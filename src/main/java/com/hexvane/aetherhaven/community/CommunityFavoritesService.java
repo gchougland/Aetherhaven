@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -22,23 +23,48 @@ import javax.annotation.Nullable;
 public final class CommunityFavoritesService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final Gson GSON = new Gson();
+    private static final long CACHE_TTL_MS = 5 * 60_000L;
+
+    private static final ConcurrentHashMap<UUID, CachedFavorites> FAVORITES_CACHE = new ConcurrentHashMap<>();
 
     private CommunityFavoritesService() {}
 
     @Nonnull
     public static List<String> fetchFavorites(@Nonnull AetherhavenPlugin plugin, @Nonnull UUID playerUuid) {
+        CachedFavorites cached = FAVORITES_CACHE.get(playerUuid);
+        long now = System.currentTimeMillis();
+        if (cached != null && now - cached.fetchedAtMs < CACHE_TTL_MS) {
+            return cached.buildingIds;
+        }
+        FetchResult remote = fetchFavoritesFromApi(plugin, playerUuid);
+        if (remote == null) {
+            return cached != null ? cached.buildingIds : List.of();
+        }
+        FAVORITES_CACHE.put(playerUuid, new CachedFavorites(List.copyOf(remote.buildingIds), now));
+        return remote.buildingIds;
+    }
+
+    public static void invalidateCache(@Nonnull UUID playerUuid) {
+        FAVORITES_CACHE.remove(playerUuid);
+    }
+
+    @Nullable
+    private static FetchResult fetchFavoritesFromApi(@Nonnull AetherhavenPlugin plugin, @Nonnull UUID playerUuid) {
         CommunityMarketplaceConfig cfg = plugin.getConfig().get().getCommunityMarketplace();
         if (!cfg.isEnabled() || cfg.getApiBaseUrl().isBlank()) {
-            return List.of();
+            return new FetchResult(List.of());
         }
         String json = CommunityHttpClient.getString(cfg.getApiBaseUrl() + "/api/me/favorites", playerHeaders(playerUuid));
-        if (json == null || json.isBlank()) {
-            return List.of();
+        if (json == null) {
+            return null;
+        }
+        if (json.isBlank()) {
+            return new FetchResult(List.of());
         }
         try {
             FavoritesResponse response = GSON.fromJson(json, FavoritesResponse.class);
             if (response == null || response.buildingIds == null) {
-                return List.of();
+                return new FetchResult(List.of());
             }
             List<String> out = new ArrayList<>();
             for (String id : response.buildingIds) {
@@ -46,10 +72,10 @@ public final class CommunityFavoritesService {
                     out.add(id.trim().toLowerCase(Locale.ROOT));
                 }
             }
-            return out;
+            return new FetchResult(out);
         } catch (Exception e) {
             LOGGER.atWarning().withCause(e).log("Failed to parse favorites response");
-            return List.of();
+            return null;
         }
     }
 
@@ -68,7 +94,7 @@ public final class CommunityFavoritesService {
     /**
      * Toggles a community favorite on the API.
      *
-     * @return {@code null} on success, or an error key
+     * @return {@code null} on failure
      */
     @Nullable
     public static ToggleResult toggleRemote(
@@ -91,7 +117,15 @@ public final class CommunityFavoritesService {
             if (response == null) {
                 return null;
             }
-            return new ToggleResult(response.userHasFavorited, response.buildingIds != null ? response.buildingIds : List.of());
+            List<String> ids = response.buildingIds != null ? response.buildingIds : List.of();
+            FAVORITES_CACHE.put(
+                playerUuid,
+                new CachedFavorites(
+                    ids.stream().map(s -> s.trim().toLowerCase(Locale.ROOT)).toList(),
+                    System.currentTimeMillis()
+                )
+            );
+            return new ToggleResult(response.userHasFavorited, ids);
         } catch (Exception e) {
             LOGGER.atWarning().withCause(e).log("Failed to parse favorite toggle response");
             return null;
@@ -106,6 +140,10 @@ public final class CommunityFavoritesService {
     }
 
     public record ToggleResult(boolean favorited, @Nonnull List<String> buildingIds) {}
+
+    private record CachedFavorites(@Nonnull List<String> buildingIds, long fetchedAtMs) {}
+
+    private record FetchResult(@Nonnull List<String> buildingIds) {}
 
     private static final class FavoritesResponse {
         @SerializedName("buildingIds")

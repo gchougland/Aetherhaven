@@ -117,6 +117,8 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     @Nullable
     private String lastSentPreviewPrefabKey;
     private int pageIconFetchSerial;
+    private long lastCommunityFavoritesSyncMs;
+    private static final long COMMUNITY_FAVORITES_SYNC_INTERVAL_MS = 120_000L;
     @Nullable
     private String pendingPreviewPrefabKey;
     @Nullable
@@ -280,7 +282,12 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             }
             boolean communityIcons =
                 communityTab || (favoritesTab && ConstructionFavoritesService.isCommunityBuildingId(group.groupKey()));
-            commandBuilder.set(row + " #IconBox #BuildingIcon.AssetPath", iconPathForGroup(catalog, group, plugin, communityIcons, moderationTab));
+            VariantEntry listVariant = listVariantForGroup(group);
+            String listFavoriteId = listVariant.constructionId();
+            commandBuilder.set(
+                row + " #IconBox #BuildingIcon.AssetPath",
+                iconPathForVariant(catalog, listVariant, group, plugin, communityIcons, moderationTab)
+            );
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
                 row + " #Select",
@@ -288,19 +295,21 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                 false
             );
             if (!moderationTab) {
-                boolean favorited = ConstructionFavoritesService.isFavorite(ref, store, group.groupKey());
+                boolean favorited = ConstructionFavoritesService.isFavorite(ref, store, listFavoriteId);
+                commandBuilder.set(row + " #FavoriteStarOn.Visible", favorited);
+                commandBuilder.set(row + " #FavoriteStarOff.Visible", !favorited);
                 commandBuilder.set(row + " #FavoriteButtonOn.Visible", favorited);
                 commandBuilder.set(row + " #FavoriteButtonOff.Visible", !favorited);
                 eventBuilder.addEventBinding(
                     CustomUIEventBindingType.Activating,
                     row + " #FavoriteButtonOn",
-                    new EventData().append("Action", "ToggleFavorite").append("GroupKey", group.groupKey()),
+                    new EventData().append("Action", "ToggleFavorite").append("ConstructionId", listFavoriteId),
                     false
                 );
                 eventBuilder.addEventBinding(
                     CustomUIEventBindingType.Activating,
                     row + " #FavoriteButtonOff",
-                    new EventData().append("Action", "ToggleFavorite").append("GroupKey", group.groupKey()),
+                    new EventData().append("Action", "ToggleFavorite").append("ConstructionId", listFavoriteId),
                     false
                 );
             }
@@ -781,10 +790,14 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                 }
             }
             case "ToggleFavorite" -> {
-                if (data.groupKey == null || data.groupKey.isBlank()) {
+                String constructionId =
+                    data.constructionId != null && !data.constructionId.isBlank()
+                        ? data.constructionId.trim()
+                        : data.groupKey != null ? data.groupKey.trim() : null;
+                if (constructionId == null || constructionId.isBlank()) {
                     return;
                 }
-                tryToggleFavorite(ref, store, data.groupKey.trim());
+                tryToggleFavorite(ref, store, constructionId);
                 return;
             }
             case "SelectGroup" -> {
@@ -1104,23 +1117,24 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         return PlotCraftingCatalog.groupsForTab(catalog, activeTab, plugin.getClass().getClassLoader(), activeStyleFilters);
     }
 
-    private void tryToggleFavorite(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull String groupKey) {
-        boolean wasFavorite = ConstructionFavoritesService.isFavorite(ref, store, groupKey);
-        boolean nowFavorite = ConstructionFavoritesService.toggleLocal(ref, store, groupKey);
-        if (ConstructionFavoritesService.isCommunityBuildingId(groupKey)) {
+    private void tryToggleFavorite(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull String constructionId) {
+        String favoriteId = constructionId.trim().toLowerCase(Locale.ROOT);
+        boolean wasFavorite = ConstructionFavoritesService.isFavorite(ref, store, favoriteId);
+        boolean nowFavorite = ConstructionFavoritesService.toggleLocal(ref, store, favoriteId);
+        if (ConstructionFavoritesService.isCommunityBuildingId(favoriteId)) {
             AetherhavenPlugin plugin = AetherhavenPlugin.get();
             UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
             PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
             if (plugin != null && uc != null && pr != null && plugin.getCommunityCatalogService().isEnabled()) {
                 CommunityFavoritesService.ToggleResult remote =
-                    CommunityFavoritesService.toggleRemote(plugin, uc.getUuid(), groupKey);
+                    CommunityFavoritesService.toggleRemote(plugin, uc.getUuid(), favoriteId);
                 if (remote == null) {
-                    ConstructionFavoritesService.setFavorite(ref, store, groupKey, wasFavorite);
+                    ConstructionFavoritesService.setFavorite(ref, store, favoriteId, wasFavorite);
                     pr.sendMessage(Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.favoriteSyncFailed"));
                     refresh(ref, store);
                     return;
                 }
-                ConstructionFavoritesService.setFavorite(ref, store, groupKey, remote.favorited());
+                ConstructionFavoritesService.setFavorite(ref, store, favoriteId, remote.favorited());
                 nowFavorite = remote.favorited();
             }
         }
@@ -1134,10 +1148,6 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                 )
             );
         }
-        if (activeTab == Tab.FAVORITES && !nowFavorite) {
-            selectedGroupKey = null;
-            variantIndex = 0;
-        }
         refresh(ref, store);
     }
 
@@ -1147,6 +1157,11 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         if (plugin == null || uc == null || !plugin.getCommunityCatalogService().isEnabled()) {
             return;
         }
+        long now = System.currentTimeMillis();
+        if (now - lastCommunityFavoritesSyncMs < COMMUNITY_FAVORITES_SYNC_INTERVAL_MS) {
+            return;
+        }
+        lastCommunityFavoritesSyncMs = now;
         UUID playerUuid = uc.getUuid();
         CompletableFuture.runAsync(
             () -> {
@@ -1165,11 +1180,34 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                             return;
                         }
                         ConstructionFavoritesService.mergeCommunityFavorites(pref, st, remote);
-                        refresh(pref, st);
+                        if (activeTab == Tab.FAVORITES) {
+                            refresh(pref, st);
+                        }
                     }
                 );
             }
         );
+    }
+
+    @Nonnull
+    private VariantEntry listVariantForGroup(@Nonnull GroupEntry group) {
+        if (group.groupKey().equals(selectedGroupKey)) {
+            VariantEntry selected = selectedVariant(group);
+            if (selected != null) {
+                return selected;
+            }
+        }
+        return defaultListVariant(group);
+    }
+
+    @Nonnull
+    private static VariantEntry defaultListVariant(@Nonnull GroupEntry group) {
+        for (VariantEntry variant : group.variants()) {
+            if (variant.constructionId().equalsIgnoreCase(group.groupKey())) {
+                return variant;
+            }
+        }
+        return group.variants().get(0);
     }
 
     @Nonnull
@@ -1178,8 +1216,9 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     }
 
     @Nonnull
-    private static String iconPathForGroup(
+    private static String iconPathForVariant(
         @Nonnull ConstructionCatalog catalog,
+        @Nonnull VariantEntry variant,
         @Nonnull GroupEntry group,
         @Nonnull AetherhavenPlugin plugin,
         boolean communityTab,
@@ -1193,7 +1232,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             return ConstructionTokenIconPath.unifiedPlotTokenFallbackIconPath();
         }
         if (communityTab) {
-            String id = group.groupKey();
+            String id = variant.constructionId();
             Path iconFile = CommunityPaths.iconFile(plugin.getDataDirectory(), id);
             if (Files.isRegularFile(iconFile)) {
                 return CommunityPaths.iconAssetPath(id);
@@ -1203,17 +1242,15 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             }
             return ConstructionTokenIconPath.unifiedPlotTokenFallbackIconPath();
         }
-        for (VariantEntry v : group.variants()) {
-            ConstructionDefinition def = catalog.get(v.constructionId());
-            if (def != null) {
-                return ConstructionTokenIconPath.forConstruction(def, plugin.getDataDirectory());
-            }
+        ConstructionDefinition def = catalog.get(variant.constructionId());
+        if (def != null) {
+            return ConstructionTokenIconPath.forConstruction(def, plugin.getDataDirectory());
         }
         ConstructionDefinition canon = catalog.get(group.groupKey());
         if (canon != null) {
             return ConstructionTokenIconPath.forConstruction(canon, plugin.getDataDirectory());
         }
-        return CustomBuildingsPaths.iconAssetPath(group.groupKey());
+        return CustomBuildingsPaths.iconAssetPath(variant.constructionId());
     }
 
     private void tryLoadPreview(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
@@ -2444,6 +2481,8 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             .add()
             .append(new KeyedCodec<>("GroupKey", Codec.STRING), (d, v) -> d.groupKey = v, d -> d.groupKey)
             .add()
+            .append(new KeyedCodec<>("ConstructionId", Codec.STRING), (d, v) -> d.constructionId = v, d -> d.constructionId)
+            .add()
             .append(new KeyedCodec<>("TabId", Codec.STRING), (d, v) -> d.tabId = v, d -> d.tabId)
             .add()
             .append(new KeyedCodec<>("SelectedTab", Codec.STRING), (d, v) -> d.selectedTab = v, d -> d.selectedTab)
@@ -2464,6 +2503,8 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         private String action;
         @Nullable
         private String groupKey;
+        @Nullable
+        private String constructionId;
         @Nullable
         private String tabId;
         @Nullable

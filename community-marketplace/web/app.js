@@ -304,10 +304,8 @@ function renderBuildingCard(entry, options = {}) {
     <article class="${cardClass}" data-building-id="${escapeAttr(entry.id)}" ${openAttrs}>
       <div class="building-card-header">
         ${buildingIconHtml(buildingCardImageUrl(entry), null, Boolean(entry.usesCoverImage))}
-        <div class="building-card-actions">
-          ${favoriteControlHtml(entry, canVote)}
-          ${upvoteControlHtml(entry, canVote)}
-        </div>
+        <div class="building-card-favorite">${favoriteControlHtml(entry, canVote)}</div>
+        <div class="building-card-upvote">${upvoteControlHtml(entry, canVote)}</div>
       </div>
       <div class="building-card-body">
         <h3>${escapeHtml(entry.displayName)}</h3>
@@ -411,7 +409,7 @@ async function toggleFavorite(buildingId, buttonEl) {
         applyFavoriteButtonState(el, body.userHasFavorited);
       }
     });
-    if (getCatalogFilterState().favoritesOnly && !body.userHasFavorited) {
+    if (getCatalogFilterState().favoritesOnly) {
       applyCatalogFilters({ resetPage: false });
     }
   } finally {
@@ -481,10 +479,8 @@ function renderNewestCarouselCard(entry, options = {}) {
     >
       <div class="newest-carousel-card-media">
         ${buildingIconHtml(buildingCardImageUrl(entry), null, Boolean(entry.usesCoverImage))}
-        <div class="building-card-actions">
-          ${favoriteControlHtml(entry, catalogCanVote)}
-          ${upvoteControlHtml(entry, catalogCanVote)}
-        </div>
+        <div class="building-card-favorite">${favoriteControlHtml(entry, catalogCanVote)}</div>
+        <div class="building-card-upvote">${upvoteControlHtml(entry, catalogCanVote)}</div>
       </div>
       <div class="newest-carousel-card-body">
         <h4>${escapeHtml(entry.displayName)}</h4>
@@ -912,8 +908,13 @@ function sortCatalogEntries(entries, sortMode) {
 }
 
 function entryMatchesCatalogFilters(entry, filters) {
-  if (filters.favoritesOnly && !entry.userHasFavorited) {
-    return false;
+  if (filters.favoritesOnly) {
+    if (!catalogCanVote) {
+      return false;
+    }
+    if (!entry.userHasFavorited) {
+      return false;
+    }
   }
   if (filters.author && (entry.creatorName || "Unknown") !== filters.author) {
     return false;
@@ -1033,7 +1034,14 @@ function renderCatalogPage() {
     return;
   }
   if (!filteredTotal) {
-    el.innerHTML = emptyStateHtml("No builds match your search or filters.");
+    const filters = getCatalogFilterState();
+    let message = "No builds match your search or filters.";
+    if (filters.favoritesOnly && !catalogCanVote) {
+      message = "Sign in to view your favorite builds.";
+    } else if (filters.favoritesOnly) {
+      message = "You have not favorited any builds yet. Star a build to save it here.";
+    }
+    el.innerHTML = emptyStateHtml(message);
     updateCatalogResultCount(0, 0, 0, allTotal);
     renderCatalogPagination(0);
     return;
@@ -2765,3 +2773,7 @@ function jsString(value) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 }
+
+window.toggleFavorite = toggleFavorite;
+window.toggleUpvote = toggleUpvote;
+window.goToCatalogPage = goToCatalogPage;

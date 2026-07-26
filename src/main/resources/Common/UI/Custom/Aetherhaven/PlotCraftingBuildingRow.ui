@@ -8,29 +8,19 @@ $Sounds = "../Sounds.ui";
   VerticalAlignment: Center
 );
 
-@FavoriteStarActiveStyle = TextButtonStyle(
-  Default: (Background: PatchStyle(TexturePath: "../star.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
-  Hovered: (Background: PatchStyle(TexturePath: "../star.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
-  Pressed: (Background: PatchStyle(TexturePath: "../star.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
-  Disabled: (Background: PatchStyle(TexturePath: "../star.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@IconLbl)),
-  Sounds: $Sounds.@ButtonsLight
-);
-
-@FavoriteStarInactiveStyle = TextButtonStyle(
-  Default: (Background: PatchStyle(TexturePath: "../star.png", Border: 0, Color: #5c6a78(0.55)), LabelStyle: (...@IconLbl)),
-  Hovered: (Background: PatchStyle(TexturePath: "../star.png", Border: 0, Color: #7a8490), LabelStyle: (...@IconLbl)),
-  Pressed: (Background: PatchStyle(TexturePath: "../star.png", Border: 0, Color: #4a5560), LabelStyle: (...@IconLbl)),
-  Disabled: (Background: PatchStyle(TexturePath: "../star.png", Border: 0, Color: #5c6a78(0.35)), LabelStyle: (...@IconLbl)),
+@FavoriteHitStyle = TextButtonStyle(
+  Default: (Background: #000000(0.01), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: #ffffff(0.08), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: #ffffff(0.14), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: #000000(0.01), LabelStyle: (...@IconLbl)),
   Sounds: $Sounds.@ButtonsLight
 );
 
 Group #PlotCraftingBuildingRow {
-  LayoutMode: Left;
   Anchor: (Bottom: 4);
 
   Group #SelectShell {
     LayoutMode: Full;
-    FlexWeight: 1;
 
     Group #SelectHilite {
       Anchor: (Full: 0);
@@ -81,25 +71,44 @@ Group #PlotCraftingBuildingRow {
           Text: "";
         }
       }
+
+      Group #FavoriteSlot {
+        LayoutMode: Middle;
+        Anchor: (Width: 36, Height: 36, Left: 4);
+
+        AssetImage #FavoriteStarOn {
+          Anchor: (Width: 26, Height: 26);
+          AssetPath: "../star.png";
+          Visible: false;
+          HitTestVisible: false;
+        }
+
+        AssetImage #FavoriteStarOff {
+          Anchor: (Width: 26, Height: 26);
+          AssetPath: "../star.png";
+          Color: #5c6a78(0.85);
+          HitTestVisible: false;
+        }
+
+        TextButton #FavoriteButtonOn {
+          Style: @FavoriteHitStyle;
+          TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+          Anchor: (Full: 0);
+          Padding: (Full: 0);
+          Text: ".";
+          TooltipText: "";
+          Visible: false;
+        }
+
+        TextButton #FavoriteButtonOff {
+          Style: @FavoriteHitStyle;
+          TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+          Anchor: (Full: 0);
+          Padding: (Full: 0);
+          Text: ".";
+          TooltipText: "";
+        }
+      }
     }
-  }
-
-  TextButton #FavoriteButtonOn {
-    Style: @FavoriteStarActiveStyle;
-    TextTooltipStyle: $C.@DefaultTextTooltipStyle;
-    Anchor: (Width: 40, Height: 40, Left: 6, Vertical: 0);
-    Padding: (Full: 0);
-    Text: ".";
-    TooltipText: "";
-    Visible: false;
-  }
-
-  TextButton #FavoriteButtonOff {
-    Style: @FavoriteStarInactiveStyle;
-    TextTooltipStyle: $C.@DefaultTextTooltipStyle;
-    Anchor: (Width: 40, Height: 40, Left: 6, Vertical: 0);
-    Padding: (Full: 0);
-    Text: ".";
-    TooltipText: "";
   }
 }

@@ -114,7 +114,9 @@ public final class PlotCraftingCatalog {
             if (groupKey.isBlank()) {
                 groupKey = def.getId();
             }
-            if (!normalized.contains(groupKey.trim().toLowerCase(Locale.ROOT))) {
+            String defId = def.getId().trim().toLowerCase(Locale.ROOT);
+            String normalizedGroupKey = groupKey.trim().toLowerCase(Locale.ROOT);
+            if (!normalized.contains(normalizedGroupKey) && !normalized.contains(defId)) {
                 continue;
             }
             byGroup.computeIfAbsent(groupKey, k -> new ObjectArrayList<>()).add(def);

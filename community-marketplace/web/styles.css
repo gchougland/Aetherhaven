@@ -511,26 +511,27 @@ main.wrap > section + section {
   color: var(--text-muted);
 }
 
-.catalog-filter--toggle {
-  flex: 0 0 auto;
-  min-width: auto;
+.catalog-favorites-filter {
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   gap: var(--space-sm);
-  padding-top: 1.25rem;
-}
-
-.catalog-filter--toggle input[type="checkbox"] {
-  width: 1rem;
-  height: 1rem;
-  accent-color: var(--gold);
-}
-
-.catalog-filter--toggle span {
-  text-transform: none;
-  letter-spacing: normal;
+  flex: 0 0 auto;
+  align-self: center;
+  margin: 0;
+  cursor: pointer;
   font-size: 0.9rem;
   color: var(--text);
+  user-select: none;
+  white-space: nowrap;
+}
+
+.catalog-favorites-filter input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  accent-color: var(--gold);
+  cursor: pointer;
 }
 
 .catalog-toolbar input[type="search"],
@@ -707,14 +708,20 @@ main.wrap > section + section {
   color: var(--text);
 }
 
-.building-card-header .building-card-actions {
+.building-card-header .building-card-favorite {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+  z-index: 2;
+  pointer-events: auto;
+}
+
+.building-card-header .building-card-upvote {
   position: absolute;
   top: var(--space-sm);
   right: var(--space-sm);
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
+  z-index: 2;
+  pointer-events: auto;
 }
 
 .building-card-header .upvote-btn,
@@ -823,8 +830,8 @@ main.wrap > section + section {
   width: 18px;
   height: 18px;
   object-fit: contain;
-  filter: grayscale(1) brightness(0.75);
-  opacity: 0.85;
+  opacity: 0.72;
+  filter: brightness(0) invert(1);
 }
 
 .favorite-btn:hover {
@@ -832,8 +839,7 @@ main.wrap > section + section {
 }
 
 .favorite-btn:hover .favorite-btn-icon {
-  filter: grayscale(0.4) brightness(1);
-  opacity: 1;
+  opacity: 0.95;
 }
 
 .favorite-btn--active .favorite-btn-icon {
@@ -1161,14 +1167,20 @@ main.wrap > section + section {
   image-rendering: auto;
 }
 
-.newest-carousel-card-media .building-card-actions {
+.newest-carousel-card-media .building-card-favorite {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+  z-index: 2;
+  pointer-events: auto;
+}
+
+.newest-carousel-card-media .building-card-upvote {
   position: absolute;
   top: var(--space-sm);
   right: var(--space-sm);
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
+  z-index: 2;
+  pointer-events: auto;
 }
 
 .newest-carousel-card-media .upvote-btn,
@@ -1888,7 +1900,9 @@ body.modal-open {
 }
 
 .building-modal-actions {
-  position: static;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
   flex-shrink: 0;
 }
 

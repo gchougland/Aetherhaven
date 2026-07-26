@@ -58,13 +58,14 @@ $Sounds = "../Sounds.ui";
   VerticalAlignment: Center
 );
 
-@ModerationTabButtonStyle = TextButtonStyle(
-  Default: (Background: PatchStyle(TexturePath: "../cog.png", Border: 0, Color: #ffffff), LabelStyle: (...@ModerationTabIconLbl)),
-  Hovered: (Background: PatchStyle(TexturePath: "../cog.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@ModerationTabIconLbl)),
-  Pressed: (Background: PatchStyle(TexturePath: "../cog.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@ModerationTabIconLbl)),
-  Disabled: (Background: PatchStyle(TexturePath: "../cog.png", Border: 0, Color: #5c6a78(0.45)), LabelStyle: (...@ModerationTabIconLbl)),
-  Sounds: $Sounds.@ButtonsLight
+@ModerationTabButtonStyle = (
+  Default: (Background: (TexturePath: "../Common/Tab.png", Border: 0)),
+  Hovered: (Background: (TexturePath: "../Common/Tab.png", Border: 0, Color: #c5d0dc)),
+  Pressed: (Background: (TexturePath: "../Common/Tab.png", Border: 0, Color: #8fa0b0)),
+  Disabled: (Background: (TexturePath: "../Common/Tab.png", Border: 0, Color: #5c6a78(0.45)))
 );
+
+@ModerationTabAnchor = Anchor(Width: 82, Height: 62, Bottom: -8);
 
 $C.@PageOverlay {
   LayoutMode: Middle;
@@ -153,7 +154,7 @@ $C.@PageOverlay {
 
           Group #ModerationTabHost {
             LayoutMode: Full;
-            Anchor: (Width: 82, Height: 62, Vertical: 0);
+            Anchor: (...@ModerationTabAnchor, Vertical: 0);
 
             Group #ModerationTabSelected {
               Anchor: (Full: 0);
@@ -163,13 +164,18 @@ $C.@PageOverlay {
               HitTestVisible: false;
             }
 
-            TextButton #ModerationTabButton {
+            Button #ModerationTabButton {
+              LayoutMode: Middle;
+              Anchor: (Full: 0);
               Style: @ModerationTabButtonStyle;
               TextTooltipStyle: $C.@DefaultTextTooltipStyle;
-              Anchor: (Width: 82, Height: 62);
-              Padding: (Full: 0);
-              Text: ".";
               TooltipText: "Moderate";
+
+              AssetImage #ModerationTabIcon {
+                Anchor: (Width: 44, Height: 44);
+                AssetPath: "../cog.png";
+                HitTestVisible: false;
+              }
             }
           }
         }

@@ -27,7 +27,7 @@ public final class CommunityMarketplaceConfig {
             .add()
             .append(
                 new KeyedCodec<>("ManifestRefreshMinutes", Codec.INTEGER),
-                (o, v) -> o.manifestRefreshMinutes = v != null ? v : 5,
+                (o, v) -> o.manifestRefreshMinutes = v != null ? v : 15,
                 o -> o.manifestRefreshMinutes
             )
             .documentation("Minimum minutes between manifest metadata refreshes while the Community tab is open.")
@@ -53,7 +53,7 @@ public final class CommunityMarketplaceConfig {
 
     private boolean enabled = true;
     private String apiBaseUrl = "https://aetherhaven.net";
-    private int manifestRefreshMinutes = 5;
+    private int manifestRefreshMinutes = 15;
     private boolean submitOnSaveDefault = false;
     private String moderatorUuidsRaw = "";
 
