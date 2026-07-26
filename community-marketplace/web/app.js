@@ -198,13 +198,11 @@ function favoriteControlHtml(entry, canFavorite) {
   return `<button type="button" class="upvote-btn favorite-btn${active}" data-building-id="${escapeAttr(entry.id)}" onclick="event.stopPropagation(); toggleFavorite('${escapeAttr(entry.id)}', this)" aria-pressed="${favorited ? "true" : "false"}" aria-label="${escapeAttr(label)}" title="${escapeAttr(label)}"><span class="favorite-star" aria-hidden="true">${star}</span></button>`;
 }
 
-function buildingCardMediaHtml(entry, canVote) {
+function buildingCardHeaderHtml(entry, canVote) {
   return `
-    <div class="building-card-media">
-      ${buildingIconHtml(buildingCardImageUrl(entry), null, Boolean(entry.usesCoverImage))}
-      <div class="building-card-overlay building-card-overlay--favorite">${favoriteControlHtml(entry, canVote)}</div>
-      <div class="building-card-overlay building-card-overlay--upvote">${upvoteControlHtml(entry, canVote)}</div>
-    </div>`;
+    ${buildingIconHtml(buildingCardImageUrl(entry), null, Boolean(entry.usesCoverImage))}
+    <div class="building-card-overlay building-card-overlay--favorite">${favoriteControlHtml(entry, canVote)}</div>
+    <div class="building-card-overlay building-card-overlay--upvote">${upvoteControlHtml(entry, canVote)}</div>`;
 }
 
 function formatDownloadCount(count) {
@@ -314,7 +312,7 @@ function renderBuildingCard(entry, options = {}) {
   return `
     <article class="${cardClass}" data-building-id="${escapeAttr(entry.id)}" ${openAttrs}>
       <div class="building-card-header">
-        ${buildingCardMediaHtml(entry, canVote)}
+        ${buildingCardHeaderHtml(entry, canVote)}
       </div>
       <div class="building-card-body">
         <h3>${escapeHtml(entry.displayName)}</h3>
@@ -491,7 +489,7 @@ function renderNewestCarouselCard(entry, options = {}) {
       onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openBuildingDetail('${escapeAttr(entry.id)}');}"
     >
       <div class="newest-carousel-card-media">
-        ${buildingCardMediaHtml(entry, catalogCanVote)}
+        ${buildingCardHeaderHtml(entry, catalogCanVote)}
       </div>
       <div class="newest-carousel-card-body">
         <h4>${escapeHtml(entry.displayName)}</h4>
