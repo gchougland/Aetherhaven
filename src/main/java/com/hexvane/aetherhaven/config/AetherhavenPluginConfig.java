@@ -613,6 +613,13 @@ public final class AetherhavenPluginConfig {
         )
         .documentation("Remote community building browser (manifest browse, on-demand download, optional submit).")
         .add()
+        .append(
+            new KeyedCodec<>("SupportUpload", SupportUploadConfig.CODEC),
+            (o, v) -> o.supportUpload = v != null ? v : new SupportUploadConfig(),
+            o -> o.supportUpload
+        )
+        .documentation("Upload mod save data and logs for remote debugging (/aetherhaven support upload).")
+        .add()
         .build();
 
     private int constructionBlocksPerTick = 8;
@@ -717,10 +724,16 @@ public final class AetherhavenPluginConfig {
     private float reputationWaveCooldownSeconds = 45f;
 
     private CommunityMarketplaceConfig communityMarketplace = new CommunityMarketplaceConfig();
+    private SupportUploadConfig supportUpload = new SupportUploadConfig();
 
     @Nonnull
     public CommunityMarketplaceConfig getCommunityMarketplace() {
         return communityMarketplace != null ? communityMarketplace : new CommunityMarketplaceConfig();
+    }
+
+    @Nonnull
+    public SupportUploadConfig getSupportUpload() {
+        return supportUpload != null ? supportUpload : new SupportUploadConfig();
     }
 
     public int getConstructionBlocksPerTick() {
@@ -1634,6 +1647,7 @@ public final class AetherhavenPluginConfig {
         this.reputationWaveDurationSeconds = o.reputationWaveDurationSeconds;
         this.reputationWaveCooldownSeconds = o.reputationWaveCooldownSeconds;
         this.communityMarketplace = o.communityMarketplace != null ? o.communityMarketplace : new CommunityMarketplaceConfig();
+        this.supportUpload = o.supportUpload != null ? o.supportUpload : new SupportUploadConfig();
     }
 
     @Nonnull

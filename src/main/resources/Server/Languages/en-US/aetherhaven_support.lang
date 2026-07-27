@@ -1,0 +1,13 @@
+# Support bundle upload (/aetherhaven support upload)
+
+commands.aetherhaven.support.desc=Send mod save data to Aetherhaven for debugging help
+commands.aetherhaven.support.upload.desc=Upload town saves, villager audit logs, and recent server logs
+commands.aetherhaven.support.upload.note.desc=Optional short note about the problem
+
+aetherhaven.support.upload.started=Preparing your debug files. This may take a moment.
+aetherhaven.support.upload.success=Debug files sent. Reference id: {id}
+aetherhaven.support.upload.disabled=Support uploads are turned off on this server.
+aetherhaven.support.upload.tooLarge=Debug files are too large to upload. Ask the server owner for help.
+aetherhaven.support.upload.rateLimited=Please wait before uploading again.
+aetherhaven.support.upload.empty=Nothing to upload yet. Play a bit first so the mod has save data.
+aetherhaven.support.upload.failed=Upload failed: {reason}

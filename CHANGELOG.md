@@ -6,6 +6,7 @@
 
 - **Town Journal villager locate** — Each villager in the Town tab has a trail button. Toggle it to see green particles leading to them or to where they were last seen. Press again or walk close to stop the trail.
 - **Villager audit log** — Town villager deaths, removals, and confirmed missing events append to `villager_audit/{world}/audit.jsonl` under the mod data folder. Disable with `VillagerAuditLogEnabled` in config.json.
+- **Support bundle upload** — `/aetherhaven support upload` zips town saves, villager audit logs, NPC telemetry, config, and recent server logs, then sends them to aetherhaven.net for admin download.
 - **Community submission editor** — In Creative mode, the building editor staff has a My submissions tab. Edit and save to upload a new version. Pending updates replace your submission. Live buildings stay up until an update is approved.
 - **Debug commands for quest board, inn, and town rank** — `/ah questboard reroll`, `/ah inn reroll`, and `/ah townrank set <rank>`. Optional `--town` and `--player` targeting.
 - **Command tab completion** — Aetherhaven commands suggest values while you type (construction ids, town names, quest ids, and more).

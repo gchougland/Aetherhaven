@@ -1354,6 +1354,32 @@ button.danger:hover {
   margin-top: var(--space-lg);
 }
 
+.admin-support-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.admin-support-table th,
+.admin-support-table td {
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  vertical-align: top;
+  text-align: left;
+}
+
+.admin-support-table th {
+  font-weight: 600;
+  color: var(--text-muted, #b8b0a6);
+}
+
+.admin-support-actions {
+  white-space: nowrap;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
 .admin-jump-chips {
   margin-bottom: 0;
 }

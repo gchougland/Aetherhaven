@@ -1657,7 +1657,7 @@ async function loadAdminPage() {
   }
   renderAccountMenu(me.user, me.isAdmin);
   const restoredState = restoreAdminViewState();
-  await Promise.all([loadAdminQueue(), loadAdminScreenshotQueue(), loadAdminCatalog()]);
+  await Promise.all([loadAdminQueue(), loadAdminScreenshotQueue(), loadAdminCatalog(), loadAdminSupportBundles()]);
   updateAdminJumpCounts();
   if (restoredState) {
     requestAnimationFrame(() => {
@@ -1682,6 +1682,10 @@ let adminPublishedFilters = { query: "", author: "", sort: "newest" };
 let adminPublishedFiltersBound = false;
 let adminPublishedPage = 1;
 
+let adminSupportCache = [];
+let adminSupportQuery = "";
+let adminSupportFiltersBound = false;
+
 function rememberAdminPosition() {
   const state = {
     scrollY: Math.max(0, window.scrollY || 0),
@@ -1689,6 +1693,7 @@ function rememberAdminPosition() {
     screenshotsQuery: adminScreenshotsQuery,
     publishedFilters: adminPublishedFilters,
     publishedPage: adminPublishedPage,
+    supportQuery: adminSupportQuery,
   };
   try {
     sessionStorage.setItem(ADMIN_VIEW_STATE_KEY, JSON.stringify(state));
@@ -1719,7 +1724,144 @@ function restoreAdminViewState() {
     sort: String(state.publishedFilters?.sort || "newest"),
   };
   adminPublishedPage = Math.max(1, Number(state.publishedPage) || 1);
+  adminSupportQuery = String(state.supportQuery || "");
   return { scrollY: Math.max(0, Number(state.scrollY) || 0) };
+}
+
+function formatBytes(bytes) {
+  const n = Number(bytes) || 0;
+  if (n < 1024) return `${n} B`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+  return `${(n / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function adminSupportMatchesQuery(item, query) {
+  if (!query) return true;
+  const worlds = Array.isArray(item.worldNames) ? item.worldNames.join(" ") : "";
+  const haystack = [
+    item.playerName,
+    item.playerUuid,
+    item.note,
+    item.modVersion,
+    item.bundleId,
+    worlds,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+  return haystack.includes(query);
+}
+
+async function loadAdminSupportBundles() {
+  const root = document.getElementById("adminSupportBundles");
+  if (!root) return;
+  const res = await fetch("/api/admin/support-bundles");
+  if (!res.ok) {
+    root.innerHTML = "<p class=\"meta\">Could not load support bundles.</p>";
+    return;
+  }
+  const data = await res.json();
+  adminSupportCache = Array.isArray(data.bundles) ? data.bundles : [];
+  renderAdminSupportBundles();
+}
+
+function renderAdminSupportBundles() {
+  const root = document.getElementById("adminSupportBundles");
+  const toolbar = document.getElementById("adminSupportToolbar");
+  if (!root) return;
+
+  const query = adminSupportQuery.trim().toLowerCase();
+  const filtered = adminSupportCache.filter((item) => adminSupportMatchesQuery(item, query));
+
+  if (!adminSupportFiltersBound) {
+    adminSupportFiltersBound = true;
+    const search = document.getElementById("adminSupportSearch");
+    const clearBtn = document.getElementById("adminSupportClear");
+    if (search) {
+      search.value = adminSupportQuery;
+      search.addEventListener("input", () => {
+        adminSupportQuery = search.value;
+        renderAdminSupportBundles();
+      });
+    }
+    if (clearBtn && search) {
+      clearBtn.addEventListener("click", () => {
+        adminSupportQuery = "";
+        search.value = "";
+        renderAdminSupportBundles();
+      });
+    }
+  }
+
+  if (toolbar) {
+    toolbar.hidden = adminSupportCache.length === 0;
+  }
+  setAdminResultCount(
+    "adminSupportResultCount",
+    filtered.length,
+    adminSupportCache.length,
+    adminSupportCache.length ? "" : "No support bundles yet.",
+  );
+  updateAdminJumpCounts();
+
+  if (!adminSupportCache.length) {
+    root.innerHTML =
+      "<p class=\"meta\">When a player runs <code>/aetherhaven support upload</code> in-game, their bundle will appear here.</p>";
+    return;
+  }
+  if (!filtered.length) {
+    root.innerHTML = "<p class=\"meta\">No bundles match your search.</p>";
+    return;
+  }
+
+  root.innerHTML = `
+    <table class="admin-support-table">
+      <thead>
+        <tr>
+          <th>When</th>
+          <th>Player</th>
+          <th>Worlds</th>
+          <th>Note</th>
+          <th>Mod</th>
+          <th>Size</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        ${filtered
+          .map((item) => {
+            const when = item.uploadedAt ? new Date(item.uploadedAt).toLocaleString() : "—";
+            const worlds = Array.isArray(item.worldNames) && item.worldNames.length ? item.worldNames.join(", ") : "—";
+            const note = item.note ? escapeHtml(item.note) : "—";
+            const player = escapeHtml(item.playerName || "Unknown");
+            const uuid = escapeHtml(item.playerUuid || "");
+            return `<tr>
+              <td>${escapeHtml(when)}</td>
+              <td><strong>${player}</strong><br /><span class="meta">${uuid}</span></td>
+              <td>${escapeHtml(worlds)}</td>
+              <td>${note}</td>
+              <td>${escapeHtml(item.modVersion || "—")}</td>
+              <td>${escapeHtml(formatBytes(item.sizeBytes))}</td>
+              <td class="admin-support-actions">
+                <a class="button secondary" href="/api/admin/support-bundles/${encodeURIComponent(item.bundleId)}/download">Download</a>
+                <button type="button" class="secondary" onclick="deleteSupportBundle('${escapeHtml(item.bundleId)}')">Delete</button>
+              </td>
+            </tr>`;
+          })
+          .join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+async function deleteSupportBundle(bundleId) {
+  if (!bundleId || !confirm("Delete this support bundle?")) return;
+  const res = await fetch(`/api/admin/support-bundles/${encodeURIComponent(bundleId)}`, { method: "DELETE" });
+  if (!res.ok) {
+    alert("Delete failed");
+    return;
+  }
+  await loadAdminSupportBundles();
 }
 
 function updateAdminJumpCounts() {
@@ -1727,6 +1869,7 @@ function updateAdminJumpCounts() {
     pending: adminPendingCache.length,
     screenshots: adminScreenshotsCache.length,
     published: adminPublishedCache.length,
+    support: adminSupportCache.length,
   };
   document.querySelectorAll("[data-admin-count]").forEach((el) => {
     const key = el.getAttribute("data-admin-count");

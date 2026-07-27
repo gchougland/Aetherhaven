@@ -53,6 +53,8 @@ import {
   resolveOwnerSubmissionFile,
   updateOwnedSubmission,
 } from "./submissionUpdates.js";
+import { createSupportBundles } from "./supportBundles.js";
+import { createSupportBundleRateLimit } from "./supportBundleRateLimit.js";
 // sharp is loaded lazily inside processScreenshot so native-lib failures
 // do not crash startup before Railway's /api/v1/health check can succeed.
 
@@ -81,6 +83,8 @@ const storage = createStorage(dataDir);
 const votes = createVotes(dataDir);
 const favorites = createFavorites(dataDir);
 const downloads = createDownloads(dataDir);
+const supportBundles = createSupportBundles(dataDir);
+const supportBundleRateLimit = createSupportBundleRateLimit();
 const oidc = createOidc({
   issuer: process.env.HYTALE_OIDC_ISSUER || "https://connect.accounts.hytale.com",
   clientId: process.env.HYTALE_OIDC_CLIENT_ID || "",
@@ -96,6 +100,13 @@ const upload = multer({
 const screenshotUpload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: MAX_SCREENSHOT_BYTES },
+});
+
+const MAX_SUPPORT_BUNDLE_BYTES = Number(process.env.SUPPORT_BUNDLE_MAX_BYTES || 50 * 1024 * 1024);
+
+const supportBundleUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: MAX_SUPPORT_BUNDLE_BYTES },
 });
 
 const adminRawJsonUpload = express.text({
@@ -1293,6 +1304,46 @@ app.post("/api/v1/submissions/:submissionId/reject", requireAdminApiKey, (req, r
   res.status(result.status).json(result.body);
 });
 
+app.post(
+  "/api/v1/support-bundles",
+  supportBundleRateLimit,
+  supportBundleUpload.fields([{ name: "bundle", maxCount: 1 }]),
+  (req, res) => {
+    const playerUuid = String(req.get("X-Player-Uuid") || "").trim().toLowerCase();
+    if (!UUID_RE.test(playerUuid)) {
+      res.status(400).json({ error: "missing_player_uuid" });
+      return;
+    }
+    const zipFile = req.files?.bundle?.[0];
+    if (!zipFile?.buffer?.length) {
+      res.status(400).json({ error: "missing_bundle" });
+      return;
+    }
+    if (zipFile.buffer.length > MAX_SUPPORT_BUNDLE_BYTES) {
+      res.status(413).json({ error: "too_large" });
+      return;
+    }
+    let meta = {};
+    try {
+      const raw = req.body?.meta;
+      meta = raw ? JSON.parse(String(raw)) : {};
+    } catch {
+      res.status(400).json({ error: "invalid_meta" });
+      return;
+    }
+    const saved = supportBundles.saveUpload({
+      playerUuid,
+      playerName: String(req.get("X-Player-Name") || "Unknown"),
+      note: meta.note || "",
+      modVersion: meta.modVersion || "",
+      serverUuid: meta.serverUuid || "",
+      worldNames: meta.worldNames,
+      zipBuffer: zipFile.buffer,
+    });
+    res.status(201).json({ bundleId: saved.bundleId, uploadedAt: saved.uploadedAt });
+  },
+);
+
 app.get("/api/v1/moderation/pending", requireModerator, (_req, res) => {
   res.json({ submissions: listEnrichedPending() });
 });
@@ -2353,6 +2404,27 @@ app.get("/api/buildings/:id/screenshots/:screenshotId", (req, res) => {
 
 app.get("/api/admin/pending", requireWebUser, requireAdmin, (_req, res) => {
   res.json({ submissions: listEnrichedPending() });
+});
+
+app.get("/api/admin/support-bundles", requireWebUser, requireAdmin, (_req, res) => {
+  res.json({ bundles: supportBundles.listBundles() });
+});
+
+app.get("/api/admin/support-bundles/:bundleId/download", requireWebUser, requireAdmin, (req, res) => {
+  const bundle = supportBundles.getBundle(req.params.bundleId);
+  if (!bundle) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  res.download(bundle.zipFile, `aetherhaven-support-${req.params.bundleId}.zip`);
+});
+
+app.delete("/api/admin/support-bundles/:bundleId", requireWebUser, requireAdmin, (req, res) => {
+  if (!supportBundles.deleteBundle(req.params.bundleId)) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  res.json({ ok: true });
 });
 
 app.get("/api/admin/submissions/:submissionId/icon.png", requireWebUser, requireAdmin, (req, res) => {

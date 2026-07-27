@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.HStats;
 import com.hexvane.aetherhaven.command.AetherhavenCommand;
 import com.hexvane.aetherhaven.command.AetherhavenCommunityCommand;
+import com.hexvane.aetherhaven.command.AetherhavenSupportCommand;
 import com.hexvane.aetherhaven.command.AetherhavenHudCommand;
 import com.hexvane.aetherhaven.command.AetherhavenJournalCommand;
 import com.hexvane.aetherhaven.generated.HstatsBuildMetadata;
@@ -152,6 +153,7 @@ public final class AetherhavenCoreBootstrap {
         plugin.registerAetherhavenSubcommand(new AetherhavenJournalCommand());
         plugin.registerAetherhavenSubcommand(new AetherhavenHudCommand());
         plugin.registerAetherhavenSubcommand(new AetherhavenCommunityCommand());
+        plugin.registerAetherhavenSubcommand(new AetherhavenSupportCommand());
         // After shared components and the /ah command tree — feature packs register systems and subcommands.
         AetherhavenFeatureBootstrap.registerEnabled(plugin);
         LOGGER.atInfo().log("Aetherhaven core v%s setup complete", plugin.getManifest().getVersion().toString());

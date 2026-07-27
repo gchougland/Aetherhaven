@@ -372,6 +372,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
         constructionScheduler.schedule(() -> world.execute(worldTask), delay, TimeUnit.MILLISECONDS);
     }
 
+    @Nonnull
+    public ScheduledExecutorService getConstructionScheduler() {
+        return constructionScheduler;
+    }
+
     @Override
     @SuppressWarnings("removal")
     protected void setup() {

@@ -80,6 +80,9 @@
           <a class="submissions-chip" href="#adminPublishedSection">
             Published <span class="submissions-chip-count" data-admin-count="published">0</span>
           </a>
+          <a class="submissions-chip" href="#adminSupportBundlesSection">
+            Support bundles <span class="submissions-chip-count" data-admin-count="support">0</span>
+          </a>
         </div>
       </section>
 
@@ -172,6 +175,28 @@
           aria-label="Published building pages"
           hidden
         ></nav>
+      </section>
+
+      <section class="card admin-section" id="adminSupportBundlesSection">
+        <h2>Support bundles</h2>
+        <p class="meta">
+          Debug uploads from in-game <code>/aetherhaven support upload</code>. Download the zip to inspect
+          town saves, villager audit logs, and recent server logs.
+        </p>
+        <div class="catalog-toolbar submissions-toolbar" id="adminSupportToolbar" hidden>
+          <label class="catalog-search">
+            <span class="visually-hidden">Search support bundles</span>
+            <input
+              type="search"
+              id="adminSupportSearch"
+              placeholder="Search by player, note, world, or id…"
+              autocomplete="off"
+            />
+          </label>
+          <button type="button" class="secondary" id="adminSupportClear">Clear</button>
+          <p class="catalog-result-count" id="adminSupportResultCount" aria-live="polite"></p>
+        </div>
+        <div id="adminSupportBundles"></div>
       </section>
     </main>
     <script src="/app.js?v=33"></script>
