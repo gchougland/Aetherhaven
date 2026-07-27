@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.placement;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -21,5 +22,9 @@ public final class PlotPlacementSessions {
 
     public static void remove(@Nonnull UUID playerUuid) {
         BY_PLAYER.remove(playerUuid);
+    }
+
+    public static void forEachActive(@Nonnull BiConsumer<UUID, PlotPlacementSession> consumer) {
+        BY_PLAYER.forEach(consumer);
     }
 }

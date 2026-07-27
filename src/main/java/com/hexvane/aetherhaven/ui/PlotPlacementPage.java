@@ -16,6 +16,7 @@ import com.hexvane.aetherhaven.placement.PlotBuildingRelocation;
 import com.hexvane.aetherhaven.placement.PlotPlacementNudgeUtil;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyPreviewSystem;
 import com.hexvane.aetherhaven.placement.PlotPlacementClientPrefabPreview;
+import com.hexvane.aetherhaven.placement.PlotPlacementPreviewSync;
 import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -893,7 +894,12 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(session.getAnchor(), session.getPrefabYaw());
         PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf);
         if (pr != null) {
+            boolean placerNeedFull =
+                !clientPrefabPreviewActive
+                    || !session.getConstructionId().equals(lastPreviewConstructionId)
+                    || session.getRotationSteps() != lastPreviewRotationSteps;
             syncClientPrefabPreview(pr, def, prefabOrigin);
+            PlotPlacementPreviewSync.syncSpectators(world, uc.getUuid(), session, def, prefabOrigin, placerNeedFull);
             PlotPlacementWireframeOverlay.send(pr, fp, placementValid, town);
             PlotAssemblyPreviewSystem.repaintFrontierAfterExternalDebugClear(ref, store);
         }
@@ -936,6 +942,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
     }
 
     private void clearClientPrefabPreview(@Nonnull PlayerRef pr) {
+        PlotPlacementPreviewSync.hideSpectators(session.getWorld(), pr.getUuid(), session);
         if (clientPrefabPreviewActive) {
             PlotPlacementClientPrefabPreview.hide(pr);
         }

@@ -6,7 +6,9 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,6 +52,15 @@ public final class PlotPlacementSession {
     private int clientPrefabPreviewRotationSteps = -1;
     @Nullable
     private PlotPlacementClientPrefabPreview.Payload clientPrefabPreviewPayload;
+
+    @Nonnull
+    private final Set<UUID> spectatorPreviewActive = new HashSet<>();
+
+    @Nullable
+    private String lastSpectatorPreviewConstructionId;
+    private int lastSpectatorPreviewRotationSteps = -1;
+    @Nullable
+    private Vector3i lastSpectatorPreviewOriginFloored;
 
     public PlotPlacementSession(@Nonnull World world, @Nonnull Vector3i anchor, int rotationSteps, @Nonnull String constructionId) {
         this(world, anchor, rotationSteps, constructionId, null);
@@ -232,5 +243,45 @@ public final class PlotPlacementSession {
         this.clientPrefabPreviewPathKey = null;
         this.clientPrefabPreviewRotationSteps = -1;
         this.clientPrefabPreviewPayload = null;
+    }
+
+    @Nonnull
+    public Set<UUID> getSpectatorPreviewActive() {
+        return spectatorPreviewActive;
+    }
+
+    public boolean hasSpectatorPreviewActive() {
+        return !spectatorPreviewActive.isEmpty();
+    }
+
+    @Nullable
+    public String getLastSpectatorPreviewConstructionId() {
+        return lastSpectatorPreviewConstructionId;
+    }
+
+    public int getLastSpectatorPreviewRotationSteps() {
+        return lastSpectatorPreviewRotationSteps;
+    }
+
+    @Nullable
+    public Vector3i getLastSpectatorPreviewOriginFloored() {
+        return lastSpectatorPreviewOriginFloored != null ? new Vector3i(lastSpectatorPreviewOriginFloored) : null;
+    }
+
+    public void setLastSpectatorPreviewState(
+        @Nonnull String constructionId,
+        int rotationSteps,
+        @Nonnull Vector3i originFloored
+    ) {
+        this.lastSpectatorPreviewConstructionId = constructionId;
+        this.lastSpectatorPreviewRotationSteps = rotationSteps;
+        this.lastSpectatorPreviewOriginFloored = new Vector3i(originFloored);
+    }
+
+    public void clearSpectatorPreviewState() {
+        spectatorPreviewActive.clear();
+        lastSpectatorPreviewConstructionId = null;
+        lastSpectatorPreviewRotationSteps = -1;
+        lastSpectatorPreviewOriginFloored = null;
     }
 }

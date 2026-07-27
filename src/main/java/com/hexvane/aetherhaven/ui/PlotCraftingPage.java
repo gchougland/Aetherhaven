@@ -87,8 +87,12 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     private static final long CRAFT_COST = AetherhavenConstants.PLOT_TOKEN_CRAFT_GOLD_COST;
     /** Matches {@code PlotCraftingPage.ui} list height for core/decoration tabs. */
     private static final int BUILDING_LIST_HEIGHT_NORMAL = 470;
-    /** Shorter list on Community tab (refresh row + action buttons + craft). */
-    private static final int BUILDING_LIST_HEIGHT_MARKETPLACE = 380;
+    /** Community / moderation tab with refresh row and craft only. */
+    private static final int BUILDING_LIST_HEIGHT_MARKETPLACE = 418;
+    /** Community tab when load/download/remove row is visible. */
+    private static final int BUILDING_LIST_HEIGHT_MARKETPLACE_WITH_ACTIONS = 340;
+    /** Favorites tab when a not-yet-installed community build is selected. */
+    private static final int BUILDING_LIST_HEIGHT_WITH_COMMUNITY_ACTIONS = 432;
     /** Shorter still on Moderation (refresh row + two action button rows). */
     private static final int BUILDING_LIST_HEIGHT_MODERATION = 340;
     private static final int BUILDING_LIST_FOOTER_GAP = 8;
@@ -440,7 +444,10 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             favoritesTab
                 && variant != null
                 && ConstructionFavoritesService.isCommunityBuildingId(variant.constructionId());
-        boolean showCommunityActions = communityTab || (favoritesCommunitySelected && !installed);
+        boolean showCommunityActions =
+            variant != null
+                && !installed
+                && (communityTab || favoritesCommunitySelected);
 
         commandBuilder.set("#StyleFilterColumn.Visible", showStyleFilters);
         commandBuilder.set("#MarketplaceRefreshRow.Visible", marketplaceTab);
@@ -470,8 +477,8 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             }
             commandBuilder.set("#MarketplaceRefreshButton.Disabled", marketplaceLoading);
         }
-        // Shorter list when marketplace action rows are visible (community / moderation).
-        applyBuildingListHeight(commandBuilder, communityTab, moderationTab);
+        // Shorter list when marketplace or community action rows are visible.
+        applyBuildingListHeight(commandBuilder, marketplaceTab, showCommunityActions, moderationTab);
         if (communityTab || favoritesCommunitySelected) {
             boolean hasSelection = variant != null;
             CommunityManifestEntry selectedCommunity =
@@ -1068,14 +1075,19 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
 
     private static void applyBuildingListHeight(
         @Nonnull UICommandBuilder commandBuilder,
-        boolean communityTab,
+        boolean marketplaceRefreshRow,
+        boolean communityActionRow,
         boolean moderationTab
     ) {
         int height = BUILDING_LIST_HEIGHT_NORMAL;
         if (moderationTab) {
             height = BUILDING_LIST_HEIGHT_MODERATION;
-        } else if (communityTab) {
-            height = BUILDING_LIST_HEIGHT_MARKETPLACE;
+        } else if (marketplaceRefreshRow) {
+            height = communityActionRow
+                ? BUILDING_LIST_HEIGHT_MARKETPLACE_WITH_ACTIONS
+                : BUILDING_LIST_HEIGHT_MARKETPLACE;
+        } else if (communityActionRow) {
+            height = BUILDING_LIST_HEIGHT_WITH_COMMUNITY_ACTIONS;
         }
         Anchor anchor = new Anchor();
         anchor.setHeight(Value.of(height));
@@ -1111,7 +1123,20 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         }
         if (activeTab == Tab.FAVORITES) {
             Set<String> favIds = ConstructionFavoritesService.listFavorites(ref, store);
-            List<GroupEntry> catalogFavs = PlotCraftingCatalog.favoritesGroups(catalog, favIds, activeStyleFilters);
+            Set<String> communityGameplayGroupKeys = new HashSet<>();
+            for (String favId : favIds) {
+                if (ConstructionFavoritesService.isCommunityBuildingId(favId)) {
+                    String gameplayGroupKey = catalog.resolveGameplayConstructionId(favId);
+                    if (!gameplayGroupKey.isBlank()) {
+                        communityGameplayGroupKeys.add(gameplayGroupKey.trim().toLowerCase(Locale.ROOT));
+                    }
+                }
+            }
+            List<GroupEntry> catalogFavs =
+                PlotCraftingCatalog.favoritesGroups(catalog, favIds, activeStyleFilters)
+                    .stream()
+                    .filter(group -> !communityGameplayGroupKeys.contains(group.groupKey().trim().toLowerCase(Locale.ROOT)))
+                    .toList();
             Set<String> catalogKeys = new HashSet<>();
             for (GroupEntry group : catalogFavs) {
                 catalogKeys.add(group.groupKey().trim().toLowerCase(Locale.ROOT));

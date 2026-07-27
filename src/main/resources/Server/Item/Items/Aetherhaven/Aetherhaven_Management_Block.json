@@ -16,25 +16,11 @@
       { "Texture": "Blocks/Decorative_Sets/Village/Shelf_Book_02.png", "Weight": 1 }
     ],
     "HitboxType": "Block_Vertical_Half",
+    "IgnoreSupportWhenPlaced": true,
     "VariantRotation": "NESW",
     "Flags": { "IsUsable": true },
     "Gathering": { "Breaking": { "GatherType": "Woods" } },
     "BlockParticleSetId": "Wood",
-    "MaxSupportDistance": 8,
-    "Support": {
-      "Down": [
-        { "FaceType": "Full" },
-        { "FaceType": "Shelf", "Support": "Ignored" },
-        { "FaceType": "Shelf", "SelfFaceType": "Shelf" }
-      ],
-      "Up": [
-        { "FaceType": "Full" },
-        { "FaceType": "Shelf", "Support": "Ignored" },
-        { "FaceType": "Shelf", "SelfFaceType": "Shelf" }
-      ],
-      "North": [{ "FaceType": "Full" }]
-    },
-    "Supporting": { "Up": [{ "FaceType": "Shelf" }] },
     "ParticleColor": "#684127",
     "BlockSoundSetId": "Wood",
     "BlockEntity": {

@@ -44,6 +44,14 @@ public final class ConstructionCatalog {
         return new ConstructionCatalog(Collections.emptyMap(), Set.of());
     }
 
+    /** Builds a catalog from explicit definitions (unit tests). */
+    @Nonnull
+    public static ConstructionCatalog forTests(@Nonnull Map<String, ConstructionDefinition> byId) {
+        Map<String, ConstructionDefinition> map = new LinkedHashMap<>(byId);
+        validateCountsAsAliases(map);
+        return new ConstructionCatalog(Collections.unmodifiableMap(map), Set.of());
+    }
+
     @Nonnull
     public static ConstructionCatalog loadFromAssetPacksOrClasspath(@Nonnull ClassLoader classLoader) {
         return loadFromAssetPacksOrClasspath(classLoader, null);

@@ -89,6 +89,33 @@ public final class PlotPlacementClientPrefabPreview {
         return true;
     }
 
+    /**
+     * Full prefab ghost for a nearby viewer using cached payload and tint at the preview origin.
+     */
+    public static void sendFullToViewer(
+        @Nonnull PlayerRef viewer,
+        @Nonnull World world,
+        @Nonnull Vector3i prefabOriginWorld,
+        @Nonnull Payload payload
+    ) {
+        writeShowToViewer(viewer, world, flooredPosition(prefabOriginWorld), payload);
+    }
+
+    /**
+     * Position-only update for a nearby viewer; tint sampled at the preview origin.
+     */
+    public static void sendPositionOnlyToViewer(
+        @Nonnull PlayerRef viewer,
+        @Nonnull World world,
+        @Nonnull Vector3i prefabOriginWorld
+    ) {
+        Vector3f pos = flooredPosition(prefabOriginWorld);
+        ShowTriggerVolumePastePrefabPreview packet = new ShowTriggerVolumePastePrefabPreview();
+        packet.position = pos;
+        applyTintFromWorldPosition(world, MathUtil.floor(prefabOriginWorld.x), MathUtil.floor(prefabOriginWorld.y), MathUtil.floor(prefabOriginWorld.z), packet);
+        viewer.getPacketHandler().write(packet);
+    }
+
     @Nonnull
     public static Vector3i flooredOrigin(@Nonnull Vector3i prefabOriginWorld) {
         return new Vector3i(
@@ -108,7 +135,7 @@ public final class PlotPlacementClientPrefabPreview {
     }
 
     @Nullable
-    private static Payload resolvePayload(
+    static Payload resolvePayload(
         @Nonnull String prefabPathKey,
         int rotationSteps,
         @Nonnull PlotPlacementSession session
@@ -151,13 +178,30 @@ public final class PlotPlacementClientPrefabPreview {
     }
 
     private static void writeShow(@Nonnull PlayerRef playerRef, @Nonnull Vector3f position, @Nonnull Payload payload) {
+        ShowTriggerVolumePastePrefabPreview packet = buildShowPacket(position, payload);
+        applyTintFromPlayerPosition(playerRef, packet);
+        playerRef.getPacketHandler().write(packet);
+    }
+
+    private static void writeShowToViewer(
+        @Nonnull PlayerRef viewer,
+        @Nonnull World world,
+        @Nonnull Vector3f position,
+        @Nonnull Payload payload
+    ) {
+        ShowTriggerVolumePastePrefabPreview packet = buildShowPacket(position, payload);
+        applyTintFromWorldPosition(world, MathUtil.floor(position.x), MathUtil.floor(position.y), MathUtil.floor(position.z), packet);
+        viewer.getPacketHandler().write(packet);
+    }
+
+    @Nonnull
+    private static ShowTriggerVolumePastePrefabPreview buildShowPacket(@Nonnull Vector3f position, @Nonnull Payload payload) {
         ShowTriggerVolumePastePrefabPreview packet = new ShowTriggerVolumePastePrefabPreview();
         packet.position = position;
         packet.blocksChange = payload.blocksChange();
         packet.fluidsChange = payload.fluidsChange();
         packet.entityChanges = payload.entityChanges();
-        applyTintFromPlayerPosition(playerRef, packet);
-        playerRef.getPacketHandler().write(packet);
+        return packet;
     }
 
     @Nonnull
@@ -182,9 +226,22 @@ public final class PlotPlacementClientPrefabPreview {
         Store<EntityStore> store = ref.getStore();
         World world = store.getExternalData().getWorld();
         Vector3d pos = playerRef.getTransform().getPosition();
-        int x = MathUtil.floor(pos.x);
-        int y = MathUtil.floor(pos.y);
-        int z = MathUtil.floor(pos.z);
+        applyTintFromWorldPosition(
+            world,
+            MathUtil.floor(pos.x),
+            MathUtil.floor(pos.y),
+            MathUtil.floor(pos.z),
+            packet
+        );
+    }
+
+    static void applyTintFromWorldPosition(
+        @Nonnull World world,
+        int x,
+        int y,
+        int z,
+        @Nonnull ShowTriggerVolumePastePrefabPreview packet
+    ) {
         long chunkIndex = ChunkUtil.indexChunkFromBlock(x, z);
         WorldChunk chunk = world.getNonTickingChunk(chunkIndex);
         if (chunk != null && chunk.getBlockChunk() != null) {

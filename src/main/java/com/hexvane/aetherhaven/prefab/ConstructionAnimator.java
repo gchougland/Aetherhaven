@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.prefab;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
+import com.hexvane.aetherhaven.construction.ConstructionPrefabSequence;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Holder;
@@ -122,7 +123,7 @@ public final class ConstructionAnimator {
         long batchDelayMs,
         @Nullable Runnable onComplete
     ) {
-        ConstructionPasteOps.PrefabSequence seq = ConstructionPasteOps.buildSequence(bufferAccess, yaw);
+        ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(bufferAccess, yaw);
         int prefabId = PrefabUtil.getNextPrefabId();
         PrefabPasteEvent start = new PrefabPasteEvent(prefabId, true);
         entityAccessor.invoke(start);

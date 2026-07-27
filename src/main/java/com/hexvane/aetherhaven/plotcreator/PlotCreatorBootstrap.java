@@ -4,6 +4,8 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.command.AetherhavenPlotCreatorCommand;
 import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
+import com.hexvane.aetherhaven.placement.PlotPlacementPlayerRemoveSystem;
+import com.hexvane.aetherhaven.placement.PlotPlacementSpectatorSyncSystem;
 import com.hexvane.aetherhaven.placement.WallPlacementEditHelper;
 import com.hexvane.aetherhaven.placement.WallPlacementOpenHelper;
 import com.hexvane.aetherhaven.plugin.AetherhavenFeatures;
@@ -125,6 +127,8 @@ public final class PlotCreatorBootstrap {
             );
         plugin.getEntityStoreRegistry().registerSystem(new PlotCreatorBreakAllowSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new PlotCreatorPreviewSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new PlotPlacementSpectatorSyncSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new PlotPlacementPlayerRemoveSystem());
         core.registerAetherhavenSubcommand(new AetherhavenPlotCreatorCommand());
         plugin
             .getEventRegistry()

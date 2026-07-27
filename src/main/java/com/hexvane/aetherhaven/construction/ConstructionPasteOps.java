@@ -99,12 +99,6 @@ public final class ConstructionPasteOps {
         int fluidLevel
     ) {}
 
-    public record PrefabSequence(
-        @Nonnull List<PendingBlock> pendingBlocks,
-        @Nonnull List<Holder<EntityStore>> prefabEntitiesInOrder,
-        @Nonnull PrefabRotation prefabRotation
-    ) {}
-
     /** Split of non-air assembly cells: incremental frontier uses {@code main}; {@code deferred} is placed in one batch at completion. */
     public record AssemblyDeferredPartition(
         @Nonnull List<PendingBlock> main,
@@ -112,7 +106,7 @@ public final class ConstructionPasteOps {
     ) {}
 
     @Nonnull
-    public static PrefabSequence buildSequence(@Nonnull IPrefabBuffer bufferAccess, @Nonnull Rotation yaw) {
+    public static ConstructionPrefabSequence buildSequence(@Nonnull IPrefabBuffer bufferAccess, @Nonnull Rotation yaw) {
         Random bufferIterationRandom = new Random(PREFAB_BUFFER_ITERATION_SEED);
         PrefabRotation prefabRotation = PrefabRotation.fromRotation(yaw);
         PrefabBufferCall call = new PrefabBufferCall(bufferIterationRandom, prefabRotation);
@@ -143,7 +137,7 @@ public final class ConstructionPasteOps {
         Comparator<PendingBlock> byColumn =
             Comparator.comparingInt(PendingBlock::y).thenComparingInt(PendingBlock::x).thenComparingInt(PendingBlock::z);
         pending.sort(byColumn);
-        return new PrefabSequence(pending, prefabEntitiesInOrder, prefabRotation);
+        return new ConstructionPrefabSequence(pending, prefabEntitiesInOrder, prefabRotation);
     }
 
     /**
@@ -387,7 +381,7 @@ public final class ConstructionPasteOps {
         @Nonnull Rotation yaw,
         @Nonnull IPrefabBuffer bufferAccess
     ) {
-        PrefabSequence seq = buildSequence(bufferAccess, yaw);
+        ConstructionPrefabSequence seq = buildSequence(bufferAccess, yaw);
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         int failed = 0;
         int placed = 0;
@@ -717,7 +711,7 @@ public final class ConstructionPasteOps {
         boolean preserveWater,
         @Nonnull IPrefabBuffer bufferAccess
     ) {
-        PrefabSequence seq = buildSequence(bufferAccess, yaw);
+        ConstructionPrefabSequence seq = buildSequence(bufferAccess, yaw);
         List<PendingBlock> cells = withoutPureAirCells(seq.pendingBlocks());
         LocalCachedChunkAccessor chunkAccessor = createAccessor(world, origin, bufferAccess);
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();

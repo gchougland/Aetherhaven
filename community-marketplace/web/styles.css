@@ -727,6 +727,13 @@ main.wrap > section + section {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
   background: rgba(12, 8, 8, 0.82);
   backdrop-filter: blur(4px);
+  width: 2.5rem;
+  min-width: 2.5rem;
+  max-width: 2.5rem;
+  height: 2.75rem;
+  min-height: 2.75rem;
+  max-height: 2.75rem;
+  padding: 0.2rem 0.25rem;
 }
 
 .building-card-header .upvote-btn:hover,
@@ -746,6 +753,7 @@ main.wrap > section + section {
 .building-card-header .favorite-btn .favorite-star,
 .newest-carousel-card-media .favorite-btn .favorite-star {
   color: var(--text-muted);
+  font-size: 1.05rem;
 }
 
 .building-card-header .favorite-btn.upvote-btn--active .favorite-star,
@@ -805,7 +813,9 @@ main.wrap > section + section {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 0.05rem;
   min-width: 2.5rem;
+  min-height: 2.75rem;
   padding: var(--space-xs) var(--space-sm);
   font-family: var(--font-body);
   font-size: 0.75rem;
@@ -837,10 +847,6 @@ main.wrap > section + section {
 .upvote-btn:disabled {
   opacity: 0.6;
   cursor: wait;
-}
-
-.favorite-btn {
-  min-height: 2.75rem;
 }
 
 .favorite-star {
@@ -1853,10 +1859,18 @@ body.modal-open {
 .building-modal-actions .favorite-btn {
   box-shadow: none;
   background: var(--bg-deep);
+  width: 2.5rem;
+  min-width: 2.5rem;
+  max-width: 2.5rem;
+  height: 2.75rem;
+  min-height: 2.75rem;
+  max-height: 2.75rem;
+  padding: 0.2rem 0.25rem;
 }
 
 .building-modal-actions .favorite-btn .favorite-star {
   color: var(--text-muted);
+  font-size: 1.05rem;
 }
 
 .building-modal-actions .favorite-btn.upvote-btn--active .favorite-star {

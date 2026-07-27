@@ -107,6 +107,9 @@ public final class PlotCraftingCatalog {
             if (!isCraftable(def)) {
                 continue;
             }
+            if (ConstructionFavoritesService.isCommunityBuildingId(def.getId())) {
+                continue;
+            }
             if (!matchesStyleFilter(def, activeStyleFilters)) {
                 continue;
             }

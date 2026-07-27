@@ -33,6 +33,12 @@ import { createDownloadRateLimit } from "./downloadRateLimit.js";
 import { createVotes } from "./votes.js";
 import { createFavorites } from "./favorites.js";
 import { createDownloads } from "./downloads.js";
+import {
+  applyCoverScreenshotIfUnset,
+  autoSetCoverFromExistingApprovedScreenshots,
+  isValidCoverScreenshot,
+  readApprovedCoverScreenshotId,
+} from "./coverScreenshots.js";
 import { notifyBuildingApproved, notifyBuildingPending } from "./discordNotify.js";
 import { processScreenshot, ScreenshotProcessingError } from "./imageProcessing.js";
 import {
@@ -409,23 +415,10 @@ function buildManifestEntry(id, meta, prefabBytes) {
   return entry;
 }
 
-function readApprovedCoverScreenshotId(buildingId) {
-  try {
-    const paths = storage.approvedPaths(buildingId);
-    if (!fs.existsSync(paths.meta)) {
-      return "";
-    }
-    const meta = JSON.parse(fs.readFileSync(paths.meta, "utf8"));
-    return String(meta.coverScreenshotId || "").trim();
-  } catch {
-    return "";
-  }
-}
-
 /** Keeps the marketplace card cover when approving an update to an already published building. */
 function resolvePreservedCoverScreenshotId(buildingId) {
   const candidates = [];
-  const fromMeta = readApprovedCoverScreenshotId(buildingId);
+  const fromMeta = readApprovedCoverScreenshotId(storage, buildingId);
   if (fromMeta) {
     candidates.push(fromMeta);
   }
@@ -436,28 +429,11 @@ function resolvePreservedCoverScreenshotId(buildingId) {
     candidates.push(fromManifest);
   }
   for (const coverScreenshotId of candidates) {
-    if (isValidCoverScreenshot(buildingId, coverScreenshotId)) {
+    if (isValidCoverScreenshot(storage, buildingId, coverScreenshotId)) {
       return coverScreenshotId;
     }
   }
   return "";
-}
-
-/**
- * @param {string} buildingId
- * @param {string} coverScreenshotId
- */
-function isValidCoverScreenshot(buildingId, coverScreenshotId) {
-  if (!coverScreenshotId) {
-    return false;
-  }
-  const shot = storage.loadScreenshotMeta(coverScreenshotId);
-  return Boolean(
-    shot &&
-      shot.status === "approved" &&
-      shot.ownerKind === "approved" &&
-      shot.ownerId === buildingId
-  );
 }
 
 /**
@@ -467,8 +443,8 @@ function isValidCoverScreenshot(buildingId, coverScreenshotId) {
  */
 function resolveCardImage(buildingId, coverScreenshotId) {
   const iconUrl = `/api/v1/buildings/${encodeURIComponent(buildingId)}/icon.png`;
-  const coverId = String(coverScreenshotId || "").trim() || readApprovedCoverScreenshotId(buildingId);
-  if (!isValidCoverScreenshot(buildingId, coverId)) {
+  const coverId = String(coverScreenshotId || "").trim() || readApprovedCoverScreenshotId(storage, buildingId);
+  if (!isValidCoverScreenshot(storage, buildingId, coverId)) {
     return { iconUrl, coverImageUrl: "", coverScreenshotId: "", usesCoverImage: false };
   }
   return {
@@ -504,7 +480,7 @@ function setBuildingCoverScreenshot(buildingId, coverScreenshotId, webUser, opti
   }
 
   const nextCover = String(coverScreenshotId || "").trim();
-  if (nextCover && !isValidCoverScreenshot(id, nextCover)) {
+  if (nextCover && !isValidCoverScreenshot(storage, id, nextCover)) {
     return {
       status: 400,
       body: { error: "invalid_cover", message: "Cover must be an approved screenshot for this build." },
@@ -632,6 +608,7 @@ function approveSubmission(submissionId, requestedId, requiredModsOverride) {
 
   fs.rmSync(pendingDir, { recursive: true, force: true });
   storage.reassignScreenshotsToApproved(submissionId, id);
+  autoSetCoverFromExistingApprovedScreenshots(storage, id);
   notifyBuildingApproved({
     publicBaseUrl,
     id,
@@ -2003,6 +1980,9 @@ async function saveOwnerScreenshot(ownerKind, ownerId, ownerMeta, file, webUser,
     storage.deleteScreenshot(screenshotId);
     throw err;
   }
+  if (autoApprove && ownerKind === "approved") {
+    applyCoverScreenshotIfUnset(storage, ownerId, screenshotId);
+  }
   let url = `/api/my-screenshots/${encodeURIComponent(screenshotId)}/image`;
   if (autoApprove && ownerKind === "approved") {
     url = `/api/buildings/${encodeURIComponent(ownerId)}/screenshots/${encodeURIComponent(screenshotId)}`;
@@ -2078,6 +2058,9 @@ function approveScreenshot(screenshotId) {
   meta.status = "approved";
   meta.approvedAt = new Date().toISOString();
   storage.writeScreenshotMeta(meta);
+  if (meta.ownerKind === "approved" && meta.ownerId) {
+    applyCoverScreenshotIfUnset(storage, meta.ownerId, screenshotId);
+  }
   return { status: 200, body: { screenshotId, status: "approved" } };
 }
 

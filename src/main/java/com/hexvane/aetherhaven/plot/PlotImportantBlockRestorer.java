@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.plot;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
+import com.hexvane.aetherhaven.construction.ConstructionPrefabSequence;
 import com.hexvane.aetherhaven.poi.BuildingPoisDefinition;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.PlotInstance;
@@ -68,7 +69,7 @@ public final class PlotImportantBlockRestorer {
         }
         Set<String> importantIds = importantBlockTypeIds(def);
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
-        ConstructionPasteOps.PrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
+        ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
         List<ConstructionPasteOps.PendingBlock> cells =
             ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
         LocalCachedChunkAccessor accessor = ConstructionPasteOps.createAccessor(world, anchor, buffer);

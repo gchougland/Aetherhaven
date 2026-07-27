@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.placement.CharterRelocationSessions;
 import com.hexvane.aetherhaven.placement.PlotPlacementClientPrefabPreview;
+import com.hexvane.aetherhaven.placement.PlotPlacementPreviewSync;
 import com.hexvane.aetherhaven.placement.PlotPlacementSession;
 import com.hexvane.aetherhaven.placement.PlotPlacementSessions;
 import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
@@ -186,6 +187,7 @@ public final class PlotPlacementOpenHelper {
         World world = store.getExternalData().getWorld();
         world.execute(
             () -> {
+                PlotPlacementPreviewSync.hideSpectators(world, uc.getUuid(), s);
                 PlotPlacementClientPrefabPreview.hide(pr);
                 PlotPlacementWireframeOverlay.clearFor(pr);
             }

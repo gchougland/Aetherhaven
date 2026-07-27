@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.plot.PlotBlockStamper;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
+import com.hexvane.aetherhaven.construction.ConstructionPrefabSequence;
 import com.hexvane.aetherhaven.construction.PlotMaterialDepositService;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.inventory.BenchAdjacentChestUtil;
@@ -284,7 +285,7 @@ public final class PlotAssemblyService {
         TownManager tmPay = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         tmPay.updateTown(town);
 
-        ConstructionPasteOps.PrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
+        ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
         List<PendingBlock> footprintCells = seq.pendingBlocks();
         List<PendingBlock> nonAirCells = ConstructionPasteOps.withoutPureAirCells(footprintCells);
         ConstructionPasteOps.AssemblyDeferredPartition split =
@@ -536,7 +537,7 @@ public final class PlotAssemblyService {
             return false;
         }
         int prefabId = start.getPrefabId();
-        ConstructionPasteOps.PrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
+        ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
         List<PendingBlock> footprintCells = seq.pendingBlocks();
         List<PendingBlock> nonAirCells = ConstructionPasteOps.withoutPureAirCells(footprintCells);
         ConstructionPasteOps.AssemblyDeferredPartition split =
