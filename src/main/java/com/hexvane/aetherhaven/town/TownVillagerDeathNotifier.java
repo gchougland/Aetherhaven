@@ -144,7 +144,7 @@ public final class TownVillagerDeathNotifier {
     private static Message translatedDamageCause(@Nullable Damage info, @Nullable DeathComponent death) {
         DamageCause cause = null;
         if (info != null) {
-            cause = info.getCause();
+            cause = DamageCause.getAssetMap().getAsset(info.getDamageCauseIndex());
         }
         if (cause == null && death != null) {
             cause = death.getDeathCause();

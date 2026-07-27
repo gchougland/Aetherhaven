@@ -25,6 +25,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockComponentChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.Map;
@@ -114,8 +115,10 @@ public final class OpenFloatingGiftChestInteraction extends SimpleBlockInteracti
             return;
         }
 
-        var section = blockChunkComponent.getSectionAtBlockY(pos.y);
-        int rotationIndex = section.getRotationIndex(pos.x, pos.y, pos.z);
+        int rotationIndex = getBlockRotationIndex(chunkStore, chunkComponentStore, pos);
+        if (rotationIndex < 0) {
+            return;
+        }
 
         ContainerBlockWindow window =
             new ContainerBlockWindow(pos.x, pos.y, pos.z, rotationIndex, blockType, itemContainerBlock.getItemContainer());
@@ -187,10 +190,6 @@ public final class OpenFloatingGiftChestInteraction extends SimpleBlockInteracti
         }
 
         var chunkComponentStore = chunkStore.getStore();
-        BlockChunk blockChunkComponent = chunkComponentStore.getComponent(chunkRef, BlockChunk.getComponentType());
-        if (blockChunkComponent == null) {
-            return;
-        }
 
         WorldChunk worldChunkComponent = chunkComponentStore.getComponent(chunkRef, WorldChunk.getComponentType());
         if (worldChunkComponent == null) {
@@ -223,8 +222,10 @@ public final class OpenFloatingGiftChestInteraction extends SimpleBlockInteracti
         if (interactionState != null) {
             int soundEventIndex = interactionState.getInteractionSoundEventIndex();
             if (soundEventIndex != SoundEvent.EMPTY_ID) {
-                var section = blockChunkComponent.getSectionAtBlockY(pos.y);
-                int rotationIndex = section.getRotationIndex(pos.x, pos.y, pos.z);
+                int rotationIndex = getBlockRotationIndex(chunkStore, chunkComponentStore, pos);
+                if (rotationIndex < 0) {
+                    return;
+                }
 
                 Vector3d soundPos = new Vector3d();
                 blockType.getBlockCenter(rotationIndex, soundPos);
@@ -232,6 +233,23 @@ public final class OpenFloatingGiftChestInteraction extends SimpleBlockInteracti
                 SoundUtil.playSoundEvent3d(ref, soundEventIndex, soundPos, commandBuffer);
             }
         }
+    }
+
+    /** Returns block rotation index, or -1 when the section is unavailable. */
+    private static int getBlockRotationIndex(
+        @Nonnull ChunkStore chunkStore,
+        @Nonnull Store<ChunkStore> chunkComponentStore,
+        @Nonnull Vector3i pos
+    ) {
+        Ref<ChunkStore> sectionRef = chunkStore.getChunkSectionReferenceAtBlock(pos.x, pos.y, pos.z);
+        if (sectionRef == null || !sectionRef.isValid()) {
+            return -1;
+        }
+        BlockSection section = chunkComponentStore.getComponent(sectionRef, BlockSection.getComponentType());
+        if (section == null) {
+            return -1;
+        }
+        return section.getRotationIndex(pos.x, pos.y, pos.z);
     }
 
     @Override

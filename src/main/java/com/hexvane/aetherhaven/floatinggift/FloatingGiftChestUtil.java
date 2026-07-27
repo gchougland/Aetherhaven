@@ -12,7 +12,6 @@ import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBloc
 import com.hypixel.hytale.server.core.universe.world.SetBlockSettings;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockComponentChunk;
-import com.hypixel.hytale.server.core.universe.world.chunk.ChunkColumn;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import javax.annotation.Nonnull;
@@ -111,21 +110,11 @@ public final class FloatingGiftChestUtil {
         if (blockType == null || !isGiftChestBlockType(blockType)) {
             return;
         }
-        long chunkIndex = ChunkUtil.indexChunkFromBlock(x, z);
         var chunkStore = world.getChunkStore();
-        Ref<ChunkStore> chunkRef = chunkStore.getChunkReference(chunkIndex);
-        if (chunkRef == null || !chunkRef.isValid()) {
-            return;
-        }
-        Store<ChunkStore> store = chunkStore.getStore();
-        ChunkColumn column = store.getComponent(chunkRef, ChunkColumn.getComponentType());
-        if (column == null) {
-            return;
-        }
-        Ref<ChunkStore> sectionRef = column.getSection(ChunkUtil.chunkCoordinate(y));
+        Ref<ChunkStore> sectionRef = chunkStore.getChunkSectionReferenceAtBlock(x, y, z);
         if (sectionRef == null || !sectionRef.isValid()) {
             return;
         }
-        BlockPhysics.markDeco(store, sectionRef, x, y, z);
+        BlockPhysics.markDeco(chunkStore.getStore(), sectionRef, x, y, z);
     }
 }

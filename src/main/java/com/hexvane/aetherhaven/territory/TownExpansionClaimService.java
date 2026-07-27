@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.town.TownTerritoryClaims;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -48,7 +49,7 @@ public final class TownExpansionClaimService {
         if (player == null) {
             return "aetherhaven_common.aetherhaven.common.pluginNotLoaded";
         }
-        CombinedItemContainer inv = player.getInventory().getCombinedHotbarFirst();
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.HOTBAR_FIRST);
         boolean allowTreasury = town.playerCanSpendTreasuryGold(playerUuid);
         if (GoldCoinPayment.totalAvailable(town, inv, allowTreasury) < cost) {
             return "aetherhaven_town.aetherhaven.ui.expansion.err.notEnoughGold";

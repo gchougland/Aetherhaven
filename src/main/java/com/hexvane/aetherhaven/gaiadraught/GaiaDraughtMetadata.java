@@ -185,13 +185,7 @@ public final class GaiaDraughtMetadata {
         progress.clampChargesToCapacity();
         int cap = progress.getCapacity();
         int charges = progress.getCharges();
-        ItemStack withDur = new ItemStack(
-            AetherhavenConstants.ITEM_GAIAS_DRAUGHT,
-            1,
-            charges,
-            cap,
-            stack.getMetadata()
-        );
+        ItemStack withDur = stack.withMaxDurability(cap).withDurability(charges);
         return writeProgress(withDur, progress);
     }
 

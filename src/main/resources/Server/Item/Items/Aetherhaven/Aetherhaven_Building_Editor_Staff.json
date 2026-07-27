@@ -3,13 +3,13 @@
     "Name": "aetherhaven_items.items.Aetherhaven_Building_Editor_Staff.name",
     "Description": "aetherhaven_items.items.Aetherhaven_Building_Editor_Staff.description"
   },
-  "Icon": "Icons/ItemsGenerated/Aetherhaven_Plot_Creator_Staff.png",
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Building_Editor_Staff.png",
   "Categories": [
     "Items.Tools",
     "Aetherhaven.All"
   ],
-  "Model": "Items/Aetherhaven/Building_Staff/Building_Staff.blockymodel",
-  "Texture": "Items/Aetherhaven/Building_Staff/Plot_Creator_Staff.png",
+  "Model": "Items/Aetherhaven/Building_Editor_Staff/BuildingEditorStaff.blockymodel",
+  "Texture": "Items/Aetherhaven/Building_Editor_Staff/BuildingEditorStaff.png",
   "PlayerAnimationsId": "Staff",
   "MaxStack": 1,
   "Quality": "Rare",
@@ -24,15 +24,15 @@
   },
   "ItemSoundSetId": "ISS_Weapons_Wood",
   "IconProperties": {
-    "Scale": 0.28,
+    "Scale": 0.4,
     "Rotation": [
-      39,
-      171,
-      39
+      22.5,
+      45,
+      315
     ],
     "Translation": [
-      -47,
-      -41
+      -34,
+      -29
     ]
   },
   "Interactions": {
