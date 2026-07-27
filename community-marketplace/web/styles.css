@@ -1354,6 +1354,71 @@ button.danger:hover {
   margin-top: var(--space-lg);
 }
 
+.admin-collapsible {
+  padding: 0;
+}
+
+.admin-collapsible > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  user-select: none;
+}
+
+.admin-collapsible > summary::-webkit-details-marker {
+  display: none;
+}
+
+.admin-collapsible > summary::marker {
+  content: "";
+}
+
+.admin-section-summary-main {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.admin-section-title {
+  font-family: var(--font-display, "Cinzel", serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.admin-section-chevron {
+  flex-shrink: 0;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-right: 2px solid var(--gold-dim, #c9a227);
+  border-bottom: 2px solid var(--gold-dim, #c9a227);
+  transform: rotate(-45deg);
+  transition: transform var(--transition, 0.2s ease);
+  margin-top: -0.2rem;
+}
+
+.admin-collapsible[open] > summary .admin-section-chevron {
+  transform: rotate(45deg);
+  margin-top: 0.15rem;
+}
+
+.admin-collapsible > summary:hover .admin-section-title {
+  color: var(--gold, #f0d070);
+}
+
+.admin-section-body {
+  padding: 0 var(--space-lg) var(--space-lg);
+}
+
+.admin-section-body > .meta:first-child {
+  margin-top: 0;
+}
+
 .admin-support-table {
   width: 100%;
   border-collapse: collapse;

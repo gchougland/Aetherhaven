@@ -11,7 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/styles.css?v=40" />
+    <link rel="stylesheet" href="/styles.css?v=41" />
   </head>
   <body>
     <header class="site-header">
@@ -69,6 +69,7 @@
         </div>
         <p class="meta submissions-intro">
           Review pending builds and screenshots, then search the published catalog to edit or remove listings.
+          Expand a section below, or use the shortcuts.
         </p>
         <div class="submissions-status-chips admin-jump-chips" id="adminJumpChips" role="navigation" aria-label="Jump to section">
           <a class="submissions-chip" href="#adminPendingSection">
@@ -86,120 +87,152 @@
         </div>
       </section>
 
-      <section class="card admin-section" id="adminPendingSection">
-        <h2>Pending submissions</h2>
-        <div class="catalog-toolbar submissions-toolbar" id="adminPendingToolbar" hidden>
-          <label class="catalog-search">
-            <span class="visually-hidden">Search pending submissions</span>
-            <input
-              type="search"
-              id="adminPendingSearch"
-              placeholder="Search by name, creator, or id…"
-              autocomplete="off"
-            />
-          </label>
-          <label class="catalog-filter">
-            <span>Sort</span>
-            <select id="adminPendingSort">
-              <option value="newest" selected>Newest</option>
-              <option value="name-asc">Name A–Z</option>
-              <option value="name-desc">Name Z–A</option>
-            </select>
-          </label>
-          <button type="button" class="secondary" id="adminPendingClear">Clear</button>
-          <p class="catalog-result-count" id="adminPendingResultCount" aria-live="polite"></p>
+      <details class="card admin-section admin-collapsible" id="adminPendingSection">
+        <summary class="admin-section-summary">
+          <span class="admin-section-summary-main">
+            <span class="admin-section-title">Pending submissions</span>
+            <span class="submissions-chip-count" data-admin-count="pending">0</span>
+          </span>
+          <span class="admin-section-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="admin-section-body">
+          <div class="catalog-toolbar submissions-toolbar" id="adminPendingToolbar" hidden>
+            <label class="catalog-search">
+              <span class="visually-hidden">Search pending submissions</span>
+              <input
+                type="search"
+                id="adminPendingSearch"
+                placeholder="Search by name, creator, or id…"
+                autocomplete="off"
+              />
+            </label>
+            <label class="catalog-filter">
+              <span>Sort</span>
+              <select id="adminPendingSort">
+                <option value="newest" selected>Newest</option>
+                <option value="name-asc">Name A–Z</option>
+                <option value="name-desc">Name Z–A</option>
+              </select>
+            </label>
+            <button type="button" class="secondary" id="adminPendingClear">Clear</button>
+            <p class="catalog-result-count" id="adminPendingResultCount" aria-live="polite"></p>
+          </div>
+          <div id="adminQueue" class="submissions-group-list"></div>
         </div>
-        <div id="adminQueue" class="submissions-group-list"></div>
-      </section>
+      </details>
 
-      <section class="card admin-section" id="adminScreenshotsSection">
-        <h2>Pending screenshots</h2>
-        <p class="meta">
-          Approve screenshots before they appear in the public build gallery. Admins can also edit any
-          submission and upload screenshots from the Edit page (admin uploads skip review).
-        </p>
-        <div class="catalog-toolbar submissions-toolbar" id="adminScreenshotsToolbar" hidden>
-          <label class="catalog-search">
-            <span class="visually-hidden">Search pending screenshots</span>
-            <input
-              type="search"
-              id="adminScreenshotsSearch"
-              placeholder="Search by build name, creator, or id…"
-              autocomplete="off"
-            />
-          </label>
-          <button type="button" class="secondary" id="adminScreenshotsClear">Clear</button>
-          <p class="catalog-result-count" id="adminScreenshotsResultCount" aria-live="polite"></p>
+      <details class="card admin-section admin-collapsible" id="adminScreenshotsSection">
+        <summary class="admin-section-summary">
+          <span class="admin-section-summary-main">
+            <span class="admin-section-title">Pending screenshots</span>
+            <span class="submissions-chip-count" data-admin-count="screenshots">0</span>
+          </span>
+          <span class="admin-section-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="admin-section-body">
+          <p class="meta">
+            Approve screenshots before they appear in the public build gallery. Admins can also edit any
+            submission and upload screenshots from the Edit page (admin uploads skip review).
+          </p>
+          <div class="catalog-toolbar submissions-toolbar" id="adminScreenshotsToolbar" hidden>
+            <label class="catalog-search">
+              <span class="visually-hidden">Search pending screenshots</span>
+              <input
+                type="search"
+                id="adminScreenshotsSearch"
+                placeholder="Search by build name, creator, or id…"
+                autocomplete="off"
+              />
+            </label>
+            <button type="button" class="secondary" id="adminScreenshotsClear">Clear</button>
+            <p class="catalog-result-count" id="adminScreenshotsResultCount" aria-live="polite"></p>
+          </div>
+          <div id="adminScreenshotQueue"></div>
         </div>
-        <div id="adminScreenshotQueue"></div>
-      </section>
+      </details>
 
-      <section class="card admin-section" id="adminPublishedSection">
-        <h2>Published buildings</h2>
-        <p class="meta">
-          Browse approved builds, edit metadata and screenshots, or remove any from the public catalog.
-          Players who already downloaded a build keep their local copy.
-        </p>
-        <div class="catalog-toolbar submissions-toolbar" id="adminPublishedToolbar" hidden>
-          <label class="catalog-search">
-            <span class="visually-hidden">Search published buildings</span>
-            <input
-              type="search"
-              id="adminPublishedSearch"
-              placeholder="Search by name, author, or id…"
-              autocomplete="off"
-            />
-          </label>
-          <label class="catalog-filter">
-            <span>Author</span>
-            <select id="adminPublishedAuthor">
-              <option value="">All authors</option>
-            </select>
-          </label>
-          <label class="catalog-filter">
-            <span>Sort</span>
-            <select id="adminPublishedSort">
-              <option value="newest" selected>Newest</option>
-              <option value="name-asc">Name A–Z</option>
-              <option value="name-desc">Name Z–A</option>
-              <option value="downloads">Most downloads</option>
-            </select>
-          </label>
-          <button type="button" class="secondary" id="adminPublishedClear">Clear</button>
-          <p class="catalog-result-count" id="adminPublishedResultCount" aria-live="polite"></p>
+      <details class="card admin-section admin-collapsible" id="adminPublishedSection">
+        <summary class="admin-section-summary">
+          <span class="admin-section-summary-main">
+            <span class="admin-section-title">Published buildings</span>
+            <span class="submissions-chip-count" data-admin-count="published">0</span>
+          </span>
+          <span class="admin-section-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="admin-section-body">
+          <p class="meta">
+            Browse approved builds, edit metadata and screenshots, or remove any from the public catalog.
+            Players who already downloaded a build keep their local copy.
+          </p>
+          <div class="catalog-toolbar submissions-toolbar" id="adminPublishedToolbar" hidden>
+            <label class="catalog-search">
+              <span class="visually-hidden">Search published buildings</span>
+              <input
+                type="search"
+                id="adminPublishedSearch"
+                placeholder="Search by name, author, or id…"
+                autocomplete="off"
+              />
+            </label>
+            <label class="catalog-filter">
+              <span>Author</span>
+              <select id="adminPublishedAuthor">
+                <option value="">All authors</option>
+              </select>
+            </label>
+            <label class="catalog-filter">
+              <span>Sort</span>
+              <select id="adminPublishedSort">
+                <option value="newest" selected>Newest</option>
+                <option value="name-asc">Name A–Z</option>
+                <option value="name-desc">Name Z–A</option>
+                <option value="downloads">Most downloads</option>
+              </select>
+            </label>
+            <button type="button" class="secondary" id="adminPublishedClear">Clear</button>
+            <p class="catalog-result-count" id="adminPublishedResultCount" aria-live="polite"></p>
+          </div>
+          <div id="adminCatalog" class="catalog-grid"></div>
+          <nav
+            id="adminPublishedPagination"
+            class="catalog-pagination"
+            aria-label="Published building pages"
+            hidden
+          ></nav>
         </div>
-        <div id="adminCatalog" class="catalog-grid"></div>
-        <nav
-          id="adminPublishedPagination"
-          class="catalog-pagination"
-          aria-label="Published building pages"
-          hidden
-        ></nav>
-      </section>
+      </details>
 
-      <section class="card admin-section" id="adminSupportBundlesSection">
-        <h2>Support bundles</h2>
-        <p class="meta">
-          Debug uploads from in-game <code>/aetherhaven support upload</code>. Download the zip to inspect
-          town saves, villager audit logs, and recent server logs.
-        </p>
-        <div class="catalog-toolbar submissions-toolbar" id="adminSupportToolbar" hidden>
-          <label class="catalog-search">
-            <span class="visually-hidden">Search support bundles</span>
-            <input
-              type="search"
-              id="adminSupportSearch"
-              placeholder="Search by player, note, world, or id…"
-              autocomplete="off"
-            />
-          </label>
-          <button type="button" class="secondary" id="adminSupportClear">Clear</button>
-          <p class="catalog-result-count" id="adminSupportResultCount" aria-live="polite"></p>
+      <details class="card admin-section admin-collapsible" id="adminSupportBundlesSection">
+        <summary class="admin-section-summary">
+          <span class="admin-section-summary-main">
+            <span class="admin-section-title">Support bundles</span>
+            <span class="submissions-chip-count" data-admin-count="support">0</span>
+          </span>
+          <span class="admin-section-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="admin-section-body">
+          <p class="meta">
+            Debug uploads from in-game <code>/aetherhaven support upload</code>. Download the zip to inspect
+            town saves, villager audit logs, and recent server logs.
+          </p>
+          <div class="catalog-toolbar submissions-toolbar" id="adminSupportToolbar" hidden>
+            <label class="catalog-search">
+              <span class="visually-hidden">Search support bundles</span>
+              <input
+                type="search"
+                id="adminSupportSearch"
+                placeholder="Search by player, note, world, or id…"
+                autocomplete="off"
+              />
+            </label>
+            <button type="button" class="secondary" id="adminSupportClear">Clear</button>
+            <p class="catalog-result-count" id="adminSupportResultCount" aria-live="polite"></p>
+          </div>
+          <div id="adminSupportBundles"></div>
         </div>
-        <div id="adminSupportBundles"></div>
-      </section>
+      </details>
     </main>
-    <script src="/app.js?v=33"></script>
+    <script src="/app.js?v=34"></script>
     <script>
       loadAdminPage();
     </script>

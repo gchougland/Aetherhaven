@@ -1645,6 +1645,32 @@ async function removeMyBuilding(buildingId, displayName) {
   loadSubmissions();
 }
 
+function openAdminSection(sectionId) {
+  if (!sectionId) return;
+  const el = document.getElementById(sectionId);
+  if (el?.tagName === "DETAILS") {
+    el.open = true;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
+function initAdminCollapsibleSections() {
+  const chips = document.getElementById("adminJumpChips");
+  if (chips && !chips.dataset.bound) {
+    chips.dataset.bound = "1";
+    chips.addEventListener("click", (e) => {
+      const link = e.target.closest("a.submissions-chip");
+      if (!link) return;
+      e.preventDefault();
+      openAdminSection(link.getAttribute("href")?.slice(1));
+    });
+  }
+  const hashId = window.location.hash?.slice(1);
+  if (hashId) {
+    openAdminSection(hashId);
+  }
+}
+
 async function loadAdminPage() {
   const me = await fetch("/api/me").then((r) => r.json());
   if (!me.user) {
@@ -1656,6 +1682,7 @@ async function loadAdminPage() {
     return;
   }
   renderAccountMenu(me.user, me.isAdmin);
+  initAdminCollapsibleSections();
   const restoredState = restoreAdminViewState();
   await Promise.all([loadAdminQueue(), loadAdminScreenshotQueue(), loadAdminCatalog(), loadAdminSupportBundles()]);
   updateAdminJumpCounts();

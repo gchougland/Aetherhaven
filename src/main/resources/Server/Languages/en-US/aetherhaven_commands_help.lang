@@ -190,8 +190,7 @@ commands.aetherhaven.community.submit.desc=Submit a locally saved custom buildin
 commands.aetherhaven.community.submit.constructionId=Building id (e.g. plot_my_house)
 
 commands.aetherhaven.support.desc=Send mod save data to Aetherhaven for debugging help
-commands.aetherhaven.support.upload.desc=Upload town saves, villager audit logs, and recent server logs
-commands.aetherhaven.support.upload.note.desc=Optional short note about the problem
+commands.aetherhaven.support.upload.desc=Upload town saves, villager audit logs, and recent server logs. Add words after upload to include a note.
 
 commands.aetherhaven.plottoken.desc=Give, unlock, and list plot tokens for buildings
 commands.aetherhaven.plottoken.give.desc=Give a plot token for a building id
