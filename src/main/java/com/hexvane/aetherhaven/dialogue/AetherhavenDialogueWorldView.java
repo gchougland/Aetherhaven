@@ -13,6 +13,7 @@ import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.quest.QuestProgressionService;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.quest.data.QuestObjective;
+import com.hexvane.aetherhaven.questboard.TownRankCapacity;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -599,7 +600,8 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
         return profileId != null
             && inv != null
-            && GuardHireService.canAfford(plugin, town, inv, pu.getUuid(), profileId);
+            && GuardHireService.canAfford(plugin, town, inv, pu.getUuid(), profileId)
+            && TownRankCapacity.canHireGuard(town, plugin.getQuestBoardCatalog());
     }
 
     @Override

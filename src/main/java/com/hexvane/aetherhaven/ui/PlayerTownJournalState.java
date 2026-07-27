@@ -156,6 +156,28 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
                 c -> c.activeTownId.isEmpty() ? null : c.activeTownId
             )
             .add()
+            .append(new KeyedCodec<>("ToolKeyPrimary", Codec.STRING), (c, v) -> c.toolKeyPrimary = trimOrEmpty(v), c -> emptyOrNull(c.toolKeyPrimary))
+            .add()
+            .append(new KeyedCodec<>("ToolKeySecondary", Codec.STRING), (c, v) -> c.toolKeySecondary = trimOrEmpty(v), c -> emptyOrNull(c.toolKeySecondary))
+            .add()
+            .append(new KeyedCodec<>("ToolKeyUse", Codec.STRING), (c, v) -> c.toolKeyUse = trimOrEmpty(v), c -> emptyOrNull(c.toolKeyUse))
+            .add()
+            .append(new KeyedCodec<>("ToolKeyAbility1", Codec.STRING), (c, v) -> c.toolKeyAbility1 = trimOrEmpty(v), c -> emptyOrNull(c.toolKeyAbility1))
+            .add()
+            .append(new KeyedCodec<>("ToolKeyAbility2", Codec.STRING), (c, v) -> c.toolKeyAbility2 = trimOrEmpty(v), c -> emptyOrNull(c.toolKeyAbility2))
+            .add()
+            .append(new KeyedCodec<>("ToolKeyAbility3", Codec.STRING), (c, v) -> c.toolKeyAbility3 = trimOrEmpty(v), c -> emptyOrNull(c.toolKeyAbility3))
+            .add()
+            .append(new KeyedCodec<>("ToolKeyEscape", Codec.STRING), (c, v) -> c.toolKeyEscape = trimOrEmpty(v), c -> emptyOrNull(c.toolKeyEscape))
+            .add()
+            .append(new KeyedCodec<>("ToolKeyShift", Codec.STRING), (c, v) -> c.toolKeyShift = trimOrEmpty(v), c -> emptyOrNull(c.toolKeyShift))
+            .add()
+            .append(new KeyedCodec<>("ToolKeyCtrl", Codec.STRING), (c, v) -> c.toolKeyCtrl = trimOrEmpty(v), c -> emptyOrNull(c.toolKeyCtrl))
+            .add()
+            .append(new KeyedCodec<>("ToolKeySpace", Codec.STRING), (c, v) -> c.toolKeySpace = trimOrEmpty(v), c -> emptyOrNull(c.toolKeySpace))
+            .add()
+            .append(new KeyedCodec<>("ToolKeyMovement", Codec.STRING), (c, v) -> c.toolKeyMovement = trimOrEmpty(v), c -> emptyOrNull(c.toolKeyMovement))
+            .add()
             .build();
 
     @Nullable
@@ -212,6 +234,29 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
     @Nonnull
     private String activeTownId = "";
 
+    @Nonnull
+    private String toolKeyPrimary = "";
+    @Nonnull
+    private String toolKeySecondary = "";
+    @Nonnull
+    private String toolKeyUse = "";
+    @Nonnull
+    private String toolKeyAbility1 = "";
+    @Nonnull
+    private String toolKeyAbility2 = "";
+    @Nonnull
+    private String toolKeyAbility3 = "";
+    @Nonnull
+    private String toolKeyEscape = "";
+    @Nonnull
+    private String toolKeyShift = "";
+    @Nonnull
+    private String toolKeyCtrl = "";
+    @Nonnull
+    private String toolKeySpace = "";
+    @Nonnull
+    private String toolKeyMovement = "";
+
     public PlayerTownJournalState() {}
 
     @Nonnull
@@ -239,6 +284,17 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         c.dialogueSpeechEnabled = dialogueSpeechEnabled;
         c.dialogueSpeechVolumePercent = dialogueSpeechVolumePercent;
         c.activeTownId = activeTownId;
+        c.toolKeyPrimary = toolKeyPrimary;
+        c.toolKeySecondary = toolKeySecondary;
+        c.toolKeyUse = toolKeyUse;
+        c.toolKeyAbility1 = toolKeyAbility1;
+        c.toolKeyAbility2 = toolKeyAbility2;
+        c.toolKeyAbility3 = toolKeyAbility3;
+        c.toolKeyEscape = toolKeyEscape;
+        c.toolKeyShift = toolKeyShift;
+        c.toolKeyCtrl = toolKeyCtrl;
+        c.toolKeySpace = toolKeySpace;
+        c.toolKeyMovement = toolKeyMovement;
         return c;
     }
 
@@ -402,6 +458,54 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         hudBackgroundOpacity = 0f;
         dialogueSpeechEnabled = true;
         dialogueSpeechVolumePercent = 70;
+        resetToolKeyLabels();
+    }
+
+    @Nonnull
+    public String getToolKeyLabel(@Nonnull ToolKeybindSlot slot) {
+        return switch (slot) {
+            case PRIMARY -> toolKeyPrimary;
+            case SECONDARY -> toolKeySecondary;
+            case USE -> toolKeyUse;
+            case ABILITY1 -> toolKeyAbility1;
+            case ABILITY2 -> toolKeyAbility2;
+            case ABILITY3 -> toolKeyAbility3;
+            case ESCAPE -> toolKeyEscape;
+            case SHIFT -> toolKeyShift;
+            case CTRL -> toolKeyCtrl;
+            case SPACE -> toolKeySpace;
+            case MOVEMENT -> toolKeyMovement;
+        };
+    }
+
+    public void setToolKeyLabel(@Nonnull ToolKeybindSlot slot, @Nullable String label) {
+        String value = label != null ? label.trim() : "";
+        switch (slot) {
+            case PRIMARY -> toolKeyPrimary = value;
+            case SECONDARY -> toolKeySecondary = value;
+            case USE -> toolKeyUse = value;
+            case ABILITY1 -> toolKeyAbility1 = value;
+            case ABILITY2 -> toolKeyAbility2 = value;
+            case ABILITY3 -> toolKeyAbility3 = value;
+            case ESCAPE -> toolKeyEscape = value;
+            case SHIFT -> toolKeyShift = value;
+            case CTRL -> toolKeyCtrl = value;
+            case SPACE -> toolKeySpace = value;
+            case MOVEMENT -> toolKeyMovement = value;
+        }
+    }
+
+    public void setToolKeyLabels(@Nonnull ToolKeybindSlot[] slots, @Nonnull String[] labels) {
+        int n = Math.min(slots.length, labels.length);
+        for (int i = 0; i < n; i++) {
+            setToolKeyLabel(slots[i], labels[i]);
+        }
+    }
+
+    public void resetToolKeyLabels() {
+        for (ToolKeybindSlot slot : ToolKeybindSlot.values()) {
+            setToolKeyLabel(slot, "");
+        }
     }
 
     public boolean isDialogueSpeechEnabled() {
@@ -528,5 +632,15 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
 
     private static int clampSpeechVolume(int value) {
         return Math.max(0, Math.min(100, value));
+    }
+
+    @Nonnull
+    private static String trimOrEmpty(@Nullable String value) {
+        return value != null ? value.trim() : "";
+    }
+
+    @Nullable
+    private static String emptyOrNull(@Nonnull String value) {
+        return value.isEmpty() ? null : value;
     }
 }

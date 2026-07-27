@@ -10,12 +10,15 @@
 - **Community submission editor** — In Creative mode, the building editor staff has a My submissions tab. Edit and save to upload a new version. Pending updates replace your submission. Live buildings stay up until an update is approved.
 - **Debug commands for quest board, inn, and town rank** — `/ah questboard reroll`, `/ah inn reroll`, and `/ah townrank set <rank>`. Optional `--town` and `--player` targeting.
 - **Command tab completion** — Aetherhaven commands suggest values while you type (construction ids, town names, quest ids, and more).
+- **Tool key labels** — In the Town Journal under Settings, Personal, open Tool key labels to choose what keys show on tool hints for the path shovel, plot staff, patrol wand, shop spots, guard command, and more. This only changes what you see. Set each label to match your game settings so the hints stay accurate.
 - **Multi town membership** — You can join other towns as a guest while still owning only one. Use the town picker in the Town Journal when you belong to more than one town.
 - **Chalk for miners** — Chalk is now a valid material option for miners.
 - **Keep water when building** — New plot creator option for docks and boat plots. Water stays around the build during assembly. Empty markers inside the building still hollow out interiors.
 - **Town territory and expansions** — Towns claim map chunks, not just a fixed square. Members can be allowed or blocked from breaking blocks, placing blocks, harvesting, chests, and doors. At a completed town hall, use the expand tab to buy adjacent chunks (100 gold, then 200, and so on). The world map border follows your claim shape.
 - **Building favorites** — Star buildings in the plot crafting bench or on the community website. Open the Favorites tab to see everything you saved. Community favorites sync between the website and in-game.
 - **Crossmod villager schedules** — Other mods can register custom schedule locations and patch existing villager weekly routines without replacing full schedule files.
+- **Rank based follower and guard limits** — How many villagers and guards can follow you at once depends on your town rank. Higher rank towns can hire more guards too.
+- **Guild hall guard roster** — The guild hall town records shelf lists your hired guards and shows how many you have out of your town rank limit.
 
 ### Changed
 

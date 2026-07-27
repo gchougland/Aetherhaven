@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.ui.AetherhavenUiLocalization;
+import com.hexvane.aetherhaven.ui.PlayerToolKeybindLabels;
+import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -77,6 +79,7 @@ public final class PlotCreatorStatusHud extends CustomUIHud {
         }
         b.clear(CONTROL_ROWS);
         List<PlotCreatorHudControls.Row> rows = PlotCreatorHudControls.rowsFor(step, session);
+        PlayerTownJournalState journal = PlayerToolKeybindLabels.journalOrDefaults(getPlayerRef());
         for (int i = 0; i < rows.size(); i++) {
             PlotCreatorHudControls.Row row = rows.get(i);
             String base = CONTROL_ROWS + "[" + i + "]";
@@ -88,7 +91,10 @@ public final class PlotCreatorStatusHud extends CustomUIHud {
                 );
             } else {
                 b.append(CONTROL_ROWS, "Aetherhaven/PathToolHudControlRow.ui");
-                b.set(base + " #KeyLabel.TextSpans", Message.raw(row.keyLabel()));
+                b.set(
+                    base + " #KeyLabel.TextSpans",
+                    Message.raw(PlayerToolKeybindLabels.resolve(journal, row.slot()))
+                );
                 b.set(
                     base + " #DescLabel.TextSpans",
                     Message.translation(LANG_PREFIX + row.descriptionLangKey())

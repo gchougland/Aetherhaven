@@ -1,11 +1,12 @@
 package com.hexvane.aetherhaven.patrol;
 
+import com.hexvane.aetherhaven.ui.ToolKeybindSlot;
 import java.util.List;
 import javax.annotation.Nonnull;
 
 /** Mode-specific HUD control rows for the patrol wand. */
 public final class PatrolWandHudControls {
-    public record Row(@Nonnull String keyLabel, @Nonnull String descriptionLangKey, boolean infoOnly) {}
+    public record Row(@Nonnull ToolKeybindSlot slot, @Nonnull String descriptionLangKey, boolean infoOnly) {}
 
     private PatrolWandHudControls() {}
 
@@ -13,24 +14,24 @@ public final class PatrolWandHudControls {
     public static List<Row> rowsFor(@Nonnull PatrolWandMode mode) {
         return switch (mode) {
             case Build -> List.of(
-                row("Secondary", "aetherhaven.patrolWand.hud.build.secondary"),
-                row("Primary", "aetherhaven.patrolWand.hud.build.primary"),
-                row("F", "aetherhaven.patrolWand.hud.build.f"),
-                row("R", "aetherhaven.patrolWand.hud.build.r"),
-                row("E", "aetherhaven.patrolWand.hud.build.e"),
-                row("Q", "aetherhaven.patrolWand.hud.build.q")
+                row(ToolKeybindSlot.SECONDARY, "aetherhaven.patrolWand.hud.build.secondary"),
+                row(ToolKeybindSlot.PRIMARY, "aetherhaven.patrolWand.hud.build.primary"),
+                row(ToolKeybindSlot.USE, "aetherhaven.patrolWand.hud.build.f"),
+                row(ToolKeybindSlot.ABILITY3, "aetherhaven.patrolWand.hud.build.r"),
+                row(ToolKeybindSlot.ABILITY2, "aetherhaven.patrolWand.hud.build.e"),
+                row(ToolKeybindSlot.ABILITY1, "aetherhaven.patrolWand.hud.build.q")
             );
             case Assign -> List.of(
-                row("Primary", "aetherhaven.patrolWand.hud.assign.primary"),
-                row("F", "aetherhaven.patrolWand.hud.assign.f"),
-                row("E", "aetherhaven.patrolWand.hud.assign.e"),
-                row("Q", "aetherhaven.patrolWand.hud.assign.q")
+                row(ToolKeybindSlot.PRIMARY, "aetherhaven.patrolWand.hud.assign.primary"),
+                row(ToolKeybindSlot.USE, "aetherhaven.patrolWand.hud.assign.f"),
+                row(ToolKeybindSlot.ABILITY2, "aetherhaven.patrolWand.hud.assign.e"),
+                row(ToolKeybindSlot.ABILITY1, "aetherhaven.patrolWand.hud.assign.q")
             );
         };
     }
 
     @Nonnull
-    private static Row row(@Nonnull String key, @Nonnull String langKey) {
-        return new Row(key, langKey, false);
+    private static Row row(@Nonnull ToolKeybindSlot slot, @Nonnull String langKey) {
+        return new Row(slot, langKey, false);
     }
 }

@@ -81,7 +81,7 @@ aetherhaven.poiTool.hudHelpEdit=Primary: select POI. Secondary: move selected PO
 aetherhaven.poiTool.hudHelpPlacement=Secondary: open POI config on a block inside a completed plot.
 aetherhaven.poiTool.hudHelpRemove=Secondary: remove the nearest POI marker or registry POI near the block.
 aetherhaven.poiTool.hudHelpAdventurerSpots=Secondary: place a spot above the block facing you, or remove a nearby spot.
-aetherhaven.poiTool.hudHint=Q: cycle edit / placement / remove / adventurer spots
+aetherhaven.poiTool.hudHint={ability1}: cycle edit, placement, remove, and adventurer spots
 
 aetherhaven.pathTool.legendPageTitle=Path tool
 aetherhaven.pathTool.legendBlurb=Build a path, preview it, then place it. A status panel appears while you hold the tool.
@@ -284,7 +284,7 @@ aetherhaven.patrolWand.hudGuardNone=No guard
 aetherhaven.patrolWand.hudGuardAssigned=Assigned
 aetherhaven.patrolWand.hudRouteNew=New route
 aetherhaven.patrolWand.hudRouteUnnamed=Route
-aetherhaven.patrolWand.hudHint=Build: add points, R loop, F name and save | Assign: F guard list | Q: mode | E: new route or clear guard
+aetherhaven.patrolWand.hudHint=Build: add points, {ability3} loop, {use} name and save | Assign: {use} guard list | {ability1}: mode | {ability2}: new route or clear guard
 
 aetherhaven.patrolWand.hud.build.secondary=Click the ground to add a point, or aim at a point to remove it
 aetherhaven.patrolWand.hud.build.primary=Click a point on a saved route to select it

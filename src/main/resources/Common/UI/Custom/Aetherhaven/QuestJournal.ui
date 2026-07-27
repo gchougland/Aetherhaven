@@ -699,6 +699,28 @@ $C.@PageOverlay {
                         Anchor: (Bottom: 10, Height: 40, Left: 0, Right: 0);
                       }
 
+                      Label #SettingsToolKeybindsHeading {
+                        Anchor: (Bottom: 6);
+                        Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2, FontSize: 16);
+                        Text: "";
+                      }
+
+                      Label #SettingsToolKeybindsHint {
+                        Anchor: (Bottom: 10);
+                        Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8, Wrap: true);
+                        Text: "";
+                      }
+
+                      Group #SettingsToolKeybindsRow {
+                        LayoutMode: Left;
+                        Anchor: (Bottom: 16);
+
+                        $C.@SecondaryTextButton #SettingsOpenToolKeybindsButton {
+                          Anchor: (Width: 240, Height: 40);
+                          Text: "";
+                        }
+                      }
+
                       Group #SettingsPersonalSaveRow {
                         LayoutMode: Left;
                         Anchor: (Bottom: 12);

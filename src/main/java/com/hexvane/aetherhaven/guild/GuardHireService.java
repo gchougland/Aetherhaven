@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.equipment.VillagerEquipmentService;
 import com.hexvane.aetherhaven.equipment.data.EquipmentProfileDefinition;
+import com.hexvane.aetherhaven.questboard.TownRankCapacity;
 import com.hexvane.aetherhaven.town.HiredGuardRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -138,6 +139,10 @@ public final class GuardHireService {
             TownsfolkExistenceService.checkoutForCharacter(world, plugin, town.getTownId(), tb.getCharacterId());
         if (checkout == null) {
             LOGGER.atWarning().log("Cannot hire %s: missing townsfolk ledger entry", tb.getCharacterId());
+            return false;
+        }
+
+        if (!TownRankCapacity.canHireGuard(town, plugin.getQuestBoardCatalog())) {
             return false;
         }
 

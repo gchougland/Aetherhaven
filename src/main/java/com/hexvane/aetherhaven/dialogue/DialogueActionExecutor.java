@@ -15,6 +15,7 @@ import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerSystem;
 import com.hexvane.aetherhaven.patrol.GuardFollowPlayerSystem;
+import com.hexvane.aetherhaven.questboard.TownRankCapacity;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtMetadata;
@@ -1194,6 +1195,33 @@ public final class DialogueActionExecutor {
         }
         UUIDComponent playerUuid = store.getComponent(playerRef, UUIDComponent.getComponentType());
         if (playerUuid == null) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
+        if (town == null) {
+            return;
+        }
+        if (!TownRankCapacity.canStartFollow(
+            store,
+            playerUuid.getUuid(),
+            town,
+            plugin.getQuestBoardCatalog(),
+            npcRef
+        )) {
+            PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
+            if (pr != null) {
+                int limit = TownRankCapacity.maxFollowers(town, plugin.getQuestBoardCatalog());
+                pr.sendMessage(
+                    Message.translation("aetherhaven_dialogue_follow.aetherhaven.dialogue.follow.limitReached")
+                        .param("limit", String.valueOf(limit))
+                );
+            }
             return;
         }
         TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());

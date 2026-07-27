@@ -5,3 +5,4 @@ aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes=Yes, hire the
 aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.no=Not now
 aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.body=They are yours. Keep them fed and housed if you want them to stay long.
 aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.leave=Goodbye
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_limitReached=Your town can only hire {limit} guards at its current rank.

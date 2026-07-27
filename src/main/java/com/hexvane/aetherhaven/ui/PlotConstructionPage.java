@@ -46,6 +46,8 @@ import com.hexvane.aetherhaven.town.TownPlayerLookup;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.tourist.TownPortalTravelColor;
 import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
+import com.hexvane.aetherhaven.guild.GuardHireManifest;
+import com.hexvane.aetherhaven.questboard.TownRankCapacity;
 import com.hexvane.aetherhaven.tourist.TouristVisitManifest;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.codec.Codec;
@@ -113,6 +115,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         "#WorkplaceWorkerPickerModal #WorkplaceWorkerListScroll #WorkplaceWorkerRows";
     private static final String TOURIST_MANIFEST_ROWS = "#TouristManifestScroll #TouristManifestRows";
     private static final int MAX_TOURIST_MANIFEST_ROWS = 48;
+    private static final String GUARD_MANIFEST_ROWS = "#GuardManifestScroll #GuardManifestRows";
+    private static final int MAX_GUARD_MANIFEST_ROWS = 48;
     private static final String VP_COLOR_MODAL = "#VisitorPortalColorPickerModal";
     private static final String VP_COLOR_GRID = VP_COLOR_MODAL + " #Content #VisitorPortalColorPresetGrid";
     private static final String VP_COLOR_CHOOSE_BTN = "#ChooseVisitorPortalColorButton";
@@ -250,6 +254,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             commandBuilder.set("#TreasuryRow.Visible", false);
             commandBuilder.set("#HouseResidentRow.Visible", false);
             commandBuilder.set("#TouristManifestRow.Visible", false);
+            commandBuilder.set("#GuardManifestRow.Visible", false);
             commandBuilder.set("#WorkplaceAssignRow.Visible", false);
             commandBuilder.set("#WorkplaceAssignBardRow.Visible", false);
             commandBuilder.set("#ProductionUpgradeTreeSlot.Visible", false);
@@ -442,9 +447,19 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                     def.getId(),
                     AetherhavenConstants.CONSTRUCTION_PLOT_TOURIST_PORTAL
                 );
+        boolean showGuardManifest =
+            managementUi
+                && completed
+                && plotTabActive
+                && plugWork != null
+                && plugWork.getConstructionCatalog().matchesGameplayConstruction(
+                    def.getId(),
+                    AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL
+                );
 
         commandBuilder.set("#HouseResidentRow.Visible", showHouseResident);
         commandBuilder.set("#TouristManifestRow.Visible", showTouristManifest);
+        commandBuilder.set("#GuardManifestRow.Visible", showGuardManifest);
         commandBuilder.set("#WorkplaceAssignRow.Visible", showWorkplaceAssign && !nonBardRoles.isEmpty());
         commandBuilder.set("#WorkplaceAssignBardRow.Visible", showWorkplaceBard);
         commandBuilder.set("#WorkplaceAssignExtraRow.Visible", showWorkplaceExtra);
@@ -659,6 +674,10 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             );
         }
 
+        if (showGuardManifest && townUuidMgmt != null && plugWork != null) {
+            buildGuardManifestSection(store, commandBuilder, townUuidMgmt, plugWork);
+        }
+
         if (showDeposit) {
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
@@ -857,6 +876,51 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         }
     }
 
+    private void buildGuardManifestSection(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UUID townUuid,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.getTown(townUuid);
+        commandBuilder.clear(GUARD_MANIFEST_ROWS);
+        if (town == null) {
+            commandBuilder.set("#GuardManifestHeader.TextSpans", Message.raw(""));
+            commandBuilder.set("#GuardManifestEmpty.Visible", true);
+            commandBuilder.set("#GuardManifestScroll.Visible", false);
+            return;
+        }
+        int current = town.getHiredGuardRecords().size();
+        int max = TownRankCapacity.maxHiredGuards(town, plugin.getQuestBoardCatalog());
+        commandBuilder.set(
+            "#GuardManifestHeader.TextSpans",
+            Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.guardManifestHeader")
+                .param("current", String.valueOf(current))
+                .param("max", String.valueOf(max))
+        );
+        Store<EntityStore> entityStore = world.getEntityStore().getStore();
+        List<GuardHireManifest.Row> rows = GuardHireManifest.listRows(town, entityStore, plugin);
+        if (rows.isEmpty()) {
+            commandBuilder.set("#GuardManifestEmpty.Visible", true);
+            commandBuilder.set("#GuardManifestScroll.Visible", false);
+        } else {
+            commandBuilder.set("#GuardManifestEmpty.Visible", false);
+            commandBuilder.set("#GuardManifestScroll.Visible", true);
+            int n = Math.min(rows.size(), MAX_GUARD_MANIFEST_ROWS);
+            for (int i = 0; i < n; i++) {
+                GuardHireManifest.Row row = rows.get(i);
+                String rowPath = GUARD_MANIFEST_ROWS + "[" + i + "]";
+                commandBuilder.append(GUARD_MANIFEST_ROWS, "Aetherhaven/TouristManifestRow.ui");
+                commandBuilder.set(rowPath + " #Portrait.AssetPath", row.portraitPath());
+                commandBuilder.set(rowPath + " #NameLabel.TextSpans", Message.raw(row.label()));
+                commandBuilder.set(rowPath + " #StatusLabel.Visible", true);
+                commandBuilder.set(rowPath + " #StatusLabel.TextSpans", guardManifestStatus(row.guardRoleId(), row.housed()));
+            }
+        }
+    }
+
     private void handleSetVisitorPortalTravel(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
@@ -943,6 +1007,15 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             case HOUSED ->
                 Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.touristManifestHoused");
         };
+    }
+
+    @Nonnull
+    private static Message guardManifestStatus(@Nonnull String guardRoleId, boolean housed) {
+        String key =
+            housed
+                ? "aetherhaven_ui_town.aetherhaven.ui.plotconstruction.guardManifestStatusHoused"
+                : "aetherhaven_ui_town.aetherhaven.ui.plotconstruction.guardManifestStatusUnhoused";
+        return Message.translation(key).param("type", Message.translation(GuardRoleLabels.guardTypeLangKey(guardRoleId)));
     }
 
     private void buildManagementPlayersTab(

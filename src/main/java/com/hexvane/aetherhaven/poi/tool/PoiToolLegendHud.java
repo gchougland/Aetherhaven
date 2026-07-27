@@ -5,6 +5,7 @@ package com.hexvane.aetherhaven.poi.tool;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 
 import com.hexvane.aetherhaven.ui.AetherhavenUiLocalization;
+import com.hexvane.aetherhaven.ui.PlayerToolKeybindLabels;
 
 import com.hypixel.hytale.server.core.Message;
 
@@ -82,7 +83,10 @@ public final class PoiToolLegendHud extends CustomUIHud {
 
         b.set("#ModeHelp.TextSpans", Message.translation(helpKey));
 
-        b.set("#HintLine.TextSpans", Message.translation("aetherhaven_items.aetherhaven.poiTool.hudHint"));
+        b.set("#HintLine.TextSpans", PlayerToolKeybindLabels.paramMessage(
+            PlayerToolKeybindLabels.journalOrDefaults(getPlayerRef()),
+            "aetherhaven_items.aetherhaven.poiTool.hudHint"
+        ));
 
         this.update(false, b);
 

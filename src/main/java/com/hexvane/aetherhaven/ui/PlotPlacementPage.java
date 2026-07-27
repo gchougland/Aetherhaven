@@ -157,7 +157,10 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         commandBuilder.set(
             "#Tips.TextSpans",
             Message.join(
-                Message.translation(MSG_PLOT_UI + ".tipsControls"),
+                PlayerToolKeybindLabels.paramMessage(
+                    PlayerToolKeybindLabels.journalOrDefaults(ref, store),
+                    MSG_PLOT_UI + ".tipsControls"
+                ),
                 Message.raw("\n\n"),
                 Message.translation(MSG_PLOT_UI + ".cameraHint")
             )

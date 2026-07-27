@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.dialogue.DialogueConditionEvaluator;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerSystem;
 import com.hexvane.aetherhaven.patrol.GuardFollowPlayerSystem;
+import com.hexvane.aetherhaven.questboard.TownRankCapacity;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.bard.BardDialogueSongs;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
@@ -873,6 +874,21 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             villagerEligible
                 ? VillagerFollowPlayerSystem.isFollowingPlayer(store, npcRef, playerUuid.getUuid())
                 : GuardFollowPlayerSystem.isFollowingPlayer(store, npcRef, playerUuid.getUuid());
+        if (!following) {
+            TownRecord town = resolvePlayerTown(store, playerRef);
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (town == null
+                || plugin == null
+                || !TownRankCapacity.canStartFollow(
+                    store,
+                    playerUuid.getUuid(),
+                    town,
+                    plugin.getQuestBoardCatalog(),
+                    npcRef
+                )) {
+                return;
+            }
+        }
         DialogueChoiceDefinition follow = new DialogueChoiceDefinition();
         follow.setId(following ? "follow_stop" : "follow_start");
         follow.setText(following ? LANG_FOLLOW_STOP : LANG_FOLLOW_START);

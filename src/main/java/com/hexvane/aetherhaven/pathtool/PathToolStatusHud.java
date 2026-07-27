@@ -3,6 +3,8 @@ package com.hexvane.aetherhaven.pathtool;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.ui.AetherhavenUiLocalization;
+import com.hexvane.aetherhaven.ui.PlayerToolKeybindLabels;
+import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
@@ -113,6 +115,7 @@ public final class PathToolStatusHud extends CustomUIHud {
         }
         List<PathToolHudControls.Row> rows =
             PathToolHudControls.rowsFor(mode, styleEditingActive, replaceFilterEditingActive);
+        PlayerTownJournalState journal = PlayerToolKeybindLabels.journalOrDefaults(playerRef);
         for (int i = 0; i < rows.size(); i++) {
             PathToolHudControls.Row row = rows.get(i);
             String base = CONTROL_ROWS + "[" + i + "]";
@@ -124,7 +127,10 @@ public final class PathToolStatusHud extends CustomUIHud {
                 );
             } else {
                 b.append(CONTROL_ROWS, "Aetherhaven/PathToolHudControlRow.ui");
-                b.set(base + " #KeyLabel.TextSpans", Message.raw(row.keyLabel()));
+                b.set(
+                    base + " #KeyLabel.TextSpans",
+                    Message.raw(PlayerToolKeybindLabels.resolve(journal, row.slot()))
+                );
                 b.set(
                     base + " #DescLabel.TextSpans",
                     Message.translation(LANG_PREFIX + row.descriptionLangKey())

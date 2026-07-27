@@ -223,6 +223,33 @@ $C.@PageOverlay {
             }
           }
 
+          Group #GuardManifestRow {
+            LayoutMode: Top;
+            Visible: false;
+            Anchor: (Bottom: 12);
+
+            Label #GuardManifestHeader {
+              Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+              Anchor: (Bottom: 6);
+            }
+
+            Label #GuardManifestEmpty {
+              Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, Wrap: true);
+              Anchor: (Bottom: 8);
+              Visible: false;
+            }
+
+            Group #GuardManifestScroll {
+              LayoutMode: TopScrolling;
+              ScrollbarStyle: $C.@DefaultScrollbarStyle;
+              Anchor: (Height: 220, Bottom: 8);
+
+              Group #GuardManifestRows {
+                LayoutMode: Top;
+              }
+            }
+          }
+
           Group #VillagerRow {
             LayoutMode: Top;
             Visible: false;

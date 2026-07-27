@@ -54,6 +54,7 @@ public final class AetherhavenUiLocalization {
         b.set("#ReconstructBuildingCancelButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.reconstructBuildingModalCancel"));
         b.set("#TouristManifestHeader.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.touristManifestHeader"));
         b.set("#TouristManifestEmpty.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.touristManifestEmpty"));
+        b.set("#GuardManifestEmpty.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.guardManifestEmpty"));
         b.set("#ClearVisitingTouristsButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.clearVisitingTourists"));
         b.set("#VisitorPortalTravelLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalTravelAllow"));
         b.set("#VisitorPortalTravelLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalTravelAllowTooltip"));
@@ -401,6 +402,9 @@ public final class AetherhavenUiLocalization {
         b.set("#SettingsRepairPlotsButton.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.repairPlots"));
         b.set("#SettingsFinishPlotButton.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.finishPlot"));
         b.set("#SettingsVillagerReportButton.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.villagerReport"));
+        b.set("#SettingsToolKeybindsHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.toolKeybindsHeading"));
+        b.set("#SettingsToolKeybindsHint.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.toolKeybindsHint"));
+        b.set("#SettingsOpenToolKeybindsButton.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.toolKeybindsButton"));
         b.set("#GuideListHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.guide.listHeading"));
         b.set("#QuestListHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.questListHeading"));
         b.set("#RewardSectionHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.rewardHeading"));
@@ -501,5 +505,14 @@ public final class AetherhavenUiLocalization {
 
     public static void applyQuestBoardPage(@Nonnull UICommandBuilder b) {
         b.set("#QuestBoardTitleText.TextSpans", t("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.title"));
+    }
+
+    public static void applyToolKeybindsPage(@Nonnull UICommandBuilder b) {
+        String p = "aetherhaven_ui_journal_items_tail.aetherhaven.ui.toolKeybinds";
+        b.set("#ToolKeybindsTitleText.TextSpans", t(p + ".title"));
+        b.set("#ToolKeybindsIntro.TextSpans", t(p + ".intro"));
+        b.set("#ToolKeybindsSaveButton.TextSpans", t(p + ".saveButton"));
+        b.set("#ToolKeybindsResetButton.TextSpans", t(p + ".resetButton"));
+        b.set("#ToolKeybindsBackButton.TextSpans", t(p + ".backButton"));
     }
 }

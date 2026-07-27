@@ -923,6 +923,12 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             new EventData().append("Action", "PersonalSettingsReset"),
             false
         );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#SettingsOpenToolKeybindsButton",
+            new EventData().append("Action", "OpenToolKeybinds"),
+            false
+        );
     }
 
     @Nonnull
@@ -2715,6 +2721,14 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             UIEventBuilder ev = new UIEventBuilder();
             build(ref, cmd, ev, store);
             sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (action.equalsIgnoreCase("OpenToolKeybinds")) {
+            Player player = store.getComponent(ref, Player.getComponentType());
+            if (player == null) {
+                return;
+            }
+            player.getPageManager().openCustomPage(ref, store, new ToolKeybindsPage(playerRef));
             return;
         }
         if (action.equalsIgnoreCase("OpenDifficulty")) {

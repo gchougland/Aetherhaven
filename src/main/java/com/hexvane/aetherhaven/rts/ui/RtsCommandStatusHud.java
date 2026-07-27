@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.rts.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.rts.RtsCommandPlayerComponent;
+import com.hexvane.aetherhaven.ui.PlayerToolKeybindLabels;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -25,12 +26,18 @@ public final class RtsCommandStatusHud extends CustomUIHud {
         b.set("#HudTitle.TextSpans", Message.translation(p + ".hudTitle"));
         b.set("#OrderModeLine.TextSpans", Message.translation(orderModeKey(session, p)));
         b.set("#StanceLine.TextSpans", Message.translation(stanceKey(session, p)));
-        b.set("#ToolHelpLine.TextSpans", Message.translation(toolHelpKey));
+        b.set("#ToolHelpLine.TextSpans", PlayerToolKeybindLabels.paramMessage(
+            PlayerToolKeybindLabels.journalOrDefaults(getPlayerRef()),
+            toolHelpKey
+        ));
         b.set(
             "#SelectedLine.TextSpans",
             Message.translation(p + ".hudSelected").param("n", String.valueOf(session.getSelectedGuardUuids().size()))
         );
-        b.set("#ControlsLine.TextSpans", Message.translation(p + ".hudControls"));
+        b.set("#ControlsLine.TextSpans", PlayerToolKeybindLabels.paramMessage(
+            PlayerToolKeybindLabels.journalOrDefaults(getPlayerRef()),
+            p + ".hudControls"
+        ));
         this.update(false, b);
     }
 
