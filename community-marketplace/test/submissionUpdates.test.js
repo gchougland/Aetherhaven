@@ -179,6 +179,7 @@ test("updateOwnedSubmission creates new pending for approved buildings", () => {
     });
     assert.equal(result.status, 201);
     assert.equal(result.body.action, "created_pending");
+    assert.equal(result.body.isBuildingUpdate, true);
     assert.equal(result.body.version, "4");
     assert.equal(storage.listPending().length, 1);
     assert.notEqual(storage.listPending()[0].submissionId, `${BUILDING_ID}_old`);

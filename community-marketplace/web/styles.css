@@ -656,8 +656,15 @@ main.wrap > section + section {
   overflow: hidden;
 }
 
-.building-card-header > .building-icon-wrap,
-.newest-carousel-card-media > .building-icon-wrap {
+/* Legacy wrapper from older app.js bundles (e.g. admin page cache). */
+.building-card-media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.building-card-header .building-icon-wrap,
+.newest-carousel-card-media .building-icon-wrap {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -671,21 +678,21 @@ main.wrap > section + section {
   background: var(--bg-deep);
 }
 
-.building-card-header > .building-icon-wrap--placeholder,
-.newest-carousel-card-media > .building-icon-wrap--placeholder {
+.building-card-header .building-icon-wrap--placeholder,
+.newest-carousel-card-media .building-icon-wrap--placeholder {
   border: none;
   background: linear-gradient(145deg, #1a1012, var(--panel));
 }
 
-.building-card-header > .building-icon-wrap--placeholder::before,
-.newest-carousel-card-media > .building-icon-wrap--placeholder::before {
+.building-card-header .building-icon-wrap--placeholder::before,
+.newest-carousel-card-media .building-icon-wrap--placeholder::before {
   font-size: 2.75rem;
 }
 
-.building-card-header > .building-icon-wrap img,
-.building-card-header > .building-icon-wrap .building-icon,
-.newest-carousel-card-media > .building-icon-wrap img,
-.newest-carousel-card-media > .building-icon-wrap .building-icon {
+.building-card-header .building-icon-wrap img,
+.building-card-header .building-icon-wrap .building-icon,
+.newest-carousel-card-media .building-icon-wrap img,
+.newest-carousel-card-media .building-icon-wrap .building-icon {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -696,10 +703,10 @@ main.wrap > section + section {
   background: transparent;
 }
 
-.building-card-header > .building-icon-wrap--cover .building-icon,
-.building-card-header > .building-icon--cover,
-.newest-carousel-card-media > .building-icon-wrap--cover .building-icon,
-.newest-carousel-card-media > .building-icon--cover {
+.building-card-header .building-icon-wrap--cover .building-icon,
+.building-card-header .building-icon--cover,
+.newest-carousel-card-media .building-icon-wrap--cover .building-icon,
+.newest-carousel-card-media .building-icon--cover {
   image-rendering: auto;
 }
 

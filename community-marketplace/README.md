@@ -58,8 +58,8 @@ Set webhook URLs in Railway Variables (or local `.env`):
 
 | Variable | Channel | Fires when |
 |----------|---------|------------|
-| `DISCORD_PENDING_WEBHOOK_URL` | Admin-only | A new building is submitted for review |
-| `DISCORD_APPROVED_WEBHOOK_URL` | Public announcements | A building is approved |
+| `DISCORD_PENDING_WEBHOOK_URL` | Admin-only | A new building is submitted for review (not version updates to already published builds) |
+| `DISCORD_APPROVED_WEBHOOK_URL` | Public announcements | A building is approved for the first time (not re-approval after an update) |
 
 Leave either unset to disable that notification. Webhook failures never block submit or approve.
 

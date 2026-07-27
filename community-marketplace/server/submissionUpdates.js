@@ -374,6 +374,7 @@ export function updateOwnedSubmission({
           status: "pending",
           version: meta.version,
           action: "created_pending",
+          isBuildingUpdate: true,
           displayName: meta.displayName,
           description: meta.description || "",
         },

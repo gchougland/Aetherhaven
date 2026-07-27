@@ -561,6 +561,9 @@ function approveSubmission(submissionId, requestedId, requiredModsOverride) {
   }
 
   const approved = storage.approvedPaths(id);
+  const wasAlreadyPublished =
+    fs.existsSync(approved.meta) ||
+    (storage.readManifest().entries || []).some((entry) => entry.id === id);
   const preservedCoverScreenshotId = resolvePreservedCoverScreenshotId(id);
   fs.mkdirSync(approved.dir, { recursive: true });
   fs.copyFileSync(path.join(pendingDir, "building.json"), approved.building);
@@ -609,17 +612,19 @@ function approveSubmission(submissionId, requestedId, requiredModsOverride) {
   fs.rmSync(pendingDir, { recursive: true, force: true });
   storage.reassignScreenshotsToApproved(submissionId, id);
   autoSetCoverFromExistingApprovedScreenshots(storage, id);
-  notifyBuildingApproved({
-    publicBaseUrl,
-    id,
-    displayName: approvedMeta.displayName,
-    description: approvedMeta.description,
-    creatorName: approvedMeta.creatorName,
-    tags: approvedMeta.tags,
-    styleId: approvedMeta.styleId,
-    approvedAt: approvedMeta.approvedAt,
-    hasIcon: fs.existsSync(approved.icon),
-  }).catch(() => {});
+  if (!wasAlreadyPublished) {
+    notifyBuildingApproved({
+      publicBaseUrl,
+      id,
+      displayName: approvedMeta.displayName,
+      description: approvedMeta.description,
+      creatorName: approvedMeta.creatorName,
+      tags: approvedMeta.tags,
+      styleId: approvedMeta.styleId,
+      approvedAt: approvedMeta.approvedAt,
+      hasIcon: fs.existsSync(approved.icon),
+    }).catch(() => {});
+  }
   return { status: 200, body: { id, status: "approved" } };
 }
 
@@ -1259,7 +1264,7 @@ app.put(
       normalizeDescription,
       normalizeTags,
     });
-    if (result.status === 201 && result.body?.action === "created_pending") {
+    if (result.status === 201 && result.body?.action === "created_pending" && !result.body?.isBuildingUpdate) {
       notifyBuildingPending({
         publicBaseUrl,
         submissionId: result.body.submissionId,
