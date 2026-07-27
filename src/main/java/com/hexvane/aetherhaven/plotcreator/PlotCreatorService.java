@@ -545,17 +545,41 @@ public final class PlotCreatorService {
             draft.setConstructionId(draft.getEditingConstructionId());
             id = draft.getEditingConstructionId();
         }
-        String lockedPrefab = draft.getLockedPrefabPathKey() != null ? draft.getLockedPrefabPathKey() : draft.getPrefabPath();
-        Path writeRoot = BuildingEditorSavePaths.resolveWriteRoot(plugin, id);
-        Path prefabOut = BuildingEditorSavePaths.prefabFile(writeRoot, lockedPrefab);
+        boolean communityEnabled = plugin.getConfig().get().getCommunityMarketplace().isEnabled();
+        boolean submitChecked = draft.isSubmitToCommunity() && !draft.isCommunitySubmissionEdit();
+        if (submitChecked && communityEnabled) {
+            try {
+                String remapErr =
+                    CommunitySubmitLocalSave.prepareDraftForCommunitySubmit(plugin, draft, playerRef.getUuid());
+                if (remapErr != null) {
+                    playerRef.sendMessage(
+                        Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error." + remapErr)
+                    );
+                    return false;
+                }
+            } catch (Exception e) {
+                playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.saveFailed"));
+                return false;
+            }
+            id = draft.getConstructionId().trim();
+        }
+        String prefabKey =
+            submitChecked && communityEnabled
+                ? draft.getPrefabPath()
+                : (draft.getLockedPrefabPathKey() != null ? draft.getLockedPrefabPathKey() : draft.getPrefabPath());
+        Path writeRoot =
+            submitChecked && communityEnabled
+                ? plugin.getDataDirectory().toAbsolutePath().normalize()
+                : BuildingEditorSavePaths.resolveWriteRoot(plugin, id);
+        Path prefabOut = BuildingEditorSavePaths.prefabFile(writeRoot, prefabKey);
         boolean exported = PlotCreatorPrefabExporter.export(session.getWorld(), draft, prefabOut, true);
         if (!exported) {
             playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.prefabExport"));
             return false;
         }
-        if (lockedPrefab != null) {
-            draft.setPrefabPath(lockedPrefab);
-            draft.setPrefabFileName(lockedPrefab);
+        if (prefabKey != null) {
+            draft.setPrefabPath(prefabKey);
+            draft.setPrefabFileName(prefabKey);
         }
         Path buildingFile = BuildingEditorSavePaths.buildingFile(writeRoot, id);
         try {
@@ -568,7 +592,7 @@ public final class PlotCreatorService {
         if (prefabPath != null && !prefabPath.isBlank()) {
             plugin.getPrefabMaterialsService().generateOne(id, prefabPath, writeRoot);
         }
-        if (draft.isCommunitySubmissionEdit() && plugin.getConfig().get().getCommunityMarketplace().isEnabled()) {
+        if (draft.isCommunitySubmissionEdit() && communityEnabled) {
             String playerName = playerRef.getUsername() != null ? playerRef.getUsername() : "Unknown";
             CommunitySubmissionService.UpdateOutcome outcome = new CommunitySubmissionService.UpdateOutcome();
             String submitErr =
@@ -584,6 +608,11 @@ public final class PlotCreatorService {
             if (submitErr != null) {
                 return false;
             }
+        } else if (submitChecked && communityEnabled) {
+            String playerName = playerRef.getUsername() != null ? playerRef.getUsername() : "Unknown";
+            String submitErr =
+                CommunitySubmissionService.submitSavedBuilding(plugin, playerRef.getUuid(), playerName, id);
+            CommunitySubmissionService.notifyPlayer(playerRef, submitErr);
         }
         plugin.reloadConfigsAndAssetCatalogs();
         draft.setStep(PlotCreatorStep.DONE);

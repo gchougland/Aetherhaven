@@ -61,9 +61,6 @@ public final class ShopPriceTooltipMessages {
         }
         BsonDocument meta = metadata != null ? metadata.clone() : new BsonDocument();
         Message body = resolveBaseDescription(meta, baseId);
-        if (meta.containsKey(JewelryMetadata.BSON_KEY)) {
-            body = stripShopPriceFooter(body);
-        }
         Message merged = buildMergedDescription(meta, baseId, body, footer);
         writeDisplayDescription(meta, merged);
         return meta;
@@ -91,7 +88,10 @@ public final class ShopPriceTooltipMessages {
         if (isEmptyMessage(body)) {
             return false;
         }
-        Item item = Item.getAssetMap().getAsset(itemId);
+        if (hasNonEmptyItemDisplayDescription(metadata)) {
+            return hasMeaningfulCustomBody(body);
+        }
+        Item item = resolveItem(itemId);
         if (item != null && hasLangText(item.getDescriptionTranslationKey())) {
             return true;
         }
@@ -99,6 +99,15 @@ public final class ShopPriceTooltipMessages {
             return hasMeaningfulCustomBody(body);
         }
         return false;
+    }
+
+    /** True when stack metadata already carries a custom {@code ItemDisplay.Description} (e.g. Simple Enchantments). */
+    private static boolean hasNonEmptyItemDisplayDescription(@Nonnull BsonDocument metadata) {
+        ItemDisplayMetadata display = decodeDisplay(metadata);
+        if (display == null || display.getDescription() == null) {
+            return false;
+        }
+        return !isEmptyMessage(stripShopPriceFooter(display.getDescription()));
     }
 
     private static boolean hasMeaningfulCustomBody(@Nonnull Message body) {
@@ -155,22 +164,33 @@ public final class ShopPriceTooltipMessages {
     }
 
     /**
-     * Non-jewelry: always the item asset description (translation key) so persisted {@code ItemDisplay} from prior packet
-     * patches does not stack duplicate footers. Jewelry: use {@code ItemDisplay} (rolled traits, etc.).
+     * Prefer existing per-stack {@code ItemDisplay.Description} (Simple Enchantments, jewelry, etc.); fall back to the
+     * item asset description when no custom display text is present.
      */
     @Nonnull
     private static Message resolveBaseDescription(@Nonnull BsonDocument metadata, @Nonnull String itemId) {
-        if (metadata.containsKey(JewelryMetadata.BSON_KEY)) {
-            ItemDisplayMetadata display = decodeDisplay(metadata);
-            if (display != null && display.getDescription() != null) {
-                return display.getDescription();
+        ItemDisplayMetadata display = decodeDisplay(metadata);
+        if (display != null && display.getDescription() != null) {
+            Message fromDisplay = stripShopPriceFooter(display.getDescription());
+            if (!isEmptyMessage(fromDisplay)) {
+                return fromDisplay;
             }
         }
-        Item item = Item.getAssetMap().getAsset(itemId);
+        Item item = resolveItem(itemId);
         if (item != null) {
             return item.getDescriptionTranslationMessage();
         }
         return Message.raw("");
+    }
+
+    @Nullable
+    private static Item resolveItem(@Nonnull String itemId) {
+        var store = Item.getAssetStore();
+        if (store == null) {
+            return null;
+        }
+        var assetMap = store.getAssetMap();
+        return assetMap != null ? assetMap.getAsset(itemId) : null;
     }
 
     @Nonnull
@@ -242,7 +262,13 @@ public final class ShopPriceTooltipMessages {
     }
 
     private static void writeDisplayDescription(@Nonnull BsonDocument metadata, @Nonnull Message description) {
-        BsonDocument display = new BsonDocument();
+        BsonDocument display;
+        BsonValue existing = metadata.get(ItemDisplayMetadata.KEY);
+        if (existing != null && existing.isDocument()) {
+            display = existing.asDocument().clone();
+        } else {
+            display = new BsonDocument();
+        }
         BsonValue encoded = Message.CODEC.encode(description, new ExtraInfo());
         if (encoded.isDocument()) {
             patchMarkupEnabledSelective(encoded.asDocument());

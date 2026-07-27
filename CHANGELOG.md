@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.6.1] - Unreleased
+
+### Fixed
+
+- **Building editor community submit** — Checking submit to community while editing a locally saved building now uploads it for review when you finish, same as the plot creator staff.
+- **Shop price tooltips** — Shop gold price lines append to existing item descriptions (Simple Enchantments and other mods using ItemDisplay) instead of replacing them.
+
+
 ## [2.6.0] - 7/27/2026
 
 ### Added
