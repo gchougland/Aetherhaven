@@ -15,6 +15,7 @@
 - **Keep water when building** — New plot creator option for docks and boat plots. Water stays around the build during assembly. Empty markers inside the building still hollow out interiors.
 - **Town territory and expansions** — Towns claim map chunks, not just a fixed square. Members can be allowed or blocked from breaking blocks, placing blocks, harvesting, chests, and doors. At a completed town hall, use the expand tab to buy adjacent chunks (100 gold, then 200, and so on). The world map border follows your claim shape.
 - **Building favorites** — Star buildings in the plot crafting bench or on the community website. Open the Favorites tab to see everything you saved. Community favorites sync between the website and in-game.
+- **Crossmod villager schedules** — Other mods can register custom schedule locations and patch existing villager weekly routines without replacing full schedule files.
 
 ### Changed
 

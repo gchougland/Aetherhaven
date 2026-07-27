@@ -37,6 +37,7 @@ import com.hexvane.aetherhaven.questboard.QuestBoardCatalog;
 import com.hexvane.aetherhaven.reputation.ReputationRewardCatalog;
 import com.hexvane.aetherhaven.rts.RtsClientMovementPacketAdapter;
 import com.hexvane.aetherhaven.rts.RtsCommandHotbarSlotInboundAdapter;
+import com.hexvane.aetherhaven.schedule.ScheduleLocationCatalog;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleRegistry;
 import com.hexvane.aetherhaven.shopspot.ShopPriceCatalog;
 import com.hexvane.aetherhaven.shopspot.ShopPriceFiles;
@@ -105,6 +106,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private WorldQuestBoardCatalog worldQuestBoardCatalog = WorldQuestBoardCatalog.empty();
     private final WorldNpcService worldNpcService = new WorldNpcService(this);
     private VillagerScheduleRegistry villagerScheduleRegistry = VillagerScheduleRegistry.empty();
+    private ScheduleLocationCatalog scheduleLocationCatalog = ScheduleLocationCatalog.empty();
     private VillagerDefinitionCatalog villagerDefinitionCatalog = VillagerDefinitionCatalog.empty();
     private TownsfolkPersonalityCatalog townsfolkPersonalityCatalog = TownsfolkPersonalityCatalog.empty();
     private TownsfolkCharacterCatalog townsfolkCharacterCatalog = TownsfolkCharacterCatalog.empty();
@@ -297,6 +299,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public VillagerScheduleRegistry getVillagerScheduleRegistry() {
         return villagerScheduleRegistry;
+    }
+
+    @Nonnull
+    public ScheduleLocationCatalog getScheduleLocationCatalog() {
+        return scheduleLocationCatalog;
     }
 
     @Nonnull
@@ -495,7 +502,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.questCatalog = QuestCatalog.loadFromAssetPacksOrClasspath(cl);
         this.questBoardCatalog = QuestBoardCatalog.loadFromAssetPacksOrClasspath(cl);
         this.worldQuestBoardCatalog = WorldQuestBoardCatalog.loadFromAssetPacks();
-        this.villagerScheduleRegistry = VillagerScheduleRegistry.loadFromAssetPacksOrClasspath(cl);
+        this.scheduleLocationCatalog = ScheduleLocationCatalog.loadFromAssetPacks();
+        this.villagerScheduleRegistry =
+            VillagerScheduleRegistry.loadFromAssetPacksOrClasspath(cl, this.villagerDefinitionCatalog, this.scheduleLocationCatalog);
         this.townNameCatalog = TownNameCatalog.loadFromClasspath();
         this.productionCatalog = ProductionCatalog.loadFromClasspath(cl);
         this.workplaceUnlockCatalog = WorkplaceUnlockCatalog.loadFromClasspath(cl);

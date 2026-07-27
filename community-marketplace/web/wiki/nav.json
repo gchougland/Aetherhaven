@@ -174,6 +174,12 @@
               "children": []
             },
             {
+              "id": "villager_chef",
+              "name": "Pepper Ashford",
+              "depth": 2,
+              "children": []
+            },
+            {
               "id": "villager_blacksmith",
               "name": "Garren Vale",
               "depth": 2,
@@ -455,6 +461,11 @@
       "depth": 2
     },
     {
+      "id": "villager_chef",
+      "name": "Pepper Ashford",
+      "depth": 2
+    },
+    {
       "id": "villager_blacksmith",
       "name": "Garren Vale",
       "depth": 2
@@ -599,6 +610,7 @@
     "Elias Thornwood": "villager_bard",
     "Garren Vale": "villager_blacksmith",
     "Rowan Ridgecraft": "villager_builder",
+    "Pepper Ashford": "villager_chef",
     "Vaelith Prismshade": "villager_crystal_keeper",
     "Elder Lyren": "villager_elder",
     "Irienne Mossmark": "villager_farmer",

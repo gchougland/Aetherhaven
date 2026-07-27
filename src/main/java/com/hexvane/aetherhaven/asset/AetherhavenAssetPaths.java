@@ -22,6 +22,12 @@ public final class AetherhavenAssetPaths {
     /** Relative to pack root: villager weekly schedule JSON per NPC role id (recursive). */
     public static final String VILLAGER_SCHEDULES = "Server/Aetherhaven/VillagerSchedules";
 
+    /** Crossmod schedule location symbols mapped to gameplay construction ids. */
+    public static final String SCHEDULE_LOCATIONS = "Server/Aetherhaven/ScheduleLocations";
+
+    /** Patches that add, replace, or remove transitions on existing villager weekly schedules. */
+    public static final String VILLAGER_SCHEDULE_PATCHES = "Server/Aetherhaven/VillagerSchedulePatches";
+
     /** Relative to pack root: villager gameplay metadata JSON (dialogue keys, rep, inn pool, schedule bindings). */
     public static final String VILLAGERS = "Server/Aetherhaven/Villagers";
 

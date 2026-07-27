@@ -135,6 +135,27 @@ public final class VillagerScheduleResolver {
         @Nullable VillagerDefinition villagerDef,
         @Nonnull ConstructionCatalog constructionCatalog
     ) {
+        return describeSchedulePlotUnresolvedReason(
+            town,
+            binding,
+            entityUuid,
+            locationSymbol,
+            villagerDef,
+            constructionCatalog,
+            null
+        );
+    }
+
+    @Nonnull
+    public static String describeSchedulePlotUnresolvedReason(
+        @Nonnull TownRecord town,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull UUID entityUuid,
+        @Nonnull String locationSymbol,
+        @Nullable VillagerDefinition villagerDef,
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nullable ScheduleLocationCatalog locationCatalog
+    ) {
         String loc = normalizeLocation(locationSymbol);
         if (loc == null) {
             return "empty or invalid location symbol";
@@ -149,8 +170,41 @@ public final class VillagerScheduleResolver {
             case LOC_GAIA_ALTAR ->
                 describeSharedUnresolved(town, sharedConstructionId(loc, villagerDef), constructionCatalog);
             case LOC_SHOP -> "no complete shop tagged building in town";
-            default -> "unsupported location '" + loc + "' (not home/work/inn/park/gaia_altar/shop)";
+            default -> describeCustomLocationUnresolved(town, loc, villagerDef, constructionCatalog, locationCatalog);
         };
+    }
+
+    @Nonnull
+    private static String describeCustomLocationUnresolved(
+        @Nonnull TownRecord town,
+        @Nonnull String normalizedLoc,
+        @Nullable VillagerDefinition villagerDef,
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nullable ScheduleLocationCatalog locationCatalog
+    ) {
+        String constructionId = resolveCustomConstructionId(normalizedLoc, villagerDef, locationCatalog);
+        if (constructionId == null) {
+            return "unsupported location '" + normalizedLoc + "' (not registered)";
+        }
+        return describeSharedUnresolved(town, constructionId, constructionCatalog);
+    }
+
+    @Nullable
+    private static String resolveCustomConstructionId(
+        @Nonnull String normalizedLoc,
+        @Nullable VillagerDefinition villagerDef,
+        @Nullable ScheduleLocationCatalog locationCatalog
+    ) {
+        if (villagerDef != null) {
+            String fromDef = villagerDef.sharedConstructionIdForLocationSymbol(normalizedLoc);
+            if (fromDef != null) {
+                return fromDef;
+            }
+        }
+        if (locationCatalog != null) {
+            return locationCatalog.constructionIdForSymbol(normalizedLoc);
+        }
+        return null;
     }
 
     @Nonnull
@@ -174,6 +228,7 @@ public final class VillagerScheduleResolver {
             tickState,
             timeJump,
             null,
+            null,
             null
         );
     }
@@ -190,6 +245,35 @@ public final class VillagerScheduleResolver {
         boolean timeJump,
         @Nullable TownsfolkPersonalityCatalog personalityCatalog,
         @Nullable List<String> personalityIds
+    ) {
+        return resolvePlot(
+            town,
+            binding,
+            entityUuid,
+            locationSymbol,
+            villagerDef,
+            constructionCatalog,
+            tickState,
+            timeJump,
+            personalityCatalog,
+            personalityIds,
+            null
+        );
+    }
+
+    @Nonnull
+    public static VillagerScheduleResolveOutcome resolvePlot(
+        @Nonnull TownRecord town,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull UUID entityUuid,
+        @Nonnull String locationSymbol,
+        @Nullable VillagerDefinition villagerDef,
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nullable VillagerScheduleTickState tickState,
+        boolean timeJump,
+        @Nullable TownsfolkPersonalityCatalog personalityCatalog,
+        @Nullable List<String> personalityIds,
+        @Nullable ScheduleLocationCatalog locationCatalog
     ) {
         String loc = normalizeLocation(locationSymbol);
         if (loc == null) {
@@ -232,8 +316,46 @@ public final class VillagerScheduleResolver {
                     personalityIds
                 );
             case LOC_SHOP -> resolveShopBrowsing(town, constructionCatalog);
-            default -> VillagerScheduleResolveOutcome.skip();
+            default -> resolveCustomLocation(
+                town,
+                loc,
+                villagerDef,
+                constructionCatalog,
+                locationCatalog,
+                tickState,
+                timeJump,
+                personalityCatalog,
+                personalityIds
+            );
         };
+    }
+
+    @Nonnull
+    private static VillagerScheduleResolveOutcome resolveCustomLocation(
+        @Nonnull TownRecord town,
+        @Nonnull String normalizedLoc,
+        @Nullable VillagerDefinition villagerDef,
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nullable ScheduleLocationCatalog locationCatalog,
+        @Nullable VillagerScheduleTickState tickState,
+        boolean timeJump,
+        @Nullable TownsfolkPersonalityCatalog personalityCatalog,
+        @Nullable List<String> personalityIds
+    ) {
+        String constructionId = resolveCustomConstructionId(normalizedLoc, villagerDef, locationCatalog);
+        if (constructionId == null) {
+            return VillagerScheduleResolveOutcome.skip();
+        }
+        return resolveSharedBuilding(
+            town,
+            constructionCatalog,
+            constructionId,
+            normalizedLoc,
+            tickState,
+            timeJump,
+            personalityCatalog,
+            personalityIds
+        );
     }
 
     @Nonnull

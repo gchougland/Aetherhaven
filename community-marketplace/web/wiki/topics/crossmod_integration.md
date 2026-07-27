@@ -35,6 +35,8 @@ Place content under your pack root:
 | `Server/Aetherhaven/Villagers/`            | Villager gameplay defs (dialogue trees, gifts, schedules, inn pool) |
 | `Server/Aetherhaven/VillagerGiftPatches/`  | Append gift loves/likes/dislikes onto an existing villager          |
 | `Server/Aetherhaven/VillagerSchedules/`    | Weekly schedules by NPC role id                                     |
+| `Server/Aetherhaven/ScheduleLocations/`    | Custom schedule location symbols mapped to buildings                |
+| `Server/Aetherhaven/VillagerSchedulePatches/` | Add, replace, or remove schedule times on existing roles         |
 | `Server/Aetherhaven/GuideTopics/`          | Journal guide markdown pages (`<locale>/<topicId>.md`)              |
 | `Server/Aetherhaven/GuidePatches/`         | Append guide hub `sub-topics` (e.g. under `villagers`)              |
 | `Server/Aetherhaven/NpcRoles/`            | Engine NPC roles (only loaded when Aetherhaven is present)          |
@@ -52,7 +54,7 @@ Place content under your pack root:
 | `Server/Languages/en-US/`                  | English lang keys                                                   |
 
 
-Same content id from a later pack replaces an earlier pack for whole-file catalogs (villagers, dialogue trees, quests, buildings). Prices, loot, quest board pools, dialogue patches, and gift patches merge as described below.
+Same content id from a later pack replaces an earlier pack for whole-file catalogs (villagers, dialogue trees, quests, buildings). Prices, loot, quest board pools, dialogue patches, gift patches, and schedule patches merge as described below.
 
 ## Villagers and NPC roles
 
@@ -87,6 +89,129 @@ Same `npcRoleId` under `Villagers/` replaces the **whole** villager definition. 
 ```
 
 Item ids are appended (duplicates skipped). Put full gift lists on your own villager def when you own that role.
+
+## Villager schedules
+
+Villagers follow a weekly routine: at set days and times they go to symbolic locations (home, work, inn, park, gaia altar, shop, or your own registered symbols). Aetherhaven resolves those symbols to town plots at runtime.
+
+### Built in location symbols
+
+| Symbol | Meaning |
+| --- | --- |
+| `home` | The villager's house plot, or their workplace if they have no house yet |
+| `work` | Their job plot (from `workConstructionId` or villager kind) |
+| `inn` | A completed inn plot |
+| `park` | A completed park plot |
+| `gaia_altar` | A completed Gaia altar plot |
+| `shop` | Browsing shop tagged buildings town wide |
+
+Symbols are case insensitive.
+
+### Register a custom location
+
+When your mod adds a new building villagers should visit on a schedule, register its symbol once under `Server/Aetherhaven/ScheduleLocations/`:
+
+```json
+{
+  "schemaVersion": 1,
+  "constructionId": "plot_fishing_shop",
+  "displayNameLangKey": "example_mod.schedule.fishing_dock.name"
+}
+```
+
+The file name (without `.json`) is the symbol id, for example `fishing_dock.json` → `fishing_dock`. The building must exist under `Server/Aetherhaven/Buildings/`. If several complete plots use the same construction, set `"scheduleSharedUtilityPick": true` on that building JSON (same as inn and park) so villagers pick one plot and stick with it for the day.
+
+Optional `displayNameLangKey` is used in the town journal schedule view. Add the English line in your pack's `Server/Languages/en-US/` files.
+
+You cannot register symbols named `home`, `work`, `inn`, `park`, `gaia_altar`, or `shop`.
+
+### Per villager location override
+
+On a villager definition, `scheduleSharedLocations` maps a symbol to a different construction id for that villager only:
+
+```json
+"scheduleSharedLocations": {
+  "fishing_dock": "plot_special_pier"
+}
+```
+
+Use this when one villager should visit a different building than the global registration.
+
+### Full schedule files
+
+Ship a complete week under `Server/Aetherhaven/VillagerSchedules/<scheduleRoleId>.json`. Same role id from a later pack replaces the whole file. You can also embed `weeklySchedule` on your villager def (that overrides the file).
+
+Example transition:
+
+```json
+{
+  "dayOfWeek": "WEDNESDAY",
+  "hour": 14,
+  "minute": 0,
+  "location": "fishing_dock"
+}
+```
+
+`dayOfWeek` can be `MONDAY` through `SUNDAY` or `1` through `7` (Monday = 1).
+
+### Schedule patches (extend an existing villager)
+
+To add or tweak times on an Aetherhaven villager without copying their full schedule, use `Server/Aetherhaven/VillagerSchedulePatches/`:
+
+```json
+{
+  "schemaVersion": 1,
+  "targetScheduleRoleId": "Aetherhaven_Merchant",
+  "removeTransitionIds": ["example_wed_fishing"],
+  "removeTransitions": [
+    { "dayOfWeek": "TUESDAY", "hour": 17, "minute": 0 }
+  ],
+  "addTransitions": [
+    {
+      "id": "example_wed_fishing",
+      "dayOfWeek": "WEDNESDAY",
+      "hour": 14,
+      "minute": 0,
+      "location": "fishing_dock"
+    }
+  ]
+}
+```
+
+Patch order per target schedule:
+
+1. `removeTransitionIds` drops transitions with a matching optional `id`.
+2. `removeTransitions` drops transitions at the exact day, hour, and minute (for bundled schedules that have no ids).
+3. `addTransitions` appends each entry, or **replaces** an existing transition when the same `id` is already present.
+
+`targetScheduleRoleId` is the schedule file name (usually the same as `npcRoleId`, or the villager's `scheduleRoleId` when set). Later patch files win on id conflicts.
+
+Register the location symbol before referencing it in a patch. The server log warns if a patch uses an unknown symbol.
+
+## Townsfolk (optional mod characters)
+
+Townsfolk are hand designed characters that can appear as **tourists**, **guards**, or **guild hall adventurers** in Aetherhaven towns. They are separate from named **villagers** (inn workers with `npcRoleId` and dialogue trees).
+
+Ship in your asset pack:
+
+1. **Character definition** — `Server/Aetherhaven/Townsfolk/<characterId>.json` (same fields as Aetherhaven’s townsfolk: `modelAssetId`, `personalityIds`, `allowedAssignmentKinds`, optional `moveInRequirements` for tourist housing quests, optional `equipmentProfileId` for guards).
+2. **Model asset** — `Server/Models/Townsfolk/<ModelAssetId>.json` (global model catalog; `modelAssetId` must match the filename without `.json`). You can parent to `"Player"` or to your own base model and attach **vanilla player cosmetics** in `DefaultAttachments` (greyscale textures plus `GradientSet` / `GradientId` tints work the same as on human townsfolk).
+3. **Portrait** — `Common/Icons/ModelsGenerated/<ModelAssetId>.png`, referenced from the model JSON `Icon` field.
+4. **Personalities** — reuse Aetherhaven personality ids under `Server/Aetherhaven/Personalities/`, or add new ones in your pack plus English greeting lines in `Server/Languages/en-US/`.
+5. **Optional plugin gate** — when your character only makes sense with your mod installed, set:
+
+```json
+"requiresOptionalPlugin": {
+  "group": "hexvane",
+  "name": "YourModName"
+}
+```
+
+Use the same `group` and `name` as your plugin manifest (`Group` / `Name`). Matching is case insensitive at runtime.
+
+Aetherhaven still **loads** the definition (so existing save checkouts stay valid), but the character is **excluded from new pool draws** until that plugin is loaded and enabled. Example: Machinaria robot townsfolk `reginald_volt` and `copper_pin` use the shared `Machinaria_Robot_Base` model with cosmetic attachments.
+
+Tourists should include `moveInRequirements` (item ids the visitor asks for before accepting a house). See Aetherhaven’s townsfolk JSON for examples.
 
 ## Journal guide pages
 
@@ -175,6 +300,8 @@ Do **not** set `countsAsConstructionId` on the base itself. Variants created in 
 ### Patches (recommended for adding one option to a villager hub)
 
 `Server/Aetherhaven/DialoguePatches/*.json`:
+
+**Item requirements on choices** — Add an `itemRequirements` array (same shape as building materials: `itemId`, `count`) on any choice. The dialogue UI shows large item icons on the right, greys the row when the player’s inventory is short, and only enables the choice when they have everything. Tourist move in lines can keep `"icon": "move_in_item"` instead; requirements are inferred from the speaking townsfolk. Use `"whenFalse": "disabled"` with a `condition` when you also need quest or flag checks.
 
 ```json
 {
@@ -275,6 +402,47 @@ Unknown types fall through to Aetherhaven’s built-in conditions; registered ty
 Add quest JSON under `Server/Aetherhaven/Quests/`. Same quest `id` overrides. You can reference your items and constructions. Use `requiresSubplugin` only if you are tying into Aetherhaven’s optional feature packs.
 
 For an inn visitor shop arc, grant the shop with `grantPlotTokenConstructionId` or `grantPlotBlueprintConstructionId` matching the villager’s `workConstructionId`. The visitor is promoted when the shop plot completes (with that quest active or completed), not when the quest completes by itself.
+
+### Objective kinds (shop and housing)
+
+Copy **objective `kind` values** from bundled Aetherhaven quests (`subplugin-assets/Quests/Server/Aetherhaven/Quests/`). Do **not** use `"kind": "journal"` for build, assign, or dialogue turn-in steps on shop or housing arcs.
+
+Ordered objectives drive progression: events (plot placed, resident assigned, and so on) advance only the **current** non-journal step. Dialogue `complete_quest` completes the current step only when its kind is `dialogue_turn_in`. Using `journal` for the last step (or for steps before `assign_house_resident`) leaves the quest stuck on an earlier kind even when the player did the work and the turn-in line appears in dialogue.
+
+| Arc | Typical objective sequence |
+| --- | --- |
+| **Shop (plot token)** | `plot_token_received` → `construction_built` (`constructionId` = shop id) → `dialogue_turn_in` |
+| **Shop (blueprint)** | `plot_blueprint_received` → `plot_blueprint_learned` (`constructionId` = shop id) → `construction_built` → `dialogue_turn_in` |
+| **Housing** | `plot_token_received` → `construction_built` (`constructionId`: `plot_house`) → `assign_house_resident` (`npcRoleId` = your role) → `dialogue_turn_in` |
+
+Set `assignNpcRoleId` on housing quests to the villager role id. House dialogue turn-in should require `town_quest_active` plus `town_npc_home_resident_house` on the NPC the player is talking to (same pattern as `aetherhaven_blacksmith` / bundled `q_house_*` quests).
+
+Minimal housing quest (match fields to your villager):
+
+```json
+{
+  "id": "q_house_example",
+  "category": "housing",
+  "grantPlotTokenConstructionId": "plot_house",
+  "assignNpcRoleId": "YourMod_Fisherman",
+  "objectives": [
+    { "id": "token", "kind": "plot_token_received", "text": "..." },
+    {
+      "id": "build",
+      "kind": "construction_built",
+      "constructionId": "plot_house",
+      "text": "..."
+    },
+    {
+      "id": "assign",
+      "kind": "assign_house_resident",
+      "npcRoleId": "YourMod_Fisherman",
+      "text": "..."
+    },
+    { "id": "talk", "kind": "dialogue_turn_in", "text": "..." }
+  ]
+}
+```
 
 ## Quest board extensions
 
@@ -379,18 +547,21 @@ Lang files with the same filename as Aetherhaven’s (for example `aetherhaven_u
 ## Worked example (fictional ExampleFish mod)
 
 1. Manifest depends on `Hexvane:Aetherhaven`, `IncludesAssetPack: true`.
-2. `Server/Aetherhaven/ShopPrices/example_fish.json` prices fish and rods.
-3. `Server/Aetherhaven/ShopLoot/merchant_food.json` appends fish to the merchant food table.
-4. `Server/Aetherhaven/DialoguePatches/merchant_fish.json` adds a hub choice on `aetherhaven_merchant` / `main_hub`.
-5. On plugin enable, register `example_open_journal` and `example_mod_ready`.
-6. `Server/Languages/en-US/example_mod.lang` holds the dialogue and quest board strings.
-7. Optional: `QuestBoardExtensions/merchant_fish.json` adds a fetch entry for salmon.
+2. `Server/Aetherhaven/Buildings/plot_fishing_shop.json` and prefab for the fishing shop.
+3. `Server/Aetherhaven/ScheduleLocations/fishing_dock.json` maps symbol `fishing_dock` to that building.
+4. `Server/Aetherhaven/VillagerSchedulePatches/merchant_fishing.json` adds a weekly visit for the Merchant.
+5. `Server/Aetherhaven/ShopPrices/example_fish.json` prices fish and rods.
+6. `Server/Aetherhaven/ShopLoot/merchant_food.json` appends fish to the merchant food table.
+7. `Server/Aetherhaven/DialoguePatches/merchant_fish.json` adds a hub choice on `aetherhaven_merchant` / `main_hub`.
+8. On plugin enable, register `example_open_journal` and `example_mod_ready`.
+9. `Server/Languages/en-US/example_mod.lang` holds dialogue, quest board, and schedule location strings.
+10. Optional: `QuestBoardExtensions/merchant_fish.json` adds a fetch entry for salmon.
 
 
 
 ## Reload and debugging
 
-Aetherhaven reloads catalogs when asset packs register and when configs reload. Check the server log for lines about merged shop prices, shop loot append/replace, quest board extensions, and applied dialogue patches.
+Aetherhaven reloads catalogs when asset packs register and when configs reload. Check the server log for lines about merged shop prices, shop loot append/replace, quest board extensions, applied dialogue patches, loaded schedule locations, and applied villager schedule patches.
 
 ## Important engine notes
 

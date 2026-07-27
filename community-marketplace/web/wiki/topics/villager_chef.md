@@ -21,6 +21,15 @@ Pepper wants a real kitchen, not just a shared kettle at Corin's.
 3. Stake and build the restaurant prefab.
 4. Find Pepper at the restaurant and close the quest in dialogue.
 
+#### Pepper's home
+Once the restaurant is running, Pepper still wants a quiet house of her own.
+
+1. Talk to Pepper and accept the housing quest.
+2. Take the house plot token from Pepper.
+3. Stake and build the house prefab.
+4. Assign Pepper as resident on the house management block.
+5. Find Pepper and close the quest in dialogue.
+
 ### Friendship rewards
 
 Visit her after your friendship reaches each level to pick up the reward through dialogue.

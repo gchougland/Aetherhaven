@@ -164,7 +164,8 @@ public final class VillagerScheduleService {
                 tickState,
                 timeJump,
                 plugin.getTownsfolkPersonalityCatalog(),
-                personalityIds
+                personalityIds,
+                plugin.getScheduleLocationCatalog()
             );
         UUID targetPlot = out.plotId();
         if (targetPlot == null && !out.clearPreferredPlot()) {
@@ -178,7 +179,8 @@ public final class VillagerScheduleService {
                         uc.getUuid(),
                         loc,
                         vdef,
-                        plugin.getConstructionCatalog()
+                        plugin.getConstructionCatalog(),
+                        plugin.getScheduleLocationCatalog()
                     );
                 LOGGER.at(Level.INFO).log(
                     "[Aetherhaven schedule] unresolved plot — role=%s npc=%s segment=%s time=%s town=%s kind=%s jobPlot=%s preferredPlot=%s reason=%s (retrying)",

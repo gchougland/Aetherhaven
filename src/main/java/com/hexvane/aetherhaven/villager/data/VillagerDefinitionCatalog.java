@@ -51,6 +51,11 @@ public final class VillagerDefinitionCatalog {
     }
 
     @Nonnull
+    public static VillagerDefinitionCatalog forTests(@Nonnull Map<String, VillagerDefinition> byNpcRoleId) {
+        return buildCatalog(new LinkedHashMap<>(byNpcRoleId));
+    }
+
+    @Nonnull
     public static VillagerDefinitionCatalog loadFromAssetPacksOrClasspath(@Nonnull ClassLoader classLoader) {
         Gson gson = new GsonBuilder().create();
         Map<String, VillagerDefinition> byRole = new LinkedHashMap<>();

@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.asset.AetherhavenAssetPaths;
 import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner;
 import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner.PackJsonFile;
 import com.hexvane.aetherhaven.asset.ClasspathResourceScanner;
+import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -40,6 +41,19 @@ public final class VillagerScheduleRegistry {
 
     @Nonnull
     public static VillagerScheduleRegistry loadFromAssetPacksOrClasspath(@Nonnull ClassLoader classLoader) {
+        return loadFromAssetPacksOrClasspath(
+            classLoader,
+            VillagerDefinitionCatalog.empty(),
+            ScheduleLocationCatalog.empty()
+        );
+    }
+
+    @Nonnull
+    public static VillagerScheduleRegistry loadFromAssetPacksOrClasspath(
+        @Nonnull ClassLoader classLoader,
+        @Nonnull VillagerDefinitionCatalog villagerCatalog,
+        @Nonnull ScheduleLocationCatalog locationCatalog
+    ) {
         Gson gson = new GsonBuilder().create();
         Map<String, VillagerScheduleDefinition> map = new LinkedHashMap<>();
         List<PackJsonFile> packFiles = AetherhavenPackAssetScanner.listJsonFilesUnderAllPacks(AetherhavenAssetPaths.VILLAGER_SCHEDULES);
@@ -75,6 +89,7 @@ public final class VillagerScheduleRegistry {
                 AetherhavenAssetPaths.villagerSchedulesPrefix()
             );
         }
+        VillagerSchedulePatchApplier.applyAllPackPatches(gson, map, villagerCatalog, locationCatalog);
         return new VillagerScheduleRegistry(Collections.unmodifiableMap(map));
     }
 

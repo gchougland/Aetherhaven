@@ -1415,21 +1415,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         if (sym == null || sym.isBlank()) {
             return Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleUnknown");
         }
-        return switch (sym.trim().toLowerCase()) {
-            case VillagerScheduleResolver.LOC_HOME ->
-                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleHome");
-            case VillagerScheduleResolver.LOC_WORK ->
-                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleWork");
-            case VillagerScheduleResolver.LOC_INN ->
-                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleInn");
-            case VillagerScheduleResolver.LOC_PARK ->
-                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.schedulePark");
-            case VillagerScheduleResolver.LOC_GAIA_ALTAR ->
-                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleAltar");
-            case VillagerScheduleResolver.LOC_SHOP ->
-                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleShop");
-            default -> Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleUnknown");
-        };
+        return plugin.getScheduleLocationCatalog().journalDisplayMessage(sym);
     }
 
     @Nullable
@@ -1619,7 +1605,13 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                     // Same wall clock as villager schedules: WorldTimeResource#getGameDateTime() (UTC calendar).
                     WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
                     LocalDateTime gameNow = wtr != null ? wtr.getGameDateTime() : null;
-                    GuideScheduleWeekAppender.appendWeek(commandBuilder, GUIDE_SCHEDULE_ROWS, wsched, gameNow);
+                    GuideScheduleWeekAppender.appendWeek(
+                        commandBuilder,
+                        GUIDE_SCHEDULE_ROWS,
+                        wsched,
+                        gameNow,
+                        plugin.getScheduleLocationCatalog()
+                    );
                 }
             } else {
                 commandBuilder.set("#GuideScheduleBlock.Visible", false);

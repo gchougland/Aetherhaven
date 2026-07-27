@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.guide;
 
+import com.hexvane.aetherhaven.schedule.ScheduleLocationCatalog;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleDefinition;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleResolver;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleTransition;
@@ -51,6 +52,16 @@ public final class GuideScheduleWeekAppender {
         @Nonnull VillagerScheduleDefinition def,
         @Nullable LocalDateTime gameNow
     ) {
+        return appendWeek(cmd, rowsSelector, def, gameNow, ScheduleLocationCatalog.empty());
+    }
+
+    public static int appendWeek(
+        @Nonnull UICommandBuilder cmd,
+        @Nonnull String rowsSelector,
+        @Nonnull VillagerScheduleDefinition def,
+        @Nullable LocalDateTime gameNow,
+        @Nonnull ScheduleLocationCatalog locationCatalog
+    ) {
         cmd.clear(rowsSelector);
         List<VillagerScheduleTransition> raw = def.getTransitions();
         if (raw.isEmpty()) {
@@ -68,14 +79,14 @@ public final class GuideScheduleWeekAppender {
                 continue;
             }
             day.sort(Comparator.comparingInt(GuideScheduleWeekAppender::dayStartMinute));
-            List<Segment> segs = buildSegments(day);
+            List<Segment> segs = buildSegments(day, locationCatalog);
             if (segs.isEmpty()) {
                 continue;
             }
             if (rows >= 32) {
                 break;
             }
-            appendDayRow(cmd, rowsSelector, rows, dow, segs, gameNow, dayStartMinute(day.get(0)));
+            appendDayRow(cmd, rowsSelector, rows, dow, segs, gameNow, dayStartMinute(day.get(0)), locationCatalog);
             rows++;
         }
         if (rows == 0) {
@@ -97,7 +108,8 @@ public final class GuideScheduleWeekAppender {
         @Nonnull DayOfWeek dow,
         @Nonnull List<Segment> segs,
         @Nullable LocalDateTime gameNow,
-        int dayFirstTransitionMinute
+        int dayFirstTransitionMinute,
+        @Nonnull ScheduleLocationCatalog locationCatalog
     ) {
         cmd.append(rowsSelector, "Aetherhaven/GuideScheduleDayRow.ui");
         String row = rowsSelector + "[" + rowIndex + "]";
@@ -143,7 +155,10 @@ public final class GuideScheduleWeekAppender {
         }
     }
 
-    private static List<Segment> buildSegments(@Nonnull List<VillagerScheduleTransition> daySorted) {
+    private static List<Segment> buildSegments(
+        @Nonnull List<VillagerScheduleTransition> daySorted,
+        @Nonnull ScheduleLocationCatalog locationCatalog
+    ) {
         List<Segment> out = new ArrayList<>();
         for (int i = 0; i < daySorted.size(); i++) {
             VillagerScheduleTransition t = daySorted.get(i);
@@ -157,19 +172,22 @@ public final class GuideScheduleWeekAppender {
             out.add(
                 new Segment(
                     norm,
-                    shortLabelMessage(norm),
-                    tooltipLineMessage(norm, start, end),
+                    locationCatalog.guideShortLabelMessage(norm),
+                    tooltipLineMessage(norm, start, end, locationCatalog),
                     end - start
                 )
             );
         }
         while (out.size() > MAX_SEGMENTS) {
-            mergeSmallestAdjacent(out);
+            mergeSmallestAdjacent(out, locationCatalog);
         }
         return out;
     }
 
-    private static void mergeSmallestAdjacent(@Nonnull List<Segment> segs) {
+    private static void mergeSmallestAdjacent(
+        @Nonnull List<Segment> segs,
+        @Nonnull ScheduleLocationCatalog locationCatalog
+    ) {
         if (segs.size() < 2) {
             return;
         }
@@ -187,7 +205,7 @@ public final class GuideScheduleWeekAppender {
         String norm = a.locationNorm.equals(b.locationNorm) ? a.locationNorm : "?";
         int dur = a.durationMinutes + b.durationMinutes;
         Message tip = a.tooltip.insert(Message.raw("\n")).insert(b.tooltip);
-        Segment merged = new Segment(norm, shortLabelMessage(norm), tip, dur);
+        Segment merged = new Segment(norm, locationCatalog.guideShortLabelMessage(norm), tip, dur);
         segs.set(best, merged);
         segs.remove(best + 1);
     }
@@ -251,39 +269,17 @@ public final class GuideScheduleWeekAppender {
     }
 
     @Nonnull
-    private static Message shortLabelMessage(@Nonnull String locNorm) {
-        return switch (locNorm) {
-            case "?" -> Message.translation(LANG + "scheduleLocUnknown");
-            case "home" -> Message.translation(LANG + "scheduleLocShortHome");
-            case "work" -> Message.translation(LANG + "scheduleLocShortWork");
-            case "inn" -> Message.translation(LANG + "scheduleLocShortInn");
-            case "park" -> Message.translation(LANG + "scheduleLocShortPark");
-            case "gaia_altar" -> Message.translation(LANG + "scheduleLocShortAltar");
-            case VillagerScheduleResolver.LOC_SHOP -> Message.translation(LANG + "scheduleLocShortShop");
-            default -> Message.raw(locNorm.length() > 5 ? locNorm.substring(0, 5) : locNorm);
-        };
-    }
-
-    @Nonnull
-    private static Message tooltipLineMessage(@Nonnull String locNorm, int startMin, int endMin) {
+    private static Message tooltipLineMessage(
+        @Nonnull String locNorm,
+        int startMin,
+        int endMin,
+        @Nonnull ScheduleLocationCatalog locationCatalog
+    ) {
         return Message
             .translation(LANG + "scheduleSegmentTooltip")
-            .param("location", friendlyLocationMessage(locNorm))
+            .param("location", locationCatalog.guideFriendlyLocationMessage(locNorm))
             .param("start", formatClock(startMin))
             .param("end", formatClock(endMin));
-    }
-
-    @Nonnull
-    private static Message friendlyLocationMessage(@Nonnull String locNorm) {
-        return switch (locNorm) {
-            case "home" -> Message.translation(LANG + "scheduleLocHome");
-            case "work" -> Message.translation(LANG + "scheduleLocWork");
-            case "inn" -> Message.translation(LANG + "scheduleLocInn");
-            case "park" -> Message.translation(LANG + "scheduleLocPark");
-            case "gaia_altar" -> Message.translation(LANG + "scheduleLocAltar");
-            case VillagerScheduleResolver.LOC_SHOP -> Message.translation(LANG + "scheduleLocShop");
-            default -> Message.raw(locNorm);
-        };
     }
 
     @Nonnull
