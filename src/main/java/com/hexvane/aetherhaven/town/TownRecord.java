@@ -260,6 +260,10 @@ public final class TownRecord {
     @SerializedName("residentNpcRecords")
     private List<ResidentNpcRecord> residentNpcRecords = new ArrayList<>();
 
+    /** Last known world positions for town residents (keyed by entity uuid in each row). */
+    @SerializedName("residentLastKnownPositions")
+    private List<ResidentLastKnownPosition> residentLastKnownPositions = new ArrayList<>();
+
     /**
      * Player-visible name; unique per world (case-insensitive). Set at charter placement (random default) or charter UI.
      */
@@ -463,6 +467,9 @@ public final class TownRecord {
         }
         if (residentNpcRecords == null) {
             residentNpcRecords = new ArrayList<>();
+        }
+        if (residentLastKnownPositions == null) {
+            residentLastKnownPositions = new ArrayList<>();
         }
         migrateVillagerGiftLogIfNeeded();
         migrateVillagerReputationIfNeeded();
@@ -762,6 +769,24 @@ public final class TownRecord {
             residentNpcRecords = new ArrayList<>();
         }
         return residentNpcRecords;
+    }
+
+    @Nonnull
+    public List<ResidentLastKnownPosition> getResidentLastKnownPositions() {
+        if (residentLastKnownPositions == null) {
+            residentLastKnownPositions = new ArrayList<>();
+        }
+        return residentLastKnownPositions;
+    }
+
+    @Nullable
+    public ResidentLastKnownPosition findLastKnownPosition(@Nonnull UUID entityUuid) {
+        for (ResidentLastKnownPosition row : getResidentLastKnownPositions()) {
+            if (entityUuid.equals(row.getEntityUuid())) {
+                return row;
+            }
+        }
+        return null;
     }
 
     /**

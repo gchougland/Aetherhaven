@@ -1,0 +1,30 @@
+{
+  "id": "stellario",
+  "displayName": "Stellario",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "Stellario",
+  "personalityIds": [
+    "cheerful",
+    "lazy",
+    "shy"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_mage",
+  "speechVoiceId": "low",
+  "moveInRequirements": [
+    {
+      "itemId": "Ingredient_Crystal_Green",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Bread",
+      "count": 2
+    }
+  ]
+}

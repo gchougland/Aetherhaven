@@ -6,6 +6,8 @@ import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
+import com.hexvane.aetherhaven.villager.audit.VillagerAuditContext;
+import com.hexvane.aetherhaven.villager.audit.VillagerAuditMissingScanService;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
@@ -78,12 +80,13 @@ public final class ElderReconcileService {
                 collectDuplicateElders(chunk, townId, canonical, duplicateUuids)
         );
         if (duplicateUuids.isEmpty()) {
+            VillagerAuditMissingScanService.scanTown(world, store, plugin, town);
             return;
         }
         for (UUID duplicateUuid : duplicateUuids) {
             Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(duplicateUuid);
             if (ref != null && ref.isValid()) {
-                store.removeEntity(ref, RemoveReason.REMOVE);
+                VillagerAuditContext.runWithSource("elder_duplicate_reconcile", () -> store.removeEntity(ref, RemoveReason.REMOVE));
             }
         }
         LOGGER.atInfo().log(
@@ -92,6 +95,7 @@ public final class ElderReconcileService {
             town.getTownId(),
             canonical
         );
+        VillagerAuditMissingScanService.scanTown(world, store, plugin, town);
     }
 
     private static void collectDuplicateElders(

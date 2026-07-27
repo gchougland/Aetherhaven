@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.pathtool;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.command.AetherhavenPathCommand;
+import com.hexvane.aetherhaven.plugin.AetherhavenFeatureBootstrap;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import javax.annotation.Nonnull;
@@ -34,5 +35,6 @@ public final class PathDesignerBootstrap {
         PathToolPlayerComponent.register(plugin.getEntityStoreRegistry());
         plugin.getEntityStoreRegistry().registerSystem(new PathToolPreviewSystem(core));
         core.registerAetherhavenSubcommand(new AetherhavenPathCommand());
+        AetherhavenFeatureBootstrap.registerShutdownHook(PathNavViz::shutdown);
     }
 }

@@ -24,6 +24,9 @@ import com.hexvane.aetherhaven.ui.VillagerNeedsOverviewPage;
 import com.hexvane.aetherhaven.villager.NpcPersistentModelResyncSystem;
 import com.hexvane.aetherhaven.villager.TownVillagerEnvironmentalDamageFilterSystem;
 import com.hexvane.aetherhaven.villager.TownVillagerNpcWorldSpawnSanitizeSystems;
+import com.hexvane.aetherhaven.villager.ResidentLastKnownPositionSystem;
+import com.hexvane.aetherhaven.villager.VillagerLocateTrailSystem;
+import com.hexvane.aetherhaven.villager.audit.TownVillagerAuditRemoveSystem;
 import com.hexvane.aetherhaven.villager.VillagerNeedsDecaySystem;
 import com.hexvane.aetherhaven.villager.AetherhavenNpcTeleportGuardSystem;
 import com.hexvane.aetherhaven.villager.AetherhavenNpcUsedTeleporterGuardSystem;
@@ -101,6 +104,7 @@ public final class VillagersBootstrap {
     public static void register(@Nonnull AetherhavenPlugin core, @Nonnull JavaPlugin plugin) {
         PoiMarkerDataComponent.register(plugin.getEntityStoreRegistry());
         plugin.getEntityStoreRegistry().registerSystem(new TownVillagerNpcWorldSpawnSanitizeSystems.OnAdd());
+        plugin.getEntityStoreRegistry().registerSystem(new TownVillagerAuditRemoveSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new TownVillagerNpcWorldSpawnSanitizeSystems.EachTick());
         NpcFaceVisualState.register(plugin.getEntityStoreRegistry());
         VillagerAutonomyDebugTag.register(plugin.getEntityStoreRegistry());
@@ -123,6 +127,8 @@ public final class VillagersBootstrap {
         plugin.getChunkStoreRegistry().registerSystem(new EntityChunkStaleReferenceCleanupSystem());
         plugin.getChunkStoreRegistry().registerSystem(new WorldSpawnStaleChunkRefCleanupSystem());
         plugin.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new ResidentLastKnownPositionSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new VillagerLocateTrailSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new BlockMountDeathCleanupSystem());
         plugin.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(core));

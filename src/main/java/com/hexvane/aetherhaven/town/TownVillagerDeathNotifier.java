@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.villager.AetherhavenRoleLabels;
+import com.hexvane.aetherhaven.villager.audit.VillagerAuditService;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -101,6 +102,7 @@ public final class TownVillagerDeathNotifier {
             bindingKind,
             entityUuid != null ? entityUuid : "unknown"
         );
+        VillagerAuditService.logDeath(plugin, store, victimRef, "death_handler", causeLabel);
     }
 
     @Nonnull

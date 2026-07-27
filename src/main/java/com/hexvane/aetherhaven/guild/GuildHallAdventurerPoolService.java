@@ -194,7 +194,7 @@ public final class GuildHallAdventurerPoolService {
             if (entityUuid != null) {
                 Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityUuid);
                 if (ref != null && ref.isValid()) {
-                    PendingEntityRemovalService.schedule(world, entityUuid);
+                    PendingEntityRemovalService.schedule(world, entityUuid, "hired_guard_clear");
                     despawned++;
                 }
             }
@@ -481,7 +481,7 @@ public final class GuildHallAdventurerPoolService {
             releaseAdventurerCheckout(world, plugin, entry.characterId(), entry.entityUuid());
             despawned++;
         }
-        PendingEntityRemovalService.scheduleAll(world, despawnEntityUuids);
+        PendingEntityRemovalService.scheduleAll(world, despawnEntityUuids, "guild_hall_adventurer_despawn");
 
         for (UUID u : toRemove) {
             town.getGuildHallAdventurerNpcIds().removeIf(s -> u.toString().equalsIgnoreCase(s != null ? s.trim() : ""));

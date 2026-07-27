@@ -21,6 +21,7 @@ import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
+import com.hexvane.aetherhaven.villager.audit.VillagerAuditContext;
 import com.hexvane.aetherhaven.villager.data.InnPoolEntry;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Ref;
@@ -507,7 +508,7 @@ public final class InnPoolService {
         }
 
         if (!toRemove.isEmpty()) {
-            PendingEntityRemovalService.scheduleAll(world, toRemove);
+            PendingEntityRemovalService.scheduleAll(world, toRemove, "inn_visitor_despawn");
             LOGGER.atInfo().log(
                 "Inn reconcile for town %s: scheduling removal of %s visitor(s) (%s duplicate(s), %s orphan(s))",
                 town.getTownId(),
@@ -642,7 +643,7 @@ public final class InnPoolService {
             }
             town.getInnPoolNpcIds().remove(sid);
             if (isInnPoolListedEntityVisitorToDespawn(town, store, ref, u)) {
-                store.removeEntity(ref, RemoveReason.REMOVE);
+                VillagerAuditContext.removeEntity(store, ref, "inn_visitor_despawn");
             }
         }
         town.setInnPoolLastMorningEpochDay(epochDay);
@@ -844,7 +845,7 @@ public final class InnPoolService {
             }
             Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
             if (ref != null && ref.isValid() && isInnPoolListedEntityVisitorToDespawn(town, store, ref, u)) {
-                store.removeEntity(ref, RemoveReason.REMOVE);
+                VillagerAuditContext.removeEntity(store, ref, "inn_visitor_despawn");
             }
         }
         ids.clear();
@@ -977,7 +978,7 @@ public final class InnPoolService {
             }
             town.getInnPoolNpcIds().remove(sid);
             if (isInnPoolListedEntityVisitorToDespawn(town, store, ref, u)) {
-                store.removeEntity(ref, RemoveReason.REMOVE);
+                VillagerAuditContext.removeEntity(store, ref, "inn_visitor_despawn");
             }
         }
     }
@@ -1999,7 +2000,7 @@ public final class InnPoolService {
         });
         for (Ref<EntityStore> ref : refs) {
             if (ref.isValid()) {
-                store.removeEntity(ref, RemoveReason.REMOVE);
+                VillagerAuditContext.removeEntity(store, ref, "inn_visitor_despawn");
             }
         }
     }
@@ -2089,7 +2090,7 @@ public final class InnPoolService {
             town.removeInnLockedEntity(u);
             removed++;
             if (isInnPoolListedEntityVisitorToDespawn(town, store, ref, u)) {
-                store.removeEntity(ref, RemoveReason.REMOVE);
+                VillagerAuditContext.removeEntity(store, ref, "inn_visitor_despawn");
             }
         }
         if (removed > 0) {

@@ -169,6 +169,15 @@ public final class AetherhavenPluginConfig {
         )
         .add()
         .append(
+            new KeyedCodec<>("VillagerAuditLogEnabled", Codec.BOOLEAN),
+            (o, v) -> o.villagerAuditLogEnabled = v != null && v,
+            o -> o.villagerAuditLogEnabled
+        )
+        .documentation(
+            "When true, appends town villager death and removal events to villager_audit/{world}/audit.jsonl under the plugin data folder."
+        )
+        .add()
+        .append(
             new KeyedCodec<>("TreasuryMaxGoldTaxPerVillagerPerDay", Codec.INTEGER),
             (o, v) -> o.treasuryMaxGoldTaxPerVillagerPerDay = v,
             o -> o.treasuryMaxGoldTaxPerVillagerPerDay
@@ -628,6 +637,7 @@ public final class AetherhavenPluginConfig {
     private boolean villagerScheduleEnabled = true;
     private boolean villagerScheduleDebugLog = false;
     private boolean raidMarchDebugLog = false;
+    private boolean villagerAuditLogEnabled = true;
 
     /** When true, plot creator staff and commands do not require explicit aetherhaven.plot.creator grants. */
     private boolean grantPlotCreatorPermissionToEveryone = true;
@@ -871,6 +881,10 @@ public final class AetherhavenPluginConfig {
 
     public boolean isRaidMarchDebugLog() {
         return raidMarchDebugLog;
+    }
+
+    public boolean isVillagerAuditLogEnabled() {
+        return villagerAuditLogEnabled;
     }
 
     public int getTreasuryMaxGoldTaxPerVillagerPerDay() {
@@ -1565,6 +1579,7 @@ public final class AetherhavenPluginConfig {
         this.villagerScheduleEnabled = o.villagerScheduleEnabled;
         this.villagerScheduleDebugLog = o.villagerScheduleDebugLog;
         this.raidMarchDebugLog = o.raidMarchDebugLog;
+        this.villagerAuditLogEnabled = o.villagerAuditLogEnabled;
         this.grantPlotCreatorPermissionToEveryone = o.grantPlotCreatorPermissionToEveryone;
         this.plotCreatorPlayerBuildingTypesOnly = o.plotCreatorPlayerBuildingTypesOnly;
         this.buildingEditorWriteRoot = o.buildingEditorWriteRoot != null ? o.buildingEditorWriteRoot : "";

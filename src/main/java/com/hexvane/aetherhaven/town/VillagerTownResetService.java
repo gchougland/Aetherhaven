@@ -26,6 +26,7 @@ import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
+import com.hexvane.aetherhaven.villager.audit.VillagerAuditContext;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
@@ -126,7 +127,7 @@ public final class VillagerTownResetService {
             if (ref == null || !ref.isValid()) {
                 continue;
             }
-            store.removeEntity(ref, RemoveReason.REMOVE);
+            VillagerAuditContext.removeEntity(store, ref, "villager_reset");
         }
 
         town.getInnPoolNpcIds().clear();
@@ -316,7 +317,7 @@ public final class VillagerTownResetService {
 
         Ref<EntityStore> oldRef = store.getExternalData().getRefFromUUID(targetEntityUuid);
         if (oldRef != null && oldRef.isValid()) {
-            store.removeEntity(oldRef, RemoveReason.REMOVE);
+            VillagerAuditContext.removeEntity(store, oldRef, "villager_reset");
         }
 
         PlotInstance innPlot =
@@ -380,7 +381,7 @@ public final class VillagerTownResetService {
         int count = 0;
         for (Ref<EntityStore> r : toRemove) {
             if (r.isValid()) {
-                store.removeEntity(r, RemoveReason.REMOVE);
+                VillagerAuditContext.removeEntity(store, r, "villager_reset");
                 count++;
             }
         }
@@ -736,7 +737,7 @@ public final class VillagerTownResetService {
         int count = 0;
         for (Ref<EntityStore> r : toRemove) {
             if (r.isValid()) {
-                store.removeEntity(r, RemoveReason.REMOVE);
+                VillagerAuditContext.removeEntity(store, r, "villager_reset");
                 count++;
             }
         }
@@ -1036,7 +1037,7 @@ public final class VillagerTownResetService {
         int count = 0;
         for (Ref<EntityStore> r : toRemove) {
             if (r.isValid()) {
-                store.removeEntity(r, RemoveReason.REMOVE);
+                VillagerAuditContext.removeEntity(store, r, "villager_reset");
                 count++;
             }
         }
@@ -1212,7 +1213,7 @@ public final class VillagerTownResetService {
         int count = 0;
         for (Ref<EntityStore> r : toRemove) {
             if (r.isValid()) {
-                store.removeEntity(r, RemoveReason.REMOVE);
+                VillagerAuditContext.removeEntity(store, r, "villager_reset");
                 count++;
             }
         }

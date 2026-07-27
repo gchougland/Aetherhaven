@@ -12,6 +12,7 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkExistenceService;
+import com.hexvane.aetherhaven.villager.audit.VillagerAuditContext;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolCheckoutRecord;
 import com.hexvane.aetherhaven.ui.GuardRoleLabels;
 import java.util.List;
@@ -190,17 +191,17 @@ public final class GuardHireService {
 
         UUIDComponent guardUuidComp = store.getComponent(guardRef, UUIDComponent.getComponentType());
         if (guardUuidComp == null) {
-            store.removeEntity(guardRef, RemoveReason.REMOVE);
+            VillagerAuditContext.removeEntity(store, guardRef, "guard_hire_replace");
             return false;
         }
         UUID newEntityUuid = guardUuidComp.getUuid();
 
         if (!TownsfolkExistenceService.transferInstanceOnHire(world, plugin, tb.getCharacterId(), newEntityUuid, town.getTownId())) {
-            store.removeEntity(guardRef, RemoveReason.REMOVE);
+            VillagerAuditContext.removeEntity(store, guardRef, "guard_hire_replace");
             return false;
         }
 
-        store.removeEntity(npcRef, RemoveReason.REMOVE);
+        VillagerAuditContext.removeEntity(store, npcRef, "guard_hire_replace");
         TownsfolkExistenceService.purgeDuplicateEntities(world, store, town.getTownId(), tb.getCharacterId(), newEntityUuid);
 
         Integer hiredSlot = town.getGuildHallAdventurerSlotByNpcId().get(adventurerUuid.toString());

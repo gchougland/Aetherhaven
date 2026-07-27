@@ -19,6 +19,8 @@ import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkSpawnService;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.audit.VillagerAuditContext;
+import com.hexvane.aetherhaven.villager.audit.VillagerAuditService;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
@@ -190,6 +192,21 @@ public final class TouristReconcileService {
                     releaseMissing,
                     townNpcChunksLoaded
                 )                ) {
+                    UUID touristUuid = rec.getEntityUuid();
+                    if (touristUuid != null) {
+                        VillagerAuditService.logDetectedMissing(
+                            plugin,
+                            world,
+                            store,
+                            touristUuid,
+                            town.getTownId(),
+                            rec.getCharacterId(),
+                            TownVillagerBinding.KIND_TOWNSFOLK,
+                            rec.getCharacterId(),
+                            "tourist_reconcile",
+                            "Tourist record entity ref is missing while town chunks are loaded"
+                        );
+                    }
                     releaseStaleTouristRecord(world, plugin, town, rec);
                     if (town.getTouristRecords().remove(rec)) {
                         changed = true;
@@ -402,7 +419,7 @@ public final class TouristReconcileService {
         if (entityUuid != null) {
             Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityUuid);
             if (ref != null && ref.isValid()) {
-                store.removeEntity(ref, RemoveReason.REMOVE);
+                VillagerAuditContext.removeEntity(store, ref, "tourist_purge");
             }
         }
         releaseStaleTouristRecord(world, plugin, town, rec);

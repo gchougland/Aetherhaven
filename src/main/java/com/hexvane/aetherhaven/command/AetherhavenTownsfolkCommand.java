@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolCheckoutRecord;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolPersistence;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolState;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkSpawnService;
+import com.hexvane.aetherhaven.villager.audit.VillagerAuditContext;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
@@ -212,7 +213,7 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
                     java.util.UUID entityId = java.util.UUID.fromString(rec.getEntityUuid());
                     Ref<EntityStore> npcRef = store.getExternalData().getRefFromUUID(entityId);
                     if (npcRef != null && npcRef.isValid()) {
-                        store.removeEntity(npcRef, com.hypixel.hytale.component.RemoveReason.REMOVE);
+                        VillagerAuditContext.removeEntity(store, npcRef, "admin_townsfolk_despawn");
                     }
                 } catch (IllegalArgumentException ignored) {
                     // fall through

@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.townsfolk;
 
+import com.hexvane.aetherhaven.villager.audit.VillagerAuditContext;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
@@ -16,27 +17,43 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /** Queues NPC despawn until the next {@link EntityStore} tick so chunk save never sees invalidated refs. */
 public final class PendingEntityRemovalService {
     private static final ConcurrentHashMap<String, ConcurrentLinkedQueue<UUID>> PENDING_BY_WORLD = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<UUID, String> PENDING_SOURCE_BY_ENTITY = new ConcurrentHashMap<>();
 
     private PendingEntityRemovalService() {}
 
     public static void schedule(@Nonnull World world, @Nonnull UUID entityUuid) {
+        schedule(world, entityUuid, "pending_removal_queue");
+    }
+
+    public static void schedule(@Nonnull World world, @Nonnull UUID entityUuid, @Nonnull String source) {
         if (!world.isAlive()) {
             return;
+        }
+        if (source != null && !source.isBlank()) {
+            PENDING_SOURCE_BY_ENTITY.put(entityUuid, source);
         }
         PENDING_BY_WORLD.computeIfAbsent(world.getName(), k -> new ConcurrentLinkedQueue<>()).add(entityUuid);
     }
 
     public static void scheduleAll(@Nonnull World world, @Nonnull List<UUID> entityUuids) {
+        scheduleAll(world, entityUuids, "pending_removal_queue");
+    }
+
+    public static void scheduleAll(@Nonnull World world, @Nonnull List<UUID> entityUuids, @Nonnull String source) {
         if (!world.isAlive() || entityUuids.isEmpty()) {
             return;
         }
         ConcurrentLinkedQueue<UUID> queue = PENDING_BY_WORLD.computeIfAbsent(world.getName(), k -> new ConcurrentLinkedQueue<>());
         for (UUID entityUuid : entityUuids) {
             if (entityUuid != null) {
+                if (source != null && !source.isBlank()) {
+                    PENDING_SOURCE_BY_ENTITY.put(entityUuid, source);
+                }
                 queue.add(entityUuid);
             }
         }
@@ -56,18 +73,24 @@ public final class PendingEntityRemovalService {
         }
         UUID entityUuid;
         while ((entityUuid = queue.poll()) != null) {
-            removeNow(world, store, entityUuid);
+            String source = PENDING_SOURCE_BY_ENTITY.remove(entityUuid);
+            removeNow(world, store, entityUuid, source != null ? source : "pending_removal_queue");
         }
     }
 
-    private static void removeNow(@Nonnull World world, @Nonnull Store<EntityStore> store, @Nonnull UUID entityUuid) {
+    private static void removeNow(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID entityUuid,
+        @Nonnull String source
+    ) {
         Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityUuid);
         if (ref == null || !ref.isValid()) {
             return;
         }
         detachFromEntityChunk(world, store, ref);
         if (ref.isValid()) {
-            store.removeEntity(ref, RemoveReason.REMOVE);
+            VillagerAuditContext.runWithSource(source, () -> store.removeEntity(ref, RemoveReason.REMOVE));
         }
     }
 

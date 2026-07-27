@@ -1,4 +1,30 @@
 $C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@VillagerRowHeight = 64;
+
+@IconLbl = (
+  FontSize: 6,
+  TextColor: #ffffff(0.01),
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+@LocateVillagerStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../man-walking.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../man-walking.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../man-walking.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../man-walking.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+@LocateVillagerActiveStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../man-walking.png", Border: 0, Color: #8fd4a0), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../man-walking.png", Border: 0, Color: #a8e0b8), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../man-walking.png", Border: 0, Color: #6fc492), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../man-walking.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
 
 Group #TownJournalVillagerRow {
   LayoutMode: Left;
@@ -27,6 +53,30 @@ Group #TownJournalVillagerRow {
     Label #ScheduleLocation {
       Style: (...$C.@DefaultLabelStyle, TextColor: #c8c2b0, FontSize: 12, Wrap: true);
       Text: "";
+    }
+  }
+
+  Group {
+    LayoutMode: Middle;
+    Anchor: (Width: 44, Height: @VillagerRowHeight, Left: 6);
+
+    TextButton #LocateVillager {
+      Style: @LocateVillagerStyle;
+      TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+      Anchor: (Width: 40, Height: 40);
+      Padding: (Full: 0);
+      Text: ".";
+      TooltipText: "";
+    }
+
+    TextButton #LocateVillagerActive {
+      Style: @LocateVillagerActiveStyle;
+      TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+      Anchor: (Width: 40, Height: 40);
+      Padding: (Full: 0);
+      Text: ".";
+      TooltipText: "";
+      Visible: false;
     }
   }
 }

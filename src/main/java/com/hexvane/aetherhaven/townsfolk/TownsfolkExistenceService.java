@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.audit.VillagerAuditService;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
@@ -188,6 +189,21 @@ public final class TownsfolkExistenceService {
                 // Entity unloaded in another chunk — keep checkout until reconcile proves absence.
                 continue;
             }
+            UUID townUuid = parseUuid(rec.getTownId());
+            if (townUuid != null) {
+                VillagerAuditService.logDetectedMissing(
+                    plugin,
+                    world,
+                    store,
+                    ledgerUuid,
+                    townUuid,
+                    characterId,
+                    rec.getAssignmentKind(),
+                    characterId,
+                    "townsfolk_reconcile",
+                    "Checkout ledger entity ref is invalid"
+                );
+            }
             toRelease.add(rec);
         }
         for (TownsfolkPoolCheckoutRecord rec : toRelease) {
@@ -348,7 +364,7 @@ public final class TownsfolkExistenceService {
                 }
             }
         );
-        PendingEntityRemovalService.scheduleAll(world, duplicateUuids);
+        PendingEntityRemovalService.scheduleAll(world, duplicateUuids, "townsfolk_duplicate_purge");
         for (UUID staleUuid : duplicateUuids) {
             LOGGER.atWarning().log(
                 "Removed duplicate townsfolk entity for %s (stale uuid %s, canonical %s)",
@@ -444,7 +460,7 @@ public final class TownsfolkExistenceService {
         if (townChanged && tm != null) {
             tm.updateTown(town);
         }
-        PendingEntityRemovalService.scheduleAll(world, despawnUuids);
+        PendingEntityRemovalService.scheduleAll(world, despawnUuids, "guild_hall_stale_adventurer_purge");
         return stale.size();
     }
 

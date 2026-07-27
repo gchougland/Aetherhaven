@@ -1,0 +1,53 @@
+{
+  "Parent": "Aetherhaven_Mannequin",
+  "Texture": "NPC/MISC/Mannequin/Models/Model_Default.png",
+  "DefaultAttachments": [
+    {
+      "Model": "Cosmetics/Pants/LongDungarees.blockymodel",
+      "Texture": "Cosmetics/Pants/LongDungarees_Textures/Long_Dungarees_Slacks.png",
+      "GradientSet": "Jean_Generic",
+      "GradientId": "Blue"
+    },
+    {
+      "Model": "Cosmetics/Undertops/BasicUndertop.blockymodel",
+      "Texture": "Cosmetics/Undertops/BasicTop_Textures/FrostyF_Top_Texture.png",
+      "GradientSet": "Colored_Cotton",
+      "GradientId": "White"
+    },
+    {
+      "Model": "Cosmetics/Overtops/Scavenger_Poncho.blockymodel",
+      "Texture": "Cosmetics/Overtops/Scavenger_Poncho_Textures/Scavenger_Poncho_Texture.png",
+      "GradientSet": "Fantasy_Cotton_Dark",
+      "GradientId": "BrownDark"
+    },
+    {
+      "Model": "Cosmetics/Shoes/Trainers.blockymodel",
+      "Texture": "Cosmetics/Shoes/Trainers_Textures/Trainers_Greyscale.png",
+      "GradientSet": "Colored_Cotton",
+      "GradientId": "Red"
+    },
+    {
+      "Model": "Cosmetics/Gloves/LongGloves.blockymodel",
+      "Texture": "Cosmetics/Gloves/LongGloves_Textures/Merchant_Mittens_Texture.png"
+    },
+    {
+      "Model": "Cosmetics/Head/StrawHat.blockymodel",
+      "Texture": "Cosmetics/Head/StrawHat_Textures/Straw_Greyscale.png",
+      "GradientSet": "Colored_Cotton",
+      "GradientId": "Yellow"
+    }
+  ],
+  "Icon": "Icons/ModelsGenerated/Male_Mannequin_01.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      19,
+      0
+    ],
+    "Translation": [
+      0,
+      -110
+    ]
+  }
+}

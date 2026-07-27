@@ -1,0 +1,28 @@
+{
+  "id": "male_mannequin_01",
+  "displayName": "Woodrow Pin",
+  "gender": "male",
+  "race": "mannequin",
+  "modelAssetId": "Male_Mannequin_01",
+  "personalityIds": [
+    "mannequin_display",
+    "stoic",
+    "curious"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist"
+  ],
+  "befriendable": false,
+  "speechVoiceId": "mid",
+  "moveInRequirements": [
+    {
+      "itemId": "Ingredient_Fabric_Scrap_Wool",
+      "count": 2
+    },
+    {
+      "itemId": "Ingredient_Spices",
+      "count": 1
+    }
+  ]
+}

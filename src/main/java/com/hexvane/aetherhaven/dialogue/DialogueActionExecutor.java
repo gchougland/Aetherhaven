@@ -1129,7 +1129,7 @@ public final class DialogueActionExecutor {
             RescueVillagerDespawnEffects.playAtNpc(npcRef, store, particle, sound);
         }
         World world = store.getExternalData().getWorld();
-        PendingEntityRemovalService.schedule(world, npcUuid);
+        PendingEntityRemovalService.schedule(world, npcUuid, "dialogue_rescue_vanish");
     }
 
     private static void playBardSong(

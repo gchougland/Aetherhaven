@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.villager;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.villager.audit.VillagerAuditContext;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -41,7 +42,7 @@ public final class TownVillagerNpcWorldSpawnSanitizeSystems {
         if (tm.getTown(binding.getTownId()) != null) {
             return false;
         }
-        commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
+        VillagerAuditContext.runWithSource("dissolved_town_orphan", () -> commandBuffer.removeEntity(ref, RemoveReason.REMOVE));
         return true;
     }
 

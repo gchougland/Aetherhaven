@@ -1,0 +1,28 @@
+{
+  "id": "female_mannequin_01",
+  "displayName": "Lacey Stand",
+  "gender": "female",
+  "race": "mannequin",
+  "modelAssetId": "Female_Mannequin_01",
+  "personalityIds": [
+    "mannequin_display",
+    "cheerful",
+    "shy"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist"
+  ],
+  "befriendable": false,
+  "speechVoiceId": "soft",
+  "moveInRequirements": [
+    {
+      "itemId": "Ingredient_Fabric_Scrap_Wool",
+      "count": 2
+    },
+    {
+      "itemId": "Ingredient_Motes_Light",
+      "count": 1
+    }
+  ]
+}

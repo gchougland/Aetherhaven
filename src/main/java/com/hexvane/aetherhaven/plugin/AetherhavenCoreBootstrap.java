@@ -16,6 +16,7 @@ import com.hexvane.aetherhaven.plot.GaiaStatueBlock;
 import com.hexvane.aetherhaven.plot.ConstructionFavoritesPlayerInitSystem;
 import com.hexvane.aetherhaven.plot.PlayerConstructionFavoritesState;
 import com.hexvane.aetherhaven.plot.PlayerPlotTokenUnlockState;
+import com.hexvane.aetherhaven.plot.PlotBlueprintSalvageBenchSystem;
 import com.hexvane.aetherhaven.plot.PlotTokenUnlockPageUseInteraction;
 import com.hexvane.aetherhaven.plot.PlotTokenUnlockPlayerInitSystem;
 import com.hexvane.aetherhaven.placement.PlotConstructionBlockResolver;
@@ -30,6 +31,8 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownMemberBlockAccess;
 import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
 import com.hexvane.aetherhaven.ui.TownJournalPlayerInitSystem;
+import com.hexvane.aetherhaven.villager.VillagerLocatePlayerComponent;
+import com.hexvane.aetherhaven.villager.VillagerLocatePlayerInitSystem;
 import com.hexvane.aetherhaven.territory.TerritoryProtectionBootstrap;
 import com.hexvane.aetherhaven.tourist.TouristReconcileService;
 import com.hexvane.aetherhaven.town.ElderReconcileService;
@@ -103,10 +106,13 @@ public final class AetherhavenCoreBootstrap {
             .registerSystem(new AetherhavenGameTimeCoordinatorSystem(plugin.getGameTimeHub(), cursorType));
 
         PlayerTownJournalState.register(plugin.getEntityStoreRegistry());
+        VillagerLocatePlayerComponent.register(plugin.getEntityStoreRegistry());
         PlayerPlotTokenUnlockState.register(plugin.getEntityStoreRegistry());
         PlayerConstructionFavoritesState.register(plugin.getEntityStoreRegistry());
         plugin.getEntityStoreRegistry().registerSystem(new TownJournalPlayerInitSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new VillagerLocatePlayerInitSystem());
         plugin.getEntityStoreRegistry().registerSystem(new PlotTokenUnlockPlayerInitSystem());
+        plugin.getChunkStoreRegistry().registerSystem(new PlotBlueprintSalvageBenchSystem());
         plugin.getEntityStoreRegistry().registerSystem(new ConstructionFavoritesPlayerInitSystem());
         TerritoryProtectionBootstrap.register(plugin);
 

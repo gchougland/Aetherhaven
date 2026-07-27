@@ -46,7 +46,7 @@ public final class TownDissolutionService {
         collectLoadedBoundNpcUuids(entityStore, townId, npcUuids);
         UUID nil = new UUID(0L, 0L);
         npcUuids.remove(nil);
-        PendingEntityRemovalService.scheduleAll(world, new ArrayList<>(npcUuids));
+        PendingEntityRemovalService.scheduleAll(world, new ArrayList<>(npcUuids), "town_dissolution");
         TownsfolkExistenceService.releaseForTown(world, plugin, townId);
 
         List<PlotInstance> plots = new ArrayList<>(town.getPlotInstances());

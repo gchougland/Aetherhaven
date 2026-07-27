@@ -48,6 +48,8 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownResidentEligibility;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.VillagerLocatePlayerComponent;
+import com.hexvane.aetherhaven.town.ResidentLastKnownPositionService;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.google.gson.JsonObject;
 import com.hypixel.hytale.codec.Codec;
@@ -1114,6 +1116,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         List<TownVillagerRow> villagers = TownVillagerDirectory.listResidents(store, town);
         WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
         LocalDateTime gameNow = wtr != null ? wtr.getGameDateTime() : null;
+        VillagerLocatePlayerComponent locateSession = VillagerLocatePlayerComponent.get(store, ref);
         for (int i = 0; i < villagers.size(); i++) {
             TownVillagerRow r = villagers.get(i);
             commandBuilder.append(TOWN_VILLAGER_ROWS, "Aetherhaven/TownJournalVillagerRow.ui");
@@ -1138,6 +1141,29 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                     || !TownResidentEligibility.isTownsfolkPoolKind(r.bindingKind(), r.roleId(), plugin)
                     || liveEatingActivityMessage(plugin, world, store, r.entityUuid()) != null;
             commandBuilder.set(row + " #ScheduleLocation.Visible", showSchedule);
+            boolean locateActive = locateSession != null && locateSession.isActiveFor(r.entityUuid());
+            commandBuilder.set(row + " #LocateVillager.Visible", !locateActive);
+            commandBuilder.set(row + " #LocateVillagerActive.Visible", locateActive);
+            String locateTooltipKey = locateActive
+                ? "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.locateVillagerActiveTooltip"
+                : "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.locateVillagerTooltip";
+            Message locateTooltip = Message.translation(locateTooltipKey);
+            commandBuilder.set(row + " #LocateVillager.TooltipTextSpans", locateTooltip);
+            commandBuilder.set(row + " #LocateVillagerActive.TooltipTextSpans", locateTooltip);
+            EventData locateEvent =
+                new EventData().append("Action", "ToggleLocateVillager").append("VillagerUuid", r.entityUuid().toString());
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                row + " #LocateVillager",
+                locateEvent,
+                false
+            );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                row + " #LocateVillagerActive",
+                locateEvent,
+                false
+            );
         }
 
         commandBuilder.clear(TOWN_PLOT_ROWS);
@@ -2351,6 +2377,92 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             sendUpdate(cmd, ev, false);
             return;
         }
+        if (action.equalsIgnoreCase("ToggleLocateVillager")) {
+            String villagerUuidRaw = data.villagerUuid;
+            if (villagerUuidRaw == null || villagerUuidRaw.isBlank()) {
+                return;
+            }
+            UUID villagerUuid;
+            try {
+                villagerUuid = UUID.fromString(villagerUuidRaw.trim());
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            World world = store.getExternalData().getWorld();
+            if (plugin == null) {
+                return;
+            }
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (uc == null) {
+                return;
+            }
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
+            if (town == null) {
+                return;
+            }
+            VillagerLocatePlayerComponent session = VillagerLocatePlayerComponent.get(store, ref);
+            if (session != null && session.isActiveFor(villagerUuid)) {
+                VillagerLocatePlayerComponent.clear(store, ref);
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.locateStopped")
+                );
+            } else {
+                boolean listed = false;
+                String label = "";
+                for (TownVillagerRow row : TownVillagerDirectory.listResidents(store, town)) {
+                    if (villagerUuid.equals(row.entityUuid())) {
+                        listed = true;
+                        label = row.label();
+                        break;
+                    }
+                }
+                if (!listed) {
+                    playerRef.sendMessage(
+                        Message.translation(
+                            "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.locateNotResident"
+                        )
+                    );
+                    return;
+                }
+                ResidentLastKnownPositionService.LocateTarget target =
+                    ResidentLastKnownPositionService.resolveLocateTarget(store, town, villagerUuid);
+                if (!target.isValid()) {
+                    playerRef.sendMessage(
+                        Message.translation(
+                            "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.locateNoPosition"
+                        )
+                    );
+                    return;
+                }
+                VillagerLocatePlayerComponent.start(
+                    store,
+                    ref,
+                    town.getTownId(),
+                    villagerUuid,
+                    label,
+                    target.isLastKnown()
+                );
+                if (target.isLastKnown()) {
+                    playerRef.sendMessage(
+                        Message.translation(
+                                "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.locateStartedLastKnown"
+                            )
+                            .param("name", label)
+                    );
+                } else {
+                    playerRef.sendMessage(
+                        Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.locateStarted")
+                            .param("name", label)
+                    );
+                }
+            }
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
         if (action.equalsIgnoreCase("RepairPlot")) {
             String pid = data.plotId;
             if (pid == null || pid.isBlank()) {
@@ -3178,6 +3290,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             .add()
             .append(new KeyedCodec<>("PlotId", Codec.STRING), (d, v) -> d.plotId = v, d -> d.plotId)
             .add()
+            .append(new KeyedCodec<>("VillagerUuid", Codec.STRING), (d, v) -> d.villagerUuid = v, d -> d.villagerUuid)
+            .add()
             .append(new KeyedCodec<>("@Passive", Codec.BOOLEAN), (d, v) -> d.passive = v, d -> d.passive)
             .add()
             .append(new KeyedCodec<>("@ConstrBpt", Codec.STRING), (d, v) -> d.constrBpt = v, d -> d.constrBpt)
@@ -3270,6 +3384,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         private String guideNavSectionId;
         @Nullable
         private String plotId;
+        @Nullable
+        private String villagerUuid;
         @Nullable
         private Boolean passive;
         @Nullable

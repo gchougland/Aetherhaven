@@ -22,7 +22,6 @@ import com.hexvane.aetherhaven.jewelry.JewelryNativeTooltipManager;
 import com.hexvane.aetherhaven.jewelry.JewelryTooltipPacketAdapter;
 import com.hexvane.aetherhaven.jewelry.JewelryVirtualItemRegistry;
 import com.hexvane.aetherhaven.monument.FounderMonumentSpawnService;
-import com.hexvane.aetherhaven.pathtool.PathNavViz;
 import com.hexvane.aetherhaven.plot.PlotTokenIconPacketAdapter;
 import com.hexvane.aetherhaven.plot.PlotTokenVirtualItemRegistry;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
@@ -594,7 +593,6 @@ public final class AetherhavenPlugin extends JavaPlugin {
         }
         this.jewelryVirtualItemRegistry = null;
         this.plotTokenVirtualItemRegistry = null;
-        PathNavViz.shutdown();
         instance = null;
         AetherhavenWorldRegistries.saveAll();
         this.constructionScheduler.shutdown();

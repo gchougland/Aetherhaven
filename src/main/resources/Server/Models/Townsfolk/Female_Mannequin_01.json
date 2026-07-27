@@ -1,0 +1,57 @@
+{
+  "Parent": "Aetherhaven_Mannequin",
+  "Texture": "NPC/MISC/Mannequin/Models/Model_Light.png",
+  "DefaultAttachments": [
+    {
+      "Model": "Cosmetics/Pants/HighSkirt_Plaid.blockymodel",
+      "Texture": "Cosmetics/Pants/HighSkirt_Textures/PlaidSkirt_Texture.png",
+      "GradientSet": "Fantasy_Cotton",
+      "GradientId": "Red"
+    },
+    {
+      "Model": "Cosmetics/Overpants/Long_Socks.blockymodel",
+      "Texture": "Cosmetics/Overpants/Long_Socks_Textures/PlainSocks_Greyscale.png"
+    },
+    {
+      "Model": "Cosmetics/Undertops/Tshirt.blockymodel",
+      "Texture": "Cosmetics/Undertops/Tshirt_Textures/School_Ribbon_Greyscale.png",
+      "GradientSet": "Colored_Cotton",
+      "GradientId": "Red"
+    },
+    {
+      "Model": "Cosmetics/Overtops/QuiltedTop.blockymodel",
+      "Texture": "Cosmetics/Overtops/QuiltedTop_Texture.png",
+      "GradientSet": "Flashy_Synthetic",
+      "GradientId": "Red"
+    },
+    {
+      "Model": "Cosmetics/Shoes/FlatsStyled.blockymodel",
+      "Texture": "Cosmetics/Shoes/FlatsStyled_Textures/FlatsStyled_GreyScale.png",
+      "GradientSet": "Flashy_Synthetic",
+      "GradientId": "Red"
+    },
+    {
+      "Model": "Cosmetics/Gloves/LongGloves.blockymodel",
+      "Texture": "Cosmetics/Gloves/LongGloves_Textures/PopstarGloves_Texture.png"
+    },
+    {
+      "Model": "Cosmetics/Head/Ribbon.blockymodel",
+      "Texture": "Cosmetics/Head/Ribbon_Textures/Ribbon_Greyscale.png",
+      "GradientSet": "Colored_Cotton",
+      "GradientId": "Red"
+    }
+  ],
+  "Icon": "Icons/ModelsGenerated/Female_Mannequin_01.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      19,
+      0
+    ],
+    "Translation": [
+      0,
+      -110
+    ]
+  }
+}

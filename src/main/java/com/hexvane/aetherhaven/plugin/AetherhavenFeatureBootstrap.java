@@ -41,12 +41,19 @@ public final class AetherhavenFeatureBootstrap {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     private static final List<GameTimeTickListener> TICK_LISTENERS = new ArrayList<>();
+    private static final List<Runnable> SHUTDOWN_HOOKS = new ArrayList<>();
     private static boolean jewelryStarted;
 
     private AetherhavenFeatureBootstrap() {}
 
+    /** Runs on plugin shutdown after feature tick listeners are cleared. */
+    public static void registerShutdownHook(@Nonnull Runnable hook) {
+        SHUTDOWN_HOOKS.add(hook);
+    }
+
     public static void registerEnabled(@Nonnull AetherhavenPlugin core) {
         TICK_LISTENERS.clear();
+        SHUTDOWN_HOOKS.clear();
         jewelryStarted = false;
         // Host registries on the parent plugin (same classloader / lifecycle as core).
         JavaPlugin host = core;
@@ -125,6 +132,14 @@ public final class AetherhavenFeatureBootstrap {
             }
         }
         TICK_LISTENERS.clear();
+        for (Runnable hook : SHUTDOWN_HOOKS) {
+            try {
+                hook.run();
+            } catch (Throwable t) {
+                LOGGER.atWarning().withCause(t).log("Feature shutdown hook failed");
+            }
+        }
+        SHUTDOWN_HOOKS.clear();
         jewelryStarted = false;
     }
 

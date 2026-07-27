@@ -4,6 +4,8 @@
 
 ### Added
 
+- **Town Journal villager locate** — Each villager in the Town tab has a trail button. Toggle it to see green particles leading to them or to where they were last seen. Press again or walk close to stop the trail.
+- **Villager audit log** — Town villager deaths, removals, and confirmed missing events append to `villager_audit/{world}/audit.jsonl` under the mod data folder. Disable with `VillagerAuditLogEnabled` in config.json.
 - **Community submission editor** — In Creative mode, the building editor staff has a My submissions tab. Edit and save to upload a new version. Pending updates replace your submission. Live buildings stay up until an update is approved.
 - **Debug commands for quest board, inn, and town rank** — `/ah questboard reroll`, `/ah inn reroll`, and `/ah townrank set <rank>`. Optional `--town` and `--player` targeting.
 - **Command tab completion** — Aetherhaven commands suggest values while you type (construction ids, town names, quest ids, and more).
@@ -32,6 +34,7 @@
 - **Raid march behavior** — Raid mobs march toward town again and keep pathing toward staged waypoints.
 - **Raid quest tracking** — Raid mobs in unloaded chunks no longer disappear from the quest or compass when you approach town.
 - **German town planning desk (de-DE)** — Updated German names for tools and benches at the town planning desk.
+- **Plot blueprint salvaging** — Plot blueprints can be salvaged at the salvaging bench for 5 gold coins again.
 
 ## [2.5.0] - 7/22/2026
 
