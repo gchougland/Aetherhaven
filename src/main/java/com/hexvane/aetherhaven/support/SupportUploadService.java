@@ -24,7 +24,7 @@ public final class SupportUploadService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final Gson GSON = new Gson();
     private static final String BOUNDARY = "----AetherhavenSupportBundleBoundary";
-    private static final long LOCAL_COOLDOWN_MS = 10L * 60L * 1000L;
+    private static final long LOCAL_COOLDOWN_MS = 2L * 60L * 1000L;
 
     private static final ConcurrentHashMap<UUID, Long> LAST_UPLOAD_BY_PLAYER = new ConcurrentHashMap<>();
 
@@ -101,6 +101,9 @@ public final class SupportUploadService {
             Map<String, String> headers = new LinkedHashMap<>();
             headers.put("X-Player-Uuid", playerUuid.toString().trim().toLowerCase(Locale.ROOT));
             headers.put("X-Player-Name", playerName);
+            if (note != null && !note.isBlank()) {
+                headers.put("X-Support-Note", note.trim());
+            }
 
             String url = marketplace.getApiBaseUrl() + "/api/v1/support-bundles";
             String response = CommunityHttpClient.postMultipart(url, headers, BOUNDARY, body);

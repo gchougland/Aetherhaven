@@ -1331,10 +1331,11 @@ app.post(
       res.status(400).json({ error: "invalid_meta" });
       return;
     }
+    const headerNote = String(req.get("X-Support-Note") || "").trim();
     const saved = supportBundles.saveUpload({
       playerUuid,
       playerName: String(req.get("X-Player-Name") || "Unknown"),
-      note: meta.note || "",
+      note: headerNote || meta.note || "",
       modVersion: meta.modVersion || "",
       serverUuid: meta.serverUuid || "",
       worldNames: meta.worldNames,

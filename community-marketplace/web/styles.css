@@ -1346,6 +1346,10 @@ button.danger:hover {
   margin-bottom: var(--space-md);
 }
 
+.admin-page-intro + .admin-section {
+  margin-top: var(--space-lg);
+}
+
 .admin-page .admin-section {
   scroll-margin-top: var(--space-xl);
 }
