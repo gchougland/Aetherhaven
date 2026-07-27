@@ -77,17 +77,20 @@ public final class WorkplacePlotAssignment {
         if (plot == null || plot.getState() != PlotInstanceState.COMPLETE) {
             return "Plot is not ready.";
         }
-        String gameplayId = plugin.getConstructionCatalog().resolveGameplayConstructionId(plot.getConstructionId());
-        if (!ProductionWorkplaceKinds.supportsWorkerAssignmentForPlot(
-            plugin.getConstructionCatalog(),
-            plot.getConstructionId()
-        )) {
+        var catalog = plugin.getConstructionCatalog();
+        if (!ProductionWorkplaceKinds.supportsWorkerAssignmentForPlot(catalog, plot.getConstructionId())) {
             return "This building is not a workplace.";
         }
 
         Ref<EntityStore> npcRef = findWorkerOnPlot(store, town.getTownId(), workplacePlotId, residentKind);
         if (npcRef == null || !npcRef.isValid()) {
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(gameplayId)
+            String roleGameplayId =
+                ProductionWorkplaceKinds.gameplayConstructionIdForResidentKind(
+                    catalog,
+                    plot.getConstructionId(),
+                    residentKind
+                );
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(roleGameplayId)
                 && TownVillagerBinding.KIND_GUILD_MASTER.equals(residentKind)) {
                 GuildHallAdventurerPoolService.clearAdventurersForHall(world, plugin, town, tm, store, plot);
             }
@@ -95,12 +98,21 @@ public final class WorkplacePlotAssignment {
         }
 
         UUIDComponent assignedUuidComp = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        String roleGameplayId =
+            ProductionWorkplaceKinds.gameplayConstructionIdForResidentKind(
+                catalog,
+                plot.getConstructionId(),
+                residentKind
+            );
+        if (roleGameplayId == null || roleGameplayId.isBlank()) {
+            return "This building is not a workplace.";
+        }
         String clearBlock =
             clearBlockReason(
                 plugin,
                 store,
                 town,
-                gameplayId,
+                roleGameplayId,
                 workplacePlotId,
                 residentKind,
                 assignedUuidComp != null ? assignedUuidComp.getUuid() : null
@@ -120,7 +132,7 @@ public final class WorkplacePlotAssignment {
         if (roleId != null && !roleId.isBlank() && uuidComp != null) {
             ResidentRegistryService.upsert(town, tm, roleId, residentKind, null, uuidComp.getUuid());
         }
-        if (AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(gameplayId)
+        if (AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(roleGameplayId)
             && TownVillagerBinding.KIND_GUILD_MASTER.equals(residentKind)) {
             GuildHallAdventurerPoolService.clearAdventurersForHall(world, plugin, town, tm, store, plot);
         }
@@ -246,11 +258,8 @@ public final class WorkplacePlotAssignment {
         if (plot == null || plot.getState() != PlotInstanceState.COMPLETE) {
             return "Plot is not ready.";
         }
-        String gameplayId = plugin.getConstructionCatalog().resolveGameplayConstructionId(plot.getConstructionId());
-        if (!ProductionWorkplaceKinds.supportsWorkerAssignmentForPlot(
-            plugin.getConstructionCatalog(),
-            plot.getConstructionId()
-        )) {
+        var catalog = plugin.getConstructionCatalog();
+        if (!ProductionWorkplaceKinds.supportsWorkerAssignmentForPlot(catalog, plot.getConstructionId())) {
             return "This building is not a workplace.";
         }
 
@@ -275,9 +284,9 @@ public final class WorkplacePlotAssignment {
             return "That villager does not work at this building type.";
         }
         boolean workMatches = false;
-        for (String gid : plugin.getConstructionCatalog().resolveGameplayConstructionIds(plot.getConstructionId())) {
+        for (String gid : catalog.resolveGameplayConstructionIds(plot.getConstructionId())) {
             if (workId.equals(gid)
-                || plugin.getConstructionCatalog().matchesGameplayConstruction(workId, gid)) {
+                || catalog.matchesGameplayConstruction(workId, gid)) {
                 workMatches = true;
                 break;
             }
@@ -337,7 +346,9 @@ public final class WorkplacePlotAssignment {
             ResidentRegistryService.upsert(town, tm, npc.getRoleName().trim(), kind, workplacePlotId, uuidComp.getUuid());
         }
         tm.updateTown(town);
-        if (AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(gameplayId)
+        String roleGameplayId =
+            ProductionWorkplaceKinds.gameplayConstructionIdForResidentKind(catalog, plot.getConstructionId(), kind);
+        if (AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(roleGameplayId)
             && TownVillagerBinding.KIND_GUILD_MASTER.equals(kind)) {
             GuildHallAdventurerPoolService.tryFillAfterGuildMasterAssigned(
                 world,
@@ -348,7 +359,7 @@ public final class WorkplacePlotAssignment {
                 store
             );
         }
-        if (AetherhavenConstants.CONSTRUCTION_PLOT_INN.equals(gameplayId)
+        if (AetherhavenConstants.CONSTRUCTION_PLOT_INN.equals(roleGameplayId)
             && TownVillagerBinding.KIND_INNKEEPER.equals(kind)
             && town.isInnActive()) {
             InnBellService.ring(world, plugin, town, tm, store, plot);

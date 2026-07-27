@@ -347,6 +347,7 @@ aetherhaven.plotcreator.success.registered = Building saved as {id} and register
 aetherhaven.plotcreator.success.savedTokenFallback = Building file saved as {id}. Could not link it to your town in-world; use the plot token to place it.
 aetherhaven.plotcreator.success.submittedCommunity = Building submitted for community review.
 aetherhaven.plotcreator.error.communitySubmit = Community submission failed: {reason}
+aetherhaven.plotcreator.error.communityRateLimited = You have uploaded too many buildings recently. Please try again later.
 aetherhaven.plotcreator.error.communityDisabled = Community marketplace is disabled on this server.
 aetherhaven.plotcreator.error.communitySubmitNotFound = No locally saved building found with id {id}.
 aetherhaven.plotcreator.field.submitToCommunity = Submit to community marketplace for review

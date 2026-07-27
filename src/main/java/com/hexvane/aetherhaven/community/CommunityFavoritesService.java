@@ -8,6 +8,7 @@ import com.hexvane.aetherhaven.plot.ConstructionFavoritesService;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -102,9 +103,18 @@ public final class CommunityFavoritesService {
         @Nonnull UUID playerUuid
     ) {
         List<String> remote = fetchFavorites(plugin, playerUuid);
-        if (!remote.isEmpty()) {
-            ConstructionFavoritesService.mergeCommunityFavorites(ref, store, remote);
+        if (remote.isEmpty()) {
+            return;
         }
+        World world = store.getExternalData().getWorld();
+        world.execute(
+            () -> {
+                if (!ref.isValid()) {
+                    return;
+                }
+                ConstructionFavoritesService.mergeCommunityFavorites(ref, store, remote);
+            }
+        );
     }
 
     /**

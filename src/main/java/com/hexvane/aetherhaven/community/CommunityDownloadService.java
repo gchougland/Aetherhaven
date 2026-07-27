@@ -31,6 +31,15 @@ public final class CommunityDownloadService {
 
     @Nonnull
     public static InstallResult install(@Nonnull AetherhavenPlugin plugin, @Nonnull CommunityManifestEntry entry) {
+        return install(plugin, entry, false);
+    }
+
+    @Nonnull
+    public static InstallResult install(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull CommunityManifestEntry entry,
+        boolean forceRefresh
+    ) {
         if (!CommunityRequiredMods.isSatisfied(entry.getRequiredMods())) {
             return InstallResult.MISSING_MODS;
         }
@@ -43,7 +52,15 @@ public final class CommunityDownloadService {
             Files.createDirectories(CommunityPaths.prefabsDirectory(dataDir));
             Files.createDirectories(CommunityPaths.iconsDirectory(dataDir));
 
-            if (!CommunityPreviewCache.get().promotePreviewPrefab(dataDir, id)) {
+            Path installedPrefab = CommunityPaths.installedPrefabFile(dataDir, id);
+            boolean havePrefab = Files.isRegularFile(installedPrefab);
+            if (forceRefresh) {
+                CommunityPreviewCache.get().clearEntryPreview(plugin, id);
+                havePrefab = false;
+            } else if (!havePrefab && CommunityPreviewCache.get().promotePreviewPrefab(dataDir, id)) {
+                havePrefab = true;
+            }
+            if (!havePrefab) {
                 String prefabUrl = entry.getPrefabUrl();
                 if (prefabUrl == null || prefabUrl.isBlank()) {
                     return InstallResult.NOT_FOUND;
@@ -57,9 +74,8 @@ public final class CommunityDownloadService {
                     LOGGER.atWarning().log("Refused unsafe community download %s: %s", id, safety.detail());
                     return InstallResult.UNSAFE_PREFAB;
                 }
-                Files.write(CommunityPaths.installedPrefabFile(dataDir, id), prefab);
+                Files.write(installedPrefab, prefab);
             }
-            Path installedPrefab = CommunityPaths.installedPrefabFile(dataDir, id);
             CommunityPrefabSafety.Result installedSafety =
                 CommunityPrefabSafety.validate(Files.readAllBytes(installedPrefab));
             if (!installedSafety.isSafe()) {
@@ -69,7 +85,7 @@ public final class CommunityDownloadService {
             }
 
             Path buildingFile = CommunityPaths.buildingFile(dataDir, id);
-            if (!Files.isRegularFile(buildingFile)) {
+            if (forceRefresh || !Files.isRegularFile(buildingFile)) {
                 String buildingUrl = entry.getBuildingUrl();
                 if (buildingUrl == null || buildingUrl.isBlank()) {
                     return InstallResult.NOT_FOUND;
@@ -84,7 +100,7 @@ public final class CommunityDownloadService {
             CommunityBuildingJsonNormalizer.normalizeInstalledBuildingFile(buildingFile, id);
 
             Path iconFile = CommunityPaths.iconFile(dataDir, id);
-            if (!Files.isRegularFile(iconFile)) {
+            if (forceRefresh || !Files.isRegularFile(iconFile)) {
                 String iconUrl = entry.getIconUrl();
                 if (iconUrl != null && !iconUrl.isBlank()) {
                     byte[] icon = CommunityHttpClient.getBytes(catalog.resolveUrl(iconUrl));
@@ -94,8 +110,8 @@ public final class CommunityDownloadService {
                 }
             }
             if (Files.isRegularFile(iconFile)) {
-                CommonAsset asset = CommunityIconRegistry.registerIconFileNoSend(plugin, iconFile, false);
-                CustomBuildingIconAssetRegistry.registerIconFileNoSend(plugin, iconFile, false);
+                CommonAsset asset = CommunityIconRegistry.registerIconFileNoSend(plugin, iconFile, forceRefresh);
+                CustomBuildingIconAssetRegistry.registerIconFileNoSend(plugin, iconFile, forceRefresh);
                 if (asset != null) {
                     CommunityIconRegistry.broadcastAssets(List.of(asset));
                     String constructionId = CustomBuildingsPaths.constructionIdFromIconFileName(iconFile.getFileName().toString());
@@ -105,9 +121,12 @@ public final class CommunityDownloadService {
                 }
             }
 
+            CommunityInstallVersion.writeInstalledVersion(dataDir, id, entry.getVersion());
             plugin.reloadConfigsAndAssetCatalogs();
-            reportInstall(plugin, id);
-            LOGGER.atInfo().log("Installed community building %s", id);
+            if (!forceRefresh) {
+                reportInstall(plugin, id);
+            }
+            LOGGER.atInfo().log(forceRefresh ? "Updated community building %s" : "Installed community building %s", id);
             return InstallResult.SUCCESS;
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Failed to install community building %s", id);
@@ -135,6 +154,7 @@ public final class CommunityDownloadService {
         try {
             Files.deleteIfExists(CommunityPaths.buildingFile(dataDir, constructionId));
             Files.deleteIfExists(CommunityPaths.installedPrefabFile(dataDir, constructionId));
+            CommunityInstallVersion.deleteInstalledVersion(dataDir, constructionId);
             CommunityPreviewCache.get().clearEntryPreview(plugin, constructionId);
             plugin.reloadConfigsAndAssetCatalogs();
             return InstallResult.SUCCESS;

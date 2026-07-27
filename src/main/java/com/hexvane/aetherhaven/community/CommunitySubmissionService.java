@@ -113,10 +113,14 @@ public final class CommunitySubmissionService {
             String url =
                 cfg.getApiBaseUrl()
                     + (update ? "/api/v1/submissions/" + constructionId.trim() : "/api/v1/submissions");
-            String response =
+            CommunityHttpClient.HttpResult result =
                 update
-                    ? CommunityHttpClient.putMultipart(url, headers, BOUNDARY, body)
-                    : CommunityHttpClient.postMultipart(url, headers, BOUNDARY, body);
+                    ? CommunityHttpClient.putMultipartResult(url, headers, BOUNDARY, body)
+                    : CommunityHttpClient.postMultipartResult(url, headers, BOUNDARY, body);
+            if (!result.isSuccess()) {
+                return mapUploadError(result);
+            }
+            String response = result.getBody();
             if (response == null) {
                 return "upload_failed";
             }
@@ -182,6 +186,16 @@ public final class CommunitySubmissionService {
             );
             return;
         }
+        if (isRateLimitedError(err)) {
+            playerRef.sendMessage(
+                Message.translation(
+                    update
+                        ? "aetherhaven_building_editor.aetherhaven.buildingeditor.error.communityRateLimited"
+                        : "aetherhaven_plot_creator.aetherhaven.plotcreator.error.communityRateLimited"
+                )
+            );
+            return;
+        }
         playerRef.sendMessage(
             Message.translation(
                     update
@@ -190,6 +204,22 @@ public final class CommunitySubmissionService {
                 )
                 .param("reason", Message.raw(err))
         );
+    }
+
+    private static boolean isRateLimitedError(@Nonnull String err) {
+        return "rate_limited".equals(err) || "rate_limited_player".equals(err) || "rate_limited_ip".equals(err);
+    }
+
+    @Nullable
+    private static String mapUploadError(@Nonnull CommunityHttpClient.HttpResult result) {
+        String apiError = CommunityHttpClient.parseErrorKey(result.getBody());
+        if (apiError != null) {
+            return apiError;
+        }
+        if (result.getStatusCode() == 429) {
+            return "rate_limited";
+        }
+        return "upload_failed";
     }
 
     private static boolean parseWaitingForReview(@Nonnull String responseJson) {

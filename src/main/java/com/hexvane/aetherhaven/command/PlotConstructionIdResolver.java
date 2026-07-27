@@ -77,7 +77,7 @@ public final class PlotConstructionIdResolver {
         if (want.equals(stored)) {
             return true;
         }
-        return want.equals(catalog.resolveGameplayConstructionId(stored));
+        return catalog.matchesGameplayConstruction(stored, want);
     }
 
     @Nonnull

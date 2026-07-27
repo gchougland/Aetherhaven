@@ -39,14 +39,29 @@ public final class JournalPlotAssigneeFormatter {
         if (state != PlotInstanceState.COMPLETE) {
             return Message.translation(plotStatusLangKey(state));
         }
-        String gameplayId = catalog.resolveGameplayConstructionId(plot.getConstructionId());
-        if (AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(gameplayId)) {
+        if (catalog.matchesGameplayConstruction(plot.getConstructionId(), AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE)) {
             return houseAssigneeLine(plugin, store, town, plot);
         }
-        if (ProductionWorkplaceKinds.supportsWorkerAssignment(gameplayId)) {
-            return workplaceAssigneeLine(plugin, store, town, plot, gameplayId);
+        List<String> workplaceRoles =
+            ProductionWorkplaceKinds.residentBindingKindsForPlot(catalog, plot.getConstructionId());
+        if (workplaceRoles.isEmpty()) {
+            return Message.translation(TAIL + "plotStatusComplete");
         }
-        return Message.translation(TAIL + "plotStatusComplete");
+        if (workplaceRoles.size() > 1
+            || ProductionWorkplaceKinds.isMultiRoleWorkplacePlot(catalog, plot.getConstructionId())) {
+            return multiRoleWorkplaceAssigneeLine(plugin, store, town, catalog, plot, workplaceRoles);
+        }
+        String residentKind = workplaceRoles.get(0);
+        String gameplayId =
+            ProductionWorkplaceKinds.gameplayConstructionIdForResidentKind(
+                catalog,
+                plot.getConstructionId(),
+                residentKind
+            );
+        if (gameplayId == null || gameplayId.isBlank()) {
+            return Message.translation(TAIL + "plotStatusComplete");
+        }
+        return singleRoleWorkplaceAssigneeLine(plugin, store, town, plot, gameplayId, residentKind);
     }
 
     @Nonnull
@@ -78,52 +93,92 @@ public final class JournalPlotAssigneeFormatter {
     }
 
     @Nonnull
-    private static Message workplaceAssigneeLine(
+    private static Message multiRoleWorkplaceAssigneeLine(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull PlotInstance plot,
+        @Nonnull List<String> workplaceRoles
+    ) {
+        UUID plotId = plot.getPlotId();
+        Message combined = null;
+        for (String residentKind : workplaceRoles) {
+            String gameplayId =
+                ProductionWorkplaceKinds.gameplayConstructionIdForResidentKind(
+                    catalog,
+                    plot.getConstructionId(),
+                    residentKind
+                );
+            if (gameplayId == null || gameplayId.isBlank()) {
+                continue;
+            }
+            Message line =
+                roleAssigneeLine(
+                    plugin,
+                    store,
+                    town,
+                    plotId,
+                    gameplayId,
+                    residentKind,
+                    npcRoleFilterForResidentKind(residentKind),
+                    workplaceRoleLabelKey(residentKind)
+                );
+            combined = combined == null ? line : Message.join(combined, Message.raw(" · "), line);
+        }
+        return combined != null ? combined : Message.translation(TAIL + "plotStatusComplete");
+    }
+
+    @Nonnull
+    private static Message singleRoleWorkplaceAssigneeLine(
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull Store<EntityStore> store,
         @Nonnull TownRecord town,
         @Nonnull PlotInstance plot,
-        @Nonnull String gameplayWorkplaceId
+        @Nonnull String gameplayWorkplaceId,
+        @Nonnull String residentKind
     ) {
         UUID plotId = plot.getPlotId();
-        if (ProductionWorkplaceKinds.isMultiRoleWorkplace(gameplayWorkplaceId)) {
-            Message guildMaster =
-                roleAssigneeLine(
-                    plugin,
-                    store,
-                    town,
-                    plotId,
-                    gameplayWorkplaceId,
-                    TownVillagerBinding.KIND_GUILD_MASTER,
-                    AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID,
-                    TOWN + "workplaceGuildMaster"
-                );
-            Message bard =
-                roleAssigneeLine(
-                    plugin,
-                    store,
-                    town,
-                    plotId,
-                    gameplayWorkplaceId,
-                    TownVillagerBinding.KIND_BARD,
-                    AetherhavenConstants.BARD_NPC_ROLE_ID,
-                    TOWN + "workplaceBard"
-                );
-            return Message.join(guildMaster, Message.raw(" · "), bard);
-        }
-        String residentKind = ProductionWorkplaceKinds.residentBindingKindForGameplayConstruction(gameplayWorkplaceId);
-        if (residentKind == null) {
-            return Message.translation(TAIL + "plotStatusComplete");
-        }
         UUID worker = findEntityWithJobPlotAndKind(store, town.getTownId(), plotId, residentKind);
         if (worker == null) {
             return Message.translation(TAIL + "plotWorkplaceUnassigned");
         }
-        String name = resolveWorkerName(plugin, store, town, gameplayWorkplaceId, null, worker);
+        String name =
+            resolveWorkerName(
+                plugin,
+                store,
+                town,
+                gameplayWorkplaceId,
+                npcRoleFilterForResidentKind(residentKind),
+                worker
+            );
         if (name == null || name.isBlank()) {
             return Message.translation(TAIL + "plotWorkplaceUnassigned");
         }
         return Message.translation(TAIL + "plotWorkplaceWorker").param("name", Message.raw(name.trim()));
+    }
+
+    @Nullable
+    private static String npcRoleFilterForResidentKind(@Nonnull String residentKind) {
+        if (TownVillagerBinding.KIND_GUILD_MASTER.equals(residentKind)) {
+            return AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID;
+        }
+        if (TownVillagerBinding.KIND_BARD.equals(residentKind)) {
+            return AetherhavenConstants.BARD_NPC_ROLE_ID;
+        }
+        return null;
+    }
+
+    @Nonnull
+    private static String workplaceRoleLabelKey(@Nonnull String residentKind) {
+        return switch (residentKind.trim()) {
+            case TownVillagerBinding.KIND_GUILD_MASTER -> TOWN + "workplaceGuildMaster";
+            case TownVillagerBinding.KIND_BARD -> TOWN + "workplaceBard";
+            case TownVillagerBinding.KIND_INNKEEPER -> TOWN + "workplaceInnkeeper";
+            case TownVillagerBinding.KIND_ELDER -> TOWN + "workplaceElder";
+            case TownVillagerBinding.KIND_CHEF -> TOWN + "workplaceChef";
+            default -> TOWN + "workplaceRole." + residentKind.trim();
+        };
     }
 
     @Nonnull

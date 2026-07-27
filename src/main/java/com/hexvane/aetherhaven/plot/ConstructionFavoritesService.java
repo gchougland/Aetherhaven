@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.plot;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -18,9 +19,48 @@ public final class ConstructionFavoritesService {
         return state.favorites();
     }
 
+    /** Read-only favorites union for UI while Store writes must be deferred (e.g. during page build). */
+    @Nonnull
+    public static Set<String> listFavoritesIncluding(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Collection<String> additionalIds
+    ) {
+        Set<String> favIds = new LinkedHashSet<>();
+        PlayerConstructionFavoritesState state = store.getComponent(ref, PlayerConstructionFavoritesState.getComponentType());
+        if (state != null) {
+            favIds.addAll(state.favorites());
+        }
+        for (String id : additionalIds) {
+            if (id != null && !id.isBlank()) {
+                favIds.add(id.trim().toLowerCase(Locale.ROOT));
+            }
+        }
+        return favIds;
+    }
+
     public static boolean isFavorite(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull String constructionId) {
         PlayerConstructionFavoritesState state = store.getComponent(ref, PlayerConstructionFavoritesState.getComponentType());
         return state != null && state.isFavorite(constructionId);
+    }
+
+    /** Read-only favorite check that also considers ids not yet merged into player state. */
+    public static boolean isFavoriteIncluding(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String constructionId,
+        @Nonnull Collection<String> additionalIds
+    ) {
+        if (isFavorite(ref, store, constructionId)) {
+            return true;
+        }
+        String id = constructionId.trim().toLowerCase(Locale.ROOT);
+        for (String extra : additionalIds) {
+            if (extra != null && id.equals(extra.trim().toLowerCase(Locale.ROOT))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** @return true when favorited after toggle, false when unfavorited */

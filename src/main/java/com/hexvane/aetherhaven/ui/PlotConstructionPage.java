@@ -113,6 +113,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
     private static final String HOUSE_RESIDENT_SLOT_ROWS = "#HouseResidentSlotScroll #HouseResidentSlotRows";
     private static final String WORKPLACE_WORKER_ROWS =
         "#WorkplaceWorkerPickerModal #WorkplaceWorkerListScroll #WorkplaceWorkerRows";
+    private static final String WORKPLACE_ASSIGN_ROLE_ROWS =
+        "#WorkplaceAssignSection #WorkplaceAssignRoleScroll #WorkplaceAssignRoleRows";
     private static final String TOURIST_MANIFEST_ROWS = "#TouristManifestScroll #TouristManifestRows";
     private static final int MAX_TOURIST_MANIFEST_ROWS = 48;
     private static final String GUARD_MANIFEST_ROWS = "#GuardManifestScroll #GuardManifestRows";
@@ -255,8 +257,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             commandBuilder.set("#HouseResidentRow.Visible", false);
             commandBuilder.set("#TouristManifestRow.Visible", false);
             commandBuilder.set("#GuardManifestRow.Visible", false);
-            commandBuilder.set("#WorkplaceAssignRow.Visible", false);
-            commandBuilder.set("#WorkplaceAssignBardRow.Visible", false);
+            commandBuilder.set("#WorkplaceAssignSection.Visible", false);
+            commandBuilder.clear(WORKPLACE_ASSIGN_ROLE_ROWS);
             commandBuilder.set("#ProductionUpgradeTreeSlot.Visible", false);
             commandBuilder.set("#MaterialsHeader.Visible", false);
             commandBuilder.set("#MaterialsProgress.Visible", false);
@@ -372,8 +374,13 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         commandBuilder.set("#TabNeedsButton.Disabled", !needsMoveTabsOk);
         commandBuilder.set("#TabMoveButton.Disabled", !needsMoveTabsOk);
         TownRecord mgmtTown = managementUi ? resolveManagementTown(store) : null;
+        AetherhavenPlugin plugWork = AetherhavenPlugin.get();
         boolean isTownHall =
-            AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL.equals(def.getId());
+            plugWork != null
+                && plugWork.getConstructionCatalog().matchesGameplayConstruction(
+                    def.getId(),
+                    AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL
+                );
         boolean showExpandTerritory =
             managementUi
                 && completed
@@ -398,7 +405,6 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             commandBuilder.set("#TabPlayersButton.Disabled", managementTab == 1);
         }
 
-        AetherhavenPlugin plugWork = AetherhavenPlugin.get();
         boolean showHouseResident =
             managementUi
                 && completed
@@ -417,16 +423,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 ? ProductionWorkplaceKinds.residentBindingKindsForPlot(plugWork.getConstructionCatalog(), def.getId())
                 : List.of();
         boolean showWorkplaceAssign = managementUi && completed && !workplaceRoles.isEmpty();
-        boolean hasBardRole = workplaceRoles.contains(TownVillagerBinding.KIND_BARD);
-        List<String> nonBardRoles = new ArrayList<>();
-        for (String role : workplaceRoles) {
-            if (!TownVillagerBinding.KIND_BARD.equals(role)) {
-                nonBardRoles.add(role);
-            }
-        }
-        boolean showWorkplaceExtra = showWorkplaceAssign && nonBardRoles.size() > 1;
-        boolean showWorkplaceBard = showWorkplaceAssign && hasBardRole;
-        boolean multiWorkplaceLabels = nonBardRoles.size() > 1 || hasBardRole;
+        boolean multiWorkplaceLabels = workplaceRoles.size() > 1;
         boolean showProductionUpgrades =
             managementUi
                 && completed
@@ -460,9 +457,10 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         commandBuilder.set("#HouseResidentRow.Visible", showHouseResident);
         commandBuilder.set("#TouristManifestRow.Visible", showTouristManifest);
         commandBuilder.set("#GuardManifestRow.Visible", showGuardManifest);
-        commandBuilder.set("#WorkplaceAssignRow.Visible", showWorkplaceAssign && !nonBardRoles.isEmpty());
-        commandBuilder.set("#WorkplaceAssignBardRow.Visible", showWorkplaceBard);
-        commandBuilder.set("#WorkplaceAssignExtraRow.Visible", showWorkplaceExtra);
+        commandBuilder.set("#WorkplaceAssignSection.Visible", showWorkplaceAssign);
+        if (!showWorkplaceAssign) {
+            commandBuilder.clear(WORKPLACE_ASSIGN_ROLE_ROWS);
+        }
         boolean bothPerkTrees = showProductionUpgrades && showRestaurantUpgrades;
         commandBuilder.set("#PerkTreeTabStrip.Visible", bothPerkTrees);
         commandBuilder.set("#ProductionUpgradeTreeSlot.Visible", showProductionUpgrades || showRestaurantUpgrades);
@@ -502,83 +500,17 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             World worldW = store.getExternalData().getWorld();
             TownManager tmw = AetherhavenWorldRegistries.getOrCreateTownManager(worldW, plugWork);
             TownRecord townW = tmw.getTown(townUuidMgmt);
-            if (!nonBardRoles.isEmpty()) {
-                String primaryResidentKind = nonBardRoles.get(0);
-                commandBuilder.set("#WorkplaceAssignFieldLabel.Visible", multiWorkplaceLabels);
-                if (multiWorkplaceLabels) {
-                    commandBuilder.set(
-                        "#WorkplaceAssignFieldLabel.TextSpans",
-                        Message.translation(workplaceRoleLabelKey(primaryResidentKind))
-                    );
-                }
-                String primaryNpcRole =
-                    TownVillagerBinding.KIND_GUILD_MASTER.equals(primaryResidentKind)
-                        ? AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID
-                        : null;
-                buildWorkplaceRoleSection(
-                    store,
-                    commandBuilder,
-                    eventBuilder,
-                    townW,
-                    plugWork,
-                    gameplayWorkplaceIdForRole(plugWork.getConstructionCatalog(), def.getId(), primaryResidentKind),
-                    plotUuidMgmt,
-                    primaryNpcRole,
-                    primaryResidentKind,
-                    "#WorkplaceAssignRow",
-                    "#WorkplaceWorkerSelection",
-                    "#ChooseWorkplaceWorkerButton"
-                );
-            }
-            if (showWorkplaceExtra) {
-                String extraKind = nonBardRoles.get(1);
-                commandBuilder.set(
-                    "#WorkplaceAssignExtraFieldLabel.TextSpans",
-                    Message.translation(workplaceRoleLabelKey(extraKind))
-                );
-                String extraNpcRole =
-                    TownVillagerBinding.KIND_GUILD_MASTER.equals(extraKind)
-                        ? AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID
-                        : null;
-                buildWorkplaceRoleSection(
-                    store,
-                    commandBuilder,
-                    eventBuilder,
-                    townW,
-                    plugWork,
-                    gameplayWorkplaceIdForRole(plugWork.getConstructionCatalog(), def.getId(), extraKind),
-                    plotUuidMgmt,
-                    extraNpcRole,
-                    extraKind,
-                    "#WorkplaceAssignExtraRow",
-                    "#WorkplaceExtraSelection",
-                    "#ChooseWorkplaceExtraButton"
-                );
-            }
-            if (showWorkplaceBard) {
-                commandBuilder.set(
-                    "#WorkplaceAssignBardFieldLabel.TextSpans",
-                    Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.workplaceBard")
-                );
-                buildWorkplaceRoleSection(
-                    store,
-                    commandBuilder,
-                    eventBuilder,
-                    townW,
-                    plugWork,
-                    gameplayWorkplaceIdForRole(
-                        plugWork.getConstructionCatalog(),
-                        def.getId(),
-                        TownVillagerBinding.KIND_BARD
-                    ),
-                    plotUuidMgmt,
-                    AetherhavenConstants.BARD_NPC_ROLE_ID,
-                    TownVillagerBinding.KIND_BARD,
-                    "#WorkplaceAssignBardRow",
-                    "#WorkplaceBardSelection",
-                    "#ChooseWorkplaceBardButton"
-                );
-            }
+            buildWorkplaceAssignRoleRows(
+                store,
+                commandBuilder,
+                eventBuilder,
+                townW,
+                plugWork,
+                def.getId(),
+                plotUuidMgmt,
+                workplaceRoles,
+                multiWorkplaceLabels
+            );
             if (workplaceWorkerPickerOpen && workplacePickerResidentKind != null) {
                 buildWorkplaceWorkerPickerModal(
                     store,
@@ -2839,7 +2771,51 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         sendUpdate(cmd, ev, false);
     }
 
-    private void buildWorkplaceRoleSection(
+    private void buildWorkplaceAssignRoleRows(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nullable TownRecord town,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull String plotConstructionId,
+        @Nonnull UUID plotUuidMgmt,
+        @Nonnull List<String> workplaceRoles,
+        boolean showRoleLabels
+    ) {
+        commandBuilder.clear(WORKPLACE_ASSIGN_ROLE_ROWS);
+        ConstructionCatalog catalog = plugin.getConstructionCatalog();
+        for (int i = 0; i < workplaceRoles.size(); i++) {
+            String residentKind = workplaceRoles.get(i);
+            commandBuilder.append(WORKPLACE_ASSIGN_ROLE_ROWS, "Aetherhaven/WorkplaceAssignRoleRow.ui");
+            String rowPath = WORKPLACE_ASSIGN_ROLE_ROWS + "[" + i + "]";
+            AetherhavenUiLocalization.applyWorkplaceAssignRoleRow(
+                commandBuilder,
+                rowPath,
+                TownVillagerBinding.KIND_BARD.equals(residentKind)
+            );
+            commandBuilder.set(rowPath + " #RoleLabel.Visible", showRoleLabels);
+            if (showRoleLabels) {
+                commandBuilder.set(
+                    rowPath + " #RoleLabel.TextSpans",
+                    Message.translation(workplaceRoleLabelKey(residentKind))
+                );
+            }
+            buildWorkplaceRoleRow(
+                store,
+                commandBuilder,
+                eventBuilder,
+                town,
+                plugin,
+                gameplayWorkplaceIdForRole(catalog, plotConstructionId, residentKind),
+                plotUuidMgmt,
+                npcRoleFilterForWorkplaceKind(residentKind),
+                residentKind,
+                rowPath
+            );
+        }
+    }
+
+    private void buildWorkplaceRoleRow(
         @Nonnull Store<EntityStore> store,
         @Nonnull UICommandBuilder commandBuilder,
         @Nonnull UIEventBuilder eventBuilder,
@@ -2849,9 +2825,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         @Nonnull UUID plotUuidMgmt,
         @Nullable String filterNpcRoleId,
         @Nonnull String residentKind,
-        @Nonnull String rowGroupSelector,
-        @Nonnull String selectionSelector,
-        @Nonnull String chooseButtonSelector
+        @Nonnull String rowPath
     ) {
         String langU = playerRef.getLanguage() != null ? playerRef.getLanguage() : "en-US";
         String unassignedLabel =
@@ -2868,13 +2842,11 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 WorkplaceWorkerDirectory.listEligible(store, town, plugin, gameplayWorkplaceId, filterNpcRoleId);
         }
 
+        String selectionPath = rowPath + " #WorkplaceWorkerSelection";
         if (assignedUuid.isEmpty()) {
-            commandBuilder.set(rowGroupSelector + " " + selectionSelector + " #PreviewPortrait.Visible", false);
-            commandBuilder.set(
-                rowGroupSelector + " " + selectionSelector + " #PreviewNameLine.TextSpans",
-                Message.raw(unassignedLabel)
-            );
-            commandBuilder.set(rowGroupSelector + " " + selectionSelector + " #PreviewRoleLine.Visible", false);
+            commandBuilder.set(selectionPath + " #PreviewPortrait.Visible", false);
+            commandBuilder.set(selectionPath + " #PreviewNameLine.TextSpans", Message.raw(unassignedLabel));
+            commandBuilder.set(selectionPath + " #PreviewRoleLine.Visible", false);
         } else {
             UUID assigned = UUID.fromString(assignedUuid);
             WorkplaceWorkerDirectory.WorkplaceWorkerRow preview = WorkplaceWorkerDirectory.findRow(eligible, assigned);
@@ -2890,27 +2862,15 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                     );
             }
             if (preview != null) {
-                commandBuilder.set(rowGroupSelector + " " + selectionSelector + " #PreviewPortrait.Visible", true);
-                commandBuilder.set(
-                    rowGroupSelector + " " + selectionSelector + " #PreviewPortrait.AssetPath",
-                    preview.portraitPath()
-                );
-                commandBuilder.set(
-                    rowGroupSelector + " " + selectionSelector + " #PreviewNameLine.TextSpans",
-                    Message.raw(preview.displayName())
-                );
-                commandBuilder.set(rowGroupSelector + " " + selectionSelector + " #PreviewRoleLine.Visible", true);
-                commandBuilder.set(
-                    rowGroupSelector + " " + selectionSelector + " #PreviewRoleLine.TextSpans",
-                    preview.roleLine()
-                );
+                commandBuilder.set(selectionPath + " #PreviewPortrait.Visible", true);
+                commandBuilder.set(selectionPath + " #PreviewPortrait.AssetPath", preview.portraitPath());
+                commandBuilder.set(selectionPath + " #PreviewNameLine.TextSpans", Message.raw(preview.displayName()));
+                commandBuilder.set(selectionPath + " #PreviewRoleLine.Visible", true);
+                commandBuilder.set(selectionPath + " #PreviewRoleLine.TextSpans", preview.roleLine());
             } else {
-                commandBuilder.set(rowGroupSelector + " " + selectionSelector + " #PreviewPortrait.Visible", false);
-                commandBuilder.set(
-                    rowGroupSelector + " " + selectionSelector + " #PreviewNameLine.TextSpans",
-                    Message.raw(unassignedLabel)
-                );
-                commandBuilder.set(rowGroupSelector + " " + selectionSelector + " #PreviewRoleLine.Visible", false);
+                commandBuilder.set(selectionPath + " #PreviewPortrait.Visible", false);
+                commandBuilder.set(selectionPath + " #PreviewNameLine.TextSpans", Message.raw(unassignedLabel));
+                commandBuilder.set(selectionPath + " #PreviewRoleLine.Visible", false);
             }
         }
 
@@ -2921,7 +2881,23 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         if (filterNpcRoleId != null) {
             openPicker.append("WorkplacePickerFilterNpcRoleId", filterNpcRoleId);
         }
-        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, rowGroupSelector + " " + chooseButtonSelector, openPicker, false);
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            rowPath + " #ChooseWorkplaceWorkerButton",
+            openPicker,
+            false
+        );
+    }
+
+    @Nullable
+    private static String npcRoleFilterForWorkplaceKind(@Nonnull String residentKind) {
+        if (TownVillagerBinding.KIND_GUILD_MASTER.equals(residentKind)) {
+            return AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID;
+        }
+        if (TownVillagerBinding.KIND_BARD.equals(residentKind)) {
+            return AetherhavenConstants.BARD_NPC_ROLE_ID;
+        }
+        return null;
     }
 
     private void buildWorkplaceWorkerPickerModal(
@@ -3024,8 +3000,13 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         if (defW == null || pluginW == null) {
             return;
         }
-        String gw = pluginW.getConstructionCatalog().resolveGameplayConstructionId(defW.getId());
-        if (!ProductionWorkplaceKinds.supportsWorkerAssignment(gw)) {
+        var catalogW = pluginW.getConstructionCatalog();
+        List<String> plotRoles = ProductionWorkplaceKinds.residentBindingKindsForPlot(catalogW, defW.getId());
+        if (!plotRoles.contains(residentKind.trim())) {
+            return;
+        }
+        String roleGameplayId = gameplayWorkplaceIdForRole(catalogW, defW.getId(), residentKind);
+        if (roleGameplayId == null || roleGameplayId.isBlank()) {
             return;
         }
         Store<ChunkStore> csw = blockRef.getStore();

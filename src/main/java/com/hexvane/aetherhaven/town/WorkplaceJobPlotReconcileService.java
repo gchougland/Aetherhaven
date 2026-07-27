@@ -66,12 +66,6 @@ public final class WorkplaceJobPlotReconcileService {
             if (plot.getState() != PlotInstanceState.COMPLETE) {
                 continue;
             }
-            String gameplay =
-                plugin.getConstructionCatalog().resolveGameplayConstructionId(plot.getConstructionId());
-            if (!AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR.equals(gameplay)
-                && !AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(gameplay)) {
-                continue;
-            }
             if (!PlotFootprintChunkUtil.isPlotFullyLoaded(world, plot)) {
                 continue;
             }
@@ -81,6 +75,18 @@ public final class WorkplaceJobPlotReconcileService {
             }
             Vector3i anchor = plot.resolvePrefabAnchorWorld(def);
             if (anchor == null) {
+                continue;
+            }
+            boolean needsPoi = false;
+            for (String gameplay :
+                plugin.getConstructionCatalog().resolveGameplayConstructionIds(plot.getConstructionId())) {
+                if (AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR.equals(gameplay)
+                    || AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(gameplay)) {
+                    needsPoi = true;
+                    break;
+                }
+            }
+            if (!needsPoi) {
                 continue;
             }
             Rotation yaw = plot.resolvePrefabYaw();

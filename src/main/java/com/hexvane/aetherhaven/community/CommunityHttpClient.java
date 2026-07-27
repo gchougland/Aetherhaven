@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.community;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -14,10 +16,35 @@ import javax.annotation.Nullable;
 /** Minimal outbound HTTP for the community marketplace API. */
 public final class CommunityHttpClient {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+    private static final Gson GSON = new Gson();
     private static final int CONNECT_TIMEOUT_MS = 15_000;
     private static final int READ_TIMEOUT_MS = 120_000;
 
     private CommunityHttpClient() {}
+
+    public static final class HttpResult {
+        private final int statusCode;
+        @Nullable
+        private final String body;
+
+        public HttpResult(int statusCode, @Nullable String body) {
+            this.statusCode = statusCode;
+            this.body = body;
+        }
+
+        public int getStatusCode() {
+            return statusCode;
+        }
+
+        @Nullable
+        public String getBody() {
+            return body;
+        }
+
+        public boolean isSuccess() {
+            return statusCode >= 200 && statusCode < 300;
+        }
+    }
 
     @Nullable
     public static byte[] getBytes(@Nonnull String url) {
@@ -104,7 +131,8 @@ public final class CommunityHttpClient {
         @Nonnull String boundary,
         @Nonnull byte[] body
     ) {
-        return sendMultipart(url, "POST", headers, boundary, body);
+        HttpResult result = sendMultipart(url, "POST", headers, boundary, body);
+        return result.isSuccess() ? result.getBody() : null;
     }
 
     @Nullable
@@ -114,11 +142,50 @@ public final class CommunityHttpClient {
         @Nonnull String boundary,
         @Nonnull byte[] body
     ) {
+        HttpResult result = sendMultipart(url, "PUT", headers, boundary, body);
+        return result.isSuccess() ? result.getBody() : null;
+    }
+
+    @Nonnull
+    public static HttpResult postMultipartResult(
+        @Nonnull String url,
+        @Nonnull Map<String, String> headers,
+        @Nonnull String boundary,
+        @Nonnull byte[] body
+    ) {
+        return sendMultipart(url, "POST", headers, boundary, body);
+    }
+
+    @Nonnull
+    public static HttpResult putMultipartResult(
+        @Nonnull String url,
+        @Nonnull Map<String, String> headers,
+        @Nonnull String boundary,
+        @Nonnull byte[] body
+    ) {
         return sendMultipart(url, "PUT", headers, boundary, body);
     }
 
+    /** Reads {@code error} from a marketplace JSON error body, if present. */
     @Nullable
-    private static String sendMultipart(
+    public static String parseErrorKey(@Nullable String responseBody) {
+        if (responseBody == null || responseBody.isBlank()) {
+            return null;
+        }
+        try {
+            JsonObject root = GSON.fromJson(responseBody, JsonObject.class);
+            if (root == null || !root.has("error") || root.get("error").isJsonNull()) {
+                return null;
+            }
+            String error = root.get("error").getAsString();
+            return error != null && !error.isBlank() ? error.trim() : null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Nonnull
+    private static HttpResult sendMultipart(
         @Nonnull String url,
         @Nonnull String method,
         @Nonnull Map<String, String> headers,
@@ -138,12 +205,11 @@ public final class CommunityHttpClient {
             http.disconnect();
             if (code < 200 || code >= 300) {
                 LOGGER.atWarning().log("Community %s %s failed: HTTP %s %s", method, url, code, response);
-                return null;
             }
-            return response;
+            return new HttpResult(code, response);
         } catch (Exception e) {
             LOGGER.atWarning().withCause(e).log("Community %s %s failed", method, url);
-            return null;
+            return new HttpResult(-1, null);
         }
     }
 

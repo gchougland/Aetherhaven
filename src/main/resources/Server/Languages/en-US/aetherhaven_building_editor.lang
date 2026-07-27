@@ -22,6 +22,7 @@ aetherhaven.buildingeditor.error.wallNotSupported=Wall pieces cannot be edited w
 aetherhaven.buildingeditor.error.prefabMissing=Could not find the build shape for that building.
 aetherhaven.buildingeditor.error.pasteFailed=Could not load the building here. Try again from solid ground.
 aetherhaven.buildingeditor.error.communityDisabled=The community marketplace is turned off on this server.
+aetherhaven.buildingeditor.error.communityRateLimited=You have uploaded too many buildings recently. Please try again later.
 aetherhaven.buildingeditor.error.communityUpdate=Could not upload your building update: {reason}
 aetherhaven.buildingeditor.error.prepareMine=Could not prepare your building for editing: {reason}
 

@@ -116,6 +116,14 @@ public final class CommunityCatalogService {
         return CommunityPaths.isInstalled(plugin.getDataDirectory(), constructionId);
     }
 
+    public boolean hasUpdateAvailable(@Nonnull String constructionId) {
+        CommunityManifestEntry entry = findEntry(constructionId);
+        if (entry == null) {
+            return false;
+        }
+        return CommunityInstallVersion.hasUpdate(plugin.getDataDirectory(), entry);
+    }
+
     /** Refreshes manifest if stale; does not download icons (call {@link #ensureIconsForIds} for the visible page). */
     public void refreshIfStale() {
         if (!isCacheStale()) {

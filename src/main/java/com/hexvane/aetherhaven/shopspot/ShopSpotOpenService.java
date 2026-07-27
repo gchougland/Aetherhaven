@@ -87,15 +87,16 @@ public final class ShopSpotOpenService {
         if (plugin == null) {
             return false;
         }
-        String gameplayId = plugin.getConstructionCatalog().resolveGameplayConstructionId(plot.getConstructionId());
-        if (!ProductionWorkplaceKinds.supportsWorkerAssignment(gameplayId)) {
+        var catalog = plugin.getConstructionCatalog();
+        if (!ProductionWorkplaceKinds.supportsWorkerAssignmentForPlot(catalog, plot.getConstructionId())) {
             return true;
         }
-        String kind = ProductionWorkplaceKinds.residentBindingKindForGameplayConstruction(gameplayId);
-        if (kind == null) {
-            return true;
+        for (String kind : ProductionWorkplaceKinds.residentBindingKindsForPlot(catalog, plot.getConstructionId())) {
+            if (!hasWorkerOnPlot(store, town.getTownId(), plotId, kind)) {
+                return false;
+            }
         }
-        return hasWorkerOnPlot(store, town.getTownId(), plotId, kind);
+        return true;
     }
 
     private static boolean hasWorkerOnPlot(

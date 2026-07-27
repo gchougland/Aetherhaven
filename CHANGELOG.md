@@ -2,11 +2,21 @@
 
 ## [2.6.1] - Unreleased
 
+### Added
+
+- **Community updates** — Update button on the plot crafting bench when a newer version of a downloaded building is available.
+
+### Changed
+
+- **Workplace slots** — Town record shelves list every worker a building needs.
+
 ### Fixed
 
-- **Building editor community submit** — Checking submit to community while editing a locally saved building now uploads it for review when you finish, same as the plot creator staff.
-- **Shop price tooltips** — Shop gold price lines append to existing item descriptions (Simple Enchantments and other mods using ItemDisplay) instead of replacing them.
-
+- **Building editor submit** — Submit to community works when you finish editing a saved building in the building editor staff.
+- **Shop tooltips** — Shop prices no longer replace other tooltip text.
+- **Upload limit message** — Clearer message when you hit the community upload limit.
+- **Plot crafting bench** — Fixed a crash when opening the bench with favorites loaded.
+- **Variant building menus** — Custom building variants now get the same record shelf options as the original (expand territory, guards, tourists, workers, and shops).
 
 ## [2.6.0] - 7/27/2026
 
