@@ -1,0 +1,28 @@
+{
+  "id": "plot_stormwind_portal",
+  "displayName": "Stormwind Portal",
+  "description": "Inspired by WOW",
+  "prefabPath": "Stormwind/plot_stormwind_portal.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 50,
+  "materials": [
+    {
+      "resourceTypeId": "Rock",
+      "count": 300
+    }
+  ],
+  "managementBlockLocalPos": [
+    4,
+    2,
+    -5
+  ],
+  "countsAsConstructionId": "plot_tourist_portal",
+  "styleId": "stormwind"
+}

@@ -1,0 +1,106 @@
+{
+  "constructionId": "plot_stormwind_explosion_inc",
+  "prefabPath": "Stormwind/plot_stormwind_explosion_inc.prefab.json",
+  "materials": [
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 193
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 136
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 96
+    },
+    {
+      "itemId": "Wood_Hardwood_Stairs",
+      "count": 55
+    },
+    {
+      "itemId": "Wood_Hardwood_Roof",
+      "count": 40
+    },
+    {
+      "itemId": "Wood_Hardwood_Roof_Shallow",
+      "count": 38
+    },
+    {
+      "itemId": "Rock_Sandstone_Red_Cobble",
+      "count": 36
+    },
+    {
+      "itemId": "Wood_Hardwood_Decorative",
+      "count": 32
+    },
+    {
+      "itemId": "Rock_Marble_Brick_Decorative",
+      "count": 26
+    },
+    {
+      "itemId": "Furniture_Tavern_Window",
+      "count": 24
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Smooth",
+      "count": 20
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 17
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 12
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 8
+    },
+    {
+      "itemId": "Wood_Hardwood_Fence",
+      "count": 8
+    },
+    {
+      "itemId": "Wood_Hardwood_Ornate",
+      "count": 8
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 4
+    },
+    {
+      "itemId": "Aetherhaven_Smokestack",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 2
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Roof_Flat",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Stairs",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Village_Chest_Large",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Wardrobe",
+      "count": 1
+    },
+    {
+      "itemId": "Wood_Hardwood_Fence_Gate",
+      "count": 1
+    }
+  ]
+}

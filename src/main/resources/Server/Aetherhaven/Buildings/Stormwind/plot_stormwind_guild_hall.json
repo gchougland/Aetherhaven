@@ -1,0 +1,299 @@
+{
+  "id": "plot_stormwind_guild_hall",
+  "displayName": "Stormwind Guild Hall",
+  "description": "Inspired by WOW",
+  "prefabPath": "Stormwind/plot_stormwind_guild_hall.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 150,
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 500
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 500
+    }
+  ],
+  "pois": [
+    {
+      "localX": 10,
+      "localY": 8,
+      "localZ": -11,
+      "tags": [
+        "QUEST_BOARD"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Aetherhaven_Quest_Board",
+      "interactionKind": "NONE",
+      "interactionTargetLocalX": 10,
+      "interactionTargetLocalY": 8,
+      "interactionTargetLocalZ": -10,
+      "interactionTargetYawDegrees": -5.2333984
+    },
+    {
+      "localX": 5,
+      "localY": 1,
+      "localZ": -9,
+      "tags": [
+        "WORK",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 4,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -9,
+      "workResidentKind": "guild_master",
+      "interactionTargetYawDegrees": -88.18677
+    },
+    {
+      "localX": 13,
+      "localY": 1,
+      "localZ": -11,
+      "tags": [
+        "WORK",
+        "BARD",
+        "workActivity:leisure"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 14,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -11,
+      "workResidentKind": "bard",
+      "interactionTargetYawDegrees": 140.57886
+    },
+    {
+      "localX": 8,
+      "localY": 1,
+      "localZ": -7,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 9,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -7,
+      "interactionTargetYawDegrees": 73.28369
+    },
+    {
+      "localX": 8,
+      "localY": 2,
+      "localZ": -10,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Cloth_Roof_Red_Flat",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 9,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -10,
+      "interactionTargetYawDegrees": 99.48877
+    },
+    {
+      "localX": 7,
+      "localY": 8,
+      "localZ": -7,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 8,
+      "interactionTargetLocalY": 8,
+      "interactionTargetLocalZ": -7,
+      "interactionTargetYawDegrees": 65.71643
+    },
+    {
+      "localX": 5,
+      "localY": 8,
+      "localZ": -8,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 5,
+      "interactionTargetLocalY": 8,
+      "interactionTargetLocalZ": -9,
+      "interactionTargetYawDegrees": 156.93396
+    },
+    {
+      "localX": 4,
+      "localY": 8,
+      "localZ": -6,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 3,
+      "interactionTargetLocalY": 8,
+      "interactionTargetLocalZ": -6,
+      "interactionTargetYawDegrees": -88.85608
+    },
+    {
+      "localX": 6,
+      "localY": 8,
+      "localZ": -10,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 5,
+      "interactionTargetLocalY": 8,
+      "interactionTargetLocalZ": -10,
+      "interactionTargetYawDegrees": -35.939087
+    },
+    {
+      "localX": 7,
+      "localY": 8,
+      "localZ": -12,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 8,
+      "interactionTargetLocalY": 8,
+      "interactionTargetLocalZ": -12,
+      "interactionTargetYawDegrees": 64.42865
+    },
+    {
+      "localX": 4,
+      "localY": 8,
+      "localZ": -11,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 3,
+      "interactionTargetLocalY": 8,
+      "interactionTargetLocalZ": -11,
+      "interactionTargetYawDegrees": -54.02771
+    }
+  ],
+  "managementBlockLocalPos": [
+    4,
+    3,
+    -9
+  ],
+  "adventurerSpawnLocals": [
+    [
+      11,
+      3,
+      -10
+    ],
+    [
+      14,
+      2,
+      -9
+    ],
+    [
+      7,
+      9,
+      -7
+    ],
+    [
+      6,
+      9,
+      -5
+    ],
+    [
+      5,
+      9,
+      -8
+    ],
+    [
+      4,
+      9,
+      -6
+    ],
+    [
+      6,
+      9,
+      -10
+    ],
+    [
+      4,
+      9,
+      -11
+    ],
+    [
+      5,
+      9,
+      -13
+    ],
+    [
+      7,
+      9,
+      -12
+    ],
+    [
+      10,
+      8,
+      -9
+    ],
+    [
+      10,
+      7,
+      -4
+    ],
+    [
+      15,
+      8,
+      -5
+    ],
+    [
+      17,
+      8,
+      -6
+    ]
+  ],
+  "adventurerSpawnYaws": [
+    3.5542705059051514,
+    4.5225372314453125,
+    4.954313278198242,
+    3.1189069747924805,
+    0.004244033247232437,
+    1.553381323814392,
+    3.3269782066345215,
+    1.4215964078903198,
+    0.48182547092437744,
+    5.000192165374756,
+    3.285327672958374,
+    0.07115297019481659,
+    4.332438945770264,
+    5.499154567718506
+  ],
+  "countsAsConstructionId": "plot_guild_hall",
+  "styleId": "stormwind",
+  "tags": [
+    "guild hall",
+    "work",
+    "bard",
+    "eat"
+  ],
+  "touristDestination": true
+}

@@ -1,0 +1,134 @@
+{
+  "constructionId": "plot_stormwind_town_hall",
+  "prefabPath": "Stormwind/plot_stormwind_town_hall.prefab.json",
+  "materials": [
+    {
+      "itemId": "Rock_Marble_Brick",
+      "count": 218
+    },
+    {
+      "itemId": "Rock_Sandstone_Red_Cobble",
+      "count": 156
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 122
+    },
+    {
+      "itemId": "Rock_Chalk_Cobble_Roof_Shallow",
+      "count": 93
+    },
+    {
+      "itemId": "Rock_Marble_Brick_Stairs",
+      "count": 86
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 84
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 81
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Smooth",
+      "count": 73
+    },
+    {
+      "itemId": "Rock_Chalk_Cobble_Stairs",
+      "count": 60
+    },
+    {
+      "itemId": "Rock_Marble_Brick_Decorative",
+      "count": 48
+    },
+    {
+      "itemId": "Wood_Hardwood_Decorative",
+      "count": 35
+    },
+    {
+      "itemId": "Cloth_Block_Wool_Red",
+      "count": 25
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 18
+    },
+    {
+      "itemId": "Furniture_Tavern_Window",
+      "count": 12
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 12
+    },
+    {
+      "itemId": "Deco_Rope",
+      "count": 8
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Stairs",
+      "count": 8
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 4
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Half",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Smooth_Half",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Hardwood_Ornate",
+      "count": 4
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 4
+    },
+    {
+      "resourceTypeId": "Soils",
+      "count": 3
+    },
+    {
+      "itemId": "Aetherhaven_Command_Post",
+      "count": 1
+    },
+    {
+      "itemId": "Aetherhaven_Plot_Crafting_Bench",
+      "count": 1
+    },
+    {
+      "itemId": "Aetherhaven_Smokestack",
+      "count": 1
+    },
+    {
+      "itemId": "Aetherhaven_Town_Planning_Desk",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Candle",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Temple_Emerald_Door_Medium",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Chair",
+      "count": 1
+    },
+    {
+      "itemId": "Wood_Hardwood_Fence_Gate",
+      "count": 1
+    }
+  ]
+}

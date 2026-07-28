@@ -1,0 +1,98 @@
+{
+  "constructionId": "plot_stormwind_lumbermill",
+  "prefabPath": "Stormwind/plot_stormwind_lumbermill.prefab.json",
+  "materials": [
+    {
+      "itemId": "Rock_Sandstone_Red_Cobble",
+      "count": 194
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 184
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 148
+    },
+    {
+      "itemId": "Wood_Hardwood_Stairs",
+      "count": 105
+    },
+    {
+      "itemId": "Wood_Darkwood_Roof",
+      "count": 77
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Smooth",
+      "count": 68
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 66
+    },
+    {
+      "itemId": "Wood_Darkwood_Roof_Shallow",
+      "count": 65
+    },
+    {
+      "itemId": "Wood_Darkwood_Roof_Flat",
+      "count": 48
+    },
+    {
+      "itemId": "Wood_Hardwood_Decorative",
+      "count": 32
+    },
+    {
+      "itemId": "Furniture_Tavern_Window",
+      "count": 28
+    },
+    {
+      "itemId": "Rock_Marble_Brick_Decorative",
+      "count": 22
+    },
+    {
+      "itemId": "Wood_Beech_Trunk_Stairs",
+      "count": 10
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 6
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 5
+    },
+    {
+      "itemId": "Wood_Sticks",
+      "count": 3
+    },
+    {
+      "itemId": "Furniture_Lumberjack_Door",
+      "count": 2
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 2
+    },
+    {
+      "itemId": "Wood_Hardwood_Fence_Gate",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Lumberjack_Lantern",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Chandelier",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Temple_Emerald_Statue",
+      "count": 1
+    }
+  ]
+}

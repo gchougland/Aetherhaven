@@ -1,0 +1,107 @@
+{
+  "id": "plot_stormwind_town_hall",
+  "displayName": "Stormwind Town Hall",
+  "description": "Inspired by WOW",
+  "prefabPath": "Stormwind/plot_stormwind_town_hall.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 10,
+  "materials": [
+    {
+      "resourceTypeId": "Rock",
+      "count": 500
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 300
+    }
+  ],
+  "pois": [
+    {
+      "localX": 6,
+      "localY": 2,
+      "localZ": -10,
+      "tags": [
+        "WORK",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Chair",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 5,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -10,
+      "workResidentKind": "elder",
+      "interactionTargetYawDegrees": -122.38719
+    },
+    {
+      "localX": 9,
+      "localY": 0,
+      "localZ": -8,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 10,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -8,
+      "interactionTargetYawDegrees": 57.451385
+    },
+    {
+      "localX": 11,
+      "localY": 0,
+      "localZ": -10,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Cloth_Block_Wool_Red",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 11,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -9,
+      "interactionTargetYawDegrees": -6.6558533
+    },
+    {
+      "localX": 13,
+      "localY": 0,
+      "localZ": -8,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 12,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -8,
+      "interactionTargetYawDegrees": -63.86374
+    }
+  ],
+  "managementBlockLocalPos": [
+    5,
+    2,
+    -10
+  ],
+  "treasuryLocalPos": [
+    15,
+    1,
+    -7
+  ],
+  "countsAsConstructionId": "plot_town_hall",
+  "styleId": "stormwind",
+  "tags": [
+    "work",
+    "town hall",
+    "visitor"
+  ],
+  "touristDestination": true
+}

@@ -1,0 +1,38 @@
+{
+  "constructionId": "plot_stormwind_portal",
+  "prefabPath": "Stormwind/plot_stormwind_portal.prefab.json",
+  "materials": [
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 169
+    },
+    {
+      "itemId": "Rock_Sandstone_Red_Cobble",
+      "count": 80
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Stairs",
+      "count": 54
+    },
+    {
+      "itemId": "Rock_Crystal_Purple_Block",
+      "count": 49
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Smooth",
+      "count": 44
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Half",
+      "count": 12
+    },
+    {
+      "itemId": "Furniture_Village_Brazier",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Volcanic_Brick_Smooth",
+      "count": 4
+    }
+  ]
+}

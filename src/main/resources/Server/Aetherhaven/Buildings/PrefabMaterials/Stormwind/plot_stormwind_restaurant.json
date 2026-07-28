@@ -1,0 +1,118 @@
+{
+  "constructionId": "plot_stormwind_restaurant",
+  "prefabPath": "Stormwind/plot_stormwind_restaurant.prefab.json",
+  "materials": [
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 197
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 136
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 96
+    },
+    {
+      "itemId": "Wood_Hardwood_Roof",
+      "count": 40
+    },
+    {
+      "itemId": "Wood_Hardwood_Stairs",
+      "count": 40
+    },
+    {
+      "itemId": "Wood_Hardwood_Roof_Shallow",
+      "count": 38
+    },
+    {
+      "itemId": "Rock_Sandstone_Red_Cobble",
+      "count": 36
+    },
+    {
+      "itemId": "Wood_Hardwood_Decorative",
+      "count": 32
+    },
+    {
+      "itemId": "Rock_Marble_Brick_Decorative",
+      "count": 26
+    },
+    {
+      "itemId": "Furniture_Tavern_Window",
+      "count": 24
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Smooth",
+      "count": 20
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 17
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 8
+    },
+    {
+      "itemId": "Wood_Hardwood_Fence",
+      "count": 8
+    },
+    {
+      "itemId": "Furniture_Village_Chair",
+      "count": 7
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 4
+    },
+    {
+      "itemId": "Deco_Mug",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Hardwood_Ornate",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Village_Table",
+      "count": 3
+    },
+    {
+      "itemId": "Aetherhaven_Smokestack",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Roof_Flat",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Stairs",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_Cooking",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Cheese",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Pie_Apple",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Salad_Berry",
+      "count": 1
+    },
+    {
+      "itemId": "Wood_Hardwood_Fence_Gate",
+      "count": 1
+    }
+  ]
+}

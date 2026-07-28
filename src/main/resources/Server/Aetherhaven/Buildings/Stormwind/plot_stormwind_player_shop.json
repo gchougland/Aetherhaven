@@ -1,0 +1,88 @@
+{
+  "id": "plot_stormwind_player_shop",
+  "displayName": "Stormwind Player Shop",
+  "description": "Inspired by WOW",
+  "prefabPath": "Stormwind/plot_stormwind_player_shop.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 100,
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 500
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 100
+    }
+  ],
+  "pois": [
+    {
+      "localX": 5,
+      "localY": 1,
+      "localZ": -6,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 5,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -5,
+      "interactionTargetYawDegrees": 6.255371
+    },
+    {
+      "localX": 7,
+      "localY": 1,
+      "localZ": -6,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 7,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -5,
+      "interactionTargetYawDegrees": -13.224121
+    },
+    {
+      "localX": 8,
+      "localY": 1,
+      "localZ": -5,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 8,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -6,
+      "interactionTargetYawDegrees": -158.12793
+    }
+  ],
+  "managementBlockLocalPos": [
+    6,
+    3,
+    -9
+  ],
+  "shopSafeLocalPos": [
+    7,
+    2,
+    -9
+  ],
+  "countsAsConstructionId": "plot_player_shop",
+  "styleId": "stormwind",
+  "tags": [
+    "shop",
+    "player"
+  ]
+}

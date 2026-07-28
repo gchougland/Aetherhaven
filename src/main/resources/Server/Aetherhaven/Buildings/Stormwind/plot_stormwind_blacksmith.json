@@ -1,0 +1,63 @@
+{
+  "id": "plot_stormwind_blacksmith",
+  "displayName": "Stormwind Blacksmith",
+  "description": "Inspired by WOW",
+  "prefabPath": "Stormwind/plot_stormwind_blacksmith.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 100,
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 500
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 200
+    },
+    {
+      "itemId": "Bench_Armour",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Weapon",
+      "count": 1
+    }
+  ],
+  "pois": [
+    {
+      "localX": 15,
+      "localY": 1,
+      "localZ": -8,
+      "tags": [
+        "WORK",
+        "workActivity:smith"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Rock_Stone_Brick",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 14,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -8,
+      "workResidentKind": "blacksmith",
+      "interactionTargetYawDegrees": -95.14563
+    }
+  ],
+  "managementBlockLocalPos": [
+    7,
+    3,
+    -10
+  ],
+  "countsAsConstructionId": "plot_blacksmith_shop",
+  "styleId": "stormwind",
+  "tags": [
+    "work",
+    "blacksmith"
+  ]
+}

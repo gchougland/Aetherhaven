@@ -1,0 +1,102 @@
+{
+  "id": "plot_stormwind_farm",
+  "displayName": "Stormwind Farm",
+  "description": "Inspired by WOW",
+  "prefabPath": "Stormwind/plot_stormwind_farm.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 100,
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 500
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 200
+    },
+    {
+      "resourceTypeId": "Soils",
+      "count": 42
+    },
+    {
+      "itemId": "Bench_Farming",
+      "count": 1
+    }
+  ],
+  "pois": [
+    {
+      "localX": 6,
+      "localY": 1,
+      "localZ": -11,
+      "tags": [
+        "WORK",
+        "workActivity:water"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Soil_Mud_Dry",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 6,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -12,
+      "workResidentKind": "farmer",
+      "interactionTargetYawDegrees": 163.64061
+    },
+    {
+      "localX": 9,
+      "localY": 1,
+      "localZ": -6,
+      "tags": [
+        "WORK",
+        "workActivity:water"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Soil_Mud_Dry",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 8,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -6,
+      "workResidentKind": "farmer",
+      "interactionTargetYawDegrees": -60.165955
+    },
+    {
+      "localX": 9,
+      "localY": 1,
+      "localZ": -11,
+      "tags": [
+        "WORK",
+        "workActivity:water"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Soil_Mud_Dry",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 8,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -11,
+      "workResidentKind": "farmer",
+      "interactionTargetYawDegrees": -37.661076
+    }
+  ],
+  "managementBlockLocalPos": [
+    9,
+    3,
+    -4
+  ],
+  "productionStorageLocalPos": [
+    6,
+    2,
+    -14
+  ],
+  "countsAsConstructionId": "plot_farm",
+  "styleId": "stormwind",
+  "tags": [
+    "work",
+    "farm"
+  ]
+}

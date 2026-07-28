@@ -1,0 +1,295 @@
+{
+  "id": "plot_stormwind_inn",
+  "displayName": "Stormwind Inn",
+  "description": "Inspired by WOW",
+  "prefabPath": "Stormwind/plot_stormwind_inn.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 20,
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 300
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 100
+    },
+    {
+      "itemId": "Bench_Cooking",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_Furnace",
+      "count": 1
+    }
+  ],
+  "pois": [
+    {
+      "localX": 14,
+      "localY": 1,
+      "localZ": -19,
+      "tags": [
+        "WORK",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 14,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -20,
+      "workResidentKind": "innkeeper",
+      "interactionTargetYawDegrees": -159.50928
+    },
+    {
+      "localX": 5,
+      "localY": 7,
+      "localZ": -25,
+      "tags": [
+        "SLEEP",
+        "ENERGY"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Bed",
+      "interactionKind": "SLEEP",
+      "interactionTargetLocalX": 6,
+      "interactionTargetLocalY": 7,
+      "interactionTargetLocalZ": -25,
+      "interactionTargetYawDegrees": 61.013916
+    },
+    {
+      "localX": 22,
+      "localY": 7,
+      "localZ": -25,
+      "tags": [
+        "SLEEP",
+        "ENERGY"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Bed",
+      "interactionKind": "SLEEP",
+      "interactionTargetLocalX": 22,
+      "interactionTargetLocalY": 7,
+      "interactionTargetLocalZ": -24,
+      "interactionTargetYawDegrees": 12.375732
+    },
+    {
+      "localX": 15,
+      "localY": 3,
+      "localZ": -13,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 16,
+      "interactionTargetLocalY": 3,
+      "interactionTargetLocalZ": -13,
+      "interactionTargetYawDegrees": 69.092896
+    },
+    {
+      "localX": 15,
+      "localY": 3,
+      "localZ": -11,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 16,
+      "interactionTargetLocalY": 3,
+      "interactionTargetLocalZ": -11,
+      "interactionTargetYawDegrees": 129.32544
+    },
+    {
+      "localX": 13,
+      "localY": 3,
+      "localZ": -10,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 14,
+      "interactionTargetLocalY": 3,
+      "interactionTargetLocalZ": -10,
+      "interactionTargetYawDegrees": 37.595093
+    },
+    {
+      "localX": 12,
+      "localY": 3,
+      "localZ": -12,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 11,
+      "interactionTargetLocalY": 3,
+      "interactionTargetLocalZ": -12,
+      "interactionTargetYawDegrees": -37.906372
+    },
+    {
+      "localX": 12,
+      "localY": 3,
+      "localZ": -14,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 11,
+      "interactionTargetLocalY": 3,
+      "interactionTargetLocalZ": -14,
+      "interactionTargetYawDegrees": -119.33887
+    },
+    {
+      "localX": 14,
+      "localY": 3,
+      "localZ": -15,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 13,
+      "interactionTargetLocalY": 3,
+      "interactionTargetLocalZ": -15,
+      "interactionTargetYawDegrees": -148.63745
+    },
+    {
+      "localX": 9,
+      "localY": 2,
+      "localZ": -6,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 9,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -5,
+      "interactionTargetYawDegrees": 7.7717285
+    },
+    {
+      "localX": 18,
+      "localY": 2,
+      "localZ": -6,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 17,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -6,
+      "interactionTargetYawDegrees": -42.60034
+    },
+    {
+      "localX": 16,
+      "localY": 6,
+      "localZ": -19,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 16,
+      "interactionTargetLocalY": 6,
+      "interactionTargetLocalZ": -20,
+      "interactionTargetYawDegrees": 150.6289
+    },
+    {
+      "localX": 10,
+      "localY": 6,
+      "localZ": -19,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 10,
+      "interactionTargetLocalY": 6,
+      "interactionTargetLocalZ": -20,
+      "interactionTargetYawDegrees": -160.90088
+    },
+    {
+      "localX": 15,
+      "localY": 1,
+      "localZ": -17,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 15,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -16,
+      "interactionTargetYawDegrees": 8.296143
+    },
+    {
+      "localX": 12,
+      "localY": 1,
+      "localZ": -17,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 12,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -16,
+      "interactionTargetYawDegrees": 15.174316
+    }
+  ],
+  "managementBlockLocalPos": [
+    17,
+    3,
+    -5
+  ],
+  "innkeeperSpawnLocal": [
+    13,
+    1,
+    -19
+  ],
+  "visitorSpawnLocals": [
+    [
+      7,
+      1,
+      -10
+    ],
+    [
+      20,
+      1,
+      -10
+    ]
+  ],
+  "countsAsConstructionId": "plot_inn",
+  "styleId": "stormwind",
+  "tags": [
+    "inn",
+    "rest",
+    "eat",
+    "visitor",
+    "work"
+  ]
+}

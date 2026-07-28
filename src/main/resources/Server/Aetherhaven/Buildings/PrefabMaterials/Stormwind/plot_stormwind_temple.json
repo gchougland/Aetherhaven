@@ -1,0 +1,118 @@
+{
+  "constructionId": "plot_stormwind_temple",
+  "prefabPath": "Stormwind/plot_stormwind_temple.prefab.json",
+  "materials": [
+    {
+      "itemId": "Rock_Marble_Brick",
+      "count": 780
+    },
+    {
+      "itemId": "Rock_Marble_Brick_Stairs",
+      "count": 250
+    },
+    {
+      "itemId": "Rock_Sandstone_Red_Cobble",
+      "count": 246
+    },
+    {
+      "itemId": "Wood_Lightwood_Decorative",
+      "count": 212
+    },
+    {
+      "itemId": "Wood_Darkwood_Roof",
+      "count": 166
+    },
+    {
+      "itemId": "Rock_Marble_Brick_Decorative",
+      "count": 161
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 116
+    },
+    {
+      "itemId": "Furniture_Temple_Wind_Window",
+      "count": 98
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Smooth",
+      "count": 86
+    },
+    {
+      "itemId": "Rock_Marble_Brick_Roof",
+      "count": 44
+    },
+    {
+      "itemId": "Rock_Marble_Brick_Pillar_Middle",
+      "count": 42
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 28
+    },
+    {
+      "itemId": "Rock_Chalk_Brick_Decorative",
+      "count": 27
+    },
+    {
+      "itemId": "Rock_Marble_Brick_Ornate",
+      "count": 26
+    },
+    {
+      "itemId": "Rock_Marble_Brick_Pillar_Base",
+      "count": 26
+    },
+    {
+      "itemId": "Rock_Crystal_Cyan_Block",
+      "count": 22
+    },
+    {
+      "itemId": "Deco_Iron_Bars_Corner",
+      "count": 20
+    },
+    {
+      "itemId": "Rock_Marble_Brick_Smooth",
+      "count": 20
+    },
+    {
+      "itemId": "Furniture_Temple_Light_Brazier",
+      "count": 12
+    },
+    {
+      "itemId": "Rock_Marble_Brick_Half",
+      "count": 8
+    },
+    {
+      "itemId": "Wood_Darkwood_Roof_Flat",
+      "count": 6
+    },
+    {
+      "itemId": "Wood_Darkwood_Roof_Shallow",
+      "count": 6
+    },
+    {
+      "itemId": "Wood_Darkwood_Roof_Steep",
+      "count": 6
+    },
+    {
+      "itemId": "Furniture_Temple_Light_Lantern_Ceiling",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Marble_Brick_Roof_Flat",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Castle_Bench",
+      "count": 3
+    },
+    {
+      "itemId": "Rock_Marble_Brick_Roof_Shallow",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Marble_Brick_Roof_Steep",
+      "count": 2
+    }
+  ]
+}

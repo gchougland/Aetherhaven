@@ -4,6 +4,7 @@
 
 ### Added
 
+- **Stormwind building set** — 20 WoW-inspired Stormwind-style plot variants (inn, town hall, shops, production buildings, townhouses, etc.) available on the plot crafting bench under the Stormwind style filter.
 - **Community updates** — Update button on the plot crafting bench when a newer version of a downloaded building is available.
 
 ### Changed
@@ -12,7 +13,7 @@
 
 ### Fixed
 
-- **Building editor submit** — Submit to community works when you finish editing a saved building in the building editor staff.
+- **Stormwind building icons** — Plot crafting thumbnails for Stormwind variants now load correctly (icons were missing from the import).
 - **Shop tooltips** — Shop prices no longer replace other tooltip text.
 - **Upload limit message** — Clearer message when you hit the community upload limit.
 - **Plot crafting bench** — Fixed a crash when opening the bench with favorites loaded.

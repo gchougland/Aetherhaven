@@ -1,0 +1,136 @@
+{
+  "id": "plot_stormwind_barn",
+  "displayName": "Stormwind Barn",
+  "description": "Inspired by WOW",
+  "prefabPath": "Stormwind/plot_stormwind_barn.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 100,
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 500
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 200
+    },
+    {
+      "resourceTypeId": "Soils",
+      "count": 42
+    },
+    {
+      "itemId": "Bench_Farming",
+      "count": 1
+    }
+  ],
+  "pois": [
+    {
+      "localX": 12,
+      "localY": 1,
+      "localZ": -6,
+      "tags": [
+        "WORK",
+        "workActivity:craft"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 11,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -6,
+      "workResidentKind": "rancher",
+      "interactionTargetYawDegrees": -35.804443
+    },
+    {
+      "localX": 9,
+      "localY": 1,
+      "localZ": -15,
+      "tags": [
+        "WORK",
+        "workActivity:craft"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 8,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -15,
+      "workResidentKind": "rancher",
+      "interactionTargetYawDegrees": -59.324738
+    },
+    {
+      "localX": 8,
+      "localY": 1,
+      "localZ": -14,
+      "tags": [
+        "WORK",
+        "workActivity:craft"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 9,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -14,
+      "workResidentKind": "rancher",
+      "interactionTargetYawDegrees": 84.07123
+    },
+    {
+      "localX": 8,
+      "localY": 1,
+      "localZ": -10,
+      "tags": [
+        "WORK",
+        "workActivity:craft"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 9,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -10,
+      "workResidentKind": "rancher",
+      "interactionTargetYawDegrees": 118.19403
+    },
+    {
+      "localX": 9,
+      "localY": 1,
+      "localZ": -9,
+      "tags": [
+        "WORK",
+        "workActivity:craft"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 8,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -9,
+      "workResidentKind": "rancher",
+      "interactionTargetYawDegrees": -54.192505
+    }
+  ],
+  "managementBlockLocalPos": [
+    9,
+    3,
+    -16
+  ],
+  "productionStorageLocalPos": [
+    4,
+    2,
+    -6
+  ],
+  "countsAsConstructionId": "plot_barn",
+  "styleId": "stormwind",
+  "tags": [
+    "barn",
+    "work"
+  ]
+}

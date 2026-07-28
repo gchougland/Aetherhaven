@@ -1,0 +1,98 @@
+{
+  "id": "plot_stormwind_mine",
+  "displayName": "Stormwind Mine",
+  "description": "Inspired by WOW",
+  "prefabPath": "Stormwind/plot_stormwind_mine.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 100,
+  "materials": [
+    {
+      "resourceTypeId": "Rock",
+      "count": 500
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 200
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 1
+    }
+  ],
+  "pois": [
+    {
+      "localX": 10,
+      "localY": 0,
+      "localZ": -14,
+      "tags": [
+        "WORK",
+        "workActivity:mine"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Rock_Stone",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 11,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -14,
+      "workResidentKind": "miner",
+      "interactionTargetYawDegrees": 30.614258
+    },
+    {
+      "localX": 15,
+      "localY": 0,
+      "localZ": -15,
+      "tags": [
+        "WORK",
+        "workActivity:mine"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Rock_Stone_Cobble",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 15,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -14,
+      "workResidentKind": "miner",
+      "interactionTargetYawDegrees": 1.15625
+    },
+    {
+      "localX": 18,
+      "localY": 0,
+      "localZ": -13,
+      "tags": [
+        "WORK",
+        "workActivity:mine"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Rock_Stone",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 17,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -13,
+      "workResidentKind": "miner",
+      "interactionTargetYawDegrees": -137.05103
+    }
+  ],
+  "managementBlockLocalPos": [
+    12,
+    2,
+    -5
+  ],
+  "productionStorageLocalPos": [
+    6,
+    1,
+    -6
+  ],
+  "countsAsConstructionId": "plot_miners_hut",
+  "styleId": "stormwind",
+  "tags": [
+    "mine",
+    "work"
+  ]
+}

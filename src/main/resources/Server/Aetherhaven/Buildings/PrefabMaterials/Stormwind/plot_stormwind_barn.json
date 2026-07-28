@@ -1,0 +1,102 @@
+{
+  "constructionId": "plot_stormwind_barn",
+  "prefabPath": "Stormwind/plot_stormwind_barn.prefab.json",
+  "materials": [
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 283
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 226
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 152
+    },
+    {
+      "itemId": "Rock_Sandstone_Red_Cobble",
+      "count": 104
+    },
+    {
+      "itemId": "Wood_Darkwood_Stairs",
+      "count": 102
+    },
+    {
+      "itemId": "Furniture_Tavern_Window",
+      "count": 78
+    },
+    {
+      "itemId": "Wood_Darkwood_Roof_Flat",
+      "count": 76
+    },
+    {
+      "itemId": "Wood_Darkwood_Roof_Shallow",
+      "count": 76
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Smooth",
+      "count": 66
+    },
+    {
+      "itemId": "Wood_Hardwood_Fence",
+      "count": 56
+    },
+    {
+      "resourceTypeId": "Soils",
+      "count": 42
+    },
+    {
+      "itemId": "Wood_Darkwood_Planks",
+      "count": 38
+    },
+    {
+      "itemId": "Wood_Darkwood_Roof",
+      "count": 38
+    },
+    {
+      "itemId": "Wood_Darkwood_Roof_Steep",
+      "count": 38
+    },
+    {
+      "itemId": "Wood_Hardwood_Stairs",
+      "count": 38
+    },
+    {
+      "itemId": "Ingredient_Hay",
+      "count": 37
+    },
+    {
+      "itemId": "Rock_Marble_Brick",
+      "count": 34
+    },
+    {
+      "itemId": "Wood_Beech_Trunk_Stairs",
+      "count": 32
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 8
+    },
+    {
+      "itemId": "Wood_Hardwood_Fence_Gate",
+      "count": 8
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 8
+    },
+    {
+      "itemId": "Furniture_Village_Ladder",
+      "count": 6
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 4
+    },
+    {
+      "itemId": "Bench_Farming",
+      "count": 1
+    }
+  ]
+}

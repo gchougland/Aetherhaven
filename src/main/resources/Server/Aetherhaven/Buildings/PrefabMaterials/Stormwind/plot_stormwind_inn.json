@@ -1,0 +1,142 @@
+{
+  "constructionId": "plot_stormwind_inn",
+  "prefabPath": "Stormwind/plot_stormwind_inn.prefab.json",
+  "materials": [
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 1284
+    },
+    {
+      "itemId": "Rock_Chalk_Cobble_Roof",
+      "count": 492
+    },
+    {
+      "itemId": "Wood_Hardwood_Stairs",
+      "count": 444
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 350
+    },
+    {
+      "itemId": "Rock_Sandstone_Red_Cobble",
+      "count": 282
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 242
+    },
+    {
+      "itemId": "Rock_Chalk_Cobble_Roof_Flat",
+      "count": 204
+    },
+    {
+      "itemId": "Wood_Hardwood_Decorative",
+      "count": 196
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Smooth",
+      "count": 110
+    },
+    {
+      "itemId": "Furniture_Tavern_Window",
+      "count": 66
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 66
+    },
+    {
+      "itemId": "Wood_Hardwood_Beam",
+      "count": 38
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks_Half",
+      "count": 38
+    },
+    {
+      "itemId": "Cloth_Block_Wool_Red",
+      "count": 24
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 24
+    },
+    {
+      "itemId": "Furniture_Crude_Shelf",
+      "count": 14
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 14
+    },
+    {
+      "itemId": "Ingredient_Leather_Light",
+      "count": 12
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 10
+    },
+    {
+      "itemId": "Furniture_Tavern_Chandelier",
+      "count": 8
+    },
+    {
+      "itemId": "Furniture_Village_Chair",
+      "count": 8
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 6
+    },
+    {
+      "itemId": "Deco_Rope",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Tavern_Candle",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Stone_Cobble_Stairs",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Hardwood_Ornate",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Crude_Candle",
+      "count": 3
+    },
+    {
+      "itemId": "Bench_Cooking",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Tavern_Chest_Large",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Tavern_Door",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Tavern_Wardrobe",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Village_Table",
+      "count": 2
+    },
+    {
+      "itemId": "Wood_Hardwood_Fence_Gate",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_Furnace",
+      "count": 1
+    }
+  ]
+}

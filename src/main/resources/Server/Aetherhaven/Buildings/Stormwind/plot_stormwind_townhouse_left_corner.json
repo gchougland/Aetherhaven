@@ -1,0 +1,103 @@
+{
+  "id": "plot_stormwind_townhouse_left_corner",
+  "displayName": "Stormwind Townhouse Left Corner",
+  "description": "Inspired by WOW",
+  "prefabPath": "Stormwind/plot_stormwind_townhouse_left_corner.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 100,
+  "maxHomeResidents": 2,
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 500
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 100
+    }
+  ],
+  "pois": [
+    {
+      "localX": 10,
+      "localY": 6,
+      "localZ": -8,
+      "tags": [
+        "SLEEP",
+        "ENERGY"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Bed",
+      "interactionKind": "SLEEP",
+      "interactionTargetLocalX": 9,
+      "interactionTargetLocalY": 6,
+      "interactionTargetLocalZ": -8,
+      "interactionTargetYawDegrees": -57.23578
+    },
+    {
+      "localX": 10,
+      "localY": 6,
+      "localZ": -5,
+      "tags": [
+        "SLEEP",
+        "ENERGY"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Bed",
+      "interactionKind": "SLEEP",
+      "interactionTargetLocalX": 9,
+      "interactionTargetLocalY": 6,
+      "interactionTargetLocalZ": -5,
+      "interactionTargetYawDegrees": -116.93451
+    },
+    {
+      "localX": 7,
+      "localY": 2,
+      "localZ": -8,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Stool",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 6,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -8,
+      "interactionTargetYawDegrees": -30.403625
+    },
+    {
+      "localX": 9,
+      "localY": 2,
+      "localZ": -7,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Stool",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 9,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -6,
+      "interactionTargetYawDegrees": 24.081299
+    }
+  ],
+  "managementBlockLocalPos": [
+    4,
+    7,
+    -4
+  ],
+  "countsAsConstructionId": "plot_house",
+  "styleId": "stormwind",
+  "tags": [
+    "home",
+    "house",
+    "rest",
+    "eat"
+  ]
+}

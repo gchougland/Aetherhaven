@@ -1,0 +1,201 @@
+{
+  "id": "plot_stormwind_temple",
+  "displayName": "Stormwind Temple",
+  "description": "Inspired by WOW",
+  "prefabPath": "Stormwind/plot_stormwind_temple.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 100,
+  "materials": [
+    {
+      "resourceTypeId": "Rock",
+      "count": 500
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 200
+    }
+  ],
+  "pois": [
+    {
+      "localX": 8,
+      "localY": 2,
+      "localZ": -8,
+      "tags": [
+        "FUN",
+        "SIT",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Castle_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 8,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -9,
+      "interactionTargetYawDegrees": 179.70332
+    },
+    {
+      "localX": 7,
+      "localY": 2,
+      "localZ": -8,
+      "tags": [
+        "FUN",
+        "SIT",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Castle_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 8,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -8,
+      "interactionTargetYawDegrees": 140.84639
+    },
+    {
+      "localX": 15,
+      "localY": 2,
+      "localZ": -8,
+      "tags": [
+        "FUN",
+        "SIT",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Castle_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 14,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -8,
+      "interactionTargetYawDegrees": -99.993164
+    },
+    {
+      "localX": 16,
+      "localY": 2,
+      "localZ": -8,
+      "tags": [
+        "FUN",
+        "SIT",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Castle_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 15,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -8,
+      "interactionTargetYawDegrees": -122.14815
+    },
+    {
+      "localX": 12,
+      "localY": 2,
+      "localZ": -19,
+      "tags": [
+        "FUN",
+        "SIT",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Castle_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 13,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -19,
+      "interactionTargetYawDegrees": 49.014526
+    },
+    {
+      "localX": 11,
+      "localY": 2,
+      "localZ": -19,
+      "tags": [
+        "FUN",
+        "SIT",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Castle_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 12,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -19,
+      "interactionTargetYawDegrees": 42.982788
+    },
+    {
+      "localX": 13,
+      "localY": 1,
+      "localZ": -8,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Lightwood_Decorative",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 13,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -7,
+      "interactionTargetYawDegrees": -17.549805
+    },
+    {
+      "localX": 7,
+      "localY": 1,
+      "localZ": -12,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Lightwood_Decorative",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 8,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -12,
+      "interactionTargetYawDegrees": 77.16608
+    },
+    {
+      "localX": 9,
+      "localY": 1,
+      "localZ": -17,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Lightwood_Decorative",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 8,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -17,
+      "interactionTargetYawDegrees": -144.09082
+    },
+    {
+      "localX": 16,
+      "localY": 1,
+      "localZ": -14,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Lightwood_Decorative",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 16,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -15,
+      "interactionTargetYawDegrees": -153.36621
+    }
+  ],
+  "managementBlockLocalPos": [
+    14,
+    3,
+    -5
+  ],
+  "countsAsConstructionId": "plot_gaia_altar",
+  "styleId": "stormwind",
+  "tags": [
+    "work",
+    "gaia altar",
+    "visitor"
+  ]
+}
