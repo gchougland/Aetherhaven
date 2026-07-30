@@ -8,6 +8,22 @@ author: Hexvane
 
 # Production wardrobe
 
-Production buildings use a wardrobe style chest for configuring and accessing the generated resources. Find the wardrobe in the building and interact with it to open the production window. You can cycle through the available resources to produce using the arrows. Each resource type is stored seperately. Choosing multiple of the same resource increases the speed at which it is produced. The unlocks page lets you unlock new resources to generate at the cost of some of that resource and gold coins.
+Production buildings (farm, lumber mill, miner's hut, barn, and similar workplaces) store output in a **wardrobe-style chest** inside the plot. Interact with the wardrobe to open the production window.
+
+## Production window
+
+* Use the **arrows** to cycle which resource type the building generates.
+* Each resource type is stored separately in the wardrobe inventory.
+* Selecting multiple slots of the **same** resource increases how fast that resource is produced.
+
+## Unlocks tab
+
+The **unlocks** page lists new resource types you can add to the rotation. Unlocking costs some of that resource plus **gold coins** from town funds.
+
+## Upgrades
+
+Open the **town records shelf** on a production building to **upgrade** it. Upgrades improve output or capacity depending on building type. Costs and tiers are shown in the shelf UI.
 
 *In the future you will be able to upgrade the max storage and production speed of buildings.*
+
+See **Town records shelf** for shelf controls on production plots and **Sprinklers** for farm watering.

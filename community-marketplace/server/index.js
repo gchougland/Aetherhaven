@@ -55,6 +55,11 @@ import {
 } from "./submissionUpdates.js";
 import { createSupportBundles } from "./supportBundles.js";
 import { createSupportBundleRateLimit } from "./supportBundleRateLimit.js";
+import {
+  buildRobotsTxt,
+  buildSitemapXml,
+  renderWikiTopic,
+} from "./wikiRender.js";
 // sharp is loaded lazily inside processScreenshot so native-lib failures
 // do not crash startup before Railway's /api/v1/health check can succeed.
 
@@ -2529,35 +2534,98 @@ const webRoot = path.join(__dirname, "..", "web");
 /** Inject AdSense site-verification script into HTML head when publisher ID is configured. */
 function sendHtmlWithAdSense(relativePath) {
   return (_req, res) => {
-    const filePath = path.join(webRoot, relativePath);
-    let html;
-    try {
-      html = fs.readFileSync(filePath, "utf8");
-    } catch {
-      res.status(404).send("Not found");
-      return;
-    }
-    if (ADSENSE_CLIENT_ID && !html.includes("pagead2.googlesyndication.com/pagead/js/adsbygoogle.js")) {
-      const snippet =
-        `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}" ` +
-        `crossorigin="anonymous"></script>\n`;
-      html = html.replace(/<\/head>/i, `${snippet}</head>`);
-    }
-    res.type("html").send(html);
+    sendHtmlFile(relativePath, _req, res);
   };
+}
+
+function sendHtmlFile(relativePath, req, res, options = {}) {
+  const filePath = path.join(webRoot, relativePath);
+  let html;
+  try {
+    html = fs.readFileSync(filePath, "utf8");
+  } catch {
+    res.status(404).send("Not found");
+    return;
+  }
+  if (options.wikiTopic) {
+    const rendered = renderWikiTopic(options.wikiTopic);
+    if (rendered) {
+      html = html.replace(
+        /<!-- SSR_WIKI_ARTICLE -->[\s\S]*?(?=<\/article>)/,
+        rendered.html
+      );
+      html = html.replace(/<title>[^<]*<\/title>/i, `<title>${escapeHtmlAttr(rendered.title)} | Aetherhaven Wiki</title>`);
+      const desc = escapeHtmlAttr(rendered.description);
+      if (html.includes('name="description"')) {
+        html = html.replace(
+          /<meta\s+name="description"\s+content="[^"]*"\s*\/?>/i,
+          `<meta name="description" content="${desc}" />`
+        );
+      } else {
+        html = html.replace(
+          /<meta\s+name="viewport"[^>]*>/i,
+          `$&\n    <meta name="description" content="${desc}" />`
+        );
+      }
+      const canonical = `${publicBaseUrl}/wiki.html?topic=${encodeURIComponent(options.wikiTopic)}`;
+      if (!html.includes('rel="canonical"')) {
+        html = html.replace(
+          /<link rel="canonical"[^>]*>/i,
+          `<link rel="canonical" href="${escapeHtmlAttr(canonical)}" />`
+        );
+      } else {
+        html = html.replace(
+          /<link rel="canonical" href="[^"]*"\s*\/?>/i,
+          `<link rel="canonical" href="${escapeHtmlAttr(canonical)}" />`
+        );
+      }
+    }
+  }
+  if (ADSENSE_CLIENT_ID && !html.includes("pagead2.googlesyndication.com/pagead/js/adsbygoogle.js")) {
+    const snippet =
+      `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}" ` +
+      `crossorigin="anonymous"></script>\n`;
+    html = html.replace(/<\/head>/i, `${snippet}</head>`);
+  }
+  res.type("html").send(html);
+}
+
+function escapeHtmlAttr(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+function sendWikiHtml(req, res) {
+  const topic = String(req.query.topic || "welcome").trim() || "welcome";
+  sendHtmlFile("wiki.html", req, res, { wikiTopic: topic });
 }
 
 app.get("/admin.html", requireWebUser, requireAdmin, sendHtmlWithAdSense("admin.html"));
 
+app.get("/sitemap.xml", (_req, res) => {
+  res.type("application/xml").send(buildSitemapXml(publicBaseUrl));
+});
+
+app.get("/robots.txt", (_req, res) => {
+  res.type("text/plain").send(buildRobotsTxt(publicBaseUrl));
+});
+
 if (ADSENSE_CLIENT_ID) {
   app.get("/", sendHtmlWithAdSense("index.html"));
   app.get("/index.html", sendHtmlWithAdSense("index.html"));
-  app.get("/wiki.html", sendHtmlWithAdSense("wiki.html"));
+  app.get("/wiki.html", sendWikiHtml);
   app.get("/privacy.html", sendHtmlWithAdSense("privacy.html"));
+  app.get("/about.html", sendHtmlWithAdSense("about.html"));
+  app.get("/terms.html", sendHtmlWithAdSense("terms.html"));
   app.get("/account.html", sendHtmlWithAdSense("account.html"));
   app.get("/submissions.html", sendHtmlWithAdSense("submissions.html"));
   app.get("/edit.html", sendHtmlWithAdSense("edit.html"));
   app.get("/dashboard.html", sendHtmlWithAdSense("dashboard.html"));
+} else {
+  app.get("/wiki.html", sendWikiHtml);
 }
 
 app.use(express.static(webRoot));

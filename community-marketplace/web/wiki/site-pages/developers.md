@@ -8,8 +8,21 @@ sub-topics:
 
 # For developers
 
-These pages explain how other mods can add content that works with Aetherhaven through asset packs (and a little Java when needed).
+These pages explain how other mods can add content that works with Aetherhaven through asset packs and, when needed, small Java hooks.
 
-Start with **[Crossmod integration](?topic=crossmod_integration)** for the full folder map, villagers, buildings, dialogue patches, quests, and a worked example.
+## Start here
 
-Players looking for optional companion mods should see **[Addons](?topic=addons)** instead.
+Read **[Crossmod integration](?topic=crossmod_integration)** for the folder map under `Server/Aetherhaven/`, including:
+
+* Villager definitions, dialogue trees, and weekly schedules
+* Buildings, plot tokens, and schedule location symbols
+* Quest patches, gift patches, and quest board entries
+* A worked example you can copy into your own pack
+
+## Players looking for addons
+
+Optional companion mods (Machinaria, Cozy Tales Fishing, and similar) are listed under **[Addons](?topic=addons)** in the wiki directory, not on this page.
+
+## Testing changes
+
+Run your pack on a server with Aetherhaven enabled, place test plots with the plot tools, and verify villagers resolve schedules against your new buildings. The crossmod guide lists merge rules when two packs touch the same catalog file.

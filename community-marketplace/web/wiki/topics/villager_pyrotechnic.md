@@ -9,7 +9,6 @@ npcRoleId: Aetherhaven_Pyrotechnic
 
 **Grubble Sparkmatch** is a goblin **pyrotechnic** who sells explosives. You must **find and free him in the world** before he will visit the inn. After the rescue, he can open a bomb shop in town.
 
-Use **Show weekly schedule** below to see where Grubble goes each day.
 
 ### Quests
 
@@ -32,3 +31,63 @@ Even a goblin who loves loud noises needs a quiet bed sometimes.
 2. Stake and build the house prefab.
 3. Assign Grubble as resident on the house management block.
 4. Find Grubble and close the quest in dialogue.
+
+### Friendship rewards
+
+Visit them after your friendship reaches each level to pick up the reward through dialogue.
+
+- **Friendship 50:** teaches you to craft **Mining Bomb**
+
+## Weekly routine
+
+Times are in world hours. Most days follow the same rhythm; Sunday can include a short visit to the altar.
+
+### Monday
+- **06:00** — the bomb shop
+- **14:25** — town shops
+- **15:00** — the town park
+- **15:25** — the bomb shop
+- **16:30** — the bomb shop
+- **20:00** — home
+
+### Tuesday
+- **06:00** — the bomb shop
+- **15:00** — the town park
+- **16:30** — the bomb shop
+- **20:00** — home
+
+### Wednesday
+- **06:00** — the bomb shop
+- **11:45** — town shops
+- **13:00** — the bomb shop
+- **15:00** — the town park
+- **16:30** — the bomb shop
+- **20:00** — home
+
+### Thursday
+- **06:00** — the bomb shop
+- **15:00** — the town park
+- **16:30** — the bomb shop
+- **20:00** — home
+
+### Friday
+- **06:00** — the bomb shop
+- **15:00** — the town park
+- **16:30** — the bomb shop
+- **20:00** — home
+
+### Saturday
+- **06:00** — the bomb shop
+- **10:15** — town shops
+- **11:15** — the bomb shop
+- **15:00** — the town park
+- **16:30** — the bomb shop
+- **20:00** — home
+
+### Sunday
+- **06:00** — the bomb shop
+- **08:00** — the Gaia altar
+- **09:00** — the bomb shop
+- **15:00** — the town park
+- **16:30** — the bomb shop
+- **20:00** — home
