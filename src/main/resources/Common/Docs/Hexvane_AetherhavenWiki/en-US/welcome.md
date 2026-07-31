@@ -1,6 +1,6 @@
 ---
 name: Welcome
-description: Start here to learn Aetherhaven in your journal
+description: Start here to learn Aetherhaven on the web and in your journal
 author: Hexvane
 sub-topics:
   - getting_started
@@ -14,10 +14,12 @@ sub-topics:
 
 # Welcome to the guide
 
-This book lives inside your town journal. Pick a topic on the left to read more.
+This is the public Aetherhaven wiki at [aetherhaven.net](https://aetherhaven.net). The same articles appear in your in-game **Town Journal** while you play. Use the directory on the left to open a topic.
 
 **Getting Started** walks you through founding a town, your first buildings, and how money flows in.
 
 **Mechanics** explains tools, buildings, and systems you will use around town.
 
-**Villagers** introduces each resident, their story quests, reputation gifts, and weekly routines. Gift taste spoilers stay hidden until you choose to show them.
+**Villagers** introduces each resident, their story quests, friendship rewards, and weekly routines.
+
+You can also browse **Community Builds** on the main site to download player-made plot prefabs for your town.

@@ -9,7 +9,6 @@ npcRoleId: Aetherhaven_Chef
 
 **Pepper Ashford** is the town **chef**. She can visit the inn as soon as it is open. Once her **restaurant** is built, she cooks and sells food there, and townsfolk prefer eating at her tables instead of the inn hearth.
 
-Use **Show weekly schedule** below to see where Pepper goes each day.
 
 ### Quests
 
@@ -50,3 +49,54 @@ The restaurant restocks **skewers**, **salads**, and **pies** (with a few produc
 ### Quest board
 
 Once Pepper is a town resident, she can post **food fetch jobs** on the guild hall quest board. Bring the ingredients or cooked dishes she asks for and turn them in through her dialogue.
+
+## Weekly routine
+
+Times are in world hours. Most days follow the same rhythm; Sunday can include a short visit to the altar.
+
+### Monday
+- **06:00** — the restaurant
+- **17:00** — the town park
+- **18:30** — the restaurant
+- **20:00** — home
+
+### Tuesday
+- **06:00** — the restaurant
+- **17:00** — the town park
+- **18:30** — the restaurant
+- **20:00** — home
+
+### Wednesday
+- **06:00** — the restaurant
+- **17:00** — the town park
+- **18:30** — the restaurant
+- **20:00** — home
+
+### Thursday
+- **06:00** — the restaurant
+- **10:30** — town shops
+- **11:30** — the restaurant
+- **17:00** — the town park
+- **18:30** — the restaurant
+- **20:00** — home
+
+### Friday
+- **06:00** — the restaurant
+- **17:00** — the town park
+- **18:30** — the restaurant
+- **20:00** — home
+
+### Saturday
+- **06:00** — the restaurant
+- **11:55** — town shops
+- **17:00** — the town park
+- **18:30** — the restaurant
+- **20:00** — home
+
+### Sunday
+- **06:00** — the restaurant
+- **08:00** — the Gaia altar
+- **09:00** — the restaurant
+- **17:00** — the town park
+- **18:30** — the restaurant
+- **20:00** — home

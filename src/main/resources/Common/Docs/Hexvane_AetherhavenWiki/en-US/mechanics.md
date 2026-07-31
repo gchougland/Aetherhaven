@@ -31,4 +31,17 @@ sub-topics:
 
 # Mechanics
 
-These pages describe how each major feature feels in play. Open the page you care about from the list on the left.
+These pages describe how each major feature works in play. Start with **Getting Started** if you are new, then open the page you need from the list on the left.
+
+| Topic | What it covers |
+| --- | --- |
+| **Plot placement staff** | Staking building footprints |
+| **Building staff** | Finishing construction faster |
+| **Town charter** | Founding and naming your town |
+| **Treasury and taxes** | Morning gold from residents |
+| **Villager needs** | Hunger, energy, and fun |
+| **Reputation** | Friendship, gifts, and milestones |
+| **Guild hall and guards** | Hiring patrols and the command post |
+| **Tourist portal** | Visitors from other worlds |
+
+Each linked page includes steps, related buildings, and cross-links where another system matters.

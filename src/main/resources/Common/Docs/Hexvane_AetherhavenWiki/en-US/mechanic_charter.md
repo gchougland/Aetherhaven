@@ -8,8 +8,23 @@ author: Hexvane
 
 # Town charter
 
-The charter is your town anchor. Place it once to create the town, name the place, and spawn the villager Elder to start your town building adventure.
+The charter is your town anchor. Craft it at the **town planning desk**, then place it once to create the town, choose a name, and spawn **Lyren the Elder** to begin.
+
+## What the charter does
+
+* Marks your town borders in the world.
+* Starts the founding quest line (inn, town hall, and beyond).
+* Can be opened later to rename the town.
+
+After placement, talk to Lyren to accept **raise the inn** and receive your first **inn plot token**. You stake that token with the **plot placement staff** the same way as every other building.
+
+## Moving or removing the town
+
+You can move the charter from its menu if you need to adjust the town heart. If you dissolve the town, villagers and town buildings are removed with it.
+
+Read **Getting Started** for the full early-game path from charter to treasury.
 
 **Tips**
+
 * If you dissolve the town, all villagers and buildings will be removed.
 * You can move the charter using the button in its menu.
