@@ -23,6 +23,7 @@ import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.questboard.QuestBoardPoiEnsure;
 import com.hexvane.aetherhaven.questboard.QuestBoardPostVisitQueue;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.npc.NpcAnimationPlayback;
@@ -763,6 +764,14 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             failTravel(autonomy, now, "NIGHT", commandBuffer, ref, npc);
             return;
         }
+        VillagerScheduleTickState schedTick = store.getComponent(ref, VillagerScheduleTickState.getComponentType());
+        String scheduleSeg = schedTick != null ? schedTick.getLastAppliedScheduleSegment() : null;
+        if (poiEarly != null
+            && PoiScoring.isWorkPoi(poiEarly)
+            && !PoiScoring.isWorkScheduleSegment(scheduleSeg)) {
+            failTravel(autonomy, now, "OFF_SHIFT", commandBuffer, ref, npc);
+            return;
+        }
 
         TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
         if (tc == null) {
@@ -1100,7 +1109,18 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (nightAbortEat) {
             autonomy.setFillingHunger(false);
         }
-        if (now < autonomy.getPhaseEndEpochMs() && !hungerLeaveNonEat && !nightAbortEat && !leaveForQuestBoard) {
+        VillagerScheduleTickState schedTickEarly = store.getComponent(ref, VillagerScheduleTickState.getComponentType());
+        String scheduleSegEarly = schedTickEarly != null ? schedTickEarly.getLastAppliedScheduleSegment() : null;
+        // Leave work stations when the schedule segment ends (house + workplace share one plot).
+        boolean scheduleLeaveWork =
+            poi != null
+                && PoiScoring.isWorkPoi(poi)
+                && !PoiScoring.isWorkScheduleSegment(scheduleSegEarly);
+        if (now < autonomy.getPhaseEndEpochMs()
+            && !hungerLeaveNonEat
+            && !nightAbortEat
+            && !scheduleLeaveWork
+            && !leaveForQuestBoard) {
             if (isNpcBlockMounted(store, commandBuffer, ref)) {
                 // Keep Seek off and refresh Sit/Sleep so Idle transitions cannot leave a standing T-pose in the chair.
                 pinLeashToCurrentFeet(ref, store, commandBuffer, npc);
@@ -1201,6 +1221,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                     || hungerLeaveNonEat
                     || keepEating
                     || nightAbortEat
+                    || scheduleLeaveWork
                     || leaveForQuestBoard
                 ? now
                 : now + 2500L
@@ -1267,6 +1288,10 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null || !ShopSpotPurchaseService.isPlayerShopPlot(plugin, townRecord, poi.getPlotId())) {
+            return;
+        }
+        PlotInstance plot = townRecord.findPlotById(poi.getPlotId());
+        if (plot != null && !plot.isAllowNpcShopPurchases()) {
             return;
         }
         VillagerScheduleTickState sched = store.getComponent(ref, VillagerScheduleTickState.getComponentType());

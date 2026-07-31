@@ -103,6 +103,7 @@ public final class InnkeeperSpawnService {
         int wy = anchor.y + d.y;
         int wz = anchor.z + d.z;
         Vector3d pos = new Vector3d(wx + 0.5, wy, wz + 0.5);
+        pos = com.hexvane.aetherhaven.autonomy.VillagerBlockUtil.snapNpcFeetToStand(world, pos);
 
         NPCPlugin npc = NPCPlugin.get();
         if (npc == null) {

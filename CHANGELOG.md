@@ -6,6 +6,8 @@
 
 - **Stormwind building set** — 20 WoW-inspired Stormwind-style plot variants (inn, town hall, shops, production buildings, townhouses, etc.) available on the plot crafting bench under the Stormwind style filter.
 - **Community updates** — Update button on the plot crafting bench when a newer version of a downloaded building is available.
+- **Barn Feathers** - The barn can now produce feathers.
+- **Player shop sales toggle** — The town records shelf on player shops has an option to sell to players only. Visitors and villagers can still visit and browse.
 
 ### Changed
 
@@ -13,8 +15,11 @@
 
 ### Fixed
 
+- **Important spots** — Plot creator spots snap to the right surface when you click blocks, half blocks, carpets, or chairs.
+- **Inn visitors and adventurers** — They spawn on the ground instead of inside blocks or floating in the air.
+- **Seating** — Villagers and adventurers sit facing forward on chairs and benches.
 - **Stormwind building icons** — Plot crafting thumbnails for Stormwind variants now load correctly (icons were missing from the import).
-- **Shop tooltips** — Shop prices no longer replace other tooltip text.
+- **Shop tooltips** — Shop prices no longer replace other tooltip text. (Fixes Enchantment tooltip issue)
 - **Upload limit message** — Clearer message when you hit the community upload limit.
 - **Plot crafting bench** — Fixed a crash when opening the bench with favorites loaded.
 - **Variant building menus** — Custom building variants now get the same record shelf options as the original (expand territory, guards, tourists, workers, and shops).

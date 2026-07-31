@@ -146,6 +146,27 @@ $C.@PageOverlay {
             Style: (...$C.@DefaultLabelStyle, Wrap: true);
           }
 
+          Group #PlayerShopNpcBuyRow {
+            LayoutMode: Top;
+            Visible: false;
+            Anchor: (Bottom: 12);
+            Padding: (Horizontal: 8, Vertical: 8);
+            Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+            Group #PlayerShopNpcBuyAllowRow {
+              LayoutMode: Left;
+
+              $C.@CheckBox #PlayerShopNpcBuyToggle {}
+
+              Label #PlayerShopNpcBuyLabel {
+                Text: "";
+                Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8, Wrap: true);
+                Anchor: (Left: 11);
+                FlexWeight: 1;
+              }
+            }
+          }
+
           Group #TouristManifestRow {
             LayoutMode: Top;
             Visible: false;

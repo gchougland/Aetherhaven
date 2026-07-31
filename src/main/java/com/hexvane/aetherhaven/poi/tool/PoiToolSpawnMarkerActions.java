@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.guild.marker.AdventurerSpawnMarkerSpawner;
 
 import com.hexvane.aetherhaven.marker.MarkerEntityProximity;
 
+import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hexvane.aetherhaven.marker.MarkerFacingYaw;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 
@@ -136,15 +137,9 @@ public final class PoiToolSpawnMarkerActions {
 
         }
 
-        Vector3d spawnPos = new Vector3d(
-
-            targetBlock.x() + 0.5,
-
-            targetBlock.y() + 1.0,
-
-            targetBlock.z() + 0.5
-
-        );
+        Vector3i clicked = new Vector3i(targetBlock.x(), targetBlock.y(), targetBlock.z());
+        Vector3i standBlock = VillagerBlockUtil.resolveStandBlockFromClick(world, clicked);
+        Vector3d spawnPos = new Vector3d(standBlock.x + 0.5, standBlock.y, standBlock.z + 0.5);
 
         if (MarkerEntityProximity.isDuplicatePosition(store, AdventurerSpawnMarkerEntity.getComponentType(), spawnPos)) {
 
@@ -158,7 +153,15 @@ public final class PoiToolSpawnMarkerActions {
 
         float yaw = 0f;
         TransformComponent playerTc = store.getComponent(playerRef, TransformComponent.getComponentType());
-        if (playerTc != null) {
+        Vector3i seatBlock = VillagerBlockUtil.findGuildHallSeatBelowSpawn(world, spawnPos);
+        if (seatBlock != null) {
+            Float seatYaw = VillagerBlockUtil.seatForwardYawRadians(world, seatBlock);
+            if (seatYaw != null) {
+                yaw = seatYaw;
+            } else if (playerTc != null) {
+                yaw = MarkerFacingYaw.yawFacingToward(spawnPos, playerTc.getPosition());
+            }
+        } else if (playerTc != null) {
             yaw = MarkerFacingYaw.yawFacingToward(spawnPos, playerTc.getPosition());
         }
 

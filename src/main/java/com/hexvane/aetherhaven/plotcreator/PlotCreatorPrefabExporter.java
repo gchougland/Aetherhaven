@@ -4,7 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.guild.marker.AdventurerSpawnMarkerEntity;
 import com.hexvane.aetherhaven.plotcreator.icon.PlotCreatorIconExporter;
 import com.hexvane.aetherhaven.shopspot.ShopSpotDisplayService;
-import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
+import com.hexvane.aetherhaven.prefab.EditorMarkerBlocks;
 import com.hypixel.hytale.builtin.buildertools.BuilderToolsPlugin;
 import com.hypixel.hytale.builtin.buildertools.prefabeditor.saving.PrefabSaveContributor;
 import com.hypixel.hytale.component.ComponentRegistry;
@@ -89,7 +89,6 @@ public final class PlotCreatorPrefabExporter {
 
         int editorBlock = BlockType.getAssetMap().getIndex("Editor_Block");
         boolean skipEditorBlock = editorBlock != Integer.MIN_VALUE;
-        int editorBlockPrefabAir = BlockType.getAssetMap().getIndex("Editor_Empty");
         boolean includeEmpty = draft.isSaveEmptySpaces();
 
         int top = Math.max(yMin, yMax);
@@ -130,8 +129,8 @@ public final class PlotCreatorPrefabExporter {
                     }
 
                     if ((block != 0 || fluid != 0 || includeEmpty) && (!skipEditorBlock || block != editorBlock)) {
-                    if (block == editorBlockPrefabAir) {
-                        selection.copyFromAtWorld(x, y, z, chunk, blockPhysics);
+                    if (EditorMarkerBlocks.isEditorEmpty(block)) {
+                        selection.addBlockAtWorldPos(x, y, z, 0, 0, 0, 0);
                     } else if (block == 0 && fluid == 0) {
                         selection.addBlockAtWorldPos(x, y, z, 0, 0, 0, 0);
                     } else {
@@ -309,7 +308,7 @@ public final class PlotCreatorPrefabExporter {
             return false;
         }
         String key = blockEntity.getBlockTypeKey();
-        return key != null && (key.equals("Editor_Block") || key.equals("Editor_Empty") || key.equals("Editor_Anchor"));
+        return EditorMarkerBlocks.isEditorMarkerTypeId(key);
     }
 
     /**

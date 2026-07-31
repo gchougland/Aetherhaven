@@ -90,6 +90,11 @@
     { "workplace": "plot_barn", "itemId": "Ingredient_Hide_Storm", "rarityTier": 4, "defaultUnlocked": false, "resourceCost": 25, "ticks": 1728, "maxStorage": 25 },
     { "workplace": "plot_barn", "itemId": "Ingredient_Hide_Prismic", "rarityTier": 5, "defaultUnlocked": false, "resourceCost": 25, "ticks": 1728, "maxStorage": 25 },
 
+    { "workplace": "plot_barn", "itemId": "Ingredient_Feathers_Light", "rarityTier": 0, "defaultUnlocked": true, "resourceCost": 25, "ticks": 1728, "maxStorage": 25 },
+    { "workplace": "plot_barn", "itemId": "Ingredient_Feathers_Dark", "rarityTier": 1, "defaultUnlocked": false, "resourceCost": 25, "ticks": 1728, "maxStorage": 25 },
+    { "workplace": "plot_barn", "itemId": "Ingredient_Feathers_Red", "rarityTier": 2, "defaultUnlocked": false, "resourceCost": 25, "ticks": 1728, "maxStorage": 25 },
+    { "workplace": "plot_barn", "itemId": "Ingredient_Feathers_Blue", "rarityTier": 3, "defaultUnlocked": false, "resourceCost": 25, "ticks": 1728, "maxStorage": 25 },
+
     { "workplace": "plot_farm", "itemId": "Plant_Crop_Wheat_Item", "rarityTier": 0, "defaultUnlocked": true, "resourceCost": 25, "ticks": 1728, "maxStorage": 50 },
     { "workplace": "plot_farm", "itemId": "Plant_Crop_Lettuce_Item", "rarityTier": 0, "defaultUnlocked": true, "resourceCost": 25, "ticks": 1728, "maxStorage": 50 },
     { "workplace": "plot_farm", "itemId": "Plant_Crop_Carrot_Item", "rarityTier": 1, "defaultUnlocked": false, "resourceCost": 25, "ticks": 1728, "maxStorage": 50 },

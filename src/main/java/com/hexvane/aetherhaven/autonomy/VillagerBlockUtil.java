@@ -3,9 +3,12 @@ package com.hexvane.aetherhaven.autonomy;
 import com.hypixel.hytale.builtin.mounts.BlockMountComponent;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.protocol.BlockMaterial;
+import com.hypixel.hytale.server.core.asset.type.blockhitbox.BlockBoundingBoxes;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.mountpoints.BlockMountPoint;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.mountpoints.RotatedMountPointsArray;
+import com.hypixel.hytale.server.core.util.TargetUtil;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.DoorInteraction;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -28,6 +31,11 @@ import org.joml.Vector3i;
 public final class VillagerBlockUtil {
     /** Max horizontal distance from POI block center (XZ) for bed/chair mount attempts. */
     public static final double MOUNT_POI_MAX_HORIZONTAL = 0.92;
+
+    /** Max blocks to raycast downward when resolving stand placement from air clicks. */
+    public static final double DOWNCAST_MAX_DISTANCE = 32.0;
+
+    private static final double THIN_SURFACE_TOP_Y = 0.999;
 
     private VillagerBlockUtil() {}
 
@@ -88,7 +96,7 @@ public final class VillagerBlockUtil {
         if (standY == Integer.MIN_VALUE) {
             return;
         }
-        pos.y = standY + 0.02;
+        pos.y = resolveFeetYForStandCell(world, bx, standY, bz);
         if (commandBuffer != null) {
             commandBuffer.putComponent(npcRef, TransformComponent.getComponentType(), tc);
         } else {
@@ -180,30 +188,257 @@ public final class VillagerBlockUtil {
 
     /**
      * Snaps a spawn/travel target to a validated feet column when the requested position is floating or inside blocks.
+     * Feet Y uses the ground block hitbox top so thin flats (carpet, cloth roof) are not floating a block above.
      */
     @Nonnull
     public static Vector3d snapNpcFeetToStand(@Nonnull World world, @Nonnull Vector3d feet) {
         int bx = (int) Math.floor(feet.x);
         int bz = (int) Math.floor(feet.z);
         int probeFeetY = (int) Math.floor(feet.y);
-        if (isNpcStandColumn(world, bx, probeFeetY, bz)) {
-            return new Vector3d(bx + 0.5, probeFeetY, bz + 0.5);
+        int standCellY = probeFeetY;
+        if (!isNpcStandColumn(world, bx, probeFeetY, bz)) {
+            int standY = findStandY(world, bx, bz, Math.min(319, probeFeetY + 4));
+            if (standY != Integer.MIN_VALUE) {
+                standCellY = standY;
+            }
         }
-        int standY = findStandY(world, bx, bz, Math.min(319, probeFeetY + 4));
+        double feetY = resolveFeetYForStandCell(world, bx, standCellY, bz);
+        return new Vector3d(bx + 0.5, feetY, bz + 0.5);
+    }
+
+    /** World Y for NPC feet when standing in {@code standCellY} on the ground block below. */
+    public static double resolveFeetYForStandCell(@Nonnull World world, int bx, int standCellY, int bz) {
+        int groundY = findGroundBlockYBelowStandCell(world, bx, standCellY, bz);
+        if (groundY == Integer.MIN_VALUE) {
+            return standCellY + 0.02;
+        }
+        return blockSurfaceTopY(world, bx, groundY, bz) + 0.02;
+    }
+
+    /** Top Y of a block's collision hitbox in world space. */
+    public static double blockSurfaceTopY(@Nonnull World world, int bx, int by, int bz) {
+        BlockType blockType = blockTypeNoLoad(world, bx, by, bz);
+        if (blockType == null || blockType == BlockType.EMPTY) {
+            return by;
+        }
+        BlockBoundingBoxes hitboxAsset = BlockBoundingBoxes.getAssetMap().getAsset(blockType.getHitboxTypeIndex());
+        if (hitboxAsset == null) {
+            return by + 1.0;
+        }
+        int rotationIndex = blockRotationIndexNoLoad(world, bx, by, bz);
+        return by + hitboxAsset.get(rotationIndex).getBoundingBox().max.y;
+    }
+
+    private static int findGroundBlockYBelowStandCell(@Nonnull World world, int bx, int standCellY, int bz) {
+        for (int y = standCellY - 1; y >= Math.max(0, standCellY - 8); y--) {
+            if (isGroundBlock(world, bx, y, bz)) {
+                return y;
+            }
+        }
+        return Integer.MIN_VALUE;
+    }
+
+    private static boolean isGroundBlock(@Nonnull World world, int x, int y, int z) {
+        BlockType blockType = blockTypeNoLoad(world, x, y, z);
+        if (blockType == null || blockType == BlockType.EMPTY) {
+            return false;
+        }
+        if (blockType.getMaterial() == BlockMaterial.Solid) {
+            return true;
+        }
+        return isThinSurfaceBlock(world, x, y, z);
+    }
+
+    /** True when the block hitbox is a full 1×1×1 unit cube. */
+    public static boolean isFullUnitBlock(@Nonnull World world, int x, int y, int z) {
+        BlockType blockType = blockTypeNoLoad(world, x, y, z);
+        if (blockType == null || blockType == BlockType.EMPTY) {
+            return false;
+        }
+        if (BlockBoundingBoxes.DEFAULT.equals(blockType.getHitboxType())) {
+            return true;
+        }
+        BlockBoundingBoxes hitboxAsset = BlockBoundingBoxes.getAssetMap().getAsset(blockType.getHitboxTypeIndex());
+        if (hitboxAsset == null) {
+            return false;
+        }
+        int rotationIndex = blockRotationIndexNoLoad(world, x, y, z);
+        return hitboxAsset.get(rotationIndex).getBoundingBox().isUnitBox();
+    }
+
+    /**
+     * Half slabs, carpets, and other non-unit surfaces whose top is below a full block height.
+     */
+    public static boolean isThinSurfaceBlock(@Nonnull World world, int x, int y, int z) {
+        if (isFullUnitBlock(world, x, y, z)) {
+            return false;
+        }
+        if (isBlockMountSeat(world, x, y, z)) {
+            return true;
+        }
+        BlockType blockType = blockTypeNoLoad(world, x, y, z);
+        if (blockType == null || blockType == BlockType.EMPTY) {
+            return false;
+        }
+        BlockBoundingBoxes hitboxAsset = BlockBoundingBoxes.getAssetMap().getAsset(blockType.getHitboxTypeIndex());
+        if (hitboxAsset == null) {
+            return false;
+        }
+        int rotationIndex = blockRotationIndexNoLoad(world, x, y, z);
+        return hitboxAsset.get(rotationIndex).getBoundingBox().max.y < THIN_SURFACE_TOP_Y;
+    }
+
+    /**
+     * Resolves the supporting block for a plot-creator click. Air clicks raycast down; solid, thin, and mount blocks
+     * use the clicked cell (filler voxels resolve to the furniture origin).
+     */
+    @Nonnull
+    public static Vector3i resolveSupportBlockFromClick(@Nonnull World world, @Nonnull Vector3i clicked) {
+        if (isSupportBlockAtClick(world, clicked)) {
+            return resolveMountBaseBlock(world, clicked.x, clicked.y, clicked.z);
+        }
+        Vector3i hit =
+            TargetUtil.getTargetBlock(
+                world,
+                (blockId, fluidId) -> blockId == 0,
+                clicked.x + 0.5,
+                clicked.y + 0.5,
+                clicked.z + 0.5,
+                0.0,
+                -1.0,
+                0.0,
+                DOWNCAST_MAX_DISTANCE
+            );
+        if (hit != null) {
+            return resolveMountBaseBlock(world, hit.x, hit.y, hit.z);
+        }
+        return new Vector3i(clicked);
+    }
+
+    /**
+     * Block cell where NPC feet stand, given a supporting surface block (full cube, slab, carpet, chair, etc.).
+     */
+    @Nonnull
+    public static Vector3i resolveStandBlockFromSupport(@Nonnull World world, @Nonnull Vector3i support) {
+        int sx = support.x;
+        int sy = support.y;
+        int sz = support.z;
+        if (isFullUnitBlock(world, sx, sy, sz)) {
+            return new Vector3i(sx, sy + 1, sz);
+        }
+        for (int feetY = sy + 1; feetY >= sy; feetY--) {
+            if (walkableColumn(world, sx, feetY, sz)) {
+                return new Vector3i(sx, feetY, sz);
+            }
+        }
+        int standY = findStandY(world, sx, sz, Math.min(319, sy + 4));
         if (standY != Integer.MIN_VALUE) {
-            return new Vector3d(bx + 0.5, standY, bz + 0.5);
+            return new Vector3i(sx, standY, sz);
         }
-        return feet;
+        return new Vector3i(sx, sy + 1, sz);
+    }
+
+    /** Resolves support from a click then the stand cell above/on that surface. */
+    @Nonnull
+    public static Vector3i resolveStandBlockFromClick(@Nonnull World world, @Nonnull Vector3i clicked) {
+        Vector3i support = resolveSupportBlockFromClick(world, clicked);
+        return resolveStandBlockFromSupport(world, support);
+    }
+
+    /**
+     * Body yaw (radians) for sitting forward on a chair, bench, or bed mount block.
+     * Matches {@link BlockMountPoint#computeRotationEuler} / {@link com.hypixel.hytale.builtin.mounts.BlockMountAPI}.
+     */
+    @Nullable
+    public static Float seatForwardYawRadians(@Nonnull World world, @Nonnull Vector3i mountBlock) {
+        Vector3i base = resolveMountBaseBlock(world, mountBlock.x, mountBlock.y, mountBlock.z);
+        BlockMountPoint point = primaryMountPoint(world, base);
+        if (point == null) {
+            return null;
+        }
+        int rotationIndex = blockRotationIndexNoLoad(world, base.x, base.y, base.z);
+        return normalizeYawRadians(point.computeRotationEuler(rotationIndex).yaw());
+    }
+
+    private static float normalizeYawRadians(float yaw) {
+        float y = yaw;
+        while (y > Math.PI) {
+            y -= (float) (2.0 * Math.PI);
+        }
+        while (y <= -Math.PI) {
+            y += (float) (2.0 * Math.PI);
+        }
+        return y;
+    }
+
+    /** Prefers seat forward yaw for a mount block; otherwise returns {@code fallbackYawRadians}. */
+    public static float resolveMountBodyYawRadians(
+        @Nonnull World world,
+        @Nonnull Vector3i mountBlock,
+        float fallbackYawRadians
+    ) {
+        Float seatYaw = seatForwardYawRadians(world, mountBlock);
+        return seatYaw != null ? seatYaw : fallbackYawRadians;
+    }
+
+    /** Prefers seat forward yaw under a guild hall spawn marker; otherwise returns {@code fallbackYawRadians}. */
+    public static float resolveSeatedDisplayYawRadians(
+        @Nonnull World world,
+        @Nonnull Vector3d spawnMarker,
+        float fallbackYawRadians
+    ) {
+        Vector3i seatBlock = findGuildHallSeatBelowSpawn(world, spawnMarker);
+        if (seatBlock == null) {
+            return fallbackYawRadians;
+        }
+        return resolveMountBodyYawRadians(world, seatBlock, fallbackYawRadians);
+    }
+
+    @Nullable
+    private static BlockMountPoint primaryMountPoint(@Nonnull World world, @Nonnull Vector3i base) {
+        BlockType blockType = blockTypeNoLoad(world, base.x, base.y, base.z);
+        if (blockType == null) {
+            return null;
+        }
+        int rotationIndex = blockRotationIndexNoLoad(world, base.x, base.y, base.z);
+        RotatedMountPointsArray seats = blockType.getSeats();
+        if (seats != null) {
+            BlockMountPoint[] points = seats.getRotated(rotationIndex);
+            if (points != null && points.length > 0) {
+                return points[0];
+            }
+        }
+        RotatedMountPointsArray beds = blockType.getBeds();
+        if (beds != null) {
+            BlockMountPoint[] points = beds.getRotated(rotationIndex);
+            if (points != null && points.length > 0) {
+                return points[0];
+            }
+        }
+        return null;
+    }
+
+    private static boolean isSupportBlockAtClick(@Nonnull World world, @Nonnull Vector3i clicked) {
+        BlockType blockType = blockTypeNoLoad(world, clicked.x, clicked.y, clicked.z);
+        if (blockType == null || blockType == BlockType.EMPTY) {
+            return false;
+        }
+        if (isBlockMountSeat(world, clicked.x, clicked.y, clicked.z)) {
+            return true;
+        }
+        if (isThinSurfaceBlock(world, clicked.x, clicked.y, clicked.z)) {
+            return true;
+        }
+        return blockType.getMaterial() == BlockMaterial.Solid;
     }
 
     private static boolean walkableColumn(@Nonnull World world, int bx, int by, int bz) {
         BlockType feet = blockTypeNoLoad(world, bx, by, bz);
         BlockType head = blockTypeNoLoad(world, bx, by + 1, bz);
-        BlockType below = blockTypeNoLoad(world, bx, by - 1, bz);
-        if (feet == null || head == null || below == null) {
+        if (feet == null || head == null) {
             return false;
         }
-        return isPassable(world, bx, by, bz, feet) && isPassable(world, bx, by + 1, bz, head) && isGround(below);
+        return isPassable(world, bx, by, bz, feet) && isPassable(world, bx, by + 1, bz, head) && isGroundBlock(world, bx, by - 1, bz);
     }
 
     private static boolean isPassable(@Nonnull World world, int x, int y, int z, @Nullable BlockType t) {
@@ -225,13 +460,6 @@ public final class VillagerBlockUtil {
     @SuppressWarnings("deprecation")
     private static boolean isDoorBlockTypeWhenChunkUnknown(@Nonnull BlockType t) {
         return t.isDoor();
-    }
-
-    private static boolean isGround(@Nullable BlockType t) {
-        if (t == null || t == BlockType.EMPTY) {
-            return false;
-        }
-        return t.getMaterial() == BlockMaterial.Solid;
     }
 
     /**
@@ -448,11 +676,13 @@ public final class VillagerBlockUtil {
     @Nonnull
     public static Vector3d resolveGuildHallAdventurerFeetPosition(@Nonnull World world, @Nonnull Vector3d spawnMarker) {
         Vector3i seatBlock = findGuildHallSeatBelowSpawn(world, spawnMarker);
-        if (seatBlock == null) {
-            return new Vector3d(spawnMarker);
+        if (seatBlock != null) {
+            Vector3d seatPos = seatWorldPosition(world, seatBlock);
+            if (seatPos != null) {
+                return new Vector3d(seatPos);
+            }
         }
-        Vector3d seatPos = seatWorldPosition(world, seatBlock);
-        return seatPos != null ? new Vector3d(seatPos) : new Vector3d(spawnMarker);
+        return snapNpcFeetToStand(world, spawnMarker);
     }
 
     @Nullable

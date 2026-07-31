@@ -86,6 +86,38 @@ class PoiScoringBardWorkFallbackTest {
     }
 
     @Test
+    void pickBest_homeSegmentAtWorkplacePrefersSleepOverWorkStation() {
+        UUID plotId = UUID.randomUUID();
+        UUID townId = UUID.randomUUID();
+        PoiEntry work =
+            poi(plotId, townId, 10, 64, 20, List.of("WORK", "SHOP"), PoiInteractionKind.WORK_SURFACE);
+        PoiEntry bed =
+            poi(plotId, townId, 6, 70, 22, List.of("SLEEP", "ENERGY"), PoiInteractionKind.SLEEP);
+
+        TownVillagerBinding binding =
+            new TownVillagerBinding(townId, TownVillagerBinding.KIND_FLORIST, plotId, plotId);
+        VillagerNeeds needs = VillagerNeeds.full();
+        needs.setEnergy(20f);
+
+        PoiEntry pick =
+            PoiScoring.pickBest(
+                List.of(work, bed),
+                needs,
+                binding,
+                Map.of(),
+                0.0,
+                0.0,
+                VillagerScheduleResolver.LOC_HOME,
+                false,
+                false,
+                false,
+                null
+            );
+        assertNotNull(pick);
+        assertEquals(bed.getId(), pick.getId());
+    }
+
+    @Test
     void pickBest_multiCapacityPrefersJoiningHalfFullOverEmpty() {
         UUID plotId = UUID.randomUUID();
         UUID townId = UUID.randomUUID();

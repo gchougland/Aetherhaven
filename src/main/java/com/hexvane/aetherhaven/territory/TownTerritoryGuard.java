@@ -54,14 +54,6 @@ public final class TownTerritoryGuard {
         return false;
     }
 
-    public static boolean isAetherhavenProtectedBlock(@Nonnull BlockType blockType) {
-        String id = blockType.getId();
-        if (id == null || id.isBlank()) {
-            return false;
-        }
-        return id.startsWith("Aetherhaven_") || id.contains("Aetherhaven");
-    }
-
     public static boolean isHarvestStyleBreak(@Nonnull BlockType blockType) {
         BlockGathering gathering = blockType.getGathering();
         return gathering != null && gathering.getHarvest() != null;

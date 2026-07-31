@@ -19,6 +19,7 @@ import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.system.TransformSystems;
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.support.StateSupport;
@@ -119,11 +120,9 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
         boolean inDialogue = isInInteractionDialogue(npc);
         if (seated) {
             if (blockMounted) {
-                lockSeatedBodyFacing(ref, store, commandBuffer, anchor, inDialogue);
-            } else if (!inDialogue) {
-                lockDisplayTransform(ref, store, commandBuffer, anchor);
+                syncSeatedHeadToMountedBody(ref, store, commandBuffer, inDialogue);
             } else {
-                lockSeatedBodyFacing(ref, store, commandBuffer, anchor, true);
+                lockSeatedBodyFacing(ref, store, commandBuffer, anchor, inDialogue);
             }
             zeroVelocity(ref, commandBuffer);
             return;
@@ -184,7 +183,8 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull GuildHallDisplayAnchor anchor
     ) {
-        Vector3d target = anchor.getPosition();
+        World world = store.getExternalData().getWorld();
+        Vector3d target = VillagerBlockUtil.snapNpcFeetToStand(world, anchor.getSpawnMarkerPosition());
         TransformComponentUtil.replacePreservingChunk(
             ref,
             commandBuffer,
@@ -194,9 +194,27 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
         syncHeadToBodyFacing(ref, store, commandBuffer, anchor.getYawRadians());
     }
 
+    /** Block mount already applies seat facing; only align head when not in dialogue. */
+    private static void syncSeatedHeadToMountedBody(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        boolean inDialogue
+    ) {
+        if (inDialogue) {
+            return;
+        }
+        TransformComponent tc = commandBuffer.getComponent(ref, TransformComponent.getComponentType());
+        if (tc == null) {
+            tc = store.getComponent(ref, TransformComponent.getComponentType());
+        }
+        if (tc != null) {
+            syncHeadToBodyFacing(ref, store, commandBuffer, tc.getRotation().yaw());
+        }
+    }
+
     /**
-     * Keeps the adventurer spot facing while seated on a block mount (chair rotation is ignored). During dialogue only
-     * the body yaw is locked; {@code $Interaction} head motion can still turn toward the player.
+     * Keeps sit-fallback facing (no block mount). During dialogue only the body yaw is locked.
      */
     private static void lockSeatedBodyFacing(
         @Nonnull Ref<EntityStore> ref,
@@ -205,7 +223,14 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
         @Nonnull GuildHallDisplayAnchor anchor,
         boolean inDialogue
     ) {
-        Rotation3f bodyRot = new Rotation3f(0.0F, anchor.getYawRadians(), 0.0F);
+        World world = store.getExternalData().getWorld();
+        float bodyYaw =
+            VillagerBlockUtil.resolveSeatedDisplayYawRadians(
+                world,
+                anchor.getSpawnMarkerPosition(),
+                anchor.getYawRadians()
+            );
+        Rotation3f bodyRot = new Rotation3f(0.0F, bodyYaw, 0.0F);
         TransformComponent tc = commandBuffer.getComponent(ref, TransformComponent.getComponentType());
         if (tc == null) {
             tc = store.getComponent(ref, TransformComponent.getComponentType());
@@ -214,7 +239,7 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
             TransformComponentUtil.replacePreservingChunk(ref, commandBuffer, tc.getPosition(), bodyRot);
         }
         if (!inDialogue) {
-            syncHeadToBodyFacing(ref, store, commandBuffer, anchor.getYawRadians());
+            syncHeadToBodyFacing(ref, store, commandBuffer, bodyYaw);
         }
     }
 

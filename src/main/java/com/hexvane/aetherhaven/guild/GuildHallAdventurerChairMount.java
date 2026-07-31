@@ -127,18 +127,6 @@ public final class GuildHallAdventurerChairMount {
             }
 
             syncAnchorAfterMount(npcRef, store, commandBuffer, anchor);
-            TransformComponent mountedTc = commandBuffer.getComponent(npcRef, TransformComponent.getComponentType());
-            if (mountedTc == null) {
-                mountedTc = store.getComponent(npcRef, TransformComponent.getComponentType());
-            }
-            if (mountedTc != null) {
-                TransformComponentUtil.replacePreservingChunk(
-                    npcRef,
-                    commandBuffer,
-                    mountedTc.getPosition(),
-                    new Rotation3f(0.0F, anchor.getYawRadians(), 0.0F)
-                );
-            }
 
             return true;
 
@@ -186,7 +174,11 @@ public final class GuildHallAdventurerChairMount {
             store,
             commandBuffer,
             seatPos,
-            new Rotation3f(0.0F, anchor.getYawRadians(), 0.0F)
+            new Rotation3f(
+                0.0F,
+                VillagerBlockUtil.resolveMountBodyYawRadians(world, mountBlock, anchor.getYawRadians()),
+                0.0F
+            )
         );
 
         playSitAnimationOnce(npcRef, store, anchor);

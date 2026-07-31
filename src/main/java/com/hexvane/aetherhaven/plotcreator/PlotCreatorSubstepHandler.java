@@ -27,7 +27,7 @@ public final class PlotCreatorSubstepHandler {
         @Nonnull PlayerRef playerRef,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
-        if (!PlotCreatorSpawnLocations.tryRemoveAdventurerNear(session.getDraft(), targetBlock, 2.0)) {
+        if (!PlotCreatorSpawnLocations.tryRemoveAdventurerNear(session.getDraft(), session.getWorld(), targetBlock, 2.0)) {
             return false;
         }
         PlotCreatorAdventurerMarkers.removeMarkerNear(commandBuffer, targetBlock);
@@ -40,7 +40,7 @@ public final class PlotCreatorSubstepHandler {
         @Nonnull Vector3i targetBlock,
         @Nonnull PlayerRef playerRef
     ) {
-        if (!PlotCreatorSpawnLocations.tryRemoveVisitorNear(session.getDraft(), targetBlock, 2.0)) {
+        if (!PlotCreatorSpawnLocations.tryRemoveVisitorNear(session.getDraft(), session.getWorld(), targetBlock, 2.0)) {
             return false;
         }
         playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.visitorSpawnRemoved"));
@@ -350,7 +350,9 @@ public final class PlotCreatorSubstepHandler {
                 yield true;
             }
             case INNKEEPER_SPAWN -> {
-                draft.setInnkeeperSpawnLocal(local);
+                PlotCreatorSpotPlacement.ResolvedSpot spot =
+                    PlotCreatorSpotPlacement.resolveStandSpawn(session.getWorld(), targetBlock);
+                draft.setInnkeeperSpawnLocal(PlotCreatorLocalCoords.toLocal(draft, spot.worldBlock()));
                 playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.spawnRecorded"));
                 yield true;
             }
@@ -359,31 +361,46 @@ public final class PlotCreatorSubstepHandler {
                     playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.tooManyVisitors"));
                     yield true;
                 }
-                if (hasVisitorLocal(draft, local)) {
+                PlotCreatorSpotPlacement.ResolvedSpot spot =
+                    PlotCreatorSpotPlacement.resolveStandSpawn(session.getWorld(), targetBlock);
+                int[] standLocal = PlotCreatorLocalCoords.toLocal(draft, spot.worldBlock());
+                if (hasVisitorLocal(draft, standLocal)) {
                     playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded"));
                     yield true;
                 }
-                draft.getVisitorSpawnLocals().add(local);
+                draft.getVisitorSpawnLocals().add(standLocal);
                 playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.spawnRecorded"));
                 yield true;
             }
             case GUILD_MASTER_SPAWN -> {
-                draft.setGuildMasterSpawnLocal(local);
+                PlotCreatorSpotPlacement.ResolvedSpot spot =
+                    PlotCreatorSpotPlacement.resolveStandSpawn(session.getWorld(), targetBlock);
+                draft.setGuildMasterSpawnLocal(PlotCreatorLocalCoords.toLocal(draft, spot.worldBlock()));
                 playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.spawnRecorded"));
                 yield true;
             }
             case ADVENTURER_SPAWN -> {
-                int[] prefabLocal = PlotCreatorPrefabCoords.standPrefabLocal(draft, PlotCreatorPrefabCoords.standWorldBlock(draft, targetBlock));
+                PlotCreatorSpotPlacement.ResolvedSpot spot =
+                    PlotCreatorSpotPlacement.resolveAdventurerSpawn(
+                        session.getWorld(),
+                        draft,
+                        targetBlock,
+                        playerEntityRef,
+                        store
+                    );
+                int[] prefabLocal = PlotCreatorPrefabCoords.standPrefabLocal(draft, spot.worldBlock());
                 if (!hasAdventurerLocal(draft, prefabLocal)) {
                     float yaw =
-                        PlotCreatorPrefabCoords.standPrefabYawFacingPlayer(
-                            draft,
-                            playerEntityRef,
-                            store,
-                            prefabLocal[0],
-                            prefabLocal[1],
-                            prefabLocal[2]
-                        );
+                        spot.worldYawRadians() != null
+                            ? PlotCreatorSpotPlacement.prefabYawFromWorld(draft, spot.worldYawRadians())
+                            : PlotCreatorPrefabCoords.standPrefabYawFacingPlayer(
+                                draft,
+                                playerEntityRef,
+                                store,
+                                prefabLocal[0],
+                                prefabLocal[1],
+                                prefabLocal[2]
+                            );
                     PlotCreatorAdventurerSpawnEntry entry =
                         new PlotCreatorAdventurerSpawnEntry(prefabLocal[0], prefabLocal[1], prefabLocal[2], yaw);
                     draft.getAdventurerSpawns().add(entry);
@@ -446,10 +463,12 @@ public final class PlotCreatorSubstepHandler {
             playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.wrongBlock"));
             return true;
         }
+        PlotCreatorSpotPlacement.ResolvedSpot spot = PlotCreatorSpotPlacement.resolvePoiAnchor(world, targetBlock);
+        int[] poiLocal = PlotCreatorLocalCoords.toLocal(draft, spot.worldBlock());
         for (PlotCreatorPoiDraft existing : draft.getPois()) {
-            if (existing.getLocalX() == local[0]
-                && existing.getLocalY() == local[1]
-                && existing.getLocalZ() == local[2]
+            if (existing.getLocalX() == poiLocal[0]
+                && existing.getLocalY() == poiLocal[1]
+                && existing.getLocalZ() == poiLocal[2]
                 && PlotCreatorValidator.matchesPoiRequirement(existing, req)) {
                 playerRef.sendMessage(
                     Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.poiAlreadyRecorded")
@@ -458,19 +477,27 @@ public final class PlotCreatorSubstepHandler {
             }
         }
         PlotCreatorPoiDraft poi = new PlotCreatorPoiDraft();
-        poi.setLocal(local[0], local[1], local[2]);
-        poi.setBlockTypeId(blockId);
+        poi.setLocal(poiLocal[0], poiLocal[1], poiLocal[2]);
+        if (blockId != null && spot.role() == PlotCreatorSpotPlacement.SpotRole.POI_ANCHOR) {
+            poi.setBlockTypeId(PlotCreatorLocalCoords.blockTypeAt(world, spot.worldBlock()));
+        } else {
+            poi.setBlockTypeId(blockId);
+        }
         poi.setCapacity(1);
         applyPoiDefaults(poi, type, draft, req.workResidentKind());
-        PlotCreatorPoiInteractionTarget.applyFromPlayerFacing(
-            draft,
-            playerEntityRef,
-            store,
-            world,
-            targetBlock,
-            local,
-            poi
-        );
+        if (spot.worldYawRadians() != null) {
+            PlotCreatorPoiInteractionTarget.applyFromSeatFacing(draft, spot.worldYawRadians(), poiLocal, poi);
+        } else {
+            PlotCreatorPoiInteractionTarget.applyFromPlayerFacing(
+                draft,
+                playerEntityRef,
+                store,
+                world,
+                spot.worldBlock(),
+                poiLocal,
+                poi
+            );
+        }
         draft.getPois().add(poi);
         playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.poiRecorded"));
         return true;

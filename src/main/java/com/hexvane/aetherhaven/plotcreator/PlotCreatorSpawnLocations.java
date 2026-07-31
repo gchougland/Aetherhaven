@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.guild.marker.GuildHallAdventurerSpawnPositions;
+import com.hypixel.hytale.server.core.universe.world.World;
 import javax.annotation.Nonnull;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
@@ -35,6 +36,7 @@ public final class PlotCreatorSpawnLocations {
      */
     public static boolean tryRemoveAdventurerNear(
         @Nonnull PlotCreatorDraft draft,
+        @Nonnull World world,
         @Nonnull Vector3i clickedBlock,
         double maxDist
     ) {
@@ -54,8 +56,7 @@ public final class PlotCreatorSpawnLocations {
                     entry.getLocalY(),
                     entry.getLocalZ()
                 );
-            if (sameBlock(standBlock, clickedBlock)
-                || sameBlock(standBlock, new Vector3i(clickedBlock.x, clickedBlock.y - STAND_BLOCK_ABOVE_CLICK, clickedBlock.z))) {
+            if (PlotCreatorSpotPlacement.matchesStandSpawnClick(world, clickedBlock, standBlock)) {
                 locals.remove(i);
                 return true;
             }
@@ -82,6 +83,7 @@ public final class PlotCreatorSpawnLocations {
      */
     public static boolean tryRemoveVisitorNear(
         @Nonnull PlotCreatorDraft draft,
+        @Nonnull World world,
         @Nonnull Vector3i clickedBlock,
         double maxDist
     ) {
@@ -95,7 +97,7 @@ public final class PlotCreatorSpawnLocations {
         for (int i = 0; i < locals.size(); i++) {
             int[] local = locals.get(i);
             Vector3i standBlock = PlotCreatorLocalCoords.toWorldBlock(draft, local);
-            if (sameBlock(standBlock, clickedBlock)) {
+            if (PlotCreatorSpotPlacement.matchesStandSpawnClick(world, clickedBlock, standBlock)) {
                 locals.remove(i);
                 return true;
             }

@@ -1156,6 +1156,10 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         if (!ShopSpotPurchaseService.isPlayerShopPlot(plugin, town, plotId)) {
             return;
         }
+        PlotInstance plot = town.findPlotById(plotId);
+        if (plot != null && !plot.isAllowNpcShopPurchases()) {
+            return;
+        }
         int buyChancePercent = PLAYER_SHOP_BUY_CHANCE_PERCENT;
         TownsfolkCharacterBinding tb = store.getComponent(ref, TownsfolkCharacterBinding.getComponentType());
         if (tb != null && !tb.getCharacterId().isBlank()) {

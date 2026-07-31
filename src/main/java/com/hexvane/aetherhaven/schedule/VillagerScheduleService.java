@@ -215,16 +215,28 @@ public final class VillagerScheduleService {
         } else {
             needsApply = timeJump || newCalendarMinute || current == null || !targetPlot.equals(current);
         }
+        String prevSegment = tickState.getLastAppliedScheduleSegment();
+        boolean segmentLocationChanged = prevSegment.isEmpty() || !prevSegment.equals(loc);
         if (!needsApply) {
-            tickState.setLastGameEpochMinute(epochMinute);
-            commandBuffer.putComponent(ref, VillagerScheduleTickState.getComponentType(), tickState);
+            // Dual house/workplace plots keep the same preferredPlotId across work/home — still advance segment.
+            if (segmentLocationChanged) {
+                if (!VillagerScheduleResolver.LOC_SHOP.equals(loc)) {
+                    tickState.setShopSegmentPurchaseDone(false);
+                }
+                tickState.setLastAppliedScheduleSegment(loc);
+                tickState.setLastGameEpochMinute(epochMinute);
+                commandBuffer.putComponent(ref, VillagerScheduleTickState.getComponentType(), tickState);
+                long nowMs = VillagerAutonomySystem.resolveAutonomyNowMs(store);
+                VillagerAutonomySystem.promptWorkplaceTravel(ref, store, commandBuffer, nowMs);
+            } else {
+                tickState.setLastGameEpochMinute(epochMinute);
+                commandBuffer.putComponent(ref, VillagerScheduleTickState.getComponentType(), tickState);
+            }
             return;
         }
 
-        String prevSegment = tickState.getLastAppliedScheduleSegment();
         boolean plotLocationChanged =
             out.clearPreferredPlot() ? current != null : current == null || !Objects.equals(targetPlot, current);
-        boolean segmentLocationChanged = prevSegment.isEmpty() || !prevSegment.equals(loc);
         if (segmentLocationChanged && !VillagerScheduleResolver.LOC_SHOP.equals(loc)) {
             tickState.setShopSegmentPurchaseDone(false);
         }

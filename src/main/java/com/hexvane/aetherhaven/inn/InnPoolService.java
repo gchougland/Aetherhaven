@@ -1468,6 +1468,7 @@ public final class InnPoolService {
         int wy = anchor.y + d.y;
         int wz = anchor.z + d.z;
         Vector3d pos = new Vector3d(wx + 0.5, wy, wz + 0.5);
+        pos = com.hexvane.aetherhaven.autonomy.VillagerBlockUtil.snapNpcFeetToStand(world, pos);
         var pair = npc.spawnNPC(store, roleId, null, pos, Rotation3f.ZERO);
         if (pair == null) {
             LOGGER.atWarning().log("Failed to spawn inn visitor %s for town %s", roleId, town.getTownId());
@@ -1499,6 +1500,7 @@ public final class InnPoolService {
      */
     @Nullable
     public static Vector3d resolveVisitorSpawnWorldPosition(
+        @Nonnull World world,
         @Nonnull PlotInstance innPlot,
         @Nonnull ConstructionDefinition innDef,
         @Nonnull AetherhavenPlugin plugin,
@@ -1520,7 +1522,10 @@ public final class InnPoolService {
         int wx = anchor.x + d.x;
         int wy = anchor.y + d.y;
         int wz = anchor.z + d.z;
-        return new Vector3d(wx + 0.5, wy, wz + 0.5);
+        return com.hexvane.aetherhaven.autonomy.VillagerBlockUtil.snapNpcFeetToStand(
+            world,
+            new Vector3d(wx + 0.5, wy, wz + 0.5)
+        );
     }
 
     /**

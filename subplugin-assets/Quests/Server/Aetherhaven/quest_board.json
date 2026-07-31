@@ -56,8 +56,7 @@
       "weight": 65
     },
     "hunt": {
-      "weight": 45,
-      "goldCoinMultiplier": 1.5
+      "weight": 45
     },
     "raid": {
       "weight": 20
@@ -866,7 +865,7 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 18,
+              "count": 27,
               "grantTo": "player"
             },
             {
@@ -899,7 +898,7 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 50,
+              "count": 75,
               "grantTo": "player"
             },
             {
@@ -1687,7 +1686,7 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 18,
+              "count": 27,
               "grantTo": "player"
             },
             {
@@ -2107,7 +2106,7 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 28,
+              "count": 42,
               "grantTo": "player"
             },
             {
@@ -2140,7 +2139,7 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 28,
+              "count": 42,
               "grantTo": "player"
             },
             {
@@ -2173,7 +2172,7 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 50,
+              "count": 75,
               "grantTo": "player"
             },
             {

@@ -43,9 +43,6 @@ public final class TownTerritoryBreakBlockSystem extends EntityEventSystem<Entit
         if (event.isCancelled()) {
             return;
         }
-        if (TownTerritoryGuard.isAetherhavenProtectedBlock(event.getBlockType())) {
-            return;
-        }
         Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
         Player player = store.getComponent(ref, Player.getComponentType());
         UUID playerUuid = TownTerritoryGuard.resolvePlayerUuid(ref, store);

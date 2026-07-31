@@ -40,7 +40,7 @@
       "outputs": [
         { "itemId": "Plant_Crop_Wheat_Item", "ticks": 1728, "maxStorage": 50 },
         { "itemId": "Plant_Crop_Lettuce_Item", "ticks": 1728, "maxStorage": 50 },
-        { "itemId": "Ingredient_Life_Essence", "ticks": 600, "maxStorage": 100 }
+        { "itemId": "Ingredient_Life_Essence", "ticks": 300, "maxStorage": 100 }
       ]
     },
     "plot_barn": {

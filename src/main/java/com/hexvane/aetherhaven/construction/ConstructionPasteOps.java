@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.construction;
 
 import com.hexvane.aetherhaven.construction.assembly.AssemblyObstructionUtil;
 import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
+import com.hexvane.aetherhaven.prefab.EditorMarkerBlocks;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.BlockMaterial;
@@ -115,6 +116,7 @@ public final class ConstructionPasteOps {
         bufferAccess.forEach(
             IPrefabBuffer.iterateAllColumns(),
             (x, y, z, blockId, holder, supportValue, blockRotation, filler, t, fluidId, fluidLevel) -> {
+                blockId = EditorMarkerBlocks.normalizePrefabBlockId(blockId);
                 if (blockId == 0 && filler == 0) {
                     pending.add(new PendingBlock(x, y, z, 0, null, 0, 0, 0, fluidId, fluidLevel));
                     return;

@@ -56,6 +56,8 @@ public final class AetherhavenUiLocalization {
         b.set("#ClearVisitingTouristsButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.clearVisitingTourists"));
         b.set("#VisitorPortalTravelLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalTravelAllow"));
         b.set("#VisitorPortalTravelLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalTravelAllowTooltip"));
+        b.set("#PlayerShopNpcBuyLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.playerShopNpcBuyAllow"));
+        b.set("#PlayerShopNpcBuyLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.playerShopNpcBuyAllowTooltip"));
         b.set("#VisitorPortalColorLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalColor"));
         b.set("#VisitorPortalColorLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalColorTooltip"));
         b.set("#ChooseVisitorPortalColorButton.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.chooseColor"));

@@ -156,6 +156,11 @@ public final class PlotInstance {
     @SerializedName("depositedMaterials")
     private ArrayList<MaterialRequirement> depositedMaterials;
 
+    /** When false, villagers and tourists may visit but not buy from this player shop plot. */
+    @Nullable
+    @SerializedName("allowNpcShopPurchases")
+    private Boolean allowNpcShopPurchases;
+
     public PlotInstance() {}
 
     public PlotInstance(
@@ -680,5 +685,14 @@ public final class PlotInstance {
         } else {
             this.depositedMaterials = new ArrayList<>(materials);
         }
+    }
+
+    /** True when villagers and tourists may purchase listings on this player shop plot. */
+    public boolean isAllowNpcShopPurchases() {
+        return allowNpcShopPurchases == null || allowNpcShopPurchases;
+    }
+
+    public void setAllowNpcShopPurchases(boolean allowNpcShopPurchases) {
+        this.allowNpcShopPurchases = allowNpcShopPurchases;
     }
 }

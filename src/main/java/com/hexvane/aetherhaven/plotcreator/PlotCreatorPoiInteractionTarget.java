@@ -36,6 +36,28 @@ public final class PlotCreatorPoiInteractionTarget {
         Rotation placement = PlotCreatorPrefabCoords.placementYaw(draft);
         float worldYaw = playerTc.getRotation().yaw();
         float prefabYaw = PrefabYaw.prefabFromWorld(placement, worldYaw);
+        applyFacingFromPrefabYaw(prefabYaw, poiLocal, poi);
+    }
+
+    /**
+     * Uses the seat or bed forward direction for mount POIs so villagers face the front of the chair or bench.
+     */
+    public static void applyFromSeatFacing(
+        @Nonnull PlotCreatorDraft draft,
+        float worldSeatYawRadians,
+        @Nonnull int[] poiLocal,
+        @Nonnull PlotCreatorPoiDraft poi
+    ) {
+        Rotation placement = PlotCreatorPrefabCoords.placementYaw(draft);
+        float prefabYaw = PrefabYaw.prefabFromWorld(placement, worldSeatYawRadians);
+        applyFacingFromPrefabYaw(prefabYaw, poiLocal, poi);
+    }
+
+    private static void applyFacingFromPrefabYaw(
+        float prefabYaw,
+        @Nonnull int[] poiLocal,
+        @Nonnull PlotCreatorPoiDraft poi
+    ) {
         poi.setInteractionTargetYawDegrees(normalizeDegrees((float) Math.toDegrees(prefabYaw)));
         int[] forward = horizontalForwardLocal(prefabYaw);
         // Stand one cell behind the facing direction so the villager looks toward the POI block.
