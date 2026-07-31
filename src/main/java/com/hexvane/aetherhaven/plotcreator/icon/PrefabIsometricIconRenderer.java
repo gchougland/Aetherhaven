@@ -27,6 +27,18 @@ public final class PrefabIsometricIconRenderer {
             BlockColorResolver.FaceColors faces = BlockColorResolver.resolveFaceColors(blockId);
             cells.add(new BlockCell(x, y, z, faces));
         });
+        prefab.forEachFluid((x, y, z, fluidId, level) -> {
+            if (!BlockColorResolver.isRenderableFluid(fluidId)) {
+                return;
+            }
+            if (prefab.hasBlockAtWorldPos(x, y, z)) {
+                int blockId = prefab.getBlockAtWorldPos(x, y, z);
+                if (BlockColorResolver.isRenderable(blockId)) {
+                    return;
+                }
+            }
+            cells.add(new BlockCell(x, y, z, BlockColorResolver.resolveFluidFaceColors(fluidId)));
+        });
         if (cells.isEmpty()) {
             return null;
         }

@@ -8,11 +8,13 @@
 - **Community updates** — Update button on the plot crafting bench when a newer version of a downloaded building is available.
 - **Barn Feathers** - The barn can now produce feathers.
 - **Player shop sales toggle** — The town records shelf on player shops has an option to sell to players only. Visitors and villagers can still visit and browse.
+- **Plot creator step jump** — Middle click the plot creator staff to jump back to any step you have already reached.
 
 ### Changed
 
 - **Tool HUD key hints** — Path tool hints read your local Hytale keybind settings when available, with a builder style key legend on the shovel. Other tool HUDs use the same label lookup with vanilla defaults as fallback. The Town Journal tool key labels setting was removed.
 - **Workplace slots** — Town record shelves list every worker a building needs.
+- **Plot creator menus** — Type, variant, spots, and settings menus open when you reach those steps. Done moves you forward when your choices are valid.
 
 ### Fixed
 
@@ -24,6 +26,9 @@
 - **Upload limit message** — Clearer message when you hit the community upload limit.
 - **Plot crafting bench** — Fixed a crash when opening the bench with favorites loaded.
 - **Variant building menus** — Custom building variants now get the same record shelf options as the original (expand territory, guards, tourists, workers, and shops).
+- **Building thumbnails** — Water and lava in a building now show on plot crafting icons (blue water, orange lava) instead of being left out.
+- **Plot creator Done button** — Done enables right away when you pick a type or variant instead of staying grey until you close the menu.
+- **Plot creator bounds hint** — Shrink bounds now shows crouch and right click in the key hint row like other tools.
 
 ## [2.6.0] - 7/27/2026
 

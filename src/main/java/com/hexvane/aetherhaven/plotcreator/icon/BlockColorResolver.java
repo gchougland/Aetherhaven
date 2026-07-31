@@ -2,10 +2,12 @@ package com.hexvane.aetherhaven.plotcreator.icon;
 
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.protocol.Color;
+import com.hypixel.hytale.protocol.ShaderType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockTypeTextures;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.CustomModelTexture;
+import com.hypixel.hytale.server.core.asset.type.fluid.Fluid;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -19,7 +21,68 @@ public final class BlockColorResolver {
     private static final int GRASS_TOP_ARGB = referenceArgb("Soil_Grass_Sunny", 0xFF709D2C);
     private static final int GRASS_SIDE_ARGB = referenceArgb("Soil_Dirt", 0xFF88632B);
 
+    private static final String FLUID_WATER_TEXTURE = "BlockTextures/Fluid_Water.png";
+    private static final String FLUID_LAVA_TEXTURE = "BlockTextures/Fluid_Lava.png";
+    private static final int WATER_TOP_FALLBACK = 0xFF3B7FB8;
+    private static final int LAVA_TOP_FALLBACK = 0xFFF94E11;
+
     private BlockColorResolver() {}
+
+    public static boolean isRenderableFluid(int fluidId) {
+        return fluidId != Fluid.EMPTY_ID;
+    }
+
+    @Nonnull
+    public static FaceColors resolveFluidFaceColors(int fluidId) {
+        if (!isRenderableFluid(fluidId)) {
+            return FaceColors.EMPTY;
+        }
+        int top = resolveFluidTopArgb(fluidId);
+        return new FaceColors(top, darken(top, 0.68f), darken(top, 0.84f));
+    }
+
+    private static int resolveFluidTopArgb(int fluidId) {
+        Fluid fluid = Fluid.getAssetMap().getAsset(fluidId);
+        if (fluid != null) {
+            if (isWaterFluid(fluid)) {
+                return fluidTextureTop(FLUID_WATER_TEXTURE, WATER_TOP_FALLBACK, fluid);
+            }
+            if (isLavaFluid(fluid)) {
+                return fluidTextureTop(FLUID_LAVA_TEXTURE, LAVA_TOP_FALLBACK, fluid);
+            }
+        }
+        return FALLBACK_GRAY;
+    }
+
+    private static boolean isWaterFluid(@Nonnull Fluid fluid) {
+        if (fluid.hasEffect(ShaderType.Water)) {
+            return true;
+        }
+        String id = fluid.getId();
+        return id != null && id.contains("Water");
+    }
+
+    private static boolean isLavaFluid(@Nonnull Fluid fluid) {
+        if (fluid.hasEffect(ShaderType.Lava)) {
+            return true;
+        }
+        String id = fluid.getId();
+        return id != null && id.contains("Lava");
+    }
+
+    private static int fluidTextureTop(@Nonnull String texturePath, int fallback, @Nullable Fluid fluid) {
+        int fromTexture = BlockTextureColorSampler.averageArgb(texturePath);
+        if (BlockTextureColorSampler.isResolved(fromTexture)) {
+            return fromTexture;
+        }
+        if (fluid != null) {
+            Color particleColor = fluid.getParticleColor();
+            if (particleColor != null) {
+                return toOpaqueArgb(particleColor);
+            }
+        }
+        return fallback;
+    }
 
     public static boolean isRenderable(int blockId) {
         if (blockId == BlockType.EMPTY_ID) {
