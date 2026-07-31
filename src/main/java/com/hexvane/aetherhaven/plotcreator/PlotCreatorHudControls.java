@@ -88,6 +88,8 @@ public final class PlotCreatorHudControls {
         List<Row> rows = new ArrayList<>();
         if (draft.getBoundsPhase() == PlotCreatorBoundsPhase.FACE_ADJUST) {
             rows.add(row(ToolKeybindSlot.PRIMARY, "hud.BOUNDS.primaryFace"));
+            rows.add(row(ToolKeybindSlot.SECONDARY, "hud.BOUNDS.secondary"));
+            rows.add(info("hud.BOUNDS.secondaryShrink"));
             rows.add(row(ToolKeybindSlot.ABILITY1, "hud.BOUNDS.redo"));
         } else {
             rows.add(row(ToolKeybindSlot.PRIMARY, "hud.BOUNDS.primary"));

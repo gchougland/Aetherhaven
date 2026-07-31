@@ -114,7 +114,43 @@ public final class PlotCreatorBoundsInput {
             } else if (state == MouseButtonState.Released) {
                 onPrimaryRelease(session, ref, store, playerRef);
             }
+        } else if (type == MouseButtonType.Right && state == MouseButtonState.Pressed) {
+            onSecondaryPress(session, ref, store, playerRef);
         }
+    }
+
+    static void onSecondaryPress(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlayerRef playerRef
+    ) {
+        PlotCreatorDraft draft = session.getDraft();
+        if (draft.getBoundsPhase() != PlotCreatorBoundsPhase.FACE_ADJUST) {
+            return;
+        }
+        boolean expand = !isCrouching(ref, store);
+        @Nullable
+        String err = PlotCreatorBoundsLookAdjust.tryNudgeFromLook(ref, store, draft, expand);
+        if (err != null) {
+            playerRef.sendMessage(Message.translation(MSG + ".error." + err));
+            return;
+        }
+        playerRef.sendMessage(
+            Message.translation(MSG + (expand ? ".hint.boundsExpanded" : ".hint.boundsShrunk"))
+        );
+        PlotCreatorService.refreshBoundsVisuals(session, playerRef);
+        PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
+    }
+
+    private static boolean isCrouching(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent ms =
+            store.getComponent(ref, com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent.getComponentType());
+        if (ms == null || ms.getMovementStates() == null) {
+            return false;
+        }
+        var states = ms.getMovementStates();
+        return states.crouching || states.forcedCrouching;
     }
 
     private static void onMouseMotion(@Nonnull PlayerMouseMotionEvent event) {

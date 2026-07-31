@@ -35,6 +35,13 @@ public final class PlotCreatorBootstrap {
             );
         core
             .getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPlotCreatorBoundsAdjust",
+                PlotCreatorBoundsAdjustInteraction.class,
+                PlotCreatorBoundsAdjustInteraction.CODEC
+            );
+        core
+            .getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenPlotCreatorBlock", PlotCreatorBlockInteraction.class, PlotCreatorBlockInteraction.CODEC);
         core
             .getCodecRegistry(Interaction.CODEC)

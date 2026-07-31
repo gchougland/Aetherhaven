@@ -47,7 +47,7 @@ Open your **town journal → Guide → Mechanics → Plot creator staff** (this 
 
 ## Flow (short)
 
-1. Drag to mark the build box (the plot sign is placed at the center automatically).
+1. Drag to mark the build box (the plot sign is placed at the center automatically). Stand inside the box and use **secondary** to expand one block toward where you look, or **crouch + secondary** to shrink. You can also drag the side panels.
 2. Choose **building type** (and **variant of** if applicable).
 3. Place **important spots** (blocks are given one at a time per substep).
 4. Enter **name and id** (prefab filename follows the id).

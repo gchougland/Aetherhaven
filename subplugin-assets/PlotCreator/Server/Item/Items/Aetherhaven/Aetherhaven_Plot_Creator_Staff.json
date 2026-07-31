@@ -83,6 +83,9 @@
     "Secondary": {
       "Interactions": [
         {
+          "Type": "AetherhavenPlotCreatorBoundsAdjust"
+        },
+        {
           "Type": "AetherhavenPlotCreatorBlock"
         }
       ]

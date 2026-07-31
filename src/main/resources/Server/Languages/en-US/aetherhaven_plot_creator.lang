@@ -28,9 +28,11 @@ aetherhaven.plotcreator.generateicon.error.loadFailed = Could not load prefab: {
 aetherhaven.plotcreator.generateicon.error.renderFailed = Icon render failed for {id}.
 aetherhaven.plotcreator.generateicon.ok = Icon saved for {id} at {path} (asset path: {asset})
 
-aetherhaven.plotcreator.hint.boundsReady = Build area ready. Look at a side to fine tune, or press E to continue.
+aetherhaven.plotcreator.hint.boundsReady = Build area ready. Stand inside the box and use secondary to grow it toward where you look, or drag a side panel. Press E to continue.
 aetherhaven.plotcreator.hint.boundsSet = Build area set: {width} wide, {depth} deep, {height} tall.
 aetherhaven.plotcreator.hint.boundsHelp = Hold primary and drag to mark the build box. The plot sign is placed at the center when you continue.
+aetherhaven.plotcreator.hint.boundsExpanded = Build area expanded.
+aetherhaven.plotcreator.hint.boundsShrunk = Build area shrunk.
 aetherhaven.plotcreator.hint.anchorSet = Plot sign spot set.
 aetherhaven.plotcreator.hint.blockRecorded = Spot saved.
 aetherhaven.plotcreator.hint.shopSpotRecorded = Shop stall saved.
@@ -104,6 +106,8 @@ aetherhaven.plotcreator.hud.WELCOME.e = Begin
 
 aetherhaven.plotcreator.hud.BOUNDS.primary = Hold and drag to mark the build box
 aetherhaven.plotcreator.hud.BOUNDS.primaryFace = Drag to resize the highlighted side
+aetherhaven.plotcreator.hud.BOUNDS.secondary = Secondary to expand toward where you look (stand inside the box)
+aetherhaven.plotcreator.hud.BOUNDS.secondaryShrink = Crouch and secondary to shrink toward where you look
 aetherhaven.plotcreator.hud.BOUNDS.confirm = E to confirm build area
 aetherhaven.plotcreator.hud.BOUNDS.redo = Q to redo the build box
 aetherhaven.plotcreator.hud.ANCHOR.primary = Click one of the four outside corners of the footprint
@@ -134,6 +138,7 @@ aetherhaven.plotcreator.error.needBounds = Mark the build area before continuing
 aetherhaven.plotcreator.error.boundsDragTooShort = Hold primary and drag to mark a box. A single click is not enough.
 aetherhaven.plotcreator.error.boundsTooFlat = That box is only one block tall. Drag a taller box or pull the top side up.
 aetherhaven.plotcreator.error.boundsTooSmall = That box is too small. Drag a larger box.
+aetherhaven.plotcreator.error.boundsNudgeOutside = Stand inside the build box to resize it this way.
 
 aetherhaven.plotcreator.error.needKind = Open the building type picker with F and choose at least one type before continuing.
 
@@ -185,8 +190,7 @@ aetherhaven.plotcreator.step.WELCOME.hint = Turn something you built into a town
 aetherhaven.plotcreator.step.BOUNDS.title = Mark build area
 aetherhaven.plotcreator.step.BOUNDS.short = Bounds
 aetherhaven.plotcreator.step.BOUNDS.hint.initial = Hold primary and drag to mark a rough box. Point at blocks or empty air. The plot sign goes at the center when you press E to continue.
-aetherhaven.plotcreator.step.BOUNDS.hint.faces = Drag the side panels to fine tune the box, then press E to continue.
-aetherhaven.plotcreator.step.BOUNDS.hint.faces = Look at a side to highlight it. Drag to expand or shrink that side. Press E when the box looks right.
+aetherhaven.plotcreator.step.BOUNDS.hint.faces = Stand inside the box. Secondary expands toward where you look. Crouch and secondary shrinks. You can also drag side panels. Press E when the box looks right.
 
 aetherhaven.plotcreator.step.ANCHOR.title = Plot sign spot
 aetherhaven.plotcreator.step.ANCHOR.short = Sign
