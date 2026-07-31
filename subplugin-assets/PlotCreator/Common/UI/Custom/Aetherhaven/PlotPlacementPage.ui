@@ -119,9 +119,9 @@ $C.@PageOverlay {
         Style: (...@MutedBodyStyle);
       }
 
-      Label #Tips {
+      Group #TipsRows {
         Anchor: (Bottom: 14, Width: 448);
-        Style: (...@MutedBodyStyle);
+        LayoutMode: Top;
       }
 
       Label #PlotTypeLabel {

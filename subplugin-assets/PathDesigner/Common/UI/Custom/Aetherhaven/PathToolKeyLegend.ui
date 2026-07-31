@@ -1,0 +1,87 @@
+$LegendCommon = "../Hud/ToolsLegends/ToolsLegendsCommon.ui";
+
+$LegendCommon.@Legend {
+  #Pages {
+    $LegendCommon.@Page #PathToolKeysPage {
+      @Title = %aetherhaven.pathTool.hudTitle;
+
+      $LegendCommon.@Row {
+        $LegendCommon.@RowHintContainer {
+          HotkeyLabel #PrimaryHotkey {
+            InputBindingKey: "PrimaryItemAction";
+          }
+        }
+        $LegendCommon.@RowLabelContainer {
+          $LegendCommon.@RowLabel {
+            Text: %aetherhaven.pathTool.keyLegend.primary;
+          }
+        }
+      }
+
+      $LegendCommon.@Row {
+        $LegendCommon.@RowHintContainer {
+          HotkeyLabel #SecondaryHotkey {
+            InputBindingKey: "SecondaryItemAction";
+          }
+        }
+        $LegendCommon.@RowLabelContainer {
+          $LegendCommon.@RowLabel {
+            Text: %aetherhaven.pathTool.keyLegend.secondary;
+          }
+        }
+      }
+
+      $LegendCommon.@Row {
+        $LegendCommon.@RowHintContainer {
+          HotkeyLabel #UseHotkey {
+            InputBindingKey: "BlockInteractAction";
+          }
+        }
+        $LegendCommon.@RowLabelContainer {
+          $LegendCommon.@RowLabel {
+            Text: %aetherhaven.pathTool.keyLegend.use;
+          }
+        }
+      }
+
+      $LegendCommon.@Row {
+        $LegendCommon.@RowHintContainer {
+          HotkeyLabel #Ability1Hotkey {
+            InputBindingKey: "Ability1ItemAction";
+          }
+        }
+        $LegendCommon.@RowLabelContainer {
+          $LegendCommon.@RowLabel {
+            Text: %aetherhaven.pathTool.keyLegend.ability1;
+          }
+        }
+      }
+
+      $LegendCommon.@Row {
+        $LegendCommon.@RowHintContainer {
+          HotkeyLabel #Ability2Hotkey {
+            InputBindingKey: "Ability2ItemAction";
+          }
+        }
+        $LegendCommon.@RowLabelContainer {
+          $LegendCommon.@RowLabel {
+            Text: %aetherhaven.pathTool.keyLegend.ability2;
+          }
+        }
+      }
+
+      $LegendCommon.@Row {
+        $LegendCommon.@RowHintContainer {
+          HotkeyLabel #Ability3Hotkey {
+            InputBindingKey: "Ability3ItemAction";
+          }
+        }
+        $LegendCommon.@RowLabelContainer {
+          $LegendCommon.@RowLabel {
+            Text: %aetherhaven.pathTool.keyLegend.ability3;
+          }
+        }
+      }
+    }
+  }
+}

@@ -15,9 +15,8 @@ import javax.annotation.Nullable;
 import org.joml.Vector3i;
 
 /**
- * Keeps plot sign XZ from the placement preview, snaps sign Y to terrain under the prefab footprint, prefers the block
- * above open water when the column is flooded, and falls back to the preview sign Y when no surface is found (e.g. fully
- * underground).
+ * Resolves plot sign placement independently from the building preview anchor: sign XZ sits at the horizontal center of
+ * the prefab footprint (from the preview building pose), and sign Y is terrain-snapped under that column.
  */
 public final class PlotSignGrounding {
     private static final int MAX_RAY_DOWN = 512;
@@ -27,22 +26,47 @@ public final class PlotSignGrounding {
     private PlotSignGrounding() {}
 
     /**
-     * @param anchorPreview session anchor (XZ and yaw from preview; preview Y is only used when raycast fails)
-     * @return world cell for the plot sign block (one block above solid ground or water surface when found)
+     * @param previewSignAnchor session anchor from the placement UI (drives building prefab origin via
+     *     {@link ConstructionDefinition#resolvePrefabAnchorWorld}; preview Y is only used when raycast fails)
+     * @return world cell for the plot sign block (footprint center XZ, terrain-snapped Y)
      */
     @Nonnull
     public static Vector3i resolveSignCell(
         @Nonnull World world,
-        @Nonnull Vector3i anchorPreview,
+        @Nonnull Vector3i previewSignAnchor,
         @Nonnull ConstructionDefinition def,
         @Nonnull Rotation prefabYaw,
         @Nonnull IPrefabBuffer buf
     ) {
-        int sx = anchorPreview.x;
-        int sz = anchorPreview.z;
-        Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(anchorPreview, prefabYaw);
+        Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(previewSignAnchor, prefabYaw);
         PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, prefabYaw, buf);
-        int startY = Math.max(anchorPreview.y, fp.getMaxY());
+        int sx = fp.horizontalCenterX();
+        int sz = fp.horizontalCenterZ();
+        int startY = Math.max(previewSignAnchor.y, fp.getMaxY());
+        int signY = resolveSignY(world, sx, sz, startY, previewSignAnchor.y);
+        return new Vector3i(sx, signY, sz);
+    }
+
+    /**
+     * Terrain-snaps sign Y at an existing column without changing XZ (wall preview height adjust).
+     */
+    public static int resolveSignYAtColumn(
+        @Nonnull World world,
+        int blockX,
+        int blockZ,
+        int startY,
+        int fallbackY
+    ) {
+        return resolveSignY(world, blockX, blockZ, startY, fallbackY);
+    }
+
+    private static int resolveSignY(
+        @Nonnull World world,
+        int sx,
+        int sz,
+        int startY,
+        int fallbackY
+    ) {
         Integer support = PathGrounding.findSupportY(world, sx, sz, startY, MAX_RAY_DOWN, 1);
         Integer fluidSurface = findFluidSurfaceY(world, sx, sz, startY, MAX_RAY_DOWN, FLUID_SCAN_UP);
         int signY;
@@ -51,10 +75,9 @@ public final class PlotSignGrounding {
         } else if (support != null) {
             signY = Math.min(318, support + 1);
         } else {
-            signY = anchorPreview.y;
+            signY = fallbackY;
         }
-        signY = Math.max(1, Math.min(318, signY));
-        return new Vector3i(sx, signY, sz);
+        return Math.max(1, Math.min(318, signY));
     }
 
     /**

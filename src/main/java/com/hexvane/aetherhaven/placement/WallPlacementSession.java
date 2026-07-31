@@ -410,9 +410,15 @@ public final class WallPlacementSession {
         if (heightManuallyAdjusted) {
             return;
         }
-        Vector3i grounded =
-            PlotSignGrounding.resolveSignCell(world, currentAnchor, def, getCurrentPrefabYaw(), buf);
-        currentAnchor = new Vector3i(grounded.x, grounded.y, grounded.z);
+        int signY =
+            PlotSignGrounding.resolveSignYAtColumn(
+                world,
+                currentAnchor.x,
+                currentAnchor.z,
+                currentAnchor.y,
+                currentAnchor.y
+            );
+        currentAnchor = new Vector3i(currentAnchor.x, signY, currentAnchor.z);
     }
 
     private void applyExpandPreviewPlan(@Nonnull WallPlacementChainPlanner.ExpandPreviewPlan plan) {

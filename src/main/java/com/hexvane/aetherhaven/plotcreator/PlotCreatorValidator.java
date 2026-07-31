@@ -47,11 +47,8 @@ public final class PlotCreatorValidator {
         if (anchor == null) {
             return "incomplete";
         }
-        if (draft.isInsideBounds(anchor)) {
-            return "anchorInside";
-        }
-        if (!PlotCreatorAnchorRules.isOutsideCorner(draft, anchor)) {
-            return "anchorNotCorner";
+        if (!draft.isInsideBounds(anchor)) {
+            return "anchorOutsideBounds";
         }
         String idErr = validateId(draft.getConstructionId(), plugin.getConstructionCatalog(), draft.getEditingConstructionId());
         if (idErr != null) {

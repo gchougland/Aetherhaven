@@ -40,7 +40,7 @@ benchCategories.aetherhaven.plot_tokens=Plot tokens
 creativeCategory.aetherhaven=Aetherhaven
 
 items.Aetherhaven_Plot_Placement_Tool.name=Plot placement staff
-items.Aetherhaven_Plot_Placement_Tool.description=Keep the matching plot token in your bags. Use this staff while aiming at the ground to see a ghost of the building. Nudge and turn it until it fits, then confirm to stake the plot. Cancel to clear the preview and use the staff again when you want a different spot.
+items.Aetherhaven_Plot_Placement_Tool.description=Carry the plot token for the building you want. Aim at the ground to preview it, move and rotate until it fits, then confirm to place the plot sign.
 
 items.Aetherhaven_Wall_Wand.name=Wall wand
 items.Aetherhaven_Wall_Wand.description=Plan stone walls around your town. Secondary use opens a top down view to chain wall, gate, and tower pieces. Primary use on an existing piece lets you extend the wall or remove it. Each piece uses a plot sign and builds like other town plots.
@@ -81,7 +81,7 @@ aetherhaven.poiTool.hudHelpEdit=Primary: select POI. Secondary: move selected PO
 aetherhaven.poiTool.hudHelpPlacement=Secondary: open POI config on a block inside a completed plot.
 aetherhaven.poiTool.hudHelpRemove=Secondary: remove the nearest POI marker or registry POI near the block.
 aetherhaven.poiTool.hudHelpAdventurerSpots=Secondary: place a spot above the block facing you, or remove a nearby spot.
-aetherhaven.poiTool.hudHint={ability1}: cycle edit, placement, remove, and adventurer spots
+aetherhaven.poiTool.hudHint.desc=cycle edit, placement, remove, and adventurer spots
 
 aetherhaven.pathTool.legendPageTitle=Path tool
 aetherhaven.pathTool.legendBlurb=Build a path, preview it, then place it. A status panel appears while you hold the tool.
@@ -114,6 +114,12 @@ aetherhaven.pathTool.stylePickChoose=Use this style
 aetherhaven.pathTool.stylePickCancel=Cancel
 
 aetherhaven.pathTool.hudTitle=Path tool
+aetherhaven.pathTool.keyLegend.primary=Primary action
+aetherhaven.pathTool.keyLegend.secondary=Secondary action
+aetherhaven.pathTool.keyLegend.use=Use / interact
+aetherhaven.pathTool.keyLegend.ability1=Cycle mode
+aetherhaven.pathTool.keyLegend.ability2=Cycle path width
+aetherhaven.pathTool.keyLegend.ability3=Cycle path style
 aetherhaven.pathTool.hudNameTranslate=Move
 aetherhaven.pathTool.hudNameRotate=Rotate
 aetherhaven.pathTool.hudNameCommit=Place
@@ -129,27 +135,27 @@ aetherhaven.pathTool.hudWidth=Width: {w} blocks
 aetherhaven.pathTool.hudNodes=Nodes: {n}
 aetherhaven.pathTool.hudPlaceReminder=Switch to Place mode to place the path.
 
-aetherhaven.pathTool.hud.move.primary=Select a node, then click the ground to move it
-aetherhaven.pathTool.hud.move.secondary=Click the ground to add a node, or aim at a node to remove it
+aetherhaven.pathTool.hud.move.primary=Select a node by looking at it, then click the ground to move it
+aetherhaven.pathTool.hud.move.secondary=Click the ground to add a node, or look at a node and press secondary to remove it
 aetherhaven.pathTool.hud.move.q=Next mode
 aetherhaven.pathTool.hud.move.e=Open path width settings
 aetherhaven.pathTool.hud.move.r=Choose path style
 
-aetherhaven.pathTool.hud.rotate.primary=Select a node
-aetherhaven.pathTool.hud.rotate.secondary=Click the ground to add a node, or aim at a node to remove it
+aetherhaven.pathTool.hud.rotate.primary=Look at a node and press primary to select it
+aetherhaven.pathTool.hud.rotate.secondary=Click the ground to add a node, or look at a node and press secondary to remove it
 aetherhaven.pathTool.hud.rotate.f=Nudge the selected node direction
 aetherhaven.pathTool.hud.rotate.q=Next mode
 aetherhaven.pathTool.hud.rotate.e=Open path width settings
 aetherhaven.pathTool.hud.rotate.r=Choose path style
 
-aetherhaven.pathTool.hud.place.primary=Select a node
-aetherhaven.pathTool.hud.place.secondary=Click the ground to add a node, or aim at a node to remove it
+aetherhaven.pathTool.hud.place.primary=Look at a node and press primary to select it
+aetherhaven.pathTool.hud.place.secondary=Click the ground to add a node, or look at a node and press secondary to remove it
 aetherhaven.pathTool.hud.place.f=Place the path
 aetherhaven.pathTool.hud.place.q=Next mode
 aetherhaven.pathTool.hud.place.e=Open path width settings
 aetherhaven.pathTool.hud.place.r=Choose path style
 
-aetherhaven.pathTool.hud.remove.primary=Select a path
+aetherhaven.pathTool.hud.remove.primary=Look at a path and press primary to select it
 aetherhaven.pathTool.hud.remove.f=Remove the selected path
 aetherhaven.pathTool.hud.remove.q=Next mode
 
@@ -189,6 +195,7 @@ aetherhaven.pathTool.selectedNode=Node selected.
 aetherhaven.pathTool.movedNode=Node moved.
 aetherhaven.pathTool.noNodeHit=No control node in range. In move mode with a node selected, try primary on the ground to move.
 aetherhaven.pathTool.noNodeOnAim=No node on crosshair. Selection unchanged.
+aetherhaven.pathTool.noGroundOnAim=No ground in reach. Point at a block to move the node.
 aetherhaven.pathTool.toastAdd=Control point added
 aetherhaven.pathTool.toastModeTranslate=Move mode
 aetherhaven.pathTool.toastModeRotate=Rotate mode

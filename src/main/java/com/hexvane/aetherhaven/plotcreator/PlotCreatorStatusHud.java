@@ -2,8 +2,7 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.ui.AetherhavenUiLocalization;
-import com.hexvane.aetherhaven.ui.PlayerToolKeybindLabels;
-import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
+import com.hexvane.aetherhaven.ui.ToolHudHotkeyRows;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -31,7 +30,17 @@ public final class PlotCreatorStatusHud extends CustomUIHud {
         PlotCreatorStep step = session.getDraft().getStep();
         String stepKey = "step." + step.name();
         b.set("#StepName.TextSpans", Message.translation(LANG_PREFIX + stepKey + ".title"));
-        b.set("#StepHelp.TextSpans", Message.translation(LANG_PREFIX + stepKey + ".hint"));
+        if (step == PlotCreatorStep.BOUNDS) {
+            PlotCreatorDraft draft = session.getDraft();
+            String hintKey =
+                draft.getBoundsPhase() == PlotCreatorBoundsPhase.FACE_ADJUST
+                    ? stepKey + ".hint.faces"
+                    : stepKey + ".hint.initial";
+            b.set("#StepHelp.TextSpans", Message.translation(LANG_PREFIX + hintKey));
+            b.set("#DetailLine.Visible", false);
+        } else {
+            b.set("#StepHelp.TextSpans", Message.translation(LANG_PREFIX + stepKey + ".hint"));
+        }
         if (step == PlotCreatorStep.SUBSTEP) {
             PlotBuildingKindRequirements.SubstepRequirement sub = PlotCreatorService.currentSubstep(session.getDraft());
             if (sub != null) {
@@ -74,12 +83,11 @@ public final class PlotCreatorStatusHud extends CustomUIHud {
                 Message.translation(LANG_PREFIX + "materials.pageLabel").param("page", page).param("pages", pages)
             );
             b.set("#DetailLine.Visible", true);
-        } else {
+        } else if (step != PlotCreatorStep.BOUNDS) {
             b.set("#DetailLine.Visible", false);
         }
         b.clear(CONTROL_ROWS);
         List<PlotCreatorHudControls.Row> rows = PlotCreatorHudControls.rowsFor(step, session);
-        PlayerTownJournalState journal = PlayerToolKeybindLabels.journalOrDefaults(getPlayerRef());
         for (int i = 0; i < rows.size(); i++) {
             PlotCreatorHudControls.Row row = rows.get(i);
             String base = CONTROL_ROWS + "[" + i + "]";
@@ -90,14 +98,13 @@ public final class PlotCreatorStatusHud extends CustomUIHud {
                     Message.translation(LANG_PREFIX + row.descriptionLangKey())
                 );
             } else {
-                b.append(CONTROL_ROWS, "Aetherhaven/PathToolHudControlRow.ui");
-                b.set(
-                    base + " #KeyLabel.TextSpans",
-                    Message.raw(PlayerToolKeybindLabels.resolve(journal, row.slot()))
-                );
-                b.set(
-                    base + " #DescLabel.TextSpans",
-                    Message.translation(LANG_PREFIX + row.descriptionLangKey())
+                ToolHudHotkeyRows.appendRow(
+                    b,
+                    CONTROL_ROWS,
+                    i,
+                    row.slot(),
+                    LANG_PREFIX + row.descriptionLangKey(),
+                    getPlayerRef()
                 );
             }
         }

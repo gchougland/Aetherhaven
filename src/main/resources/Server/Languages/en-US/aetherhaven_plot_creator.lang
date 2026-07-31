@@ -11,9 +11,7 @@ aetherhaven.plotcreator.error.prefab_missing = Save the prefab before finishing.
 aetherhaven.plotcreator.error.prefabName = Enter a name for the prefab file.
 aetherhaven.plotcreator.error.prefabExport = Could not save the prefab. Check the bounds and try again.
 aetherhaven.plotcreator.error.saveFailed = Could not save the building file.
-aetherhaven.plotcreator.error.anchorInside = The plot sign cannot be inside the build bounds. Use an outside corner instead.
-aetherhaven.plotcreator.error.anchorNotCorner = Click one of the four outside corners of the build (one block out on both X and Z from the footprint).
-aetherhaven.plotcreator.error.needAnchor = Click an outside corner for the plot sign before continuing.
+aetherhaven.plotcreator.error.anchorOutsideBounds = The plot sign must be inside the build bounds.
 aetherhaven.plotcreator.error.outsideBounds = Click inside the marked bounds.
 aetherhaven.plotcreator.error.wrongBlock = That is not the block needed for this step.
 aetherhaven.plotcreator.error.shopSpotNotConfigured = Confirm the shop stall setup first, then click it with the plot creator staff.
@@ -30,8 +28,9 @@ aetherhaven.plotcreator.generateicon.error.loadFailed = Could not load prefab: {
 aetherhaven.plotcreator.generateicon.error.renderFailed = Icon render failed for {id}.
 aetherhaven.plotcreator.generateicon.ok = Icon saved for {id} at {path} (asset path: {asset})
 
-aetherhaven.plotcreator.hint.cornerFirstSet = First corner set. Mark the opposite corner next.
-aetherhaven.plotcreator.hint.cornerSecondSet = Bounds set. Next, mark the outside-corner plot sign, then choose the building type and place any required blocks before saving the shape.
+aetherhaven.plotcreator.hint.boundsReady = Build area ready. Look at a side to fine tune, or press E to continue.
+aetherhaven.plotcreator.hint.boundsSet = Build area set: {width} wide, {depth} deep, {height} tall.
+aetherhaven.plotcreator.hint.boundsHelp = Hold primary and drag to mark the build box. The plot sign is placed at the center when you continue.
 aetherhaven.plotcreator.hint.anchorSet = Plot sign spot set.
 aetherhaven.plotcreator.hint.blockRecorded = Spot saved.
 aetherhaven.plotcreator.hint.shopSpotRecorded = Shop stall saved.
@@ -103,8 +102,10 @@ aetherhaven.plotcreator.hud.common.r = Cancel session
 aetherhaven.plotcreator.hud.WELCOME.f = Begin
 aetherhaven.plotcreator.hud.WELCOME.e = Begin
 
-aetherhaven.plotcreator.hud.CORNER_FIRST.primary = Click a block at one corner of your build
-aetherhaven.plotcreator.hud.CORNER_SECOND.primary = Click the opposite corner to mark the full area
+aetherhaven.plotcreator.hud.BOUNDS.primary = Hold and drag to mark the build box
+aetherhaven.plotcreator.hud.BOUNDS.primaryFace = Drag to resize the highlighted side
+aetherhaven.plotcreator.hud.BOUNDS.confirm = E to confirm build area
+aetherhaven.plotcreator.hud.BOUNDS.redo = Q to redo the build box
 aetherhaven.plotcreator.hud.ANCHOR.primary = Click one of the four outside corners of the footprint
 
 aetherhaven.plotcreator.hud.PREFAB_SAVE.f = Export the build shape inside the bounds
@@ -129,9 +130,10 @@ aetherhaven.plotcreator.hint.kindCycled = Building type: {kind}
 
 aetherhaven.plotcreator.hint.prefabSaved = Prefab saved as {file}. Press E when ready for the next step.
 
-aetherhaven.plotcreator.error.needCornerFirst = Click the first corner before continuing.
-
-aetherhaven.plotcreator.error.needCornerSecond = Click the opposite corner before continuing.
+aetherhaven.plotcreator.error.needBounds = Mark the build area before continuing.
+aetherhaven.plotcreator.error.boundsDragTooShort = Hold primary and drag to mark a box. A single click is not enough.
+aetherhaven.plotcreator.error.boundsTooFlat = That box is only one block tall. Drag a taller box or pull the top side up.
+aetherhaven.plotcreator.error.boundsTooSmall = That box is too small. Drag a larger box.
 
 aetherhaven.plotcreator.error.needKind = Open the building type picker with F and choose at least one type before continuing.
 
@@ -180,13 +182,11 @@ aetherhaven.plotcreator.step.WELCOME.title = Welcome
 aetherhaven.plotcreator.step.WELCOME.short = Welcome
 aetherhaven.plotcreator.step.WELCOME.hint = Turn something you built into a town building.
 
-aetherhaven.plotcreator.step.CORNER_FIRST.title = First corner
-aetherhaven.plotcreator.step.CORNER_FIRST.short = Corner 1
-aetherhaven.plotcreator.step.CORNER_FIRST.hint = Mark one corner of your build.
-
-aetherhaven.plotcreator.step.CORNER_SECOND.title = Opposite corner
-aetherhaven.plotcreator.step.CORNER_SECOND.short = Corner 2
-aetherhaven.plotcreator.step.CORNER_SECOND.hint = Mark the opposite corner to define the full area.
+aetherhaven.plotcreator.step.BOUNDS.title = Mark build area
+aetherhaven.plotcreator.step.BOUNDS.short = Bounds
+aetherhaven.plotcreator.step.BOUNDS.hint.initial = Hold primary and drag to mark a rough box. Point at blocks or empty air. The plot sign goes at the center when you press E to continue.
+aetherhaven.plotcreator.step.BOUNDS.hint.faces = Drag the side panels to fine tune the box, then press E to continue.
+aetherhaven.plotcreator.step.BOUNDS.hint.faces = Look at a side to highlight it. Drag to expand or shrink that side. Press E when the box looks right.
 
 aetherhaven.plotcreator.step.ANCHOR.title = Plot sign spot
 aetherhaven.plotcreator.step.ANCHOR.short = Sign
@@ -331,7 +331,7 @@ aetherhaven.plotcreator.spot.confirm = Save spot choices
 aetherhaven.plotcreator.spot.hint = Turn on the spots you want. Town records shelf stays on.
 
 aetherhaven.plotcreator.checklist.title = Requirements
-aetherhaven.plotcreator.checklist.corners = Plot corners
+aetherhaven.plotcreator.checklist.corners = Build bounds
 aetherhaven.plotcreator.checklist.anchor = Plot sign spot
 aetherhaven.plotcreator.checklist.kind = Building type
 aetherhaven.plotcreator.checklist.identity = Name and id

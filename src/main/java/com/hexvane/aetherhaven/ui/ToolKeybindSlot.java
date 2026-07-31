@@ -3,24 +3,31 @@ package com.hexvane.aetherhaven.ui;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Display label slots for Aetherhaven tool HUD key hints (visual only). */
+/** Vanilla {@code InputBindingKey} ids and default key labels for dynamically appended tool HUD rows. */
 public enum ToolKeybindSlot {
-    PRIMARY("Primary"),
-    SECONDARY("Secondary"),
-    USE("F"),
-    ABILITY1("Q"),
-    ABILITY2("E"),
-    ABILITY3("R"),
-    ESCAPE("Escape"),
-    SHIFT("Shift"),
-    CTRL("Ctrl"),
-    SPACE("Space"),
-    MOVEMENT("WASD");
+    PRIMARY("PrimaryItemAction", "LMB"),
+    SECONDARY("SecondaryItemAction", "RMB"),
+    USE("BlockInteractAction", "F"),
+    ABILITY1("Ability1ItemAction", "Q"),
+    ABILITY2("Ability2ItemAction", "E"),
+    ABILITY3("Ability3ItemAction", "R"),
+    ESCAPE("UiCancel", "Esc"),
+    SHIFT("Sprint", "Shift"),
+    CTRL("FlyDown", "Ctrl"),
+    SPACE("Jump", "Space"),
+    MOVEMENT("MoveForwards", "WASD");
 
+    private final String inputBindingKey;
     private final String defaultLabel;
 
-    ToolKeybindSlot(@Nonnull String defaultLabel) {
+    ToolKeybindSlot(@Nonnull String inputBindingKey, @Nonnull String defaultLabel) {
+        this.inputBindingKey = inputBindingKey;
         this.defaultLabel = defaultLabel;
+    }
+
+    @Nonnull
+    public String inputBindingKey() {
+        return inputBindingKey;
     }
 
     @Nonnull
@@ -28,10 +35,10 @@ public enum ToolKeybindSlot {
         return defaultLabel;
     }
 
-    /** Lang suffix under {@code aetherhaven.ui.toolKeybinds.slot.*}. */
+    /** Shared append row template for server-built tool HUD hint lists. */
     @Nonnull
-    public String langSuffix() {
-        return name().toLowerCase();
+    public String rowUiPath() {
+        return "Aetherhaven/ToolHudHotkeyRow.ui";
     }
 
     @Nullable

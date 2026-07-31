@@ -86,11 +86,17 @@ public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntitySt
             LAST_GUIDE_SIG.put(uuid, guideSig);
             PlotCreatorHudSupport.refreshAll(player, pr, session);
         }
+        if (step == PlotCreatorStep.BOUNDS) {
+            PlotCreatorBoundsInput.tickHover(session, ref, store, pr);
+            if (session.getDraft().isBoundsPrimaryHeld()) {
+                PlotCreatorBoundsInput.onDragTick(session, ref, store, pr);
+            }
+        }
         long sig = wireframeSignature(session.getDraft());
         Long prevSig = LAST_WIREFRAME_SIG.get(uuid);
         if (prevSig == null || prevSig != sig) {
             LAST_WIREFRAME_SIG.put(uuid, sig);
-            PlotCreatorService.refreshWireframe(session, pr);
+            PlotCreatorService.refreshBoundsVisuals(session, pr);
         }
         syncImportantSpotMarkers(session, world, store, ref, commandBuffer);
     }
@@ -191,13 +197,15 @@ public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntitySt
     }
 
     private static long wireframeSignature(@Nonnull PlotCreatorDraft draft) {
-        Vector3i a = draft.getCornerFirst();
-        Vector3i b = draft.getCornerSecond();
-        if (a == null || b == null) {
-            return 0L;
+        PlotCreatorService.BoundsPreview preview = PlotCreatorService.boundsPreview(draft);
+        if (preview == null) {
+            long h = draft.getStep() == PlotCreatorStep.BOUNDS ? 1L : 0L;
+            h = 31 * h + draft.getBoundsPhase().ordinal();
+            h = 31 * h + (draft.getHoveredBoundsFace() != null ? draft.getHoveredBoundsFace().ordinal() : -1);
+            return h;
         }
-        Vector3i min = draft.boundsMin();
-        Vector3i max = draft.boundsMax();
+        Vector3i min = preview.min();
+        Vector3i max = preview.max();
         long h = 17L;
         h = 31 * h + min.x;
         h = 31 * h + min.y;
@@ -205,6 +213,13 @@ public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntitySt
         h = 31 * h + max.x;
         h = 31 * h + max.y;
         h = 31 * h + max.z;
+        if (draft.getStep() == PlotCreatorStep.BOUNDS) {
+            h = 31 * h + draft.getBoundsPhase().ordinal();
+            h = 31 * h + (draft.getHoveredBoundsFace() != null ? draft.getHoveredBoundsFace().ordinal() : -1);
+            h = 31 * h + (draft.getActiveBoundsFaceDrag() != null ? draft.getActiveBoundsFaceDrag().ordinal() : -1);
+        } else {
+            h = 31 * h + draft.getStep().ordinal();
+        }
         return h;
     }
 }

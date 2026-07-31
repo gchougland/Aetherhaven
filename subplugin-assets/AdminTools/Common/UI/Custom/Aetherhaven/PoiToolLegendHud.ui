@@ -33,9 +33,9 @@ Group #PoiToolLegendRoot {
         }
       }
 
-      Label #HintLine {
-        Text: " ";
-        Style: (...$C.@DefaultLabelStyle, TextColor: #98a0a8, FontSize: 13, Wrap: true);
+      Group #HintRows {
+        LayoutMode: Top;
+        Anchor: (Top: 2);
       }
     }
   }

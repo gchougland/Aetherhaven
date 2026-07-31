@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.poi.marker.PoiMarkerDedupUtil;
 import com.hexvane.aetherhaven.construction.ConstructionCompleter;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
+import com.hexvane.aetherhaven.placement.PlotPlacementHeights;
 import com.hexvane.aetherhaven.placement.PlotPlacementValidator;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -73,8 +74,35 @@ public final class PlotCreatorWorldRegistrar {
         UUID plotId = existing != null ? existing.getPlotId() : UUID.randomUUID();
         UUID excludePlotId = existing != null ? plotId : null;
 
+        Vector3i previewAnchor = anchor;
+        IPrefabBuffer buf = PrefabResolveUtil.resolvePrefabBuffer(def.getPrefabPath());
+        Vector3i groundedSign = anchor;
+        Vector3i prefabAnchor = def.resolvePrefabAnchorWorld(anchor, yaw);
+        if (buf != null) {
+            PlotPlacementHeights.ResolvedPlacement resolved =
+                PlotPlacementHeights.resolve(world, previewAnchor, def, yaw, buf);
+            groundedSign = resolved.signCell();
+            prefabAnchor = resolved.buildingPrefabAnchor();
+        }
+
         String placementErr =
-            PlotPlacementValidator.validate(world, tm, town, playerUuid, anchor, yaw, def, plugin, excludePlotId);
+            buf != null
+                ? PlotPlacementValidator.validateWithResolvedHeights(
+                    world,
+                    tm,
+                    town,
+                    playerUuid,
+                    previewAnchor,
+                    groundedSign,
+                    prefabAnchor,
+                    yaw,
+                    def,
+                    plugin,
+                    excludePlotId
+                )
+                : PlotPlacementValidator.validate(
+                    world, tm, town, playerUuid, anchor, yaw, def, plugin, excludePlotId
+                );
         if (placementErr != null) {
             return placementErr;
         }
@@ -84,9 +112,7 @@ public final class PlotCreatorWorldRegistrar {
             town.removePlotInstance(plotId);
         }
 
-        Vector3i prefabAnchor = def.resolvePrefabAnchorWorld(anchor, yaw);
         PlotFootprintRecord footprint;
-        IPrefabBuffer buf = PrefabResolveUtil.resolvePrefabBuffer(def.getPrefabPath());
         try {
             footprint = PlotFootprintUtil.computeFootprint(prefabAnchor, yaw, buf);
         } catch (Exception e) {
@@ -94,6 +120,7 @@ public final class PlotCreatorWorldRegistrar {
             Vector3i min = draft.boundsMin();
             Vector3i max = draft.boundsMax();
             footprint = new PlotFootprintRecord(min.x, min.y, min.z, max.x, max.y, max.z);
+            groundedSign = new Vector3i(footprint.horizontalCenterX(), anchor.y, footprint.horizontalCenterZ());
         }
 
         long now = System.currentTimeMillis();
@@ -103,9 +130,9 @@ public final class PlotCreatorWorldRegistrar {
                 def.getId(),
                 PlotInstanceState.COMPLETE,
                 footprint,
-                anchor.x,
-                anchor.y,
-                anchor.z,
+                groundedSign.x,
+                groundedSign.y,
+                groundedSign.z,
                 now
             );
         inst.setPlacementPrefabYaw(yaw);

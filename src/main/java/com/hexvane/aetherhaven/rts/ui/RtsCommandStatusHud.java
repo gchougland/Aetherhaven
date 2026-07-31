@@ -2,7 +2,6 @@ package com.hexvane.aetherhaven.rts.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.rts.RtsCommandPlayerComponent;
-import com.hexvane.aetherhaven.ui.PlayerToolKeybindLabels;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -10,6 +9,8 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import javax.annotation.Nonnull;
 
 public final class RtsCommandStatusHud extends CustomUIHud {
+    private static final String TOOL_HELP_ROWS = "#ToolHelpRows";
+    private static final String CONTROLS_ROWS = "#ControlsRows";
 
     public RtsCommandStatusHud(@Nonnull PlayerRef playerRef) {
         super(playerRef, AetherhavenConstants.RTS_COMMAND_HUD_KEY, 0);
@@ -26,18 +27,12 @@ public final class RtsCommandStatusHud extends CustomUIHud {
         b.set("#HudTitle.TextSpans", Message.translation(p + ".hudTitle"));
         b.set("#OrderModeLine.TextSpans", Message.translation(orderModeKey(session, p)));
         b.set("#StanceLine.TextSpans", Message.translation(stanceKey(session, p)));
-        b.set("#ToolHelpLine.TextSpans", PlayerToolKeybindLabels.paramMessage(
-            PlayerToolKeybindLabels.journalOrDefaults(getPlayerRef()),
-            toolHelpKey
-        ));
+        RtsHudHotkeyHints.appendToolHelpRows(b, TOOL_HELP_ROWS, toolHelpKey, getPlayerRef());
         b.set(
             "#SelectedLine.TextSpans",
             Message.translation(p + ".hudSelected").param("n", String.valueOf(session.getSelectedGuardUuids().size()))
         );
-        b.set("#ControlsLine.TextSpans", PlayerToolKeybindLabels.paramMessage(
-            PlayerToolKeybindLabels.journalOrDefaults(getPlayerRef()),
-            p + ".hudControls"
-        ));
+        RtsHudHotkeyHints.appendControlsRows(b, CONTROLS_ROWS, getPlayerRef());
         this.update(false, b);
     }
 

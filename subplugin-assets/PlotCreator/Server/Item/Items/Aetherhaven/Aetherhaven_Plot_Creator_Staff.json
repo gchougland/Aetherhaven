@@ -7,24 +7,16 @@
     "TimeSeconds": 3,
     "Input": [
       {
-        "ItemId": "Ingredient_Bar_Adamantite",
-        "Quantity": 2
-      },
-      {
-        "ItemId": "Ingredient_Bar_Thorium",
-        "Quantity": 2
-      },
-      {
-        "ItemId": "Ingredient_Bar_Cobalt",
-        "Quantity": 2
+        "ItemId": "Ingredient_Bar_Iron",
+        "Quantity": 8
       },
       {
         "ResourceTypeId": "Wood_Trunk",
-        "Quantity": 6
+        "Quantity": 10
       },
       {
         "ItemId": "Ingredient_Fibre",
-        "Quantity": 1
+        "Quantity": 10
       }
     ],
     "BenchRequirement": [
@@ -73,6 +65,16 @@
   "Interactions": {
     "Primary": {
       "Interactions": [
+        {
+          "Type": "AetherhavenPlotCreatorBoundsDrag",
+          "AllowIndefiniteHold": true,
+          "DisplayProgress": false,
+          "Next": {
+            "0": {
+              "Type": "Simple"
+            }
+          }
+        },
         {
           "Type": "AetherhavenPlotCreatorBlock"
         }

@@ -39,12 +39,13 @@ public final class PoiDebugLineHelper {
         if (matrix == null) {
             return;
         }
+        int renderFlags = flags | DebugUtils.FLAG_NO_WIREFRAME;
         DisplayDebug packet = new DisplayDebug(
             DebugShape.Cylinder,
             Matrix4dUtil.asFloatData(matrix),
             color,
             timeSeconds,
-            (byte) flags,
+            (byte) renderFlags,
             null,
             DebugUtils.DEFAULT_OPACITY
         );

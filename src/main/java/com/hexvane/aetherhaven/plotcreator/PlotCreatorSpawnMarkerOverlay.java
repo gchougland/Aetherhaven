@@ -62,7 +62,7 @@ public final class PlotCreatorSpawnMarkerOverlay {
                 Matrix4dUtil.asFloatData(m),
                 color,
                 MARKER_HOLD_SECONDS,
-                (byte) PathDebugPreviewUtil.FLAG_MACHINIMA,
+                (byte) PathDebugPreviewUtil.FLAG_SOLID_OVERLAY,
                 null,
                 OPACITY
             );

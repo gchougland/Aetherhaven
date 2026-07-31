@@ -49,10 +49,11 @@ aetherhaven.shop.hud.price={gold} gold each
 aetherhaven.shop.hud.priceBatch={gold} gold for {count} {item}
 aetherhaven.shop.hud.stock={n} left
 aetherhaven.shop.hud.stockBatches={batches} lots left ({items} total)
-aetherhaven.shop.hud.hintNpc={use} to buy. NPC stock restocks at dawn
-aetherhaven.shop.hud.hintPlayerBuy={use} to buy
-aetherhaven.shop.hud.hintPlayerList={use} with an item in hand to list for sale
-aetherhaven.shop.hud.hintPlayerOwn={use} to take your items back
+aetherhaven.shop.hud.hintNpc.desc=to buy
+aetherhaven.shop.hud.hintNpc.restock=NPC stock restocks at dawn
+aetherhaven.shop.hud.hintPlayerBuy.desc=to buy
+aetherhaven.shop.hud.hintPlayerList.desc=with an item in hand to list for sale
+aetherhaven.shop.hud.hintPlayerOwn.desc=to take your items back
 aetherhaven.shop.hud.hintPlayerEmpty=Nothing for sale
 
 aetherhaven.shop.buy.title=Buy

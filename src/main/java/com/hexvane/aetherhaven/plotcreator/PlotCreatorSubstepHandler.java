@@ -192,52 +192,10 @@ public final class PlotCreatorSubstepHandler {
     ) {
         Store<EntityStore> store = commandBuffer.getStore();
         PlotCreatorDraft draft = session.getDraft();
-        if (draft.getStep() != PlotCreatorStep.CORNER_FIRST
-            && draft.getStep() != PlotCreatorStep.CORNER_SECOND
-            && draft.getStep() != PlotCreatorStep.ANCHOR
-            && draft.getStep() != PlotCreatorStep.SUBSTEP) {
+        if (draft.getStep() != PlotCreatorStep.SUBSTEP) {
             return false;
         }
-        return switch (draft.getStep()) {
-            case CORNER_FIRST -> {
-                draft.setCornerFirst(targetBlock);
-                PlotCreatorService.advance(session, ref, store);
-                playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.cornerFirstSet"));
-                yield true;
-            }
-            case CORNER_SECOND -> {
-                draft.setCornerSecond(targetBlock);
-                PlotCreatorService.advance(session, ref, store);
-                playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.cornerSecondSet"));
-                yield true;
-            }
-            case ANCHOR -> {
-                if (draft.isInsideBounds(targetBlock)) {
-                    playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.anchorInside"));
-                    yield true;
-                }
-                if (!PlotCreatorAnchorRules.isOutsideCorner(draft, targetBlock)) {
-                    playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.anchorNotCorner"));
-                    yield true;
-                }
-                Vector3i previousAnchor = draft.getPlotAnchor();
-                if (draft.isBuildingEditorMode() && previousAnchor != null) {
-                    BuildingEditorSessionStarter.rebaseLocalsForNewPlotSign(
-                        draft,
-                        previousAnchor,
-                        targetBlock
-                    );
-                }
-                draft.setPlotAnchor(targetBlock);
-                draft.setPrefabOriginMin(new Vector3i(draft.boundsMin()));
-                PlotCreatorLocalCoords.recomputeAnchorOffset(draft);
-                PlotCreatorService.advance(session, ref, store);
-                playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.anchorSet"));
-                yield true;
-            }
-            case SUBSTEP -> handleSubstepClick(session, targetBlock, playerRef, ref, commandBuffer);
-            default -> false;
-        };
+        return handleSubstepClick(session, targetBlock, playerRef, ref, commandBuffer);
     }
 
     private static boolean handleSubstepClick(

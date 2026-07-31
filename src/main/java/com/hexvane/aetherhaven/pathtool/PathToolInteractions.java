@@ -33,6 +33,8 @@ import javax.annotation.Nullable;
 public final class PathToolInteractions {
     private static final double NODE_PICK_RADIUS = 0.45;
     private static final double PICK_RAY_MAX = 128.0;
+    /** Matches path tool item UseDistance (creative). */
+    private static final double BLOCK_PICK_MAX = 6.0;
     private static final float ROTATE_STEP_DEG = 15f;
 
     private PathToolInteractions() {}
@@ -71,7 +73,6 @@ public final class PathToolInteractions {
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull World world,
-        @Nonnull Vector3i targetBlock,
         @Nonnull InteractionContext context,
         @Nonnull Store<EntityStore> store
     ) {
@@ -124,6 +125,12 @@ public final class PathToolInteractions {
             pathToast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.pathTool.toastRemoved");
             return;
         }
+        @Nullable
+        Vector3i targetBlock = pickTargetBlock(playerRef, store);
+        if (targetBlock == null) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
         double yo = plugin.getConfig().get().getPathToolNodeBlockYOffset();
         Vector3d pos = blockTopCenter(targetBlock, yo);
         double yaw = 0.0;
@@ -148,7 +155,6 @@ public final class PathToolInteractions {
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull World world,
-        @Nonnull Vector3i targetBlock,
         @Nonnull InteractionContext context,
         @Nonnull Store<EntityStore> store
     ) {
@@ -218,6 +224,17 @@ public final class PathToolInteractions {
         if (st.getGizmoMode() == PathToolGizmoMode.Translate
             && st.getSelectedNodeId() != null
             && st.findNode(st.getSelectedNodeId()) != null) {
+            @Nullable
+            Vector3i targetBlock = pickTargetBlock(playerRef, store);
+            if (targetBlock == null) {
+                send(
+                    playerRef,
+                    commandBuffer,
+                    Message.translation("aetherhaven_items.aetherhaven.pathTool.noGroundOnAim")
+                );
+                context.getState().state = InteractionState.Failed;
+                return;
+            }
             Vector3d npos = blockTopCenter(targetBlock, yo);
             @Nonnull
             List<PathToolNode> list = st.getNodes();
@@ -652,6 +669,14 @@ public final class PathToolInteractions {
             }
         }
         return null;
+    }
+
+    @Nullable
+    private static Vector3i pickTargetBlock(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        return TargetUtil.getTargetBlock(playerRef, BLOCK_PICK_MAX, store);
     }
 
     @Nullable

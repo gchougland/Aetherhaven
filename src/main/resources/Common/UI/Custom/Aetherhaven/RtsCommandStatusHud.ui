@@ -33,14 +33,12 @@ Group #RtsCommandHudRoot {
         Style: (...$C.@DefaultLabelStyle, TextColor: #c8d0d8, FontSize: 15);
         Anchor: (Bottom: 6);
       }
-      Label #ToolHelpLine {
-        Text: " ";
-        Style: (...$C.@DefaultLabelStyle, TextColor: #dce4ec, FontSize: 14, Wrap: true);
+      Group #ToolHelpRows {
+        LayoutMode: Top;
         Anchor: (Bottom: 8);
       }
-      Label #ControlsLine {
-        Text: " ";
-        Style: (...$C.@DefaultLabelStyle, TextColor: #98a0a8, FontSize: 12, Wrap: true);
+      Group #ControlsRows {
+        LayoutMode: Top;
       }
     }
   }

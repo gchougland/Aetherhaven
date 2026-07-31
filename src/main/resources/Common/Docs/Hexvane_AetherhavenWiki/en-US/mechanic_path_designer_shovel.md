@@ -27,8 +27,8 @@ The HUD reminds you to switch to **Place** mode when you are ready to lay path b
 ### Move, Rotate, and Place
 
 * **Secondary (right click) on ground** — add a node.
-* **Secondary while aiming at a node** — remove that node.
-* **Primary (left click) on a node** — select it.
+* **Secondary while looking at a node** — remove that node.
+* **Primary (left click) while looking at a node** — select it.
 * **Primary on ground (Move mode)** — move the selected node.
 * **F (Rotate mode)** — nudge the selected node's direction.
 * **F (Place mode)** — place the path on the ground.
@@ -38,7 +38,7 @@ The HUD reminds you to switch to **Place** mode when you are ready to lay path b
 
 ### Remove
 
-* **Primary** — select a placed path.
+* **Primary while looking at a placed path** — select it.
 * **F** — remove the selected path.
 * **Q** — next mode.
 

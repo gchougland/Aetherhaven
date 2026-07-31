@@ -22,13 +22,11 @@ Group #ShopSpotStatusRoot {
       Padding: (Left: 14, Right: 14, Top: 10, Bottom: 14);
 
       Group {
-        LayoutMode: Center;
+        LayoutMode: Top;
         Anchor: (Bottom: 8, Horizontal: 0);
-        Label #HintLine {
-          Visible: false;
-          Text: " ";
-          Style: (...$C.@DefaultLabelStyle, TextColor: #9aa8b8, FontSize: 14, Wrap: true, HorizontalAlignment: Center);
-          Anchor: (Width: 380);
+        Group #HintRows {
+          LayoutMode: Top;
+          Visible: true;
         }
       }
 

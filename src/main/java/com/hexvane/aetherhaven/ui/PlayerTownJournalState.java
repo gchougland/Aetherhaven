@@ -458,54 +458,6 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         hudBackgroundOpacity = 0f;
         dialogueSpeechEnabled = true;
         dialogueSpeechVolumePercent = 70;
-        resetToolKeyLabels();
-    }
-
-    @Nonnull
-    public String getToolKeyLabel(@Nonnull ToolKeybindSlot slot) {
-        return switch (slot) {
-            case PRIMARY -> toolKeyPrimary;
-            case SECONDARY -> toolKeySecondary;
-            case USE -> toolKeyUse;
-            case ABILITY1 -> toolKeyAbility1;
-            case ABILITY2 -> toolKeyAbility2;
-            case ABILITY3 -> toolKeyAbility3;
-            case ESCAPE -> toolKeyEscape;
-            case SHIFT -> toolKeyShift;
-            case CTRL -> toolKeyCtrl;
-            case SPACE -> toolKeySpace;
-            case MOVEMENT -> toolKeyMovement;
-        };
-    }
-
-    public void setToolKeyLabel(@Nonnull ToolKeybindSlot slot, @Nullable String label) {
-        String value = label != null ? label.trim() : "";
-        switch (slot) {
-            case PRIMARY -> toolKeyPrimary = value;
-            case SECONDARY -> toolKeySecondary = value;
-            case USE -> toolKeyUse = value;
-            case ABILITY1 -> toolKeyAbility1 = value;
-            case ABILITY2 -> toolKeyAbility2 = value;
-            case ABILITY3 -> toolKeyAbility3 = value;
-            case ESCAPE -> toolKeyEscape = value;
-            case SHIFT -> toolKeyShift = value;
-            case CTRL -> toolKeyCtrl = value;
-            case SPACE -> toolKeySpace = value;
-            case MOVEMENT -> toolKeyMovement = value;
-        }
-    }
-
-    public void setToolKeyLabels(@Nonnull ToolKeybindSlot[] slots, @Nonnull String[] labels) {
-        int n = Math.min(slots.length, labels.length);
-        for (int i = 0; i < n; i++) {
-            setToolKeyLabel(slots[i], labels[i]);
-        }
-    }
-
-    public void resetToolKeyLabels() {
-        for (ToolKeybindSlot slot : ToolKeybindSlot.values()) {
-            setToolKeyLabel(slot, "");
-        }
     }
 
     public boolean isDialogueSpeechEnabled() {

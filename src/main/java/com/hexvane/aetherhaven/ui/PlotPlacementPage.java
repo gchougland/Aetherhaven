@@ -154,17 +154,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 .param("oz", prefabO.z)
                 .param("step", session.getRotationSteps())
         );
-        commandBuilder.set(
-            "#Tips.TextSpans",
-            Message.join(
-                PlayerToolKeybindLabels.paramMessage(
-                    PlayerToolKeybindLabels.journalOrDefaults(ref, store),
-                    MSG_PLOT_UI + ".tipsControls"
-                ),
-                Message.raw("\n\n"),
-                Message.translation(MSG_PLOT_UI + ".cameraHint")
-            )
-        );
+        PlotPlacementHotkeyTips.appendTipsRows(commandBuilder, "#TipsRows");
 
         commandBuilder.set("#BirdsEyeToggle #CheckBox.Value", birdsEyeEnabled);
         commandBuilder.set("#BirdsEyeZoomRow.Visible", birdsEyeEnabled);

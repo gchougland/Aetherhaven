@@ -90,6 +90,12 @@
   },
   "Quality": "Uncommon",
   "Set": "Aetherhaven",
+  "HudUI": [
+    {
+      "Path": "Aetherhaven/PathToolKeyLegend.ui",
+      "Type": "Legend"
+    }
+  ],
   "Tags": {
     "Family": ["Aetherhaven"],
     "Type": ["Tool"]

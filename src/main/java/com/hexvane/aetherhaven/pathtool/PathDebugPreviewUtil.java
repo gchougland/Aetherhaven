@@ -147,7 +147,7 @@ public final class PathDebugPreviewUtil {
         m.identity();
         m.translate(center.x(), center.y(), center.z());
         m.scale(radius, radius, radius);
-        add(player, DebugShape.Sphere, m, color, opacity, FLAG_MACHINIMA, PATH_TOOL_DEBUG_HOLD_SECONDS);
+        add(player, DebugShape.Sphere, m, color, opacity, FLAG_SOLID_OVERLAY, PATH_TOOL_DEBUG_HOLD_SECONDS);
     }
 
     public static void drawLine(
@@ -163,7 +163,7 @@ public final class PathDebugPreviewUtil {
         if (matrix == null) {
             return;
         }
-        add(player, DebugShape.Cylinder, matrix, color, 0.75f, FLAG_MACHINIMA, PATH_TOOL_DEBUG_HOLD_SECONDS);
+        add(player, DebugShape.Cylinder, matrix, color, 0.75f, FLAG_SOLID_OVERLAY, PATH_TOOL_DEBUG_HOLD_SECONDS);
     }
 
     /**

@@ -19,24 +19,8 @@ public final class PlotCreatorHudControls {
                 row(ToolKeybindSlot.ABILITY2, "hud.WELCOME.e"),
                 row(ToolKeybindSlot.ABILITY3, "hud.common.r")
             );
-            case CORNER_FIRST -> List.of(
-                row(ToolKeybindSlot.PRIMARY, "hud.CORNER_FIRST.primary"),
-                row(ToolKeybindSlot.ABILITY1, "hud.common.q"),
-                row(ToolKeybindSlot.ABILITY2, "hud.common.e"),
-                row(ToolKeybindSlot.ABILITY3, "hud.common.r")
-            );
-            case CORNER_SECOND -> List.of(
-                row(ToolKeybindSlot.PRIMARY, "hud.CORNER_SECOND.primary"),
-                row(ToolKeybindSlot.ABILITY1, "hud.common.q"),
-                row(ToolKeybindSlot.ABILITY2, "hud.common.e"),
-                row(ToolKeybindSlot.ABILITY3, "hud.common.r")
-            );
-            case ANCHOR -> List.of(
-                row(ToolKeybindSlot.PRIMARY, "hud.ANCHOR.primary"),
-                row(ToolKeybindSlot.ABILITY1, "hud.common.q"),
-                row(ToolKeybindSlot.ABILITY2, "hud.common.e"),
-                row(ToolKeybindSlot.ABILITY3, "hud.common.r")
-            );
+            case BOUNDS -> boundsRows(session);
+            case ANCHOR -> List.of();
             case PREFAB_SAVE -> List.of(
                 row(ToolKeybindSlot.USE, "hud.PREFAB_SAVE.f"),
                 row(ToolKeybindSlot.ABILITY1, "hud.common.q"),
@@ -95,6 +79,22 @@ public final class PlotCreatorHudControls {
             );
             case DONE -> List.of();
         });
+        return rows;
+    }
+
+    @Nonnull
+    private static List<Row> boundsRows(@Nonnull PlotCreatorSession session) {
+        PlotCreatorDraft draft = session.getDraft();
+        List<Row> rows = new ArrayList<>();
+        if (draft.getBoundsPhase() == PlotCreatorBoundsPhase.FACE_ADJUST) {
+            rows.add(row(ToolKeybindSlot.PRIMARY, "hud.BOUNDS.primaryFace"));
+            rows.add(row(ToolKeybindSlot.ABILITY1, "hud.BOUNDS.redo"));
+        } else {
+            rows.add(row(ToolKeybindSlot.PRIMARY, "hud.BOUNDS.primary"));
+            rows.add(row(ToolKeybindSlot.ABILITY1, "hud.common.q"));
+        }
+        rows.add(row(ToolKeybindSlot.ABILITY2, "hud.BOUNDS.confirm"));
+        rows.add(row(ToolKeybindSlot.ABILITY3, "hud.common.r"));
         return rows;
     }
 

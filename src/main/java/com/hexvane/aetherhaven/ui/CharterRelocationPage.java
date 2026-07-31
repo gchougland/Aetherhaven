@@ -84,14 +84,7 @@ public final class CharterRelocationPage extends AetherhavenInteractiveCustomUIP
                 .param("sz", a.z)
                 .param("step", session.getRotationSteps())
         );
-        commandBuilder.set(
-            "#Tips.TextSpans",
-            Message.join(
-                Message.translation("aetherhaven_plot_move.aetherhaven.ui.charterrelocation.tips"),
-                Message.raw("\n\n"),
-                Message.translation("aetherhaven_plot_move.aetherhaven.ui.plotplacement.cameraHint")
-            )
-        );
+        PlotPlacementHotkeyTips.appendCharterTipsRows(commandBuilder, "#TipsRows");
 
         commandBuilder.set("#PlotTypeDropdown.Visible", false);
         commandBuilder.set("#PlotTypeLabel.Visible", false);

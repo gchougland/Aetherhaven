@@ -65,4 +65,14 @@ public final class PlotFootprintRecord {
     public boolean containsBlock(int x, int y, int z) {
         return x >= minX && x <= maxX && y >= minY && y <= maxY && z >= minZ && z <= maxZ;
     }
+
+    /** Horizontal center block column (X) of this footprint. */
+    public int horizontalCenterX() {
+        return (int) Math.round((minX + maxX) / 2.0);
+    }
+
+    /** Horizontal center block column (Z) of this footprint. */
+    public int horizontalCenterZ() {
+        return (int) Math.round((minZ + maxZ) / 2.0);
+    }
 }

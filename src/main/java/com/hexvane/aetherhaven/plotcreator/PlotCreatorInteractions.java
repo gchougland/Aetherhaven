@@ -70,6 +70,14 @@ public final class PlotCreatorInteractions {
             context.getState().state = InteractionState.Failed;
             return;
         }
+        PlotCreatorDraft draft = session.getDraft();
+        if (draft.getStep() == PlotCreatorStep.BOUNDS && draft.getBoundsPhase() == PlotCreatorBoundsPhase.FACE_ADJUST) {
+            draft.resetBoundsEditing();
+            PlotCreatorService.refreshBoundsVisuals(session, playerRef);
+            refreshHud(playerRef, ref, commandBuffer.getStore(), session);
+            context.getState().state = InteractionState.Finished;
+            return;
+        }
         PlotCreatorService.back(session, ref, commandBuffer.getStore());
         refreshHud(playerRef, ref, commandBuffer.getStore(), session);
         context.getState().state = InteractionState.Finished;
@@ -215,28 +223,30 @@ public final class PlotCreatorInteractions {
             PlotCreatorService.advance(session, ref, store);
             return true;
         }
-        if (step == PlotCreatorStep.CORNER_FIRST && d.getCornerFirst() == null) {
-            playerRef.sendMessage(Message.translation(MSG + ".error.needCornerFirst"));
-            return false;
-        }
-        if (step == PlotCreatorStep.CORNER_SECOND && d.getCornerSecond() == null) {
-            playerRef.sendMessage(Message.translation(MSG + ".error.needCornerSecond"));
-            return false;
-        }
-        if (step == PlotCreatorStep.ANCHOR) {
-            Vector3i anchor = d.getPlotAnchor();
-            if (anchor == null) {
-                playerRef.sendMessage(Message.translation(MSG + ".error.needAnchor"));
+        if (step == PlotCreatorStep.BOUNDS) {
+            if (d.getCornerFirst() == null || d.getCornerSecond() == null) {
+                playerRef.sendMessage(Message.translation(MSG + ".error.needBounds"));
                 return false;
             }
-            if (d.isInsideBounds(anchor)) {
-                playerRef.sendMessage(Message.translation(MSG + ".error.anchorInside"));
+            Vector3i min = d.boundsMin();
+            Vector3i max = d.boundsMax();
+            String boundsErr = PlotCreatorBoundsValidation.validateMinMax(min, max);
+            if (boundsErr != null) {
+                playerRef.sendMessage(Message.translation(MSG + ".error." + boundsErr));
                 return false;
             }
-            if (!PlotCreatorAnchorRules.isOutsideCorner(d, anchor)) {
-                playerRef.sendMessage(Message.translation(MSG + ".error.anchorNotCorner"));
-                return false;
-            }
+            int width = max.x - min.x + 1;
+            int depth = max.z - min.z + 1;
+            int height = max.y - min.y + 1;
+            playerRef.sendMessage(
+                Message.translation(MSG + ".hint.boundsSet")
+                    .param("width", width)
+                    .param("depth", depth)
+                    .param("height", height)
+            );
+            PlotCreatorAutoAnchor.applyCenter(d);
+            PlotCreatorService.advance(session, ref, store);
+            return true;
         }
         if (step == PlotCreatorStep.PREFAB_SAVE) {
             if (d.getConstructionId() == null || d.getConstructionId().isBlank()) {
@@ -338,7 +348,16 @@ public final class PlotCreatorInteractions {
                 PlotCreatorService.advance(session, ref, store);
                 yield true;
             }
-            case CORNER_FIRST, CORNER_SECOND, ANCHOR, SUBSTEP -> {
+            case BOUNDS -> {
+                playerRef.sendMessage(Message.translation(MSG + ".hint.boundsHelp"));
+                yield true;
+            }
+            case ANCHOR -> {
+                PlotCreatorAutoAnchor.applyCenter(d);
+                PlotCreatorService.advance(session, ref, store);
+                yield true;
+            }
+            case SUBSTEP -> {
                 playerRef.sendMessage(Message.translation(MSG + ".hint.clickBlock"));
                 yield true;
             }

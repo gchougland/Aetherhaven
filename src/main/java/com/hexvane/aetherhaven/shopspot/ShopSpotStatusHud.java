@@ -3,8 +3,6 @@ package com.hexvane.aetherhaven.shopspot;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.TownRecord;
-import com.hexvane.aetherhaven.ui.PlayerToolKeybindLabels;
-import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
 import com.hexvane.aetherhaven.ui.UiMaterialLabels;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
@@ -38,8 +36,7 @@ public final class ShopSpotStatusHud extends CustomUIHud {
     ) {
         UICommandBuilder b = new UICommandBuilder();
         b.set("#ShopSpotHudTitle.TextSpans", Message.translation(MSG + ".title"));
-        PlayerTownJournalState journal = PlayerToolKeybindLabels.journalOrDefaults(getPlayerRef());
-        applyHint(b, record, town, viewerUuid, gameDay, journal);
+        applyHint(b, record, town, viewerUuid, gameDay, getPlayerRef());
         if (!gameDay && !record.isPlayerControlled()) {
             showClosed(b, Message.translation(MSG + ".closedNight"));
             this.update(false, b);
@@ -115,15 +112,10 @@ public final class ShopSpotStatusHud extends CustomUIHud {
         @Nonnull TownRecord town,
         @Nonnull UUID viewerUuid,
         boolean gameDay,
-        @Nonnull PlayerTownJournalState journal
+        @Nonnull PlayerRef playerRef
     ) {
         String hintKey = ShopSpotHudHints.hintTranslationKey(record, town, viewerUuid, gameDay);
-        if (hintKey == null) {
-            b.set("#HintLine.Visible", false);
-            return;
-        }
-        b.set("#HintLine.Visible", true);
-        b.set("#HintLine.TextSpans", PlayerToolKeybindLabels.paramMessage(journal, hintKey));
+        ShopSpotHudHotkeyHints.appendHintRows(b, "#HintRows", hintKey, playerRef);
     }
 
     private static void showClosed(@Nonnull UICommandBuilder b, @Nonnull Message line) {

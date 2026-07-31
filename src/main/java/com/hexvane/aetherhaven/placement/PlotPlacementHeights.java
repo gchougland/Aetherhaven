@@ -8,8 +8,8 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import javax.annotation.Nonnull;
 
 /**
- * Resolves plot sign cell (terrain-snapped) and building prefab anchor (preview height) independently at placement
- * commit.
+ * Resolves plot sign cell (terrain-snapped at footprint center) and building prefab anchor (preview height)
+ * independently at placement commit.
  */
 public final class PlotPlacementHeights {
 

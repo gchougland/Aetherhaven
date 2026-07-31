@@ -1,0 +1,8 @@
+# Client UI lang for CustomUI documents (file name has no underscore so %aetherhaven.*; references parse).
+pathTool.hudTitle=Path tool
+pathTool.keyLegend.primary=Primary action
+pathTool.keyLegend.secondary=Secondary action
+pathTool.keyLegend.use=Use / interact
+pathTool.keyLegend.ability1=Cycle mode
+pathTool.keyLegend.ability2=Cycle path width
+pathTool.keyLegend.ability3=Cycle path style

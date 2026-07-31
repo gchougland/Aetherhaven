@@ -1,0 +1,12 @@
+$C = "../Common.ui";
+
+Group #InfoRow {
+  LayoutMode: Top;
+  Anchor: (Bottom: 6);
+  Padding: (Left: 4);
+
+  Label #InfoLabel {
+    Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #b0b8c0, Wrap: true);
+    Text: "";
+  }
+}

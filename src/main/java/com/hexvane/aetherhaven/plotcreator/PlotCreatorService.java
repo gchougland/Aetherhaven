@@ -164,23 +164,55 @@ public final class PlotCreatorService {
     }
 
     public static void refreshWireframe(@Nonnull PlotCreatorSession session, @Nonnull PlayerRef playerRef) {
+        refreshBoundsVisuals(session, playerRef);
+    }
+
+    /** Wireframe during drag and face panels during face adjust. */
+    public static void refreshBoundsVisuals(@Nonnull PlotCreatorSession session, @Nonnull PlayerRef playerRef) {
         PlotCreatorDraft draft = session.getDraft();
         World world = session.getWorld();
-        if (draft.getCornerFirst() == null || draft.getCornerSecond() == null) {
+        UUID uuid = playerRef.getUuid();
+        @Nullable
+        BoundsPreview preview = boundsPreview(draft);
+        if (preview == null) {
             clearPlotCreatorWireframe(playerRef, world);
             return;
         }
-        Vector3i min = draft.boundsMin();
-        Vector3i max = draft.boundsMax();
-        PlotFootprintRecord fp = new PlotFootprintRecord(min.x, min.y, min.z, max.x, max.y, max.z);
-        UUID uuid = playerRef.getUuid();
         if (PLOT_CREATOR_WIREFRAME_ACTIVE.containsKey(uuid)) {
             PlotPlacementWireframeOverlay.clearFor(playerRef);
             restoreOtherDebugOverlays(playerRef, world);
         }
+        PlotFootprintRecord fp =
+            new PlotFootprintRecord(preview.min.x, preview.min.y, preview.min.z, preview.max.x, preview.max.y, preview.max.z);
         PlotPlacementWireframeOverlay.sendWithoutClear(playerRef, fp, true, null);
         PLOT_CREATOR_WIREFRAME_ACTIVE.put(uuid, Boolean.TRUE);
+        if (draft.getStep() == PlotCreatorStep.BOUNDS
+            && draft.getCornerFirst() != null
+            && draft.getCornerSecond() != null) {
+            PlotCreatorBoundsFaceOverlay.draw(
+                playerRef,
+                preview.min,
+                preview.max,
+                draft.getHoveredBoundsFace(),
+                draft.getActiveBoundsFaceDrag()
+            );
+        }
     }
+
+    @Nullable
+    static BoundsPreview boundsPreview(@Nonnull PlotCreatorDraft draft) {
+        if (draft.getCornerFirst() != null && draft.getCornerSecond() != null) {
+            return new BoundsPreview(draft.boundsMin(), draft.boundsMax());
+        }
+        Vector3i start = draft.getBoundsDragStart();
+        Vector3i end = draft.getBoundsDragEnd();
+        if (start != null && end != null) {
+            return new BoundsPreview(PlotCreatorBoundsValidation.min(start, end), PlotCreatorBoundsValidation.max(start, end));
+        }
+        return null;
+    }
+
+    record BoundsPreview(@Nonnull Vector3i min, @Nonnull Vector3i max) {}
 
     public static void refreshSpawnMarkers(@Nonnull PlotCreatorSession session, @Nonnull PlayerRef playerRef) {
         // Important-spot markers are entity-based (PlotCreatorSpotMarkerSync); debug spheres retired.
@@ -212,9 +244,9 @@ public final class PlotCreatorService {
     public static List<PlotCreatorStep> stepOrder(@Nonnull PlotCreatorDraft draft) {
         List<PlotCreatorStep> steps = new ArrayList<>();
         steps.add(PlotCreatorStep.WELCOME);
-        steps.add(PlotCreatorStep.CORNER_FIRST);
-        steps.add(PlotCreatorStep.CORNER_SECOND);
-        steps.add(PlotCreatorStep.ANCHOR);
+        if (!draft.isBuildingEditorMode()) {
+            steps.add(PlotCreatorStep.BOUNDS);
+        }
         steps.add(PlotCreatorStep.KIND);
         if (draft.hasKind(PlotBuildingKind.VARIANT)) {
             steps.add(PlotCreatorStep.VARIANT);
@@ -296,6 +328,9 @@ public final class PlotCreatorService {
             return;
         }
         PlotCreatorStep prev = order.get(idx - 1);
+        if (current == PlotCreatorStep.BOUNDS && prev == PlotCreatorStep.WELCOME) {
+            session.getDraft().resetBoundsEditing();
+        }
         if (current == PlotCreatorStep.MATERIALS && player != null && ref != null && store != null) {
             PlotCreatorMaterialsHelper.snapshotAndCloseMaterials(session, player, ref, store);
             PlotCreatorMaterialsActions.clearFillConfirm(session);
@@ -331,6 +366,20 @@ public final class PlotCreatorService {
         }
         if (step == PlotCreatorStep.SUBSTEP) {
             PlotCreatorSubstepGrants.grantCurrentSubstep(session, player, ref, store);
+        }
+        if (step == PlotCreatorStep.BOUNDS) {
+            PlotCreatorDraft d = session.getDraft();
+            d.setBoundsDragStart(null);
+            d.setBoundsDragEnd(null);
+            d.setActiveBoundsFaceDrag(null);
+            d.setBoundsPrimaryHeld(false);
+            d.setHoveredBoundsFace(null);
+            if (d.getCornerFirst() != null && d.getCornerSecond() != null) {
+                d.setBoundsPhase(PlotCreatorBoundsPhase.FACE_ADJUST);
+            } else {
+                d.setBoundsPhase(PlotCreatorBoundsPhase.INITIAL_DRAG);
+            }
+            PlotCreatorService.refreshBoundsVisuals(session, playerRef);
         }
         if (step == PlotCreatorStep.KIND) {
             PlotCreatorInteractions.openKindPanel(playerRef, ref, store, session);
@@ -442,6 +491,9 @@ public final class PlotCreatorService {
         applyConfigureInput(draft);
         if (draft.isDecorationOnly() && !draft.getBuildingTags().contains("decoration")) {
             draft.getBuildingTags().add("decoration");
+        }
+        if (draft.getPlotAnchor() == null && PlotCreatorAnchorRules.hasBounds(draft)) {
+            PlotCreatorAutoAnchor.applyCenter(draft);
         }
         if (draft.getPlotAnchor() != null) {
             PlotCreatorLocalCoords.recomputeAnchorOffset(draft);

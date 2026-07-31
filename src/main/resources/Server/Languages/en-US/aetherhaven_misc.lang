@@ -24,7 +24,7 @@ aetherhaven.banner.reputation.unlock.recipe={item}
 aetherhaven.banner.reputation.unlock.item={item} x{count}
 
 items.Aetherhaven_Building_Staff.name=Copper building staff
-items.Aetherhaven_Building_Staff.description=Primary sends a guiding bolt through blocks to the nearest assembly preview in range. Hold secondary and aim through blocks at that preview to channel and place building nodes after a brief hold (town build permission). Fills up to <color is="#4ade80">3×3×3</color> highlighted building nodes around your aim at once. While held, grants <color is="#60a5fa">+150 max mana</color>; each placed block costs <color is="#60a5fa">1 mana</color>. Mana refills faster if you stop using secondary for a couple of seconds. Higher-tier staves grant more mana and recover it faster. Passive plot assembly still progresses while you are away.
+items.Aetherhaven_Building_Staff.description=Build faster at plot signs. Hold secondary on green markers to place up to a <color is="#4ade80">3×3×3</color> area at once. Left click sends a bolt to the nearest marker. Grants <color is="#60a5fa">+150 max mana</color>. Each block costs <color is="#60a5fa">1 mana</color>.
 items.Aetherhaven_Building_Staff_Iron.name=Iron building staff
 items.Aetherhaven_Building_Staff_Iron.description=Same as the copper building staff. Secondary fills up to <color is="#4ade80">5×5×5</color> highlighted building nodes at once. While held, grants <color is="#60a5fa">+250 max mana</color> and faster mana recovery; each placed block costs <color is="#60a5fa">1 mana</color>.
 items.Aetherhaven_Building_Staff_Thorium.name=Thorium building staff

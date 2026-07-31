@@ -28,6 +28,13 @@ public final class PlotCreatorBootstrap {
             .register("AetherhavenPlotCreatorUse", PlotCreatorUseInteraction.class, PlotCreatorUseInteraction.CODEC);
         core
             .getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPlotCreatorBoundsDrag",
+                PlotCreatorBoundsDragInteraction.class,
+                PlotCreatorBoundsDragInteraction.CODEC
+            );
+        core
+            .getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenPlotCreatorBlock", PlotCreatorBlockInteraction.class, PlotCreatorBlockInteraction.CODEC);
         core
             .getCodecRegistry(Interaction.CODEC)
@@ -139,5 +146,6 @@ public final class PlotCreatorBootstrap {
                     world.execute(() -> PlotCreatorSpotMarkerSpawner.purgeAllInWorld(world));
                 }
             );
+        PlotCreatorBoundsInput.register(plugin.getEventRegistry());
     }
 }

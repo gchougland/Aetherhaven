@@ -3,8 +3,7 @@ package com.hexvane.aetherhaven.pathtool;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.ui.AetherhavenUiLocalization;
-import com.hexvane.aetherhaven.ui.PlayerToolKeybindLabels;
-import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
+import com.hexvane.aetherhaven.ui.ToolKeybindDisplay;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
@@ -14,13 +13,21 @@ import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.List;
-import java.util.UUID;
 import javax.annotation.Nonnull;
 
 /** In-world HUD overlay for path width and mode; shown while the path tool is held. */
 public final class PathToolStatusHud extends CustomUIHud {
-    private static final String CONTROL_ROWS = "#ControlRows";
     private static final String LANG_PREFIX = "aetherhaven_items.";
+    private static final String[] HINT_GROUPS = {
+        "#RowsTranslate",
+        "#RowsRotate",
+        "#RowsCommit",
+        "#RowsRemove",
+        "#RowsStyleDesigner",
+        "#RowsStyleDesignerEdit",
+        "#RowsReplaceFilter",
+        "#RowsReplaceFilterEdit",
+    };
 
     public PathToolStatusHud(@Nonnull PlayerRef playerRef) {
         super(playerRef, AetherhavenConstants.PATH_TOOL_HUD_KEY, 0);
@@ -97,7 +104,6 @@ public final class PathToolStatusHud extends CustomUIHud {
                 Message.translation(LANG_PREFIX + "aetherhaven.pathTool.hudPlaceReminder")
             );
         }
-        b.clear(CONTROL_ROWS);
         boolean styleEditingActive = false;
         boolean replaceFilterEditingActive = false;
         Ref<EntityStore> ref = playerRef.getReference();
@@ -113,30 +119,47 @@ public final class PathToolStatusHud extends CustomUIHud {
                 replaceFilterEditingActive = PathToolReplaceFilterUi.isActivelyEditing(ref, store);
             }
         }
+        String activeGroup = hintGroupSelector(mode, styleEditingActive, replaceFilterEditingActive);
+        for (String group : HINT_GROUPS) {
+            b.set(group + ".Visible", group.equals(activeGroup));
+        }
         List<PathToolHudControls.Row> rows =
             PathToolHudControls.rowsFor(mode, styleEditingActive, replaceFilterEditingActive);
-        PlayerTownJournalState journal = PlayerToolKeybindLabels.journalOrDefaults(playerRef);
         for (int i = 0; i < rows.size(); i++) {
             PathToolHudControls.Row row = rows.get(i);
-            String base = CONTROL_ROWS + "[" + i + "]";
+            String rowPrefix = activeGroup + " #";
             if (row.infoOnly()) {
-                b.append(CONTROL_ROWS, "Aetherhaven/PathToolHudInfoRow.ui");
                 b.set(
-                    base + " #InfoLabel.TextSpans",
+                    rowPrefix + "Info" + i + ".TextSpans",
                     Message.translation(LANG_PREFIX + row.descriptionLangKey())
                 );
             } else {
-                b.append(CONTROL_ROWS, "Aetherhaven/PathToolHudControlRow.ui");
                 b.set(
-                    base + " #KeyLabel.TextSpans",
-                    Message.raw(PlayerToolKeybindLabels.resolve(journal, row.slot()))
+                    rowPrefix + "Key" + i + ".TextSpans",
+                    Message.raw(ToolKeybindDisplay.labelFor(playerRef, row.slot()))
                 );
                 b.set(
-                    base + " #DescLabel.TextSpans",
+                    rowPrefix + "Desc" + i + ".TextSpans",
                     Message.translation(LANG_PREFIX + row.descriptionLangKey())
                 );
             }
         }
         this.update(false, b);
+    }
+
+    @Nonnull
+    private static String hintGroupSelector(
+        @Nonnull PathToolGizmoMode mode,
+        boolean styleEditingActive,
+        boolean replaceFilterEditingActive
+    ) {
+        return switch (mode) {
+            case Translate -> "#RowsTranslate";
+            case Rotate -> "#RowsRotate";
+            case Commit -> "#RowsCommit";
+            case Remove -> "#RowsRemove";
+            case StyleDesigner -> styleEditingActive ? "#RowsStyleDesignerEdit" : "#RowsStyleDesigner";
+            case ReplaceFilter -> replaceFilterEditingActive ? "#RowsReplaceFilterEdit" : "#RowsReplaceFilter";
+        };
     }
 }

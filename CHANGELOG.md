@@ -11,6 +11,7 @@
 
 ### Changed
 
+- **Tool HUD key hints** — Path tool hints read your local Hytale keybind settings when available, with a builder style key legend on the shovel. Other tool HUDs use the same label lookup with vanilla defaults as fallback. The Town Journal tool key labels setting was removed.
 - **Workplace slots** — Town record shelves list every worker a building needs.
 
 ### Fixed
@@ -34,7 +35,6 @@
 - **Community submission editor** — In Creative mode, the building editor staff has a My submissions tab. Edit and save to upload a new version. Pending updates replace your submission. Live buildings stay up until an update is approved.
 - **Debug commands for quest board, inn, and town rank** — `/ah questboard reroll`, `/ah inn reroll`, and `/ah townrank set <rank>`. Optional `--town` and `--player` targeting.
 - **Command tab completion** — Aetherhaven commands suggest values while you type (construction ids, town names, quest ids, and more).
-- **Tool key labels** — In the Town Journal under Settings, Personal, open Tool key labels to choose what keys show on tool hints for the path shovel, plot staff, patrol wand, shop spots, guard command, and more. This only changes what you see. Set each label to match your game settings so the hints stay accurate.
 - **Multi town membership** — You can join other towns as a guest while still owning only one. Use the town picker in the Town Journal when you belong to more than one town.
 - **Chalk for miners** — Chalk is now a valid material option for miners.
 - **Keep water when building** — New plot creator option for docks and boat plots. Water stays around the build during assembly. Empty markers inside the building still hollow out interiors.

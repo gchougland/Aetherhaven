@@ -53,7 +53,12 @@ public final class PlotCreatorBlockInteraction extends SimpleBlockInteraction {
             context.getState().state = InteractionState.Failed;
             return;
         }
+        PlotCreatorDraft draft = session.getDraft();
         Store<EntityStore> store = commandBuffer.getStore();
+        if (draft.getStep() == PlotCreatorStep.BOUNDS) {
+            context.getState().state = InteractionState.Finished;
+            return;
+        }
         Vector3i block =
             PlotCreatorBlockTarget.resolve(ref, store, context, targetBlock);
         if (block == null) {
@@ -61,7 +66,6 @@ public final class PlotCreatorBlockInteraction extends SimpleBlockInteraction {
             return;
         }
         if (type == InteractionType.Secondary) {
-            PlotCreatorDraft draft = session.getDraft();
             if (draft.getStep() == PlotCreatorStep.SUBSTEP) {
                 if (PlotCreatorSubstepHandler.tryRemoveCurrentSubstepAt(session, block, playerRef, commandBuffer)) {
                     PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);

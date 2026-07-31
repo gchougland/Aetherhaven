@@ -228,7 +228,11 @@ public final class WallPlacementEditHelper {
         }
         IPrefabBuffer buf = PrefabBufferUtil.getCached(path);
         Vector3i preview = new Vector3i(signX, previewY, signZ);
-        return PlotSignGrounding.resolveSignCell(world, preview, def, seg.resolvePrefabYaw(), buf);
+        Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(preview, seg.resolvePrefabYaw());
+        PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, seg.resolvePrefabYaw(), buf);
+        int startY = Math.max(previewY, fp.getMaxY());
+        int signY = PlotSignGrounding.resolveSignYAtColumn(world, signX, signZ, startY, previewY);
+        return new Vector3i(signX, signY, signZ);
     }
 
     @Nullable

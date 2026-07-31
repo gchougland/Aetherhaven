@@ -3,59 +3,72 @@ package com.hexvane.aetherhaven.pathtool;
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
 import com.hypixel.hytale.component.CommandBuffer;
-import org.joml.Vector3i;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionType;
+import com.hypixel.hytale.protocol.WaitForDataFrom;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
-import com.hypixel.hytale.server.core.modules.interaction.interaction.config.client.SimpleBlockInteraction;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public final class PathToolSelectInteraction extends SimpleBlockInteraction {
+public final class PathToolSelectInteraction extends SimpleInstantInteraction {
     @Nonnull
     public static final com.hypixel.hytale.codec.builder.BuilderCodec<PathToolSelectInteraction> CODEC =
         com.hypixel.hytale.codec.builder.BuilderCodec
-            .builder(PathToolSelectInteraction.class, PathToolSelectInteraction::new, SimpleBlockInteraction.CODEC)
-            .documentation("Path tool: select / move node, or click air block to move in translate mode.")
+            .builder(PathToolSelectInteraction.class, PathToolSelectInteraction::new, SimpleInstantInteraction.CODEC)
+            .documentation("Path tool: select node or path by look, or click ground to move in translate mode.")
             .build();
 
+    @Nonnull
     @Override
-    protected void interactWithBlock(
-        @Nonnull World world,
-        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+    public WaitForDataFrom getWaitForDataFrom() {
+        return WaitForDataFrom.Client;
+    }
+
+    @Override
+    public boolean needsRemoteSync() {
+        return true;
+    }
+
+    @Override
+    protected void firstRun(
         @Nonnull InteractionType type,
         @Nonnull InteractionContext context,
-        @Nullable ItemStack itemInHand,
-        @Nonnull Vector3i targetBlock,
         @Nonnull CooldownHandler cooldownHandler
     ) {
         if (SubpluginInteractionGuard.failIfDisabled(context, AetherhavenPluginIds.PATH_DESIGNER)) {
             return;
         }
-        if (!PathToolInteractions.isPathToolItem(itemInHand)) {
+        CommandBuffer<EntityStore> commandBuffer = context.getCommandBuffer();
+        if (commandBuffer == null) {
             context.getState().state = InteractionState.Failed;
             return;
         }
-        PathToolInteractions.handleSelect(
-            context.getEntity(),
-            commandBuffer,
-            world,
-            targetBlock,
-            context,
-            commandBuffer.getStore()
-        );
+        if (type != InteractionType.Primary) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        @Nullable
+        Ref<EntityStore> playerRef = context.getEntity();
+        if (playerRef == null) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        @Nullable
+        ItemStack h = InventoryComponent.getItemInHand(commandBuffer, playerRef);
+        if (h == null
+            || h.isEmpty()
+            || !com.hexvane.aetherhaven.AetherhavenConstants.PATH_TOOL_ITEM_ID.equals(h.getItemId())) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        World world = commandBuffer.getStore().getExternalData().getWorld();
+        PathToolInteractions.handleSelect(playerRef, commandBuffer, world, context, commandBuffer.getStore());
     }
-
-    @Override
-    protected void simulateInteractWithBlock(
-        @Nonnull InteractionType interactionType,
-        @Nonnull InteractionContext interactionContext,
-        @Nullable ItemStack itemStack,
-        @Nonnull World world,
-        @Nonnull Vector3i vector3i
-    ) {}
 }

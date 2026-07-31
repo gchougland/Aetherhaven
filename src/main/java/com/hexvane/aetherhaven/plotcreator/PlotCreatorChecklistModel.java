@@ -26,13 +26,10 @@ public final class PlotCreatorChecklistModel {
         out.add(
             new ChecklistItem(
                 LANG + "checklist.corners",
-                draft.getCornerFirst() != null && draft.getCornerSecond() != null,
+                draft.getCornerFirst() != null && draft.getCornerSecond() != null && draft.getPlotAnchor() != null,
                 false,
                 null
             )
-        );
-        out.add(
-            new ChecklistItem(LANG + "checklist.anchor", draft.getPlotAnchor() != null, false, null)
         );
         out.add(new ChecklistItem(LANG + "checklist.kind", !draft.getKinds().isEmpty(), false, null));
         out.add(

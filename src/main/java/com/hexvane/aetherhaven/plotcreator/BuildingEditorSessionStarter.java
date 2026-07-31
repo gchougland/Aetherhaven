@@ -185,7 +185,6 @@ public final class BuildingEditorSessionStarter {
         draft.setCornerSecond(new Vector3i(fp.getMaxX(), fp.getMaxY(), fp.getMaxZ()));
         draft.setPlotAnchor(signPos);
         convertPrefabLocalsToSignSpace(draft, def.getPlotAnchorOffset());
-        snapPlotSignToOutsideCorner(draft);
         seedSpecialBlocksFromPois(draft);
         seedAdventurerSpawnsFromWorldMarkers(world, draft, fp);
         PlotCreatorStep startStep = editorStartStep(draft);
@@ -225,52 +224,6 @@ public final class BuildingEditorSessionStarter {
             return PlotCreatorStep.IDENTITY;
         }
         return PlotCreatorStep.IDENTITY;
-    }
-
-    /**
-     * Paste poses the sign near the player, which often is not a legal plot-creator outside corner. Snap the draft
-     * sign to the nearest outside corner and shift local coords so world spot positions stay put.
-     */
-    private static void snapPlotSignToOutsideCorner(@Nonnull PlotCreatorDraft draft) {
-        Vector3i current = draft.getPlotAnchor();
-        if (current == null || !PlotCreatorAnchorRules.hasBounds(draft)) {
-            return;
-        }
-        if (PlotCreatorAnchorRules.isOutsideCorner(draft, current)) {
-            return;
-        }
-        Vector3i snapped = nearestOutsideCorner(draft, current);
-        int dx = current.x - snapped.x;
-        int dy = current.y - snapped.y;
-        int dz = current.z - snapped.z;
-        if (dx == 0 && dy == 0 && dz == 0) {
-            return;
-        }
-        shiftAllDraftLocals(draft, dx, dy, dz);
-        draft.setPlotAnchor(snapped);
-    }
-
-    @Nonnull
-    private static Vector3i nearestOutsideCorner(@Nonnull PlotCreatorDraft draft, @Nonnull Vector3i from) {
-        Vector3i min = draft.boundsMin();
-        Vector3i max = draft.boundsMax();
-        int y = from.y;
-        Vector3i[] corners = {
-            new Vector3i(min.x - 1, y, min.z - 1),
-            new Vector3i(min.x - 1, y, max.z + 1),
-            new Vector3i(max.x + 1, y, min.z - 1),
-            new Vector3i(max.x + 1, y, max.z + 1)
-        };
-        Vector3i best = corners[0];
-        int bestDist = Integer.MAX_VALUE;
-        for (Vector3i corner : corners) {
-            int dist = Math.abs(corner.x - from.x) + Math.abs(corner.z - from.z);
-            if (dist < bestDist) {
-                bestDist = dist;
-                best = corner;
-            }
-        }
-        return best;
     }
 
     private static void shiftAllDraftLocals(@Nonnull PlotCreatorDraft draft, int dx, int dy, int dz) {
