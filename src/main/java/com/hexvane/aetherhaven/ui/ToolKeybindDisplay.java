@@ -27,6 +27,7 @@ public final class ToolKeybindDisplay {
         Map.entry("Ability1ItemAction", "Q"),
         Map.entry("Ability2ItemAction", "E"),
         Map.entry("Ability3ItemAction", "R"),
+        Map.entry("PickBlock", "MMB"),
         Map.entry("UiCancel", "Esc"),
         Map.entry("Sprint", "Shift"),
         Map.entry("FlyDown", "Ctrl"),

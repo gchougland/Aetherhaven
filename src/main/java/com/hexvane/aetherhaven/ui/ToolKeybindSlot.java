@@ -11,6 +11,7 @@ public enum ToolKeybindSlot {
     ABILITY1("Ability1ItemAction", "Q"),
     ABILITY2("Ability2ItemAction", "E"),
     ABILITY3("Ability3ItemAction", "R"),
+    PICK("PickBlock", "MMB"),
     ESCAPE("UiCancel", "Esc"),
     SHIFT("Sprint", "Shift"),
     CTRL("FlyDown", "Ctrl"),
@@ -53,6 +54,7 @@ public enum ToolKeybindSlot {
             case "Q" -> ABILITY1;
             case "E" -> ABILITY2;
             case "R" -> ABILITY3;
+            case "MMB" -> PICK;
             case "Escape" -> ESCAPE;
             case "Shift" -> SHIFT;
             case "Ctrl" -> CTRL;

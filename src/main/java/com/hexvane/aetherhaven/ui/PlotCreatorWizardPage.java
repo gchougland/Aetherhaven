@@ -38,66 +38,48 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
 
     @Nonnull
     private final PlotCreatorSession session;
-    private final boolean configPanelOnly;
-    private final boolean kindPanelOnly;
-    private final boolean configurePanelOnly;
+    /** Kind / variant / settings popup; layout follows {@link PlotCreatorStep} on the draft. */
+    private final boolean subPanelOnly;
     private boolean templateAppended;
 
     public PlotCreatorWizardPage(@Nonnull PlayerRef playerRef, @Nonnull PlotCreatorSession session) {
-        this(playerRef, session, false, false, false);
+        this(playerRef, session, false);
     }
 
     public PlotCreatorWizardPage(
         @Nonnull PlayerRef playerRef,
         @Nonnull PlotCreatorSession session,
-        boolean configPanelOnly
-    ) {
-        this(playerRef, session, configPanelOnly, false, false);
-    }
-
-    public PlotCreatorWizardPage(
-        @Nonnull PlayerRef playerRef,
-        @Nonnull PlotCreatorSession session,
-        boolean configPanelOnly,
-        boolean kindPanelOnly
-    ) {
-        this(playerRef, session, configPanelOnly, kindPanelOnly, false);
-    }
-
-    public PlotCreatorWizardPage(
-        @Nonnull PlayerRef playerRef,
-        @Nonnull PlotCreatorSession session,
-        boolean configPanelOnly,
-        boolean kindPanelOnly,
-        boolean configurePanelOnly
+        boolean subPanelOnly
     ) {
         super(playerRef, CustomPageLifetime.CanDismiss, PageData.CODEC);
         this.session = session;
-        this.configPanelOnly = configPanelOnly;
-        this.kindPanelOnly = kindPanelOnly;
-        this.configurePanelOnly = configurePanelOnly;
+        this.subPanelOnly = subPanelOnly;
     }
 
     @Nonnull
-    public static PlotCreatorWizardPage kindPanel(@Nonnull PlayerRef playerRef, @Nonnull PlotCreatorSession session) {
-        return new PlotCreatorWizardPage(playerRef, session, false, true, false);
+    public static PlotCreatorWizardPage subPanel(@Nonnull PlayerRef playerRef, @Nonnull PlotCreatorSession session) {
+        return new PlotCreatorWizardPage(playerRef, session, true);
     }
 
-    @Nonnull
-    public static PlotCreatorWizardPage configurePanel(@Nonnull PlayerRef playerRef, @Nonnull PlotCreatorSession session) {
-        return new PlotCreatorWizardPage(playerRef, session, false, false, true);
+    public boolean isSubPanelMode() {
+        return subPanelOnly;
     }
 
     public boolean isConfigPanelOnly() {
-        return configPanelOnly;
+        return subPanelOnly && session.getDraft().getStep() == PlotCreatorStep.VARIANT;
     }
 
     public boolean isKindPanelOnly() {
-        return kindPanelOnly;
+        return subPanelOnly && session.getDraft().getStep() == PlotCreatorStep.KIND;
     }
 
     public boolean isConfigurePanelOnly() {
-        return configurePanelOnly;
+        return subPanelOnly && session.getDraft().getStep() == PlotCreatorStep.CONFIGURE;
+    }
+
+    /** Refresh the open sub-panel after a step change without {@code openCustomPage} (avoids PageManager ACK races). */
+    public void refreshSubPanel(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        refreshPartial();
     }
 
     @Override
@@ -116,6 +98,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         applyVisibility(commandBuilder);
         applyFields(commandBuilder);
         applyCheckLists(commandBuilder, eventBuilder);
+        applyFooterState(commandBuilder);
         PlotCreatorService.refreshWireframe(session, playerRef);
     }
 
@@ -257,11 +240,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
 
     private void applyLabels(@Nonnull UICommandBuilder b) {
         PlotCreatorStep step = session.getDraft().getStep();
-        PlotCreatorStep labelStep =
-            kindPanelOnly ? PlotCreatorStep.KIND : configurePanelOnly ? PlotCreatorStep.CONFIGURE : step;
-        b.set("#PlotCreatorTitleText.TextSpans", Message.translation(MSG + ".step." + labelStep.name() + ".title"));
-        b.set("#StepHint.TextSpans", Message.translation(MSG + ".step." + labelStep.name() + ".hint"));
-        boolean subPanel = configPanelOnly || kindPanelOnly || configurePanelOnly;
+        b.set("#PlotCreatorTitleText.TextSpans", Message.translation(MSG + ".step." + step.name() + ".title"));
+        b.set("#StepHint.TextSpans", Message.translation(MSG + ".step." + step.name() + ".hint"));
+        boolean subPanel = subPanelOnly;
         b.set("#BackButton.Visible", !subPanel);
         b.set("#BackButton.TextSpans", Message.translation(MSG + ".button.back"));
         b.set(
@@ -297,9 +278,23 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#StyleIdField.PlaceholderText", Message.translation(MSG + ".field.styleId.hint"));
     }
 
+    private void applyFooterState(@Nonnull UICommandBuilder b) {
+        PlotCreatorStep step = session.getDraft().getStep();
+        if (subPanelOnly && step == PlotCreatorStep.KIND) {
+            b.set("#NextButton.Disabled", PlotCreatorService.validateKindSelection(session.getDraft()) != null);
+            return;
+        }
+        if (subPanelOnly && step == PlotCreatorStep.VARIANT) {
+            b.set("#NextButton.Disabled", session.getDraft().getCountsAsConstructionIds().isEmpty());
+            return;
+        }
+        b.set("#NextButton.Disabled", false);
+    }
+
     private void applyVisibility(@Nonnull UICommandBuilder b) {
         PlotCreatorStep step = session.getDraft().getStep();
-        if (kindPanelOnly) {
+        if (subPanelOnly && step == PlotCreatorStep.KIND) {
+            b.set("#FormScroll.Visible", false);
             b.set("#DisplayNameField.Visible", false);
             b.set("#DescriptionField.Visible", false);
             b.set("#ConstructionIdField.Visible", false);
@@ -336,10 +331,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#SubmitToCommunityRow.Visible", false);
             return;
         }
-        if (configurePanelOnly) {
-            boolean homeKind =
-                PlotBuildingKindRequirements.effectiveKinds(session.getDraft(), AetherhavenPlugin.get())
-                    .contains(PlotBuildingKind.HOME);
+        if (subPanelOnly && step == PlotCreatorStep.VARIANT) {
+            b.set("#FormScroll.Visible", false);
             b.set("#DisplayNameField.Visible", false);
             b.set("#DescriptionField.Visible", false);
             b.set("#ConstructionIdField.Visible", false);
@@ -348,43 +341,58 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#KindCheckScroll.Visible", false);
             b.set("#TagsField.Visible", false);
             b.set("#VariantOfDropdown.Visible", false);
-            b.set("#VariantCheckScroll.Visible", false);
-            b.set("#GoldCostLabel.Visible", true);
-            b.set("#GoldCostField.Visible", true);
-            b.set("#SelfBuildDaysLabel.Visible", true);
-            b.set("#SelfBuildDaysField.Visible", true);
-            b.set("#MaxHomeResidentsLabel.Visible", homeKind);
-            b.set("#MaxHomeResidentsField.Visible", homeKind);
-            b.set("#SaveEmptySpacesRow.Visible", true);
-            b.set("#SaveEmptySpacesHint.Visible", true);
-            b.set("#PreserveWaterRow.Visible", true);
-            b.set("#PreserveWaterHint.Visible", true);
-            b.set("#TouristDestinationRow.Visible", true);
-            b.set("#TouristDestinationHint.Visible", true);
-            b.set("#PlotTokenLockedRow.Visible", true);
-            b.set("#PlotTokenLockedHint.Visible", true);
-            b.set("#FloatingGiftBlueprintRow.Visible", true);
-            b.set("#FloatingGiftBlueprintHint.Visible", true);
-            b.set("#StyleIdLabel.Visible", true);
-            b.set("#StyleIdField.Visible", true);
+            b.set("#VariantCheckScroll.Visible", true);
+            b.set("#GoldCostLabel.Visible", false);
+            b.set("#GoldCostField.Visible", false);
+            b.set("#SelfBuildDaysLabel.Visible", false);
+            b.set("#SelfBuildDaysField.Visible", false);
+            b.set("#MaxHomeResidentsLabel.Visible", false);
+            b.set("#MaxHomeResidentsField.Visible", false);
+            b.set("#SaveEmptySpacesRow.Visible", false);
+            b.set("#SaveEmptySpacesHint.Visible", false);
+            b.set("#PreserveWaterRow.Visible", false);
+            b.set("#PreserveWaterHint.Visible", false);
+            b.set("#TouristDestinationRow.Visible", false);
+            b.set("#TouristDestinationHint.Visible", false);
+            b.set("#PlotTokenLockedRow.Visible", false);
+            b.set("#PlotTokenLockedHint.Visible", false);
+            b.set("#FloatingGiftBlueprintRow.Visible", false);
+            b.set("#FloatingGiftBlueprintHint.Visible", false);
+            b.set("#StyleIdLabel.Visible", false);
+            b.set("#StyleIdField.Visible", false);
             b.set("#OpenMaterialsButton.Visible", false);
             b.set("#FillFromBuildShapeButton.Visible", false);
             b.set("#MaterialsPageLabel.Visible", false);
             b.set("#MaterialsPageRow.Visible", false);
             b.set("#ReviewSummary.Visible", false);
             b.set("#DetailHint.Visible", false);
-            b.set("#SubmitToCommunityRow.Visible", isCommunityMarketplaceEnabled() && !session.getDraft().isCommunitySubmissionEdit());
+            b.set("#SubmitToCommunityRow.Visible", false);
             return;
         }
+        if (step == PlotCreatorStep.CONFIGURE) {
+            b.set("#FormScroll.Visible", true);
+            b.set("#KindCheckScroll.Visible", false);
+            b.set("#VariantCheckScroll.Visible", false);
+            applyCombinedSettingsVisibility(
+                b,
+                PlotBuildingKindRequirements.effectiveKinds(session.getDraft(), AetherhavenPlugin.get())
+                    .contains(PlotBuildingKind.HOME),
+                isCommunityMarketplaceEnabled() && !session.getDraft().isCommunitySubmissionEdit()
+            );
+            return;
+        }
+        boolean showKindList = step == PlotCreatorStep.KIND;
+        boolean showVariantList = step == PlotCreatorStep.VARIANT;
+        b.set("#FormScroll.Visible", !showKindList && !showVariantList);
+        b.set("#KindCheckScroll.Visible", showKindList);
+        b.set("#VariantCheckScroll.Visible", showVariantList);
         b.set("#DisplayNameField.Visible", step == PlotCreatorStep.IDENTITY);
         b.set("#DescriptionField.Visible", step == PlotCreatorStep.IDENTITY);
         b.set("#ConstructionIdField.Visible", step == PlotCreatorStep.IDENTITY);
         b.set("#PrefabNameField.Visible", false);
         b.set("#KindDropdown.Visible", false);
-        b.set("#KindCheckScroll.Visible", step == PlotCreatorStep.KIND);
-        b.set("#TagsField.Visible", step == PlotCreatorStep.TAGS);
         b.set("#VariantOfDropdown.Visible", false);
-        b.set("#VariantCheckScroll.Visible", step == PlotCreatorStep.VARIANT);
+        b.set("#TagsField.Visible", step == PlotCreatorStep.TAGS);
         b.set("#GoldCostLabel.Visible", false);
         b.set("#GoldCostField.Visible", false);
         b.set("#SelfBuildDaysLabel.Visible", false);
@@ -426,6 +434,49 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#ReviewSummary.TextSpans", Message.raw(buildReviewText()));
         }
         b.set("#SubmitToCommunityRow.Visible", false);
+    }
+
+    private void applyCombinedSettingsVisibility(
+        @Nonnull UICommandBuilder b,
+        boolean homeKind,
+        boolean showCommunitySubmit
+    ) {
+        b.set("#DisplayNameField.Visible", true);
+        b.set("#DescriptionField.Visible", true);
+        b.set("#ConstructionIdField.Visible", true);
+        b.set("#PrefabNameField.Visible", false);
+        b.set("#KindDropdown.Visible", false);
+        b.set("#KindCheckScroll.Visible", false);
+        b.set("#TagsField.Visible", true);
+        b.set("#VariantOfDropdown.Visible", false);
+        b.set("#VariantCheckScroll.Visible", false);
+        b.set("#GoldCostLabel.Visible", true);
+        b.set("#GoldCostField.Visible", true);
+        b.set("#SelfBuildDaysLabel.Visible", true);
+        b.set("#SelfBuildDaysField.Visible", true);
+        b.set("#MaxHomeResidentsLabel.Visible", homeKind);
+        b.set("#MaxHomeResidentsField.Visible", homeKind);
+        b.set("#SaveEmptySpacesRow.Visible", true);
+        b.set("#SaveEmptySpacesHint.Visible", true);
+        b.set("#PreserveWaterRow.Visible", true);
+        b.set("#PreserveWaterHint.Visible", true);
+        b.set("#TouristDestinationRow.Visible", true);
+        b.set("#TouristDestinationHint.Visible", true);
+        b.set("#PlotTokenLockedRow.Visible", true);
+        b.set("#PlotTokenLockedHint.Visible", true);
+        b.set("#FloatingGiftBlueprintRow.Visible", true);
+        b.set("#FloatingGiftBlueprintHint.Visible", true);
+        b.set("#StyleIdLabel.Visible", true);
+        b.set("#StyleIdField.Visible", true);
+        b.set("#OpenMaterialsButton.Visible", false);
+        b.set("#FillFromBuildShapeButton.Visible", false);
+        b.set("#MaterialsPageLabel.Visible", false);
+        b.set("#MaterialsPageRow.Visible", false);
+        b.set("#MaterialsPrevPageButton.Visible", false);
+        b.set("#MaterialsNextPageButton.Visible", false);
+        b.set("#ReviewSummary.Visible", false);
+        b.set("#DetailHint.Visible", false);
+        b.set("#SubmitToCommunityRow.Visible", showCommunitySubmit);
     }
 
     private static boolean isCommunityMarketplaceEnabled() {
@@ -515,17 +566,19 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         }
         UICommandBuilder b = new UICommandBuilder();
         UIEventBuilder events = new UIEventBuilder();
+        wireEvents(events);
         applyLabels(b);
         applyVisibility(b);
         applyFields(b);
         applyCheckLists(b, events);
+        applyFooterState(b);
         sendUpdate(b, events, false);
     }
 
     private void applyCheckLists(@Nonnull UICommandBuilder b, @Nonnull UIEventBuilder eventBuilder) {
         PlotCreatorStep step = session.getDraft().getStep();
-        boolean showKind = kindPanelOnly || (!configurePanelOnly && step == PlotCreatorStep.KIND);
-        boolean showVariant = !kindPanelOnly && !configurePanelOnly && step == PlotCreatorStep.VARIANT;
+        boolean showKind = step == PlotCreatorStep.KIND;
+        boolean showVariant = step == PlotCreatorStep.VARIANT;
         b.clear("#KindCheckList");
         b.clear("#VariantCheckList");
         if (showKind) {
@@ -652,7 +705,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             return;
         }
         if ("Cancel".equals(data.action)) {
-            if (configPanelOnly || kindPanelOnly || configurePanelOnly) {
+            if (subPanelOnly) {
                 closePanel(ref, store);
             } else {
                 PlotCreatorService.cancelSession(playerRef, ref, store);
@@ -660,30 +713,33 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             return;
         }
         if ("Back".equals(data.action)) {
-            if (!configPanelOnly && !kindPanelOnly && !configurePanelOnly) {
+            if (!subPanelOnly) {
                 PlotCreatorService.back(session, ref, store);
                 refreshPartial();
             }
             return;
         }
         if ("Next".equals(data.action)) {
-            if (kindPanelOnly) {
-                if (applyKindPanelAndClose(ref, store)) {
-                    closePanel(ref, store);
-                } else {
-                    refreshPartial();
-                }
-            } else if (configurePanelOnly) {
-                if (applyConfigurePanelAndClose(ref, store)) {
-                    closePanel(ref, store);
-                } else {
-                    refreshPartial();
-                }
-            } else if (configPanelOnly) {
-                if (applyConfigPanelAndClose(ref, store)) {
-                    closePanel(ref, store);
-                } else {
-                    refreshPartial();
+            if (subPanelOnly) {
+                PlotCreatorStep step = session.getDraft().getStep();
+                if (step == PlotCreatorStep.KIND) {
+                    if (applyKindPanelAndClose(ref, store)) {
+                        finishSubPanelAdvance(ref, store);
+                    } else {
+                        refreshPartial();
+                    }
+                } else if (step == PlotCreatorStep.CONFIGURE) {
+                    if (applyConfigurePanelAndClose(ref, store)) {
+                        finishSubPanelAdvance(ref, store);
+                    } else {
+                        refreshPartial();
+                    }
+                } else if (step == PlotCreatorStep.VARIANT) {
+                    if (applyConfigPanelAndClose(ref, store)) {
+                        finishSubPanelAdvance(ref, store);
+                    } else {
+                        refreshPartial();
+                    }
                 }
             } else {
                 handleNext(ref, store);
@@ -723,7 +779,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
     }
 
     private boolean applyConfigurePanelAndClose(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
-        String err = PlotCreatorService.applyConfigureInput(session.getDraft());
+        String err = PlotCreatorService.applySettingsStepInput(session.getDraft());
         if (err != null) {
             playerRef.sendMessage(Message.translation(MSG + ".error." + err));
             return false;
@@ -739,36 +795,11 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             return false;
         }
         PlotCreatorService.applyDefaultTagsForKind(session.getDraft());
-        PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
         return true;
     }
 
     private boolean applyConfigPanelAndClose(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         PlotCreatorStep step = session.getDraft().getStep();
-        if (step == PlotCreatorStep.IDENTITY) {
-            AetherhavenPlugin plugin = AetherhavenPlugin.get();
-            if (plugin == null) {
-                return false;
-            }
-            String err =
-                PlotCreatorValidator.validateId(
-                    session.getDraft().getConstructionId(),
-                    plugin.getConstructionCatalog(),
-                    session.getDraft().getEditingConstructionId()
-                );
-            if (err != null) {
-                playerRef.sendMessage(Message.translation(MSG + ".error." + err));
-                return false;
-            }
-            if (session.getDraft().getDisplayName() == null || session.getDraft().getDisplayName().isBlank()) {
-                playerRef.sendMessage(Message.translation(MSG + ".error.id_empty"));
-                return false;
-            }
-            PlotCreatorService.syncPrefabFileNameFromConstructionId(session.getDraft());
-        }
-        if (step == PlotCreatorStep.TAGS) {
-            PlotCreatorService.applyTagsInput(session.getDraft());
-        }
         if (step == PlotCreatorStep.VARIANT) {
             if (session.getDraft().getCountsAsConstructionIds().isEmpty()) {
                 playerRef.sendMessage(Message.translation(MSG + ".error.needVariantOf"));
@@ -781,7 +812,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
                 }
             }
         }
-        PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
         return true;
     }
 
@@ -791,6 +821,16 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             player.getPageManager().setPage(ref, store, com.hypixel.hytale.protocol.packets.interface_.Page.None);
         }
         PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
+    }
+
+    /** Advance after a sub-panel Done; let onStepEntered replace the page when the next step opens a panel. */
+    private void finishSubPanelAdvance(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        PlotCreatorService.advance(session, ref, store);
+        if (!PlotCreatorService.stepAutoOpensPanel(session.getDraft().getStep())) {
+            closePanel(ref, store);
+        } else {
+            PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
+        }
     }
 
     private void applyIncomingFields(@Nonnull PageData data) {
@@ -867,22 +907,12 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             PlotCreatorInteractions.exportPrefab(session, playerRef);
             return;
         }
-        if (step == PlotCreatorStep.IDENTITY) {
-            String err = PlotCreatorValidator.validateId(d.getConstructionId(), plugin.getConstructionCatalog(), d.getEditingConstructionId());
-            if (err != null) {
-                playerRef.sendMessage(Message.translation(MSG + ".error." + err));
+        if (step == PlotCreatorStep.CONFIGURE) {
+            String settingsErr = PlotCreatorService.applySettingsStepInput(d);
+            if (settingsErr != null) {
+                playerRef.sendMessage(Message.translation(MSG + ".error." + settingsErr));
                 return;
             }
-            if (d.getDisplayName() == null || d.getDisplayName().isBlank()) {
-                playerRef.sendMessage(Message.translation(MSG + ".error.id_empty"));
-                return;
-            }
-            PlotCreatorService.syncPrefabFileNameFromConstructionId(d);
-            PlotCreatorService.advance(session, ref, store);
-            return;
-        }
-        if (step == PlotCreatorStep.TAGS) {
-            PlotCreatorService.applyTagsInput(d);
             PlotCreatorService.advance(session, ref, store);
             return;
         }
@@ -920,15 +950,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             return;
         }
         if (step == PlotCreatorStep.MATERIALS) {
-            PlotCreatorService.advance(session, ref, store);
-            return;
-        }
-        if (step == PlotCreatorStep.CONFIGURE) {
-            String configureErr = PlotCreatorService.applyConfigureInput(d);
-            if (configureErr != null) {
-                playerRef.sendMessage(Message.translation(MSG + ".error." + configureErr));
-                return;
-            }
             PlotCreatorService.advance(session, ref, store);
             return;
         }

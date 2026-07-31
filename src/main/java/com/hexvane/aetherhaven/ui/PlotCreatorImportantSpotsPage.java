@@ -131,6 +131,7 @@ public final class PlotCreatorImportantSpotsPage
                 );
             }
         }
+        b.set("#ConfirmButton.Disabled", false);
     }
 
     @Nonnull
@@ -230,7 +231,10 @@ public final class PlotCreatorImportantSpotsPage
         draft.getSelectedSpots().addAll(working);
         PlotCreatorService.ensureRequiredSpots(draft);
         draft.setImportantSpotsConfirmed(true);
-        close(ref, store);
+        PlotCreatorService.advance(session, ref, store);
+        if (!PlotCreatorService.stepAutoOpensPanel(session.getDraft().getStep())) {
+            close(ref, store);
+        }
         PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
     }
 
@@ -253,6 +257,11 @@ public final class PlotCreatorImportantSpotsPage
         bindFooterButtons(events);
         applyContent(b, events);
         sendUpdate(b, events, false);
+    }
+
+    /** In-place refresh when the important spots step is re-entered without replacing the page. */
+    public void refreshOpenPanel(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        refreshIfOpen(ref, store);
     }
 
     private void close(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {

@@ -66,6 +66,13 @@ public final class PlotCreatorBootstrap {
             );
         core
             .getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPlotCreatorStepJump",
+                PlotCreatorStepJumpInteraction.class,
+                PlotCreatorStepJumpInteraction.CODEC
+            );
+        core
+            .getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenBuildingEditorUse", BuildingEditorUseInteraction.class, BuildingEditorUseInteraction.CODEC);
         core
             .getCodecRegistry(Interaction.CODEC)
@@ -94,6 +101,13 @@ public final class PlotCreatorBootstrap {
                 "AetherhavenBuildingEditorCancel",
                 BuildingEditorCancelInteraction.class,
                 BuildingEditorCancelInteraction.CODEC
+            );
+        core
+            .getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenBuildingEditorStepJump",
+                BuildingEditorStepJumpInteraction.class,
+                BuildingEditorStepJumpInteraction.CODEC
             );
         OpenCustomUIInteraction.registerCustomPageSupplier(
             core,

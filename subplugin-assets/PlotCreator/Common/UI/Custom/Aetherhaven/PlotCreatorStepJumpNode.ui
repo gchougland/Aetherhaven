@@ -1,0 +1,61 @@
+$C = "../Common.ui";
+
+@HintStyle = (
+  FontSize: 12,
+  TextColor: #8a8070,
+  Wrap: true
+);
+
+@StepJumpTabStyle = (
+  Default: (Background: (TexturePath: "../Common/Tab.png", Border: 8)),
+  Hovered: (Background: (TexturePath: "../Common/Tab.png", Border: 8, Color: #c5d0dc)),
+  Pressed: (Background: (TexturePath: "../Common/Tab.png", Border: 8, Color: #8fa0b0)),
+  Disabled: (Background: (TexturePath: "../Common/Tab.png", Border: 8, Color: #5c6a78(0.45)))
+);
+
+Group #StepJumpNode {
+  LayoutMode: Top;
+  Anchor: (Width: 76, Right: 4);
+
+  Button #StepButton {
+    LayoutMode: Center;
+    Anchor: (Width: 76, Height: 54, Bottom: 4);
+    Style: @StepJumpTabStyle;
+    Padding: (Full: 0);
+
+    Group #IconStack {
+      LayoutMode: Center;
+      Anchor: (Full: 0);
+      HitTestVisible: false;
+
+      Group #LockedTint {
+        Visible: false;
+        Anchor: (Full: 0);
+        Background: #5c6a78(0.45);
+        HitTestVisible: false;
+      }
+
+      AssetImage #NodeIconNormal {
+        Anchor: (Width: 18, Height: 18);
+        AssetPath: "UI/Custom/NodeEmpty.png";
+        FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+        HitTestVisible: false;
+      }
+
+      AssetImage #NodeIconCurrent {
+        Visible: false;
+        Anchor: (Width: 26, Height: 26);
+        AssetPath: "UI/Custom/NodeFull.png";
+        FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+        HitTestVisible: false;
+      }
+    }
+  }
+
+  Label #StepLabel {
+    Style: (...$C.@DefaultLabelStyle, TextColor: #c8d0d8, FontSize: 11, HorizontalAlignment: Center, Wrap: true);
+    Text: "";
+    Anchor: (Horizontal: 2);
+    HitTestVisible: false;
+  }
+}

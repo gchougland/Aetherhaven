@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.ui.PlotCreatorCancelConfirmPage;
 import com.hexvane.aetherhaven.ui.PlotCreatorImportantSpotsPage;
+import com.hexvane.aetherhaven.ui.PlotCreatorStepJumpPage;
 import com.hexvane.aetherhaven.ui.PlotCreatorWizardPage;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -105,6 +106,41 @@ public final class PlotCreatorInteractions {
         context.getState().state = InteractionState.Finished;
     }
 
+    public static void handleStepJump(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull InteractionContext context
+    ) {
+        if (!prepareSession(ref, commandBuffer, context)) {
+            return;
+        }
+        PlayerRef playerRef = commandBuffer.getComponent(ref, PlayerRef.getComponentType());
+        PlotCreatorSession session = PlotCreatorSessions.get(playerRef.getUuid());
+        if (session == null || playerRef == null) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        if (session.getDraft().getStep() == PlotCreatorStep.DONE) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        openStepJumpPage(playerRef, ref, commandBuffer.getStore(), session);
+        context.getState().state = InteractionState.Finished;
+    }
+
+    public static void openStepJumpPage(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotCreatorSession session
+    ) {
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player == null) {
+            return;
+        }
+        player.getPageManager().openCustomPage(ref, store, new PlotCreatorStepJumpPage(playerRef, session));
+    }
+
     public static void handleUse(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
@@ -149,9 +185,34 @@ public final class PlotCreatorInteractions {
 
     public static void closeConfigPanel(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         Player player = store.getComponent(ref, Player.getComponentType());
-        if (player != null && player.getPageManager().getCustomPage() instanceof PlotCreatorWizardPage) {
+        if (player != null && player.getPageManager().getCustomPage() instanceof PlotCreatorWizardPage wizard
+            && wizard.isSubPanelMode()) {
             player.getPageManager().setPage(ref, store, Page.None);
         }
+    }
+
+    /**
+     * Opens or in-place refreshes the wizard sub-panel for the draft's current step (kind, variant, or settings).
+     * Reuses the active {@link PlotCreatorWizardPage} when possible to avoid PageManager acknowledgement races.
+     */
+    public static void openWizardSubPanel(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotCreatorSession session
+    ) {
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player == null) {
+            return;
+        }
+        com.hypixel.hytale.server.core.entity.entities.player.pages.CustomUIPage current =
+            player.getPageManager().getCustomPage();
+        if (current instanceof PlotCreatorWizardPage wizard && wizard.isSubPanelMode()) {
+            wizard.refreshSubPanel(ref, store);
+            refreshHud(playerRef, ref, store, session);
+            return;
+        }
+        player.getPageManager().openCustomPage(ref, store, PlotCreatorWizardPage.subPanel(playerRef, session));
     }
 
     public static void openConfigPanel(
@@ -160,11 +221,7 @@ public final class PlotCreatorInteractions {
         @Nonnull Store<EntityStore> store,
         @Nonnull PlotCreatorSession session
     ) {
-        Player player = store.getComponent(ref, Player.getComponentType());
-        if (player == null) {
-            return;
-        }
-        player.getPageManager().openCustomPage(ref, store, new PlotCreatorWizardPage(playerRef, session, true, false));
+        openWizardSubPanel(playerRef, ref, store, session);
     }
 
     public static void openKindPanel(
@@ -173,11 +230,7 @@ public final class PlotCreatorInteractions {
         @Nonnull Store<EntityStore> store,
         @Nonnull PlotCreatorSession session
     ) {
-        Player player = store.getComponent(ref, Player.getComponentType());
-        if (player == null) {
-            return;
-        }
-        player.getPageManager().openCustomPage(ref, store, PlotCreatorWizardPage.kindPanel(playerRef, session));
+        openWizardSubPanel(playerRef, ref, store, session);
     }
 
     public static void openConfigurePanel(
@@ -186,11 +239,7 @@ public final class PlotCreatorInteractions {
         @Nonnull Store<EntityStore> store,
         @Nonnull PlotCreatorSession session
     ) {
-        Player player = store.getComponent(ref, Player.getComponentType());
-        if (player == null) {
-            return;
-        }
-        player.getPageManager().openCustomPage(ref, store, PlotCreatorWizardPage.configurePanel(playerRef, session));
+        openWizardSubPanel(playerRef, ref, store, session);
     }
 
     public static void openImportantSpotsPanel(
@@ -204,6 +253,13 @@ public final class PlotCreatorInteractions {
             return;
         }
         PlotCreatorService.seedImportantSpotsIfEmpty(session.getDraft());
+        com.hypixel.hytale.server.core.entity.entities.player.pages.CustomUIPage current =
+            player.getPageManager().getCustomPage();
+        if (current instanceof PlotCreatorImportantSpotsPage spotsPage) {
+            spotsPage.refreshOpenPanel(ref, store);
+            refreshHud(playerRef, ref, store, session);
+            return;
+        }
         player.getPageManager().openCustomPage(ref, store, new PlotCreatorImportantSpotsPage(playerRef, session));
     }
 
@@ -270,19 +326,6 @@ public final class PlotCreatorInteractions {
             PlotCreatorService.advance(session, ref, store);
             return true;
         }
-        if (step == PlotCreatorStep.IDENTITY) {
-            String err = PlotCreatorValidator.validateId(d.getConstructionId(), plugin.getConstructionCatalog(), d.getEditingConstructionId());
-            if (err != null) {
-                playerRef.sendMessage(Message.translation(MSG + ".error." + err));
-                return false;
-            }
-            if (d.getDisplayName() == null || d.getDisplayName().isBlank()) {
-                playerRef.sendMessage(Message.translation(MSG + ".error.id_empty"));
-                return false;
-            }
-            PlotCreatorService.advance(session, ref, store);
-            return true;
-        }
         if (step == PlotCreatorStep.VARIANT) {
             if (d.getCountsAsConstructionIds().isEmpty()) {
                 playerRef.sendMessage(Message.translation(MSG + ".error.needVariantOf"));
@@ -302,11 +345,6 @@ public final class PlotCreatorInteractions {
             PlotCreatorService.advance(session, ref, store);
             return true;
         }
-        if (step == PlotCreatorStep.TAGS) {
-            PlotCreatorService.applyTagsInput(d);
-            PlotCreatorService.advance(session, ref, store);
-            return true;
-        }
         if (step == PlotCreatorStep.SUBSTEP) {
             PlotCreatorService.advanceSubstepOrStep(session, ref, store);
             return true;
@@ -316,9 +354,9 @@ public final class PlotCreatorInteractions {
             return true;
         }
         if (step == PlotCreatorStep.CONFIGURE) {
-            String configureErr = PlotCreatorService.applyConfigureInput(d);
-            if (configureErr != null) {
-                playerRef.sendMessage(Message.translation(MSG + ".error." + configureErr));
+            String settingsErr = PlotCreatorService.applySettingsStepInput(d);
+            if (settingsErr != null) {
+                playerRef.sendMessage(Message.translation(MSG + ".error." + settingsErr));
                 return false;
             }
             PlotCreatorService.advance(session, ref, store);
@@ -370,11 +408,11 @@ public final class PlotCreatorInteractions {
                 openImportantSpotsPanel(playerRef, ref, store, session);
                 yield true;
             }
-            case IDENTITY, TAGS, VARIANT -> {
+            case VARIANT -> {
                 openConfigPanel(playerRef, ref, store, session);
                 yield true;
             }
-            case CONFIGURE -> {
+            case IDENTITY, TAGS, CONFIGURE -> {
                 openConfigurePanel(playerRef, ref, store, session);
                 yield true;
             }
@@ -428,11 +466,22 @@ public final class PlotCreatorInteractions {
             }
             out = CustomBuildingsPaths.prefabsDirectory(plugin.getDataDirectory()).resolve(fileName);
         }
-        boolean overwrite = d.getEditingConstructionId() != null || d.isBuildingEditorMode();
-        boolean ok = PlotCreatorPrefabExporter.export(session.getWorld(), d, out, overwrite);
-        if (!ok) {
+        boolean overwrite = allowPrefabOverwrite(d, fileName);
+        if (!overwrite && java.nio.file.Files.isRegularFile(out)) {
+            playerRef.sendMessage(Message.translation(MSG + ".error.prefabAlreadyExists"));
+            return;
+        }
+        PlotCreatorPrefabExporter.ExportResult result = PlotCreatorPrefabExporter.export(session.getWorld(), d, out, overwrite);
+        if (result == PlotCreatorPrefabExporter.ExportResult.ALREADY_EXISTS) {
+            playerRef.sendMessage(Message.translation(MSG + ".error.prefabAlreadyExists"));
+            return;
+        }
+        if (result != PlotCreatorPrefabExporter.ExportResult.SUCCESS) {
             playerRef.sendMessage(Message.translation(MSG + ".error.prefabExport"));
             return;
+        }
+        if (!d.isBuildingEditorMode()) {
+            d.setSessionExportedPrefabPath(fileName);
         }
         if (d.isBuildingEditorMode() && d.getLockedPrefabPathKey() != null) {
             d.setPrefabPath(d.getLockedPrefabPathKey());
@@ -445,8 +494,15 @@ public final class PlotCreatorInteractions {
         playerRef.sendMessage(Message.translation(MSG + ".hint.prefabSaved").param("file", fileName));
     }
 
+    private static boolean allowPrefabOverwrite(@Nonnull PlotCreatorDraft draft, @Nonnull String prefabFileName) {
+        if (draft.isBuildingEditorMode() || draft.getEditingConstructionId() != null) {
+            return true;
+        }
+        return prefabFileName.equals(draft.getSessionExportedPrefabPath());
+    }
+
     public static boolean stepUsesConfigPanel(@Nonnull PlotCreatorStep step) {
-        return step == PlotCreatorStep.IDENTITY || step == PlotCreatorStep.TAGS || step == PlotCreatorStep.VARIANT;
+        return step == PlotCreatorStep.VARIANT;
     }
 
     private static boolean prepareSession(

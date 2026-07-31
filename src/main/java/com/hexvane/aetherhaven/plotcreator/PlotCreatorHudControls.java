@@ -4,10 +4,20 @@ import com.hexvane.aetherhaven.ui.ToolKeybindSlot;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /** Step-specific HUD control rows (key slot + lang key for description). */
 public final class PlotCreatorHudControls {
-    public record Row(@Nonnull ToolKeybindSlot slot, @Nonnull String descriptionLangKey, boolean infoOnly) {}
+    public record Row(
+        @Nonnull ToolKeybindSlot slot,
+        @Nonnull String descriptionLangKey,
+        boolean infoOnly,
+        @Nullable String modifierLabel
+    ) {
+        public Row(@Nonnull ToolKeybindSlot slot, @Nonnull String descriptionLangKey, boolean infoOnly) {
+            this(slot, descriptionLangKey, infoOnly, null);
+        }
+    }
 
     private PlotCreatorHudControls() {}
 
@@ -33,17 +43,12 @@ public final class PlotCreatorHudControls {
                 row(ToolKeybindSlot.ABILITY2, "hud.common.e"),
                 row(ToolKeybindSlot.ABILITY3, "hud.common.r")
             );
-            case IDENTITY -> List.of(
-                row(ToolKeybindSlot.USE, "hud.IDENTITY.f"),
+            case IDENTITY, TAGS, CONFIGURE -> List.of(
+                row(ToolKeybindSlot.USE, "hud.CONFIGURE.f"),
                 row(ToolKeybindSlot.ABILITY1, "hud.common.q"),
                 row(ToolKeybindSlot.ABILITY2, "hud.common.e"),
-                row(ToolKeybindSlot.ABILITY3, "hud.common.r")
-            );
-            case TAGS -> List.of(
-                row(ToolKeybindSlot.USE, "hud.TAGS.f"),
-                row(ToolKeybindSlot.ABILITY1, "hud.common.q"),
-                row(ToolKeybindSlot.ABILITY2, "hud.common.e"),
-                row(ToolKeybindSlot.ABILITY3, "hud.common.r")
+                row(ToolKeybindSlot.ABILITY3, "hud.common.r"),
+                info("step.CONFIGURE.detail")
             );
             case VARIANT -> List.of(
                 row(ToolKeybindSlot.USE, "hud.VARIANT.f"),
@@ -65,13 +70,6 @@ public final class PlotCreatorHudControls {
                 row(ToolKeybindSlot.ABILITY3, "hud.common.r"),
                 info("step.MATERIALS.detail")
             );
-            case CONFIGURE -> List.of(
-                row(ToolKeybindSlot.USE, "hud.CONFIGURE.f"),
-                row(ToolKeybindSlot.ABILITY1, "hud.common.q"),
-                row(ToolKeybindSlot.ABILITY2, "hud.common.e"),
-                row(ToolKeybindSlot.ABILITY3, "hud.common.r"),
-                info("step.CONFIGURE.detail")
-            );
             case REVIEW -> List.of(
                 row(ToolKeybindSlot.USE, "hud.REVIEW.f"),
                 row(ToolKeybindSlot.ABILITY1, "hud.common.q"),
@@ -79,6 +77,9 @@ public final class PlotCreatorHudControls {
             );
             case DONE -> List.of();
         });
+        if (step != PlotCreatorStep.DONE) {
+            rows.add(row(ToolKeybindSlot.PICK, "hud.STEP_JUMP.f"));
+        }
         return rows;
     }
 
@@ -89,7 +90,7 @@ public final class PlotCreatorHudControls {
         if (draft.getBoundsPhase() == PlotCreatorBoundsPhase.FACE_ADJUST) {
             rows.add(row(ToolKeybindSlot.PRIMARY, "hud.BOUNDS.primaryFace"));
             rows.add(row(ToolKeybindSlot.SECONDARY, "hud.BOUNDS.secondary"));
-            rows.add(info("hud.BOUNDS.secondaryShrink"));
+            rows.add(modifierRow("Crouch", ToolKeybindSlot.SECONDARY, "hud.BOUNDS.secondaryShrink"));
             rows.add(row(ToolKeybindSlot.ABILITY1, "hud.BOUNDS.redo"));
         } else {
             rows.add(row(ToolKeybindSlot.PRIMARY, "hud.BOUNDS.primary"));
@@ -119,6 +120,15 @@ public final class PlotCreatorHudControls {
     @Nonnull
     private static Row row(@Nonnull ToolKeybindSlot slot, @Nonnull String langKey) {
         return new Row(slot, langKey, false);
+    }
+
+    @Nonnull
+    private static Row modifierRow(
+        @Nonnull String modifierLabel,
+        @Nonnull ToolKeybindSlot slot,
+        @Nonnull String langKey
+    ) {
+        return new Row(slot, langKey, false, modifierLabel);
     }
 
     @Nonnull

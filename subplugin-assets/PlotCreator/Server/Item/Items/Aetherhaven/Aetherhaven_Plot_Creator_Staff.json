@@ -117,6 +117,13 @@
           "Type": "AetherhavenPlotCreatorCancel"
         }
       ]
+    },
+    "Pick": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPlotCreatorStepJump"
+        }
+      ]
     }
   },
   "InteractionConfig": {

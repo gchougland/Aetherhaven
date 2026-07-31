@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 /** Appends tool HUD hint rows into a dynamic {@link com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud}. */
 public final class ToolHudHotkeyRows {
     private static final String ROW_UI = "Aetherhaven/ToolHudHotkeyRow.ui";
+    private static final String MODIFIER_ROW_UI = "Aetherhaven/ToolHudModifierHotkeyRow.ui";
 
     private ToolHudHotkeyRows() {}
 
@@ -35,6 +36,42 @@ public final class ToolHudHotkeyRows {
         @Nullable PlayerRef playerRef
     ) {
         appendRow(builder, containerSelector, index, slot, Message.translation(descriptionLangKey), playerRef);
+    }
+
+    public static void appendModifierRow(
+        @Nonnull UICommandBuilder builder,
+        @Nonnull String containerSelector,
+        int index,
+        @Nonnull String modifierLabel,
+        @Nonnull ToolKeybindSlot slot,
+        @Nonnull Message description,
+        @Nullable PlayerRef playerRef
+    ) {
+        String base = containerSelector + "[" + index + "]";
+        builder.append(containerSelector, MODIFIER_ROW_UI);
+        builder.set(base + " #ModifierLabel.TextSpans", Message.raw(modifierLabel + " +"));
+        builder.set(base + " #KeyLabel.TextSpans", Message.raw(ToolKeybindDisplay.labelFor(playerRef, slot)));
+        builder.set(base + " #DescLabel.TextSpans", description);
+    }
+
+    public static void appendModifierRow(
+        @Nonnull UICommandBuilder builder,
+        @Nonnull String containerSelector,
+        int index,
+        @Nonnull String modifierLabel,
+        @Nonnull ToolKeybindSlot slot,
+        @Nonnull String descriptionLangKey,
+        @Nullable PlayerRef playerRef
+    ) {
+        appendModifierRow(
+            builder,
+            containerSelector,
+            index,
+            modifierLabel,
+            slot,
+            Message.translation(descriptionLangKey),
+            playerRef
+        );
     }
 
     public static void appendInfoRow(

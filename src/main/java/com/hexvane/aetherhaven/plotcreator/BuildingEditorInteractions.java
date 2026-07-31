@@ -122,6 +122,28 @@ public final class BuildingEditorInteractions {
         context.getState().state = InteractionState.Finished;
     }
 
+    public static void handleStepJump(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull InteractionContext context
+    ) {
+        if (!prepareEditorSession(ref, commandBuffer, context)) {
+            return;
+        }
+        PlayerRef playerRef = commandBuffer.getComponent(ref, PlayerRef.getComponentType());
+        PlotCreatorSession session = PlotCreatorSessions.get(playerRef.getUuid());
+        if (session == null || playerRef == null) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        if (session.getDraft().getStep() == PlotCreatorStep.DONE) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        PlotCreatorInteractions.openStepJumpPage(playerRef, ref, commandBuffer.getStore(), session);
+        context.getState().state = InteractionState.Finished;
+    }
+
     public static void handleCancel(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,

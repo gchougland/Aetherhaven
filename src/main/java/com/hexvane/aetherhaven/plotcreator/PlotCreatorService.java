@@ -101,6 +101,11 @@ public final class PlotCreatorService {
         PlotCreatorDraftLoader.loadIntoDraft(session.getDraft(), def);
         applyCommunityMarketplaceDefaults(session.getDraft());
         session.getDraft().setStep(PlotCreatorStep.REVIEW);
+        session
+            .getDraft()
+            .setMaxReachedStepIndex(
+                Math.max(0, stepOrder(session.getDraft()).indexOf(PlotCreatorStep.REVIEW))
+            );
         PlotCreatorSessions.put(session);
         playerRef.sendMessage(
             Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.edit.loaded").param("id", id)
@@ -259,14 +264,20 @@ public final class PlotCreatorService {
                 steps.add(PlotCreatorStep.SUBSTEP);
             }
         }
-        steps.add(PlotCreatorStep.IDENTITY);
-        steps.add(PlotCreatorStep.TAGS);
         steps.add(PlotCreatorStep.CONFIGURE);
         steps.add(PlotCreatorStep.PREFAB_SAVE);
         steps.add(PlotCreatorStep.MATERIALS);
         steps.add(PlotCreatorStep.REVIEW);
         steps.add(PlotCreatorStep.DONE);
         return steps;
+    }
+
+    /** Steps that open a wizard sub-panel when entered (replace current page; do not setPage(None) first). */
+    public static boolean stepAutoOpensPanel(@Nonnull PlotCreatorStep step) {
+        return step == PlotCreatorStep.KIND
+            || step == PlotCreatorStep.VARIANT
+            || step == PlotCreatorStep.IMPORTANT_SPOTS
+            || step == PlotCreatorStep.CONFIGURE;
     }
 
     public static void advance(@Nonnull PlotCreatorSession session) {
@@ -300,6 +311,7 @@ public final class PlotCreatorService {
             PlotCreatorMaterialsActions.onEnterMaterialsStep(session);
         }
         session.getDraft().setStep(next);
+        session.getDraft().setMaxReachedStepIndex(Math.max(session.getDraft().getMaxReachedStepIndex(), idx + 1));
         onStepEntered(session, ref, store, next);
     }
 
@@ -350,6 +362,81 @@ public final class PlotCreatorService {
         onStepEntered(session, ref, store, prev);
     }
 
+    /**
+     * Jump directly to a previously reached wizard step (step jump menu). Does not re-run forward validation.
+     *
+     * @return false if the target is unreachable or invalid
+     */
+    public static boolean jumpToStep(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull PlotCreatorStep target,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store
+    ) {
+        PlotCreatorDraft draft = session.getDraft();
+        if (target == PlotCreatorStep.DONE || draft.getStep() == PlotCreatorStep.DONE) {
+            return false;
+        }
+        List<PlotCreatorStep> order = stepOrder(draft);
+        int targetIdx = order.indexOf(target);
+        if (targetIdx < 0 || targetIdx > draft.getMaxReachedStepIndex()) {
+            return false;
+        }
+        PlotCreatorStep current = draft.getStep();
+        if (current == target) {
+            return true;
+        }
+        int currentIdx = order.indexOf(current);
+        if (currentIdx < 0) {
+            return false;
+        }
+        Player player = playerFrom(ref, store);
+        leaveStepForJump(session, current, target, order, player, ref, store);
+        prepareEnterStepForJump(session, current, target, order);
+        draft.setStep(target);
+        onStepEntered(session, ref, store, target);
+        return true;
+    }
+
+    private static void leaveStepForJump(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull PlotCreatorStep current,
+        @Nonnull PlotCreatorStep target,
+        @Nonnull List<PlotCreatorStep> order,
+        @Nullable Player player,
+        @Nullable Ref<EntityStore> ref,
+        @Nullable Store<EntityStore> store
+    ) {
+        PlotCreatorDraft draft = session.getDraft();
+        if (current == PlotCreatorStep.SUBSTEP && player != null) {
+            PlotCreatorSubstepGrants.revokeAll(session, player);
+        }
+        if (current == PlotCreatorStep.MATERIALS && player != null && ref != null && store != null) {
+            PlotCreatorMaterialsHelper.snapshotAndCloseMaterials(session, player, ref, store);
+            PlotCreatorMaterialsActions.clearFillConfirm(session);
+        }
+        if (current == PlotCreatorStep.BOUNDS && target == PlotCreatorStep.WELCOME) {
+            draft.resetBoundsEditing();
+        }
+    }
+
+    private static void prepareEnterStepForJump(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull PlotCreatorStep current,
+        @Nonnull PlotCreatorStep target,
+        @Nonnull List<PlotCreatorStep> order
+    ) {
+        PlotCreatorDraft draft = session.getDraft();
+        int currentIdx = order.indexOf(current);
+        int targetIdx = order.indexOf(target);
+        if (target == PlotCreatorStep.SUBSTEP && currentIdx < targetIdx) {
+            draft.setSubstepIndex(0);
+        }
+        if (target == PlotCreatorStep.MATERIALS) {
+            PlotCreatorMaterialsActions.onEnterMaterialsStep(session);
+        }
+    }
+
     private static void onStepEntered(
         @Nonnull PlotCreatorSession session,
         @Nullable Ref<EntityStore> ref,
@@ -384,9 +471,20 @@ public final class PlotCreatorService {
         if (step == PlotCreatorStep.KIND) {
             PlotCreatorInteractions.openKindPanel(playerRef, ref, store, session);
         }
+        if (step == PlotCreatorStep.VARIANT) {
+            PlotCreatorInteractions.openConfigPanel(playerRef, ref, store, session);
+        }
         if (step == PlotCreatorStep.IMPORTANT_SPOTS) {
             seedImportantSpotsIfEmpty(session.getDraft());
-            PlotCreatorInteractions.openImportantSpotsPanel(playerRef, ref, store, session);
+            World world = store.getExternalData().getWorld();
+            world.execute(
+                () -> {
+                    if (!ref.isValid()) {
+                        return;
+                    }
+                    PlotCreatorInteractions.openImportantSpotsPanel(playerRef, ref, store, session);
+                }
+            );
         }
         if (step == PlotCreatorStep.CONFIGURE) {
             PlotCreatorInteractions.openConfigurePanel(playerRef, ref, store, session);
@@ -488,6 +586,7 @@ public final class PlotCreatorService {
         @Nonnull Store<EntityStore> store
     ) {
         PlotCreatorDraft draft = session.getDraft();
+        applyTagsInput(draft);
         applyConfigureInput(draft);
         if (draft.isDecorationOnly() && !draft.getBuildingTags().contains("decoration")) {
             draft.getBuildingTags().add("decoration");
@@ -624,8 +723,8 @@ public final class PlotCreatorService {
                 ? plugin.getDataDirectory().toAbsolutePath().normalize()
                 : BuildingEditorSavePaths.resolveWriteRoot(plugin, id);
         Path prefabOut = BuildingEditorSavePaths.prefabFile(writeRoot, prefabKey);
-        boolean exported = PlotCreatorPrefabExporter.export(session.getWorld(), draft, prefabOut, true);
-        if (!exported) {
+        PlotCreatorPrefabExporter.ExportResult exported = PlotCreatorPrefabExporter.export(session.getWorld(), draft, prefabOut, true);
+        if (exported != PlotCreatorPrefabExporter.ExportResult.SUCCESS) {
             playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.prefabExport"));
             return false;
         }
@@ -760,6 +859,33 @@ public final class PlotCreatorService {
         if (file != null) {
             draft.setPrefabFileName(file);
         }
+    }
+
+    /**
+     * Validates and applies name, id, tags, and building settings from the combined settings step or panel.
+     * Returns an error message key, or null on success.
+     */
+    @Nullable
+    public static String applySettingsStepInput(@Nonnull PlotCreatorDraft draft) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return "saveFailed";
+        }
+        String err =
+            PlotCreatorValidator.validateId(
+                draft.getConstructionId(),
+                plugin.getConstructionCatalog(),
+                draft.getEditingConstructionId()
+            );
+        if (err != null) {
+            return err;
+        }
+        if (draft.getDisplayName() == null || draft.getDisplayName().isBlank()) {
+            return "id_empty";
+        }
+        syncPrefabFileNameFromConstructionId(draft);
+        applyTagsInput(draft);
+        return applyConfigureInput(draft);
     }
 
     /** Parses configure-panel fields into the draft. Returns an error message key, or null on success. */

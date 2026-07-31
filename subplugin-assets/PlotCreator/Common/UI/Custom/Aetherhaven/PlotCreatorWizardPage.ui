@@ -36,6 +36,36 @@ $C.@PageOverlay {
         Anchor: (Bottom: 14);
       }
 
+      Group #KindCheckScroll {
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+        Anchor: (Height: 280, Bottom: 12);
+        Visible: false;
+
+        Group #KindCheckList {
+          LayoutMode: Top;
+        }
+      }
+
+      Group #VariantCheckScroll {
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+        Anchor: (Height: 280, Bottom: 12);
+        Visible: false;
+
+        Group #VariantCheckList {
+          LayoutMode: Top;
+        }
+      }
+
+      Group #FormScroll {
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+        Anchor: (Height: 420, Bottom: 12);
+
+        Group #FormBody {
+          LayoutMode: Top;
+
       $C.@TextField #DisplayNameField {
         Anchor: (Bottom: 10, Height: 36);
         PlaceholderText: "";
@@ -64,17 +94,6 @@ $C.@PageOverlay {
       $C.@DropdownBox #VariantOfDropdown {
         Anchor: (Bottom: 10, Height: $C.@DropdownBoxHeight);
         Visible: false;
-      }
-
-      Group #VariantCheckScroll {
-        LayoutMode: TopScrolling;
-        ScrollbarStyle: $C.@DefaultScrollbarStyle;
-        Anchor: (Height: 280, Bottom: 10);
-        Visible: false;
-
-        Group #VariantCheckList {
-          LayoutMode: Top;
-        }
       }
 
       Label #StyleIdLabel {
@@ -279,22 +298,14 @@ $C.@PageOverlay {
         Visible: false;
       }
 
-      Group #KindCheckScroll {
-        LayoutMode: TopScrolling;
-        ScrollbarStyle: $C.@DefaultScrollbarStyle;
-        Anchor: (Height: 280, Bottom: 10);
-        Visible: false;
-
-        Group #KindCheckList {
-          LayoutMode: Top;
-        }
-      }
-
       Label #ReviewSummary {
         Style: (...@HintStyle, TextColor: #e8dcc8);
         Text: "";
         Anchor: (Bottom: 14);
         Visible: false;
+      }
+
+        }
       }
 
       Group #ButtonRow {

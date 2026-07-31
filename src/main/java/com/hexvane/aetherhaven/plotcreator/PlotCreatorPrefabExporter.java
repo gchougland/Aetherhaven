@@ -21,6 +21,7 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.BlockEntity;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.prefab.PrefabCopyableComponent;
+import com.hypixel.hytale.server.core.prefab.PrefabSaveException;
 import com.hypixel.hytale.server.core.prefab.PrefabStore;
 import com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -51,9 +52,15 @@ import org.joml.Vector3i;
 public final class PlotCreatorPrefabExporter {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
+    public enum ExportResult {
+        SUCCESS,
+        ALREADY_EXISTS,
+        FAILED
+    }
+
     private PlotCreatorPrefabExporter() {}
 
-    public static boolean export(
+    public static ExportResult export(
         @Nonnull World world,
         @Nonnull PlotCreatorDraft draft,
         @Nonnull Path outputFile,
@@ -63,7 +70,7 @@ public final class PlotCreatorPrefabExporter {
         Vector3i max = draft.boundsMax();
         Vector3i anchor = draft.getPlotAnchor();
         if (anchor == null) {
-            return false;
+            return ExportResult.FAILED;
         }
         draft.setPrefabOriginMin(new Vector3i(min));
         PlotCreatorLocalCoords.recomputeAnchorOffset(draft);
@@ -179,7 +186,7 @@ public final class PlotCreatorPrefabExporter {
 
         if (blockCount == 0) {
             LOGGER.atWarning().log("Plot creator prefab export: no blocks in bounds");
-            return false;
+            return ExportResult.FAILED;
         }
 
         try {
@@ -199,10 +206,16 @@ public final class PlotCreatorPrefabExporter {
                 PlotCreatorIconExporter.tryExportIcon(prefab, draft.getConstructionId(), plugin.getDataDirectory());
             }
             PrefabStore.get().savePrefab(outputFile, prefab, overwrite);
-            return true;
+            return ExportResult.SUCCESS;
+        } catch (PrefabSaveException e) {
+            if (e.getType() == PrefabSaveException.Type.ALREADY_EXISTS) {
+                return ExportResult.ALREADY_EXISTS;
+            }
+            LOGGER.atSevere().withCause(e).log("Failed to save prefab to %s", outputFile);
+            return ExportResult.FAILED;
         } catch (Exception e) {
             LOGGER.atSevere().withCause(e).log("Failed to save prefab to %s", outputFile);
-            return false;
+            return ExportResult.FAILED;
         }
     }
 

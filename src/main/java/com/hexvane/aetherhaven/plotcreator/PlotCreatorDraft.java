@@ -142,6 +142,14 @@ public final class PlotCreatorDraft {
     /** Locked prefab file name for editor saves (do not rename to construction id). */
     @Nullable
     private String lockedPrefabPathKey;
+    /**
+     * Prefab file exported during this wizard session. Re-exports to the same file are allowed on the shape step;
+     * other on-disk prefabs are not overwritten.
+     */
+    @Nullable
+    private String sessionExportedPrefabPath;
+    /** Highest step index reached this session (for step jump menu). */
+    private int maxReachedStepIndex;
 
     public boolean isConstructionIdUserEdited() {
         return constructionIdUserEdited;
@@ -676,6 +684,23 @@ public final class PlotCreatorDraft {
 
     public void setEditingConstructionId(@Nullable String editingConstructionId) {
         this.editingConstructionId = editingConstructionId;
+    }
+
+    @Nullable
+    public String getSessionExportedPrefabPath() {
+        return sessionExportedPrefabPath;
+    }
+
+    public void setSessionExportedPrefabPath(@Nullable String sessionExportedPrefabPath) {
+        this.sessionExportedPrefabPath = sessionExportedPrefabPath;
+    }
+
+    public int getMaxReachedStepIndex() {
+        return maxReachedStepIndex;
+    }
+
+    public void setMaxReachedStepIndex(int maxReachedStepIndex) {
+        this.maxReachedStepIndex = Math.max(0, maxReachedStepIndex);
     }
 
     public boolean isBuildingEditorMode() {

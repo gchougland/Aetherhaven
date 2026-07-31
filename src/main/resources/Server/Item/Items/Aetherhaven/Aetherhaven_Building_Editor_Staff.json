@@ -77,6 +77,13 @@
           "Type": "AetherhavenBuildingEditorCancel"
         }
       ]
+    },
+    "Pick": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenBuildingEditorStepJump"
+        }
+      ]
     }
   },
   "InteractionConfig": {

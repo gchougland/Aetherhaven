@@ -189,6 +189,9 @@ public final class BuildingEditorSessionStarter {
         seedAdventurerSpawnsFromWorldMarkers(world, draft, fp);
         PlotCreatorStep startStep = editorStartStep(draft);
         draft.setStep(startStep);
+        draft.setMaxReachedStepIndex(
+            Math.max(0, PlotCreatorService.stepOrder(draft).indexOf(startStep))
+        );
         PlotCreatorService.seedImportantSpotsIfEmpty(draft);
         PlotCreatorSessions.put(session);
 
@@ -205,14 +208,14 @@ public final class BuildingEditorSessionStarter {
             // Replaces the building list page without setPage(None) (avoids PageManager ACK race).
             PlotCreatorInteractions.openImportantSpotsPanel(playerRef, ref, store, session);
         } else if (player != null) {
-            // Decoration start at Identity with no follow-up panel — dismiss the picker here.
+            // Decoration start at settings with no follow-up panel — dismiss the picker here.
             player.getPageManager().setPage(ref, store, Page.None);
         }
     }
 
     /**
      * Decoration/placements skip important spots in the wizard order. Landing on that missing step makes progress show
-     * Welcome and blocks E/Q advance — start at Identity instead.
+     * Welcome and blocks E/Q advance — start at settings instead.
      */
     @Nonnull
     private static PlotCreatorStep editorStartStep(@Nonnull PlotCreatorDraft draft) {
@@ -220,10 +223,10 @@ public final class BuildingEditorSessionStarter {
         if (order.contains(PlotCreatorStep.IMPORTANT_SPOTS)) {
             return PlotCreatorStep.IMPORTANT_SPOTS;
         }
-        if (order.contains(PlotCreatorStep.IDENTITY)) {
-            return PlotCreatorStep.IDENTITY;
+        if (order.contains(PlotCreatorStep.CONFIGURE)) {
+            return PlotCreatorStep.CONFIGURE;
         }
-        return PlotCreatorStep.IDENTITY;
+        return PlotCreatorStep.CONFIGURE;
     }
 
     private static void shiftAllDraftLocals(@Nonnull PlotCreatorDraft draft, int dx, int dy, int dz) {

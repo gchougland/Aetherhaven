@@ -8,7 +8,7 @@ author: Hexvane
 
 The plot creator staff registers **custom buildings** you built in the world: footprint, specialty blocks, prefab export, costs, and (optionally) a live plot in your town. Most players should use **Decoration** or **Variant**, not the full workplace types below.
 
-Open your **town journal → Guide → Mechanics → Plot creator staff** (this page) while learning the flow. In play: equip the staff, press **F** to start or open the current step panel, **primary-click** blocks in the world, **Q** / **E** previous / next step, **R** to cancel.
+Open your **town journal → Guide → Mechanics → Plot creator staff** (this page) while learning the flow. In play: equip the staff, press **F** to start or open the current step panel, **primary-click** blocks in the world, **Q** / **E** previous / next step, **middle mouse** to open the step menu and jump to a step you already reached, **R** to cancel.
 
 ## Recommended paths
 
@@ -50,12 +50,10 @@ Open your **town journal → Guide → Mechanics → Plot creator staff** (this 
 1. Drag to mark the build box (the plot sign is placed at the center automatically). Stand inside the box and use **secondary** to expand one block toward where you look, or **crouch + secondary** to shrink. You can also drag the side panels.
 2. Choose **building type** (and **variant of** if applicable).
 3. Place **important spots** (blocks are given one at a time per substep).
-4. Enter **name and id** (prefab filename follows the id).
-5. Edit **tags** if needed.
-6. Open **building settings** (F): treasury gold cost, self-build days, empty-space prefab option, and assembly sections.
-7. **Export prefab** with F on the save-shape step (uses settings from step 6).
-8. Set **build materials** (virtual chest; items return to you when you continue).
-9. Review and save.
+4. Open **building settings** (F): name, id, tags, treasury gold cost, self build days, empty space prefab option, and other options.
+5. **Export prefab** with F on the save shape step (uses settings from step 4).
+6. Set **build materials** (virtual chest; items return to you when you continue).
+7. Review and save.
 
 ## Permissions
 

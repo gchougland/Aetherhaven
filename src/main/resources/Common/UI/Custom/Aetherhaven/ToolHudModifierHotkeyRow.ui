@@ -1,0 +1,34 @@
+$LegendCommon = "../Hud/ToolsLegends/ToolsLegendsCommon.ui";
+
+Group #ControlRow {
+  LayoutMode: Left;
+  Anchor: (Vertical: 4);
+
+  Group #ModifierWrap {
+    LayoutMode: Middle;
+    Anchor: (Right: 6);
+
+    Label #ModifierLabel {
+      Style: $LegendCommon.@RowHintTextStyle;
+      Text: "";
+    }
+  }
+
+  $LegendCommon.@RowHintContainer {
+    Label #KeyLabel {
+      Style: $LegendCommon.@RowHintTextStyle;
+      Text: "";
+    }
+  }
+
+  $LegendCommon.@RowLabelContainer {
+    Label #DescLabel {
+      Style: (
+        FontSize: 14,
+        TextColor: #96a9be,
+        Wrap: true
+      );
+      Text: "";
+    }
+  }
+}

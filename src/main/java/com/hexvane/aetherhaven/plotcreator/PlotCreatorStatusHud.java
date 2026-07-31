@@ -97,6 +97,16 @@ public final class PlotCreatorStatusHud extends CustomUIHud {
                     base + " #InfoLabel.TextSpans",
                     Message.translation(LANG_PREFIX + row.descriptionLangKey())
                 );
+            } else if (row.modifierLabel() != null) {
+                ToolHudHotkeyRows.appendModifierRow(
+                    b,
+                    CONTROL_ROWS,
+                    i,
+                    row.modifierLabel(),
+                    row.slot(),
+                    LANG_PREFIX + row.descriptionLangKey(),
+                    getPlayerRef()
+                );
             } else {
                 ToolHudHotkeyRows.appendRow(
                     b,

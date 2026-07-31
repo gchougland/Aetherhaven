@@ -10,6 +10,7 @@ aetherhaven.plotcreator.error.incomplete = Finish all required steps first.
 aetherhaven.plotcreator.error.prefab_missing = Save the prefab before finishing.
 aetherhaven.plotcreator.error.prefabName = Enter a name for the prefab file.
 aetherhaven.plotcreator.error.prefabExport = Could not save the prefab. Check the bounds and try again.
+aetherhaven.plotcreator.error.prefabAlreadyExists = This building id already has a prefab from an existing plot. Choose a different building id.
 aetherhaven.plotcreator.error.saveFailed = Could not save the building file.
 aetherhaven.plotcreator.error.anchorOutsideBounds = The plot sign must be inside the build bounds.
 aetherhaven.plotcreator.error.outsideBounds = Click inside the marked bounds.
@@ -100,6 +101,10 @@ aetherhaven.plotcreator.hud.title = Plot creator
 aetherhaven.plotcreator.hud.common.q = Previous step
 aetherhaven.plotcreator.hud.common.e = Continue to next step
 aetherhaven.plotcreator.hud.common.r = Cancel session
+aetherhaven.plotcreator.hud.STEP_JUMP.f = Open step menu
+
+aetherhaven.plotcreator.stepJump.title = Jump to step
+aetherhaven.plotcreator.stepJump.hint = Locked steps need earlier steps finished first. Pick a step you already reached.
 
 aetherhaven.plotcreator.hud.WELCOME.f = Begin
 aetherhaven.plotcreator.hud.WELCOME.e = Begin
@@ -107,7 +112,7 @@ aetherhaven.plotcreator.hud.WELCOME.e = Begin
 aetherhaven.plotcreator.hud.BOUNDS.primary = Hold and drag to mark the build box
 aetherhaven.plotcreator.hud.BOUNDS.primaryFace = Drag to resize the highlighted side
 aetherhaven.plotcreator.hud.BOUNDS.secondary = Secondary to expand toward where you look (stand inside the box)
-aetherhaven.plotcreator.hud.BOUNDS.secondaryShrink = Crouch and secondary to shrink toward where you look
+aetherhaven.plotcreator.hud.BOUNDS.secondaryShrink = Shrink toward where you look
 aetherhaven.plotcreator.hud.BOUNDS.confirm = E to confirm build area
 aetherhaven.plotcreator.hud.BOUNDS.redo = Q to redo the build box
 aetherhaven.plotcreator.hud.ANCHOR.primary = Click one of the four outside corners of the footprint
@@ -123,7 +128,7 @@ aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer = Remove an adventurer s
 aetherhaven.plotcreator.hud.SUBSTEP.secondaryVisitor = Remove an inn visitor spawn marker
 aetherhaven.plotcreator.hud.SUBSTEP.q = Go back (extra placement blocks from the step you leave are removed)
 aetherhaven.plotcreator.hud.MATERIALS.f = Open build materials menu
-aetherhaven.plotcreator.hud.CONFIGURE.f = Open building settings
+aetherhaven.plotcreator.hud.CONFIGURE.f = Open building settings (name, tags, and options)
 aetherhaven.plotcreator.hud.REVIEW.f = Save the building
 
 aetherhaven.plotcreator.hud.kindSelected = Type: {kind}
@@ -248,7 +253,7 @@ aetherhaven.plotcreator.step.MATERIALS.detail = Use plus and minus to change cou
 
 aetherhaven.plotcreator.step.CONFIGURE.title = Building settings
 aetherhaven.plotcreator.step.CONFIGURE.short = Settings
-aetherhaven.plotcreator.step.CONFIGURE.hint = Set treasury gold cost, self build days, style, prefab empty spaces, plot token lock, and optionally submit to the community marketplace.
+aetherhaven.plotcreator.step.CONFIGURE.hint = Enter the display name, description, building id, and tags. Set treasury gold cost, self build days, style, prefab empty spaces, plot token lock, and optionally submit to the community marketplace. The id updates from the name until you edit the id field yourself. The prefab file uses this id.
 
 aetherhaven.plotcreator.step.CONFIGURE.detail = Gold is paid from the town treasury when the plot is built. Self build days is how long the plot takes to finish without a building staff. Style groups your building in the plot crafting bench. Save empty spaces controls whether air in your footprint is saved to clear blocks when built. Plot token locked requires players to unlock this plot at the plot crafting bench before they can craft tokens.
 
