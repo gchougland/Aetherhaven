@@ -1,6 +1,6 @@
 {
   "id": "plot_jimmys_windmill",
-  "displayName": "Jimmy's Windmill",
+  "displayName": "Jimmy\u0027s Windmill",
   "description": "By Jimmy G",
   "prefabPath": "Jimmys/plot_jimmys_windmill.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -30,18 +30,22 @@
   ],
   "pois": [
     {
-      "localX": 13,
-      "localY": 2,
+      "localX": 12,
+      "localY": 1,
       "localZ": -8,
       "tags": [
-        "WORK"
+        "WORK",
+        "workActivity:craft"
       ],
       "capacity": 1,
-      "blockTypeId": "Wood_Beech_Trunk",
+      "blockTypeId": "Rock_Stone",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 14,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -8
+      "interactionTargetLocalX": 11,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -8,
+      "workResidentKind": "farmer",
+      "interactionTargetYawDegrees": -128.18402,
+      "equipmentProfileId": "work_builder"
     }
   ],
   "managementBlockLocalPos": [
@@ -55,11 +59,6 @@
     -6
   ],
   "countsAsConstructionId": "plot_farm",
-  "tags": [
-    "farm",
-    "work",
-    "nature"
-  ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_jimmys_windmill.displayName",
   "styleId": "jimmy"
 }

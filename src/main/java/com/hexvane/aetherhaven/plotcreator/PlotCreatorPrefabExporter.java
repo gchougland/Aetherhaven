@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.guild.marker.AdventurerSpawnMarkerEntity;
 import com.hexvane.aetherhaven.plotcreator.icon.PlotCreatorIconExporter;
 import com.hexvane.aetherhaven.shopspot.ShopSpotDisplayService;
 import com.hexvane.aetherhaven.prefab.EditorMarkerBlocks;
+import com.hexvane.aetherhaven.prefab.PrefabSupportUtil;
 import com.hypixel.hytale.builtin.buildertools.BuilderToolsPlugin;
 import com.hypixel.hytale.builtin.buildertools.prefabeditor.saving.PrefabSaveContributor;
 import com.hypixel.hytale.component.ComponentRegistry;
@@ -16,7 +17,6 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.VectorBoxUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
-import com.hypixel.hytale.server.core.blocktype.component.BlockPhysics;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.BlockEntity;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
@@ -113,16 +113,12 @@ public final class PlotCreatorPrefabExporter {
                 Store<ChunkStore> chunkStore = chunk.getReference().getStore();
                 int lastSection = -1;
                 Ref<ChunkStore> sectionRef = null;
-                BlockPhysics blockPhysics = null;
 
                 for (int y = top; y >= bottom; y--) {
                     int block = chunk.getBlock(x, y, z);
                     if (lastSection != ChunkUtil.indexSection(y)) {
                         lastSection = ChunkUtil.indexSection(y);
                         sectionRef = chunkStoreAccessor.getChunkSectionReferenceAtBlock(x, y, z);
-                        blockPhysics = sectionRef != null && sectionRef.isValid()
-                            ? chunkStore.getComponent(sectionRef, BlockPhysics.getComponentType())
-                            : null;
                     }
 
                     int fluid = 0;
@@ -141,7 +137,22 @@ public final class PlotCreatorPrefabExporter {
                     } else if (block == 0 && fluid == 0) {
                         selection.addBlockAtWorldPos(x, y, z, 0, 0, 0, 0);
                     } else {
-                        selection.copyFromAtWorld(x, y, z, chunk, blockPhysics);
+                        int rotation = chunk.getRotationIndex(x, y, z);
+                        int filler = chunk.getFiller(x, y, z);
+                        int worldSupport = chunk.getSupportValue(x, y, z);
+                        BlockType blockType = BlockType.getAssetMap().getAsset(block);
+                        int support =
+                            PrefabSupportUtil.effectiveSupportForExport(blockType, rotation, worldSupport);
+                        selection.addBlockAtWorldPos(
+                            x,
+                            y,
+                            z,
+                            block,
+                            rotation,
+                            filler,
+                            support,
+                            chunk.getBlockComponentHolder(x, y, z)
+                        );
                     }
                         // Match BuilderTools PrefabSaver: always write the fluid layer explicitly so fluid-only
                         // cells and editor-air cells keep their fluids (copyFromAtWorld alone is not enough for

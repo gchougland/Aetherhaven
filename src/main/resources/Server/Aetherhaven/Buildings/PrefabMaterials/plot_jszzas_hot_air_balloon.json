@@ -1,0 +1,70 @@
+{
+  "constructionId": "plot_jszzas_hot_air_balloon",
+  "prefabPath": "Jszza/plot_jszzas_hot_air_balloon.prefab.json",
+  "materials": [
+    {
+      "itemId": "Cloth_Block_Wool_Red",
+      "count": 714
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 500
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 322
+    },
+    {
+      "itemId": "Wood_Hardwood_Beam",
+      "count": 185
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks_Half",
+      "count": 78
+    },
+    {
+      "itemId": "Wood_Hardwood_Stairs",
+      "count": 44
+    },
+    {
+      "itemId": "Furniture_Crude_Trapdoor",
+      "count": 35
+    },
+    {
+      "itemId": "Deco_Rope",
+      "count": 15
+    },
+    {
+      "itemId": "Rock_Calcite_Brick_Smooth_Half",
+      "count": 10
+    },
+    {
+      "itemId": "Rock_Calcite_Brick_Smooth",
+      "count": 7
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 5
+    },
+    {
+      "itemId": "Rock_Calcite_Brick_Beam",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Crystal_Yellow_Block",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Beam",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Crude_Platform",
+      "count": 2
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 2
+    }
+  ]
+}

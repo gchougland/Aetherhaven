@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.construction;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyObstructionUtil;
 import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
 import com.hexvane.aetherhaven.prefab.EditorMarkerBlocks;
+import com.hexvane.aetherhaven.prefab.PrefabSupportUtil;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.BlockMaterial;
@@ -18,7 +19,6 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.protocol.InteractionType;
-import com.hypixel.hytale.server.core.blocktype.component.BlockPhysics;
 import com.hypixel.hytale.server.core.entity.entities.BlockEntity;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
@@ -274,9 +274,9 @@ public final class ConstructionPasteOps {
     }
 
     /**
-     * Partitions {@code nonAirPlacementOrder} (typically {@link #withoutPureAirCells}) so block types listed in the
-     * construction JSON’s {@code assemblyDeferredBlockIds} are not indexed for the assembly frontier — they are written
-     * in {@code deferred} order after the frontier completes.
+     * Partitions {@code nonAirPlacementOrder} so block types listed in the construction JSON’s
+     * {@code assemblyDeferredBlockIds} and blocks that {@link PrefabSupportUtil#requiresNeighborSupport} are not
+     * indexed for the assembly frontier — they are written in {@code deferred} order after the frontier completes.
      */
     @Nonnull
     public static AssemblyDeferredPartition partitionAssemblyDeferredBlocks(
@@ -284,29 +284,21 @@ public final class ConstructionPasteOps {
         @Nonnull BlockTypeAssetMap<String, BlockType> blockTypeMap,
         @Nonnull Collection<String> deferBlockTypeIds
     ) {
-        if (deferBlockTypeIds.isEmpty()) {
-            return new AssemblyDeferredPartition(nonAirPlacementOrder, List.of());
-        }
         HashSet<String> want = new HashSet<>();
         for (String id : deferBlockTypeIds) {
             if (id != null && !id.isBlank()) {
                 want.add(id.trim());
             }
         }
-        if (want.isEmpty()) {
-            return new AssemblyDeferredPartition(nonAirPlacementOrder, List.of());
-        }
         List<PendingBlock> main = new ArrayList<>();
         List<PendingBlock> deferred = new ArrayList<>();
         for (PendingBlock pb : nonAirPlacementOrder) {
-            String typeId = null;
-            if (pb.blockId() != 0) {
-                BlockType bt = blockTypeMap.getAsset(pb.blockId());
-                if (bt != null) {
-                    typeId = bt.getId();
-                }
-            }
-            if (typeId != null && want.contains(typeId)) {
+            BlockType bt = pb.blockId() != 0 ? blockTypeMap.getAsset(pb.blockId()) : null;
+            String typeId = bt != null ? bt.getId() : null;
+            boolean defer =
+                (typeId != null && want.contains(typeId))
+                    || PrefabSupportUtil.requiresNeighborSupport(bt, pb.blockRotation());
+            if (defer) {
                 deferred.add(pb);
             } else {
                 main.add(pb);
@@ -467,13 +459,22 @@ public final class ConstructionPasteOps {
                 return false;
             }
         }
-        if (pb.supportValue() != 0) {
+        if (pb.supportValue() != 0 || PrefabSupportUtil.requiresNeighborSupport(block, pb.blockRotation())) {
             Ref<ChunkStore> columnRef = chunk.getReference();
             if (columnRef.isValid()) {
                 Store<ChunkStore> store = columnRef.getStore();
                 Ref<ChunkStore> section = sectionRefForBlockY(chunk, by);
                 if (section != null) {
-                    BlockPhysics.setSupportValue(store, section, bx, by, bz, pb.supportValue());
+                    PrefabSupportUtil.applyEffectiveSupport(
+                        store,
+                        section,
+                        bx,
+                        by,
+                        bz,
+                        pb.supportValue(),
+                        block,
+                        pb.blockRotation()
+                    );
                 }
             }
         }
@@ -684,7 +685,7 @@ public final class ConstructionPasteOps {
                 return false;
             }
         }
-        if (pb.supportValue != 0) {
+        if (pb.supportValue != 0 || PrefabSupportUtil.requiresNeighborSupport(block, pb.blockRotation)) {
             Ref<ChunkStore> ref = chunk.getReference();
             if (!ref.isValid()) {
                 return false;
@@ -692,7 +693,16 @@ public final class ConstructionPasteOps {
             Store<ChunkStore> store = ref.getStore();
             Ref<ChunkStore> section = sectionRefForBlockY(chunk, by);
             if (section != null) {
-                BlockPhysics.setSupportValue(store, section, bx, by, bz, pb.supportValue);
+                PrefabSupportUtil.applyEffectiveSupport(
+                    store,
+                    section,
+                    bx,
+                    by,
+                    bz,
+                    pb.supportValue,
+                    block,
+                    pb.blockRotation
+                );
             }
         }
         if (pb.holder != null) {
@@ -776,13 +786,22 @@ public final class ConstructionPasteOps {
             FillerBlockUtil.NO_FILLER,
             SET_BLOCK_SETTINGS_PLACE
         );
-        if (pb.supportValue() != 0) {
+        if (pb.supportValue() != 0 || PrefabSupportUtil.requiresNeighborSupport(block, pb.blockRotation())) {
             Ref<ChunkStore> ref = chunk.getReference();
             if (ref.isValid()) {
                 Store<ChunkStore> store = ref.getStore();
                 Ref<ChunkStore> section = sectionRefForBlockY(chunk, by);
                 if (section != null) {
-                    BlockPhysics.setSupportValue(store, section, bx, by, bz, pb.supportValue());
+                    PrefabSupportUtil.applyEffectiveSupport(
+                        store,
+                        section,
+                        bx,
+                        by,
+                        bz,
+                        pb.supportValue(),
+                        block,
+                        pb.blockRotation()
+                    );
                 }
             }
         }

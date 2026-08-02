@@ -387,7 +387,8 @@
       "x": -20,
       "y": 2,
       "z": 4,
-      "name": "Furniture_Tavern_Barrel"
+      "name": "Furniture_Tavern_Barrel",
+      "support": 15
     },
     {
       "x": -20,
@@ -619,7 +620,8 @@
       "x": -20,
       "y": 10,
       "z": 10,
-      "name": "Furniture_Village_Planter"
+      "name": "Furniture_Village_Planter",
+      "support": 15
     },
     {
       "x": -20,
@@ -686,7 +688,8 @@
       "x": -20,
       "y": 10,
       "z": 11,
-      "name": "Furniture_Village_Planter"
+      "name": "Furniture_Village_Planter",
+      "support": 15
     },
     {
       "x": -20,
@@ -1141,7 +1144,7 @@
             "FuelTime": 0.0,
             "Active": false,
             "NextExtra": 2,
-            "LastTickGameTime": "0001-01-10T04:47:59.998970031Z"
+            "LastTickGameTime": "0001-02-02T17:49:42.514624111Z"
           },
           "PlacedByInteraction": {
             "WhoPlacedUuid": {
@@ -1151,6 +1154,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 1
     },
     {
@@ -1158,6 +1162,7 @@
       "y": 3,
       "z": 10,
       "name": "Bench_Furnace",
+      "support": 15,
       "filler": 1024,
       "rotation": 1
     },
@@ -1193,6 +1198,7 @@
       "y": 2,
       "z": 11,
       "name": "Bench_Furnace",
+      "support": 15,
       "filler": 32,
       "rotation": 1
     },
@@ -1201,6 +1207,7 @@
       "y": 3,
       "z": 11,
       "name": "Bench_Furnace",
+      "support": 15,
       "filler": 1056,
       "rotation": 1
     },
@@ -1341,7 +1348,8 @@
       "x": -19,
       "y": 4,
       "z": 15,
-      "name": "Plant_Hay_Bundle"
+      "name": "Plant_Hay_Bundle",
+      "support": 15
     },
     {
       "x": -19,
@@ -1378,6 +1386,7 @@
       "y": 2,
       "z": 18,
       "name": "Deco_Target",
+      "support": 15,
       "rotation": 1
     },
     {
@@ -1444,7 +1453,8 @@
       "x": -18,
       "y": 3,
       "z": 4,
-      "name": "Furniture_Tavern_Barrel"
+      "name": "Furniture_Tavern_Barrel",
+      "support": 15
     },
     {
       "x": -18,
@@ -1689,7 +1699,8 @@
       "x": -18,
       "y": 3,
       "z": 16,
-      "name": "Plant_Hay_Bundle"
+      "name": "Plant_Hay_Bundle",
+      "support": 15
     },
     {
       "x": -18,
@@ -1743,7 +1754,8 @@
       "x": -17,
       "y": 2,
       "z": 2,
-      "name": "Furniture_Tavern_Barrel"
+      "name": "Furniture_Tavern_Barrel",
+      "support": 15
     },
     {
       "x": -17,
@@ -2052,7 +2064,8 @@
       "x": -16,
       "y": 2,
       "z": 3,
-      "name": "Furniture_Tavern_Barrel"
+      "name": "Furniture_Tavern_Barrel",
+      "support": 15
     },
     {
       "x": -16,
@@ -2076,13 +2089,15 @@
       "x": -16,
       "y": 2,
       "z": 6,
-      "name": "Furniture_Tavern_Planter"
+      "name": "Furniture_Tavern_Planter",
+      "support": 15
     },
     {
       "x": -16,
       "y": 3,
       "z": 6,
-      "name": "Plant_Flower_Tall_Pink"
+      "name": "Plant_Flower_Tall_Pink",
+      "support": 15
     },
     {
       "x": -16,
@@ -2149,13 +2164,15 @@
       "x": -16,
       "y": 5,
       "z": 8,
-      "name": "Deco_Lantern_Ceiling"
+      "name": "Deco_Lantern_Ceiling",
+      "support": 15
     },
     {
       "x": -16,
       "y": 6,
       "z": 8,
-      "name": "Deco_Rope"
+      "name": "Deco_Rope",
+      "support": 15
     },
     {
       "x": -16,
@@ -2176,6 +2193,7 @@
       "y": 2,
       "z": 9,
       "name": "Furniture_Tavern_Bench",
+      "support": 15,
       "filler": 31
     },
     {
@@ -2202,7 +2220,8 @@
       "x": -16,
       "y": 2,
       "z": 10,
-      "name": "Furniture_Village_Table"
+      "name": "Furniture_Village_Table",
+      "support": 15
     },
     {
       "x": -16,
@@ -2223,6 +2242,7 @@
       "y": 2,
       "z": 11,
       "name": "Furniture_Village_Table",
+      "support": 15,
       "filler": 32
     },
     {
@@ -2243,6 +2263,7 @@
       "y": 2,
       "z": 12,
       "name": "Furniture_Tavern_Bench",
+      "support": 15,
       "rotation": 2
     },
     {
@@ -2268,13 +2289,15 @@
       "x": -16,
       "y": 5,
       "z": 13,
-      "name": "Deco_Lantern_Ceiling"
+      "name": "Deco_Lantern_Ceiling",
+      "support": 15
     },
     {
       "x": -16,
       "y": 6,
       "z": 13,
-      "name": "Deco_Rope"
+      "name": "Deco_Rope",
+      "support": 15
     },
     {
       "x": -16,
@@ -2346,7 +2369,8 @@
       "x": -16,
       "y": 3,
       "z": 15,
-      "name": "Plant_Hay_Bundle"
+      "name": "Plant_Hay_Bundle",
+      "support": 15
     },
     {
       "x": -16,
@@ -2508,7 +2532,8 @@
       "x": -15,
       "y": 2,
       "z": 9,
-      "name": "Furniture_Tavern_Bench"
+      "name": "Furniture_Tavern_Bench",
+      "support": 15
     },
     {
       "x": -15,
@@ -2535,6 +2560,7 @@
       "y": 2,
       "z": 10,
       "name": "Furniture_Village_Table",
+      "support": 15,
       "filler": 1
     },
     {
@@ -2556,6 +2582,7 @@
       "y": 2,
       "z": 11,
       "name": "Furniture_Village_Table",
+      "support": 15,
       "filler": 33
     },
     {
@@ -2583,6 +2610,7 @@
       "y": 2,
       "z": 12,
       "name": "Furniture_Tavern_Bench",
+      "support": 15,
       "filler": 1,
       "rotation": 2
     },
@@ -2750,7 +2778,8 @@
       "x": -14,
       "y": 2,
       "z": 6,
-      "name": "Furniture_Tavern_Barrel"
+      "name": "Furniture_Tavern_Barrel",
+      "support": 15
     },
     {
       "x": -14,
@@ -3043,7 +3072,8 @@
       "x": -13,
       "y": 3,
       "z": 6,
-      "name": "Furniture_Tavern_Barrel"
+      "name": "Furniture_Tavern_Barrel",
+      "support": 15
     },
     {
       "x": -13,
@@ -3116,6 +3146,7 @@
       "y": 2,
       "z": 8,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -3123,6 +3154,7 @@
       "y": 3,
       "z": 8,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -3130,6 +3162,7 @@
       "y": 4,
       "z": 8,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -3137,6 +3170,7 @@
       "y": 5,
       "z": 8,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -3274,6 +3308,7 @@
       "y": 2,
       "z": 13,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -3281,6 +3316,7 @@
       "y": 3,
       "z": 13,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -3288,6 +3324,7 @@
       "y": 4,
       "z": 13,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -3295,6 +3332,7 @@
       "y": 5,
       "z": 13,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -3366,7 +3404,8 @@
       "x": -13,
       "y": 2,
       "z": 15,
-      "name": "Furniture_Tavern_Barrel"
+      "name": "Furniture_Tavern_Barrel",
+      "support": 15
     },
     {
       "x": -13,
@@ -3486,7 +3525,8 @@
       "x": -12,
       "y": 2,
       "z": 5,
-      "name": "Furniture_Tavern_Barrel"
+      "name": "Furniture_Tavern_Barrel",
+      "support": 15
     },
     {
       "x": -12,
@@ -3533,7 +3573,8 @@
       "x": -12,
       "y": 4,
       "z": 6,
-      "name": "Furniture_Tavern_Barrel"
+      "name": "Furniture_Tavern_Barrel",
+      "support": 15
     },
     {
       "x": -12,
@@ -3918,7 +3959,8 @@
       "x": -12,
       "y": 3,
       "z": 15,
-      "name": "Furniture_Tavern_Barrel"
+      "name": "Furniture_Tavern_Barrel",
+      "support": 15
     },
     {
       "x": -12,
@@ -3951,7 +3993,8 @@
       "x": -12,
       "y": 2,
       "z": 16,
-      "name": "Furniture_Tavern_Barrel"
+      "name": "Furniture_Tavern_Barrel",
+      "support": 15
     },
     {
       "x": -12,
@@ -4050,7 +4093,8 @@
       "x": -11,
       "y": 2,
       "z": 1,
-      "name": "Furniture_Tavern_Barrel"
+      "name": "Furniture_Tavern_Barrel",
+      "support": 15
     },
     {
       "x": -11,
@@ -4317,6 +4361,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 1
     },
     {
@@ -4335,6 +4380,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 1
     },
     {
@@ -4353,6 +4399,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 1
     },
     {
@@ -4381,6 +4428,7 @@
       "y": 2,
       "z": 8,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 32,
       "rotation": 1
     },
@@ -4389,6 +4437,7 @@
       "y": 3,
       "z": 8,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 32,
       "rotation": 1
     },
@@ -4397,6 +4446,7 @@
       "y": 4,
       "z": 8,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 32,
       "rotation": 1
     },
@@ -4578,6 +4628,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 1
     },
     {
@@ -4596,6 +4647,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 1
     },
     {
@@ -4614,6 +4666,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 1
     },
     {
@@ -4642,6 +4695,7 @@
       "y": 2,
       "z": 14,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 32,
       "rotation": 1
     },
@@ -4650,6 +4704,7 @@
       "y": 3,
       "z": 14,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 32,
       "rotation": 1
     },
@@ -4658,6 +4713,7 @@
       "y": 4,
       "z": 14,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 32,
       "rotation": 1
     },
@@ -4941,7 +4997,8 @@
       "x": -10,
       "y": 3,
       "z": 1,
-      "name": "Furniture_Tavern_Barrel"
+      "name": "Furniture_Tavern_Barrel",
+      "support": 15
     },
     {
       "x": -10,
@@ -5007,13 +5064,15 @@
       "x": -10,
       "y": 2,
       "z": 3,
-      "name": "Furniture_Tavern_Planter"
+      "name": "Furniture_Tavern_Planter",
+      "support": 15
     },
     {
       "x": -10,
       "y": 3,
       "z": 3,
-      "name": "Plant_Flower_Common_Purple"
+      "name": "Plant_Flower_Common_Purple",
+      "support": 15
     },
     {
       "x": -10,
@@ -5033,13 +5092,15 @@
       "x": -10,
       "y": 5,
       "z": 4,
-      "name": "Deco_Lantern_Ceiling"
+      "name": "Deco_Lantern_Ceiling",
+      "support": 15
     },
     {
       "x": -10,
       "y": 6,
       "z": 4,
-      "name": "Deco_Rope"
+      "name": "Deco_Rope",
+      "support": 15
     },
     {
       "x": -10,
@@ -5235,13 +5296,15 @@
       "x": -10,
       "y": 5,
       "z": 17,
-      "name": "Deco_Lantern_Ceiling"
+      "name": "Deco_Lantern_Ceiling",
+      "support": 15
     },
     {
       "x": -10,
       "y": 6,
       "z": 17,
-      "name": "Deco_Rope"
+      "name": "Deco_Rope",
+      "support": 15
     },
     {
       "x": -10,
@@ -5261,13 +5324,15 @@
       "x": -10,
       "y": 2,
       "z": 18,
-      "name": "Furniture_Tavern_Planter"
+      "name": "Furniture_Tavern_Planter",
+      "support": 15
     },
     {
       "x": -10,
       "y": 3,
       "z": 18,
-      "name": "Plant_Flower_Tall_Pink"
+      "name": "Plant_Flower_Tall_Pink",
+      "support": 15
     },
     {
       "x": -10,
@@ -5347,7 +5412,8 @@
       "x": -9,
       "y": 2,
       "z": 1,
-      "name": "Furniture_Tavern_Barrel"
+      "name": "Furniture_Tavern_Barrel",
+      "support": 15
     },
     {
       "x": -9,
@@ -5959,13 +6025,15 @@
       "x": -8,
       "y": 6,
       "z": 8,
-      "name": "Deco_Lantern_Ceiling"
+      "name": "Deco_Lantern_Ceiling",
+      "support": 15
     },
     {
       "x": -8,
       "y": 7,
       "z": 8,
-      "name": "Deco_Rope"
+      "name": "Deco_Rope",
+      "support": 15
     },
     {
       "x": -8,
@@ -6041,13 +6109,15 @@
       "x": -8,
       "y": 6,
       "z": 13,
-      "name": "Deco_Lantern_Ceiling"
+      "name": "Deco_Lantern_Ceiling",
+      "support": 15
     },
     {
       "x": -8,
       "y": 7,
       "z": 13,
-      "name": "Deco_Rope"
+      "name": "Deco_Rope",
+      "support": 15
     },
     {
       "x": -8,
@@ -6407,6 +6477,7 @@
       "y": 2,
       "z": 7,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 992,
       "rotation": 3
     },
@@ -6415,6 +6486,7 @@
       "y": 3,
       "z": 7,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 992,
       "rotation": 3
     },
@@ -6423,6 +6495,7 @@
       "y": 4,
       "z": 7,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 992,
       "rotation": 3
     },
@@ -6474,6 +6547,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 3
     },
     {
@@ -6498,6 +6572,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 3
     },
     {
@@ -6522,6 +6597,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 3
     },
     {
@@ -6601,6 +6677,7 @@
       "y": 2,
       "z": 10,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 992,
       "rotation": 3
     },
@@ -6609,6 +6686,7 @@
       "y": 3,
       "z": 10,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 992,
       "rotation": 3
     },
@@ -6617,6 +6695,7 @@
       "y": 4,
       "z": 10,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 992,
       "rotation": 3
     },
@@ -6668,6 +6747,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 3
     },
     {
@@ -6692,6 +6772,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 3
     },
     {
@@ -6716,6 +6797,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 3
     },
     {
@@ -6795,6 +6877,7 @@
       "y": 2,
       "z": 13,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 992,
       "rotation": 3
     },
@@ -6803,6 +6886,7 @@
       "y": 3,
       "z": 13,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 992,
       "rotation": 3
     },
@@ -6811,6 +6895,7 @@
       "y": 4,
       "z": 13,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 992,
       "rotation": 3
     },
@@ -6862,6 +6947,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 3
     },
     {
@@ -6886,6 +6972,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 3
     },
     {
@@ -6910,6 +6997,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 3
     },
     {
@@ -7332,6 +7420,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 1
     },
     {
@@ -7356,6 +7445,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 1
     },
     {
@@ -7380,6 +7470,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 1
     },
     {
@@ -7413,6 +7504,7 @@
       "y": 2,
       "z": 8,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 32,
       "rotation": 1
     },
@@ -7421,6 +7513,7 @@
       "y": 3,
       "z": 8,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 32,
       "rotation": 1
     },
@@ -7429,6 +7522,7 @@
       "y": 4,
       "z": 8,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 32,
       "rotation": 1
     },
@@ -7526,6 +7620,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 1
     },
     {
@@ -7550,6 +7645,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 1
     },
     {
@@ -7574,6 +7670,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 1
     },
     {
@@ -7607,6 +7704,7 @@
       "y": 2,
       "z": 11,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 32,
       "rotation": 1
     },
@@ -7615,6 +7713,7 @@
       "y": 3,
       "z": 11,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 32,
       "rotation": 1
     },
@@ -7623,6 +7722,7 @@
       "y": 4,
       "z": 11,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 32,
       "rotation": 1
     },
@@ -7720,6 +7820,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 1
     },
     {
@@ -7744,6 +7845,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 1
     },
     {
@@ -7768,6 +7870,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 1
     },
     {
@@ -7801,6 +7904,7 @@
       "y": 2,
       "z": 14,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 32,
       "rotation": 1
     },
@@ -7809,6 +7913,7 @@
       "y": 3,
       "z": 14,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 32,
       "rotation": 1
     },
@@ -7817,6 +7922,7 @@
       "y": 4,
       "z": 14,
       "name": "Furniture_Village_Chest_Large",
+      "support": 15,
       "filler": 32,
       "rotation": 1
     },
@@ -8193,13 +8299,15 @@
       "x": -5,
       "y": 6,
       "z": 8,
-      "name": "Deco_Lantern_Ceiling"
+      "name": "Deco_Lantern_Ceiling",
+      "support": 15
     },
     {
       "x": -5,
       "y": 7,
       "z": 8,
-      "name": "Deco_Rope"
+      "name": "Deco_Rope",
+      "support": 15
     },
     {
       "x": -5,
@@ -8275,13 +8383,15 @@
       "x": -5,
       "y": 6,
       "z": 13,
-      "name": "Deco_Lantern_Ceiling"
+      "name": "Deco_Lantern_Ceiling",
+      "support": 15
     },
     {
       "x": -5,
       "y": 7,
       "z": 13,
-      "name": "Deco_Rope"
+      "name": "Deco_Rope",
+      "support": 15
     },
     {
       "x": -5,
@@ -9001,13 +9111,15 @@
       "x": -3,
       "y": 2,
       "z": 3,
-      "name": "Furniture_Tavern_Planter"
+      "name": "Furniture_Tavern_Planter",
+      "support": 15
     },
     {
       "x": -3,
       "y": 3,
       "z": 3,
-      "name": "Plant_Flower_Common_Yellow"
+      "name": "Plant_Flower_Common_Yellow",
+      "support": 15
     },
     {
       "x": -3,
@@ -9027,13 +9139,15 @@
       "x": -3,
       "y": 5,
       "z": 4,
-      "name": "Deco_Lantern_Ceiling"
+      "name": "Deco_Lantern_Ceiling",
+      "support": 15
     },
     {
       "x": -3,
       "y": 6,
       "z": 4,
-      "name": "Deco_Rope"
+      "name": "Deco_Rope",
+      "support": 15
     },
     {
       "x": -3,
@@ -9117,6 +9231,7 @@
       "y": 2,
       "z": 7,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9124,6 +9239,7 @@
       "y": 3,
       "z": 7,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9131,6 +9247,7 @@
       "y": 4,
       "z": 7,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9138,6 +9255,7 @@
       "y": 5,
       "z": 7,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9145,6 +9263,7 @@
       "y": 6,
       "z": 7,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9166,6 +9285,7 @@
       "y": 2,
       "z": 8,
       "name": "Bench_WorkBench",
+      "support": 15,
       "filler": 992,
       "rotation": 3
     },
@@ -9174,6 +9294,7 @@
       "y": 4,
       "z": 8,
       "name": "Furniture_Tavern_Shelf",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9209,6 +9330,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9216,6 +9338,7 @@
       "y": 4,
       "z": 9,
       "name": "Furniture_Tavern_Shelf",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9237,6 +9360,7 @@
       "y": 2,
       "z": 10,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9244,6 +9368,7 @@
       "y": 3,
       "z": 10,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9251,6 +9376,7 @@
       "y": 4,
       "z": 10,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9258,6 +9384,7 @@
       "y": 5,
       "z": 10,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9265,6 +9392,7 @@
       "y": 6,
       "z": 10,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9286,6 +9414,7 @@
       "y": 2,
       "z": 11,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9293,6 +9422,7 @@
       "y": 3,
       "z": 11,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9300,6 +9430,7 @@
       "y": 4,
       "z": 11,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9307,6 +9438,7 @@
       "y": 5,
       "z": 11,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9314,6 +9446,7 @@
       "y": 6,
       "z": 11,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9335,6 +9468,7 @@
       "y": 2,
       "z": 12,
       "name": "Bench_Builders",
+      "support": 15,
       "filler": 992,
       "rotation": 3
     },
@@ -9343,6 +9477,7 @@
       "y": 3,
       "z": 12,
       "name": "Bench_Builders",
+      "support": 15,
       "filler": 2016,
       "rotation": 3
     },
@@ -9351,6 +9486,7 @@
       "y": 4,
       "z": 12,
       "name": "Furniture_Tavern_Shelf",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9386,6 +9522,7 @@
           }
         }
       },
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9393,6 +9530,7 @@
       "y": 3,
       "z": 13,
       "name": "Bench_Builders",
+      "support": 15,
       "filler": 1024,
       "rotation": 3
     },
@@ -9401,6 +9539,7 @@
       "y": 4,
       "z": 13,
       "name": "Furniture_Tavern_Shelf",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9422,6 +9561,7 @@
       "y": 2,
       "z": 14,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9429,6 +9569,7 @@
       "y": 3,
       "z": 14,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9436,6 +9577,7 @@
       "y": 4,
       "z": 14,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9443,6 +9585,7 @@
       "y": 5,
       "z": 14,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9450,6 +9593,7 @@
       "y": 6,
       "z": 14,
       "name": "Furniture_Village_Bookcase",
+      "support": 15,
       "rotation": 3
     },
     {
@@ -9533,13 +9677,15 @@
       "x": -3,
       "y": 5,
       "z": 17,
-      "name": "Deco_Lantern_Ceiling"
+      "name": "Deco_Lantern_Ceiling",
+      "support": 15
     },
     {
       "x": -3,
       "y": 6,
       "z": 17,
-      "name": "Deco_Rope"
+      "name": "Deco_Rope",
+      "support": 15
     },
     {
       "x": -3,
@@ -9559,13 +9705,15 @@
       "x": -3,
       "y": 2,
       "z": 18,
-      "name": "Furniture_Tavern_Planter"
+      "name": "Furniture_Tavern_Planter",
+      "support": 15
     },
     {
       "x": -3,
       "y": 3,
       "z": 18,
-      "name": "Plant_Flower_Flax_Blue"
+      "name": "Plant_Flower_Flax_Blue",
+      "support": 15
     },
     {
       "x": -3,

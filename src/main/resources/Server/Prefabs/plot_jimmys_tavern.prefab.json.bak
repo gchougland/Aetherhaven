@@ -61726,7 +61726,7 @@
             "FuelTime": 0.0,
             "Active": false,
             "NextExtra": 2,
-            "LastTickGameTime": "0001-01-10T15:17:41.782671795Z"
+            "LastTickGameTime": "0001-01-10T15:19:49.123750433Z"
           },
           "PlacedByInteraction": {
             "WhoPlacedUuid": {
@@ -61788,7 +61788,7 @@
             "FuelTime": 0.0,
             "Active": false,
             "NextExtra": 2,
-            "LastTickGameTime": "0001-01-10T15:17:41.782671795Z"
+            "LastTickGameTime": "0001-01-10T15:19:49.123750433Z"
           },
           "PlacedByInteraction": {
             "WhoPlacedUuid": {

@@ -207,6 +207,12 @@ public final class PlotCreatorSubstepHandler {
     ) {
         Store<EntityStore> store = commandBuffer.getStore();
         PlotCreatorDraft draft = session.getDraft();
+        if (session.getPendingPoiPlacement() != null) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.poiActivityPending")
+            );
+            return true;
+        }
         if (!draft.isInsideBounds(targetBlock)) {
             playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.outsideBounds"));
             return true;
@@ -369,8 +375,7 @@ public final class PlotCreatorSubstepHandler {
             }
             case WORK_POI, SLEEP_POI, EAT_POI, FUN_POI, SHOP_POI, TOURIST_VISIT_POI, PLANNING_DESK_POI, BARD_WORK_POI,
                 QUEST_BOARD_POI -> addPoiForSubstep(
-                session.getWorld(),
-                draft,
+                session,
                 targetBlock,
                 blockId,
                 local,
@@ -380,6 +385,58 @@ public final class PlotCreatorSubstepHandler {
                 store
             );
         };
+    }
+
+    public static void finalizePendingPoi(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull String activityId,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> playerEntityRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        PlotCreatorPendingPoiPlacement pending = session.getPendingPoiPlacement();
+        if (pending == null) {
+            return;
+        }
+        PlotCreatorDraft draft = session.getDraft();
+        PlotCreatorPoiDraft poi = new PlotCreatorPoiDraft();
+        poi.setLocal(pending.poiLocal()[0], pending.poiLocal()[1], pending.poiLocal()[2]);
+        poi.setBlockTypeId(pending.resolvedBlockTypeId());
+        poi.setCapacity(1);
+        applyPoiDefaults(poi, pending.req().type(), draft, pending.req().workResidentKind());
+        PlotCreatorWorkActivityOptions.applyToPoi(poi, activityId);
+        if (pending.useSeatFacing() && pending.seatYawRadians() != null) {
+            PlotCreatorPoiInteractionTarget.applyFromSeatFacing(
+                draft,
+                pending.seatYawRadians(),
+                pending.poiLocal(),
+                poi
+            );
+        } else {
+            PlotCreatorPoiInteractionTarget.applyFromPlayerFacing(
+                draft,
+                playerEntityRef,
+                store,
+                session.getWorld(),
+                pending.spotWorldBlock(),
+                pending.poiLocal(),
+                poi
+            );
+        }
+        draft.getPois().add(poi);
+        session.clearPendingPoiPlacement();
+        playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.poiRecorded"));
+    }
+
+    public static void cancelPendingPoi(@Nonnull PlotCreatorSession session) {
+        session.clearPendingPoiPlacement();
+    }
+
+    private static boolean needsActivityPicker(@Nonnull PlotCreatorSubstepType type) {
+        return type == PlotCreatorSubstepType.WORK_POI
+            || type == PlotCreatorSubstepType.BARD_WORK_POI
+            || type == PlotCreatorSubstepType.SHOP_POI
+            || type == PlotCreatorSubstepType.FUN_POI;
     }
 
     private static boolean hasAdventurerLocal(@Nonnull PlotCreatorDraft draft, @Nonnull int[] prefabLocal) {
@@ -404,8 +461,7 @@ public final class PlotCreatorSubstepHandler {
     }
 
     private static boolean addPoiForSubstep(
-        @Nonnull com.hypixel.hytale.server.core.universe.world.World world,
-        @Nonnull PlotCreatorDraft draft,
+        @Nonnull PlotCreatorSession session,
         @Nonnull Vector3i targetBlock,
         @Nullable String blockId,
         @Nonnull int[] local,
@@ -414,6 +470,8 @@ public final class PlotCreatorSubstepHandler {
         @Nonnull Ref<EntityStore> playerEntityRef,
         @Nonnull Store<EntityStore> store
     ) {
+        com.hypixel.hytale.server.core.universe.world.World world = session.getWorld();
+        PlotCreatorDraft draft = session.getDraft();
         PlotCreatorSubstepType type = req.type();
         if (type == PlotCreatorSubstepType.QUEST_BOARD_POI
             && blockId != null
@@ -434,13 +492,30 @@ public final class PlotCreatorSubstepHandler {
                 return true;
             }
         }
+        String resolvedBlockTypeId;
+        if (blockId != null && spot.role() == PlotCreatorSpotPlacement.SpotRole.POI_ANCHOR) {
+            resolvedBlockTypeId = PlotCreatorLocalCoords.blockTypeAt(world, spot.worldBlock());
+        } else {
+            resolvedBlockTypeId = blockId;
+        }
+        if (needsActivityPicker(type)) {
+            boolean useSeatFacing = spot.worldYawRadians() != null;
+            session.setPendingPoiPlacement(
+                new PlotCreatorPendingPoiPlacement(
+                    req,
+                    poiLocal,
+                    resolvedBlockTypeId,
+                    spot.worldYawRadians(),
+                    new Vector3i(spot.worldBlock()),
+                    useSeatFacing
+                )
+            );
+            PlotCreatorInteractions.openPoiActivityPage(playerRef, playerEntityRef, store, session);
+            return true;
+        }
         PlotCreatorPoiDraft poi = new PlotCreatorPoiDraft();
         poi.setLocal(poiLocal[0], poiLocal[1], poiLocal[2]);
-        if (blockId != null && spot.role() == PlotCreatorSpotPlacement.SpotRole.POI_ANCHOR) {
-            poi.setBlockTypeId(PlotCreatorLocalCoords.blockTypeAt(world, spot.worldBlock()));
-        } else {
-            poi.setBlockTypeId(blockId);
-        }
+        poi.setBlockTypeId(resolvedBlockTypeId);
         poi.setCapacity(1);
         applyPoiDefaults(poi, type, draft, req.workResidentKind());
         if (spot.worldYawRadians() != null) {

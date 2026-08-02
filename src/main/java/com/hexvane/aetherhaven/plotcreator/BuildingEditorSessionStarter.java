@@ -102,16 +102,14 @@ public final class BuildingEditorSessionStarter {
         }
         Vector3d pos = transform.getPosition();
         float yawRad = transform.getRotation().yaw();
-        Vector3i signPos = pasteSignNearPlayer(pos, yawRad);
         Rotation yaw = PlotCreatorJsonWriter.parseRotationYaw(def.getRotationYaw());
-        Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(signPos, yaw);
+        Vector3i prefabOrigin = pasteOriginNearPlayer(pos, yawRad);
 
         UUID uuid = playerRef.getUuid();
         PlotCreatorSessions.remove(uuid);
         World world = store.getExternalData().getWorld();
         playerRef.sendMessage(Message.translation(MSG + ".hint.loading").param("name", displayName(def)));
 
-        Vector3i signCopy = new Vector3i(signPos);
         Vector3i originCopy = new Vector3i(prefabOrigin);
         boolean communityEdit = communitySubmissionEdit;
         boolean communityApproved = communitySubmissionApproved;
@@ -138,7 +136,6 @@ public final class BuildingEditorSessionStarter {
                             def,
                             buffer,
                             originCopy,
-                            signCopy,
                             yaw,
                             communityEdit,
                             communityApproved
@@ -156,7 +153,6 @@ public final class BuildingEditorSessionStarter {
         @Nonnull ConstructionDefinition def,
         @Nonnull IPrefabBuffer buffer,
         @Nonnull Vector3i prefabOrigin,
-        @Nonnull Vector3i signPos,
         @Nonnull Rotation yaw,
         boolean communitySubmissionEdit,
         boolean communitySubmissionApproved
@@ -183,7 +179,7 @@ public final class BuildingEditorSessionStarter {
         PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, yaw, buffer);
         draft.setCornerFirst(new Vector3i(fp.getMinX(), fp.getMinY(), fp.getMinZ()));
         draft.setCornerSecond(new Vector3i(fp.getMaxX(), fp.getMaxY(), fp.getMaxZ()));
-        draft.setPlotAnchor(signPos);
+        draft.setPlotAnchor(def.resolvePreviewSignAnchorWorld(prefabOrigin, yaw));
         convertPrefabLocalsToSignSpace(draft, def.getPlotAnchorOffset());
         seedSpecialBlocksFromPois(draft);
         seedAdventurerSpawnsFromWorldMarkers(world, draft, fp);
@@ -418,13 +414,13 @@ public final class BuildingEditorSessionStarter {
     private record SeededAdventurer(int x, int y, int z, float yaw) {}
 
     @Nonnull
-    private static Vector3i pasteSignNearPlayer(@Nonnull Vector3d pos, float yawRad) {
+    private static Vector3i pasteOriginNearPlayer(@Nonnull Vector3d pos, float yawRad) {
         double forwardX = -Math.sin(yawRad);
         double forwardZ = -Math.cos(yawRad);
-        int sx = (int) Math.floor(pos.x + forwardX * PASTE_FORWARD_BLOCKS);
-        int sy = (int) Math.floor(pos.y);
-        int sz = (int) Math.floor(pos.z + forwardZ * PASTE_FORWARD_BLOCKS);
-        return new Vector3i(sx, sy, sz);
+        int ox = (int) Math.floor(pos.x + forwardX * PASTE_FORWARD_BLOCKS);
+        int oy = (int) Math.floor(pos.y);
+        int oz = (int) Math.floor(pos.z + forwardZ * PASTE_FORWARD_BLOCKS);
+        return new Vector3i(ox, oy, oz);
     }
 
     @Nonnull

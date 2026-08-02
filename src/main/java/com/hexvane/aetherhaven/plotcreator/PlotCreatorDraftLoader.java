@@ -55,6 +55,8 @@ public final class PlotCreatorDraftLoader {
                 );
             }
             p.setWorkResidentKind(row.getWorkResidentKind());
+            p.setInteractionTargetYawDegrees(row.getInteractionTargetYawDegrees());
+            p.setEquipmentProfileId(row.getEquipmentProfileId());
             draft.getPois().add(p);
         }
         copyPos(def.getManagementBlockLocalPos(), draft::setManagementBlockLocalPos);

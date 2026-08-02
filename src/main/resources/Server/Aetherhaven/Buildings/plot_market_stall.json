@@ -12,9 +12,9 @@
     0
   ],
   "managementBlockLocalPos": [
-    6,
-    3,
-    -12
+    0,
+    2,
+    -5
   ],
   "rotationYaw": "None",
   "autonomyNavFloorYAboveMinY": 1.0,
@@ -33,9 +33,9 @@
   ],
   "pois": [
     {
-      "localX": 7,
-      "localY": 2,
-      "localZ": -7,
+      "localX": 1,
+      "localY": 1,
+      "localZ": 0,
       "tags": [
         "SHOP",
         "WORK"
@@ -43,40 +43,38 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Counter",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -8,
+      "interactionTargetLocalX": 1,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -1,
       "workResidentKind": "merchant"
     },
     {
-      "localX": 5,
-      "localY": 1,
-      "localZ": -5,
+      "localX": -1,
+      "localY": 0,
+      "localZ": 2,
       "tags": [
         "TOURIST_VISIT"
       ],
       "capacity": 1,
       "blockTypeId": "Rock_Stone_Brick",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 5,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -4,
-      "interactionTargetYawDegrees": 22.250317
+      "interactionTargetLocalX": -1,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 3
     },
     {
-      "localX": 8,
-      "localY": 1,
-      "localZ": -5,
+      "localX": 2,
+      "localY": 0,
+      "localZ": 2,
       "tags": [
         "TOURIST_VISIT"
       ],
       "capacity": 1,
       "blockTypeId": "Rock_Stone_Brick",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -5,
-      "interactionTargetYawDegrees": -38.52237
+      "interactionTargetLocalX": 1,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 2
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_market_stall.displayName",

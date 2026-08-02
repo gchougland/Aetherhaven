@@ -52,8 +52,7 @@
       "interactionKind": "SIT",
       "interactionTargetLocalX": 4,
       "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -4,
-      "interactionTargetYawDegrees": 1.8342577
+      "interactionTargetLocalZ": -4
     },
     {
       "localX": 7,
@@ -67,8 +66,7 @@
       "interactionKind": "SIT",
       "interactionTargetLocalX": 6,
       "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -5,
-      "interactionTargetYawDegrees": -30.524378
+      "interactionTargetLocalZ": -5
     }
   ],
   "managementBlockLocalPos": [

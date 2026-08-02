@@ -176,13 +176,9 @@ public final class PoiMarkerPlacementService {
 
     @Nullable
     public static String equipmentForWorkAction(@Nullable String workAction) {
-        if (workAction == null) {
-            return null;
-        }
-        return switch (workAction) {
-            case "Mine" -> "work_miner";
-            case "Chop" -> "work_logger";
-            default -> null;
-        };
+        String activityId = com.hexvane.aetherhaven.plotcreator.PlotCreatorWorkActivityOptions.activityIdForWorkAction(workAction);
+        return activityId != null
+            ? com.hexvane.aetherhaven.plotcreator.PlotCreatorWorkActivityOptions.equipmentProfileFor(activityId)
+            : null;
     }
 }

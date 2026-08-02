@@ -21,14 +21,11 @@
 - **Important spots** — Plot creator spots snap to the right surface when you click blocks, half blocks, carpets, or chairs.
 - **Inn visitors and adventurers** — They spawn on the ground instead of inside blocks or floating in the air.
 - **Seating** — Villagers and adventurers sit facing forward on chairs and benches.
-- **Stormwind building icons** — Plot crafting thumbnails for Stormwind variants now load correctly (icons were missing from the import).
 - **Shop tooltips** — Shop prices no longer replace other tooltip text. (Fixes Enchantment tooltip issue)
 - **Upload limit message** — Clearer message when you hit the community upload limit.
 - **Plot crafting bench** — Fixed a crash when opening the bench with favorites loaded.
 - **Variant building menus** — Custom building variants now get the same record shelf options as the original (expand territory, guards, tourists, workers, and shops).
 - **Building thumbnails** — Water and lava in a building now show on plot crafting icons (blue water, orange lava) instead of being left out.
-- **Plot creator Done button** — Done enables right away when you pick a type or variant instead of staying grey until you close the menu.
-- **Plot creator bounds hint** — Shrink bounds now shows crouch and right click in the key hint row like other tools.
 
 ## [2.6.0] - 7/27/2026
 

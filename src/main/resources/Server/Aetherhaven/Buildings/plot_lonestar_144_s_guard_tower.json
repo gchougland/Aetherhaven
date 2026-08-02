@@ -1,6 +1,6 @@
-﻿{
+{
   "id": "plot_lonestar_144_s_guard_tower",
-  "displayName": "LoneStar_144's Guard Tower",
+  "displayName": "LoneStar_144\u0027s Guard Tower",
   "description": "By LoneStar_144",
   "prefabPath": "plot_lonestar_144_s_guard_tower.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -21,7 +21,7 @@
     },
     {
       "resourceTypeId": "Rock",
-      "count": 400
+      "count": 300
     }
   ],
   "tags": [

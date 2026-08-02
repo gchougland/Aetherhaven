@@ -1,6 +1,6 @@
 {
   "id": "plot_jszzas_small_castle",
-  "displayName": "Jszza's Small Castle",
+  "displayName": "Jszza\u0027s Small Castle",
   "description": "Made by Jszza",
   "prefabPath": "Jszza/plot_jszzas_small_castle.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -14,180 +14,12 @@
   "treasuryGoldCoinCost": 50,
   "materials": [
     {
-      "itemId": "Rock_Stone_Brick",
-      "count": 497
-    },
-    {
-      "resourceTypeId": "Soils",
-      "count": 319
-    },
-    {
-      "itemId": "Rock_Stone",
-      "count": 116
-    },
-    {
-      "itemId": "Ingredient_Fibre",
-      "count": 108
-    },
-    {
-      "itemId": "Wood_Hardwood_Planks",
-      "count": 73
-    },
-    {
-      "itemId": "Rock_Stone_Brick_Stairs",
-      "count": 52
-    },
-    {
-      "itemId": "Rock_Basalt_Cobble_Roof",
-      "count": 47
-    },
-    {
-      "itemId": "Rock_Aqua_Brick",
-      "count": 42
-    },
-    {
-      "itemId": "Rock_Calcite_Cobble",
-      "count": 40
-    },
-    {
-      "itemId": "Rock_Stone_Brick_Beam",
-      "count": 39
-    },
-    {
-      "itemId": "Wood_Drywood_Planks",
-      "count": 39
-    },
-    {
-      "itemId": "Wood_Hardwood_Stairs",
-      "count": 32
-    },
-    {
-      "itemId": "Rock_Stone_Brick_Half",
-      "count": 26
+      "resourceTypeId": "Rock",
+      "count": 600
     },
     {
       "resourceTypeId": "Wood_All",
-      "count": 26
-    },
-    {
-      "itemId": "Deco_Rope",
-      "count": 21
-    },
-    {
-      "itemId": "Furniture_Crude_Trapdoor",
-      "count": 20
-    },
-    {
-      "itemId": "Wood_Darkwood_Beam",
-      "count": 20
-    },
-    {
-      "itemId": "Cloth_Block_Wool_White",
-      "count": 17
-    },
-    {
-      "itemId": "Rock_Aqua_Cobble_Stairs",
-      "count": 16
-    },
-    {
-      "itemId": "Rock_Basalt_Cobble",
-      "count": 15
-    },
-    {
-      "itemId": "Rock_Aqua_Brick_Half",
-      "count": 8
-    },
-    {
-      "itemId": "Rock_Slate_Cobble_Wall",
-      "count": 8
-    },
-    {
-      "itemId": "Wood_Ash_Trunk",
-      "count": 8
-    },
-    {
-      "itemId": "Wood_Blackwood_Planks",
-      "count": 8
-    },
-    {
-      "itemId": "Wood_Hardwood_Planks_Half",
-      "count": 8
-    },
-    {
-      "itemId": "Rock_Shale_Cobble",
-      "count": 7
-    },
-    {
-      "itemId": "Wood_Banyan_Trunk_Full",
-      "count": 7
-    },
-    {
-      "itemId": "Ingredient_Bar_Iron",
-      "count": 6
-    },
-    {
-      "itemId": "Cloth_Block_Wool_Cyan",
-      "count": 5
-    },
-    {
-      "resourceTypeId": "Rubble",
-      "count": 5
-    },
-    {
-      "itemId": "Furniture_Tavern_Candle",
-      "count": 4
-    },
-    {
-      "itemId": "Rock_Aqua_Cobble_Half",
-      "count": 4
-    },
-    {
-      "itemId": "Rock_Basalt_Cobble_Roof_Flat",
-      "count": 4
-    },
-    {
-      "itemId": "Soil_Clay",
-      "count": 4
-    },
-    {
-      "itemId": "Wood_Softwood_Planks",
-      "count": 4
-    },
-    {
-      "resourceTypeId": "Rock",
-      "count": 4
-    },
-    {
-      "itemId": "Furniture_Village_Brazier",
-      "count": 3
-    },
-    {
-      "itemId": "Ingredient_Hay",
-      "count": 3
-    },
-    {
-      "itemId": "Rock_Basalt_Cobble_Half",
-      "count": 3
-    },
-    {
-      "itemId": "Rock_Basalt_Cobble_Stairs",
-      "count": 3
-    },
-    {
-      "itemId": "Rock_Stone_Brick_Wall",
-      "count": 3
-    },
-    {
-      "itemId": "Furniture_Tavern_Window",
-      "count": 2
-    },
-    {
-      "itemId": "Wood_Blackwood_Beam",
-      "count": 2
-    },
-    {
-      "itemId": "Wood_Blackwood_Fence",
-      "count": 2
+      "count": 200
     },
     {
       "itemId": "Bench_Armour",
@@ -196,48 +28,12 @@
     {
       "itemId": "Bench_Weapon",
       "count": 1
-    },
-    {
-      "itemId": "Deco_Lantern",
-      "count": 1
-    },
-    {
-      "itemId": "Deco_Map",
-      "count": 1
-    },
-    {
-      "itemId": "Furniture_Ancient_Bed",
-      "count": 1
-    },
-    {
-      "itemId": "Furniture_Village_Door",
-      "count": 1
-    },
-    {
-      "itemId": "Halloween_Wagon",
-      "count": 1
-    },
-    {
-      "itemId": "Rock_Aqua_Cobble_Beam",
-      "count": 1
-    },
-    {
-      "itemId": "Rock_Basalt_Cobble_Beam",
-      "count": 1
-    },
-    {
-      "itemId": "Tool_Feedbag",
-      "count": 1
-    },
-    {
-      "itemId": "Wood_Darkwood_Stairs",
-      "count": 1
     }
   ],
   "pois": [
     {
-      "localX": 15,
-      "localY": 6,
+      "localX": 16,
+      "localY": 5,
       "localZ": 12,
       "tags": [
         "SLEEP",
@@ -246,9 +42,10 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Ancient_Bed",
       "interactionKind": "SLEEP",
-      "interactionTargetLocalX": 14,
-      "interactionTargetLocalY": 6,
-      "interactionTargetLocalZ": 12
+      "interactionTargetLocalX": 17,
+      "interactionTargetLocalY": 5,
+      "interactionTargetLocalZ": 12,
+      "interactionTargetYawDegrees": 90.00001
     }
   ],
   "managementBlockLocalPos": [
@@ -257,9 +54,8 @@
     4
   ],
   "countsAsConstructionId": "plot_house",
-  "tags": [
-  ],
   "plotTokenLockedByDefault": true,
   "floatingGiftBlueprint": true,
-  "styleId": "jszza"
+  "styleId": "jszza",
+  "maxHomeResidents": 1
 }

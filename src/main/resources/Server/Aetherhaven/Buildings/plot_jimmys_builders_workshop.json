@@ -14,104 +14,24 @@
   "treasuryGoldCoinCost": 45,
   "materials": [
     {
-      "itemId": "Wood_Softwood_Planks",
-      "count": 268
+      "resourceTypeId": "Wood_All",
+      "count": 500
     },
     {
-      "itemId": "Wood_Oak_Trunk",
-      "count": 178
-    },
-    {
-      "itemId": "Wood_Softwood_Roof_Shallow",
-      "count": 114
-    },
-    {
-      "itemId": "Rock_Quartzite",
-      "count": 99
-    },
-    {
-      "itemId": "Wood_Softwood_Roof",
-      "count": 83
+      "resourceTypeId": "Rock",
+      "count": 200
     },
     {
       "resourceTypeId": "Soils",
-      "count": 83
-    },
-    {
-      "itemId": "Rock_Stone_Cobble",
-      "count": 62
-    },
-    {
-      "itemId": "Rock_Stone_Brick",
-      "count": 41
-    },
-    {
-      "itemId": "Wood_Softwood_Planks_Half",
-      "count": 37
-    },
-    {
-      "itemId": "Wood_Softwood_Stairs",
-      "count": 32
-    },
-    {
-      "itemId": "Wood_Hardwood_Planks",
-      "count": 19
-    },
-    {
-      "itemId": "Furniture_Tavern_Window",
-      "count": 8
-    },
-    {
-      "itemId": "Soil_Clay",
-      "count": 8
-    },
-    {
-      "itemId": "Furniture_Crude_Torch",
-      "count": 5
-    },
-    {
-      "itemId": "Furniture_Crude_Shelf",
-      "count": 4
-    },
-    {
-      "itemId": "Rock_Stone_Cobble_Half",
-      "count": 3
+      "count": 80
     },
     {
       "itemId": "Bench_WorkBench",
       "count": 2
     },
     {
-      "itemId": "Furniture_Village_Chair",
-      "count": 2
-    },
-    {
-      "itemId": "Furniture_Village_Wardrobe",
-      "count": 2
-    },
-    {
-      "itemId": "Rock_Quartzite_Half",
-      "count": 2
-    },
-    {
-      "itemId": "Rock_Stone_Brick_Half",
-      "count": 2
-    },
-    {
       "itemId": "Bench_Builders",
       "count": 1
-    },
-    {
-      "itemId": "Furniture_Village_Door",
-      "count": 1
-    },
-    {
-      "itemId": "Rock_Stone_Cobble_Stairs",
-      "count": 1
-    },
-    {
-      "itemId": "Furniture_Tavern_Chest_Small",
-      "count": 12
     }
   ],
   "pois": [
@@ -120,8 +40,8 @@
       "localY": 0,
       "localZ": -6,
       "tags": [
-        "WORK",
-        "workActivity:craft"
+        "workActivity:craft",
+        "WORK"
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
@@ -129,8 +49,7 @@
       "interactionTargetLocalX": 7,
       "interactionTargetLocalY": 0,
       "interactionTargetLocalZ": -6,
-      "workResidentKind": "builder",
-      "interactionTargetYawDegrees": 135.3382
+      "workResidentKind": "builder"
     }
   ],
   "managementBlockLocalPos": [

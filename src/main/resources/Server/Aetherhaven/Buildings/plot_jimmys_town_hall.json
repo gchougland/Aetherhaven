@@ -14,130 +14,22 @@
   "treasuryGoldCoinCost": 35,
   "materials": [
     {
-      "itemId": "Wood_Softwood_Planks",
-      "count": 332
-    },
-    {
-      "itemId": "Rock_Quartzite",
-      "count": 171
-    },
-    {
-      "itemId": "Wood_Oak_Trunk",
-      "count": 170
-    },
-    {
-      "itemId": "Wood_Softwood_Roof",
-      "count": 131
-    },
-    {
-      "itemId": "Rock_Stone_Cobble",
-      "count": 91
-    },
-    {
-      "itemId": "Wood_Softwood_Roof_Steep",
-      "count": 82
-    },
-    {
-      "itemId": "Wood_Hardwood_Planks",
-      "count": 69
-    },
-    {
-      "itemId": "Rock_Stone_Brick",
-      "count": 43
-    },
-    {
-      "itemId": "Wood_Softwood_Stairs",
-      "count": 42
-    },
-    {
-      "itemId": "Wood_Softwood_Planks_Half",
-      "count": 28
-    },
-    {
-      "itemId": "Wood_Softwood_Roof_Shallow",
-      "count": 20
-    },
-    {
-      "itemId": "Furniture_Tavern_Window",
-      "count": 18
-    },
-    {
-      "itemId": "Ingredient_Leather_Light",
-      "count": 12
-    },
-    {
       "resourceTypeId": "Wood_All",
-      "count": 10
+      "count": 500
     },
     {
-      "itemId": "Furniture_Crude_Torch",
-      "count": 9
-    },
-    {
-      "itemId": "Rock_Stone_Cobble_Stairs",
-      "count": 7
-    },
-    {
-      "itemId": "Wood_Hardwood_Fence",
-      "count": 5
-    },
-    {
-      "itemId": "Soil_Clay",
-      "count": 4
-    },
-    {
-      "itemId": "Furniture_Village_Door",
-      "count": 3
+      "resourceTypeId": "Rock",
+      "count": 300
     },
     {
       "itemId": "Bench_Furnace",
       "count": 2
-    },
-    {
-      "resourceTypeId": "Rock",
-      "count": 2
-    },
-    {
-      "resourceTypeId": "Soils",
-      "count": 2
-    },
-    {
-      "itemId": "Aetherhaven_Smokestack",
-      "count": 1
-    },
-    {
-      "itemId": "Aetherhaven_Town_Planning_Desk",
-      "count": 1
-    },
-    {
-      "itemId": "Deco_Mug",
-      "count": 1
-    },
-    {
-      "itemId": "Furniture_Tavern_Wardrobe",
-      "count": 1
-    },
-    {
-      "itemId": "Furniture_Village_Chair",
-      "count": 1
-    },
-    {
-      "itemId": "Furniture_Village_Shelf_Full",
-      "count": 1
-    },
-    {
-      "itemId": "Furniture_Village_Stool",
-      "count": 1
-    },
-    {
-      "itemId": "Furniture_Tavern_Chest_Small",
-      "count": 4
     }
   ],
   "pois": [
     {
       "localX": -16,
-      "localY": 2,
+      "localY": 1,
       "localZ": 12,
       "tags": [
         "WORK",
@@ -146,11 +38,41 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": -17,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": 12,
+      "interactionTargetLocalX": -16,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": 11,
       "workResidentKind": "elder",
-      "interactionTargetYawDegrees": -141.919
+      "interactionTargetYawDegrees": 180.0
+    },
+    {
+      "localX": -10,
+      "localY": 1,
+      "localZ": 7,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Cloth_Roof_Leather_Flat",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": -10,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": 6,
+      "interactionTargetYawDegrees": 162.93207
+    },
+    {
+      "localX": -10,
+      "localY": 1,
+      "localZ": 11,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Cloth_Roof_Leather_Flat",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": -11,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": 11,
+      "interactionTargetYawDegrees": -91.3858
     }
   ],
   "managementBlockLocalPos": [
@@ -167,5 +89,9 @@
   "touristDestination": true,
   "plotTokenLockedByDefault": true,
   "floatingGiftBlueprint": true,
-  "styleId": "jimmy"
+  "styleId": "jimmy",
+  "tags": [
+    "town_hall",
+    "work"
+  ]
 }

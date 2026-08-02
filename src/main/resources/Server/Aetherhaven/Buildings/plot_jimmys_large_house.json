@@ -30,37 +30,6 @@
   ],
   "pois": [
     {
-      "localX": 16,
-      "localY": 2,
-      "localZ": -10,
-      "tags": [
-        "SLEEP",
-        "ENERGY"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Furniture_Village_Bed",
-      "interactionKind": "SLEEP",
-      "interactionTargetLocalX": 15,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -10
-    },
-    {
-      "localX": 16,
-      "localY": 2,
-      "localZ": -8,
-      "tags": [
-        "SLEEP",
-        "ENERGY"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Furniture_Village_Bed",
-      "interactionKind": "SLEEP",
-      "interactionTargetLocalX": 15,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -8,
-      "interactionTargetYawDegrees": -144.75964
-    },
-    {
       "localX": 5,
       "localY": 0,
       "localZ": -9,
@@ -72,17 +41,69 @@
       "interactionKind": "USE_BENCH",
       "interactionTargetLocalX": 4,
       "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": -9,
-      "interactionTargetYawDegrees": -32.071777
+      "interactionTargetLocalZ": -9
+    },
+    {
+      "localX": 17,
+      "localY": 2,
+      "localZ": -11,
+      "tags": [
+        "SLEEP",
+        "ENERGY"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Bed",
+      "interactionKind": "SLEEP",
+      "interactionTargetLocalX": 18,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -11,
+      "interactionTargetYawDegrees": 90.00001
+    },
+    {
+      "localX": 17,
+      "localY": 2,
+      "localZ": -8,
+      "tags": [
+        "SLEEP",
+        "ENERGY"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Bed",
+      "interactionKind": "SLEEP",
+      "interactionTargetLocalX": 18,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -8,
+      "interactionTargetYawDegrees": 90.00001
+    },
+    {
+      "localX": 5,
+      "localY": 1,
+      "localZ": -10,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Drywood_Planks",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 4,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -10,
+      "interactionTargetYawDegrees": -62.622314
     }
   ],
   "managementBlockLocalPos": [
     10,
-    2,
+    3,
     -9
   ],
   "countsAsConstructionId": "plot_house",
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_jimmys_large_house.displayName",
   "styleId": "jimmy",
-  "maxHomeResidents": 2
+  "maxHomeResidents": 2,
+  "tags": [
+    "home",
+    "house",
+    "rest",
+    "eat"
+  ]
 }

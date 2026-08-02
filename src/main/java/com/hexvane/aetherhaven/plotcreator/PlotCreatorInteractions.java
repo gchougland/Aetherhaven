@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.ui.PlotCreatorCancelConfirmPage;
 import com.hexvane.aetherhaven.ui.PlotCreatorImportantSpotsPage;
+import com.hexvane.aetherhaven.ui.PlotCreatorPoiActivityPage;
 import com.hexvane.aetherhaven.ui.PlotCreatorStepJumpPage;
 import com.hexvane.aetherhaven.ui.PlotCreatorWizardPage;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -261,6 +262,19 @@ public final class PlotCreatorInteractions {
             return;
         }
         player.getPageManager().openCustomPage(ref, store, new PlotCreatorImportantSpotsPage(playerRef, session));
+    }
+
+    public static void openPoiActivityPage(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotCreatorSession session
+    ) {
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player == null) {
+            return;
+        }
+        player.getPageManager().openCustomPage(ref, store, new PlotCreatorPoiActivityPage(playerRef, session));
     }
 
     public static boolean tryAdvanceForward(

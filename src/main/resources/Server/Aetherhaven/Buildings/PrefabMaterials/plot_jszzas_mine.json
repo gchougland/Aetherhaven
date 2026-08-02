@@ -27,12 +27,12 @@
       "count": 52
     },
     {
-      "itemId": "Rock_Basalt",
-      "count": 36
+      "itemId": "Wood_Beech_Trunk",
+      "count": 44
     },
     {
-      "itemId": "Wood_Beech_Trunk",
-      "count": 35
+      "itemId": "Rock_Basalt",
+      "count": 36
     },
     {
       "itemId": "Wood_Softwood_Planks_Half",
@@ -60,10 +60,6 @@
     },
     {
       "itemId": "Furniture_Crude_Stool",
-      "count": 9
-    },
-    {
-      "itemId": "Wood_Beech_Trunk_Full",
       "count": 9
     },
     {

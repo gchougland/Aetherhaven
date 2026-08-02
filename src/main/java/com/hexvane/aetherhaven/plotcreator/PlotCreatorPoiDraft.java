@@ -50,6 +50,10 @@ public final class PlotCreatorPoiDraft {
     @SerializedName("interactionTargetYawDegrees")
     private Float interactionTargetYawDegrees;
 
+    @Nullable
+    @SerializedName("equipmentProfileId")
+    private String equipmentProfileId;
+
     public int getLocalX() {
         return localX;
     }
@@ -141,5 +145,15 @@ public final class PlotCreatorPoiDraft {
 
     public void setInteractionTargetYawDegrees(@Nullable Float interactionTargetYawDegrees) {
         this.interactionTargetYawDegrees = interactionTargetYawDegrees;
+    }
+
+    @Nullable
+    public String getEquipmentProfileId() {
+        return equipmentProfileId != null && !equipmentProfileId.isBlank() ? equipmentProfileId.trim() : null;
+    }
+
+    public void setEquipmentProfileId(@Nullable String equipmentProfileId) {
+        this.equipmentProfileId =
+            equipmentProfileId != null && !equipmentProfileId.isBlank() ? equipmentProfileId.trim() : null;
     }
 }

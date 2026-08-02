@@ -14,139 +14,19 @@
   "treasuryGoldCoinCost": 50,
   "materials": [
     {
-      "itemId": "Wood_Oak_Trunk",
-      "count": 579
-    },
-    {
-      "itemId": "Rock_Stone_Cobble",
-      "count": 554
-    },
-    {
-      "itemId": "Wood_Softwood_Planks_Half",
-      "count": 208
-    },
-    {
-      "itemId": "Wood_Softwood_Planks",
-      "count": 198
-    },
-    {
-      "itemId": "Wood_Softwood_Stairs",
-      "count": 192
-    },
-    {
-      "itemId": "Wood_Softwood_Roof_Shallow",
-      "count": 173
-    },
-    {
-      "itemId": "Wood_Softwood_Roof",
-      "count": 141
-    },
-    {
-      "itemId": "Wood_Hardwood_Fence",
-      "count": 86
-    },
-    {
-      "itemId": "Rock_Quartzite",
-      "count": 84
-    },
-    {
-      "itemId": "Rock_Stone_Brick",
-      "count": 78
-    },
-    {
-      "itemId": "Wood_Softwood_Roof_Flat",
-      "count": 76
-    },
-    {
-      "itemId": "Wood_Beech_Trunk",
-      "count": 52
-    },
-    {
-      "itemId": "Wood_Hardwood_Planks",
-      "count": 46
-    },
-    {
       "resourceTypeId": "Wood_All",
-      "count": 43
+      "count": 500
     },
     {
-      "itemId": "Wood_Softwood_Roof_Steep",
-      "count": 41
-    },
-    {
-      "itemId": "Wood_Ash_Trunk",
-      "count": 39
-    },
-    {
-      "itemId": "Cloth_Block_Wool_White",
-      "count": 32
-    },
-    {
-      "itemId": "Wood_Sticks",
-      "count": 20
-    },
-    {
-      "resourceTypeId": "Soils",
-      "count": 18
-    },
-    {
-      "itemId": "Rock_Stone_Cobble_Stairs",
-      "count": 11
-    },
-    {
-      "itemId": "Wood_Hardwood_Beam",
-      "count": 11
-    },
-    {
-      "itemId": "Furniture_Tavern_Window",
-      "count": 8
-    },
-    {
-      "itemId": "Furniture_Crude_Torch",
-      "count": 7
-    },
-    {
-      "itemId": "Metal_Iron_Pipe_Large",
-      "count": 6
-    },
-    {
-      "itemId": "Rock_Stone_Brick_Smooth_Half",
-      "count": 3
+      "resourceTypeId": "Rock",
+      "count": 400
     },
     {
       "itemId": "Bench_WorkBench",
       "count": 2
     },
     {
-      "itemId": "Deco_Lantern",
-      "count": 2
-    },
-    {
-      "itemId": "Deco_Rope",
-      "count": 2
-    },
-    {
-      "itemId": "Furniture_Crude_Candle",
-      "count": 2
-    },
-    {
-      "resourceTypeId": "Rock",
-      "count": 2
-    },
-    {
-      "itemId": "Aetherhaven_Smokestack",
-      "count": 1
-    },
-    {
       "itemId": "Bench_Furnace",
-      "count": 1
-    },
-    {
-      "itemId": "Furniture_Village_Chair",
-      "count": 1
-    },
-    {
-      "itemId": "Furniture_Village_Door",
       "count": 1
     }
   ],
@@ -167,6 +47,22 @@
       "workResidentKind": "logger"
     },
     {
+      "localX": -24,
+      "localY": 2,
+      "localZ": 22,
+      "tags": [
+        "WORK",
+        "workActivity:chop"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Rock_Stone_Cobble",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": -24,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": 23,
+      "workResidentKind": "logger"
+    },
+    {
       "localX": -13,
       "localY": 3,
       "localZ": 18,
@@ -181,24 +77,8 @@
       "interactionTargetLocalY": 3,
       "interactionTargetLocalZ": 18,
       "workResidentKind": "logger",
-      "interactionTargetYawDegrees": 67.89691
-    },
-    {
-      "localX": -24,
-      "localY": 2,
-      "localZ": 22,
-      "tags": [
-        "WORK",
-        "workActivity:chop"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Rock_Stone_Cobble",
-      "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": -24,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": 23,
-      "workResidentKind": "logger",
-      "interactionTargetYawDegrees": 10.524414
+      "interactionTargetYawDegrees": 100.770836,
+      "equipmentProfileId": "work_logger"
     },
     {
       "localX": -24,
@@ -215,7 +95,8 @@
       "interactionTargetLocalY": 2,
       "interactionTargetLocalZ": 15,
       "workResidentKind": "logger",
-      "interactionTargetYawDegrees": 59.42932
+      "interactionTargetYawDegrees": 72.58296,
+      "equipmentProfileId": "work_logger"
     },
     {
       "localX": -18,
@@ -232,7 +113,8 @@
       "interactionTargetLocalY": 3,
       "interactionTargetLocalZ": 18,
       "workResidentKind": "logger",
-      "interactionTargetYawDegrees": -121.41028
+      "interactionTargetYawDegrees": -125.81697,
+      "equipmentProfileId": "work_logger"
     }
   ],
   "managementBlockLocalPos": [
@@ -242,7 +124,7 @@
   ],
   "productionStorageLocalPos": [
     -25,
-    4,
+    3,
     29
   ],
   "countsAsConstructionId": "plot_lumbermill",

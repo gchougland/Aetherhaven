@@ -1,0 +1,67 @@
+$C = "../Common.ui";
+
+@HintStyle = (
+  FontSize: 12,
+  TextColor: #8a8070,
+  Wrap: true
+);
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 480);
+
+    #Title {
+      Label #PoiActivityTitle {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Top: 14, Left: 18, Right: 18, Bottom: 18);
+
+      Label #IntroHint {
+        Style: (...@HintStyle);
+        Text: "";
+        Anchor: (Bottom: 14);
+      }
+
+      Group #ActivityRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 16);
+
+        Label #ActivityLabel {
+          Text: "";
+          Anchor: (Top: 8, Right: 12, Width: 120);
+          Style: $C.@DefaultLabelStyle;
+        }
+
+        $C.@DropdownBox #ActivityDropdown {
+          FlexWeight: 1;
+          Anchor: (Left: 0, Right: 0, Height: $C.@DropdownBoxHeight);
+        }
+      }
+
+      Group #ButtonRow {
+        LayoutMode: Left;
+        Anchor: (Top: 4);
+
+        $C.@TextButton #ConfirmButton {
+          FlexWeight: 1;
+          Anchor: (Right: 10, Height: 40);
+          Text: "";
+        }
+
+        $C.@CancelTextButton #CloseButton {
+          FlexWeight: 1;
+          Anchor: (Height: 40);
+          Text: "";
+        }
+      }
+    }
+  }
+}

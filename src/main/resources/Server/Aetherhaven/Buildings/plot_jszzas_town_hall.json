@@ -1,6 +1,6 @@
 {
   "id": "plot_jszzas_town_hall",
-  "displayName": "Jszza's Town Hall",
+  "displayName": "Jszza\u0027s Town Hall",
   "description": "Made by Jszza",
   "prefabPath": "Jszza/plot_jszzas_town_hall.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -14,329 +14,21 @@
   "treasuryGoldCoinCost": 50,
   "materials": [
     {
-      "resourceTypeId": "Soils",
-      "count": 1201
-    },
-    {
-      "itemId": "Ingredient_Fibre",
-      "count": 1118
-    },
-    {
-      "itemId": "Rock_Calcite_Cobble",
-      "count": 614
-    },
-    {
-      "itemId": "Rock_Stone_Brick",
-      "count": 436
-    },
-    {
-      "itemId": "Wood_Hardwood_Decorative",
-      "count": 420
-    },
-    {
-      "itemId": "Wood_Hardwood_Planks",
-      "count": 387
-    },
-    {
-      "itemId": "Wood_Hardwood_Planks_Half",
-      "count": 336
-    },
-    {
-      "itemId": "Wood_Hardwood_Stairs",
-      "count": 323
-    },
-    {
-      "itemId": "Wood_Oak_Trunk",
-      "count": 286
-    },
-    {
-      "itemId": "Wood_Oak_Trunk_Full",
-      "count": 229
-    },
-    {
-      "itemId": "Rock_Basalt_Cobble_Roof_Steep",
-      "count": 227
-    },
-    {
-      "itemId": "Furniture_Crude_Trapdoor",
-      "count": 207
-    },
-    {
-      "itemId": "Rock_Sandstone_Red_Cobble",
-      "count": 179
-    },
-    {
-      "itemId": "Rock_Chalk_Brick",
-      "count": 151
-    },
-    {
-      "itemId": "Wood_Hardwood_Fence",
-      "count": 141
-    },
-    {
-      "itemId": "Rock_Basalt_Cobble_Roof",
-      "count": 86
-    },
-    {
-      "itemId": "Rock_Stone_Brick_Stairs",
-      "count": 86
-    },
-    {
-      "itemId": "Wood_Hardwood_Beam",
-      "count": 83
-    },
-    {
-      "itemId": "Rock_Stone_Brick_Half",
-      "count": 72
-    },
-    {
-      "itemId": "Prototype_Rock_Concrete_Brick",
-      "count": 71
-    },
-    {
-      "itemId": "Cloth_Block_Wool_White",
-      "count": 69
-    },
-    {
-      "itemId": "Rock_Peach_Brick",
-      "count": 66
-    },
-    {
-      "itemId": "Rock_Slate_Cobble_Stairs",
-      "count": 65
-    },
-    {
-      "itemId": "Rock_Slate_Cobble_Half",
-      "count": 62
-    },
-    {
-      "itemId": "Rock_Stone_Brick_Smooth",
-      "count": 62
-    },
-    {
-      "itemId": "Rock_Slate_Cobble",
-      "count": 56
-    },
-    {
-      "itemId": "Rock_Stone",
-      "count": 53
-    },
-    {
-      "itemId": "Rock_Calcite_Cobble_Half",
-      "count": 50
-    },
-    {
-      "itemId": "Rock_Stone_Cobble",
-      "count": 49
-    },
-    {
-      "itemId": "Rock_Sandstone_Red_Cobble_Half",
-      "count": 48
-    },
-    {
-      "itemId": "Wood_Hardwood_Fence_Gate",
-      "count": 43
-    },
-    {
-      "itemId": "Rock_Stone_Cobble_Half",
-      "count": 40
-    },
-    {
-      "itemId": "Furniture_Ancient_Trapdoor",
-      "count": 38
-    },
-    {
-      "itemId": "Rock_Calcite_Cobble_Stairs",
-      "count": 37
-    },
-    {
-      "itemId": "Rock_Basalt_Cobble_Roof_Flat",
-      "count": 33
-    },
-    {
       "resourceTypeId": "Rock",
-      "count": 29
+      "count": 600
     },
     {
-      "itemId": "Rock_Sandstone_Red_Cobble_Stairs",
-      "count": 28
-    },
-    {
-      "itemId": "Deco_Lantern",
-      "count": 27
-    },
-    {
-      "itemId": "Wood_Beech_Trunk",
-      "count": 24
-    },
-    {
-      "itemId": "Rock_Stone_Brick_Wall",
-      "count": 23
-    },
-    {
-      "itemId": "Rock_Stone_Cobble_Stairs",
-      "count": 20
-    },
-    {
-      "itemId": "Furniture_Village_Shelf_Full",
-      "count": 17
-    },
-    {
-      "itemId": "Rock_Peach_Brick_Stairs",
-      "count": 17
-    },
-    {
-      "itemId": "Rock_Stone_Cobble_Wall",
-      "count": 17
-    },
-    {
-      "itemId": "Furniture_Village_Window",
-      "count": 14
-    },
-    {
-      "itemId": "Soil_Clay",
-      "count": 12
-    },
-    {
-      "itemId": "Rock_Stone_Cobble_Mossy_Half",
-      "count": 11
-    },
-    {
-      "itemId": "Furniture_Tavern_Window",
-      "count": 10
-    },
-    {
-      "itemId": "Ingredient_Hay",
-      "count": 10
-    },
-    {
-      "itemId": "Furniture_Village_Door",
-      "count": 8
-    },
-    {
-      "itemId": "Furniture_Tavern_Stool",
-      "count": 6
-    },
-    {
-      "itemId": "Ingredient_Bar_Iron",
-      "count": 6
-    },
-    {
-      "itemId": "Rock_Peach_Brick_Wall",
-      "count": 6
-    },
-    {
-      "itemId": "Cloth_Block_Wool_Cyan",
-      "count": 5
-    },
-    {
-      "itemId": "Furniture_Tavern_Chandelier",
-      "count": 5
-    },
-    {
-      "itemId": "Furniture_Village_Ladder",
-      "count": 5
-    },
-    {
-      "itemId": "Ingredient_Leather_Light",
-      "count": 5
-    },
-    {
-      "itemId": "Wood_Beech_Trunk_Full",
-      "count": 5
-    },
-    {
-      "itemId": "Wood_Darkwood_Planks_Half",
-      "count": 5
-    },
-    {
-      "itemId": "Wood_Fir_Trunk",
-      "count": 5
-    },
-    {
-      "itemId": "Furniture_Village_Stool",
-      "count": 4
-    },
-    {
-      "itemId": "Furniture_Tavern_Table",
-      "count": 3
-    },
-    {
-      "itemId": "Prototype_Rock_Concrete_Brick_Half",
-      "count": 3
-    },
-    {
-      "itemId": "Rock_Stone_Brick_Beam",
-      "count": 3
-    },
-    {
-      "itemId": "Alchemy_Cauldron",
-      "count": 2
-    },
-    {
-      "itemId": "Food_Pie_Apple",
-      "count": 2
-    },
-    {
-      "itemId": "Furniture_Tavern_Chair",
-      "count": 2
-    },
-    {
-      "itemId": "Furniture_Village_Table",
-      "count": 2
-    },
-    {
-      "itemId": "Wood_Blackwood_Beam",
-      "count": 2
-    },
-    {
-      "itemId": "Wood_Blackwood_Fence",
-      "count": 2
-    },
-    {
-      "itemId": "Wood_Darkwood_Planks",
-      "count": 2
-    },
-    {
-      "itemId": "Wood_Drywood_Beam",
-      "count": 2
-    },
-    {
-      "itemId": "Wood_Drywood_Fence",
-      "count": 2
-    },
-    {
-      "itemId": "Wood_Drywood_Stairs",
-      "count": 2
-    },
-    {
-      "itemId": "Aetherhaven_Command_Post",
-      "count": 1
-    },
-    {
-      "itemId": "Aetherhaven_Plot_Crafting_Bench",
-      "count": 1
-    },
-    {
-      "itemId": "Aetherhaven_Town_Planning_Desk",
-      "count": 1
+      "resourceTypeId": "Wood_All",
+      "count": 600
     },
     {
       "itemId": "Bench_Cooking",
-      "count": 1
-    },
-    {
-      "itemId": "Furniture_Crude_Chest_Small",
-      "count": 1
-    },
-    {
-      "itemId": "Furniture_Kweebec_Bed",
       "count": 1
     }
   ],
   "pois": [
     {
-      "localX": 20,
+      "localX": 21,
       "localY": 2,
       "localZ": -12,
       "tags": [
@@ -344,12 +36,73 @@
         "workActivity:read"
       ],
       "capacity": 1,
-      "blockTypeId": "Aetherhaven_Town_Planning_Desk",
+      "blockTypeId": "Furniture_Village_Stool",
       "interactionKind": "WORK_SURFACE",
-      "workResidentKind": "elder",
-      "interactionTargetLocalX": 21,
+      "interactionTargetLocalX": 22,
       "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -12
+      "interactionTargetLocalZ": -12,
+      "workResidentKind": "elder",
+      "interactionTargetYawDegrees": 90.00001
+    },
+    {
+      "localX": 14,
+      "localY": 2,
+      "localZ": -14,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Cloth_Roof_Blue_Flat",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 14,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -13,
+      "interactionTargetYawDegrees": -26.531097
+    },
+    {
+      "localX": 18,
+      "localY": 2,
+      "localZ": -12,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Cloth_Roof_Green_Flat",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 17,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -12,
+      "interactionTargetYawDegrees": -53.89737
+    },
+    {
+      "localX": 17,
+      "localY": 6,
+      "localZ": -14,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Decorative",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 16,
+      "interactionTargetLocalY": 6,
+      "interactionTargetLocalZ": -14,
+      "interactionTargetYawDegrees": -129.73273
+    },
+    {
+      "localX": 23,
+      "localY": 6,
+      "localZ": -11,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Decorative",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 23,
+      "interactionTargetLocalY": 6,
+      "interactionTargetLocalZ": -10,
+      "interactionTargetYawDegrees": -2.2626953
     }
   ],
   "managementBlockLocalPos": [
@@ -363,10 +116,6 @@
     -10
   ],
   "countsAsConstructionId": "plot_town_hall",
-  "tags": [
-    "town_hall",
-    "work"
-  ],
   "touristDestination": true,
   "plotTokenLockedByDefault": true,
   "floatingGiftBlueprint": true,

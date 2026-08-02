@@ -1,6 +1,6 @@
-﻿{
+{
   "id": "plot_jtmessenger_s_warehouse",
-  "displayName": "JTMessenger's Warehouse",
+  "displayName": "JTMessenger\u0027s Warehouse",
   "description": "By JTMessenger",
   "prefabPath": "plot_jtmessenger_s_warehouse.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -17,11 +17,11 @@
   "materials": [
     {
       "resourceTypeId": "Wood_All",
-      "count": 900
+      "count": 600
     },
     {
       "resourceTypeId": "Rock",
-      "count": 420
+      "count": 300
     },
     {
       "itemId": "Bench_Builders",

@@ -47,6 +47,21 @@ aetherhaven.plotcreator.hint.spotRemoved = Important spot removed.
 aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded = That inn visitor spawn spot is already saved.
 aetherhaven.plotcreator.hint.poiRecorded = Activity spot saved. Villagers will face the way you were looking.
 aetherhaven.plotcreator.hint.poiAlreadyRecorded = That activity spot is already saved for this step.
+aetherhaven.plotcreator.hint.poiActivityPending = Pick an animation in the menu first, or close it to cancel.
+
+aetherhaven.plotcreator.poiActivity.title = Pick villager animation
+aetherhaven.plotcreator.poiActivity.hint = Choose what villagers do at this spot.
+aetherhaven.plotcreator.poiActivity.activityLabel = Animation
+aetherhaven.plotcreator.poiActivity.confirm = Save spot
+aetherhaven.plotcreator.poiActivity.close = Cancel
+aetherhaven.plotcreator.poiActivity.option.mine = Mine ore
+aetherhaven.plotcreator.poiActivity.option.chop = Chop wood
+aetherhaven.plotcreator.poiActivity.option.water = Water crops
+aetherhaven.plotcreator.poiActivity.option.till = Till soil
+aetherhaven.plotcreator.poiActivity.option.smith = Smith at anvil
+aetherhaven.plotcreator.poiActivity.option.craft = Craft at bench
+aetherhaven.plotcreator.poiActivity.option.read = Read
+aetherhaven.plotcreator.poiActivity.option.leisure = Leisure
 
 aetherhaven.plotcreator.button.save = Save building
 aetherhaven.plotcreator.button.addFromInventory = Add from inventory

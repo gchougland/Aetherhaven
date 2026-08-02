@@ -1,0 +1,122 @@
+{
+  "constructionId": "plot_jimmys_house_3",
+  "prefabPath": "Jimmys/plot_jimmys_house_3.prefab.json",
+  "materials": [
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 163
+    },
+    {
+      "itemId": "Rock_Quartzite",
+      "count": 138
+    },
+    {
+      "itemId": "Wood_Oak_Trunk",
+      "count": 118
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 87
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 68
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Steep",
+      "count": 54
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 48
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 26
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 21
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 17
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 12
+    },
+    {
+      "itemId": "Furniture_Tavern_Window",
+      "count": 10
+    },
+    {
+      "itemId": "Rock_Stone_Cobble_Stairs",
+      "count": 7
+    },
+    {
+      "itemId": "Furniture_Crude_Shelf",
+      "count": 6
+    },
+    {
+      "itemId": "Furniture_Crude_Torch",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 3
+    },
+    {
+      "itemId": "Bench_Furnace",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Tavern_Chest_Small",
+      "count": 2
+    },
+    {
+      "itemId": "Ingredient_Flour",
+      "count": 2
+    },
+    {
+      "itemId": "Soil_Clay",
+      "count": 2
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 2
+    },
+    {
+      "itemId": "Aetherhaven_Smokestack",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Cooking",
+      "count": 1
+    },
+    {
+      "itemId": "Container_Bucket",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Bread",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Fish_Raw",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Bed",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Chair",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Wardrobe",
+      "count": 1
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "id": "plot_jimmys_house_2",
-  "displayName": "Jimmy's House 2",
+  "displayName": "Jimmy\u0027s House 2",
   "description": "Made by Jimmy G",
   "prefabPath": "Jimmys/plot_jimmys_house_2.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -14,80 +14,12 @@
   "treasuryGoldCoinCost": 30,
   "materials": [
     {
-      "itemId": "Wood_Softwood_Planks",
-      "count": 120
-    },
-    {
-      "itemId": "Wood_Oak_Trunk",
-      "count": 75
-    },
-    {
-      "itemId": "Rock_Quartzite",
-      "count": 58
-    },
-    {
-      "itemId": "Wood_Softwood_Roof_Shallow",
-      "count": 58
-    },
-    {
-      "itemId": "Rock_Stone_Cobble",
-      "count": 57
-    },
-    {
-      "itemId": "Wood_Softwood_Roof",
-      "count": 30
-    },
-    {
-      "itemId": "Rock_Stone_Brick",
-      "count": 26
-    },
-    {
-      "itemId": "Wood_Softwood_Planks_Half",
-      "count": 15
-    },
-    {
-      "itemId": "Wood_Softwood_Stairs",
-      "count": 14
-    },
-    {
-      "itemId": "Wood_Hardwood_Planks",
-      "count": 9
-    },
-    {
       "resourceTypeId": "Wood_All",
-      "count": 6
-    },
-    {
-      "itemId": "Rock_Stone_Cobble_Stairs",
-      "count": 5
-    },
-    {
-      "itemId": "Furniture_Tavern_Window",
-      "count": 4
-    },
-    {
-      "itemId": "Furniture_Crude_Shelf",
-      "count": 2
-    },
-    {
-      "itemId": "Furniture_Crude_Torch",
-      "count": 2
-    },
-    {
-      "itemId": "Furniture_Village_Door",
-      "count": 2
-    },
-    {
-      "itemId": "Furniture_Village_Shelf_Full",
-      "count": 2
+      "count": 300
     },
     {
       "resourceTypeId": "Rock",
-      "count": 2
-    },
-    {
-      "itemId": "Aetherhaven_Smokestack",
-      "count": 1
+      "count": 100
     },
     {
       "itemId": "Bench_Cooking",
@@ -96,25 +28,13 @@
     {
       "itemId": "Bench_Furnace",
       "count": 1
-    },
-    {
-      "itemId": "Furniture_Tavern_Bed",
-      "count": 1
-    },
-    {
-      "itemId": "Furniture_Village_Chair",
-      "count": 1
-    },
-    {
-      "itemId": "Furniture_Village_Wardrobe",
-      "count": 1
     }
   ],
   "pois": [
     {
-      "localX": -6,
-      "localY": 2,
-      "localZ": -6,
+      "localX": -5,
+      "localY": 1,
+      "localZ": -4,
       "tags": [
         "SLEEP",
         "ENERGY"
@@ -122,9 +42,25 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Bed",
       "interactionKind": "SLEEP",
-      "interactionTargetLocalX": -6,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -5
+      "interactionTargetLocalX": -5,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -3,
+      "interactionTargetYawDegrees": 0.0
+    },
+    {
+      "localX": -12,
+      "localY": 0,
+      "localZ": -7,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": -11,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -7,
+      "interactionTargetYawDegrees": 93.27014
     }
   ],
   "managementBlockLocalPos": [
@@ -133,12 +69,8 @@
     -8
   ],
   "countsAsConstructionId": "plot_house",
-  "tags": [
-    "house",
-    "home",
-    "rest"
-  ],
   "plotTokenLockedByDefault": true,
   "floatingGiftBlueprint": true,
-  "styleId": "jimmy"
+  "styleId": "jimmy",
+  "maxHomeResidents": 1
 }

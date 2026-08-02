@@ -1,10 +1,10 @@
 {
   "constructionId": "plot_jimmys_windmill",
-  "prefabPath": "plot_jimmys_windmill.prefab.json",
+  "prefabPath": "Jimmys/plot_jimmys_windmill.prefab.json",
   "materials": [
     {
       "itemId": "Wood_Beech_Trunk",
-      "count": 253
+      "count": 257
     },
     {
       "itemId": "Rock_Stone_Cobble",
@@ -92,10 +92,6 @@
     },
     {
       "itemId": "Furniture_Village_Ladder",
-      "count": 4
-    },
-    {
-      "itemId": "Wood_Beech_Trunk_Full",
       "count": 4
     },
     {

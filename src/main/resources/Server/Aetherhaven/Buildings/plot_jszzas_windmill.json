@@ -1,6 +1,6 @@
 {
   "id": "plot_jszzas_windmill",
-  "displayName": "Jszza's Windmill",
+  "displayName": "Jszza\u0027s Windmill",
   "description": "Made by Jszza",
   "prefabPath": "Jszza/plot_jszzas_windmill.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -14,100 +14,12 @@
   "treasuryGoldCoinCost": 45,
   "materials": [
     {
-      "resourceTypeId": "Soils",
-      "count": 619
-    },
-    {
       "resourceTypeId": "Wood_All",
-      "count": 486
+      "count": 600
     },
     {
-      "itemId": "Wood_Hardwood_Planks",
-      "count": 469
-    },
-    {
-      "itemId": "Wood_Hardwood_Stairs",
-      "count": 365
-    },
-    {
-      "itemId": "Wood_Oak_Trunk",
-      "count": 305
-    },
-    {
-      "itemId": "Rock_Calcite_Brick_Smooth",
-      "count": 209
-    },
-    {
-      "itemId": "Cloth_Block_Wool_White",
-      "count": 109
-    },
-    {
-      "itemId": "Furniture_Kweebec_Trapdoor",
-      "count": 98
-    },
-    {
-      "itemId": "Ingredient_Fibre",
-      "count": 94
-    },
-    {
-      "itemId": "Rock_Chalk_Cobble_Roof",
-      "count": 92
-    },
-    {
-      "itemId": "Ingredient_Hay",
-      "count": 83
-    },
-    {
-      "itemId": "Wood_Hardwood_Planks_Half",
-      "count": 75
-    },
-    {
-      "itemId": "Rock_Calcite_Brick_Stairs",
-      "count": 64
-    },
-    {
-      "itemId": "Wood_Hardwood_Beam",
-      "count": 47
-    },
-    {
-      "itemId": "Rock_Calcite_Brick_Smooth_Half",
-      "count": 46
-    },
-    {
-      "itemId": "Rock_Chalk_Cobble_Roof_Steep",
-      "count": 44
-    },
-    {
-      "itemId": "Wood_Lightwood_Fence",
-      "count": 32
-    },
-    {
-      "itemId": "Rock_Chalk_Cobble_Roof_Flat",
-      "count": 31
-    },
-    {
-      "itemId": "Furniture_Tavern_Window",
-      "count": 29
-    },
-    {
-      "itemId": "Deco_Iron_Bars_Platforms",
-      "count": 12
-    },
-    {
-      "itemId": "Furniture_Crude_Trapdoor",
-      "count": 9
-    },
-    {
-      "itemId": "Furniture_Village_Ladder",
-      "count": 7
-    },
-    {
-      "itemId": "Halloween_Wagon",
-      "count": 2
-    },
-    {
-      "itemId": "Deco_Lantern",
-      "count": 1
+      "resourceTypeId": "Rock",
+      "count": 400
     }
   ],
   "pois": [
@@ -116,14 +28,17 @@
       "localY": 1,
       "localZ": -11,
       "tags": [
-        "WORK"
+        "WORK",
+        "workActivity:read"
       ],
       "capacity": 1,
       "blockTypeId": "Rock_Calcite_Brick_Smooth",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 17,
+      "interactionTargetLocalX": 18,
       "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -12
+      "interactionTargetLocalZ": -11,
+      "workResidentKind": "farmer",
+      "interactionTargetYawDegrees": 77.05487
     }
   ],
   "managementBlockLocalPos": [
@@ -137,10 +52,6 @@
     -9
   ],
   "countsAsConstructionId": "plot_farm",
-  "tags": [
-    "farm",
-    "work"
-  ],
   "plotTokenLockedByDefault": true,
   "floatingGiftBlueprint": true,
   "styleId": "jszza"

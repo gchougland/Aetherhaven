@@ -47,7 +47,9 @@ public final class PlotCreatorValidator {
         if (anchor == null) {
             return "incomplete";
         }
-        if (!draft.isInsideBounds(anchor)) {
+        // Existing catalog buildings anchor the prefab at plot sign + plotAnchorOffset; do not require the sign
+        // cell to sit inside the solid footprint (would force re-centering and shift in-world plots on reconstruct).
+        if (!draft.isBuildingEditorMode() && !draft.isInsideBounds(anchor)) {
             return "anchorOutsideBounds";
         }
         String idErr = validateId(draft.getConstructionId(), plugin.getConstructionCatalog(), draft.getEditingConstructionId());

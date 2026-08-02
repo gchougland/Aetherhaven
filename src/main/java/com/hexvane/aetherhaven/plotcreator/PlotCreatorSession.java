@@ -118,4 +118,20 @@ public final class PlotCreatorSession {
     public Map<Integer, Map<String, Integer>> getSubstepGrants() {
         return substepGrants;
     }
+
+    @Nullable
+    private PlotCreatorPendingPoiPlacement pendingPoiPlacement;
+
+    @Nullable
+    public PlotCreatorPendingPoiPlacement getPendingPoiPlacement() {
+        return pendingPoiPlacement;
+    }
+
+    public void setPendingPoiPlacement(@Nullable PlotCreatorPendingPoiPlacement pendingPoiPlacement) {
+        this.pendingPoiPlacement = pendingPoiPlacement;
+    }
+
+    public void clearPendingPoiPlacement() {
+        this.pendingPoiPlacement = null;
+    }
 }

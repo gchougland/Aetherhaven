@@ -14,112 +14,16 @@
   "treasuryGoldCoinCost": 50,
   "materials": [
     {
-      "resourceTypeId": "Soils",
-      "count": 210
-    },
-    {
-      "itemId": "Wood_Softwood_Planks",
-      "count": 206
-    },
-    {
-      "itemId": "Cloth_Block_Wool_White",
-      "count": 109
-    },
-    {
-      "itemId": "Wood_Hardwood_Planks",
-      "count": 104
-    },
-    {
-      "itemId": "Rock_Stone",
-      "count": 67
-    },
-    {
-      "itemId": "Ingredient_Fibre",
-      "count": 52
-    },
-    {
-      "itemId": "Rock_Basalt",
-      "count": 36
-    },
-    {
-      "itemId": "Wood_Beech_Trunk",
-      "count": 35
-    },
-    {
-      "itemId": "Wood_Softwood_Planks_Half",
-      "count": 32
-    },
-    {
       "resourceTypeId": "Wood_All",
-      "count": 29
+      "count": 400
     },
     {
-      "resourceTypeId": "Rubble",
-      "count": 20
+      "resourceTypeId": "Soils",
+      "count": 200
     },
     {
-      "itemId": "Furniture_Crude_Platform",
-      "count": 18
-    },
-    {
-      "itemId": "Wood_Softwood_Beam",
-      "count": 12
-    },
-    {
-      "itemId": "Rock_Basalt_Cobble",
-      "count": 10
-    },
-    {
-      "itemId": "Furniture_Crude_Stool",
-      "count": 9
-    },
-    {
-      "itemId": "Wood_Beech_Trunk_Full",
-      "count": 9
-    },
-    {
-      "itemId": "Deco_Rope_Diagonal",
-      "count": 8
-    },
-    {
-      "itemId": "Wood_Softwood_Fence",
-      "count": 8
-    },
-    {
-      "itemId": "Rock_Stone_Cobble_Half",
-      "count": 6
-    },
-    {
-      "itemId": "Ingredient_Bar_Iron",
-      "count": 5
-    },
-    {
-      "itemId": "Furniture_Lumberjack_Lantern",
-      "count": 4
-    },
-    {
-      "itemId": "Rock_Stone_Mossy",
-      "count": 4
-    },
-    {
-      "itemId": "Furniture_Crude_Torch",
-      "count": 2
-    },
-    {
-      "itemId": "Soil_Clay",
-      "count": 2
-    },
-    {
-      "itemId": "Furniture_Crude_Bed",
-      "count": 1
-    },
-    {
-      "itemId": "Halloween_Wagon",
-      "count": 1
-    },
-    {
-      "itemId": "Ore_Iron",
-      "count": 2
+      "resourceTypeId": "Rock",
+      "count": 100
     }
   ],
   "pois": [
@@ -154,8 +58,8 @@
       "workResidentKind": "miner"
     },
     {
-      "localX": 12,
-      "localY": 3,
+      "localX": 13,
+      "localY": 2,
       "localZ": -15,
       "tags": [
         "WORK",
@@ -164,50 +68,17 @@
       "capacity": 1,
       "blockTypeId": "Rock_Stone",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 13,
-      "interactionTargetLocalY": 3,
+      "interactionTargetLocalX": 14,
+      "interactionTargetLocalY": 2,
       "interactionTargetLocalZ": -15,
       "workResidentKind": "miner",
-      "interactionTargetYawDegrees": 61.775696
+      "interactionTargetYawDegrees": 77.56177,
+      "equipmentProfileId": "work_miner"
     },
     {
       "localX": 15,
-      "localY": 3,
-      "localZ": -17,
-      "tags": [
-        "WORK",
-        "workActivity:mine"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Rock_Stone",
-      "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 15,
-      "interactionTargetLocalY": 3,
-      "interactionTargetLocalZ": -16,
-      "workResidentKind": "miner",
-      "interactionTargetYawDegrees": -20.240112
-    },
-    {
-      "localX": 17,
-      "localY": 3,
-      "localZ": -15,
-      "tags": [
-        "WORK",
-        "workActivity:mine"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Rock_Stone",
-      "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 16,
-      "interactionTargetLocalY": 3,
-      "interactionTargetLocalZ": -15,
-      "workResidentKind": "miner",
-      "interactionTargetYawDegrees": -90.29407
-    },
-    {
-      "localX": 15,
-      "localY": 3,
-      "localZ": -12,
+      "localY": 2,
+      "localZ": -13,
       "tags": [
         "WORK",
         "workActivity:mine"
@@ -216,10 +87,65 @@
       "blockTypeId": "Rock_Basalt",
       "interactionKind": "WORK_SURFACE",
       "interactionTargetLocalX": 15,
-      "interactionTargetLocalY": 3,
-      "interactionTargetLocalZ": -13,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -14,
       "workResidentKind": "miner",
-      "interactionTargetYawDegrees": -163.18542
+      "interactionTargetYawDegrees": 150.94464,
+      "equipmentProfileId": "work_miner"
+    },
+    {
+      "localX": 16,
+      "localY": 1,
+      "localZ": -15,
+      "tags": [
+        "WORK",
+        "workActivity:mine"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Rock_Stone",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 15,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -15,
+      "workResidentKind": "miner",
+      "interactionTargetYawDegrees": -124.59546,
+      "equipmentProfileId": "work_miner"
+    },
+    {
+      "localX": 15,
+      "localY": 1,
+      "localZ": -16,
+      "tags": [
+        "WORK",
+        "workActivity:mine"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Rock_Stone",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 15,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -15,
+      "workResidentKind": "miner",
+      "interactionTargetYawDegrees": -27.985168,
+      "equipmentProfileId": "work_miner"
+    },
+    {
+      "localX": 10,
+      "localY": 4,
+      "localZ": -15,
+      "tags": [
+        "WORK",
+        "workActivity:craft"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 11,
+      "interactionTargetLocalY": 4,
+      "interactionTargetLocalZ": -15,
+      "workResidentKind": "miner",
+      "interactionTargetYawDegrees": 113.80652,
+      "equipmentProfileId": "work_builder"
     }
   ],
   "managementBlockLocalPos": [

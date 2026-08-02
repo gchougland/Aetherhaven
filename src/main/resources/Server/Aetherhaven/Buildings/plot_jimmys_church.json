@@ -1,6 +1,6 @@
 {
   "id": "plot_jimmys_church",
-  "displayName": "Jimmy's Church",
+  "displayName": "Jimmy\u0027s Church",
   "description": "Made by Jimmy",
   "prefabPath": "Jimmys/plot_jimmys_church.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -14,131 +14,15 @@
   "treasuryGoldCoinCost": 40,
   "materials": [
     {
-      "itemId": "Wood_Softwood_Planks",
-      "count": 435
-    },
-    {
-      "itemId": "Rock_Stone_Cobble",
-      "count": 342
-    },
-    {
-      "itemId": "Wood_Oak_Trunk",
-      "count": 340
-    },
-    {
-      "itemId": "Wood_Softwood_Roof",
-      "count": 217
-    },
-    {
-      "itemId": "Wood_Softwood_Roof_Steep",
-      "count": 201
-    },
-    {
-      "itemId": "Rock_Quartzite",
-      "count": 182
-    },
-    {
-      "itemId": "Wood_Softwood_Stairs",
-      "count": 139
-    },
-    {
-      "itemId": "Ingredient_Fibre",
-      "count": 88
-    },
-    {
-      "itemId": "Rock_Stone_Brick",
-      "count": 65
-    },
-    {
-      "itemId": "Wood_Hardwood_Planks",
-      "count": 57
-    },
-    {
-      "itemId": "Wood_Softwood_Planks_Half",
-      "count": 37
-    },
-    {
       "resourceTypeId": "Wood_All",
-      "count": 20
-    },
-    {
-      "itemId": "Rock_Stone_Cobble_Stairs",
-      "count": 19
-    },
-    {
-      "itemId": "Rock_Stone_Cobble_Half",
-      "count": 18
-    },
-    {
-      "itemId": "Furniture_Tavern_Window",
-      "count": 16
-    },
-    {
-      "itemId": "Soil_Clay",
-      "count": 14
-    },
-    {
-      "itemId": "Deco_Rope",
-      "count": 13
-    },
-    {
-      "itemId": "Furniture_Crude_Torch",
-      "count": 11
+      "count": 500
     },
     {
       "resourceTypeId": "Rock",
-      "count": 8
-    },
-    {
-      "itemId": "Rock_Quartzite_Half",
-      "count": 7
-    },
-    {
-      "itemId": "Rock_Gold_Brick_Smooth_Half",
-      "count": 4
-    },
-    {
-      "itemId": "Rock_Quartzite_Stairs",
-      "count": 4
-    },
-    {
-      "itemId": "Wood_Beech_Trunk",
-      "count": 3
-    },
-    {
-      "itemId": "Furniture_Crude_Shelf",
-      "count": 2
-    },
-    {
-      "itemId": "Furniture_Village_Door",
-      "count": 2
-    },
-    {
-      "itemId": "Rock_Stone_Brick_Half",
-      "count": 2
-    },
-    {
-      "itemId": "Aetherhaven_Smokestack",
-      "count": 1
+      "count": 300
     },
     {
       "itemId": "Bench_Furnace",
-      "count": 1
-    },
-    {
-      "itemId": "Rock_Gold_Brick_Beam",
-      "count": 1
-    },
-    {
-      "itemId": "Rock_Gold_Brick_Smooth",
-      "count": 1
-    },
-    {
-      "itemId": "Rock_Stone_Cobble_Beam",
-      "count": 1
-    },
-    {
-      "itemId": "Wood_Tropicalwood_Beam",
       "count": 1
     }
   ],
@@ -148,9 +32,9 @@
       "localY": 2,
       "localZ": -4,
       "tags": [
+        "workActivity:read",
         "FUN",
-        "SIT",
-        "workActivity:read"
+        "SIT"
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bench",
@@ -164,9 +48,9 @@
       "localY": 2,
       "localZ": -4,
       "tags": [
+        "workActivity:read",
         "FUN",
-        "SIT",
-        "workActivity:read"
+        "SIT"
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bench",
@@ -177,7 +61,41 @@
     },
     {
       "localX": 12,
-      "localY": 2,
+      "localY": 1,
+      "localZ": -4,
+      "tags": [
+        "FUN",
+        "SIT",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 13,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -4,
+      "interactionTargetYawDegrees": 90.00001
+    },
+    {
+      "localX": 15,
+      "localY": 1,
+      "localZ": -4,
+      "tags": [
+        "FUN",
+        "SIT",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 16,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -4,
+      "interactionTargetYawDegrees": 90.00001
+    },
+    {
+      "localX": 15,
+      "localY": 1,
       "localZ": -9,
       "tags": [
         "FUN",
@@ -187,46 +105,15 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 11,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -9
-    },
-    {
-      "localX": 15,
-      "localY": 2,
-      "localZ": -9,
-      "tags": [
-        "FUN",
-        "SIT",
-        "workActivity:read"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Furniture_Village_Bench",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 14,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -9
-    },
-    {
-      "localX": 15,
-      "localY": 2,
-      "localZ": -5,
-      "tags": [
-        "FUN",
-        "SIT",
-        "workActivity:read"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Furniture_Village_Bench",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 14,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -5
+      "interactionTargetLocalX": 16,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -9,
+      "interactionTargetYawDegrees": 90.00001
     },
     {
       "localX": 12,
-      "localY": 2,
-      "localZ": -5,
+      "localY": 1,
+      "localZ": -9,
       "tags": [
         "FUN",
         "SIT",
@@ -235,9 +122,10 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 11,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -5
+      "interactionTargetLocalX": 13,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -9,
+      "interactionTargetYawDegrees": 90.00001
     }
   ],
   "managementBlockLocalPos": [
@@ -246,11 +134,6 @@
     -13
   ],
   "countsAsConstructionId": "plot_gaia_altar",
-  "tags": [
-    "gaia_altar",
-    "work",
-    "fun"
-  ],
   "touristDestination": true,
   "plotTokenLockedByDefault": true,
   "floatingGiftBlueprint": true,
