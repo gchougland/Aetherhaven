@@ -21,6 +21,7 @@ import com.hexvane.aetherhaven.plot.PlotBlueprintSalvageBenchSystem;
 import com.hexvane.aetherhaven.plot.PlotTokenUnlockPageUseInteraction;
 import com.hexvane.aetherhaven.plot.PlotTokenUnlockPlayerInitSystem;
 import com.hexvane.aetherhaven.placement.PlotConstructionBlockResolver;
+import com.hexvane.aetherhaven.quest.IntroQuestPromptService;
 import com.hexvane.aetherhaven.questboard.QuestBoardOnlineDawnService;
 import com.hexvane.aetherhaven.rts.RtsCommandService;
 import com.hexvane.aetherhaven.time.AetherhavenGameTimeBridgeSubscriber;
@@ -270,6 +271,13 @@ public final class AetherhavenCoreBootstrap {
                                     );
                                 }
                                 RtsCommandService.exit(ref, store);
+                                IntroQuestPromptService.maybeShow(
+                                    AetherhavenPlugin.get(),
+                                    ref,
+                                    store,
+                                    readyPlayerRef,
+                                    player.getWorld()
+                                );
                             });
                 });
         plugin

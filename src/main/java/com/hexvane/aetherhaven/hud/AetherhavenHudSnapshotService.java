@@ -7,6 +7,8 @@ import com.hexvane.aetherhaven.questboard.QuestBoardCatalog;
 import com.hexvane.aetherhaven.questboard.QuestBoardService;
 import com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.quest.PlayerQuestIds;
+import com.hexvane.aetherhaven.quest.PlayerQuestProgress;
 import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
 import com.hexvane.aetherhaven.worldnpc.WorldNpcPlayerProgress;
 import com.hexvane.aetherhaven.worldnpc.WorldQuestBoardService;
@@ -50,7 +52,7 @@ public final class AetherhavenHudSnapshotService {
         @Nullable TownRecord town,
         @Nonnull PlayerTownJournalState preferences
     ) {
-        return capture(playerRef, store, gameTime, town, null, preferences);
+        return capture(playerRef, store, gameTime, town, null, null, preferences);
     }
 
     @Nonnull
@@ -62,6 +64,19 @@ public final class AetherhavenHudSnapshotService {
         @Nullable WorldNpcPlayerProgress worldProgress,
         @Nonnull PlayerTownJournalState preferences
     ) {
+        return capture(playerRef, store, gameTime, town, worldProgress, null, preferences);
+    }
+
+    @Nonnull
+    public AetherhavenHudSnapshot capture(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull LocalDateTime gameTime,
+        @Nullable TownRecord town,
+        @Nullable WorldNpcPlayerProgress worldProgress,
+        @Nullable PlayerQuestProgress playerProgress,
+        @Nonnull PlayerTownJournalState preferences
+    ) {
         Ref<EntityStore> playerEntity = playerRef.getReference();
         CombinedItemContainer inventory =
             playerEntity != null ? InventoryComponent.getCombined(store, playerEntity, InventoryComponent.EVERYTHING) : null;
@@ -71,7 +86,7 @@ public final class AetherhavenHudSnapshotService {
         long treasuryCoins = town != null ? Math.max(0L, town.getTreasuryGoldCoinCount()) : 0L;
         List<HudQuestEntry> quests =
             preferences.isHudShowQuests()
-                ? questEntries(town, worldProgress, store, preferences.getPinnedQuestIds())
+                ? questEntries(town, worldProgress, playerProgress, store, preferences.getPinnedQuestIds())
                 : List.of();
         return new AetherhavenHudSnapshot(
             preferences.isHudShowTime(),
@@ -92,6 +107,7 @@ public final class AetherhavenHudSnapshotService {
     private List<HudQuestEntry> questEntries(
         @Nullable TownRecord town,
         @Nullable WorldNpcPlayerProgress worldProgress,
+        @Nullable PlayerQuestProgress playerProgress,
         @Nonnull Store<EntityStore> store,
         @Nonnull List<String> pinnedQuestIds
     ) {
@@ -103,7 +119,21 @@ public final class AetherhavenHudSnapshotService {
             if (entries.size() >= MAX_QUESTS) {
                 break;
             }
-            if (WorldQuestIds.isWorldQuestRow(questId) && worldProgress != null) {
+            if (PlayerQuestIds.isPlayerQuestRow(questId) && playerProgress != null) {
+                String playerQuestId = PlayerQuestIds.parsePlayerQuestId(questId);
+                if (playerQuestId == null || !playerProgress.hasQuestActive(playerQuestId)) {
+                    continue;
+                }
+                entries.add(
+                    new HudQuestEntry(
+                        HudQuestEntry.Source.STORY,
+                        questId,
+                        storyCatalog.titleMessage(playerQuestId),
+                        storyCatalog.currentPlayerObjectiveMessage(playerQuestId, playerProgress, store, plugin),
+                        storyCatalog.hudPinnedPlayerObjectiveKey(playerQuestId, playerProgress, plugin)
+                    )
+                );
+            } else if (WorldQuestIds.isWorldQuestRow(questId) && worldProgress != null) {
                 String worldQuestId = WorldQuestIds.parseWorldQuestId(questId);
                 if (worldQuestId == null || !worldProgress.hasQuestActive(worldQuestId)) {
                     continue;

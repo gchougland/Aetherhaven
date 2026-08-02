@@ -45,6 +45,9 @@ public final class BuildingEditorJsonWriter {
         @Nonnull PlotCreatorDraft draft,
         @Nonnull Map<String, Object> originalSnapshot
     ) throws IOException {
+        if (PlotBuildingKindRequirements.requiresGaiaStatue(draft, null)) {
+            PlotCreatorGaiaStatueSupport.syncPoiFromLocalPos(draft);
+        }
         Map<String, Object> root = new LinkedHashMap<>(originalSnapshot);
         root.put("id", draft.getConstructionId());
         root.put("displayName", draft.getDisplayName());

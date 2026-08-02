@@ -26,6 +26,7 @@ public final class PlotCreatorSpotMarkerVisuals {
                 TREASURY_BLOCK,
                 SHOP_SAFE_BLOCK,
                 INN_BELL_BLOCK,
+                GAIA_STATUE_BLOCK,
                 SHOP_SPOT -> TEX_GREEN;
         };
     }
@@ -72,6 +73,7 @@ public final class PlotCreatorSpotMarkerVisuals {
             case TREASURY_BLOCK -> "Treasury";
             case SHOP_SAFE_BLOCK -> "Shop safe";
             case INN_BELL_BLOCK -> "Inn Bell";
+            case GAIA_STATUE_BLOCK -> "Gaia statue";
             case PLANNING_DESK_POI -> "Planning desk";
             case WORK_POI -> "Work spot";
             case SLEEP_POI -> "Sleep spot";

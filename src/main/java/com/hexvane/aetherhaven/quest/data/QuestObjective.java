@@ -26,6 +26,11 @@ public final class QuestObjective {
     @Nullable
     private String constructionId;
 
+    /** For {@code kind: item_crafted}. */
+    @SerializedName("itemId")
+    @Nullable
+    private String itemId;
+
     @SerializedName("npcRoleId")
     @Nullable
     private String npcRoleId;
@@ -77,6 +82,11 @@ public final class QuestObjective {
     @Nullable
     public String constructionId() {
         return constructionId;
+    }
+
+    @Nullable
+    public String itemId() {
+        return itemId;
     }
 
     @Nullable

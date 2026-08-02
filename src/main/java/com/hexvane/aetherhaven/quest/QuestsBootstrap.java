@@ -41,6 +41,9 @@ public final class QuestsBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new QuestKillProgressSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new RaidQuestMarchSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new RaidHealthBarHudRefreshSystem(core));
+        PlayerQuestProgress.register(plugin.getEntityStoreRegistry());
+        plugin.getEntityStoreRegistry().registerSystem(new PlayerQuestProgressInitSystem());
+        QuestCraftProgressListener.register(core);
         core.registerAetherhavenSubcommand(new AetherhavenQuestDebugCommand());
         core.registerAetherhavenSubcommand(new AetherhavenQuestBoardDebugCommand());
         core.registerAetherhavenSubcommand(new AetherhavenTownRankDebugCommand());

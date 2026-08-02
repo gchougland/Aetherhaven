@@ -55,6 +55,9 @@ import com.google.gson.JsonObject;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hexvane.aetherhaven.quest.PlayerQuestIds;
+import com.hexvane.aetherhaven.quest.PlayerQuestProgress;
+import com.hexvane.aetherhaven.quest.PlayerQuestProgressionService;
 import com.hexvane.aetherhaven.worldnpc.WorldNpcPlayerProgress;
 import com.hexvane.aetherhaven.worldnpc.WorldQuestBoardService;
 import com.hexvane.aetherhaven.worldnpc.WorldQuestIds;
@@ -281,15 +284,18 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             WorldNpcPlayerProgress worldProgressModal =
                 AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(world, plugin)
                     .getOrCreatePlayerProgress(uc.getUuid());
+            PlayerQuestProgress playerProgressModal = store.getComponent(ref, PlayerQuestProgress.getComponentType());
             boolean worldPending =
                 isActiveWorldJournalQuest(worldProgressModal, pendingId);
+            boolean playerPending =
+                isActivePlayerJournalQuest(playerProgressModal, pendingId);
             TownRecord townModal =
                 journalTown(world, store, ref, plugin, uc.getUuid());
             boolean townPending =
                 townModal != null
                     && townModal.playerCanAbandonQuests(uc.getUuid())
                     && QuestBoardService.isActiveJournalQuest(townModal, pendingId);
-            if (worldPending || townPending) {
+            if (worldPending || playerPending || townPending) {
                 abandonModalBlocking = true;
             } else {
                 abandonConfirmOpen = false;
@@ -484,10 +490,11 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             WorldNpcPlayerProgress worldProgress =
                 AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(world, plugin)
                     .getOrCreatePlayerProgress(uc.getUuid());
-            List<String> active = collectActiveJournalQuestIds(town, uc.getUuid(), worldProgress);
+            PlayerQuestProgress playerProgress = store.getComponent(ref, PlayerQuestProgress.getComponentType());
+            List<String> active = collectActiveJournalQuestIds(town, uc.getUuid(), worldProgress, playerProgress);
             if (active.isEmpty()) {
                 if (town == null) {
-                    setQuestsBlocked(commandBuilder, Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.needTown"));
+                    setQuestsBlocked(commandBuilder, Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.noActive"));
                 } else if (!town.playerHasQuestPermission(uc.getUuid())) {
                     setQuestsBlocked(commandBuilder, Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.noPermission"));
                 } else {
@@ -514,7 +521,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 String qid = active.get(i);
                 commandBuilder.append(QUEST_ROWS, "Aetherhaven/QuestJournalRow.ui");
                 String row = QUEST_ROWS + "[" + i + "]";
-                Message titleMsg = journalQuestTitle(qid, town, worldProgress, quests, boardCatalog, entityStore, plugin);
+                Message titleMsg =
+                    journalQuestTitle(qid, town, worldProgress, playerProgress, quests, boardCatalog, entityStore, plugin);
                 commandBuilder.set(row + " #Select #QuestTitle.TextSpans", titleMsg);
                 boolean sel = qid.equals(selectedQuestId);
                 commandBuilder.set(row + " #QuestTitle.Style.TextColor", sel ? "#f4e8c8" : "#e8dcc8");
@@ -532,6 +540,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 sel,
                 town,
                 worldProgress,
+                playerProgress,
                 quests,
                 boardCatalog,
                 entityStore,
@@ -540,7 +549,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             );
 
             boolean canAbandon =
-                WorldQuestIds.isWorldQuestRow(sel)
+                PlayerQuestIds.isPlayerQuestRow(sel)
+                    || WorldQuestIds.isWorldQuestRow(sel)
                     || WorldQuestIds.isWorldBoardRow(sel)
                     || (town != null && town.playerCanAbandonQuests(uc.getUuid()));
             commandBuilder.set("#AbandonQuestButton.Visible", canAbandon);
@@ -1712,9 +1722,15 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
     private static List<String> collectActiveJournalQuestIds(
         @Nullable TownRecord town,
         @Nonnull UUID playerUuid,
-        @Nonnull WorldNpcPlayerProgress worldProgress
+        @Nonnull WorldNpcPlayerProgress worldProgress,
+        @Nullable PlayerQuestProgress playerProgress
     ) {
         List<String> active = new ArrayList<>();
+        if (playerProgress != null) {
+            for (String questId : playerProgress.activeQuestIdsSnapshot()) {
+                active.add(PlayerQuestIds.playerRow(questId));
+            }
+        }
         if (town != null && town.playerHasQuestPermission(playerUuid)) {
             active.addAll(town.getActiveQuestIdsSnapshot());
             for (QuestBoardSlotRecord boardSlot : town.acceptedBoardQuestsSnapshot()) {
@@ -1744,16 +1760,31 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         return false;
     }
 
+    private static boolean isActivePlayerJournalQuest(
+        @Nullable PlayerQuestProgress progress, @Nonnull String rowId
+    ) {
+        if (progress == null || !PlayerQuestIds.isPlayerQuestRow(rowId)) {
+            return false;
+        }
+        String questId = PlayerQuestIds.parsePlayerQuestId(rowId);
+        return questId != null && progress.hasQuestActive(questId);
+    }
+
     @Nonnull
     private static Message journalQuestTitle(
         @Nonnull String rowId,
         @Nullable TownRecord town,
         @Nonnull WorldNpcPlayerProgress worldProgress,
+        @Nullable PlayerQuestProgress playerProgress,
         @Nonnull QuestCatalog quests,
         @Nonnull QuestBoardCatalog boardCatalog,
         @Nonnull Store<EntityStore> entityStore,
         @Nonnull AetherhavenPlugin plugin
     ) {
+        if (PlayerQuestIds.isPlayerQuestRow(rowId)) {
+            String questId = PlayerQuestIds.parsePlayerQuestId(rowId);
+            return questId != null ? quests.titleMessage(questId) : Message.raw("");
+        }
         if (WorldQuestIds.isWorldQuestRow(rowId)) {
             String questId = WorldQuestIds.parseWorldQuestId(rowId);
             return questId != null ? quests.titleMessage(questId) : Message.raw("");
@@ -1787,12 +1818,39 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         @Nonnull String sel,
         @Nullable TownRecord town,
         @Nonnull WorldNpcPlayerProgress worldProgress,
+        @Nullable PlayerQuestProgress playerProgress,
         @Nonnull QuestCatalog quests,
         @Nonnull QuestBoardCatalog boardCatalog,
         @Nonnull Store<EntityStore> entityStore,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull Ref<EntityStore> viewerRef
     ) {
+        if (PlayerQuestIds.isPlayerQuestRow(sel)) {
+            String questId = PlayerQuestIds.parsePlayerQuestId(sel);
+            if (questId == null) {
+                clearQuestDetailPane(commandBuilder);
+                return;
+            }
+            commandBuilder.set("#QuestDetailTitle.TextSpans", quests.titleMessage(questId));
+            commandBuilder.set("#QuestDetailDescription.TextSpans", quests.descriptionMessage(questId));
+            applyQuestStepsHeading(commandBuilder, quests.hasObjectives(questId));
+            if (quests.hasObjectives(questId)) {
+                QuestJournalObjectivesUi.applyStoryQuest(
+                    commandBuilder,
+                    quests,
+                    questId,
+                    null,
+                    null,
+                    playerProgress,
+                    entityStore,
+                    plugin
+                );
+            } else {
+                QuestJournalObjectivesUi.clear(commandBuilder);
+            }
+            applyQuestRewardPreview(commandBuilder, quests, questId);
+            return;
+        }
         if (WorldQuestIds.isWorldQuestRow(sel)) {
             String questId = WorldQuestIds.parseWorldQuestId(sel);
             if (questId == null) {
@@ -1809,6 +1867,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                     questId,
                     null,
                     worldProgress,
+                    null,
                     entityStore,
                     plugin
                 );
@@ -1905,6 +1964,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 sel,
                 town,
                 worldProgress,
+                null,
                 entityStore,
                 plugin
             );
@@ -2204,7 +2264,9 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                     WorldNpcPlayerProgress worldProgress =
                         AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(w, plugin)
                             .getOrCreatePlayerProgress(uuid.getUuid());
-                    Set<String> activeIds = new HashSet<>(collectActiveJournalQuestIds(town, uuid.getUuid(), worldProgress));
+                    PlayerQuestProgress playerProgress = store.getComponent(ref, PlayerQuestProgress.getComponentType());
+                    Set<String> activeIds =
+                        new HashSet<>(collectActiveJournalQuestIds(town, uuid.getUuid(), worldProgress, playerProgress));
                     st.retainPinnedQuests(activeIds);
                 }
             }
@@ -2251,8 +2313,9 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             WorldNpcPlayerProgress worldProgress =
                 AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(world, plugin)
                     .getOrCreatePlayerProgress(uc.getUuid());
+            PlayerQuestProgress playerProgress = store.getComponent(ref, PlayerQuestProgress.getComponentType());
             String id = qid.trim();
-            List<String> active = collectActiveJournalQuestIds(town, uc.getUuid(), worldProgress);
+            List<String> active = collectActiveJournalQuestIds(town, uc.getUuid(), worldProgress, playerProgress);
             if (!active.contains(id)) {
                 return;
             }
@@ -2339,13 +2402,15 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             WorldNpcPlayerProgress worldProgress =
                 AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(world, plugin)
                     .getOrCreatePlayerProgress(uc.getUuid());
+            PlayerQuestProgress playerProgress = store.getComponent(ref, PlayerQuestProgress.getComponentType());
             boolean worldOk = isActiveWorldJournalQuest(worldProgress, sel);
+            boolean playerOk = isActivePlayerJournalQuest(playerProgress, sel);
             TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
             boolean townOk =
                 town != null
                     && town.playerCanAbandonQuests(uc.getUuid())
                     && QuestBoardService.isActiveJournalQuest(town, sel);
-            if (!worldOk && !townOk) {
+            if (!worldOk && !playerOk && !townOk) {
                 return;
             }
             pendingAbandonQuestId = selectedQuestId;
@@ -3103,7 +3168,14 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 return;
             }
             String id = qid.trim();
-            if (WorldQuestIds.isWorldQuestRow(id)) {
+            if (PlayerQuestIds.isPlayerQuestRow(id)) {
+                String playerQuestId = PlayerQuestIds.parsePlayerQuestId(id);
+                PlayerQuestProgress playerProgress = store.getComponent(ref, PlayerQuestProgress.getComponentType());
+                if (playerQuestId != null && playerProgress != null) {
+                    PlayerQuestProgressionService.abandonQuest(playerProgress, playerQuestId);
+                    store.putComponent(ref, PlayerQuestProgress.getComponentType(), playerProgress);
+                }
+            } else if (WorldQuestIds.isWorldQuestRow(id)) {
                 String worldQuestId = WorldQuestIds.parseWorldQuestId(id);
                 if (worldQuestId != null) {
                     WorldQuestProgressionService.abandonQuest(plugin, world, uc.getUuid(), worldQuestId);

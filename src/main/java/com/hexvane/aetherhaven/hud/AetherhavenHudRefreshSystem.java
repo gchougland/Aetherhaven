@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.quest.PlayerQuestProgress;
 import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
 import com.hexvane.aetherhaven.world.PersistentWorldSupport;
 import com.hypixel.hytale.component.Ref;
@@ -130,6 +131,8 @@ public final class AetherhavenHudRefreshSystem
         var worldNpcRegistry = AetherhavenWorldRegistries.getWorldNpcRegistry(world);
         var worldProgress =
             worldNpcRegistry != null ? worldNpcRegistry.findPlayerProgress(uuid.getUuid()) : null;
+        PlayerQuestProgress playerProgress =
+            store.getComponent(chunk.getReferenceTo(index), PlayerQuestProgress.getComponentType());
         AetherhavenHud hud = AetherhavenHudSupport.obtain(player, playerRef);
         hud.setStatusPlacement(
             placement(
@@ -147,7 +150,7 @@ public final class AetherhavenHudRefreshSystem
                 HudPlacement.TOP_RIGHT
             )
         );
-        hud.refresh(snapshots.capture(playerRef, store, time.getGameDateTime(), town, worldProgress, preferences));
+        hud.refresh(snapshots.capture(playerRef, store, time.getGameDateTime(), town, worldProgress, playerProgress, preferences));
     }
 
     @Override

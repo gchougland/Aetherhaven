@@ -155,6 +155,10 @@ public final class AetherhavenConstants {
 
     public static final String WORLD_QUEST_JOURNAL_PREFIX = "world:";
 
+    public static final String PLAYER_QUEST_JOURNAL_PREFIX = "player:";
+
+    public static final String QUEST_INTRO_AETHERHAVEN = "q_intro_aetherhaven";
+
     public static final String WORLD_BOARD_JOURNAL_PREFIX = "wboard:";
 
     /** Route particle systems (Wayfinder style visuals). */

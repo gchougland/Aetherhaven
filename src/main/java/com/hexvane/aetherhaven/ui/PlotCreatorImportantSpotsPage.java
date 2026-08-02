@@ -242,9 +242,11 @@ public final class PlotCreatorImportantSpotsPage
         if (spot.type() == PlotCreatorSubstepType.MANAGEMENT_BLOCK) {
             return true;
         }
-        return spot.type() == PlotCreatorSubstepType.INN_BELL_BLOCK
-            && PlotBuildingKindRequirements.effectiveKinds(session.getDraft(), AetherhavenPlugin.get())
-                .contains(com.hexvane.aetherhaven.plotcreator.PlotBuildingKind.INN);
+        return (spot.type() == PlotCreatorSubstepType.INN_BELL_BLOCK
+                && PlotBuildingKindRequirements.effectiveKinds(session.getDraft(), AetherhavenPlugin.get())
+                    .contains(com.hexvane.aetherhaven.plotcreator.PlotBuildingKind.INN))
+            || (spot.type() == PlotCreatorSubstepType.GAIA_STATUE_BLOCK
+                && PlotBuildingKindRequirements.requiresGaiaStatue(session.getDraft(), AetherhavenPlugin.get()));
     }
 
     private void refreshIfOpen(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {

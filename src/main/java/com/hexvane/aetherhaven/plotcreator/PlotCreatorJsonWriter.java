@@ -22,6 +22,9 @@ public final class PlotCreatorJsonWriter {
     private PlotCreatorJsonWriter() {}
 
     public static void writeBuilding(@Nonnull Path outputFile, @Nonnull PlotCreatorDraft draft) throws IOException {
+        if (PlotBuildingKindRequirements.requiresGaiaStatue(draft, null)) {
+            PlotCreatorGaiaStatueSupport.syncPoiFromLocalPos(draft);
+        }
         Map<String, Object> root = new LinkedHashMap<>();
         root.put("id", draft.getConstructionId());
         root.put("displayName", draft.getDisplayName());

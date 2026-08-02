@@ -178,6 +178,11 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
             .add()
             .append(new KeyedCodec<>("ToolKeyMovement", Codec.STRING), (c, v) -> c.toolKeyMovement = trimOrEmpty(v), c -> emptyOrNull(c.toolKeyMovement))
             .add()
+            .append(
+                new KeyedCodec<>("IntroQuestPromptHandled", Codec.BOOLEAN),
+                (c, v) -> c.introQuestPromptHandled = valueOr(v, false),
+                c -> c.introQuestPromptHandled)
+            .add()
             .build();
 
     @Nullable
@@ -256,6 +261,8 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
     private String toolKeySpace = "";
     @Nonnull
     private String toolKeyMovement = "";
+
+    private boolean introQuestPromptHandled;
 
     public PlayerTownJournalState() {}
 
@@ -484,6 +491,14 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
     public void setDialogueSpeechPreferences(boolean enabled, int volumePercent) {
         dialogueSpeechEnabled = enabled;
         dialogueSpeechVolumePercent = clampSpeechVolume(volumePercent);
+    }
+
+    public boolean isIntroQuestPromptHandled() {
+        return introQuestPromptHandled;
+    }
+
+    public void setIntroQuestPromptHandled(boolean handled) {
+        introQuestPromptHandled = handled;
     }
 
     @Nonnull

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "q_intro_aetherhaven",
+  "category": "player",
+  "title": "Welcome to Aetherhaven",
+  "description": "Learn the first steps to founding your own town.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "craft_desk",
+      "kind": "item_crafted",
+      "itemId": "Aetherhaven_Town_Planning_Desk",
+      "text": "Craft a town planning desk at a workbench.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_intro_aetherhaven.objective.craft_desk"
+    },
+    {
+      "id": "craft_charter",
+      "kind": "item_crafted",
+      "itemId": "Aetherhaven_Charter",
+      "text": "Craft a town charter at the planning desk.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_intro_aetherhaven.objective.craft_charter"
+    },
+    {
+      "id": "place_charter",
+      "kind": "charter_placed",
+      "text": "Place your town charter in the world.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_intro_aetherhaven.objective.place_charter"
+    }
+  ],
+  "rewards": [],
+  "lifecycle": {
+    "onStart": [],
+    "onComplete": [],
+    "onAbandon": []
+  },
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_intro_aetherhaven.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_intro_aetherhaven.description"
+}

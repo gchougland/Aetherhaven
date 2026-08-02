@@ -168,6 +168,23 @@ public final class PlotBuildingKindRequirements {
         return effectiveKinds(draft, plugin).contains(PlotBuildingKind.PLAYER_SHOP);
     }
 
+    /** Gaia altar buildings need a placed Gaia statue block. */
+    public static boolean requiresGaiaStatue(@Nonnull PlotCreatorDraft draft, @Nullable AetherhavenPlugin plugin) {
+        for (String id : candidateConstructionIds(draft)) {
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR.equals(id.trim())) {
+                return true;
+            }
+        }
+        if (plugin != null) {
+            for (String gameplayId : gameplayIdsForWorkplaceLookup(draft, plugin)) {
+                if (AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR.equals(gameplayId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /** Restaurant and other eat-tagged shops need dining POIs; plain market stalls do not. */
     public static boolean requiresEatPoi(@Nonnull PlotCreatorDraft draft, @Nullable AetherhavenPlugin plugin) {
         if (draft.getBuildingTags().contains("eat") || draft.getBuildingTags().contains("restaurant")) {
@@ -257,6 +274,7 @@ public final class PlotBuildingKindRequirements {
             || AetherhavenConstants.SHOP_SPOT_BLOCK_TYPE_ID.equals(blockTypeId)
             || AetherhavenConstants.TOURIST_PORTAL_BLOCK_TYPE_ID.equals(blockTypeId)
             || AetherhavenConstants.QUEST_BOARD_ITEM_ID.equals(blockTypeId)
+            || AetherhavenConstants.STATUE_OF_GAIA_BLOCK_TYPE_ID.equals(blockTypeId)
             || "Aetherhaven_Town_Planning_Desk".equals(blockTypeId);
     }
 
@@ -273,10 +291,7 @@ public final class PlotBuildingKindRequirements {
                 new SubstepRequirement(PlotCreatorSubstepType.SLEEP_POI, 1)
             );
             case WORK -> workSubsteps(draft, plugin);
-            case AMENITY -> List.of(
-                new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1),
-                new SubstepRequirement(PlotCreatorSubstepType.FUN_POI, 1)
-            );
+            case AMENITY -> amenitySubsteps(draft, plugin);
             case SHOP -> shopSubsteps(draft, plugin, false);
             case PLAYER_SHOP -> shopSubsteps(draft, plugin, true);
             case TOURIST_PORTAL -> List.of(
@@ -305,6 +320,22 @@ public final class PlotBuildingKindRequirements {
                 new SubstepRequirement(PlotCreatorSubstepType.QUEST_BOARD_POI, 1)
             );
         };
+    }
+
+    @Nonnull
+    private static List<SubstepRequirement> amenitySubsteps(
+        @Nonnull PlotCreatorDraft draft,
+        @Nullable AetherhavenPlugin plugin
+    ) {
+        List<SubstepRequirement> out = new ArrayList<>();
+        out.add(new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1));
+        if (requiresGaiaStatue(draft, plugin)) {
+            out.add(new SubstepRequirement(PlotCreatorSubstepType.GAIA_STATUE_BLOCK, 1));
+            out.add(new SubstepRequirement(PlotCreatorSubstepType.FUN_POI, 2));
+        } else {
+            out.add(new SubstepRequirement(PlotCreatorSubstepType.FUN_POI, 1));
+        }
+        return out;
     }
 
     @Nonnull

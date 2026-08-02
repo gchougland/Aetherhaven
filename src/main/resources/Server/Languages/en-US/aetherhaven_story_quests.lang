@@ -1,6 +1,12 @@
 # Story quest titles, descriptions, and journal objective lines (en-US source).
 aetherhaven.storyQuests._meta.noDescription=No description for this quest yet.
 
+aetherhaven.storyQuests.q_intro_aetherhaven.title=Welcome to Aetherhaven
+aetherhaven.storyQuests.q_intro_aetherhaven.description=Learn the first steps to founding your own town.
+aetherhaven.storyQuests.q_intro_aetherhaven.objective.craft_desk=Craft a town planning desk at a workbench.
+aetherhaven.storyQuests.q_intro_aetherhaven.objective.craft_charter=Craft a town charter at the planning desk.
+aetherhaven.storyQuests.q_intro_aetherhaven.objective.place_charter=Place your town charter in the world.
+
 aetherhaven.storyQuests.q_house_bard.title=Elias's home
 aetherhaven.storyQuests.q_house_bard.description=Elias plays at the guild hall most days. He would like a quiet roof at night that belongs to him alone.
 aetherhaven.storyQuests.q_house_bard.objective.token=Take the house plot token from Elias.

@@ -4,6 +4,9 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plot.CharterBlock;
 import com.hexvane.aetherhaven.difficulty.WorldDifficultyState;
+import com.hexvane.aetherhaven.hud.AetherhavenHudRefreshSystem;
+import com.hexvane.aetherhaven.quest.PlayerQuestProgress;
+import com.hexvane.aetherhaven.quest.PlayerQuestProgressionService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.ui.DifficultyPage;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -137,9 +140,19 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         );
         LOGGER.atInfo().log("Aetherhaven town %s created for %s at %s", record.getTownId(), owner, pos);
 
+        Store<EntityStore> entityStore = world.getEntityStore().getStore();
+        PlayerQuestProgress questProgress = entityStore.getComponent(entityRef, PlayerQuestProgress.getComponentType());
+        if (questProgress != null) {
+            boolean questChanged = PlayerQuestProgressionService.onCharterPlaced(plugin, questProgress);
+            questChanged |= PlayerQuestProgressionService.tryCompleteActiveQuests(plugin, questProgress);
+            if (questChanged) {
+                entityStore.putComponent(entityRef, PlayerQuestProgress.getComponentType(), questProgress);
+                AetherhavenHudRefreshSystem.requestRefresh(world);
+            }
+        }
+
         WorldDifficultyState difficulty = AetherhavenWorldRegistries.getOrLoadWorldDifficulty(world, plugin);
         if (!difficulty.isDifficultyChosen()) {
-            Store<EntityStore> entityStore = world.getEntityStore().getStore();
             Player player = entityStore.getComponent(entityRef, Player.getComponentType());
             if (player != null && player.getPageManager().getCustomPage() == null) {
                 player.getPageManager().openCustomPage(entityRef, entityStore, new DifficultyPage(playerRef));

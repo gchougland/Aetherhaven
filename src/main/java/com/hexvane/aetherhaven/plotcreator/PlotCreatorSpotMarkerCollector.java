@@ -87,6 +87,7 @@ public final class PlotCreatorSpotMarkerCollector {
         addLocal(out, draft, draft.getTreasuryLocalPos(), PlotCreatorSubstepType.TREASURY_BLOCK, null, filter);
         addLocal(out, draft, draft.getShopSafeLocalPos(), PlotCreatorSubstepType.SHOP_SAFE_BLOCK, null, filter);
         addLocal(out, draft, draft.getInnBellLocalPos(), PlotCreatorSubstepType.INN_BELL_BLOCK, null, filter);
+        addLocal(out, draft, draft.getGaiaStatueLocalPos(), PlotCreatorSubstepType.GAIA_STATUE_BLOCK, null, filter);
         addLocal(out, draft, draft.getInnkeeperSpawnLocal(), PlotCreatorSubstepType.INNKEEPER_SPAWN, null, filter);
         addLocal(out, draft, draft.getGuildMasterSpawnLocal(), PlotCreatorSubstepType.GUILD_MASTER_SPAWN, null, filter);
 
@@ -188,6 +189,9 @@ public final class PlotCreatorSpotMarkerCollector {
 
     @Nullable
     private static PlotCreatorSubstepType resolvePoiType(@Nonnull PlotCreatorPoiDraft poi) {
+        if (PlotCreatorGaiaStatueSupport.isGaiaStatueBlockTypeId(poi.getBlockTypeId())) {
+            return null;
+        }
         if (poi.getTags().contains(AetherhavenConstants.POI_TAG_BARD)
             || "bard".equalsIgnoreCase(poi.getWorkResidentKind())) {
             return PlotCreatorSubstepType.BARD_WORK_POI;

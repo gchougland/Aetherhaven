@@ -65,4 +65,23 @@ class PlotCreatorMainConstructionsTest {
                 .anyMatch(requirement -> requirement.type() == PlotCreatorSubstepType.INN_BELL_BLOCK)
         );
     }
+
+    @Test
+    void gaiaAltar_requiresGaiaStatueStep() {
+        PlotCreatorDraft draft = new PlotCreatorDraft();
+        draft.setKinds(List.of(PlotBuildingKind.AMENITY));
+        draft.setConstructionId(AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR);
+
+        List<PlotBuildingKindRequirements.SubstepRequirement> requirements =
+            PlotBuildingKindRequirements.defaultRequirements(draft, null);
+        assertTrue(
+            requirements.stream()
+                .anyMatch(requirement -> requirement.type() == PlotCreatorSubstepType.GAIA_STATUE_BLOCK)
+        );
+        assertTrue(
+            requirements.stream()
+                .anyMatch(requirement ->
+                    requirement.type() == PlotCreatorSubstepType.FUN_POI && requirement.minCount() == 2)
+        );
+    }
 }

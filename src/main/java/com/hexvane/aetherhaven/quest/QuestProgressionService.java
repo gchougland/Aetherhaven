@@ -29,6 +29,8 @@ public final class QuestProgressionService {
     public static final String ASSIGN_HOUSE_RESIDENT = "assign_house_resident";
     public static final String DIALOGUE_TURN_IN = "dialogue_turn_in";
     public static final String TOURIST_MOVE_IN_ITEMS = "tourist_move_in_items";
+    public static final String ITEM_CRAFTED = "item_crafted";
+    public static final String CHARTER_PLACED = "charter_placed";
 
     private QuestProgressionService() {}
 

@@ -508,11 +508,14 @@ public final class PlotCreatorService {
     public static void ensureRequiredSpots(@Nonnull PlotCreatorDraft draft) {
         boolean hasManagement = false;
         boolean hasInnBell = false;
+        boolean hasGaiaStatue = false;
         for (PlotCreatorSpotEntry entry : draft.getSelectedSpots()) {
             if (entry.type() == PlotCreatorSubstepType.MANAGEMENT_BLOCK) {
                 hasManagement = true;
             } else if (entry.type() == PlotCreatorSubstepType.INN_BELL_BLOCK) {
                 hasInnBell = true;
+            } else if (entry.type() == PlotCreatorSubstepType.GAIA_STATUE_BLOCK) {
+                hasGaiaStatue = true;
             }
         }
         if (!hasManagement) {
@@ -521,6 +524,9 @@ public final class PlotCreatorService {
         if (!hasInnBell
             && PlotBuildingKindRequirements.effectiveKinds(draft, AetherhavenPlugin.get()).contains(PlotBuildingKind.INN)) {
             draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.INN_BELL_BLOCK, 1));
+        }
+        if (!hasGaiaStatue && PlotBuildingKindRequirements.requiresGaiaStatue(draft, AetherhavenPlugin.get())) {
+            draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.GAIA_STATUE_BLOCK, 1));
         }
     }
 

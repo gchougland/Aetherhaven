@@ -7,6 +7,7 @@ public enum PlotCreatorSubstepType {
     TREASURY_BLOCK,
     SHOP_SAFE_BLOCK,
     INN_BELL_BLOCK,
+    GAIA_STATUE_BLOCK,
     PLANNING_DESK_POI,
     WORK_POI,
     SLEEP_POI,

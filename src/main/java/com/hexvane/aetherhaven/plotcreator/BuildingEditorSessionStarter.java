@@ -231,6 +231,7 @@ public final class BuildingEditorSessionStarter {
         shiftLocal(draft.getTreasuryLocalPos(), dx, dy, dz, draft::setTreasuryLocalPos);
         shiftLocal(draft.getShopSafeLocalPos(), dx, dy, dz, draft::setShopSafeLocalPos);
         shiftLocal(draft.getInnBellLocalPos(), dx, dy, dz, draft::setInnBellLocalPos);
+        shiftLocal(draft.getGaiaStatueLocalPos(), dx, dy, dz, draft::setGaiaStatueLocalPos);
         shiftLocal(draft.getInnkeeperSpawnLocal(), dx, dy, dz, draft::setInnkeeperSpawnLocal);
         shiftLocal(draft.getGuildMasterSpawnLocal(), dx, dy, dz, draft::setGuildMasterSpawnLocal);
         for (int[] visitor : draft.getVisitorSpawnLocals()) {
@@ -286,6 +287,7 @@ public final class BuildingEditorSessionStarter {
         shiftLocal(draft.getTreasuryLocalPos(), ox, dy, oz, draft::setTreasuryLocalPos);
         shiftLocal(draft.getShopSafeLocalPos(), ox, dy, oz, draft::setShopSafeLocalPos);
         shiftLocal(draft.getInnBellLocalPos(), ox, dy, oz, draft::setInnBellLocalPos);
+        shiftLocal(draft.getGaiaStatueLocalPos(), ox, dy, oz, draft::setGaiaStatueLocalPos);
         shiftLocal(draft.getInnkeeperSpawnLocal(), ox, dy, oz, draft::setInnkeeperSpawnLocal);
         shiftLocal(draft.getGuildMasterSpawnLocal(), ox, dy, oz, draft::setGuildMasterSpawnLocal);
         for (int[] visitor : draft.getVisitorSpawnLocals()) {

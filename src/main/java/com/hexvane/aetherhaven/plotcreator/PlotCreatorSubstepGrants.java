@@ -37,6 +37,7 @@ public final class PlotCreatorSubstepGrants {
             case TREASURY_BLOCK -> List.of(new ItemStack(AetherhavenConstants.TREASURY_BLOCK_TYPE_ID, qty));
             case SHOP_SAFE_BLOCK -> List.of(new ItemStack(AetherhavenConstants.SHOP_SAFE_ITEM_ID, qty));
             case INN_BELL_BLOCK -> List.of(new ItemStack(AetherhavenConstants.INN_BELL_BLOCK_TYPE_ID, qty));
+            case GAIA_STATUE_BLOCK -> List.of(new ItemStack(AetherhavenConstants.STATUE_OF_GAIA_BLOCK_TYPE_ID, qty));
             case PLANNING_DESK_POI -> List.of(new ItemStack("Aetherhaven_Town_Planning_Desk", qty));
             case WORK_POI -> {
                 // Town hall elder work: give the planning desk to place in the build; the work spot can be their chair.

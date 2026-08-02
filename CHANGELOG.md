@@ -4,6 +4,8 @@
 
 ### Added
 
+- **Intro quest** — On your first join to a world, you can accept a short guided quest to craft a town planning desk, craft a charter, and place your charter to found a town.
+- **Town Journal on intro quest** — Accepting the intro quest gives you the Town Journal and pins the quest to your HUD.
 - **Stormwind building set** — 20 WoW-inspired Stormwind-style plot variants (inn, town hall, shops, production buildings, townhouses, etc.) available on the plot crafting bench under the Stormwind style filter.
 - **Community updates** — Update button on the plot crafting bench when a newer version of a downloaded building is available.
 - **Barn Feathers** - The barn can now produce feathers.
@@ -12,6 +14,7 @@
 
 ### Changed
 
+- **Town Journal timing** — Elder Lyren no longer gives you the Town Journal after the inn is built. You get it when you accept the intro quest instead.
 - **Tool HUD key hints** — Path tool hints read your local Hytale keybind settings when available, with a builder style key legend on the shovel. Other tool HUDs use the same label lookup with vanilla defaults as fallback. The Town Journal tool key labels setting was removed.
 - **Workplace slots** — Town record shelves list every worker a building needs.
 - **Plot creator menus** — Type, variant, spots, and settings menus open when you reach those steps. Done moves you forward when your choices are valid.

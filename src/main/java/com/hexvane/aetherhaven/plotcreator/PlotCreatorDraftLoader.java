@@ -88,6 +88,7 @@ public final class PlotCreatorDraftLoader {
         draft.setCountsAsConstructionIds(def.getCountsAsConstructionIds());
         draft.setKinds(inferKinds(def));
         stampWorkResidentKinds(draft);
+        PlotCreatorGaiaStatueSupport.extractLocalPosFromPois(draft);
         seedSelectedSpotsFromDefinition(draft, def);
     }
 

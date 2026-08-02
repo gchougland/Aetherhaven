@@ -202,6 +202,8 @@ public final class QuestCatalog {
                 "dialogue_turn_in",
                 "assign_house_resident",
                 "tourist_move_in_items",
+                "item_crafted",
+                "charter_placed",
                 "custom",
                 "entity_kills" -> true;
             default -> false;
@@ -500,6 +502,49 @@ public final class QuestCatalog {
             if (objective.kind() != null && "entity_kills".equalsIgnoreCase(objective.kind().trim())) {
                 return objectiveProgressKey(questId, town, objective);
             }
+        }
+        return "complete";
+    }
+
+    /** Renders only the first incomplete objective for save wide player quests on the HUD. */
+    @Nonnull
+    public Message currentPlayerObjectiveMessage(
+        @Nonnull String questId,
+        @Nonnull PlayerQuestProgress progress,
+        @Nullable Store<EntityStore> store,
+        @Nullable AetherhavenPlugin plugin
+    ) {
+        if (plugin == null) {
+            return Message.raw("");
+        }
+        QuestDefinition def = get(questId);
+        QuestObjective objective = PlayerQuestProgressionService.currentObjective(plugin, progress, questId);
+        if (def == null) {
+            return Message.raw("");
+        }
+        if (objective == null) {
+            return Message.raw("");
+        }
+        return objectiveLineMessage(objective, null, null, store, plugin, questId);
+    }
+
+    @Nonnull
+    public String hudPinnedPlayerObjectiveKey(
+        @Nonnull String questId,
+        @Nonnull PlayerQuestProgress progress,
+        @Nullable AetherhavenPlugin plugin
+    ) {
+        if (plugin == null) {
+            return "";
+        }
+        QuestDefinition def = get(questId);
+        if (def == null) {
+            return "";
+        }
+        QuestObjective current = PlayerQuestProgressionService.currentObjective(plugin, progress, questId);
+        if (current != null && current.id() != null && !current.id().isBlank()) {
+            String id = current.id().trim();
+            return id + ':' + (PlayerQuestProgressionService.isObjectiveComplete(progress, questId, current) ? "done" : "open");
         }
         return "complete";
     }

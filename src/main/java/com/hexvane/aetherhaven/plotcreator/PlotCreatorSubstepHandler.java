@@ -97,6 +97,13 @@ public final class PlotCreatorSubstepHandler {
                 () -> draft.setInnBellLocalPos(null),
                 playerRef
             );
+            case GAIA_STATUE_BLOCK -> clearLocalIfNear(
+                draft,
+                draft.getGaiaStatueLocalPos(),
+                targetBlock,
+                () -> PlotCreatorGaiaStatueSupport.clear(draft),
+                playerRef
+            );
             case INNKEEPER_SPAWN -> clearLocalIfNear(
                 draft,
                 draft.getInnkeeperSpawnLocal(),
@@ -266,6 +273,16 @@ public final class PlotCreatorSubstepHandler {
                     yield true;
                 }
                 draft.setInnBellLocalPos(local);
+                playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.blockRecorded"));
+                yield true;
+            }
+            case GAIA_STATUE_BLOCK -> {
+                if (!PlotCreatorGaiaStatueSupport.isGaiaStatueBlockTypeId(blockId)) {
+                    playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.wrongBlock"));
+                    yield true;
+                }
+                draft.setGaiaStatueLocalPos(local);
+                PlotCreatorGaiaStatueSupport.syncPoiFromLocalPos(draft);
                 playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.blockRecorded"));
                 yield true;
             }

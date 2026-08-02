@@ -81,6 +81,8 @@ public final class PlotCreatorDraft {
     @Nullable
     private int[] innBellLocalPos;
     @Nullable
+    private int[] gaiaStatueLocalPos;
+    @Nullable
     private int[] innkeeperSpawnLocal;
     @Nonnull
     private final List<int[]> visitorSpawnLocals = new ArrayList<>();
@@ -490,6 +492,15 @@ public final class PlotCreatorDraft {
 
     public void setInnBellLocalPos(@Nullable int[] innBellLocalPos) {
         this.innBellLocalPos = innBellLocalPos;
+    }
+
+    @Nullable
+    public int[] getGaiaStatueLocalPos() {
+        return gaiaStatueLocalPos;
+    }
+
+    public void setGaiaStatueLocalPos(@Nullable int[] gaiaStatueLocalPos) {
+        this.gaiaStatueLocalPos = gaiaStatueLocalPos;
     }
 
     @Nullable

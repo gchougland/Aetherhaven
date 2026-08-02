@@ -50,6 +50,18 @@ public final class QuestObjectiveItemIcons {
             String blueprint = def.grantPlotBlueprintConstructionId();
             return constructionTokenSlots(blueprint, catalog);
         }
+        if ("item_crafted".equalsIgnoreCase(kind)) {
+            String itemId = objective.itemId();
+            if (itemId == null || itemId.isBlank()) {
+                return List.of();
+            }
+            ItemGridSlot slot = AetherhavenUiItemGrids.slotForKnownItem(itemId.trim(), 1);
+            return slot != null ? List.of(slot) : List.of();
+        }
+        if ("charter_placed".equalsIgnoreCase(kind)) {
+            ItemGridSlot slot = AetherhavenUiItemGrids.slotForKnownItem("Aetherhaven_Charter", 1);
+            return slot != null ? List.of(slot) : List.of();
+        }
         return List.of();
     }
 

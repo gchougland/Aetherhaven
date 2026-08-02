@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.quest.PlayerQuestProgress;
+import com.hexvane.aetherhaven.quest.PlayerQuestProgressionService;
 import com.hexvane.aetherhaven.quest.QuestAssigneeDisplay;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.quest.QuestObjectiveItemIcons;
@@ -42,6 +44,7 @@ public final class QuestJournalObjectivesUi {
         @Nonnull String questId,
         @Nullable TownRecord town,
         @Nullable WorldNpcPlayerProgress worldProgress,
+        @Nullable PlayerQuestProgress playerProgress,
         @Nonnull Store<EntityStore> store,
         @Nonnull AetherhavenPlugin plugin
     ) {
@@ -63,12 +66,12 @@ public final class QuestJournalObjectivesUi {
         }
         for (int i = 0; i < objectives.size(); i++) {
             QuestObjective objective = objectives.get(i);
-            boolean complete = isStoryObjectiveComplete(questId, objective, town, worldProgress);
+            boolean complete = isStoryObjectiveComplete(questId, objective, town, worldProgress, playerProgress);
             Message label =
                 Message.raw(String.valueOf(i + 1))
                     .insert(Message.raw(". "))
                     .insert(quests.formatObjectiveLine(objective, targetName, town, store, plugin, questId))
-                    .insert(killProgressSuffix(questId, objective, town, worldProgress));
+                    .insert(killProgressSuffix(questId, objective, town, worldProgress, playerProgress));
             appendRow(
                 commandBuilder,
                 i,
@@ -146,10 +149,14 @@ public final class QuestJournalObjectivesUi {
         @Nonnull String questId,
         @Nonnull QuestObjective objective,
         @Nullable TownRecord town,
-        @Nullable WorldNpcPlayerProgress worldProgress
+        @Nullable WorldNpcPlayerProgress worldProgress,
+        @Nullable PlayerQuestProgress playerProgress
     ) {
         if (town != null) {
             return QuestProgressionService.isObjectiveComplete(town, questId, objective);
+        }
+        if (playerProgress != null && PlayerQuestProgressionService.isObjectiveComplete(playerProgress, questId, objective)) {
+            return true;
         }
         if (worldProgress == null || objective.id() == null || objective.id().isBlank()) {
             return false;
@@ -167,7 +174,8 @@ public final class QuestJournalObjectivesUi {
         @Nonnull String questId,
         @Nonnull QuestObjective objective,
         @Nullable TownRecord town,
-        @Nullable WorldNpcPlayerProgress worldProgress
+        @Nullable WorldNpcPlayerProgress worldProgress,
+        @Nullable PlayerQuestProgress playerProgress
     ) {
         if (objective.kind() == null || !"entity_kills".equalsIgnoreCase(objective.kind().trim())) {
             return Message.raw("");
