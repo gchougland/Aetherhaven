@@ -96,6 +96,13 @@ public final class ConstructionBootstrap {
                 ScaffoldUseExtendInteraction.class,
                 ScaffoldUseExtendInteraction.CODEC
             );
+        core
+            .getCodecRegistry(Interaction.CODEC)
+            .register(
+                "OpenTownPlanningBench",
+                OpenTownPlanningBenchInteraction.class,
+                OpenTownPlanningBenchInteraction.CODEC
+            );
         OpenCustomUIInteraction.registerCustomPageSupplier(
             core,
             PlotConstructionPage.class,

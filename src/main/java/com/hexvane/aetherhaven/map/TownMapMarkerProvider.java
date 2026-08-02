@@ -6,13 +6,18 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Transform;
+import com.hypixel.hytale.protocol.NetworkChannel;
 import com.hypixel.hytale.protocol.packets.worldmap.MapMarker;
+import com.hypixel.hytale.protocol.packets.worldmap.UpdateWorldMap;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.universe.world.worldmap.WorldMapManager;
 import com.hypixel.hytale.server.core.universe.world.worldmap.markers.MapMarkerBuilder;
 import com.hypixel.hytale.server.core.universe.world.worldmap.markers.MarkersCollector;
+import com.hypixel.hytale.component.Ref;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
@@ -70,5 +75,29 @@ public final class TownMapMarkerProvider implements WorldMapManager.MarkerProvid
 
     public static boolean isTownMarkerId(@Nonnull String id) {
         return id.startsWith(MARKER_ID_PREFIX);
+    }
+
+    /** Removes a dissolved town's map waypoint from every online player immediately. Must run on the world thread. */
+    public static void removeTownMarkerFromAllPlayers(@Nonnull World world, @Nonnull UUID townId) {
+        String markerId = markerId(townId);
+        String[] removed = new String[] {markerId};
+        for (PlayerRef pref : world.getPlayerRefs()) {
+            Ref<EntityStore> ref = pref.getReference();
+            if (ref == null || !ref.isValid()) {
+                continue;
+            }
+            Player player = ref.getStore().getComponent(ref, Player.getComponentType());
+            PlayerRef playerRef = ref.getStore().getComponent(ref, PlayerRef.getComponentType());
+            if (player == null || playerRef == null) {
+                continue;
+            }
+            if (player.getWorldMapTracker().getSentMarkers().remove(markerId) == null) {
+                continue;
+            }
+            if (!playerRef.getPacketHandler().getChannel(NetworkChannel.WorldMap).isWritable()) {
+                continue;
+            }
+            playerRef.getPacketHandler().writeNoCache(new UpdateWorldMap(null, null, removed));
+        }
     }
 }

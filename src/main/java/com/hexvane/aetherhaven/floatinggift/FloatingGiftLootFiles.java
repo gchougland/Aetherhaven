@@ -16,7 +16,7 @@ import javax.annotation.Nonnull;
 public final class FloatingGiftLootFiles {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     public static final String FILE_NAME = "floating_gift_loot.json";
-    public static final int CURRENT_LOOT_FILE_VERSION = 2;
+    public static final int CURRENT_LOOT_FILE_VERSION = 3;
     private static final String DEFAULT_RESOURCE = "/defaults/floating_gift_loot.json";
 
     private FloatingGiftLootFiles() {}

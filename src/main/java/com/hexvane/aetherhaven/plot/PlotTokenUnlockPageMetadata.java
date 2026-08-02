@@ -26,6 +26,11 @@ public final class PlotTokenUnlockPageMetadata {
     private PlotTokenUnlockPageMetadata() {}
 
     @Nonnull
+    public static ItemStack createGenericStack() {
+        return new ItemStack(AetherhavenConstants.PLOT_TOKEN_UNLOCK_PAGE, 1);
+    }
+
+    @Nonnull
     public static ItemStack createStack(@Nonnull String constructionId) {
         return createStack(constructionId, null);
     }

@@ -9,7 +9,6 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackSlotTransaction;
-import com.hypixel.hytale.server.core.modules.item.ItemModule;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,20 +91,14 @@ public final class FloatingGiftChestLoot {
         @Nonnull FloatingGiftLootBundle bundle,
         @Nonnull ThreadLocalRandom rnd
     ) {
-        ItemModule itemModule = ItemModule.get();
-        if (!itemModule.isEnabled()) {
-            return;
-        }
+        FloatingGiftLootTable filler = bundle.getFillerTable();
         int min = bundle.getFillerRollsMin();
         int max = bundle.getFillerRollsMax();
         int rolls = min + (max > min ? rnd.nextInt(max - min + 1) : 0);
-        String droplistId = bundle.getFillerDroplistId();
         for (int i = 0; i < rolls; i++) {
-            List<ItemStack> rolled = itemModule.getRandomItemDrops(droplistId);
-            for (ItemStack stack : rolled) {
-                if (stack != null && !ItemStack.isEmpty(stack)) {
-                    out.add(stack);
-                }
+            ItemStack stack = filler.rollStack(rnd);
+            if (stack != null && !ItemStack.isEmpty(stack)) {
+                out.add(stack);
             }
         }
     }

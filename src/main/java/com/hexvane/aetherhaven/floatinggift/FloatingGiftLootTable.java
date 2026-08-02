@@ -23,15 +23,40 @@ public final class FloatingGiftLootTable {
         @Nullable
         private final String constructionId;
         private final int weight;
+        private final int quantityMin;
+        private final int quantityMax;
 
         public Entry(@Nonnull String itemId, int weight) {
-            this(itemId, null, weight);
+            this(itemId, null, weight, 1, 1);
+        }
+
+        public Entry(@Nonnull String itemId, int weight, int quantityMin, int quantityMax) {
+            this(itemId, null, weight, quantityMin, quantityMax);
         }
 
         public Entry(@Nonnull String itemId, @Nullable String constructionId, int weight) {
+            this(itemId, constructionId, weight, 1, 1);
+        }
+
+        public Entry(
+            @Nonnull String itemId,
+            @Nullable String constructionId,
+            int weight,
+            int quantityMin,
+            int quantityMax
+        ) {
             this.itemId = itemId;
             this.constructionId = constructionId != null && !constructionId.isBlank() ? constructionId.trim() : null;
             this.weight = Math.max(0, weight);
+            int min = quantityMin;
+            int max = quantityMax;
+            if (min > max) {
+                int tmp = min;
+                min = max;
+                max = tmp;
+            }
+            this.quantityMin = Math.max(1, min);
+            this.quantityMax = Math.max(this.quantityMin, max);
         }
 
         @Nonnull
@@ -46,6 +71,14 @@ public final class FloatingGiftLootTable {
 
         public int weight() {
             return weight;
+        }
+
+        public int quantityMin() {
+            return quantityMin;
+        }
+
+        public int quantityMax() {
+            return quantityMax;
         }
     }
 
@@ -95,8 +128,18 @@ public final class FloatingGiftLootTable {
             String itemId = row.has("itemId") ? row.get("itemId").getAsString() : "";
             String constructionId = row.has("constructionId") ? row.get("constructionId").getAsString() : null;
             int weight = row.has("weight") ? row.get("weight").getAsInt() : 1;
+            int quantityMin = 1;
+            int quantityMax = 1;
+            if (row.has("quantityMin")) {
+                quantityMin = row.get("quantityMin").getAsInt();
+            }
+            if (row.has("quantityMax")) {
+                quantityMax = row.get("quantityMax").getAsInt();
+            } else if (row.has("quantityMin")) {
+                quantityMax = quantityMin;
+            }
             if (itemId != null && !itemId.isBlank() && weight > 0) {
-                list.add(new Entry(itemId.trim(), constructionId, weight));
+                list.add(new Entry(itemId.trim(), constructionId, weight, quantityMin, quantityMax));
             }
         }
         return new FloatingGiftLootTable(list);
@@ -132,10 +175,10 @@ public final class FloatingGiftLootTable {
         for (Entry e : entries) {
             acc += e.weight;
             if (roll < acc) {
-                return toStack(e);
+                return toStack(e, rnd);
             }
         }
-        return toStack(entries.get(entries.size() - 1));
+        return toStack(entries.get(entries.size() - 1), rnd);
     }
 
     /** Rolls up to {@code count} unique stacks from this table (no duplicate item ids). */
@@ -164,10 +207,18 @@ public final class FloatingGiftLootTable {
     }
 
     @Nonnull
-    private static ItemStack toStack(@Nonnull Entry e) {
+    private static ItemStack toStack(@Nonnull Entry e, @Nonnull ThreadLocalRandom rnd) {
         if (e.constructionId != null) {
             return PlotTokenUnlockPageMetadata.createStack(e.constructionId);
         }
-        return new ItemStack(e.itemId, 1);
+        int quantity = rollQuantity(e.quantityMin, e.quantityMax, rnd);
+        return new ItemStack(e.itemId, quantity);
+    }
+
+    private static int rollQuantity(int min, int max, @Nonnull ThreadLocalRandom rnd) {
+        if (min >= max) {
+            return min;
+        }
+        return min + rnd.nextInt(max - min + 1);
     }
 }

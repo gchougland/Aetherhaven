@@ -169,62 +169,84 @@ public final class TownBorderMapOverlayService {
   }
 
   public static void refreshPlayer(@Nonnull World world, @Nonnull UUID playerUuid) {
-    world.execute(
-        () -> {
-          Player player = findPlayer(world, playerUuid);
-          if (player == null) {
-            return;
-          }
-          Ref<EntityStore> ref = player.getReference();
-          if (ref == null || !ref.isValid()) {
-            return;
-          }
-          Store<EntityStore> store = ref.getStore();
-          PlayerTownJournalState journal = store.getComponent(ref, PlayerTownJournalState.getComponentType());
-          PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
-          if (playerRef == null) {
-            return;
-          }
-          if (journal == null || !journal.isShowTownBordersOnMap()) {
-            clearOverlays(world, player, playerRef, playerUuid);
-          } else {
-            restorePristineOverlays(world, player, playerRef, playerUuid);
-            PAINT_CACHE.remove(playerUuid);
-            WorldBorderState borderState = worldBorderState(world);
-            if (borderState.towns.isEmpty()) {
-              return;
-            }
-            updatePlayerOverlays(world, player, playerRef, playerUuid, borderState);
-          }
-        });
+    world.execute(() -> refreshPlayerOnWorldThread(world, playerUuid));
+  }
+
+  /**
+   * Refreshes border overlays for every online player after town membership or territory changes.
+   * Must run on the world thread (e.g. after {@link TownManager#removeTown}).
+   */
+  public static void onWorldTownsChanged(@Nonnull World world) {
+    AetherhavenPlugin plugin = AetherhavenPlugin.get();
+    if (plugin == null) {
+      return;
+    }
+    TownManager townManager = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+    ensureWorldBorderState(world.getName(), townManager, world.getName());
+    invalidateOverlaysForWorldOnWorldThread(world);
+    for (PlayerRef pref : world.getPlayerRefs()) {
+      UUID uuid = pref.getUuid();
+      if (uuid != null) {
+        refreshPlayerOnWorldThread(world, uuid);
+      }
+    }
   }
 
   /** Clears cached painted tiles and restores base map imagery for every viewer in this world. */
   public static void invalidateOverlaysForWorld(@Nonnull World world) {
-    world.execute(
-        () -> {
-          for (PlayerRef pref : world.getPlayerRefs()) {
-            UUID uuid = pref.getUuid();
-            if (uuid == null) {
-              continue;
-            }
-            Ref<EntityStore> ref = pref.getReference();
-            if (ref == null || !ref.isValid()) {
-              continue;
-            }
-            Player player = ref.getStore().getComponent(ref, Player.getComponentType());
-            if (player == null) {
-              continue;
-            }
-            PlayerTownJournalState journal =
-                ref.getStore().getComponent(ref, PlayerTownJournalState.getComponentType());
-            if (journal == null || !journal.isShowTownBordersOnMap()) {
-              continue;
-            }
-            restorePristineOverlays(world, player, pref, uuid);
-            PAINT_CACHE.remove(uuid);
-          }
-        });
+    world.execute(() -> invalidateOverlaysForWorldOnWorldThread(world));
+  }
+
+  private static void refreshPlayerOnWorldThread(@Nonnull World world, @Nonnull UUID playerUuid) {
+    Player player = findPlayer(world, playerUuid);
+    if (player == null) {
+      return;
+    }
+    Ref<EntityStore> ref = player.getReference();
+    if (ref == null || !ref.isValid()) {
+      return;
+    }
+    Store<EntityStore> store = ref.getStore();
+    PlayerTownJournalState journal = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+    PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
+    if (playerRef == null) {
+      return;
+    }
+    if (journal == null || !journal.isShowTownBordersOnMap()) {
+      clearOverlays(world, player, playerRef, playerUuid);
+    } else {
+      restorePristineOverlays(world, player, playerRef, playerUuid);
+      PAINT_CACHE.remove(playerUuid);
+      WorldBorderState borderState = worldBorderState(world);
+      if (borderState.towns.isEmpty()) {
+        return;
+      }
+      updatePlayerOverlays(world, player, playerRef, playerUuid, borderState);
+    }
+  }
+
+  private static void invalidateOverlaysForWorldOnWorldThread(@Nonnull World world) {
+    for (PlayerRef pref : world.getPlayerRefs()) {
+      UUID uuid = pref.getUuid();
+      if (uuid == null) {
+        continue;
+      }
+      Ref<EntityStore> ref = pref.getReference();
+      if (ref == null || !ref.isValid()) {
+        continue;
+      }
+      Player player = ref.getStore().getComponent(ref, Player.getComponentType());
+      if (player == null) {
+        continue;
+      }
+      PlayerTownJournalState journal =
+          ref.getStore().getComponent(ref, PlayerTownJournalState.getComponentType());
+      if (journal == null || !journal.isShowTownBordersOnMap()) {
+        continue;
+      }
+      restorePristineOverlays(world, player, pref, uuid);
+      PAINT_CACHE.remove(uuid);
+    }
   }
 
   private static void restorePristineOverlays(
@@ -278,6 +300,11 @@ public final class TownBorderMapOverlayService {
     TownManager townManager = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
     WorldBorderState borderState = ensureWorldBorderState(world.getName(), townManager, world.getName());
     if (borderState.towns.isEmpty()) {
+      for (BorderPlayer bp : borderPlayers) {
+        if (LAST_OVERLAY_CHUNKS.containsKey(bp.playerUuid)) {
+          clearOverlays(world, bp.player, bp.playerRef, bp.playerUuid);
+        }
+      }
       return;
     }
 

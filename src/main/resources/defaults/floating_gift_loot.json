@@ -1,9 +1,17 @@
 {
-  "version": 2,
+  "version": 3,
   "filler": {
-    "droplistId": "Zone1_Encounters_Tier1",
-    "rollsMin": 1,
-    "rollsMax": 2
+    "rollsMin": 3,
+    "rollsMax": 6,
+    "entries": [
+      { "itemId": "Ingredient_Fabric_Scrap_Linen", "weight": 10, "quantityMin": 2, "quantityMax": 5 },
+      { "itemId": "Ingredient_Life_Essence", "weight": 10, "quantityMin": 4, "quantityMax": 10 },
+      { "itemId": "Ingredient_Hide_Light", "weight": 10, "quantityMin": 1, "quantityMax": 3 },
+      { "itemId": "Ingredient_Hide_Medium", "weight": 4, "quantityMin": 1, "quantityMax": 3 },
+      { "itemId": "Ingredient_Hide_Heavy", "weight": 1, "quantityMin": 1, "quantityMax": 3 },
+      { "itemId": "Ore_Copper", "weight": 16, "quantityMin": 1, "quantityMax": 3 },
+      { "itemId": "Ore_Iron", "weight": 8, "quantityMin": 1, "quantityMax": 2 }
+    ]
   },
   "regular": {
     "plotBlueprintWeight": 5,

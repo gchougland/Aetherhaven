@@ -5,7 +5,6 @@
 ### Added
 
 - **Intro quest** — On your first join to a world, you can accept a short guided quest to craft a town planning desk, craft a charter, and place your charter to found a town.
-- **Town Journal on intro quest** — Accepting the intro quest gives you the Town Journal and pins the quest to your HUD.
 - **Stormwind building set** — 20 WoW-inspired Stormwind-style plot variants (inn, town hall, shops, production buildings, townhouses, etc.) available on the plot crafting bench under the Stormwind style filter.
 - **Community updates** — Update button on the plot crafting bench when a newer version of a downloaded building is available.
 - **Barn Feathers** - The barn can now produce feathers.
@@ -14,13 +13,17 @@
 
 ### Changed
 
-- **Town Journal timing** — Elder Lyren no longer gives you the Town Journal after the inn is built. You get it when you accept the intro quest instead.
+- **Floating gift supplies** Common supplies in balloon gifts now come from a simple editable list instead of the full zone loot table, so rewards are less cluttered. Each item can set a min and max stack size.
+- **Town planning desk** — Recipes are split into Tools and staves and Miscellaneous tabs.
 - **Tool HUD key hints** — Path tool hints read your local Hytale keybind settings when available, with a builder style key legend on the shovel. Other tool HUDs use the same label lookup with vanilla defaults as fallback. The Town Journal tool key labels setting was removed.
 - **Workplace slots** — Town record shelves list every worker a building needs.
 - **Plot creator menus** — Type, variant, spots, and settings menus open when you reach those steps. Done moves you forward when your choices are valid.
+- **Plot blueprints** — Plot blueprints now give unlock points instead of unlocking a specific building. Use a blueprint to gain a point, then spend points at the plot crafting bench to unlock locked buildings. Plot blueprints stack to 25. The bench shows how many unlock points you have.
 
 ### Fixed
 
+- **Plot token salvaging** — Unified plot tokens (community buildings, variant prefabs) and missing legacy tokens (guild hall, player shop, tourist portal) can be salvaged for 5 gold coins again at the salvage bench.
+- **Plot crafting favorites tab** — Community favorites now load their icons and Load preview works on the Favorites tab.
 - **Important spots** — Plot creator spots snap to the right surface when you click blocks, half blocks, carpets, or chairs.
 - **Inn visitors and adventurers** — They spawn on the ground instead of inside blocks or floating in the air.
 - **Seating** — Villagers and adventurers sit facing forward on chairs and benches.

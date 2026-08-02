@@ -96,6 +96,81 @@ public final class PlotTokenUnlockService {
         return added;
     }
 
+    public static int getUnlockPoints(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        PlayerPlotTokenUnlockState state = store.getComponent(ref, PlayerPlotTokenUnlockState.getComponentType());
+        return state != null ? state.getUnlockPoints() : 0;
+    }
+
+    public static void addUnlockPoint(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        addUnlockPoints(ref, commandBuffer, 1);
+    }
+
+    public static void addUnlockPoints(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        int amount
+    ) {
+        if (amount <= 0) {
+            return;
+        }
+        PlayerPlotTokenUnlockState state = ensureState(ref, commandBuffer);
+        state.addUnlockPoints(amount);
+    }
+
+    public static void addUnlockPoint(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store
+    ) {
+        addUnlockPoints(ref, store, 1);
+    }
+
+    public static void addUnlockPoints(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        int amount
+    ) {
+        if (amount <= 0) {
+            return;
+        }
+        PlayerPlotTokenUnlockState state = store.getComponent(ref, PlayerPlotTokenUnlockState.getComponentType());
+        boolean wasNew = state == null;
+        if (state == null) {
+            state = new PlayerPlotTokenUnlockState();
+        }
+        state.addUnlockPoints(amount);
+        if (wasNew) {
+            store.addComponent(ref, PlayerPlotTokenUnlockState.getComponentType(), state);
+        } else {
+            store.putComponent(ref, PlayerPlotTokenUnlockState.getComponentType(), state);
+        }
+    }
+
+    /** @return true when a point was spent */
+    public static boolean trySpendUnlockPoint(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        PlayerPlotTokenUnlockState state = store.getComponent(ref, PlayerPlotTokenUnlockState.getComponentType());
+        if (state == null || !state.trySpendUnlockPoint()) {
+            return false;
+        }
+        store.putComponent(ref, PlayerPlotTokenUnlockState.getComponentType(), state);
+        return true;
+    }
+
+    @Nonnull
+    private static PlayerPlotTokenUnlockState ensureState(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        PlayerPlotTokenUnlockState state = commandBuffer.getComponent(ref, PlayerPlotTokenUnlockState.getComponentType());
+        if (state == null) {
+            state = new PlayerPlotTokenUnlockState();
+            commandBuffer.addComponent(ref, PlayerPlotTokenUnlockState.getComponentType(), state);
+        }
+        return state;
+    }
+
     @Nullable
     public static String displayNameFor(@Nonnull String constructionId) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();

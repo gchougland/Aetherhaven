@@ -11,9 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.annotation.Nonnull;
 
-/** Parsed floating gift loot bundle with per-type tables and shared zone filler config. */
+/** Parsed floating gift loot bundle with per-type tables and shared filler config. */
 public final class FloatingGiftLootBundle {
-    public static final String DEFAULT_FILLER_DROPLIST = "Zone1_Encounters_Tier1";
     private static final int DEFAULT_FILLER_ROLLS_MIN = 2;
     private static final int DEFAULT_FILLER_ROLLS_MAX = 4;
     private static final int DEFAULT_RED_FURNITURE_ROLLS = 3;
@@ -22,8 +21,8 @@ public final class FloatingGiftLootBundle {
     private final FloatingGiftLootTable regularTable;
     private final FloatingGiftLootTable greenTable;
     private final FloatingGiftLootTable redTable;
+    private final FloatingGiftLootTable fillerTable;
     private final int regularPlotBlueprintWeight;
-    private final String fillerDroplistId;
     private final int fillerRollsMin;
     private final int fillerRollsMax;
     private final int redFurnitureRolls;
@@ -32,8 +31,8 @@ public final class FloatingGiftLootBundle {
         @Nonnull FloatingGiftLootTable regularTable,
         @Nonnull FloatingGiftLootTable greenTable,
         @Nonnull FloatingGiftLootTable redTable,
+        @Nonnull FloatingGiftLootTable fillerTable,
         int regularPlotBlueprintWeight,
-        @Nonnull String fillerDroplistId,
         int fillerRollsMin,
         int fillerRollsMax,
         int redFurnitureRolls
@@ -41,8 +40,8 @@ public final class FloatingGiftLootBundle {
         this.regularTable = regularTable;
         this.greenTable = greenTable;
         this.redTable = redTable;
+        this.fillerTable = fillerTable;
         this.regularPlotBlueprintWeight = Math.max(0, regularPlotBlueprintWeight);
-        this.fillerDroplistId = fillerDroplistId;
         this.fillerRollsMin = fillerRollsMin;
         this.fillerRollsMax = fillerRollsMax;
         this.redFurnitureRolls = redFurnitureRolls;
@@ -54,8 +53,8 @@ public final class FloatingGiftLootBundle {
             FloatingGiftLootTable.empty(),
             FloatingGiftLootTable.empty(),
             FloatingGiftLootTable.empty(),
+            FloatingGiftLootTable.empty(),
             DEFAULT_REGULAR_PLOT_BLUEPRINT_WEIGHT,
-            DEFAULT_FILLER_DROPLIST,
             DEFAULT_FILLER_ROLLS_MIN,
             DEFAULT_FILLER_ROLLS_MAX,
             DEFAULT_RED_FURNITURE_ROLLS
@@ -76,8 +75,8 @@ public final class FloatingGiftLootBundle {
                 legacy,
                 FloatingGiftLootTable.empty(),
                 FloatingGiftLootTable.empty(),
+                FloatingGiftLootTable.empty(),
                 DEFAULT_REGULAR_PLOT_BLUEPRINT_WEIGHT,
-                DEFAULT_FILLER_DROPLIST,
                 DEFAULT_FILLER_ROLLS_MIN,
                 DEFAULT_FILLER_ROLLS_MAX,
                 DEFAULT_RED_FURNITURE_ROLLS
@@ -93,20 +92,17 @@ public final class FloatingGiftLootBundle {
         FloatingGiftLootTable regular = parseSectionTable(obj, "regular");
         FloatingGiftLootTable green = parseSectionTable(obj, "green");
         FloatingGiftLootTable red = parseSectionTable(obj, "red");
+        FloatingGiftLootTable filler = parseSectionTable(obj, "filler");
 
-        String droplistId = DEFAULT_FILLER_DROPLIST;
         int rollsMin = DEFAULT_FILLER_ROLLS_MIN;
         int rollsMax = DEFAULT_FILLER_ROLLS_MAX;
-        JsonObject filler = obj.getAsJsonObject("filler");
-        if (filler != null) {
-            if (filler.has("droplistId")) {
-                droplistId = filler.get("droplistId").getAsString().trim();
+        JsonObject fillerSection = obj.getAsJsonObject("filler");
+        if (fillerSection != null) {
+            if (fillerSection.has("rollsMin")) {
+                rollsMin = fillerSection.get("rollsMin").getAsInt();
             }
-            if (filler.has("rollsMin")) {
-                rollsMin = filler.get("rollsMin").getAsInt();
-            }
-            if (filler.has("rollsMax")) {
-                rollsMax = filler.get("rollsMax").getAsInt();
+            if (fillerSection.has("rollsMax")) {
+                rollsMax = fillerSection.get("rollsMax").getAsInt();
             }
         }
         if (rollsMin > rollsMax) {
@@ -127,8 +123,8 @@ public final class FloatingGiftLootBundle {
             regular,
             green,
             red,
+            filler,
             plotBlueprintWeight,
-            droplistId,
             rollsMin,
             rollsMax,
             furnitureRolls
@@ -141,8 +137,8 @@ public final class FloatingGiftLootBundle {
             regularTable,
             greenTable,
             redTable,
+            fillerTable,
             regularPlotBlueprintWeight,
-            fillerDroplistId,
             fillerRollsMin,
             fillerRollsMax,
             redFurnitureRolls
@@ -189,8 +185,8 @@ public final class FloatingGiftLootBundle {
     }
 
     @Nonnull
-    public String getFillerDroplistId() {
-        return fillerDroplistId.isBlank() ? DEFAULT_FILLER_DROPLIST : fillerDroplistId;
+    public FloatingGiftLootTable getFillerTable() {
+        return fillerTable;
     }
 
     public int getFillerRollsMin() {

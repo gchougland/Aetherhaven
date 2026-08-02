@@ -266,6 +266,12 @@ $C.@PageOverlay {
               Text: "";
             }
 
+            Label #UnlockPointsLine {
+              Style: (...$C.@DefaultLabelStyle, TextColor: #8a8070, Wrap: true, FontSize: 15);
+              Anchor: (Bottom: 6);
+              Text: "";
+            }
+
             Group #CommunityActionRow {
               LayoutMode: Left;
               Anchor: (Bottom: 6);

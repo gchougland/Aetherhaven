@@ -33,11 +33,9 @@ public final class LootChestPlotBlueprintLoot {
 
     @Nullable
     public static ItemStack roll(@Nonnull ConstructionCatalog catalog, @Nonnull ThreadLocalRandom rnd) {
-        List<String> ids = listEligibleConstructionIds(catalog);
-        if (ids.isEmpty()) {
+        if (listEligibleConstructionIds(catalog).isEmpty()) {
             return null;
         }
-        String pick = ids.get(rnd.nextInt(ids.size()));
-        return PlotTokenUnlockPageMetadata.createStack(pick);
+        return PlotTokenUnlockPageMetadata.createGenericStack();
     }
 }

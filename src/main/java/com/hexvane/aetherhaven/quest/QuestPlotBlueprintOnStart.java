@@ -45,7 +45,7 @@ public final class QuestPlotBlueprintOnStart {
         if (player == null) {
             return false;
         }
-        ItemStack stack = PlotTokenUnlockPageMetadata.createStack(cdef.getId());
+        ItemStack stack = PlotTokenUnlockPageMetadata.createGenericStack();
         player.giveItem(stack, playerRef, store);
         return true;
     }

@@ -18,17 +18,15 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.bson.BsonDocument;
 
 /**
- * Plot blueprints carry per-building metadata for their name and unlock target. The salvaging bench
- * accepts them by item id, but Hytale only completes a recipe when the stack metadata matches exactly.
- * Strip instance metadata in the bench input so the normal salvage recipe can run.
+ * Plot blueprints and unified plot tokens carry per-building metadata for their name and unlock target.
+ * The salvaging bench accepts them by item id, but Hytale only completes a recipe when the stack metadata
+ * matches exactly. Strip instance metadata in the bench input so the normal salvage recipe can run.
  */
 public final class PlotBlueprintSalvageBenchSystem extends EntityTickingSystem<ChunkStore> {
     private static final String SALVAGE_BENCH_ID = "Salvagebench";
-
-    @Nonnull
-    private static final ItemStack BARE_BLUEPRINT = new ItemStack(AetherhavenConstants.PLOT_TOKEN_UNLOCK_PAGE, 1);
 
     @Nonnull
     private final Set<Dependency<ChunkStore>> dependencies =
@@ -64,29 +62,41 @@ public final class PlotBlueprintSalvageBenchSystem extends EntityTickingSystem<C
             return;
         }
 
-        normalizeBlueprintStacks(benchBlock.getInputContainer());
+        normalizeSalvageInputs(benchBlock.getInputContainer());
     }
 
-    static void normalizeBlueprintStacks(@Nullable ItemContainer input) {
+    static void normalizeSalvageInputs(@Nullable ItemContainer input) {
         if (input == null) {
             return;
         }
         for (short slot = 0; slot < input.getCapacity(); slot++) {
             ItemStack stack = input.getItemStack(slot);
-            if (needsSalvageNormalization(stack)) {
-                input.setItemStackForSlot(slot, bareBlueprint(stack.getQuantity()));
+            ItemStack normalized = normalizedForSalvage(stack);
+            if (normalized != null) {
+                input.setItemStackForSlot(slot, normalized);
             }
         }
     }
 
-    private static boolean needsSalvageNormalization(@Nullable ItemStack stack) {
-        return !ItemStack.isEmpty(stack)
-            && AetherhavenConstants.PLOT_TOKEN_UNLOCK_PAGE.equals(stack.getItemId())
-            && !BARE_BLUEPRINT.isEquivalentType(stack);
+    @Nullable
+    static ItemStack normalizedForSalvage(@Nullable ItemStack stack) {
+        if (!shouldStripSalvageMetadata(stack)) {
+            return null;
+        }
+        return new ItemStack(stack.getItemId(), stack.getQuantity());
     }
 
-    @Nonnull
-    private static ItemStack bareBlueprint(int quantity) {
-        return new ItemStack(AetherhavenConstants.PLOT_TOKEN_UNLOCK_PAGE, quantity);
+    static boolean shouldStripSalvageMetadata(@Nullable ItemStack stack) {
+        if (ItemStack.isEmpty(stack) || !hasSalvageMetadata(stack)) {
+            return false;
+        }
+        String itemId = stack.getItemId();
+        return AetherhavenConstants.PLOT_TOKEN_UNLOCK_PAGE.equals(itemId)
+            || AetherhavenConstants.PLOT_TOKEN_UNIFIED.equals(itemId);
+    }
+
+    private static boolean hasSalvageMetadata(@Nonnull ItemStack stack) {
+        BsonDocument meta = stack.getMetadata();
+        return meta != null && !meta.isEmpty();
     }
 }

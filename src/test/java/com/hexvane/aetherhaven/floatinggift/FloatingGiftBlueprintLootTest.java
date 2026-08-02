@@ -1,14 +1,11 @@
 package com.hexvane.aetherhaven.floatinggift;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.annotation.Nonnull;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +13,7 @@ import org.junit.jupiter.api.Test;
 class FloatingGiftBlueprintLootTest {
 
     @Test
-    void merge_stripsLegacyManualBlueprints_andAddsCatalogFlaggedBuildings() {
+    void merge_stripsLegacyManualBlueprints_andAddsSingleGenericEntry() {
         FloatingGiftLootTable manual =
             FloatingGiftLootTable.of(
                 List.of(
@@ -36,16 +33,34 @@ class FloatingGiftBlueprintLootTest {
                 5
             );
 
-        assertEquals(3, merged.entries().size());
+        assertEquals(2, merged.entries().size());
         assertEquals("Some_Other_Item", merged.entries().get(0).itemId());
-        assertEquals("plot_balloon_a", merged.entries().get(1).constructionId());
-        assertEquals("plot_balloon_b", merged.entries().get(2).constructionId());
+        assertEquals(AetherhavenConstants.PLOT_TOKEN_UNLOCK_PAGE, merged.entries().get(1).itemId());
+        assertNull(merged.entries().get(1).constructionId());
         assertTrue(
             merged
                 .entries()
                 .stream()
                 .noneMatch(e -> "plot_legacy_manual".equals(e.constructionId()))
         );
+    }
+
+    @Test
+    void merge_withEmptyBlueprintPool_addsNoGenericEntry() {
+        FloatingGiftLootTable manual =
+            FloatingGiftLootTable.of(
+                List.of(new FloatingGiftLootTable.Entry("Some_Other_Item", 3))
+            );
+
+        FloatingGiftLootTable merged =
+            FloatingGiftBlueprintLoot.mergeIntoRegularTable(
+                manual,
+                List.of(),
+                5
+            );
+
+        assertEquals(1, merged.entries().size());
+        assertEquals("Some_Other_Item", merged.entries().get(0).itemId());
     }
 
     @Test
@@ -59,90 +74,49 @@ class FloatingGiftBlueprintLootTest {
     }
 
     @Test
-    void buildPool_excludesBlueprintsOwnerAlreadyUnlocked() {
-        FloatingGiftLootTable table = blueprintOnlyTable("plot_a", "plot_b", "plot_c");
-        Set<String> unlocked =
-            Set.of(
-                FloatingGiftBlueprintLoot.normalizeConstructionId("plot_a"),
-                FloatingGiftBlueprintLoot.normalizeConstructionId("plot_b")
-            );
-
-        List<FloatingGiftLootTable.Entry> pool =
-            FloatingGiftBlueprintLoot.buildFilteredRollPool(
-                table,
-                constructionId -> unlocked.contains(FloatingGiftBlueprintLoot.normalizeConstructionId(constructionId))
-            );
-
-        assertEquals(List.of("plot_c"), blueprintConstructionIds(pool));
+    void parseBundle_readsFillerEntriesAndRolls() {
+        String json =
+            """
+            {"version":3,"filler":{"rollsMin":1,"rollsMax":2,"entries":[{"itemId":"Ore_Copper","weight":16},{"itemId":"Ore_Iron","weight":8}]},"regular":{"entries":[]},"green":{"entries":[]},"red":{"entries":[]}}
+            """;
+        FloatingGiftLootBundle bundle = FloatingGiftLootBundle.parseJson(json);
+        assertEquals(1, bundle.getFillerRollsMin());
+        assertEquals(2, bundle.getFillerRollsMax());
+        assertEquals(2, bundle.getFillerTable().entries().size());
+        assertEquals("Ore_Copper", bundle.getFillerTable().entries().get(0).itemId());
+        assertEquals(16, bundle.getFillerTable().entries().get(0).weight());
     }
 
     @Test
-    void buildPool_whenAllBlueprintsOwned_includesEveryBlueprintForDuplicateRolls() {
-        FloatingGiftLootTable table = blueprintOnlyTable("plot_a", "plot_b", "plot_c");
-        Set<String> unlocked =
-            Set.of(
-                FloatingGiftBlueprintLoot.normalizeConstructionId("plot_a"),
-                FloatingGiftBlueprintLoot.normalizeConstructionId("plot_b"),
-                FloatingGiftBlueprintLoot.normalizeConstructionId("plot_c")
-            );
-
-        List<FloatingGiftLootTable.Entry> pool =
-            FloatingGiftBlueprintLoot.buildFilteredRollPool(
-                table,
-                constructionId -> unlocked.contains(FloatingGiftBlueprintLoot.normalizeConstructionId(constructionId))
-            );
-
-        assertEquals(Set.of("plot_a", "plot_b", "plot_c"), Set.copyOf(blueprintConstructionIds(pool)));
+    void parseTable_readsQuantityRange() {
+        String json =
+            """
+            {"entries":[{"itemId":"Ore_Copper","weight":1,"quantityMin":1,"quantityMax":3}]}
+            """;
+        FloatingGiftLootTable table = FloatingGiftLootTable.parseJson(json);
+        assertEquals(1, table.entries().get(0).quantityMin());
+        assertEquals(3, table.entries().get(0).quantityMax());
     }
 
     @Test
-    void buildPool_withNoUnlocks_matchesUnfilteredBlueprintTable() {
-        FloatingGiftLootTable table = blueprintOnlyTable("plot_a", "plot_b");
-
-        List<FloatingGiftLootTable.Entry> pool =
-            FloatingGiftBlueprintLoot.buildFilteredRollPool(table, constructionId -> false);
-
-        assertEquals(blueprintConstructionIds(table.entries()), blueprintConstructionIds(pool));
+    void parseTable_normalizesQuantityRange() {
+        String json =
+            """
+            {"entries":[{"itemId":"Ore_Copper","weight":1,"quantityMin":5,"quantityMax":2}]}
+            """;
+        FloatingGiftLootTable table = FloatingGiftLootTable.parseJson(json);
+        assertEquals(2, table.entries().get(0).quantityMin());
+        assertEquals(5, table.entries().get(0).quantityMax());
     }
 
     @Test
-    void buildPool_keepsNonBlueprintEntries() {
-        FloatingGiftLootTable table =
-            FloatingGiftLootTable.of(
-                List.of(
-                    new FloatingGiftLootTable.Entry("Some_Other_Item", 3),
-                    new FloatingGiftLootTable.Entry(AetherhavenConstants.PLOT_TOKEN_UNLOCK_PAGE, "plot_a", 5),
-                    new FloatingGiftLootTable.Entry(AetherhavenConstants.PLOT_TOKEN_UNLOCK_PAGE, "plot_b", 5)
-                )
-            );
-        Set<String> unlocked = Set.of(FloatingGiftBlueprintLoot.normalizeConstructionId("plot_a"));
-
-        List<FloatingGiftLootTable.Entry> pool =
-            FloatingGiftBlueprintLoot.buildFilteredRollPool(
-                table,
-                constructionId -> unlocked.contains(FloatingGiftBlueprintLoot.normalizeConstructionId(constructionId))
-            );
-
-        assertEquals(2, pool.size());
-        assertEquals("Some_Other_Item", pool.get(0).itemId());
-        assertEquals("plot_b", pool.get(1).constructionId());
-    }
-
-    @Nonnull
-    private static FloatingGiftLootTable blueprintOnlyTable(@Nonnull String... constructionIds) {
-        List<FloatingGiftLootTable.Entry> entries =
-            Arrays.stream(constructionIds)
-                .map(id -> new FloatingGiftLootTable.Entry(AetherhavenConstants.PLOT_TOKEN_UNLOCK_PAGE, id, 5))
-                .toList();
-        return FloatingGiftLootTable.of(entries);
-    }
-
-    @Nonnull
-    private static List<String> blueprintConstructionIds(@Nonnull List<FloatingGiftLootTable.Entry> entries) {
-        return entries
-            .stream()
-            .map(FloatingGiftLootTable.Entry::constructionId)
-            .filter(id -> id != null && !id.isBlank())
-            .collect(Collectors.toList());
+    void parseTable_defaultsQuantityToOne() {
+        String json =
+            """
+            {"entries":[{"itemId":"Ore_Copper","weight":1}]}
+            """;
+        FloatingGiftLootTable table = FloatingGiftLootTable.parseJson(json);
+        assertEquals(1, table.entries().get(0).quantityMin());
+        assertEquals(1, table.entries().get(0).quantityMax());
     }
 }

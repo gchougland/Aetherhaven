@@ -11,7 +11,7 @@
         "Quantity": 8
       },
       {
-        "ItemId": "Rock_Stone_Cobble",
+        "ResourceTypeId": "Rock",
         "Quantity": 4
       },
       {
@@ -47,15 +47,32 @@
       }
     ],
     "HitboxType": "Bench_Workbench",
+    "Flags": {
+      "IsUsable": true
+    },
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "OpenTownPlanningBench"
+          }
+        ]
+      }
+    },
     "VariantRotation": "NESW",
     "Bench": {
       "Type": "Crafting",
       "Id": "Aetherhaven_TownPlanningDesk",
       "Categories": [
         {
-          "Id": "Aetherhaven_TownPlanning",
-          "Icon": "Icons/CraftingCategories/Aetherhaven/Town_Planning.png",
-          "Name": "aetherhaven_items.benchCategories.aetherhaven.town_planning"
+          "Id": "Aetherhaven_TownPlanning_Tools",
+          "Icon": "Icons/CraftingCategories/Aetherhaven/Tools.png",
+          "Name": "aetherhaven_items.benchCategories.aetherhaven.town_planning_tools"
+        },
+        {
+          "Id": "Aetherhaven_TownPlanning_Misc",
+          "Icon": "Icons/CraftingCategories/Aetherhaven/Misc.png",
+          "Name": "aetherhaven_items.benchCategories.aetherhaven.town_planning_misc"
         }
       ],
       "LocalOpenSoundEventId": "SFX_Workbench_Open",

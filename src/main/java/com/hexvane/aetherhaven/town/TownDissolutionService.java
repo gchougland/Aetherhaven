@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyWorldRegistry;
+import com.hexvane.aetherhaven.map.TownBorderMapOverlayService;
+import com.hexvane.aetherhaven.map.TownMapMarkerProvider;
 import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.shopspot.ShopSpotPlotRelocation;
@@ -56,6 +58,8 @@ public final class TownDissolutionService {
 
         reg.unregisterAllForTown(townId);
         tm.removeTown(townId);
+        TownBorderMapOverlayService.onWorldTownsChanged(world);
+        TownMapMarkerProvider.removeTownMarkerFromAllPlayers(world, townId);
         world.breakBlock(town.getCharterX(), town.getCharterY(), town.getCharterZ(), BREAK_SETTINGS);
     }
 

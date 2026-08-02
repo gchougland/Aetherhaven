@@ -35,7 +35,8 @@ items.Aetherhaven_Inn_Bell.description=Ring to call inn visitors back to the gue
 items.Aetherhaven_Smokestack.name=Smokestack
 items.Aetherhaven_Smokestack.description=Place on chimneys and rooftops for a steady wisp of smoke. Invisible when placed.
 
-benchCategories.aetherhaven.town_planning=Town planning
+benchCategories.aetherhaven.town_planning_tools=Tools and staves
+benchCategories.aetherhaven.town_planning_misc=Miscellaneous
 benchCategories.aetherhaven.plot_tokens=Plot tokens
 creativeCategory.aetherhaven=Aetherhaven
 
@@ -359,9 +360,9 @@ items.Aetherhaven_Plot_Token.instance.name={building} plot token
 items.Aetherhaven_Plot_Token.instance.description=Required to place the {building} footprint from the plot placement staff.
 
 items.Aetherhaven_Plot_Token_Unlock_Page.name=Plot blueprint
-items.Aetherhaven_Plot_Token_Unlock_Page.description=A special blueprint page. Use it to learn a new plot at your plot crafting bench.
-items.Aetherhaven_Plot_Token_Unlock_Page.instance.name=Plot blueprint: {building}
-items.Aetherhaven_Plot_Token_Unlock_Page.instance.description=Read this to permanently unlock the {building} plot at your plot crafting bench.
+items.Aetherhaven_Plot_Token_Unlock_Page.description=Use this to gain an unlock point. Spend unlock points at your plot crafting bench to unlock new buildings.
+items.Aetherhaven_Plot_Token_Unlock_Page.instance.name=Plot blueprint
+items.Aetherhaven_Plot_Token_Unlock_Page.instance.description=Use this to gain an unlock point. Spend unlock points at your plot crafting bench to unlock new buildings.
 
 items.Aetherhaven_Plot_Creator_Staff.name=Plot creator staff
 items.Aetherhaven_Plot_Creator_Staff.description=Turn a build into a custom town building. See the town journal Guide. F starts or acts on the current step. Primary-click blocks for bounds and spots. Q/E previous/next. R cancels.

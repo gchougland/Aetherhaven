@@ -24,6 +24,11 @@ public final class PlayerPlotTokenUnlockState implements Component<EntityStore> 
                 (c, v) -> c.unlockedConstructionIds = v != null ? new HashSet<>(Arrays.asList(v)) : new HashSet<>(),
                 c -> c.unlockedConstructionIds.toArray(String[]::new))
             .add()
+            .append(
+                new KeyedCodec<>("UnlockPoints", Codec.INTEGER),
+                (c, v) -> c.unlockPoints = v != null ? Math.max(0, v) : 0,
+                c -> c.unlockPoints)
+            .add()
             .build();
 
     @Nullable
@@ -45,6 +50,7 @@ public final class PlayerPlotTokenUnlockState implements Component<EntityStore> 
 
     @Nonnull
     private Set<String> unlockedConstructionIds = new HashSet<>();
+    private int unlockPoints;
 
     public PlayerPlotTokenUnlockState() {}
 
@@ -54,6 +60,25 @@ public final class PlayerPlotTokenUnlockState implements Component<EntityStore> 
 
     public boolean unlock(@Nonnull String constructionId) {
         return unlockedConstructionIds.add(normalize(constructionId));
+    }
+
+    public int getUnlockPoints() {
+        return unlockPoints;
+    }
+
+    public void addUnlockPoints(int amount) {
+        if (amount > 0) {
+            unlockPoints += amount;
+        }
+    }
+
+    /** @return true when a point was spent */
+    public boolean trySpendUnlockPoint() {
+        if (unlockPoints <= 0) {
+            return false;
+        }
+        unlockPoints--;
+        return true;
     }
 
     @Nonnull
@@ -66,6 +91,7 @@ public final class PlayerPlotTokenUnlockState implements Component<EntityStore> 
     public Component<EntityStore> clone() {
         PlayerPlotTokenUnlockState c = new PlayerPlotTokenUnlockState();
         c.unlockedConstructionIds = new HashSet<>(unlockedConstructionIds);
+        c.unlockPoints = unlockPoints;
         return c;
     }
 }
