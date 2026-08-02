@@ -1,6 +1,5 @@
 package com.hexvane.aetherhaven.tourist;
 
-import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -11,6 +10,7 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import java.util.UUID;
+import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3d;
@@ -28,7 +28,7 @@ public final class TouristPortalBlockUtil {
     private TouristPortalBlockUtil() {}
 
     public static boolean isTouristPortalBlock(@Nullable BlockType type) {
-        return type != null && AetherhavenConstants.TOURIST_PORTAL_BLOCK_TYPE_ID.equals(type.getId());
+        return type != null && TownPortalTravelColor.isTouristPortalBlockTypeId(type.getId());
     }
 
     /**
@@ -122,6 +122,20 @@ public final class TouristPortalBlockUtil {
     public static Vector3d portalEffectCenter(@Nonnull World world, @Nonnull Vector3i blockPos) {
         PortalLayout layout = resolvePortalLayout(world, blockPos);
         return new Vector3d(layout.centerX(), blockPos.y + 2.5, layout.centerZ());
+    }
+
+    /** Invokes {@code consumer} for each voxel of the 2×1 portal platform (base + filler cells). */
+    public static void forEachPlatformCell(
+        @Nonnull World world,
+        @Nonnull Vector3i basePos,
+        @Nonnull Consumer<Vector3i> consumer
+    ) {
+        Vector3i base = resolvePortalBaseBlock(world, basePos);
+        PortalLayout layout = resolvePortalLayout(world, base);
+        int y = base.y;
+        for (int[] off : layout.platformOffsets()) {
+            consumer.accept(new Vector3i(layout.minX() + off[0], y, layout.minZ() + off[1]));
+        }
     }
 
     /** Feet position at the center of the portal platform (spawn). */

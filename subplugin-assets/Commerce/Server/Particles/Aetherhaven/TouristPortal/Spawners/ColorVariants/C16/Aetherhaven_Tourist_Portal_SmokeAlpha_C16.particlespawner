@@ -1,0 +1,86 @@
+{
+  "RenderMode": "BlendAdd",
+  "ParticleRotationInfluence": "None",
+  "LinearFiltering": true,
+  "LightInfluence": 0,
+  "MaxConcurrentParticles": 1,
+  "ParticleLifeSpan": {
+    "Min": 2.0,
+    "Max": 3.0
+  },
+  "ParticleRotateWithSpawner": true,
+  "SpawnRate": {
+    "Min": 2.0,
+    "Max": 2.0
+  },
+  "Particle": {
+    "Texture": "Particles/Textures/Rnd/Ring7.png",
+    "ScaleRatioConstraint": "None",
+    "Animation": {
+      "0": {
+        "FrameIndex": {
+          "Min": 0,
+          "Max": 0
+        },
+        "Opacity": 0,
+        "Scale": {
+          "X": {
+            "Min": 1.2,
+            "Max": 1.2
+          },
+          "Y": {
+            "Min": 1.3,
+            "Max": 1.3
+          }
+        },
+        "Color": "#EAF692"
+      },
+      "30": {
+        "Opacity": 1
+      },
+      "100": {
+        "Opacity": 0,
+        "Scale": {
+          "X": {
+            "Min": 0.8,
+            "Max": 0.8
+          },
+          "Y": {
+            "Min": 0.8,
+            "Max": 0.9
+          }
+        },
+        "Color": "#41FFC8"
+      }
+    },
+    "InitialAnimationFrame": {
+      "Scale": {
+        "X": {
+          "Min": 0.8,
+          "Max": 0.8
+        },
+        "Y": {
+          "Min": 1.2,
+          "Max": 1.2
+        }
+      },
+      "Opacity": 1.0,
+      "FrameIndex": {
+        "Min": 0,
+        "Max": 0
+      }
+    }
+  },
+  "UVMotion": {
+    "Texture": "Particles/Textures/UVMotion/FlowMap.png",
+    "AddRandomUVOffset": true,
+    "Strength": 2.0,
+    "StrengthCurveType": "IncreaseQuartOut",
+    "Scale": 2.0,
+    "SpeedX": 0.2
+  },
+  "WaveDelay": {
+    "Min": 0.2,
+    "Max": 0.5
+  }
+}

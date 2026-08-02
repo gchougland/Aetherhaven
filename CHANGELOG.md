@@ -13,6 +13,7 @@
 
 ### Changed
 
+- **Visitor portal color** — The portal glow matches the color you pick for your town.
 - **Floating gift supplies** Common supplies in balloon gifts now come from a simple editable list instead of the full zone loot table, so rewards are less cluttered. Each item can set a min and max stack size.
 - **Town planning desk** — Recipes are split into Tools and staves and Miscellaneous tabs.
 - **Tool HUD key hints** — Path tool hints read your local Hytale keybind settings when available, with a builder style key legend on the shovel. Other tool HUDs use the same label lookup with vanilla defaults as fallback. The Town Journal tool key labels setting was removed.

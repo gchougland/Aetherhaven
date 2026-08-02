@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.tourist;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.server.core.ui.PatchStyle;
 import com.hypixel.hytale.server.core.ui.Value;
@@ -34,7 +35,84 @@ public final class TownPortalTravelColor {
         "#D4AF37",
     };
 
+    public static final int PRESET_COUNT = PRESET_HEX.length;
+
+    private static final String BLOCK_VARIANT_PREFIX = AetherhavenConstants.TOURIST_PORTAL_BLOCK_TYPE_ID + "_C";
+    private static final String IDLE_PARTICLE_PREFIX = AetherhavenConstants.TOURIST_PORTAL_IDLE_PARTICLE + "_C";
+    private static final String BURST_PARTICLE_PREFIX = AetherhavenConstants.TOURIST_PORTAL_SPAWN_BURST_PARTICLE + "_C";
+
     private TownPortalTravelColor() {}
+
+    /** Preset index 0–15 for the town's resolved portal color. */
+    public static int presetIndexForTown(@Nonnull TownRecord town) {
+        String preset = normalizePresetHex(resolveHex(town));
+        for (int i = 0; i < PRESET_HEX.length; i++) {
+            if (PRESET_HEX[i].equalsIgnoreCase(preset)) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    @Nonnull
+    public static String blockTypeIdForTown(@Nonnull TownRecord town) {
+        return blockTypeIdForPresetIndex(presetIndexForTown(town));
+    }
+
+    @Nonnull
+    public static String blockTypeIdForPresetIndex(int index) {
+        return BLOCK_VARIANT_PREFIX + formatVariantSuffix(index);
+    }
+
+    @Nonnull
+    public static String idleParticleSystemIdForTown(@Nonnull TownRecord town) {
+        return idleParticleSystemIdForPresetIndex(presetIndexForTown(town));
+    }
+
+    @Nonnull
+    public static String burstParticleSystemIdForTown(@Nonnull TownRecord town) {
+        return burstParticleSystemIdForPresetIndex(presetIndexForTown(town));
+    }
+
+    @Nonnull
+    public static String idleParticleSystemIdForPresetIndex(int index) {
+        return IDLE_PARTICLE_PREFIX + formatVariantSuffix(index);
+    }
+
+    @Nonnull
+    public static String burstParticleSystemIdForPresetIndex(int index) {
+        return BURST_PARTICLE_PREFIX + formatVariantSuffix(index);
+    }
+
+    public static boolean isTouristPortalBlockTypeId(@Nullable String blockTypeId) {
+        if (blockTypeId == null || blockTypeId.isBlank()) {
+            return false;
+        }
+        if (AetherhavenConstants.TOURIST_PORTAL_BLOCK_TYPE_ID.equals(blockTypeId)) {
+            return true;
+        }
+        if (!blockTypeId.startsWith(BLOCK_VARIANT_PREFIX)) {
+            return false;
+        }
+        String suffix = blockTypeId.substring(BLOCK_VARIANT_PREFIX.length());
+        if (suffix.length() != 2) {
+            return false;
+        }
+        for (int i = 0; i < 2; i++) {
+            char c = suffix.charAt(i);
+            if (c < '0' || c > '9') {
+                return false;
+            }
+        }
+        int variant = Integer.parseInt(suffix);
+        return variant >= 1 && variant <= PRESET_COUNT;
+    }
+
+    @Nonnull
+    private static String formatVariantSuffix(int index) {
+        int clamped = Math.max(0, Math.min(index, PRESET_COUNT - 1));
+        return String.format("%02d", clamped + 1);
+    }
 
     @Nullable
     public static String getStoredHex(@Nonnull TownRecord town) {

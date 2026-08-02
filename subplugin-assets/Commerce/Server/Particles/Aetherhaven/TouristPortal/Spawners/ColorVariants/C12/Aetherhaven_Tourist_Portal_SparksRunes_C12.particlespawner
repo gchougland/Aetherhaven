@@ -1,0 +1,114 @@
+{
+  "RenderMode": "Erosion",
+  "EmitOffset": {
+    "X": {
+      "Min": 1.2,
+      "Max": 1.2
+    },
+    "Y": {
+      "Min": 2.0,
+      "Max": 2.0
+    },
+    "Z": {
+      "Max": 0.0,
+      "Min": 0.0
+    }
+  },
+  "ParticleRotationInfluence": "BillboardVelocity",
+  "LinearFiltering": false,
+  "LightInfluence": 0,
+  "MaxConcurrentParticles": 50,
+  "ParticleLifeSpan": {
+    "Min": 0.5,
+    "Max": 0.8
+  },
+  "ParticleRotateWithSpawner": false,
+  "TrailSpawnerPositionMultiplier": 1,
+  "TrailSpawnerRotationMultiplier": 1,
+  "SpawnRate": {
+    "Min": 15.0,
+    "Max": 5.0
+  },
+  "Attractors": [
+    {
+      "RadialAxis": {
+        "Z": 1.0
+      },
+      "RadialTangentAcceleration": 2.0,
+      "DampingMultiplier": {
+        "X": 0.7,
+        "Y": 0.7,
+        "Z": 0.7
+      },
+      "RadialTangentImpulse": 1.0,
+      "RadialImpulse": -0.4
+    }
+  ],
+  "Particle": {
+    "Texture": "Particles/Textures/Shapes/Spiral.png",
+    "ScaleRatioConstraint": "OneToOne",
+    "UVOption": "RandomFlipU",
+    "Animation": {
+      "0": {
+        "FrameIndex": {
+          "Min": 0,
+          "Max": 0
+        },
+        "Opacity": 0,
+        "Scale": {
+          "X": {
+            "Min": 1,
+            "Max": 1
+          },
+          "Y": {
+            "Min": 1,
+            "Max": 1
+          }
+        }
+      },
+      "10": {
+        "Opacity": 1,
+        "Scale": {
+          "X": {
+            "Min": 1,
+            "Max": 1.5
+          }
+        }
+      },
+      "100": {
+        "Opacity": 0,
+        "Rotation": {
+          "Z": {
+            "Min": -180.0,
+            "Max": 180.0
+          }
+        }
+      }
+    },
+    "InitialAnimationFrame": {
+      "Scale": {
+        "X": {
+          "Min": 0.2,
+          "Max": 0.3
+        }
+      },
+      "Opacity": 0.724,
+      "FrameIndex": {
+        "Min": 0,
+        "Max": 0
+      },
+      "Rotation": {
+        "Z": {
+          "Min": 0.0,
+          "Max": 180.0
+        }
+      },
+      "Color": "#D8E5FF"
+    }
+  },
+  "SpawnBurst": false,
+  "WaveDelay": {
+    "Min": 1.0,
+    "Max": 3.0
+  }
+}

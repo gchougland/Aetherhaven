@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.ProductionWorkplaceKinds;
+import com.hexvane.aetherhaven.tourist.TownPortalTravelColor;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -272,7 +273,7 @@ public final class PlotBuildingKindRequirements {
             || AetherhavenConstants.TREASURY_BLOCK_TYPE_ID.equals(blockTypeId)
             || AetherhavenConstants.SHOP_SAFE_BLOCK_TYPE_ID.equals(blockTypeId)
             || AetherhavenConstants.SHOP_SPOT_BLOCK_TYPE_ID.equals(blockTypeId)
-            || AetherhavenConstants.TOURIST_PORTAL_BLOCK_TYPE_ID.equals(blockTypeId)
+            || TownPortalTravelColor.isTouristPortalBlockTypeId(blockTypeId)
             || AetherhavenConstants.QUEST_BOARD_ITEM_ID.equals(blockTypeId)
             || AetherhavenConstants.STATUE_OF_GAIA_BLOCK_TYPE_ID.equals(blockTypeId)
             || "Aetherhaven_Town_Planning_Desk".equals(blockTypeId);

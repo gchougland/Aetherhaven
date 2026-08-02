@@ -992,8 +992,21 @@ public final class TouristPortalTickService {
 
     public static void playPortalBurst(@Nonnull World world, @Nonnull Store<EntityStore> store, @Nonnull Vector3i blockPos) {
         Vector3d center = TouristPortalBlockUtil.portalEffectCenter(world, blockPos);
+        String particleSystemId = AetherhavenConstants.TOURIST_PORTAL_SPAWN_BURST_PARTICLE;
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null) {
+            TouristPortalRecord portal = TouristPortalRegistrySync.resolveAtBlock(world, plugin, blockPos);
+            if (portal != null) {
+                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                TownRecord town = tm.getTown(portal.getTownId());
+                if (town != null) {
+                    particleSystemId = TownPortalTravelColor.burstParticleSystemIdForTown(town);
+                }
+            }
+        }
+        String burstId = particleSystemId;
         world.execute(() -> {
-            ParticleUtil.spawnParticleEffect(AetherhavenConstants.TOURIST_PORTAL_SPAWN_BURST_PARTICLE, center, store);
+            ParticleUtil.spawnParticleEffect(burstId, center, store);
         });
     }
 

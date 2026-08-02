@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.shopspot.ShopSpotBlock;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBlockUtil;
 import com.hexvane.aetherhaven.tourist.TouristPortalBlock;
 import com.hexvane.aetherhaven.tourist.TouristPortalBlockUtil;
+import com.hexvane.aetherhaven.tourist.TownPortalTravelColor;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -307,7 +308,7 @@ public final class PlotCreatorSubstepHandler {
                 yield true;
             }
             case TOURIST_PORTAL_BLOCK -> {
-                if (!AetherhavenConstants.TOURIST_PORTAL_BLOCK_TYPE_ID.equals(blockId)) {
+                if (!TownPortalTravelColor.isTouristPortalBlockTypeId(blockId)) {
                     playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.wrongBlock"));
                     yield true;
                 }

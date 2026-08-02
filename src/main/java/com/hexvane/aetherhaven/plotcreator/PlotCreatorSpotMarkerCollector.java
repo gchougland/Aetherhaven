@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.PrefabYaw;
+import com.hexvane.aetherhaven.tourist.TownPortalTravelColor;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.util.ArrayList;
@@ -177,7 +178,7 @@ public final class PlotCreatorSpotMarkerCollector {
     private static PlotCreatorSubstepType resolveSpecialBlockType(@Nullable World world, @Nonnull Vector3i worldPos) {
         if (world != null) {
             String blockId = PlotCreatorLocalCoords.blockTypeAt(world, worldPos);
-            if (AetherhavenConstants.TOURIST_PORTAL_BLOCK_TYPE_ID.equals(blockId)) {
+            if (TownPortalTravelColor.isTouristPortalBlockTypeId(blockId)) {
                 return PlotCreatorSubstepType.TOURIST_PORTAL_BLOCK;
             }
             if (AetherhavenConstants.SHOP_SPOT_BLOCK_TYPE_ID.equals(blockId)) {

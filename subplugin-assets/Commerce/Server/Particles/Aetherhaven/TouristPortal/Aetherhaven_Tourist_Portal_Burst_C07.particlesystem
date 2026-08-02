@@ -1,0 +1,68 @@
+{
+  "Spawners": [
+    {
+      "SpawnerId": "Aetherhaven_Tourist_Portal_Activate_Glow_C07",
+      "PositionOffset": {
+        "X": 0,
+        "Y": 1,
+        "Z": -0.1
+      },
+      "StartDelay": 0.05
+    },
+    {
+      "SpawnerId": "Aetherhaven_Tourist_Portal_Activate_Flash_C07",
+      "PositionOffset": {
+        "X": 0,
+        "Y": 1,
+        "Z": 0
+      },
+      "StartDelay": 0.05
+    },
+    {
+      "SpawnerId": "Aetherhaven_Tourist_Portal_Activate_Rays_C07",
+      "PositionOffset": {
+        "X": 0,
+        "Y": 1,
+        "Z": 0
+      }
+    },
+    {
+      "SpawnerId": "Aetherhaven_Tourist_Portal_Activate_Rays2_C07",
+      "PositionOffset": {
+        "X": 0,
+        "Y": 1,
+        "Z": 0
+      },
+      "RotationOffset": {
+        "Yaw": 90,
+        "Pitch": 0,
+        "Roll": 0
+      },
+      "StartDelay": 0.05
+    },
+    {
+      "SpawnerId": "Aetherhaven_Tourist_Portal_Activate_Rays3_C07",
+      "PositionOffset": {
+        "X": 0,
+        "Y": 1,
+        "Z": 0
+      },
+      "RotationOffset": {
+        "Yaw": 90,
+        "Pitch": 0,
+        "Roll": 0
+      },
+      "StartDelay": 0.05
+    },
+    {
+      "SpawnerId": "Aetherhaven_Tourist_Portal_Activate_Sparks_C07",
+      "PositionOffset": {
+        "X": 0,
+        "Y": 1,
+        "Z": 0
+      },
+      "StartDelay": 0.05
+    }
+  ],
+  "BoundingRadius": 10
+}

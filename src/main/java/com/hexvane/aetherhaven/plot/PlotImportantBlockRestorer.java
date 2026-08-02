@@ -8,6 +8,7 @@ import com.hexvane.aetherhaven.poi.BuildingPoisDefinition;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.tourist.TownPortalTravelColor;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
@@ -121,6 +122,9 @@ public final class PlotImportantBlockRestorer {
         ids.add(AetherhavenConstants.SHOP_SAFE_BLOCK_TYPE_ID);
         ids.add(AetherhavenConstants.SHOP_SPOT_BLOCK_TYPE_ID);
         ids.add(AetherhavenConstants.TOURIST_PORTAL_BLOCK_TYPE_ID);
+        for (int i = 0; i < TownPortalTravelColor.PRESET_COUNT; i++) {
+            ids.add(TownPortalTravelColor.blockTypeIdForPresetIndex(i));
+        }
         ids.add(AetherhavenConstants.BLOCK_PRODUCTION_STORAGE);
         ids.add(AetherhavenConstants.STATUE_OF_GAIA_BLOCK_TYPE_ID);
         for (BuildingPoisDefinition.PoiRow row : def.getPois()) {

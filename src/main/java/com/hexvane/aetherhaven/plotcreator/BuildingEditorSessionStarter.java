@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
 import com.hexvane.aetherhaven.prefab.ConstructionAnimator;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
+import com.hexvane.aetherhaven.tourist.TownPortalTravelColor;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -338,7 +339,7 @@ public final class BuildingEditorSessionStarter {
         for (PlotCreatorPoiDraft poi : draft.getPois()) {
             String blockId = poi.getBlockTypeId();
             if (!AetherhavenConstants.SHOP_SPOT_BLOCK_TYPE_ID.equals(blockId)
-                && !AetherhavenConstants.TOURIST_PORTAL_BLOCK_TYPE_ID.equals(blockId)) {
+                && !TownPortalTravelColor.isTouristPortalBlockTypeId(blockId)) {
                 continue;
             }
             Vector3i world = PlotCreatorLocalCoords.toWorldBlock(

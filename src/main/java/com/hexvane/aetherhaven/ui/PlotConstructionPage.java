@@ -46,6 +46,7 @@ import com.hexvane.aetherhaven.town.TownPlayerLookup;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.tourist.TownPortalTravelColor;
 import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
+import com.hexvane.aetherhaven.tourist.TouristPortalVisualService;
 import com.hexvane.aetherhaven.guild.GuardHireManifest;
 import com.hexvane.aetherhaven.questboard.TownRankCapacity;
 import com.hexvane.aetherhaven.tourist.TouristVisitManifest;
@@ -1027,6 +1028,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         TownPortalTravelColor.applyStoredHex(town, presetHex);
         AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
         TownBorderMapOverlayService.refreshPlayer(world, uc.getUuid());
+        TouristPortalVisualService.applyTownColorToAllPortals(world, plugin, town);
         visitorPortalColorPickerOpen = false;
         UICommandBuilder cmd = new UICommandBuilder();
         UIEventBuilder ev = new UIEventBuilder();

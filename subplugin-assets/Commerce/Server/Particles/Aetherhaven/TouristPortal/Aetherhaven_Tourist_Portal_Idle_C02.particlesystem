@@ -1,0 +1,50 @@
+{
+  "Spawners": [
+    {
+      "SpawnerId": "Aetherhaven_Tourist_Portal_Spawn_C02"
+    },
+    {
+      "SpawnerId": "Aetherhaven_Tourist_Portal_Flash_C02"
+    },
+    {
+      "SpawnerId": "Aetherhaven_Tourist_Portal_CenterCircle_C02"
+    },
+    {
+      "SpawnerId": "Aetherhaven_Tourist_Portal_Waves_C02",
+      "StartDelay": 0,
+      "PositionOffset": {
+        "Y": 0.2
+      }
+    },
+    {
+      "SpawnerId": "Aetherhaven_Tourist_Portal_SmokeAlpha_C02",
+      "StartDelay": 0,
+      "PositionOffset": {
+        "Y": 0.2
+      }
+    },
+    {
+      "SpawnerId": "Aetherhaven_Tourist_Portal_Sparks_C02",
+      "StartDelay": 0
+    },
+    {
+      "SpawnerId": "Aetherhaven_Tourist_Portal_SparksRunes_C02"
+    },
+    {
+      "SpawnerId": "Aetherhaven_Tourist_Portal_Center_C02",
+      "StartDelay": 0.5
+    },
+    {
+      "SpawnerId": "Aetherhaven_Tourist_Portal_CenterGlow_C02",
+      "StartDelay": 0.5
+    },
+    {
+      "SpawnerId": "Aetherhaven_Tourist_Portal_SmokeMiddle_C02",
+      "RotationOffset": {
+        "Pitch": 90.0
+      }
+    }
+  ],
+  "CullDistance": 50.0,
+  "IsImportant": false
+}

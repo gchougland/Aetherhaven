@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.tourist.TownPortalTravelColor;
 import com.hexvane.aetherhaven.tourist.TouristPortalRecord;
 import com.hexvane.aetherhaven.tourist.TouristPortalTravelService;
+import com.hexvane.aetherhaven.tourist.TouristPortalVisualService;
 import com.hexvane.aetherhaven.tourist.TouristPortalTravelService.Destination;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -279,6 +280,7 @@ public final class TouristPortalTravelPage extends AetherhavenInteractiveCustomU
         TownPortalTravelColor.applyStoredHex(town, presetHex);
         tm.updateTown(town);
         TownBorderMapOverlayService.refreshPlayer(world, uc.getUuid());
+        TouristPortalVisualService.applyTownColorToAllPortals(world, plugin, town);
         portalColorPickerOpen = false;
         rebuild();
     }

@@ -106,6 +106,7 @@ public final class TouristPortalExtractor {
 
         registry.put(record);
         TouristPortalBlockUtil.syncConfigToBlock(world, pos, record);
+        TouristPortalVisualService.applyColorVariantAtBlock(world, pos, town);
         reboundPortalIds.add(record.getPortalId());
         return 1;
     }

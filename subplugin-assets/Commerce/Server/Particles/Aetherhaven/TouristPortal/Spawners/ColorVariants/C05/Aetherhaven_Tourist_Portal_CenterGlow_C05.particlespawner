@@ -1,0 +1,50 @@
+{
+  "RenderMode": "BlendAdd",
+  "ParticleRotationInfluence": "None",
+  "MaxConcurrentParticles": 2,
+  "ParticleLifeSpan": {
+    "Min": 2.0,
+    "Max": 2.0
+  },
+  "SpawnRate": {
+    "Min": 1.0,
+    "Max": 1.0
+  },
+  "LinearFiltering": true,
+  "Particle": {
+    "ScaleRatioConstraint": "None",
+    "Animation": {
+      "0": {
+        "Opacity": 0.0
+      },
+      "50": {
+        "Opacity": 1.0
+      },
+      "100": {
+        "Opacity": 0.0
+      }
+    },
+    "InitialAnimationFrame": {
+      "Scale": {
+        "X": {
+          "Min": 1.2,
+          "Max": 1.2
+        },
+        "Y": {
+          "Min": 2.0,
+          "Max": 2.0
+        }
+      },
+      "Opacity": 0.644,
+      "Color": "#5EFFA1"
+    },
+    "Texture": "Particles/Textures/Basic/Ball5.png"
+  },
+  "SpawnBurst": true,
+  "ParticleRotateWithSpawner": true,
+  "WaveDelay": {
+    "Min": 1.0,
+    "Max": 1.0
+  },
+  "CameraOffset": 0.1
+}
