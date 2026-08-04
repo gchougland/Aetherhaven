@@ -1,12 +1,12 @@
 {
-  "id": "aetherhaven_elder_week2",
+  "id": "aetherhaven_elder",
   "entry": "main_hub",
   "nodes": {
     "main_hub": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.speaker",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.speaker",
       "bodyMode": "villager_greeting",
-      "introText": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.body",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.main_hub.fallback",
+      "introText": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.body",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.main_hub.fallback",
       "choices": [
         {
           "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.offer",
@@ -29,7 +29,30 @@
           "next": "gift_confirm"
         },
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.c0",
+          "id": "board_foundation_stones_talk",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c14",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              },
+              {
+                "type": "player_recently_finished_quest_board_quest",
+                "withinDays": 2,
+                "giverRoleId": "Aetherhaven_Elder_Lyren",
+                "configEntryId": "foundation_stones"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "board_foundation_stones_thanks"
+        },
+        {
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c0",
           "condition": {
             "type": "and",
             "conditions": [
@@ -63,7 +86,7 @@
           "next": "quest_accepted"
         },
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.c1",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c1",
           "condition": {
             "type": "and",
             "conditions": [
@@ -87,7 +110,7 @@
           "next": "remind_inn"
         },
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.c2",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c2",
           "condition": {
             "type": "and",
             "conditions": [
@@ -114,7 +137,7 @@
           "next": "inn_done"
         },
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.c3",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c3",
           "condition": {
             "type": "and",
             "conditions": [
@@ -153,7 +176,7 @@
           "next": "town_hall_offer"
         },
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.c4",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c4",
           "condition": {
             "type": "and",
             "conditions": [
@@ -176,7 +199,7 @@
           "next": "lyren_house_finish"
         },
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.c5",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c5",
           "condition": {
             "type": "and",
             "conditions": [
@@ -196,7 +219,7 @@
           "next": "lyren_house_remind"
         },
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.c6",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c6",
           "condition": {
             "type": "and",
             "conditions": [
@@ -235,7 +258,7 @@
           "next": "lyren_house_offer"
         },
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.c7",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c7",
           "condition": {
             "type": "and",
             "conditions": [
@@ -256,7 +279,7 @@
           "next": "town_hall_remind"
         },
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.c12",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c12",
           "condition": {
             "type": "and",
             "conditions": [
@@ -277,7 +300,7 @@
           "next": "tourist_portal_remind"
         },
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.c8",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c8",
           "condition": {
             "type": "and",
             "conditions": [
@@ -304,7 +327,7 @@
           "next": "town_hall_done"
         },
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.c11",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c11",
           "condition": {
             "type": "and",
             "conditions": [
@@ -343,7 +366,7 @@
           "next": "tourist_portal_offer"
         },
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.c13",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c13",
           "condition": {
             "type": "and",
             "conditions": [
@@ -370,7 +393,7 @@
           "next": "tourist_portal_done"
         },
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.c9",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c9",
           "condition": {
             "type": "aetherhaven_has_town"
           },
@@ -378,47 +401,47 @@
           "next": "gold_explainer"
         },
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.c10",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c10",
           "next": null
         }
       ]
     },
     "quest_accepted": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.body",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.quest_accepted.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.quest_accepted.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.c0",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.quest_accepted.c0",
           "next": null
         }
       ]
     },
     "remind_inn": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.body",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.remind_inn.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.remind_inn.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.c0",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.remind_inn.c0",
           "next": null
         }
       ]
     },
     "inn_done": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.body",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.inn_done.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.inn_done.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.c0",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.inn_done.c0",
           "next": null
         }
       ]
     },
     "lyren_house_offer": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.body",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.lyren_house_offer.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.lyren_house_offer.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c0",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.lyren_house_offer.c0",
           "actions": [
             {
               "type": "start_quest",
@@ -428,47 +451,47 @@
           "next": "lyren_house_accepted"
         },
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c1",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.lyren_house_offer.c1",
           "next": null
         }
       ]
     },
     "lyren_house_accepted": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.body",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.lyren_house_accepted.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.lyren_house_accepted.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.c0",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.lyren_house_accepted.c0",
           "next": null
         }
       ]
     },
     "lyren_house_remind": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.body",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.lyren_house_remind.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.lyren_house_remind.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.c0",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.lyren_house_remind.c0",
           "next": null
         }
       ]
     },
     "lyren_house_finish": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.body",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.lyren_house_finish.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.lyren_house_finish.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.c0",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.lyren_house_finish.c0",
           "next": null
         }
       ]
     },
     "town_hall_offer": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.body",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.town_hall_offer.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.town_hall_offer.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c0",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.town_hall_offer.c0",
           "actions": [
             {
               "type": "start_quest",
@@ -478,47 +501,47 @@
           "next": "town_hall_accepted"
         },
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c1",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.town_hall_offer.c1",
           "next": null
         }
       ]
     },
     "town_hall_accepted": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.body",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.town_hall_accepted.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.town_hall_accepted.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.c0",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.town_hall_accepted.c0",
           "next": null
         }
       ]
     },
     "town_hall_remind": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.body",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.town_hall_remind.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.town_hall_remind.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.c0",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.town_hall_remind.c0",
           "next": null
         }
       ]
     },
     "town_hall_done": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.body",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.town_hall_done.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.town_hall_done.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.c0",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.town_hall_done.c0",
           "next": null
         }
       ]
     },
     "tourist_portal_offer": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_offer.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_offer.body",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.tourist_portal_offer.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.tourist_portal_offer.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_offer.c0",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.tourist_portal_offer.c0",
           "actions": [
             {
               "type": "start_quest",
@@ -528,53 +551,53 @@
           "next": "tourist_portal_accepted"
         },
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_offer.c1",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.tourist_portal_offer.c1",
           "next": null
         }
       ]
     },
     "tourist_portal_accepted": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_accepted.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_accepted.body",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.tourist_portal_accepted.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.tourist_portal_accepted.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_accepted.c0",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.tourist_portal_accepted.c0",
           "next": null
         }
       ]
     },
     "tourist_portal_remind": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_remind.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_remind.body",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.tourist_portal_remind.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.tourist_portal_remind.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_remind.c0",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.tourist_portal_remind.c0",
           "next": null
         }
       ]
     },
     "tourist_portal_done": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_done.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_done.body",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.tourist_portal_done.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.tourist_portal_done.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_done.c0",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.tourist_portal_done.c0",
           "next": null
         }
       ]
     },
     "gold_explainer": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.body",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.gold_explainer.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.gold_explainer.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.c0",
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.gold_explainer.c0",
           "next": null
         }
       ]
     },
     "rep_reward_50": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_50.speaker",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.rep_reward_50.speaker",
       "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.elder.50",
       "actions": [
         {
@@ -590,7 +613,7 @@
       ]
     },
     "rep_reward_100": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_100.speaker",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.rep_reward_100.speaker",
       "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.elder.100",
       "actions": [
         {
@@ -606,7 +629,7 @@
       ]
     },
     "gift_confirm": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.speaker",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.speaker",
       "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmBody",
       "choices": [
         {
@@ -629,8 +652,8 @@
       ]
     },
     "gift_love": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.gift.love",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.gift.love",
       "choices": [
         {
           "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
@@ -639,8 +662,8 @@
       ]
     },
     "gift_like": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.gift.like",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.gift.like",
       "choices": [
         {
           "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
@@ -648,9 +671,19 @@
         }
       ]
     },
+    "board_foundation_stones_thanks": {
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.board.foundation_stones_thanks.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.board.foundation_stones_thanks.c0",
+          "next": "main_hub"
+        }
+      ]
+    },
     "gift_neutral": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.gift.neutral",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.gift.neutral",
       "choices": [
         {
           "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
@@ -659,8 +692,8 @@
       ]
     },
     "gift_dislike": {
-      "speaker": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.root.speaker",
-      "text": "aetherhaven_dialogue_elder_week2.aetherhaven.dialogue.aetherhaven_elder_week2.gift.dislike",
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.speaker",
+      "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.gift.dislike",
       "choices": [
         {
           "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",

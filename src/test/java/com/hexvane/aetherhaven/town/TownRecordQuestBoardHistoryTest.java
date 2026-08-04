@@ -14,10 +14,26 @@ class TownRecordQuestBoardHistoryTest {
     void recordsAndQueriesCompleteWithinDays() {
         TownRecord town = new TownRecord();
         UUID player = UUID.randomUUID();
-        town.recordQuestBoardComplete(player, 100L);
+        town.recordQuestBoardComplete(player, 100L, "Aetherhaven_Elder_Lyren", "foundation_stones");
         assertTrue(town.wasQuestBoardCompleteWithin(player, 100L, 3));
         assertTrue(town.wasQuestBoardCompleteWithin(player, 102L, 3));
         assertFalse(town.wasQuestBoardCompleteWithin(player, 103L, 3));
+    }
+
+    @Test
+    void completeHistoryFiltersByGiverAndEntry() {
+        TownRecord town = new TownRecord();
+        UUID player = UUID.randomUUID();
+        town.recordQuestBoardComplete(player, 100L, "Aetherhaven_Elder_Lyren", "foundation_stones");
+        assertTrue(
+            town.wasQuestBoardCompleteWithin(player, 100L, 3, "Aetherhaven_Elder_Lyren", "foundation_stones")
+        );
+        assertFalse(
+            town.wasQuestBoardCompleteWithin(player, 100L, 3, "Aetherhaven_Miner", "foundation_stones")
+        );
+        assertFalse(
+            town.wasQuestBoardCompleteWithin(player, 100L, 3, "Aetherhaven_Elder_Lyren", "village_timber")
+        );
     }
 
     @Test

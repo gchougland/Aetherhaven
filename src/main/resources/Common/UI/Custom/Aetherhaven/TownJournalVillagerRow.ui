@@ -29,30 +29,43 @@ $Sounds = "../Sounds.ui";
 Group #TownJournalVillagerRow {
   LayoutMode: Left;
   Anchor: (Bottom: 6);
+  Padding: (Horizontal: 4, Vertical: 3);
+  Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
 
-  AssetImage #Portrait {
-    Anchor: (Width: 64, Height: 64, Right: 10);
-    FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
-  }
-
-  Group {
-    LayoutMode: Top;
+  Button #Select {
+    LayoutMode: Left;
     FlexWeight: 1;
+    Padding: (Horizontal: 4, Vertical: 2);
+    Style: (
+      Default: (Background: #000000(0.0)),
+      Hovered: (Background: #ffffff(0.08)),
+      Pressed: (Background: #ffffff(0.12))
+    );
 
-    Label #VillagerName {
-      Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2, FontSize: 14, Wrap: true);
-      Anchor: (Bottom: 4);
-      Text: "";
+    AssetImage #Portrait {
+      Anchor: (Width: 64, Height: 64, Right: 10);
+      FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
     }
 
-    Group #ReputationHeartSlots {
-      LayoutMode: Left;
-      Anchor: (Bottom: 6);
-    }
+    Group {
+      LayoutMode: Top;
+      FlexWeight: 1;
 
-    Label #ScheduleLocation {
-      Style: (...$C.@DefaultLabelStyle, TextColor: #c8c2b0, FontSize: 12, Wrap: true);
-      Text: "";
+      Label #VillagerName {
+        Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2, FontSize: 14, Wrap: true);
+        Anchor: (Bottom: 4);
+        Text: "";
+      }
+
+      Group #ReputationHeartSlots {
+        LayoutMode: Left;
+        Anchor: (Bottom: 6);
+      }
+
+      Label #ScheduleLocation {
+        Style: (...$C.@DefaultLabelStyle, TextColor: #c8c2b0, FontSize: 12, Wrap: true);
+        Text: "";
+      }
     }
   }
 

@@ -34,6 +34,7 @@ import com.hexvane.aetherhaven.tourist.TouristMoveInRequirements;
 import com.hexvane.aetherhaven.villager.VillagerBefriendableResolver;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.hexvane.aetherhaven.villager.data.VillagerGreetingPicker;
+import com.hexvane.aetherhaven.villager.data.VillagerNeedsDialoguePicker;
 import com.hexvane.aetherhaven.worldnpc.WorldNpcBinding;
 import com.hexvane.aetherhaven.worldnpc.WorldNpcDialogueChoiceFilter;
 import com.hexvane.aetherhaven.worldnpc.WorldNpcDisplay;
@@ -424,6 +425,11 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                 if (npc != null && npc.getRoleName() != null && nu != null && pu != null) {
                     AetherhavenPlugin plugin = AetherhavenPlugin.get();
                     if (plugin != null) {
+                        Message needGreeting =
+                            VillagerNeedsDialoguePicker.pickMessage(store, npcRef, plugin, pu.getUuid(), nu.getUuid());
+                        if (needGreeting != null) {
+                            return needGreeting;
+                        }
                         Message townsfolkGreeting = TownsfolkGreetingPicker.pickMessage(store, npcRef, plugin, pu.getUuid(), nu.getUuid());
                         if (townsfolkGreeting != null) {
                             return townsfolkGreeting;

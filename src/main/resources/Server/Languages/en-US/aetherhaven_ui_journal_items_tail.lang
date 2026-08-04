@@ -201,6 +201,7 @@ aetherhaven.ui.townJournal.repairPlotTooltip=Fix missing shelves, safes, and wor
 aetherhaven.ui.townJournal.repairPlotOk=Fixed {count} spot(s) for that building.
 aetherhaven.ui.townJournal.repairPlotNothing=That building looks fine already.
 aetherhaven.ui.townJournal.repairPlotNotLoaded=Move closer to that building and try again.
+aetherhaven.ui.townJournal.plotMaterialsComplete=This building is already finished.
 aetherhaven.ui.townJournal.repairPlotFailed=Could not repair that building. Try again when the area is fully loaded.
 aetherhaven.ui.townJournal.repairPlotSignAt=Plot sign is at {x} {y} {z}.
 aetherhaven.ui.townJournal.repairPlotSignFixed=Plot sign fixed. It is at {x} {y} {z}.
@@ -213,6 +214,11 @@ aetherhaven.ui.townJournal.locateArrived=You reached {name}
 aetherhaven.ui.townJournal.locateArrivedLastKnown=This is where we last saw {name}
 aetherhaven.ui.townJournal.locateNoPosition=We do not know where they are right now
 aetherhaven.ui.townJournal.locateNotResident=That person is not in this town
+aetherhaven.ui.townJournal.locatePlotTooltip=Show a trail to this building
+aetherhaven.ui.townJournal.locatePlotActiveTooltip=Stop showing the trail
+aetherhaven.ui.townJournal.locatePlotStarted=Following {name}
+aetherhaven.ui.townJournal.locatePlotArrived=You reached {name}
+aetherhaven.ui.townJournal.locatePlotStopped=Trail removed
 
 # Legacy keys (other locales; unused in new UI)
 aetherhaven.ui.questjournal.title=Quest journal

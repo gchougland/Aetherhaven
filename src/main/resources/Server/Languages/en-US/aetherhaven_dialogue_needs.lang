@@ -1,0 +1,13 @@
+# Low-need greeting lines (hunger, energy, fun)
+
+aetherhaven.dialogue.needs.hunger.0=I am really hungry. We could use a place to eat around here.
+aetherhaven.dialogue.needs.hunger.1=My stomach is empty. A good meal spot in town would help.
+aetherhaven.dialogue.needs.hunger.2=I could use a proper meal. Wish we had somewhere to eat nearby.
+
+aetherhaven.dialogue.needs.energy.0=I am worn out. I could use a quiet place to rest.
+aetherhaven.dialogue.needs.energy.1=I have not had a proper break in a while. Somewhere to rest would be nice.
+aetherhaven.dialogue.needs.energy.2=I am running on empty. This town needs a good spot to unwind.
+
+aetherhaven.dialogue.needs.fun.0=Things have been dull lately. A little fun around town would help.
+aetherhaven.dialogue.needs.fun.1=I could use something cheerful. This town needs more to do.
+aetherhaven.dialogue.needs.fun.2=It has been a quiet spell. Something fun would lift everyone's spirits.

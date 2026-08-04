@@ -57,12 +57,14 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
     private int selectedIndex;
     /** -1 = default (0); set when reopening (e.g. from gift history back). */
     private final int initialVillagerIndex;
+    /** Read-only preview (e.g. Town Journal): no rescue teleport or gift history navigation. */
+    private final boolean viewOnly;
     /** {@code append(ui)} must run only once per page instance; repeating it on every {@link #sendUpdate} duplicates the whole tree. */
     private boolean templateAppended;
     private boolean reputationHeartSlotsAppended;
 
     public VillagerNeedsOverviewPage(@Nonnull PlayerRef playerRef, @Nonnull UUID townId) {
-        this(playerRef, townId, null, null, -1);
+        this(playerRef, townId, null, null, -1, false);
     }
 
     public VillagerNeedsOverviewPage(
@@ -71,7 +73,7 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
         @Nullable Ref<ChunkStore> managementBlockRef,
         @Nullable Vector3i managementBlockPos
     ) {
-        this(playerRef, townId, managementBlockRef, managementBlockPos, -1);
+        this(playerRef, townId, managementBlockRef, managementBlockPos, -1, false);
     }
 
     public VillagerNeedsOverviewPage(
@@ -81,14 +83,56 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
         @Nullable Vector3i managementBlockPos,
         int initialVillagerIndex
     ) {
+        this(playerRef, townId, managementBlockRef, managementBlockPos, initialVillagerIndex, false);
+    }
+
+    public VillagerNeedsOverviewPage(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull UUID townId,
+        @Nullable Ref<ChunkStore> managementBlockRef,
+        @Nullable Vector3i managementBlockPos,
+        int initialVillagerIndex,
+        boolean viewOnly
+    ) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
         this.townId = townId;
         this.managementBlockRef = managementBlockRef;
         this.managementBlockPos = managementBlockPos != null ? new Vector3i(managementBlockPos) : null;
         this.initialVillagerIndex = initialVillagerIndex;
+        this.viewOnly = viewOnly;
         if (initialVillagerIndex >= 0) {
             this.selectedIndex = initialVillagerIndex;
         }
+    }
+
+    /** Opens the needs overview for one villager (e.g. from Town Journal). Shelf tabs are hidden. */
+    public static void openForVillager(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID townId,
+        @Nonnull UUID villagerEntityUuid
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).getTown(townId);
+        if (town == null) {
+            return;
+        }
+        List<TownVillagerRow> rows = TownVillagerDirectory.listResidents(store, town);
+        int idx = TownVillagerDirectory.indexOfEntity(rows, villagerEntityUuid);
+        if (idx < 0) {
+            return;
+        }
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player == null) {
+            return;
+        }
+        player.getPageManager()
+            .openCustomPage(ref, store, new VillagerNeedsOverviewPage(playerRef, townId, null, null, idx, true));
     }
 
     @Override
@@ -106,18 +150,20 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
             }
             reputationHeartSlotsAppended = true;
         }
-        eventBuilder.addEventBinding(
-            CustomUIEventBindingType.Activating,
-            "#RescueTeleportButton",
-            new EventData().append("Action", "RescueTeleport"),
-            false
-        );
-        eventBuilder.addEventBinding(
-            CustomUIEventBindingType.Activating,
-            "#GiftHistoryButton",
-            new EventData().append("Action", "GiftHistory"),
-            false
-        );
+        if (!viewOnly) {
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#RescueTeleportButton",
+                new EventData().append("Action", "RescueTeleport"),
+                false
+            );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#GiftHistoryButton",
+                new EventData().append("Action", "GiftHistory"),
+                false
+            );
+        }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         World world = store.getExternalData().getWorld();
         boolean showMgmtTabs = managementBlockRef != null && managementBlockPos != null;
@@ -161,7 +207,7 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
             selectedIndex = 0;
         }
 
-        commandBuilder.set("#RescueTeleportButton.Visible", true);
+        commandBuilder.set("#RescueTeleportButton.Visible", !viewOnly);
         commandBuilder.set("#Hint.Visible", false);
         commandBuilder.clear(VILLAGER_ROWS);
         for (int i = 0; i < rows.size(); i++) {
@@ -200,7 +246,7 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
         Ref<EntityStore> selRef = entityStore.getExternalData().getRefFromUUID(sel.entityUuid());
         boolean befriendable = VillagerBefriendableResolver.isBefriendable(entityStore, selRef, plugin);
         commandBuilder.set("#ReputationBlock.Visible", befriendable);
-        commandBuilder.set("#GiftHistoryButton.Visible", befriendable);
+        commandBuilder.set("#GiftHistoryButton.Visible", befriendable && !viewOnly);
         UUIDComponent pu = store.getComponent(ref, UUIDComponent.getComponentType());
         if (befriendable && pu != null) {
             int rep = VillagerReputationService.getOrCreateEntry(town, pu.getUuid(), sel.entityUuid()).getReputation();
@@ -232,10 +278,16 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
                 return;
             }
             if (data.action.equalsIgnoreCase("RescueTeleport")) {
+                if (viewOnly) {
+                    return;
+                }
                 handleRescueTeleport(ref, store);
                 return;
             }
             if (data.action.equalsIgnoreCase("GiftHistory")) {
+                if (viewOnly) {
+                    return;
+                }
                 openGiftHistory(ref, store);
                 return;
             }

@@ -30,6 +30,9 @@ import com.hexvane.aetherhaven.time.AetherhavenGameTimeCoordinatorSystem;
 import com.hexvane.aetherhaven.time.AetherhavenGameTimeCursorResource;
 import com.hexvane.aetherhaven.time.AetherhavenGameTimeHub;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.PlotLocatePlayerComponent;
+import com.hexvane.aetherhaven.town.PlotLocatePlayerInitSystem;
+import com.hexvane.aetherhaven.town.PlotLocateTrailSystem;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownMemberBlockAccess;
 import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
@@ -110,12 +113,15 @@ public final class AetherhavenCoreBootstrap {
 
         PlayerTownJournalState.register(plugin.getEntityStoreRegistry());
         VillagerLocatePlayerComponent.register(plugin.getEntityStoreRegistry());
+        PlotLocatePlayerComponent.register(plugin.getEntityStoreRegistry());
         PlayerPlotTokenUnlockState.register(plugin.getEntityStoreRegistry());
         PlayerConstructionFavoritesState.register(plugin.getEntityStoreRegistry());
         plugin.getEntityStoreRegistry().registerSystem(new EntityRotationRepairSystem.OnHolderAdd());
         plugin.getEntityStoreRegistry().registerSystem(new EntityRotationRepairSystem.OnRefAdded());
         plugin.getEntityStoreRegistry().registerSystem(new TownJournalPlayerInitSystem());
         plugin.getEntityStoreRegistry().registerSystem(new VillagerLocatePlayerInitSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new PlotLocatePlayerInitSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new PlotLocateTrailSystem(plugin));
         plugin.getEntityStoreRegistry().registerSystem(new PlotTokenUnlockPlayerInitSystem());
         plugin.getChunkStoreRegistry().registerSystem(new PlotBlueprintSalvageBenchSystem());
         plugin.getEntityStoreRegistry().registerSystem(new ConstructionFavoritesPlayerInitSystem());

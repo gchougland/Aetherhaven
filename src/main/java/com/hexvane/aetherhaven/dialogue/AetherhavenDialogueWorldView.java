@@ -867,7 +867,11 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
 
     @Override
     public boolean playerRecentlyFinishedQuestBoardQuest(
-        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, int withinDays
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        int withinDays,
+        @Nullable String giverRoleId,
+        @Nullable String configEntryId
     ) {
         TownRecord town = townFor(playerRef, store);
         UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
@@ -877,7 +881,9 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         return town.wasQuestBoardCompleteWithin(
             pu.getUuid(),
             VillagerReputationService.currentGameEpochDay(store),
-            withinDays
+            withinDays,
+            giverRoleId,
+            configEntryId
         );
     }
 

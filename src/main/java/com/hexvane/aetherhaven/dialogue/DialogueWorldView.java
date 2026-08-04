@@ -387,7 +387,9 @@ public interface DialogueWorldView {
     default boolean playerRecentlyFinishedQuestBoardQuest(
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store,
-        int withinDays
+        int withinDays,
+        @Nullable String giverRoleId,
+        @Nullable String configEntryId
     ) {
         return false;
     }

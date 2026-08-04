@@ -18,6 +18,11 @@
 - **Move token** — The town records shelf can give you a move token for a building. Use it with the plot placement staff at the new spot to move the building there without nudging it block by block.
 - **Snap to me** — The plot placement staff has a button that moves the building preview to where you are standing.
 - **Dialogue conditions** — Villager dialogue can branch on another villager being nearby, friendship hearts, how a villager is feeling, hunger, whether a building exists in town, and whether you recently finished or failed a quest board quest.
+- **Town Journal villager needs** — Tap a villager in the Town tab to see their needs.
+- **Town Journal plot materials** — Tap a building that is still a plot sign to see its material progress. View only; use the town records shelf or plot sign to deposit or build.
+- **Town Journal building trail** — Tap the walking icon on a building to show a trail that leads you there. It stops when you arrive.
+- **Low need dialogue** — Town villagers sometimes tell you when they are hungry, tired, or bored when you talk to them.
+- **Quest board follow up** — Elder Lyren has example dialogue after you turn in his Foundation Stones board quest.
 
 ### Changed
 

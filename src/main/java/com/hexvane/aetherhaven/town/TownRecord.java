@@ -372,10 +372,15 @@ public final class TownRecord {
     @Nullable
     private List<String> questBoardDrawPool;
 
-    /** Last dawn day a player completed a town quest board quest (player UUID string -> dawn day). */
+    /** Last dawn day a player completed a town quest board quest (player UUID string -> dawn day). Legacy; migrated on load. */
     @Nullable
     @SerializedName("playerQuestBoardLastCompleteDawnDayByUuid")
     private Map<String, Long> playerQuestBoardLastCompleteDawnDayByUuid;
+
+    /** Last town quest board completion details per player. */
+    @Nullable
+    @SerializedName("playerQuestBoardLastCompleteByUuid")
+    private Map<String, com.hexvane.aetherhaven.questboard.QuestBoardPlayerCompleteRecord> playerQuestBoardLastCompleteByUuid;
 
     /** Last dawn day a player failed or abandoned a town quest board quest (player UUID string -> dawn day). */
     @Nullable
@@ -2000,24 +2005,71 @@ public final class TownRecord {
         this.questBoardDrawPool = new ArrayList<>(keys);
     }
 
-    public void recordQuestBoardComplete(@Nonnull UUID playerUuid, long dawnDay) {
-        playerQuestBoardLastCompleteDawnDayByUuid().put(playerUuid.toString(), dawnDay);
+    public void recordQuestBoardComplete(
+        @Nonnull UUID playerUuid, long dawnDay, @Nullable String giverRoleId, @Nullable String configEntryId
+    ) {
+        playerQuestBoardLastCompleteByUuid().put(
+            playerUuid.toString(),
+            new com.hexvane.aetherhaven.questboard.QuestBoardPlayerCompleteRecord(dawnDay, giverRoleId, configEntryId)
+        );
     }
 
     public void recordQuestBoardFail(@Nonnull UUID playerUuid, long dawnDay) {
         playerQuestBoardLastFailDawnDayByUuid().put(playerUuid.toString(), dawnDay);
     }
 
+    public boolean wasQuestBoardCompleteWithin(
+        @Nonnull UUID playerUuid, long currentDawnDay, int withinDays, @Nullable String giverRoleId, @Nullable String configEntryId
+    ) {
+        migrateQuestBoardCompleteHistoryIfNeeded();
+        com.hexvane.aetherhaven.questboard.QuestBoardPlayerCompleteRecord recorded =
+            playerQuestBoardLastCompleteByUuid().get(playerUuid.toString());
+        if (recorded == null) {
+            return false;
+        }
+        return com.hexvane.aetherhaven.dialogue.DialogueNpcConditionUtil.dawnDayWithin(
+            recorded.getDawnDay(),
+            currentDawnDay,
+            withinDays
+        ) && recorded.matchesFilters(giverRoleId, configEntryId);
+    }
+
     public boolean wasQuestBoardCompleteWithin(@Nonnull UUID playerUuid, long currentDawnDay, int withinDays) {
-        Long recorded = playerQuestBoardLastCompleteDawnDayByUuid().get(playerUuid.toString());
-        return recorded != null
-            && com.hexvane.aetherhaven.dialogue.DialogueNpcConditionUtil.dawnDayWithin(recorded, currentDawnDay, withinDays);
+        return wasQuestBoardCompleteWithin(playerUuid, currentDawnDay, withinDays, null, null);
     }
 
     public boolean wasQuestBoardFailWithin(@Nonnull UUID playerUuid, long currentDawnDay, int withinDays) {
         Long recorded = playerQuestBoardLastFailDawnDayByUuid().get(playerUuid.toString());
         return recorded != null
             && com.hexvane.aetherhaven.dialogue.DialogueNpcConditionUtil.dawnDayWithin(recorded, currentDawnDay, withinDays);
+    }
+
+    @Nonnull
+    private Map<String, com.hexvane.aetherhaven.questboard.QuestBoardPlayerCompleteRecord> playerQuestBoardLastCompleteByUuid() {
+        migrateQuestBoardCompleteHistoryIfNeeded();
+        if (playerQuestBoardLastCompleteByUuid == null) {
+            playerQuestBoardLastCompleteByUuid = new LinkedHashMap<>();
+        }
+        return playerQuestBoardLastCompleteByUuid;
+    }
+
+    private void migrateQuestBoardCompleteHistoryIfNeeded() {
+        if (playerQuestBoardLastCompleteDawnDayByUuid == null || playerQuestBoardLastCompleteDawnDayByUuid.isEmpty()) {
+            return;
+        }
+        if (playerQuestBoardLastCompleteByUuid == null) {
+            playerQuestBoardLastCompleteByUuid = new LinkedHashMap<>();
+        }
+        for (Map.Entry<String, Long> e : playerQuestBoardLastCompleteDawnDayByUuid.entrySet()) {
+            if (e.getKey() == null || e.getValue() == null || playerQuestBoardLastCompleteByUuid.containsKey(e.getKey())) {
+                continue;
+            }
+            playerQuestBoardLastCompleteByUuid.put(
+                e.getKey(),
+                new com.hexvane.aetherhaven.questboard.QuestBoardPlayerCompleteRecord(e.getValue(), null, null)
+            );
+        }
+        playerQuestBoardLastCompleteDawnDayByUuid = null;
     }
 
     @Nonnull

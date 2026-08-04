@@ -659,7 +659,7 @@ public final class QuestBoardService {
         }
         UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
         if (pu != null) {
-            recordBoardQuestComplete(town, pu.getUuid(), store);
+            recordBoardQuestComplete(town, pu.getUuid(), store, slot);
         }
         slot.markCompleted();
         tm.updateTown(town);
@@ -828,9 +828,17 @@ public final class QuestBoardService {
     }
 
     private static void recordBoardQuestComplete(
-        @Nonnull TownRecord town, @Nonnull UUID playerUuid, @Nonnull Store<EntityStore> store
+        @Nonnull TownRecord town,
+        @Nonnull UUID playerUuid,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull QuestBoardSlotRecord slot
     ) {
-        town.recordQuestBoardComplete(playerUuid, VillagerReputationService.currentGameEpochDay(store));
+        town.recordQuestBoardComplete(
+            playerUuid,
+            VillagerReputationService.currentGameEpochDay(store),
+            slot.getGiverRoleId(),
+            slot.getConfigEntryId()
+        );
     }
 
     private static void recordBoardQuestFail(

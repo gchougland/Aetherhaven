@@ -245,7 +245,9 @@ public final class DialogueConditionEvaluator {
             case "player_recently_finished_quest_board_quest" -> worldView.playerRecentlyFinishedQuestBoardQuest(
                 playerRef,
                 store,
-                intOrDefault(o, "withinDays", 3)
+                intOrDefault(o, "withinDays", 3),
+                getString(o, "giverRoleId"),
+                getString(o, "configEntryId")
             );
             case "player_recently_failed_quest_board_quest" -> worldView.playerRecentlyFailedQuestBoardQuest(
                 playerRef,

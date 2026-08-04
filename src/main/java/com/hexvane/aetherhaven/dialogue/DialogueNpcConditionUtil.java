@@ -97,6 +97,57 @@ public final class DialogueNpcConditionUtil {
         return snapshot == null ? 0 : needPercent(snapshot.hunger());
     }
 
+    /** Thresholds aligned with {@link com.hexvane.aetherhaven.autonomy.PoiScoring}. */
+    public static final float HUNGER_LOW_THRESHOLD = 50f;
+    public static final float ENERGY_LOW_THRESHOLD = 40f;
+    public static final float FUN_LOW_THRESHOLD = 40f;
+
+    public enum LowNeedKind {
+        HUNGER,
+        ENERGY,
+        FUN
+    }
+
+    /**
+     * When any need is below its low threshold, returns the kind with the lowest meter value.
+     * Ties break hunger, then energy, then fun.
+     */
+    @Nullable
+    public static LowNeedKind resolveLowestLowNeed(@Nullable VillagerNeedsSnapshot snapshot) {
+        if (snapshot == null) {
+            return null;
+        }
+        float h = snapshot.hunger();
+        float e = snapshot.energy();
+        float f = snapshot.fun();
+        boolean hungerLow = h < HUNGER_LOW_THRESHOLD;
+        boolean energyLow = e < ENERGY_LOW_THRESHOLD;
+        boolean funLow = f < FUN_LOW_THRESHOLD;
+        if (!hungerLow && !energyLow && !funLow) {
+            return null;
+        }
+        float minVal = Float.MAX_VALUE;
+        if (hungerLow) {
+            minVal = Math.min(minVal, h);
+        }
+        if (energyLow) {
+            minVal = Math.min(minVal, e);
+        }
+        if (funLow) {
+            minVal = Math.min(minVal, f);
+        }
+        if (hungerLow && h == minVal) {
+            return LowNeedKind.HUNGER;
+        }
+        if (energyLow && e == minVal) {
+            return LowNeedKind.ENERGY;
+        }
+        if (funLow && f == minVal) {
+            return LowNeedKind.FUN;
+        }
+        return null;
+    }
+
     public static boolean isOtherTownVillagerNearby(
         @Nonnull Store<EntityStore> store,
         @Nonnull Ref<EntityStore> speakerRef,

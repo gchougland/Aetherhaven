@@ -35,11 +35,15 @@ import com.hexvane.aetherhaven.rts.RtsPickTuning;
 import com.hexvane.aetherhaven.rts.RtsScreenPickUtil;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleDefinition;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleResolver;
+import com.hexvane.aetherhaven.placement.PlotConstructionOpenHelper;
+import com.hexvane.aetherhaven.placement.PlotConstructionOpenHelper.OpenResult;
 import com.hexvane.aetherhaven.plot.ConstructionFavoritesService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintChunkUtil;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
+import com.hexvane.aetherhaven.town.PlotLocatePlayerComponent;
+import com.hexvane.aetherhaven.town.PlotLocateTargetResolver;
 import com.hexvane.aetherhaven.town.PlotLinkReconcileService;
 import com.hexvane.aetherhaven.town.TownDissolutionService;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -1137,12 +1141,12 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             TownVillagerRow r = villagers.get(i);
             commandBuilder.append(TOWN_VILLAGER_ROWS, "Aetherhaven/TownJournalVillagerRow.ui");
             String row = TOWN_VILLAGER_ROWS + "[" + i + "]";
-            commandBuilder.set(row + " #Portrait.AssetPath", r.portraitPath());
-            commandBuilder.set(row + " #VillagerName.TextSpans", Message.raw(r.label()));
+            commandBuilder.set(row + " #Select #Portrait.AssetPath", r.portraitPath());
+            commandBuilder.set(row + " #Select #VillagerName.TextSpans", Message.raw(r.label()));
             boolean befriendable =
                 JournalTabVisibility.reputationTab()
                     && VillagerBefriendableResolver.isBefriendableForJournal(store, r.entityUuid(), r.roleId(), plugin);
-            String heartsPath = row + " #ReputationHeartSlots";
+            String heartsPath = row + " #Select #ReputationHeartSlots";
             commandBuilder.set(heartsPath + ".Visible", befriendable);
             if (befriendable) {
                 for (int h = 0; h < 10; h++) {
@@ -1151,12 +1155,15 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 int rep = VillagerReputationService.getOrCreateEntry(town, uc.getUuid(), r.entityUuid()).getReputation();
                 ReputationHeartUi.applyHearts(commandBuilder, heartsPath, rep);
             }
-            commandBuilder.set(row + " #ScheduleLocation.TextSpans", townJournalSecondaryLineMessage(plugin, world, store, r, gameNow));
+            commandBuilder.set(
+                row + " #Select #ScheduleLocation.TextSpans",
+                townJournalSecondaryLineMessage(plugin, world, store, r, gameNow)
+            );
             boolean showSchedule =
                 TownVillagerBinding.KIND_GUARD.equals(r.bindingKind())
                     || !TownResidentEligibility.isTownsfolkPoolKind(r.bindingKind(), r.roleId(), plugin)
                     || liveEatingActivityMessage(plugin, world, store, r.entityUuid()) != null;
-            commandBuilder.set(row + " #ScheduleLocation.Visible", showSchedule);
+            commandBuilder.set(row + " #Select #ScheduleLocation.Visible", showSchedule);
             boolean locateActive = locateSession != null && locateSession.isActiveFor(r.entityUuid());
             commandBuilder.set(row + " #LocateVillager.Visible", !locateActive);
             commandBuilder.set(row + " #LocateVillagerActive.Visible", locateActive);
@@ -1178,6 +1185,12 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 CustomUIEventBindingType.Activating,
                 row + " #LocateVillagerActive",
                 locateEvent,
+                false
+            );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                row + " #Select",
+                new EventData().append("Action", "OpenVillagerNeeds").append("VillagerUuid", r.entityUuid().toString()),
                 false
             );
         }
@@ -1205,17 +1218,18 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         }
         boolean canRemovePlots = town.playerCanRemovePlots(uc.getUuid());
         boolean canRepairPlots = town.playerCanManageConstructions(uc.getUuid());
+        PlotLocatePlayerComponent locatePlotSession = PlotLocatePlayerComponent.get(store, ref);
         java.util.Set<String> plotIconsEnsured = new java.util.HashSet<>();
         for (int i = 0; i < plots.size(); i++) {
             PlotInstance p = plots.get(i);
             commandBuilder.append(TOWN_PLOT_ROWS, "Aetherhaven/TownJournalPlotRow.ui");
             String row = TOWN_PLOT_ROWS + "[" + i + "]";
             Message title = journalPlotConstructionTitle(plotCatalog, p);
-            commandBuilder.set(row + " #PlotTitle.TextSpans", title);
+            commandBuilder.set(row + " #Select #PlotTitle.TextSpans", title);
             String coords = p.getSignX() + " " + p.getSignY() + " " + p.getSignZ();
-            commandBuilder.set(row + " #PlotCoords.TextSpans", Message.raw(coords));
+            commandBuilder.set(row + " #Select #PlotCoords.TextSpans", Message.raw(coords));
             commandBuilder.set(
-                row + " #PlotStatus.TextSpans",
+                row + " #Select #PlotStatus.TextSpans",
                 JournalPlotAssigneeFormatter.plotStatusLine(plugin, store, town, plotCatalog, p)
             );
             String constructionId = p.getConstructionId();
@@ -1224,13 +1238,36 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             }
             ItemGridSlot tokenSlot = AetherhavenUiItemGrids.plotTokenSlotForConstruction(p.getConstructionId(), plotCatalog);
             if (tokenSlot != null) {
-                commandBuilder.set(row + " #PlotIconHost.Visible", true);
-                AetherhavenUiItemGrids.setSingleSlot(commandBuilder, row + " #PlotTokenSlot", tokenSlot);
+                commandBuilder.set(row + " #Select #PlotIconHost.Visible", true);
+                AetherhavenUiItemGrids.setSingleSlot(commandBuilder, row + " #Select #PlotTokenSlot", tokenSlot);
             } else {
-                commandBuilder.set(row + " #PlotIconHost.Visible", false);
-                AetherhavenUiItemGrids.setSingleSlotEmpty(commandBuilder, row + " #PlotTokenSlot");
+                commandBuilder.set(row + " #Select #PlotIconHost.Visible", false);
+                AetherhavenUiItemGrids.setSingleSlotEmpty(commandBuilder, row + " #Select #PlotTokenSlot");
             }
             boolean areaLoaded = PlotFootprintChunkUtil.isPlotRepairAreaLoaded(world, p);
+            boolean locatePlotActive = locatePlotSession != null && locatePlotSession.isActiveFor(p.getPlotId());
+            commandBuilder.set(row + " #LocatePlot.Visible", !locatePlotActive);
+            commandBuilder.set(row + " #LocatePlotActive.Visible", locatePlotActive);
+            String locatePlotTooltipKey = locatePlotActive
+                ? "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.locatePlotActiveTooltip"
+                : "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.locatePlotTooltip";
+            Message locatePlotTooltip = Message.translation(locatePlotTooltipKey);
+            commandBuilder.set(row + " #LocatePlot.TooltipTextSpans", locatePlotTooltip);
+            commandBuilder.set(row + " #LocatePlotActive.TooltipTextSpans", locatePlotTooltip);
+            EventData locatePlotEvent =
+                new EventData().append("Action", "ToggleLocatePlot").append("PlotId", p.getPlotId().toString());
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                row + " #LocatePlot",
+                locatePlotEvent,
+                false
+            );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                row + " #LocatePlotActive",
+                locatePlotEvent,
+                false
+            );
             commandBuilder.set(row + " #RepairPlot.Visible", canRepairPlots);
             commandBuilder.set(
                 row + " #RepairPlot.TooltipTextSpans",
@@ -1259,6 +1296,12 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                     false
                 );
             }
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                row + " #Select",
+                new EventData().append("Action", "OpenPlotMaterials").append("PlotId", p.getPlotId().toString()),
+                false
+            );
         }
     }
 
@@ -2440,6 +2483,72 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             sendUpdate(cmd, ev, false);
             return;
         }
+        if (action.equalsIgnoreCase("OpenVillagerNeeds")) {
+            String villagerUuidRaw = data.villagerUuid;
+            if (villagerUuidRaw == null || villagerUuidRaw.isBlank()) {
+                return;
+            }
+            UUID villagerUuid;
+            try {
+                villagerUuid = UUID.fromString(villagerUuidRaw.trim());
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            World world = store.getExternalData().getWorld();
+            if (plugin == null) {
+                return;
+            }
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (uc == null) {
+                return;
+            }
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
+            if (town == null) {
+                return;
+            }
+            VillagerNeedsOverviewPage.openForVillager(playerRef, ref, store, town.getTownId(), villagerUuid);
+            return;
+        }
+        if (action.equalsIgnoreCase("OpenPlotMaterials")) {
+            String plotIdRaw = data.plotId;
+            if (plotIdRaw == null || plotIdRaw.isBlank()) {
+                return;
+            }
+            UUID plotUuid;
+            try {
+                plotUuid = UUID.fromString(plotIdRaw.trim());
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            World world = store.getExternalData().getWorld();
+            if (plugin == null) {
+                return;
+            }
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (uc == null) {
+                return;
+            }
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
+            if (town == null) {
+                return;
+            }
+            OpenResult openResult = PlotConstructionOpenHelper.tryOpenFromJournal(playerRef, ref, store, town, plotUuid);
+            switch (openResult) {
+                case CHUNK_NOT_LOADED -> playerRef.sendMessage(
+                    Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.removePlotAreaNotLoaded")
+                );
+                case ASSEMBLING -> playerRef.sendMessage(
+                    Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.assemblingHint")
+                );
+                case COMPLETE -> playerRef.sendMessage(
+                    Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.plotMaterialsComplete")
+                );
+                default -> {}
+            }
+            return;
+        }
         if (action.equalsIgnoreCase("ToggleLocateVillager")) {
             String villagerUuidRaw = data.villagerUuid;
             if (villagerUuidRaw == null || villagerUuidRaw.isBlank()) {
@@ -2471,6 +2580,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                     Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.locateStopped")
                 );
             } else {
+                PlotLocatePlayerComponent.clear(store, ref);
                 boolean listed = false;
                 String label = "";
                 for (TownVillagerRow row : TownVillagerDirectory.listResidents(store, town)) {
@@ -2519,6 +2629,60 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                             .param("name", label)
                     );
                 }
+            }
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (action.equalsIgnoreCase("ToggleLocatePlot")) {
+            String plotIdRaw = data.plotId;
+            if (plotIdRaw == null || plotIdRaw.isBlank()) {
+                return;
+            }
+            UUID plotUuid;
+            try {
+                plotUuid = UUID.fromString(plotIdRaw.trim());
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            World world = store.getExternalData().getWorld();
+            if (plugin == null) {
+                return;
+            }
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (uc == null) {
+                return;
+            }
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
+            if (town == null) {
+                return;
+            }
+            PlotInstance plot = town.findPlotById(plotUuid);
+            if (plot == null) {
+                return;
+            }
+            PlotLocatePlayerComponent plotSession = PlotLocatePlayerComponent.get(store, ref);
+            if (plotSession != null && plotSession.isActiveFor(plotUuid)) {
+                PlotLocatePlayerComponent.clear(store, ref);
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.locatePlotStopped")
+                );
+            } else {
+                VillagerLocatePlayerComponent.clear(store, ref);
+                PlotLocateTargetResolver.PlotLocateTarget target = PlotLocateTargetResolver.resolve(plot);
+                if (!target.valid()) {
+                    return;
+                }
+                Message titleMsg = journalPlotConstructionTitle(plugin.getConstructionCatalog(), plot);
+                String label = titleMsg.getAnsiMessage();
+                PlotLocatePlayerComponent.start(store, ref, town.getTownId(), plotUuid, label);
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.locatePlotStarted")
+                        .param("name", label)
+                );
             }
             UICommandBuilder cmd = new UICommandBuilder();
             UIEventBuilder ev = new UIEventBuilder();

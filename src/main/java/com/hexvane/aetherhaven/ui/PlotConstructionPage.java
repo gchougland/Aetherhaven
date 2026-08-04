@@ -129,6 +129,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
     @Nonnull
     private final Vector3i blockWorldPos;
     private final boolean managementUi;
+    /** Read-only preview (e.g. Town Journal): no build, deposit, or pickup. */
+    private final boolean viewOnly;
     /** 0 = Plot, 1 = Players (management UI only). */
     private int managementTab;
     /** When both production and restaurant perk trees apply: 0 = production, 1 = restaurant. */
@@ -175,7 +177,17 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         @Nonnull Vector3i blockWorldPos,
         boolean managementUi
     ) {
-        this(playerRef, blockRef, blockWorldPos, managementUi, 0, false);
+        this(playerRef, blockRef, blockWorldPos, managementUi, 0, false, false);
+    }
+
+    public PlotConstructionPage(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<ChunkStore> blockRef,
+        @Nonnull Vector3i blockWorldPos,
+        boolean managementUi,
+        boolean viewOnly
+    ) {
+        this(playerRef, blockRef, blockWorldPos, managementUi, 0, false, viewOnly);
     }
 
     public PlotConstructionPage(
@@ -186,10 +198,23 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         int initialManagementTab,
         boolean openMoveBuildingModalOnFirstBuild
     ) {
+        this(playerRef, blockRef, blockWorldPos, managementUi, initialManagementTab, openMoveBuildingModalOnFirstBuild, false);
+    }
+
+    public PlotConstructionPage(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<ChunkStore> blockRef,
+        @Nonnull Vector3i blockWorldPos,
+        boolean managementUi,
+        int initialManagementTab,
+        boolean openMoveBuildingModalOnFirstBuild,
+        boolean viewOnly
+    ) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
         this.blockRef = blockRef;
         this.blockWorldPos = new Vector3i(blockWorldPos);
         this.managementUi = managementUi;
+        this.viewOnly = viewOnly;
         this.managementTab = initialManagementTab;
         this.pendingMoveBuildingModal = openMoveBuildingModalOnFirstBuild;
         UUID prefKey = playerRef.getUuid();
@@ -347,7 +372,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         }
 
         boolean showMaterials = !hideConstructionDetails && !requiredMaterials.isEmpty();
-        boolean showPlotActions = !managementUi && !completed && !assembling;
+        boolean showPlotActions = !managementUi && !completed && !assembling && !viewOnly;
         boolean showDeposit =
             showMaterials && showPlotActions && !plotReqBypassCreative && blueprintPlot != null;
         commandBuilder.set("#MaterialsHeader.Visible", showMaterials);
@@ -654,19 +679,21 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 false
             );
         }
-        eventBuilder.addEventBinding(
-            CustomUIEventBindingType.Activating,
-            "#BuildButton",
-            new EventData().append("Action", "Build"),
-            false
-        );
-        if (!managementUi && canPickupPlot) {
+        if (showPlotActions) {
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
-                "#PickUpPlotButton",
-                new EventData().append("Action", "BeginPickUpPlot"),
+                "#BuildButton",
+                new EventData().append("Action", "Build"),
                 false
             );
+            if (canPickupPlot) {
+                eventBuilder.addEventBinding(
+                    CustomUIEventBindingType.Activating,
+                    "#PickUpPlotButton",
+                    new EventData().append("Action", "BeginPickUpPlot"),
+                    false
+                );
+            }
         }
 
         if (managementUi) {
@@ -2085,21 +2112,21 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             return;
         }
         if (data.action != null && data.action.equalsIgnoreCase("DepositMaterial")) {
-            if (managementUi || data.materialIndex == null || data.materialIndex < 0) {
+            if (managementUi || viewOnly || data.materialIndex == null || data.materialIndex < 0) {
                 return;
             }
             handleDepositMaterial(store, ref, data.materialIndex);
             return;
         }
         if (data.action != null && data.action.equalsIgnoreCase("DepositMaterials")) {
-            if (managementUi) {
+            if (managementUi || viewOnly) {
                 return;
             }
             handleDepositAllMaterials(store, ref);
             return;
         }
         if (data.action != null && data.action.equalsIgnoreCase("BeginPickUpPlot")) {
-            if (managementUi) {
+            if (managementUi || viewOnly) {
                 return;
             }
             String pickUpErr = validatePickUpPlotAllowed(store, ref);
@@ -2117,7 +2144,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             return;
         }
         if (data.action != null && data.action.equalsIgnoreCase("ConfirmPickUpPlot")) {
-            if (managementUi) {
+            if (managementUi || viewOnly) {
                 return;
             }
             pickUpPlotConfirmOpen = false;
@@ -2233,7 +2260,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         if (data.action == null || !data.action.equalsIgnoreCase("Build")) {
             return;
         }
-        if (managementUi) {
+        if (managementUi || viewOnly) {
             return;
         }
         ConstructionDefinition def = resolveDefinition(store, ref);
@@ -2792,7 +2819,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 );
                 commandBuilder.set(cell + " #Count.TextSpans", Message.raw(deposited + " / " + line.getCount()));
                 commandBuilder.set(cell + " #Count.Style.TextColor", ok ? "#3d913f" : "#c8a060");
-                if (!completed && !creativeBypass) {
+                if (!completed && !creativeBypass && !viewOnly) {
                     eventBuilder.addEventBinding(
                         CustomUIEventBindingType.Activating,
                         cell,

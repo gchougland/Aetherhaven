@@ -403,7 +403,7 @@ Unknown types fall through to Aetherhaven’s built-in conditions; registered ty
 | `npc_hunger_at_least` | `percent` | Villager hunger is at least N% |
 | `npc_hunger_below` | `percent` | Villager hunger is below N% |
 | `town_has_building` | `constructionId` | Alias for `town_has_complete_plot` |
-| `player_recently_finished_quest_board_quest` | `withinDays` (default 3) | Player finished a town quest board quest recently |
+| `player_recently_finished_quest_board_quest` | `withinDays` (default 3), optional `giverRoleId`, optional `configEntryId` | Player finished a town quest board quest recently |
 | `player_recently_failed_quest_board_quest` | `withinDays` (default 3) | Player failed or abandoned a town quest board quest recently |
 
 ## Quests

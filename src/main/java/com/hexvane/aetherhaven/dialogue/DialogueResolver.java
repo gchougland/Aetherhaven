@@ -32,7 +32,7 @@ public final class DialogueResolver {
     private static final String DEFAULT_DIALOGUE_KIND = "merchant";
     private static final String DEFAULT_RESIDENT_DIALOGUE_TREE = "aetherhaven_merchant";
     public static final String KIND_ELDER_LYREN = "elder_lyren";
-    public static final String TREE_ELDER_WEEK2 = "aetherhaven_elder_week2";
+    public static final String TREE_ELDER = "aetherhaven_elder";
     public static final String KIND_INNKEEPER = "innkeeper";
     public static final String TREE_INN_WELCOME = "aetherhaven_inn_welcome";
 
@@ -68,7 +68,7 @@ public final class DialogueResolver {
     private void applyLegacyDefaultKindMaps() {
         kindToTree.clear();
         kindToVisitorTree.clear();
-        kindToTree.put(KIND_ELDER_LYREN, TREE_ELDER_WEEK2);
+        kindToTree.put(KIND_ELDER_LYREN, TREE_ELDER);
         kindToTree.put(KIND_INNKEEPER, TREE_INN_WELCOME);
         kindToTree.put(KIND_GUILD_MASTER, TREE_GUILD_MASTER);
         kindToTree.put(KIND_GUILD_ADVENTURER, TREE_GUILD_ADVENTURER);

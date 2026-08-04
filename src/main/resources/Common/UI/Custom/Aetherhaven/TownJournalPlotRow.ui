@@ -10,6 +10,22 @@ $Sounds = "../Sounds.ui";
   VerticalAlignment: Center
 );
 
+@LocatePlotStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../man-walking.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../man-walking.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../man-walking.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../man-walking.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+@LocatePlotActiveStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../man-walking.png", Border: 0, Color: #8fd4a0), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../man-walking.png", Border: 0, Color: #a8e0b8), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../man-walking.png", Border: 0, Color: #6fc492), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../man-walking.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
 @BulldozerRemoveStyle = TextButtonStyle(
   Default: (Background: PatchStyle(TexturePath: "../bulldozer_icon_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
   Hovered: (Background: PatchStyle(TexturePath: "../bulldozer_icon_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
@@ -29,49 +45,81 @@ $Sounds = "../Sounds.ui";
 Group #TownJournalPlotRow {
   LayoutMode: Left;
   Anchor: (Bottom: 8);
+  Padding: (Horizontal: 4, Vertical: 3);
+  Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
 
-  Group #PlotIconHost {
-    LayoutMode: Middle;
-    Anchor: (Width: @TownPlotRowHeight, Height: @TownPlotRowHeight, Right: 10);
-
-    ItemGrid #PlotTokenSlot {
-      Anchor: (Width: @TownPlotRowHeight, Height: @TownPlotRowHeight);
-      SlotsPerRow: 1;
-      Style: (
-        SlotSize: @TownPlotRowHeight,
-        SlotIconSize: @TownPlotRowHeight,
-        SlotSpacing: 0,
-        SlotBackground: "../Common/BlockSelectorSlotBackground.png"
-      );
-    }
-  }
-
-  Group {
-    LayoutMode: Top;
+  Button #Select {
+    LayoutMode: Left;
     FlexWeight: 1;
-    Anchor: (Vertical: 0);
+    Padding: (Horizontal: 4, Vertical: 2);
+    Style: (
+      Default: (Background: #000000(0.0)),
+      Hovered: (Background: #ffffff(0.08)),
+      Pressed: (Background: #ffffff(0.12))
+    );
 
-    Label #PlotTitle {
-      Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2, FontSize: 15, Wrap: true);
-      Anchor: (Bottom: 4);
-      Text: "";
+    Group #PlotIconHost {
+      LayoutMode: Middle;
+      Anchor: (Width: @TownPlotRowHeight, Height: @TownPlotRowHeight, Right: 10);
+
+      ItemGrid #PlotTokenSlot {
+        Anchor: (Width: @TownPlotRowHeight, Height: @TownPlotRowHeight);
+        SlotsPerRow: 1;
+        Style: (
+          SlotSize: @TownPlotRowHeight,
+          SlotIconSize: @TownPlotRowHeight,
+          SlotSpacing: 0,
+          SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+        );
+      }
     }
 
-    Label #PlotCoords {
-      Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, FontSize: 13, Wrap: true);
-      Anchor: (Bottom: 4);
-      Text: "";
-    }
+    Group {
+      LayoutMode: Top;
+      FlexWeight: 1;
+      Anchor: (Vertical: 0);
 
-    Label #PlotStatus {
-      Style: (...$C.@DefaultLabelStyle, TextColor: #b8c0cc, FontSize: 12, Wrap: true);
-      Text: "";
+      Label #PlotTitle {
+        Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2, FontSize: 15, Wrap: true);
+        Anchor: (Bottom: 4);
+        Text: "";
+      }
+
+      Label #PlotCoords {
+        Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, FontSize: 13, Wrap: true);
+        Anchor: (Bottom: 4);
+        Text: "";
+      }
+
+      Label #PlotStatus {
+        Style: (...$C.@DefaultLabelStyle, TextColor: #b8c0cc, FontSize: 12, Wrap: true);
+        Text: "";
+      }
     }
   }
 
   Group {
     LayoutMode: Left;
-    Anchor: (Width: 88, Height: @TownPlotRowHeight, Left: 6);
+    Anchor: (Width: 132, Height: @TownPlotRowHeight, Left: 6);
+
+    TextButton #LocatePlot {
+      Style: @LocatePlotStyle;
+      TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+      Anchor: (Width: 40, Height: 40, Right: 4);
+      Padding: (Full: 0);
+      Text: ".";
+      TooltipText: "";
+    }
+
+    TextButton #LocatePlotActive {
+      Style: @LocatePlotActiveStyle;
+      TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+      Anchor: (Width: 40, Height: 40, Right: 4);
+      Padding: (Full: 0);
+      Text: ".";
+      TooltipText: "";
+      Visible: false;
+    }
 
     TextButton #RepairPlot {
       Style: @HammerRepairStyle;
