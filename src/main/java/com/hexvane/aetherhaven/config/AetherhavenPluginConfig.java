@@ -18,6 +18,9 @@ import javax.annotation.Nonnull;
  * options appear without discarding existing settings.
  */
 public final class AetherhavenPluginConfig {
+    /** Hunger points (0..100) drained per second at full rate; energy/fun use lower multipliers in {@link VillagerNeedsDecaySystem}. */
+    public static final float DEFAULT_VILLAGER_NEEDS_DECAY_PER_SECOND = 0.0525f;
+
     public static final BuilderCodec<AetherhavenPluginConfig> CODEC = BuilderCodec.builder(AetherhavenPluginConfig.class, AetherhavenPluginConfig::new)
         .append(
             new KeyedCodec<>("ConstructionBlocksPerTick", Codec.INTEGER),
@@ -116,7 +119,7 @@ public final class AetherhavenPluginConfig {
         )
         .documentation(
             "Hunger points (0..100 scale) removed per second of game time at full rate; energy/fun use slightly lower "
-                + "multipliers. Default 0.07 (~24 min from 100 to 0 for hunger). Config values below 0.002 are assumed "
+                + "multipliers. Default 0.0525 (~32 min from 100 to 0 for hunger). Config values below 0.002 are assumed "
                 + "to be legacy 0..1-scale rates and are multiplied by 100. Values >= 20 are capped to the default."
         )
         .add()
@@ -634,7 +637,7 @@ public final class AetherhavenPluginConfig {
     private boolean territoryExpansionClaimLimitEnabled = false;
     private int maxTerritoryExpansionClaimBlocks = 0;
     /** Hunger points (0..100 scale) drained per second of game time; energy/fun use lower multipliers in code. */
-    private float villagerNeedsDecayPerSecond = 0.07f;
+    private float villagerNeedsDecayPerSecond = DEFAULT_VILLAGER_NEEDS_DECAY_PER_SECOND;
 
     /** Inclusive start hour for the daily morning inn refresh (game clock, {@link com.hypixel.hytale.server.core.modules.time.WorldTimeResource}). */
     private int innPoolMorningStartHour = 5;
@@ -815,12 +818,13 @@ public final class AetherhavenPluginConfig {
     }
 
     public float getVillagerNeedsDecayPerSecond() {
-        float v = villagerNeedsDecayPerSecond > 0f ? villagerNeedsDecayPerSecond : 0.07f;
+        float v =
+            villagerNeedsDecayPerSecond > 0f ? villagerNeedsDecayPerSecond : DEFAULT_VILLAGER_NEEDS_DECAY_PER_SECOND;
         if (v > 0f && v < 0.002f) {
             v *= 100f;
         }
         if (v >= 20f) {
-            return 0.07f;
+            return DEFAULT_VILLAGER_NEEDS_DECAY_PER_SECOND;
         }
         return v;
     }

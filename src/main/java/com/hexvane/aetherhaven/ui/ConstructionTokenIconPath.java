@@ -2,8 +2,11 @@ package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.community.CommunityIconDownload;
+import com.hexvane.aetherhaven.community.CommunityIconRegistry;
 import com.hexvane.aetherhaven.community.CommunityPaths;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import java.nio.file.Files;
@@ -58,12 +61,33 @@ public final class ConstructionTokenIconPath {
         return CustomBuildingsPaths.iconAssetPath(id);
     }
 
+    /**
+     * Registers a runtime plot-creator or community PNG into the common-asset registry when present on disk.
+     * Safe to call before journal ItemGrid slots render.
+     */
+    public static void registerRuntimeIconIfPresent(@Nonnull AetherhavenPlugin plugin, @Nonnull String constructionId) {
+        String id = constructionId.trim();
+        if (id.isEmpty()) {
+            return;
+        }
+        Path iconFile = resolveRuntimeIconFile(plugin.getDataDirectory(), id);
+        if (iconFile == null) {
+            return;
+        }
+        Path communityDir = CommunityPaths.iconsDirectory(plugin.getDataDirectory()).normalize();
+        if (iconFile.normalize().startsWith(communityDir)) {
+            CommunityIconRegistry.registerIconFile(plugin, iconFile);
+        } else {
+            CustomBuildingIconAssetRegistry.registerIconFile(plugin, iconFile);
+        }
+    }
+
     private static boolean hasRuntimeIconFile(@Nullable Path dataDirectory, @Nonnull String constructionId) {
         return resolveRuntimeIconFile(dataDirectory, constructionId) != null;
     }
 
     @Nullable
-    private static Path resolveRuntimeIconFile(@Nullable Path dataDirectory, @Nonnull String constructionId) {
+    static Path resolveRuntimeIconFile(@Nullable Path dataDirectory, @Nonnull String constructionId) {
         if (dataDirectory == null) {
             return null;
         }
@@ -94,15 +118,12 @@ public final class ConstructionTokenIconPath {
                 return isIconAvailable(def, dataDirectory);
             }
         }
-        if (hasRuntimeIconFile(dataDirectory, id)) {
-            return true;
-        }
-        return hasBundledTokenIcon(id);
+        return isRuntimeIconClientSafe(id, dataDirectory, plugin) || hasBundledTokenIcon(id);
     }
 
     public static boolean isIconAvailable(@Nonnull ConstructionDefinition def, @Nullable Path dataDirectory) {
         String id = def.getId().trim();
-        if (hasRuntimeIconFile(dataDirectory, id)) {
+        if (isRuntimeIconClientSafe(id, dataDirectory, AetherhavenPlugin.get())) {
             return true;
         }
         String tokenItemId = def.getPlotTokenItemId();
@@ -112,6 +133,20 @@ public final class ConstructionTokenIconPath {
             return Item.getAssetMap().getAsset(tokenItemId.trim()) != null;
         }
         return hasBundledTokenIcon(id);
+    }
+
+    private static boolean isRuntimeIconClientSafe(
+        @Nonnull String constructionId,
+        @Nullable Path dataDirectory,
+        @Nullable AetherhavenPlugin plugin
+    ) {
+        if (!hasRuntimeIconFile(dataDirectory, constructionId)) {
+            return false;
+        }
+        if (plugin != null) {
+            registerRuntimeIconIfPresent(plugin, constructionId);
+        }
+        return CommunityIconDownload.isRegistered(CustomBuildingsPaths.iconAssetPath(constructionId));
     }
 
     /** Unified plot token default icon from {@link AetherhavenConstants#PLOT_TOKEN_UNIFIED}. */

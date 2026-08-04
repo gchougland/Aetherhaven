@@ -35,8 +35,7 @@ import com.hexvane.aetherhaven.rts.RtsPickTuning;
 import com.hexvane.aetherhaven.rts.RtsScreenPickUtil;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleDefinition;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleResolver;
-import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
-import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
+import com.hexvane.aetherhaven.plot.ConstructionFavoritesService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintChunkUtil;
 import com.hexvane.aetherhaven.town.PlotInstance;
@@ -1187,6 +1186,16 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             plots.add(p);
         }
         plots.sort((a, b) -> compareJournalPlots(plotCatalog, a, b));
+        List<String> communityPlotIconIds = new ArrayList<>();
+        for (PlotInstance plot : plots) {
+            String constructionId = plot.getConstructionId();
+            if (constructionId != null && ConstructionFavoritesService.isCommunityBuildingId(constructionId)) {
+                communityPlotIconIds.add(constructionId.trim());
+            }
+        }
+        if (!communityPlotIconIds.isEmpty()) {
+            plugin.getCommunityCatalogService().ensureIconsForIds(communityPlotIconIds);
+        }
         boolean canRemovePlots = town.playerCanRemovePlots(uc.getUuid());
         boolean canRepairPlots = town.playerCanManageConstructions(uc.getUuid());
         java.util.Set<String> plotIconsEnsured = new java.util.HashSet<>();
@@ -1204,7 +1213,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             );
             String constructionId = p.getConstructionId();
             if (constructionId != null && plotIconsEnsured.add(constructionId.trim())) {
-                ensurePlotTokenIconRegistered(plugin, constructionId);
+                ConstructionTokenIconPath.registerRuntimeIconIfPresent(plugin, constructionId);
             }
             ItemGridSlot tokenSlot = AetherhavenUiItemGrids.plotTokenSlotForConstruction(p.getConstructionId(), plotCatalog);
             if (tokenSlot != null) {
@@ -1301,18 +1310,6 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         commandBuilder.set("#TownSplit.Visible", false);
         commandBuilder.clear(TOWN_VILLAGER_ROWS);
         commandBuilder.clear(TOWN_PLOT_ROWS);
-    }
-
-    /** Registers runtime plot-creator PNGs so the client receives icons before journal ItemGrid slots render. */
-    private static void ensurePlotTokenIconRegistered(@Nonnull AetherhavenPlugin plugin, @Nonnull String constructionId) {
-        String id = constructionId.trim();
-        if (id.isEmpty()) {
-            return;
-        }
-        Path iconFile = CustomBuildingsPaths.iconFile(plugin.getDataDirectory(), id);
-        if (Files.isRegularFile(iconFile)) {
-            CustomBuildingIconAssetRegistry.registerIconFile(plugin, iconFile);
-        }
     }
 
     @Nonnull
@@ -1710,7 +1707,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             commandBuilder.set(block + " #Section.Visible", showSectionTitle);
             ItemGridSlot[] gridSlots = new ItemGridSlot[n];
             for (int i = 0; i < n; i++) {
-                gridSlots[i] = new ItemGridSlot(new ItemStack(sorted.get(off + i), 1));
+                ItemGridSlot slot = AetherhavenUiItemGrids.slotForKnownItem(sorted.get(off + i), 1);
+                gridSlots[i] = slot != null ? slot : new ItemGridSlot();
             }
             AetherhavenUiItemGrids.setSlots(commandBuilder, block + " #IconGrid", gridSlots);
             bi++;
@@ -2020,9 +2018,10 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
 
         if (hasItem) {
             commandBuilder.set("#RewardRow.Visible", true);
+            ItemGridSlot rewardSlot = AetherhavenUiItemGrids.slotForKnownItem(itemRw.itemId(), itemRw.count());
             commandBuilder.set(
                 "#RewardSlot.Slots",
-                new ItemGridSlot[]{new ItemGridSlot(new ItemStack(itemRw.itemId(), itemRw.count()))}
+                new ItemGridSlot[]{rewardSlot != null ? rewardSlot : new ItemGridSlot()}
             );
             commandBuilder.set("#RewardQuantity.TextSpans", Message.raw(String.valueOf(itemRw.count())));
             Item assetItem = Item.getAssetMap().getAsset(itemRw.itemId());

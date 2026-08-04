@@ -13,6 +13,7 @@ import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.asset.common.CommonAsset;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -46,6 +48,8 @@ public final class CommunityCatalogService {
     private volatile long lastFetchAttemptMs;
     private volatile boolean lastFetchIncludedPlayerContext;
     private final AtomicInteger iconFetchSerial = new AtomicInteger();
+    /** Installed community buildings whose manifest icon is missing or not client-registered. */
+    private final Set<String> incompleteIconInstalls = ConcurrentHashMap.newKeySet();
     private final ExecutorService iconExecutor =
         Executors.newFixedThreadPool(
             ICON_DOWNLOAD_PARALLELISM,
@@ -116,12 +120,95 @@ public final class CommunityCatalogService {
         return CommunityPaths.isInstalled(plugin.getDataDirectory(), constructionId);
     }
 
+    /** True when building JSON exists and any required manifest icon is on disk and registered. */
+    public boolean isInstallComplete(@Nonnull String constructionId) {
+        if (!isInstalled(constructionId)) {
+            return false;
+        }
+        if (incompleteIconInstalls.contains(constructionId.trim().toLowerCase(Locale.ROOT))) {
+            return false;
+        }
+        CommunityManifestEntry entry = findEntry(constructionId);
+        return CommunityIconDownload.isIconCompleteOnDisk(plugin, constructionId, entry);
+    }
+
+    public boolean hasIncompleteIconInstall(@Nonnull String constructionId) {
+        String id = constructionId.trim().toLowerCase(Locale.ROOT);
+        if (incompleteIconInstalls.contains(id)) {
+            return true;
+        }
+        if (!isInstalled(constructionId)) {
+            return false;
+        }
+        CommunityManifestEntry entry = findEntry(constructionId);
+        if (entry == null || !CommunityIconDownload.iconRequired(entry)) {
+            return false;
+        }
+        return !CommunityIconDownload.isIconCompleteOnDisk(plugin, constructionId, entry);
+    }
+
+    public void markIconComplete(@Nonnull String constructionId) {
+        incompleteIconInstalls.remove(constructionId.trim().toLowerCase(Locale.ROOT));
+    }
+
+    public void markIconIncomplete(@Nonnull String constructionId) {
+        incompleteIconInstalls.add(constructionId.trim().toLowerCase(Locale.ROOT));
+    }
+
     public boolean hasUpdateAvailable(@Nonnull String constructionId) {
+        if (hasIncompleteIconInstall(constructionId)) {
+            return true;
+        }
         CommunityManifestEntry entry = findEntry(constructionId);
         if (entry == null) {
             return false;
         }
         return CommunityInstallVersion.hasUpdate(plugin.getDataDirectory(), entry);
+    }
+
+    /**
+     * Scans installed community buildings and retries missing icons. Marks installs incomplete when repair fails.
+     * Call after catalog reload / icon sync.
+     */
+    public void repairMissingIconsForInstalledBuildings() {
+        Path buildingsDir = CommunityPaths.buildingsDirectory(plugin.getDataDirectory());
+        if (!Files.isDirectory(buildingsDir)) {
+            return;
+        }
+        List<String> stillBroken = new ArrayList<>();
+        try (var stream = Files.list(buildingsDir)) {
+            for (Path p : stream.filter(Files::isRegularFile).filter(f -> f.toString().endsWith(".json")).toList()) {
+                String fileName = p.getFileName().toString();
+                if (!fileName.endsWith(".json")) {
+                    continue;
+                }
+                String constructionId = fileName.substring(0, fileName.length() - 5);
+                CommunityManifestEntry entry = findEntry(constructionId);
+                if (entry == null || !CommunityIconDownload.iconRequired(entry)) {
+                    markIconComplete(constructionId);
+                    continue;
+                }
+                if (CommunityIconDownload.isIconCompleteOnDisk(plugin, constructionId, entry)) {
+                    markIconComplete(constructionId);
+                    continue;
+                }
+                if (CommunityIconDownload.ensureIconComplete(plugin, entry)) {
+                    markIconComplete(constructionId);
+                } else {
+                    markIconIncomplete(constructionId);
+                    stillBroken.add(constructionId);
+                }
+            }
+        } catch (IOException e) {
+            LOGGER.atWarning().withCause(e).log("Failed to scan community buildings for icon repair");
+        }
+        if (!stillBroken.isEmpty()) {
+            LOGGER.atWarning().log(
+                "Community building icon repair incomplete for %s install(s): %s",
+                stillBroken.size(),
+                stillBroken
+            );
+        }
     }
 
     /** Refreshes manifest if stale; does not download icons (call {@link #ensureIconsForIds} for the visible page). */
@@ -281,26 +368,15 @@ public final class CommunityCatalogService {
 
     @Nullable
     private Path downloadIconToDisk(@Nonnull CommunityManifestEntry entry) {
-        Path iconFile = CommunityPaths.iconFile(plugin.getDataDirectory(), entry.getId());
-        String iconUrl = entry.getIconUrl();
-        if (iconUrl == null || iconUrl.isBlank()) {
-            LOGGER.atWarning().log("Community entry %s has no icon URL in manifest", entry.getId());
-            return null;
+        CommunityIconDownload.Result result =
+            CommunityIconDownload.downloadRegisterAndValidate(plugin, entry, true);
+        if (result == CommunityIconDownload.Result.SUCCESS) {
+            return CommunityPaths.iconFile(plugin.getDataDirectory(), entry.getId());
         }
-        String absolute = resolveUrl(iconUrl);
-        byte[] png = CommunityHttpClient.getBytes(absolute);
-        if (png == null || png.length == 0) {
-            LOGGER.atWarning().log("Community icon download failed for %s from %s", entry.getId(), absolute);
-            return null;
+        if (CommunityIconDownload.iconRequired(entry)) {
+            LOGGER.atWarning().log("Community icon thumbnail download failed for %s: %s", entry.getId(), result);
         }
-        try {
-            Files.createDirectories(iconFile.getParent());
-            Files.write(iconFile, png);
-            return iconFile;
-        } catch (Exception e) {
-            LOGGER.atWarning().withCause(e).log("Failed to cache community icon for %s", entry.getId());
-            return null;
-        }
+        return null;
     }
 
     /** True when the cached PNG is older than the last successful manifest fetch (e.g. was a cover screenshot). */

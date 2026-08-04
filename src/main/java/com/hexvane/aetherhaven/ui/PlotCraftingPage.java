@@ -342,6 +342,8 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         int variantDisplayIndex = selectedVariantIndex(selectedGroup);
         Player player = store.getComponent(ref, Player.getComponentType());
         boolean installed = variant != null && communityCatalog.isInstalled(variant.constructionId());
+        boolean installComplete =
+            variant != null && (!communityTab || communityCatalog.isInstallComplete(variant.constructionId()));
         boolean updateAvailable =
             installed
                 && variant != null
@@ -576,7 +578,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             !moderationTab
                 && !marketplaceLoading
                 && variant != null
-                && (!communityTab || installed);
+                && (!communityTab || installComplete);
 
         if (variantLocked && hasVariant) {
             commandBuilder.set(
@@ -1584,6 +1586,16 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                         }
                         if (result == CommunityDownloadService.InstallResult.MISSING_MODS) {
                             notifyMissingRequiredMods(pr, entry.getRequiredMods());
+                        } else if (result == CommunityDownloadService.InstallResult.ICON_FAILED) {
+                            NotificationUtil.sendNotification(
+                                pr.getPacketHandler(),
+                                Message.translation(
+                                    forceRefresh
+                                        ? "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.iconUpdateFailed"
+                                        : "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.iconDownloadFailed"
+                                ),
+                                NotificationStyle.Danger
+                            );
                         } else if (result != CommunityDownloadService.InstallResult.SUCCESS) {
                             NotificationUtil.sendNotification(
                                 pr.getPacketHandler(),

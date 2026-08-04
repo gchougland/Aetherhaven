@@ -1,15 +1,10 @@
 package com.hexvane.aetherhaven.community;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
-import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
-import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.server.core.asset.common.CommonAsset;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -26,7 +21,8 @@ public final class CommunityDownloadService {
         DOWNLOAD_FAILED,
         IO_ERROR,
         MISSING_MODS,
-        UNSAFE_PREFAB
+        UNSAFE_PREFAB,
+        ICON_FAILED
     }
 
     @Nonnull
@@ -46,6 +42,10 @@ public final class CommunityDownloadService {
         String id = entry.getId();
         Path dataDir = plugin.getDataDirectory();
         CommunityCatalogService catalog = plugin.getCommunityCatalogService();
+
+        boolean wrotePrefabThisAttempt = false;
+        boolean wroteBuildingThisAttempt = false;
+        boolean wroteIconThisAttempt = false;
 
         try {
             Files.createDirectories(CommunityPaths.buildingsDirectory(dataDir));
@@ -75,11 +75,14 @@ public final class CommunityDownloadService {
                     return InstallResult.UNSAFE_PREFAB;
                 }
                 Files.write(installedPrefab, prefab);
+                wrotePrefabThisAttempt = true;
             }
             CommunityPrefabSafety.Result installedSafety =
                 CommunityPrefabSafety.validate(Files.readAllBytes(installedPrefab));
             if (!installedSafety.isSafe()) {
-                Files.deleteIfExists(installedPrefab);
+                if (wrotePrefabThisAttempt) {
+                    Files.deleteIfExists(installedPrefab);
+                }
                 LOGGER.atWarning().log("Refused unsafe installed community prefab %s: %s", id, installedSafety.detail());
                 return InstallResult.UNSAFE_PREFAB;
             }
@@ -88,40 +91,51 @@ public final class CommunityDownloadService {
             if (forceRefresh || !Files.isRegularFile(buildingFile)) {
                 String buildingUrl = entry.getBuildingUrl();
                 if (buildingUrl == null || buildingUrl.isBlank()) {
+                    rollbackFreshInstall(dataDir, id, wrotePrefabThisAttempt, false, false);
                     return InstallResult.NOT_FOUND;
                 }
                 String buildingJson = CommunityHttpClient.getString(catalog.resolveUrl(buildingUrl));
                 if (buildingJson == null || buildingJson.isBlank()) {
+                    rollbackFreshInstall(dataDir, id, wrotePrefabThisAttempt, false, false);
                     return InstallResult.DOWNLOAD_FAILED;
                 }
                 Files.writeString(buildingFile, buildingJson);
+                wroteBuildingThisAttempt = true;
             }
-            // Prefab is stored as {id}.prefab.json; rewrite creator-local prefabPath to match.
             CommunityBuildingJsonNormalizer.normalizeInstalledBuildingFile(buildingFile, id);
 
-            Path iconFile = CommunityPaths.iconFile(dataDir, id);
-            if (forceRefresh || !Files.isRegularFile(iconFile)) {
-                String iconUrl = entry.getIconUrl();
-                if (iconUrl != null && !iconUrl.isBlank()) {
-                    byte[] icon = CommunityHttpClient.getBytes(catalog.resolveUrl(iconUrl));
-                    if (icon != null && icon.length > 0) {
-                        Files.write(iconFile, icon);
+            boolean iconRequired = CommunityIconDownload.iconRequired(entry);
+            if (iconRequired) {
+                Path iconFile = CommunityPaths.iconFile(dataDir, id);
+                boolean hadIconBefore = Files.isRegularFile(iconFile);
+                CommunityIconDownload.Result iconResult =
+                    CommunityIconDownload.downloadRegisterAndValidate(plugin, entry, forceRefresh || !hadIconBefore);
+                wroteIconThisAttempt =
+                    iconResult == CommunityIconDownload.Result.SUCCESS
+                        && Files.isRegularFile(iconFile)
+                        && (forceRefresh || !hadIconBefore);
+                if (iconResult != CommunityIconDownload.Result.SUCCESS
+                    && iconResult != CommunityIconDownload.Result.NOT_REQUIRED) {
+                    LOGGER.atWarning().log(
+                        "Community icon install failed for %s: %s",
+                        id,
+                        iconResult
+                    );
+                    if (!forceRefresh) {
+                        rollbackFreshInstall(
+                            dataDir,
+                            id,
+                            wrotePrefabThisAttempt,
+                            wroteBuildingThisAttempt,
+                            wroteIconThisAttempt
+                        );
                     }
-                }
-            }
-            if (Files.isRegularFile(iconFile)) {
-                CommonAsset asset = CommunityIconRegistry.registerIconFileNoSend(plugin, iconFile, forceRefresh);
-                CustomBuildingIconAssetRegistry.registerIconFileNoSend(plugin, iconFile, forceRefresh);
-                if (asset != null) {
-                    CommunityIconRegistry.broadcastAssets(List.of(asset));
-                    String constructionId = CustomBuildingsPaths.constructionIdFromIconFileName(iconFile.getFileName().toString());
-                    if (constructionId != null) {
-                        PlotTokenIconSync.afterIconRegistered(plugin, constructionId);
-                    }
+                    return InstallResult.ICON_FAILED;
                 }
             }
 
             CommunityInstallVersion.writeInstalledVersion(dataDir, id, entry.getVersion());
+            plugin.getCommunityCatalogService().markIconComplete(id);
             plugin.reloadConfigsAndAssetCatalogs();
             if (!forceRefresh) {
                 reportInstall(plugin, id);
@@ -129,8 +143,37 @@ public final class CommunityDownloadService {
             LOGGER.atInfo().log(forceRefresh ? "Updated community building %s" : "Installed community building %s", id);
             return InstallResult.SUCCESS;
         } catch (IOException e) {
+            rollbackFreshInstall(
+                dataDir,
+                id,
+                wrotePrefabThisAttempt,
+                wroteBuildingThisAttempt,
+                wroteIconThisAttempt
+            );
             LOGGER.atWarning().withCause(e).log("Failed to install community building %s", id);
             return InstallResult.IO_ERROR;
+        }
+    }
+
+    private static void rollbackFreshInstall(
+        @Nonnull Path dataDir,
+        @Nonnull String constructionId,
+        boolean wrotePrefab,
+        boolean wroteBuilding,
+        boolean wroteIcon
+    ) {
+        try {
+            if (wroteIcon) {
+                Files.deleteIfExists(CommunityPaths.iconFile(dataDir, constructionId));
+            }
+            if (wroteBuilding) {
+                Files.deleteIfExists(CommunityPaths.buildingFile(dataDir, constructionId));
+            }
+            if (wrotePrefab) {
+                Files.deleteIfExists(CommunityPaths.installedPrefabFile(dataDir, constructionId));
+            }
+        } catch (IOException e) {
+            LOGGER.atWarning().withCause(e).log("Failed to roll back partial community install for %s", constructionId);
         }
     }
 
@@ -156,6 +199,7 @@ public final class CommunityDownloadService {
             Files.deleteIfExists(CommunityPaths.installedPrefabFile(dataDir, constructionId));
             CommunityInstallVersion.deleteInstalledVersion(dataDir, constructionId);
             CommunityPreviewCache.get().clearEntryPreview(plugin, constructionId);
+            plugin.getCommunityCatalogService().markIconComplete(constructionId);
             plugin.reloadConfigsAndAssetCatalogs();
             return InstallResult.SUCCESS;
         } catch (IOException e) {

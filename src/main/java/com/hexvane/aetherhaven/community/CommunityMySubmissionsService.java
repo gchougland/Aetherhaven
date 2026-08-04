@@ -203,6 +203,7 @@ public final class CommunityMySubmissionsService {
             case IO_ERROR -> "io_error";
             case MISSING_MODS -> "missing_mods";
             case UNSAFE_PREFAB -> "unsafe_prefab";
+            case ICON_FAILED -> "icon_failed";
         };
     }
 

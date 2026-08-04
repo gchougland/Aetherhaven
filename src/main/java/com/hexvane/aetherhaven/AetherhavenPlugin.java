@@ -519,6 +519,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         );
         CustomBuildingIconAssetRegistry.syncFromDataDirectory(this);
         CommunityIconRegistry.syncFromCommunityDirectory(this);
+        this.communityCatalogService.repairMissingIconsForInstalledBuildings();
     }
 
     public void registerJewelryNativeTooltipHooks() {

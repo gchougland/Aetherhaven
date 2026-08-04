@@ -217,11 +217,11 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (autonomy == null) {
             autonomy = VillagerAutonomyState.fresh(now);
             commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
-            applyAutonomyDebugOverlay(ref, store, commandBuffer, npc, autonomy);
+            applyAutonomyDebugOverlay(ref, store, commandBuffer, npc, needs, autonomy);
             return;
         }
 
-        applyAutonomyDebugOverlay(ref, store, commandBuffer, npc, autonomy);
+        applyAutonomyDebugOverlay(ref, store, commandBuffer, npc, needs, autonomy);
 
         MountedComponent mounted = store.getComponent(ref, MountedComponent.getComponentType());
         if (mounted != null && mounted.getControllerType() == MountController.BlockMount) {
@@ -247,7 +247,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             case VillagerAutonomyState.PHASE_USE ->
                 tickUse(ref, store, commandBuffer, npc, reg, needs, autonomy, now, townRecord, binding, world);
             case VillagerAutonomyState.PHASE_TRAVEL ->
-                tickTravel(ref, store, commandBuffer, npc, reg, autonomy, now, townRecord);
+                tickTravel(ref, store, commandBuffer, npc, reg, needs, autonomy, now, townRecord);
             default ->
                 tickIdle(
                     ref,
@@ -328,6 +328,12 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         )) {
             return;
         }
+        // Hunger meals bypass nextDecisionEpochMs (same as feast gather) so work shifts interrupt immediately.
+        if (tryBeginNextHungerMeal(
+            ref, store, commandBuffer, world, npc, reg, pois, needs, binding, autonomy, now, plugin, townRecord, tc, daytime
+        )) {
+            return;
+        }
         // Do not commute back to the schedule plot while seeking food; that was yanking villagers off
         // restaurant chairs before they could chain another meal.
         if (!PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger(), daytime)
@@ -337,11 +343,6 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return;
         }
         if (now < autonomy.getNextDecisionEpochMs()) {
-            return;
-        }
-        if (tryBeginNextHungerMeal(
-            ref, store, commandBuffer, world, npc, reg, pois, needs, binding, autonomy, now, plugin, townRecord, tc, daytime
-        )) {
             return;
         }
         Map<String, Integer> cellOcc = PoiOccupancy.cellOccupancyForTown(world, binding.getTownId(), store, reg);
@@ -727,6 +728,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull NPCEntity npc,
         @Nonnull PoiRegistry reg,
+        @Nonnull VillagerNeeds needs,
         @Nonnull VillagerAutonomyState autonomy,
         long now,
         @Nullable TownRecord townRecord
@@ -748,6 +750,16 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         }
 
         PoiEntry poiEarly = poiId != null ? reg.get(poiId) : null;
+        boolean daytime = ShopSpotOpenService.isGameDay(store);
+        // Redirect non-eat travel when hunger drops during a work shift or commute.
+        if (daytime
+            && poiEarly != null
+            && !PoiScoring.isEatPoi(poiEarly)
+            && PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger(), daytime)) {
+            autonomy.setFillingHunger(true);
+            failTravel(autonomy, now, "HUNGRY", commandBuffer, ref, npc);
+            return;
+        }
         // Dawn quest-board posts preempt schedule commute / POI wander (not feast gather).
         if (isQuestBoardPosterDue(ref, store, townRecord, now)
             && !isQuestBoardPoi(poiEarly)
@@ -1323,6 +1335,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull NPCEntity npc,
+        @Nonnull VillagerNeeds needs,
         @Nonnull VillagerAutonomyState autonomy
     ) {
         if (npc.getRole() == null) {
@@ -1335,6 +1348,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return;
         }
         VillagerAutonomyDebug.ensureAutonomyDebugRoleFlags(npc);
+        boolean daytime = ShopSpotOpenService.isGameDay(store);
         StringBuilder sb = new StringBuilder();
         sb.append("AH ");
         sb.append(switch (autonomy.getPhase()) {
@@ -1349,6 +1363,12 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         }
         if (!autonomy.getPathFailureReason().isEmpty()) {
             sb.append(" FAIL:").append(autonomy.getPathFailureReason());
+        }
+        if (autonomy.getPhase() == VillagerAutonomyState.PHASE_IDLE
+            && tgtPoi == null
+            && daytime
+            && PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger(), daytime)) {
+            sb.append(autonomy.isFillingHunger() ? " NO_EAT" : " HUNGRY");
         }
         Vector3d leash = npc.getLeashPoint();
         sb.append(" L:").append((int) leash.x).append(',').append((int) leash.z);
