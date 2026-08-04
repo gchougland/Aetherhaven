@@ -1,4 +1,4 @@
-﻿{
+{
   "id": "plot_jimmys_school",
   "displayName": "Jimmy's School",
   "description": "By Jimmy G",
@@ -13,7 +13,6 @@
   "selfBuildGameDays": 1.0,
   "treasuryGoldCoinCost": 40,
   "plotTokenLockedByDefault": true,
-  "floatingGiftBlueprint": true,
   "materials": [
     {
       "resourceTypeId": "Wood_All",

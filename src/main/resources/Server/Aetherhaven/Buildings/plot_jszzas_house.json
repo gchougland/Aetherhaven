@@ -81,7 +81,6 @@
   ],
   "countsAsConstructionId": "plot_house",
   "plotTokenLockedByDefault": true,
-  "floatingGiftBlueprint": true,
   "styleId": "jszza",
   "maxHomeResidents": 1
 }

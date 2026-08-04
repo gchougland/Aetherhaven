@@ -1,4 +1,4 @@
-﻿{
+{
   "id": "plot_hytinys_starter_base",
   "displayName": "Hytiny's Starter Base",
   "description": "By Hytiny",
@@ -75,7 +75,6 @@
     "player"
   ],
   "plotTokenLockedByDefault": true,
-  "floatingGiftBlueprint": true,
   "excludeFromTownJournal": true,
   "decorationPlot": true,
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_hytinys_starter_base.displayName",

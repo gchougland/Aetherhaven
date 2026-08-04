@@ -1,4 +1,4 @@
-﻿{
+{
   "id": "plot_hytinys_redwood_cottage",
   "displayName": "Hytiny's Redwood Cottage",
   "description": "By HytinyBuilds",
@@ -66,7 +66,6 @@
     "decoration"
   ],
   "plotTokenLockedByDefault": true,
-  "floatingGiftBlueprint": true,
   "excludeFromTownJournal": true,
   "decorationPlot": true,
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_hytinys_redwood_cottage.displayName",

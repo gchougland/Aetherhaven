@@ -283,8 +283,6 @@ aetherhaven.plotcreator.field.touristDestination = Visitors may stop here
 aetherhaven.plotcreator.field.touristDestination.hint = When on, portal visitors may walk to this building during the day.
 aetherhaven.plotcreator.field.plotTokenLocked = Plot token locked by default
 aetherhaven.plotcreator.field.plotTokenLocked.hint = When on, players must spend an unlock point at the plot crafting bench before they can craft plot tokens for this building.
-aetherhaven.plotcreator.field.floatingGiftBlueprint = Balloon plot blueprint
-aetherhaven.plotcreator.field.floatingGiftBlueprint.hint = When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
 aetherhaven.plotcreator.field.styleId = Style
 aetherhaven.plotcreator.field.styleId.hint = Any name you like
 

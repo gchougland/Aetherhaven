@@ -23,7 +23,7 @@ public final class LootChestPlotBlueprintLoot {
             if (def == null || id == null || id.isBlank()) {
                 continue;
             }
-            if (PlotTokenUnlockService.requiresUnlock(def) || def.isFloatingGiftBlueprint()) {
+            if (PlotTokenUnlockService.requiresUnlock(def)) {
                 ids.add(id.trim());
             }
         }

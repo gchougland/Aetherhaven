@@ -3,6 +3,9 @@ package com.hexvane.aetherhaven.ui;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.plot.PlotTokenInventory;
+import com.hexvane.aetherhaven.plot.PlotTokenPlacementOption;
+import com.hexvane.aetherhaven.placement.PlotPlacementSessionFactory;
+import com.hexvane.aetherhaven.placement.PlotPlacementSnapUtil;
 import com.hexvane.aetherhaven.quest.QuestProgressionService;
 import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementCommit;
@@ -54,6 +57,7 @@ import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.modules.i18n.I18nModule;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.nio.file.Path;
@@ -88,9 +92,14 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
     private Vector3i lastPreviewOriginFloored;
     private boolean clientPrefabPreviewActive;
 
+    /** Selected plot type dropdown value (construction id or move:plotUuid). */
+    @Nullable
+    private String selectedDropdownValue;
+
     public PlotPlacementPage(@Nonnull PlayerRef playerRef, @Nonnull PlotPlacementSession session) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
         this.session = session;
+        this.selectedDropdownValue = resolveDropdownValueFromSession(session);
     }
 
     /**
@@ -122,6 +131,8 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         commandBuilder.set("#BtnYm.TooltipTextSpans", Message.translation(p + ".moveYmTooltip"));
         commandBuilder.set("#BtnYp.TooltipTextSpans", Message.translation(p + ".moveYpTooltip"));
         commandBuilder.set("#BtnRotate.TooltipTextSpans", Message.translation(p + ".rotateTooltip"));
+        commandBuilder.set("#SnapToLocationButton.TextSpans", Message.translation(p + ".snapToLocation"));
+        commandBuilder.set("#SnapToLocationButton.TooltipTextSpans", Message.translation(p + ".snapToLocationTooltip"));
     }
 
     @Override
@@ -176,23 +187,36 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         } else {
             commandBuilder.set("#PlaceButton.TextSpans", Message.translation(MSG_PLOT_UI + ".place"));
         }
-        if (!moveMode && plugin != null && inv != null) {
-            List<String> validIds = listConstructionIdsWithPlotTokens(plugin, inv);
-            if (!validIds.isEmpty() && !validIds.contains(session.getConstructionId())) {
-                session.setConstructionId(validIds.get(0));
+        // Keep the building picker visible for move tokens; hide it only for shelf Move tab (no token in inventory).
+        boolean showPlotTypeDropdown =
+            plugin != null && inv != null && (!moveMode || session.isMoveViaToken());
+        if (showPlotTypeDropdown) {
+            List<PlotTokenPlacementOption> options = PlotTokenInventory.listPlacementOptions(plugin, inv);
+            if (session.isMoveViaToken() && session.getMovePlotId() != null) {
+                selectedDropdownValue = PlotTokenPlacementOption.MOVE_VALUE_PREFIX + session.getMovePlotId();
+            } else if (!options.isEmpty() && selectedDropdownValue == null) {
+                selectedDropdownValue = options.get(0).getDropdownValue();
+            } else if (
+                selectedDropdownValue != null
+                    && !options.isEmpty()
+                    && options.stream().noneMatch(o -> o.getDropdownValue().equals(selectedDropdownValue))
+            ) {
+                selectedDropdownValue = options.get(0).getDropdownValue();
             }
-            List<DropdownEntryInfo> entries = collectPlotDropdownEntries(plugin, inv);
+            List<DropdownEntryInfo> entries = collectPlotDropdownEntries(plugin, inv, playerRef.getLanguage());
+            showPlotTypeDropdown = !entries.isEmpty();
             commandBuilder.set("#PlotTypeDropdown.Entries", entries);
-            commandBuilder.set("#PlotTypeDropdown.Visible", !entries.isEmpty());
-            commandBuilder.set("#PlotTypeLabel.Visible", !entries.isEmpty());
-            if (!entries.isEmpty()) {
-                commandBuilder.set("#PlotTypeDropdown.Value", session.getConstructionId());
+            commandBuilder.set("#PlotTypeDropdown.Visible", showPlotTypeDropdown);
+            commandBuilder.set("#PlotTypeLabel.Visible", showPlotTypeDropdown);
+            if (showPlotTypeDropdown && selectedDropdownValue != null) {
+                commandBuilder.set("#PlotTypeDropdown.Value", selectedDropdownValue);
             }
         } else {
             commandBuilder.set("#PlotTypeDropdown.Visible", false);
             commandBuilder.set("#PlotTypeLabel.Visible", false);
         }
 
+        bind(eventBuilder, "#SnapToLocationButton", "SnapToLocation");
         bind(eventBuilder, "#BtnXm", "MoveXm");
         bind(eventBuilder, "#BtnXp", "MoveXp");
         bind(eventBuilder, "#BtnZm", "MoveZm");
@@ -287,20 +311,39 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
         if (data.constructionId != null && !data.constructionId.isBlank()) {
-            if (session.isMoveMode()) {
-                scheduleRebuild(ref, store);
-                return;
-            }
             String id = data.constructionId.trim();
+            selectedDropdownValue = id;
             AetherhavenPlugin plugin = AetherhavenPlugin.get();
-            ConstructionDefinition def = plugin != null ? plugin.getConstructionCatalog().get(id) : null;
             Player player = store.getComponent(ref, Player.getComponentType());
             CombinedItemContainer inv =
                 player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
-            if (def == null || inv == null || !PlotTokenInventory.hasPlotToken(inv, def)) {
+            if (plugin == null || inv == null) {
+                scheduleRebuild(ref, store);
+                return;
+            }
+            PlotTokenPlacementOption chosen = findPlacementOption(plugin, inv, id);
+            if (chosen == null) {
                 sendError(store, ref, "You need the matching plot token in your inventory for that building.");
+                scheduleRebuild(ref, store);
+                return;
+            }
+            World world = store.getExternalData().getWorld();
+            if (chosen.isMovePlot()) {
+                PlotPlacementSession moveSession =
+                    PlotPlacementSessionFactory.createFromOption(world, session.getAnchor(), chosen, plugin);
+                if (moveSession == null) {
+                    sendError(store, ref, "That building can no longer be moved.");
+                    scheduleRebuild(ref, store);
+                    return;
+                }
+                session.setConstructionId(moveSession.getConstructionId());
+                session.setMovePlotId(moveSession.getMovePlotId());
+                session.setMoveViaToken(true);
+                session.setRotationSteps(moveSession.getRotationSteps());
             } else {
-                session.setConstructionId(id);
+                session.setConstructionId(chosen.getConstructionId());
+                session.setMovePlotId(null);
+                session.setMoveViaToken(false);
             }
             scheduleRebuild(ref, store);
             return;
@@ -430,6 +473,17 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                     return;
                 }
                 schedulePlace(ref, store);
+                return;
+            }
+            case "SnapToLocation" -> {
+                PlotPlacementSnapUtil.snapSessionToPlayer(session, ref, store);
+                if (birdsEyeEnabled) {
+                    session.clearBirdsEyeSnapshot();
+                    captureBirdsEyeSnapshot(ref, store);
+                    scheduleApplyCameraAndRebuild(ref, store);
+                } else {
+                    scheduleRebuild(ref, store);
+                }
                 return;
             }
             default -> {
@@ -594,7 +648,17 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
             return false;
         }
         if (session.isMoveMode()) {
-            return PlotBuildingRelocation.tryCommit(ref, store, session, uc.getUuid());
+            boolean ok = PlotBuildingRelocation.tryCommit(ref, store, session, uc.getUuid());
+            if (ok && session.isMoveViaToken()) {
+                UUID movePlotId = session.getMovePlotId();
+                Player playerMove = store.getComponent(ref, Player.getComponentType());
+                CombinedItemContainer invMove =
+                    playerMove != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
+                if (movePlotId != null && invMove != null) {
+                    PlotTokenInventory.consumeMoveToken(invMove, movePlotId);
+                }
+            }
+            return ok;
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
@@ -965,39 +1029,62 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         return t == null || t.getMaterial() == BlockMaterial.Empty;
     }
 
-    /**
-     * Catalog order: first construction the player has a plot token for becomes the default when opening placement.
-     */
-    @Nonnull
-    private static List<String> listConstructionIdsWithPlotTokens(
-        @Nonnull AetherhavenPlugin plugin, @Nonnull CombinedItemContainer inv
-    ) {
-        return PlotTokenInventory.listConstructionIdsWithTokens(plugin, inv);
-    }
-
     @Nonnull
     private static List<DropdownEntryInfo> collectPlotDropdownEntries(
-        @Nonnull AetherhavenPlugin plugin, @Nonnull CombinedItemContainer inv
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull CombinedItemContainer inv,
+        @Nullable String language
     ) {
         ObjectArrayList<DropdownEntryInfo> entries = new ObjectArrayList<>();
-        for (String id : listConstructionIdsWithPlotTokens(plugin, inv)) {
-            ConstructionDefinition d = plugin.getConstructionCatalog().get(id);
-            if (d == null) {
+        String moveSuffix = resolveMoveDropdownSuffix(language);
+        for (PlotTokenPlacementOption option : PlotTokenInventory.listPlacementOptions(plugin, inv)) {
+            ConstructionDefinition d = plugin.getConstructionCatalog().get(option.getConstructionId());
+            if (d == null && !option.isMovePlot()) {
                 continue;
             }
-            entries.add(new DropdownEntryInfo(LocalizableString.fromString(d.getDisplayName()), d.getId()));
+            String label = d != null ? d.getDisplayName() : option.getConstructionId();
+            if (option.isMovePlot()) {
+                label = label + moveSuffix;
+            }
+            entries.add(new DropdownEntryInfo(LocalizableString.fromString(label), option.getDropdownValue()));
         }
         return entries;
     }
 
-    @Nullable
-    private static Path resolvePrefabAssetPath(@Nullable String key) {
-        return PrefabResolveUtil.resolvePrefabPath(key);
+    @Nonnull
+    private static String resolveMoveDropdownSuffix(@Nullable String language) {
+        String lang = language != null && !language.isBlank() ? language : "en-US";
+        I18nModule i18n = I18nModule.get();
+        String text =
+            i18n != null
+                ? i18n.getMessage(lang, "aetherhaven_plot_move.aetherhaven.ui.plotplacement.moveDropdownSuffix")
+                : null;
+        if (text == null || text.isBlank()) {
+            return " (move)";
+        }
+        return text;
     }
 
     @Nullable
-    private static IPrefabBuffer resolvePrefabBuffer(@Nullable String key) {
-        return PrefabResolveUtil.resolvePrefabBuffer(key);
+    private static PlotTokenPlacementOption findPlacementOption(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull CombinedItemContainer inv,
+        @Nonnull String dropdownValue
+    ) {
+        for (PlotTokenPlacementOption option : PlotTokenInventory.listPlacementOptions(plugin, inv)) {
+            if (option.getDropdownValue().equals(dropdownValue)) {
+                return option;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private static String resolveDropdownValueFromSession(@Nonnull PlotPlacementSession session) {
+        if (session.isMoveMode() && session.getMovePlotId() != null) {
+            return PlotTokenPlacementOption.MOVE_VALUE_PREFIX + session.getMovePlotId();
+        }
+        return session.getConstructionId();
     }
 
     @Nullable
@@ -1008,8 +1095,18 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
             return null;
         }
         CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
-        List<String> ids = listConstructionIdsWithPlotTokens(plugin, inv);
-        return ids.isEmpty() ? null : ids.get(0);
+        PlotTokenPlacementOption option = PlotTokenInventory.defaultPlacementOption(plugin, inv);
+        return option != null ? option.getConstructionId() : null;
+    }
+
+    @Nullable
+    private static Path resolvePrefabAssetPath(@Nullable String key) {
+        return PrefabResolveUtil.resolvePrefabPath(key);
+    }
+
+    @Nullable
+    private static IPrefabBuffer resolvePrefabBuffer(@Nullable String key) {
+        return PrefabResolveUtil.resolvePrefabBuffer(key);
     }
 
     public static final class PageData {

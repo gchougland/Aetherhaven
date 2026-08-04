@@ -114,6 +114,7 @@ public final class DialogueConditionEvaluator {
             case "world_quest_active" -> worldView.worldQuestActive(playerRef, store, stringOrEmpty(o, "questId"));
             case "world_quest_completed" -> worldView.worldQuestCompleted(playerRef, store, stringOrEmpty(o, "questId"));
             case "town_has_complete_plot" -> worldView.townHasCompletePlot(playerRef, store, stringOrEmpty(o, "constructionId"));
+            case "town_has_building" -> worldView.townHasCompletePlot(playerRef, store, stringOrEmpty(o, "constructionId"));
             case "aetherhaven_has_town" -> worldView.aetherhavenHasTown(playerRef, store);
             case "aetherhaven_player_can_accept_quests" -> worldView.aetherhavenPlayerCanAcceptQuests(playerRef, store);
             case "npc_binding_is_visitor" -> npcBindingIsVisitor(store, npcRef);
@@ -198,6 +199,59 @@ public final class DialogueConditionEvaluator {
             case "bard_is_performing" -> BardPerformanceService.isPerforming(store, npcRef);
             case "npc_following_this_player" -> npcFollowingThisPlayer(playerRef, store, npcRef);
             case "subplugin_enabled" -> subpluginEnabled(o);
+            case "npc_other_villager_nearby" -> worldView.npcOtherVillagerNearby(
+                playerRef,
+                store,
+                npcRef,
+                floatOrDefault(o, "radius", DialogueNpcConditionUtil.DEFAULT_NEARBY_RADIUS),
+                getString(o, "kind")
+            );
+            case "npc_reputation_hearts_at_least" -> worldView.npcReputationHeartsAtLeast(
+                playerRef,
+                store,
+                npcRef,
+                intOrDefault(o, "hearts", 0)
+            );
+            case "npc_reputation_hearts_below" -> worldView.npcReputationHeartsBelow(
+                playerRef,
+                store,
+                npcRef,
+                intOrDefault(o, "hearts", 0)
+            );
+            case "npc_mood_at_least" -> worldView.npcMoodAtLeast(
+                playerRef,
+                store,
+                npcRef,
+                intOrDefault(o, "percent", 0)
+            );
+            case "npc_mood_below" -> worldView.npcMoodBelow(
+                playerRef,
+                store,
+                npcRef,
+                intOrDefault(o, "percent", 0)
+            );
+            case "npc_hunger_at_least" -> worldView.npcHungerAtLeast(
+                playerRef,
+                store,
+                npcRef,
+                intOrDefault(o, "percent", 0)
+            );
+            case "npc_hunger_below" -> worldView.npcHungerBelow(
+                playerRef,
+                store,
+                npcRef,
+                intOrDefault(o, "percent", 0)
+            );
+            case "player_recently_finished_quest_board_quest" -> worldView.playerRecentlyFinishedQuestBoardQuest(
+                playerRef,
+                store,
+                intOrDefault(o, "withinDays", 3)
+            );
+            case "player_recently_failed_quest_board_quest" -> worldView.playerRecentlyFailedQuestBoardQuest(
+                playerRef,
+                store,
+                intOrDefault(o, "withinDays", 3)
+            );
             default -> {
                 LOGGER.atWarning().log("Unknown dialogue condition type: %s", type);
                 yield false;
@@ -217,6 +271,20 @@ public final class DialogueConditionEvaluator {
     private static String stringOrEmpty(@Nonnull JsonObject o, @Nonnull String key) {
         String s = getString(o, key);
         return s != null ? s : "";
+    }
+
+    private static int intOrDefault(@Nonnull JsonObject o, @Nonnull String key, int defaultValue) {
+        if (!o.has(key) || !o.get(key).isJsonPrimitive()) {
+            return defaultValue;
+        }
+        return o.get(key).getAsInt();
+    }
+
+    private static float floatOrDefault(@Nonnull JsonObject o, @Nonnull String key, float defaultValue) {
+        if (!o.has(key) || !o.get(key).isJsonPrimitive()) {
+            return defaultValue;
+        }
+        return o.get(key).getAsFloat();
     }
 
     private static boolean subpluginEnabled(@Nonnull JsonObject o) {

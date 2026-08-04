@@ -115,7 +115,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
                 .append("@PreserveWater", "#PreserveWaterToggle.Value")
                 .append("@TouristDestination", "#TouristDestinationToggle.Value")
                 .append("@PlotTokenLocked", "#PlotTokenLockedToggle.Value")
-                .append("@FloatingGiftBlueprint", "#FloatingGiftBlueprintToggle.Value")
                 .append("@SubmitToCommunity", "#SubmitToCommunityToggle.Value")
                 .append("@StyleId", "#StyleIdField.Value"),
             false
@@ -220,12 +219,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         );
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.ValueChanged,
-            "#FloatingGiftBlueprintToggle",
-            EventData.of("@FloatingGiftBlueprint", "#FloatingGiftBlueprintToggle.Value"),
-            false
-        );
-        eventBuilder.addEventBinding(
-            CustomUIEventBindingType.ValueChanged,
             "#SubmitToCommunityToggle",
             EventData.of("@SubmitToCommunity", "#SubmitToCommunityToggle.Value"),
             false
@@ -271,8 +264,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#TouristDestinationHint.TextSpans", Message.translation(MSG + ".field.touristDestination.hint"));
         b.set("#PlotTokenLockedLabel.TextSpans", Message.translation(MSG + ".field.plotTokenLocked"));
         b.set("#PlotTokenLockedHint.TextSpans", Message.translation(MSG + ".field.plotTokenLocked.hint"));
-        b.set("#FloatingGiftBlueprintLabel.TextSpans", Message.translation(MSG + ".field.floatingGiftBlueprint"));
-        b.set("#FloatingGiftBlueprintHint.TextSpans", Message.translation(MSG + ".field.floatingGiftBlueprint.hint"));
         b.set("#SubmitToCommunityLabel.TextSpans", Message.translation(MSG + ".field.submitToCommunity"));
         b.set("#StyleIdLabel.TextSpans", Message.translation(MSG + ".field.styleId"));
         b.set("#StyleIdField.PlaceholderText", Message.translation(MSG + ".field.styleId.hint"));
@@ -318,8 +309,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#TouristDestinationHint.Visible", false);
             b.set("#PlotTokenLockedRow.Visible", false);
             b.set("#PlotTokenLockedHint.Visible", false);
-            b.set("#FloatingGiftBlueprintRow.Visible", false);
-            b.set("#FloatingGiftBlueprintHint.Visible", false);
             b.set("#StyleIdLabel.Visible", false);
             b.set("#StyleIdField.Visible", false);
             b.set("#OpenMaterialsButton.Visible", false);
@@ -356,8 +345,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#TouristDestinationHint.Visible", false);
             b.set("#PlotTokenLockedRow.Visible", false);
             b.set("#PlotTokenLockedHint.Visible", false);
-            b.set("#FloatingGiftBlueprintRow.Visible", false);
-            b.set("#FloatingGiftBlueprintHint.Visible", false);
             b.set("#StyleIdLabel.Visible", false);
             b.set("#StyleIdField.Visible", false);
             b.set("#OpenMaterialsButton.Visible", false);
@@ -407,8 +394,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#TouristDestinationHint.Visible", false);
         b.set("#PlotTokenLockedRow.Visible", false);
         b.set("#PlotTokenLockedHint.Visible", false);
-        b.set("#FloatingGiftBlueprintRow.Visible", false);
-        b.set("#FloatingGiftBlueprintHint.Visible", false);
         b.set("#StyleIdLabel.Visible", false);
         b.set("#StyleIdField.Visible", false);
         b.set("#OpenMaterialsButton.Visible", false);
@@ -464,8 +449,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#TouristDestinationHint.Visible", true);
         b.set("#PlotTokenLockedRow.Visible", true);
         b.set("#PlotTokenLockedHint.Visible", true);
-        b.set("#FloatingGiftBlueprintRow.Visible", true);
-        b.set("#FloatingGiftBlueprintHint.Visible", true);
         b.set("#StyleIdLabel.Visible", true);
         b.set("#StyleIdField.Visible", true);
         b.set("#OpenMaterialsButton.Visible", false);
@@ -519,7 +502,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#PreserveWaterToggle.Value", d.isPreserveWater());
         b.set("#TouristDestinationToggle.Value", d.isTouristDestination());
         b.set("#PlotTokenLockedToggle.Value", d.isPlotTokenLockedByDefault());
-        b.set("#FloatingGiftBlueprintToggle.Value", d.isFloatingGiftBlueprint());
         b.set("#SubmitToCommunityToggle.Value", d.isSubmitToCommunity());
         if (d.getStyleId() != null) {
             b.set("#StyleIdField.Value", d.getStyleId());
@@ -881,9 +863,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         if (data.plotTokenLocked != null) {
             d.setPlotTokenLockedByDefault(data.plotTokenLocked);
         }
-        if (data.floatingGiftBlueprint != null) {
-            d.setFloatingGiftBlueprint(data.floatingGiftBlueprint);
-        }
         if (data.submitToCommunity != null) {
             d.setSubmitToCommunity(data.submitToCommunity);
         }
@@ -1008,12 +987,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             .append(new KeyedCodec<>("@PlotTokenLocked", Codec.BOOLEAN), (d, v) -> d.plotTokenLocked = v, d -> d.plotTokenLocked)
             .add()
             .append(
-                new KeyedCodec<>("@FloatingGiftBlueprint", Codec.BOOLEAN),
-                (d, v) -> d.floatingGiftBlueprint = v,
-                d -> d.floatingGiftBlueprint
-            )
-            .add()
-            .append(
                 new KeyedCodec<>("@SubmitToCommunity", Codec.BOOLEAN),
                 (d, v) -> d.submitToCommunity = v,
                 d -> d.submitToCommunity
@@ -1055,8 +1028,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         private Boolean touristDestination;
         @Nullable
         private Boolean plotTokenLocked;
-        @Nullable
-        private Boolean floatingGiftBlueprint;
         @Nullable
         private Boolean submitToCommunity;
         @Nullable

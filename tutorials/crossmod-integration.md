@@ -391,6 +391,21 @@ ah.getDialogueConditionRegistry().register("example_mod_ready", (condition, play
 
 Unknown types fall through to Aetherhaven’s built-in conditions; registered types are checked first.
 
+**Built-in NPC and town checks (dialogue JSON):**
+
+| Type | Params | Meaning |
+|------|--------|---------|
+| `npc_other_villager_nearby` | `radius` (default 8), optional `kind` | Another town villager is near the speaker |
+| `npc_reputation_hearts_at_least` | `hearts` (0–10) | Player friendship with this villager is at least N hearts |
+| `npc_reputation_hearts_below` | `hearts` | Player friendship is below N hearts |
+| `npc_mood_at_least` | `percent` (0–100) | Villager’s lowest need (hunger, energy, fun) is at least N% |
+| `npc_mood_below` | `percent` | Villager’s lowest need is below N% |
+| `npc_hunger_at_least` | `percent` | Villager hunger is at least N% |
+| `npc_hunger_below` | `percent` | Villager hunger is below N% |
+| `town_has_building` | `constructionId` | Alias for `town_has_complete_plot` |
+| `player_recently_finished_quest_board_quest` | `withinDays` (default 3) | Player finished a town quest board quest recently |
+| `player_recently_failed_quest_board_quest` | `withinDays` (default 3) | Player failed or abandoned a town quest board quest recently |
+
 ## Quests
 
 Add quest JSON under `Server/Aetherhaven/Quests/`. Same quest `id` overrides. You can reference your items and constructions. Use `requiresSubplugin` only if you are tying into Aetherhaven’s optional feature packs.

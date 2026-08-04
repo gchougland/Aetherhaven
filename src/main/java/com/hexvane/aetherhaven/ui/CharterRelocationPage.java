@@ -8,6 +8,7 @@ import com.hexvane.aetherhaven.placement.CharterRelocationSessions;
 import com.hexvane.aetherhaven.placement.PlotPlacementCameraUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementNudgeUtil;
 import com.hexvane.aetherhaven.placement.PlotPreviewSpawner;
+import com.hexvane.aetherhaven.placement.PlotPlacementSnapUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
@@ -119,6 +120,7 @@ public final class CharterRelocationPage extends AetherhavenInteractiveCustomUIP
         bind(eventBuilder, "#BtnPanXp", "PanXp");
         bind(eventBuilder, "#BtnPanZm", "PanZm");
         bind(eventBuilder, "#BtnPanZp", "PanZp");
+        bind(eventBuilder, "#SnapToLocationButton", "SnapToLocation");
         bind(eventBuilder, "#PlaceButton", "Place");
         bind(eventBuilder, "#CancelButton", "Cancel");
 
@@ -267,6 +269,17 @@ public final class CharterRelocationPage extends AetherhavenInteractiveCustomUIP
             }
             case "Place" -> {
                 schedulePlace(ref, store);
+                return;
+            }
+            case "SnapToLocation" -> {
+                PlotPlacementSnapUtil.snapCharterSessionToPlayer(session, ref, store);
+                if (birdsEyeEnabled) {
+                    session.clearBirdsEyeSnapshot();
+                    captureBirdsEyeSnapshot(ref, store);
+                    scheduleApplyCameraAndRebuild(ref, store);
+                } else {
+                    scheduleRebuild(ref, store);
+                }
                 return;
             }
             default -> {

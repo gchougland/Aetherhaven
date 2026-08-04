@@ -13,7 +13,10 @@ import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -29,6 +32,20 @@ public final class PlotTokenInventory {
             return countUnifiedForConstruction(inv, def.getId()) > 0;
         }
         return countUnifiedForConstruction(inv, def.getId()) > 0;
+    }
+
+    public static boolean hasMoveTokenForPlot(@Nonnull ItemContainer inv, @Nonnull UUID plotId) {
+        String pid = plotId.toString();
+        for (short i = 0; i < inv.getCapacity(); i++) {
+            ItemStack stack = inv.getItemStack(i);
+            if (ItemStack.isEmpty(stack) || !AetherhavenConstants.PLOT_TOKEN_UNIFIED.equals(stack.getItemId())) {
+                continue;
+            }
+            if (PlotTokenMetadata.matchesPlotId(stack, pid)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Nonnull
@@ -48,6 +65,68 @@ public final class PlotTokenInventory {
         return ids;
     }
 
+    @Nonnull
+    public static List<PlotTokenPlacementOption> listPlacementOptions(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull CombinedItemContainer inv
+    ) {
+        ObjectArrayList<PlotTokenPlacementOption> options = new ObjectArrayList<>();
+        Set<String> seenValues = new LinkedHashSet<>();
+        for (ConstructionDefinition d : plugin.getConstructionCatalog().list()) {
+            if (d.isWallSegment()) {
+                continue;
+            }
+            if (hasPlotToken(inv, d)) {
+                PlotTokenPlacementOption opt = PlotTokenPlacementOption.forNewPlot(d.getId());
+                if (seenValues.add(opt.getDropdownValue())) {
+                    options.add(opt);
+                }
+            }
+        }
+        for (short i = 0; i < inv.getCapacity(); i++) {
+            ItemStack stack = inv.getItemStack(i);
+            if (ItemStack.isEmpty(stack) || !AetherhavenConstants.PLOT_TOKEN_UNIFIED.equals(stack.getItemId())) {
+                continue;
+            }
+            if (!PlotTokenMetadata.isMoveToken(stack)) {
+                continue;
+            }
+            String constructionId = PlotTokenMetadata.readConstructionId(stack);
+            String plotIdStr = PlotTokenMetadata.readPlotId(stack);
+            if (constructionId == null || plotIdStr == null) {
+                continue;
+            }
+            UUID plotId;
+            try {
+                plotId = UUID.fromString(plotIdStr.trim());
+            } catch (IllegalArgumentException e) {
+                continue;
+            }
+            UUID townId = null;
+            String townIdStr = PlotTokenMetadata.readTownId(stack);
+            if (townIdStr != null && !townIdStr.isBlank()) {
+                try {
+                    townId = UUID.fromString(townIdStr.trim());
+                } catch (IllegalArgumentException ignored) {
+                }
+            }
+            PlotTokenPlacementOption opt = PlotTokenPlacementOption.forMovePlot(constructionId, plotId, townId);
+            if (seenValues.add(opt.getDropdownValue())) {
+                options.add(opt);
+            }
+        }
+        return options;
+    }
+
+    @Nullable
+    public static PlotTokenPlacementOption defaultPlacementOption(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull CombinedItemContainer inv
+    ) {
+        List<PlotTokenPlacementOption> options = listPlacementOptions(plugin, inv);
+        return options.isEmpty() ? null : options.get(0);
+    }
+
     public static boolean consumePlotToken(@Nonnull ItemContainer inv, @Nonnull ConstructionDefinition def) {
         String legacy = def.getPlotTokenItemId();
         if (legacy != null && !legacy.isBlank() && !AetherhavenConstants.PLOT_TOKEN_UNIFIED.equals(legacy.trim())) {
@@ -57,6 +136,23 @@ public final class PlotTokenInventory {
             return consumeUnifiedForConstruction(inv, def.getId());
         }
         return consumeUnifiedForConstruction(inv, def.getId());
+    }
+
+    public static boolean consumeMoveToken(@Nonnull ItemContainer inv, @Nonnull UUID plotId) {
+        String pid = plotId.toString();
+        for (short i = 0; i < inv.getCapacity(); i++) {
+            ItemStack stack = inv.getItemStack(i);
+            if (ItemStack.isEmpty(stack) || !AetherhavenConstants.PLOT_TOKEN_UNIFIED.equals(stack.getItemId())) {
+                continue;
+            }
+            if (!PlotTokenMetadata.matchesPlotId(stack, pid)) {
+                continue;
+            }
+            if (removeOneFromSlot(inv, i, stack)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** Legacy per-building tokens: match item id only (no instance metadata). */
@@ -82,6 +178,9 @@ public final class PlotTokenInventory {
         for (short i = 0; i < inv.getCapacity(); i++) {
             ItemStack stack = inv.getItemStack(i);
             if (ItemStack.isEmpty(stack) || !AetherhavenConstants.PLOT_TOKEN_UNIFIED.equals(stack.getItemId())) {
+                continue;
+            }
+            if (PlotTokenMetadata.isMoveToken(stack)) {
                 continue;
             }
             if (!PlotTokenMetadata.matchesConstruction(stack, cid)) {
@@ -122,6 +221,25 @@ public final class PlotTokenInventory {
     }
 
     @Nonnull
+    public static ItemStack createMoveTokenStack(
+        @Nonnull String constructionId,
+        @Nonnull UUID plotId,
+        @Nonnull UUID townId,
+        @Nullable String displayName,
+        @Nullable String language
+    ) {
+        ItemStack base = new ItemStack(AetherhavenConstants.PLOT_TOKEN_UNIFIED, 1);
+        return PlotTokenMetadata.withMoveToken(
+            base,
+            constructionId,
+            plotId.toString(),
+            townId.toString(),
+            displayName,
+            language
+        );
+    }
+
+    @Nonnull
     public static ItemStack createTokenStack(@Nonnull String constructionId, int quantity, @Nullable String displayName) {
         return createTokenStack(constructionId, quantity, displayName, null);
     }
@@ -144,6 +262,7 @@ public final class PlotTokenInventory {
     private static int countUnifiedForConstruction(@Nonnull ItemContainer inv, @Nonnull String constructionId) {
         return inv.countItemStacks(
             s -> AetherhavenConstants.PLOT_TOKEN_UNIFIED.equals(s.getItemId())
+                && !PlotTokenMetadata.isMoveToken(s)
                 && PlotTokenMetadata.matchesConstruction(s, constructionId)
         );
     }

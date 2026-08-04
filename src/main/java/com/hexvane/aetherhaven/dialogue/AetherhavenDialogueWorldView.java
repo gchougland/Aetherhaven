@@ -14,6 +14,7 @@ import com.hexvane.aetherhaven.quest.QuestProgressionService;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.quest.data.QuestObjective;
 import com.hexvane.aetherhaven.questboard.TownRankCapacity;
+import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -772,5 +773,156 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
             return false;
         }
         return QuestProgressionService.isQuestObjectiveComplete(plugin, town, questId, objectiveId);
+    }
+
+    @Override
+    public boolean npcOtherVillagerNearby(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        float radiusBlocks,
+        @Nullable String kindFilter
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return false;
+        }
+        TownVillagerBinding speakerBinding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+        if (speakerBinding == null) {
+            return false;
+        }
+        return DialogueNpcConditionUtil.isOtherTownVillagerNearby(
+            store,
+            npcRef,
+            speakerBinding.getTownId(),
+            radiusBlocks,
+            kindFilter
+        );
+    }
+
+    @Override
+    public boolean npcReputationHeartsAtLeast(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        int hearts
+    ) {
+        int rep = speakerReputation(playerRef, store, npcRef);
+        return rep >= DialogueNpcConditionUtil.reputationForHearts(hearts);
+    }
+
+    @Override
+    public boolean npcReputationHeartsBelow(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        int hearts
+    ) {
+        int rep = speakerReputation(playerRef, store, npcRef);
+        return rep < DialogueNpcConditionUtil.reputationForHearts(hearts);
+    }
+
+    @Override
+    public boolean npcMoodAtLeast(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        int percent
+    ) {
+        DialogueNpcConditionUtil.VillagerNeedsSnapshot snapshot = speakerNeedsSnapshot(playerRef, store, npcRef);
+        return DialogueNpcConditionUtil.minNeedPercent(snapshot) >= percent;
+    }
+
+    @Override
+    public boolean npcMoodBelow(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        int percent
+    ) {
+        DialogueNpcConditionUtil.VillagerNeedsSnapshot snapshot = speakerNeedsSnapshot(playerRef, store, npcRef);
+        return DialogueNpcConditionUtil.minNeedPercent(snapshot) < percent;
+    }
+
+    @Override
+    public boolean npcHungerAtLeast(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        int percent
+    ) {
+        DialogueNpcConditionUtil.VillagerNeedsSnapshot snapshot = speakerNeedsSnapshot(playerRef, store, npcRef);
+        return DialogueNpcConditionUtil.hungerPercent(snapshot) >= percent;
+    }
+
+    @Override
+    public boolean npcHungerBelow(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        int percent
+    ) {
+        DialogueNpcConditionUtil.VillagerNeedsSnapshot snapshot = speakerNeedsSnapshot(playerRef, store, npcRef);
+        return DialogueNpcConditionUtil.hungerPercent(snapshot) < percent;
+    }
+
+    @Override
+    public boolean playerRecentlyFinishedQuestBoardQuest(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, int withinDays
+    ) {
+        TownRecord town = townFor(playerRef, store);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (town == null || pu == null) {
+            return false;
+        }
+        return town.wasQuestBoardCompleteWithin(
+            pu.getUuid(),
+            VillagerReputationService.currentGameEpochDay(store),
+            withinDays
+        );
+    }
+
+    @Override
+    public boolean playerRecentlyFailedQuestBoardQuest(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, int withinDays
+    ) {
+        TownRecord town = townFor(playerRef, store);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (town == null || pu == null) {
+            return false;
+        }
+        return town.wasQuestBoardFailWithin(
+            pu.getUuid(),
+            VillagerReputationService.currentGameEpochDay(store),
+            withinDays
+        );
+    }
+
+    private int speakerReputation(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return 0;
+        }
+        TownRecord town = townFor(playerRef, store);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        if (town == null || pu == null || nu == null) {
+            return 0;
+        }
+        return VillagerReputationService.getOrCreateEntry(town, pu.getUuid(), nu.getUuid()).getReputation();
+    }
+
+    @Nullable
+    private DialogueNpcConditionUtil.VillagerNeedsSnapshot speakerNeedsSnapshot(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return null;
+        }
+        return DialogueNpcConditionUtil.resolveSpeakerNeeds(store, npcRef, townFor(playerRef, store));
     }
 }

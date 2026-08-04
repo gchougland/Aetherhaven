@@ -40,6 +40,9 @@ aetherhaven.ui.plotplacement.moveZmTooltip=Bird's-eye: north (-Z). First-person:
 aetherhaven.ui.plotplacement.moveZpTooltip=Bird's-eye: south (+Z). First-person: move back (relative to view).
 aetherhaven.ui.plotplacement.moveYmTooltip=Nudge one block down
 aetherhaven.ui.plotplacement.moveYpTooltip=Nudge one block up
+aetherhaven.ui.plotplacement.snapToLocation=Snap to me
+aetherhaven.ui.plotplacement.snapToLocationTooltip=Move the preview to where you are standing
+aetherhaven.ui.plotplacement.moveDropdownSuffix= (move)
 
 # === UI: move town charter (relocate territory center) ===
 aetherhaven.ui.charterrelocation.title=Move charter

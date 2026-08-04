@@ -215,13 +215,6 @@ public final class ConstructionDefinition {
     @SerializedName("plotTokenLockedByDefault")
     private boolean plotTokenLockedByDefault;
 
-    /**
-     * When true, regular (white) balloon gifts may roll a plot blueprint unlock page for this construction id.
-     * Independent of {@link #plotTokenLockedByDefault} (quest-only locked buildings omit this flag).
-     */
-    @SerializedName("floatingGiftBlueprint")
-    private boolean floatingGiftBlueprint;
-
     /** When true, the town journal plot list omits this construction. */
     @SerializedName("excludeFromTownJournal")
     private boolean excludeFromTownJournal;
@@ -573,10 +566,6 @@ public final class ConstructionDefinition {
 
     public boolean isPlotTokenLockedByDefault() {
         return plotTokenLockedByDefault;
-    }
-
-    public boolean isFloatingGiftBlueprint() {
-        return floatingGiftBlueprint;
     }
 
     public boolean isExcludeFromTownJournal() {

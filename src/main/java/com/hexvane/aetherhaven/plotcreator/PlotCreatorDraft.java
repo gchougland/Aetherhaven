@@ -113,8 +113,6 @@ public final class PlotCreatorDraft {
     private boolean touristDestination;
     /** When true, players must unlock this plot at the plot crafting bench before crafting tokens. */
     private boolean plotTokenLockedByDefault;
-    /** When true, regular balloon gifts may drop a plot blueprint for this building (requires locked token). */
-    private boolean floatingGiftBlueprint;
 
     /** When true, save also uploads this building to the community marketplace for review. */
     private boolean submitToCommunity;
@@ -640,17 +638,6 @@ public final class PlotCreatorDraft {
 
     public void setPlotTokenLockedByDefault(boolean plotTokenLockedByDefault) {
         this.plotTokenLockedByDefault = plotTokenLockedByDefault;
-        if (!plotTokenLockedByDefault) {
-            this.floatingGiftBlueprint = false;
-        }
-    }
-
-    public boolean isFloatingGiftBlueprint() {
-        return floatingGiftBlueprint;
-    }
-
-    public void setFloatingGiftBlueprint(boolean floatingGiftBlueprint) {
-        this.floatingGiftBlueprint = floatingGiftBlueprint;
     }
 
     public boolean isSubmitToCommunity() {

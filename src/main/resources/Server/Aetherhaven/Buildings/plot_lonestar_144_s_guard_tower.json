@@ -13,7 +13,6 @@
   "selfBuildGameDays": 1.0,
   "treasuryGoldCoinCost": 25,
   "plotTokenLockedByDefault": true,
-  "floatingGiftBlueprint": true,
   "materials": [
     {
       "resourceTypeId": "Wood_All",

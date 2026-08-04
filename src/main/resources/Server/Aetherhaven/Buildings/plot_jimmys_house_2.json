@@ -70,7 +70,6 @@
   ],
   "countsAsConstructionId": "plot_house",
   "plotTokenLockedByDefault": true,
-  "floatingGiftBlueprint": true,
   "styleId": "jimmy",
   "maxHomeResidents": 1
 }

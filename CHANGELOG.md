@@ -15,6 +15,9 @@
 - **Patrol route removal** — Patrol wand has a remove mode. Select a saved route and press F to delete it.
 - **Gaia altar work spot** — Plot creator and building editor now ask you to mark where the priestess stands at the Gaia altar.
 - **Fix duplicate villagers** — Town Journal Settings has a button to clean up duplicate villager entries if they ever show up.
+- **Move token** — The town records shelf can give you a move token for a building. Use it with the plot placement staff at the new spot to move the building there without nudging it block by block.
+- **Snap to me** — The plot placement staff has a button that moves the building preview to where you are standing.
+- **Dialogue conditions** — Villager dialogue can branch on another villager being nearby, friendship hearts, how a villager is feeling, hunger, whether a building exists in town, and whether you recently finished or failed a quest board quest.
 
 ### Changed
 
@@ -25,6 +28,8 @@
 - **Workplace slots** — Town record shelves list every worker a building needs.
 - **Plot creator menus** — Type, variant, spots, and settings menus open when you reach those steps. Done moves you forward when your choices are valid.
 - **Plot blueprints** — Plot blueprints now give unlock points instead of unlocking a specific building. Use a blueprint to gain a point, then spend points at the plot crafting bench to unlock locked buildings. Plot blueprints stack to 25. The bench shows how many unlock points you have.
+- **Plot creator balloon blueprint toggle** — Removed the balloon plot blueprint option from the plot creator. Use plot token locked by default to control whether a building needs an unlock point at the bench.
+- **Jewelry workbench** — Can pull bars, gems, and life essence from nearby chests, like other crafting benches.
 
 ### Fixed
 

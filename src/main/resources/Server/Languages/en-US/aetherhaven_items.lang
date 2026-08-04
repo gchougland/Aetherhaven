@@ -373,6 +373,8 @@ items.Aetherhaven_Plot_Token.name=Plot token
 items.Aetherhaven_Plot_Token.description=Places a custom town building from the plot placement staff. Each token is tied to one building type.
 items.Aetherhaven_Plot_Token.instance.name={building} plot token
 items.Aetherhaven_Plot_Token.instance.description=Required to place the {building} footprint from the plot placement staff.
+items.Aetherhaven_Plot_Token.move.name={building} move token
+items.Aetherhaven_Plot_Token.move.description=Use with the plot placement staff to move this building to a new spot.
 
 items.Aetherhaven_Plot_Token_Unlock_Page.name=Plot blueprint
 items.Aetherhaven_Plot_Token_Unlock_Page.description=Use this to gain an unlock point. Spend unlock points at your plot crafting bench to unlock new buildings.

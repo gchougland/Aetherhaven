@@ -17,12 +17,16 @@ public final class PlotTokenMetadata {
     public static final String BSON_KEY = "AetherhavenPlotToken";
     public static final String FIELD_CONSTRUCTION_ID = "constructionId";
     public static final String FIELD_DISPLAY_NAME = "displayName";
+    public static final String FIELD_PLOT_ID = "plotId";
+    public static final String FIELD_TOWN_ID = "townId";
 
     /** Plain resolved strings for inventory tooltips (same key as vanilla {@code TranslationProperties}). */
     public static final String INSTANCE_TRANSLATION_PROPERTIES_KEY = "TranslationProperties";
 
     private static final String LANG_NAME = "aetherhaven_items.items.Aetherhaven_Plot_Token.instance.name";
     private static final String LANG_DESC = "aetherhaven_items.items.Aetherhaven_Plot_Token.instance.description";
+    private static final String LANG_MOVE_NAME = "aetherhaven_items.items.Aetherhaven_Plot_Token.move.name";
+    private static final String LANG_MOVE_DESC = "aetherhaven_items.items.Aetherhaven_Plot_Token.move.description";
 
     private PlotTokenMetadata() {}
 
@@ -47,7 +51,69 @@ public final class PlotTokenMetadata {
         BsonDocument meta = new BsonDocument();
         meta.put(BSON_KEY, root);
         ItemStack stack = base.withMetadata(meta);
-        return applyInstanceTooltip(stack, resolvedName, constructionId.trim(), language);
+        return applyInstanceTooltip(stack, resolvedName, constructionId.trim(), language, false);
+    }
+
+    @Nonnull
+    public static ItemStack withMoveToken(
+        @Nonnull ItemStack base,
+        @Nonnull String constructionId,
+        @Nonnull String plotId,
+        @Nullable String townId,
+        @Nullable String displayName,
+        @Nullable String language
+    ) {
+        BsonDocument root = new BsonDocument();
+        root.put(FIELD_CONSTRUCTION_ID, new BsonString(constructionId.trim()));
+        root.put(FIELD_PLOT_ID, new BsonString(plotId.trim()));
+        if (townId != null && !townId.isBlank()) {
+            root.put(FIELD_TOWN_ID, new BsonString(townId.trim()));
+        }
+        String resolvedName = resolveBuildingLabel(displayName, constructionId);
+        if (resolvedName != null && !resolvedName.isBlank()) {
+            root.put(FIELD_DISPLAY_NAME, new BsonString(resolvedName.trim()));
+        }
+        BsonDocument meta = new BsonDocument();
+        meta.put(BSON_KEY, root);
+        ItemStack stack = base.withMetadata(meta);
+        return applyInstanceTooltip(stack, resolvedName, constructionId.trim(), language, true);
+    }
+
+    public static boolean isMoveToken(@Nullable ItemStack stack) {
+        return readPlotId(stack) != null;
+    }
+
+    @Nullable
+    public static String readPlotId(@Nullable ItemStack stack) {
+        BsonDocument root = readRoot(stack);
+        if (root == null) {
+            return null;
+        }
+        var v = root.get(FIELD_PLOT_ID);
+        if (v == null || !v.isString()) {
+            return null;
+        }
+        String s = v.asString().getValue();
+        return s != null && !s.isBlank() ? s.trim() : null;
+    }
+
+    @Nullable
+    public static String readTownId(@Nullable ItemStack stack) {
+        BsonDocument root = readRoot(stack);
+        if (root == null) {
+            return null;
+        }
+        var v = root.get(FIELD_TOWN_ID);
+        if (v == null || !v.isString()) {
+            return null;
+        }
+        String s = v.asString().getValue();
+        return s != null && !s.isBlank() ? s.trim() : null;
+    }
+
+    public static boolean matchesPlotId(@Nullable ItemStack stack, @Nonnull String plotId) {
+        String onStack = readPlotId(stack);
+        return onStack != null && onStack.equals(plotId.trim());
     }
 
     @Nullable
@@ -79,6 +145,9 @@ public final class PlotTokenMetadata {
     }
 
     public static boolean matchesConstruction(@Nullable ItemStack stack, @Nonnull String constructionId) {
+        if (isMoveToken(stack)) {
+            return false;
+        }
         String onStack = readConstructionId(stack);
         return onStack != null && onStack.equals(constructionId.trim());
     }
@@ -88,15 +157,18 @@ public final class PlotTokenMetadata {
         @Nonnull ItemStack stack,
         @Nullable String buildingLabel,
         @Nonnull String constructionId,
-        @Nullable String language
+        @Nullable String language,
+        boolean moveToken
     ) {
         if (buildingLabel == null || buildingLabel.isBlank()) {
             return stack;
         }
         String label = buildingLabel.trim();
         String lang = language != null && !language.isBlank() ? language : "en-US";
-        String namePlain = resolveLang(lang, LANG_NAME, label);
-        String descPlain = resolveDescription(lang, label, constructionId);
+        String nameKey = moveToken ? LANG_MOVE_NAME : LANG_NAME;
+        String descKey = moveToken ? LANG_MOVE_DESC : LANG_DESC;
+        String namePlain = resolveLang(lang, nameKey, label);
+        String descPlain = moveToken ? resolveLang(lang, descKey, label) : resolveDescription(lang, label, constructionId);
 
         BsonDocument tp = new BsonDocument();
         tp.put("Name", new BsonString(namePlain));

@@ -90,6 +90,9 @@ public final class PlotBlueprintSalvageBenchSystem extends EntityTickingSystem<C
         if (ItemStack.isEmpty(stack) || !hasSalvageMetadata(stack)) {
             return false;
         }
+        if (PlotTokenMetadata.isMoveToken(stack)) {
+            return false;
+        }
         String itemId = stack.getItemId();
         return AetherhavenConstants.PLOT_TOKEN_UNLOCK_PAGE.equals(itemId)
             || AetherhavenConstants.PLOT_TOKEN_UNIFIED.equals(itemId);

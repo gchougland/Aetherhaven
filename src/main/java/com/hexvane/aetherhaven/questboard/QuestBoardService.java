@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.questboard.data.QuestBoardFetchEntryJson;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardHuntEntryJson;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardRaidEntryJson;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.ui.TownVillagerDirectory;
@@ -498,6 +499,7 @@ public final class QuestBoardService {
         if (slot.isRaidQuest()) {
             RaidQuestSpawnService.cleanupRaid(slot, world, store, town.getTownId());
         }
+        recordBoardQuestFail(town, playerUuid, store);
         slot.markCompleted();
         return true;
     }
@@ -520,6 +522,7 @@ public final class QuestBoardService {
                 if (slot.isRaidQuest()) {
                     RaidQuestSpawnService.cleanupRaid(slot, world, store, town.getTownId());
                 }
+                recordBoardQuestFail(town, playerUuid, store);
                 slot.markCompleted();
                 return true;
             }
@@ -654,6 +657,10 @@ public final class QuestBoardService {
         if (slot.isRaidQuest()) {
             RaidQuestSpawnService.cleanupRaid(slot, store.getExternalData().getWorld(), store, town.getTownId());
         }
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (pu != null) {
+            recordBoardQuestComplete(town, pu.getUuid(), store);
+        }
         slot.markCompleted();
         tm.updateTown(town);
 
@@ -725,6 +732,10 @@ public final class QuestBoardService {
         }
         if (slot.isRaidQuest()) {
             RaidQuestSpawnService.cleanupRaid(slot, store.getExternalData().getWorld(), store, town.getTownId());
+        }
+        UUID failPlayer = acceptedPlayerUuid(slot);
+        if (failPlayer != null) {
+            recordBoardQuestFail(town, failPlayer, store);
         }
         int slotIndex = slotIndexForInstanceId(town, slot.instanceIdOrEmpty());
         slot.clearToEmpty();
@@ -814,5 +825,30 @@ public final class QuestBoardService {
             return slot.instanceIdOrEmpty() + ":raid:" + slot.getRaidKillProgress() + '/' + slot.getRaidKillRequired();
         }
         return slot.instanceIdOrEmpty();
+    }
+
+    private static void recordBoardQuestComplete(
+        @Nonnull TownRecord town, @Nonnull UUID playerUuid, @Nonnull Store<EntityStore> store
+    ) {
+        town.recordQuestBoardComplete(playerUuid, VillagerReputationService.currentGameEpochDay(store));
+    }
+
+    private static void recordBoardQuestFail(
+        @Nonnull TownRecord town, @Nonnull UUID playerUuid, @Nonnull Store<EntityStore> store
+    ) {
+        town.recordQuestBoardFail(playerUuid, VillagerReputationService.currentGameEpochDay(store));
+    }
+
+    @Nullable
+    private static UUID acceptedPlayerUuid(@Nonnull QuestBoardSlotRecord slot) {
+        String raw = slot.getAcceptedByPlayerUuid();
+        if (raw == null || raw.isBlank()) {
+            return null;
+        }
+        try {
+            return UUID.fromString(raw.trim());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 }

@@ -39,7 +39,7 @@ public final class LootChestPlotBlueprintConfig {
     @Nonnull
     private static String defaultNote() {
         return
-            "Pool: constructions with plotTokenLockedByDefault, plus floatingGiftBlueprint entries."
+            "Pool: constructions with plotTokenLockedByDefault."
                 + " Independent of legacy PlotToken item id rolls.";
     }
 

@@ -105,9 +105,6 @@ public final class PlotCreatorJsonWriter {
         }
         if (draft.isPlotTokenLockedByDefault()) {
             root.put("plotTokenLockedByDefault", true);
-            if (draft.isFloatingGiftBlueprint()) {
-                root.put("floatingGiftBlueprint", true);
-            }
         }
         if (draft.isExcludeFromTownJournal()) {
             root.put("excludeFromTownJournal", true);

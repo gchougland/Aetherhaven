@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.floatinggift;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.plot.PlotTokenUnlockService;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -22,7 +23,7 @@ public final class FloatingGiftBlueprintLoot {
     public static List<String> listBlueprintConstructionIds(@Nonnull ConstructionCatalog catalog) {
         List<String> ids = new ArrayList<>();
         for (ConstructionDefinition def : catalog.list()) {
-            if (def.isFloatingGiftBlueprint() && def.getId() != null && !def.getId().isBlank()) {
+            if (PlotTokenUnlockService.requiresUnlock(def) && def.getId() != null && !def.getId().isBlank()) {
                 ids.add(def.getId().trim());
             }
         }

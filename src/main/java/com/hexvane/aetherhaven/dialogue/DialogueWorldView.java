@@ -312,6 +312,95 @@ public interface DialogueWorldView {
         return false;
     }
 
+    /** True when another loaded town villager is within {@code radiusBlocks} of the speaking NPC. */
+    default boolean npcOtherVillagerNearby(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        float radiusBlocks,
+        @Nullable String kindFilter
+    ) {
+        return false;
+    }
+
+    /** Player friendship with the speaking villager is at least {@code hearts} full hearts (0–10). */
+    default boolean npcReputationHeartsAtLeast(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        int hearts
+    ) {
+        return false;
+    }
+
+    /** Player friendship with the speaking villager is below {@code hearts} full hearts (0–10). */
+    default boolean npcReputationHeartsBelow(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        int hearts
+    ) {
+        return false;
+    }
+
+    /** Speaking NPC min hunger/energy/fun is at least {@code percent}. */
+    default boolean npcMoodAtLeast(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        int percent
+    ) {
+        return false;
+    }
+
+    /** Speaking NPC min hunger/energy/fun is below {@code percent}. */
+    default boolean npcMoodBelow(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        int percent
+    ) {
+        return false;
+    }
+
+    /** Speaking NPC hunger is at least {@code percent}. */
+    default boolean npcHungerAtLeast(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        int percent
+    ) {
+        return false;
+    }
+
+    /** Speaking NPC hunger is below {@code percent}. */
+    default boolean npcHungerBelow(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        int percent
+    ) {
+        return false;
+    }
+
+    /** Player completed a town quest board quest within the last {@code withinDays} dawn days. */
+    default boolean playerRecentlyFinishedQuestBoardQuest(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        int withinDays
+    ) {
+        return false;
+    }
+
+    /** Player failed or abandoned a town quest board quest within the last {@code withinDays} dawn days. */
+    default boolean playerRecentlyFailedQuestBoardQuest(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        int withinDays
+    ) {
+        return false;
+    }
+
     final class DefaultDialogueWorldView implements DialogueWorldView {
         @Override
         public boolean hasAchievement(@Nonnull String id) {

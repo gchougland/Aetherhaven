@@ -1,15 +1,9 @@
 package com.hexvane.aetherhaven.placement;
 
-import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
-import com.hexvane.aetherhaven.placement.CharterRelocationSessions;
-import com.hexvane.aetherhaven.placement.PlotPlacementClientPrefabPreview;
-import com.hexvane.aetherhaven.placement.PlotPlacementPreviewSync;
-import com.hexvane.aetherhaven.placement.PlotPlacementSession;
-import com.hexvane.aetherhaven.placement.PlotPlacementSessions;
-import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
-import com.hexvane.aetherhaven.placement.PlotPreviewSpawner;
+import com.hexvane.aetherhaven.plot.PlotTokenInventory;
+import com.hexvane.aetherhaven.plot.PlotTokenPlacementOption;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
@@ -20,21 +14,22 @@ import com.hexvane.aetherhaven.ui.PlotPlacementPage;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import org.joml.Vector3i;
-import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.server.core.Message;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.CustomUIPage;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector3i;
 
 public final class PlotPlacementOpenHelper {
     private PlotPlacementOpenHelper() {}
@@ -125,49 +120,37 @@ public final class PlotPlacementOpenHelper {
             playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.lookAtBlockPlot"));
             return null;
         }
-        Vector3i anchor = pickAnchor(world, tb);
-        String cons = PlotPlacementPage.defaultConstructionFromInventory(store, ref);
-        if (cons == null) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        Player player = store.getComponent(ref, Player.getComponentType());
+        CombinedItemContainer inv =
+            player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
+        if (plugin == null || inv == null) {
             playerRef.sendMessage(
                 Message.translation("aetherhaven_common.aetherhaven.common.carryPlotToken")
             );
             return null;
         }
+        PlotTokenPlacementOption option = PlotTokenInventory.defaultPlacementOption(plugin, inv);
+        if (option == null) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_common.aetherhaven.common.carryPlotToken")
+            );
+            return null;
+        }
+        Vector3i anchor = PlotPlacementAnchorUtil.pickAnchor(world, tb);
         CharterRelocationSession droppedCharter = CharterRelocationSessions.removeAndGet(uc.getUuid());
         if (droppedCharter != null) {
             PlotPreviewSpawner.clear(store, droppedCharter.getPreviewEntityRefs());
             PlotPlacementWireframeOverlay.clearFor(playerRef);
         }
         PlotPlacementClientPrefabPreview.hide(playerRef);
-        existing = new PlotPlacementSession(world, anchor, 0, cons);
+        existing = PlotPlacementSessionFactory.createFromOption(world, anchor, option, plugin);
+        if (existing == null) {
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.buildingCannotMove"));
+            return null;
+        }
         PlotPlacementSessions.put(uc.getUuid(), existing);
         return new PlotPlacementPage(playerRef, existing);
-    }
-
-    @Nonnull
-    private static Vector3i pickAnchor(@Nonnull World world, @Nonnull BlockPosition tb) {
-        Vector3i above = new Vector3i(tb.x, tb.y + 1, tb.z);
-        Vector3i picked;
-        if (isReplaceable(world, above.x, above.y, above.z)) {
-            picked = above;
-        } else {
-            Vector3i on = new Vector3i(tb.x, tb.y, tb.z);
-            if (isReplaceable(world, on.x, on.y, on.z)) {
-                picked = on;
-            } else {
-                picked = above;
-            }
-        }
-        return new Vector3i(
-            picked.x,
-            picked.y + AetherhavenConstants.PLOT_SIGN_BLOCK_Y_ABOVE_LOGICAL_ANCHOR,
-            picked.z
-        );
-    }
-
-    private static boolean isReplaceable(@Nonnull World world, int x, int y, int z) {
-        BlockType t = world.getBlockType(x, y, z);
-        return t == null || t.getMaterial() == BlockMaterial.Empty;
     }
 
     /**

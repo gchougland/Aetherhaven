@@ -126,7 +126,7 @@ public final class BuildingEditorJsonWriter {
         putFlag(root, "touristDestination", draft.isTouristDestination());
         putFlag(root, "preserveWater", draft.isPreserveWater());
         putFlag(root, "plotTokenLockedByDefault", draft.isPlotTokenLockedByDefault());
-        putFlag(root, "floatingGiftBlueprint", draft.isFloatingGiftBlueprint());
+        root.remove("floatingGiftBlueprint");
         putFlag(root, "excludeFromTownJournal", draft.isExcludeFromTownJournal());
         putFlag(root, "decorationPlot", draft.isDecorationOnly());
         if (draft.isDecorationOnly()) {

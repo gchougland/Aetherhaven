@@ -1,4 +1,4 @@
-﻿{
+{
   "id": "plot_decoration_hytiny_potted_treehouse",
   "displayName": "Hytiny's Potted Treehouse",
   "description": "A decorative treehouse build for your town. It does not count as a house, workplace, or civic plot for quests or systems. Prefab built by HytinyBuilds.",
@@ -6,7 +6,6 @@
   "selfBuildGameDays": 1,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse",
   "plotTokenLockedByDefault": true,
-  "floatingGiftBlueprint": true,
   "decorationPlot": true,
   "excludeFromTownJournal": true,
   "tags": [

@@ -29,7 +29,10 @@ public final class PlotPlacementSession {
 
     /** When non-null, placement commits relocate this existing plot instead of consuming a token / new plot id. */
     @Nullable
-    private final UUID movePlotId;
+    private UUID movePlotId;
+
+    /** When true, a successful move commit consumes a move plot token from inventory. */
+    private boolean moveViaToken;
 
     @Nonnull
     private final List<Ref<EntityStore>> previewEntityRefs = new ArrayList<>();
@@ -113,6 +116,18 @@ public final class PlotPlacementSession {
         return movePlotId;
     }
 
+    public void setMovePlotId(@Nullable UUID movePlotId) {
+        this.movePlotId = movePlotId;
+    }
+
+    public boolean isMoveViaToken() {
+        return moveViaToken;
+    }
+
+    public void setMoveViaToken(boolean moveViaToken) {
+        this.moveViaToken = moveViaToken;
+    }
+
     @Nonnull
     public World getWorld() {
         return world;
@@ -155,9 +170,6 @@ public final class PlotPlacementSession {
     }
 
     public void setConstructionId(@Nonnull String constructionId) {
-        if (movePlotId != null) {
-            return;
-        }
         this.constructionId = constructionId;
     }
 

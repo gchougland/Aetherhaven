@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.inventory;
 
+import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.spatial.SpatialResource;
@@ -43,7 +44,27 @@ public final class BenchAdjacentChestUtil {
         int by,
         int bz
     ) {
-        CombinedItemContainer player = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
+        return combinedPlayerAndAdjacentChestsForBlock(
+            world, store, ref, bx, by, bz, InventoryComponent.EVERYTHING
+        );
+    }
+
+    /**
+     * Player inventory at {@code playerInventoryScope} plus chest inventories near {@code (bx, by, bz)}, in vanilla
+     * bench order (spatial query order, capped by config). Removal and counts behave like
+     * {@link CombinedItemContainer}.
+     */
+    @Nonnull
+    public static CombinedItemContainer combinedPlayerAndAdjacentChestsForBlock(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> ref,
+        int bx,
+        int by,
+        int bz,
+        @Nonnull ComponentType<EntityStore, ? extends InventoryComponent>[] playerInventoryScope
+    ) {
+        CombinedItemContainer player = InventoryComponent.getCombined(store, ref, playerInventoryScope);
         BlockType blockType = world.getBlockType(bx, by, bz);
         if (blockType == null) {
             return player;

@@ -1,4 +1,4 @@
-﻿{
+{
   "id": "plot_hytinys_witch_hut",
   "displayName": "Hytiny's Witch Hut",
   "description": "By HytinyBuilds",
@@ -34,7 +34,6 @@
     "decoration"
   ],
   "plotTokenLockedByDefault": true,
-  "floatingGiftBlueprint": true,
   "excludeFromTownJournal": true,
   "decorationPlot": true,
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_hytinys_witch_hut.displayName",

@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.inventory.BenchAdjacentChestUtil;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.jewelry.JewelryCraftingItems;
 import com.hexvane.aetherhaven.jewelry.JewelryCraftingRarityTable;
@@ -32,12 +33,14 @@ import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.util.NotificationUtil;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector3i;
 
 public final class JewelryCraftingPage extends AetherhavenInteractiveCustomUIPage<JewelryCraftingPage.PageData> {
     private static final int ESSENCE_MAX = 999;
@@ -51,11 +54,18 @@ public final class JewelryCraftingPage extends AetherhavenInteractiveCustomUIPag
     private int essenceConc = 0;
     @Nullable
     private ItemStack pendingCraftOutput;
+    @Nullable
+    private final Vector3i benchBlockPos;
 
     private static final String NO_OWNED_GEM = "__aetherhaven_no_gem__";
 
     public JewelryCraftingPage(@Nonnull PlayerRef playerRef) {
+        this(playerRef, null);
+    }
+
+    public JewelryCraftingPage(@Nonnull PlayerRef playerRef, @Nullable Vector3i benchBlockPos) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
+        this.benchBlockPos = benchBlockPos != null ? new Vector3i(benchBlockPos) : null;
     }
 
     @Override
@@ -73,7 +83,7 @@ public final class JewelryCraftingPage extends AetherhavenInteractiveCustomUIPag
             return;
         }
 
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.ARMOR_HOTBAR_UTILITY_STORAGE);
+        CombinedItemContainer inv = materialInventory(store, ref);
         int nGold = inv != null ? InventoryMaterials.count(inv, AetherhavenConstants.INGREDIENT_BAR_GOLD) : 0;
         int nSilver = inv != null ? InventoryMaterials.count(inv, AetherhavenConstants.INGREDIENT_BAR_SILVER) : 0;
         int nEss = inv != null ? InventoryMaterials.count(inv, AetherhavenConstants.ITEM_LIFE_ESSENCE) : 0;
@@ -194,11 +204,12 @@ public final class JewelryCraftingPage extends AetherhavenInteractiveCustomUIPag
         commandBuilder.set("#SilverHilite.Visible", !gold);
 
         boolean hasPending = hasPendingOutput();
+        CombinedItemContainer playerBags = playerBagInventory(store, ref);
         boolean canAddTake =
-            inv != null
+            playerBags != null
                 && pendingCraftOutput != null
                 && !ItemStack.isEmpty(pendingCraftOutput)
-                && inv.canAddItemStack(pendingCraftOutput);
+                && playerBags.canAddItemStack(pendingCraftOutput);
         applyPendingOutputItemGrid(commandBuilder);
         commandBuilder.set("#TakeButton.Disabled", !canAddTake);
 
@@ -356,7 +367,7 @@ public final class JewelryCraftingPage extends AetherhavenInteractiveCustomUIPag
         if (!hasPendingOutput()) {
             return;
         }
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.ARMOR_HOTBAR_UTILITY_STORAGE);
+        CombinedItemContainer inv = playerBagInventory(store, ref);
         if (inv == null) {
             return;
         }
@@ -399,7 +410,7 @@ public final class JewelryCraftingPage extends AetherhavenInteractiveCustomUIPag
             refresh(ref, store);
             return;
         }
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.ARMOR_HOTBAR_UTILITY_STORAGE);
+        CombinedItemContainer inv = materialInventory(store, ref);
         if (inv == null) {
             return;
         }
@@ -467,6 +478,29 @@ public final class JewelryCraftingPage extends AetherhavenInteractiveCustomUIPag
         UIEventBuilder ev = new UIEventBuilder();
         build(ref, cmd, ev, store);
         sendUpdate(cmd, ev, false);
+    }
+
+    /** Player bags plus nearby chests when opened from a placed bench. */
+    @Nullable
+    private CombinedItemContainer materialInventory(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref) {
+        if (benchBlockPos != null) {
+            World world = store.getExternalData().getWorld();
+            return BenchAdjacentChestUtil.combinedPlayerAndAdjacentChestsForBlock(
+                world,
+                store,
+                ref,
+                benchBlockPos.x,
+                benchBlockPos.y,
+                benchBlockPos.z,
+                InventoryComponent.ARMOR_HOTBAR_UTILITY_STORAGE
+            );
+        }
+        return playerBagInventory(store, ref);
+    }
+
+    @Nullable
+    private static CombinedItemContainer playerBagInventory(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref) {
+        return InventoryComponent.getCombined(store, ref, InventoryComponent.ARMOR_HOTBAR_UTILITY_STORAGE);
     }
 
     @Nonnull

@@ -63,6 +63,11 @@ public final class AetherhavenUiLocalization {
         b.set("#ReconstructBuildingModalText.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.reconstructBuildingModalBody"));
         b.set("#ReconstructBuildingConfirmButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.reconstructBuildingModalConfirm"));
         b.set("#ReconstructBuildingCancelButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.reconstructBuildingModalCancel"));
+        b.set("#GetMoveTokenButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.getMoveToken"));
+        b.set("#GetMoveTokenModalTitle.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.getMoveTokenModalTitle"));
+        b.set("#GetMoveTokenModalText.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.getMoveTokenModalBody"));
+        b.set("#GetMoveTokenConfirmButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.getMoveTokenModalConfirm"));
+        b.set("#GetMoveTokenCancelButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.getMoveTokenModalCancel"));
         b.set("#TouristManifestHeader.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.touristManifestHeader"));
         b.set("#TouristManifestEmpty.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.touristManifestEmpty"));
         b.set("#GuardManifestEmpty.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.guardManifestEmpty"));

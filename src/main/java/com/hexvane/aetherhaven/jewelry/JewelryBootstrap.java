@@ -7,9 +7,11 @@ import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.ui.JewelryAppraisalPage;
 import com.hexvane.aetherhaven.ui.JewelryCraftingPage;
 import com.hexvane.aetherhaven.ui.OpenHandMirrorUiInteraction;
+import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.OpenCustomUIInteraction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
+import org.joml.Vector3i;
 import javax.annotation.Nonnull;
 
 public final class JewelryBootstrap {
@@ -32,12 +34,21 @@ public final class JewelryBootstrap {
                     ? new JewelryAppraisalPage(playerRef, false)
                     : null
         );
-        OpenCustomUIInteraction.registerSimple(
+        OpenCustomUIInteraction.registerCustomPageSupplier(
             core,
             JewelryCraftingPage.class,
             AetherhavenConstants.PAGE_JEWELRY_CRAFTING_BENCH,
-            playerRef ->
-                AetherhavenFeatures.isLoaded(AetherhavenPluginIds.JEWELRY) ? new JewelryCraftingPage(playerRef) : null
+            (ref, componentAccessor, playerRef, context) -> {
+                if (!AetherhavenFeatures.isLoaded(AetherhavenPluginIds.JEWELRY)) {
+                    return null;
+                }
+                BlockPosition targetBlock = context.getTargetBlock();
+                Vector3i benchPos =
+                    targetBlock != null
+                        ? new Vector3i(targetBlock.x, targetBlock.y, targetBlock.z)
+                        : null;
+                return new JewelryCraftingPage(playerRef, benchPos);
+            }
         );
     }
 

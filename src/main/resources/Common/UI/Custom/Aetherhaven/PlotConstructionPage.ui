@@ -358,6 +358,13 @@ $C.@PageOverlay {
                 Text: "";
               }
 
+              $C.@SecondaryTextButton #GetMoveTokenButton {
+                FlexWeight: 1;
+                Anchor: (Height: 36, Left: 8);
+                Padding: (Horizontal: 12);
+                Text: "";
+              }
+
               $C.@SecondaryTextButton #ExpandTerritoryButton {
                 FlexWeight: 1;
                 Anchor: (Height: 36, Left: 8);
@@ -603,6 +610,52 @@ $C.@PageOverlay {
             }
 
             $C.@CancelTextButton #ReconstructBuildingCancelButton {
+              Text: "";
+              FlexWeight: 1;
+              Anchor: (Left: 8);
+            }
+          }
+        }
+      }
+    }
+
+    Group #GetMoveTokenModal {
+      LayoutMode: Middle;
+      Visible: false;
+      Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
+      Background: #000000(0.55);
+
+      $C.@DecoratedContainer {
+        Anchor: (Width: 420);
+
+        #Title {
+          Label #GetMoveTokenModalTitle {
+            Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+            Padding: (Horizontal: 12);
+            Text: "";
+          }
+        }
+
+        #Content {
+          LayoutMode: Top;
+          Padding: (Full: 18);
+
+          Label #GetMoveTokenModalText {
+            Anchor: (Bottom: 16);
+            Style: (...$C.@DefaultLabelStyle, Wrap: true);
+            Text: "";
+          }
+
+          Group {
+            LayoutMode: Left;
+
+            $C.@TextButton #GetMoveTokenConfirmButton {
+              Text: "";
+              FlexWeight: 1;
+              Anchor: (Right: 8);
+            }
+
+            $C.@CancelTextButton #GetMoveTokenCancelButton {
               Text: "";
               FlexWeight: 1;
               Anchor: (Left: 8);

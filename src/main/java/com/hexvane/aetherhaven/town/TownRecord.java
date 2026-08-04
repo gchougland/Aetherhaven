@@ -372,6 +372,16 @@ public final class TownRecord {
     @Nullable
     private List<String> questBoardDrawPool;
 
+    /** Last dawn day a player completed a town quest board quest (player UUID string -> dawn day). */
+    @Nullable
+    @SerializedName("playerQuestBoardLastCompleteDawnDayByUuid")
+    private Map<String, Long> playerQuestBoardLastCompleteDawnDayByUuid;
+
+    /** Last dawn day a player failed or abandoned a town quest board quest (player UUID string -> dawn day). */
+    @Nullable
+    @SerializedName("playerQuestBoardLastFailDawnDayByUuid")
+    private Map<String, Long> playerQuestBoardLastFailDawnDayByUuid;
+
     /**
      * Workplace plot production storage: key plot UUID string, value slot cursors + item amounts
      * (see {@link com.hexvane.aetherhaven.production.ProductionTickSystem}).
@@ -1988,6 +1998,42 @@ public final class TownRecord {
     public void setQuestBoardDrawPool(@Nonnull List<String> keys) {
         migrateQuestBoardFieldsIfNeeded();
         this.questBoardDrawPool = new ArrayList<>(keys);
+    }
+
+    public void recordQuestBoardComplete(@Nonnull UUID playerUuid, long dawnDay) {
+        playerQuestBoardLastCompleteDawnDayByUuid().put(playerUuid.toString(), dawnDay);
+    }
+
+    public void recordQuestBoardFail(@Nonnull UUID playerUuid, long dawnDay) {
+        playerQuestBoardLastFailDawnDayByUuid().put(playerUuid.toString(), dawnDay);
+    }
+
+    public boolean wasQuestBoardCompleteWithin(@Nonnull UUID playerUuid, long currentDawnDay, int withinDays) {
+        Long recorded = playerQuestBoardLastCompleteDawnDayByUuid().get(playerUuid.toString());
+        return recorded != null
+            && com.hexvane.aetherhaven.dialogue.DialogueNpcConditionUtil.dawnDayWithin(recorded, currentDawnDay, withinDays);
+    }
+
+    public boolean wasQuestBoardFailWithin(@Nonnull UUID playerUuid, long currentDawnDay, int withinDays) {
+        Long recorded = playerQuestBoardLastFailDawnDayByUuid().get(playerUuid.toString());
+        return recorded != null
+            && com.hexvane.aetherhaven.dialogue.DialogueNpcConditionUtil.dawnDayWithin(recorded, currentDawnDay, withinDays);
+    }
+
+    @Nonnull
+    private Map<String, Long> playerQuestBoardLastCompleteDawnDayByUuid() {
+        if (playerQuestBoardLastCompleteDawnDayByUuid == null) {
+            playerQuestBoardLastCompleteDawnDayByUuid = new LinkedHashMap<>();
+        }
+        return playerQuestBoardLastCompleteDawnDayByUuid;
+    }
+
+    @Nonnull
+    private Map<String, Long> playerQuestBoardLastFailDawnDayByUuid() {
+        if (playerQuestBoardLastFailDawnDayByUuid == null) {
+            playerQuestBoardLastFailDawnDayByUuid = new LinkedHashMap<>();
+        }
+        return playerQuestBoardLastFailDawnDayByUuid;
     }
 
     @Nullable
