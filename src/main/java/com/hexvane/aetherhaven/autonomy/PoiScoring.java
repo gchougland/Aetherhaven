@@ -1,16 +1,24 @@
 package com.hexvane.aetherhaven.autonomy;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
 import com.hexvane.aetherhaven.poi.PoiOccupancy;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleResolver;
+import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.town.PlotInstanceState;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkPersonalityCatalog;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkPersonalityDefinition;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
@@ -24,8 +32,17 @@ public final class PoiScoring {
     private static final float WORK_POI_JITTER = 2.5f;
     /** When energy/fun fall below this (0..{@link VillagerNeeds#MAX}), work shift allows break POIs town-wide. */
     private static final float NEEDS_BREAK_THRESHOLD = 40f;
+    /** Start a rest trip when energy is below 30% of {@link VillagerNeeds#MAX}. */
+    public static final float ENERGY_REST_START_THRESHOLD = 30f;
     /** Start a meal trip when hunger is below half of {@link VillagerNeeds#MAX}. */
     private static final float HUNGER_EAT_START_THRESHOLD = 50f;
+
+    /** Which urgent need break should preempt work (lowest satisfiable meter wins). */
+    public enum UrgentNeedKind {
+        HUNGER,
+        ENERGY,
+        FUN
+    }
 
     private PoiScoring() {}
 
@@ -102,6 +119,285 @@ public final class PoiScoring {
         return e.getTags().contains("EAT") || e.getTags().contains(AetherhavenConstants.POI_TAG_FEAST);
     }
 
+    /** Bed / rest spots used for energy breaks. */
+    public static boolean isRestPoi(@Nonnull PoiEntry e) {
+        PoiInteractionKind k = e.getInteractionKind();
+        return k == PoiInteractionKind.SLEEP || e.getTags().contains("SLEEP") || e.getTags().contains("ENERGY");
+    }
+
+    /** Leisure spots used for fun breaks. */
+    public static boolean isFunPoi(@Nonnull PoiEntry e) {
+        return e.getTags().contains("FUN");
+    }
+
+    public static boolean isEnergyNotFull(@Nonnull VillagerNeeds needs) {
+        return needs.getEnergy() < VillagerNeeds.MAX - 0.25f;
+    }
+
+    public static boolean isFunNotFull(@Nonnull VillagerNeeds needs) {
+        return needs.getFun() < VillagerNeeds.MAX - 0.25f;
+    }
+
+    public static boolean needsEnergyBreak(@Nonnull VillagerNeeds needs, boolean fillingEnergySession) {
+        if (!isEnergyNotFull(needs)) {
+            return false;
+        }
+        return fillingEnergySession || needs.getEnergy() < ENERGY_REST_START_THRESHOLD;
+    }
+
+    public static boolean needsFunBreak(@Nonnull VillagerNeeds needs, boolean fillingFunSession, boolean daytime) {
+        if (!daytime || !isFunNotFull(needs)) {
+            return false;
+        }
+        return fillingFunSession || needs.getFun() < NEEDS_BREAK_THRESHOLD;
+    }
+
+    @Nullable
+    public static UUID resolveHomePlotId(
+        @Nonnull TownRecord town,
+        @Nonnull UUID entityUuid,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
+        for (PlotInstance p :
+            town.listCompletePlotsWithGameplayConstruction(
+                constructionCatalog,
+                AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE
+            )) {
+            if (p.hasHomeResident(entityUuid)) {
+                return p.getPlotId();
+            }
+        }
+        return null;
+    }
+
+    @Nonnull
+    public static List<UUID> resolveInnPlotIds(
+        @Nonnull TownRecord town,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
+        return town.listCompletePlotIdsWithGameplayConstruction(
+            constructionCatalog,
+            AetherhavenConstants.CONSTRUCTION_PLOT_INN
+        );
+    }
+
+    /** Completed park plots in the town (shared leisure utility; no villager assignment required). */
+    @Nonnull
+    public static List<UUID> resolveParkPlotIds(
+        @Nonnull TownRecord town,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
+        return town.listCompletePlotIdsWithGameplayConstruction(
+            constructionCatalog,
+            AetherhavenConstants.CONSTRUCTION_PLOT_PARK
+        );
+    }
+
+    /**
+     * Plot ids allowed during an urgent need break in {@link #pickBest}: assigned house (housing only), inn plots
+     * (shared rest), or park plots (shared fun). Workplace assignment is not required for inn or park.
+     */
+    @Nullable
+    public static Set<UUID> resolveUrgentBreakPlotAllowlist(
+        @Nonnull VillagerNeeds needs,
+        boolean fillingHungerSession,
+        boolean fillingEnergySession,
+        boolean fillingFunSession,
+        boolean daytime,
+        @Nullable TownRecord town,
+        @Nullable UUID entityUuid,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
+        if (town == null) {
+            return null;
+        }
+        UrgentNeedKind breakMode =
+            pickBestBreakMode(needs, fillingHungerSession, fillingEnergySession, fillingFunSession, daytime);
+        if (breakMode == UrgentNeedKind.FUN) {
+            List<UUID> parkPlotIds = resolveParkPlotIds(town, constructionCatalog);
+            return parkPlotIds.isEmpty() ? null : new HashSet<>(parkPlotIds);
+        }
+        if (breakMode == UrgentNeedKind.ENERGY) {
+            Set<UUID> allowed = new HashSet<>(resolveInnPlotIds(town, constructionCatalog));
+            if (entityUuid != null) {
+                UUID homePlotId = resolveHomePlotId(town, entityUuid, constructionCatalog);
+                if (homePlotId != null) {
+                    allowed.add(homePlotId);
+                }
+            }
+            return allowed.isEmpty() ? null : allowed;
+        }
+        return null;
+    }
+
+    /**
+     * Rest break POI: assigned house bed when the villager has housing, otherwise the nearest inn bed. Inn use never
+     * requires assignment.
+     */
+    @Nullable
+    public static PoiEntry pickEnergyRestPoi(
+        @Nonnull List<PoiEntry> candidates,
+        @Nonnull Map<String, Integer> cellOccupancy,
+        double npcX,
+        double npcZ,
+        @Nullable UUID homePlotId,
+        @Nonnull List<UUID> innPlotIds
+    ) {
+        if (homePlotId != null) {
+            PoiEntry homePick = pickNearestRestPoiOnPlots(candidates, cellOccupancy, npcX, npcZ, List.of(homePlotId));
+            if (homePick != null) {
+                return homePick;
+            }
+        }
+        if (!innPlotIds.isEmpty()) {
+            return pickNearestRestPoiOnPlots(candidates, cellOccupancy, npcX, npcZ, innPlotIds);
+        }
+        return null;
+    }
+
+    /**
+     * Fun break POI: nearest completed park plot with an available fun POI. No villager assignment required.
+     */
+    @Nullable
+    public static PoiEntry pickFunBreakPoi(
+        @Nonnull List<PoiEntry> candidates,
+        @Nonnull Map<String, Integer> cellOccupancy,
+        double npcX,
+        double npcZ,
+        @Nonnull TownRecord town,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
+        List<UUID> parkPlotIds = resolveParkPlotIds(town, constructionCatalog);
+        if (parkPlotIds.isEmpty()) {
+            return null;
+        }
+        Set<UUID> parkPlots = new HashSet<>(parkPlotIds);
+        Map<UUID, List<PoiEntry>> byPlot = new HashMap<>();
+        for (PoiEntry e : candidates) {
+            if (!isFunPoi(e) || e.getPlotId() == null || !parkPlots.contains(e.getPlotId())) {
+                continue;
+            }
+            if (!hasAvailableCapacity(e, cellOccupancy)) {
+                continue;
+            }
+            byPlot.computeIfAbsent(e.getPlotId(), k -> new ArrayList<>()).add(e);
+        }
+        if (byPlot.isEmpty()) {
+            return null;
+        }
+        UUID nearestPlot = null;
+        double nearestPlotDistSq = Double.POSITIVE_INFINITY;
+        for (UUID plotId : byPlot.keySet()) {
+            PlotInstance plot = town.findPlotById(plotId);
+            double distSq;
+            if (plot != null) {
+                var fp = plot.toFootprint();
+                double cx = (fp.getMinX() + fp.getMaxX()) * 0.5 + 0.5;
+                double cz = (fp.getMinZ() + fp.getMaxZ()) * 0.5 + 0.5;
+                distSq = distSqWorld(npcX, npcZ, cx, cz);
+            } else {
+                PoiEntry proxy = pickNearestClaimablePoi(byPlot.get(plotId), cellOccupancy, npcX, npcZ);
+                if (proxy == null) {
+                    continue;
+                }
+                distSq = distSqToPoi(proxy, npcX, npcZ);
+            }
+            if (nearestPlot == null || distSq < nearestPlotDistSq) {
+                nearestPlot = plotId;
+                nearestPlotDistSq = distSq;
+            }
+        }
+        if (nearestPlot == null) {
+            return null;
+        }
+        return pickNearestClaimablePoi(byPlot.get(nearestPlot), cellOccupancy, npcX, npcZ);
+    }
+
+    /**
+     * Among needs below threshold with an available POI, pick the lowest meter. Active fill sessions keep priority
+     * for their need type.
+     */
+    @Nullable
+    public static UrgentNeedKind resolveMostUrgentSatisfiableNeed(
+        @Nonnull VillagerNeeds needs,
+        boolean fillingHunger,
+        boolean fillingEnergy,
+        boolean fillingFun,
+        boolean daytime,
+        @Nonnull List<PoiEntry> candidates,
+        @Nonnull Map<String, Integer> cellOccupancy,
+        double npcX,
+        double npcZ,
+        @Nonnull UUID entityUuid,
+        @Nullable TownRecord town,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
+        if (fillingHunger && needsHungerBreak(needs, true, daytime)) {
+            if (hasSatisfiableHungerPoi(candidates, cellOccupancy)) {
+                return UrgentNeedKind.HUNGER;
+            }
+        }
+        if (fillingEnergy && needsEnergyBreak(needs, true)) {
+            if (town != null && hasSatisfiableEnergyPoi(candidates, cellOccupancy, entityUuid, town, constructionCatalog)) {
+                return UrgentNeedKind.ENERGY;
+            }
+        }
+        if (fillingFun && needsFunBreak(needs, true, daytime)) {
+            if (town != null
+                && pickFunBreakPoi(candidates, cellOccupancy, npcX, npcZ, town, constructionCatalog) != null) {
+                return UrgentNeedKind.FUN;
+            }
+        }
+        UrgentNeedKind best = null;
+        float bestMeter = Float.MAX_VALUE;
+        if (daytime
+            && needsHungerBreak(needs, false, daytime)
+            && hasSatisfiableHungerPoi(candidates, cellOccupancy)
+            && needs.getHunger() < bestMeter) {
+            best = UrgentNeedKind.HUNGER;
+            bestMeter = needs.getHunger();
+        }
+        if (needsEnergyBreak(needs, false)
+            && town != null
+            && hasSatisfiableEnergyPoi(candidates, cellOccupancy, entityUuid, town, constructionCatalog)
+            && needs.getEnergy() < bestMeter) {
+            best = UrgentNeedKind.ENERGY;
+            bestMeter = needs.getEnergy();
+        }
+        if (daytime
+            && needsFunBreak(needs, false, daytime)
+            && town != null
+            && pickFunBreakPoi(candidates, cellOccupancy, npcX, npcZ, town, constructionCatalog) != null
+            && needs.getFun() < bestMeter) {
+            best = UrgentNeedKind.FUN;
+        }
+        return best;
+    }
+
+    public static boolean hasSatisfiableHungerPoi(
+        @Nonnull List<PoiEntry> candidates,
+        @Nonnull Map<String, Integer> cellOccupancy
+    ) {
+        for (PoiEntry e : candidates) {
+            if (isEatPoi(e) && hasAvailableCapacity(e, cellOccupancy)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean hasSatisfiableEnergyPoi(
+        @Nonnull List<PoiEntry> candidates,
+        @Nonnull Map<String, Integer> cellOccupancy,
+        @Nonnull UUID entityUuid,
+        @Nonnull TownRecord town,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
+        UUID homePlotId = resolveHomePlotId(town, entityUuid, constructionCatalog);
+        List<UUID> innPlotIds = resolveInnPlotIds(town, constructionCatalog);
+        return pickEnergyRestPoi(candidates, cellOccupancy, Double.NaN, Double.NaN, homePlotId, innPlotIds) != null;
+    }
+
     /** True when the villager should temporarily override a work shift to satisfy a low meter (eat / rest / fun). */
     public static boolean needsBreakForSchedule(@Nonnull VillagerNeeds needs) {
         return needsBreakForSchedule(needs, true);
@@ -110,8 +406,8 @@ public final class PoiScoring {
     /** Night: ignore hunger for work breaks so they do not leave for food; energy/fun still apply. */
     public static boolean needsBreakForSchedule(@Nonnull VillagerNeeds needs, boolean daytime) {
         return (daytime && needs.getHunger() < HUNGER_EAT_START_THRESHOLD)
-            || needs.getEnergy() < NEEDS_BREAK_THRESHOLD
-            || needs.getFun() < NEEDS_BREAK_THRESHOLD;
+            || needs.getEnergy() < ENERGY_REST_START_THRESHOLD
+            || (daytime && needs.getFun() < NEEDS_BREAK_THRESHOLD);
     }
 
     public static boolean isWorkScheduleSegment(@Nullable String scheduleLocation) {
@@ -341,15 +637,84 @@ public final class PoiScoring {
         boolean daytime,
         @Nullable UUID lastUsedPoiId
     ) {
+        return pickBest(
+            candidates,
+            needs,
+            binding,
+            cellOccupancy,
+            npcX,
+            npcZ,
+            scheduleLocation,
+            townHasRestaurant,
+            fillingHungerSession,
+            false,
+            false,
+            daytime,
+            lastUsedPoiId,
+            null
+        );
+    }
+
+    @Nullable
+    public static PoiEntry pickBest(
+        @Nonnull List<PoiEntry> candidates,
+        @Nonnull VillagerNeeds needs,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull Map<String, Integer> cellOccupancy,
+        double npcX,
+        double npcZ,
+        @Nullable String scheduleLocation,
+        boolean townHasRestaurant,
+        boolean fillingHungerSession,
+        boolean fillingEnergySession,
+        boolean fillingFunSession,
+        boolean daytime,
+        @Nullable UUID lastUsedPoiId
+    ) {
+        return pickBest(
+            candidates,
+            needs,
+            binding,
+            cellOccupancy,
+            npcX,
+            npcZ,
+            scheduleLocation,
+            townHasRestaurant,
+            fillingHungerSession,
+            fillingEnergySession,
+            fillingFunSession,
+            daytime,
+            lastUsedPoiId,
+            null
+        );
+    }
+
+    @Nullable
+    public static PoiEntry pickBest(
+        @Nonnull List<PoiEntry> candidates,
+        @Nonnull VillagerNeeds needs,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull Map<String, Integer> cellOccupancy,
+        double npcX,
+        double npcZ,
+        @Nullable String scheduleLocation,
+        boolean townHasRestaurant,
+        boolean fillingHungerSession,
+        boolean fillingEnergySession,
+        boolean fillingFunSession,
+        boolean daytime,
+        @Nullable UUID lastUsedPoiId,
+        @Nullable Set<UUID> breakPlotAllowlist
+    ) {
         UUID preferredPlot = binding.getPreferredPlotId();
         boolean atWork = isWorkScheduleSegment(scheduleLocation);
         boolean atShop = isShopScheduleSegment(scheduleLocation);
-        boolean hungerBreak = needsHungerBreak(needs, fillingHungerSession, daytime);
+        UrgentNeedKind breakMode =
+            pickBestBreakMode(needs, fillingHungerSession, fillingEnergySession, fillingFunSession, daytime);
         boolean breakOverride = atWork && needsBreakForSchedule(needs, daytime);
-        boolean workOnlyShift = preferredPlot != null && atWork && !breakOverride && !hungerBreak;
-        boolean shopBrowseShift = atShop && !hungerBreak;
-        boolean allowTownWide =
-            hungerBreak || (atWork && breakOverride);
+        boolean workOnlyShift = preferredPlot != null && atWork && !breakOverride && breakMode == null;
+        boolean shopBrowseShift = atShop && breakMode == null;
+        boolean allowTownWide = breakMode != null || (atWork && breakOverride);
         PoiEntry best = null;
         float bestScore = 0f;
         int bestUsed = Integer.MAX_VALUE;
@@ -363,7 +728,7 @@ public final class PoiScoring {
                 continue;
             }
             // Job stations only during the scheduled work segment (homeless roosting at the workplace must idle).
-            if (!atWork && !hungerBreak && isWorkPoi(e)) {
+            if (!atWork && breakMode == null && isWorkPoi(e)) {
                 continue;
             }
             // Night is for sleep: do not leave for non-feast eat spots after dark.
@@ -372,8 +737,24 @@ public final class PoiScoring {
                 && !e.getTags().contains(AetherhavenConstants.POI_TAG_FEAST)) {
                 continue;
             }
-            if (hungerBreak) {
+            if (breakMode == UrgentNeedKind.HUNGER) {
                 if (!isEatPoi(e)) {
+                    continue;
+                }
+            } else if (breakMode == UrgentNeedKind.ENERGY) {
+                if (!isRestPoi(e)) {
+                    continue;
+                }
+                if (breakPlotAllowlist != null
+                    && (e.getPlotId() == null || !breakPlotAllowlist.contains(e.getPlotId()))) {
+                    continue;
+                }
+            } else if (breakMode == UrgentNeedKind.FUN) {
+                if (!isFunPoi(e)) {
+                    continue;
+                }
+                if (breakPlotAllowlist != null
+                    && (e.getPlotId() == null || !breakPlotAllowlist.contains(e.getPlotId()))) {
                     continue;
                 }
             } else if (shopBrowseShift) {
@@ -469,9 +850,46 @@ public final class PoiScoring {
         // Idle discretionary visits: require some unmet need so villagers do not crisscross town when already satisfied.
         // When the weekly schedule sets preferredPlotId, we must still pick a POI in that plot even if needs are full
         // (scores near zero); otherwise they never enter TRAVEL and stay on local wander (e.g. near Gaia after revival).
-        // Hunger breaks always allow a scored eat POI even without preferredPlot.
-        if (preferredPlot == null && !shopBrowseShift && !hungerBreak && bestScore < 8f) {
+        // Urgent need breaks always allow a scored POI even without preferredPlot.
+        if (preferredPlot == null && !shopBrowseShift && breakMode == null && bestScore < 8f) {
             return null;
+        }
+        return best;
+    }
+
+    /**
+     * Which need break {@link #pickBest} should pursue: active fill sessions win, otherwise the lowest meter among
+     * satisfiable break thresholds (same priority as {@link #resolveMostUrgentSatisfiableNeed}).
+     */
+    @Nullable
+    private static UrgentNeedKind pickBestBreakMode(
+        @Nonnull VillagerNeeds needs,
+        boolean fillingHungerSession,
+        boolean fillingEnergySession,
+        boolean fillingFunSession,
+        boolean daytime
+    ) {
+        if (fillingHungerSession && needsHungerBreak(needs, true, daytime)) {
+            return UrgentNeedKind.HUNGER;
+        }
+        if (fillingEnergySession && needsEnergyBreak(needs, true)) {
+            return UrgentNeedKind.ENERGY;
+        }
+        if (fillingFunSession && needsFunBreak(needs, true, daytime)) {
+            return UrgentNeedKind.FUN;
+        }
+        UrgentNeedKind best = null;
+        float bestMeter = Float.MAX_VALUE;
+        if (daytime && needsHungerBreak(needs, false, daytime) && needs.getHunger() < bestMeter) {
+            best = UrgentNeedKind.HUNGER;
+            bestMeter = needs.getHunger();
+        }
+        if (needsEnergyBreak(needs, false) && needs.getEnergy() < bestMeter) {
+            best = UrgentNeedKind.ENERGY;
+            bestMeter = needs.getEnergy();
+        }
+        if (daytime && needsFunBreak(needs, false, daytime) && needs.getFun() < bestMeter) {
+            best = UrgentNeedKind.FUN;
         }
         return best;
     }
@@ -532,6 +950,69 @@ public final class PoiScoring {
         } else {
             px = e.getX() + 0.5;
             pz = e.getZ() + 0.5;
+        }
+        double dx = px - npcX;
+        double dz = pz - npcZ;
+        return dx * dx + dz * dz;
+    }
+
+    private static boolean hasAvailableCapacity(@Nonnull PoiEntry e, @Nonnull Map<String, Integer> cellOccupancy) {
+        return PoiOccupancy.hasAvailableCapacity(cellOccupancy, e);
+    }
+
+    @Nullable
+    private static PoiEntry pickNearestRestPoiOnPlots(
+        @Nonnull List<PoiEntry> candidates,
+        @Nonnull Map<String, Integer> cellOccupancy,
+        double npcX,
+        double npcZ,
+        @Nonnull List<UUID> plotIds
+    ) {
+        Set<UUID> allowed = new HashSet<>(plotIds);
+        List<PoiEntry> filtered = new ArrayList<>();
+        for (PoiEntry e : candidates) {
+            if (!isRestPoi(e) || e.getPlotId() == null || !allowed.contains(e.getPlotId())) {
+                continue;
+            }
+            if (!hasAvailableCapacity(e, cellOccupancy)) {
+                continue;
+            }
+            filtered.add(e);
+        }
+        return pickNearestClaimablePoi(filtered, cellOccupancy, npcX, npcZ);
+    }
+
+    @Nullable
+    private static PoiEntry pickNearestClaimablePoi(
+        @Nonnull List<PoiEntry> pois,
+        @Nonnull Map<String, Integer> cellOccupancy,
+        double npcX,
+        double npcZ
+    ) {
+        PoiEntry best = null;
+        int bestUsed = Integer.MAX_VALUE;
+        double bestDistSq = Double.POSITIVE_INFINITY;
+        for (PoiEntry e : pois) {
+            if (!hasAvailableCapacity(e, cellOccupancy)) {
+                continue;
+            }
+            int used = cellOccupancy.getOrDefault(PoiOccupancy.standCellKey(e), 0);
+            double distSq = distSqToPoi(e, npcX, npcZ);
+            if (best == null || used < bestUsed || (!Double.isNaN(distSq) && distSq < bestDistSq - 1e-9)) {
+                best = e;
+                bestUsed = used;
+                bestDistSq = distSq;
+            } else if (used == bestUsed && !Double.isNaN(distSq) && distSq < bestDistSq - 1e-9) {
+                best = e;
+                bestDistSq = distSq;
+            }
+        }
+        return best;
+    }
+
+    private static double distSqWorld(double npcX, double npcZ, double px, double pz) {
+        if (Double.isNaN(npcX) || Double.isNaN(npcZ)) {
+            return Double.POSITIVE_INFINITY;
         }
         double dx = px - npcX;
         double dz = pz - npcZ;

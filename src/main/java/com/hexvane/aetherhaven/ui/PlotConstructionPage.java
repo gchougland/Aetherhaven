@@ -867,6 +867,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         if (canClear) {
             commandBuilder.set("#VisitorPortalTravelToggle.Value", town.isAllowVisitorPortalTravel());
             commandBuilder.set("#VisitorPortalTravelToggle.Disabled", false);
+            commandBuilder.set("#VisitorPortalMembersOnlyToggle.Value", town.isVisitorPortalMembersOnly());
+            commandBuilder.set("#VisitorPortalMembersOnlyToggle.Disabled", false);
             String portalColor = TownPortalTravelColor.resolveHex(town);
             TownPortalTravelColor.applyTeleportIconTint(commandBuilder, "#VisitorPortalColorPreviewIcon", portalColor);
             commandBuilder.set("#ChooseVisitorPortalColorButton.Disabled", false);
@@ -886,6 +888,14 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 new EventData()
                     .append("Action", "SetVisitorPortalTravel")
                     .append("@AllowVisitorPortalTravel", "#VisitorPortalTravelToggle.Value"),
+                false
+            );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.ValueChanged,
+                "#VisitorPortalMembersOnlyToggle",
+                new EventData()
+                    .append("Action", "SetVisitorPortalMembersOnly")
+                    .append("@VisitorPortalMembersOnly", "#VisitorPortalMembersOnlyToggle.Value"),
                 false
             );
         }
@@ -974,6 +984,43 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         }
         World world = store.getExternalData().getWorld();
         town.setAllowVisitorPortalTravel(allow);
+        AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
+        UICommandBuilder cmd = new UICommandBuilder();
+        UIEventBuilder ev = new UIEventBuilder();
+        build(ref, cmd, ev, store);
+        sendUpdate(cmd, ev, false);
+    }
+
+    private void handleSetVisitorPortalMembersOnly(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Boolean membersOnly
+    ) {
+        if (!managementUi || membersOnly == null) {
+            return;
+        }
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc == null) {
+            return;
+        }
+        TownRecord town = resolveManagementTown(store);
+        if (town == null) {
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.townNotFound"));
+            return;
+        }
+        if (!town.playerCanPlacePlots(uc.getUuid())) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalTravelNoPermission")
+            );
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        town.setVisitorPortalMembersOnly(membersOnly);
         AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
         UICommandBuilder cmd = new UICommandBuilder();
         UIEventBuilder ev = new UIEventBuilder();
@@ -1565,6 +1612,10 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         }
         if (data.action != null && data.action.equalsIgnoreCase("SetVisitorPortalTravel")) {
             handleSetVisitorPortalTravel(ref, store, data.allowVisitorPortalTravel);
+            return;
+        }
+        if (data.action != null && data.action.equalsIgnoreCase("SetVisitorPortalMembersOnly")) {
+            handleSetVisitorPortalMembersOnly(ref, store, data.visitorPortalMembersOnly);
             return;
         }
         if (data.action != null && data.action.equalsIgnoreCase("SetPlayerShopNpcBuy")) {
@@ -2552,24 +2603,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         world.breakBlock(blockWorldPos.x, blockWorldPos.y, blockWorldPos.z, BREAK_SETTINGS);
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (def.consumesPlotToken()) {
-            String language = "en-US";
-            if (pr != null && pr.getLanguage() != null && !pr.getLanguage().isBlank()) {
-                language = pr.getLanguage();
-            }
-            ItemStack tokenStack = PlotTokenInventory.createTokenStackForDefinition(def, language);
-            ItemStackTransaction giveTx = player.giveItem(tokenStack, ref, store);
-            if (giveTx.succeeded()) {
-                PlotTokenIconSync.afterTokenGranted(pr);
-            }
-            if (!giveTx.succeeded() || !ItemStack.isEmpty(giveTx.getRemainder())) {
-                List<ItemStack> tokenOverflow = new ArrayList<>();
-                if (!giveTx.succeeded()) {
-                    tokenOverflow.add(tokenStack);
-                } else {
-                    tokenOverflow.add(giveTx.getRemainder());
-                }
-                PlotMaterialDepositService.refundItemStacksToPlayer(player, ref, store, tokenOverflow, dropPos);
-            }
+            PlotTokenInventory.grantDefinitionTokenToPlayer(def, player, ref, store, dropPos);
         }
         if (pr != null) {
             pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.plotRemoved"));
@@ -3545,6 +3579,12 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             )
             .add()
             .append(
+                new KeyedCodec<>("@VisitorPortalMembersOnly", Codec.BOOLEAN),
+                (d, v) -> d.visitorPortalMembersOnly = v,
+                d -> d.visitorPortalMembersOnly
+            )
+            .add()
+            .append(
                 new KeyedCodec<>("@AllowNpcShopPurchases", Codec.BOOLEAN),
                 (d, v) -> d.allowNpcShopPurchases = v,
                 d -> d.allowNpcShopPurchases
@@ -3576,6 +3616,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         private String upgradeBranch;
         @Nullable
         private Boolean allowVisitorPortalTravel;
+        @Nullable
+        private Boolean visitorPortalMembersOnly;
         @Nullable
         private Boolean allowNpcShopPurchases;
         @Nullable

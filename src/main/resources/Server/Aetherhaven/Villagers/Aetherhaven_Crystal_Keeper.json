@@ -10,6 +10,7 @@
   "uiSortOrder": 13,
   "innPoolEligible": true,
   "innPoolOrder": 8,
+  "innPoolWeight": 1,
   "visitorBindingKind": "visitor_crystal_keeper",
   "innPoolRequires": {
     "completedQuestIds": [

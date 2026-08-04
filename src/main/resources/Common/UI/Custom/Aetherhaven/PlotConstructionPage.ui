@@ -242,6 +242,20 @@ $C.@PageOverlay {
                 }
               }
 
+              Group #VisitorPortalMembersOnlyRow {
+                LayoutMode: Left;
+                Anchor: (Bottom: 8);
+
+                $C.@CheckBox #VisitorPortalMembersOnlyToggle {}
+
+                Label #VisitorPortalMembersOnlyLabel {
+                  Text: "";
+                  Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8, Wrap: true);
+                  Anchor: (Left: 11);
+                  FlexWeight: 1;
+                }
+              }
+
               Group #VisitorPortalColorRow {
                 LayoutMode: Left;
 

@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.ui;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.choices.ChoiceElement;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.choices.ChoiceInteraction;
@@ -9,7 +10,7 @@ import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import javax.annotation.Nonnull;
 
-/** Same layout as vanilla {@code ItemRepairElement} for {@code Pages/ItemRepairElement.ui}. */
+/** Row layout for {@code Aetherhaven/BlacksmithRepairElement.ui}. */
 public final class BlacksmithRepairRowElement extends ChoiceElement {
     private final ItemStack itemStack;
 
@@ -26,9 +27,14 @@ public final class BlacksmithRepairRowElement extends ChoiceElement {
         PlayerRef playerRef
     ) {
         int durabilityPercentage = (int) Math.round(this.itemStack.getDurability() / this.itemStack.getMaxDurability() * 100.0);
-        commandBuilder.append("#ElementList", "Pages/ItemRepairElement.ui");
+        int cost = BlacksmithRepairInteraction.goldCost(this.itemStack, AetherhavenConstants.BLACKSMITH_REPAIR_COST_FULL);
+        commandBuilder.append("#ElementList", "Aetherhaven/BlacksmithRepairElement.ui");
         commandBuilder.set(selector + " #Icon.ItemId", this.itemStack.getItemId().toString());
         commandBuilder.set(selector + " #Name.TextSpans", Message.translation(this.itemStack.getItem().getTranslationKey()));
+        commandBuilder.set(
+            selector + " #Cost.TextSpans",
+            Message.translation("aetherhaven_misc.aetherhaven.blacksmith.repair.rowCost").param("cost", cost)
+        );
         commandBuilder.set(selector + " #Durability.Text", durabilityPercentage + "%");
     }
 }

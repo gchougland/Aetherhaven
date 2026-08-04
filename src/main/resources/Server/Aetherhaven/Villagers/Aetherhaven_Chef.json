@@ -9,6 +9,7 @@
   "uiSortOrder": 16,
   "innPoolEligible": true,
   "innPoolOrder": 1,
+  "innPoolWeight": 5,
   "visitorBindingKind": "visitor_chef",
   "reputationMilestones": [
     {

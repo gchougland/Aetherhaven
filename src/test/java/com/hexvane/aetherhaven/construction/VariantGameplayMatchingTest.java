@@ -104,6 +104,31 @@ class VariantGameplayMatchingTest {
     }
 
     @Test
+    void uniqueCrossmodShopIsNotTreatedAsMarketStall() {
+        ConstructionDefinition hobbitShop =
+            GSON.fromJson(
+                """
+                {"id":"plot_hobbit_shop","displayName":"Hobbit Shop","prefabPath":"plot_hobbit_shop.prefab.json","plotTokenItemId":"Lotr_Plot_Token_Hobbit_Shop","countsAsConstructionId":["plot_house"]}
+                """,
+                ConstructionDefinition.class
+            );
+        ConstructionCatalog catalog = ConstructionCatalog.forTests(Map.of(hobbitShop.getId(), hobbitShop));
+
+        assertFalse(
+            catalog.matchesGameplayConstruction(
+                hobbitShop.getId(),
+                AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL
+            )
+        );
+        assertFalse(
+            ProductionWorkplaceKinds.residentBindingKindsForPlot(catalog, hobbitShop.getId())
+                .contains(TownVillagerBinding.KIND_MERCHANT)
+        );
+        assertTrue(catalog.matchesGameplayConstruction(hobbitShop.getId(), "plot_house"));
+        assertTrue(ProductionWorkplaceKinds.residentBindingKindsForPlot(catalog, hobbitShop.getId()).isEmpty());
+    }
+
+    @Test
     void plotLookupMatchesAnyResolvedAlias() {
         ConstructionDefinition variant =
             GSON.fromJson(

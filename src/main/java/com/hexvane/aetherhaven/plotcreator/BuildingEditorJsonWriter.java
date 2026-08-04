@@ -108,7 +108,9 @@ public final class BuildingEditorJsonWriter {
             root.remove("adventurerSpawnYaws");
         }
         if (draft.getCountsAsConstructionIds().isEmpty()) {
-            root.remove("countsAsConstructionId");
+            if (!originalSnapshot.containsKey("countsAsConstructionId")) {
+                root.remove("countsAsConstructionId");
+            }
         } else if (draft.getCountsAsConstructionIds().size() == 1) {
             root.put("countsAsConstructionId", draft.getCountsAsConstructionIds().get(0));
         } else {

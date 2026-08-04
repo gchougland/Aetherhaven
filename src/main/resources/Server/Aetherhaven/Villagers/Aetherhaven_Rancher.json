@@ -11,6 +11,7 @@
   "uiSortOrder": 8,
   "innPoolEligible": true,
   "innPoolOrder": 6,
+  "innPoolWeight": 1,
   "visitorBindingKind": "visitor_rancher",
   "reputationMilestones": [
     {

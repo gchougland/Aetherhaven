@@ -27,6 +27,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
@@ -93,31 +94,69 @@ public final class VillagerAutonomyTravelKick {
                     boolean daytime = ShopSpotOpenService.isGameDay(store);
                     if (!daytime) {
                         autonomy.setFillingHunger(false);
+                        autonomy.setFillingFun(false);
                     }
                     TownManager tmm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
                     TownRecord townRow = tmm.getTown(binding.getTownId());
                     TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+                    PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
+                    List<PoiEntry> pois = reg.listByTown(binding.getTownId());
+                    if (autonomy.getPhase() == VillagerAutonomyState.PHASE_USE) {
+                        return true;
+                    }
                     if (VillagerAutonomySystem.tryBeginQuestBoardPostTravel(
                         ref, store, commandBuffer, world, npc, binding, autonomy, townRow, now, plugin, tc
                     )) {
                         return true;
                     }
-                    if (!PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger(), daytime)
+                    if (VillagerAutonomySystem.tryBeginUrgentNeedBreak(
+                        ref,
+                        store,
+                        commandBuffer,
+                        world,
+                        npc,
+                        reg,
+                        pois,
+                        needs,
+                        binding,
+                        autonomy,
+                        now,
+                        plugin,
+                        townRow,
+                        tc,
+                        daytime
+                    )) {
+                        return true;
+                    }
+                    if (!VillagerAutonomySystem.hasResolvableUrgentNeed(
+                            ref, store, pois, needs, binding, autonomy, plugin, townRow, tc, daytime)
                         && SchedulePlotCommute.tryBeginIfOffSchedulePlot(
                             ref, store, commandBuffer, world, npc, binding, autonomy, now, plugin
                         )) {
                         return true;
                     }
-                    PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
-                    List<PoiEntry> pois = reg.listByTown(binding.getTownId());
                     Map<String, Integer> cellOcc = PoiOccupancy.cellOccupancyForTown(world, binding.getTownId(), store, reg);
                     double npcX = tc != null ? tc.getPosition().x : Double.NaN;
                     double npcZ = tc != null ? tc.getPosition().z : Double.NaN;
                     VillagerScheduleTickState schedTick =
                         chunk.getComponent(i, VillagerScheduleTickState.getComponentType());
                     String scheduleSeg = schedTick != null ? schedTick.getLastAppliedScheduleSegment() : null;
-                    boolean filling =
-                        daytime && (autonomy.isFillingHunger() || PoiScoring.needsHungerBreak(needs, false, daytime));
+                    Set<UUID> breakPlotAllowlist =
+                        townRow != null
+                            ? PoiScoring.resolveUrgentBreakPlotAllowlist(
+                                needs,
+                                autonomy.isFillingHunger()
+                                    || PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger(), daytime),
+                                autonomy.isFillingEnergy()
+                                    || PoiScoring.needsEnergyBreak(needs, autonomy.isFillingEnergy()),
+                                autonomy.isFillingFun()
+                                    || PoiScoring.needsFunBreak(needs, autonomy.isFillingFun(), daytime),
+                                daytime,
+                                townRow,
+                                npcUuid,
+                                plugin.getConstructionCatalog()
+                            )
+                            : null;
                     PoiEntry pick =
                         PoiScoring.pickBest(
                             pois,
@@ -128,9 +167,15 @@ public final class VillagerAutonomyTravelKick {
                             npcZ,
                             scheduleSeg,
                             false,
-                            filling,
+                            autonomy.isFillingHunger()
+                                || PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger(), daytime),
+                            autonomy.isFillingEnergy()
+                                || PoiScoring.needsEnergyBreak(needs, autonomy.isFillingEnergy()),
+                            autonomy.isFillingFun()
+                                || PoiScoring.needsFunBreak(needs, autonomy.isFillingFun(), daytime),
                             daytime,
-                            autonomy.getLastUsedPoiUuid()
+                            autonomy.getLastUsedPoiUuid(),
+                            breakPlotAllowlist
                         );
                     if (pick == null) {
                         return true;

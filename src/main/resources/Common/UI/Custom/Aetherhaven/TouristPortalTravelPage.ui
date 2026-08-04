@@ -79,6 +79,20 @@ $C.@PageOverlay {
           }
         }
 
+        Group #MembersOnlyRow {
+          LayoutMode: Left;
+          Anchor: (Bottom: 10);
+
+          $C.@CheckBox #MembersOnlyToggle {}
+
+          Label #MembersOnlyLabel {
+            Text: "";
+            Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8, Wrap: true);
+            Anchor: (Left: 11);
+            FlexWeight: 1;
+          }
+        }
+
         Group #PortalColorRow {
           LayoutMode: Left;
 

@@ -1,9 +1,10 @@
 # Changelog
 
-## [2.6.1] - Unreleased
+## [2.7.0] - Unreleased
 
 ### Added
 
+- **Blacksmith repair cost** — The repair menu shows how much each item will cost in gold before you confirm.
 - **Intro quest** — On your first join to a world, you can accept a short guided quest to craft a town planning desk, craft a charter, and place your charter to found a town.
 - **Stormwind building set** — 20 WoW-inspired Stormwind-style plot variants (inn, town hall, shops, production buildings, townhouses, etc.) available on the plot crafting bench under the Stormwind style filter.
 - **Community updates** — Update button on the plot crafting bench when a newer version of a downloaded building is available.
@@ -22,7 +23,6 @@
 - **Town Journal plot materials** — Tap a building that is still a plot sign to see its material progress. View only; use the town records shelf or plot sign to deposit or build.
 - **Town Journal building trail** — Tap the walking icon on a building to show a trail that leads you there. It stops when you arrive.
 - **Low need dialogue** — Town villagers sometimes tell you when they are hungry, tired, or bored when you talk to them.
-- **Quest board follow up** — Elder Lyren has example dialogue after you turn in his Foundation Stones board quest.
 
 ### Changed
 
@@ -35,6 +35,7 @@
 - **Plot blueprints** — Plot blueprints now give unlock points instead of unlocking a specific building. Use a blueprint to gain a point, then spend points at the plot crafting bench to unlock locked buildings. Plot blueprints stack to 25. The bench shows how many unlock points you have.
 - **Plot creator balloon blueprint toggle** — Removed the balloon plot blueprint option from the plot creator. Use plot token locked by default to control whether a building needs an unlock point at the bench.
 - **Jewelry workbench** — Can pull bars, gems, and life essence from nearby chests, like other crafting benches.
+- **Town Journal building removal** — Removing a building from the Town Journal returns most of the gold spent to build it to the town treasury and gives back the plot token.
 
 ### Fixed
 

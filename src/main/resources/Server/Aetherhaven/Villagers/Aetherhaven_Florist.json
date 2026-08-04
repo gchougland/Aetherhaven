@@ -9,6 +9,7 @@
   "uiSortOrder": 15,
   "innPoolEligible": true,
   "innPoolOrder": 10,
+  "innPoolWeight": 1,
   "visitorBindingKind": "visitor_florist",
   "innPoolRequires": {
     "completedQuestIds": [

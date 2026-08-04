@@ -145,6 +145,63 @@ public final class PoiAutonomyVisuals {
         }
     }
 
+    /**
+     * While holding a need-fill USE at a seat/bed POI, (re)attach block mount when the POI sits on mountable furniture.
+     * Returns true when the NPC is block-mounted afterward.
+     */
+    public static boolean ensureMountedForPoi(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull PoiEntry poi
+    ) {
+        if (VillagerAutonomySystem.isNpcBlockMounted(store, commandBuffer, npcRef)) {
+            return true;
+        }
+        Set<String> tags = poi.getTags();
+        World world = store.getExternalData().getWorld();
+        if (isEatPoi(tags)) {
+            VillagerBlockUtil.FurnitureMountKind furniture =
+                VillagerBlockUtil.furnitureMountKind(world, poi.getX(), poi.getY(), poi.getZ());
+            if (furniture == VillagerBlockUtil.FurnitureMountKind.SEAT && tryMountBlockPoi(npcRef, store, commandBuffer, poi)) {
+                playMountedFurnitureAnim(npcRef, store, commandBuffer, furniture);
+                return true;
+            }
+            return false;
+        }
+        VillagerBlockUtil.FurnitureMountKind furniture =
+            VillagerBlockUtil.furnitureMountKind(world, poi.getX(), poi.getY(), poi.getZ());
+        boolean shouldMount =
+            furniture != VillagerBlockUtil.FurnitureMountKind.NONE
+                && (poi.isMountOnUse() || furniture == VillagerBlockUtil.FurnitureMountKind.SEAT);
+        if (!shouldMount) {
+            return false;
+        }
+        if (tryMountBlockPoi(npcRef, store, commandBuffer, poi)) {
+            playMountedFurnitureAnim(npcRef, store, commandBuffer, furniture);
+            return true;
+        }
+        if (furniture == VillagerBlockUtil.FurnitureMountKind.BED) {
+            TransformComponent tcSleep = store.getComponent(npcRef, TransformComponent.getComponentType());
+            if (tcSleep != null
+                && (poi.hasInteractionTarget()
+                    || VillagerBlockUtil.canNpcMountBlockPoi(
+                        world,
+                        tcSleep.getPosition().x,
+                        tcSleep.getPosition().y,
+                        tcSleep.getPosition().z,
+                        poi.getX(),
+                        poi.getY(),
+                        poi.getZ()
+                    ))) {
+                sleepPoiFallbackPose(npcRef, store, commandBuffer, poi);
+                playMountedFurnitureAnim(npcRef, store, commandBuffer, furniture);
+                return false;
+            }
+        }
+        return false;
+    }
+
     /** Stop item consume / walk overlays after POI USE. {@code commandBuffer} may be null on the world thread. */
     public static void cleanupAfterPoiUse(
         @Nonnull Ref<EntityStore> npcRef,

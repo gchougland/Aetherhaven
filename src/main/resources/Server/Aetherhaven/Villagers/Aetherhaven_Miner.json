@@ -11,6 +11,7 @@
   "uiSortOrder": 6,
   "innPoolEligible": true,
   "innPoolOrder": 4,
+  "innPoolWeight": 2,
   "visitorBindingKind": "visitor_miner",
   "reputationMilestones": [
     {

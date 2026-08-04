@@ -70,6 +70,11 @@ public final class VillagerDefinition {
     @Nullable
     private Integer innPoolOrder;
 
+    /** Relative spawn chance in the daily inn visitor pool (default 1). */
+    @SerializedName("innPoolWeight")
+    @Nullable
+    private Integer innPoolWeight;
+
     @SerializedName("visitorBindingKind")
     @Nullable
     private String visitorBindingKind;
@@ -219,6 +224,10 @@ public final class VillagerDefinition {
 
     public int getInnPoolOrder() {
         return innPoolOrder != null ? innPoolOrder : 0;
+    }
+
+    public int getInnPoolWeight() {
+        return innPoolWeight != null && innPoolWeight > 0 ? innPoolWeight : 1;
     }
 
     @Nullable

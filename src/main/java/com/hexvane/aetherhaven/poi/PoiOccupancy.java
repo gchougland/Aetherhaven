@@ -133,6 +133,14 @@ public final class PoiOccupancy {
         return cellOccupancy.getOrDefault(cell, 0) < Math.max(1, capacity);
     }
 
+    /** True when another villager may soft-claim or begin travel to {@code poi}'s stand cell. */
+    public static boolean hasAvailableCapacity(
+        @Nonnull Map<String, Integer> cellOccupancy,
+        @Nonnull PoiEntry poi
+    ) {
+        return isCellAvailable(cellOccupancy, standCellKey(poi), poi.getCapacity());
+    }
+
     /**
      * Live store count of town villagers/tourists targeting {@code poi}'s stand cell, excluding
      * {@code excludeEntityUuid}.
@@ -296,12 +304,7 @@ public final class PoiOccupancy {
         if (targetId != null) {
             PoiEntry target = registry.get(targetId);
             if (target != null) {
-                // Count both the POI block and stand (may differ when an interaction target is set).
-                counts.merge(cellKey(target), 1, Integer::sum);
-                String stand = standCellKey(target);
-                if (!stand.equals(cellKey(target))) {
-                    counts.merge(stand, 1, Integer::sum);
-                }
+                counts.merge(standCellKey(target), 1, Integer::sum);
                 return;
             }
         }

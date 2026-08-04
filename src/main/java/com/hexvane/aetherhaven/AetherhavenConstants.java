@@ -607,6 +607,9 @@ public final class AetherhavenConstants {
     /** Gold coins spent to craft one plot token at the plot crafting bench. */
     public static final long PLOT_TOKEN_CRAFT_GOLD_COST = 5L;
 
+    /** Fraction of effective build gold returned to town treasury when removing a building from the town journal. */
+    public static final double JOURNAL_PLOT_REMOVE_GOLD_REFUND_FRACTION = 0.8;
+
     public static final String PAGE_TREASURY = "AetherhavenTreasury";
 
     /** Gaia statue revival UI; OpenCustomUI page id matches block interaction. */

@@ -40,6 +40,8 @@ import com.hexvane.aetherhaven.placement.PlotConstructionOpenHelper.OpenResult;
 import com.hexvane.aetherhaven.plot.ConstructionFavoritesService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintChunkUtil;
+import com.hexvane.aetherhaven.town.PlotJournalRemovalRefundService;
+import com.hexvane.aetherhaven.town.PlotJournalRemovalRefundService.RefundResult;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.PlotLocatePlayerComponent;
@@ -380,6 +382,21 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 "#JournalPlotRemoveModalConfirm.Disabled",
                 !PlotFootprintChunkUtil.isPlotFullyLoaded(world, plotForRemoveModal)
             );
+            ConstructionDefinition removeModalDef =
+                plugin.getConstructionCatalog().get(plotForRemoveModal.getConstructionId());
+            if (removeModalDef != null) {
+                commandBuilder.set(
+                    "#JournalPlotRemoveModalText.TextSpans",
+                    Message.translation(
+                        PlotJournalRemovalRefundService.confirmBodyLangKey(
+                            removeModalDef,
+                            plotForRemoveModal,
+                            world,
+                            plugin
+                        )
+                    )
+                );
+            }
         }
         if (abandonModalBlocking) {
             eventBuilder.addEventBinding(
@@ -1162,7 +1179,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             boolean showSchedule =
                 TownVillagerBinding.KIND_GUARD.equals(r.bindingKind())
                     || !TownResidentEligibility.isTownsfolkPoolKind(r.bindingKind(), r.roleId(), plugin)
-                    || liveEatingActivityMessage(plugin, world, store, r.entityUuid()) != null;
+                    || liveNeedBreakActivityMessage(plugin, world, store, r.entityUuid()) != null;
             commandBuilder.set(row + " #Select #ScheduleLocation.Visible", showSchedule);
             boolean locateActive = locateSession != null && locateSession.isActiveFor(r.entityUuid());
             commandBuilder.set(row + " #LocateVillager.Visible", !locateActive);
@@ -1373,7 +1390,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         if (TownVillagerBinding.KIND_GUARD.equals(row.bindingKind())) {
             return guardPatrolRouteMessage(world, plugin, row.entityUuid());
         }
-        Message eating = liveEatingActivityMessage(plugin, world, store, row.entityUuid());
+        Message eating = liveNeedBreakActivityMessage(plugin, world, store, row.entityUuid());
         if (eating != null) {
             return eating;
         }
@@ -1384,11 +1401,11 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
     }
 
     /**
-     * When a villager is traveling to or using an eat / feast POI (hunger break), override the schedule line so the
-     * journal shows that meal instead of work / home / inn.
+     * When a villager is filling hunger, energy, or fun, override the schedule line so the journal shows the break
+     * instead of work / home / inn.
      */
     @Nullable
-    private static Message liveEatingActivityMessage(
+    private static Message liveNeedBreakActivityMessage(
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull World world,
         @Nonnull Store<EntityStore> store,
@@ -1403,31 +1420,96 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             return null;
         }
         int phase = autonomy.getPhase();
+        UUID poiId = autonomy.getTargetPoiUuid();
+        PoiEntry poi = null;
+        if (poiId != null && !AetherhavenConstants.isScheduleZoneCommutePoi(poiId)) {
+            PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
+            poi = reg.get(poiId);
+        }
+        if (autonomy.isFillingHunger()) {
+            return needBreakActivityMessage(phase, poi, NeedBreakJournalKind.HUNGER);
+        }
+        if (autonomy.isFillingEnergy()) {
+            return needBreakActivityMessage(phase, poi, NeedBreakJournalKind.ENERGY);
+        }
+        if (autonomy.isFillingFun()) {
+            return needBreakActivityMessage(phase, poi, NeedBreakJournalKind.FUN);
+        }
         if (phase != VillagerAutonomyState.PHASE_TRAVEL && phase != VillagerAutonomyState.PHASE_USE) {
             return null;
         }
-        UUID poiId = autonomy.getTargetPoiUuid();
-        if (poiId == null || AetherhavenConstants.isScheduleZoneCommutePoi(poiId)) {
+        if (poi == null) {
             return null;
         }
-        PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
-        PoiEntry poi = reg.get(poiId);
-        if (poi == null || !PoiScoring.isEatPoi(poi)) {
-            return null;
+        if (PoiScoring.isEatPoi(poi)) {
+            return needBreakActivityMessage(phase, poi, NeedBreakJournalKind.HUNGER);
         }
-        boolean atRestaurant = poi.getTags().contains(AetherhavenConstants.POI_TAG_RESTAURANT);
-        if (phase == VillagerAutonomyState.PHASE_TRAVEL) {
-            return Message.translation(
-                atRestaurant
-                    ? "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleGoingToRestaurant"
-                    : "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleGoingToEat"
-            );
+        if (PoiScoring.isRestPoi(poi)) {
+            return needBreakActivityMessage(phase, poi, NeedBreakJournalKind.ENERGY);
         }
-        return Message.translation(
-            atRestaurant
-                ? "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleEatingRestaurant"
-                : "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleEating"
-        );
+        if (PoiScoring.isFunPoi(poi)) {
+            return needBreakActivityMessage(phase, poi, NeedBreakJournalKind.FUN);
+        }
+        return null;
+    }
+
+    private enum NeedBreakJournalKind {
+        HUNGER,
+        ENERGY,
+        FUN
+    }
+
+    @Nullable
+    private static Message needBreakActivityMessage(
+        int phase,
+        @Nullable PoiEntry poi,
+        @Nonnull NeedBreakJournalKind kind
+    ) {
+        boolean traveling = phase == VillagerAutonomyState.PHASE_TRAVEL;
+        boolean using = phase == VillagerAutonomyState.PHASE_USE;
+        return switch (kind) {
+            case HUNGER -> {
+                boolean atRestaurant =
+                    poi != null && poi.getTags().contains(AetherhavenConstants.POI_TAG_RESTAURANT);
+                if (traveling) {
+                    yield Message.translation(
+                        atRestaurant
+                            ? "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleGoingToRestaurant"
+                            : "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleGoingToEat"
+                    );
+                }
+                if (using) {
+                    yield Message.translation(
+                        atRestaurant
+                            ? "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleEatingRestaurant"
+                            : "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleEating"
+                    );
+                }
+                yield Message.translation(
+                    "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleGoingToEat"
+                );
+            }
+            case ENERGY -> {
+                if (using) {
+                    yield Message.translation(
+                        "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleResting"
+                    );
+                }
+                yield Message.translation(
+                    "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleGoingToRest"
+                );
+            }
+            case FUN -> {
+                if (using) {
+                    yield Message.translation(
+                        "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleAtPark"
+                    );
+                }
+                yield Message.translation(
+                    "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleGoingToPark"
+                );
+            }
+        };
     }
 
     @Nonnull
@@ -2847,6 +2929,13 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 sendUpdate(cmd, ev, false);
                 return;
             }
+            ConstructionDefinition def = plugin.getConstructionCatalog().get(plot.getConstructionId());
+            Player player = store.getComponent(ref, Player.getComponentType());
+            TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+            Vector3d dropPos =
+                tc != null
+                    ? new Vector3d(tc.getPosition())
+                    : new Vector3d(plot.getSignX() + 0.5, plot.getSignY(), plot.getSignZ() + 0.5);
             PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
             TownDissolutionService.clearPlotFromWorld(world, plugin, town, plot, store, reg);
             if (!town.removePlotInstance(plotUuid)) {
@@ -2857,7 +2946,23 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 pendingRemovePlotId = null;
                 return;
             }
+            RefundResult refundResult = RefundResult.NONE;
+            if (def != null && player != null) {
+                refundResult =
+                    PlotJournalRemovalRefundService.applyRefunds(
+                        town,
+                        plot,
+                        def,
+                        world,
+                        plugin,
+                        player,
+                        ref,
+                        store,
+                        dropPos
+                    );
+            }
             tm.updateTown(town);
+            playerRef.sendMessage(Message.translation(PlotJournalRemovalRefundService.successLangKey(refundResult)));
             plotRemoveConfirmOpen = false;
             pendingRemovePlotId = null;
             UICommandBuilder cmd = new UICommandBuilder();

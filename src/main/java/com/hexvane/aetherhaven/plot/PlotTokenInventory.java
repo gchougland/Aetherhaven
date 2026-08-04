@@ -11,10 +11,13 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
+import com.hexvane.aetherhaven.construction.PlotMaterialDepositService;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import org.joml.Vector3d;
 import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -290,9 +293,51 @@ public final class PlotTokenInventory {
             language = playerRef.getLanguage();
         }
         ItemStack stack = createTokenStack(constructionId, amount, displayName, language);
-        ItemStackTransaction tx = player.giveItem(stack, ref, store);
-        if (tx.succeeded()) {
+        grantTokenStackToPlayer(player, ref, store, playerRef, stack, null);
+    }
+
+    /** Returns a plot token for {@code def} to the player; overflow drops at {@code dropPosition} when set. */
+    public static void grantDefinitionTokenToPlayer(
+        @Nonnull ConstructionDefinition def,
+        @Nonnull Player player,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Vector3d dropPosition
+    ) {
+        if (!def.consumesPlotToken()) {
+            return;
+        }
+        String language = "en-US";
+        PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
+        if (playerRef != null && playerRef.getLanguage() != null && !playerRef.getLanguage().isBlank()) {
+            language = playerRef.getLanguage();
+        }
+        ItemStack tokenStack = createTokenStackForDefinition(def, language);
+        grantTokenStackToPlayer(player, ref, store, playerRef, tokenStack, dropPosition);
+    }
+
+    private static void grantTokenStackToPlayer(
+        @Nonnull Player player,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable PlayerRef playerRef,
+        @Nonnull ItemStack tokenStack,
+        @Nullable Vector3d dropPosition
+    ) {
+        ItemStackTransaction giveTx = player.giveItem(tokenStack, ref, store);
+        if (giveTx.succeeded()) {
             PlotTokenIconSync.afterTokenGranted(playerRef);
+        }
+        if (!giveTx.succeeded() || !ItemStack.isEmpty(giveTx.getRemainder())) {
+            List<ItemStack> tokenOverflow = new ArrayList<>();
+            if (!giveTx.succeeded()) {
+                tokenOverflow.add(tokenStack);
+            } else {
+                tokenOverflow.add(giveTx.getRemainder());
+            }
+            if (dropPosition != null) {
+                PlotMaterialDepositService.refundItemStacksToPlayer(player, ref, store, tokenOverflow, dropPosition);
+            }
         }
     }
 }

@@ -10,6 +10,7 @@
   "uiSortOrder": 5,
   "innPoolEligible": true,
   "innPoolOrder": 3,
+  "innPoolWeight": 2,
   "visitorBindingKind": "visitor_priestess",
   "reputationMilestones": [
     {

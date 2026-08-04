@@ -9,6 +9,7 @@
   "uiSortOrder": 12,
   "innPoolEligible": true,
   "innPoolOrder": 7,
+  "innPoolWeight": 2,
   "visitorBindingKind": "visitor_guild_master",
   "innPoolRequires": {
     "completedQuestIds": [

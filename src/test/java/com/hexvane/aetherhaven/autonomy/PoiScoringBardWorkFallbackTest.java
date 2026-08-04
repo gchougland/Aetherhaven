@@ -153,9 +153,9 @@ class PoiScoringBardWorkFallbackTest {
         VillagerNeeds needs = VillagerNeeds.full();
         Map<String, Integer> occ =
             Map.of(
-                PoiOccupancy.cellKey(halfFull),
+                PoiOccupancy.standCellKey(halfFull),
                 1,
-                PoiOccupancy.cellKey(empty),
+                PoiOccupancy.standCellKey(empty),
                 0
             );
 

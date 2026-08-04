@@ -87,7 +87,8 @@ public final class TouristPortalTravelService {
     public static List<Destination> listNetworkDestinations(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
-        @Nonnull UUID sourcePortalId
+        @Nonnull UUID sourcePortalId,
+        @Nullable UUID viewerPlayerUuid
     ) {
         TouristPortalRegistrySync.refreshTravelNetwork(world, plugin);
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
@@ -110,8 +111,12 @@ public final class TouristPortalTravelService {
                 continue;
             }
             boolean source = sourcePortalId.equals(portal.getPortalId());
+            boolean viewerIsMember = viewerPlayerUuid != null && town.hasMemberOrOwner(viewerPlayerUuid);
+            if (!source && town.isVisitorPortalMembersOnly() && !viewerIsMember) {
+                continue;
+            }
             boolean accepts = town.isAllowVisitorPortalTravel();
-            boolean canTravel = !source && accepts;
+            boolean canTravel = !source && (accepts || (town.isVisitorPortalMembersOnly() && viewerIsMember));
             String ownerName = TownPlayerLookup.ownerDisplayName(world, town);
             out.add(
                 new Destination(
@@ -128,6 +133,19 @@ public final class TouristPortalTravelService {
         }
         out.sort(Comparator.comparing(Destination::townDisplayName, String.CASE_INSENSITIVE_ORDER));
         return out;
+    }
+
+    public static boolean canPlayerTravelToPortalTown(
+        @Nonnull TownRecord town,
+        @Nullable UUID playerUuid
+    ) {
+        if (playerUuid != null && town.isVisitorPortalMembersOnly() && !town.hasMemberOrOwner(playerUuid)) {
+            return false;
+        }
+        if (playerUuid != null && town.isVisitorPortalMembersOnly() && town.hasMemberOrOwner(playerUuid)) {
+            return true;
+        }
+        return town.isAllowVisitorPortalTravel();
     }
 
     @Nullable

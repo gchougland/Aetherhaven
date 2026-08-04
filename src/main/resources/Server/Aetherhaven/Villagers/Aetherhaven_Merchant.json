@@ -10,6 +10,7 @@
   "uiSortOrder": 2,
   "innPoolEligible": true,
   "innPoolOrder": 0,
+  "innPoolWeight": 1,
   "visitorBindingKind": "visitor_merchant",
   "reputationMilestones": [
     {

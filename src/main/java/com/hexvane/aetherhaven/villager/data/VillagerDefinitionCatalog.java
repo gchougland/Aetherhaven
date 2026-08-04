@@ -232,7 +232,16 @@ public final class VillagerDefinitionCatalog {
                 LOGGER.atWarning().log("Inn pool villager %s missing visitorBindingKind; skipped", d.getNpcRoleId());
                 continue;
             }
-            out.add(new InnPoolEntry(d.getNpcRoleId(), vk, d.getInnPoolOrder(), d.getInnPoolRequires(), d.getInnPoolSpawnLocal()));
+            out.add(
+                new InnPoolEntry(
+                    d.getNpcRoleId(),
+                    vk,
+                    d.getInnPoolOrder(),
+                    d.getInnPoolWeight(),
+                    d.getInnPoolRequires(),
+                    d.getInnPoolSpawnLocal()
+                )
+            );
         }
         return out;
     }

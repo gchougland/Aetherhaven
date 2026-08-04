@@ -11,6 +11,7 @@
   "uiSortOrder": 3,
   "innPoolEligible": true,
   "innPoolOrder": 1,
+  "innPoolWeight": 1,
   "visitorBindingKind": "visitor_blacksmith",
   "reputationMilestones": [
     {

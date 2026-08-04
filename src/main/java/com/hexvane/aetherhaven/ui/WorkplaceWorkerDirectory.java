@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownResidentDisplay;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -74,7 +75,7 @@ public final class WorkplaceWorkerDirectory {
                         continue;
                     }
                     String w = vdef.getWorkConstructionId();
-                    if (w == null || !w.equals(gameplayWorkplaceId)) {
+                    if (w == null || !matchesWorkplace(plugin.getConstructionCatalog(), w, gameplayWorkplaceId)) {
                         continue;
                     }
                     UUID u = uc.getUuid();
@@ -200,6 +201,17 @@ public final class WorkplaceWorkerDirectory {
         return null;
     }
 
+    static boolean matchesWorkplace(
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull String workConstructionId,
+        @Nonnull String gameplayWorkplaceId
+    ) {
+        if (workConstructionId.equals(gameplayWorkplaceId)) {
+            return true;
+        }
+        return catalog.matchesGameplayConstruction(workConstructionId, gameplayWorkplaceId);
+    }
+
     private static void addStoryFallbackIfMissing(
         @Nonnull Map<UUID, WorkplaceWorkerRow> byUuid,
         @Nonnull TownRecord town,
@@ -214,7 +226,8 @@ public final class WorkplaceWorkerDirectory {
             return;
         }
         VillagerDefinition vdef = plugin.getVillagerDefinitionCatalog().byNpcRoleId(roleId);
-        if (vdef == null || vdef.getWorkConstructionId() == null || !vdef.getWorkConstructionId().equals(gameplayWorkplaceId)) {
+        if (vdef == null || vdef.getWorkConstructionId() == null
+            || !matchesWorkplace(plugin.getConstructionCatalog(), vdef.getWorkConstructionId(), gameplayWorkplaceId)) {
             return;
         }
         if (filterNpcRoleId != null && !roleId.equalsIgnoreCase(filterNpcRoleId)) {

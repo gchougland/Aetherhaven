@@ -84,6 +84,8 @@ public final class TouristPortalTravelPage extends AetherhavenInteractiveCustomU
             TownPlayerLookup.refreshOwnerUsernameIfOnline(world, sourceTown, tm);
             commandBuilder.set(MAIN + " #AllowInboundToggle.Value", sourceTown.isAllowVisitorPortalTravel());
             commandBuilder.set(MAIN + " #AllowInboundToggle.Disabled", false);
+            commandBuilder.set(MAIN + " #MembersOnlyToggle.Value", sourceTown.isVisitorPortalMembersOnly());
+            commandBuilder.set(MAIN + " #MembersOnlyToggle.Disabled", false);
             String townColor = TownPortalTravelColor.resolveHex(sourceTown);
             TownPortalTravelColor.applyTeleportIconTint(commandBuilder, MAIN + " #TownColorPreviewIcon", townColor);
             commandBuilder.set(COLOR_CHOOSE_BTN + ".Disabled", false);
@@ -99,7 +101,12 @@ public final class TouristPortalTravelPage extends AetherhavenInteractiveCustomU
         }
 
         List<Destination> destinations =
-            TouristPortalTravelService.listNetworkDestinations(world, plugin, sourcePortalId);
+            TouristPortalTravelService.listNetworkDestinations(
+                world,
+                plugin,
+                sourcePortalId,
+                uc != null ? uc.getUuid() : null
+            );
         commandBuilder.clear(ROWS);
         int travelable = 0;
         for (Destination d : destinations) {
@@ -174,6 +181,14 @@ public final class TouristPortalTravelPage extends AetherhavenInteractiveCustomU
                 .append("@AllowInbound", MAIN + " #AllowInboundToggle.Value"),
             false
         );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
+            MAIN + " #MembersOnlyToggle",
+            new EventData()
+                .append("Action", "SetMembersOnly")
+                .append("@MembersOnly", MAIN + " #MembersOnlyToggle.Value"),
+            false
+        );
         TownPortalTravelColorPickerUi.bindOpenButton(eventBuilder, COLOR_CHOOSE_BTN);
         TownPortalTravelColorPickerUi.bindCloseButton(eventBuilder, COLOR_CANCEL_BTN);
     }
@@ -197,6 +212,13 @@ public final class TouristPortalTravelPage extends AetherhavenInteractiveCustomU
                 return;
             }
             handleSetAllowInbound(ref, store, plugin, world, data.allowInbound);
+            return;
+        }
+        if ("SetMembersOnly".equalsIgnoreCase(data.action)) {
+            if (data.membersOnly == null) {
+                return;
+            }
+            handleSetMembersOnly(ref, store, plugin, world, data.membersOnly);
             return;
         }
         if (TownPortalTravelColorPickerUi.ACTION_OPEN.equalsIgnoreCase(data.action)) {
@@ -248,6 +270,41 @@ public final class TouristPortalTravelPage extends AetherhavenInteractiveCustomU
             allow
                 ? Message.translation(MSG + ".inboundEnabled")
                 : Message.translation(MSG + ".inboundDisabled"),
+            NotificationStyle.Success
+        );
+        rebuild();
+    }
+
+    private void handleSetMembersOnly(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull World world,
+        boolean membersOnly
+    ) {
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        TouristPortalRecord source = TouristPortalTravelService.findPortal(world, plugin, sourcePortalId);
+        if (uc == null || source == null) {
+            return;
+        }
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.getTown(source.getTownId());
+        if (town == null || !TouristPortalTravelService.canPlayerManageTownPortalSettings(town, uc.getUuid())) {
+            NotificationUtil.sendNotification(
+                playerRef.getPacketHandler(),
+                Message.translation(MSG + ".noPermission"),
+                NotificationStyle.Warning
+            );
+            rebuild();
+            return;
+        }
+        town.setVisitorPortalMembersOnly(membersOnly);
+        tm.updateTown(town);
+        NotificationUtil.sendNotification(
+            playerRef.getPacketHandler(),
+            membersOnly
+                ? Message.translation(MSG + ".membersOnlyEnabled")
+                : Message.translation(MSG + ".membersOnlyDisabled"),
             NotificationStyle.Success
         );
         rebuild();
@@ -312,7 +369,14 @@ public final class TouristPortalTravelPage extends AetherhavenInteractiveCustomU
             return;
         }
         TownRecord destTown = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).getTown(dest.getTownId());
-        if (destTown == null || !destTown.isAllowVisitorPortalTravel()) {
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (
+            destTown == null
+                || !TouristPortalTravelService.canPlayerTravelToPortalTown(
+                    destTown,
+                    uc != null ? uc.getUuid() : null
+                )
+        ) {
             NotificationUtil.sendNotification(
                 playerRef.getPacketHandler(),
                 Message.translation(MSG + ".destinationClosed"),
@@ -339,6 +403,8 @@ public final class TouristPortalTravelPage extends AetherhavenInteractiveCustomU
                 .add()
                 .append(new KeyedCodec<>("@AllowInbound", Codec.BOOLEAN), (d, v) -> d.allowInbound = v, d -> d.allowInbound)
                 .add()
+                .append(new KeyedCodec<>("@MembersOnly", Codec.BOOLEAN), (d, v) -> d.membersOnly = v, d -> d.membersOnly)
+                .add()
                 .append(new KeyedCodec<>("PresetHex", Codec.STRING), (d, v) -> d.presetHex = v, d -> d.presetHex)
                 .add()
                 .build();
@@ -349,6 +415,8 @@ public final class TouristPortalTravelPage extends AetherhavenInteractiveCustomU
         private String portalId;
         @Nullable
         private Boolean allowInbound;
+        @Nullable
+        private Boolean membersOnly;
         @Nullable
         private String presetHex;
     }

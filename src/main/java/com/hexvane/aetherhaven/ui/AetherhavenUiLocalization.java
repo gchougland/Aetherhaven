@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.ui;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import java.util.function.UnaryOperator;
@@ -74,6 +75,8 @@ public final class AetherhavenUiLocalization {
         b.set("#ClearVisitingTouristsButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.clearVisitingTourists"));
         b.set("#VisitorPortalTravelLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalTravelAllow"));
         b.set("#VisitorPortalTravelLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalTravelAllowTooltip"));
+        b.set("#VisitorPortalMembersOnlyLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalMembersOnly"));
+        b.set("#VisitorPortalMembersOnlyLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalMembersOnlyTooltip"));
         b.set("#PlayerShopNpcBuyLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.playerShopNpcBuyAllow"));
         b.set("#PlayerShopNpcBuyLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.playerShopNpcBuyAllowTooltip"));
         b.set("#VisitorPortalColorLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalColor"));
@@ -166,6 +169,18 @@ public final class AetherhavenUiLocalization {
         b.set("#GeodeOpenTitleText.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.geodeopen.title"));
     }
 
+    public static void applyBlacksmithRepairPage(@Nonnull UICommandBuilder b) {
+        b.set("#TitleText.TextSpans", t("aetherhaven_misc.aetherhaven.blacksmith.repair.page.title"));
+        b.set(
+            "#Hint.TextSpans",
+            Message.translation("aetherhaven_misc.aetherhaven.blacksmith.repair.page.hint")
+                .param("maxCost", AetherhavenConstants.BLACKSMITH_REPAIR_COST_FULL)
+        );
+        b.set("#ItemHeader.TextSpans", t("aetherhaven_misc.aetherhaven.blacksmith.repair.page.item"));
+        b.set("#CostHeader.TextSpans", t("aetherhaven_misc.aetherhaven.blacksmith.repair.page.cost"));
+        b.set("#DurabilityHeader.TextSpans", t("aetherhaven_misc.aetherhaven.blacksmith.repair.page.durability"));
+    }
+
     public static void applyGaiaStatueRevivePage(@Nonnull UICommandBuilder b) {
         b.set("#GaiaReviveTitleText.TextSpans", t("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.title"));
         b.set("#Footer.TextSpans", t("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.footer"));
@@ -237,6 +252,8 @@ public final class AetherhavenUiLocalization {
         b.set("#TravelIntro.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.intro"));
         b.set("#AllowInboundLabel.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.allowInbound"));
         b.set("#AllowInboundLabel.TooltipTextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.allowInboundTooltip"));
+        b.set("#MembersOnlyLabel.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.membersOnly"));
+        b.set("#MembersOnlyLabel.TooltipTextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.membersOnlyTooltip"));
         b.set("#TownPortalColorLabel.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.townColor"));
         b.set("#TownPortalColorLabel.TooltipTextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.townColorTooltip"));
         b.set("#ChoosePortalColorButton.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.chooseColor"));

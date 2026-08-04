@@ -90,6 +90,18 @@ public final class VillagerAutonomyState
             )
             .add()
             .append(
+                new KeyedCodec<>("FillingEnergy", Codec.BOOLEAN),
+                (v, x) -> v.fillingEnergy = x != null && x,
+                v -> v.fillingEnergy
+            )
+            .add()
+            .append(
+                new KeyedCodec<>("FillingFun", Codec.BOOLEAN),
+                (v, x) -> v.fillingFun = x != null && x,
+                v -> v.fillingFun
+            )
+            .add()
+            .append(
                 new KeyedCodec<>("LastUsedPoiId", Codec.STRING),
                 (v, x) -> v.lastUsedPoiId = x,
                 v -> v.lastUsedPoiId
@@ -144,6 +156,10 @@ public final class VillagerAutonomyState
      * Once hunger drops below half, stay on eat trips until the hunger meter is full (eat, leave, eat again).
      */
     private boolean fillingHunger;
+    /** Once energy drops below rest threshold, stay on bed trips until the meter is full. */
+    private boolean fillingEnergy;
+    /** Once fun drops below break threshold, stay on leisure trips until the meter is full. */
+    private boolean fillingFun;
     /** Last finished POI id; scoring soft-penalizes re-picking so workers rotate between work spots. */
     @Nullable
     private String lastUsedPoiId;
@@ -542,6 +558,26 @@ public final class VillagerAutonomyState
         this.fillingHunger = fillingHunger;
     }
 
+    public boolean isFillingEnergy() {
+        return fillingEnergy;
+    }
+
+    public void setFillingEnergy(boolean fillingEnergy) {
+        this.fillingEnergy = fillingEnergy;
+    }
+
+    public boolean isFillingFun() {
+        return fillingFun;
+    }
+
+    public void setFillingFun(boolean fillingFun) {
+        this.fillingFun = fillingFun;
+    }
+
+    public boolean isFillingAnyNeed() {
+        return fillingHunger || fillingEnergy || fillingFun;
+    }
+
     @Nullable
     public UUID getLastUsedPoiUuid() {
         if (lastUsedPoiId == null || lastUsedPoiId.isBlank()) {
@@ -584,6 +620,8 @@ public final class VillagerAutonomyState
         c.travelWaypointStartedMs = travelWaypointStartedMs;
         c.travelWaypointStartedIndex = travelWaypointStartedIndex;
         c.fillingHunger = fillingHunger;
+        c.fillingEnergy = fillingEnergy;
+        c.fillingFun = fillingFun;
         c.lastUsedPoiId = lastUsedPoiId;
         c.lastWorkHitEpochMs = lastWorkHitEpochMs;
         c.travelWaypoints.addAll(travelWaypoints);

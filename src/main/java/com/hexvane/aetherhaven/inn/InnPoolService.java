@@ -1247,27 +1247,7 @@ public final class InnPoolService {
                 ^ epochDay * 0x9E3779B97F4A7C15L
                 ^ wtr.getGameTime().toEpochMilli();
         List<InnPoolEntry> pool = innPoolOrLegacy(plugin);
-        List<String> order = prioritizedInnRoleOrder(town);
-        List<String> shuffledPoolOrder = new ArrayList<>();
-        for (InnPoolEntry e : pool) {
-            String rid = e.npcRoleId();
-            if (rid != null && !rid.isBlank() && isRoleEligibleForInnPool(plugin, town, pool, rid)) {
-                shuffledPoolOrder.add(rid);
-            }
-        }
-        Collections.shuffle(shuffledPoolOrder, new Random(seed));
-        Set<String> seen = new LinkedHashSet<>();
-        List<String> mergedOrder = new ArrayList<>();
-        for (String roleId : order) {
-            if (roleId != null && !roleId.isBlank() && seen.add(roleId)) {
-                mergedOrder.add(roleId);
-            }
-        }
-        for (String rid : shuffledPoolOrder) {
-            if (seen.add(rid)) {
-                mergedOrder.add(rid);
-            }
-        }
+        List<String> mergedOrder = buildDailyVisitorRoleOrder(town, plugin, pool, seed);
 
         for (String roleId : mergedOrder) {
             if (town.getInnPoolNpcIds().size() >= MAX_VISITORS) {
@@ -1655,28 +1635,90 @@ public final class InnPoolService {
                 ^ epochDay * 0x9E3779B97F4A7C15L
                 ^ wtr.getGameTime().toEpochMilli();
         List<InnPoolEntry> pool = innPoolOrLegacy(plugin);
-        List<String> order = prioritizedInnRoleOrder(town);
-        List<String> shuffledPoolOrder = new ArrayList<>();
-        for (InnPoolEntry e : pool) {
-            String rid = e.npcRoleId();
-            if (rid != null && !rid.isBlank() && isRoleEligibleForInnPool(plugin, town, pool, rid)) {
-                shuffledPoolOrder.add(rid);
-            }
-        }
-        Collections.shuffle(shuffledPoolOrder, new Random(seed));
+        return buildDailyVisitorRoleOrder(town, plugin, pool, seed);
+    }
+
+    /**
+     * Quest-priority roles first, then weighted random order among remaining eligible catalog roles (deterministic
+     * per town/world/day/time seed).
+     */
+    @Nonnull
+    private static List<String> buildDailyVisitorRoleOrder(
+        @Nonnull TownRecord town,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull List<InnPoolEntry> pool,
+        long seed
+    ) {
+        List<String> priority = prioritizedInnRoleOrder(town);
+        Set<String> exclude = new LinkedHashSet<>(priority);
+        List<String> weightedOrder = weightedInnRoleOrderWithoutReplacement(plugin, town, pool, exclude, new Random(seed));
         Set<String> seen = new LinkedHashSet<>();
         List<String> mergedOrder = new ArrayList<>();
-        for (String roleId : order) {
+        for (String roleId : priority) {
             if (roleId != null && !roleId.isBlank() && seen.add(roleId)) {
                 mergedOrder.add(roleId);
             }
         }
-        for (String rid : shuffledPoolOrder) {
+        for (String rid : weightedOrder) {
             if (seen.add(rid)) {
                 mergedOrder.add(rid);
             }
         }
         return mergedOrder;
+    }
+
+    @Nonnull
+    static List<String> weightedInnRoleOrderWithoutReplacement(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull List<InnPoolEntry> pool,
+        @Nonnull Set<String> excludeRoleIds,
+        @Nonnull Random rng
+    ) {
+        List<InnPoolEntry> remaining = new ArrayList<>();
+        for (InnPoolEntry e : pool) {
+            String rid = e.npcRoleId();
+            if (rid == null || rid.isBlank() || excludeRoleIds.contains(rid)) {
+                continue;
+            }
+            if (!isRoleEligibleForInnPool(plugin, town, pool, rid)) {
+                continue;
+            }
+            remaining.add(e);
+        }
+        List<String> ordered = new ArrayList<>();
+        while (!remaining.isEmpty()) {
+            InnPoolEntry picked = pickWeightedInnPoolEntry(remaining, rng);
+            if (picked == null) {
+                break;
+            }
+            ordered.add(picked.npcRoleId());
+            remaining.removeIf(e -> e.npcRoleId().equals(picked.npcRoleId()));
+        }
+        return ordered;
+    }
+
+    @Nullable
+    static InnPoolEntry pickWeightedInnPoolEntry(@Nonnull List<InnPoolEntry> pool, @Nonnull Random rng) {
+        if (pool.isEmpty()) {
+            return null;
+        }
+        int total = 0;
+        for (InnPoolEntry e : pool) {
+            total += Math.max(1, e.weight());
+        }
+        if (total <= 0) {
+            return pool.get(rng.nextInt(pool.size()));
+        }
+        int roll = rng.nextInt(total);
+        int acc = 0;
+        for (InnPoolEntry e : pool) {
+            acc += Math.max(1, e.weight());
+            if (roll < acc) {
+                return e;
+            }
+        }
+        return pool.get(pool.size() - 1);
     }
 
     @Nonnull

@@ -197,6 +197,14 @@ public final class TownRecord {
     @SerializedName("allowVisitorPortalTravel")
     private Boolean allowVisitorPortalTravel;
 
+    /**
+     * When true, only town members see this town in the visitor portal travel list and may teleport here through
+     * portals. Null or false shows the town to everyone (subject to {@link #allowVisitorPortalTravel}).
+     */
+    @Nullable
+    @SerializedName("visitorPortalMembersOnly")
+    private Boolean visitorPortalMembersOnly;
+
     /** Optional {@code #RRGGBB} tint for visitor portal travel icons. Null uses a default from the town id. */
     @Nullable
     @SerializedName("visitorPortalNetworkColor")
@@ -1207,6 +1215,15 @@ public final class TownRecord {
         this.allowVisitorPortalTravel = allowVisitorPortalTravel;
     }
 
+    /** True when only town members may see and use this town in the visitor portal travel list. */
+    public boolean isVisitorPortalMembersOnly() {
+        return visitorPortalMembersOnly != null && visitorPortalMembersOnly;
+    }
+
+    public void setVisitorPortalMembersOnly(boolean visitorPortalMembersOnly) {
+        this.visitorPortalMembersOnly = visitorPortalMembersOnly;
+    }
+
     @Nullable
     public String getVisitorPortalNetworkColor() {
         return visitorPortalNetworkColor;
@@ -1744,6 +1761,20 @@ public final class TownRecord {
                 && constructionCatalog.matchesGameplayConstruction(p.getConstructionId(), c)) {
                 out.add(p);
             }
+        }
+        return out;
+    }
+
+    /** Plot ids for {@link #listCompletePlotsWithGameplayConstruction} (variant-aware via {@link ConstructionCatalog}). */
+    @Nonnull
+    public List<UUID> listCompletePlotIdsWithGameplayConstruction(
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nonnull String gameplayConstructionId
+    ) {
+        List<PlotInstance> plots = listCompletePlotsWithGameplayConstruction(constructionCatalog, gameplayConstructionId);
+        List<UUID> out = new ArrayList<>(plots.size());
+        for (PlotInstance p : plots) {
+            out.add(p.getPlotId());
         }
         return out;
     }
