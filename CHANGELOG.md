@@ -35,6 +35,9 @@
 - **Plot crafting bench** — Fixed a crash when opening the bench with favorites loaded.
 - **Variant building menus** — Custom building variants now get the same record shelf options as the original (expand territory, guards, tourists, workers, and shops).
 - **Building thumbnails** — Water and lava in a building now show on plot crafting icons (blue water, orange lava) instead of being left out.
+- **Workplace production while away** — Farms, barns, lumbermills, and miners huts keep producing on the worker’s schedule when you’re out of town, at a slightly lower rate than when you’re nearby.
+- **Production and time skips** — Skipping or setting game time forward credits workplace production for scheduled work hours, whether the worker is nearby or not (like furnaces and crops).
+- **Workplace production bar** — The production bar advances more reliably while a worker is on shift at their building.
 
 ## [2.6.0] - 7/27/2026
 

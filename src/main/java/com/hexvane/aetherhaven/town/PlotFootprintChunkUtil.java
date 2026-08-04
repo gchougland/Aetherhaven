@@ -33,6 +33,25 @@ public final class PlotFootprintChunkUtil {
         return isFootprintFullyLoaded(world, plot.toFootprint());
     }
 
+    /** True when every footprint chunk is loaded and simulating ({@code ChunkFlag.TICKING}). */
+    public static boolean isPlotFootprintTicking(@Nonnull World world, @Nonnull PlotInstance plot) {
+        PlotFootprintRecord footprint = plot.toFootprint();
+        int minChunkX = Math.floorDiv(footprint.getMinX(), 16);
+        int maxChunkX = Math.floorDiv(footprint.getMaxX(), 16);
+        int minChunkZ = Math.floorDiv(footprint.getMinZ(), 16);
+        int maxChunkZ = Math.floorDiv(footprint.getMaxZ(), 16);
+        for (int cx = minChunkX; cx <= maxChunkX; cx++) {
+            for (int cz = minChunkZ; cz <= maxChunkZ; cz++) {
+                int bx = cx * 16 + 8;
+                int bz = cz * 16 + 8;
+                if (world.getChunkIfLoaded(ChunkUtil.indexChunkFromBlock(bx, bz)) == null) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     /** True when the chunk containing the plot sign block is loaded (enough for blueprinting repair). */
     public static boolean isPlotSignChunkLoaded(@Nonnull World world, @Nonnull PlotInstance plot) {
         int x = plot.getSignX();

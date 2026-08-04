@@ -101,7 +101,10 @@ public final class AetherhavenFeatureBootstrap {
             ConstructionBootstrap.register(core, host);
             registerTick(core, ConstructionBootstrap.createPlotAssemblyGameTimeListener(core));
         });
-        register(AetherhavenPluginIds.PRODUCTION, () -> ProductionBootstrap.register(core, host));
+        register(AetherhavenPluginIds.PRODUCTION, () -> {
+            ProductionBootstrap.register(core, host);
+            registerTick(core, ProductionBootstrap.createProductionGameTimeListener(core));
+        });
         register(AetherhavenPluginIds.DIALOGUE, () -> DialogueBootstrap.register(core, host));
         register(AetherhavenPluginIds.WORLD_NPCS, () -> {
             WorldNpcsBootstrap.register(core, host);

@@ -46,7 +46,7 @@ public final class PoiScoring {
         return isWorkPoi(e) && !isBardWorkPoi(e);
     }
 
-    static boolean matchesWorkPoiForBindingKind(@Nonnull PoiEntry e, @Nonnull String bindingKind) {
+    public static boolean matchesWorkPoiForBindingKind(@Nonnull PoiEntry e, @Nonnull String bindingKind) {
         // Inn-pool / temporary visitors never claim workplace desks; only assigned residents work there.
         if (TownVillagerBinding.isVisitorKind(bindingKind)) {
             return false;

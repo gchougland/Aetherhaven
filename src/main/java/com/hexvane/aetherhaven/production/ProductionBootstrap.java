@@ -12,6 +12,7 @@ import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.ui.ProductionStoragePage;
 import com.hexvane.aetherhaven.ui.ProductionStorageUnlocksPage;
+import com.hexvane.aetherhaven.plugin.GameTimeTickListener;
 import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -19,8 +20,12 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.ser
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.annotation.Nonnull;
+import com.hypixel.hytale.component.Store;
 
 public final class ProductionBootstrap {
     private ProductionBootstrap() {}
@@ -96,5 +101,48 @@ public final class ProductionBootstrap {
 
     public static void register(@Nonnull AetherhavenPlugin core, @Nonnull JavaPlugin plugin) {
         plugin.getEntityStoreRegistry().registerSystem(new ProductionTickSystem(core));
+    }
+
+    @Nonnull
+    public static GameTimeTickListener createProductionGameTimeListener(@Nonnull AetherhavenPlugin core) {
+        return new GameTimeTickListener() {
+            @Override
+            public void onSmoothGameMinuteAdvanced(
+                @Nonnull Store<EntityStore> store,
+                @Nonnull World world,
+                @Nonnull WorldTimeResource wtr,
+                long prevEpochMinute,
+                long newEpochMinute
+            ) {
+                ProductionCatchUpService.onSmoothGameMinuteAdvanced(
+                    world,
+                    store,
+                    core,
+                    prevEpochMinute,
+                    newEpochMinute
+                );
+            }
+
+            @Override
+            public void onGameTimeDiscontinuity(
+                @Nonnull Store<EntityStore> store,
+                @Nonnull World world,
+                @Nonnull WorldTimeResource wtr,
+                @Nonnull Instant from,
+                @Nonnull Instant to,
+                @Nonnull LocalDateTime toDateTime,
+                boolean backward
+            ) {
+                ProductionCatchUpService.onGameTimeDiscontinuity(
+                    world,
+                    store,
+                    core,
+                    from,
+                    to,
+                    toDateTime,
+                    backward
+                );
+            }
+        };
     }
 }

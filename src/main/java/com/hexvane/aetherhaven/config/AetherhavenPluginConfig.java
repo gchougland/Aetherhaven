@@ -362,6 +362,22 @@ public final class AetherhavenPluginConfig {
         )
         .add()
         .append(
+            new KeyedCodec<>("ProductionOfflineMultiplier", Codec.DOUBLE),
+            (o, v) -> o.productionOfflineMultiplier = v != null ? v : 0.8,
+            o -> o.productionOfflineMultiplier
+        )
+        .documentation(
+            "Multiplier on offline (unloaded worker) schedule catch-up production. 0.8 = 80% of a full work-minute at live tick rate."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("ProductionOfflineCatchUpMaxMinutes", Codec.INTEGER),
+            (o, v) -> o.productionOfflineCatchUpMaxMinutes = v != null ? v : 10080,
+            o -> o.productionOfflineCatchUpMaxMinutes
+        )
+        .documentation("Max in-game minutes processed per catch-up pass (default 10080 = 7 days).")
+        .add()
+        .append(
             new KeyedCodec<>("ShopSpotPlayerListingPricePercent", Codec.INTEGER),
             (o, v) -> o.shopSpotPlayerListingPricePercent = v,
             o -> o.shopSpotPlayerListingPricePercent
@@ -694,6 +710,10 @@ public final class AetherhavenPluginConfig {
 
     /** Multiplier on catalog production ticks (workplace outputs). Default 1.0. */
     private double productionTimeMultiplier = 1.0;
+    /** Offline catch-up rate vs a full work-minute at live entity tick rate. Default 0.8. */
+    private double productionOfflineMultiplier = 0.8;
+    /** Max in-game minutes per offline catch-up pass. Default 7 days. */
+    private int productionOfflineCatchUpMaxMinutes = 10080;
     /** Buyer price at player shop spots as percent of catalog price (1-100). Default 75. */
     private int shopSpotPlayerListingPricePercent = 75;
 
@@ -1107,6 +1127,22 @@ public final class AetherhavenPluginConfig {
             return 1.0;
         }
         return Math.max(0.05, Math.min(100.0, v));
+    }
+
+    public double getProductionOfflineMultiplier() {
+        double v = productionOfflineMultiplier;
+        if (Double.isNaN(v)) {
+            return 0.8;
+        }
+        return Math.max(0.0, Math.min(2.0, v));
+    }
+
+    public int getProductionOfflineCatchUpMaxMinutes() {
+        int v = productionOfflineCatchUpMaxMinutes;
+        if (v <= 0) {
+            return 10080;
+        }
+        return Math.min(v, 525600);
     }
 
     public double getPathToolNodeBlockYOffset() {
@@ -1622,6 +1658,8 @@ public final class AetherhavenPluginConfig {
         this.feastNeedsDecayScalePermille = o.feastNeedsDecayScalePermille;
         this.feastGatherTimeoutSeconds = o.feastGatherTimeoutSeconds;
         this.productionTimeMultiplier = o.productionTimeMultiplier;
+        this.productionOfflineMultiplier = o.productionOfflineMultiplier;
+        this.productionOfflineCatchUpMaxMinutes = o.productionOfflineCatchUpMaxMinutes;
         this.shopSpotPlayerListingPricePercent = o.shopSpotPlayerListingPricePercent;
         this.pathToolNodeBlockYOffset = o.pathToolNodeBlockYOffset;
         this.pathToolSamplesPerBlock = o.pathToolSamplesPerBlock;

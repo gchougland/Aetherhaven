@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.production;
 
 import com.google.gson.annotations.SerializedName;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -71,6 +72,25 @@ public final class PlotProductionState {
     /** Player-purchased workplace output item ids for this plot (see {@link WorkplaceUnlockCatalog}). */
     @SerializedName("workUnlockIds")
     private List<String> workplaceUnlockedOutputIds = new ArrayList<>();
+
+    /**
+     * Last game epoch minute processed by {@link ProductionCatchUpService}; {@code -1} until a worker is assigned or
+     * first catch-up run.
+     */
+    @SerializedName("lastCatchUpEpochMinute")
+    private long lastCatchUpEpochMinute = -1L;
+
+    /** NPC role id for schedule lookup; set when a production worker is assigned to this plot. */
+    @Nullable
+    @SerializedName("assignedWorkerNpcRoleId")
+    private String assignedWorkerNpcRoleId;
+
+    /**
+     * Last {@link com.hypixel.hytale.server.core.modules.time.WorldTimeResource#getGameTime()} instant processed by
+     * catch-up (furnace-style jump accrual). {@code -1} until first accrual.
+     */
+    @SerializedName("lastAccrualGameInstantMs")
+    private long lastAccrualGameInstantMs = -1L;
 
     public PlotProductionState() {}
 
@@ -200,6 +220,55 @@ public final class PlotProductionState {
             case 4 -> a4 = v;
             default -> {}
         }
+    }
+
+    /** {@code -1} when never initialized (no retroactive offline catch-up). */
+    public long getLastCatchUpEpochMinute() {
+        return lastCatchUpEpochMinute;
+    }
+
+    public void setLastCatchUpEpochMinute(long lastCatchUpEpochMinute) {
+        this.lastCatchUpEpochMinute = lastCatchUpEpochMinute;
+    }
+
+    public boolean isCatchUpCursorInitialized() {
+        return lastCatchUpEpochMinute >= 0L;
+    }
+
+    @Nullable
+    public String getAssignedWorkerNpcRoleId() {
+        if (assignedWorkerNpcRoleId == null || assignedWorkerNpcRoleId.isBlank()) {
+            return null;
+        }
+        return assignedWorkerNpcRoleId.trim();
+    }
+
+    public void setAssignedWorkerNpcRoleId(@Nullable String npcRoleId) {
+        this.assignedWorkerNpcRoleId =
+            npcRoleId != null && !npcRoleId.isBlank() ? npcRoleId.trim() : null;
+    }
+
+    public void clearAssignedWorker() {
+        this.assignedWorkerNpcRoleId = null;
+        this.lastCatchUpEpochMinute = -1L;
+        this.lastAccrualGameInstantMs = -1L;
+    }
+
+    public long getLastAccrualGameInstantMs() {
+        return lastAccrualGameInstantMs;
+    }
+
+    public void setLastAccrualGameInstantMs(long lastAccrualGameInstantMs) {
+        this.lastAccrualGameInstantMs = lastAccrualGameInstantMs;
+    }
+
+    @Nullable
+    public Instant lastAccrualGameInstant() {
+        return lastAccrualGameInstantMs >= 0L ? Instant.ofEpochMilli(lastAccrualGameInstantMs) : null;
+    }
+
+    public void setLastAccrualGameInstant(@Nonnull Instant instant) {
+        this.lastAccrualGameInstantMs = instant.toEpochMilli();
     }
 
     @Nonnull

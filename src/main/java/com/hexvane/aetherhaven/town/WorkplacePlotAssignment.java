@@ -9,7 +9,10 @@ import com.hexvane.aetherhaven.inn.InnBellService;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
+import com.hexvane.aetherhaven.production.ProductionCatchUpCursor;
 import com.hexvane.aetherhaven.production.ProductionWorkplaceKinds;
+import com.hexvane.aetherhaven.schedule.VillagerScheduleWorkMinutes;
+import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hexvane.aetherhaven.ui.WorkplaceWorkerDirectory;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
@@ -131,6 +134,9 @@ public final class WorkplacePlotAssignment {
         );
         if (roleId != null && !roleId.isBlank() && uuidComp != null) {
             ResidentRegistryService.upsert(town, tm, roleId, residentKind, null, uuidComp.getUuid());
+        }
+        if (ProductionCatchUpCursor.isProductionWorkerKind(residentKind)) {
+            ProductionCatchUpCursor.clearOnWorkerUnassign(town, workplacePlotId);
         }
         if (AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(roleGameplayId)
             && TownVillagerBinding.KIND_GUILD_MASTER.equals(residentKind)) {
@@ -344,6 +350,18 @@ public final class WorkplacePlotAssignment {
         town.addInnVisitorPoolExcludedRoleId(npc.getRoleName().trim());
         if (uuidComp != null) {
             ResidentRegistryService.upsert(town, tm, npc.getRoleName().trim(), kind, workplacePlotId, uuidComp.getUuid());
+        }
+        if (ProductionCatchUpCursor.isProductionWorkerKind(kind)) {
+            WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
+            if (wtr != null && npc.getRoleName() != null && !npc.getRoleName().isBlank()) {
+                ProductionCatchUpCursor.initOnWorkerAssign(
+                    town,
+                    workplacePlotId,
+                    VillagerScheduleWorkMinutes.currentEpochMinute(wtr.getGameDateTime()),
+                    npc.getRoleName().trim(),
+                    wtr.getGameTime()
+                );
+            }
         }
         tm.updateTown(town);
         String roleGameplayId =
