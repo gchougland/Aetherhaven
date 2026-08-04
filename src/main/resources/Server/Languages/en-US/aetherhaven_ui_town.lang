@@ -19,6 +19,7 @@ aetherhaven.ui.plotmanagement.roleOwner=Owner
 aetherhaven.ui.plotmanagement.tabPlotTooltip=Plot info
 aetherhaven.ui.plotmanagement.tabNeedsTooltip=Villager needs
 aetherhaven.ui.plotmanagement.tabPlayersTooltip=Town members
+aetherhaven.ui.plotmanagement.tabLogTooltip=Town log
 aetherhaven.ui.plotmanagement.tabMoveTooltip=Move this building
 aetherhaven.ui.plotconstruction.materials=Materials
 aetherhaven.ui.plotconstruction.build=Build
@@ -133,6 +134,17 @@ aetherhaven.ui.giftHistory.cyclePrevTooltip=Previous town villager
 aetherhaven.ui.giftHistory.cycleNextTooltip=Next town villager
 aetherhaven.ui.villagerneeds.rescueDone=The selected resident was moved to you and their routine was reset.
 aetherhaven.ui.villagerneeds.rescueNotTownResident=That resident is not part of this town.
+
+aetherhaven.ui.townlog.title=Town log
+aetherhaven.ui.townlog.hint=A saved history of town events. Newest entries appear first.
+aetherhaven.ui.townlog.empty=Nothing has happened in your town yet
+aetherhaven.ui.townlog.clear=Clear log
+aetherhaven.ui.townlog.clearTooltip=Remove all saved log entries for this town
+aetherhaven.ui.townlog.clearConfirmTitle=Clear town log?
+aetherhaven.ui.townlog.clearConfirmBody=This removes every saved entry. It cannot be undone.
+aetherhaven.ui.townlog.clearConfirm=Clear
+aetherhaven.ui.townlog.clearCancel=Cancel
+aetherhaven.ui.townlog.cleared=Town log cleared
 
 # Town NPC death (chat + server log)
 aetherhaven.town.villagerDeath.chat={name} ({category}) has died at {location}. {cause}

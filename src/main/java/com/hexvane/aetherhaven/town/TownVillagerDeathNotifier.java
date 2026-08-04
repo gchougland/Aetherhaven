@@ -18,6 +18,7 @@ import com.hypixel.hytale.server.core.modules.entity.damage.DamageCause;
 import com.hypixel.hytale.server.core.modules.entity.damage.DeathComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.Locale;
 import java.util.UUID;
@@ -103,6 +104,11 @@ public final class TownVillagerDeathNotifier {
             entityUuid != null ? entityUuid : "unknown"
         );
         VillagerAuditService.logDeath(plugin, store, victimRef, "death_handler", causeLabel);
+        World world = store.getExternalData().getWorld();
+        if (world != null) {
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            TownLogService.logDeath(store, victimRef, town, tm, displayName, category, death);
+        }
     }
 
     @Nonnull

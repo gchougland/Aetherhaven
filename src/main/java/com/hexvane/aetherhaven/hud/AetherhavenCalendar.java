@@ -33,6 +33,12 @@ public final class AetherhavenCalendar {
         return from(gameTime).displayText();
     }
 
+    /** Formats a Hytale game {@link LocalDate#toEpochDay()} value for player-facing UI. */
+    @Nonnull
+    public static String formatDateFromEpochDay(long epochDay) {
+        return formatDate(LocalDate.ofEpochDay(epochDay).atStartOfDay());
+    }
+
     /** Formats the game wall clock as a 12-hour clock with lowercase {@code am}/{@code pm}. */
     @Nonnull
     public static String formatClock(@Nonnull LocalDateTime gameTime) {

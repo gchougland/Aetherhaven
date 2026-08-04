@@ -90,6 +90,9 @@ public final class RaidQuestSpawnService {
                 }
             }
             Vector3d pos = spawn.position();
+            if (RaidQuestMarchRoles.isFlyingRosterRole(roleId)) {
+                pos = new Vector3d(pos.x, pos.y + RaidQuestMarchRoles.FLY_RAID_SPAWN_LIFT, pos.z);
+            }
             int roleIndex = npc.getIndex(spawnRoleId);
             if (roleIndex < 0) {
                 LOGGER.atWarning().log(
@@ -116,7 +119,7 @@ public final class RaidQuestSpawnService {
                     Rotation3f.ZERO,
                     null,
                     (npcEntity, mobRef, st) ->
-                        configureRaidMobMarch(npcEntity, mobRef, spawnPos, marchTarget, st)
+                        configureRaidMobMarch(npcEntity, mobRef, spawnPos, marchTarget, roleId, st)
                 );
             if (pair == null) {
                 LOGGER.atWarning().log("Raid quest %s: failed to spawn %s", instanceId, roleId);
@@ -139,6 +142,9 @@ public final class RaidQuestSpawnService {
                 );
             }
             RaidQuestMobBinding binding = new RaidQuestMobBinding(townId, instanceId);
+            if (RaidQuestMarchRoles.isFlyingRosterRole(roleId)) {
+                binding.setMarchFlyCruiseY(spawnPos.y);
+            }
             RaidQuestMarchUtil.bootstrapMarch(binding, spawnPos, marchTarget, marchNowMs);
             store.putComponent(mobRef, RaidQuestMobBinding.getComponentType(), binding);
             if (mobUuid != null) {
@@ -190,17 +196,10 @@ public final class RaidQuestSpawnService {
     /** Resolves a ground snapped charter target. Only call outside entity tick systems (quest accept / spawn). */
     @Nonnull
     public static Vector3d charterMarchTarget(@Nonnull World world, @Nonnull TownRecord town) {
-        Vector3d pos =
-            RaidSpawnGroundUtil.findSpawnPosition(
-                world,
-                town.getCharterX(),
-                town.getCharterZ(),
-                town.getCharterY()
-            );
-        if (pos != null) {
-            return pos;
-        }
-        return charterMarchTargetFromTown(town);
+        return com.hexvane.aetherhaven.autonomy.VillagerBlockUtil.snapNpcFeetToStand(
+            world,
+            charterMarchTargetFromTown(town)
+        );
     }
 
     private static void configureRaidMobMarch(
@@ -208,11 +207,17 @@ public final class RaidQuestSpawnService {
         @Nonnull Ref<EntityStore> mobRef,
         @Nonnull Vector3d spawnPos,
         @Nonnull Vector3d charterTarget,
+        @Nonnull String rosterRoleId,
         @Nonnull Store<EntityStore> store
     ) {
-        Vector3d firstWaypoint = RaidQuestMarchUtil.computeNextWaypoint(spawnPos, charterTarget);
+        RaidQuestMobBinding bootstrapBinding = new RaidQuestMobBinding(java.util.UUID.randomUUID(), "bootstrap");
+        if (RaidQuestMarchRoles.isFlyingRosterRole(rosterRoleId)) {
+            bootstrapBinding.setMarchFlyCruiseY(spawnPos.y);
+        }
+        Vector3d firstWaypoint = RaidQuestMarchUtil.computeNextWaypoint(spawnPos, charterTarget, bootstrapBinding);
         npcEntity.setLeashPoint(firstWaypoint);
         RaidQuestMarchUtil.applyMarchState(mobRef, npcEntity, store);
+        RaidQuestMarchUtil.applyFlyingCruiseAltitude(npcEntity);
         store.putComponent(mobRef, NPCEntity.getComponentType(), npcEntity);
     }
 

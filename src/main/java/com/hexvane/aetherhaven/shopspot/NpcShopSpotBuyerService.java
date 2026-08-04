@@ -3,6 +3,10 @@ package com.hexvane.aetherhaven.shopspot;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.reputation.VillagerReputationService;
+import com.hexvane.aetherhaven.town.TownLogEntry;
+import com.hexvane.aetherhaven.town.TownLogMessage;
+import com.hexvane.aetherhaven.town.TownLogService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Store;
@@ -86,6 +90,14 @@ public final class NpcShopSpotBuyerService {
             return false;
         }
         ShopSpotPurchaseService.creditSellerPayout(plugin, town, record, totalCost);
+        TownLogService.appendEntry(
+            town,
+            new TownLogEntry(
+                VillagerReputationService.currentGameEpochDay(store),
+                TownLogService.KEY_SHOP_SALE,
+                TownLogMessage.shopSaleParams(buyerDisplayName, itemId, Integer.toString(itemQty), Long.toString(totalCost))
+            )
+        );
         tm.updateTown(town);
         record.setStock(record.getStock() - itemQty);
         UUID buyerUuid = buyerEntityUuid != null ? buyerEntityUuid : new UUID(0L, 0L);

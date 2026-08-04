@@ -9,6 +9,7 @@
 - **Community updates** — Update button on the plot crafting bench when a newer version of a downloaded building is available.
 - **Barn Feathers** - The barn can now produce feathers.
 - **Player shop sales toggle** — The town records shelf on player shops has an option to sell to players only. Visitors and villagers can still visit and browse.
+- **Town log** — The town records shelf has a new tab with a scrollable saved history of town events. The town owner can clear the log when they want a fresh start.
 - **Plot creator step jump** — Middle click the plot creator staff to jump back to any step you have already reached.
 - **Patrol wand guard list** — When assigning a guard, you can turn on a filter to show only guards that do not have a patrol route yet.
 - **Patrol route removal** — Patrol wand has a remove mode. Select a saved route and press F to delete it.
@@ -43,6 +44,7 @@
 - **Town NPC loading** — Villagers and other NPCs around your town load more reliably when you travel back into the area.
 - **Duplicate town villagers** — The same person no longer appears twice in the Town Journal or on town record shelves after they die and come back.
 - **Reconstruct and move building** — Rebuilding or moving a building only clears blocks that belong to that building. Empty space inside the plot is left alone.
+- **Morning tax notice** — Town members now get a chat message when daily taxes are collected instead of a small on screen toast.
 
 ## [2.6.0] - 7/27/2026
 

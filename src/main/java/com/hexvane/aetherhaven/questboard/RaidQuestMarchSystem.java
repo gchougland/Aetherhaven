@@ -23,8 +23,8 @@ import javax.annotation.Nonnull;
 import org.joml.Vector3d;
 
 /**
- * Advances raid mobs toward the town charter in timed stages so vanilla combat AI can engage players and guards
- * between marches.
+ * Advances raid mobs toward the town charter in timed stages. Mobs walk between waypoints; stuck recovery may
+ * teleport them toward the current leash when out of combat.
  */
 public final class RaidQuestMarchSystem extends EntityTickingSystem<EntityStore> {
     @Nonnull
@@ -108,12 +108,15 @@ public final class RaidQuestMarchSystem extends EntityTickingSystem<EntityStore>
 
         if (!binding.isMarchInitialized() || !binding.hasMarchTarget()) {
             RaidQuestMarchUtil.bootstrapMarch(binding, pos, charterPos, nowMs);
+            if (RaidQuestMarchUtil.isFlyingNpc(npc) && !binding.hasMarchFlyCruiseY()) {
+                binding.setMarchFlyCruiseY(pos.y);
+            }
             commandBuffer.putComponent(ref, RaidQuestMobBinding.getComponentType(), binding);
             RaidQuestMarchDebugLog.logBootstrap(plugin, mobUuid.getUuid(), pos, charterPos, binding.getMarchLeash(), npc);
         }
 
         String stateName = npc.getRole().getStateSupport().getStateName();
-        boolean inCombat = RaidQuestMarchUtil.isEngagedInCombat(stateName);
+        boolean inCombat = RaidQuestMarchUtil.isEngagedInCombat(npc);
         RaidQuestMarchDebugLog.logMarchStatus(
             plugin,
             mobUuid.getUuid(),
@@ -144,13 +147,15 @@ public final class RaidQuestMarchSystem extends EntityTickingSystem<EntityStore>
             commandBuffer.putComponent(ref, RaidQuestMobBinding.getComponentType(), binding);
         }
 
-        RaidQuestMarchUtil.ensureMarchMotion(ref, npc, binding, commandBuffer);
+        RaidQuestMarchUtil.ensureMarchMotion(ref, npc, binding, pos, commandBuffer);
+
+        RaidQuestMarchAggro.tryEngageNearbyPlayers(ref, npc, pos, store, commandBuffer);
 
         if (!RaidQuestMarchUtil.shouldAdvanceMarch(pos, binding, nowMs)) {
             return;
         }
 
-        RaidQuestMarchUtil.applyMarchAdvance(npc, binding, charterPos, nowMs, commandBuffer, ref);
+        RaidQuestMarchUtil.applyMarchAdvance(npc, binding, charterPos, nowMs, commandBuffer, ref, pos);
         RaidQuestMarchDebugLog.logAdvance(plugin, mobUuid.getUuid(), binding.getMarchLeash(), charterPos);
     }
 }

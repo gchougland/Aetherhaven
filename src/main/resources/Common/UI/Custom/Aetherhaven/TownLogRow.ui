@@ -1,0 +1,19 @@
+$C = "../Common.ui";
+
+Group #TownLogRow {
+  LayoutMode: Top;
+  Anchor: (Bottom: 6);
+  Padding: (Horizontal: 10, Vertical: 8);
+  Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16);
+
+  Label #DayLabel {
+    Anchor: (Bottom: 4);
+    Style: (...$C.@DefaultLabelStyle, TextColor: #9a8c78, FontSize: 13, Wrap: true);
+    Text: "";
+  }
+
+  Label #MessageLabel {
+    Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true);
+    Text: "";
+  }
+}

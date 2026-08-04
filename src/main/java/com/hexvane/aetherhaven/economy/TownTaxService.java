@@ -12,6 +12,9 @@ import com.hexvane.aetherhaven.town.HiredGuardRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.ResidentNpcRecord;
+import com.hexvane.aetherhaven.town.TownLogEntry;
+import com.hexvane.aetherhaven.town.TownLogMessage;
+import com.hexvane.aetherhaven.town.TownLogService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownResidentDisplay;
@@ -25,7 +28,6 @@ import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
@@ -33,7 +35,6 @@ import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.core.util.NotificationUtil;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -152,6 +153,14 @@ public final class TownTaxService {
             town.setTreasuryLastTaxGameLocalDateEpochDay(todayGameLocalEpochDay);
             if (added > 0L) {
                 town.addTreasuryGoldCoins(added);
+                TownLogService.appendEntry(
+                    town,
+                    new TownLogEntry(
+                        titheDay,
+                        TownLogService.KEY_TAX,
+                        TownLogMessage.taxParams(Long.toString(added))
+                    )
+                );
             }
             tm.updateTown(town);
             if (added > 0L) {
@@ -677,7 +686,7 @@ public final class TownTaxService {
                     if (!town.hasMemberOrOwner(uc.getUuid())) {
                         continue;
                     }
-                    NotificationUtil.sendNotification(pr.getPacketHandler(), msg, NotificationStyle.Success);
+                    pr.sendMessage(msg);
                 }
             }
         );

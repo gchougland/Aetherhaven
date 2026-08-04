@@ -253,6 +253,11 @@ public final class TownRecord {
     @SerializedName("villagerGiftLogByRoleId")
     private Map<String, List<VillagerGiftLogEntry>> villagerGiftLogByRoleId;
 
+    /** Persisted town event log for the town records shelf. */
+    @Nullable
+    @SerializedName("townLog")
+    private List<TownLogEntry> townLog;
+
     /**
      * Last known town resident NPCs (role id, binding kind, job plot, entity UUID) for revival UI and saves
      * when entities are unloaded or missing.
@@ -760,6 +765,37 @@ public final class TownRecord {
         int cap = 500;
         while (list.size() > cap) {
             list.remove(0);
+        }
+    }
+
+    @Nonnull
+    public List<TownLogEntry> getTownLog() {
+        migrateTownLogIfNeeded();
+        return townLog;
+    }
+
+    public void migrateTownLogIfNeeded() {
+        if (townLog == null) {
+            townLog = new ArrayList<>();
+        }
+    }
+
+    public void appendTownLog(@Nonnull TownLogEntry entry) {
+        migrateTownLogIfNeeded();
+        if (townLog == null) {
+            return;
+        }
+        townLog.add(entry);
+        int cap = 200;
+        while (townLog.size() > cap) {
+            townLog.remove(0);
+        }
+    }
+
+    public void clearTownLog() {
+        migrateTownLogIfNeeded();
+        if (townLog != null) {
+            townLog.clear();
         }
     }
 

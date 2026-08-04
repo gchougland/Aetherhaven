@@ -5,6 +5,10 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.reputation.VillagerReputationService;
+import com.hexvane.aetherhaven.town.TownLogEntry;
+import com.hexvane.aetherhaven.town.TownLogMessage;
+import com.hexvane.aetherhaven.town.TownLogService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.ui.UiMaterialLabels;
@@ -154,6 +158,14 @@ public final class ShopSpotPurchaseService {
         }
         if (record.isPlayerControlled()) {
             creditSellerPayout(plugin, town, record, totalCost);
+            TownLogService.appendEntry(
+                town,
+                new TownLogEntry(
+                    VillagerReputationService.currentGameEpochDay(store),
+                    TownLogService.KEY_SHOP_SALE,
+                    TownLogMessage.shopSaleParams(pr.getUsername(), itemId, Integer.toString(itemQty), Long.toString(totalCost))
+                )
+            );
             tm.updateTown(town);
         }
         notifySellerIfNeeded(record, buyer, pr.getUsername(), itemId, itemQty, totalCost, world, store, plugin);

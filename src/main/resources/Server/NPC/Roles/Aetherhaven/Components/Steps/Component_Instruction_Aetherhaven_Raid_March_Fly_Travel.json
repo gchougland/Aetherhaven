@@ -1,0 +1,33 @@
+{
+  "Type": "Component",
+  "Class": "Instruction",
+  "$Comment": "Raid march for Fly motion controllers: cruise altitude then seek toward Java leash without ground pathfinding.",
+  "Content": {
+    "Instructions": [
+      {
+        "Sensor": {
+          "Type": "Leash",
+          "Range": 2.5
+        },
+        "BodyMotion": {
+          "Type": "Seek",
+          "StopDistance": 4.0,
+          "SlowDownDistance": 12,
+          "AbortDistance": 512,
+          "UsePathfinder": false,
+          "UseSteering": true,
+          "RelativeSpeed": 0.95,
+          "HeightDifference": [-48, 48]
+        }
+      },
+      {
+        "Sensor": {
+          "Type": "Any"
+        },
+        "BodyMotion": {
+          "Type": "Nothing"
+        }
+      }
+    ]
+  }
+}

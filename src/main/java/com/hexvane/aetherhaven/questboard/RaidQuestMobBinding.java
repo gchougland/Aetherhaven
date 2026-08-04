@@ -61,6 +61,7 @@ public final class RaidQuestMobBinding implements Component<EntityStore>, Autono
     private transient double autonomyAnchorZ = Double.NaN;
     private transient double autonomyGoalDistSq = Double.NaN;
     private transient int autonomyStallTicks;
+    private transient double marchFlyCruiseY = Double.NaN;
 
     public RaidQuestMobBinding() {}
 
@@ -120,6 +121,18 @@ public final class RaidQuestMobBinding implements Component<EntityStore>, Autono
 
     public boolean hasMarchTarget() {
         return marchTargetSet;
+    }
+
+    public boolean hasMarchFlyCruiseY() {
+        return Double.isFinite(marchFlyCruiseY);
+    }
+
+    public double getMarchFlyCruiseY() {
+        return marchFlyCruiseY;
+    }
+
+    public void setMarchFlyCruiseY(double y) {
+        this.marchFlyCruiseY = y;
     }
 
     @Override
@@ -203,6 +216,7 @@ public final class RaidQuestMobBinding implements Component<EntityStore>, Autono
         copy.autonomyAnchorZ = autonomyAnchorZ;
         copy.autonomyGoalDistSq = autonomyGoalDistSq;
         copy.autonomyStallTicks = autonomyStallTicks;
+        copy.marchFlyCruiseY = marchFlyCruiseY;
         return copy;
     }
 }

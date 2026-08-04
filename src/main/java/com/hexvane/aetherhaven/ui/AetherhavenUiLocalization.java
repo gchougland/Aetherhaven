@@ -22,7 +22,20 @@ public final class AetherhavenUiLocalization {
         b.set("#TabPlotButton.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.tabPlotTooltip"));
         b.set("#TabNeedsButton.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.tabNeedsTooltip"));
         b.set("#TabPlayersButton.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.tabPlayersTooltip"));
+        b.set("#TabLogButton.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.tabLogTooltip"));
         b.set("#TabMoveButton.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.tabMoveTooltip"));
+    }
+
+    public static void applyTownLogPage(@Nonnull UICommandBuilder b) {
+        applyManagementTabTooltips(b);
+        b.set("#TownLogTitleText.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.townlog.title"));
+        b.set("#Hint.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.townlog.hint"));
+        b.set("#ClearLogButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.townlog.clear"));
+        b.set("#ClearLogButton.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.townlog.clearTooltip"));
+        b.set("#ClearLogModalTitle.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.townlog.clearConfirmTitle"));
+        b.set("#ClearLogModalText.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.townlog.clearConfirmBody"));
+        b.set("#ClearLogConfirmButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.townlog.clearConfirm"));
+        b.set("#ClearLogCancelButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.townlog.clearCancel"));
     }
 
     public static void applyPlotConstructionPage(@Nonnull UICommandBuilder b) {

@@ -127,6 +127,7 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
             commandBuilder.set("#TabPlotButton.Disabled", false);
             commandBuilder.set("#TabPlayersButton.Disabled", false);
             commandBuilder.set("#TabNeedsButton.Disabled", true);
+            commandBuilder.set("#TabLogButton.Disabled", !needsOk);
             commandBuilder.set("#TabMoveButton.Disabled", !needsOk);
             bindManagementReturnNav(eventBuilder, needsOk);
         }
@@ -226,6 +227,10 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
                 openPlotManagement(ref, store, 0, true);
                 return;
             }
+            if (data.action.equalsIgnoreCase("OpenTownLog")) {
+                openTownLog(ref, store);
+                return;
+            }
             if (data.action.equalsIgnoreCase("RescueTeleport")) {
                 handleRescueTeleport(ref, store);
                 return;
@@ -267,7 +272,25 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
                 new EventData().append("Action", "BeginMoveBuilding"),
                 false
             );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#TabLogButton",
+                new EventData().append("Action", "OpenTownLog"),
+                false
+            );
         }
+    }
+
+    private void openTownLog(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        if (managementBlockRef == null || managementBlockPos == null) {
+            return;
+        }
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player == null) {
+            return;
+        }
+        player.getPageManager()
+            .openCustomPage(ref, store, new TownLogPage(playerRef, townId, managementBlockRef, managementBlockPos));
     }
 
     private void handleRescueTeleport(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {

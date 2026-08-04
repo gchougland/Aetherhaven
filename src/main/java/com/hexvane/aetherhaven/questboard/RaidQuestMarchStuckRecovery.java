@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3d;
 
-/** Teleports stalled raid mobs to their current march waypoint (same idea as villager/tourist recovery). */
+/** Teleports stalled raid mobs to their current march waypoint when out of combat. */
 public final class RaidQuestMarchStuckRecovery {
     private RaidQuestMarchStuckRecovery() {}
 
@@ -36,9 +36,16 @@ public final class RaidQuestMarchStuckRecovery {
         if (!AutonomyStuckTeleportRecovery.isStallTeleportDue(binding)) {
             return false;
         }
-
         World world = store.getExternalData().getWorld();
-        Vector3d target = VillagerBlockUtil.snapNpcFeetToStand(world, leash);
+        Vector3d spread = RaidQuestMarchSpread.offsetAround(leash, mobUuid);
+        Vector3d target;
+        if (RaidQuestMarchUtil.isFlyingNpc(npc)) {
+            double flyY = binding.hasMarchFlyCruiseY() ? binding.getMarchFlyCruiseY() : mobPos.y;
+            target = new Vector3d(spread.x, flyY, spread.z);
+        } else {
+            spread.y = mobPos.y;
+            target = VillagerBlockUtil.snapNpcFeetToStand(world, spread);
+        }
         int stallTicks = binding.getAutonomyStallTicks();
         AutonomyStuckTeleportRecovery.teleportNpc(ref, commandBuffer, store, target, npc);
         npc.setLeashPoint(leash);

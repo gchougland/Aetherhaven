@@ -373,6 +373,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
 
         boolean needsMoveTabsOk = managementUi && completed;
         commandBuilder.set("#TabNeedsButton.Disabled", !needsMoveTabsOk);
+        commandBuilder.set("#TabLogButton.Disabled", !needsMoveTabsOk);
         commandBuilder.set("#TabMoveButton.Disabled", !needsMoveTabsOk);
         TownRecord mgmtTown = managementUi ? resolveManagementTown(store) : null;
         AetherhavenPlugin plugWork = AetherhavenPlugin.get();
@@ -743,6 +744,12 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 CustomUIEventBindingType.Activating,
                 "#TabNeedsButton",
                 new EventData().append("Action", "OpenTownNeeds"),
+                false
+            );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#TabLogButton",
+                new EventData().append("Action", "OpenTownLog"),
                 false
             );
             eventBuilder.addEventBinding(
@@ -2016,6 +2023,34 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                         store,
                         new TownExpansionPage(playerRef, blockRef, blockWorldPos, townUuid, viewCx, viewCz)
                     );
+            }
+            return;
+        }
+        if (data.action != null && data.action.equalsIgnoreCase("OpenTownLog")) {
+            if (!managementUi) {
+                return;
+            }
+            moveBuildingConfirmOpen = false;
+            reconstructBuildingConfirmOpen = false;
+            PlotInstanceState st = resolvePlotState(store, ref);
+            if (st != PlotInstanceState.COMPLETE) {
+                return;
+            }
+            Store<ChunkStore> cs = blockRef.getStore();
+            ManagementBlock mb = cs.getComponent(blockRef, ManagementBlock.getComponentType());
+            if (mb == null || mb.getTownId().isBlank()) {
+                return;
+            }
+            UUID townUuid;
+            try {
+                townUuid = UUID.fromString(mb.getTownId().trim());
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+            Player player = store.getComponent(ref, Player.getComponentType());
+            if (player != null) {
+                player.getPageManager()
+                    .openCustomPage(ref, store, new TownLogPage(playerRef, townUuid, blockRef, blockWorldPos));
             }
             return;
         }

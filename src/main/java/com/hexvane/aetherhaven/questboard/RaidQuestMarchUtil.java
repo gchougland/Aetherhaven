@@ -8,6 +8,8 @@ import com.hypixel.hytale.server.core.modules.time.TimeModule;
 import com.hypixel.hytale.server.core.modules.time.TimeResource;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import com.hypixel.hytale.server.npc.movement.controllers.MotionControllerFly;
+import com.hypixel.hytale.server.npc.role.support.MarkedEntitySupport;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3d;
@@ -16,7 +18,7 @@ import org.joml.Vector3d;
 public final class RaidQuestMarchUtil {
     public static final long MARCH_ADVANCE_INTERVAL_MS = 15_000L;
 
-    private static final double MARCH_ARRIVE_HORIZONTAL = 6.0;
+    private static final double CHARTER_STANDOFF_HORIZONTAL = 10.0;
     private static final double MARCH_WAYPOINT_REACHED_HORIZONTAL = 6.0;
     private static final double MARCH_WAYPOINT_STEP = 20.0;
 
@@ -40,7 +42,7 @@ public final class RaidQuestMarchUtil {
         long nowMs
     ) {
         binding.setMarchTarget(charterPos);
-        Vector3d first = computeNextWaypoint(spawnPos, charterPos);
+        Vector3d first = computeNextWaypoint(spawnPos, charterPos, binding);
         binding.setMarchLeash(first);
         binding.setNextMarchAdvanceEpochMs(nowMs + MARCH_ADVANCE_INTERVAL_MS);
         binding.setMarchInitialized(true);
@@ -52,27 +54,70 @@ public final class RaidQuestMarchUtil {
         long nowMs
     ) {
         if (!binding.isMarchInitialized()) {
-            return true;
+            return false;
         }
-        if (nowMs >= binding.getNextMarchAdvanceEpochMs()) {
-            return true;
+        if (nowMs < binding.getNextMarchAdvanceEpochMs()) {
+            return false;
         }
         Vector3d leash = binding.getMarchLeash();
         double dx = mobPos.x - leash.x;
         double dz = mobPos.z - leash.z;
-        return dx * dx + dz * dz <= MARCH_WAYPOINT_REACHED_HORIZONTAL * MARCH_WAYPOINT_REACHED_HORIZONTAL;
+        boolean reachedLeash =
+            dx * dx + dz * dz <= MARCH_WAYPOINT_REACHED_HORIZONTAL * MARCH_WAYPOINT_REACHED_HORIZONTAL;
+        return reachedLeash;
     }
 
     @Nonnull
-    public static Vector3d computeNextWaypoint(@Nonnull Vector3d from, @Nonnull Vector3d charterPos) {
+    public static Vector3d computeNextWaypoint(
+        @Nonnull Vector3d from,
+        @Nonnull Vector3d charterPos,
+        @Nonnull RaidQuestMobBinding binding
+    ) {
         double dx = charterPos.x - from.x;
         double dz = charterPos.z - from.z;
         double distHoriz = Math.sqrt(dx * dx + dz * dz);
-        if (distHoriz <= MARCH_ARRIVE_HORIZONTAL) {
-            return new Vector3d(charterPos);
+        double waypointY = resolveMarchWaypointY(from, binding);
+        if (distHoriz <= CHARTER_STANDOFF_HORIZONTAL) {
+            return resolveCharterStandoff(from, charterPos, waypointY);
         }
-        double step = Math.min(MARCH_WAYPOINT_STEP, distHoriz);
-        return new Vector3d(from.x + dx / distHoriz * step, charterPos.y, from.z + dz / distHoriz * step);
+        double maxStep = distHoriz - CHARTER_STANDOFF_HORIZONTAL;
+        double step = Math.min(MARCH_WAYPOINT_STEP, maxStep);
+        return new Vector3d(from.x + dx / distHoriz * step, waypointY, from.z + dz / distHoriz * step);
+    }
+
+    /** Backward compatible helper for tests and spawn setup. */
+    @Nonnull
+    public static Vector3d computeNextWaypoint(@Nonnull Vector3d from, @Nonnull Vector3d charterPos) {
+        RaidQuestMobBinding binding = new RaidQuestMobBinding(java.util.UUID.randomUUID(), "test");
+        return computeNextWaypoint(from, charterPos, binding);
+    }
+
+    static double resolveMarchWaypointY(@Nonnull Vector3d from, @Nonnull RaidQuestMobBinding binding) {
+        if (binding.hasMarchFlyCruiseY()) {
+            return binding.getMarchFlyCruiseY();
+        }
+        return from.y;
+    }
+
+    /** Final march goal: a ring near the charter, not on top of the stone. */
+    @Nonnull
+    static Vector3d resolveCharterStandoff(@Nonnull Vector3d from, @Nonnull Vector3d charterCenter, double waypointY) {
+        double dx = from.x - charterCenter.x;
+        double dz = from.z - charterCenter.z;
+        double dist = Math.sqrt(dx * dx + dz * dz);
+        if (dist < 0.001) {
+            return new Vector3d(
+                charterCenter.x + CHARTER_STANDOFF_HORIZONTAL,
+                waypointY,
+                charterCenter.z
+            );
+        }
+        double scale = CHARTER_STANDOFF_HORIZONTAL / dist;
+        return new Vector3d(
+            charterCenter.x + dx * scale,
+            waypointY,
+            charterCenter.z + dz * scale
+        );
     }
 
     @Nullable
@@ -103,10 +148,18 @@ public final class RaidQuestMarchUtil {
         @Nonnull Ref<EntityStore> ref,
         @Nonnull NPCEntity npc,
         @Nonnull RaidQuestMobBinding binding,
+        @Nonnull Vector3d mobPos,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
+        if (isEngagedInCombat(npc)) {
+            return;
+        }
         Vector3d leash = binding.getMarchLeash();
+        if (isFlyingNpc(npc)) {
+            leash = new Vector3d(leash.x, mobPos.y, leash.z);
+        }
         npc.setLeashPoint(leash);
+        applyFlyingCruiseAltitude(npc);
         String marchState = resolveMarchState(npc);
         if (marchState != null && npc.getRole() != null) {
             String stateName = npc.getRole().getStateSupport().getStateName();
@@ -139,30 +192,86 @@ public final class RaidQuestMarchUtil {
         }
     }
 
+    /** Moves the march leash to the next waypoint. Mobs walk there; only stuck recovery may teleport. */
     public static void applyMarchAdvance(
         @Nonnull NPCEntity npc,
         @Nonnull RaidQuestMobBinding binding,
         @Nonnull Vector3d charterPos,
         long nowMs,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
-        @Nonnull Ref<EntityStore> ref
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Vector3d mobPos
     ) {
-        Vector3d next = computeNextWaypoint(binding.getMarchLeash(), charterPos);
+        Vector3d next = computeNextWaypoint(binding.getMarchLeash(), charterPos, binding);
         binding.setMarchLeash(next);
         binding.setNextMarchAdvanceEpochMs(nowMs + MARCH_ADVANCE_INTERVAL_MS);
-        npc.setLeashPoint(next);
+        Vector3d leash = next;
+        if (isFlyingNpc(npc)) {
+            leash = new Vector3d(next.x, mobPos.y, next.z);
+        } else if (binding.hasMarchFlyCruiseY()) {
+            leash = new Vector3d(next.x, binding.getMarchFlyCruiseY(), next.z);
+        }
+        npc.setLeashPoint(leash);
+        applyFlyingCruiseAltitude(npc);
         applyMarchState(ref, npc, commandBuffer);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
         commandBuffer.putComponent(ref, RaidQuestMobBinding.getComponentType(), binding);
     }
 
+    public static boolean isEngagedInCombat(@Nonnull NPCEntity npc) {
+        if (hasActiveCombatTarget(npc)) {
+            return true;
+        }
+        if (npc.getRole() == null) {
+            return false;
+        }
+        String stateName = npc.getRole().getStateSupport().getStateName();
+        if (isInMarchState(stateName) && !isCombatStateName(stateName)) {
+            return false;
+        }
+        return isCombatStateName(stateName);
+    }
+
     public static boolean isEngagedInCombat(@Nonnull String stateName) {
+        return isCombatStateName(stateName);
+    }
+
+    static boolean isCombatStateName(@Nonnull String stateName) {
         return stateName.contains("Combat")
             || stateName.contains("Chase")
             || stateName.contains("Search")
             || stateName.contains("Alerted")
             || stateName.contains("Angry")
             || stateName.contains("Flee")
-            || stateName.contains("Shoot");
+            || stateName.contains("Shoot")
+            || stateName.contains("Attack")
+            || stateName.contains("Investigate")
+            || stateName.contains("Warn")
+            || stateName.contains("Defend")
+            || stateName.contains("Melee")
+            || stateName.contains("Ranged");
+    }
+
+    static boolean hasActiveCombatTarget(@Nonnull NPCEntity npc) {
+        if (npc.getRole() == null) {
+            return false;
+        }
+        MarkedEntitySupport marked = npc.getRole().getMarkedEntitySupport();
+        Ref<EntityStore> target = marked.getMarkedEntityRef(MarkedEntitySupport.DEFAULT_TARGET_SLOT);
+        return target != null && target.isValid();
+    }
+
+    public static boolean isFlyingNpc(@Nonnull NPCEntity npc) {
+        return MotionControllerFly.TYPE.equals(npc.getActiveMotionControllerName());
+    }
+
+    static void applyFlyingCruiseAltitude(@Nonnull NPCEntity npc) {
+        if (!isFlyingNpc(npc) || npc.getRole() == null) {
+            return;
+        }
+        var mc = npc.getRole().getActiveMotionController();
+        if (mc instanceof MotionControllerFly fly) {
+            fly.setDesiredAltitudeOverride(new double[] {8.0, 12.0});
+        }
     }
 }
