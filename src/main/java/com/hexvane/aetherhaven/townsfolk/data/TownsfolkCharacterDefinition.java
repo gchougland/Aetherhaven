@@ -27,6 +27,11 @@ public final class TownsfolkCharacterDefinition {
     @SerializedName("modelAssetId")
     private String modelAssetId = "";
 
+    /** Optional portrait PNG under {@code Icons/ModelsGenerated/} (overrides {@link #modelAssetId}.png). */
+    @SerializedName("portraitIcon")
+    @Nullable
+    private String portraitIcon;
+
     /** All personality traits for this character (fixed in data; not chosen at spawn). */
     @SerializedName("personalityIds")
     @Nullable
@@ -88,6 +93,11 @@ public final class TownsfolkCharacterDefinition {
     @Nonnull
     public String getModelAssetId() {
         return modelAssetId != null ? modelAssetId.trim() : "";
+    }
+
+    @Nullable
+    public String getPortraitIcon() {
+        return portraitIcon != null && !portraitIcon.isBlank() ? portraitIcon.trim() : null;
     }
 
     @Nonnull

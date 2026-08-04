@@ -47,13 +47,11 @@ public final class PlotCreatorStatusHud extends CustomUIHud {
                 if (sub.type() == PlotCreatorSubstepType.WORK_POI
                     && sub.workResidentKind() != null
                     && !sub.workResidentKind().isBlank()) {
+                    String role = sub.workResidentKind().toLowerCase(java.util.Locale.ROOT);
+                    b.set("#StepHelp.TextSpans", Message.translation(LANG_PREFIX + "substep.workRole." + role));
                     b.set(
                         "#DetailLine.TextSpans",
-                        Message.translation(
-                            LANG_PREFIX
-                                + "spot.workRole."
-                                + sub.workResidentKind().toLowerCase(java.util.Locale.ROOT)
-                        )
+                        Message.translation(LANG_PREFIX + "spot.workRole." + role)
                     );
                 } else {
                     b.set("#DetailLine.TextSpans", Message.translation(LANG_PREFIX + "substep." + sub.type().name()));

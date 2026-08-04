@@ -109,7 +109,7 @@ public final class GuildHallAdventurerPoolService {
             pruneMissingAdventurers(town, store, tm);
             TownsfolkExistenceService.purgeStaleGuildHallAdventurers(world, plugin, town, store, hallPlot, tm);
             morningRefreshIfDue(world, plugin, town, tm, store, hallPlot, spawnSlots, wtr, morningStart, morningEndEx);
-            fillEmptySlots(world, plugin, town, tm, store, hallPlot, spawnSlots, wtr);
+            fillEmptySlots(world, plugin, town, tm, store, hallPlot, spawnSlots, wtr, null);
         }
     }
 
@@ -148,9 +148,10 @@ public final class GuildHallAdventurerPoolService {
         town.getGuildHallAdventurerSlotByNpcId().clear();
 
         long epochDay = wtr.getGameDateTime().toLocalDate().toEpochDay();
-        rollTodayAdventurerSlots(town, tm, spawnSlots.size(), epochDay);
+        long rerollEntropy = System.nanoTime();
+        rollTodayAdventurerSlots(town, tm, spawnSlots.size(), epochDay, rerollEntropy);
 
-        int spawned = fillEmptySlots(world, plugin, town, tm, store, hallPlot, spawnSlots, wtr);
+        int spawned = fillEmptySlots(world, plugin, town, tm, store, hallPlot, spawnSlots, wtr, rerollEntropy);
         int available = availableGuardEligibleCount(world, plugin, town.getTownId());
         return new ForceRespawnResult(reclaimed, despawned, town.getGuildHallAdventurerFilledSlots().size(), spawned, available);
     }
@@ -317,7 +318,7 @@ public final class GuildHallAdventurerPoolService {
                 }
                 long epochDay = wtr.getGameDateTime().toLocalDate().toEpochDay();
                 ensureTodayAdventurerSlotsRolled(town, tm, spawnSlots.size(), epochDay);
-                fillEmptySlots(world, plugin, town, tm, store, hallPlot, spawnSlots, wtr);
+                fillEmptySlots(world, plugin, town, tm, store, hallPlot, spawnSlots, wtr, null);
             }
         );
     }
@@ -352,7 +353,7 @@ public final class GuildHallAdventurerPoolService {
             town.getGuildHallAdventurerSlotByNpcId().clear();
         }
 
-        rollTodayAdventurerSlots(town, tm, spawnSlots.size(), epochDay);
+        rollTodayAdventurerSlots(town, tm, spawnSlots.size(), epochDay, null);
     }
 
     /**
@@ -394,17 +395,21 @@ public final class GuildHallAdventurerPoolService {
         if (lastDay != null && lastDay == epochDay) {
             return;
         }
-        rollTodayAdventurerSlots(town, tm, slotCount, epochDay);
+        rollTodayAdventurerSlots(town, tm, slotCount, epochDay, null);
     }
 
     private static void rollTodayAdventurerSlots(
         @Nonnull TownRecord town,
         @Nonnull TownManager tm,
         int slotCount,
-        long epochDay
+        long epochDay,
+        @Nullable Long rerollEntropy
     ) {
         town.getGuildHallAdventurerFilledSlots().clear();
         long seed = town.getTownId().getLeastSignificantBits() ^ epochDay * 0x9E3779B97F4A7C15L;
+        if (rerollEntropy != null) {
+            seed ^= rerollEntropy;
+        }
         Random slotRandom = new Random(seed);
         for (int slot = 0; slot < slotCount; slot++) {
             if (slotRandom.nextFloat() < ADVENTURER_FILL_CHANCE) {
@@ -522,7 +527,8 @@ public final class GuildHallAdventurerPoolService {
         @Nonnull Store<EntityStore> store,
         @Nonnull PlotInstance hallPlot,
         @Nonnull List<AdventurerSpawnSlot> spawnSlots,
-        @Nonnull WorldTimeResource wtr
+        @Nonnull WorldTimeResource wtr,
+        @Nullable Long rerollEntropy
     ) {
         Long lastDay = town.getGuildHallLastMorningEpochDay();
         long epochDay = wtr.getGameDateTime().toLocalDate().toEpochDay();
@@ -554,6 +560,9 @@ public final class GuildHallAdventurerPoolService {
                     ^ (long) world.getName().hashCode() << 1
                     ^ epochDay * 0x9E3779B97F4A7C15L
                     ^ slot;
+            if (rerollEntropy != null) {
+                seed ^= rerollEntropy;
+            }
             var result =
                 TownsfolkSpawnService.trySpawn(
                     world,

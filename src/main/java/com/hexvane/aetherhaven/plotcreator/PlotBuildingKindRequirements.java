@@ -332,6 +332,7 @@ public final class PlotBuildingKindRequirements {
         out.add(new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1));
         if (requiresGaiaStatue(draft, plugin)) {
             out.add(new SubstepRequirement(PlotCreatorSubstepType.GAIA_STATUE_BLOCK, 1));
+            out.add(new SubstepRequirement(PlotCreatorSubstepType.WORK_POI, 1, TownVillagerBinding.KIND_PRIESTESS));
             out.add(new SubstepRequirement(PlotCreatorSubstepType.FUN_POI, 2));
         } else {
             out.add(new SubstepRequirement(PlotCreatorSubstepType.FUN_POI, 1));

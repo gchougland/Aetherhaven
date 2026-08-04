@@ -246,6 +246,9 @@ public final class PlotCreatorImportantSpotsPage
                 && PlotBuildingKindRequirements.effectiveKinds(session.getDraft(), AetherhavenPlugin.get())
                     .contains(com.hexvane.aetherhaven.plotcreator.PlotBuildingKind.INN))
             || (spot.type() == PlotCreatorSubstepType.GAIA_STATUE_BLOCK
+                && PlotBuildingKindRequirements.requiresGaiaStatue(session.getDraft(), AetherhavenPlugin.get()))
+            || (spot.isWorkRoleSpot()
+                && TownVillagerBinding.KIND_PRIESTESS.equals(spot.workResidentKind())
                 && PlotBuildingKindRequirements.requiresGaiaStatue(session.getDraft(), AetherhavenPlugin.get()));
     }
 

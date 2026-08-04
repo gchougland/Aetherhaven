@@ -302,6 +302,7 @@ aetherhaven.plotcreator.substep.INN_BELL_BLOCK = Click the Inn Bell you placed.
 aetherhaven.plotcreator.substep.GAIA_STATUE_BLOCK = Click the Gaia statue you placed.
 aetherhaven.plotcreator.substep.PLANNING_DESK_POI = Click the town planning desk.
 aetherhaven.plotcreator.substep.WORK_POI = Click a work spot. Face the way villagers should look while working.
+aetherhaven.plotcreator.substep.workRole.priestess = Click where the priestess should stand at the altar. Face the way she should look.
 aetherhaven.plotcreator.substep.BARD_WORK_POI = Click where the bard should stand beside the quest board.
 aetherhaven.plotcreator.substep.SLEEP_POI = Click a bed or rest spot.
 aetherhaven.plotcreator.substep.EAT_POI = Click an eating spot.

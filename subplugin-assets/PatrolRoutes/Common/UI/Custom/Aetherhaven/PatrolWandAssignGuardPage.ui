@@ -24,6 +24,20 @@ $C.@PageOverlay {
         Text: "";
       }
 
+      Group #OnlyUnassignedCheckbox {
+        LayoutMode: Left;
+        Anchor: (Bottom: 8);
+
+        $C.@CheckBox #CheckBox {
+        }
+
+        Label #OnlyUnassignedLabel {
+          Text: "";
+          Anchor: (Right: 30, Left: 11);
+          Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center);
+        }
+      }
+
       Group #ListScroll {
         LayoutMode: TopScrolling;
         ScrollbarStyle: $C.@DefaultScrollbarStyle;

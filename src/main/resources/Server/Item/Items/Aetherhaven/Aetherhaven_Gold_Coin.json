@@ -3,22 +3,36 @@
     "Name": "aetherhaven_items.items.Aetherhaven_Gold_Coin.name",
     "Description": "aetherhaven_items.items.Aetherhaven_Gold_Coin.description"
   },
-  "Icon": "Icons/ItemsGenerated/Deco_Scrap_Treasure.png",
-  "Model": "Blocks/Dungeons/Treasure_Object.blockymodel",
-  "Texture": "Items/Aetherhaven/Gold_Coin_Texture.png",
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Gold_Coin.png",
+  "Model": "Items/Aetherhaven/ah_coin.blockymodel",
+  "Texture": "Items/Aetherhaven/ah_coin.png",
   "MaxStack": 9999,
   "PlayerAnimationsId": "Item",
-  "Categories": ["Items.Utility", "Aetherhaven.All"],
+  "Categories": [
+    "Items.Utility",
+    "Aetherhaven.All"
+  ],
   "Set": "Aetherhaven",
   "Quality": "Common",
   "IconProperties": {
-    "Scale": 0.6,
-    "Rotation": [358, 265, 341],
-    "Translation": [-1, -10]
+    "Scale": 1.2,
+    "Rotation": [
+      358,
+      181,
+      341
+    ],
+    "Translation": [
+      5.5,
+      -7
+    ]
   },
   "Tags": {
-    "Type": ["Currency"],
-    "Family": ["Aetherhaven"]
+    "Type": [
+      "Currency"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
   },
   "ItemSoundSetId": "ISS_Blocks_Wood"
 }

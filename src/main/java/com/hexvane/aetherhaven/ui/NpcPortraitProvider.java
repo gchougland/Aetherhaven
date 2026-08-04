@@ -3,9 +3,11 @@ package com.hexvane.aetherhaven.ui;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.villager.AetherhavenRoleLabels;
+import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import java.util.Map;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * GUI portraits for {@link VillagerNeedsOverviewPage}, {@link GaiaStatueRevivePage}, etc.: PNGs under
@@ -69,6 +71,33 @@ public final class NpcPortraitProvider {
     /**
      * Portrait for a townsfolk body model ({@code Male_Human_01.png}, etc.) under {@link #ICON_DIR}.
      */
+    @Nonnull
+    public static String portraitPathForTownsfolk(@Nullable TownsfolkCharacterDefinition def) {
+        if (def == null) {
+            return MISSING;
+        }
+        String icon = def.getPortraitIcon();
+        if (icon != null) {
+            return portraitPathForFilename(icon);
+        }
+        return portraitPathForModelAssetId(def.getModelAssetId());
+    }
+
+    @Nonnull
+    public static String portraitPathForFilename(@Nonnull String filename) {
+        String name = filename.trim();
+        if (name.isEmpty()) {
+            return MISSING;
+        }
+        if (name.startsWith("UI/") || name.startsWith("Icons/")) {
+            return name;
+        }
+        if (name.endsWith(".png")) {
+            return ICON_DIR + name;
+        }
+        return ICON_DIR + name + ".png";
+    }
+
     @Nonnull
     public static String portraitPathForModelAssetId(@Nonnull String modelAssetId) {
         String id = modelAssetId.trim();

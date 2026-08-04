@@ -101,7 +101,9 @@ public final class PlotReconstructService {
 
         PoiRegistry poiReg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
         PlotBuildingRelocation.relocateTownNpcsOutOfFootprint(entityStore, town, oldFootprint);
-        TownDissolutionService.clearPlotFromWorld(world, plugin, town, plot, entityStore, poiReg);
+        TownDissolutionService.clearPlotFromWorld(
+            world, plugin, town, plot, entityStore, poiReg, PlotBlockClearMode.NONE, null
+        );
         plot.clearAssemblyPersistence();
 
         PlotFootprintRecord newFp = PlotFootprintUtil.computeFootprint(anchor, yaw, buffer);

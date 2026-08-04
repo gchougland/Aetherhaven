@@ -5,22 +5,22 @@
   "displayName": "Gaia altar",
   "description": "A quiet shrine with a Gaia statue for the priestess to tend, and stools to rest by the path.",
   "prefabPath": "Gaia_Altar.prefab.json",
-  "selfBuildGameDays": 1,
+  "selfBuildGameDays": 1.0,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Gaia_Altar",
   "plotAnchorOffset": [
-    5,
     0,
-    5
+    1,
+    0
   ],
   "managementBlockLocalPos": [
-    2,
-    1,
-    3
+    7,
+    0,
+    8
   ],
   "rotationYaw": "None",
-  "autonomyNavFloorYAboveMinY": 1,
-  "autonomyNavMaxStandYSpanAboveMinY": 2,
-  "autonomyNavRoofExclusionYBelowMaxY": 5,
+  "autonomyNavFloorYAboveMinY": 1.0,
+  "autonomyNavMaxStandYSpanAboveMinY": 2.0,
+  "autonomyNavRoofExclusionYBelowMaxY": 5.0,
   "treasuryGoldCoinCost": 50,
   "materials": [
     {
@@ -34,48 +34,105 @@
   ],
   "pois": [
     {
-      "localX": -3,
-      "localY": 1,
-      "localZ": -2,
-      "blockTypeId": "Furniture_Temple_Emerald_Stool",
-      "interactionKind": "SIT",
+      "localX": 2,
+      "localY": 0,
+      "localZ": 3,
       "tags": [
         "FUN",
         "SIT"
       ],
       "capacity": 1,
-      "interactionTargetLocalX": -3,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -1
+      "blockTypeId": "Furniture_Temple_Emerald_Stool",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 2,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 4
+    },
+    {
+      "localX": 8,
+      "localY": 0,
+      "localZ": 7,
+      "tags": [
+        "FUN",
+        "SIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Temple_Emerald_Stool",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 8,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 6
+    },
+    {
+      "localX": 5,
+      "localY": -1,
+      "localZ": 6,
+      "tags": [
+        "WORK",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Soil_Pathway",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 5,
+      "interactionTargetLocalY": -1,
+      "interactionTargetLocalZ": 7,
+      "workResidentKind": "priestess",
+      "interactionTargetYawDegrees": 1.5697932
+    },
+    {
+      "localX": 4,
+      "localY": -1,
+      "localZ": 3,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Soil_Pathway",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 3,
+      "interactionTargetLocalY": -1,
+      "interactionTargetLocalZ": 3,
+      "interactionTargetYawDegrees": -117.23249
     },
     {
       "localX": 3,
-      "localY": 1,
-      "localZ": 2,
-      "blockTypeId": "Furniture_Temple_Emerald_Stool",
-      "interactionKind": "SIT",
+      "localY": -1,
+      "localZ": 7,
       "tags": [
-        "FUN",
-        "SIT"
+        "TOURIST_VISIT"
       ],
       "capacity": 1,
-      "interactionTargetLocalX": 3,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 1
+      "blockTypeId": "Soil_Pathway",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 2,
+      "interactionTargetLocalY": -1,
+      "interactionTargetLocalZ": 7,
+      "interactionTargetYawDegrees": -65.61196
     },
     {
-      "localX": 0,
-      "localY": 2,
-      "localZ": 0,
-      "blockTypeId": "Aetherhaven_Statue_Of_Gaia",
-      "interactionKind": "WORK_SURFACE",
+      "localX": 7,
+      "localY": -1,
+      "localZ": 5,
       "tags": [
-        "WORK"
+        "TOURIST_VISIT"
       ],
       "capacity": 1,
-      "interactionTargetLocalX": 0,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 1
+      "blockTypeId": "Soil_Pathway",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 8,
+      "interactionTargetLocalY": -1,
+      "interactionTargetLocalZ": 5,
+      "interactionTargetYawDegrees": 124.2118
+    },
+    {
+      "localX": 5,
+      "localY": 1,
+      "localZ": 5,
+      "tags": [],
+      "capacity": 1,
+      "blockTypeId": "Aetherhaven_Statue_Of_Gaia",
+      "interactionKind": "NONE"
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_gaia_altar.displayName",

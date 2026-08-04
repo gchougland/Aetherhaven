@@ -20,6 +20,7 @@ import com.hypixel.hytale.component.Store;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
@@ -110,6 +111,13 @@ public final class PlotBuildingRelocation {
         }
 
         PlotFootprintRecord oldFootprint = plot.toFootprint();
+        Rotation oldYaw = plot.resolvePrefabYaw();
+        Vector3i oldAnchor =
+            PlotInPlacePrefabAnchor.resolveInPlaceAnchor(plot, oldYaw, buffer, oldFootprint);
+        if (oldAnchor == null) {
+            sendError(store, ref, "Could not resolve the current building anchor.");
+            return false;
+        }
 
         PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
         reg.unregisterByPlotId(movePlotId);
@@ -126,7 +134,9 @@ public final class PlotBuildingRelocation {
         relocateTownNpcsOutOfFootprint(store, town, oldFootprint);
 
         PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(store, oldFootprint, town);
-        PrefabFootprintClearUtil.clearFootprint(world, oldFootprint);
+        PrefabFootprintClearUtil.clearPrefabCellsAtAnchor(
+            world, oldAnchor, oldYaw, buffer, def.isPreserveWater()
+        );
 
         PlotFootprintRecord newFp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buffer);
         plot.applySignAndFootprint(signPos.x, signPos.y, signPos.z, newFp);

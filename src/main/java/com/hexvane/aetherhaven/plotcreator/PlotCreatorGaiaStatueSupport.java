@@ -28,17 +28,6 @@ public final class PlotCreatorGaiaStatueSupport {
     /** Upserts the runtime Gaia statue POI row from {@code gaiaStatueLocalPos}. */
     public static void syncPoiFromLocalPos(@Nonnull PlotCreatorDraft draft) {
         int[] local = draft.getGaiaStatueLocalPos();
-        Integer targetX = null;
-        Integer targetY = null;
-        Integer targetZ = null;
-        for (PlotCreatorPoiDraft poi : draft.getPois()) {
-            if (isGaiaStatueBlockTypeId(poi.getBlockTypeId())) {
-                targetX = poi.getInteractionTargetLocalX();
-                targetY = poi.getInteractionTargetLocalY();
-                targetZ = poi.getInteractionTargetLocalZ();
-                break;
-            }
-        }
         draft.getPois().removeIf(p -> isGaiaStatueBlockTypeId(p.getBlockTypeId()));
         if (local == null || local.length < 3) {
             return;
@@ -46,14 +35,8 @@ public final class PlotCreatorGaiaStatueSupport {
         PlotCreatorPoiDraft poi = new PlotCreatorPoiDraft();
         poi.setLocal(local[0], local[1], local[2]);
         poi.setBlockTypeId(AetherhavenConstants.STATUE_OF_GAIA_BLOCK_TYPE_ID);
-        poi.setInteractionKind("WORK_SURFACE");
-        poi.getTags().add("WORK");
+        poi.setInteractionKind("NONE");
         poi.setCapacity(1);
-        if (targetX != null && targetY != null && targetZ != null) {
-            poi.setInteractionTargetLocal(targetX, targetY, targetZ);
-        } else {
-            poi.setInteractionTargetLocal(local[0], local[1] - 1, local[2] + 1);
-        }
         draft.getPois().add(poi);
     }
 

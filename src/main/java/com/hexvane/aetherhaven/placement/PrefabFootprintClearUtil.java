@@ -1,12 +1,19 @@
 package com.hexvane.aetherhaven.placement;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
+import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
+import com.hexvane.aetherhaven.construction.ConstructionPrefabSequence;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
+import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
+import org.joml.Vector3i;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -170,6 +177,59 @@ public final class PrefabFootprintClearUtil {
         Store<ChunkStore> store = columnRef.getStore();
         ChunkColumn column = store.getComponent(columnRef, ChunkColumn.getComponentType());
         return column == null ? null : column.getSection(ChunkUtil.chunkCoordinate(blockY));
+    }
+
+    /**
+     * Clears only cells defined in the prefab buffer (solids, filler, and explicit air/carve markers). Omitted cells
+     * inside the footprint AABB are left untouched.
+     */
+    public static void clearPrefabCellsAtAnchor(
+        @Nonnull World world,
+        @Nonnull Vector3i anchor,
+        @Nonnull Rotation yaw,
+        @Nonnull IPrefabBuffer buffer,
+        boolean preserveWater
+    ) {
+        ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
+        BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
+        LocalCachedChunkAccessor chunkAccessor = ConstructionPasteOps.createAccessor(world, anchor, buffer);
+        for (PendingBlock pb : seq.pendingBlocks()) {
+            int bx = anchor.x + pb.x();
+            int by = anchor.y + pb.y();
+            int bz = anchor.z + pb.z();
+            if (ConstructionPasteOps.shouldPreserveWorldWaterAtPrefabCell(
+                preserveWater, pb, world, bx, by, bz, chunkAccessor
+            )) {
+                continue;
+            }
+            forceClearBlockCell(world, bx, by, bz);
+            forceClearProductionStorageAt(world, bx, by, bz);
+        }
+        ConstructionPasteOps.clearNonPrefabFluidsInFootprint(
+            world,
+            anchor,
+            seq.pendingBlocks(),
+            preserveWater,
+            chunkAccessor,
+            blockTypeMap
+        );
+    }
+
+    /** Cells listed in a prefab buffer (including air markers), for sparse vs AABB comparisons. */
+    public static int prefabListedCellCount(@Nonnull Rotation yaw, @Nonnull IPrefabBuffer buffer) {
+        return ConstructionPasteOps.buildSequence(buffer, yaw).pendingBlocks().size();
+    }
+
+    /** Block cells in a footprint AABB (what {@link #clearFootprint} would wipe). */
+    public static int footprintAabbBlockCount(@Nonnull PlotFootprintRecord fp) {
+        long dx = (long) fp.getMaxX() - fp.getMinX() + 1L;
+        long dy = (long) fp.getMaxY() - fp.getMinY() + 1L;
+        long dz = (long) fp.getMaxZ() - fp.getMinZ() + 1L;
+        long product = dx * dy * dz;
+        if (product > Integer.MAX_VALUE) {
+            return Integer.MAX_VALUE;
+        }
+        return (int) product;
     }
 
     public static void clearFootprint(@Nonnull World world, @Nonnull PlotFootprintRecord fp) {

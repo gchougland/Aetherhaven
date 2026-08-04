@@ -4,7 +4,9 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyWorldRegistry;
 import com.hexvane.aetherhaven.map.TownBorderMapOverlayService;
 import com.hexvane.aetherhaven.map.TownMapMarkerProvider;
+import com.hexvane.aetherhaven.placement.PlotBlockClearMode;
 import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
+import com.hexvane.aetherhaven.placement.PrefabVolumeClearSpec;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.shopspot.ShopSpotPlotRelocation;
 import com.hexvane.aetherhaven.shopspot.ShopSpotRegistry;
@@ -23,6 +25,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Destroys a town: removes villagers, clears buildings, POIs, persistence row, and the charter block.
@@ -94,13 +97,26 @@ public final class TownDissolutionService {
         @Nonnull Store<EntityStore> entityStore,
         @Nonnull PoiRegistry reg
     ) {
+        clearPlotFromWorld(world, plugin, town, p, entityStore, reg, PlotBlockClearMode.FULL_FOOTPRINT, null);
+    }
+
+    public static void clearPlotFromWorld(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance p,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull PoiRegistry reg,
+        @Nonnull PlotBlockClearMode blockClearMode,
+        @Nullable PrefabVolumeClearSpec sparseClear
+    ) {
         if (p.getState() == PlotInstanceState.BLUEPRINTING) {
             world.breakBlock(p.getSignX(), p.getSignY(), p.getSignZ(), BREAK_SETTINGS);
         } else if (p.getState() == PlotInstanceState.ASSEMBLING) {
             AssemblyWorldRegistry.remove(world, p.getPlotId());
             world.breakBlock(p.getSignX(), p.getSignY(), p.getSignZ(), BREAK_SETTINGS);
             PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(entityStore, p.toFootprint(), town);
-            PrefabFootprintClearUtil.clearFootprint(world, p.toFootprint());
+            clearPlotBlocks(world, p.toFootprint(), blockClearMode, sparseClear);
         } else if (p.getState() == PlotInstanceState.COMPLETE) {
             reg.unregisterByPlotId(p.getPlotId());
             ShopSpotRegistry shopRegistry = AetherhavenWorldRegistries.getOrCreateShopSpotRegistry(world, plugin);
@@ -112,7 +128,31 @@ public final class TownDissolutionService {
                 world, plugin, entityStore, touristRegistry, p.getPlotId(), town, tm
             );
             PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(entityStore, p.toFootprint(), town);
-            PrefabFootprintClearUtil.clearFootprint(world, p.toFootprint());
+            clearPlotBlocks(world, p.toFootprint(), blockClearMode, sparseClear);
+        }
+    }
+
+    private static void clearPlotBlocks(
+        @Nonnull World world,
+        @Nonnull PlotFootprintRecord footprint,
+        @Nonnull PlotBlockClearMode blockClearMode,
+        @Nullable PrefabVolumeClearSpec sparseClear
+    ) {
+        switch (blockClearMode) {
+            case NONE -> {}
+            case SPARSE_PREFAB -> {
+                if (sparseClear == null) {
+                    throw new IllegalArgumentException("SPARSE_PREFAB requires PrefabVolumeClearSpec");
+                }
+                PrefabFootprintClearUtil.clearPrefabCellsAtAnchor(
+                    world,
+                    sparseClear.anchor(),
+                    sparseClear.yaw(),
+                    sparseClear.buffer(),
+                    sparseClear.preserveWater()
+                );
+            }
+            case FULL_FOOTPRINT -> PrefabFootprintClearUtil.clearFootprint(world, footprint);
         }
     }
 }

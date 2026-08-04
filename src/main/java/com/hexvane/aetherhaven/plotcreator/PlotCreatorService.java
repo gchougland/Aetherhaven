@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.placement.PlotFootprintOverlayRefresh;
 import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
 import com.hexvane.aetherhaven.plot.PlotTokenInventory;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
@@ -509,6 +510,7 @@ public final class PlotCreatorService {
         boolean hasManagement = false;
         boolean hasInnBell = false;
         boolean hasGaiaStatue = false;
+        boolean hasPriestessWork = false;
         for (PlotCreatorSpotEntry entry : draft.getSelectedSpots()) {
             if (entry.type() == PlotCreatorSubstepType.MANAGEMENT_BLOCK) {
                 hasManagement = true;
@@ -516,6 +518,9 @@ public final class PlotCreatorService {
                 hasInnBell = true;
             } else if (entry.type() == PlotCreatorSubstepType.GAIA_STATUE_BLOCK) {
                 hasGaiaStatue = true;
+            } else if (entry.type() == PlotCreatorSubstepType.WORK_POI
+                && TownVillagerBinding.KIND_PRIESTESS.equals(entry.workResidentKind())) {
+                hasPriestessWork = true;
             }
         }
         if (!hasManagement) {
@@ -527,6 +532,9 @@ public final class PlotCreatorService {
         }
         if (!hasGaiaStatue && PlotBuildingKindRequirements.requiresGaiaStatue(draft, AetherhavenPlugin.get())) {
             draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.GAIA_STATUE_BLOCK, 1));
+        }
+        if (!hasPriestessWork && PlotBuildingKindRequirements.requiresGaiaStatue(draft, AetherhavenPlugin.get())) {
+            draft.getSelectedSpots().add(PlotCreatorSpotEntry.work(TownVillagerBinding.KIND_PRIESTESS, 1));
         }
     }
 

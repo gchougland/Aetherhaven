@@ -17,6 +17,7 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.VectorBoxUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.blocktype.component.BlockPhysics;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.BlockEntity;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
@@ -28,6 +29,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
 import com.hypixel.hytale.server.core.universe.world.chunk.EntityChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.FluidSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -113,12 +115,20 @@ public final class PlotCreatorPrefabExporter {
                 Store<ChunkStore> chunkStore = chunk.getReference().getStore();
                 int lastSection = -1;
                 Ref<ChunkStore> sectionRef = null;
+                BlockSection blockSection = null;
+                BlockPhysics blockPhysics = null;
 
                 for (int y = top; y >= bottom; y--) {
                     int block = chunk.getBlock(x, y, z);
                     if (lastSection != ChunkUtil.indexSection(y)) {
                         lastSection = ChunkUtil.indexSection(y);
                         sectionRef = chunkStoreAccessor.getChunkSectionReferenceAtBlock(x, y, z);
+                        blockSection = null;
+                        blockPhysics = null;
+                        if (sectionRef != null && sectionRef.isValid()) {
+                            blockSection = chunkStore.getComponent(sectionRef, BlockSection.getComponentType());
+                            blockPhysics = chunkStore.getComponent(sectionRef, BlockPhysics.getComponentType());
+                        }
                     }
 
                     int fluid = 0;
@@ -137,9 +147,9 @@ public final class PlotCreatorPrefabExporter {
                     } else if (block == 0 && fluid == 0) {
                         selection.addBlockAtWorldPos(x, y, z, 0, 0, 0, 0);
                     } else {
-                        int rotation = chunk.getRotationIndex(x, y, z);
-                        int filler = chunk.getFiller(x, y, z);
-                        int worldSupport = chunk.getSupportValue(x, y, z);
+                        int rotation = blockSection != null ? blockSection.getRotationIndex(x, y, z) : 0;
+                        int filler = blockSection != null ? blockSection.getFiller(x, y, z) : 0;
+                        int worldSupport = blockPhysics != null ? blockPhysics.get(x, y, z) : 0;
                         BlockType blockType = BlockType.getAssetMap().getAsset(block);
                         int support =
                             PrefabSupportUtil.effectiveSupportForExport(blockType, rotation, worldSupport);

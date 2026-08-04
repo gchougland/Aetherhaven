@@ -123,15 +123,15 @@ public final class PatrolGuardDirectory {
     ) {
         TownsfolkCharacterBinding tb = chunk.getComponent(index, TownsfolkCharacterBinding.getComponentType());
         if (tb != null) {
+            if (!tb.getCharacterId().isBlank()) {
+                TownsfolkCharacterDefinition def = plugin.getTownsfolkCharacterCatalog().byId(tb.getCharacterId());
+                if (def != null) {
+                    return NpcPortraitProvider.portraitPathForTownsfolk(def);
+                }
+            }
             String modelId = tb.getModelAssetId();
             if (modelId != null && !modelId.isBlank()) {
                 return NpcPortraitProvider.portraitPathForModelAssetId(modelId);
-            }
-            if (!tb.getCharacterId().isBlank()) {
-                TownsfolkCharacterDefinition def = plugin.getTownsfolkCharacterCatalog().byId(tb.getCharacterId());
-                if (def != null && !def.getModelAssetId().isBlank()) {
-                    return NpcPortraitProvider.portraitPathForModelAssetId(def.getModelAssetId());
-                }
             }
         }
         return NpcPortraitProvider.portraitPathForRoleId(role);

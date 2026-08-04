@@ -76,8 +76,7 @@ public final class TownResidentDisplay {
         if (name == null) {
             name = NpcPortraitProvider.displayLabelForRoleId(roleId);
         }
-        String portrait =
-            model != null ? NpcPortraitProvider.portraitPathForModelAssetId(model) : NpcPortraitProvider.portraitPathForRoleId(roleId);
+        String portrait = portraitForOffline(plugin, roleId, characterId, model);
         return new Resolved(name, portrait);
     }
 
@@ -114,15 +113,15 @@ public final class TownResidentDisplay {
     ) {
         TownsfolkCharacterBinding tb = chunk.getComponent(index, TownsfolkCharacterBinding.getComponentType());
         if (tb != null) {
+            if (!tb.getCharacterId().isBlank()) {
+                TownsfolkCharacterDefinition def = plugin.getTownsfolkCharacterCatalog().byId(tb.getCharacterId());
+                if (def != null) {
+                    return NpcPortraitProvider.portraitPathForTownsfolk(def);
+                }
+            }
             String modelId = tb.getModelAssetId();
             if (modelId != null && !modelId.isBlank()) {
                 return NpcPortraitProvider.portraitPathForModelAssetId(modelId);
-            }
-            if (!tb.getCharacterId().isBlank()) {
-                TownsfolkCharacterDefinition def = plugin.getTownsfolkCharacterCatalog().byId(tb.getCharacterId());
-                if (def != null && !def.getModelAssetId().isBlank()) {
-                    return NpcPortraitProvider.portraitPathForModelAssetId(def.getModelAssetId());
-                }
             }
         }
         return NpcPortraitProvider.portraitPathForRoleId(roleId);
@@ -137,16 +136,35 @@ public final class TownResidentDisplay {
     ) {
         TownsfolkCharacterBinding tb = store.getComponent(ref, TownsfolkCharacterBinding.getComponentType());
         if (tb != null) {
+            if (!tb.getCharacterId().isBlank()) {
+                TownsfolkCharacterDefinition def = plugin.getTownsfolkCharacterCatalog().byId(tb.getCharacterId());
+                if (def != null) {
+                    return NpcPortraitProvider.portraitPathForTownsfolk(def);
+                }
+            }
             String modelId = tb.getModelAssetId();
             if (modelId != null && !modelId.isBlank()) {
                 return NpcPortraitProvider.portraitPathForModelAssetId(modelId);
             }
-            if (!tb.getCharacterId().isBlank()) {
-                TownsfolkCharacterDefinition def = plugin.getTownsfolkCharacterCatalog().byId(tb.getCharacterId());
-                if (def != null && !def.getModelAssetId().isBlank()) {
-                    return NpcPortraitProvider.portraitPathForModelAssetId(def.getModelAssetId());
-                }
+        }
+        return NpcPortraitProvider.portraitPathForRoleId(roleId);
+    }
+
+    @Nonnull
+    private static String portraitForOffline(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull String roleId,
+        @Nullable String characterId,
+        @Nullable String modelAssetId
+    ) {
+        if (characterId != null && !characterId.isBlank()) {
+            TownsfolkCharacterDefinition def = plugin.getTownsfolkCharacterCatalog().byId(characterId);
+            if (def != null) {
+                return NpcPortraitProvider.portraitPathForTownsfolk(def);
             }
+        }
+        if (modelAssetId != null && !modelAssetId.isBlank()) {
+            return NpcPortraitProvider.portraitPathForModelAssetId(modelAssetId);
         }
         return NpcPortraitProvider.portraitPathForRoleId(roleId);
     }

@@ -10,6 +10,8 @@
 - **Barn Feathers** - The barn can now produce feathers.
 - **Player shop sales toggle** — The town records shelf on player shops has an option to sell to players only. Visitors and villagers can still visit and browse.
 - **Plot creator step jump** — Middle click the plot creator staff to jump back to any step you have already reached.
+- **Patrol wand guard list** — When assigning a guard, you can turn on a filter to show only guards that do not have a patrol route yet.
+- **Gaia altar work spot** — Plot creator and building editor now ask you to mark where the priestess stands at the Gaia altar.
 
 ### Changed
 

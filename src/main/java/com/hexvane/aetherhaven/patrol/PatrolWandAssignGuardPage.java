@@ -20,6 +20,7 @@ import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -32,6 +33,7 @@ public final class PatrolWandAssignGuardPage extends AetherhavenInteractiveCusto
     private final UUID routeId;
     private final UUID townId;
     private boolean templateAppended;
+    private boolean onlyUnassignedGuards;
 
     public PatrolWandAssignGuardPage(
         @Nonnull PlayerRef playerRef,
@@ -78,14 +80,45 @@ public final class PatrolWandAssignGuardPage extends AetherhavenInteractiveCusto
             );
             return;
         }
-        commandBuilder.set(
-            "#Hint.TextSpans",
-            Message
-                .translation("aetherhaven_items.aetherhaven.patrolWand.assignPageHint")
-                .param("route", route.safeDisplayName())
+
+        commandBuilder.set("#OnlyUnassignedCheckbox #CheckBox.Value", onlyUnassignedGuards);
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
+            "#OnlyUnassignedCheckbox #CheckBox",
+            EventData.of("@OnlyUnassignedGuards", "#OnlyUnassignedCheckbox #CheckBox.Value"),
+            false
         );
 
-        List<PatrolGuardDirectory.PatrolGuardRow> guards = PatrolGuardDirectory.listGuards(store, town, plugin);
+        List<PatrolGuardDirectory.PatrolGuardRow> allGuards = PatrolGuardDirectory.listGuards(store, town, plugin);
+        List<PatrolGuardDirectory.PatrolGuardRow> guards = allGuards;
+        if (onlyUnassignedGuards) {
+            guards = new ArrayList<>();
+            for (PatrolGuardDirectory.PatrolGuardRow g : allGuards) {
+                if (reg.routesForGuard(g.entityUuid()).isEmpty()) {
+                    guards.add(g);
+                }
+            }
+        }
+
+        if (allGuards.isEmpty()) {
+            commandBuilder.set(
+                "#Hint.TextSpans",
+                Message.translation("aetherhaven_items.aetherhaven.patrolWand.assignPageNoGuards")
+            );
+        } else if (onlyUnassignedGuards && guards.isEmpty()) {
+            commandBuilder.set(
+                "#Hint.TextSpans",
+                Message.translation("aetherhaven_items.aetherhaven.patrolWand.assignPageNoUnassignedGuards")
+            );
+        } else {
+            commandBuilder.set(
+                "#Hint.TextSpans",
+                Message
+                    .translation("aetherhaven_items.aetherhaven.patrolWand.assignPageHint")
+                    .param("route", route.safeDisplayName())
+            );
+        }
+
         for (int i = 0; i < guards.size(); i++) {
             PatrolGuardDirectory.PatrolGuardRow g = guards.get(i);
             commandBuilder.append(ROWS, "Aetherhaven/PatrolWandAssignGuardRow.ui");
@@ -101,16 +134,18 @@ public final class PatrolWandAssignGuardPage extends AetherhavenInteractiveCusto
                 false
             );
         }
-        if (guards.isEmpty()) {
-            commandBuilder.set(
-                "#Hint.TextSpans",
-                Message.translation("aetherhaven_items.aetherhaven.patrolWand.assignPageNoGuards")
-            );
-        }
     }
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
+        if (data.onlyUnassignedGuards != null) {
+            onlyUnassignedGuards = data.onlyUnassignedGuards;
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
         if (data.action == null || !"Assign".equalsIgnoreCase(data.action) || data.guardUuid == null || data.guardUuid.isBlank()) {
             return;
         }
@@ -160,6 +195,12 @@ public final class PatrolWandAssignGuardPage extends AetherhavenInteractiveCusto
             .add()
             .append(new KeyedCodec<>("GuardUuid", Codec.STRING), (d, v) -> d.guardUuid = v, d -> d.guardUuid)
             .add()
+            .append(
+                new KeyedCodec<>("@OnlyUnassignedGuards", Codec.BOOLEAN),
+                (d, v) -> d.onlyUnassignedGuards = v,
+                d -> d.onlyUnassignedGuards
+            )
+            .add()
             .build();
 
         @Nullable
@@ -167,5 +208,8 @@ public final class PatrolWandAssignGuardPage extends AetherhavenInteractiveCusto
 
         @Nullable
         private String guardUuid;
+
+        @Nullable
+        private Boolean onlyUnassignedGuards;
     }
 }

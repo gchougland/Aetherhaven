@@ -166,6 +166,10 @@ public final class AetherhavenUiLocalization {
 
     public static void applyPatrolWandAssignGuardPage(@Nonnull UICommandBuilder b) {
         b.set("#PatrolAssignTitleText.TextSpans", t("aetherhaven_items.aetherhaven.patrolWand.assignPageTitle"));
+        b.set(
+            "#OnlyUnassignedCheckbox #OnlyUnassignedLabel.TextSpans",
+            t("aetherhaven_items.aetherhaven.patrolWand.assignPageOnlyUnassigned")
+        );
     }
 
     public static void applyPatrolWandAssignGuardRow(@Nonnull UICommandBuilder b, @Nonnull String rowPath) {
