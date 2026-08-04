@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
+import com.hexvane.aetherhaven.entity.EntityPresenceUtil;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
@@ -387,32 +388,39 @@ public final class ResidentRegistryService {
         return found[0];
     }
 
-    /** Clears {@link ResidentNpcRecord#isPendingDawnRevival()} when the villager is already live in loaded chunks. */
+    /** Clears stale registry rows when a live NPC for the same story role is already in loaded chunks. */
     public static void reconcileStalePendingDawnRevival(
         @Nonnull TownRecord town,
         @Nonnull TownManager tm,
         @Nonnull Store<EntityStore> store
     ) {
-        boolean changed = false;
         for (ResidentNpcRecord r : town.getResidentNpcRecords()) {
+            if (!isGaiaRevivalEligible(r.getKind(), r.getNpcRoleId())) {
+                continue;
+            }
             if (!r.isPendingDawnRevival()) {
-                continue;
+                UUID saved = r.getLastEntityUuid();
+                if (EntityPresenceUtil.isLoadedLive(EntityPresenceUtil.resolve(store, saved))) {
+                    continue;
+                }
+                if (findLiveEntityUuidForStoryRole(store, town, r) == null) {
+                    continue;
+                }
             }
-            UUID uuid = r.getLastEntityUuid();
-            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(uuid);
-            if (ref != null && ref.isValid()) {
-                r.setPendingDawnRevival(false);
-                changed = true;
-                continue;
-            }
-            if (hasLiveTownRevivalNpcForRole(store, town, r)) {
-                r.setPendingDawnRevival(false);
-                changed = true;
-            }
+            TownResidentReconcileService.syncRegistryToLiveEntityIfNeeded(town, tm, store, r);
         }
-        if (changed) {
-            tm.updateTown(town);
-        }
+    }
+
+    /**
+     * Returns the entity uuid of a loaded live town NPC matching this story row's role, or null when none is loaded.
+     */
+    @Nullable
+    public static UUID findLiveEntityUuidForStoryRole(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull ResidentNpcRecord record
+    ) {
+        return TownResidentReconcileService.findLiveEntityUuidForStoryRole(store, town, record);
     }
 
     @Nullable

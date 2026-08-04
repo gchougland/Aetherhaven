@@ -76,8 +76,7 @@ public final class VillagerRevivalService {
                     roleId,
                     town.getTownId()
                 );
-            record.setPendingDawnRevival(false);
-            tm.updateTown(town);
+            TownResidentReconcileService.syncRegistryToLiveEntityIfNeeded(town, tm, store, record);
             return false;
         }
         NPCPlugin npc = NPCPlugin.get();

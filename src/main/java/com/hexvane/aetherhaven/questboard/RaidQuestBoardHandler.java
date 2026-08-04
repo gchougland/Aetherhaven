@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.questboard;
 
 import com.hexvane.aetherhaven.questboard.data.QuestBoardFetchEntryJson;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardRaidEntryJson;
+import com.hexvane.aetherhaven.questboard.data.QuestBoardRaidGuaranteedMobJson;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardRaidMobPoolEntryJson;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardRaidSetJson;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -11,9 +12,11 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -48,7 +51,8 @@ public final class RaidQuestBoardHandler implements QuestBoardQuestTypeHandler {
         @Nonnull Random rng
     ) {
         QuestBoardRaidSetJson raidSet = pickWeightedRaidSet(entry, rng);
-        if (raidSet == null || raidSet.mobPoolOrEmpty().isEmpty()) {
+        if (raidSet == null
+            || (raidSet.mobPoolOrEmpty().isEmpty() && raidSet.guaranteedMobsOrEmpty().isEmpty())) {
             return false;
         }
         String rank = entry.rank() != null ? entry.rank().trim() : "E";
@@ -110,17 +114,33 @@ public final class RaidQuestBoardHandler implements QuestBoardQuestTypeHandler {
         List<QuestBoardRaidMobPoolEntryJson> pool = raidSet.mobPoolOrEmpty().stream()
             .filter(e -> e.roleId() != null && !e.roleId().isBlank())
             .toList();
-        if (pool.isEmpty()) {
-            return List.of();
-        }
         int totalCount = resolveMobCount(raidSet, rank);
         if (totalCount <= 0) {
             return List.of();
         }
 
-        int distinctTarget = Math.min(3, Math.min(totalCount, pool.size()));
-        List<QuestBoardRaidMobPoolEntryJson> remaining = new ArrayList<>(pool);
         List<String> roster = new ArrayList<>();
+        Set<String> guaranteedRoleIds = new HashSet<>();
+        for (QuestBoardRaidGuaranteedMobJson guaranteed : raidSet.guaranteedMobsOrEmpty()) {
+            if (guaranteed.roleId() == null || guaranteed.roleId().isBlank()) {
+                continue;
+            }
+            String roleId = guaranteed.roleId().trim();
+            guaranteedRoleIds.add(roleId);
+            for (int i = 0; i < guaranteed.count() && roster.size() < totalCount; i++) {
+                roster.add(roleId);
+            }
+        }
+
+        List<QuestBoardRaidMobPoolEntryJson> fillPool = pool.stream()
+            .filter(e -> !guaranteedRoleIds.contains(e.roleId().trim()))
+            .toList();
+        if (fillPool.isEmpty() && roster.isEmpty()) {
+            return List.of();
+        }
+
+        int distinctTarget = Math.min(3, Math.min(totalCount - roster.size(), fillPool.size()));
+        List<QuestBoardRaidMobPoolEntryJson> remaining = new ArrayList<>(fillPool);
 
         for (int i = 0; i < distinctTarget; i++) {
             QuestBoardRaidMobPoolEntryJson picked = pickWeightedPoolEntry(remaining, rng);
@@ -131,7 +151,7 @@ public final class RaidQuestBoardHandler implements QuestBoardQuestTypeHandler {
             remaining.remove(picked);
         }
         while (roster.size() < totalCount) {
-            QuestBoardRaidMobPoolEntryJson picked = pickWeightedPoolEntry(pool, rng);
+            QuestBoardRaidMobPoolEntryJson picked = pickWeightedPoolEntry(fillPool, rng);
             if (picked == null) {
                 break;
             }

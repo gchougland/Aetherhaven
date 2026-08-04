@@ -204,7 +204,7 @@ public final class PatrolWandPreviewSystem extends EntityTickingSystem<EntitySto
         if (routeId == null) {
             return false;
         }
-        if (st.getMode() == PatrolWandMode.Assign) {
+        if (st.getMode() == PatrolWandMode.Assign || st.getMode() == PatrolWandMode.Remove) {
             return routeId.equals(st.getSelectedRouteId());
         }
         return !st.getDraftNodes().isEmpty() && routeId.equals(st.getEditingRouteId());

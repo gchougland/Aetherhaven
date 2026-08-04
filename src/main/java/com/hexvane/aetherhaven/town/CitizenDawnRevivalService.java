@@ -126,6 +126,7 @@ public final class CitizenDawnRevivalService {
             if (last != null && last >= epochDay) {
                 continue;
             }
+            TownResidentReconcileService.reconcileTownOnWorldThread(world, plugin, town);
             List<ResidentNpcRecord> candidates = ResidentRegistryService.dawnRevivalCandidates(town, tm, store);
             if (candidates.isEmpty()) {
                 LAST_MORNING_REVIVAL_EPOCH_DAY_BY_TOWN.put(revivalKey, epochDay);
@@ -135,8 +136,7 @@ public final class CitizenDawnRevivalService {
             boolean anyRevived = false;
             for (ResidentNpcRecord record : candidates) {
                 if (ResidentRegistryService.hasLiveTownRevivalNpcForRole(store, town, record)) {
-                    record.setPendingDawnRevival(false);
-                    tm.updateTown(town);
+                    TownResidentReconcileService.syncRegistryToLiveEntityIfNeeded(town, tm, store, record);
                     continue;
                 }
                 if (VillagerRevivalService.validateCanRevive(store, town, record) != null) {

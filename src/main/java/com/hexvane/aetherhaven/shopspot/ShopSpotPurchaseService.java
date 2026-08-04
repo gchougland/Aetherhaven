@@ -285,8 +285,9 @@ public final class ShopSpotPurchaseService {
             return;
         }
         ShopPriceEntry entry = prices.getEntry(itemId);
-        int qty = hand.getQuantity();
-        if (!ShopPriceEntry.isValidListingQuantity(qty, entry)) {
+        int handQty = hand.getQuantity();
+        int listQty = ShopPriceEntry.alignItemStockToBatches(handQty, entry.getBatchSize());
+        if (listQty <= 0) {
             notify(
                 playerRef,
                 commandBuffer,
@@ -309,12 +310,12 @@ public final class ShopSpotPurchaseService {
         if (!ShopSpotJewelrySupport.isJewelryListing(itemId)) {
             ShopSpotJewelrySupport.clearJewelryListing(record);
         }
-        if (!clearActiveHotbarStack(playerRef, store, hotbar, hand)) {
+        if (!removeFromActiveHotbarStack(playerRef, store, hotbar, hand, listQty)) {
             fail(context);
             return;
         }
         record.setItemId(itemId);
-        record.setStock(qty);
+        record.setStock(listQty);
         record.setSellerUuid(playerUuid);
         PlayerRef sellerRef = commandBuffer.getComponent(playerRef, PlayerRef.getComponentType());
         if (sellerRef != null) {
@@ -323,7 +324,18 @@ public final class ShopSpotPurchaseService {
         registry.put(record);
         ShopSpotPersistence.save(world, plugin, registry);
         ShopSpotDisplayService.syncDisplay(world, store, commandBuffer, plugin, registry, record, town);
-        notify(playerRef, commandBuffer, Message.translation(MSG + ".listed"));
+        int kept = handQty - listQty;
+        if (kept > 0) {
+            notify(
+                playerRef,
+                commandBuffer,
+                Message.translation(MSG + ".listedPartial")
+                    .param("listed", String.valueOf(listQty))
+                    .param("kept", String.valueOf(kept))
+            );
+        } else {
+            notify(playerRef, commandBuffer, Message.translation(MSG + ".listed"));
+        }
         context.getState().state = InteractionState.Finished;
     }
 
@@ -493,19 +505,42 @@ public final class ShopSpotPurchaseService {
         return cur < baseMax - DURABILITY_EPS || stackMax < baseMax - DURABILITY_EPS;
     }
 
+    private static boolean removeFromActiveHotbarStack(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull InventoryComponent.Hotbar hotbar,
+        @Nonnull ItemStack inHand,
+        int removeQty
+    ) {
+        if (removeQty <= 0) {
+            return false;
+        }
+        byte slot = hotbar.getActiveSlot();
+        if (slot < 0) {
+            return false;
+        }
+        int have = inHand.getQuantity();
+        if (removeQty > have) {
+            return false;
+        }
+        ItemStack replacement =
+            removeQty >= have
+                ? ItemStack.EMPTY
+                : (inHand.withQuantity(have - removeQty) != null
+                    ? inHand.withQuantity(have - removeQty)
+                    : ItemStack.EMPTY);
+        ItemContainer container = hotbar.getInventory();
+        container.replaceItemStackInSlot(slot, inHand, replacement);
+        return true;
+    }
+
     private static boolean clearActiveHotbarStack(
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store,
         @Nonnull InventoryComponent.Hotbar hotbar,
         @Nonnull ItemStack inHand
     ) {
-        byte slot = hotbar.getActiveSlot();
-        if (slot < 0) {
-            return false;
-        }
-        ItemContainer container = hotbar.getInventory();
-        container.replaceItemStackInSlot(slot, inHand, ItemStack.EMPTY);
-        return true;
+        return removeFromActiveHotbarStack(playerRef, store, hotbar, inHand, inHand.getQuantity());
     }
 
     private static void fail(@Nonnull InteractionContext context) {

@@ -27,6 +27,11 @@ public final class PatrolWandHudControls {
                 row(ToolKeybindSlot.ABILITY2, "aetherhaven.patrolWand.hud.assign.e"),
                 row(ToolKeybindSlot.ABILITY1, "aetherhaven.patrolWand.hud.assign.q")
             );
+            case Remove -> List.of(
+                row(ToolKeybindSlot.PRIMARY, "aetherhaven.patrolWand.hud.remove.primary"),
+                row(ToolKeybindSlot.USE, "aetherhaven.patrolWand.hud.remove.f"),
+                row(ToolKeybindSlot.ABILITY1, "aetherhaven.patrolWand.hud.remove.q")
+            );
         };
     }
 

@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.construction;
 
+import com.hexvane.aetherhaven.entity.EntityRotationUtil;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyObstructionUtil;
 import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
 import com.hexvane.aetherhaven.prefab.EditorMarkerBlocks;
@@ -400,6 +401,89 @@ public final class ConstructionPasteOps {
     }
 
     /**
+     * Places up to {@code maxCells} interactive block entities from {@code cells} starting at {@code startIndex}.
+     * Returns the next index ({@code cells.size()} when finished).
+     */
+    public static int placeInteractiveCellsBatch(
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        @Nonnull List<PendingBlock> cells,
+        int startIndex,
+        int maxCells
+    ) {
+        BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
+        int end = Math.min(cells.size(), startIndex + Math.max(0, maxCells));
+        for (int i = startIndex; i < end; i++) {
+            PendingBlock pb = cells.get(i);
+            if (!isInteractiveBlockEntityOrigin(pb, blockTypeMap)) {
+                continue;
+            }
+            placeInteractiveBlockEntityCell(world, origin, pb, blockTypeMap);
+        }
+        return end;
+    }
+
+    /** Writes prefab fluid cells from {@code bufferAccess} (deferred from incremental assembly). */
+    public static void applyCompletionFluids(
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        @Nonnull PrefabRotation prefabRotation,
+        boolean preserveWater,
+        @Nonnull IPrefabBuffer bufferAccess
+    ) {
+        LocalCachedChunkAccessor chunkAccessor = createAccessor(world, origin, bufferAccess);
+        PrefabBufferCall secondPassCall = new PrefabBufferCall(new Random(PREFAB_BUFFER_ITERATION_SEED), prefabRotation);
+        bufferAccess.forEach(
+            IPrefabBuffer.iterateAllColumns(),
+            (x, y, z, blockId, holder, supportValue, blockRotation, filler, t, fluidId, fluidLevel) -> {
+                int bx = origin.x + x;
+                int by = origin.y + y;
+                int bz = origin.z + z;
+                if (fluidId == 0) {
+                    PendingBlock pb =
+                        new PendingBlock(x, y, z, blockId, holder, supportValue, blockRotation, filler, fluidId, fluidLevel);
+                    if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz, chunkAccessor)) {
+                        return;
+                    }
+                }
+                applyPrefabFluidForCell(world, bx, by, bz, fluidId, fluidLevel, chunkAccessor);
+            },
+            null,
+            null,
+            secondPassCall
+        );
+    }
+
+    /**
+     * Spawns up to {@code maxEntities} prefab entities from {@code prefabEntitiesInOrder} starting at {@code startIndex}.
+     * Returns the next index ({@code prefabEntitiesInOrder.size()} when finished).
+     */
+    public static int spawnPrefabEntitiesBatch(
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        @Nonnull PrefabRotation prefabRotation,
+        int prefabId,
+        @Nonnull List<Holder<EntityStore>> prefabEntitiesInOrder,
+        int startIndex,
+        int maxEntities,
+        @Nonnull ComponentAccessor<EntityStore> entityAccessor
+    ) {
+        int end = Math.min(prefabEntitiesInOrder.size(), startIndex + Math.max(0, maxEntities));
+        for (int i = startIndex; i < end; i++) {
+            Holder<EntityStore> source = prefabEntitiesInOrder.get(i);
+            try {
+                spawnPrefabEntityLikePaste(world, origin, prefabRotation, prefabId, entityAccessor, source);
+            } catch (RuntimeException e) {
+                HytaleLogger.forEnclosingClass()
+                    .atWarning()
+                    .withCause(e)
+                    .log("Failed to spawn prefab entity %d for prefabId %s", i, prefabId);
+            }
+        }
+        return end;
+    }
+
+    /**
      * Force-pastes one prefab cell at {@code origin + pb} when restoring missing important blocks on a completed plot.
      */
     public static boolean restoreSinglePrefabCell(
@@ -736,6 +820,32 @@ public final class ConstructionPasteOps {
         }
     }
 
+    /**
+     * Force-pastes up to {@code maxCells} solids starting at {@code startIndex}. Returns the next index to process
+     * ({@code cells.size()} when finished).
+     */
+    public static int forcePasteSolidsBatch(
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        boolean preserveWater,
+        @Nonnull IPrefabBuffer bufferAccess,
+        @Nonnull List<PendingBlock> cells,
+        int startIndex,
+        int maxCells
+    ) {
+        LocalCachedChunkAccessor chunkAccessor = createAccessor(world, origin, bufferAccess);
+        BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
+        int end = Math.min(cells.size(), startIndex + Math.max(0, maxCells));
+        for (int i = startIndex; i < end; i++) {
+            PendingBlock pb = cells.get(i);
+            if (!forceSetSolid(world, origin, pb, preserveWater, chunkAccessor, blockTypeMap)) {
+                chunkAccessor = createAccessor(world, origin, bufferAccess);
+                forceSetSolid(world, origin, pb, preserveWater, chunkAccessor, blockTypeMap);
+            }
+        }
+        return end;
+    }
+
     private static boolean forceSetSolid(
         @Nonnull World world,
         @Nonnull Vector3i origin,
@@ -953,10 +1063,10 @@ public final class ConstructionPasteOps {
         if (prefabRotation == PrefabRotation.ROTATION_90 || prefabRotation == PrefabRotation.ROTATION_270) {
             dyaw += (float) Math.PI;
         }
-        transformComp.getRotation().setYaw(transformComp.getRotation().yaw() + dyaw);
+        EntityRotationUtil.setBodyYaw(transformComp.getRotation(), transformComp.getRotation().yaw() + dyaw);
         HeadRotation headRotation = clone.getComponent(HeadRotation.getComponentType());
         if (headRotation != null) {
-            headRotation.getRotation().setYaw(headRotation.getRotation().yaw() + dyaw);
+            EntityRotationUtil.setBodyYaw(headRotation.getRotation(), headRotation.getRotation().yaw() + dyaw);
         }
         PrefabPlaceEntityEvent prefabPlaceEntityEvent = new PrefabPlaceEntityEvent(prefabId, clone);
         entityAccessor.invoke(prefabPlaceEntityEvent);

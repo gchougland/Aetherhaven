@@ -92,8 +92,18 @@ public final class PatrolWandInteractions {
             return;
         }
         PatrolWandPlayerComponent st = resolveState(playerRef, commandBuffer);
-        if (st == null || st.getMode() != PatrolWandMode.Build) {
+        if (st == null) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        if (st.getMode() == PatrolWandMode.Remove) {
+            wrongModeToast(playerRef, commandBuffer);
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        if (st.getMode() != PatrolWandMode.Build) {
             send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.patrolWand.needBuildMode"));
+            context.getState().state = InteractionState.Failed;
             return;
         }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
@@ -199,7 +209,7 @@ public final class PatrolWandInteractions {
             }
             return;
         }
-        if (st.getMode() == PatrolWandMode.Assign) {
+        if (st.getMode() == PatrolWandMode.Assign || st.getMode() == PatrolWandMode.Remove) {
             UUID rid = route.getIdUuid();
             if (rid == null) {
                 return;
@@ -209,11 +219,17 @@ public final class PatrolWandInteractions {
             st.loadFromRecord(route);
         }
         commandBuffer.putComponent(playerRef, PatrolWandPlayerComponent.getComponentType(), st);
+        String messageKey =
+            switch (st.getMode()) {
+                case Assign -> "aetherhaven_items.aetherhaven.patrolWand.selectedRoute";
+                case Remove -> "aetherhaven_items.aetherhaven.patrolWand.removeSelected";
+                default -> "aetherhaven_items.aetherhaven.patrolWand.selectedRoute";
+            };
         send(
             playerRef,
             commandBuffer,
             Message
-                .translation("aetherhaven_items.aetherhaven.patrolWand.selectedRoute")
+                .translation(messageKey)
                 .param("name", route.safeDisplayName())
         );
         toast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.patrolWand.toastSelected");
@@ -241,8 +257,10 @@ public final class PatrolWandInteractions {
         }
         if (st.getMode() == PatrolWandMode.Build) {
             openNameRoutePage(playerRef, commandBuffer, world, st, store);
-        } else {
+        } else if (st.getMode() == PatrolWandMode.Assign) {
             openAssignGuardPage(playerRef, commandBuffer, world, st, store);
+        } else {
+            handleRemoveRoute(playerRef, commandBuffer, world, st, context, store);
         }
     }
 
@@ -263,11 +281,17 @@ public final class PatrolWandInteractions {
         st.cycleMode();
         commandBuffer.putComponent(playerRef, PatrolWandPlayerComponent.getComponentType(), st);
         String key =
-            st.getMode() == PatrolWandMode.Build
-                ? "aetherhaven_items.aetherhaven.patrolWand.modeBuild"
-                : "aetherhaven_items.aetherhaven.patrolWand.modeAssign";
+            switch (st.getMode()) {
+                case Build -> "aetherhaven_items.aetherhaven.patrolWand.modeBuild";
+                case Assign -> "aetherhaven_items.aetherhaven.patrolWand.modeAssign";
+                case Remove -> "aetherhaven_items.aetherhaven.patrolWand.modeRemove";
+            };
         send(playerRef, commandBuffer, Message.translation(key));
-        toast(playerRef, commandBuffer, key);
+        String toastKey =
+            st.getMode() == PatrolWandMode.Remove
+                ? "aetherhaven_items.aetherhaven.patrolWand.toastModeRemove"
+                : key;
+        toast(playerRef, commandBuffer, toastKey);
     }
 
     public static void handleNewRoute(
@@ -291,6 +315,11 @@ public final class PatrolWandInteractions {
         }
         if (st.getMode() == PatrolWandMode.Assign) {
             clearGuardFromSelectedRoute(playerRef, commandBuffer, world, st);
+            return;
+        }
+        if (st.getMode() == PatrolWandMode.Remove) {
+            wrongModeToast(playerRef, commandBuffer);
+            context.getState().state = InteractionState.Failed;
             return;
         }
         st.startNewRoute();
@@ -556,6 +585,79 @@ public final class PatrolWandInteractions {
             st.resetProgress();
             store.putComponent(guardRef, GuardPatrolState.getComponentType(), st);
         }
+    }
+
+    private static void handleRemoveRoute(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull World world,
+        @Nonnull PatrolWandPlayerComponent st,
+        @Nonnull InteractionContext context,
+        @Nonnull Store<EntityStore> store
+    ) {
+        UUID targetId = st.getSelectedRouteId();
+        if (targetId == null) {
+            send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.patrolWand.removeNeedSelection"));
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        PatrolRouteRegistry reg = AetherhavenWorldRegistries.getOrCreatePatrolRouteRegistry(world, plugin);
+        PatrolRouteRecord existing = reg.get(targetId);
+        if (existing == null) {
+            st.setSelectedRouteId(null);
+            commandBuffer.putComponent(playerRef, PatrolWandPlayerComponent.getComponentType(), st);
+            send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.patrolWand.removeUnknown"));
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        String routeName = existing.safeDisplayName();
+        @Nullable
+        UUID guardUuid = existing.getAssignedGuardUuidParsed();
+        @Nullable
+        PatrolRouteRecord removed = reg.remove(targetId);
+        if (removed == null) {
+            st.setSelectedRouteId(null);
+            commandBuffer.putComponent(playerRef, PatrolWandPlayerComponent.getComponentType(), st);
+            send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.patrolWand.removeUnknown"));
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        PatrolRoutePersistence.save(world, plugin, reg);
+        if (guardUuid != null) {
+            Ref<EntityStore> guardRef = store.getExternalData().getRefFromUUID(guardUuid);
+            if (guardRef != null && guardRef.isValid()) {
+                GuardPatrolState gps = store.getComponent(guardRef, GuardPatrolState.getComponentType());
+                if (gps != null && targetId.equals(gps.getActiveRouteId())) {
+                    gps.setActiveRouteId(null);
+                    gps.resetProgress();
+                    commandBuffer.putComponent(guardRef, GuardPatrolState.getComponentType(), gps);
+                }
+            }
+        }
+        if (targetId.equals(st.getEditingRouteId()) || targetId.equals(st.getSelectedRouteId())) {
+            st.startNewRoute();
+        }
+        commandBuffer.putComponent(playerRef, PatrolWandPlayerComponent.getComponentType(), st);
+        send(
+            playerRef,
+            commandBuffer,
+            Message
+                .translation("aetherhaven_items.aetherhaven.patrolWand.removedRoute")
+                .param("name", routeName)
+        );
+        toast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.patrolWand.toastRemovedRoute");
+    }
+
+    private static void wrongModeToast(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        toast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.patrolWand.wrongMode");
     }
 
     private static void clearGuardFromSelectedRoute(

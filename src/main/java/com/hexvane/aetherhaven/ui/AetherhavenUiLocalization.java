@@ -419,6 +419,7 @@ public final class AetherhavenUiLocalization {
         b.set("#SettingsRepairPlotsButton.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.repairPlots"));
         b.set("#SettingsFinishPlotButton.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.finishPlot"));
         b.set("#SettingsVillagerReportButton.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.villagerReport"));
+        b.set("#SettingsDedupeVillagersButton.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.dedupeVillagers"));
         b.set("#GuideListHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.guide.listHeading"));
         b.set("#QuestListHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.questListHeading"));
         b.set("#RewardSectionHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.rewardHeading"));

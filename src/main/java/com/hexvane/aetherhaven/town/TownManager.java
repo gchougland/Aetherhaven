@@ -37,6 +37,7 @@ public final class TownManager {
     private final Map<UUID, TownRecord> byTownId = new LinkedHashMap<>();
     private long lastLoadedFromDiskMs;
     private long lastSavedToDiskMs;
+    private boolean dirty;
 
     public TownManager(@Nonnull World world, @Nonnull Path pluginDataDirectory) {
         this.world = world;
@@ -478,11 +479,26 @@ public final class TownManager {
     }
 
     public void updateTown(@Nonnull TownRecord record) {
+        markDirty(record);
+        saveToDisk();
+        dirty = false;
+    }
+
+    /** Updates in-memory town data without writing to disk (call {@link #flushDirtyToDisk()} when batching). */
+    public void markDirty(@Nonnull TownRecord record) {
         record.migrateTownSocialFieldsIfNeeded();
         record.migrateFounderMonumentCountIfNeeded();
         ensureDisplayNameUnique(record);
         byTownId.put(record.getTownId(), record);
-        saveToDisk();
+        dirty = true;
+    }
+
+    /** Persists when {@link #markDirty} was used since the last flush or immediate {@link #updateTown}. */
+    public void flushDirtyToDisk() {
+        if (dirty) {
+            saveToDisk();
+            dirty = false;
+        }
     }
 
     /** Rename without throwing; caller shows message on failure. */

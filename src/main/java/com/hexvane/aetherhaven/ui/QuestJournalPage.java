@@ -45,6 +45,7 @@ import com.hexvane.aetherhaven.town.TownDissolutionService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownPlayerResolution;
+import com.hexvane.aetherhaven.town.TownResidentReconcileService;
 import com.hexvane.aetherhaven.town.TownResidentEligibility;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerLocatePlayerComponent;
@@ -1091,6 +1092,12 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 CustomUIEventBindingType.Activating,
                 "#SettingsVillagerReportButton",
                 new EventData().append("Action", "JournalOpenVillagerReportModal"),
+                false
+            );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#SettingsDedupeVillagersButton",
+                new EventData().append("Action", "JournalDedupeVillagers"),
                 false
             );
         }
@@ -2981,6 +2988,35 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                     .param("locked", String.valueOf(rep.getLockedQuestVisitors()))
                     .param("promoted", String.valueOf(rep.getPromotedResidents()))
                     .param("removed", String.valueOf(rep.getRemovedPoolEntries()))
+            );
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (action.equalsIgnoreCase("JournalDedupeVillagers")) {
+            if (!JournalSettingsAccess.canOpen(store, ref)) {
+                return;
+            }
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            World world = store.getExternalData().getWorld();
+            if (plugin == null) {
+                return;
+            }
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (uc == null) {
+                return;
+            }
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
+            if (town == null) {
+                return;
+            }
+            TownResidentReconcileService.ReconcileReport rep = TownJournalAdminService.dedupeVillagers(world, plugin, town);
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.dedupeVillagersDone")
+                    .param("removed", String.valueOf(rep.getRemovedDuplicateEntities()))
+                    .param("synced", String.valueOf(rep.getSyncedRoles()))
             );
             UICommandBuilder cmd = new UICommandBuilder();
             UIEventBuilder ev = new UIEventBuilder();

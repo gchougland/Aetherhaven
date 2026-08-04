@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.town.HiredGuardRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.ResidentNpcRecord;
+import com.hexvane.aetherhaven.town.ResidentRegistryService;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownResidentDisplay;
 import com.hexvane.aetherhaven.town.TownResidentEligibility;
@@ -23,8 +24,11 @@ import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -44,6 +48,7 @@ public final class TownVillagerDirectory {
         ConstructionCatalog catalog = plugin.getConstructionCatalog();
         UUID tid = town.getTownId();
         Map<UUID, TownVillagerRow> byUuid = new LinkedHashMap<>();
+        Set<String> loadedStoryRoleIds = new LinkedHashSet<>();
         Query<EntityStore> q =
             Query.and(TownVillagerBinding.getComponentType(), UUIDComponent.getComponentType(), NPCEntity.getComponentType());
         store.forEachChunk(
@@ -63,6 +68,9 @@ public final class TownVillagerDirectory {
                     String roleId = npc.getRoleName().trim();
                     if (!TownResidentEligibility.includeInResidentList(town, u, b, roleId, plugin, catalog)) {
                         continue;
+                    }
+                    if (isLoadedStoryCitizen(b.getKind(), roleId, plugin)) {
+                        loadedStoryRoleIds.add(roleId.toLowerCase(Locale.ROOT));
                     }
                     TownResidentDisplay.Resolved display = TownResidentDisplay.resolveFromChunk(archetypeChunk, i, roleId, plugin);
                     int ko = kindOrderForBindingKind(b.getKind());
@@ -84,7 +92,7 @@ public final class TownVillagerDirectory {
             AetherhavenConstants.INNKEEPER_NPC_ROLE_ID,
             TownVillagerBinding.KIND_INNKEEPER
         );
-        addResidentsFromRegistry(byUuid, town, plugin, catalog);
+        addResidentsFromRegistry(byUuid, loadedStoryRoleIds, town, plugin, catalog);
         addHousedTownsfolkFallbacks(byUuid, town, store, plugin, catalog);
 
         List<TownVillagerRow> out = new ArrayList<>(byUuid.values());
@@ -138,6 +146,7 @@ public final class TownVillagerDirectory {
      */
     private static void addResidentsFromRegistry(
         @Nonnull Map<UUID, TownVillagerRow> byUuid,
+        @Nonnull Set<String> loadedStoryRoleIds,
         @Nonnull TownRecord town,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull ConstructionCatalog catalog
@@ -156,6 +165,10 @@ public final class TownVillagerDirectory {
             }
             String roleId = r.getNpcRoleId().trim();
             if (roleId.isEmpty()) {
+                continue;
+            }
+            if (ResidentRegistryService.isGaiaRevivalEligible(r.getKind(), roleId)
+                && loadedStoryRoleIds.contains(roleId.toLowerCase(Locale.ROOT))) {
                 continue;
             }
             if (!TownResidentEligibility.includeInResidentList(town, u, r.getKind(), roleId, plugin, catalog)) {
@@ -274,6 +287,23 @@ public final class TownVillagerDirectory {
                 false
             )
         );
+    }
+
+    private static boolean isLoadedStoryCitizen(
+        @Nonnull String kind,
+        @Nonnull String roleId,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        if (TownVillagerBinding.isVisitorKind(kind)) {
+            return false;
+        }
+        if (TownResidentEligibility.isTownsfolkPoolKind(kind, roleId, plugin)) {
+            return false;
+        }
+        if (TownVillagerBinding.KIND_GUARD.equals(kind)) {
+            return false;
+        }
+        return ResidentRegistryService.isGaiaRevivalEligible(kind, roleId);
     }
 
     private static int kindOrderForBindingKind(@Nonnull String kind) {

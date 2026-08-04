@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.tourist;
 
+import com.hexvane.aetherhaven.entity.EntityRotationUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
@@ -296,7 +297,10 @@ public final class TouristShopSpotBrowse {
         if (dx * dx + dz * dz < 1.0e-6) {
             return;
         }
-        tc.getRotation().setYaw((float) (Math.atan2(dx, dz) + Math.PI));
+        EntityRotationUtil.setBodyYaw(
+            tc.getRotation(),
+            (float) (Math.atan2(dx, dz) + Math.PI)
+        );
         commandBuffer.putComponent(npcRef, TransformComponent.getComponentType(), tc);
     }
 

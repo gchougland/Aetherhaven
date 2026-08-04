@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.autonomy;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.entity.EntityRotationUtil;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.entity.TransformComponentUtil;
 import com.hexvane.aetherhaven.equipment.VillagerEquipmentService;
@@ -474,7 +475,7 @@ public final class PoiAutonomyVisuals {
         int rotIdx = VillagerBlockUtil.blockRotationIndexNoLoad(world, poi.getX(), poi.getY(), poi.getZ());
         RotationTuple rt = rotationTupleOrNone(rotIdx);
         Vector3d forward = rt.rotatedVector(new Vector3d(0, 0, 1));
-        tc.getRotation().setYaw(bodyYawAlongMove(forward.x, forward.z));
+        EntityRotationUtil.setBodyYaw(tc.getRotation(), bodyYawAlongMove(forward.x, forward.z));
         commandBuffer.putComponent(npcRef, TransformComponent.getComponentType(), tc);
     }
 
@@ -612,7 +613,7 @@ public final class PoiAutonomyVisuals {
         if (tc == null) {
             return;
         }
-        tc.getRotation().setYaw(yawRadians);
+        EntityRotationUtil.setBodyYaw(tc.getRotation(), yawRadians);
         commandBuffer.putComponent(npcRef, TransformComponent.getComponentType(), tc);
     }
 

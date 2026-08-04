@@ -11,7 +11,9 @@
 - **Player shop sales toggle** — The town records shelf on player shops has an option to sell to players only. Visitors and villagers can still visit and browse.
 - **Plot creator step jump** — Middle click the plot creator staff to jump back to any step you have already reached.
 - **Patrol wand guard list** — When assigning a guard, you can turn on a filter to show only guards that do not have a patrol route yet.
+- **Patrol route removal** — Patrol wand has a remove mode. Select a saved route and press F to delete it.
 - **Gaia altar work spot** — Plot creator and building editor now ask you to mark where the priestess stands at the Gaia altar.
+- **Fix duplicate villagers** — Town Journal Settings has a button to clean up duplicate villager entries if they ever show up.
 
 ### Changed
 
@@ -38,6 +40,9 @@
 - **Workplace production while away** — Farms, barns, lumbermills, and miners huts keep producing on the worker’s schedule when you’re out of town, at a slightly lower rate than when you’re nearby.
 - **Production and time skips** — Skipping or setting game time forward credits workplace production for scheduled work hours, whether the worker is nearby or not (like furnaces and crops).
 - **Workplace production bar** — The production bar advances more reliably while a worker is on shift at their building.
+- **Town NPC loading** — Villagers and other NPCs around your town load more reliably when you travel back into the area.
+- **Duplicate town villagers** — The same person no longer appears twice in the Town Journal or on town record shelves after they die and come back.
+- **Reconstruct and move building** — Rebuilding or moving a building only clears blocks that belong to that building. Empty space inside the plot is left alone.
 
 ## [2.6.0] - 7/27/2026
 

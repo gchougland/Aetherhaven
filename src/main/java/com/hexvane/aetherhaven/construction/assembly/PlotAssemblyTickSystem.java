@@ -19,8 +19,14 @@ import javax.annotation.Nonnull;
  * Runs passive assembly pacing once per world per few hundred ms (first matching player in the tick batch triggers).
  */
 public final class PlotAssemblyTickSystem extends EntityTickingSystem<EntityStore> {
-    private static final long MIN_INTERVAL_MS = 220L;
+    static final long MIN_INTERVAL_MS = 220L;
     private static final ConcurrentHashMap<String, Long> LAST_RUN_MS = new ConcurrentHashMap<>();
+
+    /** {@code true} when passive assembly ran within {@code withinMs} (players online path). */
+    public static boolean ranRecently(@Nonnull World world, long withinMs) {
+        Long prev = LAST_RUN_MS.get(world.getName());
+        return prev != null && System.currentTimeMillis() - prev < withinMs;
+    }
 
     @Nonnull
     private final Set<Dependency<EntityStore>> dependencies = RootDependency.firstSet();

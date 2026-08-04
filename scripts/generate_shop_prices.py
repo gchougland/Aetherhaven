@@ -177,6 +177,201 @@ def ingot_ore_batch_size(cfg: dict[str, Any]) -> int:
     return max(1, int(cfg.get("ingotOreBatchSize", 4)))
 
 
+def ingot_bar_premium(cfg: dict[str, Any]) -> float:
+    return float(cfg.get("ingotBarPremium", 1.0))
+
+
+def bar_tier_gold(ore_tier_gold: int, cfg: dict[str, Any]) -> int:
+    return round_gold(ore_tier_gold * ingot_bar_premium(cfg))
+
+
+def hide_leather_batch_size(cfg: dict[str, Any]) -> int:
+    return max(1, int(cfg.get("hideLeatherBatchSize", 5)))
+
+
+def leather_gold_for_tier(hide_gold: int, cfg: dict[str, Any]) -> int:
+    mult = float(cfg.get("leatherPremiumMultiplier", 1.25))
+    return round_gold(hide_gold * mult)
+
+
+def match_hide_leather_tier(item_id: str, cfg: dict[str, Any]) -> tuple[str, int, int] | None:
+    """Returns (kind, goldPerBatch, batchSize) where kind is 'hide' or 'leather'."""
+    batch = hide_leather_batch_size(cfg)
+    for tier in cfg.get("hideLeatherTiers", []):
+        hide_gold = int(tier.get("hideGold", 0))
+        if hide_gold <= 0:
+            continue
+        leather_gold = int(tier.get("leatherGold", leather_gold_for_tier(hide_gold, cfg)))
+        for token in tier.get("hideTokens", []):
+            if str(token) in item_id:
+                return "hide", hide_gold, batch
+        for token in tier.get("leatherTokens", []):
+            if str(token) in item_id:
+                return "leather", leather_gold, batch
+    return None
+
+
+def match_common_material_bundle(item_id: str, cfg: dict[str, Any]) -> PriceEntry | None:
+    for rule in cfg.get("commonMaterialBundles", []):
+        gold = int(rule.get("gold", 0))
+        batch = max(1, int(rule.get("batchSize", 1)))
+        for exact in rule.get("itemIds", []):
+            if item_id == str(exact):
+                return PriceEntry(gold=gold, batch_size=batch)
+        for pat in rule.get("patterns", []):
+            if fnmatch.fnmatch(item_id, str(pat)):
+                return PriceEntry(gold=gold, batch_size=batch)
+    return None
+
+
+def price_hide_or_leather(item_id: str, cfg: dict[str, Any]) -> PriceEntry | None:
+    if not (item_id.startswith("Ingredient_Hide_") or item_id.startswith("Ingredient_Leather_")):
+        return None
+    matched = match_hide_leather_tier(item_id, cfg)
+    if matched is None:
+        return None
+    _kind, gold, batch = matched
+    return PriceEntry(gold=gold, batch_size=batch)
+
+
+def price_common_material_bundle(item_id: str, cfg: dict[str, Any]) -> PriceEntry | None:
+    return match_common_material_bundle(item_id, cfg)
+
+
+def material_unit_gold(item_id: str | None, resource_type_id: str | None, cfg: dict[str, Any]) -> float:
+    """Gold value of one unit for recipe costing (not batched shop listing)."""
+    secondary: dict[str, Any] = cfg.get("recipeSecondaryMaterials", {})
+    default_item = float(secondary.get("_defaultItemGold", cfg.get("defaultGoldPrice", 5)))
+
+    if resource_type_id:
+        wood_key = str(resource_type_id)
+        if wood_key in secondary:
+            return float(secondary[wood_key])
+        if wood_key == "Wood_Trunk":
+            return float(secondary.get("Wood_Trunk", 1))
+        return default_item
+
+    if not item_id:
+        return default_item
+
+    if item_id.startswith("Ore_"):
+        tier = detect_material_tier(item_id, cfg)
+        if tier is not None:
+            _tid, ore_base = tier
+            return ore_base / ingot_ore_batch_size(cfg)
+        return default_item
+
+    if item_id.startswith("Ingredient_Bar_"):
+        tier = detect_material_tier(item_id, cfg)
+        if tier is not None:
+            _tid, ore_base = tier
+            return bar_tier_gold(ore_base, cfg) / ingot_ore_batch_size(cfg)
+        return default_item
+
+    hide_leather = match_hide_leather_tier(item_id, cfg)
+    if hide_leather is not None:
+        _kind, gold, batch = hide_leather
+        return gold / batch
+
+    bundle = match_common_material_bundle(item_id, cfg)
+    if bundle is not None:
+        return bundle.gold / bundle.batch_size
+
+    if item_id in secondary:
+        return float(secondary[item_id])
+
+    return default_item
+
+
+def build_item_data_index(items_root: Path) -> dict[str, dict[str, Any]]:
+    index: dict[str, dict[str, Any]] = {}
+    for path in items_root.rglob("*.json"):
+        try:
+            data = load_json(path)
+        except (OSError, json.JSONDecodeError):
+            continue
+        index[path.stem] = data
+    return index
+
+
+def recipe_input_gold(row: dict[str, Any], cfg: dict[str, Any]) -> float:
+    qty = int(row.get("Quantity", 0))
+    if qty <= 0:
+        return 0.0
+    item_id = row.get("ItemId")
+    resource_type_id = row.get("ResourceTypeId")
+    item_key = str(item_id) if isinstance(item_id, str) else None
+    resource_key = str(resource_type_id) if isinstance(resource_type_id, str) else None
+    unit = material_unit_gold(item_key, resource_key, cfg)
+    return unit * qty
+
+
+def armor_recipe_multiplier(item_id: str, item_data: dict[str, Any], cfg: dict[str, Any]) -> float:
+    mult = gear_variant_multiplier(item_id, cfg)
+    recipe = item_data.get("Recipe")
+    if isinstance(recipe, dict) and recipe.get("KnowledgeRequired") is True:
+        mult *= float(cfg.get("knowledgeRecipePremium", 1.0))
+    return mult
+
+
+def price_armor_from_recipe(item_id: str, item_data: dict[str, Any], cfg: dict[str, Any]) -> PriceEntry | None:
+    if not item_id.startswith("Armor_"):
+        return None
+    recipe = item_data.get("Recipe")
+    if not isinstance(recipe, dict):
+        return None
+    inputs = recipe.get("Input")
+    if not isinstance(inputs, list) or not inputs:
+        return None
+    total = 0.0
+    for row in inputs:
+        if isinstance(row, dict):
+            total += recipe_input_gold(row, cfg)
+    if total <= 0:
+        return None
+    mult = armor_recipe_multiplier(item_id, item_data, cfg)
+    return PriceEntry(gold=round_gold(total * mult), batch_size=1)
+
+
+def item_has_recipe(item_data: dict[str, Any]) -> bool:
+    recipe = item_data.get("Recipe")
+    if not isinstance(recipe, dict):
+        return False
+    inputs = recipe.get("Input")
+    return isinstance(inputs, list) and len(inputs) > 0
+
+
+def collect_configured_material_ids(cfg: dict[str, Any], item_data_index: dict[str, dict[str, Any]] | None = None) -> set[str]:
+    ids: set[str] = set()
+    for tier in cfg.get("hideLeatherTiers", []):
+        for token in tier.get("hideTokens", []):
+            ids.add(f"Ingredient_{token}" if not str(token).startswith("Ingredient_") else str(token))
+        for token in tier.get("leatherTokens", []):
+            ids.add(f"Ingredient_{token}" if not str(token).startswith("Ingredient_") else str(token))
+    for rule in cfg.get("commonMaterialBundles", []):
+        for exact in rule.get("itemIds", []):
+            ids.add(str(exact))
+    if item_data_index:
+        for item_id in item_data_index:
+            if item_id.startswith("Ingredient_Hide_") or item_id.startswith("Ingredient_Leather_"):
+                ids.add(item_id)
+            elif item_id == "Ingredient_Fibre":
+                ids.add(item_id)
+            elif item_id.startswith("Ingredient_Fabric_Scrap_"):
+                ids.add(item_id)
+            elif item_id.startswith("Ingredient_Feathers_"):
+                ids.add(item_id)
+            elif item_id.startswith("Ingredient_Bolt_"):
+                ids.add(item_id)
+            elif item_id.startswith("Weapon_Spear_"):
+                ids.add(item_id)
+    return ids
+
+
+def collect_override_item_ids(overrides: OverrideTable) -> set[str]:
+    return set(overrides.exact.keys())
+
+
 def collect_item_ids(
     loot_dir: Path,
     extra_files: list[Path],
@@ -243,10 +438,11 @@ def discover_building_block_ids(items_root: Path, cfg: dict[str, Any]) -> set[st
     return ids
 
 
-def discover_gear_item_ids(items_root: Path, cfg: dict[str, Any]) -> set[str]:
-    """Weapon_/Armor_/Tool_ items with a configured gear type and material tier."""
+def discover_gear_item_ids(items_root: Path, cfg: dict[str, Any], item_data: dict[str, dict[str, Any]] | None = None) -> set[str]:
+    """Weapon_/Armor_/Tool_ items with a configured gear type and material tier or armor recipe."""
     if not cfg.get("discoverGearFromAssets", True):
         return set()
+    data_index = item_data or build_item_data_index(items_root)
     ids: set[str] = set()
     for path in items_root.rglob("*.json"):
         item_id = path.stem
@@ -258,9 +454,13 @@ def discover_gear_item_ids(items_root: Path, cfg: dict[str, Any]) -> set[str]:
             continue
         if parse_gear_type(item_id, cfg) is None:
             continue
-        if detect_gear_tier(item_id, cfg) is None:
-            continue
-        ids.add(item_id)
+        if item_id.startswith("Armor_"):
+            armor_data = data_index.get(item_id)
+            if armor_data is not None and item_has_recipe(armor_data):
+                ids.add(item_id)
+                continue
+        if detect_gear_tier(item_id, cfg) is not None:
+            ids.add(item_id)
     return ids
 
 
@@ -380,9 +580,12 @@ def price_ingot_or_ore(item_id: str, cfg: dict[str, Any]) -> PriceEntry | None:
         tier = detect_material_tier(item_id, cfg)
         if tier is None:
             return None
-        _tier_id, ingot_base = tier
+        _tier_id, ore_base = tier
         batch = ingot_ore_batch_size(cfg)
-        return PriceEntry(gold=ingot_base, batch_size=batch)
+        gold = ore_base
+        if item_id.startswith("Ingredient_Bar_"):
+            gold = bar_tier_gold(ore_base, cfg)
+        return PriceEntry(gold=gold, batch_size=batch)
     return None
 
 
@@ -429,15 +632,24 @@ def price_gear(
     item_id: str,
     cfg: dict[str, Any],
     recipe_index: dict[str, int] | None = None,
+    item_data_index: dict[str, dict[str, Any]] | None = None,
 ) -> PriceEntry | None:
     parsed = parse_gear_type(item_id, cfg)
     if parsed is None:
         return None
     category, gear_type = parsed
+    if category == "Armor":
+        data_index = item_data_index or {}
+        item_data = data_index.get(item_id)
+        if item_data is not None:
+            armor = price_armor_from_recipe(item_id, item_data, cfg)
+            if armor is not None:
+                return armor
     tier = detect_gear_tier(item_id, cfg)
     if tier is None:
         return None
-    _tier_id, ingot_base = tier
+    _tier_id, ore_base = tier
+    ingot_base = bar_tier_gold(ore_base, cfg)
     type_def = cfg.get("gearTypes", {}).get(category, {}).get(gear_type, {})
     if not isinstance(type_def, dict):
         return None
@@ -613,6 +825,7 @@ def price_item(
     cfg: dict[str, Any],
     recipe_index: dict[str, int] | None = None,
     block_catalog: set[str] | None = None,
+    item_data_index: dict[str, dict[str, Any]] | None = None,
 ) -> tuple[PriceEntry | None, str]:
     consumables = cfg.get("consumables", {})
     if item_id in consumables:
@@ -664,7 +877,15 @@ def price_item(
     if ingot:
         return ingot, "ingot_ore"
 
-    gear = price_gear(item_id, cfg, recipe_index)
+    hide_leather = price_hide_or_leather(item_id, cfg)
+    if hide_leather:
+        return hide_leather, "hide_leather"
+
+    bundle = price_common_material_bundle(item_id, cfg)
+    if bundle:
+        return bundle, "common_material"
+
+    gear = price_gear(item_id, cfg, recipe_index, item_data_index)
     if gear:
         return gear, "gear"
 
@@ -691,6 +912,7 @@ def generate_prices(
     omit_defaults: bool,
     recipe_index: dict[str, int] | None = None,
     block_catalog: set[str] | None = None,
+    item_data_index: dict[str, dict[str, Any]] | None = None,
 ) -> tuple[dict[str, Any], Counter[str]]:
     default_gold = int(cfg.get("defaultGoldPrice", 25))
     default_batch = int(cfg.get("defaultBatchSize", 1))
@@ -712,7 +934,7 @@ def generate_prices(
                 prices[item_id] = entry.to_json()
                 continue
 
-        entry, category = price_item(item_id, cfg, recipe_index, block_catalog)
+        entry, category = price_item(item_id, cfg, recipe_index, block_catalog, item_data_index)
         categories[category] += 1
         if entry is None:
             entry = PriceEntry(gold=default_gold, batch_size=default_batch)
@@ -967,10 +1189,13 @@ def main() -> int:
     recipe_index: dict[str, int] = {}
     block_catalog: set[str] = set()
     gear_catalog: set[str] = set()
+    item_data_index: dict[str, dict[str, Any]] = {}
     if items_root is not None:
+        item_data_index = build_item_data_index(items_root)
         recipe_index = build_recipe_bar_index(items_root)
         block_catalog = discover_building_block_ids(items_root, cfg)
-        gear_catalog = discover_gear_item_ids(items_root, cfg)
+        gear_catalog = discover_gear_item_ids(items_root, cfg, item_data_index)
+        print(f"Loaded {len(item_data_index)} item definitions from {items_root}")
         print(f"Loaded {len(recipe_index)} item recipes from {items_root}")
         print(f"Discovered {len(block_catalog)} building blocks from {items_root}")
         print(f"Discovered {len(gear_catalog)} gear items from {items_root}")
@@ -986,7 +1211,12 @@ def main() -> int:
     if existing_prices.is_file() and existing_prices not in extra:
         extra.append(existing_prices)
 
-    asset_ids = sorted(block_catalog | gear_catalog)
+    asset_ids = sorted(
+        block_catalog
+        | gear_catalog
+        | collect_configured_material_ids(cfg, item_data_index)
+        | collect_override_item_ids(overrides)
+    )
     item_ids = collect_item_ids(args.loot_dir, extra, extra_ids=asset_ids)
     if not item_ids:
         print(f"No item ids found under {args.loot_dir}", file=sys.stderr)
@@ -1004,7 +1234,7 @@ def main() -> int:
         return 0
 
     prices, categories = generate_prices(
-        item_ids, cfg, overrides, args.omit_defaults, recipe_index, block_catalog
+        item_ids, cfg, overrides, args.omit_defaults, recipe_index, block_catalog, item_data_index
     )
 
     out_doc = {

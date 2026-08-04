@@ -17,6 +17,9 @@ public final class AssemblyWorldRegistry {
     private record AssemblyEntry(
         @Nonnull PlotAssemblyJob job,
         @Nonnull PlotAssemblyPhase phase,
+        @Nonnull UUID townId,
+        boolean completionScheduled,
+        @Nullable AssemblyCompletionProgress completionProgress,
         @Nullable PlotAssemblyFrontierRuntime runtime,
         @Nullable PlotAssemblyClearingRuntime clearingRuntime,
         @Nullable PlotAssemblyClearingFrontierRuntime clearingFrontierRuntime
@@ -47,6 +50,7 @@ public final class AssemblyWorldRegistry {
     public static void put(
         @Nonnull World world,
         @Nonnull UUID plotId,
+        @Nonnull UUID townId,
         @Nonnull PlotAssemblyJob job,
         @Nonnull PlotAssemblyPhase phase,
         @Nullable PlotAssemblyFrontierRuntime runtime,
@@ -57,7 +61,16 @@ public final class AssemblyWorldRegistry {
             mapFor(world)
                 .put(
                     plotId,
-                    new AssemblyEntry(job, phase, runtime, clearingRuntime, clearingFrontierRuntime)
+                    new AssemblyEntry(
+                        job,
+                        phase,
+                        townId,
+                        false,
+                        null,
+                        runtime,
+                        clearingRuntime,
+                        clearingFrontierRuntime
+                    )
                 );
         if (previous != null) {
             releaseJobBufferQuietly(previous.job().buffer());
@@ -70,7 +83,13 @@ public final class AssemblyWorldRegistry {
         return e != null ? e.job() : null;
     }
 
-  /**
+    @Nullable
+    public static UUID townId(@Nonnull World world, @Nonnull UUID plotId) {
+        AssemblyEntry e = mapFor(world).get(plotId);
+        return e != null ? e.townId() : null;
+    }
+
+    /**
      * Active phase for {@code plotId}, or {@code null} when no in-memory job is registered (do not assume PLACING).
      */
     @Nullable
@@ -81,6 +100,83 @@ public final class AssemblyWorldRegistry {
 
     public static boolean hasJob(@Nonnull World world, @Nonnull UUID plotId) {
         return mapFor(world).containsKey(plotId);
+    }
+
+    /**
+     * @return {@code true} when completion was not already scheduled for this plot.
+     */
+    public static boolean markCompletionScheduled(@Nonnull World world, @Nonnull UUID plotId) {
+        ConcurrentHashMap<UUID, AssemblyEntry> map = mapFor(world);
+        AssemblyEntry e = map.get(plotId);
+        if (e == null || e.completionScheduled()) {
+            return false;
+        }
+        map.put(
+            plotId,
+            new AssemblyEntry(
+                e.job(),
+                e.phase(),
+                e.townId(),
+                true,
+                e.completionProgress(),
+                e.runtime(),
+                e.clearingRuntime(),
+                e.clearingFrontierRuntime()
+            )
+        );
+        return true;
+    }
+
+    public static void clearCompletionScheduled(@Nonnull World world, @Nonnull UUID plotId) {
+        ConcurrentHashMap<UUID, AssemblyEntry> map = mapFor(world);
+        AssemblyEntry e = map.get(plotId);
+        if (e == null || !e.completionScheduled()) {
+            return;
+        }
+        map.put(
+            plotId,
+            new AssemblyEntry(
+                e.job(),
+                e.phase(),
+                e.townId(),
+                false,
+                e.completionProgress(),
+                e.runtime(),
+                e.clearingRuntime(),
+                e.clearingFrontierRuntime()
+            )
+        );
+    }
+
+    @Nullable
+    public static AssemblyCompletionProgress completionProgress(@Nonnull World world, @Nonnull UUID plotId) {
+        AssemblyEntry e = mapFor(world).get(plotId);
+        return e != null ? e.completionProgress() : null;
+    }
+
+    public static void setCompletionProgress(
+        @Nonnull World world,
+        @Nonnull UUID plotId,
+        @Nullable AssemblyCompletionProgress progress
+    ) {
+        ConcurrentHashMap<UUID, AssemblyEntry> map = mapFor(world);
+        AssemblyEntry e = map.get(plotId);
+        if (e == null) {
+            return;
+        }
+        map.put(
+            plotId,
+            new AssemblyEntry(
+                e.job(),
+                e.phase(),
+                e.townId(),
+                e.completionScheduled(),
+                progress,
+                e.runtime(),
+                e.clearingRuntime(),
+                e.clearingFrontierRuntime()
+            )
+        );
     }
 
     @Nullable
@@ -111,7 +207,19 @@ public final class AssemblyWorldRegistry {
         if (e == null) {
             return;
         }
-        map.put(plotId, new AssemblyEntry(e.job(), PlotAssemblyPhase.PLACING, runtime, null, null));
+        map.put(
+            plotId,
+            new AssemblyEntry(
+                e.job(),
+                PlotAssemblyPhase.PLACING,
+                e.townId(),
+                e.completionScheduled(),
+                e.completionProgress(),
+                runtime,
+                null,
+                null
+            )
+        );
     }
 
     public static void updateClearingFrontierRuntime(
@@ -126,7 +234,16 @@ public final class AssemblyWorldRegistry {
         }
         map.put(
             plotId,
-            new AssemblyEntry(e.job(), e.phase(), e.runtime(), e.clearingRuntime(), clearingFrontierRuntime)
+            new AssemblyEntry(
+                e.job(),
+                e.phase(),
+                e.townId(),
+                e.completionScheduled(),
+                e.completionProgress(),
+                e.runtime(),
+                e.clearingRuntime(),
+                clearingFrontierRuntime
+            )
         );
     }
 

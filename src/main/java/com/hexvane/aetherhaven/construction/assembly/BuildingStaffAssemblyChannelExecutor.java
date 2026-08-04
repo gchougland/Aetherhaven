@@ -152,7 +152,7 @@ public final class BuildingStaffAssemblyChannelExecutor {
                 int idx = batch.getInt(bi);
                 PlotAssemblyService.PlacementAdvanceOutcome outcome =
                     PlotAssemblyService.advancePlacementAtIndex(
-                        world, plugin, store, town, plot, job, idx, true, playerUuid, true
+                        world, plugin, store, town, plot, job, idx, true, playerUuid, true, true
                     );
                 if (!outcome.progressed()) {
                     continue;

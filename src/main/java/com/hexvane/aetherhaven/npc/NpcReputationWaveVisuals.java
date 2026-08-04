@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.npc;
 
+import com.hexvane.aetherhaven.entity.EntityRotationUtil;
 import com.hexvane.aetherhaven.marker.MarkerFacingYaw;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -83,7 +84,7 @@ public final class NpcReputationWaveVisuals {
         }
         Vector3d from = tc.getPosition();
         float bodyYaw = MarkerFacingYaw.yawFacingToward(from, targetPos);
-        tc.getRotation().setYaw(bodyYaw);
+        EntityRotationUtil.setBodyYaw(tc.getRotation(), bodyYaw);
         commandBuffer.putComponent(npcRef, TransformComponent.getComponentType(), tc);
 
         float eyeY = (float) from.y + 1.6f;

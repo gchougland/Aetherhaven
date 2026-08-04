@@ -38,6 +38,12 @@ Group #PatrolWandStatusRoot {
       TooltipText: "Assign guard";
       Id: "Assign";
     }
+
+    TabButton {
+      Icon: "../bulldozer_icon_256.png";
+      TooltipText: "Remove";
+      Id: "Remove";
+    }
   }
 
   $C.@DecoratedContainer {

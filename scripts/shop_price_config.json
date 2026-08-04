@@ -1,10 +1,14 @@
 {
-  "_comment": "Edit tiers and bases here, then run: python scripts/generate_shop_prices.py. Shop batches use 5-based sizes (5, 10, 15, 25, 50, 100). ingotBaseGold is gold per ingotOreBatchSize (5). Gear price = ingotBaseGold × (recipeBarCount / ingotOreBatchSize) × typeMultiplier × variantMultiplier. Only Weapon_/Armor_/Tool_ with a configured gearTypes entry are auto-priced.",
-  "hytaleItemsRoot": "../HytaleSourceCode/Assets/Server/Item/Items",
+  "_comment": "Edit tiers and bases here, then run: python scripts/generate_shop_prices.py. Shop batches use 5-based sizes (5, 10, 15, 25, 50, 100). ingotBaseGold is ore gold per ingotOreBatchSize (5). Bars sell at ingotBaseGold × ingotBarPremium. Weapon/tool price = bar-tier gold × (recipeBarCount / batch) × multipliers. Armor uses full recipe material sum.",
+  "hytaleItemsRoot": "../HytaleSourceCode/hytale-shared-source/HytaleAssets/Server/Item/Items",
   "discoverGearFromAssets": true,
   "defaultGoldPrice": 5,
   "defaultBatchSize": 1,
   "ingotOreBatchSize": 5,
+  "ingotBarPremium": 1.1,
+  "knowledgeRecipePremium": 1.1,
+  "hideLeatherBatchSize": 5,
+  "leatherPremiumMultiplier": 1.25,
 
   "gearTiers": [
     {
@@ -69,7 +73,8 @@
       "Dagger": { "ingotUnits": 4, "multiplier": 1.0 },
       "Daggers": { "ingotUnits": 4, "multiplier": 1.0 },
       "Club": { "ingotUnits": 4, "multiplier": 1.0 },
-      "Crossbow": { "ingotUnits": 6, "multiplier": 1.0 }
+      "Crossbow": { "ingotUnits": 6, "multiplier": 1.0 },
+      "Spear": { "ingotUnits": 6, "multiplier": 1.0 }
     },
     "Armor": {
       "Chest": { "ingotUnits": 16, "multiplier": 1.0 },
@@ -106,6 +111,121 @@
     "_Saurian",
     "_Tribal"
   ],
+
+  "hideLeatherTiers": [
+    {
+      "label": "Small / Light",
+      "hideTokens": ["Hide_Light"],
+      "leatherTokens": ["Leather_Light"],
+      "hideGold": 15,
+      "leatherGold": 18
+    },
+    {
+      "label": "Medium",
+      "hideTokens": ["Hide_Medium"],
+      "leatherTokens": ["Leather_Medium"],
+      "hideGold": 20,
+      "leatherGold": 25
+    },
+    {
+      "label": "Large / Heavy",
+      "hideTokens": ["Hide_Heavy"],
+      "leatherTokens": ["Leather_Heavy"],
+      "hideGold": 28,
+      "leatherGold": 35
+    },
+    {
+      "label": "Other hides (Soft, Scaled, Dark)",
+      "hideTokens": ["Hide_Soft", "Hide_Scaled", "Hide_Dark"],
+      "leatherTokens": ["Leather_Soft", "Leather_Scaled", "Leather_Dark"],
+      "hideGold": 35,
+      "leatherGold": 44
+    },
+    {
+      "label": "Storm",
+      "hideTokens": ["Hide_Storm"],
+      "leatherTokens": ["Leather_Storm"],
+      "hideGold": 50,
+      "leatherGold": 62
+    },
+    {
+      "label": "Prismic",
+      "hideTokens": ["Hide_Prismic"],
+      "leatherTokens": ["Leather_Prismic"],
+      "hideGold": 75,
+      "leatherGold": 94
+    }
+  ],
+
+  "commonMaterialBundles": [
+    {
+      "label": "Fibre (cheapest)",
+      "itemIds": ["Ingredient_Fibre"],
+      "gold": 5,
+      "batchSize": 25
+    },
+    {
+      "label": "Starter fabric scraps",
+      "itemIds": ["Ingredient_Fabric_Scrap_Wool", "Ingredient_Fabric_Scrap_Linen"],
+      "gold": 8,
+      "batchSize": 10
+    },
+    {
+      "label": "Mid fabric scraps",
+      "itemIds": ["Ingredient_Fabric_Scrap_Cotton", "Ingredient_Fabric_Scrap_Silk"],
+      "gold": 12,
+      "batchSize": 10
+    },
+    {
+      "label": "High fabric scraps",
+      "itemIds": ["Ingredient_Fabric_Scrap_Cindercloth", "Ingredient_Fabric_Scrap_Shadoweave"],
+      "gold": 16,
+      "batchSize": 10
+    },
+    {
+      "label": "Endgame fabric scraps",
+      "itemIds": ["Ingredient_Fabric_Scrap_Stormsilk", "Ingredient_Fabric_Scrap_Prismaloom"],
+      "gold": 22,
+      "batchSize": 10
+    },
+    {
+      "label": "Feather Light",
+      "itemIds": ["Ingredient_Feathers_Light"],
+      "gold": 8,
+      "batchSize": 10
+    },
+    {
+      "label": "Feather Dark",
+      "itemIds": ["Ingredient_Feathers_Dark"],
+      "gold": 12,
+      "batchSize": 10
+    },
+    {
+      "label": "Feather Red",
+      "itemIds": ["Ingredient_Feathers_Red"],
+      "gold": 16,
+      "batchSize": 10
+    },
+    {
+      "label": "Feather Blue",
+      "itemIds": ["Ingredient_Feathers_Blue"],
+      "gold": 20,
+      "batchSize": 10
+    },
+    {
+      "label": "Bolts (leather armor)",
+      "patterns": ["Ingredient_Bolt_*"],
+      "gold": 10,
+      "batchSize": 10
+    }
+  ],
+
+  "recipeSecondaryMaterials": {
+    "Wood_Trunk": 1,
+    "Ingredient_Void_Essence": 5,
+    "Ingredient_Sac_Venom": 5,
+    "_defaultItemGold": 5
+  },
 
   "consumables": {
     "Potion_Health_Small": 12,

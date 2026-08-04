@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.guild;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.entity.EntityRotationUtil;
 import com.hexvane.aetherhaven.equipment.VillagerEquipmentService;
 import com.hexvane.aetherhaven.equipment.data.EquipmentProfileDefinition;
 import com.hexvane.aetherhaven.questboard.TownRankCapacity;
@@ -168,7 +169,7 @@ public final class GuardHireService {
             return false;
         }
         Vector3d spawnPos = new Vector3d(tc.getPosition());
-        Rotation3f spawnRot = new Rotation3f(tc.getRotation());
+        Rotation3f spawnRot = EntityRotationUtil.repair(tc.getRotation());
 
         var guildPlot = town.findCompletePlotWithConstruction(
             plugin.getConstructionCatalog(),

@@ -95,7 +95,12 @@ public final class PatrolWandPlayerComponent implements Component<EntityStore> {
     }
 
     public void cycleMode() {
-        mode = mode == PatrolWandMode.Build ? PatrolWandMode.Assign : PatrolWandMode.Build;
+        mode =
+            switch (mode) {
+                case Build -> PatrolWandMode.Assign;
+                case Assign -> PatrolWandMode.Remove;
+                case Remove -> PatrolWandMode.Build;
+            };
     }
 
     public void setMode(@Nonnull PatrolWandMode mode) {
@@ -105,7 +110,11 @@ public final class PatrolWandPlayerComponent implements Component<EntityStore> {
     /** Tab id for {@link PatrolWandStatusHud} mode tabs (visual only). */
     @Nonnull
     public String modeTabId() {
-        return mode == PatrolWandMode.Build ? "Build" : "Assign";
+        return switch (mode) {
+            case Build -> "Build";
+            case Assign -> "Assign";
+            case Remove -> "Remove";
+        };
     }
 
     @Nullable

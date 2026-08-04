@@ -37,9 +37,11 @@ public final class PatrolWandStatusHud extends CustomUIHud {
         b.set(
             "#ModeHelp.TextSpans",
             Message.translation(
-                mode == PatrolWandMode.Build
-                    ? LANG_PREFIX + "aetherhaven.patrolWand.hudDescBuild"
-                    : LANG_PREFIX + "aetherhaven.patrolWand.hudDescAssign"
+                switch (mode) {
+                    case Build -> LANG_PREFIX + "aetherhaven.patrolWand.hudDescBuild";
+                    case Assign -> LANG_PREFIX + "aetherhaven.patrolWand.hudDescAssign";
+                    case Remove -> LANG_PREFIX + "aetherhaven.patrolWand.hudDescRemove";
+                }
             )
         );
         Message routeName;
@@ -55,9 +57,10 @@ public final class PatrolWandStatusHud extends CustomUIHud {
             Message.translation(LANG_PREFIX + "aetherhaven.patrolWand.hudRoute").param("name", routeName)
         );
         boolean buildMode = mode == PatrolWandMode.Build;
+        boolean assignMode = mode == PatrolWandMode.Assign;
         b.set("#NodesLine.Visible", buildMode);
         b.set("#LoopLine.Visible", buildMode);
-        b.set("#GuardLine.Visible", !buildMode);
+        b.set("#GuardLine.Visible", assignMode);
         if (buildMode) {
             b.set(
                 "#NodesLine.TextSpans",
@@ -74,7 +77,7 @@ public final class PatrolWandStatusHud extends CustomUIHud {
                         : LANG_PREFIX + "aetherhaven.patrolWand.hudLoopOpen"
                 )
             );
-        } else {
+        } else if (assignMode) {
             Message guardLine =
                 selectedRoute != null && selectedRoute.getAssignedGuardUuidParsed() != null
                     ? Message.translation(LANG_PREFIX + "aetherhaven.patrolWand.hudGuardAssigned")

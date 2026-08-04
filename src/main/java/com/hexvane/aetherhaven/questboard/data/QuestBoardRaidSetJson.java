@@ -18,6 +18,10 @@ public final class QuestBoardRaidSetJson {
     @Nullable
     private List<QuestBoardRaidMobPoolEntryJson> mobPool;
 
+    @SerializedName("guaranteedMobs")
+    @Nullable
+    private List<QuestBoardRaidGuaranteedMobJson> guaranteedMobs;
+
     public int weight() {
         return Math.max(1, weight);
     }
@@ -30,5 +34,10 @@ public final class QuestBoardRaidSetJson {
     @Nonnull
     public List<QuestBoardRaidMobPoolEntryJson> mobPoolOrEmpty() {
         return mobPool != null ? mobPool : List.of();
+    }
+
+    @Nonnull
+    public List<QuestBoardRaidGuaranteedMobJson> guaranteedMobsOrEmpty() {
+        return guaranteedMobs != null ? guaranteedMobs : List.of();
     }
 }

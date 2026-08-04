@@ -1004,6 +1004,10 @@ $C.@PageOverlay {
                       }
                       $C.@SecondaryTextButton #SettingsVillagerReportButton {
                         Text: "";
+                        Anchor: (Right: 10, Height: 40);
+                      }
+                      $C.@SecondaryTextButton #SettingsDedupeVillagersButton {
+                        Text: "";
                         Anchor: (Height: 40);
                       }
                     }

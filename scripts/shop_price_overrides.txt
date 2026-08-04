@@ -23,5 +23,16 @@ Aetherhaven_Geode = 50
 
 Aetherhaven_Mining_Bomb = 20
 
+# Spears (non-metal or special variants)
+Weapon_Spear_Crude = 4
+Weapon_Spear_Scrap = 6
+Weapon_Spear_Stone_Trork = 6
+Weapon_Spear_Leaf = 10
+Weapon_Spear_Fishbone = 10
+Weapon_Spear_Bone = 15
+Weapon_Spear_Tribal = 42
+Weapon_Spear_Double_Incandescent = 42
+Weapon_Spear_Adamantite_Saurian = 62
+
 # Modular bookshelf pieces are not sold at shop spots (set_* bookcases/bookshelves are fine)
 pattern:Furniture_Bookshelf_* = skip

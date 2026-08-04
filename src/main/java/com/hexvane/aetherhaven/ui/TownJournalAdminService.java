@@ -11,6 +11,7 @@ import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownResidentReconcileService;
 import com.hexvane.aetherhaven.town.VillagerTownResetService;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
@@ -54,6 +55,15 @@ public final class TownJournalAdminService {
             return new PlotLinkReconcileService.PlotRepairReport();
         }
         return PlotLinkReconcileService.repairPlotInstance(world, plugin, town, plot, store, true);
+    }
+
+    @Nonnull
+    public static TownResidentReconcileService.ReconcileReport dedupeVillagers(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town
+    ) {
+        return TownResidentReconcileService.reconcileTownOnWorldThread(world, plugin, town);
     }
 
     @Nonnull

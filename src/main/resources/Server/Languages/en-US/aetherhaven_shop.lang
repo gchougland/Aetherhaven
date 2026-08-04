@@ -15,10 +15,11 @@ aetherhaven.shop.itemsDropped=Some items were dropped on the ground — inventor
 aetherhaven.shop.notTownMember=Only town members can sell here.
 aetherhaven.shop.noShopSpotPermission=You do not have permission to sell on player shop spots.
 aetherhaven.shop.noPrice=That item cannot be sold here.
-aetherhaven.shop.wrongBatchSize=Sell a multiple of {count} at a time.
+aetherhaven.shop.wrongBatchSize=You need at least {count} to sell this item.
 aetherhaven.shop.damagedItem=Repair that item at the blacksmith before listing it for sale.
 aetherhaven.shop.jewelryNeedsAppraisal=Appraise that jewelry before listing it for sale.
 aetherhaven.shop.listed=Your items are now for sale.
+aetherhaven.shop.listedPartial=Listed {listed} for sale. You kept {kept}.
 aetherhaven.shop.removedListing=Listing removed.
 aetherhaven.shop.soldNotify={buyer} bought {count} {item} for {gold} gold
 

@@ -70,6 +70,9 @@ public final class PlotAssemblyService {
     private static final int PASSIVE_CLEARING_BLOCKS_PER_WORLD_TICK_PER_JOB = 1;
     private static final long REHYDRATE_SCAN_INTERVAL_MS = 3_000L;
     private static final ConcurrentHashMap<String, Long> LAST_REHYDRATE_SCAN_MS = new ConcurrentHashMap<>();
+    private static final int COMPLETION_SOLIDS_BATCH = 48;
+    private static final int COMPLETION_INTERACTIVE_BATCH = 16;
+    private static final int COMPLETION_ENTITIES_BATCH = 8;
 
     /** Clearing advance: {@code progressed} advances the passive burst; {@code brokeBlock} is true only when a solid was removed. */
     public record ClearingAdvanceOutcome(boolean progressed, boolean brokeBlock) {
@@ -115,9 +118,22 @@ public final class PlotAssemblyService {
 
     private static void flushDirtyAssemblyTowns(@Nonnull TownManager tm, @Nonnull Map<UUID, TownRecord> dirty) {
         for (TownRecord town : dirty.values()) {
-            tm.updateTown(town);
+            tm.markDirty(town);
         }
         dirty.clear();
+        tm.flushDirtyToDisk();
+    }
+
+    @Nullable
+    private static TownRecord resolveAssemblyTown(@Nonnull TownManager tm, @Nonnull World world, @Nonnull UUID plotId) {
+        UUID townId = AssemblyWorldRegistry.townId(world, plotId);
+        if (townId != null) {
+            TownRecord cached = tm.getTown(townId);
+            if (cached != null) {
+                return cached;
+            }
+        }
+        return tm.findTownOwningPlot(plotId);
     }
 
     /**
@@ -433,15 +449,14 @@ public final class PlotAssemblyService {
         if (AssemblyWorldRegistry.jobs(world).isEmpty()) {
             return;
         }
-        world.execute(
-            () -> {
-                if (world.getEntityStore() == null) {
-                    return;
-                }
-                Store<EntityStore> store = world.getEntityStore().getStore();
-                tickPassive(world, plugin, store, store);
-            }
-        );
+        if (PlotAssemblyTickSystem.ranRecently(world, PlotAssemblyTickSystem.MIN_INTERVAL_MS + 50L)) {
+            return;
+        }
+        if (world.getEntityStore() == null) {
+            return;
+        }
+        Store<EntityStore> store = world.getEntityStore().getStore();
+        tickPassive(world, plugin, store, store);
     }
 
     /**
@@ -515,7 +530,14 @@ public final class PlotAssemblyService {
                 );
         }
         AssemblyWorldRegistry.put(
-            world, plot.getPlotId(), job, PlotAssemblyPhase.CLEARING, null, clearingRt, clearingFrontierRt
+            world,
+            plot.getPlotId(),
+            town.getTownId(),
+            job,
+            PlotAssemblyPhase.CLEARING,
+            null,
+            clearingRt,
+            clearingFrontierRt
         );
     }
 
@@ -594,7 +616,16 @@ public final class PlotAssemblyService {
                     plot,
                     sectionMapperFor(plot, placementOrder)
                 );
-            AssemblyWorldRegistry.put(world, plot.getPlotId(), job, PlotAssemblyPhase.PLACING, assemblyRt, null, null);
+            AssemblyWorldRegistry.put(
+                world,
+                plot.getPlotId(),
+                town.getTownId(),
+                job,
+                PlotAssemblyPhase.PLACING,
+                assemblyRt,
+                null,
+                null
+            );
             if (plot.getAssemblyStartEpochMs() == 0L) {
                 Instant simNow = entityStore.getResource(TimeResource.getResourceType()).getNow();
                 plot.setAssemblyStartEpochMs(simNow.toEpochMilli());
@@ -712,7 +743,7 @@ public final class PlotAssemblyService {
         Instant start = raw == 0L ? simNow : Instant.ofEpochMilli(raw);
         if (start.isAfter(simNow)) {
             plot.setAssemblyStartEpochMs(simNow.toEpochMilli());
-            tm.updateTown(town);
+            tm.markDirty(town);
             return simNow;
         }
         return start;
@@ -735,13 +766,13 @@ public final class PlotAssemblyService {
         if (nextDue == 0L) {
             nextDue = assemblyStart.toEpochMilli() + slot;
             plot.setAssemblyNextPassiveDueSimMs(nextDue);
-            tm.updateTown(town);
+            tm.markDirty(town);
             return nextDue;
         }
         long wallNow = System.currentTimeMillis();
         if (nextDue > wallNow + 86_400_000L || nextDue > simNowMs + 3_600_000L) {
             plot.setAssemblyNextPassiveDueSimMs(simNowMs);
-            tm.updateTown(town);
+            tm.markDirty(town);
             return simNowMs;
         }
         return nextDue;
@@ -762,7 +793,7 @@ public final class PlotAssemblyService {
         long simNowMs = simNow.toEpochMilli();
         for (PlotAssemblyJob job : AssemblyWorldRegistry.jobs(world)) {
             if (AssemblyWorldRegistry.phase(world, job.plotId()) == PlotAssemblyPhase.CLEARING) {
-                TownRecord clearingTown = tm.findTownOwningPlot(job.plotId());
+                TownRecord clearingTown = resolveAssemblyTown(tm, world, job.plotId());
                 if (clearingTown == null) {
                     AssemblyWorldRegistry.remove(world, job.plotId());
                     continue;
@@ -847,7 +878,7 @@ public final class PlotAssemblyService {
                 maybeBeginPlacingAfterClear(world, plugin, entityStore, clearingTown, clearingPlot, job);
                 continue;
             }
-            TownRecord town = tm.findTownOwningPlot(job.plotId());
+            TownRecord town = resolveAssemblyTown(tm, world, job.plotId());
             if (town == null) {
                 AssemblyWorldRegistry.remove(world, job.plotId());
                 continue;
@@ -898,7 +929,9 @@ public final class PlotAssemblyService {
                     break;
                 }
                 PlacementAdvanceOutcome outcome =
-                    advancePlacementAtIndex(world, plugin, entityStore, town, plot, job, pick, false, null, true);
+                    advancePlacementAtIndex(
+                        world, plugin, entityStore, town, plot, job, pick, false, null, true, false
+                    );
                 if (!outcome.progressed()) {
                     continue;
                 }
@@ -953,7 +986,8 @@ public final class PlotAssemblyService {
         int placementIndex,
         boolean fromStaff,
         @Nullable UUID staffActor,
-        boolean deferCompletionWhenFullyPlaced
+        boolean deferCompletionWhenFullyPlaced,
+        boolean persistProgress
     ) {
         if (plot.getState() != PlotInstanceState.ASSEMBLING) {
             return PlacementAdvanceOutcome.noProgress();
@@ -996,7 +1030,7 @@ public final class PlotAssemblyService {
         AssemblySectionMapper sm = rt.getSectionMapper();
         if (sm != null && plot.getAssemblyPlacedBlockCount() < pending.size()) {
             TownManager tmAdv = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-            if (maybeAdvanceAssemblySection(tmAdv, town, plot, pending, sm)) {
+            if (maybeAdvanceAssemblySection(tmAdv, town, plot, pending, sm, persistProgress)) {
                 rt.rebuildFrontierFromPlot(pending, plot);
                 rt.clearChunkAccessor();
             }
@@ -1004,7 +1038,9 @@ public final class PlotAssemblyService {
         if (fromStaff && staffActor != null && wroteBlock) {
             PlotAssemblyPreviewSystem.markStaffAssemblyBlockPlaced(staffActor);
         }
-        AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
+        if (persistProgress) {
+            AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
+        }
         boolean fullyIndexed = plot.getAssemblyPlacedBlockCount() >= pending.size();
         boolean frontierExhausted = !fullyIndexed && rt.smallestPlacementIndex() < 0;
         if (frontierExhausted) {
@@ -1037,26 +1073,172 @@ public final class PlotAssemblyService {
         @Nonnull PlotAssemblyJob job
     ) {
         UUID plotId = plot.getPlotId();
-        world.execute(() -> {
-            if (plot.getState() != PlotInstanceState.ASSEMBLING) {
-                return;
+        if (!AssemblyWorldRegistry.markCompletionScheduled(world, plotId)) {
+            return;
+        }
+        world.execute(() -> runCompletionTask(world, plugin, town, plot, job));
+    }
+
+    private static void runCompletionTask(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance plot,
+        @Nonnull PlotAssemblyJob job
+    ) {
+        UUID plotId = plot.getPlotId();
+        if (plot.getState() != PlotInstanceState.ASSEMBLING) {
+            AssemblyWorldRegistry.clearCompletionScheduled(world, plotId);
+            return;
+        }
+        if (world.getEntityStore() == null) {
+            AssemblyWorldRegistry.clearCompletionScheduled(world, plotId);
+            return;
+        }
+        Store<EntityStore> store = world.getEntityStore().getStore();
+        PlotAssemblyJob toComplete = AssemblyWorldRegistry.get(world, plotId);
+        if (toComplete == null) {
+            toComplete = job;
+        }
+        if (toComplete == null) {
+            AssemblyWorldRegistry.clearCompletionScheduled(world, plotId);
+            return;
+        }
+        final PlotAssemblyJob completionJob = toComplete;
+        boolean finished = advanceCompletionStep(world, plugin, store, town, plot, completionJob);
+        if (finished) {
+            AssemblyWorldRegistry.clearCompletionScheduled(world, plotId);
+            return;
+        }
+        world.execute(() -> runCompletionTask(world, plugin, town, plot, completionJob));
+    }
+
+    /**
+     * Runs one batched completion step. @return {@code true} when assembly bookkeeping is finished.
+     */
+    private static boolean advanceCompletionStep(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance plot,
+        @Nonnull PlotAssemblyJob job
+    ) {
+        UUID plotId = plot.getPlotId();
+        if (plot.getState() != PlotInstanceState.ASSEMBLING) {
+            releaseCompletionProgress(world, plotId);
+            return true;
+        }
+        AssemblyCompletionProgress progress = AssemblyWorldRegistry.completionProgress(world, plotId);
+        if (progress == null) {
+            IPrefabBuffer completionBuffer = acquireCompletionPrefabBuffer(plugin, job);
+            boolean borrowed = completionBuffer != job.buffer();
+            progress = new AssemblyCompletionProgress(completionBuffer, borrowed);
+            AssemblyWorldRegistry.setCompletionProgress(world, plotId, progress);
+        }
+        try {
+            switch (progress.phase) {
+                case SOLIDS -> {
+                    if (progress.solidCells == null) {
+                        ConstructionPrefabSequence seq =
+                            ConstructionPasteOps.buildSequence(progress.completionBuffer, job.yaw());
+                        progress.solidCells =
+                            ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
+                    }
+                    progress.index =
+                        ConstructionPasteOps.forcePasteSolidsBatch(
+                            world,
+                            job.anchor(),
+                            job.preserveWater(),
+                            progress.completionBuffer,
+                            progress.solidCells,
+                            progress.index,
+                            COMPLETION_SOLIDS_BATCH
+                        );
+                    if (progress.index >= progress.solidCells.size()) {
+                        progress.phase = AssemblyCompletionProgress.Phase.INTERACTIVE;
+                        progress.index = 0;
+                    }
+                    return false;
+                }
+                case INTERACTIVE -> {
+                    if (progress.interactiveCells == null) {
+                        ConstructionPrefabSequence seq =
+                            ConstructionPasteOps.buildSequence(progress.completionBuffer, job.yaw());
+                        progress.interactiveCells =
+                            ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
+                    }
+                    progress.index =
+                        ConstructionPasteOps.placeInteractiveCellsBatch(
+                            world,
+                            job.anchor(),
+                            progress.interactiveCells,
+                            progress.index,
+                            COMPLETION_INTERACTIVE_BATCH
+                        );
+                    if (progress.index >= progress.interactiveCells.size()) {
+                        progress.phase = AssemblyCompletionProgress.Phase.FLUIDS;
+                        progress.index = 0;
+                    }
+                    return false;
+                }
+                case FLUIDS -> {
+                    ConstructionPasteOps.applyCompletionFluids(
+                        world,
+                        job.anchor(),
+                        job.prefabRotation(),
+                        job.preserveWater(),
+                        progress.completionBuffer
+                    );
+                    progress.phase = AssemblyCompletionProgress.Phase.ENTITIES;
+                    progress.index = 0;
+                    return false;
+                }
+                case ENTITIES -> {
+                    progress.index =
+                        ConstructionPasteOps.spawnPrefabEntitiesBatch(
+                            world,
+                            job.anchor(),
+                            job.prefabRotation(),
+                            job.prefabId(),
+                            job.prefabEntitiesInOrder(),
+                            progress.index,
+                            COMPLETION_ENTITIES_BATCH,
+                            entityStore
+                        );
+                    if (progress.index >= job.prefabEntitiesInOrder().size()) {
+                        progress.phase = AssemblyCompletionProgress.Phase.BOOKKEEPING;
+                    }
+                    return false;
+                }
+                case BOOKKEEPING -> {
+                    finishAssemblyBookkeeping(world, plugin, entityStore, town, plot, job);
+                    releaseCompletionProgress(world, plotId);
+                    return true;
+                }
+                default -> {
+                    releaseCompletionProgress(world, plotId);
+                    return true;
+                }
             }
-            if (world.getEntityStore() == null) {
-                return;
-            }
-            Store<EntityStore> store = world.getEntityStore().getStore();
-            PlotAssemblyJob toComplete = AssemblyWorldRegistry.get(world, plotId);
-            if (toComplete == null) {
-                // Prefer the instance that scheduled us (avoids a rehydrate pass that can wipe soft blocks).
-                toComplete = job;
-            }
-            if (toComplete == null) {
-                return;
-            }
-            // Do not require placedCount == pending.size(): empty-frontier leftovers (wall torches, etc.) are
-            // committed inside completeAssembly via bruteForcePlaceRemaining + placeMissingAssemblyBlocks.
-            completeAssembly(world, plugin, store, town, plot, toComplete);
-        });
+        } catch (RuntimeException e) {
+            LOGGER.atSevere().withCause(e).log(
+                "Assembly completion step failed for plot %s at phase %s; applying bookkeeping anyway",
+                plotId,
+                progress.phase
+            );
+            finishAssemblyBookkeeping(world, plugin, entityStore, town, plot, job);
+            releaseCompletionProgress(world, plotId);
+            return true;
+        }
+    }
+
+    private static void releaseCompletionProgress(@Nonnull World world, @Nonnull UUID plotId) {
+        AssemblyCompletionProgress progress = AssemblyWorldRegistry.completionProgress(world, plotId);
+        if (progress != null && progress.borrowedCompletionBuffer) {
+            AssemblyWorldRegistry.releasePrefabBufferQuietly(progress.completionBuffer);
+        }
+        AssemblyWorldRegistry.setCompletionProgress(world, plotId, null);
     }
 
     public static void completeAssembly(
@@ -1067,43 +1249,20 @@ public final class PlotAssemblyService {
         @Nonnull PlotInstance plot,
         @Nonnull PlotAssemblyJob job
     ) {
+        while (!advanceCompletionStep(world, plugin, entityStore, town, plot, job)) {
+            // Run all completion steps synchronously (admin instant-complete path).
+        }
+    }
+
+    private static void finishAssemblyBookkeeping(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance plot,
+        @Nonnull PlotAssemblyJob job
+    ) {
         UUID plotId = plot.getPlotId();
-        if (plot.getState() != PlotInstanceState.ASSEMBLING) {
-            return;
-        }
-        IPrefabBuffer completionBuffer = acquireCompletionPrefabBuffer(plugin, job);
-        boolean borrowedCompletionBuffer = completionBuffer != job.buffer();
-        try {
-            // PrefabUtil-style force setBlock of every solid from a fresh buffer read (wall torches included).
-            ConstructionPasteOps.forcePasteAllSolids(world, job.anchor(), job.yaw(), job.preserveWater(), completionBuffer);
-            ConstructionPasteOps.placeInteractiveBlockEntitiesFromPrefab(
-                world,
-                job.anchor(),
-                job.yaw(),
-                completionBuffer
-            );
-            ConstructionPasteOps.finishFluidsAndEntities(
-                world,
-                job.anchor(),
-                job.prefabRotation(),
-                job.prefabId(),
-                job.preserveWater(),
-                completionBuffer,
-                job.prefabEntitiesInOrder(),
-                entityStore
-            );
-        } catch (RuntimeException e) {
-            // Still finish town bookkeeping below; missing props can be repaired, but an ASSEMBLING plot with no job
-            // would rehydrate and wipe soft blocks again.
-            LOGGER.atSevere().withCause(e).log(
-                "Assembly completion paste had errors for plot %s; applying town bookkeeping anyway",
-                plotId
-            );
-        } finally {
-            if (borrowedCompletionBuffer) {
-                AssemblyWorldRegistry.releasePrefabBufferQuietly(completionBuffer);
-            }
-        }
         try {
             PrefabPasteEvent end = new PrefabPasteEvent(job.prefabId(), false);
             entityStore.invoke(end);
@@ -1120,6 +1279,7 @@ public final class PlotAssemblyService {
         }
         ConstructionCompleter.finishBuild(world, plugin, finisher, plotId, job.anchor(), job.yaw());
         verifyPlotBlockLinksAfterComplete(world, plugin, town, plot, job);
+        AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
     }
 
     /**
@@ -1271,7 +1431,8 @@ public final class PlotAssemblyService {
         @Nonnull TownRecord town,
         @Nonnull PlotInstance plot,
         @Nonnull List<PendingBlock> pending,
-        @Nonnull AssemblySectionMapper mapper
+        @Nonnull AssemblySectionMapper mapper,
+        boolean persistProgress
     ) {
         int active = plot.getAssemblyActiveSectionIndex();
         if (!mapper.isSectionComplete(pending, plot, active)) {
@@ -1286,7 +1447,11 @@ public final class PlotAssemblyService {
             return false;
         }
         plot.setAssemblyActiveSectionIndex(next);
-        tm.updateTown(town);
+        if (persistProgress) {
+            tm.updateTown(town);
+        } else {
+            tm.markDirty(town);
+        }
         return true;
     }
 
@@ -1560,7 +1725,7 @@ public final class PlotAssemblyService {
     ) {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         for (PlotAssemblyJob job : AssemblyWorldRegistry.jobs(world)) {
-            TownRecord town = tm.findTownOwningPlot(job.plotId());
+            TownRecord town = resolveAssemblyTown(tm, world, job.plotId());
             if (town == null) {
                 continue;
             }
@@ -1592,7 +1757,7 @@ public final class PlotAssemblyService {
             if (AssemblyWorldRegistry.phase(world, job.plotId()) != PlotAssemblyPhase.CLEARING) {
                 continue;
             }
-            TownRecord town = tm.findTownOwningPlot(job.plotId());
+            TownRecord town = resolveAssemblyTown(tm, world, job.plotId());
             if (town == null) {
                 continue;
             }
@@ -1884,7 +2049,9 @@ public final class PlotAssemblyService {
                 );
                 break;
             }
-            if (!advancePlacementAtIndex(world, plugin, entityStore, town, plot, job, pick, false, null, false).progressed()) {
+            if (!advancePlacementAtIndex(
+                world, plugin, entityStore, town, plot, job, pick, false, null, false, true
+            ).progressed()) {
                 if (!bruteForcePlaceRemaining(world, plugin, town, plot, job)) {
                     break;
                 }

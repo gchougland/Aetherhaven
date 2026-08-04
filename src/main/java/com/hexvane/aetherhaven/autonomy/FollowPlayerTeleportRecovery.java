@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.autonomy;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.entity.EntityRotationUtil;
 import com.hexvane.aetherhaven.villager.AetherhavenNpcTeleport;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -132,7 +133,7 @@ public final class FollowPlayerTeleportRecovery {
     ) {
         TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
         if (tc != null) {
-            return new Rotation3f(tc.getRotation());
+            return EntityRotationUtil.repair(tc.getRotation());
         }
         return new Rotation3f(0.0F, 0.0F, 0.0F);
     }

@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.map;
 
+import com.hexvane.aetherhaven.entity.EntityRotationUtil;
 import com.hypixel.hytale.builtin.adventure.teleporter.component.Teleporter;
 import com.hypixel.hytale.builtin.teleport.TeleportPlugin;
 import com.hypixel.hytale.math.util.MathUtil;
@@ -26,6 +27,9 @@ public final class TeleporterWarpRotationUtil {
     }
 
     public static boolean rotationNeedsRepair(@Nonnull Rotation3f rotation) {
+        if (EntityRotationUtil.needsRepair(rotation)) {
+            return true;
+        }
         Rotation3f repaired = repairRotation(rotation);
         return !approximatelyEqual(rotation.pitch(), repaired.pitch())
             || !approximatelyEqual(rotation.yaw(), repaired.yaw())
