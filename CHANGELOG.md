@@ -36,6 +36,8 @@
 - **Plot creator balloon blueprint toggle** — Removed the balloon plot blueprint option from the plot creator. Use plot token locked by default to control whether a building needs an unlock point at the bench.
 - **Jewelry workbench** — Can pull bars, gems, and life essence from nearby chests, like other crafting benches.
 - **Town Journal building removal** — Removing a building from the Town Journal returns most of the gold spent to build it to the town treasury and gives back the plot token.
+- **Villager need breaks** — Town villagers leave work when hunger, energy, or fun gets low and head to the right spot: home or the inn to rest, the inn or restaurant to eat, the park for fun, and shops during shopping hours.
+- **Shopping and fun** — Villagers regain fun while browsing during their shop shift, similar to relaxing at the park.
 
 ### Fixed
 

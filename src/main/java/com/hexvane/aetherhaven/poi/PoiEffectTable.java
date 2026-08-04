@@ -74,6 +74,11 @@ public final class PoiEffectTable {
         }
     }
 
+    /** Same restore amount as park fun spots; used while browsing during a shop schedule segment. */
+    public static void applyShopFunRestore(@Nonnull VillagerNeeds needs) {
+        needs.setFun(Math.min(VillagerNeeds.MAX, needs.getFun() + FUN_RESTORE));
+    }
+
     static boolean isEatPoi(@Nonnull Set<String> tags) {
         return tags.contains("EAT") || tags.contains(AetherhavenConstants.POI_TAG_FEAST);
     }

@@ -2,9 +2,11 @@ package com.hexvane.aetherhaven.guide;
 
 import com.hexvane.aetherhaven.ui.NpcPortraitProvider;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.asset.AssetModule;
 import com.hypixel.hytale.server.core.ui.Anchor;
 import com.hypixel.hytale.server.core.ui.Value;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
+import com.hypixel.hytale.assetstore.AssetPack;
 import com.vladsch.flexmark.ast.BulletList;
 import com.vladsch.flexmark.ast.Emphasis;
 import com.vladsch.flexmark.ast.HardLineBreak;
@@ -21,6 +23,8 @@ import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,6 +40,11 @@ public final class GuideMarkdownUiAppender {
     private static final int MAX_GUIDE_IMAGE_WIDTH = 560;
     /** Max display height (tall images shrink before wide ones hit the width cap). */
     private static final int MAX_GUIDE_IMAGE_HEIGHT = 320;
+    /** Fallback when pixel size is unknown for wide wiki hero screenshots. */
+    private static final int FALLBACK_WIKI_HERO_WIDTH = 560;
+    private static final int FALLBACK_WIKI_HERO_HEIGHT = 280;
+    /** Fallback when pixel size is unknown for square NPC portrait icons. */
+    private static final int FALLBACK_PORTRAIT_SIZE = 128;
 
     private static final Map<String, int[]> IMAGE_PIXEL_SIZE_CACHE = new ConcurrentHashMap<>();
 
@@ -332,9 +341,19 @@ public final class GuideMarkdownUiAppender {
     private static int[] displayPixelSize(@Nonnull ClassLoader cl, @Nonnull String assetPath) {
         int[] src = readImagePixelSize(cl, assetPath);
         if (src == null) {
-            return fitWithin(560, 280, MAX_GUIDE_IMAGE_WIDTH, MAX_GUIDE_IMAGE_HEIGHT);
+            src = defaultFallbackPixelSize(assetPath);
         }
         return fitWithin(src[0], src[1], MAX_GUIDE_IMAGE_WIDTH, MAX_GUIDE_IMAGE_HEIGHT);
+    }
+
+    /** Guess aspect ratio when the texture lives in another mod pack and cannot be probed on the classpath. */
+    @Nonnull
+    static int[] defaultFallbackPixelSize(@Nonnull String assetPath) {
+        String p = assetPath.trim();
+        if (p.startsWith("Icons/") || p.contains("/ModelsGenerated/")) {
+            return new int[] { FALLBACK_PORTRAIT_SIZE, FALLBACK_PORTRAIT_SIZE };
+        }
+        return new int[] { FALLBACK_WIKI_HERO_WIDTH, FALLBACK_WIKI_HERO_HEIGHT };
     }
 
     @Nonnull
@@ -366,19 +385,69 @@ public final class GuideMarkdownUiAppender {
 
     @Nullable
     private static int[] readImagePixelSize(@Nonnull ClassLoader cl, @Nonnull String assetPath) {
-        String cp = assetPathToClasspathResource(assetPath);
-        if (cp == null) {
-            return null;
-        }
-        int[] cached = IMAGE_PIXEL_SIZE_CACHE.get(cp);
+        String key = assetPath.trim();
+        int[] cached = IMAGE_PIXEL_SIZE_CACHE.get(key);
         if (cached != null) {
             return new int[] { cached[0], cached[1] };
         }
-        try (InputStream in = cl.getResourceAsStream(cp)) {
-            if (in == null) {
-                return null;
+        String cp = assetPathToClasspathResource(assetPath);
+        if (cp != null) {
+            int[] fromClasspath = readImagePixelSizeFromStream(cl.getResourceAsStream(cp));
+            if (fromClasspath != null) {
+                IMAGE_PIXEL_SIZE_CACHE.put(key, fromClasspath);
+                return fromClasspath;
             }
-            BufferedImage img = ImageIO.read(in);
+        }
+        int[] fromPack = readImagePixelSizeFromAssetPacks(assetPath);
+        if (fromPack != null) {
+            IMAGE_PIXEL_SIZE_CACHE.put(key, fromPack);
+            return fromPack;
+        }
+        return null;
+    }
+
+    @Nullable
+    private static int[] readImagePixelSizeFromAssetPacks(@Nonnull String assetPath) {
+        AssetModule module = AssetModule.get();
+        if (module == null) {
+            return null;
+        }
+        String relative = assetPathToPackRelativePath(assetPath);
+        if (relative == null) {
+            return null;
+        }
+        for (AssetPack pack : module.getAssetPacks()) {
+            Path file = pack.getRoot().resolve(relative);
+            if (!Files.isRegularFile(file)) {
+                continue;
+            }
+            try (InputStream in = Files.newInputStream(file)) {
+                int[] dims = readImagePixelSizeFromStream(in);
+                if (dims != null) {
+                    return dims;
+                }
+            } catch (Exception ignored) {
+                // try next pack
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private static String assetPathToPackRelativePath(@Nonnull String assetPath) {
+        if (assetPath.startsWith("UI/") || assetPath.startsWith("Icons/")) {
+            return "Common/" + assetPath;
+        }
+        return null;
+    }
+
+    @Nullable
+    private static int[] readImagePixelSizeFromStream(@Nullable InputStream in) {
+        if (in == null) {
+            return null;
+        }
+        try (InputStream stream = in) {
+            BufferedImage img = ImageIO.read(stream);
             if (img == null) {
                 return null;
             }
@@ -387,8 +456,6 @@ public final class GuideMarkdownUiAppender {
             if (w <= 0 || h <= 0) {
                 return null;
             }
-            int[] dims = new int[] { w, h };
-            IMAGE_PIXEL_SIZE_CACHE.put(cp, dims);
             return new int[] { w, h };
         } catch (Exception ignored) {
             return null;

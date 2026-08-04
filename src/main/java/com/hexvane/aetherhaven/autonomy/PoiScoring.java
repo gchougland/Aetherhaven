@@ -2,9 +2,11 @@ package com.hexvane.aetherhaven.autonomy;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.poi.PoiEffectTable;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
 import com.hexvane.aetherhaven.poi.PoiOccupancy;
+import com.hexvane.aetherhaven.restaurant.PlotRestaurantState;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleResolver;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
@@ -25,6 +27,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class PoiScoring {
+    /** Inn hearth and shared beds top out here; restaurant and assigned housing fill to {@link VillagerNeeds#MAX}. */
+    public static final float INN_UTILITY_NEED_CAP = 80f;
+
     private static final float SCORE_EPS = 1e-4f;
     /** Soft penalty so workers rotate among multiple work spots on the same plot. */
     private static final float LAST_USED_POI_PENALTY = 14f;
@@ -136,6 +141,100 @@ public final class PoiScoring {
 
     public static boolean isFunNotFull(@Nonnull VillagerNeeds needs) {
         return needs.getFun() < VillagerNeeds.MAX - 0.25f;
+    }
+
+    /**
+     * True for shared inn eat/rest POIs (not restaurant-tagged spots, not a villager's assigned house plot).
+     */
+    public static boolean isInnUtilityNeedCapPoi(
+        @Nonnull PoiEntry poi,
+        @Nullable TownRecord town,
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nullable UUID villagerUuid
+    ) {
+        if (town == null || poi.getPlotId() == null) {
+            return false;
+        }
+        if (poi.getTags().contains(AetherhavenConstants.POI_TAG_RESTAURANT)) {
+            return false;
+        }
+        if (!resolveInnPlotIds(town, constructionCatalog).contains(poi.getPlotId())) {
+            return false;
+        }
+        if (villagerUuid != null) {
+            UUID homePlotId = resolveHomePlotId(town, villagerUuid, constructionCatalog);
+            if (homePlotId != null && homePlotId.equals(poi.getPlotId())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static float needFillCapForPoi(
+        @Nonnull PoiEntry poi,
+        @Nullable TownRecord town,
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nullable UUID villagerUuid
+    ) {
+        return isInnUtilityNeedCapPoi(poi, town, constructionCatalog, villagerUuid)
+            ? INN_UTILITY_NEED_CAP
+            : VillagerNeeds.MAX;
+    }
+
+    /** Whether this POI type's meter is topped off for the villager (80% at inn, full elsewhere). */
+    public static boolean isNeedMeterFilledForPoi(
+        @Nonnull PoiEntry poi,
+        @Nonnull VillagerNeeds needs,
+        @Nullable TownRecord town,
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nullable UUID villagerUuid
+    ) {
+        float cap = needFillCapForPoi(poi, town, constructionCatalog, villagerUuid);
+        if (isEatPoi(poi)) {
+            return needs.getHunger() >= cap - 0.25f;
+        }
+        if (isRestPoi(poi)) {
+            return needs.getEnergy() >= cap - 0.25f;
+        }
+        if (isFunPoi(poi)) {
+            return !isFunNotFull(needs);
+        }
+        return false;
+    }
+
+    public static void applyPoiUseComplete(
+        @Nonnull VillagerNeeds needs,
+        @Nonnull PoiEntry poi,
+        @Nullable PlotRestaurantState restaurantState,
+        @Nullable TownRecord town,
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nullable UUID villagerUuid
+    ) {
+        applyPoiUseComplete(needs, poi, restaurantState, town, constructionCatalog, villagerUuid, false);
+    }
+
+    public static void applyPoiUseComplete(
+        @Nonnull VillagerNeeds needs,
+        @Nonnull PoiEntry poi,
+        @Nullable PlotRestaurantState restaurantState,
+        @Nullable TownRecord town,
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nullable UUID villagerUuid,
+        boolean shopping
+    ) {
+        PoiEffectTable.applyUseComplete(needs, poi, restaurantState);
+        if (shopping && isShopPoi(poi)) {
+            PoiEffectTable.applyShopFunRestore(needs);
+        }
+        if (!isInnUtilityNeedCapPoi(poi, town, constructionCatalog, villagerUuid)) {
+            return;
+        }
+        if (isEatPoi(poi)) {
+            needs.setHunger(Math.min(needs.getHunger(), INN_UTILITY_NEED_CAP));
+        }
+        if (isRestPoi(poi)) {
+            needs.setEnergy(Math.min(needs.getEnergy(), INN_UTILITY_NEED_CAP));
+        }
     }
 
     public static boolean needsEnergyBreak(@Nonnull VillagerNeeds needs, boolean fillingEnergySession) {
@@ -420,6 +519,11 @@ public final class PoiScoring {
 
     public static boolean isShopPoi(@Nonnull PoiEntry e) {
         return e.getTags().contains("SHOP");
+    }
+
+    /** Shop POIs refill fun only while the villager is on a scheduled shopping segment. */
+    public static boolean isShopFunFillPoi(@Nonnull PoiEntry poi, boolean shopping) {
+        return shopping && isShopPoi(poi);
     }
 
     public static float score(@Nonnull VillagerNeeds needs, @Nonnull PoiEntry poi) {

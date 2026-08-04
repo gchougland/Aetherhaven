@@ -63,6 +63,18 @@ final class PoiEffectTableTest {
     }
 
     @Test
+    void shopBrowseRestoresFunOnly() {
+        VillagerNeeds needs = VillagerNeeds.full();
+        needs.setHunger(10f);
+        needs.setEnergy(10f);
+        needs.setFun(0f);
+        PoiEffectTable.applyShopFunRestore(needs);
+        assertEquals(10f, needs.getHunger(), 0.01f);
+        assertEquals(10f, needs.getEnergy(), 0.01f);
+        assertEquals(22f, needs.getFun(), 0.01f);
+    }
+
+    @Test
     void restaurantSitWithoutEatRestoresNothing() {
         VillagerNeeds needs = VillagerNeeds.full();
         needs.setHunger(0f);
