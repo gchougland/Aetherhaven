@@ -44,8 +44,23 @@ public final class ProductionWorkplaceKinds {
         @Nonnull ConstructionCatalog catalog,
         @Nullable String plotStoredConstructionId
     ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        VillagerDefinitionCatalog villagers =
+            plugin != null ? plugin.getVillagerDefinitionCatalog() : VillagerDefinitionCatalog.empty();
+        return residentBindingKindsForPlot(catalog, villagers, plotStoredConstructionId);
+    }
+
+    @Nonnull
+    static List<String> residentBindingKindsForPlot(
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull VillagerDefinitionCatalog villagers,
+        @Nullable String plotStoredConstructionId
+    ) {
         LinkedHashSet<String> out = new LinkedHashSet<>();
         for (String gid : catalog.resolveGameplayConstructionIds(plotStoredConstructionId)) {
+            if (isNonWorkplaceGameplayConstruction(gid)) {
+                continue;
+            }
             if (isMultiRoleWorkplace(gid)) {
                 String gm = residentBindingKindForGameplayConstruction(gid);
                 if (gm != null) {
@@ -57,6 +72,13 @@ public final class ProductionWorkplaceKinds {
             String kind = residentBindingKindForGameplayConstruction(gid);
             if (kind != null) {
                 out.add(kind);
+            }
+        }
+        String stored = trimOrNull(plotStoredConstructionId);
+        if (stored != null) {
+            String fromStored = residentKindForStoredPlotConstruction(villagers, catalog, stored);
+            if (fromStored != null) {
+                out.add(fromStored);
             }
         }
         return new ArrayList<>(out);
@@ -116,12 +138,84 @@ public final class ProductionWorkplaceKinds {
             return null;
         }
         for (String gid : catalog.resolveGameplayConstructionIds(plotStoredConstructionId)) {
+            if (isNonWorkplaceGameplayConstruction(gid)) {
+                continue;
+            }
             String kind = residentBindingKindForGameplayConstruction(gid);
             if (want.equals(kind)) {
                 return gid;
             }
         }
+        String stored = trimOrNull(plotStoredConstructionId);
+        if (stored != null) {
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            VillagerDefinitionCatalog villagers =
+                plugin != null ? plugin.getVillagerDefinitionCatalog() : VillagerDefinitionCatalog.empty();
+            String workId = workConstructionIdForStoredPlotRole(villagers, catalog, stored, want);
+            if (workId != null) {
+                return workId;
+            }
+        }
         return null;
+    }
+
+    @Nullable
+    public static String gameplayConstructionIdForResidentKindForTests(
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull VillagerDefinitionCatalog villagers,
+        @Nullable String plotStoredConstructionId,
+        @Nonnull String residentKind
+    ) {
+        String want = residentKind.trim();
+        if (want.isEmpty()) {
+            return null;
+        }
+        if (TownVillagerBinding.KIND_BARD.equals(want)) {
+            for (String gid : catalog.resolveGameplayConstructionIds(plotStoredConstructionId)) {
+                if (isMultiRoleWorkplace(gid)) {
+                    return gid;
+                }
+            }
+            return null;
+        }
+        for (String gid : catalog.resolveGameplayConstructionIds(plotStoredConstructionId)) {
+            if (isNonWorkplaceGameplayConstruction(gid)) {
+                continue;
+            }
+            String kind = residentBindingKindForGameplayConstruction(gid);
+            if (want.equals(kind)) {
+                return gid;
+            }
+        }
+        String stored = trimOrNull(plotStoredConstructionId);
+        if (stored != null) {
+            return workConstructionIdForStoredPlotRole(villagers, catalog, stored, want);
+        }
+        return null;
+    }
+
+    /**
+     * Canonical gameplay ids used for housing, amenities, player commerce, or travel — not permanent villager jobs
+     * on the town records workplace shelf.
+     */
+    public static boolean isNonWorkplaceGameplayConstruction(@Nullable String gameplayConstructionId) {
+        String id = trimOrNull(gameplayConstructionId);
+        if (id == null) {
+            return false;
+        }
+        return switch (id) {
+            case AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE,
+                AetherhavenConstants.CONSTRUCTION_PLOT_PARK,
+                AetherhavenConstants.CONSTRUCTION_PLOT_PLAYER_SHOP,
+                AetherhavenConstants.CONSTRUCTION_PLOT_TOURIST_PORTAL,
+                AetherhavenConstants.CONSTRUCTION_PLOT_WALL_SEGMENT,
+                AetherhavenConstants.CONSTRUCTION_PLOT_WALL_GATE,
+                AetherhavenConstants.CONSTRUCTION_PLOT_WALL_TOWER_EASTDOOR_NS,
+                AetherhavenConstants.CONSTRUCTION_PLOT_WALL_TOWER_EASTDOOR_SW,
+                AetherhavenConstants.CONSTRUCTION_PLOT_WALL_TOWER_ENDCAP_S,
+                AetherhavenConstants.CONSTRUCTION_PLOT_WALL_TOWER_OUTERCORNER_SE -> true;
+            default -> false;
+        };
     }
 
     @Nullable
@@ -192,15 +286,94 @@ public final class ProductionWorkplaceKinds {
         return InnVisitorShopPromotion.resolveResidentKind(vdef);
     }
 
+    /** Test hook for plot role resolution without {@link AetherhavenPlugin}. */
+    @Nonnull
+    public static List<String> residentBindingKindsForPlotForTests(
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull VillagerDefinitionCatalog villagers,
+        @Nullable String plotStoredConstructionId
+    ) {
+        return residentBindingKindsForPlot(catalog, villagers, plotStoredConstructionId);
+    }
+
+    /** Test hook for crossmod catalog resolution without {@link AetherhavenPlugin}. */
+    @Nullable
+    public static String residentBindingKindFromVillagerCatalogForTests(
+        @Nonnull VillagerDefinitionCatalog villagers,
+        @Nonnull ConstructionCatalog constructions,
+        @Nonnull String gameplayConstructionId
+    ) {
+        return residentKindFromVillagerCatalog(villagers, constructions, gameplayConstructionId);
+    }
+
+    /**
+     * Crossmod workplace role when a villager's {@code workConstructionId} matches this plot's stored construction id
+     * (not when both only share a generic alias such as {@code plot_house}).
+     */
+    @Nullable
+    static String residentKindForStoredPlotConstruction(
+        @Nonnull VillagerDefinitionCatalog villagers,
+        @Nonnull ConstructionCatalog constructions,
+        @Nonnull String plotStoredConstructionId
+    ) {
+        for (VillagerDefinition def : villagers.allByNpcRoleId().values()) {
+            String work = def.getWorkConstructionId();
+            if (work == null || !workConstructionMatchesStoredPlotDirectly(constructions, work, plotStoredConstructionId)) {
+                continue;
+            }
+            String kind = InnVisitorShopPromotion.resolveResidentKind(def);
+            if (kind != null && !kind.isBlank()) {
+                return kind;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    static String workConstructionIdForStoredPlotRole(
+        @Nonnull VillagerDefinitionCatalog villagers,
+        @Nonnull ConstructionCatalog constructions,
+        @Nonnull String plotStoredConstructionId,
+        @Nonnull String residentKind
+    ) {
+        String want = residentKind.trim();
+        for (VillagerDefinition def : villagers.allByNpcRoleId().values()) {
+            String work = def.getWorkConstructionId();
+            if (work == null || !workConstructionMatchesStoredPlotDirectly(constructions, work, plotStoredConstructionId)) {
+                continue;
+            }
+            String kind = InnVisitorShopPromotion.resolveResidentKind(def);
+            if (want.equals(kind)) {
+                return work;
+            }
+        }
+        return null;
+    }
+
+    /** Plot variant counts-as villager work building, or ids match exactly — not shared house-only aliases. */
+    private static boolean workConstructionMatchesStoredPlotDirectly(
+        @Nonnull ConstructionCatalog constructions,
+        @Nonnull String workConstructionId,
+        @Nonnull String plotStoredConstructionId
+    ) {
+        if (workConstructionId.equals(plotStoredConstructionId)) {
+            return true;
+        }
+        return constructions.matchesGameplayConstruction(plotStoredConstructionId, workConstructionId);
+    }
+
     @Nullable
     static String residentKindFromVillagerCatalog(
         @Nonnull VillagerDefinitionCatalog villagers,
         @Nonnull ConstructionCatalog constructions,
         @Nonnull String gameplayConstructionId
     ) {
+        if (isNonWorkplaceGameplayConstruction(gameplayConstructionId)) {
+            return null;
+        }
         for (VillagerDefinition def : villagers.allByNpcRoleId().values()) {
             String work = def.getWorkConstructionId();
-            if (work == null) {
+            if (work == null || !workConstructionIdIsWorkplaceJob(constructions, work)) {
                 continue;
             }
             if (!InnVisitorShopPromotion.constructionMatchesWork(
@@ -217,6 +390,23 @@ public final class ProductionWorkplaceKinds {
             }
         }
         return null;
+    }
+
+    /** True when {@code workConstructionId} resolves to at least one permanent job gameplay id. */
+    private static boolean workConstructionIdIsWorkplaceJob(
+        @Nonnull ConstructionCatalog constructions,
+        @Nonnull String workConstructionId
+    ) {
+        List<String> resolved = constructions.resolveGameplayConstructionIds(workConstructionId);
+        if (resolved.isEmpty()) {
+            return !isNonWorkplaceGameplayConstruction(workConstructionId);
+        }
+        for (String gid : resolved) {
+            if (!isNonWorkplaceGameplayConstruction(gid)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Nullable

@@ -1279,7 +1279,7 @@ public final class InnPoolService {
             }
             UUID spawned = spawnVisitor(world, plugin, town, store, innPlot, innDef, local, roleId, kind, "INN_MORNING_FILL", slotIndex);
             if (spawned == null) {
-                break;
+                continue;
             }
             town.getInnPoolNpcIds().add(spawned.toString());
             if (isRoleRequiredByActiveInnQuest(town, roleId)) {
@@ -1449,6 +1449,13 @@ public final class InnPoolService {
         int wz = anchor.z + d.z;
         Vector3d pos = new Vector3d(wx + 0.5, wy, wz + 0.5);
         pos = com.hexvane.aetherhaven.autonomy.VillagerBlockUtil.snapNpcFeetToStand(world, pos);
+        if (!npc.hasRoleName(roleId)) {
+            LOGGER.atWarning().log(
+                "Inn visitor spawn skipped: NPC role %s is not registered (check Server/Aetherhaven/NpcRoles/ for crossmod villagers)",
+                roleId
+            );
+            return null;
+        }
         var pair = npc.spawnNPC(store, roleId, null, pos, Rotation3f.ZERO);
         if (pair == null) {
             LOGGER.atWarning().log("Failed to spawn inn visitor %s for town %s", roleId, town.getTownId());
@@ -1926,9 +1933,6 @@ public final class InnPoolService {
         if (town.hasQuestActive(AetherhavenConstants.QUEST_BARN)) {
             out.add(AetherhavenConstants.NPC_RANCHER);
         }
-        if (town.hasQuestActive(AetherhavenConstants.QUEST_BUILD_GUILD_HALL)) {
-            out.add(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID);
-        }
         if (town.hasQuestActive(AetherhavenConstants.QUEST_CRYSTAL_KEEPERS_SHOP)) {
             out.add(AetherhavenConstants.NPC_CRYSTAL_KEEPER);
         }
@@ -1944,12 +1948,66 @@ public final class InnPoolService {
         if (town.hasQuestActive(AetherhavenConstants.QUEST_BUILDERS_HUT)) {
             out.add(AetherhavenConstants.NPC_BUILDER);
         }
-        if (town.hasQuestCompleted(AetherhavenConstants.QUEST_BUILD_TOWN_HALL)
-            && !town.isGuildHallActive()
-            && !town.getInnVisitorPoolExcludedRoleIds().contains(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID)) {
-            out.add(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID);
-        }
         return out;
+    }
+
+    /** Same-package tests: daily visitor priority list (quest-critical roles only; no guild master hard priority). */
+    @Nonnull
+    static List<String> prioritizedInnRoleOrderForTest(@Nonnull TownRecord town) {
+        return prioritizedInnRoleOrder(town);
+    }
+
+    /**
+     * Same-package tests: merged priority + weighted order using {@code pool} entries only (no eligibility gating).
+     */
+    @Nonnull
+    static List<String> buildDailyVisitorRoleOrderForTest(
+        @Nonnull TownRecord town,
+        @Nonnull List<InnPoolEntry> pool,
+        long seed
+    ) {
+        List<String> priority = prioritizedInnRoleOrder(town);
+        Set<String> exclude = new LinkedHashSet<>(priority);
+        List<String> weightedOrder = weightedInnRoleOrderWithoutReplacementForTest(pool, exclude, new Random(seed));
+        Set<String> seen = new LinkedHashSet<>();
+        List<String> mergedOrder = new ArrayList<>();
+        for (String roleId : priority) {
+            if (roleId != null && !roleId.isBlank() && seen.add(roleId)) {
+                mergedOrder.add(roleId);
+            }
+        }
+        for (String rid : weightedOrder) {
+            if (seen.add(rid)) {
+                mergedOrder.add(rid);
+            }
+        }
+        return mergedOrder;
+    }
+
+    @Nonnull
+    private static List<String> weightedInnRoleOrderWithoutReplacementForTest(
+        @Nonnull List<InnPoolEntry> pool,
+        @Nonnull Set<String> excludeRoleIds,
+        @Nonnull Random rng
+    ) {
+        List<InnPoolEntry> remaining = new ArrayList<>();
+        for (InnPoolEntry e : pool) {
+            String rid = e.npcRoleId();
+            if (rid == null || rid.isBlank() || excludeRoleIds.contains(rid)) {
+                continue;
+            }
+            remaining.add(e);
+        }
+        List<String> ordered = new ArrayList<>();
+        while (!remaining.isEmpty()) {
+            InnPoolEntry picked = pickWeightedInnPoolEntry(remaining, rng);
+            if (picked == null) {
+                break;
+            }
+            ordered.add(picked.npcRoleId());
+            remaining.removeIf(e -> e.npcRoleId().equals(picked.npcRoleId()));
+        }
+        return ordered;
     }
 
     @Nonnull

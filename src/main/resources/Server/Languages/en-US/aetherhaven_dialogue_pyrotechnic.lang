@@ -28,16 +28,16 @@ aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_goodbye=That is all for now.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.rep_reward_50.speaker=Grubble Sparkmatch
 
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.speaker=Grubble Sparkmatch
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.body=Grubble cannot sell boom things from pockets forever. Folk get nervous. Need real shop with thick walls, good sign, shelf that does not wobble when small bomb sneezes. Grubble drew plans on fireproof paper. You build for town, Grubble gives you the page.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.body=Grubble cannot sell boom things from pockets forever. Folk get nervous. Need real shop with thick walls, good sign, shelf that does not wobble when small bomb sneezes. Take this token, stake the plot with your staff, and pay the materials listed on the sign. When it stands, meet Grubble at the counter.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c0=We will get Grubble a shop.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c1=Not right now. Grubble waits.
 
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.speaker=Grubble Sparkmatch
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.body=Take blueprint page. Learn at town planning desk. Craft token. Build shop where folk can find it without getting lost or blown up by accident. Grubble waits at inn. Powder stays in bag until walls are thick.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.body=Good. Stake the shop where folk can find it without getting lost or blown up by accident. Grubble waits at inn. Powder stays in bag until walls are thick.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.c0=See you when the sign is up.
 
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.speaker=Grubble Sparkmatch
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.body=Shop not built yet? Grubble waits. Powder gets restless when Grubble waits too long. You still learning plans and stacking walls, or Grubble should stop hoping?
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.body=Shop not built yet? Grubble waits. Powder gets restless when Grubble waits too long. You still staking the plot and stacking walls, or Grubble should stop hoping?
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.c0=Grubble, I need to drop the quest for now.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.c1=Still working on it. Grubble, I will keep going.
 

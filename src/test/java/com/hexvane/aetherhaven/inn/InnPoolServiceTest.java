@@ -1,8 +1,11 @@
 package com.hexvane.aetherhaven.inn;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.data.InnPoolEntry;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -56,6 +59,54 @@ class InnPoolServiceTest {
             );
         List<String> order = weightedOrder(pool, Set.of("A"), 7L);
         assertEquals(List.of("B"), order);
+    }
+
+    @Test
+    void prioritizedInnRoleOrder_doesNotHardPriorityGuildMasterAfterTownHall() {
+        TownRecord town = new TownRecord();
+        town.completeQuest(AetherhavenConstants.QUEST_BUILD_TOWN_HALL);
+        List<String> priority = InnPoolService.prioritizedInnRoleOrderForTest(town);
+        assertFalse(priority.contains(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID));
+    }
+
+    @Test
+    void prioritizedInnRoleOrder_doesNotHardPriorityGuildMasterWhenGuildHallQuestActive() {
+        TownRecord town = new TownRecord();
+        town.addActiveQuest(AetherhavenConstants.QUEST_BUILD_GUILD_HALL);
+        List<String> priority = InnPoolService.prioritizedInnRoleOrderForTest(town);
+        assertFalse(priority.contains(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID));
+    }
+
+    @Test
+    void buildDailyVisitorRoleOrder_doesNotAlwaysPreferGuildMasterAfterTownHall() {
+        TownRecord town = new TownRecord();
+        town.completeQuest(AetherhavenConstants.QUEST_BUILD_TOWN_HALL);
+        List<InnPoolEntry> pool =
+            List.of(
+                new InnPoolEntry(
+                    AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID,
+                    "visitor_guild_master",
+                    7,
+                    2
+                ),
+                new InnPoolEntry(AetherhavenConstants.NPC_MERCHANT, "visitor_merchant", 0, 1)
+            );
+        int guildFirst = 0;
+        int merchantFirst = 0;
+        for (long seed = 0; seed < 400; seed++) {
+            List<String> order = InnPoolService.buildDailyVisitorRoleOrderForTest(town, pool, seed);
+            assertEquals(2, order.size());
+            assertTrue(order.contains(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID));
+            assertTrue(order.contains(AetherhavenConstants.NPC_MERCHANT));
+            if (AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID.equals(order.get(0))) {
+                guildFirst++;
+            } else {
+                merchantFirst++;
+            }
+        }
+        assertTrue(merchantFirst > 50, "expected merchant to lead sometimes, got " + merchantFirst);
+        assertTrue(guildFirst > 50, "expected guild master to lead sometimes, got " + guildFirst);
+        assertTrue(guildFirst < 350, "guild master should not dominate first slot, got " + guildFirst);
     }
 
     private static List<String> weightedOrder(List<InnPoolEntry> pool, Set<String> exclude, long seed) {

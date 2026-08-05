@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "q_crystal_keepers_shop",
   "category": "town",
-  "grantPlotBlueprintConstructionId": "plot_crystal_keepers_shop",
+  "grantPlotTokenConstructionId": "plot_crystal_keepers_shop",
   "title": "Vaelith's Crystal Shop",
   "description": "Vaelith wants a proper shop where she can share her crystal collection with the town.",
   "prerequisites": {
@@ -11,23 +11,16 @@
   },
   "objectives": [
     {
-      "id": "blueprint",
-      "kind": "plot_blueprint_received",
-      "text": "Take the shop blueprint from Vaelith.",
-      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_crystal_keepers_shop.objective.blueprint"
-    },
-    {
-      "id": "learn",
-      "kind": "plot_blueprint_learned",
-      "constructionId": "plot_crystal_keepers_shop",
-      "text": "Use the blueprint to learn the crystal shop at your plot crafting bench.",
-      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_crystal_keepers_shop.objective.learn"
+      "id": "token",
+      "kind": "plot_token_received",
+      "text": "Take the crystal shop plot token from Vaelith.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_crystal_keepers_shop.objective.token"
     },
     {
       "id": "build",
       "kind": "construction_built",
       "constructionId": "plot_crystal_keepers_shop",
-      "text": "Craft a shop plot token and build the crystal shop prefab.",
+      "text": "Stake and build the crystal shop prefab.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_crystal_keepers_shop.objective.build"
     },
     {

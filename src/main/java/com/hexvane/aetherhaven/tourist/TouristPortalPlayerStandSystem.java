@@ -73,9 +73,16 @@ public final class TouristPortalPlayerStandSystem extends EntityTickingSystem<En
 
         World world = store.getExternalData().getWorld();
         Vector3d feet = transform.getPosition();
-        TouristPortalRecord onPortal = TouristPortalTravelService.resolvePortalAtPlayerFeet(world, plugin, feet);
-        boolean onPortalNow = onPortal != null;
+        int probeX = (int) Math.floor(feet.x);
+        int probeZ = (int) Math.floor(feet.z);
         boolean wasOnPortal = travelState.wasOnPortal();
+        if (!wasOnPortal && travelState.sameProbeColumn(probeX, probeZ)) {
+            return;
+        }
+
+        TouristPortalRecord onPortal = TouristPortalTravelService.resolvePortalAtPlayerFeet(world, plugin, feet);
+        travelState.setLastProbeBlock(probeX, probeZ);
+        boolean onPortalNow = onPortal != null;
 
         if (onPortalNow && !wasOnPortal && player.getPageManager().getCustomPage() == null) {
             UUID portalId = onPortal.getPortalId();

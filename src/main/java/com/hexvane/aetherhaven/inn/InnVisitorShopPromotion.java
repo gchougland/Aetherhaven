@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
+import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
@@ -81,16 +82,35 @@ public final class InnVisitorShopPromotion {
             if (work == null) {
                 continue;
             }
-            String workGameplay = constructions.resolveGameplayConstructionId(work);
-            if (workGameplay.isEmpty()) {
-                workGameplay = work;
-            }
-            var plot = town.findCompletePlotWithConstruction(constructions, workGameplay);
+            PlotInstance plot = town.findCompletePlotForWorkConstruction(constructions, work);
             if (plot == null) {
                 continue;
             }
             tryPromoteVillager(world, plugin, town, tm, def, plot.getPlotId(), work);
         }
+    }
+
+    /** True when completing this quest should retry inn-pool shop promotion (crossmod and vanilla). */
+    public static boolean isInnPoolShopQuest(@Nonnull AetherhavenPlugin plugin, @Nonnull String questId) {
+        String qid = questId.trim();
+        if (qid.isEmpty()) {
+            return false;
+        }
+        ConstructionCatalog constructions = plugin.getConstructionCatalog();
+        for (VillagerDefinition def : plugin.getVillagerDefinitionCatalog().allByNpcRoleId().values()) {
+            if (!def.isInnPoolEligible()) {
+                continue;
+            }
+            String work = def.getWorkConstructionId();
+            if (work == null || work.isBlank()) {
+                continue;
+            }
+            String matched = findShopQuestId(plugin.getQuestCatalog(), constructions, def, work.trim());
+            if (qid.equals(matched)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static void tryPromoteVillager(
@@ -204,27 +224,17 @@ public final class InnVisitorShopPromotion {
         @Nonnull String completedConstructionId,
         @Nonnull String completedGameplayConstructionId
     ) {
-        if (workConstructionId.equals(completedConstructionId) || workConstructionId.equals(completedGameplayConstructionId)) {
+        String work = workConstructionId.trim();
+        if (work.isEmpty()) {
+            return false;
+        }
+        if (work.equals(completedConstructionId.trim()) || work.equals(completedGameplayConstructionId.trim())) {
             return true;
         }
-        if (constructions.matchesGameplayConstruction(completedConstructionId, workConstructionId)) {
-            return true;
-        }
-        if (constructions.matchesGameplayConstruction(completedGameplayConstructionId, workConstructionId)) {
-            return true;
-        }
-        String workGameplay = constructions.resolveGameplayConstructionId(workConstructionId);
-        for (String completedGameplay : constructions.resolveGameplayConstructionIds(completedConstructionId)) {
-            if (!workGameplay.isEmpty() && workGameplay.equals(completedGameplay)) {
-                return true;
-            }
-        }
-        for (String completedGameplay : constructions.resolveGameplayConstructionIds(completedGameplayConstructionId)) {
-            if (!workGameplay.isEmpty() && workGameplay.equals(completedGameplay)) {
-                return true;
-            }
-        }
-        return false;
+        // Match when the completed plot's stored id (or its counts-as aliases) satisfies the workplace id.
+        // Do not compare resolved gameplay ids alone: plot_hobbit_shop counts as plot_house, but a generic
+        // plot_house completion must not promote Bilbo before plot_hobbit_shop exists.
+        return constructions.matchesGameplayConstruction(completedConstructionId, work);
     }
 
     private static boolean questGrantsConstruction(

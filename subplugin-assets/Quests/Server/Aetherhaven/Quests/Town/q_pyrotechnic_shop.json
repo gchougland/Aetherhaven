@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "q_pyrotechnic_shop",
   "category": "town",
-  "grantPlotBlueprintConstructionId": "plot_bomb_shop",
+  "grantPlotTokenConstructionId": "plot_bomb_shop",
   "title": "Grubble's Bomb Shop",
   "description": "Grubble wants a proper shop where he can sell his boom things to the town.",
   "prerequisites": {
@@ -11,23 +11,16 @@
   },
   "objectives": [
     {
-      "id": "blueprint",
-      "kind": "plot_blueprint_received",
-      "text": "Take the shop blueprint from Grubble.",
-      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_pyrotechnic_shop.objective.blueprint"
-    },
-    {
-      "id": "learn",
-      "kind": "plot_blueprint_learned",
-      "constructionId": "plot_bomb_shop",
-      "text": "Use the blueprint to learn the bomb shop at your plot crafting bench.",
-      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_pyrotechnic_shop.objective.learn"
+      "id": "token",
+      "kind": "plot_token_received",
+      "text": "Take the bomb shop plot token from Grubble.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_pyrotechnic_shop.objective.token"
     },
     {
       "id": "build",
       "kind": "construction_built",
       "constructionId": "plot_bomb_shop",
-      "text": "Craft a shop plot token and build the bomb shop prefab.",
+      "text": "Stake and build the bomb shop prefab.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_pyrotechnic_shop.objective.build"
     },
     {

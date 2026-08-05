@@ -13,6 +13,7 @@ import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.inventory.BenchAdjacentChestUtil;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.PlotFootprintChunkUtil;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -1250,7 +1251,52 @@ public final class PlotAssemblyService {
         @Nonnull PlotAssemblyJob job
     ) {
         while (!advanceCompletionStep(world, plugin, entityStore, town, plot, job)) {
-            // Run all completion steps synchronously (admin instant-complete path).
+            // Run all completion steps synchronously when placement defers completion on the same thread.
+        }
+    }
+
+    /**
+     * One-shot force paste for creative/debug instant finish ({@link #instantCompleteJob}). Mirrors
+     * {@link com.hexvane.aetherhaven.prefab.ConstructionAnimator} final pass without tick-spread batching.
+     */
+    private static void completeAssemblyInstant(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance plot,
+        @Nonnull PlotAssemblyJob job
+    ) {
+        UUID plotId = plot.getPlotId();
+        IPrefabBuffer buffer = acquireCompletionPrefabBuffer(plugin, job);
+        try {
+            ConstructionPasteOps.forcePasteAllSolids(
+                world,
+                job.anchor(),
+                job.yaw(),
+                job.preserveWater(),
+                buffer
+            );
+            ConstructionPasteOps.placeInteractiveBlockEntitiesFromPrefab(
+                world,
+                job.anchor(),
+                job.yaw(),
+                buffer
+            );
+            ConstructionPasteOps.finishFluidsAndEntities(
+                world,
+                job.anchor(),
+                job.prefabRotation(),
+                job.prefabId(),
+                job.preserveWater(),
+                buffer,
+                job.prefabEntitiesInOrder(),
+                entityStore
+            );
+            finishAssemblyBookkeeping(world, plugin, entityStore, town, plot, job);
+        } catch (RuntimeException e) {
+            LOGGER.atSevere().withCause(e).log("Instant assembly completion failed for plot %s", plotId);
+            finishAssemblyBookkeeping(world, plugin, entityStore, town, plot, job);
         }
     }
 
@@ -1988,10 +2034,10 @@ public final class PlotAssemblyService {
     }
 
     /**
-     * Creative/debug: place every remaining assembly block for one job in frontier order, then run
-     * {@link #completeAssembly} on the same thread (no deferred task). Caller must be on the world thread.
+     * Creative/debug: force-paste the prefab and finalize the plot on the same thread (no deferred task).
+     * Caller must be on the world thread.
      *
-     * @return true when the job finished (or was already fully placed), false on missing chunk or bad state.
+     * @return true when the plot left {@link PlotInstanceState#ASSEMBLING}, false on unloaded chunks or bad state.
      */
     public static boolean instantCompleteJob(
         @Nonnull World world,
@@ -2008,6 +2054,12 @@ public final class PlotAssemblyService {
         if (registered != job) {
             return false;
         }
+        if (!PlotFootprintChunkUtil.isPlotFullyLoaded(world, plot)) {
+            return false;
+        }
+        UUID plotId = plot.getPlotId();
+        AssemblyWorldRegistry.clearCompletionScheduled(world, plotId);
+        releaseCompletionProgress(world, plotId);
         if (AssemblyWorldRegistry.phase(world, job.plotId()) == PlotAssemblyPhase.CLEARING) {
             BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
             ConstructionPasteOps.prepAssemblySite(
@@ -2023,46 +2075,8 @@ public final class PlotAssemblyService {
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             beginPlacingPhase(world, plugin, entityStore, tm, town, plot, job);
         }
-        List<PendingBlock> pending = job.pendingBlocks();
-        if (plot.getAssemblyPlacedBlockCount() >= pending.size()) {
-            completeAssembly(world, plugin, entityStore, town, plot, job);
-            return true;
-        }
-        int guard = 0;
-        int maxLoops = pending.size() * 3 + 16;
-        while (plot.getAssemblyPlacedBlockCount() < pending.size() && guard++ < maxLoops) {
-            PlotAssemblyFrontierRuntime rt = frontierRuntimeOrRebuild(world, job, plot, pending);
-            int pick = rt.smallestPlacementIndex();
-            if (pick < 0) {
-                rt.rebuildFrontierFromPlot(pending, plot);
-                pick = rt.smallestPlacementIndex();
-            }
-            if (pick < 0) {
-                if (bruteForcePlaceRemaining(world, plugin, town, plot, job)) {
-                    break;
-                }
-                LOGGER.atWarning().log(
-                    "instantCompleteJob: empty frontier plot %s (%d/%d placed)",
-                    plot.getPlotId(),
-                    plot.getAssemblyPlacedBlockCount(),
-                    pending.size()
-                );
-                break;
-            }
-            if (!advancePlacementAtIndex(
-                world, plugin, entityStore, town, plot, job, pick, false, null, false, true
-            ).progressed()) {
-                if (!bruteForcePlaceRemaining(world, plugin, town, plot, job)) {
-                    break;
-                }
-                break;
-            }
-        }
-        if (plot.getAssemblyPlacedBlockCount() >= pending.size()) {
-            completeAssembly(world, plugin, entityStore, town, plot, job);
-            return true;
-        }
-        return false;
+        completeAssemblyInstant(world, plugin, entityStore, town, plot, job);
+        return plot.getState() != PlotInstanceState.ASSEMBLING;
     }
 
     /**
@@ -2089,6 +2103,14 @@ public final class PlotAssemblyService {
         InstantCompleteTownResult result = new InstantCompleteTownResult();
         for (PlotInstance plot : town.getPlotInstances()) {
             if (plot.getState() != PlotInstanceState.ASSEMBLING) {
+                continue;
+            }
+            if (!PlotFootprintChunkUtil.isPlotFullyLoaded(world, plot)) {
+                LOGGER.atInfo().log(
+                    "instantComplete skipped plot %s: footprint chunks unloaded",
+                    plot.getPlotId()
+                );
+                result.failed++;
                 continue;
             }
             PlotAssemblyJob job = ensureAssemblyJob(world, plugin, town, plot, entityStore);

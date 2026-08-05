@@ -239,6 +239,9 @@ public final class PlotBuildingKindRequirements {
             return List.of();
         }
         for (String gameplayId : gameplayIdsForWorkplaceLookup(draft, plugin)) {
+            if (ProductionWorkplaceKinds.isNonWorkplaceGameplayConstruction(gameplayId)) {
+                continue;
+            }
             if (ProductionWorkplaceKinds.isMultiRoleWorkplace(gameplayId)) {
                 String gm = ProductionWorkplaceKinds.residentBindingKindForGameplayConstruction(gameplayId);
                 if (gm != null) {

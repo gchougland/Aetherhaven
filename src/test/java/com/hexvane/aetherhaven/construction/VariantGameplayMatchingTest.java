@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.construction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.gson.Gson;
@@ -9,6 +10,9 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.production.ProductionWorkplaceKinds;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
+import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -125,7 +129,139 @@ class VariantGameplayMatchingTest {
                 .contains(TownVillagerBinding.KIND_MERCHANT)
         );
         assertTrue(catalog.matchesGameplayConstruction(hobbitShop.getId(), "plot_house"));
+        assertTrue(catalog.matchesGameplayConstruction(hobbitShop.getId(), hobbitShop.getId()));
         assertTrue(ProductionWorkplaceKinds.residentBindingKindsForPlot(catalog, hobbitShop.getId()).isEmpty());
+    }
+
+    @Test
+    void variantCountsAsHouseStillMatchesOwnConstructionIdForQuests() {
+        ConstructionDefinition hobbitShop =
+            GSON.fromJson(
+                """
+                {"id":"plot_hobbit_shop","displayName":"Hobbit Shop","prefabPath":"plot_hobbit_shop.prefab.json","plotTokenItemId":"Lotr_Plot_Token_Hobbit_Shop","countsAsConstructionId":["plot_house"]}
+                """,
+                ConstructionDefinition.class
+            );
+        ConstructionCatalog catalog = ConstructionCatalog.forTests(Map.of(hobbitShop.getId(), hobbitShop));
+
+        assertTrue(catalog.matchesGameplayConstruction(hobbitShop.getId(), hobbitShop.getId()));
+        assertFalse(catalog.matchesGameplayConstruction(hobbitShop.getId(), AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL));
+    }
+
+    @Test
+    void dualWorkplaceAndHouseVariantExposesOnlyJobRole() {
+        ConstructionDefinition constructionCo =
+            GSON.fromJson(
+                """
+                {"id":"plot_stormwind_construction_co","displayName":"Stormwind Construction Co","prefabPath":"Stormwind/plot_stormwind_construction_co.prefab.json","plotTokenItemId":"Aetherhaven_Plot_Token","countsAsConstructionId":["plot_builders_hut","plot_house"]}
+                """,
+                ConstructionDefinition.class
+            );
+        ConstructionCatalog catalog = ConstructionCatalog.forTests(Map.of(constructionCo.getId(), constructionCo));
+
+        List<String> roles =
+            ProductionWorkplaceKinds.residentBindingKindsForPlot(catalog, constructionCo.getId());
+
+        assertEquals(List.of(TownVillagerBinding.KIND_BUILDER), roles);
+    }
+
+    @Test
+    void dualShopAndHouseVariantExposesOnlyShopJobRole() {
+        ConstructionDefinition generalStore =
+            GSON.fromJson(
+                """
+                {"id":"plot_stormwind_general_store","displayName":"Stormwind General Store","prefabPath":"Stormwind/plot_stormwind_general_store.prefab.json","plotTokenItemId":"Aetherhaven_Plot_Token","countsAsConstructionId":["plot_market_stall","plot_house"]}
+                """,
+                ConstructionDefinition.class
+            );
+        ConstructionCatalog catalog = ConstructionCatalog.forTests(Map.of(generalStore.getId(), generalStore));
+
+        List<String> roles =
+            ProductionWorkplaceKinds.residentBindingKindsForPlot(catalog, generalStore.getId());
+
+        assertEquals(List.of(TownVillagerBinding.KIND_MERCHANT), roles);
+    }
+
+    @Test
+    void crossmodShopkeepMatchingPlotHouseDoesNotBleedOntoDualWorkplacePlots() {
+        ConstructionDefinition lotrShop =
+            GSON.fromJson(
+                """
+                {"id":"plot_lotr_shop","displayName":"LOTR Shop","prefabPath":"plot_lotr_shop.prefab.json","plotTokenItemId":"Lotr_Plot_Token","countsAsConstructionId":["plot_house"]}
+                """,
+                ConstructionDefinition.class
+            );
+        ConstructionDefinition constructionCo =
+            GSON.fromJson(
+                """
+                {"id":"plot_stormwind_construction_co","displayName":"Stormwind Construction Co","prefabPath":"Stormwind/plot_stormwind_construction_co.prefab.json","plotTokenItemId":"Aetherhaven_Plot_Token","countsAsConstructionId":["plot_builders_hut","plot_house"]}
+                """,
+                ConstructionDefinition.class
+            );
+        ConstructionCatalog catalog =
+            ConstructionCatalog.forTests(
+                Map.of(
+                    lotrShop.getId(),
+                    lotrShop,
+                    constructionCo.getId(),
+                    constructionCo
+                )
+            );
+        VillagerDefinition lotrShopkeep =
+            GSON.fromJson(
+                """
+                {"npcRoleId":"Lotr_Shopkeep","dialogueVillagerKind":"lotr.shopkeep","workConstructionId":"plot_lotr_shop"}
+                """,
+                VillagerDefinition.class
+            );
+        VillagerDefinitionCatalog villagers =
+            VillagerDefinitionCatalog.forTests(Map.of(lotrShopkeep.getNpcRoleId(), lotrShopkeep));
+
+        assertNull(
+            ProductionWorkplaceKinds.residentBindingKindFromVillagerCatalogForTests(
+                villagers,
+                catalog,
+                AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE
+            )
+        );
+        assertEquals(
+            List.of(TownVillagerBinding.KIND_BUILDER),
+            ProductionWorkplaceKinds.residentBindingKindsForPlotForTests(catalog, villagers, constructionCo.getId())
+        );
+    }
+
+    @Test
+    void crossmodShopCountsAsHouseOnlyCanAssignShopkeepToOwnPlot() {
+        ConstructionDefinition hobbitShop =
+            GSON.fromJson(
+                """
+                {"id":"plot_hobbit_shop","displayName":"Hobbit Shop","prefabPath":"plot_hobbit_shop.prefab.json","plotTokenItemId":"Lotr_Plot_Token_Hobbit_Shop","countsAsConstructionId":["plot_house"]}
+                """,
+                ConstructionDefinition.class
+            );
+        VillagerDefinition bilbo =
+            GSON.fromJson(
+                """
+                {"npcRoleId":"Lotr_Bilbo","dialogueVillagerKind":"lotr.shopkeep","workConstructionId":"plot_hobbit_shop"}
+                """,
+                VillagerDefinition.class
+            );
+        ConstructionCatalog catalog = ConstructionCatalog.forTests(Map.of(hobbitShop.getId(), hobbitShop));
+        VillagerDefinitionCatalog villagers = VillagerDefinitionCatalog.forTests(Map.of(bilbo.getNpcRoleId(), bilbo));
+
+        assertEquals(
+            List.of("lotr.shopkeep"),
+            ProductionWorkplaceKinds.residentBindingKindsForPlotForTests(catalog, villagers, hobbitShop.getId())
+        );
+        assertEquals(
+            "plot_hobbit_shop",
+            ProductionWorkplaceKinds.gameplayConstructionIdForResidentKindForTests(
+                catalog,
+                villagers,
+                hobbitShop.getId(),
+                "lotr.shopkeep"
+            )
+        );
     }
 
     @Test

@@ -495,7 +495,8 @@ public final class DialogueActionExecutor {
         if (touristPromoteUuid != null) {
             TouristPortalTickService.promoteTouristToCitizen(town, tm, touristPromoteUuid, world, store, plugin);
         }
-        if (store != null && isInnVisitorJobQuestForResidentPromotion(qid)) {
+        if (store != null && (isInnVisitorJobQuestForResidentPromotion(qid) || InnVisitorShopPromotion.isInnPoolShopQuest(plugin, qid))) {
+            InnVisitorShopPromotion.tryPromoteReadyWorkplaces(world, plugin, town, tm);
             InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store, false);
         }
         if (rewardPlayerRef != null && beneficiaryNpcUuid != null && store != null) {

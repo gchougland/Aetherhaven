@@ -29,6 +29,8 @@ public final class TouristPortalTravelPlayerState implements Component<EntitySto
     private static volatile ComponentType<EntityStore, TouristPortalTravelPlayerState> componentType;
 
     private boolean wasOnPortal;
+    private int lastProbeBlockX = Integer.MIN_VALUE;
+    private int lastProbeBlockZ = Integer.MIN_VALUE;
 
     @Nonnull
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
@@ -54,6 +56,16 @@ public final class TouristPortalTravelPlayerState implements Component<EntitySto
 
     public void setWasOnPortal(boolean wasOnPortal) {
         this.wasOnPortal = wasOnPortal;
+    }
+
+    /** True when the player has not moved to a new block column since the last stand probe. */
+    public boolean sameProbeColumn(int blockX, int blockZ) {
+        return lastProbeBlockX == blockX && lastProbeBlockZ == blockZ;
+    }
+
+    public void setLastProbeBlock(int blockX, int blockZ) {
+        this.lastProbeBlockX = blockX;
+        this.lastProbeBlockZ = blockZ;
     }
 
     @Nonnull

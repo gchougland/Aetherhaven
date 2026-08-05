@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.map.TownMapMarkerCache;
 import com.hexvane.aetherhaven.placement.CharterRelocationSession;
 import com.hexvane.aetherhaven.placement.CharterRelocationSessions;
 import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
@@ -369,6 +370,7 @@ public final class CharterTownPage extends AetherhavenInteractiveCustomUIPage<Ch
             }
             return;
         }
+        TownMapMarkerCache.scheduleRebuild(world);
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (pr != null) {
             pr.sendMessage(

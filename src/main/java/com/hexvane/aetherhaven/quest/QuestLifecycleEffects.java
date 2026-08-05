@@ -4,14 +4,17 @@ import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.inn.InnkeeperSpawnService;
 import com.hexvane.aetherhaven.inn.InnPoolService;
+import com.hexvane.aetherhaven.inn.InnVisitorShopPromotion;
 import com.hexvane.aetherhaven.guild.GuildHallCompletion;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.quest.data.QuestEffectEntry;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
+import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -28,6 +31,8 @@ public final class QuestLifecycleEffects {
     /** Alias for {@link #EFFECT_REFRESH_INN_POOL} — existing quest JSON may still reference this name. */
     @Deprecated
     public static final String EFFECT_SPAWN_GUILD_MASTER_IF_READY = "spawn_guild_master_if_ready";
+    /** After a shop workplace completes or its quest finishes — promotes matching inn-pool visitors. */
+    public static final String EFFECT_TRY_PROMOTE_INN_POOL_SHOPS = "try_promote_inn_pool_shops";
     public static final String EFFECT_ACTIVATE_GUILD_HALL_IF_READY = "activate_guild_hall_if_ready";
 
     private QuestLifecycleEffects() {}
@@ -88,6 +93,7 @@ public final class QuestLifecycleEffects {
                 case EFFECT_REFRESH_INN_POOL, EFFECT_SPAWN_GUILD_MASTER_IF_READY ->
                     InnPoolService.tryFillOpenSlotsAfterTownStateChange(world, plugin, town);
                 case EFFECT_ACTIVATE_GUILD_HALL_IF_READY -> activateGuildHall(world, plugin, town, tm);
+                case EFFECT_TRY_PROMOTE_INN_POOL_SHOPS -> tryPromoteInnPoolShops(world, plugin, town, tm);
                 default -> LOGGER.atWarning().log("Unknown quest lifecycle effect: %s (quest %s)", name, def.idOrEmpty());
             }
         }
@@ -127,6 +133,19 @@ public final class QuestLifecycleEffects {
         var plot = town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(), com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL);
         if (plot != null) {
             GuildHallCompletion.onGuildHallBuilt(world, plugin, town, plot.getPlotId(), tm);
+        }
+    }
+
+    private static void tryPromoteInnPoolShops(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm
+    ) {
+        InnVisitorShopPromotion.tryPromoteReadyWorkplaces(world, plugin, town, tm);
+        Store<EntityStore> store = world.getEntityStore() != null ? world.getEntityStore().getStore() : null;
+        if (store != null) {
+            InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store, false);
         }
     }
 }

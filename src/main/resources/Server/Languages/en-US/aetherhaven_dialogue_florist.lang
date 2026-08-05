@@ -22,16 +22,16 @@ aetherhaven.dialogue.aetherhaven_florist.root.c_shop_offer=I want to help you op
 aetherhaven.dialogue.aetherhaven_florist.root.c_goodbye=That is all for now. I will see you later.
 
 aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.speaker=Ivy Bloomwell
-aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.body=My little plants deserve better than crates and cart wheels. I need a real flower shop with room to grow, display, and breathe. I sketched the layout on the road here. If you will raise it for the town, I can share those plans with you.
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.body=My little plants deserve better than crates and cart wheels. I need a real flower shop with room to grow, display, and breathe. Take this token, stake the plot with your staff, and pay the materials listed on the sign. When it stands, meet me at the counter so we can close the order.
 aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.c0=We will get your shop built.
 aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.c1=Not right now. I need a bit more time.
 
 aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.speaker=Ivy Bloomwell
-aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.body=Here are my shop plans. Study them at the town planning desk, craft a plot token when you are ready, and stake the shop where sunlight can reach the cuttings. I will wait at the inn with my pots until the door is real.
+aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.body=Good. I will wait at the inn with my pots until the door is real. Stake the shop where sunlight can reach the cuttings, then meet me at the counter when the shelves are up.
 aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.c0=See you when the shelves are up.
 
 aetherhaven.dialogue.aetherhaven_florist.ivy_building.speaker=Ivy Bloomwell
-aetherhaven.dialogue.aetherhaven_florist.ivy_building.body=The seedlings are getting restless in their trays. Have you learned the plans and started the build yet, or should I stop counting on a shop that might not happen?
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.body=The seedlings are getting restless in their trays. Have you staked the plot and started the build yet, or should I stop counting on a shop that might not happen?
 aetherhaven.dialogue.aetherhaven_florist.ivy_building.c0=I need to drop the quest for now.
 aetherhaven.dialogue.aetherhaven_florist.ivy_building.c1=I am still working on it and I will keep going.
 

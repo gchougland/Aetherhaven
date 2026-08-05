@@ -1,11 +1,7 @@
 package com.hexvane.aetherhaven.map;
 
-import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
-import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.protocol.NetworkChannel;
 import com.hypixel.hytale.protocol.packets.worldmap.MapMarker;
 import com.hypixel.hytale.protocol.packets.worldmap.UpdateWorldMap;
@@ -34,16 +30,8 @@ public final class TownMapMarkerProvider implements WorldMapManager.MarkerProvid
 
     @Override
     public void update(@Nonnull World world, @Nonnull Player player, @Nonnull MarkersCollector collector) {
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            return;
-        }
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        String worldName = world.getName();
-        for (TownRecord town : tm.allTowns()) {
-            if (worldName.equals(town.getWorldName())) {
-                collector.addIgnoreViewDistance(buildMarker(world, town));
-            }
+        for (MapMarker marker : TownMapMarkerCache.markersForWorld(world.getName())) {
+            collector.addIgnoreViewDistance(marker);
         }
     }
 

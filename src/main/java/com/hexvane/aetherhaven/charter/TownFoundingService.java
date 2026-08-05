@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.charter;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.placement.CharterRelocationService;
+import com.hexvane.aetherhaven.map.TownMapMarkerCache;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.ResidentRegistryService;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -56,6 +57,7 @@ public final class TownFoundingService {
         spawnElder(world, town, tm);
         town.setElderSpawned(true);
         tm.updateTown(town);
+        TownMapMarkerCache.scheduleRebuild(world);
         return town;
     }
 
@@ -93,6 +95,7 @@ public final class TownFoundingService {
         spawnElder(world, town, tm);
         town.setElderSpawned(true);
         tm.updateTown(town);
+        TownMapMarkerCache.scheduleRebuild(world);
         return town;
     }
 

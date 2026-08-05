@@ -47,7 +47,12 @@ public final class PlotPlacementPreviewSync {
             return;
         }
 
-        Vector3i floored = PlotPlacementClientPrefabPreview.flooredOrigin(prefabOriginWorld);
+        Vector3i floored =
+            PlotPlacementClientPrefabPreview.flooredClientPreviewOrigin(
+                prefabOriginWorld,
+                session,
+                session.getPrefabYaw()
+            );
         boolean groupNeedFull =
             placerNeedFull
                 || !session.hasSpectatorPreviewActive()
@@ -75,9 +80,21 @@ public final class PlotPlacementPreviewSync {
             stillVisible.add(viewerUuid);
             boolean viewerNeedFull = groupNeedFull || !active.contains(viewerUuid);
             if (viewerNeedFull) {
-                PlotPlacementClientPrefabPreview.sendFullToViewer(viewer, world, prefabOriginWorld, payload);
+                PlotPlacementClientPrefabPreview.sendFullToViewer(
+                    viewer,
+                    world,
+                    prefabOriginWorld,
+                    payload,
+                    session.getPrefabYaw()
+                );
             } else if (originChanged) {
-                PlotPlacementClientPrefabPreview.sendPositionOnlyToViewer(viewer, world, prefabOriginWorld);
+                PlotPlacementClientPrefabPreview.sendPositionOnlyToViewer(
+                    viewer,
+                    world,
+                    prefabOriginWorld,
+                    payload,
+                    session.getPrefabYaw()
+                );
             } else {
                 continue;
             }

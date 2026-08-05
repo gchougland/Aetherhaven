@@ -45,10 +45,12 @@ public final class TouristPortalTravelService {
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull Vector3d feet
     ) {
-        TouristPortalRegistrySync.refreshTravelNetwork(world, plugin);
         int fx = (int) Math.floor(feet.x);
         int fy = (int) Math.floor(feet.y);
         int fz = (int) Math.floor(feet.z);
+        if (!TouristPortalBlockUtil.hasPortalBlockNear(world, fx, fy, fz)) {
+            return null;
+        }
         for (int dy = -2; dy <= 1; dy++) {
             Vector3i probe = new Vector3i(fx, fy + dy, fz);
             Vector3i base = TouristPortalBlockUtil.resolvePortalBaseBlock(world, probe);
@@ -59,7 +61,7 @@ public final class TouristPortalTravelService {
             if (!isActivePortal(world, plugin, record)) {
                 continue;
             }
-            if (TouristPortalBlockUtil.isNearPortalDespawn(world, record.getBlockPosition(), feet)) {
+            if (TouristPortalBlockUtil.isNearPortalStand(record.getBlockPosition(), feet)) {
                 return record;
             }
         }
@@ -154,7 +156,6 @@ public final class TouristPortalTravelService {
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull UUID portalId
     ) {
-        TouristPortalRegistrySync.refreshTravelNetwork(world, plugin);
         TouristPortalRecord portal =
             AetherhavenWorldRegistries.getOrCreateTouristPortalRegistry(world, plugin).get(portalId);
         if (portal == null || !isActivePortal(world, plugin, portal)) {

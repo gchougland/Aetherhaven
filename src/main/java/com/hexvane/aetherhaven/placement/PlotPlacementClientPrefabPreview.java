@@ -1,7 +1,9 @@
 package com.hexvane.aetherhaven.placement;
 
 import com.hexvane.aetherhaven.community.CommunityPrefabSafety;
+import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.Axis;
@@ -48,7 +50,10 @@ public final class PlotPlacementClientPrefabPreview {
     public record Payload(
         @Nullable BlockChange[] blocksChange,
         @Nullable FluidChange[] fluidsChange,
-        @Nullable ClipboardEntityChange[] entityChanges
+        @Nullable ClipboardEntityChange[] entityChanges,
+        int anchorX,
+        int anchorY,
+        int anchorZ
     ) {}
 
     public static void hide(@Nonnull PlayerRef playerRef) {
@@ -65,13 +70,14 @@ public final class PlotPlacementClientPrefabPreview {
         @Nonnull String prefabPathKey,
         int rotationSteps,
         @Nonnull Vector3i prefabOriginWorld,
+        @Nonnull Rotation placementYaw,
         @Nonnull PlotPlacementSession session
     ) {
         Payload payload = resolvePayload(prefabPathKey, rotationSteps, session);
         if (payload == null) {
             return false;
         }
-        writeShow(playerRef, flooredPosition(prefabOriginWorld), payload);
+        writeShow(playerRef, flooredPosition(resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw)), payload);
         return true;
     }
 
@@ -80,8 +86,13 @@ public final class PlotPlacementClientPrefabPreview {
      *
      * @return {@code true} when a packet was sent
      */
-    public static boolean sendPositionOnly(@Nonnull PlayerRef playerRef, @Nonnull Vector3i prefabOriginWorld) {
-        Vector3f pos = flooredPosition(prefabOriginWorld);
+    public static boolean sendPositionOnly(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Vector3i prefabOriginWorld,
+        @Nonnull Payload payload,
+        @Nonnull Rotation placementYaw
+    ) {
+        Vector3f pos = flooredPosition(resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw));
         ShowTriggerVolumePastePrefabPreview packet = new ShowTriggerVolumePastePrefabPreview();
         packet.position = pos;
         applyTintFromPlayerPosition(playerRef, packet);
@@ -96,9 +107,15 @@ public final class PlotPlacementClientPrefabPreview {
         @Nonnull PlayerRef viewer,
         @Nonnull World world,
         @Nonnull Vector3i prefabOriginWorld,
-        @Nonnull Payload payload
+        @Nonnull Payload payload,
+        @Nonnull Rotation placementYaw
     ) {
-        writeShowToViewer(viewer, world, flooredPosition(prefabOriginWorld), payload);
+        writeShowToViewer(
+            viewer,
+            world,
+            flooredPosition(resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw)),
+            payload
+        );
     }
 
     /**
@@ -107,13 +124,35 @@ public final class PlotPlacementClientPrefabPreview {
     public static void sendPositionOnlyToViewer(
         @Nonnull PlayerRef viewer,
         @Nonnull World world,
-        @Nonnull Vector3i prefabOriginWorld
+        @Nonnull Vector3i prefabOriginWorld,
+        @Nonnull Payload payload,
+        @Nonnull Rotation placementYaw
     ) {
-        Vector3f pos = flooredPosition(prefabOriginWorld);
+        Vector3i clientPos = resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw);
+        Vector3f pos = flooredPosition(clientPos);
         ShowTriggerVolumePastePrefabPreview packet = new ShowTriggerVolumePastePrefabPreview();
         packet.position = pos;
-        applyTintFromWorldPosition(world, MathUtil.floor(prefabOriginWorld.x), MathUtil.floor(prefabOriginWorld.y), MathUtil.floor(prefabOriginWorld.z), packet);
+        applyTintFromWorldPosition(world, MathUtil.floor(clientPos.x), MathUtil.floor(clientPos.y), MathUtil.floor(clientPos.z), packet);
         viewer.getPacketHandler().write(packet);
+    }
+
+    /**
+     * {@link ShowTriggerVolumePastePrefabPreview} pastes at the prefab anchor; plot wireframes use prefab buffer
+     * (0,0,0) at {@code prefabBufferOriginWorld}.
+     */
+    @Nonnull
+    public static Vector3i resolveClientPreviewPosition(
+        @Nonnull Vector3i prefabBufferOriginWorld,
+        @Nonnull Payload payload,
+        @Nonnull Rotation placementYaw
+    ) {
+        Vector3i anchorOffset =
+            PrefabLocalOffset.rotate(placementYaw, payload.anchorX(), payload.anchorY(), payload.anchorZ());
+        return new Vector3i(
+            prefabBufferOriginWorld.x + anchorOffset.x,
+            prefabBufferOriginWorld.y + anchorOffset.y,
+            prefabBufferOriginWorld.z + anchorOffset.z
+        );
     }
 
     @Nonnull
@@ -132,6 +171,19 @@ public final class PlotPlacementClientPrefabPreview {
 
     public static void clearSessionCache(@Nonnull PlotPlacementSession session) {
         session.clearClientPrefabPreviewCache();
+    }
+
+    @Nonnull
+    public static Vector3i flooredClientPreviewOrigin(
+        @Nonnull Vector3i prefabBufferOriginWorld,
+        @Nonnull PlotPlacementSession session,
+        @Nonnull Rotation placementYaw
+    ) {
+        Payload payload = session.getClientPrefabPreviewPayload();
+        if (payload == null) {
+            return flooredOrigin(prefabBufferOriginWorld);
+        }
+        return flooredOrigin(resolveClientPreviewPosition(prefabBufferOriginWorld, payload, placementYaw));
     }
 
     @Nullable
@@ -172,7 +224,14 @@ public final class PlotPlacementClientPrefabPreview {
         }
         EditorBlocksChange editor = rotated.toPacket();
         Payload payload =
-            new Payload(editor.blocksChange, editor.fluidsChange, editor.entityChanges);
+            new Payload(
+                editor.blocksChange,
+                editor.fluidsChange,
+                editor.entityChanges,
+                selection.getAnchorX(),
+                selection.getAnchorY(),
+                selection.getAnchorZ()
+            );
         session.setClientPrefabPreviewCache(pathKey, steps, payload);
         return payload;
     }

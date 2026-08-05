@@ -26,16 +26,16 @@ aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_offer=I want to help
 aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_goodbye=That is all for now. I will see you later.
 
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.speaker=Vaelith Prismshade
-aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.body=My collection cannot stay in satchels forever, pressed against one another like strangers in a dark room. I need a sanctum where others may admire what the earth has grown. I drew the lattice of the shop long ago. If you will raise it for the town, I will share those plans.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.body=My collection cannot stay in satchels forever, pressed against one another like strangers in a dark room. I need a sanctum where others may admire what the earth has grown. Take this token, stake the plot with your staff, and pay the materials listed on the sign. When it stands, meet me at the counter so we can close the order.
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.c0=We will get your sanctum built.
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.c1=Not right now. I need a bit more time.
 
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.speaker=Vaelith Prismshade
-aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.body=Take these plans. Learn them at the town planning desk, craft a plot token when the lattice allows, and stake the shop where folk can reach it without jostling what sleeps inside the glass. I will wait at the inn until the walls hum properly.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.body=Good. Stake the shop where folk can reach it without jostling what sleeps inside the glass. I will wait at the inn until the walls hum properly.
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.c0=See you when the sanctum glows.
 
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.speaker=Vaelith Prismshade
-aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.body=The stones wait. So do I. Have you learned the plans and begun the build, or shall I fold my hopes back into the satchel for a while?
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.body=The stones wait. So do I. Have you staked the plot and begun the build, or shall I fold my hopes back into the satchel for a while?
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.c0=I need to drop the quest for now.
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.c1=I am still working on it and I will keep going.
 

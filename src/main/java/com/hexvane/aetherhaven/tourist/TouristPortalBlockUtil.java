@@ -31,6 +31,39 @@ public final class TouristPortalBlockUtil {
         return type != null && TownPortalTravelColor.isTouristPortalBlockTypeId(type.getId());
     }
 
+    /** Stand radius for player portal UI detection (horizontal, from base block center). */
+    private static final double PLAYER_STAND_RADIUS_SQ = 4.0;
+
+    /**
+     * True if any in-memory block at {@code (fx, fy + dy, fz)} for {@code dy} in {@code [-2, 1]} is a tourist portal
+     * type. O(4) chunk reads — no registry or plot scan.
+     */
+    public static boolean hasPortalBlockNear(@Nonnull World world, int fx, int fy, int fz) {
+        for (int dy = -2; dy <= 1; dy++) {
+            if (isTouristPortalBlock(blockTypeIfLoaded(world, fx, fy + dy, fz))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Lightweight stand check for player portal detection. Uses horizontal distance to the base block center only
+     * (no layout / stand-column search). NPC despawn continues to use {@link #isNearPortalDespawn}.
+     */
+    public static boolean isNearPortalStand(@Nonnull Vector3i blockPos, @Nonnull Vector3d feet) {
+        double cx = blockPos.x + 0.5;
+        double cz = blockPos.z + 0.5;
+        double dx = feet.x - cx;
+        double dz = feet.z - cz;
+        return dx * dx + dz * dz <= PLAYER_STAND_RADIUS_SQ;
+    }
+
+    /** @visibleForTesting */
+    static double playerStandRadiusSqForTesting() {
+        return PLAYER_STAND_RADIUS_SQ;
+    }
+
     /**
      * True for the non-filler base cell of a multi-block portal. Filler voxels share the block type id but must not
      * create their own {@link TouristPortalRecord}.

@@ -97,7 +97,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     /** Shorter still on Moderation (refresh row + two action button rows). */
     private static final int BUILDING_LIST_HEIGHT_MODERATION = 340;
     private static final int BUILDING_LIST_FOOTER_GAP = 8;
-    /** Visible rows per page on Community / Moderation (Custom UI has no list virtualization). */
+    /** Visible rows per page on Core / Decorations / Community / Moderation (Custom UI has no list virtualization). */
     private static final int MARKETPLACE_PAGE_SIZE = 12;
     /** Delayed attempts so {@code #PrefabPreview} is mounted before {@link BuilderToolPrefabPreview} arrives. */
     private static final long[] PREFAB_PREVIEW_RETRY_DELAYS_MS = {50L, 100L, 150L};
@@ -112,6 +112,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     private boolean deferPreviewToSendUpdate;
     private int prefabPreviewSendSerial;
     private int marketplacePageIndex;
+    private int catalogPageIndex;
     @Nonnull
     private String searchQuery = "";
     @Nonnull
@@ -172,6 +173,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         boolean communityTab = activeTab == Tab.COMMUNITY;
         boolean favoritesTab = activeTab == Tab.FAVORITES;
         boolean moderationTab = activeTab == Tab.MODERATION;
+        boolean catalogTab = activeTab == Tab.CORE || activeTab == Tab.DECORATIONS;
         boolean marketplaceTab = communityTab || moderationTab;
         boolean marketplaceLoading = marketplaceTab && marketplaceRefreshInFlight.get();
         CommunityCatalogService communityCatalog = plugin.getCommunityCatalogService();
@@ -184,6 +186,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         List<GroupEntry> allGroups = buildGroupsForTab(plugin, catalog, ref, store, communityCatalog, moderation);
         allGroups = filterGroupsBySearch(allGroups, communityCatalog, moderation, communityTab, moderationTab, favoritesTab);
         int marketplacePageCount = 1;
+        int catalogPageCount = 1;
         List<GroupEntry> groups = allGroups;
         if (marketplaceTab) {
             marketplacePageCount = Math.max(1, (allGroups.size() + MARKETPLACE_PAGE_SIZE - 1) / MARKETPLACE_PAGE_SIZE);
@@ -196,8 +199,19 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             int from = marketplacePageIndex * MARKETPLACE_PAGE_SIZE;
             int to = Math.min(from + MARKETPLACE_PAGE_SIZE, allGroups.size());
             groups = from < to ? allGroups.subList(from, to) : List.of();
+        } else if (catalogTab) {
+            catalogPageCount = Math.max(1, (allGroups.size() + MARKETPLACE_PAGE_SIZE - 1) / MARKETPLACE_PAGE_SIZE);
+            if (catalogPageIndex >= catalogPageCount) {
+                catalogPageIndex = catalogPageCount - 1;
+            }
+            if (catalogPageIndex < 0) {
+                catalogPageIndex = 0;
+            }
+            int from = catalogPageIndex * MARKETPLACE_PAGE_SIZE;
+            int to = Math.min(from + MARKETPLACE_PAGE_SIZE, allGroups.size());
+            groups = from < to ? allGroups.subList(from, to) : List.of();
         }
-        ensureSelection(allGroups);
+        ensureSelection(allGroups, activeTab != Tab.DECORATIONS);
 
         boolean showStyleFilters = !moderationTab;
         bindStyleFilters(commandBuilder, eventBuilder, catalog, communityTab ? communityCatalog : null, showStyleFilters);
@@ -460,8 +474,10 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         boolean showCommunityActions =
             variant != null && (communityTab || favoritesCommunitySelected);
 
+        boolean showPaginationRow = marketplaceTab || catalogTab;
         commandBuilder.set("#StyleFilterColumn.Visible", showStyleFilters);
-        commandBuilder.set("#MarketplaceRefreshRow.Visible", marketplaceTab);
+        commandBuilder.set("#MarketplaceRefreshRow.Visible", showPaginationRow);
+        commandBuilder.set("#MarketplaceRefreshButton.Visible", marketplaceTab);
         commandBuilder.set("#CommunityActionRow.Visible", showCommunityActions);
         commandBuilder.set("#ModerationActionRow.Visible", moderationTab);
         commandBuilder.set("#CostLine.Visible", false);
@@ -487,9 +503,19 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                 commandBuilder.set("#MarketplacePageNext.Disabled", marketplacePageIndex >= marketplacePageCount - 1);
             }
             commandBuilder.set("#MarketplaceRefreshButton.Disabled", marketplaceLoading);
+        } else if (catalogTab) {
+            int pageDisplay = catalogPageIndex + 1;
+            commandBuilder.set(
+                "#MarketplacePageLabel.TextSpans",
+                Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.marketplacePageLabel")
+                    .param("page", Message.raw(String.valueOf(pageDisplay)))
+                    .param("pages", Message.raw(String.valueOf(catalogPageCount)))
+            );
+            commandBuilder.set("#MarketplacePagePrev.Disabled", catalogPageIndex <= 0);
+            commandBuilder.set("#MarketplacePageNext.Disabled", catalogPageIndex >= catalogPageCount - 1);
         }
-        // Shorter list when marketplace or community action rows are visible.
-        applyBuildingListHeight(commandBuilder, marketplaceTab, showCommunityActions, moderationTab);
+        // Shorter list when pagination or community action rows are visible.
+        applyBuildingListHeight(commandBuilder, showPaginationRow, showCommunityActions, moderationTab);
         if (communityTab || favoritesCommunitySelected) {
             boolean hasSelection = variant != null;
             CommunityManifestEntry selectedCommunity =
@@ -795,12 +821,14 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         if (data.searchQuery != null) {
             searchQuery = data.searchQuery;
             marketplacePageIndex = 0;
+            catalogPageIndex = 0;
             refresh(ref, store);
             return;
         }
         if (data.sortMode != null) {
             communitySort = CommunityCatalogSort.fromValue(data.sortMode);
             marketplacePageIndex = 0;
+            catalogPageIndex = 0;
             refresh(ref, store);
             return;
         }
@@ -828,8 +856,12 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                 selectedGroupKey = null;
                 variantIndex = 0;
                 marketplacePageIndex = 0;
+                catalogPageIndex = 0;
                 communityPreviewConstructionId = null;
                 moderationPreviewSubmissionId = null;
+                if (activeTab == Tab.CORE || activeTab == Tab.DECORATIONS) {
+                    pendingPreviewPrefabKey = null;
+                }
                 if (activeTab == Tab.MODERATION) {
                     AetherhavenPlugin modPlugin = AetherhavenPlugin.get();
                     UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -882,20 +914,38 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             case "VariantPrev" -> variantIndex--;
             case "VariantNext" -> variantIndex++;
             case "MarketplacePagePrev" -> {
-                if (marketplacePageIndex > 0) {
+                if (activeTab == Tab.CORE || activeTab == Tab.DECORATIONS) {
+                    if (catalogPageIndex > 0) {
+                        catalogPageIndex--;
+                    }
+                    selectedGroupKey = null;
+                    variantIndex = 0;
+                    pendingPreviewPrefabKey = null;
+                } else if (marketplacePageIndex > 0) {
                     marketplacePageIndex--;
                 }
             }
-            case "MarketplacePageNext" -> marketplacePageIndex++;
+            case "MarketplacePageNext" -> {
+                if (activeTab == Tab.CORE || activeTab == Tab.DECORATIONS) {
+                    catalogPageIndex++;
+                    selectedGroupKey = null;
+                    variantIndex = 0;
+                    pendingPreviewPrefabKey = null;
+                } else {
+                    marketplacePageIndex++;
+                }
+            }
             case "StyleFilterToggle" -> {
                 applyStyleFilterToggle(data);
                 marketplacePageIndex = 0;
+                catalogPageIndex = 0;
                 selectedGroupKey = null;
                 variantIndex = 0;
             }
             case "CommunityMissingModsToggle" -> {
                 showCommunityBuildsWithMissingMods = Boolean.TRUE.equals(data.checked);
                 marketplacePageIndex = 0;
+                catalogPageIndex = 0;
                 selectedGroupKey = null;
                 variantIndex = 0;
                 communityPreviewConstructionId = null;
@@ -1098,15 +1148,28 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         refresh(ref, store);
     }
 
-    private void ensureSelection(@Nonnull List<GroupEntry> groups) {
+    private void ensureSelection(@Nonnull List<GroupEntry> groups, boolean autoSelectFirst) {
         if (groups.isEmpty()) {
             selectedGroupKey = null;
             variantIndex = 0;
             return;
         }
-        if (selectedGroupKey == null || findGroup(groups, selectedGroupKey) == null) {
-            selectedGroupKey = groups.get(0).groupKey();
-            variantIndex = 0;
+        if (selectedGroupKey == null) {
+            if (autoSelectFirst) {
+                selectedGroupKey = groups.get(0).groupKey();
+                variantIndex = 0;
+            }
+            return;
+        }
+        if (findGroup(groups, selectedGroupKey) == null) {
+            if (autoSelectFirst) {
+                selectedGroupKey = groups.get(0).groupKey();
+                variantIndex = 0;
+            } else {
+                selectedGroupKey = null;
+                variantIndex = 0;
+            }
+            return;
         }
         GroupEntry group = findGroup(groups, selectedGroupKey);
         if (group != null) {

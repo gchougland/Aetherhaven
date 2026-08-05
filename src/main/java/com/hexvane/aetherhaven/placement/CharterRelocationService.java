@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.placement;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.map.TownMapMarkerCache;
 import com.hexvane.aetherhaven.plot.CharterBlock;
 import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -122,6 +123,7 @@ public final class CharterRelocationService {
         TownTerritoryClaims.shiftAllClaims(town, deltaCx, deltaCz);
         town.setCharterPosition(a.x, a.y, a.z);
         tm.updateTown(town);
+        TownMapMarkerCache.scheduleRebuild(world);
 
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (pr != null) {

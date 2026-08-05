@@ -41,6 +41,7 @@
 
 ### Fixed
 
+- **Inn pool guild master priority** — The guild master no longer hard-prioritizes the first inn visitor slot after town hall (or during the guild hall quest). Spawn order uses `innPoolWeight` like other villagers.
 - **Plot token salvaging** — Unified plot tokens (community buildings, variant prefabs) and missing legacy tokens (guild hall, player shop, tourist portal) can be salvaged for 5 gold coins again at the salvage bench.
 - **Plot crafting favorites tab** — Community favorites now load their icons and Load preview works on the Favorites tab.
 - **Important spots** — Plot creator spots snap to the right surface when you click blocks, half blocks, carpets, or chairs.
@@ -58,6 +59,11 @@
 - **Duplicate town villagers** — The same person no longer appears twice in the Town Journal or on town record shelves after they die and come back.
 - **Reconstruct and move building** — Rebuilding or moving a building only clears blocks that belong to that building. Empty space inside the plot is left alone.
 - **Morning tax notice** — Town members now get a chat message when daily taxes are collected instead of a small on screen toast.
+- **Dual-type workplace UI** — Buildings that count as both a job plot and `plot_house` no longer pick up extra crossmod worker slots from the shared house alias (for example a LOTR shopkeep row on Stormwind workplaces). Crossmod shops that count only as `plot_house` still expose a worker slot when a villager’s `workConstructionId` matches that shop’s building id.
+- **Crossmod plot quest checks** — Dialogue and quest objectives that reference a variant building id (for example `plot_hobbit_shop`) recognize the completed plot again when that building uses `countsAsConstructionId` for house residency.
+- **Crossmod inn-pool shop promotion** — Workplace promotion for inn-pool villagers (for example Bilbo at `plot_hobbit_shop`) matches the villager's `workConstructionId` stored on the plot, not the first generic `plot_house` in town. Crossmod shop quests can call the `try_promote_inn_pool_shops` lifecycle effect on complete.
+- **Crossmod shop promotion on generic houses** — Completing any `plot_house` no longer triggers inn-pool shop promotion for crossmod shops whose building id only *counts as* house (for example Bilbo before `plot_hobbit_shop` is built). Inn morning fill also skips unregistered crossmod NPC roles instead of stopping the whole visitor roll.
+- **Starter town debug command** — `/aetherhaven startertown minimal` no longer auto-completes crossmod shop quests or spawns crossmod workers when only a generic `plot_house` was generated (same alias-direction bug as inn promotion).
 
 ## [2.6.0] - 7/27/2026
 
@@ -350,6 +356,7 @@
 
 ### Fixed
 
+- **finishassembly speed** `/ah plots finishassembly` and the journal “Finish one building now” action no longer simulate incremental frontier placement block-by-block; they force-paste the prefab and finalize the plot in one pass.
 - **Sporadic plot/building unlinking** Town records shelves and Gaia altars could show “no construction” or “not linked to a town” after restart or mid-session when block components and `towns.json` drifted apart. Reconciliation, repair commands, and save/load hardening address the common causes.
 - **Gaia altar statue linking** New Gaia altars could finish with an unlinked statue (“not linked to a town”) and `/ah plots repair` could not fix them. Plot link stamping now matches the statue block id case-insensitively, stamps the multi-block prop’s base cell, and falls back to scanning the plot footprint when the expected column misses.
 - **finishassembly / journal finish-plot** Creative instant-finish could place most blocks but fail before `finishBuild`, leaving shelves and statues with empty link data. Empty frontiers now retry and brute-force remaining blocks; completion always verifies block links afterward.

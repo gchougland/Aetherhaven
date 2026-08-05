@@ -967,7 +967,6 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         @Nonnull ConstructionDefinition def,
         @Nonnull Vector3i prefabOriginWorld
     ) {
-        Vector3i floored = PlotPlacementClientPrefabPreview.flooredOrigin(prefabOriginWorld);
         boolean needFull =
             !clientPrefabPreviewActive
                 || !session.getConstructionId().equals(lastPreviewConstructionId)
@@ -979,6 +978,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                     def.getPrefabPath(),
                     session.getRotationSteps(),
                     prefabOriginWorld,
+                    session.getPrefabYaw(),
                     session
                 );
             if (!ok) {
@@ -988,13 +988,27 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
             clientPrefabPreviewActive = true;
             lastPreviewConstructionId = session.getConstructionId();
             lastPreviewRotationSteps = session.getRotationSteps();
-            lastPreviewOriginFloored = floored;
+            lastPreviewOriginFloored =
+                PlotPlacementClientPrefabPreview.flooredClientPreviewOrigin(
+                    prefabOriginWorld,
+                    session,
+                    session.getPrefabYaw()
+                );
             return;
         }
+        PlotPlacementClientPrefabPreview.Payload payload = session.getClientPrefabPreviewPayload();
+        Vector3i floored =
+            PlotPlacementClientPrefabPreview.flooredClientPreviewOrigin(
+                prefabOriginWorld,
+                session,
+                session.getPrefabYaw()
+            );
         if (lastPreviewOriginFloored != null && lastPreviewOriginFloored.equals(floored)) {
             return;
         }
-        PlotPlacementClientPrefabPreview.sendPositionOnly(pr, prefabOriginWorld);
+        if (payload != null) {
+            PlotPlacementClientPrefabPreview.sendPositionOnly(pr, prefabOriginWorld, payload, session.getPrefabYaw());
+        }
         lastPreviewOriginFloored = floored;
     }
 

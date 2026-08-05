@@ -18,6 +18,7 @@ import com.hexvane.aetherhaven.pathtool.PathToolPersistence;
 import com.hexvane.aetherhaven.pathtool.PathToolRegistry;
 import com.hexvane.aetherhaven.map.TownBorderMapOverlayService;
 import com.hexvane.aetherhaven.map.RaidQuestMarkerProvider;
+import com.hexvane.aetherhaven.map.TownMapMarkerCache;
 import com.hexvane.aetherhaven.map.TownMapMarkerProvider;
 import com.hexvane.aetherhaven.map.TownSharedMapMarkerService;
 import com.hexvane.aetherhaven.poi.PoiPersistence;
@@ -27,6 +28,7 @@ import com.hexvane.aetherhaven.shopspot.ShopSpotPersistence;
 import com.hexvane.aetherhaven.shopspot.ShopSpotRegistry;
 import com.hexvane.aetherhaven.tourist.TouristPortalPersistence;
 import com.hexvane.aetherhaven.tourist.TouristPortalRegistry;
+import com.hexvane.aetherhaven.tourist.TouristPortalRegistrySync;
 import com.hexvane.aetherhaven.tourist.TouristReconcileService;
 import com.hexvane.aetherhaven.world.PersistentWorldSupport;
 import com.hexvane.aetherhaven.worldnpc.WorldNpcExistenceReconcile;
@@ -261,6 +263,7 @@ public final class AetherhavenWorldRegistries {
     public static void unloadWorld(@Nonnull World world) {
         AssemblyMarkerSpawner.purgeAllInWorld(world);
         TownBorderMapOverlayService.stopWorld(world);
+        TownMapMarkerCache.clearWorld(world.getName());
         AssemblyWorldRegistry.unloadWorld(world.getName());
         SprinklerWateringService.clearWorldState(world.getName());
         ShopSpotDailyRerollService.clearWorldState(world.getName());
@@ -381,6 +384,7 @@ public final class AetherhavenWorldRegistries {
         getOrCreatePatrolRouteRegistry(world, plugin);
         getOrCreateShopSpotRegistry(world, plugin);
         getOrCreateTouristPortalRegistry(world, plugin);
+        TouristPortalRegistrySync.refreshTravelNetwork(world, plugin);
         getOrCreateWorldNpcRegistry(world, plugin);
         getOrCreatePathNavGraphService(world);
         TownNpcMigration.ensureElderBindingsOnWorldThread(world, plugin);
@@ -397,6 +401,7 @@ public final class AetherhavenWorldRegistries {
         TownBorderMapOverlayService.startWorld(world);
         world.getWorldMapManager().addMarkerProvider("aetherhaven-towns", TownMapMarkerProvider.INSTANCE);
         world.getWorldMapManager().addMarkerProvider("aetherhaven-raid-quests", RaidQuestMarkerProvider.INSTANCE);
+        TownMapMarkerCache.scheduleRebuild(world);
         TownSharedMapMarkerService.purgeLegacyStoredMarkers(world);
     }
 }

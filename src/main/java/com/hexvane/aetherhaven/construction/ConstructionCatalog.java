@@ -273,8 +273,15 @@ public final class ConstructionCatalog {
         if (wantedGameplayConstructionId == null || wantedGameplayConstructionId.isBlank()) {
             return false;
         }
+        if (plotStoredConstructionId == null || plotStoredConstructionId.isBlank()) {
+            return false;
+        }
+        String stored = plotStoredConstructionId.trim();
         String wanted = wantedGameplayConstructionId.trim();
-        for (String id : resolveGameplayConstructionIds(plotStoredConstructionId)) {
+        if (stored.equals(wanted)) {
+            return true;
+        }
+        for (String id : resolveGameplayConstructionIds(stored)) {
             if (wanted.equals(id)) {
                 return true;
             }

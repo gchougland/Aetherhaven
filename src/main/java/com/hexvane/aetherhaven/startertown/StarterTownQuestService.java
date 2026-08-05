@@ -67,9 +67,9 @@ final class StarterTownQuestService {
         @Nullable String questConstructionId
     ) {
         String questId = nonBlank(questConstructionId);
-        return questId != null
-            && (catalog.matchesGameplayConstruction(builtConstructionId, questId)
-                || catalog.matchesGameplayConstruction(questId, builtConstructionId));
+        // Built plot must satisfy the quest grant id; reverse alias match would auto-complete
+        // plot_hobbit_shop quests when only a generic plot_house was placed.
+        return questId != null && catalog.matchesGameplayConstruction(builtConstructionId, questId);
     }
 
     @Nullable

@@ -77,9 +77,8 @@ public final class PlotPlacementOpenHelper {
         Rotation yaw = plot.resolvePrefabYaw();
         ConstructionDefinition def = plugin.getConstructionCatalog().get(plot.getConstructionId());
         Vector3i signAnchor;
-        if (plot.hasStoredPrefabWorldAnchor()) {
-            signAnchor = new Vector3i(plot.getSignX(), plot.getSignY(), plot.getSignZ());
-        } else if (def != null) {
+        if (def != null) {
+            // Sign sits at footprint center after placement; session anchor must invert stored prefab origin.
             signAnchor = def.resolvePreviewSignAnchorWorld(plot.resolvePrefabAnchorWorld(def), yaw);
         } else {
             signAnchor = new Vector3i(plot.getSignX(), plot.getSignY(), plot.getSignZ());

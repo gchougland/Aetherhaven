@@ -165,8 +165,15 @@ final class StarterTownVillagerProvisioner {
         @Nonnull String constructionId,
         @Nonnull String workConstructionId
     ) {
-        return catalog.matchesGameplayConstruction(constructionId, workConstructionId)
-            || catalog.matchesGameplayConstruction(workConstructionId, constructionId);
+        String work = workConstructionId.trim();
+        if (work.isEmpty()) {
+            return false;
+        }
+        if (constructionId.trim().equals(work)) {
+            return true;
+        }
+        // Built starter plot must satisfy the villager workplace id, not the reverse.
+        return catalog.matchesGameplayConstruction(constructionId, work);
     }
 
     @Nonnull

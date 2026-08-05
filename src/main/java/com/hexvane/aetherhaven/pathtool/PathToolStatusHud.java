@@ -125,23 +125,26 @@ public final class PathToolStatusHud extends CustomUIHud {
         }
         List<PathToolHudControls.Row> rows =
             PathToolHudControls.rowsFor(mode, styleEditingActive, replaceFilterEditingActive);
-        for (int i = 0; i < rows.size(); i++) {
-            PathToolHudControls.Row row = rows.get(i);
-            String rowPrefix = activeGroup + " #";
+        String rowPrefix = activeGroup + " #";
+        int keyIndex = 0;
+        int infoIndex = 0;
+        for (PathToolHudControls.Row row : rows) {
             if (row.infoOnly()) {
                 b.set(
-                    rowPrefix + "Info" + i + ".TextSpans",
+                    rowPrefix + "Info" + infoIndex + ".TextSpans",
                     Message.translation(LANG_PREFIX + row.descriptionLangKey())
                 );
+                infoIndex++;
             } else {
                 b.set(
-                    rowPrefix + "Key" + i + ".TextSpans",
+                    rowPrefix + "Key" + keyIndex + ".TextSpans",
                     Message.raw(ToolKeybindDisplay.labelFor(playerRef, row.slot()))
                 );
                 b.set(
-                    rowPrefix + "Desc" + i + ".TextSpans",
+                    rowPrefix + "Desc" + keyIndex + ".TextSpans",
                     Message.translation(LANG_PREFIX + row.descriptionLangKey())
                 );
+                keyIndex++;
             }
         }
         this.update(false, b);

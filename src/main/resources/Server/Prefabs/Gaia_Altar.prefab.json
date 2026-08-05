@@ -6,862 +6,862 @@
   "anchorZ": 0,
   "blocks": [
     {
-      "x": 0,
+      "x": -5,
       "y": -1,
-      "z": 0,
+      "z": -5,
       "name": "Soil_Grass"
     },
     {
-      "x": 0,
+      "x": -5,
       "y": -1,
-      "z": 1,
+      "z": -4,
       "name": "Soil_Grass"
     },
     {
-      "x": 0,
+      "x": -5,
       "y": 0,
-      "z": 1,
+      "z": -4,
       "name": "Plant_Grass_Sharp",
       "support": 15
     },
     {
-      "x": 0,
+      "x": -5,
       "y": -1,
-      "z": 2,
+      "z": -3,
       "name": "Soil_Grass"
     },
     {
-      "x": 0,
+      "x": -5,
       "y": -1,
-      "z": 3,
+      "z": -2,
       "name": "Soil_Mud_Dry"
     },
     {
-      "x": 0,
+      "x": -5,
       "y": 5,
-      "z": 3,
+      "z": -2,
       "name": "Plant_Vine",
       "support": 15,
       "rotation": 3
     },
     {
-      "x": 0,
+      "x": -5,
       "y": -1,
-      "z": 4,
+      "z": -1,
       "name": "Soil_Pathway"
     },
     {
-      "x": 0,
+      "x": -5,
       "y": -1,
-      "z": 5,
+      "z": 0,
       "name": "Soil_Pathway"
     },
     {
-      "x": 0,
+      "x": -5,
       "y": -1,
-      "z": 6,
+      "z": 1,
       "name": "Soil_Pathway"
     },
     {
-      "x": 0,
+      "x": -5,
       "y": -1,
-      "z": 7,
+      "z": 2,
       "name": "Soil_Mud_Dry"
     },
     {
-      "x": 0,
+      "x": -5,
       "y": 0,
-      "z": 7,
+      "z": 2,
       "name": "Plant_Grass_Lush_Short",
       "support": 15
     },
     {
-      "x": 0,
+      "x": -5,
       "y": -1,
-      "z": 8,
+      "z": 3,
       "name": "Soil_Grass"
     },
     {
-      "x": 0,
+      "x": -5,
       "y": 0,
-      "z": 8,
+      "z": 3,
       "name": "Plant_Grass_Lush_Short",
       "support": 15
     },
     {
-      "x": 0,
+      "x": -5,
       "y": -1,
-      "z": 9,
+      "z": 4,
       "name": "Soil_Grass"
     },
     {
-      "x": 0,
+      "x": -5,
       "y": -1,
-      "z": 10,
+      "z": 5,
       "name": "Soil_Grass"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": -1,
-      "z": 0,
+      "z": -5,
       "name": "Soil_Grass"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 0,
-      "z": 0,
+      "z": -5,
       "name": "Plant_Grass_Sharp",
       "support": 15
     },
     {
-      "x": 1,
+      "x": -4,
       "y": -1,
-      "z": 1,
+      "z": -4,
       "name": "Soil_Grass"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 0,
-      "z": 1,
+      "z": -4,
       "name": "Plant_Grass_Lush_Short",
       "support": 15
     },
     {
-      "x": 1,
+      "x": -4,
       "y": -1,
-      "z": 2,
+      "z": -3,
       "name": "Soil_Grass"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 0,
-      "z": 2,
+      "z": -3,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 1,
+      "x": -4,
       "y": -1,
-      "z": 3,
+      "z": -2,
       "name": "Soil_Mud_Dry"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 0,
-      "z": 3,
+      "z": -2,
       "name": "Rock_Marble_Brick_Pillar_Base"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 1,
-      "z": 3,
+      "z": -2,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 2,
-      "z": 3,
+      "z": -2,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 3,
-      "z": 3,
+      "z": -2,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 4,
-      "z": 3,
+      "z": -2,
       "name": "Rock_Marble_Brick_Pillar_Base",
       "rotation": 8
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 5,
-      "z": 3,
+      "z": -2,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": -1,
-      "z": 4,
+      "z": -1,
       "name": "Soil_Pathway"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 5,
-      "z": 4,
+      "z": -1,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": -1,
-      "z": 5,
+      "z": 0,
       "name": "Soil_Pathway"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 5,
-      "z": 5,
+      "z": 0,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": -1,
-      "z": 6,
+      "z": 1,
       "name": "Soil_Pathway"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 5,
-      "z": 6,
+      "z": 1,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": -1,
-      "z": 7,
+      "z": 2,
       "name": "Soil_Pathway"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 0,
-      "z": 7,
+      "z": 2,
       "name": "Rock_Marble_Brick_Pillar_Base"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 1,
-      "z": 7,
+      "z": 2,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 2,
-      "z": 7,
+      "z": 2,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 3,
-      "z": 7,
+      "z": 2,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 4,
-      "z": 7,
+      "z": 2,
       "name": "Rock_Marble_Brick_Pillar_Base",
       "rotation": 8
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 5,
-      "z": 7,
+      "z": 2,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": -1,
-      "z": 8,
+      "z": 3,
       "name": "Soil_Grass"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 0,
-      "z": 8,
+      "z": 3,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 1,
+      "x": -4,
       "y": -1,
-      "z": 9,
+      "z": 4,
       "name": "Soil_Grass"
     },
     {
-      "x": 1,
+      "x": -4,
       "y": 0,
-      "z": 9,
+      "z": 4,
       "name": "Plant_Grass_Lush_Short",
       "support": 15
     },
     {
-      "x": 1,
+      "x": -4,
       "y": -1,
-      "z": 10,
+      "z": 5,
       "name": "Soil_Grass"
     },
     {
-      "x": 2,
+      "x": -3,
       "y": -1,
-      "z": 0,
+      "z": -5,
       "name": "Soil_Grass"
     },
     {
-      "x": 2,
+      "x": -3,
       "y": -1,
-      "z": 1,
+      "z": -4,
       "name": "Soil_Grass_Deep"
     },
     {
-      "x": 2,
+      "x": -3,
       "y": 0,
-      "z": 1,
+      "z": -4,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 2,
+      "x": -3,
       "y": 5,
-      "z": 1,
+      "z": -4,
       "name": "Plant_Vine_Wall",
       "support": 15,
       "rotation": 2
     },
     {
-      "x": 2,
+      "x": -3,
       "y": -1,
-      "z": 2,
+      "z": -3,
       "name": "Soil_Grass_Deep"
     },
     {
-      "x": 2,
+      "x": -3,
       "y": 0,
-      "z": 2,
+      "z": -3,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 2,
+      "x": -3,
       "y": 1,
-      "z": 2,
+      "z": -3,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 2,
+      "x": -3,
       "y": 5,
-      "z": 2,
+      "z": -3,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 2,
+      "x": -3,
       "y": -1,
-      "z": 3,
+      "z": -2,
       "name": "Soil_Pathway"
     },
     {
-      "x": 2,
+      "x": -3,
       "y": 0,
-      "z": 3,
+      "z": -2,
       "name": "Furniture_Temple_Emerald_Stool",
       "support": 15
     },
     {
-      "x": 2,
+      "x": -3,
       "y": 5,
-      "z": 3,
+      "z": -2,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 2,
+      "x": -3,
       "y": 6,
-      "z": 3,
+      "z": -2,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 2,
+      "x": -3,
       "y": -1,
-      "z": 4,
+      "z": -1,
       "name": "Soil_Pathway"
     },
     {
-      "x": 2,
+      "x": -3,
       "y": 6,
-      "z": 4,
+      "z": -1,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 2,
-      "y": -1,
-      "z": 5,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 2,
-      "y": 6,
-      "z": 5,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 2,
-      "y": -1,
-      "z": 6,
-      "name": "Soil_Mud_Dry"
-    },
-    {
-      "x": 2,
-      "y": 6,
-      "z": 6,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 2,
-      "y": -1,
-      "z": 7,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 2,
-      "y": 5,
-      "z": 7,
-      "name": "Rock_Marble_Brick"
-    },
-    {
-      "x": 2,
-      "y": 6,
-      "z": 7,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 2,
-      "y": -1,
-      "z": 8,
-      "name": "Soil_Grass"
-    },
-    {
-      "x": 2,
-      "y": 0,
-      "z": 8,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 2,
-      "y": 1,
-      "z": 8,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 2,
-      "y": 5,
-      "z": 8,
-      "name": "Rock_Marble_Brick"
-    },
-    {
-      "x": 2,
-      "y": -1,
-      "z": 9,
-      "name": "Soil_Grass"
-    },
-    {
-      "x": 2,
-      "y": 0,
-      "z": 9,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 2,
-      "y": -1,
-      "z": 10,
-      "name": "Soil_Grass_Deep"
-    },
-    {
-      "x": 3,
+      "x": -3,
       "y": -1,
       "z": 0,
-      "name": "Soil_Mud_Dry"
-    },
-    {
-      "x": 3,
-      "y": -1,
-      "z": 1,
       "name": "Soil_Pathway"
     },
     {
-      "x": 3,
+      "x": -3,
+      "y": 6,
+      "z": 0,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": 1,
+      "name": "Soil_Mud_Dry"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": 1,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": 2,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": -3,
+      "y": 5,
+      "z": 2,
+      "name": "Rock_Marble_Brick"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": 2,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": 3,
+      "name": "Soil_Grass"
+    },
+    {
+      "x": -3,
       "y": 0,
-      "z": 1,
-      "name": "Rock_Marble_Brick_Pillar_Base"
+      "z": 3,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
     },
     {
-      "x": 3,
+      "x": -3,
       "y": 1,
-      "z": 1,
-      "name": "Rock_Marble_Brick_Pillar_Middle"
+      "z": 3,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
     },
     {
-      "x": 3,
-      "y": 2,
-      "z": 1,
-      "name": "Rock_Marble_Brick_Pillar_Middle"
-    },
-    {
-      "x": 3,
-      "y": 3,
-      "z": 1,
-      "name": "Rock_Marble_Brick_Pillar_Middle"
-    },
-    {
-      "x": 3,
-      "y": 4,
-      "z": 1,
-      "name": "Rock_Marble_Brick_Pillar_Base",
-      "rotation": 8
-    },
-    {
-      "x": 3,
+      "x": -3,
       "y": 5,
-      "z": 1,
+      "z": 3,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 3,
-      "y": -1,
-      "z": 2,
-      "name": "Soil_Mud_Dry"
-    },
-    {
-      "x": 3,
-      "y": 5,
-      "z": 2,
-      "name": "Rock_Marble_Brick"
-    },
-    {
-      "x": 3,
-      "y": 6,
-      "z": 2,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 3,
-      "y": -1,
-      "z": 3,
-      "name": "Soil_Mud_Dry"
-    },
-    {
-      "x": 3,
-      "y": 5,
-      "z": 3,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 3,
-      "y": 6,
-      "z": 3,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 3,
+      "x": -3,
       "y": -1,
       "z": 4,
-      "name": "Soil_Pathway"
+      "name": "Soil_Grass"
     },
     {
-      "x": 3,
-      "y": 6,
+      "x": -3,
+      "y": 0,
       "z": 4,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 3,
+      "x": -3,
       "y": -1,
       "z": 5,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 3,
-      "y": -1,
-      "z": 6,
-      "name": "Soil_Mud_Dry"
-    },
-    {
-      "x": 3,
-      "y": 6,
-      "z": 6,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 3,
-      "y": -1,
-      "z": 7,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 3,
-      "y": 5,
-      "z": 7,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 3,
-      "y": 6,
-      "z": 7,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 3,
-      "y": -1,
-      "z": 8,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 3,
-      "y": 5,
-      "z": 8,
-      "name": "Rock_Marble_Brick"
-    },
-    {
-      "x": 3,
-      "y": 6,
-      "z": 8,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 3,
-      "y": -1,
-      "z": 9,
       "name": "Soil_Grass_Deep"
     },
     {
-      "x": 3,
+      "x": -2,
+      "y": -1,
+      "z": -5,
+      "name": "Soil_Mud_Dry"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": -4,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": -2,
       "y": 0,
-      "z": 9,
+      "z": -4,
       "name": "Rock_Marble_Brick_Pillar_Base"
     },
     {
-      "x": 3,
+      "x": -2,
       "y": 1,
-      "z": 9,
+      "z": -4,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 3,
+      "x": -2,
       "y": 2,
-      "z": 9,
+      "z": -4,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 3,
+      "x": -2,
       "y": 3,
-      "z": 9,
+      "z": -4,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 3,
+      "x": -2,
       "y": 4,
-      "z": 9,
+      "z": -4,
       "name": "Rock_Marble_Brick_Pillar_Base",
       "rotation": 8
     },
     {
-      "x": 3,
+      "x": -2,
       "y": 5,
-      "z": 9,
+      "z": -4,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 3,
+      "x": -2,
       "y": -1,
-      "z": 10,
+      "z": -3,
       "name": "Soil_Mud_Dry"
     },
     {
-      "x": 3,
+      "x": -2,
+      "y": 5,
+      "z": -3,
+      "name": "Rock_Marble_Brick"
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": -3,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": -2,
+      "name": "Soil_Mud_Dry"
+    },
+    {
+      "x": -2,
+      "y": 5,
+      "z": -2,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": -2,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": -1,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": -1,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": 0,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": 1,
+      "name": "Soil_Mud_Dry"
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": 1,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": 2,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": -2,
+      "y": 5,
+      "z": 2,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": 2,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": 3,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": -2,
+      "y": 5,
+      "z": 3,
+      "name": "Rock_Marble_Brick"
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": 3,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": 4,
+      "name": "Soil_Grass_Deep"
+    },
+    {
+      "x": -2,
       "y": 0,
-      "z": 10,
+      "z": 4,
+      "name": "Rock_Marble_Brick_Pillar_Base"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": 4,
+      "name": "Rock_Marble_Brick_Pillar_Middle"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": 4,
+      "name": "Rock_Marble_Brick_Pillar_Middle"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": 4,
+      "name": "Rock_Marble_Brick_Pillar_Middle"
+    },
+    {
+      "x": -2,
+      "y": 4,
+      "z": 4,
+      "name": "Rock_Marble_Brick_Pillar_Base",
+      "rotation": 8
+    },
+    {
+      "x": -2,
+      "y": 5,
+      "z": 4,
+      "name": "Rock_Marble_Brick"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": 5,
+      "name": "Soil_Mud_Dry"
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": 5,
       "name": "Plant_Grass_Sharp",
       "support": 15
     },
     {
-      "x": 3,
+      "x": -2,
       "y": 5,
-      "z": 10,
+      "z": 5,
       "name": "Plant_Vine",
       "support": 15
     },
     {
-      "x": 4,
+      "x": -1,
       "y": -1,
-      "z": 0,
+      "z": -5,
       "name": "Soil_Mud_Dry"
     },
     {
-      "x": 4,
+      "x": -1,
       "y": -1,
-      "z": 1,
+      "z": -4,
       "name": "Soil_Mud_Dry"
     },
     {
-      "x": 4,
+      "x": -1,
       "y": 5,
-      "z": 1,
+      "z": -4,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 4,
+      "x": -1,
+      "y": -1,
+      "z": -3,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": -1,
+      "y": 6,
+      "z": -3,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": -2,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": -1,
+      "y": 6,
+      "z": -2,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": -1,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": 0,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": 1,
+      "name": "Soil_Mud_Dry"
+    },
+    {
+      "x": -1,
       "y": -1,
       "z": 2,
       "name": "Soil_Pathway"
     },
     {
-      "x": 4,
+      "x": -1,
       "y": 6,
       "z": 2,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 4,
+      "x": -1,
       "y": -1,
       "z": 3,
-      "name": "Soil_Pathway"
+      "name": "Soil_Mud_Dry"
     },
     {
-      "x": 4,
+      "x": -1,
       "y": 6,
       "z": 3,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 4,
+      "x": -1,
       "y": -1,
       "z": 4,
       "name": "Soil_Pathway"
     },
     {
-      "x": 4,
+      "x": -1,
+      "y": 5,
+      "z": 4,
+      "name": "Rock_Marble_Brick"
+    },
+    {
+      "x": -1,
       "y": -1,
       "z": 5,
       "name": "Soil_Pathway"
     },
     {
-      "x": 4,
+      "x": 0,
       "y": -1,
-      "z": 6,
+      "z": -5,
       "name": "Soil_Mud_Dry"
     },
     {
-      "x": 4,
+      "x": 0,
       "y": -1,
-      "z": 7,
+      "z": -4,
       "name": "Soil_Pathway"
     },
     {
-      "x": 4,
-      "y": 6,
-      "z": 7,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 4,
-      "y": -1,
-      "z": 8,
-      "name": "Soil_Mud_Dry"
-    },
-    {
-      "x": 4,
-      "y": 6,
-      "z": 8,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 4,
-      "y": -1,
-      "z": 9,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 4,
+      "x": 0,
       "y": 5,
-      "z": 9,
+      "z": -4,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 4,
+      "x": 0,
       "y": -1,
-      "z": 10,
+      "z": -3,
       "name": "Soil_Pathway"
     },
     {
-      "x": 5,
+      "x": 0,
+      "y": 6,
+      "z": -3,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": -2,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": -1,
+      "name": "Soil_Mud_Dry"
+    },
+    {
+      "x": 0,
       "y": -1,
       "z": 0,
-      "name": "Soil_Mud_Dry"
-    },
-    {
-      "x": 5,
-      "y": -1,
-      "z": 1,
       "name": "Soil_Pathway"
     },
     {
-      "x": 5,
-      "y": 5,
-      "z": 1,
-      "name": "Rock_Marble_Brick"
-    },
-    {
-      "x": 5,
-      "y": -1,
-      "z": 2,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 5,
-      "y": 6,
-      "z": 2,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 5,
-      "y": -1,
-      "z": 3,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 5,
-      "y": -1,
-      "z": 4,
-      "name": "Soil_Mud_Dry"
-    },
-    {
-      "x": 5,
-      "y": -1,
-      "z": 5,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 5,
+      "x": 0,
       "y": 0,
-      "z": 5,
+      "z": 0,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 5,
+      "x": 0,
       "y": 1,
-      "z": 5,
+      "z": 0,
       "name": "Aetherhaven_Statue_Of_Gaia",
       "components": {
         "Components": {
@@ -875,304 +875,304 @@
       "rotation": 3
     },
     {
-      "x": 5,
-      "y": -1,
-      "z": 6,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 5,
-      "y": -1,
-      "z": 7,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 5,
-      "y": -1,
-      "z": 8,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 5,
-      "y": 6,
-      "z": 8,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 5,
-      "y": -1,
-      "z": 9,
-      "name": "Soil_Mud_Dry"
-    },
-    {
-      "x": 5,
-      "y": 5,
-      "z": 9,
-      "name": "Rock_Marble_Brick"
-    },
-    {
-      "x": 5,
-      "y": -1,
-      "z": 10,
-      "name": "Soil_Mud_Dry"
-    },
-    {
-      "x": 6,
-      "y": -1,
-      "z": 0,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 6,
+      "x": 0,
       "y": -1,
       "z": 1,
       "name": "Soil_Pathway"
     },
     {
-      "x": 6,
-      "y": 5,
-      "z": 1,
-      "name": "Rock_Marble_Brick"
-    },
-    {
-      "x": 6,
+      "x": 0,
       "y": -1,
       "z": 2,
-      "name": "Soil_Mud_Dry"
+      "name": "Soil_Pathway"
     },
     {
-      "x": 6,
-      "y": 6,
-      "z": 2,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 6,
+      "x": 0,
       "y": -1,
       "z": 3,
       "name": "Soil_Pathway"
     },
     {
-      "x": 6,
+      "x": 0,
       "y": 6,
       "z": 3,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 6,
+      "x": 0,
       "y": -1,
       "z": 4,
-      "name": "Soil_Pathway"
+      "name": "Soil_Mud_Dry"
     },
     {
-      "x": 6,
+      "x": 0,
+      "y": 5,
+      "z": 4,
+      "name": "Rock_Marble_Brick"
+    },
+    {
+      "x": 0,
       "y": -1,
       "z": 5,
       "name": "Soil_Mud_Dry"
     },
     {
-      "x": 6,
+      "x": 1,
       "y": -1,
-      "z": 6,
+      "z": -5,
       "name": "Soil_Pathway"
     },
     {
-      "x": 6,
+      "x": 1,
       "y": -1,
-      "z": 7,
+      "z": -4,
       "name": "Soil_Pathway"
     },
     {
-      "x": 6,
-      "y": 6,
-      "z": 7,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 6,
-      "y": -1,
-      "z": 8,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 6,
-      "y": 6,
-      "z": 8,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 6,
-      "y": -1,
-      "z": 9,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 6,
+      "x": 1,
       "y": 5,
-      "z": 9,
+      "z": -4,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 6,
+      "x": 1,
       "y": -1,
-      "z": 10,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 7,
-      "y": -1,
-      "z": 0,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 7,
-      "y": -1,
-      "z": 1,
+      "z": -3,
       "name": "Soil_Mud_Dry"
     },
     {
-      "x": 7,
-      "y": 0,
+      "x": 1,
+      "y": 6,
+      "z": -3,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": -2,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": -2,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": -1,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": 0,
+      "name": "Soil_Mud_Dry"
+    },
+    {
+      "x": 1,
+      "y": -1,
       "z": 1,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": 2,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": 2,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": 3,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": 3,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": 4,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "z": 4,
+      "name": "Rock_Marble_Brick"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": 5,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": -5,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": -4,
+      "name": "Soil_Mud_Dry"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": -4,
       "name": "Rock_Marble_Brick_Pillar_Base"
     },
     {
-      "x": 7,
+      "x": 2,
       "y": 1,
-      "z": 1,
+      "z": -4,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 7,
+      "x": 2,
       "y": 2,
-      "z": 1,
+      "z": -4,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 7,
+      "x": 2,
       "y": 3,
-      "z": 1,
+      "z": -4,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 7,
+      "x": 2,
       "y": 4,
-      "z": 1,
+      "z": -4,
       "name": "Rock_Marble_Brick_Pillar_Base",
       "rotation": 8
     },
     {
-      "x": 7,
+      "x": 2,
       "y": 5,
+      "z": -4,
+      "name": "Rock_Marble_Brick"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": -3,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "z": -3,
+      "name": "Rock_Marble_Brick"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -3,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": -2,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "z": -2,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -2,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": -1,
+      "name": "Soil_Mud_Dry"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -1,
+      "name": "Plant_Leaves_Oak",
+      "support": 15
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": 0,
+      "name": "Soil_Pathway"
+    },
+    {
+      "x": 2,
+      "y": -1,
       "z": 1,
-      "name": "Rock_Marble_Brick"
-    },
-    {
-      "x": 7,
-      "y": -1,
-      "z": 2,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 7,
-      "y": 5,
-      "z": 2,
-      "name": "Rock_Marble_Brick"
-    },
-    {
-      "x": 7,
-      "y": 6,
-      "z": 2,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 7,
-      "y": -1,
-      "z": 3,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 7,
-      "y": 5,
-      "z": 3,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 7,
-      "y": 6,
-      "z": 3,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 7,
-      "y": -1,
-      "z": 4,
       "name": "Soil_Mud_Dry"
     },
     {
-      "x": 7,
+      "x": 2,
       "y": 6,
-      "z": 4,
+      "z": 1,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 7,
+      "x": 2,
       "y": -1,
-      "z": 5,
+      "z": 2,
       "name": "Soil_Pathway"
     },
     {
-      "x": 7,
-      "y": -1,
-      "z": 6,
-      "name": "Soil_Mud_Dry"
-    },
-    {
-      "x": 7,
-      "y": 6,
-      "z": 6,
-      "name": "Plant_Leaves_Oak",
-      "support": 15
-    },
-    {
-      "x": 7,
-      "y": -1,
-      "z": 7,
-      "name": "Soil_Pathway"
-    },
-    {
-      "x": 7,
+      "x": 2,
       "y": 5,
-      "z": 7,
+      "z": 2,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 7,
+      "x": 2,
       "y": 6,
-      "z": 7,
+      "z": 2,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 7,
+      "x": 2,
       "y": -1,
-      "z": 8,
+      "z": 3,
       "name": "Soil_Pathway"
     },
     {
-      "x": 7,
+      "x": 2,
       "y": 0,
-      "z": 8,
+      "z": 3,
       "name": "Aetherhaven_Management_Block",
       "components": {
         "Components": {
@@ -1191,565 +1191,565 @@
       "rotation": 2
     },
     {
-      "x": 7,
+      "x": 2,
       "y": 5,
-      "z": 8,
+      "z": 3,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 7,
+      "x": 2,
       "y": 6,
-      "z": 8,
+      "z": 3,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 7,
+      "x": 2,
       "y": -1,
-      "z": 9,
+      "z": 4,
       "name": "Soil_Grass"
     },
     {
-      "x": 7,
+      "x": 2,
       "y": 0,
-      "z": 9,
+      "z": 4,
       "name": "Rock_Marble_Brick_Pillar_Base"
     },
     {
-      "x": 7,
+      "x": 2,
       "y": 1,
-      "z": 9,
+      "z": 4,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 7,
+      "x": 2,
       "y": 2,
-      "z": 9,
+      "z": 4,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 7,
+      "x": 2,
       "y": 3,
-      "z": 9,
+      "z": 4,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 7,
+      "x": 2,
       "y": 4,
-      "z": 9,
+      "z": 4,
       "name": "Rock_Marble_Brick_Pillar_Base",
       "rotation": 8
     },
     {
-      "x": 7,
+      "x": 2,
       "y": 5,
-      "z": 9,
+      "z": 4,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 7,
+      "x": 2,
       "y": -1,
-      "z": 10,
+      "z": 5,
       "name": "Soil_Mud_Dry"
     },
     {
-      "x": 7,
+      "x": 2,
       "y": 5,
-      "z": 10,
+      "z": 5,
       "name": "Plant_Vine",
       "support": 15
     },
     {
-      "x": 8,
+      "x": 3,
       "y": -1,
-      "z": 0,
+      "z": -5,
       "name": "Soil_Grass"
     },
     {
-      "x": 8,
+      "x": 3,
       "y": -1,
-      "z": 1,
+      "z": -4,
       "name": "Soil_Grass"
     },
     {
-      "x": 8,
+      "x": 3,
       "y": 0,
-      "z": 1,
+      "z": -4,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 8,
+      "x": 3,
       "y": 5,
-      "z": 1,
+      "z": -4,
       "name": "Plant_Vine_Wall",
       "support": 15,
       "rotation": 1
     },
     {
-      "x": 8,
+      "x": 3,
       "y": -1,
-      "z": 2,
+      "z": -3,
       "name": "Soil_Grass_Deep"
     },
     {
-      "x": 8,
+      "x": 3,
       "y": 0,
-      "z": 2,
+      "z": -3,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 8,
+      "x": 3,
       "y": 1,
-      "z": 2,
+      "z": -3,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 8,
+      "x": 3,
       "y": 5,
-      "z": 2,
+      "z": -3,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 8,
+      "x": 3,
       "y": -1,
-      "z": 3,
+      "z": -2,
       "name": "Soil_Pathway"
     },
     {
-      "x": 8,
+      "x": 3,
       "y": 5,
-      "z": 3,
+      "z": -2,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 8,
+      "x": 3,
       "y": 6,
-      "z": 3,
+      "z": -2,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 8,
+      "x": 3,
       "y": -1,
-      "z": 4,
+      "z": -1,
       "name": "Soil_Pathway"
     },
     {
-      "x": 8,
+      "x": 3,
       "y": 6,
-      "z": 4,
+      "z": -1,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 8,
+      "x": 3,
       "y": -1,
-      "z": 5,
+      "z": 0,
       "name": "Soil_Pathway"
     },
     {
-      "x": 8,
+      "x": 3,
       "y": 6,
-      "z": 5,
+      "z": 0,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 8,
+      "x": 3,
       "y": -1,
-      "z": 6,
+      "z": 1,
       "name": "Soil_Pathway"
     },
     {
-      "x": 8,
+      "x": 3,
       "y": 6,
-      "z": 6,
+      "z": 1,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 8,
+      "x": 3,
       "y": -1,
-      "z": 7,
+      "z": 2,
       "name": "Soil_Mud_Dry"
     },
     {
-      "x": 8,
+      "x": 3,
       "y": 0,
-      "z": 7,
+      "z": 2,
       "name": "Furniture_Temple_Emerald_Stool",
       "support": 15,
       "rotation": 3
     },
     {
-      "x": 8,
+      "x": 3,
       "y": 5,
-      "z": 7,
+      "z": 2,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 8,
+      "x": 3,
       "y": 6,
-      "z": 7,
+      "z": 2,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 8,
+      "x": 3,
       "y": -1,
-      "z": 8,
+      "z": 3,
       "name": "Soil_Grass"
     },
     {
-      "x": 8,
+      "x": 3,
       "y": 0,
-      "z": 8,
+      "z": 3,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 8,
+      "x": 3,
       "y": 1,
-      "z": 8,
+      "z": 3,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 8,
+      "x": 3,
       "y": 5,
-      "z": 8,
+      "z": 3,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 8,
+      "x": 3,
       "y": -1,
-      "z": 9,
+      "z": 4,
       "name": "Soil_Grass"
     },
     {
-      "x": 8,
+      "x": 3,
       "y": 0,
-      "z": 9,
+      "z": 4,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 8,
+      "x": 3,
       "y": -1,
-      "z": 10,
+      "z": 5,
       "name": "Soil_Grass_Deep"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": -1,
-      "z": 0,
+      "z": -5,
       "name": "Soil_Grass"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 0,
-      "z": 0,
+      "z": -5,
       "name": "Plant_Grass_Lush",
       "support": 15
     },
     {
-      "x": 9,
+      "x": 4,
       "y": -1,
-      "z": 1,
+      "z": -4,
       "name": "Soil_Grass"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 0,
-      "z": 1,
+      "z": -4,
       "name": "Plant_Grass_Sharp",
       "support": 15
     },
     {
-      "x": 9,
+      "x": 4,
       "y": -1,
-      "z": 2,
+      "z": -3,
       "name": "Soil_Grass"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 0,
-      "z": 2,
+      "z": -3,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 9,
+      "x": 4,
       "y": -1,
-      "z": 3,
+      "z": -2,
       "name": "Soil_Mud_Dry"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 0,
-      "z": 3,
+      "z": -2,
       "name": "Rock_Marble_Brick_Pillar_Base"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 1,
-      "z": 3,
+      "z": -2,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 2,
-      "z": 3,
+      "z": -2,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 3,
-      "z": 3,
+      "z": -2,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 4,
-      "z": 3,
+      "z": -2,
       "name": "Rock_Marble_Brick_Pillar_Base",
       "rotation": 8
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 5,
-      "z": 3,
+      "z": -2,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": -1,
-      "z": 4,
+      "z": -1,
       "name": "Soil_Pathway"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 5,
-      "z": 4,
+      "z": -1,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": -1,
-      "z": 5,
+      "z": 0,
       "name": "Soil_Pathway"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 5,
-      "z": 5,
+      "z": 0,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": -1,
-      "z": 6,
+      "z": 1,
       "name": "Soil_Pathway"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 5,
-      "z": 6,
+      "z": 1,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": -1,
-      "z": 7,
+      "z": 2,
       "name": "Soil_Mud_Dry"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 0,
-      "z": 7,
+      "z": 2,
       "name": "Rock_Marble_Brick_Pillar_Base"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 1,
-      "z": 7,
+      "z": 2,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 2,
-      "z": 7,
+      "z": 2,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 3,
-      "z": 7,
+      "z": 2,
       "name": "Rock_Marble_Brick_Pillar_Middle"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 4,
-      "z": 7,
+      "z": 2,
       "name": "Rock_Marble_Brick_Pillar_Base",
       "rotation": 8
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 5,
-      "z": 7,
+      "z": 2,
       "name": "Rock_Marble_Brick"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": -1,
-      "z": 8,
+      "z": 3,
       "name": "Soil_Grass"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 0,
-      "z": 8,
+      "z": 3,
       "name": "Plant_Leaves_Oak",
       "support": 15
     },
     {
-      "x": 9,
+      "x": 4,
       "y": 5,
-      "z": 8,
+      "z": 3,
       "name": "Plant_Vine_Wall",
       "support": 15
     },
     {
-      "x": 9,
+      "x": 4,
       "y": -1,
-      "z": 9,
+      "z": 4,
       "name": "Soil_Grass"
     },
     {
-      "x": 9,
+      "x": 4,
       "y": -1,
-      "z": 10,
+      "z": 5,
       "name": "Soil_Grass"
     },
     {
-      "x": 10,
+      "x": 5,
       "y": -1,
-      "z": 0,
+      "z": -5,
       "name": "Soil_Grass"
     },
     {
-      "x": 10,
+      "x": 5,
       "y": -1,
-      "z": 1,
+      "z": -4,
       "name": "Soil_Grass"
     },
     {
-      "x": 10,
+      "x": 5,
       "y": 0,
-      "z": 1,
+      "z": -4,
       "name": "Plant_Grass_Sharp",
       "support": 15
     },
     {
-      "x": 10,
+      "x": 5,
       "y": -1,
-      "z": 2,
+      "z": -3,
       "name": "Soil_Grass_Deep"
     },
     {
-      "x": 10,
+      "x": 5,
       "y": 0,
-      "z": 2,
+      "z": -3,
       "name": "Plant_Grass_Lush_Short",
       "support": 15
     },
     {
-      "x": 10,
+      "x": 5,
       "y": -1,
-      "z": 3,
+      "z": -2,
       "name": "Soil_Pathway"
     },
     {
-      "x": 10,
+      "x": 5,
       "y": 5,
-      "z": 3,
+      "z": -2,
       "name": "Plant_Vine_Wall",
       "support": 15,
       "rotation": 1
     },
     {
-      "x": 10,
+      "x": 5,
       "y": -1,
-      "z": 4,
+      "z": -1,
       "name": "Soil_Pathway"
     },
     {
-      "x": 10,
+      "x": 5,
       "y": -1,
-      "z": 5,
+      "z": 0,
       "name": "Soil_Pathway"
     },
     {
-      "x": 10,
+      "x": 5,
       "y": -1,
-      "z": 6,
+      "z": 1,
       "name": "Soil_Mud_Dry"
     },
     {
-      "x": 10,
+      "x": 5,
       "y": 0,
-      "z": 6,
+      "z": 1,
       "name": "Plant_Grass_Lush_Short",
       "support": 15
     },
     {
-      "x": 10,
+      "x": 5,
       "y": 5,
-      "z": 6,
+      "z": 1,
       "name": "Plant_Vine",
       "support": 15,
       "rotation": 1
     },
     {
-      "x": 10,
+      "x": 5,
       "y": -1,
-      "z": 7,
+      "z": 2,
       "name": "Soil_Pathway"
     },
     {
-      "x": 10,
+      "x": 5,
       "y": -1,
-      "z": 8,
+      "z": 3,
       "name": "Soil_Grass"
     },
     {
-      "x": 10,
+      "x": 5,
       "y": 0,
-      "z": 8,
+      "z": 3,
       "name": "Plant_Grass_Lush",
       "support": 15
     },
     {
-      "x": 10,
+      "x": 5,
       "y": -1,
-      "z": 9,
+      "z": 4,
       "name": "Soil_Grass"
     },
     {
-      "x": 10,
+      "x": 5,
       "y": 0,
-      "z": 9,
+      "z": 4,
       "name": "Plant_Grass_Lush",
       "support": 15
     },
     {
-      "x": 10,
+      "x": 5,
       "y": -1,
-      "z": 10,
+      "z": 5,
       "name": "Soil_Grass"
     }
   ]

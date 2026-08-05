@@ -94,7 +94,6 @@ public final class TouristPortalRegistrySync {
                     if (ensureRecordAtBlock(world, registry, town, plotId, pos)) {
                         changed = true;
                     }
-                    TouristPortalVisualService.applyColorVariantAtBlock(world, pos, town);
                 }
             }
         }

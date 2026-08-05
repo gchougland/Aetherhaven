@@ -4,7 +4,6 @@
   "description": "A shop for selling gems and crystals.",
   "prefabPath": "plot_crystal_keepers_shop.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
-  "plotTokenLockedByDefault": true,
   "plotAnchorOffset": [
     0,
     1,

@@ -932,6 +932,13 @@ public final class TownRecord {
         getInnVisitorPoolExcludedRoleIds().add(roleId.trim());
     }
 
+    public void removeInnVisitorPoolExcludedRoleId(@Nonnull String roleId) {
+        if (roleId.isBlank()) {
+            return;
+        }
+        getInnVisitorPoolExcludedRoleIds().remove(roleId.trim());
+    }
+
     @Nonnull
     public UUID getTownId() {
         return UUID.fromString(townId);
@@ -1741,6 +1748,57 @@ public final class TownRecord {
             }
         }
         return null;
+    }
+
+    /**
+     * Prefer a COMPLETE plot whose stored construction id equals {@code workConstructionId}, then fall back to
+     * variant/counts-as matching. Avoids picking an unrelated alias match (e.g. generic {@code plot_house} before
+     * {@code plot_hobbit_shop} when both count as house).
+     */
+    @Nullable
+    public PlotInstance findCompletePlotForWorkConstruction(
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nonnull String workConstructionId
+    ) {
+        String work = workConstructionId.trim();
+        if (work.isEmpty()) {
+            return null;
+        }
+        for (PlotInstance p : getPlotInstances()) {
+            if (p.getState() == PlotInstanceState.COMPLETE && work.equals(p.getConstructionId())) {
+                return p;
+            }
+        }
+        for (PlotInstance p : getPlotInstances()) {
+            if (p.getState() == PlotInstanceState.COMPLETE
+                && constructionCatalog.matchesGameplayConstruction(p.getConstructionId(), work)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    /** True when {@code plot} is the villager's dedicated workplace (not merely a shared house alias). */
+    public static boolean isPlotWorkplaceForConstruction(
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nullable PlotInstance plot,
+        @Nonnull String workConstructionId
+    ) {
+        if (plot == null || plot.getState() != PlotInstanceState.COMPLETE) {
+            return false;
+        }
+        String stored = plot.getConstructionId();
+        if (stored == null || stored.isBlank()) {
+            return false;
+        }
+        String work = workConstructionId.trim();
+        if (work.isEmpty()) {
+            return false;
+        }
+        if (stored.equals(work)) {
+            return true;
+        }
+        return constructionCatalog.matchesGameplayConstruction(stored, work);
     }
 
     /**

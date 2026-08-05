@@ -526,7 +526,7 @@ public final class VillagerScheduleResolver {
         if (expected.isEmpty()) {
             return false;
         }
-        return constructionCatalog.matchesGameplayConstruction(plot.getConstructionId(), expected);
+        return TownRecord.isPlotWorkplaceForConstruction(constructionCatalog, plot, expected);
     }
 
     /**
@@ -636,10 +636,10 @@ public final class VillagerScheduleResolver {
     @Nullable
     private static UUID plotIdIfComplete(
         @Nonnull TownRecord town,
-        @Nonnull String gameplayConstructionId,
+        @Nonnull String workConstructionId,
         @Nonnull ConstructionCatalog constructionCatalog
     ) {
-        PlotInstance p = town.findCompletePlotWithConstruction(constructionCatalog, gameplayConstructionId);
+        PlotInstance p = town.findCompletePlotForWorkConstruction(constructionCatalog, workConstructionId);
         return p != null ? p.getPlotId() : null;
     }
 

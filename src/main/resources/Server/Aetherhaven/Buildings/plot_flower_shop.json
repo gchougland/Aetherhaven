@@ -4,7 +4,6 @@
   "description": "A shop for selling flowers and plants.",
   "prefabPath": "plot_flower_shop.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
-  "plotTokenLockedByDefault": true,
   "plotAnchorOffset": [
     0,
     1,
