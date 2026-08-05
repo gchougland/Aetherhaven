@@ -78,7 +78,7 @@ public final class PoiExtractor {
             batch.add(PoiMarkerLocator.toRegistryEntry(poiId, town, plotId, wx, wy, wz, data));
         }
         if (!batch.isEmpty()) {
-            reg.registerAll(batch);
+            reg.registerAll(ShopBrowsePoiMigration.migrate(batch));
         }
         LOGGER.atInfo().log(
             "Registered %s POIs for construction %s plot %s (%s from JSON, %s from markers)",

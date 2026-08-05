@@ -273,6 +273,12 @@ public final class TownRecord {
     @SerializedName("residentNpcRecords")
     private List<ResidentNpcRecord> residentNpcRecords = new ArrayList<>();
 
+    /**
+     * Entity UUIDs replaced by revive/reset/respawn this session. Not saved — used to despawn old copies when their
+     * chunks load again.
+     */
+    private transient LinkedHashSet<String> supersededEntityUuids;
+
     /** Last known world positions for town residents (keyed by entity uuid in each row). */
     @SerializedName("residentLastKnownPositions")
     private List<ResidentLastKnownPosition> residentLastKnownPositions = new ArrayList<>();
@@ -828,6 +834,28 @@ public final class TownRecord {
             residentNpcRecords = new ArrayList<>();
         }
         return residentNpcRecords;
+    }
+
+    /** Marks {@code oldUuid} as replaced so a later chunk load can despawn the stale copy. */
+    public void markEntityUuidSuperseded(@Nonnull UUID oldUuid) {
+        if (oldUuid.getLeastSignificantBits() == 0L && oldUuid.getMostSignificantBits() == 0L) {
+            return;
+        }
+        if (supersededEntityUuids == null) {
+            supersededEntityUuids = new LinkedHashSet<>();
+        }
+        String key = oldUuid.toString();
+        supersededEntityUuids.remove(key);
+        supersededEntityUuids.add(key);
+        while (supersededEntityUuids.size() > 64) {
+            var it = supersededEntityUuids.iterator();
+            it.next();
+            it.remove();
+        }
+    }
+
+    public boolean isEntityUuidSuperseded(@Nonnull UUID entityUuid) {
+        return supersededEntityUuids != null && supersededEntityUuids.contains(entityUuid.toString());
     }
 
     @Nonnull

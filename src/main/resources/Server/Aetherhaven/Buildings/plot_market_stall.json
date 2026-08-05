@@ -34,19 +34,50 @@
   "pois": [
     {
       "localX": 1,
-      "localY": 1,
-      "localZ": 0,
+      "localY": 0,
+      "localZ": -1,
       "tags": [
-        "SHOP",
-        "WORK"
+        "WORK",
+        "workActivity:read"
       ],
       "capacity": 1,
-      "blockTypeId": "Furniture_Village_Counter",
+      "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "WORK_SURFACE",
       "interactionTargetLocalX": 1,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -1,
-      "workResidentKind": "merchant"
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -2,
+      "workResidentKind": "merchant",
+      "interactionTargetYawDegrees": -150.06201
+    },
+    {
+      "localX": -2,
+      "localY": 0,
+      "localZ": 2,
+      "tags": [
+        "SHOP"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Rock_Stone_Brick",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": -2,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 3,
+      "interactionTargetYawDegrees": -18.357239
+    },
+    {
+      "localX": 2,
+      "localY": 0,
+      "localZ": 2,
+      "tags": [
+        "SHOP"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Rock_Stone_Brick",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 2,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 3,
+      "interactionTargetYawDegrees": 13.639343
     },
     {
       "localX": -1,
@@ -60,7 +91,8 @@
       "interactionKind": "SIT",
       "interactionTargetLocalX": -1,
       "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 3
+      "interactionTargetLocalZ": 3,
+      "interactionTargetYawDegrees": 12.216614
     },
     {
       "localX": 2,
@@ -72,9 +104,10 @@
       "capacity": 1,
       "blockTypeId": "Rock_Stone_Brick",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 1,
+      "interactionTargetLocalX": 2,
       "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 2
+      "interactionTargetLocalZ": 3,
+      "interactionTargetYawDegrees": 3.7924194
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_market_stall.displayName",

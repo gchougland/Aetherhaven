@@ -32,9 +32,8 @@
       "localY": 0,
       "localZ": -6,
       "tags": [
-        "WORK",
-        "SHOP",
-        "workActivity:craft"
+        "workActivity:craft",
+        "WORK"
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
@@ -42,7 +41,23 @@
       "interactionTargetLocalX": 7,
       "interactionTargetLocalY": 0,
       "interactionTargetLocalZ": -7,
+      "workResidentKind": "pyrotechnic",
       "interactionTargetYawDegrees": -177.00612
+    },
+    {
+      "localX": 7,
+      "localY": 0,
+      "localZ": -7,
+      "tags": [
+        "SHOP"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 7,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -6,
+      "interactionTargetYawDegrees": 2.99388
     },
     {
       "localX": 5,
@@ -73,6 +88,36 @@
       "interactionTargetLocalY": 0,
       "interactionTargetLocalZ": -4,
       "interactionTargetYawDegrees": -39.236725
+    },
+    {
+      "localX": 6,
+      "localY": 0,
+      "localZ": -4,
+      "tags": [
+        "SHOP"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 6,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -3,
+      "interactionTargetYawDegrees": 29.312424
+    },
+    {
+      "localX": 9,
+      "localY": 0,
+      "localZ": -4,
+      "tags": [
+        "SHOP"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 9,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -3,
+      "interactionTargetYawDegrees": -15.163978
     }
   ],
   "managementBlockLocalPos": [

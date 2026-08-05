@@ -180,8 +180,8 @@ public final class PrefabFootprintClearUtil {
     }
 
     /**
-     * Clears only cells defined in the prefab buffer (solids, filler, and explicit air/carve markers). Omitted cells
-     * inside the footprint AABB are left untouched.
+     * Clears only cells defined in the prefab buffer (solids, filler, prefab fluids, and explicit air/carve markers).
+     * Omitted cells inside the footprint AABB are left untouched.
      */
     public static void clearPrefabCellsAtAnchor(
         @Nonnull World world,
@@ -191,7 +191,6 @@ public final class PrefabFootprintClearUtil {
         boolean preserveWater
     ) {
         ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
-        BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         LocalCachedChunkAccessor chunkAccessor = ConstructionPasteOps.createAccessor(world, anchor, buffer);
         for (PendingBlock pb : seq.pendingBlocks()) {
             int bx = anchor.x + pb.x();
@@ -205,13 +204,12 @@ public final class PrefabFootprintClearUtil {
             forceClearBlockCell(world, bx, by, bz);
             forceClearProductionStorageAt(world, bx, by, bz);
         }
-        ConstructionPasteOps.clearNonPrefabFluidsInFootprint(
+        ConstructionPasteOps.clearAllFluidsInPrefabFootprint(
             world,
             anchor,
             seq.pendingBlocks(),
             preserveWater,
-            chunkAccessor,
-            blockTypeMap
+            chunkAccessor
         );
     }
 

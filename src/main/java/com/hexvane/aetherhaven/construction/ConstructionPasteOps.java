@@ -667,6 +667,29 @@ public final class ConstructionPasteOps {
         }
     }
 
+    /**
+     * Clears world fluids in every prefab-listed cell, including cells that define prefab fluids (lava, water).
+     * Used for sparse teardown (e.g. moving a building) where the old site is not rewritten. Still honors
+     * {@link #shouldPreserveWorldWaterAtPrefabCell} for {@code preserveWater} buildings.
+     */
+    public static void clearAllFluidsInPrefabFootprint(
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        @Nonnull List<PendingBlock> footprint,
+        boolean preserveWater,
+        @Nonnull LocalCachedChunkAccessor chunkAccessor
+    ) {
+        for (PendingBlock pb : footprint) {
+            int bx = origin.x + pb.x();
+            int by = origin.y + pb.y();
+            int bz = origin.z + pb.z();
+            if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz, chunkAccessor)) {
+                continue;
+            }
+            applyPrefabFluidForCell(world, bx, by, bz, 0, 0, chunkAccessor);
+        }
+    }
+
     public static void prepAssemblySite(
         @Nonnull World world,
         @Nonnull Vector3i origin,

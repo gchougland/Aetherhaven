@@ -57,12 +57,25 @@ public final class RuntimeCommonIconBroadcast {
         String assetName = "Icons/ItemsGenerated/" + iconFile.getFileName();
         String cacheKey = packId + "|" + assetName;
         try {
+            if (!Files.isRegularFile(iconFile)) {
+                return null;
+            }
             long mtime = Files.getLastModifiedTime(iconFile).toMillis();
             Long registered = registeredMtimes.get(cacheKey);
+            byte[] bytes = Files.readAllBytes(iconFile);
+            if (!PlotTokenIconPng.isValid(bytes)) {
+                LOGGER.atWarning().log(
+                    "Refusing to register invalid/empty plot-token icon %s (%s bytes)",
+                    iconFile,
+                    bytes.length
+                );
+                unregisterSilently(packId, assetName, registeredMtimes);
+                PlotTokenIconPng.deleteIfInvalid(iconFile);
+                return null;
+            }
             if (!force && registered != null && registered == mtime) {
                 return null;
             }
-            byte[] bytes = Files.readAllBytes(iconFile);
             FileCommonAsset asset = new FileCommonAsset(iconFile, assetName, bytes);
             CommonAssetRegistry.AddCommonAssetResult result = CommonAssetRegistry.addCommonAsset(packId, asset);
             registeredMtimes.put(cacheKey, mtime);

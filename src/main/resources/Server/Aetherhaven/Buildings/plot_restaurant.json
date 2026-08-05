@@ -31,8 +31,7 @@
       "localY": 1,
       "localZ": -7,
       "tags": [
-        "WORK",
-        "SHOP"
+        "WORK"
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
@@ -40,6 +39,20 @@
       "interactionTargetLocalX": 4,
       "interactionTargetLocalY": 1,
       "interactionTargetLocalZ": -8
+    },
+    {
+      "localX": 4,
+      "localY": 1,
+      "localZ": -8,
+      "tags": [
+        "SHOP"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 4,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -7
     },
     {
       "localX": 7,

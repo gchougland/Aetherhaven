@@ -51,17 +51,6 @@ public final class VillagerRevivalService {
         if (EntityPresenceUtil.isLoadedLive(presence)) {
             return false;
         }
-        if (appliesUnloadedRevivalGuard(record)
-            && ResidentRegistryService.isRevivalRecordLikelyUnloadedNotDead(town, store, record)) {
-            LOGGER.atInfo()
-                .log(
-                    "Revival blocked: saved uuid %s for role %s in town %s is likely in an unloaded chunk",
-                    oldUuid,
-                    record.getNpcRoleId(),
-                    town.getTownId()
-                );
-            return false;
-        }
         String roleId = record.getNpcRoleId().trim();
         if (roleId.isEmpty()) {
             return false;
@@ -130,6 +119,7 @@ public final class VillagerRevivalService {
         ResidentRegistryService.replaceEntityUuidEverywhere(town, tm, oldUuid, newUuid);
         record.setPendingDawnRevival(false);
         tm.updateTown(town);
+        TownResidentReconcileService.reconcileTownOnWorldThread(world, plugin, town);
         world.execute(
             () -> {
                 VillagerScheduleService.applyForWorld(world, store, plugin, true);
@@ -155,30 +145,25 @@ public final class VillagerRevivalService {
         if (EntityPresenceUtil.isLoadedLive(presence)) {
             return "That villager is already present in the world.";
         }
-        if (appliesUnloadedRevivalGuard(record)
-            && ResidentRegistryService.isRevivalRecordLikelyUnloadedNotDead(town, store, record)) {
-            return "That villager may still be in an unloaded part of your town. Return closer before reviving.";
-        }
         return null;
     }
 
-    /** Package-visible for tests — dawn-confirmed deaths bypass the unloaded-chunk revival guard. */
+    /**
+     * Package-visible for tests — Gaia may revive when the saved uuid is merely unloaded; duplicates are purged on
+     * load / reconcile instead.
+     */
     static boolean appliesUnloadedRevivalGuard(@Nonnull ResidentNpcRecord record) {
-        return !record.isPendingDawnRevival();
+        return false;
     }
 
-    /** Package-visible for tests — blocks revival when the saved uuid cannot be resolved (unloaded chunk). */
+    /**
+     * Package-visible for tests — only blocks when the saved uuid is already loaded live (unloaded copies are allowed).
+     */
     static boolean isRevivalBlockedForUnloadedEntity(
         @Nonnull Store<EntityStore> store,
         @Nonnull TownRecord town,
         @Nonnull ResidentNpcRecord record
     ) {
-        if (EntityPresenceUtil.isLoadedLive(EntityPresenceUtil.resolve(store, record.getLastEntityUuid()))) {
-            return true;
-        }
-        if (record.isPendingDawnRevival()) {
-            return false;
-        }
-        return ResidentRegistryService.isRevivalRecordLikelyUnloadedNotDead(town, store, record);
+        return EntityPresenceUtil.isLoadedLive(EntityPresenceUtil.resolve(store, record.getLastEntityUuid()));
     }
 }

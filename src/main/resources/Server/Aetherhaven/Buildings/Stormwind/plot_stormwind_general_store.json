@@ -28,7 +28,6 @@
       "localY": 1,
       "localZ": -8,
       "tags": [
-        "SHOP",
         "workActivity:craft",
         "WORK"
       ],
@@ -39,6 +38,20 @@
       "interactionTargetLocalY": 1,
       "interactionTargetLocalZ": -9,
       "workResidentKind": "merchant"
+    },
+    {
+      "localX": 7,
+      "localY": 1,
+      "localZ": -9,
+      "tags": [
+        "SHOP"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 7,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -8
     },
     {
       "localX": 5,

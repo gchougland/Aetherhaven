@@ -142,7 +142,7 @@ public final class PlotCreatorValidator {
             case SLEEP_POI -> p.getTags().contains("SLEEP") || p.getTags().contains("ENERGY");
             case EAT_POI -> p.getTags().contains("EAT");
             case FUN_POI -> p.getTags().contains("FUN") || p.getTags().contains("SIT");
-            case SHOP_POI -> p.getTags().contains("SHOP");
+            case SHOP_POI -> p.getTags().contains("SHOP") && !p.getTags().contains("WORK");
             case TOURIST_VISIT_POI -> p.getTags().contains(AetherhavenConstants.POI_TAG_TOURIST_VISIT);
             case PLANNING_DESK_POI -> "Aetherhaven_Town_Planning_Desk".equals(p.getBlockTypeId());
             default -> false;

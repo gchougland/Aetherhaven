@@ -183,6 +183,8 @@ public final class BuildingEditorSessionStarter {
         draft.setPlotAnchor(def.resolvePreviewSignAnchorWorld(prefabOrigin, yaw));
         convertPrefabLocalsToSignSpace(draft, def.getPlotAnchorOffset());
         seedSpecialBlocksFromPois(draft);
+        seedShopStallsFromWorld(world, draft, fp);
+        seedInnBellFromWorldIfMissing(world, draft, fp);
         seedAdventurerSpawnsFromWorldMarkers(world, draft, fp);
         PlotCreatorStep startStep = editorStartStep(draft);
         draft.setStep(startStep);
@@ -348,6 +350,58 @@ public final class BuildingEditorSessionStarter {
             );
             draft.getPlacedSpecialBlocks().add(world);
         }
+    }
+
+    /** Shop stalls live in the prefab as blocks, not building-JSON POIs — scan the paste for them. */
+    private static void seedShopStallsFromWorld(
+        @Nonnull World world,
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull PlotFootprintRecord fp
+    ) {
+        for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
+            for (int y = fp.getMinY(); y <= fp.getMaxY(); y++) {
+                for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
+                    if (!AetherhavenConstants.SHOP_SPOT_BLOCK_TYPE_ID.equals(world.getBlockType(x, y, z).getId())) {
+                        continue;
+                    }
+                    Vector3i pos = new Vector3i(x, y, z);
+                    if (!containsBlockPos(draft.getPlacedSpecialBlocks(), pos)) {
+                        draft.getPlacedSpecialBlocks().add(pos);
+                    }
+                }
+            }
+        }
+    }
+
+    /** Fallback when innBellLocalPos was never authored into the construction JSON. */
+    private static void seedInnBellFromWorldIfMissing(
+        @Nonnull World world,
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull PlotFootprintRecord fp
+    ) {
+        if (draft.getInnBellLocalPos() != null || draft.getPlotAnchor() == null) {
+            return;
+        }
+        for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
+            for (int y = fp.getMinY(); y <= fp.getMaxY(); y++) {
+                for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
+                    if (!AetherhavenConstants.INN_BELL_BLOCK_TYPE_ID.equals(world.getBlockType(x, y, z).getId())) {
+                        continue;
+                    }
+                    draft.setInnBellLocalPos(PlotCreatorLocalCoords.toLocal(draft, new Vector3i(x, y, z)));
+                    return;
+                }
+            }
+        }
+    }
+
+    private static boolean containsBlockPos(@Nonnull List<Vector3i> list, @Nonnull Vector3i pos) {
+        for (Vector3i existing : list) {
+            if (existing != null && existing.x == pos.x && existing.y == pos.y && existing.z == pos.z) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

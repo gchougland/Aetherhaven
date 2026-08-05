@@ -175,6 +175,7 @@ public final class ResidentRegistryService {
         if (town.replaceEntityUuidInQuestTargets(oldUuid, newUuid)) {
             changed = true;
         }
+        town.markEntityUuidSuperseded(oldUuid);
         if (changed) {
             tm.updateTown(town);
         }
@@ -540,6 +541,46 @@ public final class ResidentRegistryService {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Canonical entity uuid for a Gaia-eligible story role after respawn/revive: elder/innkeeper town fields first,
+     * then the registry row's {@link ResidentNpcRecord#getLastEntityUuid()}. Null when the town has no tracked
+     * uuid for that role yet.
+     */
+    @Nullable
+    public static UUID findCanonicalEntityUuidForGaiaRole(@Nonnull TownRecord town, @Nonnull String roleId) {
+        String rid = roleId.trim();
+        if (rid.isEmpty()) {
+            return null;
+        }
+        if (AetherhavenConstants.ELDER_NPC_ROLE_ID.equalsIgnoreCase(rid)) {
+            UUID elder = town.getElderEntityUuid();
+            if (elder != null) {
+                return elder;
+            }
+        }
+        if (AetherhavenConstants.INNKEEPER_NPC_ROLE_ID.equalsIgnoreCase(rid)) {
+            UUID innkeeper = town.getInnkeeperEntityUuid();
+            if (innkeeper != null) {
+                return innkeeper;
+            }
+        }
+        String key = rid.toLowerCase(Locale.ROOT);
+        for (ResidentNpcRecord r : town.getResidentNpcRecords()) {
+            if (!key.equals(r.getNpcRoleId().toLowerCase(Locale.ROOT))) {
+                continue;
+            }
+            if (!isGaiaRevivalEligible(r.getKind(), r.getNpcRoleId())) {
+                continue;
+            }
+            UUID uuid = r.getLastEntityUuid();
+            if (uuid.getLeastSignificantBits() == 0L && uuid.getMostSignificantBits() == 0L) {
+                return null;
+            }
+            return uuid;
+        }
+        return null;
     }
 
     private static int revivalRowSortOrder(@Nonnull ResidentNpcRecord r) {

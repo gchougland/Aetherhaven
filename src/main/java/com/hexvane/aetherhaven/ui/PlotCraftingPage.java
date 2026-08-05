@@ -1497,10 +1497,6 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         }
         if (communityTab) {
             String id = variant.constructionId();
-            Path iconFile = CommunityPaths.iconFile(plugin.getDataDirectory(), id);
-            if (Files.isRegularFile(iconFile)) {
-                return CommunityPaths.iconAssetPath(id);
-            }
             if (ConstructionTokenIconPath.isIconAvailable(id, plugin.getDataDirectory())) {
                 return CommunityPaths.iconAssetPath(id);
             }

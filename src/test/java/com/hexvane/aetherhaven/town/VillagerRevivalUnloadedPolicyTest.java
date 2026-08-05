@@ -27,7 +27,7 @@ class VillagerRevivalUnloadedPolicyTest {
     }
 
     @Test
-    void gaiaRevivalAppliesUnloadedGuardWhenDeathNotConfirmed() {
+    void gaiaRevivalDoesNotApplyUnloadedGuard() {
         ResidentNpcRecord record =
             new ResidentNpcRecord(
                 AetherhavenConstants.ELDER_NPC_ROLE_ID,
@@ -36,7 +36,7 @@ class VillagerRevivalUnloadedPolicyTest {
                 UUID.randomUUID()
             );
 
-        assertTrue(VillagerRevivalService.appliesUnloadedRevivalGuard(record));
+        assertFalse(VillagerRevivalService.appliesUnloadedRevivalGuard(record));
     }
 
     @Test
@@ -46,5 +46,27 @@ class VillagerRevivalUnloadedPolicyTest {
         town.setElderEntityUuid(elderUuid);
 
         assertTrue(town.getElderEntityUuid().equals(elderUuid));
+    }
+
+    @Test
+    void canonicalUuidPrefersElderFieldThenRegistry() {
+        UUID elderUuid = UUID.randomUUID();
+        UUID registryUuid = UUID.randomUUID();
+        TownRecord town = new TownRecord();
+        town.setElderEntityUuid(elderUuid);
+        town.getResidentNpcRecords()
+            .add(
+                new ResidentNpcRecord(
+                    AetherhavenConstants.ELDER_NPC_ROLE_ID,
+                    TownVillagerBinding.KIND_ELDER,
+                    null,
+                    registryUuid
+                )
+            );
+
+        assertTrue(elderUuid.equals(ResidentRegistryService.findCanonicalEntityUuidForGaiaRole(
+            town,
+            AetherhavenConstants.ELDER_NPC_ROLE_ID
+        )));
     }
 }

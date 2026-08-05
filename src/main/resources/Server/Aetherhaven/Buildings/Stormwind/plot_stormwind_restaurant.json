@@ -33,7 +33,6 @@
       "localZ": -7,
       "tags": [
         "WORK",
-        "SHOP",
         "workActivity:craft"
       ],
       "capacity": 1,
@@ -43,6 +42,21 @@
       "interactionTargetLocalY": 1,
       "interactionTargetLocalZ": -8,
       "interactionTargetYawDegrees": 171.76123
+    },
+    {
+      "localX": 7,
+      "localY": 1,
+      "localZ": -8,
+      "tags": [
+        "SHOP"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 7,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -7,
+      "interactionTargetYawDegrees": -8.238769999999988
     },
     {
       "localX": 5,

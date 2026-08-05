@@ -4,11 +4,10 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
-import com.hexvane.aetherhaven.plotcreator.RuntimeCommonIconBroadcast;
+import com.hexvane.aetherhaven.plotcreator.PlotTokenIconPng;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.asset.common.CommonAsset;
 import com.hypixel.hytale.server.core.asset.common.CommonAssetRegistry;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -19,7 +18,6 @@ public final class CommunityIconDownload {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final int MAX_ATTEMPTS = 3;
     private static final long[] BACKOFF_MS = {0L, 500L, 1500L};
-    private static final int MIN_PNG_BYTES = 100;
 
     public enum Result {
         /** Manifest has no icon URL — fallback icon is acceptable. */
@@ -37,6 +35,43 @@ public final class CommunityIconDownload {
         return iconUrl != null && !iconUrl.isBlank();
     }
 
+    /**
+     * Downloads and atomically writes the icon PNG without registering it. Caller batches registration.
+     *
+     * @return the icon path on success; {@code null} when not required or download/validation failed
+     */
+    @Nullable
+    public static Path downloadToDiskOnly(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull CommunityManifestEntry entry,
+        boolean forceRefresh
+    ) {
+        if (!iconRequired(entry)) {
+            return null;
+        }
+        Path iconFile = CommunityPaths.iconFile(plugin.getDataDirectory(), entry.getId());
+        synchronized (PlotTokenIconPng.lockFor(entry.getId())) {
+            if (!forceRefresh && PlotTokenIconPng.isValidFile(iconFile)) {
+                return iconFile;
+            }
+            byte[] png = downloadWithRetry(plugin, entry);
+            if (png == null) {
+                return null;
+            }
+            if (!PlotTokenIconPng.isValid(png)) {
+                LOGGER.atWarning().log("Community icon download returned invalid PNG for %s", entry.getId());
+                return null;
+            }
+            try {
+                PlotTokenIconPng.writeAtomically(iconFile, png);
+                return iconFile;
+            } catch (Exception e) {
+                LOGGER.atWarning().withCause(e).log("Failed to write community icon for %s", entry.getId());
+                return null;
+            }
+        }
+    }
+
     @Nonnull
     public static Result downloadRegisterAndValidate(
         @Nonnull AetherhavenPlugin plugin,
@@ -49,24 +84,25 @@ public final class CommunityIconDownload {
         Path dataDir = plugin.getDataDirectory();
         Path iconFile = CommunityPaths.iconFile(dataDir, entry.getId());
         String assetPath = CustomBuildingsPaths.iconAssetPath(entry.getId());
-        if (!forceRefresh && Files.isRegularFile(iconFile) && isRegistered(assetPath)) {
-            return Result.SUCCESS;
+        synchronized (PlotTokenIconPng.lockFor(entry.getId())) {
+            if (!forceRefresh && PlotTokenIconPng.isValidFile(iconFile) && isRegistered(assetPath)) {
+                return Result.SUCCESS;
+            }
+            byte[] png = downloadWithRetry(plugin, entry);
+            if (png == null) {
+                return Result.DOWNLOAD_FAILED;
+            }
+            if (!PlotTokenIconPng.isValid(png)) {
+                return Result.INVALID_PNG;
+            }
+            try {
+                PlotTokenIconPng.writeAtomically(iconFile, png);
+            } catch (Exception e) {
+                LOGGER.atWarning().withCause(e).log("Failed to write community icon for %s", entry.getId());
+                return Result.DOWNLOAD_FAILED;
+            }
+            return registerAndVerify(plugin, iconFile, entry.getId(), assetPath, true);
         }
-        byte[] png = downloadWithRetry(plugin, entry);
-        if (png == null) {
-            return Result.DOWNLOAD_FAILED;
-        }
-        if (!isValidPng(png)) {
-            return Result.INVALID_PNG;
-        }
-        try {
-            Files.createDirectories(iconFile.getParent());
-            Files.write(iconFile, png);
-        } catch (Exception e) {
-            LOGGER.atWarning().withCause(e).log("Failed to write community icon for %s", entry.getId());
-            return Result.DOWNLOAD_FAILED;
-        }
-        return registerAndVerify(plugin, iconFile, entry.getId(), assetPath, forceRefresh);
     }
 
     /**
@@ -91,10 +127,19 @@ public final class CommunityIconDownload {
             return true;
         }
         Path iconFile = CommunityPaths.iconFile(plugin.getDataDirectory(), constructionId);
-        if (!Files.isRegularFile(iconFile)) {
+        if (!PlotTokenIconPng.isValidFile(iconFile)) {
             return false;
         }
         return isRegistered(CustomBuildingsPaths.iconAssetPath(constructionId));
+    }
+
+    /**
+     * Removes an invalid on-disk community icon so repair can re-fetch it.
+     *
+     * @return true when the file was missing or deleted as invalid
+     */
+    public static boolean deleteInvalidIconIfPresent(@Nonnull Path iconFile) {
+        return PlotTokenIconPng.deleteIfInvalid(iconFile);
     }
 
     @Nullable
@@ -116,7 +161,7 @@ public final class CommunityIconDownload {
                 }
             }
             last = CommunityHttpClient.getBytes(absolute);
-            if (last != null && last.length > 0) {
+            if (last != null && last.length > 0 && PlotTokenIconPng.isValid(last)) {
                 return last;
             }
             LOGGER.atWarning().log(
@@ -126,17 +171,7 @@ public final class CommunityIconDownload {
                 absolute
             );
         }
-        return last;
-    }
-
-    private static boolean isValidPng(@Nonnull byte[] png) {
-        if (png.length < MIN_PNG_BYTES) {
-            return false;
-        }
-        return png[0] == (byte) 0x89
-            && png[1] == 0x50
-            && png[2] == 0x4E
-            && png[3] == 0x47;
+        return last != null && PlotTokenIconPng.isValid(last) ? last : null;
     }
 
     @Nonnull

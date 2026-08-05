@@ -354,6 +354,16 @@ public final class PlotBuildingKindRequirements {
         if (requireSafe) {
             out.add(new SubstepRequirement(PlotCreatorSubstepType.SHOP_SAFE_BLOCK, 1));
         }
+        String role = null;
+        if (plugin != null) {
+            for (String id : gameplayIdsForWorkplaceLookup(draft, plugin)) {
+                role = ProductionWorkplaceKinds.residentBindingKindForGameplayConstruction(id);
+                if (role != null) {
+                    break;
+                }
+            }
+        }
+        out.add(new SubstepRequirement(PlotCreatorSubstepType.WORK_POI, 1, role));
         out.add(new SubstepRequirement(PlotCreatorSubstepType.SHOP_SPOT, 1));
         out.add(new SubstepRequirement(PlotCreatorSubstepType.SHOP_POI, 1));
         out.add(new SubstepRequirement(PlotCreatorSubstepType.TOURIST_VISIT_POI, 1));

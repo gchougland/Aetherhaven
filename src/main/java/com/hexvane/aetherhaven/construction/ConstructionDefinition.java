@@ -176,6 +176,11 @@ public final class ConstructionDefinition {
     @Nullable
     private int[] shopSafeLocalPos;
 
+    /** Prefab-local position of the inn bell block; optional. */
+    @SerializedName("innBellLocalPos")
+    @Nullable
+    private int[] innBellLocalPos;
+
     /** Prefab-local position of the workplace production storage wardrobe; optional. */
     @SerializedName("productionStorageLocalPos")
     @Nullable
@@ -532,6 +537,12 @@ public final class ConstructionDefinition {
     @Nullable
     public int[] getShopSafeLocalPos() {
         return shopSafeLocalPos != null && shopSafeLocalPos.length == 3 ? shopSafeLocalPos : null;
+    }
+
+    /** @return prefab-local x,y,z of inn bell block, or null */
+    @Nullable
+    public int[] getInnBellLocalPos() {
+        return innBellLocalPos != null && innBellLocalPos.length == 3 ? innBellLocalPos : null;
     }
 
     /** @return prefab-local x,y,z of workplace production storage wardrobe, or null */

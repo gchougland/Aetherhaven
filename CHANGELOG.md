@@ -1,6 +1,16 @@
 # Changelog
 
-## [2.7.0] - Unreleased
+## [2.7.1] - Unreleased
+
+### Fixed
+
+- **Gaia statue revive** — You can revive a missing villager at the Gaia statue even if they seem to be somewhere else in town that is not loaded.
+- **Duplicate villagers after revive** — If an old copy of a revived or reset villager shows up later, it is removed so you do not end up with two.
+- **Plot creator shop variants** — Shop style variants now require merchant, stall, and tourist visit spots, and are marked as places tourists visit by default.
+- **Moving buildings** — Liquids like lava no longer stay behind at the old spot when you move a building.
+- **Community building icons** — Browsing or downloading marketplace buildings no longer crashes when a building icon fails to load.
+
+## [2.7.0] - 8/5/2026
 
 ### Added
 

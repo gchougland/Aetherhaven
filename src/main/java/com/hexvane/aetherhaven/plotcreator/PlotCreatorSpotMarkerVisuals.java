@@ -51,7 +51,6 @@ public final class PlotCreatorSpotMarkerVisuals {
         }
         if (type == PlotCreatorSubstepType.WORK_POI
             || type == PlotCreatorSubstepType.BARD_WORK_POI
-            || type == PlotCreatorSubstepType.SHOP_POI
             || type == PlotCreatorSubstepType.PLANNING_DESK_POI) {
             if (workResidentKind != null && !workResidentKind.isBlank()) {
                 String role = workRoleLabel(workResidentKind);
@@ -82,7 +81,7 @@ public final class PlotCreatorSpotMarkerVisuals {
             case SHOP_SPOT -> "Shop stall";
             case TOURIST_PORTAL_BLOCK -> "Tourist portal";
             case TOURIST_VISIT_POI -> "Tourist visit spot";
-            case SHOP_POI -> "Merchant work spot";
+            case SHOP_POI -> "Shop spot";
             case INNKEEPER_SPAWN -> "Innkeeper stand";
             case VISITOR_SPAWN -> "Inn Visitor Spawn";
             case GUILD_MASTER_SPAWN -> "Guild master stand";

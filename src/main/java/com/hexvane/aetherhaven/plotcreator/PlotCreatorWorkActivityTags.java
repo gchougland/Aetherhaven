@@ -43,9 +43,6 @@ public final class PlotCreatorWorkActivityTags {
         if (type == PlotCreatorSubstepType.BARD_WORK_POI) {
             return "leisure";
         }
-        if (type == PlotCreatorSubstepType.SHOP_POI) {
-            return "craft";
-        }
         if (type == PlotCreatorSubstepType.PLANNING_DESK_POI) {
             return "read";
         }

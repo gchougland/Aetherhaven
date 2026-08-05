@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.plot.PlotCraftingCatalog;
 import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
+import com.hexvane.aetherhaven.plotcreator.PlotTokenIconPng;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.asset.common.CommonAsset;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -274,18 +275,19 @@ public final class CommunityModerationService {
             CommunityBuildingJsonNormalizer.normalizeInstalledBuildingFile(buildingFile, proposedId);
 
             Path iconFile = CommunityPaths.iconFile(dataDir, proposedId);
-            if (!Files.isRegularFile(iconFile)) {
+            if (!PlotTokenIconPng.isValidFile(iconFile)) {
+                PlotTokenIconPng.deleteIfInvalid(iconFile);
                 Path modIcon = CustomBuildingsPaths.iconFile(dataDir, entry.iconConstructionId());
-                if (Files.isRegularFile(modIcon)) {
+                if (PlotTokenIconPng.isValidFile(modIcon)) {
                     Files.copy(modIcon, iconFile, StandardCopyOption.REPLACE_EXISTING);
                 } else {
                     byte[] png = CommunityHttpClient.getBytes(entry.moderationIconUrl(base), headers);
-                    if (png != null && png.length > 0) {
-                        Files.write(iconFile, png);
+                    if (png != null && PlotTokenIconPng.isValid(png)) {
+                        PlotTokenIconPng.writeAtomically(iconFile, png);
                     }
                 }
             }
-            if (Files.isRegularFile(iconFile)) {
+            if (PlotTokenIconPng.isValidFile(iconFile)) {
                 CommonAsset asset = CommunityIconRegistry.registerIconFileNoSend(plugin, iconFile, true);
                 CustomBuildingIconAssetRegistry.registerIconFileNoSend(plugin, iconFile, true);
                 if (asset != null) {
@@ -399,9 +401,12 @@ public final class CommunityModerationService {
         List<Path> alreadyOnDisk = new ArrayList<>();
         for (CommunityPendingEntry entry : needed) {
             Path iconFile = CustomBuildingsPaths.iconFile(plugin.getDataDirectory(), entry.iconConstructionId());
-            if (Files.isRegularFile(iconFile) && !isCachedIconStale(iconFile)) {
+            if (PlotTokenIconPng.isValidFile(iconFile) && !isCachedIconStale(iconFile)) {
                 alreadyOnDisk.add(iconFile);
             } else {
+                if (Files.isRegularFile(iconFile) && !PlotTokenIconPng.isValidFile(iconFile)) {
+                    PlotTokenIconPng.deleteIfInvalid(iconFile);
+                }
                 toDownload.add(entry);
             }
         }
@@ -475,16 +480,17 @@ public final class CommunityModerationService {
     ) {
         Path iconFile = CustomBuildingsPaths.iconFile(plugin.getDataDirectory(), entry.iconConstructionId());
         byte[] png = CommunityHttpClient.getBytes(entry.moderationIconUrl(apiBaseUrl), headers);
-        if (png == null || png.length == 0) {
+        if (png == null || !PlotTokenIconPng.isValid(png)) {
             return null;
         }
-        try {
-            Files.createDirectories(iconFile.getParent());
-            Files.write(iconFile, png);
-            return iconFile;
-        } catch (Exception e) {
-            LOGGER.atWarning().withCause(e).log("Failed to cache moderation icon for %s", entry.getSubmissionId());
-            return null;
+        synchronized (PlotTokenIconPng.lockFor(entry.iconConstructionId())) {
+            try {
+                PlotTokenIconPng.writeAtomically(iconFile, png);
+                return iconFile;
+            } catch (Exception e) {
+                LOGGER.atWarning().withCause(e).log("Failed to cache moderation icon for %s", entry.getSubmissionId());
+                return null;
+            }
         }
     }
 

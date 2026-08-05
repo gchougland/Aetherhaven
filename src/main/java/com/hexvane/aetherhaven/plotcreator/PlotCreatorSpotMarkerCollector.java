@@ -207,7 +207,7 @@ public final class PlotCreatorSpotMarkerCollector {
         if (poi.getTags().contains(AetherhavenConstants.POI_TAG_TOURIST_VISIT)) {
             return PlotCreatorSubstepType.TOURIST_VISIT_POI;
         }
-        if (poi.getTags().contains("SHOP")) {
+        if (poi.getTags().contains("SHOP") && !poi.getTags().contains("WORK")) {
             return PlotCreatorSubstepType.SHOP_POI;
         }
         if (poi.getTags().contains("SLEEP") || poi.getTags().contains("ENERGY")) {

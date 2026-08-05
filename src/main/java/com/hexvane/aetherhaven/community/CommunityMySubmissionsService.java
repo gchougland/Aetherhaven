@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.CommunityMarketplaceConfig;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
+import com.hexvane.aetherhaven.plotcreator.PlotTokenIconPng;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -181,9 +182,9 @@ public final class CommunityMySubmissionsService {
             Files.write(CustomBuildingsPaths.buildingFile(dataDir, catalogId), buildingBytes);
             Files.write(CustomBuildingsPaths.prefabsDirectory(dataDir).resolve(catalogId + ".prefab.json"), prefabBytes);
             byte[] iconBytes = CommunityHttpClient.getBytes(base + "/icon.png", headers);
-            if (iconBytes != null && iconBytes.length > 0) {
+            if (iconBytes != null && PlotTokenIconPng.isValid(iconBytes)) {
                 Path iconFile = CustomBuildingsPaths.iconFile(dataDir, catalogId);
-                Files.write(iconFile, iconBytes);
+                PlotTokenIconPng.writeAtomically(iconFile, iconBytes);
                 CustomBuildingIconAssetRegistry.registerIconFile(plugin, iconFile);
             }
             plugin.reloadConfigsAndAssetCatalogs();

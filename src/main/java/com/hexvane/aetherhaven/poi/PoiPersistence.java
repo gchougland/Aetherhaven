@@ -45,7 +45,18 @@ public final class PoiPersistence {
         Path path = poisFile(plugin, world.getName());
         try {
             PoiWorldFile file = PoiWorldFile.readOrEmpty(path);
-            registry.replaceAll(PoiWorldFile.toEntries(file));
+            java.util.List<PoiEntry> loaded = PoiWorldFile.toEntries(file);
+            java.util.List<PoiEntry> migrated = ShopBrowsePoiMigration.migrate(loaded);
+            registry.replaceAll(migrated);
+            if (migrated != loaded) {
+                save(world, plugin, registry);
+                LOGGER.atInfo().log(
+                    "Aetherhaven migrated shop browse POIs for world %s (%s -> %s entries)",
+                    world.getName(),
+                    loaded.size(),
+                    migrated.size()
+                );
+            }
             LOGGER.atInfo().log("Aetherhaven loaded %s POIs for world %s from %s", registry.allEntries().size(), world.getName(), path);
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Failed to load POIs for world %s", world.getName());

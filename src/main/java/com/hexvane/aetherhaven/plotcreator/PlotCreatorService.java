@@ -507,10 +507,25 @@ public final class PlotCreatorService {
 
     /** Restores spots that cannot be deselected for the draft's effective building kinds. */
     public static void ensureRequiredSpots(@Nonnull PlotCreatorDraft draft) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        List<PlotBuildingKind> kinds = PlotBuildingKindRequirements.effectiveKinds(draft, plugin);
+        boolean isShop = kinds.contains(PlotBuildingKind.SHOP) || kinds.contains(PlotBuildingKind.PLAYER_SHOP);
+        boolean isPlayerShop = kinds.contains(PlotBuildingKind.PLAYER_SHOP)
+            || PlotBuildingKindRequirements.requiresShopSafe(draft, plugin);
+        List<String> shopWorkRoles = isShop
+            ? PlotBuildingKindRequirements.workplaceRolesForDraft(draft, plugin)
+            : List.of();
+        String shopWorkRole = shopWorkRoles.isEmpty() ? null : shopWorkRoles.get(0);
+
         boolean hasManagement = false;
         boolean hasInnBell = false;
         boolean hasGaiaStatue = false;
         boolean hasPriestessWork = false;
+        boolean hasShopSafe = false;
+        boolean hasShopSpot = false;
+        boolean hasShopPoi = false;
+        boolean hasTouristVisit = false;
+        boolean hasShopWork = false;
         for (PlotCreatorSpotEntry entry : draft.getSelectedSpots()) {
             if (entry.type() == PlotCreatorSubstepType.MANAGEMENT_BLOCK) {
                 hasManagement = true;
@@ -521,20 +536,57 @@ public final class PlotCreatorService {
             } else if (entry.type() == PlotCreatorSubstepType.WORK_POI
                 && TownVillagerBinding.KIND_PRIESTESS.equals(entry.workResidentKind())) {
                 hasPriestessWork = true;
+            } else if (entry.type() == PlotCreatorSubstepType.SHOP_SAFE_BLOCK) {
+                hasShopSafe = true;
+            } else if (entry.type() == PlotCreatorSubstepType.SHOP_SPOT) {
+                hasShopSpot = true;
+            } else if (entry.type() == PlotCreatorSubstepType.SHOP_POI) {
+                hasShopPoi = true;
+            } else if (entry.type() == PlotCreatorSubstepType.TOURIST_VISIT_POI) {
+                hasTouristVisit = true;
+            }
+            if (isShop && entry.type() == PlotCreatorSubstepType.WORK_POI) {
+                if (shopWorkRole == null || shopWorkRole.isBlank()) {
+                    if (entry.workResidentKind() == null || entry.workResidentKind().isBlank()) {
+                        hasShopWork = true;
+                    }
+                } else if (shopWorkRole.equals(entry.workResidentKind())) {
+                    hasShopWork = true;
+                }
             }
         }
         if (!hasManagement) {
             draft.getSelectedSpots().add(0, PlotCreatorSpotEntry.of(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1));
         }
-        if (!hasInnBell
-            && PlotBuildingKindRequirements.effectiveKinds(draft, AetherhavenPlugin.get()).contains(PlotBuildingKind.INN)) {
+        if (!hasInnBell && kinds.contains(PlotBuildingKind.INN)) {
             draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.INN_BELL_BLOCK, 1));
         }
-        if (!hasGaiaStatue && PlotBuildingKindRequirements.requiresGaiaStatue(draft, AetherhavenPlugin.get())) {
+        if (!hasGaiaStatue && PlotBuildingKindRequirements.requiresGaiaStatue(draft, plugin)) {
             draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.GAIA_STATUE_BLOCK, 1));
         }
-        if (!hasPriestessWork && PlotBuildingKindRequirements.requiresGaiaStatue(draft, AetherhavenPlugin.get())) {
+        if (!hasPriestessWork && PlotBuildingKindRequirements.requiresGaiaStatue(draft, plugin)) {
             draft.getSelectedSpots().add(PlotCreatorSpotEntry.work(TownVillagerBinding.KIND_PRIESTESS, 1));
+        }
+        if (isShop) {
+            if (isPlayerShop && !hasShopSafe) {
+                draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.SHOP_SAFE_BLOCK, 1));
+            }
+            if (!hasShopWork) {
+                if (shopWorkRole != null && !shopWorkRole.isBlank()) {
+                    draft.getSelectedSpots().add(PlotCreatorSpotEntry.work(shopWorkRole, 1));
+                } else {
+                    draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.WORK_POI, 1));
+                }
+            }
+            if (!hasShopSpot) {
+                draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.SHOP_SPOT, 1));
+            }
+            if (!hasShopPoi) {
+                draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.SHOP_POI, 1));
+            }
+            if (!hasTouristVisit) {
+                draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.TOURIST_VISIT_POI, 1));
+            }
         }
     }
 
@@ -797,28 +849,33 @@ public final class PlotCreatorService {
     }
 
     public static void applyDefaultTagsForKind(@Nonnull PlotCreatorDraft draft) {
+        if (draft.hasKind(PlotBuildingKind.VARIANT) && draft.getCountsAsConstructionIds().isEmpty()) {
+            return;
+        }
+        List<PlotBuildingKind> kinds = PlotBuildingKindRequirements.effectiveKinds(draft, AetherhavenPlugin.get());
+        for (PlotBuildingKind kind : kinds) {
+            switch (kind) {
+                case AMENITY, SHOP, PLAYER_SHOP, INN -> draft.setTouristDestination(true);
+                default -> {}
+            }
+        }
         if (!draft.getBuildingTags().isEmpty() || draft.getBuildingTagsInput() != null) {
             return;
         }
-        for (PlotBuildingKind kind : draft.getKinds()) {
+        for (PlotBuildingKind kind : kinds) {
             switch (kind) {
                 case AMENITY -> {
                     addTagOnce(draft, "amenity");
                     addTagOnce(draft, "fun");
                     draft.setScheduleSharedUtilityPick(true);
-                    draft.setTouristDestination(true);
                 }
                 case HOME -> addTagOnce(draft, "home");
                 case WORK -> addTagOnce(draft, "work");
                 case SHOP, PLAYER_SHOP -> {
                     addTagOnce(draft, "shop");
                     addTagOnce(draft, "work");
-                    draft.setTouristDestination(true);
                 }
-                case INN -> {
-                    addTagOnce(draft, "civic");
-                    draft.setTouristDestination(true);
-                }
+                case INN -> addTagOnce(draft, "civic");
                 case TOWN_HALL, GUILD_HALL -> addTagOnce(draft, "civic");
                 case TOURIST_PORTAL -> addTagOnce(draft, "civic");
                 case DECORATION -> addTagOnce(draft, "decoration");

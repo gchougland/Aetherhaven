@@ -61,6 +61,7 @@ public final class PlotCreatorDraftLoader {
         copyPos(def.getManagementBlockLocalPos(), draft::setManagementBlockLocalPos);
         copyPos(def.getTreasuryLocalPos(), draft::setTreasuryLocalPos);
         copyPos(def.getShopSafeLocalPos(), draft::setShopSafeLocalPos);
+        copyPos(def.getInnBellLocalPos(), draft::setInnBellLocalPos);
         copyPos(def.getProductionStorageLocalPos(), draft::setProductionStorageLocalPos);
         copyPos(def.getInnkeeperSpawnLocal(), draft::setInnkeeperSpawnLocal);
         copyPos(def.getGuildMasterSpawnLocal(), draft::setGuildMasterSpawnLocal);

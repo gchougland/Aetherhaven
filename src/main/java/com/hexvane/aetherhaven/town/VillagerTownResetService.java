@@ -257,6 +257,7 @@ public final class VillagerTownResetService {
         // New spawns can still be visitors while their stall/farm/etc. is already complete; promote after UUID migration.
         InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store);
         tm.updateTown(town);
+        TownResidentReconcileService.reconcileTownOnWorldThread(world, plugin, town);
         world.execute(
             () -> {
                 VillagerScheduleService.applyForWorld(world, store, plugin, true);

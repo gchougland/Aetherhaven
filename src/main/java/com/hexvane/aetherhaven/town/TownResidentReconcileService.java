@@ -221,14 +221,16 @@ public final class TownResidentReconcileService {
         @Nullable UUID registryUuid,
         @Nonnull List<LoadedStoryResident> loaded
     ) {
-        if (loaded.isEmpty()) {
-            return null;
-        }
-        if (preferredUuid != null && findLoaded(loaded, preferredUuid) != null) {
+        // Prefer town/registry canonical even when that entity is not loaded — never promote a loaded stray over a
+        // uuid already chosen by revive/reset/respawn.
+        if (preferredUuid != null) {
             return preferredUuid;
         }
-        if (registryUuid != null && findLoaded(loaded, registryUuid) != null) {
+        if (registryUuid != null) {
             return registryUuid;
+        }
+        if (loaded.isEmpty()) {
+            return null;
         }
         return loaded.get(0).entityUuid();
     }
@@ -252,7 +254,7 @@ public final class TownResidentReconcileService {
                 return innkeeper;
             }
         }
-        if (registryUuid != null && findLoaded(loaded, registryUuid) != null) {
+        if (registryUuid != null) {
             return registryUuid;
         }
         return null;
@@ -309,6 +311,9 @@ public final class TownResidentReconcileService {
     /**
      * When a live story NPC exists for {@code record}'s role but the registry still points at a stale uuid, migrate town
      * data to the live entity. Returns true when town data was updated.
+     * <p>
+     * Does not adopt a loaded copy when the registry uuid is merely unloaded (e.g. after a remote reset/revive) — that
+     * would undo the respawn and leave duplicates.
      */
     public static boolean syncRegistryToLiveEntityIfNeeded(
         @Nonnull TownRecord town,
@@ -335,6 +340,13 @@ public final class TownResidentReconcileService {
                 tm.updateTown(town);
                 return true;
             }
+            return false;
+        }
+        if (town.isEntityUuidSuperseded(liveUuid)) {
+            return false;
+        }
+        EntityPresenceUtil.EntityPresence registryPresence = EntityPresenceUtil.resolve(store, registryUuid);
+        if (EntityPresenceUtil.isLoadedLive(registryPresence) || EntityPresenceUtil.isUnknownUnloaded(registryPresence)) {
             return false;
         }
         syncEntityUuid(

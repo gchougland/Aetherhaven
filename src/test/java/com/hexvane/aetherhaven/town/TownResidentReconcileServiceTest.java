@@ -35,6 +35,31 @@ class TownResidentReconcileServiceTest {
         assertEquals(1, report.getRemovedStaleRegistryRows());
     }
 
+    @Test
+    void pickCanonicalUuid_prefersRegistryEvenWhenNotLoaded() throws Exception {
+        UUID registryUuid = UUID.randomUUID();
+        var method =
+            TownResidentReconcileService.class.getDeclaredMethod(
+                "pickCanonicalUuid",
+                UUID.class,
+                UUID.class,
+                java.util.List.class
+            );
+        method.setAccessible(true);
+        // Empty loaded list: still keep the registry/preferred uuid (remote reset case).
+        assertEquals(registryUuid, method.invoke(null, registryUuid, registryUuid, java.util.List.of()));
+        assertEquals(registryUuid, method.invoke(null, registryUuid, UUID.randomUUID(), java.util.List.of()));
+    }
+
+    @Test
+    void markEntityUuidSuperseded_isDetected() {
+        TownRecord town = sampleTown();
+        UUID old = UUID.randomUUID();
+        assertFalse(town.isEntityUuidSuperseded(old));
+        town.markEntityUuidSuperseded(old);
+        assertTrue(town.isEntityUuidSuperseded(old));
+    }
+
     private static TownRecord sampleTown() {
         return new TownRecord(
             UUID.randomUUID(),

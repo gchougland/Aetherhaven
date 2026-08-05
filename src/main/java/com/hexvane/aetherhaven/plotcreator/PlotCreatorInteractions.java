@@ -351,6 +351,7 @@ public final class PlotCreatorInteractions {
                     return false;
                 }
             }
+            PlotCreatorService.applyDefaultTagsForKind(d);
             PlotCreatorService.advance(session, ref, store);
             return true;
         }

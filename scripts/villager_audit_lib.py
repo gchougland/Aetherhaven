@@ -24,6 +24,8 @@ SOURCE_LABELS: dict[str, str] = {
     "villager_reset": "Villager reset command or service",
     "guard_hire_replace": "Guard hire replaced existing guard",
     "admin_townsfolk_despawn": "Admin townsfolk despawn command",
+    "resident_duplicate_reconcile": "Duplicate story villager removed during reconcile",
+    "stale_uuid_after_respawn": "Stale UUID after respawn",
 }
 
 EVENT_LABELS: dict[str, str] = {

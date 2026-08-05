@@ -242,14 +242,33 @@ public final class PlotCreatorImportantSpotsPage
         if (spot.type() == PlotCreatorSubstepType.MANAGEMENT_BLOCK) {
             return true;
         }
-        return (spot.type() == PlotCreatorSubstepType.INN_BELL_BLOCK
-                && PlotBuildingKindRequirements.effectiveKinds(session.getDraft(), AetherhavenPlugin.get())
-                    .contains(com.hexvane.aetherhaven.plotcreator.PlotBuildingKind.INN))
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        List<PlotBuildingKind> kinds = PlotBuildingKindRequirements.effectiveKinds(session.getDraft(), plugin);
+        boolean isShop = kinds.contains(PlotBuildingKind.SHOP) || kinds.contains(PlotBuildingKind.PLAYER_SHOP);
+        boolean isPlayerShop = kinds.contains(PlotBuildingKind.PLAYER_SHOP)
+            || PlotBuildingKindRequirements.requiresShopSafe(session.getDraft(), plugin);
+        List<String> shopWorkRoles = isShop
+            ? PlotBuildingKindRequirements.workplaceRolesForDraft(session.getDraft(), plugin)
+            : List.of();
+        String shopWorkRole = shopWorkRoles.isEmpty() ? null : shopWorkRoles.get(0);
+        boolean isRequiredShopWork =
+            isShop
+                && spot.type() == PlotCreatorSubstepType.WORK_POI
+                && (shopWorkRole == null || shopWorkRole.isBlank()
+                    ? spot.workResidentKind() == null || spot.workResidentKind().isBlank()
+                    : shopWorkRole.equals(spot.workResidentKind()));
+        return (spot.type() == PlotCreatorSubstepType.INN_BELL_BLOCK && kinds.contains(PlotBuildingKind.INN))
             || (spot.type() == PlotCreatorSubstepType.GAIA_STATUE_BLOCK
-                && PlotBuildingKindRequirements.requiresGaiaStatue(session.getDraft(), AetherhavenPlugin.get()))
+                && PlotBuildingKindRequirements.requiresGaiaStatue(session.getDraft(), plugin))
             || (spot.isWorkRoleSpot()
                 && TownVillagerBinding.KIND_PRIESTESS.equals(spot.workResidentKind())
-                && PlotBuildingKindRequirements.requiresGaiaStatue(session.getDraft(), AetherhavenPlugin.get()));
+                && PlotBuildingKindRequirements.requiresGaiaStatue(session.getDraft(), plugin))
+            || isRequiredShopWork
+            || (isShop
+                && (spot.type() == PlotCreatorSubstepType.SHOP_POI
+                    || spot.type() == PlotCreatorSubstepType.SHOP_SPOT
+                    || spot.type() == PlotCreatorSubstepType.TOURIST_VISIT_POI))
+            || (isPlayerShop && spot.type() == PlotCreatorSubstepType.SHOP_SAFE_BLOCK);
     }
 
     private void refreshIfOpen(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {

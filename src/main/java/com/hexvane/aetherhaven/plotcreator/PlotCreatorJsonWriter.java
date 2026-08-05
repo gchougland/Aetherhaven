@@ -59,6 +59,9 @@ public final class PlotCreatorJsonWriter {
             && draft.getShopSafeLocalPos() != null) {
             root.put("shopSafeLocalPos", localPosList(draft.getShopSafeLocalPos()));
         }
+        if (draft.getInnBellLocalPos() != null) {
+            root.put("innBellLocalPos", localPosList(draft.getInnBellLocalPos()));
+        }
         if (draft.getProductionStorageLocalPos() != null) {
             root.put("productionStorageLocalPos", localPosList(draft.getProductionStorageLocalPos()));
         }

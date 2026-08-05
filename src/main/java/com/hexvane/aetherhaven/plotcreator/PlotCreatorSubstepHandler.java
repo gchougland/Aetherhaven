@@ -453,7 +453,6 @@ public final class PlotCreatorSubstepHandler {
     private static boolean needsActivityPicker(@Nonnull PlotCreatorSubstepType type) {
         return type == PlotCreatorSubstepType.WORK_POI
             || type == PlotCreatorSubstepType.BARD_WORK_POI
-            || type == PlotCreatorSubstepType.SHOP_POI
             || type == PlotCreatorSubstepType.FUN_POI;
     }
 
@@ -603,10 +602,8 @@ public final class PlotCreatorSubstepHandler {
                 PlotCreatorWorkActivityTags.applyDefault(poi, type, null);
             }
             case SHOP_POI -> {
-                poi.getTags().add("WORK");
                 poi.getTags().add("SHOP");
-                poi.setInteractionKind("WORK_SURFACE");
-                PlotCreatorWorkActivityTags.applyDefault(poi, type, null);
+                poi.setInteractionKind("SIT");
             }
             case TOURIST_VISIT_POI -> {
                 poi.getTags().add(AetherhavenConstants.POI_TAG_TOURIST_VISIT);

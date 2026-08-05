@@ -8,8 +8,8 @@ import com.hexvane.aetherhaven.community.CommunityPaths;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
+import com.hexvane.aetherhaven.plotcreator.PlotTokenIconPng;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -93,11 +93,11 @@ public final class ConstructionTokenIconPath {
         }
         String id = constructionId.trim();
         Path customIcon = CustomBuildingsPaths.iconFile(dataDirectory, id);
-        if (Files.isRegularFile(customIcon)) {
+        if (PlotTokenIconPng.isValidFile(customIcon)) {
             return customIcon;
         }
         Path communityIcon = CommunityPaths.iconFile(dataDirectory, id);
-        if (Files.isRegularFile(communityIcon)) {
+        if (PlotTokenIconPng.isValidFile(communityIcon)) {
             return communityIcon;
         }
         return null;

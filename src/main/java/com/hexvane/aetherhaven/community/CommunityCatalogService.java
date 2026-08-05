@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.plot.PlotCraftingCatalog;
 import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
+import com.hexvane.aetherhaven.plotcreator.PlotTokenIconPng;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.asset.common.CommonAsset;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -188,6 +189,10 @@ public final class CommunityCatalogService {
                     markIconComplete(constructionId);
                     continue;
                 }
+                Path iconFile = CommunityPaths.iconFile(plugin.getDataDirectory(), constructionId);
+                if (Files.isRegularFile(iconFile) && !PlotTokenIconPng.isValidFile(iconFile)) {
+                    CommunityIconDownload.deleteInvalidIconIfPresent(iconFile);
+                }
                 if (CommunityIconDownload.isIconCompleteOnDisk(plugin, constructionId, entry)) {
                     markIconComplete(constructionId);
                     continue;
@@ -292,9 +297,12 @@ public final class CommunityCatalogService {
         List<Path> alreadyOnDisk = new ArrayList<>();
         for (CommunityManifestEntry entry : needed) {
             Path iconFile = CommunityPaths.iconFile(plugin.getDataDirectory(), entry.getId());
-            if (Files.isRegularFile(iconFile) && !isCachedIconStale(iconFile)) {
+            if (PlotTokenIconPng.isValidFile(iconFile) && !isCachedIconStale(iconFile)) {
                 alreadyOnDisk.add(iconFile);
             } else {
+                if (Files.isRegularFile(iconFile) && !PlotTokenIconPng.isValidFile(iconFile)) {
+                    CommunityIconDownload.deleteInvalidIconIfPresent(iconFile);
+                }
                 toDownload.add(entry);
             }
         }
@@ -368,13 +376,12 @@ public final class CommunityCatalogService {
 
     @Nullable
     private Path downloadIconToDisk(@Nonnull CommunityManifestEntry entry) {
-        CommunityIconDownload.Result result =
-            CommunityIconDownload.downloadRegisterAndValidate(plugin, entry, true);
-        if (result == CommunityIconDownload.Result.SUCCESS) {
-            return CommunityPaths.iconFile(plugin.getDataDirectory(), entry.getId());
+        Path written = CommunityIconDownload.downloadToDiskOnly(plugin, entry, true);
+        if (written != null) {
+            return written;
         }
         if (CommunityIconDownload.iconRequired(entry)) {
-            LOGGER.atWarning().log("Community icon thumbnail download failed for %s: %s", entry.getId(), result);
+            LOGGER.atWarning().log("Community icon thumbnail download failed for %s", entry.getId());
         }
         return null;
     }
