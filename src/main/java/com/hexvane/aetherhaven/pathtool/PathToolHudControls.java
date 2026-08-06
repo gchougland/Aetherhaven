@@ -34,6 +34,8 @@ public final class PathToolHudControls {
         }
         if (mode == PathToolGizmoMode.ReplaceFilter && replaceFilterEditingActive) {
             return List.of(
+                row(ToolKeybindSlot.PRIMARY, "aetherhaven.pathTool.hud.replaceFilter.primary"),
+                row(ToolKeybindSlot.SECONDARY, "aetherhaven.pathTool.hud.replaceFilter.secondary"),
                 row(ToolKeybindSlot.USE, "aetherhaven.pathTool.hud.replaceFilter.fContinue"),
                 row(ToolKeybindSlot.ABILITY2, "aetherhaven.pathTool.hud.replaceFilter.eSave"),
                 row(ToolKeybindSlot.ABILITY1, "aetherhaven.pathTool.hud.replaceFilter.q"),
@@ -83,6 +85,8 @@ public final class PathToolHudControls {
                 info("aetherhaven.pathTool.hud.styleDesigner.infoWeight")
             );
             case ReplaceFilter -> List.of(
+                row(ToolKeybindSlot.PRIMARY, "aetherhaven.pathTool.hud.replaceFilter.primary"),
+                row(ToolKeybindSlot.SECONDARY, "aetherhaven.pathTool.hud.replaceFilter.secondary"),
                 row(ToolKeybindSlot.USE, "aetherhaven.pathTool.hud.replaceFilter.f"),
                 row(ToolKeybindSlot.ABILITY2, "aetherhaven.pathTool.hud.replaceFilter.e"),
                 row(ToolKeybindSlot.ABILITY1, "aetherhaven.pathTool.hud.replaceFilter.q"),

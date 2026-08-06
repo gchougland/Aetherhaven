@@ -321,7 +321,10 @@ public final class ProductionWorkplaceKinds {
             if (work == null || !workConstructionMatchesStoredPlotDirectly(constructions, work, plotStoredConstructionId)) {
                 continue;
             }
-            String kind = InnVisitorShopPromotion.resolveResidentKind(def);
+            String kind = residentBindingKindForGameplayConstruction(work);
+            if (kind == null) {
+                kind = InnVisitorShopPromotion.resolveResidentKind(def);
+            }
             if (kind != null && !kind.isBlank()) {
                 return kind;
             }
@@ -342,7 +345,10 @@ public final class ProductionWorkplaceKinds {
             if (work == null || !workConstructionMatchesStoredPlotDirectly(constructions, work, plotStoredConstructionId)) {
                 continue;
             }
-            String kind = InnVisitorShopPromotion.resolveResidentKind(def);
+            String kind = residentBindingKindForGameplayConstruction(work);
+            if (kind == null) {
+                kind = InnVisitorShopPromotion.resolveResidentKind(def);
+            }
             if (want.equals(kind)) {
                 return work;
             }

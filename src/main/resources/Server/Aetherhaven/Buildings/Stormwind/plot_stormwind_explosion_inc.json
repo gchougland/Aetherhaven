@@ -130,5 +130,6 @@
     "home",
     "rest"
   ],
-  "maxHomeResidents": 1
+  "maxHomeResidents": 1,
+  "touristDestination": true
 }

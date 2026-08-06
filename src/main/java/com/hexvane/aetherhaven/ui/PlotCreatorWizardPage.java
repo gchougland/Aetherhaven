@@ -193,40 +193,35 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             EventData.of("@MaxHomeResidents", "#MaxHomeResidentsField.Value"),
             false
         );
-        eventBuilder.addEventBinding(
-            CustomUIEventBindingType.ValueChanged,
-            "#SaveEmptySpacesToggle",
-            EventData.of("@SaveEmptySpaces", "#SaveEmptySpacesToggle.Value"),
-            false
-        );
-        eventBuilder.addEventBinding(
-            CustomUIEventBindingType.ValueChanged,
-            "#PreserveWaterToggle",
-            EventData.of("@PreserveWater", "#PreserveWaterToggle.Value"),
-            false
-        );
-        eventBuilder.addEventBinding(
-            CustomUIEventBindingType.ValueChanged,
-            "#TouristDestinationToggle",
-            EventData.of("@TouristDestination", "#TouristDestinationToggle.Value"),
-            false
-        );
-        eventBuilder.addEventBinding(
-            CustomUIEventBindingType.ValueChanged,
-            "#PlotTokenLockedToggle",
-            EventData.of("@PlotTokenLocked", "#PlotTokenLockedToggle.Value"),
-            false
-        );
-        eventBuilder.addEventBinding(
-            CustomUIEventBindingType.ValueChanged,
-            "#SubmitToCommunityToggle",
-            EventData.of("@SubmitToCommunity", "#SubmitToCommunityToggle.Value"),
-            false
-        );
+        wireConfigureToggle(eventBuilder, "#SaveEmptySpacesToggle", "@SaveEmptySpaces");
+        wireConfigureToggle(eventBuilder, "#PreserveWaterToggle", "@PreserveWater");
+        wireConfigureToggle(eventBuilder, "#TouristDestinationToggle", "@TouristDestination");
+        wireConfigureToggle(eventBuilder, "#PlotTokenLockedToggle", "@PlotTokenLocked");
+        wireConfigureToggle(eventBuilder, "#SubmitToCommunityToggle", "@SubmitToCommunity");
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.ValueChanged,
             "#StyleIdField",
             EventData.of("@StyleId", "#StyleIdField.Value"),
+            false
+        );
+    }
+
+    /** ValueChanged plus Activating so checkbox clicks always reach the draft before Done or HUD advance. */
+    private static void wireConfigureToggle(
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nonnull String toggleSelector,
+        @Nonnull String dataKey
+    ) {
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
+            toggleSelector,
+            EventData.of(dataKey, toggleSelector + ".Value"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            toggleSelector,
+            EventData.of(dataKey, toggleSelector + ".Value"),
             false
         );
     }
@@ -851,6 +846,14 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         if (data.maxHomeResidents != null) {
             d.setMaxHomeResidentsInput(data.maxHomeResidents);
         }
+        applyConfigureBooleans(data);
+        if (data.styleId != null) {
+            d.setStyleId(data.styleId);
+        }
+    }
+
+    private void applyConfigureBooleans(@Nonnull PageData data) {
+        PlotCreatorDraft d = session.getDraft();
         if (data.saveEmptySpaces != null) {
             d.setSaveEmptySpaces(data.saveEmptySpaces);
         }
@@ -865,9 +868,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         }
         if (data.submitToCommunity != null) {
             d.setSubmitToCommunity(data.submitToCommunity);
-        }
-        if (data.styleId != null) {
-            d.setStyleId(data.styleId);
         }
     }
 

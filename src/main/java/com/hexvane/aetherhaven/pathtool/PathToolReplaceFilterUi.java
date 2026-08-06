@@ -9,6 +9,7 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.windows.ContainerWindow;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -51,6 +52,26 @@ public final class PathToolReplaceFilterUi {
         @Nullable
         PathToolReplaceFilterSessions.Session session = PathToolReplaceFilterSessions.get(playerId);
         return session != null && session.editingActive;
+    }
+
+    /** Persists allowlist to player state and refreshes the open chest grid without closing it. */
+    public static void saveAllowlistAndSyncSession(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PathToolPlayerComponent st,
+        @Nonnull Set<String> blockIds
+    ) {
+        LinkedHashSet<String> copy = new LinkedHashSet<>(blockIds);
+        st.setReplaceFilterBlockIds(copy);
+        UUID playerId = playerUuid(ref, store);
+        if (playerId == null) {
+            return;
+        }
+        @Nullable
+        PathToolReplaceFilterSessions.Session session = PathToolReplaceFilterSessions.get(playerId);
+        if (session != null && session.editingActive) {
+            PathToolReplaceFilterEditorHelper.loadBlockIdsIntoContainer(session.container, copy);
+        }
     }
 
     /** Copies the open chest into player state without closing the bench (e.g. leaving replace-filter mode with Q). */

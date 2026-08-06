@@ -369,6 +369,15 @@ public final class PlotCreatorInteractions {
             return true;
         }
         if (step == PlotCreatorStep.CONFIGURE) {
+            Player player = store.getComponent(ref, Player.getComponentType());
+            if (player != null) {
+                com.hypixel.hytale.server.core.entity.entities.player.pages.CustomUIPage current =
+                    player.getPageManager().getCustomPage();
+                if (current instanceof PlotCreatorWizardPage wizard && wizard.isConfigurePanelOnly()) {
+                    playerRef.sendMessage(Message.translation(MSG + ".hint.closeConfigurePanelFirst"));
+                    return false;
+                }
+            }
             String settingsErr = PlotCreatorService.applySettingsStepInput(d);
             if (settingsErr != null) {
                 playerRef.sendMessage(Message.translation(MSG + ".error." + settingsErr));

@@ -47,6 +47,7 @@ import com.hexvane.aetherhaven.time.AetherhavenGameTimeCursorResource;
 import com.hexvane.aetherhaven.time.AetherhavenGameTimeHub;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownNameCatalog;
+import com.hexvane.aetherhaven.town.TownSaveCoordinator;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterCatalog;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkPersonalityCatalog;
 import com.hexvane.aetherhaven.speech.data.SpeechVoiceCatalog;
@@ -610,6 +611,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.plotTokenVirtualItemRegistry = null;
         instance = null;
         AetherhavenWorldRegistries.saveAll();
+        TownSaveCoordinator.shutdown();
         this.constructionScheduler.shutdown();
         try {
             if (!this.constructionScheduler.awaitTermination(5, TimeUnit.SECONDS)) {

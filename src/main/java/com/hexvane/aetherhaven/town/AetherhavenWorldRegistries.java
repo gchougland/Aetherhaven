@@ -188,6 +188,11 @@ public final class AetherhavenWorldRegistries {
     }
 
     @Nonnull
+    public static java.util.Collection<TownManager> allLoadedTownManagers() {
+        return TOWN_MANAGERS.values();
+    }
+
+    @Nonnull
     public static TownManager getTownManager(@Nonnull World world) {
         TownManager m = getTownManagerIfLoaded(world);
         if (m == null) {
@@ -342,9 +347,7 @@ public final class AetherhavenWorldRegistries {
 
     /** Save all town files (e.g. server shutdown). */
     public static void saveAll() {
-        for (TownManager tm : TOWN_MANAGERS.values()) {
-            tm.saveToDisk();
-        }
+        TownSaveCoordinator.flushAllSync();
         AetherhavenPlugin p = AetherhavenPlugin.get();
         if (p != null) {
             for (var e : PATH_TOOL_REGISTRIES.entrySet()) {

@@ -10,6 +10,7 @@ import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.vector.Transform;
+import com.hypixel.hytale.protocol.BlockPosition;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.InteractionState;
@@ -24,6 +25,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -92,10 +94,13 @@ public final class PathToolInteractions {
             return;
         }
         if (st.getGizmoMode() == PathToolGizmoMode.Remove
-            || st.getGizmoMode() == PathToolGizmoMode.StyleDesigner
-            || st.getGizmoMode() == PathToolGizmoMode.ReplaceFilter) {
+            || st.getGizmoMode() == PathToolGizmoMode.StyleDesigner) {
             wrongModeToast(playerRef, commandBuffer);
             context.getState().state = InteractionState.Failed;
+            return;
+        }
+        if (st.getGizmoMode() == PathToolGizmoMode.ReplaceFilter) {
+            handleReplaceFilterRemoveLookedBlock(playerRef, commandBuffer, world, context, store, st);
             return;
         }
         Transform look = TargetUtil.getLook(playerRef, store);
@@ -194,8 +199,7 @@ public final class PathToolInteractions {
             return;
         }
         if (st.getGizmoMode() == PathToolGizmoMode.ReplaceFilter) {
-            wrongModeToast(playerRef, commandBuffer);
-            context.getState().state = InteractionState.Failed;
+            handleReplaceFilterAddLookedBlock(playerRef, commandBuffer, world, context, store, st);
             return;
         }
         double yo = plugin.getConfig().get().getPathToolNodeBlockYOffset();
@@ -677,6 +681,130 @@ public final class PathToolInteractions {
         @Nonnull Store<EntityStore> store
     ) {
         return TargetUtil.getTargetBlock(playerRef, BLOCK_PICK_MAX, store);
+    }
+
+    @Nullable
+    private static Vector3i resolveReplaceFilterTargetBlock(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull InteractionContext context
+    ) {
+        @Nullable
+        BlockPosition blockPosition = context.getTargetBlock();
+        if (blockPosition != null) {
+            return new Vector3i(blockPosition.x, blockPosition.y, blockPosition.z);
+        }
+        return pickTargetBlock(playerRef, store);
+    }
+
+    private static void handleReplaceFilterAddLookedBlock(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull World world,
+        @Nonnull InteractionContext context,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PathToolPlayerComponent st
+    ) {
+        @Nullable
+        Vector3i target = resolveReplaceFilterTargetBlock(playerRef, store, context);
+        if (target == null) {
+            send(
+                playerRef,
+                commandBuffer,
+                Message.translation("aetherhaven_items.aetherhaven.pathTool.replaceFilterBlockNoTarget")
+            );
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        @Nullable
+        String blockId = PathToolReplaceFilterEditorHelper.resolveBlockIdAt(world, target);
+        if (blockId == null) {
+            send(
+                playerRef,
+                commandBuffer,
+                Message.translation("aetherhaven_items.aetherhaven.pathTool.replaceFilterBlockNoTarget")
+            );
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        LinkedHashSet<String> next =
+            new LinkedHashSet<>(PathToolReplaceFilterResolver.effectiveBlockIds(playerRef, store, st));
+        if (PathToolReplaceFilterEditorHelper.containsBlockId(next, blockId)) {
+            send(
+                playerRef,
+                commandBuffer,
+                Message.translation("aetherhaven_items.aetherhaven.pathTool.replaceFilterBlockAlready")
+            );
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        if (next.size() >= PathToolReplaceFilterEditorHelper.CAPACITY) {
+            send(
+                playerRef,
+                commandBuffer,
+                Message.translation("aetherhaven_items.aetherhaven.pathTool.replaceFilterBlockFull")
+            );
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        next.add(blockId);
+        PathToolReplaceFilterUi.saveAllowlistAndSyncSession(playerRef, store, st, next);
+        send(
+            playerRef,
+            commandBuffer,
+            Message.translation("aetherhaven_items.aetherhaven.pathTool.replaceFilterBlockAdded")
+        );
+        pathToast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.pathTool.toastReplaceFilterBlockAdded");
+    }
+
+    private static void handleReplaceFilterRemoveLookedBlock(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull World world,
+        @Nonnull InteractionContext context,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PathToolPlayerComponent st
+    ) {
+        @Nullable
+        Vector3i target = resolveReplaceFilterTargetBlock(playerRef, store, context);
+        if (target == null) {
+            send(
+                playerRef,
+                commandBuffer,
+                Message.translation("aetherhaven_items.aetherhaven.pathTool.replaceFilterBlockNoTarget")
+            );
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        @Nullable
+        String blockId = PathToolReplaceFilterEditorHelper.resolveBlockIdAt(world, target);
+        if (blockId == null) {
+            send(
+                playerRef,
+                commandBuffer,
+                Message.translation("aetherhaven_items.aetherhaven.pathTool.replaceFilterBlockNoTarget")
+            );
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        LinkedHashSet<String> next =
+            new LinkedHashSet<>(PathToolReplaceFilterResolver.effectiveBlockIds(playerRef, store, st));
+        if (!PathToolReplaceFilterEditorHelper.removeMatchingBlockId(next, blockId)) {
+            send(
+                playerRef,
+                commandBuffer,
+                Message.translation("aetherhaven_items.aetherhaven.pathTool.replaceFilterBlockNotInFilter")
+            );
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        PathToolReplaceFilterUi.saveAllowlistAndSyncSession(playerRef, store, st, next);
+        send(
+            playerRef,
+            commandBuffer,
+            Message.translation("aetherhaven_items.aetherhaven.pathTool.replaceFilterBlockRemoved")
+        );
+        pathToast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.pathTool.toastReplaceFilterBlockRemoved");
     }
 
     @Nullable

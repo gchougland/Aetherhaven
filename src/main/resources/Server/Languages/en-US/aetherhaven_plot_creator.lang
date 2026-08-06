@@ -281,6 +281,7 @@ aetherhaven.plotcreator.field.preserveWater = Keep water when building
 aetherhaven.plotcreator.field.preserveWater.hint = When on, water stays in prefab air spaces outside the build. Editor empty markers still clear water so you can hollow out interiors.
 aetherhaven.plotcreator.field.touristDestination = Visitors may stop here
 aetherhaven.plotcreator.field.touristDestination.hint = When on, portal visitors may walk to this building during the day.
+aetherhaven.plotcreator.hint.closeConfigurePanelFirst = Press Done on the building settings panel before continuing.
 aetherhaven.plotcreator.field.plotTokenLocked = Plot token locked by default
 aetherhaven.plotcreator.field.plotTokenLocked.hint = When on, players must spend an unlock point at the plot crafting bench before they can craft plot tokens for this building.
 aetherhaven.plotcreator.field.styleId = Style

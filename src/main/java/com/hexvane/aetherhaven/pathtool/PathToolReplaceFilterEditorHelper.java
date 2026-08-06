@@ -1,8 +1,14 @@
 package com.hexvane.aetherhaven.pathtool;
 
+import com.hypixel.hytale.math.util.ChunkUtil;
+import org.joml.Vector3i;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -96,5 +102,70 @@ public final class PathToolReplaceFilterEditorHelper {
             return item.getId();
         }
         return blockId;
+    }
+
+    /** Safe during interactions; never loads chunks (see {@link PathToolReplacePredicate}). */
+    @Nullable
+    public static String resolveBlockIdAt(@Nonnull World world, @Nonnull Vector3i pos) {
+        int x = pos.x;
+        int y = pos.y;
+        int z = pos.z;
+        if (y < 0 || y >= 320) {
+            return null;
+        }
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        if (chunk == null) {
+            return null;
+        }
+        BlockType blockType = BlockType.getAssetMap().getAsset(chunk.getBlock(x, y, z));
+        if (blockType == null || blockType == BlockType.EMPTY) {
+            return null;
+        }
+        String id = blockType.getId();
+        return id != null && !id.isBlank() ? id.trim() : null;
+    }
+
+    public static boolean containsBlockId(@Nonnull Set<String> stored, @Nonnull String worldBlockId) {
+        for (String entry : stored) {
+            if (storedMatchesWorldBlock(entry, worldBlockId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean removeMatchingBlockId(@Nonnull LinkedHashSet<String> stored, @Nonnull String worldBlockId) {
+        Iterator<String> it = stored.iterator();
+        while (it.hasNext()) {
+            if (storedMatchesWorldBlock(it.next(), worldBlockId)) {
+                it.remove();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Matches block ids, item ids, and block-only assets saved in the replace-filter chest. */
+    private static boolean storedMatchesWorldBlock(@Nonnull String stored, @Nonnull String worldBlockId) {
+        if (stored.equals(worldBlockId)) {
+            return true;
+        }
+        @Nullable
+        BlockType storedBlock = BlockType.getAssetMap().getAsset(stored);
+        if (storedBlock != null && worldBlockId.equals(storedBlock.getId())) {
+            return true;
+        }
+        @Nullable
+        Item storedItem = Item.getAssetMap().getAsset(stored);
+        if (storedItem != null && storedItem.hasBlockType()) {
+            @Nullable
+            String blockId = storedItem.getBlockId();
+            if (blockId != null && worldBlockId.equals(blockId.trim())) {
+                return true;
+            }
+        }
+        @Nullable
+        Item worldItem = Item.getAssetMap().getAsset(worldBlockId);
+        return worldItem != null && stored.equals(worldItem.getId());
     }
 }

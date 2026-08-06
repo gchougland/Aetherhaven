@@ -364,6 +364,8 @@ Group #PathToolStatusRoot {
           @PathHotkeyRow0 {}
           @PathHotkeyRow1 {}
           @PathHotkeyRow2 {}
+          @PathHotkeyRow3 {}
+          @PathHotkeyRow4 {}
           @PathInfoRow0 {}
         }
 
@@ -374,6 +376,8 @@ Group #PathToolStatusRoot {
           @PathHotkeyRow0 {}
           @PathHotkeyRow1 {}
           @PathHotkeyRow2 {}
+          @PathHotkeyRow3 {}
+          @PathHotkeyRow4 {}
           @PathInfoRow0 {}
         }
       }

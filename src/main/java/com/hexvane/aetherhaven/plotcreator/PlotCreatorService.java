@@ -652,6 +652,7 @@ public final class PlotCreatorService {
         @Nonnull Store<EntityStore> store
     ) {
         PlotCreatorDraft draft = session.getDraft();
+        applyDefaultTagsForKind(draft);
         applyTagsInput(draft);
         applyConfigureInput(draft);
         if (draft.isDecorationOnly() && !draft.getBuildingTags().contains("decoration")) {

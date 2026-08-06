@@ -265,6 +265,32 @@ class VariantGameplayMatchingTest {
     }
 
     @Test
+    void townHallVariantWithElderLyrenExposesOnlyElderRole() {
+        ConstructionDefinition stormwindTownHall =
+            GSON.fromJson(
+                """
+                {"id":"plot_stormwind_town_hall","displayName":"Stormwind Town Hall","prefabPath":"Stormwind/plot_stormwind_town_hall.prefab.json","plotTokenItemId":"Aetherhaven_Plot_Token","countsAsConstructionId":"plot_town_hall"}
+                """,
+                ConstructionDefinition.class
+            );
+        VillagerDefinition elderLyren =
+            GSON.fromJson(
+                """
+                {"npcRoleId":"Aetherhaven_Elder_Lyren","dialogueVillagerKind":"elder_lyren","workConstructionId":"plot_town_hall"}
+                """,
+                VillagerDefinition.class
+            );
+        ConstructionCatalog catalog = ConstructionCatalog.forTests(Map.of(stormwindTownHall.getId(), stormwindTownHall));
+        VillagerDefinitionCatalog villagers =
+            VillagerDefinitionCatalog.forTests(Map.of(elderLyren.getNpcRoleId(), elderLyren));
+
+        assertEquals(
+            List.of(TownVillagerBinding.KIND_ELDER),
+            ProductionWorkplaceKinds.residentBindingKindsForPlotForTests(catalog, villagers, stormwindTownHall.getId())
+        );
+    }
+
+    @Test
     void plotLookupMatchesAnyResolvedAlias() {
         ConstructionDefinition variant =
             GSON.fromJson(

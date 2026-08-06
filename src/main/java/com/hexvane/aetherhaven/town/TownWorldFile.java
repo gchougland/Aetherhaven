@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.Reader;
-import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
@@ -16,7 +15,7 @@ import javax.annotation.Nonnull;
 
 /** Gson root for {@code towns.json} per world. */
 public final class TownWorldFile {
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Gson COMPACT_GSON = new GsonBuilder().create();
 
     @com.google.gson.annotations.SerializedName("towns")
     private List<TownRecord> towns = new ArrayList<>();
@@ -34,20 +33,33 @@ public final class TownWorldFile {
             return new TownWorldFile();
         }
         try (Reader r = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-            TownWorldFile f = GSON.fromJson(r, TownWorldFile.class);
+            TownWorldFile f = COMPACT_GSON.fromJson(r, TownWorldFile.class);
             return f != null ? f : new TownWorldFile();
         }
     }
 
+    @Nonnull
+    public static byte[] toJsonBytes(@Nonnull List<TownRecord> towns) {
+        TownWorldFile file = new TownWorldFile();
+        file.getTowns().addAll(towns);
+        return COMPACT_GSON.toJson(file).getBytes(StandardCharsets.UTF_8);
+    }
+
     public void writeAtomic(@Nonnull Path path) throws IOException {
+        writeBytesAtomic(path, toJsonBytes(getTowns()));
+    }
+
+    public static void writeBytesAtomic(@Nonnull Path path, @Nonnull byte[] jsonUtf8) throws IOException {
         Path dir = path.getParent();
         if (dir != null) {
             Files.createDirectories(dir);
         }
-        Path tmp = path.resolveSibling(path.getFileName().toString() + ".tmp");
-        try (Writer w = Files.newBufferedWriter(tmp, StandardCharsets.UTF_8)) {
-            GSON.toJson(this, w);
+        if (Files.isRegularFile(path)) {
+            Path bak = path.resolveSibling("towns.json.bak");
+            Files.copy(path, bak, StandardCopyOption.REPLACE_EXISTING);
         }
+        Path tmp = path.resolveSibling(path.getFileName().toString() + ".tmp");
+        Files.write(tmp, jsonUtf8);
         try {
             Files.move(tmp, path, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
         } catch (AtomicMoveNotSupportedException e) {

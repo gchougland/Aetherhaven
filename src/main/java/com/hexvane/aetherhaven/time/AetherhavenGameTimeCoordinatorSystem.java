@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.time;
 
+import com.hexvane.aetherhaven.town.TownSaveCoordinator;
 import com.hypixel.hytale.component.ResourceType;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
@@ -31,6 +32,7 @@ public final class AetherhavenGameTimeCoordinatorSystem extends TickingSystem<En
     @Override
     public void tick(float dt, int systemIndex, @Nonnull Store<EntityStore> store) {
         World world = store.getExternalData().getWorld();
+        TownSaveCoordinator.tickWorld(world);
         if (world.getWorldConfig().isGameTimePaused()) {
             return;
         }

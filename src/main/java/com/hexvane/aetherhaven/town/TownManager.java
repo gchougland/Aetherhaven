@@ -12,7 +12,6 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -140,26 +139,36 @@ public final class TownManager {
             }
         }
         if (any) {
-            saveToDisk();
+            TownSaveCoordinator.requestSave(this);
         }
     }
 
     public void saveToDisk() {
-        if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
-            return;
-        }
-        try {
-            if (Files.isRegularFile(saveFile)) {
-                Path bak = saveFile.resolveSibling("towns.json.bak");
-                Files.copy(saveFile, bak, StandardCopyOption.REPLACE_EXISTING);
-            }
-            TownWorldFile file = new TownWorldFile();
-            file.getTowns().addAll(byTownId.values());
-            file.writeAtomic(saveFile);
-            lastSavedToDiskMs = System.currentTimeMillis();
-        } catch (IOException e) {
-            LOGGER.atSevere().withCause(e).log("Failed to save towns for world %s", world.getName());
-        }
+        TownSaveCoordinator.flushSync(this);
+    }
+
+    @Nonnull
+    String getWorldName() {
+        return world.getName();
+    }
+
+    boolean shouldPersist() {
+        return PersistentWorldSupport.shouldPersistWorldData(world);
+    }
+
+    @Nonnull
+    Path getSaveFilePath() {
+        return saveFile;
+    }
+
+    @Nonnull
+    List<TownRecord> snapshotTownsForSave() {
+        return new ArrayList<>(byTownId.values());
+    }
+
+    void notifySavedToDisk(long savedAtMs) {
+        lastSavedToDiskMs = savedAtMs;
+        dirty = false;
     }
 
     @Nullable
@@ -173,7 +182,7 @@ public final class TownManager {
         if (removed == null) {
             return false;
         }
-        saveToDisk();
+        TownSaveCoordinator.requestSave(this);
         return true;
     }
 
@@ -360,7 +369,7 @@ public final class TownManager {
             }
         }
         if (changed) {
-            saveToDisk();
+            TownSaveCoordinator.requestSave(this);
         }
     }
 
@@ -475,13 +484,13 @@ public final class TownManager {
         record.migrateFounderMonumentCountIfNeeded();
         ensureDisplayNameUnique(record);
         byTownId.put(record.getTownId(), record);
-        saveToDisk();
+        dirty = true;
+        TownSaveCoordinator.requestSave(this);
     }
 
     public void updateTown(@Nonnull TownRecord record) {
         markDirty(record);
-        saveToDisk();
-        dirty = false;
+        TownSaveCoordinator.requestSave(this);
     }
 
     /** Updates in-memory town data without writing to disk (call {@link #flushDirtyToDisk()} when batching). */
@@ -496,8 +505,7 @@ public final class TownManager {
     /** Persists when {@link #markDirty} was used since the last flush or immediate {@link #updateTown}. */
     public void flushDirtyToDisk() {
         if (dirty) {
-            saveToDisk();
-            dirty = false;
+            TownSaveCoordinator.flushSync(this);
         }
     }
 
