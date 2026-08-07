@@ -10,12 +10,12 @@ import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.vector.Transform;
-import com.hypixel.hytale.protocol.BlockPosition;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,6 +39,11 @@ public final class PathToolInteractions {
     /** Matches path tool item UseDistance (creative). */
     private static final double BLOCK_PICK_MAX = 6.0;
     private static final float ROTATE_STEP_DEG = 15f;
+
+    /** Shovel clicks can invoke both interaction chains at once; ignore duplicate filter toggles. */
+    private static final ConcurrentHashMap<UUID, Long> LAST_FILTER_CLICK_NS = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<UUID, String> LAST_FILTER_CLICK_BLOCK = new ConcurrentHashMap<>();
+    private static final long FILTER_CLICK_DEDUPE_NS = 200_000_000L;
 
     private PathToolInteractions() {}
 
@@ -93,14 +99,16 @@ public final class PathToolInteractions {
             context.getState().state = InteractionState.Failed;
             return;
         }
-        if (st.getGizmoMode() == PathToolGizmoMode.Remove
-            || st.getGizmoMode() == PathToolGizmoMode.StyleDesigner) {
-            wrongModeToast(playerRef, commandBuffer);
+        if (st.getGizmoMode() == PathToolGizmoMode.Remove) {
+            handleRemoveModeSelect(playerRef, commandBuffer, world, store, st);
+            return;
+        }
+        if (st.getGizmoMode() == PathToolGizmoMode.StyleDesigner) {
             context.getState().state = InteractionState.Failed;
             return;
         }
         if (st.getGizmoMode() == PathToolGizmoMode.ReplaceFilter) {
-            handleReplaceFilterRemoveLookedBlock(playerRef, commandBuffer, world, context, store, st);
+            handleReplaceFilterToggleBlock(playerRef, commandBuffer, world, context, store, st);
             return;
         }
         Transform look = TargetUtil.getLook(playerRef, store);
@@ -131,7 +139,7 @@ public final class PathToolInteractions {
             return;
         }
         @Nullable
-        Vector3i targetBlock = pickTargetBlock(playerRef, store);
+        Vector3i targetBlock = PathToolBlockTarget.resolve(playerRef, store, context, null);
         if (targetBlock == null) {
             context.getState().state = InteractionState.Failed;
             return;
@@ -182,24 +190,15 @@ public final class PathToolInteractions {
         Vector3d origin = look.getPosition();
         Vector3d dir = look.getDirection();
         if (st.getGizmoMode() == PathToolGizmoMode.Remove) {
-            PathToolRegistry reg = AetherhavenWorldRegistries.getOrCreatePathToolRegistry(world, plugin);
-            @Nullable
-            UUID picked = PathToolRemovePick.pickPathId(origin, dir, PICK_RAY_MAX, reg.all());
-            if (picked != null) {
-                st.setSelectedRemovePathId(picked);
-                send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.removeSelected"));
-            } else if (!reg.all().isEmpty()) {
-                send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.removeNoHit"));
-            }
-            return;
-        }
-        if (st.getGizmoMode() == PathToolGizmoMode.StyleDesigner) {
-            wrongModeToast(playerRef, commandBuffer);
-            context.getState().state = InteractionState.Failed;
+            handleRemoveModeSelect(playerRef, commandBuffer, world, store, st);
             return;
         }
         if (st.getGizmoMode() == PathToolGizmoMode.ReplaceFilter) {
-            handleReplaceFilterAddLookedBlock(playerRef, commandBuffer, world, context, store, st);
+            handleReplaceFilterToggleBlock(playerRef, commandBuffer, world, context, store, st);
+            return;
+        }
+        if (st.getGizmoMode() == PathToolGizmoMode.StyleDesigner) {
+            context.getState().state = InteractionState.Failed;
             return;
         }
         double yo = plugin.getConfig().get().getPathToolNodeBlockYOffset();
@@ -592,6 +591,33 @@ public final class PathToolInteractions {
         }
     }
 
+    private static void handleRemoveModeSelect(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PathToolPlayerComponent st
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        Transform look = TargetUtil.getLook(playerRef, store);
+        if (look == null) {
+            return;
+        }
+        PathToolRegistry reg = AetherhavenWorldRegistries.getOrCreatePathToolRegistry(world, plugin);
+        @Nullable
+        UUID picked =
+            PathToolRemovePick.pickPathId(look.getPosition(), look.getDirection(), PICK_RAY_MAX, reg.all());
+        if (picked != null) {
+            st.setSelectedRemovePathId(picked);
+            send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.removeSelected"));
+        } else if (!reg.all().isEmpty()) {
+            send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.removeNoHit"));
+        }
+    }
+
     private static void handleRemovePath(
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
@@ -683,21 +709,11 @@ public final class PathToolInteractions {
         return TargetUtil.getTargetBlock(playerRef, BLOCK_PICK_MAX, store);
     }
 
-    @Nullable
-    private static Vector3i resolveReplaceFilterTargetBlock(
-        @Nonnull Ref<EntityStore> playerRef,
-        @Nonnull Store<EntityStore> store,
-        @Nonnull InteractionContext context
-    ) {
-        @Nullable
-        BlockPosition blockPosition = context.getTargetBlock();
-        if (blockPosition != null) {
-            return new Vector3i(blockPosition.x, blockPosition.y, blockPosition.z);
-        }
-        return pickTargetBlock(playerRef, store);
-    }
-
-    private static void handleReplaceFilterAddLookedBlock(
+    /**
+     * Replace-filter mode: look at a block and click to add it to the allowlist, or click again to remove it.
+     * Uses toggle semantics so shovel tools that only route block clicks through one interaction chain still work.
+     */
+    private static void handleReplaceFilterToggleBlock(
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull World world,
@@ -706,7 +722,7 @@ public final class PathToolInteractions {
         @Nonnull PathToolPlayerComponent st
     ) {
         @Nullable
-        Vector3i target = resolveReplaceFilterTargetBlock(playerRef, store, context);
+        Vector3i target = PathToolBlockTarget.resolve(playerRef, store, context, null);
         if (target == null) {
             send(
                 playerRef,
@@ -716,6 +732,10 @@ public final class PathToolInteractions {
             context.getState().state = InteractionState.Failed;
             return;
         }
+        if (shouldDedupeReplaceFilterClick(playerRef, store, target)) {
+            return;
+        }
+        markReplaceFilterClick(playerRef, store, target);
         @Nullable
         String blockId = PathToolReplaceFilterEditorHelper.resolveBlockIdAt(world, target);
         if (blockId == null) {
@@ -730,12 +750,22 @@ public final class PathToolInteractions {
         LinkedHashSet<String> next =
             new LinkedHashSet<>(PathToolReplaceFilterResolver.effectiveBlockIds(playerRef, store, st));
         if (PathToolReplaceFilterEditorHelper.containsBlockId(next, blockId)) {
+            if (!PathToolReplaceFilterEditorHelper.removeMatchingBlockId(next, blockId)) {
+                send(
+                    playerRef,
+                    commandBuffer,
+                    Message.translation("aetherhaven_items.aetherhaven.pathTool.replaceFilterBlockNotInFilter")
+                );
+                context.getState().state = InteractionState.Failed;
+                return;
+            }
+            PathToolReplaceFilterUi.saveAllowlistAndSyncSession(playerRef, store, st, next);
             send(
                 playerRef,
                 commandBuffer,
-                Message.translation("aetherhaven_items.aetherhaven.pathTool.replaceFilterBlockAlready")
+                Message.translation("aetherhaven_items.aetherhaven.pathTool.replaceFilterBlockRemoved")
             );
-            context.getState().state = InteractionState.Failed;
+            pathToast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.pathTool.toastReplaceFilterBlockRemoved");
             return;
         }
         if (next.size() >= PathToolReplaceFilterEditorHelper.CAPACITY) {
@@ -757,54 +787,44 @@ public final class PathToolInteractions {
         pathToast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.pathTool.toastReplaceFilterBlockAdded");
     }
 
-    private static void handleReplaceFilterRemoveLookedBlock(
+    private static boolean shouldDedupeReplaceFilterClick(
         @Nonnull Ref<EntityStore> playerRef,
-        @Nonnull CommandBuffer<EntityStore> commandBuffer,
-        @Nonnull World world,
-        @Nonnull InteractionContext context,
         @Nonnull Store<EntityStore> store,
-        @Nonnull PathToolPlayerComponent st
+        @Nonnull Vector3i target
     ) {
         @Nullable
-        Vector3i target = resolveReplaceFilterTargetBlock(playerRef, store, context);
-        if (target == null) {
-            send(
-                playerRef,
-                commandBuffer,
-                Message.translation("aetherhaven_items.aetherhaven.pathTool.replaceFilterBlockNoTarget")
-            );
-            context.getState().state = InteractionState.Failed;
-            return;
+        UUID playerId = playerUuid(playerRef, store);
+        if (playerId == null) {
+            return false;
         }
+        String blockKey = target.x + "," + target.y + "," + target.z;
         @Nullable
-        String blockId = PathToolReplaceFilterEditorHelper.resolveBlockIdAt(world, target);
-        if (blockId == null) {
-            send(
-                playerRef,
-                commandBuffer,
-                Message.translation("aetherhaven_items.aetherhaven.pathTool.replaceFilterBlockNoTarget")
-            );
-            context.getState().state = InteractionState.Failed;
+        Long clickedAt = LAST_FILTER_CLICK_NS.get(playerId);
+        @Nullable
+        String lastBlock = LAST_FILTER_CLICK_BLOCK.get(playerId);
+        return clickedAt != null
+            && blockKey.equals(lastBlock)
+            && System.nanoTime() - clickedAt < FILTER_CLICK_DEDUPE_NS;
+    }
+
+    private static void markReplaceFilterClick(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Vector3i target
+    ) {
+        @Nullable
+        UUID playerId = playerUuid(playerRef, store);
+        if (playerId == null) {
             return;
         }
-        LinkedHashSet<String> next =
-            new LinkedHashSet<>(PathToolReplaceFilterResolver.effectiveBlockIds(playerRef, store, st));
-        if (!PathToolReplaceFilterEditorHelper.removeMatchingBlockId(next, blockId)) {
-            send(
-                playerRef,
-                commandBuffer,
-                Message.translation("aetherhaven_items.aetherhaven.pathTool.replaceFilterBlockNotInFilter")
-            );
-            context.getState().state = InteractionState.Failed;
-            return;
-        }
-        PathToolReplaceFilterUi.saveAllowlistAndSyncSession(playerRef, store, st, next);
-        send(
-            playerRef,
-            commandBuffer,
-            Message.translation("aetherhaven_items.aetherhaven.pathTool.replaceFilterBlockRemoved")
-        );
-        pathToast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.pathTool.toastReplaceFilterBlockRemoved");
+        LAST_FILTER_CLICK_NS.put(playerId, System.nanoTime());
+        LAST_FILTER_CLICK_BLOCK.put(playerId, target.x + "," + target.y + "," + target.z);
+    }
+
+    @Nullable
+    private static UUID playerUuid(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        UUIDComponent uc = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        return uc != null ? uc.getUuid() : null;
     }
 
     @Nullable

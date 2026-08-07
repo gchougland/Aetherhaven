@@ -1,14 +1,22 @@
 # Changelog
 
-## [2.7.1] - Unreleased
+## [2.7.1] - 8/7/2026
+
+## Changed
+
+- **Town Records Shelf and Plot Sign** New models for the Town Records Shelf and Plot Sign by Mertie.
 
 ### Fixed
 
+- **Instant finish building** — The Town Journal “Finish one building now” button and the creative finish-assembly command complete a building right away instead of placing it block by block.
+- **Inn visitor variety** — The guild master no longer shows up at the inn every morning before the guild hall is built. Other visitors appear more often.
 - **Gaia statue revive** — You can revive a missing villager at the Gaia statue even if they seem to be somewhere else in town that is not loaded.
 - **Duplicate villagers after revive** — If an old copy of a revived or reset villager shows up later, it is removed so you do not end up with two.
 - **Plot creator shop variants** — Shop style variants now require merchant, stall, and tourist visit spots, and are marked as places tourists visit by default.
 - **Moving buildings** — Liquids like lava no longer stay behind at the old spot when you move a building.
 - **Community building icons** — Browsing or downloading marketplace buildings no longer crashes when a building icon fails to load.
+- **Path tool replace filter** — Click blocks to add or remove them from your replace list. The path preview stays visible while you edit the filter.
+- **Path tool remove mode** — Look at a committed path to highlight it, then click to select it for removal.
 
 ## [2.7.0] - 8/5/2026
 
@@ -51,7 +59,6 @@
 
 ### Fixed
 
-- **Inn pool guild master priority** — The guild master no longer hard-prioritizes the first inn visitor slot after town hall (or during the guild hall quest). Spawn order uses `innPoolWeight` like other villagers.
 - **Plot token salvaging** — Unified plot tokens (community buildings, variant prefabs) and missing legacy tokens (guild hall, player shop, tourist portal) can be salvaged for 5 gold coins again at the salvage bench.
 - **Plot crafting favorites tab** — Community favorites now load their icons and Load preview works on the Favorites tab.
 - **Important spots** — Plot creator spots snap to the right surface when you click blocks, half blocks, carpets, or chairs.

@@ -3,8 +3,11 @@
     "Name": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Management_Block.name",
     "Description": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Management_Block.description"
   },
-  "Icon": "Icons/ItemsGenerated/Furniture_Village_Bookcase.png",
-  "Categories": ["Furniture.Shelves", "Aetherhaven.All"],
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Management_Block.png",
+  "Categories": [
+    "Furniture.Shelves",
+    "Aetherhaven.All"
+  ],
   "Set": "Aetherhaven",
   "BlockType": {
     "Material": "Solid",
@@ -12,19 +15,31 @@
     "Opacity": "Transparent",
     "CustomModel": "Blocks/Town_Records_Shelf.blockymodel",
     "CustomModelTexture": [
-      { "Texture": "Blocks/Town_Records_Shelf.png", "Weight": 1 }
+      {
+        "Texture": "Blocks/Town_Records_Shelf.png",
+        "Weight": 1
+      }
     ],
     "HitboxType": "Block_Vertical_Half",
     "IgnoreSupportWhenPlaced": true,
     "VariantRotation": "NESW",
-    "Flags": { "IsUsable": true },
-    "Gathering": { "Breaking": { "GatherType": "Woods" } },
+    "Flags": {
+      "IsUsable": true
+    },
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Woods"
+      }
+    },
     "BlockParticleSetId": "Wood",
     "ParticleColor": "#684127",
     "BlockSoundSetId": "Wood",
     "BlockEntity": {
       "Components": {
-        "AetherhavenManagementBlock": { "PlotId": "", "TownId": "" }
+        "AetherhavenManagementBlock": {
+          "PlotId": "",
+          "TownId": ""
+        }
       }
     },
     "Interactions": {
@@ -32,7 +47,9 @@
         "Interactions": [
           {
             "Type": "OpenCustomUI",
-            "Page": { "Id": "AetherhavenPlotManagement" }
+            "Page": {
+              "Id": "AetherhavenPlotManagement"
+            }
           }
         ]
       }
@@ -41,10 +58,31 @@
   "PlayerAnimationsId": "Block",
   "IconProperties": {
     "Scale": 0.6,
-    "Translation": [6, -17],
-    "Rotation": [22.5, 45, 22.5]
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      6,
+      -17
+    ]
   },
-  "ResourceTypes": [{ "Id": "Fuel" }, { "Id": "Charcoal" }],
-  "Tags": { "Type": ["Furniture"], "Family": ["Aetherhaven"] },
+  "ResourceTypes": [
+    {
+      "Id": "Fuel"
+    },
+    {
+      "Id": "Charcoal"
+    }
+  ],
+  "Tags": {
+    "Type": [
+      "Furniture"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
   "ItemSoundSetId": "ISS_Blocks_Wood"
 }

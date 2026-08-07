@@ -51,8 +51,9 @@ public final class PathToolRemovePick {
                     if (p == null) {
                         continue;
                     }
+                    double pickY = PathDebugPreviewUtil.navNodeVisualCenterY(p.y, false);
                     @Nullable
-                    Double t = rayHitSphere(origin, dx, dy, dz, maxDistance, p.x, p.y, p.z, NAV_PICK_RADIUS);
+                    Double t = rayHitSphere(origin, dx, dy, dz, maxDistance, p.x, pickY, p.z, NAV_PICK_RADIUS);
                     if (t != null && t < bestT) {
                         bestT = t;
                         bestId = id;

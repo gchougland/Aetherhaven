@@ -173,6 +173,11 @@ public final class PathDebugPreviewUtil {
     private static final double NAV_NODE_CUBE_HALF_SELECTED = 0.28;
     private static final Vector3f COLOR_NAV_ENDPOINT = new Vector3f(0.98f, 0.82f, 0.2f);
 
+    /** Vertical offset from stored nav Y to the cube center used for draw and ray pick. */
+    public static double navNodeVisualCenterY(double navY, boolean emphasized) {
+        return navY + (emphasized ? NAV_NODE_CUBE_HALF_SELECTED : NAV_NODE_CUBE_HALF);
+    }
+
     /**
      * Line endpoint Y for remove-mode nav previews ({@link #drawNavNodeCube}).
      */

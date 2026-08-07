@@ -22,7 +22,7 @@ public final class PathToolAddNodeInteraction extends SimpleInstantInteraction {
     public static final com.hypixel.hytale.codec.builder.BuilderCodec<PathToolAddNodeInteraction> CODEC =
         com.hypixel.hytale.codec.builder.BuilderCodec
             .builder(PathToolAddNodeInteraction.class, PathToolAddNodeInteraction::new, SimpleInstantInteraction.CODEC)
-            .documentation("Path tool: remove node by look, or add spline control point on the ground.")
+            .documentation("Path tool: remove node by look, add ground node, or remove replace-filter block.")
             .build();
 
     @Nonnull
@@ -50,13 +50,16 @@ public final class PathToolAddNodeInteraction extends SimpleInstantInteraction {
             context.getState().state = InteractionState.Failed;
             return;
         }
-        if (type != InteractionType.Secondary) {
-            context.getState().state = InteractionState.Failed;
-            return;
-        }
         @Nullable
         Ref<EntityStore> playerRef = context.getEntity();
         if (playerRef == null) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        PathToolPlayerComponent st = commandBuffer.getComponent(playerRef, PathToolPlayerComponent.getComponentType());
+        boolean replaceFilter = st != null && st.getGizmoMode() == PathToolGizmoMode.ReplaceFilter;
+        boolean removeMode = st != null && st.getGizmoMode() == PathToolGizmoMode.Remove;
+        if (type != InteractionType.Secondary && !replaceFilter && !removeMode) {
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -70,5 +73,8 @@ public final class PathToolAddNodeInteraction extends SimpleInstantInteraction {
         }
         World world = commandBuffer.getStore().getExternalData().getWorld();
         PathToolInteractions.handleAddNode(playerRef, commandBuffer, world, context, commandBuffer.getStore());
+        if (context.getState().state != InteractionState.Failed) {
+            context.getState().state = InteractionState.Finished;
+        }
     }
 }

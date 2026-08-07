@@ -41,6 +41,9 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
     private static final double NODE_PICK_RADIUS = 0.45;
     private static final double PICK_RAY_MAX = 128.0;
     private static final ConcurrentHashMap<UUID, Long> LAST_DEBUG_SIGNATURE = new ConcurrentHashMap<>();
+    /** Resend debug shapes periodically so client-side expiry does not leave the preview blank. */
+    private static final ConcurrentHashMap<UUID, Long> LAST_DEBUG_SENT_MS = new ConcurrentHashMap<>();
+    private static final long DEBUG_REFRESH_INTERVAL_MS = 2_000L;
     /** Same signature as debug preview; cleared whenever the path-tool HUD is removed so reopening always refreshes. */
     private static final ConcurrentHashMap<UUID, Long> LAST_HUD_SIGNATURE = new ConcurrentHashMap<>();
     @Nonnull
@@ -106,6 +109,7 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
                 if (LAST_DEBUG_SIGNATURE.remove(id) != null) {
                     PathDebugPreviewUtil.clear(pr);
                 }
+                LAST_DEBUG_SENT_MS.remove(id);
             }
             return;
         }
@@ -134,19 +138,39 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
             return;
         }
         @Nullable
-        UUID hoveredNodeId = pickHoveredControlNode(st, ref, store);
-        long debugSig = PathToolPreviewSignature.compute(st, registryRevision, ref, store, hoveredNodeId);
+        UUID hoveredNodeId = null;
+        @Nullable
+        UUID hoveredRemovePathId = null;
+        if (st.getGizmoMode() == PathToolGizmoMode.Remove) {
+            hoveredRemovePathId = pickHoveredRemovePath(ref, store, pathReg);
+        } else {
+            hoveredNodeId = pickHoveredControlNode(st, ref, store);
+        }
+        long debugSig =
+            PathToolPreviewSignature.compute(
+                st,
+                registryRevision,
+                ref,
+                store,
+                hoveredNodeId,
+                hoveredRemovePathId
+            );
         Long prev = LAST_DEBUG_SIGNATURE.get(playerUuid);
-        if (prev != null && prev == debugSig) {
+        long nowMs = System.currentTimeMillis();
+        Long lastSentMs = LAST_DEBUG_SENT_MS.get(playerUuid);
+        boolean refreshDue =
+            lastSentMs == null || nowMs - lastSentMs >= DEBUG_REFRESH_INTERVAL_MS;
+        if (prev != null && prev == debugSig && !refreshDue) {
             return;
         }
         LAST_DEBUG_SIGNATURE.put(playerUuid, debugSig);
+        LAST_DEBUG_SENT_MS.put(playerUuid, nowMs);
         PathDebugPreviewUtil.clear(pr);
         if (st.getGizmoMode() == PathToolGizmoMode.Remove) {
-            drawCommittedPaths(pr, pathReg, st.getSelectedRemovePathId());
+            drawCommittedPaths(pr, pathReg, st.getSelectedRemovePathId(), hoveredRemovePathId);
             return;
         }
-        if (st.getGizmoMode() == PathToolGizmoMode.StyleDesigner || st.getGizmoMode() == PathToolGizmoMode.ReplaceFilter) {
+        if (st.getGizmoMode() == PathToolGizmoMode.StyleDesigner) {
             return;
         }
         for (PathToolNode n : st.getNodes()) {
@@ -213,6 +237,24 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
     }
 
     @Nullable
+    private static UUID pickHoveredRemovePath(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PathToolRegistry pathReg
+    ) {
+        Transform look = TargetUtil.getLook(ref, store);
+        if (look == null) {
+            return null;
+        }
+        return PathToolRemovePick.pickPathId(
+            look.getPosition(),
+            look.getDirection(),
+            PICK_RAY_MAX,
+            pathReg.all()
+        );
+    }
+
+    @Nullable
     private static UUID pickHoveredControlNode(
         @Nonnull PathToolPlayerComponent st,
         @Nonnull Ref<EntityStore> ref,
@@ -221,7 +263,8 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
         PathToolGizmoMode mode = st.getGizmoMode();
         if (mode != PathToolGizmoMode.Commit
             && mode != PathToolGizmoMode.Translate
-            && mode != PathToolGizmoMode.Rotate) {
+            && mode != PathToolGizmoMode.Rotate
+            && mode != PathToolGizmoMode.ReplaceFilter) {
             return null;
         }
         if (st.getNodes().isEmpty()) {
@@ -246,22 +289,27 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
     private static void drawCommittedPaths(
         @Nonnull PlayerRef pr,
         @Nonnull PathToolRegistry reg,
-        @Nullable UUID selectedPathId
+        @Nullable UUID selectedPathId,
+        @Nullable UUID hoveredPathId
     ) {
         int shapes = 0;
         Vector3f normal = new Vector3f(0.85f, 0.45f, 0.12f);
         Vector3f selected = new Vector3f(0.98f, 0.88f, 0.15f);
+        Vector3f hovered = PathDebugPreviewUtil.COLOR_KEYFRAME_LOOK;
         for (PathCommitRecord rec : reg.all()) {
             if (rec == null || shapes >= MAX_NAV_SHAPES) {
                 return;
             }
-            boolean sel;
+            UUID pathId;
             try {
-                sel = selectedPathId != null && selectedPathId.equals(rec.getIdUuid());
+                pathId = rec.getIdUuid();
             } catch (Exception e) {
-                sel = false;
+                continue;
             }
-            Vector3f col = sel ? selected : normal;
+            boolean sel = selectedPathId != null && selectedPathId.equals(pathId);
+            boolean look = !sel && hoveredPathId != null && hoveredPathId.equals(pathId);
+            boolean emphasized = sel || look;
+            Vector3f col = sel ? selected : (look ? hovered : normal);
             List<PathNavPoint> nav = PathToolNavPreviewUtil.navPointsForPreview(rec);
             if (nav.size() < 2) {
                 continue;
@@ -274,10 +322,10 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
                 }
                 PathDebugPreviewUtil.drawLine(
                     pr,
-                    PathDebugPreviewUtil.navNodeLinePoint(a.x, a.y, a.z, sel),
-                    PathDebugPreviewUtil.navNodeLinePoint(b.x, b.y, b.z, sel),
+                    PathDebugPreviewUtil.navNodeLinePoint(a.x, a.y, a.z, emphasized),
+                    PathDebugPreviewUtil.navNodeLinePoint(b.x, b.y, b.z, emphasized),
                     col,
-                    sel ? 0.09 : 0.07
+                    emphasized ? 0.09 : 0.07
                 );
                 shapes++;
             }
@@ -287,7 +335,7 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
                     continue;
                 }
                 boolean endpoint = i == 0 || i == nav.size() - 1;
-                PathDebugPreviewUtil.drawNavNodeCube(pr, p.x, p.y, p.z, col, sel, endpoint);
+                PathDebugPreviewUtil.drawNavNodeCube(pr, p.x, p.y, p.z, col, emphasized, endpoint);
                 shapes++;
             }
         }

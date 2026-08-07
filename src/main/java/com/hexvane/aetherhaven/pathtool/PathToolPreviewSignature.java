@@ -12,11 +12,11 @@ public final class PathToolPreviewSignature {
     private PathToolPreviewSignature() {}
 
     public static long compute(@Nonnull PathToolPlayerComponent st) {
-        return computeInternal(st, 0L, null, null, null);
+        return computeInternal(st, 0L, null, null, null, null);
     }
 
     public static long compute(@Nonnull PathToolPlayerComponent st, long registryRevision) {
-        return computeInternal(st, registryRevision, null, null, null);
+        return computeInternal(st, registryRevision, null, null, null, null);
     }
 
     public static long compute(
@@ -25,7 +25,7 @@ public final class PathToolPreviewSignature {
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store
     ) {
-        return computeInternal(st, registryRevision, ref, store, null);
+        return computeInternal(st, registryRevision, ref, store, null, null);
     }
 
     public static long compute(
@@ -35,7 +35,18 @@ public final class PathToolPreviewSignature {
         @Nonnull Store<EntityStore> store,
         @Nullable UUID hoveredNodeId
     ) {
-        return computeInternal(st, registryRevision, ref, store, hoveredNodeId);
+        return computeInternal(st, registryRevision, ref, store, hoveredNodeId, null);
+    }
+
+    public static long compute(
+        @Nonnull PathToolPlayerComponent st,
+        long registryRevision,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable UUID hoveredNodeId,
+        @Nullable UUID hoveredRemovePathId
+    ) {
+        return computeInternal(st, registryRevision, ref, store, hoveredNodeId, hoveredRemovePathId);
     }
 
     private static long computeInternal(
@@ -43,7 +54,8 @@ public final class PathToolPreviewSignature {
         long registryRevision,
         @javax.annotation.Nullable Ref<EntityStore> ref,
         @javax.annotation.Nullable Store<EntityStore> store,
-        @Nullable UUID hoveredNodeId
+        @Nullable UUID hoveredNodeId,
+        @Nullable UUID hoveredRemovePathId
     ) {
         long h = 5381;
         h = h * 33 + st.getGizmoMode().ordinal();
@@ -69,6 +81,10 @@ public final class PathToolPreviewSignature {
         if (hoveredNodeId != null) {
             h = h * 33 + hoveredNodeId.getLeastSignificantBits();
             h = h * 33 + hoveredNodeId.getMostSignificantBits();
+        }
+        if (hoveredRemovePathId != null) {
+            h = h * 33 + hoveredRemovePathId.getLeastSignificantBits();
+            h = h * 33 + hoveredRemovePathId.getMostSignificantBits();
         }
         for (PathToolNode n : st.getNodes()) {
             h = h * 33 + n.getId().hashCode();

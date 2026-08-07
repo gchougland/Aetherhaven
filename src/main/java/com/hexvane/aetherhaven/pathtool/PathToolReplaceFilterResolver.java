@@ -23,10 +23,7 @@ public final class PathToolReplaceFilterResolver {
             @Nullable
             PathToolReplaceFilterSessions.Session session = PathToolReplaceFilterSessions.get(playerId);
             if (session != null && session.editingActive) {
-                Set<String> live = PathToolReplaceFilterEditorHelper.snapshotContainer(session.container);
-                if (!live.isEmpty()) {
-                    return live;
-                }
+                return PathToolReplaceFilterEditorHelper.snapshotContainer(session.container);
             }
         }
         return st.getReplaceFilterBlockIds();

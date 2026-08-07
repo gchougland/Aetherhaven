@@ -50,13 +50,16 @@ public final class PathToolSelectInteraction extends SimpleInstantInteraction {
             context.getState().state = InteractionState.Failed;
             return;
         }
-        if (type != InteractionType.Primary) {
-            context.getState().state = InteractionState.Failed;
-            return;
-        }
         @Nullable
         Ref<EntityStore> playerRef = context.getEntity();
         if (playerRef == null) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        PathToolPlayerComponent st = commandBuffer.getComponent(playerRef, PathToolPlayerComponent.getComponentType());
+        boolean replaceFilter = st != null && st.getGizmoMode() == PathToolGizmoMode.ReplaceFilter;
+        boolean removeMode = st != null && st.getGizmoMode() == PathToolGizmoMode.Remove;
+        if (type != InteractionType.Primary && !replaceFilter && !removeMode) {
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -70,5 +73,8 @@ public final class PathToolSelectInteraction extends SimpleInstantInteraction {
         }
         World world = commandBuffer.getStore().getExternalData().getWorld();
         PathToolInteractions.handleSelect(playerRef, commandBuffer, world, context, commandBuffer.getStore());
+        if (context.getState().state != InteractionState.Failed) {
+            context.getState().state = InteractionState.Finished;
+        }
     }
 }
