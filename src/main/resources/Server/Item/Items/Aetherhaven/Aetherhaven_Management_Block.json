@@ -10,10 +10,9 @@
     "Material": "Solid",
     "DrawType": "Model",
     "Opacity": "Transparent",
-    "CustomModel": "Blocks/Decorative_Sets/Village/Shelf_Book.blockymodel",
+    "CustomModel": "Blocks/Town_Records_Shelf.blockymodel",
     "CustomModelTexture": [
-      { "Weight": 1, "Texture": "Blocks/Decorative_Sets/Village/Shelf_Book_default.png" },
-      { "Texture": "Blocks/Decorative_Sets/Village/Shelf_Book_02.png", "Weight": 1 }
+      { "Texture": "Blocks/Town_Records_Shelf.png", "Weight": 1 }
     ],
     "HitboxType": "Block_Vertical_Half",
     "IgnoreSupportWhenPlaced": true,

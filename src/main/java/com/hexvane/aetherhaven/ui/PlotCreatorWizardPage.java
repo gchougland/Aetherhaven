@@ -206,7 +206,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         );
     }
 
-    /** ValueChanged plus Activating so checkbox clicks always reach the draft before Done or HUD advance. */
+    /** CheckBox supports ValueChanged only (not Activating); Next/Done still snapshot toggle values on click. */
     private static void wireConfigureToggle(
         @Nonnull UIEventBuilder eventBuilder,
         @Nonnull String toggleSelector,
@@ -214,12 +214,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
     ) {
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.ValueChanged,
-            toggleSelector,
-            EventData.of(dataKey, toggleSelector + ".Value"),
-            false
-        );
-        eventBuilder.addEventBinding(
-            CustomUIEventBindingType.Activating,
             toggleSelector,
             EventData.of(dataKey, toggleSelector + ".Value"),
             false

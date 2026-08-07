@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.plugin;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.HStats;
+import com.hexvane.aetherhaven.dialogue.DialogueBootstrap;
 import com.hexvane.aetherhaven.command.AetherhavenCommand;
 import com.hexvane.aetherhaven.command.AetherhavenCommunityCommand;
 import com.hexvane.aetherhaven.command.AetherhavenSupportCommand;
@@ -64,8 +65,10 @@ import com.hypixel.hytale.server.core.universe.world.events.AddWorldEvent;
 import com.hypixel.hytale.server.core.universe.world.events.AllWorldsLoadedEvent;
 import com.hypixel.hytale.server.core.universe.world.events.RemoveWorldEvent;
 import com.hypixel.hytale.server.core.universe.world.events.StartWorldEvent;
+import com.hypixel.hytale.server.core.asset.LoadAssetEvent;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.NPCPlugin;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
@@ -94,7 +97,9 @@ public final class AetherhavenCoreBootstrap {
             );
         registerGaiaStatueOpenUi(plugin);
         AetherhavenSubpluginAssetCodecs.registerAll(plugin);
+        DialogueBootstrap.registerLoadHooks(plugin);
         AetherhavenNpcRoleLoader.register(plugin);
+        registerTownsfolkRoleValidation(plugin);
         AetherhavenEmbeddedSubpluginPacks.registerEnabled(plugin);
 
         GameTimeTickListenerRegistry tickRegistry = plugin.getGameTimeTickListenerRegistry();
@@ -178,6 +183,39 @@ public final class AetherhavenCoreBootstrap {
             AetherhavenConstants.PERMISSION_TOWN_ADMIN,
             HytalePermissionsProvider.GROUP_ADMIN
         );
+    }
+
+    /** After {@link NPCPlugin#PRIORITY_LOAD_NPC}; logs whether {@link AetherhavenConstants#NPC_TOWNSFOLK} validated. */
+    private static void registerTownsfolkRoleValidation(@Nonnull AetherhavenPlugin plugin) {
+        plugin
+            .getEventRegistry()
+            .register((short) -7, LoadAssetEvent.class, event -> {
+                NPCPlugin npc = NPCPlugin.get();
+                if (npc == null) {
+                    LOGGER.atWarning().log("Townsfolk role check skipped: NPCPlugin not loaded");
+                    return;
+                }
+                String roleName = AetherhavenConstants.NPC_TOWNSFOLK;
+                int roleIndex = npc.getIndex(roleName);
+                if (roleIndex < 0) {
+                    LOGGER.atWarning().log("Townsfolk role %s is not registered after NPC asset load", roleName);
+                    return;
+                }
+                if (npc.tryGetCachedValidRole(roleIndex) == null) {
+                    LOGGER.atWarning().log(
+                        "Townsfolk role %s (index %s) failed NPC validation; tourist/guild spawns will fail until fixed",
+                        roleName,
+                        roleIndex
+                    );
+                    return;
+                }
+                try {
+                    npc.validateSpawnableRole(roleName);
+                    LOGGER.atInfo().log("Townsfolk role %s validated for spawn", roleName);
+                } catch (RuntimeException e) {
+                    LOGGER.atWarning().withCause(e).log("Townsfolk role %s is not spawnable", roleName);
+                }
+            });
     }
 
     private static void scheduleTeleporterWarpSanitizeAfterLoad() {

@@ -25,6 +25,8 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.asset.builder.Builder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -188,6 +190,16 @@ public final class TownsfolkSpawnService {
         int roleIndex = npcPlugin.getIndex(AetherhavenConstants.NPC_TOWNSFOLK);
         if (roleIndex < 0) {
             LOGGER.atWarning().log("Townsfolk NPC role not registered: %s", AetherhavenConstants.NPC_TOWNSFOLK);
+            return Optional.empty();
+        }
+        Builder<Role> roleBuilder = npcPlugin.tryGetCachedValidRole(roleIndex);
+        if (roleBuilder == null) {
+            LOGGER.atWarning().log(
+                "Townsfolk role %s (index %s) is missing or failed NPC validation; cannot spawn %s",
+                AetherhavenConstants.NPC_TOWNSFOLK,
+                roleIndex,
+                characterId
+            );
             return Optional.empty();
         }
         Model spawnModel = NpcModelSpawnUtil.buildScaledModel(character.getModelAssetId(), character.getModelScale());
