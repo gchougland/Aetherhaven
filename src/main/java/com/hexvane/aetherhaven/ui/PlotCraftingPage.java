@@ -8,7 +8,7 @@ import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
 import com.hexvane.aetherhaven.plot.PlotBuildingStyles;
-import com.hexvane.aetherhaven.plot.PlotBuildingTypeTags;
+import com.hexvane.aetherhaven.plot.PlotBuildingTypes;
 import com.hexvane.aetherhaven.plot.PlotCraftingCatalog;
 import com.hexvane.aetherhaven.plot.PlotCraftingCatalog.GroupEntry;
 import com.hexvane.aetherhaven.plot.PlotCraftingCatalog.Tab;
@@ -69,6 +69,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -90,16 +91,16 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     private static final String TAB_COMMUNITY = "Community";
     private static final String TAB_MODERATION = "Moderation";
     private static final long CRAFT_COST = AetherhavenConstants.PLOT_TOKEN_CRAFT_GOLD_COST;
-    /** Matches {@code PlotCraftingPage.ui} list height for core/decoration tabs. */
-    private static final int BUILDING_LIST_HEIGHT_NORMAL = 436;
-    /** Community / moderation tab with refresh row and craft only. */
-    private static final int BUILDING_LIST_HEIGHT_MARKETPLACE = 384;
+    /** Matches {@code PlotCraftingPage.ui} list height when the toolbar row is present. */
+    private static final int BUILDING_LIST_HEIGHT_NORMAL = 418;
+    /** Community / moderation tab with refresh/page controls and craft only. */
+    private static final int BUILDING_LIST_HEIGHT_MARKETPLACE = 418;
     /** Community tab when load/download/remove row is visible. */
-    private static final int BUILDING_LIST_HEIGHT_MARKETPLACE_WITH_ACTIONS = 306;
+    private static final int BUILDING_LIST_HEIGHT_MARKETPLACE_WITH_ACTIONS = 340;
     /** Favorites tab when a not-yet-installed community build is selected. */
-    private static final int BUILDING_LIST_HEIGHT_WITH_COMMUNITY_ACTIONS = 398;
-    /** Shorter still on Moderation (refresh row + two action button rows). */
-    private static final int BUILDING_LIST_HEIGHT_MODERATION = 306;
+    private static final int BUILDING_LIST_HEIGHT_WITH_COMMUNITY_ACTIONS = 390;
+    /** Shorter still on Moderation (toolbar + two action button rows). */
+    private static final int BUILDING_LIST_HEIGHT_MODERATION = 340;
     private static final int BUILDING_LIST_FOOTER_GAP = 8;
     /** Visible rows per page in list view (Custom UI has no list virtualization). */
     private static final int LIST_PAGE_SIZE = 12;
@@ -452,7 +453,8 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
 
         boolean showPaginationRow = marketplaceTab || catalogTab;
         commandBuilder.set("#StyleFilterColumn.Visible", showStyleFilters);
-        commandBuilder.set("#MarketplaceRefreshRow.Visible", showPaginationRow);
+        commandBuilder.set("#MarketplaceRefreshRow.Visible", true);
+        commandBuilder.set("#PageControls.Visible", showPaginationRow);
         commandBuilder.set("#MarketplaceRefreshButton.Visible", marketplaceTab);
         commandBuilder.set("#CommunityActionRow.Visible", showCommunityActions);
         commandBuilder.set("#ModerationActionRow.Visible", moderationTab);
@@ -491,7 +493,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             commandBuilder.set("#MarketplacePageNext.Disabled", catalogPageIndex >= catalogPageCount - 1);
         }
         // Shorter list when pagination or community action rows are visible.
-        applyBuildingListHeight(commandBuilder, showPaginationRow, showCommunityActions, moderationTab);
+        applyBuildingListHeight(commandBuilder, true, showCommunityActions, moderationTab);
         if (communityTab || favoritesCommunitySelected) {
             boolean hasSelection = variant != null;
             CommunityManifestEntry selectedCommunity =
@@ -1954,7 +1956,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             if (!PlotBuildingStyles.matchesFilter(entry.getStyleId(), activeStyleFilters)) {
                 continue;
             }
-            if (!PlotBuildingTypeTags.matchesFilter(entry.getTags(), activeTypeFilters)) {
+            if (!PlotBuildingTypes.matchesFilter(entry.getTypeIds(), activeTypeFilters)) {
                 continue;
             }
             if (!showCommunityBuildsWithMissingMods && !CommunityRequiredMods.isSatisfied(entry.getRequiredMods())) {
@@ -2930,14 +2932,14 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         if (data.typeTag == null || data.checked == null) {
             return;
         }
-        String typeTag = PlotBuildingTypeTags.normalize(data.typeTag);
-        if (typeTag == null) {
+        String typeId = PlotBuildingTypes.normalize(data.typeTag);
+        if (typeId == null) {
             return;
         }
         if (data.checked) {
-            activeTypeFilters.add(typeTag);
+            activeTypeFilters.add(typeId);
         } else {
-            activeTypeFilters.remove(typeTag);
+            activeTypeFilters.remove(typeId);
         }
     }
 
@@ -3029,13 +3031,13 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         if (!showStyleFilters) {
             commandBuilder.clear(STYLE_ROWS);
             commandBuilder.set("#FilterModeRow.Visible", false);
-            commandBuilder.set("#DownloadThemeButton.Visible", false);
+            commandBuilder.set("#DownloadThemeFooter.Visible", false);
             return;
         }
         boolean showDownloadTheme =
             communityTab && showFilterModeRow && filterMode == FilterMode.THEME;
         commandBuilder.set("#FilterModeRow.Visible", showFilterModeRow);
-        commandBuilder.set("#DownloadThemeButton.Visible", showDownloadTheme);
+        commandBuilder.set("#DownloadThemeFooter.Visible", showDownloadTheme);
         applyStyleFilterScrollHeight(commandBuilder, showFilterModeRow, showDownloadTheme);
         if (showFilterModeRow) {
             boolean themeSelected = filterMode == FilterMode.THEME;
@@ -3072,8 +3074,8 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         List<String> styleIds = listStyleFilterOptions(catalog, communityCatalog, communityTab, showFilterModeRow);
         activeStyleFilters.retainAll(styleIds);
 
-        List<String> typeTags = listTypeFilterOptions(catalog, communityCatalog, communityTab);
-        activeTypeFilters.retainAll(typeTags);
+        List<String> typeIds = listTypeFilterOptions(catalog, communityCatalog);
+        activeTypeFilters.retainAll(typeIds);
 
         if (showDownloadTheme && communityCatalog != null) {
             boolean canDownload =
@@ -3110,18 +3112,21 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             rowOffset = 1;
         }
         if (typeMode) {
-            for (int i = 0; i < typeTags.size(); i++) {
-                String typeTag = typeTags.get(i);
+            for (int i = 0; i < typeIds.size(); i++) {
+                String typeId = typeIds.get(i);
                 commandBuilder.append(STYLE_ROWS, "Aetherhaven/PlotCraftingStyleFilterRow.ui");
                 String row = STYLE_ROWS + "[" + (i + rowOffset) + "]";
-                commandBuilder.set(row + " #StyleLabel.TextSpans", Message.raw(displayFilterLabel(typeTag)));
-                commandBuilder.set(row + " #CheckBox.Value", activeTypeFilters.contains(typeTag));
+                commandBuilder.set(
+                    row + " #StyleLabel.TextSpans",
+                    Message.raw(PlotBuildingTypes.displayLabel(catalog, typeId))
+                );
+                commandBuilder.set(row + " #CheckBox.Value", activeTypeFilters.contains(typeId));
                 eventBuilder.addEventBinding(
                     CustomUIEventBindingType.ValueChanged,
                     row + " #CheckBox",
                     new EventData()
                         .append("Action", "TypeFilterToggle")
-                        .append("TypeTag", typeTag)
+                        .append("TypeTag", typeId)
                         .append("@Checked", row + " #CheckBox.Value"),
                     false
                 );
@@ -3168,18 +3173,32 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     @Nonnull
     private static List<String> listTypeFilterOptions(
         @Nonnull ConstructionCatalog catalog,
-        @Nullable CommunityCatalogService communityCatalog,
-        boolean communityTab
+        @Nullable CommunityCatalogService communityCatalog
     ) {
-        if (communityTab && communityCatalog != null) {
-            return communityCatalog.listTypeTags();
+        // Always list local core types / Decorations. Community manifests may not publish
+        // countsAs yet, so relying on listTypeIds() alone left Type mode empty except the
+        // missing-mods toggle on the Community tab.
+        LinkedHashSet<String> ordered = new LinkedHashSet<>();
+        for (String id : PlotBuildingTypes.craftableTypeIds(catalog)) {
+            ordered.add(id);
         }
-        TreeSet<String> tags = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
-        tags.addAll(PlotBuildingTypeTags.craftableTypeTags(catalog));
         if (communityCatalog != null) {
-            tags.addAll(communityCatalog.listTypeTags());
+            for (String id : communityCatalog.listTypeIds()) {
+                ordered.add(id);
+            }
         }
-        return new ArrayList<>(tags);
+        List<String> out = new ArrayList<>();
+        if (ordered.remove(PlotBuildingTypes.DECORATION)) {
+            out.add(PlotBuildingTypes.DECORATION);
+        }
+        List<String> rest = new ArrayList<>(ordered);
+        rest.sort(
+            Comparator.comparing(
+                id -> PlotBuildingTypes.displayLabel(catalog, id).toLowerCase(Locale.ROOT)
+            )
+        );
+        out.addAll(rest);
+        return out;
     }
 
     private static void applyStyleFilterScrollHeight(

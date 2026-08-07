@@ -831,14 +831,65 @@ function uniqueSortedValues(values) {
   );
 }
 
-function fillSelectOptions(selectEl, values, allLabel) {
+function normalizeCountsAsConstructionIds(value) {
+  const raw = Array.isArray(value) ? value : typeof value === "string" ? [value] : [];
+  const out = [];
+  const seen = new Set();
+  for (const item of raw) {
+    if (typeof item !== "string") {
+      continue;
+    }
+    const id = item.trim().toLowerCase();
+    if (!id || seen.has(id)) {
+      continue;
+    }
+    seen.add(id);
+    out.push(id);
+  }
+  return out;
+}
+
+/** Core building type ids (countsAs / decoration), not freeform tags. */
+function entryTypeIds(entry) {
+  const id = String(entry?.id || "")
+    .trim()
+    .toLowerCase();
+  if (entry?.decorationPlot || id.startsWith("plot_decoration")) {
+    return ["decoration"];
+  }
+  const countsAs = normalizeCountsAsConstructionIds(entry?.countsAsConstructionId);
+  if (countsAs.length) {
+    return countsAs;
+  }
+  if (id && !id.startsWith("plot_community_")) {
+    return [id];
+  }
+  return [];
+}
+
+function formatBuildingTypeLabel(typeId) {
+  if (typeId === "decoration") {
+    return "Decorations";
+  }
+  return String(typeId || "")
+    .replace(/^plot_/i, "")
+    .split(/[_\s]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+    .join(" ");
+}
+
+function fillSelectOptions(selectEl, values, allLabel, labelFn) {
   if (!selectEl) {
     return;
   }
   const current = selectEl.value;
+  const labelOf = typeof labelFn === "function" ? labelFn : (v) => v;
   selectEl.innerHTML =
     `<option value="">${escapeHtml(allLabel)}</option>` +
-    values.map((v) => `<option value="${escapeAttr(v)}">${escapeHtml(v)}</option>`).join("");
+    values
+      .map((v) => `<option value="${escapeAttr(v)}">${escapeHtml(labelOf(v))}</option>`)
+      .join("");
   if (values.includes(current)) {
     selectEl.value = current;
   }
@@ -847,10 +898,15 @@ function fillSelectOptions(selectEl, values, allLabel) {
 function populateCatalogFilterOptions(entries) {
   const authors = uniqueSortedValues(entries.map((e) => e.creatorName || "Unknown"));
   const styles = uniqueSortedValues(entries.map((e) => e.styleId || "misc"));
-  const tags = uniqueSortedValues(entries.flatMap((e) => (Array.isArray(e.tags) ? e.tags : [])));
+  const types = uniqueSortedValues(entries.flatMap((e) => entryTypeIds(e)));
   fillSelectOptions(document.getElementById("catalogAuthorFilter"), authors, "All authors");
   fillSelectOptions(document.getElementById("catalogStyleFilter"), styles, "All styles");
-  fillSelectOptions(document.getElementById("catalogTypeFilter"), tags, "All types");
+  fillSelectOptions(
+    document.getElementById("catalogTypeFilter"),
+    types,
+    "All types",
+    formatBuildingTypeLabel
+  );
 }
 
 function getCatalogFilterState() {
@@ -931,13 +987,13 @@ function entryMatchesCatalogFilters(entry, filters) {
   if (filters.style && (entry.styleId || "misc") !== filters.style) {
     return false;
   }
-  const tags = Array.isArray(entry.tags) ? entry.tags : [];
-  if (filters.type && !tags.includes(filters.type)) {
+  if (filters.type && !entryTypeIds(entry).includes(String(filters.type).toLowerCase())) {
     return false;
   }
   if (!filters.query) {
     return true;
   }
+  const tags = Array.isArray(entry.tags) ? entry.tags : [];
   const haystack = [entry.displayName || "", entry.creatorName || "", ...tags]
     .join(" ")
     .toLowerCase();

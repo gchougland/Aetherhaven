@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.CommunityMarketplaceConfig;
 import com.hexvane.aetherhaven.plot.PlotBuildingStyles;
-import com.hexvane.aetherhaven.plot.PlotBuildingTypeTags;
+import com.hexvane.aetherhaven.plot.PlotBuildingTypes;
 import com.hexvane.aetherhaven.plot.PlotCraftingCatalog;
 import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
@@ -460,7 +460,7 @@ public final class CommunityCatalogService {
             if (!PlotBuildingStyles.matchesFilter(entry.getStyleId(), activeStyleFilters)) {
                 continue;
             }
-            if (!PlotBuildingTypeTags.matchesFilter(entry.getTags(), activeTypeFilters)) {
+            if (!PlotBuildingTypes.matchesFilter(entry.getTypeIds(), activeTypeFilters)) {
                 continue;
             }
             if (!includeMissingMods && !CommunityRequiredMods.isSatisfied(entry.getRequiredMods())) {
@@ -513,7 +513,7 @@ public final class CommunityCatalogService {
             if (!PlotBuildingStyles.matchesFilter(entry.getStyleId(), activeStyleFilters)) {
                 continue;
             }
-            if (!PlotBuildingTypeTags.matchesFilter(entry.getTags(), activeTypeFilters)) {
+            if (!PlotBuildingTypes.matchesFilter(entry.getTypeIds(), activeTypeFilters)) {
                 continue;
             }
             groups.add(
@@ -560,14 +560,26 @@ public final class CommunityCatalogService {
         return new ArrayList<>(ids);
     }
 
-    /** Distinct building type tags present in the cached community manifest (for craft-bench filters). */
+    /** Distinct building type ids in the cached community manifest (core countsAs / decoration). */
     @Nonnull
-    public List<String> listTypeTags() {
+    public List<String> listTypeIds() {
         TreeSet<String> ids = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        boolean anyDecoration = false;
         for (CommunityManifestEntry entry : cachedEntries.get()) {
-            ids.addAll(entry.getTags());
+            for (String typeId : entry.getTypeIds()) {
+                if (PlotBuildingTypes.DECORATION.equals(typeId)) {
+                    anyDecoration = true;
+                } else {
+                    ids.add(typeId);
+                }
+            }
         }
-        return new ArrayList<>(ids);
+        List<String> out = new ArrayList<>();
+        if (anyDecoration) {
+            out.add(PlotBuildingTypes.DECORATION);
+        }
+        out.addAll(ids);
+        return out;
     }
 
     private static final class ManifestResponse {

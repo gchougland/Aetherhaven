@@ -130,14 +130,6 @@ $C.@PageOverlay {
               }
             }
 
-            $C.@SmallSecondaryTextButton #DownloadThemeButton {
-              FlexWeight: 1;
-              Anchor: (Bottom: 10, Height: $C.@SmallButtonHeight);
-              Padding: (Horizontal: 8);
-              Visible: false;
-              Text: "";
-            }
-
             Group #StyleFilterScroll {
               LayoutMode: TopScrolling;
               ScrollbarStyle: $C.@DefaultScrollbarStyle;
@@ -147,6 +139,18 @@ $C.@PageOverlay {
               Group #StyleFilterRows {
                 LayoutMode: Top;
                 Padding: (Horizontal: 2, Vertical: 2);
+              }
+            }
+
+            Group #DownloadThemeFooter {
+              LayoutMode: Top;
+              Anchor: (Top: 10, Height: $C.@SmallButtonHeight);
+              Visible: false;
+
+              $C.@SmallSecondaryTextButton #DownloadThemeButton {
+                FlexWeight: 1;
+                Padding: (Horizontal: 8);
+                Text: "";
               }
             }
           }
@@ -245,27 +249,31 @@ $C.@PageOverlay {
 
             Group #MarketplaceRefreshRow {
               LayoutMode: Left;
-              Anchor: (Height: 40, Bottom: 4);
-              Visible: false;
+              Anchor: (Height: 36, Bottom: 6);
 
-              TextButton #MarketplacePagePrev {
-                Style: @ArrowBackStyle;
-                Anchor: (Width: 36, Height: 36, Right: 6);
-                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
-                Text: " ";
-              }
+              Group #PageControls {
+                LayoutMode: Left;
+                Visible: false;
 
-              Label #MarketplacePageLabel {
-                Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, FontSize: 15, RenderBold: true, HorizontalAlignment: Center);
-                Anchor: (Width: 110, Height: 36, Right: 6);
-                Text: "";
-              }
+                TextButton #MarketplacePagePrev {
+                  Style: @ArrowBackStyle;
+                  Anchor: (Width: 36, Height: 36, Right: 6);
+                  TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                  Text: " ";
+                }
 
-              TextButton #MarketplacePageNext {
-                Style: @ArrowForwardStyle;
-                Anchor: (Width: 36, Height: 36, Right: 8);
-                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
-                Text: " ";
+                Label #MarketplacePageLabel {
+                  Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, FontSize: 15, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center);
+                  Anchor: (Width: 110, Height: 36, Right: 6);
+                  Text: "";
+                }
+
+                TextButton #MarketplacePageNext {
+                  Style: @ArrowForwardStyle;
+                  Anchor: (Width: 36, Height: 36, Right: 8);
+                  TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                  Text: " ";
+                }
               }
 
               Group {
@@ -279,18 +287,10 @@ $C.@PageOverlay {
 
               TextButton #MarketplaceRefreshButton {
                 Style: @RefreshIconStyle;
-                Anchor: (Width: 40, Height: 40);
+                Anchor: (Width: 36, Height: 36, Right: 8);
                 TextTooltipStyle: $C.@DefaultTextTooltipStyle;
                 Text: " ";
-              }
-            }
-
-            Group #ViewModeRow {
-              LayoutMode: Left;
-              Anchor: (Height: 28, Bottom: 6);
-
-              Group {
-                FlexWeight: 1;
+                Visible: false;
               }
 
               TextButton #ViewModeList {
@@ -313,7 +313,7 @@ $C.@PageOverlay {
             Group #BuildingListScroll {
               LayoutMode: TopScrolling;
               ScrollbarStyle: $C.@DefaultScrollbarStyle;
-              Anchor: (Height: @PlotListHeight - 34, Bottom: @PlotListFooterGap);
+              Anchor: (Height: @PlotListHeight, Bottom: @PlotListFooterGap);
               Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #1e2430(0.55));
 
               Group #BuildingRows {

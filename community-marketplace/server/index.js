@@ -403,6 +403,57 @@ function readBuildingTags(buildingPath) {
   }
 }
 
+/**
+ * @param {unknown} value
+ * @returns {string|string[]|undefined}
+ */
+function normalizeCountsAsConstructionId(value) {
+  if (typeof value === "string") {
+    const id = value.trim();
+    return id ? id : undefined;
+  }
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+  const ids = [];
+  const seen = new Set();
+  for (const raw of value) {
+    if (typeof raw !== "string") {
+      continue;
+    }
+    const id = raw.trim();
+    if (!id || seen.has(id.toLowerCase())) {
+      continue;
+    }
+    seen.add(id.toLowerCase());
+    ids.push(id);
+  }
+  if (!ids.length) {
+    return undefined;
+  }
+  return ids.length === 1 ? ids[0] : ids;
+}
+
+/**
+ * @param {string} buildingPath
+ * @returns {{ decorationPlot: boolean, countsAsConstructionId: string|string[]|undefined }}
+ */
+function readBuildingTypeMeta(buildingPath) {
+  try {
+    if (!fs.existsSync(buildingPath)) {
+      return { decorationPlot: false, countsAsConstructionId: undefined };
+    }
+    const building = JSON.parse(fs.readFileSync(buildingPath, "utf8"));
+    const id = String(building.id || "").trim();
+    const decorationPlot =
+      Boolean(building.decorationPlot) || id.toLowerCase().startsWith("plot_decoration");
+    const countsAsConstructionId = normalizeCountsAsConstructionId(building.countsAsConstructionId);
+    return { decorationPlot, countsAsConstructionId };
+  } catch {
+    return { decorationPlot: false, countsAsConstructionId: undefined };
+  }
+}
+
 function buildManifestEntry(id, meta, prefabBytes) {
   const entry = {
     id,
@@ -411,11 +462,16 @@ function buildManifestEntry(id, meta, prefabBytes) {
     creatorName: meta.creatorName,
     styleId: meta.styleId || "misc",
     tags: normalizeTags(meta.tags),
+    decorationPlot: Boolean(meta.decorationPlot),
     blockIdVersion: meta.blockIdVersion,
     prefabBytes,
     version: meta.version || "1",
     approvedAt: meta.approvedAt,
   };
+  const countsAsConstructionId = normalizeCountsAsConstructionId(meta.countsAsConstructionId);
+  if (countsAsConstructionId) {
+    entry.countsAsConstructionId = countsAsConstructionId;
+  }
   const description = normalizeDescription(meta.description);
   if (description) {
     entry.description = description;
@@ -600,11 +656,13 @@ function approveSubmission(submissionId, requestedId, requiredModsOverride) {
 
   const buildingTags = normalizeTags(building.tags);
   const buildingRequiredMods = normalizeRequiredMods(building.requiredMods);
+  const typeMeta = readBuildingTypeMeta(approved.building);
   const approvedMeta = {
     ...meta,
     id,
     description: normalizeDescription(building.description) || normalizeDescription(meta.description),
     tags: buildingTags.length ? buildingTags : normalizeTags(meta.tags),
+    decorationPlot: typeMeta.decorationPlot,
     requiredMods: buildingRequiredMods.length
       ? buildingRequiredMods
       : normalizeRequiredMods(meta.requiredMods),
@@ -613,6 +671,11 @@ function approveSubmission(submissionId, requestedId, requiredModsOverride) {
     version: meta.version || "1",
   };
   approvedMeta.requiredMods = normalizeRequiredMods(approvedMeta.requiredMods);
+  if (typeMeta.countsAsConstructionId) {
+    approvedMeta.countsAsConstructionId = typeMeta.countsAsConstructionId;
+  } else {
+    delete approvedMeta.countsAsConstructionId;
+  }
   if (preservedCoverScreenshotId) {
     approvedMeta.coverScreenshotId = preservedCoverScreenshotId;
   }
@@ -947,10 +1010,16 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
     const materials = readBuildingMaterials(paths.building);
     const entryTags = normalizeTags(e.tags);
     const tags = entryTags.length ? entryTags : readBuildingTags(paths.building);
+    const typeMeta = readBuildingTypeMeta(paths.building);
+    const decorationPlot =
+      typeof e.decorationPlot === "boolean" ? e.decorationPlot : typeMeta.decorationPlot;
+    const countsAsConstructionId =
+      normalizeCountsAsConstructionId(e.countsAsConstructionId) ?? typeMeta.countsAsConstructionId;
     const card = resolveCardImage(e.id, e.coverScreenshotId);
     const entry = {
       ...e,
       tags,
+      decorationPlot,
       prefabBytes,
       compatible,
       upvoteCount: voteCounts[e.id] || 0,
@@ -964,6 +1033,11 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
       prefabUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/prefab.json`,
       materials,
     };
+    if (countsAsConstructionId) {
+      entry.countsAsConstructionId = countsAsConstructionId;
+    } else {
+      delete entry.countsAsConstructionId;
+    }
     if (goldCost > 0) {
       entry.treasuryGoldCoinCost = goldCost;
     } else {

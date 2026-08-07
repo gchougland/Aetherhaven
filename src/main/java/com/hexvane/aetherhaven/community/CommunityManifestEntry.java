@@ -2,8 +2,11 @@ package com.hexvane.aetherhaven.community;
 
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
-import com.hexvane.aetherhaven.plot.PlotBuildingTypeTags;
+import com.hexvane.aetherhaven.plot.PlotBuildingTypes;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -26,6 +29,13 @@ public final class CommunityManifestEntry {
 
     @SerializedName("tags")
     private List<String> tags;
+
+    @SerializedName("decorationPlot")
+    private boolean decorationPlot;
+
+    /** String or array of core construction ids this variant counts as. */
+    @SerializedName("countsAsConstructionId")
+    private com.google.gson.JsonElement countsAsConstructionId;
 
     @SerializedName("blockIdVersion")
     private int blockIdVersion;
@@ -97,10 +107,42 @@ public final class CommunityManifestEntry {
         return styleId;
     }
 
-    /** Normalized building type tags from the marketplace manifest. */
+    public boolean isDecorationPlot() {
+        return decorationPlot || getId().toLowerCase(Locale.ROOT).startsWith("plot_decoration");
+    }
+
+    /** Core building ids this community build counts as (variant targets). */
     @Nonnull
-    public List<String> getTags() {
-        return PlotBuildingTypeTags.normalizeAll(tags);
+    public List<String> getCountsAsConstructionIds() {
+        if (countsAsConstructionId == null || countsAsConstructionId.isJsonNull()) {
+            return List.of();
+        }
+        List<String> out = new ArrayList<>();
+        if (countsAsConstructionId.isJsonPrimitive() && countsAsConstructionId.getAsJsonPrimitive().isString()) {
+            String s = countsAsConstructionId.getAsString();
+            if (s != null && !s.isBlank()) {
+                out.add(s.trim());
+            }
+            return List.copyOf(out);
+        }
+        if (countsAsConstructionId.isJsonArray()) {
+            for (com.google.gson.JsonElement el : countsAsConstructionId.getAsJsonArray()) {
+                if (el == null || !el.isJsonPrimitive() || !el.getAsJsonPrimitive().isString()) {
+                    continue;
+                }
+                String s = el.getAsString();
+                if (s != null && !s.isBlank() && !out.contains(s.trim())) {
+                    out.add(s.trim());
+                }
+            }
+        }
+        return List.copyOf(out);
+    }
+
+    /** Type filter keys: decoration or core countsAs / self id. */
+    @Nonnull
+    public Set<String> getTypeIds() {
+        return PlotBuildingTypes.typeIdsOf(isDecorationPlot(), getCountsAsConstructionIds(), getId());
     }
 
     public int getBlockIdVersion() {

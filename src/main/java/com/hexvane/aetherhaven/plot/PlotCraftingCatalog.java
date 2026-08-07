@@ -176,7 +176,7 @@ public final class PlotCraftingCatalog {
     }
 
     private static boolean matchesTypeFilter(@Nonnull ConstructionDefinition def, @Nonnull Set<String> activeTypeFilters) {
-        return PlotBuildingTypeTags.matchesFilter(def.getBuildingTags(), activeTypeFilters);
+        return PlotBuildingTypes.matchesDefinition(def, activeTypeFilters);
     }
 
     @Nonnull
