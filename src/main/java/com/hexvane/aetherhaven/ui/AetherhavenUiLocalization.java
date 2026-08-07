@@ -550,6 +550,11 @@ public final class AetherhavenUiLocalization {
         b.set("#MarketplacePagePrev.TooltipTextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.marketplacePagePrevTooltip"));
         b.set("#MarketplacePageNext.TooltipTextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.marketplacePageNextTooltip"));
         b.set("#StyleFilterTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.styleFilterTitle"));
+        b.set("#FilterModeTheme.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.filterModeTheme"));
+        b.set("#FilterModeType.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.filterModeType"));
+        b.set("#DownloadThemeButton.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.downloadThemeButton"));
+        b.set("#ViewModeList.TooltipTextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.viewListTooltip"));
+        b.set("#ViewModeGrid.TooltipTextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.viewGridTooltip"));
         b.set("#SearchInput.PlaceholderText", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.searchPlaceholder"));
     }
 

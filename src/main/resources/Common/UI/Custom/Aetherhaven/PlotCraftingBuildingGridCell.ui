@@ -1,0 +1,91 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@IconLbl = (
+  FontSize: 6,
+  TextColor: #ffffff(0.01),
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+@FavoriteStarActiveStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../star.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../star.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../star.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../star.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+@FavoriteStarInactiveStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../star.png", Border: 0, Color: #5c6a78(0.55)), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../star.png", Border: 0, Color: #7a8490), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../star.png", Border: 0, Color: #4a5560), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../star.png", Border: 0, Color: #5c6a78(0.35)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+Group #PlotCraftingBuildingGridCell {
+  Anchor: (Width: 72, Height: 72, Right: 6, Bottom: 6);
+
+  Group #SelectShell {
+    LayoutMode: Full;
+
+    Group #SelectHilite {
+      Anchor: (Full: 0);
+      LayoutMode: Full;
+      Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #3d4a5c(0.7));
+      Visible: false;
+      HitTestVisible: false;
+    }
+
+    Button #Select {
+      LayoutMode: Full;
+      Padding: (Full: 4);
+      TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+      TooltipText: "";
+      Style: (
+        Default: (Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #1e2430(0.85))),
+        Hovered: (Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #2a3344(0.95))),
+        Pressed: (Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #141820(0.98)))
+      );
+
+      Group #IconBox {
+        LayoutMode: Full;
+        Anchor: (Full: 0);
+        Background: #1a2530;
+        Padding: 2;
+        HitTestVisible: false;
+
+        AssetImage #BuildingIcon {
+          Anchor: (Full: 0);
+          FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+          HitTestVisible: false;
+        }
+      }
+
+      Group #FavoriteSlot {
+        LayoutMode: Middle;
+        Anchor: (Width: 22, Height: 22, Left: 46, Top: 46);
+
+        TextButton #FavoriteButtonOn {
+          Style: @FavoriteStarActiveStyle;
+          TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+          Anchor: (Width: 18, Height: 18);
+          Padding: (Full: 0);
+          Text: ".";
+          TooltipText: "";
+          Visible: false;
+        }
+
+        TextButton #FavoriteButtonOff {
+          Style: @FavoriteStarInactiveStyle;
+          TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+          Anchor: (Width: 18, Height: 18);
+          Padding: (Full: 0);
+          Text: ".";
+          TooltipText: "";
+        }
+      }
+    }
+  }
+}

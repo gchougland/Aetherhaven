@@ -6,7 +6,7 @@ plugins {
 import java.util.zip.ZipFile
 
 group = "com.hexvane"
-version = "2.7.1"
+version = "3.0.0"
 val javaVersion = 25
 
 repositories {
@@ -241,7 +241,7 @@ tasks.withType<JavaCompile>().configureEach {
 
 tasks.test {
     useJUnitPlatform {
-        includeTags("wall-placement", "floating-gift", "map-marker", "autonomy", "schedule", "tourist", "entity", "town", "crossmod", "worldnpc", "raid", "questboard", "construction", "quest")
+        includeTags("wall-placement", "floating-gift", "map-marker", "autonomy", "schedule", "tourist", "entity", "town", "crossmod", "worldnpc", "raid", "questboard", "construction", "quest", "bard")
     }
     systemProperty(
         "java.util.logging.manager",

@@ -3,7 +3,7 @@ package com.hexvane.aetherhaven.ui;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Vanilla {@code InputBindingKey} ids and default key labels for dynamically appended tool HUD rows. */
+/** Vanilla {@code InputBindingKey} ids and default key labels for CustomUIHud tool hint rows. */
 public enum ToolKeybindSlot {
     PRIMARY("PrimaryItemAction", "LMB"),
     SECONDARY("SecondaryItemAction", "RMB"),
@@ -40,6 +40,11 @@ public enum ToolKeybindSlot {
     @Nonnull
     public String rowUiPath() {
         return "Aetherhaven/ToolHudHotkeyRow.ui";
+    }
+
+    @Nonnull
+    public String modifierRowUiPath() {
+        return "Aetherhaven/ToolHudModifierHotkeyRow.ui";
     }
 
     @Nullable

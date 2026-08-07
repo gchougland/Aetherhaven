@@ -3,7 +3,7 @@ package com.hexvane.aetherhaven.pathtool;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.ui.AetherhavenUiLocalization;
-import com.hexvane.aetherhaven.ui.ToolKeybindDisplay;
+import com.hexvane.aetherhaven.ui.ToolHudHotkeyRows;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
@@ -18,16 +18,7 @@ import javax.annotation.Nonnull;
 /** In-world HUD overlay for path width and mode; shown while the path tool is held. */
 public final class PathToolStatusHud extends CustomUIHud {
     private static final String LANG_PREFIX = "aetherhaven_items.";
-    private static final String[] HINT_GROUPS = {
-        "#RowsTranslate",
-        "#RowsRotate",
-        "#RowsCommit",
-        "#RowsRemove",
-        "#RowsStyleDesigner",
-        "#RowsStyleDesignerEdit",
-        "#RowsReplaceFilter",
-        "#RowsReplaceFilterEdit",
-    };
+    private static final String CONTROL_ROWS = "#ControlRows";
 
     public PathToolStatusHud(@Nonnull PlayerRef playerRef) {
         super(playerRef, AetherhavenConstants.PATH_TOOL_HUD_KEY, 0);
@@ -119,50 +110,29 @@ public final class PathToolStatusHud extends CustomUIHud {
                 replaceFilterEditingActive = PathToolReplaceFilterUi.isActivelyEditing(ref, store);
             }
         }
-        String activeGroup = hintGroupSelector(mode, styleEditingActive, replaceFilterEditingActive);
-        for (String group : HINT_GROUPS) {
-            b.set(group + ".Visible", group.equals(activeGroup));
-        }
+        b.clear(CONTROL_ROWS);
         List<PathToolHudControls.Row> rows =
             PathToolHudControls.rowsFor(mode, styleEditingActive, replaceFilterEditingActive);
-        String rowPrefix = activeGroup + " #";
-        int keyIndex = 0;
-        int infoIndex = 0;
-        for (PathToolHudControls.Row row : rows) {
+        for (int i = 0; i < rows.size(); i++) {
+            PathToolHudControls.Row row = rows.get(i);
             if (row.infoOnly()) {
-                b.set(
-                    rowPrefix + "Info" + infoIndex + ".TextSpans",
+                ToolHudHotkeyRows.appendInfoRow(
+                    b,
+                    CONTROL_ROWS,
+                    i,
                     Message.translation(LANG_PREFIX + row.descriptionLangKey())
                 );
-                infoIndex++;
             } else {
-                b.set(
-                    rowPrefix + "Key" + keyIndex + ".TextSpans",
-                    Message.raw(ToolKeybindDisplay.labelFor(playerRef, row.slot()))
+                ToolHudHotkeyRows.appendRow(
+                    b,
+                    CONTROL_ROWS,
+                    i,
+                    row.slot(),
+                    LANG_PREFIX + row.descriptionLangKey(),
+                    playerRef
                 );
-                b.set(
-                    rowPrefix + "Desc" + keyIndex + ".TextSpans",
-                    Message.translation(LANG_PREFIX + row.descriptionLangKey())
-                );
-                keyIndex++;
             }
         }
         this.update(false, b);
-    }
-
-    @Nonnull
-    private static String hintGroupSelector(
-        @Nonnull PathToolGizmoMode mode,
-        boolean styleEditingActive,
-        boolean replaceFilterEditingActive
-    ) {
-        return switch (mode) {
-            case Translate -> "#RowsTranslate";
-            case Rotate -> "#RowsRotate";
-            case Commit -> "#RowsCommit";
-            case Remove -> "#RowsRemove";
-            case StyleDesigner -> styleEditingActive ? "#RowsStyleDesignerEdit" : "#RowsStyleDesigner";
-            case ReplaceFilter -> replaceFilterEditingActive ? "#RowsReplaceFilterEdit" : "#RowsReplaceFilter";
-        };
     }
 }

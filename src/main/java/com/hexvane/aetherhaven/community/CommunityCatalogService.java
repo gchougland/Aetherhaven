@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.CommunityMarketplaceConfig;
 import com.hexvane.aetherhaven.plot.PlotBuildingStyles;
+import com.hexvane.aetherhaven.plot.PlotBuildingTypeTags;
 import com.hexvane.aetherhaven.plot.PlotCraftingCatalog;
 import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
@@ -433,7 +434,7 @@ public final class CommunityCatalogService {
         @Nonnull Set<String> activeStyleFilters,
         @Nonnull CommunityCatalogSort sort
     ) {
-        return buildGroupEntries(activeStyleFilters, sort, false);
+        return buildGroupEntries(activeStyleFilters, Collections.emptySet(), sort, false);
     }
 
     @Nonnull
@@ -442,11 +443,24 @@ public final class CommunityCatalogService {
         @Nonnull CommunityCatalogSort sort,
         boolean includeMissingMods
     ) {
+        return buildGroupEntries(activeStyleFilters, Collections.emptySet(), sort, includeMissingMods);
+    }
+
+    @Nonnull
+    public List<PlotCraftingCatalog.GroupEntry> buildGroupEntries(
+        @Nonnull Set<String> activeStyleFilters,
+        @Nonnull Set<String> activeTypeFilters,
+        @Nonnull CommunityCatalogSort sort,
+        boolean includeMissingMods
+    ) {
         ObjectArrayList<PlotCraftingCatalog.GroupEntry> groups = new ObjectArrayList<>();
         ObjectArrayList<CommunityManifestEntry> entries = new ObjectArrayList<>(cachedEntries.get());
         entries.sort(comparatorFor(sort));
         for (CommunityManifestEntry entry : entries) {
             if (!PlotBuildingStyles.matchesFilter(entry.getStyleId(), activeStyleFilters)) {
+                continue;
+            }
+            if (!PlotBuildingTypeTags.matchesFilter(entry.getTags(), activeTypeFilters)) {
                 continue;
             }
             if (!includeMissingMods && !CommunityRequiredMods.isSatisfied(entry.getRequiredMods())) {
@@ -471,6 +485,16 @@ public final class CommunityCatalogService {
         @Nonnull Set<String> activeStyleFilters,
         @Nonnull Set<String> catalogGroupKeys
     ) {
+        return buildFavoritesGroupEntries(favoriteIds, activeStyleFilters, Collections.emptySet(), catalogGroupKeys);
+    }
+
+    @Nonnull
+    public List<PlotCraftingCatalog.GroupEntry> buildFavoritesGroupEntries(
+        @Nonnull Set<String> favoriteIds,
+        @Nonnull Set<String> activeStyleFilters,
+        @Nonnull Set<String> activeTypeFilters,
+        @Nonnull Set<String> catalogGroupKeys
+    ) {
         if (favoriteIds.isEmpty()) {
             return List.of();
         }
@@ -487,6 +511,9 @@ public final class CommunityCatalogService {
                 continue;
             }
             if (!PlotBuildingStyles.matchesFilter(entry.getStyleId(), activeStyleFilters)) {
+                continue;
+            }
+            if (!PlotBuildingTypeTags.matchesFilter(entry.getTags(), activeTypeFilters)) {
                 continue;
             }
             groups.add(
@@ -529,6 +556,16 @@ public final class CommunityCatalogService {
             if (styleId != null) {
                 ids.add(styleId);
             }
+        }
+        return new ArrayList<>(ids);
+    }
+
+    /** Distinct building type tags present in the cached community manifest (for craft-bench filters). */
+    @Nonnull
+    public List<String> listTypeTags() {
+        TreeSet<String> ids = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        for (CommunityManifestEntry entry : cachedEntries.get()) {
+            ids.addAll(entry.getTags());
         }
         return new ArrayList<>(ids);
     }

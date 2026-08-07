@@ -51,6 +51,22 @@ $Sounds = "../Sounds.ui";
   Sounds: $Sounds.@ButtonsLight
 );
 
+@ViewModeListStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../list.png", Border: 0, Color: #ffffff), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Hovered: (Background: PatchStyle(TexturePath: "../list.png", Border: 0, Color: #c5d0dc), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Pressed: (Background: PatchStyle(TexturePath: "../list.png", Border: 0, Color: #8fa0b0), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Disabled: (Background: PatchStyle(TexturePath: "../list.png", Border: 0, Color: #5c6a78(0.55)), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+@ViewModeGridStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../grid.png", Border: 0, Color: #ffffff), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Hovered: (Background: PatchStyle(TexturePath: "../grid.png", Border: 0, Color: #c5d0dc), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Pressed: (Background: PatchStyle(TexturePath: "../grid.png", Border: 0, Color: #8fa0b0), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Disabled: (Background: PatchStyle(TexturePath: "../grid.png", Border: 0, Color: #5c6a78(0.55)), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Sounds: $Sounds.@ButtonsLight
+);
+
 @ModerationTabIconLbl = (
   FontSize: 6,
   TextColor: #ffffff(0.01),
@@ -94,6 +110,33 @@ $C.@PageOverlay {
           #Content {
             LayoutMode: Top;
             Padding: (Full: 12);
+
+            Group #FilterModeRow {
+              LayoutMode: Left;
+              Anchor: (Bottom: 10, Height: $C.@SmallButtonHeight);
+              Visible: false;
+
+              $C.@SmallSecondaryTextButton #FilterModeTheme {
+                FlexWeight: 1;
+                Anchor: (Right: 6);
+                Padding: (Horizontal: 8);
+                Text: "";
+              }
+
+              $C.@SmallSecondaryTextButton #FilterModeType {
+                FlexWeight: 1;
+                Padding: (Horizontal: 8);
+                Text: "";
+              }
+            }
+
+            $C.@SmallSecondaryTextButton #DownloadThemeButton {
+              FlexWeight: 1;
+              Anchor: (Bottom: 10, Height: $C.@SmallButtonHeight);
+              Padding: (Horizontal: 8);
+              Visible: false;
+              Text: "";
+            }
 
             Group #StyleFilterScroll {
               LayoutMode: TopScrolling;
@@ -242,15 +285,46 @@ $C.@PageOverlay {
               }
             }
 
+            Group #ViewModeRow {
+              LayoutMode: Left;
+              Anchor: (Height: 28, Bottom: 6);
+
+              Group {
+                FlexWeight: 1;
+              }
+
+              TextButton #ViewModeList {
+                Style: @ViewModeListStyle;
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                Anchor: (Width: 28, Height: 28, Right: 6);
+                Text: " ";
+                TooltipText: "";
+              }
+
+              TextButton #ViewModeGrid {
+                Style: @ViewModeGridStyle;
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                Anchor: (Width: 28, Height: 28);
+                Text: " ";
+                TooltipText: "";
+              }
+            }
+
             Group #BuildingListScroll {
               LayoutMode: TopScrolling;
               ScrollbarStyle: $C.@DefaultScrollbarStyle;
-              Anchor: (Height: @PlotListHeight, Bottom: @PlotListFooterGap);
+              Anchor: (Height: @PlotListHeight - 34, Bottom: @PlotListFooterGap);
               Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #1e2430(0.55));
 
               Group #BuildingRows {
                 LayoutMode: Top;
                 Padding: (Horizontal: 4, Vertical: 4);
+              }
+
+              Group #BuildingGridRows {
+                LayoutMode: LeftCenterWrap;
+                Padding: (Horizontal: 6, Vertical: 6);
+                Visible: false;
               }
             }
 

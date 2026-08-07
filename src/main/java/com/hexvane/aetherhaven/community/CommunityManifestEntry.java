@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.community;
 
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
+import com.hexvane.aetherhaven.plot.PlotBuildingTypeTags;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -22,6 +23,9 @@ public final class CommunityManifestEntry {
 
     @SerializedName("styleId")
     private String styleId;
+
+    @SerializedName("tags")
+    private List<String> tags;
 
     @SerializedName("blockIdVersion")
     private int blockIdVersion;
@@ -91,6 +95,12 @@ public final class CommunityManifestEntry {
     @Nullable
     public String getStyleId() {
         return styleId;
+    }
+
+    /** Normalized building type tags from the marketplace manifest. */
+    @Nonnull
+    public List<String> getTags() {
+        return PlotBuildingTypeTags.normalizeAll(tags);
     }
 
     public int getBlockIdVersion() {

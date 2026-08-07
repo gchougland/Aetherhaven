@@ -24,6 +24,8 @@ import javax.annotation.Nonnull;
 /**
  * Applies per-player bard {@link com.hypixel.hytale.protocol.packets.world.UpdateForcedMusic}
  * after vanilla {@link ForcedMusicSystems.Tick} so only nearby players hear the performance.
+ * Clears forced music only for players this system marked as listening; does not wipe
+ * trigger-volume or command forced music.
  */
 public final class BardMusicProximitySystem extends EntityTickingSystem<EntityStore> {
     @Nonnull
@@ -81,21 +83,23 @@ public final class BardMusicProximitySystem extends EntityTickingSystem<EntitySt
         var pos = transform.getPosition();
         int desiredContainer = performances.nearestMusic(pos.x, pos.y, pos.z).musicContainerIndex();
         int have = tracker.getCurrentContainerIndex();
-        if (have == desiredContainer) {
-            if (desiredContainer == 0 && proximityState.isListening(playerId)) {
-                proximityState.clear(playerId);
-            }
-            return;
-        }
+        BardForcedMusicOwnership.Decision decision =
+            BardForcedMusicOwnership.decide(desiredContainer, have, proximityState.isListening(playerId));
 
-        BardEnvironmentMusic.setForcedMusic(
-            playerEntityRef,
-            commandBuffer,
-            store,
-            playerRef,
-            tracker,
-            desiredContainer
-        );
-        proximityState.setActive(playerId, desiredContainer);
+        if (decision.updateTracker()) {
+            BardEnvironmentMusic.setForcedMusic(
+                playerEntityRef,
+                commandBuffer,
+                store,
+                playerRef,
+                tracker,
+                decision.containerIndex()
+            );
+        }
+        if (decision.markListening()) {
+            proximityState.setActive(playerId, decision.containerIndex());
+        } else if (decision.clearListening()) {
+            proximityState.clear(playerId);
+        }
     }
 }

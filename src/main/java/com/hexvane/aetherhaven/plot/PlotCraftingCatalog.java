@@ -90,6 +90,16 @@ public final class PlotCraftingCatalog {
         @Nonnull Set<String> favoriteIds,
         @Nonnull Set<String> activeStyleFilters
     ) {
+        return favoritesGroups(catalog, favoriteIds, activeStyleFilters, Collections.emptySet());
+    }
+
+    @Nonnull
+    public static List<GroupEntry> favoritesGroups(
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull Set<String> favoriteIds,
+        @Nonnull Set<String> activeStyleFilters,
+        @Nonnull Set<String> activeTypeFilters
+    ) {
         if (favoriteIds.isEmpty()) {
             return List.of();
         }
@@ -111,6 +121,9 @@ public final class PlotCraftingCatalog {
                 continue;
             }
             if (!matchesStyleFilter(def, activeStyleFilters)) {
+                continue;
+            }
+            if (!matchesTypeFilter(def, activeTypeFilters)) {
                 continue;
             }
             String groupKey = catalog.resolveGameplayConstructionId(def.getId());
@@ -160,6 +173,10 @@ public final class PlotCraftingCatalog {
 
     private static boolean matchesStyleFilter(@Nonnull ConstructionDefinition def, @Nonnull Set<String> activeStyleFilters) {
         return PlotBuildingStyles.matchesFilter(def.getStyleId(), activeStyleFilters);
+    }
+
+    private static boolean matchesTypeFilter(@Nonnull ConstructionDefinition def, @Nonnull Set<String> activeTypeFilters) {
+        return PlotBuildingTypeTags.matchesFilter(def.getBuildingTags(), activeTypeFilters);
     }
 
     @Nonnull

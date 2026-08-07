@@ -15,11 +15,20 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Resolves display labels for vanilla {@link ToolKeybindSlot} binding ids.
- * Uses the local Hytale client settings file when present (singleplayer / integrated server),
- * otherwise falls back to vanilla default labels.
+ * Resolves display labels for vanilla {@link ToolKeybindSlot} binding ids in CustomUIHud rows.
+ *
+ * <p>{@code HotkeyLabel} only resolves remaps inside item Legend HUDs, not CustomUIHud. This helper
+ * reads the local Hytale client {@code Settings.json} when present (singleplayer / integrated host)
+ * and otherwise falls back to vanilla default labels.
+ *
+ * <p>Settings binding {@code SourceType}: {@code 0} keyboard, {@code 1} mouse, {@code 2} gamepad
+ * (ignored for HUD text).
  */
 public final class ToolKeybindDisplay {
+    private static final int SOURCE_KEYBOARD = 0;
+    private static final int SOURCE_MOUSE = 1;
+    private static final int SOURCE_GAMEPAD = 2;
+
     private static final Map<String, String> VANILLA_DEFAULTS = Map.ofEntries(
         Map.entry("PrimaryItemAction", "LMB"),
         Map.entry("SecondaryItemAction", "RMB"),
@@ -82,7 +91,7 @@ public final class ToolKeybindDisplay {
     }
 
     @Nonnull
-    private static Map<String, String> parseSettingsOverrides(@Nonnull String json) {
+    static Map<String, String> parseSettingsOverrides(@Nonnull String json) {
         Map<String, String> out = new HashMap<>();
         JsonObject root = JsonParser.parseString(json).getAsJsonObject();
         JsonObject actions = root.getAsJsonObject("InputActions");
@@ -118,16 +127,18 @@ public final class ToolKeybindDisplay {
             if (!element.isJsonObject()) {
                 continue;
             }
-            String label = formatBinding(element.getAsJsonObject());
+            JsonObject binding = element.getAsJsonObject();
+            int sourceType = binding.has("SourceType") ? binding.get("SourceType").getAsInt() : SOURCE_KEYBOARD;
+            if (sourceType == SOURCE_GAMEPAD) {
+                continue;
+            }
+            String label = formatBinding(binding, sourceType);
             if (label == null || label.isBlank()) {
                 continue;
             }
-            int sourceType = element.getAsJsonObject().has("SourceType")
-                ? element.getAsJsonObject().get("SourceType").getAsInt()
-                : 0;
-            if (sourceType == 0) {
+            if (sourceType == SOURCE_KEYBOARD) {
                 keyboard = label;
-            } else if (mouse == null) {
+            } else if (sourceType == SOURCE_MOUSE && mouse == null) {
                 mouse = label;
             }
         }
@@ -138,15 +149,20 @@ public final class ToolKeybindDisplay {
     }
 
     @Nullable
-    private static String formatBinding(@Nonnull JsonObject binding) {
-        int sourceType = binding.has("SourceType") ? binding.get("SourceType").getAsInt() : 0;
-        if (sourceType != 0) {
-            return switch (sourceType) {
-                case 1 -> "LMB";
-                case 2 -> "RMB";
-                case 3 -> "MMB";
+    private static String formatBinding(@Nonnull JsonObject binding, int sourceType) {
+        if (sourceType == SOURCE_MOUSE) {
+            int button = binding.has("MouseButton")
+                ? binding.get("MouseButton").getAsInt()
+                : binding.has("Button") ? binding.get("Button").getAsInt() : -1;
+            return switch (button) {
+                case 0 -> "LMB";
+                case 1 -> "RMB";
+                case 2 -> "MMB";
                 default -> null;
             };
+        }
+        if (sourceType != SOURCE_KEYBOARD) {
+            return null;
         }
         int scancode = binding.has("Scancode") ? binding.get("Scancode").getAsInt() : -1;
         String key = scancodeToLabel(scancode);
@@ -169,7 +185,8 @@ public final class ToolKeybindDisplay {
     }
 
     @Nullable
-    private static String scancodeToLabel(int scancode) {
+    static String scancodeToLabel(int scancode) {
+        // SDL scancodes (same numbering Hytale Settings.json uses).
         return switch (scancode) {
             case 4 -> "A";
             case 5 -> "B";
@@ -209,10 +226,43 @@ public final class ToolKeybindDisplay {
             case 39 -> "0";
             case 40 -> "Enter";
             case 41 -> "Esc";
-            case 57 -> "Space";
-            case 225 -> "Ctrl";
-            case 224 -> "Shift";
-            case 226 -> "Alt";
+            case 42 -> "Backspace";
+            case 43 -> "Tab";
+            case 44 -> "Space";
+            case 45 -> "-";
+            case 46 -> "=";
+            case 47 -> "[";
+            case 48 -> "]";
+            case 49 -> "\\";
+            case 51 -> ";";
+            case 52 -> "'";
+            case 53 -> "`";
+            case 54 -> ",";
+            case 55 -> ".";
+            case 56 -> "/";
+            case 57 -> "Caps";
+            case 58 -> "F1";
+            case 59 -> "F2";
+            case 60 -> "F3";
+            case 61 -> "F4";
+            case 62 -> "F5";
+            case 63 -> "F6";
+            case 64 -> "F7";
+            case 65 -> "F8";
+            case 66 -> "F9";
+            case 67 -> "F10";
+            case 68 -> "F11";
+            case 69 -> "F12";
+            case 79 -> "Right";
+            case 80 -> "Left";
+            case 81 -> "Down";
+            case 82 -> "Up";
+            case 224 -> "LCtrl";
+            case 225 -> "LShift";
+            case 226 -> "LAlt";
+            case 228 -> "RCtrl";
+            case 229 -> "RShift";
+            case 230 -> "RAlt";
             default -> null;
         };
     }

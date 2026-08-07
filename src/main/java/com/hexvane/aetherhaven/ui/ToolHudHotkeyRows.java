@@ -49,7 +49,7 @@ public final class ToolHudHotkeyRows {
     ) {
         String base = containerSelector + "[" + index + "]";
         builder.append(containerSelector, MODIFIER_ROW_UI);
-        builder.set(base + " #ModifierLabel.TextSpans", Message.raw(modifierLabel + " +"));
+        builder.set(base + " #ModifierLabel.TextSpans", Message.raw(formatModifierPrefix(modifierLabel)));
         builder.set(base + " #KeyLabel.TextSpans", Message.raw(ToolKeybindDisplay.labelFor(playerRef, slot)));
         builder.set(base + " #DescLabel.TextSpans", description);
     }
@@ -114,5 +114,14 @@ public final class ToolHudHotkeyRows {
     ) {
         appendInfoRow(builder, containerSelector, index, descriptionLangKey);
         return index + 1;
+    }
+
+    @Nonnull
+    private static String formatModifierPrefix(@Nonnull String modifierLabel) {
+        String trimmed = modifierLabel.trim();
+        if (trimmed.endsWith("+")) {
+            return trimmed.endsWith(" +") || trimmed.endsWith("+ ") ? trimmed : trimmed + " ";
+        }
+        return trimmed + " +";
     }
 }
