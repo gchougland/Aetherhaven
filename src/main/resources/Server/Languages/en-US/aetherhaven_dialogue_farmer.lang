@@ -70,3 +70,9 @@ aetherhaven.dialogue.aetherhaven_farmer.main_hub.hint.dislike.1=Raw meat on my s
 aetherhaven.dialogue.aetherhaven_farmer.main_hub.hint.dislike.2=If it only belongs in a tomb, do not bring it to the barn door.
 aetherhaven.dialogue.aetherhaven_farmer.main_hub.hint.dislike.3=Trash scrap and bent nails make poor mulch and worse gifts.
 aetherhaven.dialogue.aetherhaven_farmer.main_hub.hint.dislike.4=Poison and rot ruin more than mood. I have no patience for either near the feed.
+
+aetherhaven.dialogue.aetherhaven_farmer.birthday.greeting=It is my birthday today. The fields feel a little brighter already.
+aetherhaven.dialogue.aetherhaven_farmer.gift.love.birthday=It is my birthday and this gift is wonderful. You made my whole day.
+aetherhaven.dialogue.aetherhaven_farmer.gift.like.birthday=A birthday gift like this. You have good taste.
+aetherhaven.dialogue.aetherhaven_farmer.gift.neutral.birthday=Thanks. A simple gift on my birthday still means a lot.
+aetherhaven.dialogue.aetherhaven_farmer.gift.dislike.birthday=It is my birthday and you brought that. Well. I still appreciate the thought.

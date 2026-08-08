@@ -129,6 +129,23 @@ commands.aetherhaven.time.dawn.desc=Creative: set schedule clock to 6:00 in the 
 commands.aetherhaven.time.dawn.success=Clock set: {gameTime}
 commands.aetherhaven.time.noResource=This world has no time resource loaded.
 
+commands.aetherhaven.date.desc=Creative: set the Aetherhaven calendar date
+commands.aetherhaven.date.set.desc=Creative: jump to a season day at midnight
+commands.aetherhaven.date.set.season.desc=Spring, Summer, Autumn, or Winter
+commands.aetherhaven.date.set.day.desc=Day of the season from 1 to 28
+commands.aetherhaven.date.set.year.desc=Year number (optional, defaults to the current year)
+commands.aetherhaven.date.set.success=Date set to {date}
+commands.aetherhaven.date.set.invalidSeason=Season must be Spring, Summer, Autumn, or Winter.
+commands.aetherhaven.date.set.invalidYear=Year must be at least 1.
+commands.aetherhaven.argtype.calendarSeason.name=season
+commands.aetherhaven.argtype.calendarSeason.usage=Spring | Summer | Autumn | Winter
+commands.aetherhaven.argtype.calendarDay.name=day
+commands.aetherhaven.argtype.calendarDay.usage=1 to 28
+commands.aetherhaven.argtype.calendarDay.invalid=Day must be from 1 to 28.
+commands.aetherhaven.argtype.calendarYear.name=year
+commands.aetherhaven.argtype.calendarYear.usage=Year number
+commands.aetherhaven.argtype.calendarYear.invalid=Year must be at least 1.
+
 commands.aetherhaven.walldebug.desc=Creative: wall wand placement debug lines in chat
 commands.aetherhaven.walldebug.on.desc=Turn wall wand debug on
 commands.aetherhaven.walldebug.off.desc=Turn wall wand debug off

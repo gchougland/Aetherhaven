@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /** A compact four-season calendar whose epoch is {@code 0001-01-01 = Spring 1, Year 1}. */
 public final class AetherhavenCalendar {
@@ -43,6 +44,39 @@ public final class AetherhavenCalendar {
     @Nonnull
     public static String formatClock(@Nonnull LocalDateTime gameTime) {
         return gameTime.format(CLOCK_FORMAT).toLowerCase(Locale.ROOT);
+    }
+
+    /** Midnight on the given Aetherhaven calendar date (epoch {@code 0001-01-01 = Spring 1, Year 1}). */
+    @Nonnull
+    public static LocalDateTime toLocalDateTime(@Nonnull Season season, int dayOfSeason, long year) {
+        if (year < 1L) {
+            throw new IllegalArgumentException("year must be at least 1");
+        }
+        if (dayOfSeason < 1 || dayOfSeason > DAYS_PER_SEASON) {
+            throw new IllegalArgumentException("dayOfSeason must be between 1 and " + DAYS_PER_SEASON);
+        }
+        int dayOfYear = season.ordinal() * DAYS_PER_SEASON + (dayOfSeason - 1);
+        long epochDay = EPOCH_DATE.toEpochDay() + (year - 1L) * DAYS_PER_YEAR + dayOfYear;
+        return LocalDate.ofEpochDay(epochDay).atStartOfDay();
+    }
+
+    @Nullable
+    public static Season parseSeason(@Nullable String input) {
+        if (input == null || input.isBlank()) {
+            return null;
+        }
+        String normalized = input.trim();
+        for (Season season : Season.values()) {
+            if (season.displayName().equalsIgnoreCase(normalized) || season.name().equalsIgnoreCase(normalized)) {
+                return season;
+            }
+        }
+        return null;
+    }
+
+    @Nonnull
+    public static String formatSeasonHeader(@Nonnull CalendarDate date) {
+        return date.season().displayName() + ", Year " + date.year();
     }
 
     public enum Season {

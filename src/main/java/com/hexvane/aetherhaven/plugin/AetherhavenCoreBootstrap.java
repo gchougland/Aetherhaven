@@ -164,7 +164,10 @@ public final class AetherhavenCoreBootstrap {
             QuestJournalPage::new
         );
 
+        CalendarBootstrap.register(plugin);
+
         plugin.initAetherhavenCommand(new AetherhavenCommand());
+        CalendarBootstrap.registerCommands(plugin);
         plugin.registerAetherhavenSubcommand(new AetherhavenJournalCommand());
         plugin.registerAetherhavenSubcommand(new AetherhavenHudCommand());
         plugin.registerAetherhavenSubcommand(new AetherhavenCommunityCommand());

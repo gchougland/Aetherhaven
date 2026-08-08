@@ -316,5 +316,10 @@
     "aetherhaven_dialogue_miner.aetherhaven.dialogue.aetherhaven_miner.main_hub.hint.dislike.3",
     "aetherhaven_dialogue_miner.aetherhaven.dialogue.aetherhaven_miner.main_hub.hint.dislike.4"
   ],
-  "speechVoiceId": "low"
+  "speechVoiceId": "low",
+  "birthdaySeason": "Summer",
+  "birthdayDay": 10,
+  "dialogueBirthdayGreetingLangKeys": [
+    "aetherhaven_dialogue_miner.aetherhaven.dialogue.aetherhaven_miner.birthday.greeting"
+  ]
 }

@@ -518,6 +518,8 @@ public final class AetherhavenConstants {
 
     public static final String PAGE_QUEST_JOURNAL = "AetherhavenQuestJournal";
 
+    public static final String PAGE_CALENDAR = "AetherhavenCalendar";
+
     public static final String ITEM_QUEST_JOURNAL = "Aetherhaven_Quest_Journal";
 
     public static final String MANAGEMENT_BLOCK_TYPE_ID = "Aetherhaven_Management_Block";

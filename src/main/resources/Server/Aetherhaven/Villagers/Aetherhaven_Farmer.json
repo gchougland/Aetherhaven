@@ -322,5 +322,10 @@
     "aetherhaven_dialogue_farmer.aetherhaven.dialogue.aetherhaven_farmer.main_hub.hint.dislike.3",
     "aetherhaven_dialogue_farmer.aetherhaven.dialogue.aetherhaven_farmer.main_hub.hint.dislike.4"
   ],
-  "speechVoiceId": "soft"
+  "speechVoiceId": "soft",
+  "birthdaySeason": "Summer",
+  "birthdayDay": 2,
+  "dialogueBirthdayGreetingLangKeys": [
+    "aetherhaven_dialogue_farmer.aetherhaven.dialogue.aetherhaven_farmer.birthday.greeting"
+  ]
 }

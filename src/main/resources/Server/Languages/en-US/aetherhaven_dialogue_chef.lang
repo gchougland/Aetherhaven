@@ -61,3 +61,9 @@ aetherhaven.dialogue.aetherhaven_chef.main_hub.hint.love.2=A good ingredient doe
 aetherhaven.dialogue.aetherhaven_chef.main_hub.hint.dislike.0=Raw scraps and trash do not enter this kitchen. Full stop.
 aetherhaven.dialogue.aetherhaven_chef.main_hub.hint.dislike.1=Rocks and refuse are not clever gifts. They're chores.
 aetherhaven.dialogue.aetherhaven_chef.main_hub.hint.dislike.2=If it smells like the bin, leave it in your pack where I can't see it.
+
+aetherhaven.dialogue.aetherhaven_chef.birthday.greeting=My birthday and you walked in hungry. Perfect timing.
+aetherhaven.dialogue.aetherhaven_chef.gift.love.birthday=It is my birthday and this gift is wonderful. You made my whole day.
+aetherhaven.dialogue.aetherhaven_chef.gift.like.birthday=A birthday gift like this. You have good taste.
+aetherhaven.dialogue.aetherhaven_chef.gift.neutral.birthday=Thanks. A simple gift on my birthday still means a lot.
+aetherhaven.dialogue.aetherhaven_chef.gift.dislike.birthday=It is my birthday and you brought that. Well. I still appreciate the thought.

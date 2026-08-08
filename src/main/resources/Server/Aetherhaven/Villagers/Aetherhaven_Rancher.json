@@ -268,5 +268,10 @@
     "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.main_hub.hint.dislike.3",
     "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.main_hub.hint.dislike.4"
   ],
-  "speechVoiceId": "mid"
+  "speechVoiceId": "mid",
+  "birthdaySeason": "Autumn",
+  "birthdayDay": 4,
+  "dialogueBirthdayGreetingLangKeys": [
+    "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.birthday.greeting"
+  ]
 }

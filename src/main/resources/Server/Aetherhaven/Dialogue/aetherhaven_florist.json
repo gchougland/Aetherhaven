@@ -368,6 +368,46 @@
           "next": "main_hub"
         }
       ]
+    },
+    "gift_love_birthday": {
+      "speaker": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.root.speaker",
+      "text": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.gift.love.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_like_birthday": {
+      "speaker": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.root.speaker",
+      "text": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.gift.like.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_neutral_birthday": {
+      "speaker": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.root.speaker",
+      "text": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.gift.neutral.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_dislike_birthday": {
+      "speaker": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.root.speaker",
+      "text": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.gift.dislike.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
     }
   }
 }

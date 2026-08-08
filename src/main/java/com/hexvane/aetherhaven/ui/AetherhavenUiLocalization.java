@@ -186,6 +186,10 @@ public final class AetherhavenUiLocalization {
         b.set("#Footer.TextSpans", t("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.footer"));
     }
 
+    public static void applyCalendarPage(@Nonnull UICommandBuilder b) {
+        b.set("#CalendarTitleText.TextSpans", t("aetherhaven_ui_calendar.aetherhaven.ui.calendar.title"));
+    }
+
     public static void applyGaiaStatueReviveRow(@Nonnull UICommandBuilder b, @Nonnull String rowPath) {
         b.set(rowPath + " #ReviveButton.TextSpans", t("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.revive"));
     }

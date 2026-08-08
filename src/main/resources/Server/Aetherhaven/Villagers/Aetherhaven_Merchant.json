@@ -253,5 +253,10 @@
     "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.dislike.2",
     "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.dislike.3",
     "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.dislike.4"
+  ],
+  "birthdaySeason": "Spring",
+  "birthdayDay": 11,
+  "dialogueBirthdayGreetingLangKeys": [
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.birthday.greeting"
   ]
 }

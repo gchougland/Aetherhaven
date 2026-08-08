@@ -427,6 +427,46 @@
           "next": "main_hub"
         }
       ]
+    },
+    "gift_love_birthday": {
+      "speaker": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.root.speaker",
+      "text": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.gift.love.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_like_birthday": {
+      "speaker": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.root.speaker",
+      "text": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.gift.like.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_neutral_birthday": {
+      "speaker": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.root.speaker",
+      "text": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.gift.neutral.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_dislike_birthday": {
+      "speaker": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.root.speaker",
+      "text": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.gift.dislike.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
     }
   }
 }

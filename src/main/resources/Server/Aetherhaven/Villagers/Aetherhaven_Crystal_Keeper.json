@@ -259,5 +259,10 @@
     "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.love.1",
     "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.dislike.0",
     "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.dislike.1"
+  ],
+  "birthdaySeason": "Autumn",
+  "birthdayDay": 8,
+  "dialogueBirthdayGreetingLangKeys": [
+    "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.birthday.greeting"
   ]
 }

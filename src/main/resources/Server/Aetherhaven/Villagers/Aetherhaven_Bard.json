@@ -223,5 +223,10 @@
     "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.1",
     "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.2"
   ],
-  "dialogueGiftHintLangKeys": []
+  "dialogueGiftHintLangKeys": [],
+  "birthdaySeason": "Winter",
+  "birthdayDay": 24,
+  "dialogueBirthdayGreetingLangKeys": [
+    "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.birthday.greeting"
+  ]
 }

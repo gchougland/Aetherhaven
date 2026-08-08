@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.villager.gift;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.calendar.VillagerBirthdayService;
 import com.hexvane.aetherhaven.reputation.VillagerReputationEntry;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -24,6 +25,7 @@ import com.hypixel.hytale.server.core.asset.type.particle.config.ParticleSystem;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
@@ -135,7 +137,11 @@ public final class VillagerGiftService {
     }
 
     @Nullable
-    public static String reactionNodeIdFor(@Nonnull JsonObject action, @Nonnull GiftPreference preference) {
+    public static String reactionNodeIdFor(
+        @Nonnull JsonObject action,
+        @Nonnull GiftPreference preference,
+        boolean birthdayToday
+    ) {
         String k =
             switch (preference) {
                 case LOVE -> "reactionNodeLove";
@@ -146,10 +152,15 @@ public final class VillagerGiftService {
         if (action.has(k) && action.get(k).isJsonPrimitive()) {
             String s = action.get(k).getAsString();
             if (s != null && !s.isBlank()) {
-                return s.trim();
+                return VillagerBirthdayService.birthdayReactionNodeId(s.trim(), birthdayToday);
             }
         }
         return null;
+    }
+
+    @Nullable
+    public static String reactionNodeIdFor(@Nonnull JsonObject action, @Nonnull GiftPreference preference) {
+        return reactionNodeIdFor(action, preference, false);
     }
 
     @Nonnull
@@ -190,7 +201,12 @@ public final class VillagerGiftService {
         String itemId = inHand.getItemId();
         GiftPreference tier = VillagerGiftRules.classifyItem(itemId, def);
         int delta = VillagerGiftRules.reputationDelta(tier);
-        String gotoNode = reactionNodeIdFor(action, tier);
+        WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
+        boolean birthdayToday = wtr != null && VillagerBirthdayService.isBirthdayToday(def, wtr.getGameDateTime());
+        if (birthdayToday && delta > 0) {
+            delta *= 2;
+        }
+        String gotoNode = reactionNodeIdFor(action, tier, birthdayToday);
         if (gotoNode == null) {
             return GiftApplyResult.fail(GiftEligibility.Reason.NO_CONTEXT);
         }

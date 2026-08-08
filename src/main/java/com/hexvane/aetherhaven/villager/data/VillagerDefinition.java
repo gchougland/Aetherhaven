@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.villager.data;
 
 import com.google.gson.annotations.SerializedName;
+import com.hexvane.aetherhaven.hud.AetherhavenCalendar;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleDefinition;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -119,6 +120,20 @@ public final class VillagerDefinition {
     @SerializedName("dialogueGiftHintLangKeys")
     @Nullable
     private List<String> dialogueGiftHintLangKeys;
+
+    /** Optional calendar birthday (season name + day 1–28). Omitted means no birthday event. */
+    @SerializedName("birthdaySeason")
+    @Nullable
+    private String birthdaySeason;
+
+    @SerializedName("birthdayDay")
+    @Nullable
+    private Integer birthdayDay;
+
+    /** Hub greetings used on the villager's birthday instead of {@link #dialogueGreetingLangKeys}. */
+    @SerializedName("dialogueBirthdayGreetingLangKeys")
+    @Nullable
+    private List<String> dialogueBirthdayGreetingLangKeys;
 
     /**
      * When false, no reputation bar, gifts, or reputation gains. Omitted defaults to true for essential villagers.
@@ -308,6 +323,44 @@ public final class VillagerDefinition {
     @Nonnull
     public List<String> getDialogueGiftHintLangKeys() {
         return listOrEmpty(dialogueGiftHintLangKeys);
+    }
+
+    @Nonnull
+    public List<String> getDialogueBirthdayGreetingLangKeys() {
+        return listOrEmpty(dialogueBirthdayGreetingLangKeys);
+    }
+
+    public boolean hasBirthday() {
+        return resolveBirthdaySeason() != null && resolveBirthdayDay() != null;
+    }
+
+    @Nullable
+    public AetherhavenCalendar.Season getBirthdaySeasonOrNull() {
+        return resolveBirthdaySeason();
+    }
+
+    @Nullable
+    public Integer getBirthdayDayOrNull() {
+        return resolveBirthdayDay();
+    }
+
+    public boolean matchesBirthday(@Nonnull AetherhavenCalendar.CalendarDate date) {
+        AetherhavenCalendar.Season season = resolveBirthdaySeason();
+        Integer day = resolveBirthdayDay();
+        return season != null && day != null && date.season() == season && date.dayOfSeason() == day;
+    }
+
+    @Nullable
+    private AetherhavenCalendar.Season resolveBirthdaySeason() {
+        return AetherhavenCalendar.parseSeason(birthdaySeason);
+    }
+
+    @Nullable
+    private Integer resolveBirthdayDay() {
+        if (birthdayDay == null || birthdayDay < 1 || birthdayDay > AetherhavenCalendar.DAYS_PER_SEASON) {
+            return null;
+        }
+        return birthdayDay;
     }
 
     /** True when omitted (essential villagers stay befriendable by default). */

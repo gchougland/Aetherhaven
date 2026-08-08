@@ -281,5 +281,10 @@
     "Furniture_Temple_Dark_Coffin",
     "Furniture_Village_Coffin",
     "Furniture_Village_Tombstone"
+  ],
+  "birthdaySeason": "Summer",
+  "birthdayDay": 6,
+  "dialogueBirthdayGreetingLangKeys": [
+    "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.birthday.greeting"
   ]
 }

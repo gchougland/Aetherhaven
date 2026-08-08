@@ -68,3 +68,9 @@ aetherhaven.dialogue.aetherhaven_miner.main_hub.hint.dislike.3=Trash scrap metal
 aetherhaven.dialogue.aetherhaven_miner.main_hub.hint.dislike.4=I dig up enough stone for the entire town and don't need anyone else to help me keep up supply.
 aetherhaven.dialogue.aetherhaven_miner.rep_reward_50.speaker=Gorruk Stonevein
 aetherhaven.dialogue.aetherhaven_miner.rep_reward_100.speaker=Gorruk Stonevein
+
+aetherhaven.dialogue.aetherhaven_miner.birthday.greeting=Ha. You remembered a miner birthday. That is worth more than ore.
+aetherhaven.dialogue.aetherhaven_miner.gift.love.birthday=It is my birthday and this gift is wonderful. You made my whole day.
+aetherhaven.dialogue.aetherhaven_miner.gift.like.birthday=A birthday gift like this. You have good taste.
+aetherhaven.dialogue.aetherhaven_miner.gift.neutral.birthday=Thanks. A simple gift on my birthday still means a lot.
+aetherhaven.dialogue.aetherhaven_miner.gift.dislike.birthday=It is my birthday and you brought that. Well. I still appreciate the thought.

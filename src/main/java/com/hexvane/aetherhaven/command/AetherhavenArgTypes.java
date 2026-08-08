@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.dialogue.data.DialogueTreeDefinition;
 import com.hexvane.aetherhaven.pathtool.PathCommitRecord;
 import com.hexvane.aetherhaven.pathtool.PathToolRegistry;
+import com.hexvane.aetherhaven.hud.AetherhavenCalendar;
 import com.hexvane.aetherhaven.questboard.QuestBoardCatalog;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardRankTierJson;
 import com.hexvane.aetherhaven.reputation.ReputationRewardCatalog;
@@ -604,6 +605,88 @@ public final class AetherhavenArgTypes {
         @Override
         public int getSuggestionValueCount() {
             return 24;
+        }
+    };
+
+    public static final SingleArgumentType<String> CALENDAR_SEASON = fixedStrings(
+        "calendarSeason",
+        new String[] { "Spring", "Summer", "Autumn", "Winter" },
+        "Spring"
+    );
+
+    public static final SingleArgumentType<Integer> CALENDAR_DAY = new SingleArgumentType<>(
+        langName("calendarDay"),
+        langUsage("calendarDay"),
+        "1",
+        "28"
+    ) {
+        @Nullable
+        @Override
+        public Integer parse(@Nonnull String input, @Nonnull ParseResult parseResult) {
+            try {
+                int day = Integer.parseInt(input.trim());
+                if (day < 1 || day > AetherhavenCalendar.DAYS_PER_SEASON) {
+                    parseResult.fail(Message.translation("aetherhaven_commands_help.commands.aetherhaven.argtype.calendarDay.invalid"));
+                    return null;
+                }
+                return day;
+            } catch (NumberFormatException e) {
+                parseResult.fail(Message.translation("aetherhaven_commands_help.commands.aetherhaven.argtype.calendarDay.invalid"));
+                return null;
+            }
+        }
+
+        @Override
+        public void suggest(
+            @Nonnull CommandSender sender,
+            @Nonnull String textAlreadyEntered,
+            int numParametersTyped,
+            @Nonnull SuggestionResult result
+        ) {
+            for (int day = 1; day <= AetherhavenCalendar.DAYS_PER_SEASON; day++) {
+                String value = String.valueOf(day);
+                if (textAlreadyEntered.isEmpty() || value.startsWith(textAlreadyEntered.trim())) {
+                    result.suggest(value);
+                }
+            }
+        }
+
+        @Override
+        public int getSuggestionValueCount() {
+            return AetherhavenCalendar.DAYS_PER_SEASON;
+        }
+    };
+
+    public static final SingleArgumentType<Long> CALENDAR_YEAR = new SingleArgumentType<>(
+        langName("calendarYear"),
+        langUsage("calendarYear"),
+        "1"
+    ) {
+        @Nullable
+        @Override
+        public Long parse(@Nonnull String input, @Nonnull ParseResult parseResult) {
+            try {
+                long year = Long.parseLong(input.trim());
+                if (year < 1L) {
+                    parseResult.fail(Message.translation("aetherhaven_commands_help.commands.aetherhaven.argtype.calendarYear.invalid"));
+                    return null;
+                }
+                return year;
+            } catch (NumberFormatException e) {
+                parseResult.fail(Message.translation("aetherhaven_commands_help.commands.aetherhaven.argtype.calendarYear.invalid"));
+                return null;
+            }
+        }
+
+        @Override
+        public void suggest(
+            @Nonnull CommandSender sender,
+            @Nonnull String textAlreadyEntered,
+            int numParametersTyped,
+            @Nonnull SuggestionResult result
+        ) {
+            AetherhavenCommandSuggest.suggestPrefix(result, textAlreadyEntered, "1");
+            AetherhavenCommandSuggest.suggestPrefix(result, textAlreadyEntered, "2");
         }
     };
 

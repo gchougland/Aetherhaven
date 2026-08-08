@@ -215,5 +215,10 @@
     "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.dislike.0",
     "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.dislike.1"
   ],
-  "speechVoiceId": "mid"
+  "speechVoiceId": "mid",
+  "birthdaySeason": "Winter",
+  "birthdayDay": 9,
+  "dialogueBirthdayGreetingLangKeys": [
+    "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.birthday.greeting"
+  ]
 }

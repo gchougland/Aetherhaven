@@ -16,6 +16,9 @@ items.Aetherhaven_Wood_Scaffold.legendUse=Use (F): extend tower / branch from to
 items.Aetherhaven_Plot_Sign.name=Plot sign
 items.Aetherhaven_Plot_Sign.description=Marks where a building can be placed. Craft plot tokens at a plot crafting bench.
 
+items.Aetherhaven_Calendar.name=Calendar
+items.Aetherhaven_Calendar.description=Hang on a wall to see the season calendar and villager birthdays. Craft at the town planning desk with wood.
+
 items.Aetherhaven_Charter.name=Town charter
 items.Aetherhaven_Charter.description=Place to found a town. Each player may have one town per world. Use to open town info.
 

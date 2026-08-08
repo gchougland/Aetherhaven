@@ -1,0 +1,55 @@
+$C = "../Common.ui";
+
+@CalendarCellSize = 84;
+@CalendarCellGap = 5;
+
+Group #CalendarDayCell {
+  LayoutMode: Full;
+  Anchor: (Width: @CalendarCellSize, Height: @CalendarCellSize, Right: @CalendarCellGap, Bottom: @CalendarCellGap);
+
+  Group #CellFrame {
+    LayoutMode: Full;
+    Padding: (Full: 2);
+    Background: #4a5568;
+
+    Group #CellBackground {
+      LayoutMode: Full;
+      Background: #1a2230;
+
+      Group #TodayHighlight {
+        LayoutMode: Full;
+        Visible: false;
+        HitTestVisible: false;
+        Background: #3a6b5280;
+      }
+
+      Group #CellInner {
+        LayoutMode: Top;
+        Padding: (Top: 5, Left: 7, Right: 5, Bottom: 4);
+
+        Label #DayNumber {
+          Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b8c2d0, RenderBold: true, HorizontalAlignment: Start);
+          Anchor: (Bottom: 2);
+          Text: "";
+        }
+
+        Group {
+          LayoutMode: Middle;
+          FlexWeight: 1;
+
+          Group #PortraitArea {
+            LayoutMode: Middle;
+            Visible: false;
+            HitTestVisible: true;
+            TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+
+            AssetImage #Portrait {
+              Anchor: (Width: 44, Height: 44);
+              FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+            }
+          }
+        }
+      }
+    }
+  }
+}

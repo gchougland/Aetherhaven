@@ -12,14 +12,23 @@
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_completed", "questId": "q_build_town_hall" },
+              {
+                "type": "town_quest_completed",
+                "questId": "q_build_town_hall"
+              },
               {
                 "type": "not",
                 "condition": {
                   "type": "or",
                   "conditions": [
-                    { "type": "town_quest_active", "questId": "q_build_guild_hall" },
-                    { "type": "town_quest_completed", "questId": "q_build_guild_hall" }
+                    {
+                      "type": "town_quest_active",
+                      "questId": "q_build_guild_hall"
+                    },
+                    {
+                      "type": "town_quest_completed",
+                      "questId": "q_build_guild_hall"
+                    }
                   ]
                 }
               }
@@ -33,12 +42,23 @@
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_build_guild_hall" },
-              { "type": "town_has_complete_plot", "constructionId": "plot_guild_hall" }
+              {
+                "type": "town_quest_active",
+                "questId": "q_build_guild_hall"
+              },
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_guild_hall"
+              }
             ]
           },
           "whenFalse": "hide",
-          "actions": [{ "type": "complete_quest", "id": "q_build_guild_hall" }],
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_build_guild_hall"
+            }
+          ],
           "next": "guild_hall_done"
         },
         {
@@ -46,8 +66,17 @@
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_build_guild_hall" },
-              { "type": "not", "condition": { "type": "town_has_complete_plot", "constructionId": "plot_guild_hall" } }
+              {
+                "type": "town_quest_active",
+                "questId": "q_build_guild_hall"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_has_complete_plot",
+                  "constructionId": "plot_guild_hall"
+                }
+              }
             ]
           },
           "whenFalse": "hide",
@@ -58,18 +87,32 @@
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_completed", "questId": "q_build_guild_hall" },
+              {
+                "type": "town_quest_completed",
+                "questId": "q_build_guild_hall"
+              },
               {
                 "type": "not",
                 "condition": {
                   "type": "or",
                   "conditions": [
-                    { "type": "town_quest_active", "questId": "q_house_guild_master" },
-                    { "type": "town_quest_completed", "questId": "q_house_guild_master" }
+                    {
+                      "type": "town_quest_active",
+                      "questId": "q_house_guild_master"
+                    },
+                    {
+                      "type": "town_quest_completed",
+                      "questId": "q_house_guild_master"
+                    }
                   ]
                 }
               },
-              { "type": "not", "condition": { "type": "npc_binding_is_visitor" } }
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              }
             ]
           },
           "whenFalse": "hide",
@@ -80,12 +123,22 @@
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_guild_master" },
-              { "type": "town_npc_home_resident_house" }
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_guild_master"
+              },
+              {
+                "type": "town_npc_home_resident_house"
+              }
             ]
           },
           "whenFalse": "hide",
-          "actions": [{ "type": "complete_quest", "id": "q_house_guild_master" }],
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_house_guild_master"
+            }
+          ],
           "next": "lyra_house_finish"
         },
         {
@@ -93,8 +146,16 @@
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_guild_master" },
-              { "type": "not", "condition": { "type": "town_npc_home_resident_house" } }
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_guild_master"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_npc_home_resident_house"
+                }
+              }
             ]
           },
           "whenFalse": "hide",
@@ -103,7 +164,11 @@
         {
           "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.main_hub.leave",
           "next": null,
-          "actions": [{ "type": "close" }]
+          "actions": [
+            {
+              "type": "close"
+            }
+          ]
         }
       ]
     },
@@ -113,7 +178,12 @@
       "choices": [
         {
           "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.guild_hall_offer.accept",
-          "actions": [{ "type": "start_quest", "id": "q_build_guild_hall" }],
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_build_guild_hall"
+            }
+          ],
           "next": "guild_hall_accepted"
         },
         {
@@ -158,7 +228,12 @@
       "choices": [
         {
           "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.lyra_house_offer.accept",
-          "actions": [{ "type": "start_quest", "id": "q_house_guild_master" }],
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_house_guild_master"
+            }
+          ],
           "next": "lyra_house_accepted"
         },
         {

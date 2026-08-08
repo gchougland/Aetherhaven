@@ -33,6 +33,8 @@ import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import com.hexvane.aetherhaven.tourist.TouristMoveInRequirements;
 import com.hexvane.aetherhaven.villager.VillagerBefriendableResolver;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
+import com.hexvane.aetherhaven.calendar.VillagerBirthdayGreetingPicker;
+import com.hexvane.aetherhaven.calendar.VillagerBirthdayService;
 import com.hexvane.aetherhaven.villager.data.VillagerGreetingPicker;
 import com.hexvane.aetherhaven.villager.data.VillagerNeedsDialoguePicker;
 import com.hexvane.aetherhaven.worldnpc.WorldNpcBinding;
@@ -448,6 +450,13 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                         VillagerDefinition vdef = plugin.getVillagerDefinitionCatalog().byNpcRoleId(greetingRole);
                         if (vdef != null) {
                             long day = VillagerReputationService.currentGameEpochDay(store);
+                            var wtr = store.getResource(com.hypixel.hytale.server.core.modules.time.WorldTimeResource.getResourceType());
+                            if (wtr != null && VillagerBirthdayService.isBirthdayToday(vdef, wtr.getGameDateTime())) {
+                                Message birthday = VillagerBirthdayGreetingPicker.pickMessage(vdef, pu.getUuid(), nu.getUuid(), day);
+                                if (birthday != null) {
+                                    return birthday;
+                                }
+                            }
                             Message picked = VillagerGreetingPicker.pickMessage(vdef, pu.getUuid(), nu.getUuid(), day);
                             if (picked != null) {
                                 return picked;

@@ -1,0 +1,191 @@
+$C = "../Common.ui";
+
+@CalendarCellSize = 84;
+@CalendarCellGap = 5;
+@CalendarGridWidth = @CalendarCellSize * 7 + @CalendarCellGap * 6;
+@CalendarGridHeight = @CalendarCellSize * 4 + @CalendarCellGap * 3;
+
+@CalendarPanelWidth = @CalendarGridWidth + 48;
+@CalendarPanelHeight = 520;
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  Group #CalendarRoot {
+    LayoutMode: Center;
+
+    Group {
+      Anchor: (Width: @CalendarPanelWidth, Height: @CalendarPanelHeight);
+
+      Group #Title {
+        Anchor: (Height: $C.@TitleHeight, Top: 0);
+        LayoutMode: Full;
+
+        Group #TitleBgSpring {
+          LayoutMode: Full;
+          HitTestVisible: false;
+          Visible: true;
+          Background: (TexturePath: "../ContainerHeaderSpring.png", HorizontalBorder: 50, VerticalBorder: 0);
+        }
+
+        Group #TitleBgSummer {
+          LayoutMode: Full;
+          HitTestVisible: false;
+          Visible: false;
+          Background: (TexturePath: "../ContainerHeaderSummer.png", HorizontalBorder: 50, VerticalBorder: 0);
+        }
+
+        Group #TitleBgAutumn {
+          LayoutMode: Full;
+          HitTestVisible: false;
+          Visible: false;
+          Background: (TexturePath: "../ContainerHeaderAutumn.png", HorizontalBorder: 50, VerticalBorder: 0);
+        }
+
+        Group #TitleBgWinter {
+          LayoutMode: Full;
+          HitTestVisible: false;
+          Visible: false;
+          Background: (TexturePath: "../ContainerHeaderWinter.png", HorizontalBorder: 50, VerticalBorder: 0);
+        }
+
+        Group #DecoTopSpring {
+          Anchor: (Width: 236, Height: 11, Bottom: -6);
+          HitTestVisible: false;
+          Visible: true;
+          Background: "../ContainerDecorationTopSpring.png";
+        }
+
+        Group #DecoTopSummer {
+          Anchor: (Width: 236, Height: 11, Bottom: -6);
+          HitTestVisible: false;
+          Visible: false;
+          Background: "../ContainerDecorationTopSummer.png";
+        }
+
+        Group #DecoTopAutumn {
+          Anchor: (Width: 236, Height: 11, Bottom: -6);
+          HitTestVisible: false;
+          Visible: false;
+          Background: "../ContainerDecorationTopAutumn.png";
+        }
+
+        Group #DecoTopWinter {
+          Anchor: (Width: 236, Height: 11, Bottom: -6);
+          HitTestVisible: false;
+          Visible: false;
+          Background: "../ContainerDecorationTopWinter.png";
+        }
+
+        Group #TitleForeground {
+          LayoutMode: Middle;
+          Anchor: (Full: 0);
+          Padding: (Horizontal: 28);
+
+          Label #CalendarTitleText {
+            Style: (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #f0e6d2, RenderBold: true, HorizontalAlignment: Center, Wrap: true);
+            Text: "";
+          }
+        }
+      }
+
+      Group #Content {
+        LayoutMode: Full;
+        Anchor: (Top: $C.@TitleHeight);
+
+        Group #ContentBgSpring {
+          LayoutMode: Full;
+          HitTestVisible: false;
+          Visible: true;
+          Background: (TexturePath: "../ContainerPatchSpring.png", Border: 23);
+        }
+
+        Group #ContentBgSummer {
+          LayoutMode: Full;
+          HitTestVisible: false;
+          Visible: false;
+          Background: (TexturePath: "../ContainerPatchSummer.png", Border: 23);
+        }
+
+        Group #ContentBgAutumn {
+          LayoutMode: Full;
+          HitTestVisible: false;
+          Visible: false;
+          Background: (TexturePath: "../ContainerPatchAutumn.png", Border: 23);
+        }
+
+        Group #ContentBgWinter {
+          LayoutMode: Full;
+          HitTestVisible: false;
+          Visible: false;
+          Background: (TexturePath: "../ContainerPatchWinter.png", Border: 23);
+        }
+
+        Group #ContentForeground {
+          LayoutMode: Top;
+          Padding: (Top: 10, Left: 24, Right: 24, Bottom: 14);
+
+          Label #SeasonHeader {
+            Anchor: (Bottom: 8);
+            Style: (...$C.@DefaultLabelStyle, FontSize: 17, TextColor: #f0e6d2, RenderBold: true, HorizontalAlignment: Center);
+            Text: "";
+          }
+
+          Group #SeasonAccent {
+            Anchor: (Height: 4, Bottom: 10);
+            Background: #8EC48773;
+          }
+
+          Group #GridCenterWrap {
+            LayoutMode: Center;
+            Anchor: (Bottom: 10);
+
+            Group #WeekRows {
+              LayoutMode: Top;
+              Anchor: (Width: @CalendarGridWidth, Height: @CalendarGridHeight);
+            }
+          }
+
+          Group #FooterRow {
+            LayoutMode: Center;
+
+            $C.@CancelTextButton #CloseButton {
+              Anchor: (Width: 120, Height: 36);
+              Text: "";
+            }
+          }
+        }
+      }
+
+      Group #DecoBottomSpring {
+        Anchor: (Width: 236, Height: 11, Bottom: -6);
+        HitTestVisible: false;
+        Visible: true;
+        Background: "../ContainerDecorationBottomSpring.png";
+      }
+
+      Group #DecoBottomSummer {
+        Anchor: (Width: 236, Height: 11, Bottom: -6);
+        HitTestVisible: false;
+        Visible: false;
+        Background: "../ContainerDecorationBottomSummer.png";
+      }
+
+      Group #DecoBottomAutumn {
+        Anchor: (Width: 236, Height: 11, Bottom: -6);
+        HitTestVisible: false;
+        Visible: false;
+        Background: "../ContainerDecorationBottomAutumn.png";
+      }
+
+      Group #DecoBottomWinter {
+        Anchor: (Width: 236, Height: 11, Bottom: -6);
+        HitTestVisible: false;
+        Visible: false;
+        Background: "../ContainerDecorationBottomWinter.png";
+      }
+    }
+  }
+}
+
+$C.@BackButton {}

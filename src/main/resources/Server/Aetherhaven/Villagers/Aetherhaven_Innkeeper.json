@@ -270,5 +270,10 @@
     "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.main_hub.hint.dislike.3",
     "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.main_hub.hint.dislike.4"
   ],
-  "speechVoiceId": "mid"
+  "speechVoiceId": "mid",
+  "birthdaySeason": "Spring",
+  "birthdayDay": 7,
+  "dialogueBirthdayGreetingLangKeys": [
+    "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.birthday.greeting"
+  ]
 }

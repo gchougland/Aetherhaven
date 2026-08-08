@@ -2,7 +2,11 @@
 
 ## [3.0.0] - Unreleased
 
+### Added
 
+- **Calendar** Hang a calendar on a wall to open a season view with villager birthdays marked on their days. Craft it at the town planning desk with wood.
+- **Villager birthdays** Each story villager has a birthday on the calendar. Gifts on their birthday give double friendship. They greet you and react to gifts with special birthday lines.
+- **Set date command** Creative command to jump to a specific season day at midnight for testing.
 
 ## [2.7.1] - 8/7/2026
 

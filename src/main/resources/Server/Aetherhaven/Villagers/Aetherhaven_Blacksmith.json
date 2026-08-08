@@ -467,5 +467,10 @@
     "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.main_hub.hint.dislike.2",
     "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.main_hub.hint.dislike.3",
     "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.main_hub.hint.dislike.4"
+  ],
+  "birthdaySeason": "Spring",
+  "birthdayDay": 15,
+  "dialogueBirthdayGreetingLangKeys": [
+    "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.birthday.greeting"
   ]
 }

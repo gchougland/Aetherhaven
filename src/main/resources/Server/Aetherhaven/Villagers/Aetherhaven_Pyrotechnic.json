@@ -235,5 +235,10 @@
     "aetherhaven_dialogue_pyrotechnic.aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.dislike.0",
     "aetherhaven_dialogue_pyrotechnic.aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.dislike.1"
   ],
-  "speechVoiceId": "sharp"
+  "speechVoiceId": "sharp",
+  "birthdaySeason": "Autumn",
+  "birthdayDay": 12,
+  "dialogueBirthdayGreetingLangKeys": [
+    "aetherhaven_dialogue_pyrotechnic.aetherhaven.dialogue.aetherhaven_pyrotechnic.birthday.greeting"
+  ]
 }
