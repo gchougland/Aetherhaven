@@ -35,6 +35,7 @@ import com.hexvane.aetherhaven.villager.VillagerBefriendableResolver;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.hexvane.aetherhaven.calendar.VillagerBirthdayGreetingPicker;
 import com.hexvane.aetherhaven.calendar.VillagerBirthdayService;
+import com.hexvane.aetherhaven.festival.FestivalDialogueGreetings;
 import com.hexvane.aetherhaven.villager.data.VillagerGreetingPicker;
 import com.hexvane.aetherhaven.villager.data.VillagerNeedsDialoguePicker;
 import com.hexvane.aetherhaven.worldnpc.WorldNpcBinding;
@@ -427,15 +428,6 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                 if (npc != null && npc.getRoleName() != null && nu != null && pu != null) {
                     AetherhavenPlugin plugin = AetherhavenPlugin.get();
                     if (plugin != null) {
-                        Message needGreeting =
-                            VillagerNeedsDialoguePicker.pickMessage(store, npcRef, plugin, pu.getUuid(), nu.getUuid());
-                        if (needGreeting != null) {
-                            return needGreeting;
-                        }
-                        Message townsfolkGreeting = TownsfolkGreetingPicker.pickMessage(store, npcRef, plugin, pu.getUuid(), nu.getUuid());
-                        if (townsfolkGreeting != null) {
-                            return townsfolkGreeting;
-                        }
                         String greetingRole = npc.getRoleName().trim();
                         WorldNpcBinding worldBinding =
                             store.getComponent(npcRef, WorldNpcBinding.getComponentType());
@@ -448,15 +440,30 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                             }
                         }
                         VillagerDefinition vdef = plugin.getVillagerDefinitionCatalog().byNpcRoleId(greetingRole);
-                        if (vdef != null) {
-                            long day = VillagerReputationService.currentGameEpochDay(store);
-                            var wtr = store.getResource(com.hypixel.hytale.server.core.modules.time.WorldTimeResource.getResourceType());
-                            if (wtr != null && VillagerBirthdayService.isBirthdayToday(vdef, wtr.getGameDateTime())) {
-                                Message birthday = VillagerBirthdayGreetingPicker.pickMessage(vdef, pu.getUuid(), nu.getUuid(), day);
-                                if (birthday != null) {
-                                    return birthday;
-                                }
+                        long day = VillagerReputationService.currentGameEpochDay(store);
+                        var wtr = store.getResource(com.hypixel.hytale.server.core.modules.time.WorldTimeResource.getResourceType());
+                        // Birthday first, then festival chatter (even over low needs), then needs, then everyday lines.
+                        if (vdef != null && wtr != null && VillagerBirthdayService.isBirthdayToday(vdef, wtr.getGameDateTime())) {
+                            Message birthday = VillagerBirthdayGreetingPicker.pickMessage(vdef, pu.getUuid(), nu.getUuid(), day);
+                            if (birthday != null) {
+                                return birthday;
                             }
+                        }
+                        Message festival =
+                            FestivalDialogueGreetings.pickGreeting(store, npcRef, pu.getUuid(), nu.getUuid(), day);
+                        if (festival != null) {
+                            return festival;
+                        }
+                        Message needGreeting =
+                            VillagerNeedsDialoguePicker.pickMessage(store, npcRef, plugin, pu.getUuid(), nu.getUuid());
+                        if (needGreeting != null) {
+                            return needGreeting;
+                        }
+                        Message townsfolkGreeting = TownsfolkGreetingPicker.pickMessage(store, npcRef, plugin, pu.getUuid(), nu.getUuid());
+                        if (townsfolkGreeting != null) {
+                            return townsfolkGreeting;
+                        }
+                        if (vdef != null) {
                             Message picked = VillagerGreetingPicker.pickMessage(vdef, pu.getUuid(), nu.getUuid(), day);
                             if (picked != null) {
                                 return picked;

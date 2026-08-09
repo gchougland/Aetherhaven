@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.bard.BardBootstrap;
 import com.hexvane.aetherhaven.construction.ConstructionBootstrap;
 import com.hexvane.aetherhaven.dialogue.DialogueBootstrap;
 import com.hexvane.aetherhaven.economy.EconomyBootstrap;
+import com.hexvane.aetherhaven.festival.FestivalsBootstrap;
 import com.hexvane.aetherhaven.floatinggift.FloatingGiftsBootstrap;
 import com.hexvane.aetherhaven.guild.GuildBootstrap;
 import com.hexvane.aetherhaven.jewelry.JewelryBootstrap;
@@ -109,6 +110,10 @@ public final class AetherhavenFeatureBootstrap {
         register(AetherhavenPluginIds.WORLD_NPCS, () -> {
             WorldNpcsBootstrap.register(core, host);
             registerTick(core, WorldNpcsBootstrap.createScheduleListener(core));
+        });
+        register(AetherhavenPluginIds.FESTIVALS, () -> {
+            FestivalsBootstrap.register(core, host);
+            registerTick(core, FestivalsBootstrap.createFestivalGameTimeListener(core));
         });
     }
 

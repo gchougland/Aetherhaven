@@ -1,0 +1,24 @@
+# Festivals: festival names, town announcements, and the festival admin command (en-US source).
+
+aetherhaven.festival.new_life.name=New Life Festival
+aetherhaven.festival.new_life.description=Spring begins. The town gathers around the Springheart Lettuce and feeds it life essence until it bursts with seeds.
+
+aetherhaven.festival.started={festival} has started at the festival square.
+aetherhaven.festival.banner.started.title={festival}
+aetherhaven.festival.banner.started.subtitle=The festival begins
+aetherhaven.festival.ended={festival} is over. The square is back to normal.
+aetherhaven.festival.needSquare=Your town needs a finished festival square before festivals can happen.
+aetherhaven.festival.square.protected=The town keeps the festival square just so. You can use and pick things here, but you cannot build or dig.
+
+aetherhaven.festival.command.list.header=Festivals
+aetherhaven.festival.command.list.row={id}: {name} on {season} {day}
+aetherhaven.festival.command.list.empty=No festivals are set up.
+aetherhaven.festival.command.unknown=There is no festival called {id}.
+aetherhaven.festival.command.started=Started {name}.
+aetherhaven.festival.command.ended=Ended the festival.
+aetherhaven.festival.command.noneRunning=No festival is running.
+aetherhaven.festival.command.noTown=Stand in a town to use this.
+aetherhaven.festival.command.noSquare=This town has no finished festival square.
+
+aetherhaven.festival.npc.seedSeller.name=Seed Seller
+aetherhaven.festival.shop.seeds.title=Festival Seeds

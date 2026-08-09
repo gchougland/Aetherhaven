@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.plotcreator;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.festival.CustomFestivalPaths;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Locale;
@@ -38,8 +39,45 @@ public final class PlotCreatorValidator {
         return null;
     }
 
+    /** Festival ids and prefab names that would write over the shared festival square are rejected. */
+    @Nullable
+    public static String validateFestivalBeforeSave(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        String id = draft.getFestivalId();
+        if (id == null || id.isBlank() || draft.getDisplayName() == null || draft.getPrefabPath() == null) {
+            return "incomplete";
+        }
+        if (CustomFestivalPaths.isReserved(id) || CustomFestivalPaths.isReserved(draft.getPrefabPath())) {
+            return "festivalIdReserved";
+        }
+        String prefabFileName = draft.getPrefabFileName();
+        if (prefabFileName != null && CustomFestivalPaths.isReserved(prefabFileName)) {
+            return "festivalIdReserved";
+        }
+        if (draft.getPlotAnchor() == null) {
+            return "incomplete";
+        }
+        if (!Files.isRegularFile(CustomFestivalPaths.prefabFile(plugin.getDataDirectory(), id))
+            && com.hexvane.aetherhaven.prefab.PrefabResolveUtil.resolvePrefabBuffer(draft.getPrefabPath()) == null) {
+            return "prefab_missing";
+        }
+        List<PlotBuildingKindRequirements.SubstepRequirement> steps =
+            PlotBuildingKindRequirements.forDraft(draft, plugin);
+        for (PlotBuildingKindRequirements.SubstepRequirement req : steps) {
+            if (countForRequirement(draft, req) < req.minCount()) {
+                return "substep_" + req.type().name();
+            }
+        }
+        return null;
+    }
+
     @Nullable
     public static String validateBeforeSave(@Nonnull PlotCreatorDraft draft, @Nonnull AetherhavenPlugin plugin) {
+        if (draft.isFestivalMode()) {
+            return validateFestivalBeforeSave(draft, plugin);
+        }
         if (draft.getConstructionId() == null || draft.getDisplayName() == null || draft.getPrefabPath() == null) {
             return "incomplete";
         }

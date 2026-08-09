@@ -63,7 +63,8 @@ public final class PrefabFootprintClearUtil {
     /**
      * Removes entities inside {@code fp} so the old building site can be cleared. Prefab decor sometimes lacks
      * {@link com.hypixel.hytale.server.core.modules.entity.component.FromPrefab}, so we match any entity with a
-     * transform instead of only prefab-tagged entities.
+     * transform instead of only prefab-tagged entities. Trigger volumes are not entities once pasted, so they are
+     * cleared through {@link PrefabTriggerVolumeCleanup}.
      *
      * <p>Safety: does not remove {@link Player}s; does not remove entities with {@link TownVillagerBinding}; does not
      * remove UUIDs listed by {@link TownRecord#collectTrackedNpcEntityUuids}.
@@ -132,6 +133,7 @@ public final class PrefabFootprintClearUtil {
                 store.removeEntity(r, RemoveReason.REMOVE);
             }
         }
+        PrefabTriggerVolumeCleanup.removeVolumesInFootprint(store, fp);
     }
 
     private static boolean footprintContainsEntityBlockColumn(
@@ -211,6 +213,7 @@ public final class PrefabFootprintClearUtil {
             preserveWater,
             chunkAccessor
         );
+        PrefabTriggerVolumeCleanup.removeVolumesInPrefabBox(world, anchor, yaw, buffer);
     }
 
     /** Cells listed in a prefab buffer (including air markers), for sparse vs AABB comparisons. */

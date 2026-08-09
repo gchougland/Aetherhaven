@@ -135,6 +135,15 @@ public final class PoiScoring {
         return e.getTags().contains("FUN");
     }
 
+    /**
+     * Festival standing spots. Each spot belongs to one villager kind and is assigned directly by
+     * {@link com.hexvane.aetherhaven.festival.FestivalSpotService}, so normal scoring must never hand one out.
+     */
+    public static boolean isFestivalPoi(@Nonnull PoiEntry e) {
+        return e.getTags().contains(AetherhavenConstants.POI_TAG_FESTIVAL)
+            || e.getTags().contains(AetherhavenConstants.POI_TAG_FESTIVAL_EPHEMERAL);
+    }
+
     public static boolean isEnergyNotFull(@Nonnull VillagerNeeds needs) {
         return needs.getEnergy() < VillagerNeeds.MAX - 0.25f;
     }
@@ -825,6 +834,9 @@ public final class PoiScoring {
         double bestDistSq = Double.POSITIVE_INFINITY;
         for (PoiEntry e : candidates) {
             if (e.getTags().contains(AetherhavenConstants.POI_TAG_QUEST_BOARD)) {
+                continue;
+            }
+            if (isFestivalPoi(e)) {
                 continue;
             }
             // Visitors may live at the inn plot but must not use workplace desks.

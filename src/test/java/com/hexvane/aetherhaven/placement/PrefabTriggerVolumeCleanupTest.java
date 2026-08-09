@@ -1,0 +1,36 @@
+package com.hexvane.aetherhaven.placement;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import com.hexvane.aetherhaven.town.PlotFootprintRecord;
+import org.joml.Vector3d;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+
+/** Trigger volumes that come in with a prefab have to go back out again when the prefab is cleared. */
+@Tag("town")
+final class PrefabTriggerVolumeCleanupTest {
+    @Test
+    void aVolumeSittingOverTheSquareIsInsideTheReservedBoxEvenWhenItFloatsAboveTheBuild() {
+        // Solid blocks only reach y 8, but the prefab reserves the full 55 high box the festival square is saved at.
+        PlotFootprintRecord solid = new PlotFootprintRecord(0, 0, 0, 29, 8, 29);
+        PlotFootprintRecord reserved = new PlotFootprintRecord(0, 0, 0, 29, 54, 29);
+        Vector3d volumeCentre = new Vector3d(1.0, 12.5, 1.0);
+
+        assertFalse(
+            PrefabTriggerVolumeCleanup.footprintContains(solid, volumeCentre),
+            "the solid footprint stops at the tallest block, so it misses volumes hanging above the square"
+        );
+        assertTrue(PrefabTriggerVolumeCleanup.footprintContains(reserved, volumeCentre));
+    }
+
+    @Test
+    void volumesOutsideThePlotAreLeftAlone() {
+        PlotFootprintRecord reserved = new PlotFootprintRecord(0, 0, 0, 29, 54, 29);
+
+        assertFalse(PrefabTriggerVolumeCleanup.footprintContains(reserved, new Vector3d(-3.0, 10.0, 10.0)));
+        assertFalse(PrefabTriggerVolumeCleanup.footprintContains(reserved, new Vector3d(10.0, 10.0, 42.0)));
+        assertTrue(PrefabTriggerVolumeCleanup.footprintContains(reserved, new Vector3d(29.9, 54.0, 29.9)));
+    }
+}

@@ -1,0 +1,51 @@
+{
+  "Parent": "Kweebec_Rootling",
+  "Texture": "NPC/Intelligent/Kweebec_Rootling/Kweebec_Rootling.png",
+  "DefaultAttachments": [
+    {
+      "Model": "NPC/Intelligent/Kweebec_Rootling/Kweebec_Rootling_Mouth.blockymodel",
+      "Texture": "NPC/Intelligent/Kweebec_Rootling/Kweebec_Mouth.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Kweebec_Rootling/Kweebec_Rootling_Eyes.blockymodel",
+      "Texture": "NPC/Intelligent/Kweebec_Rootling/Kweebec_Eyes.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Kweebec_Rootling/Models/Attachments/Head/Kweebec_Rootling_Eyebrows.blockymodel",
+      "Texture": "NPC/Intelligent/Kweebec_Rootling/Models/Attachments/Head/Kweebec_Eyebrows_Sharp.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Kweebec_Rootling/Models/Attachments/Head/Kweebec_Rootling_Hair_Moptop.blockymodel",
+      "Texture": "NPC/Intelligent/Kweebec_Rootling/Models/Attachments/Head/Kweebec_Rootling_Hair_Moptop.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Kweebec_Rootling/Models/Attachments/Chest/Kweebec_Rootling_Chest_Vines.blockymodel",
+      "Texture": "NPC/Intelligent/Kweebec_Rootling/Models/Attachments/Chest/Kweebec_Rootling_Chest_Vines.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Kweebec_Rootling/Models/Attachments/Chest/Kweebec_Rootling_Shoulder_Flatleaf.blockymodel",
+      "Texture": "NPC/Intelligent/Kweebec_Rootling/Models/Attachments/Chest/Kweebec_Rootling_Shoulder_Flatleaf.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Kweebec_Rootling/Models/Attachments/Belt/Kweebec_Rootling_Belt_Leaf.blockymodel",
+      "Texture": "NPC/Intelligent/Kweebec_Rootling/Models/Attachments/Belt/Kweebec_Rootling_Belt_Leaf.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Kweebec_Rootling/Models/Attachments/Hand/Kweebec_Rootling_Cuff.blockymodel",
+      "Texture": "NPC/Intelligent/Kweebec_Rootling/Models/Attachments/Hand/Kweebec_Rootling_Cuff.png"
+    }
+  ],
+  "Icon": "Icons/ModelsGenerated/Aetherhaven_Festival_Seed_Seller.png",
+  "IconProperties": {
+    "Scale": 0.4,
+    "Rotation": [
+      0,
+      19,
+      0
+    ],
+    "Translation": [
+      0,
+      -119
+    ]
+  }
+}

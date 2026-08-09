@@ -1,0 +1,10 @@
+# New Life Festival seed seller dialogue
+
+aetherhaven.dialogue.festival_seed_seller.speaker=Seed Seller
+aetherhaven.dialogue.festival_seed_seller.main_hub.body=Happy New Life! I only set up my cart on festival day and I trade for gold coins, so take a good look while I am here.
+aetherhaven.dialogue.festival_seed_seller.main_hub.c_shop=Show me the seeds.
+aetherhaven.dialogue.festival_seed_seller.main_hub.c_about=What is this festival about?
+aetherhaven.dialogue.festival_seed_seller.main_hub.c_goodbye=Maybe later.
+
+aetherhaven.dialogue.festival_seed_seller.about.body=Feed life essence to the Springheart Lettuce in the middle. When it cannot hold any more it pops, and seeds rain down for everyone. Grab what you can.
+aetherhaven.dialogue.festival_seed_seller.about.c_back=Good to know.

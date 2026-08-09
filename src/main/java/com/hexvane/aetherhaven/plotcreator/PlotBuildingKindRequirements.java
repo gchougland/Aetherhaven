@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.plotcreator;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.ProductionWorkplaceKinds;
 import com.hexvane.aetherhaven.tourist.TownPortalTravelColor;
@@ -64,6 +65,9 @@ public final class PlotBuildingKindRequirements {
     ) {
         if (draft.isDecorationOnly()) {
             return List.of();
+        }
+        if (draft.isFestivalMode()) {
+            return festivalSubsteps(draft, plugin);
         }
         List<PlotBuildingKind> kinds = effectiveKinds(draft, plugin);
         if (kinds.isEmpty()) {
@@ -234,6 +238,11 @@ public final class PlotBuildingKindRequirements {
         @Nonnull PlotCreatorDraft draft,
         @Nullable AetherhavenPlugin plugin
     ) {
+        if (draft.isFestivalMode()) {
+            LinkedHashSet<String> festivalRoles = new LinkedHashSet<>(festivalSpotRoles(draft, plugin));
+            festivalRoles.addAll(festivalChoosableRoles());
+            return new ArrayList<>(festivalRoles);
+        }
         LinkedHashSet<String> roles = new LinkedHashSet<>();
         if (plugin == null) {
             return List.of();
@@ -264,7 +273,7 @@ public final class PlotBuildingKindRequirements {
                     roles.add(TownVillagerBinding.KIND_GUILD_MASTER);
                     roles.add(TownVillagerBinding.KIND_BARD);
                 }
-                case WORK, SHOP, PLAYER_SHOP, HOME, AMENITY, TOURIST_PORTAL, DECORATION, VARIANT -> {}
+                case WORK, SHOP, PLAYER_SHOP, HOME, AMENITY, TOURIST_PORTAL, DECORATION, VARIANT, FESTIVAL -> {}
             }
         }
         return new ArrayList<>(roles);
@@ -290,6 +299,7 @@ public final class PlotBuildingKindRequirements {
     ) {
         return switch (kind) {
             case DECORATION, VARIANT -> List.of();
+            case FESTIVAL -> festivalSubsteps(draft, plugin);
             case HOME -> List.of(
                 new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1),
                 new SubstepRequirement(PlotCreatorSubstepType.SLEEP_POI, 1)
@@ -324,6 +334,64 @@ public final class PlotBuildingKindRequirements {
                 new SubstepRequirement(PlotCreatorSubstepType.QUEST_BOARD_POI, 1)
             );
         };
+    }
+
+    /** Festival spots are one stand-here marker per villager role the festival calls for. */
+    @Nonnull
+    private static List<SubstepRequirement> festivalSubsteps(
+        @Nonnull PlotCreatorDraft draft,
+        @Nullable AetherhavenPlugin plugin
+    ) {
+        List<SubstepRequirement> out = new ArrayList<>();
+        for (String role : festivalSpotRoles(draft, plugin)) {
+            out.add(new SubstepRequirement(PlotCreatorSubstepType.WORK_POI, 1, role));
+        }
+        return out;
+    }
+
+    /** Roles the picked festival already has spots for; empty for a brand new festival. */
+    @Nonnull
+    public static List<String> festivalSpotRoles(
+        @Nonnull PlotCreatorDraft draft,
+        @Nullable AetherhavenPlugin plugin
+    ) {
+        if (plugin == null || draft.getEditingFestivalId() == null) {
+            return List.of();
+        }
+        FestivalDefinition def = plugin.getFestivalCatalog().get(draft.getEditingFestivalId());
+        if (def == null) {
+            return List.of();
+        }
+        LinkedHashSet<String> roles = new LinkedHashSet<>();
+        for (FestivalDefinition.SpotRow spot : def.getSpots()) {
+            if (!spot.getResidentKind().isEmpty()) {
+                roles.add(spot.getResidentKind());
+            }
+        }
+        return new ArrayList<>(roles);
+    }
+
+    /** Every villager role a festival author may give a stand-here spot to. */
+    @Nonnull
+    public static List<String> festivalChoosableRoles() {
+        return List.of(
+            TownVillagerBinding.KIND_PRIESTESS,
+            TownVillagerBinding.KIND_FARMER,
+            TownVillagerBinding.KIND_ELDER,
+            TownVillagerBinding.KIND_INNKEEPER,
+            TownVillagerBinding.KIND_MERCHANT,
+            TownVillagerBinding.KIND_CHEF,
+            TownVillagerBinding.KIND_BLACKSMITH,
+            TownVillagerBinding.KIND_MINER,
+            TownVillagerBinding.KIND_LOGGER,
+            TownVillagerBinding.KIND_RANCHER,
+            TownVillagerBinding.KIND_FLORIST,
+            TownVillagerBinding.KIND_BUILDER,
+            TownVillagerBinding.KIND_GUILD_MASTER,
+            TownVillagerBinding.KIND_CRYSTAL_KEEPER,
+            TownVillagerBinding.KIND_PYROTECHNIC,
+            TownVillagerBinding.KIND_GUARD
+        );
     }
 
     @Nonnull

@@ -19,6 +19,12 @@ public final class AetherhavenAssetPaths {
     /** Per-construction prefab block material lists for hard difficulty (generated). */
     public static final String PREFAB_MATERIALS = "Server/Aetherhaven/Buildings/PrefabMaterials";
 
+    /**
+     * Relative to pack root: one festival definition JSON per file (recursive). Each festival owns a prefab that
+     * replaces the festival square prefab for the length of its day.
+     */
+    public static final String FESTIVALS = "Server/Aetherhaven/Festivals";
+
     /** Relative to pack root: villager weekly schedule JSON per NPC role id (recursive). */
     public static final String VILLAGER_SCHEDULES = "Server/Aetherhaven/VillagerSchedules";
 
@@ -102,6 +108,11 @@ public final class AetherhavenAssetPaths {
     @Nonnull
     public static String prefabMaterialsPrefix() {
         return PREFAB_MATERIALS + "/";
+    }
+
+    @Nonnull
+    public static String festivalsPrefix() {
+        return FESTIVALS + "/";
     }
 
     @Nonnull

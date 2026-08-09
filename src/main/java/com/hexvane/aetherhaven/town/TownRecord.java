@@ -367,6 +367,30 @@ public final class TownRecord {
     @SerializedName("feastGatherDeadlineEpochMs")
     private long feastGatherDeadlineEpochMs;
 
+    /** Festival currently running at this town's festival square, or null when the square is in its everyday state. */
+    @Nullable
+    @SerializedName("activeFestivalId")
+    private String activeFestivalId;
+
+    /** Festival square plot the running festival was pasted onto. */
+    @Nullable
+    @SerializedName("activeFestivalPlotId")
+    private String activeFestivalPlotId;
+
+    /** Game epoch minute at which the running festival closes; a restart past this point swaps the square back. */
+    @SerializedName("activeFestivalEndEpochMinute")
+    private long activeFestivalEndEpochMinute;
+
+    /** Ephemeral villager spot POI ids registered for the running festival. */
+    @Nullable
+    @SerializedName("activeFestivalSpotPoiIds")
+    private List<String> activeFestivalSpotPoiIds;
+
+    /** Entity uuids of NPCs spawned for the running festival, despawned when it ends. */
+    @Nullable
+    @SerializedName("activeFestivalNpcEntityUuids")
+    private List<String> activeFestivalNpcEntityUuids;
+
     /** Cumulative XP from completed quest board quests; town rank tier is derived from this. */
     @SerializedName("questBoardRankXp")
     private int questBoardRankXp;
@@ -2067,6 +2091,66 @@ public final class TownRecord {
 
     public void setFeastGatherDeadlineEpochMs(long feastGatherDeadlineEpochMs) {
         this.feastGatherDeadlineEpochMs = feastGatherDeadlineEpochMs;
+    }
+
+    @Nullable
+    public String getActiveFestivalId() {
+        return activeFestivalId != null && !activeFestivalId.isBlank() ? activeFestivalId.trim() : null;
+    }
+
+    public void setActiveFestivalId(@Nullable String activeFestivalId) {
+        this.activeFestivalId = activeFestivalId != null && !activeFestivalId.isBlank() ? activeFestivalId.trim() : null;
+    }
+
+    @Nullable
+    public UUID getActiveFestivalPlotId() {
+        if (activeFestivalPlotId == null || activeFestivalPlotId.isBlank()) {
+            return null;
+        }
+        try {
+            return UUID.fromString(activeFestivalPlotId.trim());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    public void setActiveFestivalPlotId(@Nullable UUID plotId) {
+        this.activeFestivalPlotId = plotId != null ? plotId.toString() : null;
+    }
+
+    public long getActiveFestivalEndEpochMinute() {
+        return activeFestivalEndEpochMinute;
+    }
+
+    public void setActiveFestivalEndEpochMinute(long activeFestivalEndEpochMinute) {
+        this.activeFestivalEndEpochMinute = activeFestivalEndEpochMinute;
+    }
+
+    @Nonnull
+    public List<String> getActiveFestivalSpotPoiIds() {
+        return activeFestivalSpotPoiIds != null ? List.copyOf(activeFestivalSpotPoiIds) : List.of();
+    }
+
+    public void setActiveFestivalSpotPoiIds(@Nullable List<String> ids) {
+        this.activeFestivalSpotPoiIds = ids != null && !ids.isEmpty() ? new ArrayList<>(ids) : null;
+    }
+
+    @Nonnull
+    public List<String> getActiveFestivalNpcEntityUuids() {
+        return activeFestivalNpcEntityUuids != null ? List.copyOf(activeFestivalNpcEntityUuids) : List.of();
+    }
+
+    public void setActiveFestivalNpcEntityUuids(@Nullable List<String> uuids) {
+        this.activeFestivalNpcEntityUuids = uuids != null && !uuids.isEmpty() ? new ArrayList<>(uuids) : null;
+    }
+
+    /** Clears every field the running festival owns (called when the square swaps back to its everyday prefab). */
+    public void clearActiveFestival() {
+        this.activeFestivalId = null;
+        this.activeFestivalPlotId = null;
+        this.activeFestivalEndEpochMinute = 0L;
+        this.activeFestivalSpotPoiIds = null;
+        this.activeFestivalNpcEntityUuids = null;
     }
 
     public int getQuestBoardRankXp() {

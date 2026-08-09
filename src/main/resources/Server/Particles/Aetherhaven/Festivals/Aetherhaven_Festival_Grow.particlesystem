@@ -1,0 +1,11 @@
+{
+  "Spawners": [
+    {
+      "SpawnerId": "Aetherhaven_Festival_Grow_Ring",
+      "PositionOffset": { "X": 0, "Y": 0.6, "Z": 0 }
+    }
+  ],
+  "BoundingRadius": 6.0,
+  "CullDistance": 64.0,
+  "IsImportant": false
+}

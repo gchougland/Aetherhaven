@@ -5,6 +5,8 @@ import com.hexvane.aetherhaven.community.CommunitySubmissionService;
 import com.hexvane.aetherhaven.community.CommunitySubmitLocalSave;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.festival.CustomFestivalPaths;
+import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import com.hexvane.aetherhaven.placement.PlotFootprintOverlayRefresh;
 import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
 import com.hexvane.aetherhaven.plot.PlotTokenInventory;
@@ -54,6 +56,9 @@ public final class PlotCreatorService {
         }
         if (kinds.contains(PlotBuildingKind.DECORATION) && kinds.size() > 1) {
             return "decorationExclusive";
+        }
+        if (kinds.contains(PlotBuildingKind.FESTIVAL) && kinds.size() > 1) {
+            return "festivalExclusive";
         }
         if (limitBuildingTypesToPlayerKinds()) {
             if (draft.isBuildingEditorMode()) {
@@ -254,6 +259,20 @@ public final class PlotCreatorService {
             steps.add(PlotCreatorStep.BOUNDS);
         }
         steps.add(PlotCreatorStep.KIND);
+        if (draft.isFestivalMode()) {
+            steps.add(PlotCreatorStep.FESTIVAL);
+            steps.add(PlotCreatorStep.IMPORTANT_SPOTS);
+            List<PlotBuildingKindRequirements.SubstepRequirement> festivalSubs =
+                PlotBuildingKindRequirements.forDraft(draft, AetherhavenPlugin.get());
+            if (!festivalSubs.isEmpty()) {
+                steps.add(PlotCreatorStep.SUBSTEP);
+            }
+            steps.add(PlotCreatorStep.CONFIGURE);
+            steps.add(PlotCreatorStep.PREFAB_SAVE);
+            steps.add(PlotCreatorStep.REVIEW);
+            steps.add(PlotCreatorStep.DONE);
+            return steps;
+        }
         if (draft.hasKind(PlotBuildingKind.VARIANT)) {
             steps.add(PlotCreatorStep.VARIANT);
         }
@@ -277,6 +296,7 @@ public final class PlotCreatorService {
     public static boolean stepAutoOpensPanel(@Nonnull PlotCreatorStep step) {
         return step == PlotCreatorStep.KIND
             || step == PlotCreatorStep.VARIANT
+            || step == PlotCreatorStep.FESTIVAL
             || step == PlotCreatorStep.IMPORTANT_SPOTS
             || step == PlotCreatorStep.CONFIGURE;
     }
@@ -475,6 +495,9 @@ public final class PlotCreatorService {
         if (step == PlotCreatorStep.VARIANT) {
             PlotCreatorInteractions.openConfigPanel(playerRef, ref, store, session);
         }
+        if (step == PlotCreatorStep.FESTIVAL) {
+            PlotCreatorInteractions.openFestivalPanel(playerRef, ref, store, session);
+        }
         if (step == PlotCreatorStep.IMPORTANT_SPOTS) {
             seedImportantSpotsIfEmpty(session.getDraft());
             World world = store.getExternalData().getWorld();
@@ -507,6 +530,9 @@ public final class PlotCreatorService {
 
     /** Restores spots that cannot be deselected for the draft's effective building kinds. */
     public static void ensureRequiredSpots(@Nonnull PlotCreatorDraft draft) {
+        if (draft.isFestivalMode()) {
+            return;
+        }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         List<PlotBuildingKind> kinds = PlotBuildingKindRequirements.effectiveKinds(draft, plugin);
         boolean isShop = kinds.contains(PlotBuildingKind.SHOP) || kinds.contains(PlotBuildingKind.PLAYER_SHOP);
@@ -652,6 +678,9 @@ public final class PlotCreatorService {
         @Nonnull Store<EntityStore> store
     ) {
         PlotCreatorDraft draft = session.getDraft();
+        if (draft.isFestivalMode()) {
+            return saveAndFinishFestival(plugin, session, playerRef, draft);
+        }
         applyDefaultTagsForKind(draft);
         applyTagsInput(draft);
         applyConfigureInput(draft);
@@ -747,6 +776,55 @@ public final class PlotCreatorService {
         playerRef.sendMessage(
             Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.success.savedTokenFallback")
                 .param("id", draft.getConstructionId())
+        );
+        endSessionAfterSave(playerRef, session);
+        return true;
+    }
+
+    /** Writes the festival JSON and reloads the catalog. Festivals are not plots, so no token is handed out. */
+    private static boolean saveAndFinishFestival(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull PlotCreatorSession session,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull PlotCreatorDraft draft
+    ) {
+        String settingsError = PlotCreatorFestivalSettings.applyInput(draft);
+        if (settingsError != null) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error." + settingsError)
+            );
+            return false;
+        }
+        String err = PlotCreatorValidator.validateBeforeSave(draft, plugin);
+        if (err != null) {
+            String messageKey = err.startsWith("substep_")
+                ? "aetherhaven_plot_creator.aetherhaven.plotcreator.substep." + err.substring("substep_".length())
+                : "aetherhaven_plot_creator.aetherhaven.plotcreator.error." + err;
+            playerRef.sendMessage(Message.translation(messageKey));
+            return false;
+        }
+        String id = draft.getFestivalId();
+        if (id == null) {
+            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.incomplete"));
+            return false;
+        }
+        FestivalDefinition existing =
+            draft.getEditingFestivalId() != null ? plugin.getFestivalCatalog().get(draft.getEditingFestivalId()) : null;
+        try {
+            PlotCreatorFestivalJsonWriter.writeFestival(
+                CustomFestivalPaths.festivalFile(plugin.getDataDirectory(), id),
+                draft,
+                existing
+            );
+        } catch (Exception e) {
+            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.saveFailed"));
+            return false;
+        }
+        plugin.reloadConfigsAndAssetCatalogs();
+        draft.setStep(PlotCreatorStep.DONE);
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.success.festivalSaved")
+                .param("name", draft.getDisplayName() != null ? draft.getDisplayName() : id)
         );
         endSessionAfterSave(playerRef, session);
         return true;
@@ -910,15 +988,24 @@ public final class PlotCreatorService {
         if (slug.endsWith("_")) {
             slug = slug.substring(0, slug.length() - 1);
         }
-        if (!slug.isEmpty()) {
-            String prefix = draft.isDecorationOnly() ? "plot_decoration_" : "plot_";
-            draft.setConstructionId(prefix + slug);
-            syncPrefabFileNameFromConstructionId(draft);
+        if (slug.isEmpty()) {
+            return;
         }
+        if (draft.isFestivalMode()) {
+            PlotCreatorFestivalSettings.applySuggestedId(draft, slug);
+            return;
+        }
+        String prefix = draft.isDecorationOnly() ? "plot_decoration_" : "plot_";
+        draft.setConstructionId(prefix + slug);
+        syncPrefabFileNameFromConstructionId(draft);
     }
 
     /** Sets the export file name from the building id (used after identity, before prefab save). */
     public static void syncPrefabFileNameFromConstructionId(@Nonnull PlotCreatorDraft draft) {
+        if (draft.isFestivalMode()) {
+            PlotCreatorFestivalSettings.syncPrefabFileName(draft);
+            return;
+        }
         if (draft.isBuildingEditorMode()) {
             String locked = draft.getLockedPrefabPathKey();
             if (locked != null && !locked.isBlank()) {
@@ -942,6 +1029,9 @@ public final class PlotCreatorService {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {
             return "saveFailed";
+        }
+        if (draft.isFestivalMode()) {
+            return PlotCreatorFestivalSettings.applyInput(draft);
         }
         String err =
             PlotCreatorValidator.validateId(

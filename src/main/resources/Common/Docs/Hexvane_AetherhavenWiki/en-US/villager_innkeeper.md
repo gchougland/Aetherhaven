@@ -18,6 +18,13 @@ Corin wants a small park with benches so townsfolk can sit outside and feel a li
 2. Stake and build the park.
 3. Find Corin at the inn and close the quest in dialogue.
 
+#### Somewhere To Celebrate
+The park gave the town a place to sit. Corin wants a proper square next, so the whole town has somewhere to gather when a festival comes around.
+
+1. Take the festival square plot token from Corin.
+2. Stake and build the festival square.
+3. Find Corin at the inn and close the quest in dialogue.
+
 #### Corin's home
 Corin feeds everyone else first. He would like a door that closes on his own mess when the night is done.
 

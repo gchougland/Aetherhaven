@@ -305,6 +305,9 @@ public final class AetherhavenConstants {
 
     public static final String CONSTRUCTION_PLOT_PARK = "plot_park";
 
+    /** Town plaza that hosts festivals; definition in {@code Server/Aetherhaven/Buildings/plot_festival_square.json}. */
+    public static final String CONSTRUCTION_PLOT_FESTIVAL_SQUARE = "plot_festival_square";
+
     /** Shared residential prefab; completion is tracked per villager via house management assignment. */
     public static final String CONSTRUCTION_PLOT_HOUSE = "plot_house";
 
@@ -413,6 +416,9 @@ public final class AetherhavenConstants {
 
     public static final String QUEST_PARK_PLOT = "q_park_plot";
 
+    /** Innkeeper follow up to the park: build the festival square. */
+    public static final String QUEST_FESTIVAL_SQUARE = "q_festival_square";
+
     public static final String QUEST_CRYSTAL_KEEPER_RESCUE = "q_crystal_keeper_rescue";
 
     public static final String QUEST_CRYSTAL_KEEPERS_SHOP = "q_crystal_keepers_shop";
@@ -469,6 +475,9 @@ public final class AetherhavenConstants {
     public static final String NPC_RANCHER = "Aetherhaven_Rancher";
 
     public static final String NPC_BARD = "Aetherhaven_Bard";
+
+    /** Kweebec trader who sets up a seed cart at the square while a festival is running. */
+    public static final String NPC_FESTIVAL_SEED_SELLER = "Aetherhaven_Festival_Seed_Seller";
 
     /** Shared role for all townsfolk; appearance set per character at spawn. */
     public static final String NPC_TOWNSFOLK = "Aetherhaven_Townsfolk";
@@ -696,6 +705,12 @@ public final class AetherhavenConstants {
 
     /** Feast table POI: reuse EAT bench visuals; {@link com.hexvane.aetherhaven.feast.FeastService} sets hunger to max on completion. */
     public static final String POI_TAG_FEAST = "FEAST";
+
+    /** Ephemeral POI marking where a villager stands for a festival; excluded from {@code pois.json} persistence. */
+    public static final String POI_TAG_FESTIVAL_EPHEMERAL = "FESTIVAL_EPHEMERAL";
+
+    /** Festival standing spot POI; the matching villager kind heads here as soon as the festival opens. */
+    public static final String POI_TAG_FESTIVAL = "FESTIVAL";
 
     /** Dining POI on a completed restaurant plot. */
     public static final String POI_TAG_RESTAURANT = "RESTAURANT";

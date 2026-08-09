@@ -1,0 +1,93 @@
+{
+  "DisplayNameKey": "aetherhaven_festivals.aetherhaven.festival.shop.seeds.title",
+  "RefreshInterval": {
+    "Days": 1
+  },
+  "RestockHour": 6,
+  "TradeSlots": [
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Plant_Seeds_Lettuce", "Quantity": 4 },
+        "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 2 }],
+        "Stock": 20
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Plant_Seeds_Carrot", "Quantity": 4 },
+        "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 2 }],
+        "Stock": 20
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Plant_Seeds_Pumpkin", "Quantity": 2 },
+        "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 3 }],
+        "Stock": 12
+      }
+    },
+    {
+      "Type": "Pool",
+      "SlotCount": 4,
+      "Trades": [
+        {
+          "Weight": 40,
+          "Output": { "ItemId": "Plant_Seeds_Tomato", "Quantity": 3 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 3 }],
+          "Stock": [6, 12]
+        },
+        {
+          "Weight": 40,
+          "Output": { "ItemId": "Plant_Seeds_Onion", "Quantity": 3 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 3 }],
+          "Stock": [6, 12]
+        },
+        {
+          "Weight": 40,
+          "Output": { "ItemId": "Plant_Seeds_Potato", "Quantity": 3 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 3 }],
+          "Stock": [6, 12]
+        },
+        {
+          "Weight": 30,
+          "Output": { "ItemId": "Plant_Seeds_Corn", "Quantity": 3 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 4 }],
+          "Stock": [6, 12]
+        },
+        {
+          "Weight": 30,
+          "Output": { "ItemId": "Plant_Seeds_Cauliflower", "Quantity": 3 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 4 }],
+          "Stock": [6, 12]
+        },
+        {
+          "Weight": 30,
+          "Output": { "ItemId": "Plant_Seeds_Turnip", "Quantity": 3 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 4 }],
+          "Stock": [6, 12]
+        },
+        {
+          "Weight": 15,
+          "Output": { "ItemId": "Plant_Seeds_Lettuce_Eternal", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 15 }],
+          "Stock": [1, 2]
+        },
+        {
+          "Weight": 15,
+          "Output": { "ItemId": "Plant_Seeds_Carrot_Eternal", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 15 }],
+          "Stock": [1, 2]
+        },
+        {
+          "Weight": 15,
+          "Output": { "ItemId": "Plant_Seeds_Pumpkin_Eternal", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 20 }],
+          "Stock": [1, 2]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+# What the townsfolk say while the New Life Festival is running.
+# Full translation keys are aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.<lineKey>
+
+aetherhaven.dialogue.festival.new_life.greeting.elder.0=Spring opens the year, so the town opens the square. I have watched the Springheart Lettuce grow taller than the roof more than once.
+aetherhaven.dialogue.festival.new_life.greeting.elder.1=Feed the Springheart Lettuce, share the seeds, plant them well. That is the whole festival in three steps.
+
+aetherhaven.dialogue.festival.new_life.greeting.priestess.0=Gaia wakes the fields today. Giving life essence back to her through the Springheart Lettuce is the oldest thank you we have.
+aetherhaven.dialogue.festival.new_life.greeting.priestess.1=Stand close when the Springheart Lettuce bursts. A little green rain is a blessing, not a mess.
+
+aetherhaven.dialogue.festival.new_life.greeting.farmer.0=Whoever grew the Springheart Lettuce did not do it with water alone. Feed it and watch.
+aetherhaven.dialogue.festival.new_life.greeting.farmer.1=Catch the seeds and get them in the ground this week. Spring soil is forgiving.
+
+aetherhaven.dialogue.festival.new_life.greeting.innkeeper.0=Closed the kitchen early for this. Some days the square is the better table.
+aetherhaven.dialogue.festival.new_life.greeting.innkeeper.1=Every year I say I will not cheer at the Springheart Lettuce. Every year I do.
+
+aetherhaven.dialogue.festival.new_life.greeting.chef.0=Bring me anything you catch that is not a seed from the Springheart Lettuce. I have enough greens for a lifetime.
+aetherhaven.dialogue.festival.new_life.greeting.chef.1=One festival. One day off. Do not ask me to cook and I will not ask you to move.
+
+aetherhaven.dialogue.festival.new_life.greeting.merchant.0=Free seeds falling out of the sky. Terrible for business, wonderful for everyone else.
+aetherhaven.dialogue.festival.new_life.greeting.merchant.1=The seed seller only comes on festival day, so go and have a look before he packs up.
+
+aetherhaven.dialogue.festival.new_life.greeting.blacksmith.0=No hammering today. Even the forge gets to rest when the year starts over.
+aetherhaven.dialogue.festival.new_life.greeting.blacksmith.1=Growing something takes more patience than shaping steel. I respect that.
+
+aetherhaven.dialogue.festival.new_life.greeting.florist.0=Look at the Springheart Lettuce. All that green from a handful of light. I could cry.
+aetherhaven.dialogue.festival.new_life.greeting.florist.1=Save me a few seeds, would you? I know exactly where they should go.
+
+aetherhaven.dialogue.festival.new_life.greeting.rancher.0=Animals are settled, so I get the afternoon. The herd can hear the cheering from here.
+aetherhaven.dialogue.festival.new_life.greeting.rancher.1=Fresh greens after today means happy pastures all spring.
+
+aetherhaven.dialogue.festival.new_life.greeting.miner.0=Strange to spend a day looking up instead of down. Nice, though.
+aetherhaven.dialogue.festival.new_life.greeting.miner.1=I brought a bag for the seeds. A miner never turns up empty handed.
+
+aetherhaven.dialogue.festival.new_life.greeting.logger.0=Sawdust can wait. Nothing I cut down grows as fast as the Springheart Lettuce.
+aetherhaven.dialogue.festival.new_life.greeting.logger.1=Listen for the crack when it goes. Best sound of the year.
+
+aetherhaven.dialogue.festival.new_life.greeting.builder.0=Whoever laid this square did honest work. Good day to stand on it.
+aetherhaven.dialogue.festival.new_life.greeting.builder.1=I keep measuring the Springheart Lettuce by eye. Force of habit.
+
+aetherhaven.dialogue.festival.new_life.greeting.crystal_keeper.0=The essence you throw is the same light that sleeps in my crystals. Today it wakes up loudly.
+aetherhaven.dialogue.festival.new_life.greeting.crystal_keeper.1=I have seen many springs open. This one still makes me stop and watch.
+
+aetherhaven.dialogue.festival.new_life.greeting.pyrotechnic.0=Big green boom! Grubble did not even build it. Very upsetting. Very fun.
+aetherhaven.dialogue.festival.new_life.greeting.pyrotechnic.1=Grubble stands close for the pop. Grubble always stands close.
+
+aetherhaven.dialogue.festival.new_life.greeting.bard.0=A crowd, a countdown, and a burst at the end. The song writes itself.
+aetherhaven.dialogue.festival.new_life.greeting.bard.1=Keep feeding the Springheart Lettuce. I will keep playing until it pops.
+
+aetherhaven.dialogue.festival.new_life.greeting.guild_master.0=No patrols today unless something goes wrong. Even guards get to watch the Springheart Lettuce.
+aetherhaven.dialogue.festival.new_life.greeting.guild_master.1=Stand back a little when it fills up. That is the only order I am giving today.
+
+aetherhaven.dialogue.festival.new_life.greeting.guard.0=Quiet post today. Everyone is too busy feeding the Springheart Lettuce to cause trouble.
+aetherhaven.dialogue.festival.new_life.greeting.guard.1=Watch your footing in the crowd when the seeds come down.
+
+aetherhaven.dialogue.festival.new_life.greeting.default.0=New Life today. Throw some life essence at the Springheart Lettuce and stay for the seeds.
+aetherhaven.dialogue.festival.new_life.greeting.default.1=The whole town is at the square. Come and see how big the Springheart Lettuce gets.

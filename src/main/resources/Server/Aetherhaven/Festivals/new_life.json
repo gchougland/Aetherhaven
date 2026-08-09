@@ -1,0 +1,137 @@
+{
+  "id": "new_life",
+  "displayName": "New Life Festival",
+  "displayNameLangKey": "aetherhaven_festivals.aetherhaven.festival.new_life.name",
+  "description": "Spring begins. The town gathers around the Springheart Lettuce and feeds it life essence until it bursts with seeds.",
+  "prefabPath": "Festivals/Festival_New_Life.prefab.json",
+  "season": "Spring",
+  "dayOfSeason": 5,
+  "allDay": false,
+  "startHour": 8,
+  "startMinute": 0,
+  "endHour": 20,
+  "endMinute": 0,
+  "calendarIconPath": "UI/Custom/cabbage.png",
+  "mechanicId": "new_life",
+  "spots": [
+    {
+      "residentKind": "priestess",
+      "localX": 2,
+      "localY": 6,
+      "localZ": -6,
+      "yawDegrees": 180.0,
+      "required": true
+    },
+    {
+      "residentKind": "farmer",
+      "localX": 7,
+      "localY": 6,
+      "localZ": 0,
+      "yawDegrees": 90.0,
+      "required": true
+    },
+    {
+      "residentKind": "elder",
+      "localX": 2,
+      "localY": 6,
+      "localZ": 6,
+      "yawDegrees": 0.0,
+      "required": true
+    }
+  ],
+  "npcs": [
+    {
+      "npcRoleId": "Aetherhaven_Festival_Seed_Seller",
+      "localX": -4,
+      "localY": 6,
+      "localZ": 0,
+      "yawDegrees": 270.0
+    }
+  ],
+  "burstItemIds": [
+    "Plant_Seeds_Lettuce",
+    "Plant_Seeds_Carrot",
+    "Plant_Seeds_Cauliflower",
+    "Plant_Seeds_Corn",
+    "Plant_Seeds_Potato",
+    "Plant_Seeds_Pumpkin",
+    "Plant_Seeds_Onion",
+    "Plant_Seeds_Tomato",
+    "Plant_Seeds_Turnip"
+  ],
+  "tags": ["spring", "harvest"],
+  "greetings": {
+    "elder": [
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.elder.0",
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.elder.1"
+    ],
+    "priestess": [
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.priestess.0",
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.priestess.1"
+    ],
+    "farmer": [
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.farmer.0",
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.farmer.1"
+    ],
+    "innkeeper": [
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.innkeeper.0",
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.innkeeper.1"
+    ],
+    "chef": [
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.chef.0",
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.chef.1"
+    ],
+    "merchant": [
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.merchant.0",
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.merchant.1"
+    ],
+    "blacksmith": [
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.blacksmith.0",
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.blacksmith.1"
+    ],
+    "florist": [
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.florist.0",
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.florist.1"
+    ],
+    "rancher": [
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.rancher.0",
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.rancher.1"
+    ],
+    "miner": [
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.miner.0",
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.miner.1"
+    ],
+    "logger": [
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.logger.0",
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.logger.1"
+    ],
+    "builder": [
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.builder.0",
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.builder.1"
+    ],
+    "crystal_keeper": [
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.crystal_keeper.0",
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.crystal_keeper.1"
+    ],
+    "pyrotechnic": [
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.pyrotechnic.0",
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.pyrotechnic.1"
+    ],
+    "bard": [
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.bard.0",
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.bard.1"
+    ],
+    "guild_master": [
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.guild_master.0",
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.guild_master.1"
+    ],
+    "guard": [
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.guard.0",
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.guard.1"
+    ],
+    "default": [
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.default.0",
+      "aetherhaven_dialogue_festival_new_life.aetherhaven.dialogue.festival.new_life.greeting.default.1"
+    ]
+  }
+}

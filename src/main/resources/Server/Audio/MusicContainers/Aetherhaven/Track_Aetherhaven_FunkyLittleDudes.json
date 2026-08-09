@@ -2,5 +2,6 @@
   "Type": "SingleTrack",
   "Track": "Music/zUnused/FunkyLittleDudes.ogg",
   "LoopCount": 0,
+  "Volume": 4.3,
   "AudioCategory": "AudioCat_Music_In_Game"
 }

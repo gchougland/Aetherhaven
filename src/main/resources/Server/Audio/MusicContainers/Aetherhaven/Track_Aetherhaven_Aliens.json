@@ -2,5 +2,6 @@
   "Type": "SingleTrack",
   "Track": "Music/zUnused/Aliens.ogg",
   "LoopCount": 0,
+  "Volume": 2.3,
   "AudioCategory": "AudioCat_Music_In_Game"
 }

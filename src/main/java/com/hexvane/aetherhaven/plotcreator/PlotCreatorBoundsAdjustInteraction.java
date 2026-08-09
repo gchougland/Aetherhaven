@@ -87,6 +87,11 @@ public final class PlotCreatorBoundsAdjustInteraction extends SimpleInstantInter
             return;
         }
         PlotCreatorDraft draft = session.getDraft();
+        if (draft.isFestivalSizeLocked()) {
+            playerRef.sendMessage(Message.translation(MSG + ".error.boundsLockedFestival"));
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
         if (draft.getStep() != PlotCreatorStep.BOUNDS
             || draft.getBoundsPhase() != PlotCreatorBoundsPhase.FACE_ADJUST) {
             context.getState().state = InteractionState.Failed;

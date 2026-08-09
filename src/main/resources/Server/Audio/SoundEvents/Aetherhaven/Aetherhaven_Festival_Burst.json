@@ -1,0 +1,26 @@
+{
+  "Layers": [
+    {
+      "Files": [
+        "Sounds/Magic/Portals/Portal_Open_01.ogg"
+      ],
+      "StartDelay": 0,
+      "Volume": 0
+    },
+    {
+      "Files": [
+        "Sounds/Items/Crops/Crops_Grow_02.ogg",
+        "Sounds/Items/Crops/Crops_Grow_05.ogg"
+      ],
+      "RandomSettings": {
+        "MinPitch": -4.0,
+        "MaxPitch": 4.0
+      },
+      "StartDelay": 0.12,
+      "Volume": -2.0
+    }
+  ],
+  "Volume": 4.0,
+  "PreventSoundInterruption": true,
+  "Parent": "SFX_Attn_Loud"
+}

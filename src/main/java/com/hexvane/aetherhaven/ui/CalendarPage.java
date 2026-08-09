@@ -3,6 +3,10 @@ package com.hexvane.aetherhaven.ui;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.calendar.CalendarSeasonTheme;
 import com.hexvane.aetherhaven.calendar.VillagerBirthdayIndex;
+import com.hexvane.aetherhaven.festival.FestivalCalendarIndex;
+import com.hexvane.aetherhaven.festival.FestivalCatalog;
+import com.hexvane.aetherhaven.festival.FestivalDefinition;
+import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.hud.AetherhavenCalendar;
 import com.hexvane.aetherhaven.hud.AetherhavenCalendar.CalendarDate;
 import com.hexvane.aetherhaven.hud.AetherhavenCalendar.Season;
@@ -83,6 +87,10 @@ public final class CalendarPage extends AetherhavenInteractiveCustomUIPage<Calen
             plugin != null
                 ? VillagerBirthdayIndex.fromCatalog(plugin.getVillagerDefinitionCatalog())
                 : VillagerBirthdayIndex.fromCatalog(VillagerDefinitionCatalog.empty());
+        FestivalCalendarIndex festivals =
+            plugin != null
+                ? FestivalCalendarIndex.fromCatalog(plugin.getFestivalCatalog())
+                : FestivalCalendarIndex.fromCatalog(FestivalCatalog.empty());
 
         commandBuilder.clear(WEEK_ROWS);
         int rowIndex = 0;
@@ -94,7 +102,7 @@ public final class CalendarPage extends AetherhavenInteractiveCustomUIPage<Calen
                 int dayOfSeason = week * DAYS_PER_WEEK + col + 1;
                 commandBuilder.append(row, "Aetherhaven/CalendarDayCell.ui");
                 String cell = row + "[" + col + "]";
-                applyDayCell(commandBuilder, cell, today, index, today.season(), dayOfSeason, theme);
+                applyDayCell(commandBuilder, cell, today, index, festivals, today.season(), dayOfSeason, theme);
             }
         }
     }
@@ -131,6 +139,7 @@ public final class CalendarPage extends AetherhavenInteractiveCustomUIPage<Calen
         @Nonnull String cell,
         @Nonnull CalendarDate today,
         @Nonnull VillagerBirthdayIndex index,
+        @Nonnull FestivalCalendarIndex festivals,
         @Nonnull Season viewedSeason,
         int dayOfSeason,
         @Nonnull CalendarSeasonTheme theme
@@ -142,6 +151,19 @@ public final class CalendarPage extends AetherhavenInteractiveCustomUIPage<Calen
         cmd.set(cell + " #TodayHighlight.Visible", isToday);
         cmd.set(cell + " #DayNumber.TextSpans", Message.raw(String.valueOf(dayOfSeason)));
         cmd.set(cell + " #DayNumber.Style.TextColor", isToday ? theme.todayDayNumberColor() : theme.dayNumberColor());
+
+        // A festival day takes the cell marker; birthdays fall back to the portrait.
+        FestivalDefinition festival = festivals.festivalOn(viewedSeason, dayOfSeason);
+        if (festival != null) {
+            cmd.set(cell + " #PortraitArea.Visible", true);
+            cmd.set(cell + " #Portrait.AssetPath", festival.getCalendarIconPath());
+            cmd.set(
+                cell + " #PortraitArea.TooltipTextSpans",
+                Message.translation("aetherhaven_ui_calendar.aetherhaven.ui.calendar.festivalTooltip")
+                    .param("festival", FestivalService.festivalName(festival))
+            );
+            return;
+        }
 
         List<VillagerDefinition> birthdays = index.birthdaysOn(viewedSeason, dayOfSeason);
         if (birthdays.isEmpty()) {

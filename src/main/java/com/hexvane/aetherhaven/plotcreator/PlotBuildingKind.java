@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 public enum PlotBuildingKind {
     DECORATION,
     VARIANT,
+    FESTIVAL,
     HOME,
     WORK,
     AMENITY,
@@ -20,11 +21,16 @@ public enum PlotBuildingKind {
     GUILD_HALL,
     TOURIST_PORTAL;
 
-    private static final List<PlotBuildingKind> PLAYER_KINDS = List.of(DECORATION, VARIANT);
+    private static final List<PlotBuildingKind> PLAYER_KINDS = List.of(DECORATION, VARIANT, FESTIVAL);
 
-    /** Decoration and variant — the building types intended for player-authored plots. */
+    /** Decoration, variant, and festival — the building types intended for player-authored plots. */
     public boolean isPlayerKind() {
-        return this == DECORATION || this == VARIANT;
+        return this == DECORATION || this == VARIANT || this == FESTIVAL;
+    }
+
+    /** Kinds that own the whole build and cannot be combined with another kind. */
+    public boolean isExclusiveKind() {
+        return this == DECORATION || this == FESTIVAL;
     }
 
     @Nonnull

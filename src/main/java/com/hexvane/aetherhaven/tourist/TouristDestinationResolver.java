@@ -34,6 +34,8 @@ public final class TouristDestinationResolver {
     private static final int CIVIC_PLOT_VISIT_WEIGHT_PERCENT = 30;
     /** Prefer the player's shop over other destinations when one exists. */
     private static final int PLAYER_SHOP_VISIT_WEIGHT_PERCENT = 40;
+    /** While a festival is on, most visitors head for the square. */
+    private static final int FESTIVAL_PLOT_VISIT_WEIGHT_PERCENT = 65;
 
     private TouristDestinationResolver() {}
 
@@ -58,6 +60,10 @@ public final class TouristDestinationResolver {
         if (pool.isEmpty()) {
             pool = candidates;
         }
+        TouristPlotVisit festival = findFestivalVisit(town, pool);
+        if (festival != null && random.nextInt(100) < FESTIVAL_PLOT_VISIT_WEIGHT_PERCENT) {
+            return festival;
+        }
         List<TouristPlotVisit> playerShops = new ArrayList<>();
         List<TouristPlotVisit> civic = new ArrayList<>();
         for (TouristPlotVisit plot : pool) {
@@ -74,6 +80,27 @@ public final class TouristDestinationResolver {
             return civic.get(random.nextInt(civic.size()));
         }
         return pool.get(random.nextInt(pool.size()));
+    }
+
+    /** The festival square while a festival is running, when it is one of the plots a tourist could visit. */
+    @Nullable
+    private static TouristPlotVisit findFestivalVisit(
+        @Nonnull TownRecord town,
+        @Nonnull List<TouristPlotVisit> pool
+    ) {
+        if (town.getActiveFestivalId() == null) {
+            return null;
+        }
+        UUID festivalPlotId = town.getActiveFestivalPlotId();
+        if (festivalPlotId == null) {
+            return null;
+        }
+        for (TouristPlotVisit plot : pool) {
+            if (festivalPlotId.equals(plot.plotId())) {
+                return plot;
+            }
+        }
+        return null;
     }
 
     @Nonnull
@@ -432,6 +459,10 @@ public final class TouristDestinationResolver {
         }
         ConstructionDefinition def = catalog.get(plot.getConstructionId());
         if (def == null || !def.isTouristDestination()) {
+            return false;
+        }
+        // Festival standing spots belong to the villagers the festival called in.
+        if (poi.getTags().contains(AetherhavenConstants.POI_TAG_FESTIVAL_EPHEMERAL)) {
             return false;
         }
         // Shops: only customer tourist stands — never merchant WORK desks behind the counter.

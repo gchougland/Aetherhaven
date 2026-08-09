@@ -27,6 +27,7 @@ public final class AetherhavenPluginIds {
     public static final PluginIdentifier REPUTATION_UNLOCKS = id("ReputationUnlocks");
     public static final PluginIdentifier ADMIN_TOOLS = id("AdminTools");
     public static final PluginIdentifier WORLD_NPCS = id("WorldNpcs");
+    public static final PluginIdentifier FESTIVALS = id("Festivals");
 
     private AetherhavenPluginIds() {}
 

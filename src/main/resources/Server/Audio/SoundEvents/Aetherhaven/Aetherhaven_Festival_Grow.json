@@ -1,0 +1,22 @@
+{
+  "Layers": [
+    {
+      "Files": [
+        "Sounds/Items/Crops/Crops_Grow_01.ogg",
+        "Sounds/Items/Crops/Crops_Grow_04.ogg",
+        "Sounds/Items/Crops/Crops_Grow_07.ogg"
+      ],
+      "RandomSettings": {
+        "MinPitch": -4.0,
+        "MaxPitch": 2.0,
+        "MinVolume": -1.0
+      },
+      "StartDelay": 0,
+      "Volume": 0
+    }
+  ],
+  "Volume": 4.0,
+  "Pitch": -4.0,
+  "PreventSoundInterruption": false,
+  "Parent": "SFX_Attn_Moderate"
+}

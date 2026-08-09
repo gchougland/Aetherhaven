@@ -126,6 +126,10 @@ public final class PlotCreatorBoundsInput {
         @Nonnull PlayerRef playerRef
     ) {
         PlotCreatorDraft draft = session.getDraft();
+        if (draft.isFestivalSizeLocked()) {
+            playerRef.sendMessage(Message.translation(MSG + ".error.boundsLockedFestival"));
+            return;
+        }
         if (draft.getBoundsPhase() != PlotCreatorBoundsPhase.FACE_ADJUST) {
             return;
         }
@@ -181,6 +185,10 @@ public final class PlotCreatorBoundsInput {
         @Nonnull PlayerRef playerRef
     ) {
         PlotCreatorDraft draft = session.getDraft();
+        if (draft.isFestivalSizeLocked()) {
+            playerRef.sendMessage(Message.translation(MSG + ".error.boundsLockedFestival"));
+            return;
+        }
         draft.setBoundsPrimaryHeld(true);
         Vector3i aim = PlotCreatorBoundsRayPick.aimCell(ref, store);
         if (draft.getBoundsPhase() == PlotCreatorBoundsPhase.INITIAL_DRAG) {

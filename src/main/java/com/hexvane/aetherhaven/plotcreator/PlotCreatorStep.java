@@ -9,6 +9,7 @@ public enum PlotCreatorStep {
     IDENTITY,
     TAGS,
     VARIANT,
+    FESTIVAL,
     IMPORTANT_SPOTS,
     SUBSTEP,
     MATERIALS,

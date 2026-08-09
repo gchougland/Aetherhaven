@@ -137,6 +137,8 @@ aetherhaven.plotcreator.hud.KIND.f = Open the building type picker
 aetherhaven.plotcreator.hud.IDENTITY.f = Enter the display name, description, and building id
 aetherhaven.plotcreator.hud.TAGS.f = Edit tags (comma separated)
 aetherhaven.plotcreator.hud.VARIANT.f = Pick which main building types this counts as
+
+aetherhaven.plotcreator.hud.FESTIVAL.f = Pick a festival to make or edit
 aetherhaven.plotcreator.hud.IMPORTANT_SPOTS.f = Open important spots picker
 aetherhaven.plotcreator.hud.SUBSTEP.primary = Click the required block or spot inside the footprint
 aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer = Remove an adventurer spawn marker
@@ -163,6 +165,18 @@ aetherhaven.plotcreator.error.boundsNudgeOutside = Stand inside the build box to
 aetherhaven.plotcreator.error.needKind = Open the building type picker with F and choose at least one type before continuing.
 
 aetherhaven.plotcreator.error.decorationExclusive = Decorations cannot be mixed with other building types.
+
+aetherhaven.plotcreator.error.festivalExclusive = Festivals cannot be mixed with other building types.
+aetherhaven.plotcreator.error.needFestival = Press F and pick a festival to make or edit before continuing.
+aetherhaven.plotcreator.error.unknownFestival = That festival is no longer in the list. Pick another one.
+aetherhaven.plotcreator.error.boundsLockedFestival = Festivals always use the same size square, so the build area cannot change.
+aetherhaven.plotcreator.error.festivalIdReserved = That name is used by the everyday festival square. Pick a different one.
+aetherhaven.plotcreator.error.festivalIdTaken = A festival with that name already exists. Pick a different one.
+aetherhaven.plotcreator.error.festivalIdChars = Festival names can only use letters and numbers.
+aetherhaven.plotcreator.error.festivalSeason = Season must be Spring, Summer, Autumn, or Winter.
+aetherhaven.plotcreator.error.festivalDay = Day must be a whole number from 1 to 28.
+aetherhaven.plotcreator.error.festivalHours = Start and end hours must be whole numbers from 0 to 23.
+aetherhaven.plotcreator.error.festivalSameHours = Start and end hours cannot be the same. Turn on all day instead.
 
 aetherhaven.plotcreator.error.kindNotAllowed = That building type is not available. Choose Decoration or Variant.
 
@@ -230,6 +244,7 @@ aetherhaven.plotcreator.kind.INN = Inn
 aetherhaven.plotcreator.kind.TOWN_HALL = Town hall
 aetherhaven.plotcreator.kind.GUILD_HALL = Guild hall
 aetherhaven.plotcreator.kind.TOURIST_PORTAL = Tourist portal
+aetherhaven.plotcreator.kind.FESTIVAL = Festival
 
 aetherhaven.plotcreator.step.IDENTITY.title = Name and id
 aetherhaven.plotcreator.step.IDENTITY.short = Name
@@ -252,6 +267,21 @@ aetherhaven.plotcreator.error.maxHomeResidents = Max residents must be a whole n
 aetherhaven.plotcreator.step.VARIANT.title = Counts as
 aetherhaven.plotcreator.step.VARIANT.short = Variant
 aetherhaven.plotcreator.step.VARIANT.hint = Pick one or more main building types this build should count as.
+
+aetherhaven.plotcreator.step.FESTIVAL.title = Festival
+aetherhaven.plotcreator.step.FESTIVAL.short = Festival
+aetherhaven.plotcreator.step.FESTIVAL.hint = Press F and pick a festival to make or edit. The build area snaps to the festival square size and the starting square is placed for you.
+aetherhaven.plotcreator.festival.newFestival = New festival
+aetherhaven.plotcreator.hint.festivalPrefabReady = The festival square is ready. Build inside the {size} area.
+aetherhaven.plotcreator.field.festivalSeason = Season
+aetherhaven.plotcreator.field.festivalSeason.hint = Spring, Summer, Autumn, or Winter
+aetherhaven.plotcreator.field.festivalDay = Day of the season (1-28)
+aetherhaven.plotcreator.field.festivalDay.hint = 1 to 28
+aetherhaven.plotcreator.field.festivalAllDay = Runs all day
+aetherhaven.plotcreator.field.festivalStartHour = Start hour
+aetherhaven.plotcreator.field.festivalEndHour = End hour
+aetherhaven.plotcreator.field.festivalHour.hint = 0 to 23
+aetherhaven.plotcreator.success.festivalSaved = {name} is saved. It will run on its day every year.
 
 aetherhaven.plotcreator.step.IMPORTANT_SPOTS.title = Important spots
 aetherhaven.plotcreator.step.IMPORTANT_SPOTS.short = Spots

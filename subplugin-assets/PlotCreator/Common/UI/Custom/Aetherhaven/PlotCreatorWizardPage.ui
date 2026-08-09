@@ -145,6 +145,72 @@ $C.@PageOverlay {
         Visible: false;
       }
 
+      Label #FestivalSeasonLabel {
+        Style: $C.@DefaultLabelStyle;
+        Text: "";
+        Anchor: (Bottom: 4);
+        Visible: false;
+      }
+
+      $C.@TextField #FestivalSeasonField {
+        Anchor: (Bottom: 10, Height: 36);
+        PlaceholderText: "";
+        Visible: false;
+      }
+
+      Label #FestivalDayLabel {
+        Style: $C.@DefaultLabelStyle;
+        Text: "";
+        Anchor: (Bottom: 4);
+        Visible: false;
+      }
+
+      $C.@TextField #FestivalDayField {
+        Anchor: (Bottom: 10, Height: 36);
+        PlaceholderText: "";
+        Visible: false;
+      }
+
+      Group #FestivalAllDayRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 10);
+        Visible: false;
+
+        $C.@CheckBox #FestivalAllDayToggle {}
+
+        Label #FestivalAllDayLabel {
+          Text: "";
+          Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8);
+          Anchor: (Left: 11);
+        }
+      }
+
+      Label #FestivalStartHourLabel {
+        Style: $C.@DefaultLabelStyle;
+        Text: "";
+        Anchor: (Bottom: 4);
+        Visible: false;
+      }
+
+      $C.@TextField #FestivalStartHourField {
+        Anchor: (Bottom: 10, Height: 36);
+        PlaceholderText: "";
+        Visible: false;
+      }
+
+      Label #FestivalEndHourLabel {
+        Style: $C.@DefaultLabelStyle;
+        Text: "";
+        Anchor: (Bottom: 4);
+        Visible: false;
+      }
+
+      $C.@TextField #FestivalEndHourField {
+        Anchor: (Bottom: 10, Height: 36);
+        PlaceholderText: "";
+        Visible: false;
+      }
+
       Group #SaveEmptySpacesRow {
         LayoutMode: Left;
         Anchor: (Bottom: 10);

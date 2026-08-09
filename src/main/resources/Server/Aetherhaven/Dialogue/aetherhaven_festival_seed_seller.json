@@ -1,0 +1,40 @@
+{
+  "id": "aetherhaven_festival_seed_seller",
+  "entry": "main_hub",
+  "nodes": {
+    "main_hub": {
+      "speaker": "aetherhaven_dialogue_festival_seed_seller.aetherhaven.dialogue.festival_seed_seller.speaker",
+      "text": "aetherhaven_dialogue_festival_seed_seller.aetherhaven.dialogue.festival_seed_seller.main_hub.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_seed_seller.aetherhaven.dialogue.festival_seed_seller.main_hub.c_shop",
+          "actions": [
+            {
+              "type": "open_barter_shop",
+              "shop": "Aetherhaven_Festival_Seeds"
+            }
+          ],
+          "next": null
+        },
+        {
+          "text": "aetherhaven_dialogue_festival_seed_seller.aetherhaven.dialogue.festival_seed_seller.main_hub.c_about",
+          "next": "about"
+        },
+        {
+          "text": "aetherhaven_dialogue_festival_seed_seller.aetherhaven.dialogue.festival_seed_seller.main_hub.c_goodbye",
+          "next": null
+        }
+      ]
+    },
+    "about": {
+      "speaker": "aetherhaven_dialogue_festival_seed_seller.aetherhaven.dialogue.festival_seed_seller.speaker",
+      "text": "aetherhaven_dialogue_festival_seed_seller.aetherhaven.dialogue.festival_seed_seller.about.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_seed_seller.aetherhaven.dialogue.festival_seed_seller.about.c_back",
+          "next": "main_hub"
+        }
+      ]
+    }
+  }
+}

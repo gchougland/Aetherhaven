@@ -73,6 +73,11 @@ public final class PlotCreatorInteractions {
             return;
         }
         PlotCreatorDraft draft = session.getDraft();
+        if (draft.getStep() == PlotCreatorStep.BOUNDS && draft.isFestivalSizeLocked()) {
+            playerRef.sendMessage(Message.translation(MSG + ".error.boundsLockedFestival"));
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
         if (draft.getStep() == PlotCreatorStep.BOUNDS && draft.getBoundsPhase() == PlotCreatorBoundsPhase.FACE_ADJUST) {
             draft.resetBoundsEditing();
             PlotCreatorService.refreshBoundsVisuals(session, playerRef);
@@ -243,6 +248,15 @@ public final class PlotCreatorInteractions {
         openWizardSubPanel(playerRef, ref, store, session);
     }
 
+    public static void openFestivalPanel(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotCreatorSession session
+    ) {
+        openWizardSubPanel(playerRef, ref, store, session);
+    }
+
     public static void openImportantSpotsPanel(
         @Nonnull PlayerRef playerRef,
         @Nonnull Ref<EntityStore> ref,
@@ -355,6 +369,14 @@ public final class PlotCreatorInteractions {
             PlotCreatorService.advance(session, ref, store);
             return true;
         }
+        if (step == PlotCreatorStep.FESTIVAL) {
+            if (!d.isFestivalPicked()) {
+                playerRef.sendMessage(Message.translation(MSG + ".error.needFestival"));
+                return false;
+            }
+            PlotCreatorService.advance(session, ref, store);
+            return true;
+        }
         if (step == PlotCreatorStep.IMPORTANT_SPOTS) {
             PlotCreatorService.confirmImportantSpots(d);
             PlotCreatorService.advance(session, ref, store);
@@ -436,6 +458,10 @@ public final class PlotCreatorInteractions {
                 openConfigPanel(playerRef, ref, store, session);
                 yield true;
             }
+            case FESTIVAL -> {
+                openFestivalPanel(playerRef, ref, store, session);
+                yield true;
+            }
             case IDENTITY, TAGS, CONFIGURE -> {
                 openConfigurePanel(playerRef, ref, store, session);
                 yield true;
@@ -474,6 +500,32 @@ public final class PlotCreatorInteractions {
         PlotCreatorDraft d = session.getDraft();
         String fileName;
         Path out;
+        if (d.isFestivalMode()) {
+            String festivalId = d.getFestivalId();
+            if (festivalId == null || festivalId.isBlank()) {
+                playerRef.sendMessage(Message.translation(MSG + ".error.needIdentity"));
+                return;
+            }
+            if (com.hexvane.aetherhaven.festival.CustomFestivalPaths.isReserved(festivalId)) {
+                playerRef.sendMessage(Message.translation(MSG + ".error.festivalIdReserved"));
+                return;
+            }
+            fileName = com.hexvane.aetherhaven.festival.CustomFestivalPaths.prefabFileName(festivalId);
+            out = com.hexvane.aetherhaven.festival.CustomFestivalPaths.prefabFile(plugin.getDataDirectory(), festivalId);
+            String prefabKey = com.hexvane.aetherhaven.festival.CustomFestivalPaths.prefabPathKey(festivalId);
+            PlotCreatorPrefabExporter.ExportResult festivalResult =
+                PlotCreatorPrefabExporter.export(session.getWorld(), d, out, true);
+            if (festivalResult != PlotCreatorPrefabExporter.ExportResult.SUCCESS) {
+                playerRef.sendMessage(Message.translation(MSG + ".error.prefabExport"));
+                return;
+            }
+            d.setSessionExportedPrefabPath(prefabKey);
+            d.setPrefabPath(prefabKey);
+            d.setPrefabFileName(fileName);
+            com.hexvane.aetherhaven.prefab.PrefabResolveUtil.resolvePrefabBuffer(prefabKey);
+            playerRef.sendMessage(Message.translation(MSG + ".hint.prefabSaved").param("file", fileName));
+            return;
+        }
         if (d.isBuildingEditorMode()) {
             String locked = d.getLockedPrefabPathKey() != null ? d.getLockedPrefabPathKey() : d.getPrefabPath();
             fileName = BuildingEditorSavePaths.prefabFileName(locked);

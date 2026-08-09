@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.autonomy.pathnav.PathNavGraphService;
 import com.hexvane.aetherhaven.autonomy.pathnav.PathNavTravelSupport;
 import com.hexvane.aetherhaven.autonomy.pathnav.PathNavTravelWaypoints;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.festival.FestivalAttendanceService;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistState;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistSystem;
 import com.hexvane.aetherhaven.restaurant.PlotRestaurantState;
@@ -84,6 +85,11 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
     private static final int MOUNT_UNREACHABLE_FAIL_TICKS = 120;
     /** {@link #beginTravelToPoi} sets {@link VillagerAutonomyState#setNextDecisionEpochMs} to now + this; must be checked in {@link #tickTravel} or NPCs can follow Nav:PROGRESSING forever. */
     private static final long TRAVEL_PHASE_MAX_MS = 180_000L;
+    /** How close counts as standing on a festival spot (the villager just needs to be in the right part of the square). */
+    private static final double FESTIVAL_SPOT_ARRIVED_DIST_SQ = 2.5 * 2.5;
+    /** How long a villager holds their festival spot before the next idle check. */
+    private static final long FESTIVAL_SPOT_HOLD_MS = 5_000L;
+
     static void onUnloadSafetyDismount(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
@@ -273,7 +279,8 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (town == null) {
             List<PoiEntry> out = new ArrayList<>();
             for (PoiEntry e : pois) {
-                if (!e.getTags().contains(AetherhavenConstants.POI_TAG_FEAST_EPHEMERAL)) {
+                if (!e.getTags().contains(AetherhavenConstants.POI_TAG_FEAST_EPHEMERAL)
+                    && !e.getTags().contains(AetherhavenConstants.POI_TAG_FESTIVAL_EPHEMERAL)) {
                     out.add(e);
                 }
             }
@@ -289,6 +296,10 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         }
         List<PoiEntry> out = new ArrayList<>();
         for (PoiEntry e : pois) {
+            // Festival spots are reserved for one villager kind each and are handed out directly, not scored.
+            if (e.getTags().contains(AetherhavenConstants.POI_TAG_FESTIVAL_EPHEMERAL)) {
+                continue;
+            }
             if (e.getTags().contains(AetherhavenConstants.POI_TAG_FEAST_EPHEMERAL)) {
                 if (allow != null && allow.equals(e.getId())) {
                     out.add(e);
@@ -321,6 +332,10 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             autonomy.setFillingFun(false);
         }
         TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+        // A festival spot outranks everything else: the villager is expected on the square until the festival ends.
+        if (tryHoldFestivalSpot(ref, store, commandBuffer, world, npc, binding, autonomy, townRecord, now, plugin, tc)) {
+            return;
+        }
         // Feast / dawn quest-board posts temporarily suspend schedule commute and hunger meals.
         if (tryBeginFeastGatherTravel(ref, store, commandBuffer, world, npc, reg, binding, autonomy, townRecord, now, plugin, tc)) {
             return;
@@ -703,6 +718,49 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
      * When a feast is active, residents in {@link VillagerAutonomyState#PHASE_IDLE} path to the ephemeral feast POI
      * immediately (bypasses {@link VillagerAutonomyState#getNextDecisionEpochMs}).
      */
+    /**
+     * Keeps a villager on their festival spot for the whole festival: walk over as soon as it opens, then stand there
+     * instead of following the day's schedule. Returns true while the festival owns this villager.
+     */
+    private static boolean tryHoldFestivalSpot(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull World world,
+        @Nonnull NPCEntity npc,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull VillagerAutonomyState autonomy,
+        @Nullable TownRecord townRecord,
+        long now,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nullable TransformComponent tc
+    ) {
+        if (townRecord == null || TownVillagerBinding.isScheduleSuppressedKind(binding.getKind())) {
+            return false;
+        }
+        PoiEntry spot = FestivalAttendanceService.findSpot(world, plugin, townRecord, binding.getKind());
+        if (spot == null) {
+            return false;
+        }
+        if (tc != null && isStandingAtFestivalSpot(tc, spot)) {
+            autonomy.setNextDecisionEpochMs(now + FESTIVAL_SPOT_HOLD_MS);
+            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+            return true;
+        }
+        beginTravelToPoi(
+            ref, store, commandBuffer, world, npc, autonomy, now, plugin, townRecord, binding.getTownId(), tc, spot
+        );
+        return true;
+    }
+
+    private static boolean isStandingAtFestivalSpot(@Nonnull TransformComponent tc, @Nonnull PoiEntry spot) {
+        double tx = spot.getInteractionTargetX() != null ? spot.getInteractionTargetX() : spot.getX() + 0.5;
+        double tz = spot.getInteractionTargetZ() != null ? spot.getInteractionTargetZ() : spot.getZ() + 0.5;
+        double dx = tc.getPosition().x - tx;
+        double dz = tc.getPosition().z - tz;
+        return dx * dx + dz * dz <= FESTIVAL_SPOT_ARRIVED_DIST_SQ;
+    }
+
     private static boolean tryBeginFeastGatherTravel(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,

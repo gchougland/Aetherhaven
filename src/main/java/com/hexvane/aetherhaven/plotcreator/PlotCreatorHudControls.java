@@ -56,6 +56,12 @@ public final class PlotCreatorHudControls {
                 row(ToolKeybindSlot.ABILITY2, "hud.common.e"),
                 row(ToolKeybindSlot.ABILITY3, "hud.common.r")
             );
+            case FESTIVAL -> List.of(
+                row(ToolKeybindSlot.USE, "hud.FESTIVAL.f"),
+                row(ToolKeybindSlot.ABILITY1, "hud.common.q"),
+                row(ToolKeybindSlot.ABILITY2, "hud.common.e"),
+                row(ToolKeybindSlot.ABILITY3, "hud.common.r")
+            );
             case IMPORTANT_SPOTS -> List.of(
                 row(ToolKeybindSlot.USE, "hud.IMPORTANT_SPOTS.f"),
                 row(ToolKeybindSlot.ABILITY1, "hud.common.q"),

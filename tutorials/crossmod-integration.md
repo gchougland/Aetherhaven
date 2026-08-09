@@ -40,6 +40,7 @@ Place content under your pack root:
 | `Server/Aetherhaven/Quests/`               | Story / housing quests                                              |
 | `Server/Aetherhaven/QuestBoardExtensions/` | Extra quest board fetch/hunt/raid entries                           |
 | `Server/Aetherhaven/Buildings/`            | Construction definitions                                            |
+| `Server/Aetherhaven/Festivals/`            | Festival definitions swapped onto the festival square               |
 | `Server/Aetherhaven/ShopPrices/`           | Gold prices for shop spots                                          |
 | `Server/Aetherhaven/ShopLoot/`             | Shop spot loot tables (append or replace)                           |
 | `Server/Aetherhaven/Townsfolk/`            | Townsfolk character pool                                            |
@@ -282,6 +283,55 @@ Example fishing shop base (other players can then make variants of it):
 ```
 
 Do **not** set `countsAsConstructionId` on the base itself. Variants created in the plot creator will point at this id.
+
+## Festivals
+
+A town with a finished **festival square** (`plot_festival_square`) celebrates one festival per calendar day. On the festival's day the square's prefab is cleared and the festival's own prefab is pasted at the same anchor and yaw, then swapped back when the festival ends.
+
+Add a festival JSON under `Server/Aetherhaven/Festivals/`. Same `id` from a later pack replaces an earlier one, exactly like `Buildings/`.
+
+```json
+{
+  "id": "example_lantern_night",
+  "displayName": "Lantern Night",
+  "displayNameLangKey": "example_mod.festival.lantern_night.name",
+  "prefabPath": "Festivals/Festival_Lantern_Night.prefab.json",
+  "season": "Autumn",
+  "dayOfSeason": 21,
+  "allDay": false,
+  "startHour": 18,
+  "endHour": 4,
+  "calendarIconPath": "Icons/ItemsGenerated/Furniture_Lantern.png",
+  "mechanicId": "example_lantern_night",
+  "spots": [
+    { "residentKind": "priestess", "localX": 0, "localY": 6, "localZ": -6, "yawDegrees": 180.0 }
+  ],
+  "npcs": [
+    { "npcRoleId": "ExampleMod_Lantern_Seller", "localX": -4, "localY": 6, "localZ": 0, "yawDegrees": 270.0 }
+  ],
+  "greetings": {
+    "priestess": [
+      "example_mod_dialogue_lantern_night.example.dialogue.lantern_night.greeting.priestess.0",
+      "example_mod_dialogue_lantern_night.example.dialogue.lantern_night.greeting.priestess.1"
+    ],
+    "default": [
+      "example_mod_dialogue_lantern_night.example.dialogue.lantern_night.greeting.default.0"
+    ]
+  }
+}
+```
+
+Rules to follow:
+
+- **The prefab must be exactly 30 x 55 x 30**, anchored at the middle of the square on the ground (local x and z from `-14` to `15`, y from `0` to `54`). Any other size is rejected with a warning so a festival can never spill outside the plot. Copy `Festivals/Festival_Square.prefab.json` as your starting point.
+- `season` is `Spring`, `Summer`, `Autumn`, or `Winter`; `dayOfSeason` is 1 to 28. An end hour earlier than the start hour runs overnight. `allDay` ignores both hours.
+- `calendarIconPath` is the marker drawn on that day in the town calendar. Leave it out for the default flag.
+- `spots` are prefab-local cells where a villager of that `residentKind` stands for the whole festival. They become temporary points of interest, so they never end up in the town's saved POI file.
+- `npcs` are festival-only NPCs spawned at the start and removed at the end. Use a role from `Server/Aetherhaven/NpcRoles/`.
+- `greetings` replaces what townsfolk say while the festival runs, keyed by the same `residentKind` names as `spots`. Each key is a full lang key and one is picked per player, villager, and day. `default` covers everyone the festival does not name, including townsfolk and inn visitors, so you never have to list all sixteen villagers. A villager's own birthday still wins over the festival line. Keeping the lines in the festival JSON means your festival ships its dialogue with it and does not have to patch any villager files.
+- Players cannot break or place blocks inside a finished festival square, since the next swap would wipe the change. Harvesting and block interactions still work, and creative mode plus the territory bypass permission still get through.
+
+For custom behaviour, register a `FestivalMechanic` by id on `AetherhavenPlugin.getFestivalMechanicRegistry()`. The mechanic is called when the festival starts, when the prefab paste finishes, and when it ends, which is where Aetherhaven's own `new_life` mechanic wires up the growing lettuce.
 
 ## Dialogue trees vs patches
 

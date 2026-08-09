@@ -1,0 +1,171 @@
+{
+  "id": "plot_festival_square",
+  "scheduleSharedUtilityPick": true,
+  "touristDestination": true,
+  "displayName": "Festival square",
+  "description": "A wide paved plaza with benches and statues. On festival days the square is decorated and the town gathers here.",
+  "prefabPath": "Festivals/Festival_Square.prefab.json",
+  "selfBuildGameDays": 3.0,
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    15,
+    -5,
+    15
+  ],
+  "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 6.0,
+  "autonomyNavMaxStandYSpanAboveMinY": 8.0,
+  "autonomyNavRoofExclusionYBelowMaxY": 40.0,
+  "treasuryGoldCoinCost": 140,
+  "tags": [
+    "amenity",
+    "fun",
+    "festival"
+  ],
+  "materials": [
+    {
+      "resourceTypeId": "Rock",
+      "count": 260
+    },
+    {
+      "resourceTypeId": "Soils",
+      "count": 120
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 40
+    },
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 12
+    }
+  ],
+  "pois": [
+    {
+      "localX": -8,
+      "localY": 6,
+      "localZ": 0,
+      "tags": [
+        "FUN",
+        "SIT"
+      ],
+      "capacity": 2,
+      "blockTypeId": "Furniture_Castle_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": -6,
+      "interactionTargetLocalY": 6,
+      "interactionTargetLocalZ": 0
+    },
+    {
+      "localX": 9,
+      "localY": 6,
+      "localZ": 1,
+      "tags": [
+        "FUN",
+        "SIT"
+      ],
+      "capacity": 2,
+      "blockTypeId": "Furniture_Castle_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 7,
+      "interactionTargetLocalY": 6,
+      "interactionTargetLocalZ": 1
+    },
+    {
+      "localX": 0,
+      "localY": 6,
+      "localZ": -8,
+      "tags": [
+        "FUN",
+        "SIT"
+      ],
+      "capacity": 2,
+      "blockTypeId": "Furniture_Castle_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 0,
+      "interactionTargetLocalY": 6,
+      "interactionTargetLocalZ": -6
+    },
+    {
+      "localX": 1,
+      "localY": 6,
+      "localZ": 9,
+      "tags": [
+        "FUN",
+        "SIT"
+      ],
+      "capacity": 2,
+      "blockTypeId": "Furniture_Castle_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 1,
+      "interactionTargetLocalY": 6,
+      "interactionTargetLocalZ": 7
+    },
+    {
+      "localX": -4,
+      "localY": 5,
+      "localZ": -4,
+      "tags": [
+        "TOURIST_VISIT",
+        "FUN"
+      ],
+      "capacity": 2,
+      "blockTypeId": "Rock_Stone_Brick_Ornate",
+      "interactionKind": "NONE",
+      "interactionTargetLocalX": -4,
+      "interactionTargetLocalY": 5,
+      "interactionTargetLocalZ": -4,
+      "interactionTargetYawDegrees": 135.0
+    },
+    {
+      "localX": 5,
+      "localY": 5,
+      "localZ": -4,
+      "tags": [
+        "TOURIST_VISIT",
+        "FUN"
+      ],
+      "capacity": 2,
+      "blockTypeId": "Rock_Stone_Brick_Ornate",
+      "interactionKind": "NONE",
+      "interactionTargetLocalX": 5,
+      "interactionTargetLocalY": 5,
+      "interactionTargetLocalZ": -4,
+      "interactionTargetYawDegrees": -135.0
+    },
+    {
+      "localX": -4,
+      "localY": 5,
+      "localZ": 5,
+      "tags": [
+        "TOURIST_VISIT",
+        "FUN"
+      ],
+      "capacity": 2,
+      "blockTypeId": "Rock_Stone_Brick_Ornate",
+      "interactionKind": "NONE",
+      "interactionTargetLocalX": -4,
+      "interactionTargetLocalY": 5,
+      "interactionTargetLocalZ": 5,
+      "interactionTargetYawDegrees": 45.0
+    },
+    {
+      "localX": 5,
+      "localY": 5,
+      "localZ": 5,
+      "tags": [
+        "TOURIST_VISIT",
+        "FUN"
+      ],
+      "capacity": 2,
+      "blockTypeId": "Rock_Stone_Brick_Ornate",
+      "interactionKind": "NONE",
+      "interactionTargetLocalX": 5,
+      "interactionTargetLocalY": 5,
+      "interactionTargetLocalZ": 5,
+      "interactionTargetYawDegrees": -45.0
+    }
+  ],
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_festival_square.displayName",
+  "styleId": "core"
+}

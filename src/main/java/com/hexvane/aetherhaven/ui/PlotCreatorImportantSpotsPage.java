@@ -94,6 +94,9 @@ public final class PlotCreatorImportantSpotsPage
     }
 
     private void ensureManagementInWorking() {
+        if (session.getDraft().isFestivalMode()) {
+            return;
+        }
         for (PlotCreatorSpotEntry entry : working) {
             if (entry.type() == PlotCreatorSubstepType.MANAGEMENT_BLOCK) {
                 return;
@@ -137,6 +140,13 @@ public final class PlotCreatorImportantSpotsPage
     @Nonnull
     private List<PlotCreatorSpotEntry> choosableSpots() {
         LinkedHashSet<PlotCreatorSpotEntry> out = new LinkedHashSet<>();
+        if (session.getDraft().isFestivalMode()) {
+            for (String role :
+                PlotBuildingKindRequirements.workplaceRolesForDraft(session.getDraft(), AetherhavenPlugin.get())) {
+                out.add(PlotCreatorSpotEntry.work(role, 1));
+            }
+            return new ArrayList<>(out);
+        }
         out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1));
         for (PlotCreatorSubstepType type : PlotCreatorSubstepType.values()) {
             if (type == PlotCreatorSubstepType.MANAGEMENT_BLOCK) {
@@ -239,6 +249,9 @@ public final class PlotCreatorImportantSpotsPage
     }
 
     private boolean isLockedSpot(@Nonnull PlotCreatorSpotEntry spot) {
+        if (session.getDraft().isFestivalMode()) {
+            return false;
+        }
         if (spot.type() == PlotCreatorSubstepType.MANAGEMENT_BLOCK) {
             return true;
         }

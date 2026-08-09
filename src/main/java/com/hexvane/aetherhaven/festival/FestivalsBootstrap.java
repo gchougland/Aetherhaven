@@ -1,0 +1,62 @@
+package com.hexvane.aetherhaven.festival;
+
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.command.AetherhavenFestivalCommand;
+import com.hexvane.aetherhaven.festival.lettuce.FestivalLettuceAbsorbSystem;
+import com.hexvane.aetherhaven.festival.lettuce.FestivalLettuceBurstSystem;
+import com.hexvane.aetherhaven.festival.lettuce.FestivalLettuceComponent;
+import com.hexvane.aetherhaven.festival.lettuce.FestivalLettuceGrowthSystem;
+import com.hexvane.aetherhaven.plugin.GameTimeTickListener;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
+import com.hypixel.hytale.server.core.plugin.JavaPlugin;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import javax.annotation.Nonnull;
+
+/** Wires festivals into the plugin: mechanics, the admin command, and the clock that opens and closes them. */
+public final class FestivalsBootstrap {
+    private FestivalsBootstrap() {}
+
+    public static void register(@Nonnull AetherhavenPlugin core, @Nonnull JavaPlugin plugin) {
+        FestivalLettuceComponent.register(plugin.getEntityStoreRegistry());
+        plugin.getEntityStoreRegistry().registerSystem(new FestivalLettuceAbsorbSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new FestivalLettuceGrowthSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new FestivalLettuceBurstSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new FestivalSquareBreakBlockSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new FestivalSquarePlaceBlockSystem(core));
+        core.getFestivalMechanicRegistry().register(NewLifeFestivalMechanic.MECHANIC_ID, new NewLifeFestivalMechanic());
+        core.registerAetherhavenSubcommand(new AetherhavenFestivalCommand());
+    }
+
+    @Nonnull
+    public static GameTimeTickListener createFestivalGameTimeListener(@Nonnull AetherhavenPlugin core) {
+        return new GameTimeTickListener() {
+            @Override
+            public void onSmoothGameMinuteAdvanced(
+                @Nonnull Store<EntityStore> store,
+                @Nonnull World world,
+                @Nonnull WorldTimeResource wtr,
+                long prevEpochMinute,
+                long newEpochMinute
+            ) {
+                FestivalService.applyForWorld(world, store, core);
+            }
+
+            @Override
+            public void onGameTimeDiscontinuity(
+                @Nonnull Store<EntityStore> store,
+                @Nonnull World world,
+                @Nonnull WorldTimeResource wtr,
+                @Nonnull Instant from,
+                @Nonnull Instant to,
+                @Nonnull LocalDateTime toDateTime,
+                boolean backward
+            ) {
+                FestivalService.applyForWorld(world, store, core);
+            }
+        };
+    }
+}

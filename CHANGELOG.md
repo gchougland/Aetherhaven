@@ -7,6 +7,12 @@
 - **Calendar** Hang a calendar on a wall to open a season view with villager birthdays marked on their days. Craft it at the town planning desk with wood.
 - **Villager birthdays** Each story villager has a birthday on the calendar. Gifts on their birthday give double friendship. They greet you and react to gifts with special birthday lines.
 - **Set date command** Creative command to jump to a specific season day at midnight for testing.
+- **Corin's festival square quest** Once the park is finished, the innkeeper asks you to build a square where the whole town can gather.
+- **Festival square** New plot that sits as a quiet plaza most of the year and turns into a festival build on festival days. A banner announces the festival by name when it opens. Townsfolk and visitors gather there. The square is protected, so nobody can build on it or dig it up, though you can still use and harvest what is there.
+- **New Life Festival** Early spring holiday. Feed life essence to the Springheart Lettuce in the middle of the square until it bursts into a fountain of vegetable seeds and the Springheart Lettuce itself is gone. It only bursts once a year, so gather everyone for it. The priestess, farmer, and elder come to watch, and a kweebec seed seller brings a cart of seeds for the day, paid for in gold coins.
+- **Festival chatter** Every villager has their own things to say while a festival is on, so it is worth going around the town before the day is over.
+- **Festival day markers** The calendar shows an icon on every festival day. Hover it to see which festival it is.
+- **Make your own festivals** The plot creator has a Festival build type. Build inside the festival square, mark where villagers stand, and pick the season, day, and hours. Festivals made by other mods can bring their own villager chatter along with them.
 
 ## [2.7.1] - 8/7/2026
 

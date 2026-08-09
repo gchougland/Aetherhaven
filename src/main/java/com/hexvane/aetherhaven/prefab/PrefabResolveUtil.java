@@ -64,6 +64,10 @@ public final class PrefabResolveUtil {
         if (file != null) {
             return file.toAbsolutePath().normalize();
         }
+        file = com.hexvane.aetherhaven.festival.CustomFestivalPaths.resolvePrefabFile(dataDir, key);
+        if (file != null) {
+            return file.toAbsolutePath().normalize();
+        }
         file = CommunityPaths.resolveInstalledPrefab(dataDir, key);
         if (file != null) {
             return safeCommunityPath(file);

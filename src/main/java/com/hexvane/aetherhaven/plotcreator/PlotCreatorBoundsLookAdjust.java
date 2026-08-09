@@ -25,6 +25,9 @@ final class PlotCreatorBoundsLookAdjust {
         @Nonnull PlotCreatorDraft draft,
         boolean expand
     ) {
+        if (draft.isFestivalSizeLocked()) {
+            return "boundsLockedFestival";
+        }
         if (draft.getCornerFirst() == null || draft.getCornerSecond() == null) {
             return "boundsTooSmall";
         }
@@ -75,6 +78,9 @@ final class PlotCreatorBoundsLookAdjust {
      */
     @Nullable
     static String nudge(@Nonnull PlotCreatorDraft draft, @Nonnull PlotCreatorBoundsFace face, boolean expand) {
+        if (draft.isFestivalSizeLocked()) {
+            return "boundsLockedFestival";
+        }
         Vector3i min = draft.boundsMin();
         Vector3i max = draft.boundsMax();
         Vector3i newMin = new Vector3i(min);

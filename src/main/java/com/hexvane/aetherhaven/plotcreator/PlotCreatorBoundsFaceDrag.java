@@ -17,6 +17,9 @@ final class PlotCreatorBoundsFaceDrag {
         @Nonnull PlotCreatorBoundsFace face,
         @Nonnull Vector3i aimCell
     ) {
+        if (draft.isFestivalSizeLocked()) {
+            return "boundsLockedFestival";
+        }
         if (draft.getCornerFirst() == null || draft.getCornerSecond() == null) {
             return "boundsTooSmall";
         }

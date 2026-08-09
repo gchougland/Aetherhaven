@@ -25,6 +25,7 @@ sub-topics:
   - mechanic_guild_hall_and_guards
   - mechanic_player_shop
   - mechanic_tourist_portal
+  - mechanic_festivals
 ---
 
 ![Mechanics hub art](wiki/mechanics_hub.png)
@@ -43,5 +44,6 @@ These pages describe how each major feature works in play. Start with **Getting 
 | **Reputation** | Friendship, gifts, and milestones |
 | **Guild hall and guards** | Hiring patrols and the command post |
 | **Tourist portal** | Visitors from other worlds |
+| **Festivals** | Holiday builds on the festival square |
 
 Each linked page includes steps, related buildings, and cross-links where another system matters.

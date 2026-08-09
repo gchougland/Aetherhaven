@@ -1,0 +1,14 @@
+{
+  "Layers": [
+    {
+      "Files": [
+        "Sounds/Magic/Avatar/Avatar_Powers_Enable_01.ogg"
+      ],
+      "StartDelay": 0,
+      "Volume": 0
+    }
+  ],
+  "Volume": 2.0,
+  "PreventSoundInterruption": true,
+  "Parent": "SFX_Attn_VeryLoud"
+}

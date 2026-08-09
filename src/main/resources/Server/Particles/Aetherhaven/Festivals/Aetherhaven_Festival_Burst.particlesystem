@@ -1,0 +1,21 @@
+{
+  "Spawners": [
+    {
+      "SpawnerId": "Aetherhaven_Festival_Burst_Flash",
+      "PositionOffset": { "X": 0, "Y": 1.0, "Z": 0 }
+    },
+    {
+      "SpawnerId": "Aetherhaven_Festival_Burst_Leaves",
+      "PositionOffset": { "X": 0, "Y": 1.0, "Z": 0 },
+      "StartDelay": 0.03
+    },
+    {
+      "SpawnerId": "Aetherhaven_Festival_Grow_Ring",
+      "PositionOffset": { "X": 0, "Y": 0.4, "Z": 0 },
+      "StartDelay": 0.06
+    }
+  ],
+  "BoundingRadius": 12.0,
+  "CullDistance": 96.0,
+  "IsImportant": true
+}

@@ -62,6 +62,29 @@ public final class PlotCreatorDraft {
     private String countsAsConstructionId;
     @Nonnull
     private final List<String> countsAsConstructionIds = new ArrayList<>();
+    /** Festival being authored on the FESTIVAL step; null until the player picks one. */
+    @Nullable
+    private String festivalId;
+    /** Festival the session opened for editing; null for a brand new festival. */
+    @Nullable
+    private String editingFestivalId;
+    private boolean festivalPicked;
+    private boolean festivalSizeLocked;
+    @Nullable
+    private String festivalSeason;
+    private int festivalDayOfSeason = 1;
+    private boolean festivalAllDay;
+    private int festivalStartHour = 8;
+    private int festivalEndHour = 20;
+    @Nullable
+    private String festivalSeasonInput;
+    @Nullable
+    private String festivalDayInput;
+    @Nullable
+    private String festivalStartHourInput;
+    @Nullable
+    private String festivalEndHourInput;
+
     /** Chosen important spots for the SUBSTEP loop; empty until IMPORTANT_SPOTS is committed. */
     @Nonnull
     private final List<PlotCreatorSpotEntry> selectedSpots = new ArrayList<>();
@@ -349,6 +372,135 @@ public final class PlotCreatorDraft {
     public boolean isDecorationOnly() {
         List<PlotBuildingKind> ks = getKinds();
         return ks.size() == 1 && ks.get(0) == PlotBuildingKind.DECORATION;
+    }
+
+    /** True while the wizard is building a festival rather than a normal plot. */
+    public boolean isFestivalMode() {
+        List<PlotBuildingKind> ks = getKinds();
+        return ks.size() == 1 && ks.get(0) == PlotBuildingKind.FESTIVAL;
+    }
+
+    @Nullable
+    public String getFestivalId() {
+        return festivalId;
+    }
+
+    public void setFestivalId(@Nullable String festivalId) {
+        this.festivalId = festivalId != null && !festivalId.isBlank() ? festivalId.trim() : null;
+    }
+
+    /** Festival id the session started from, or null when the player picked "new festival". */
+    @Nullable
+    public String getEditingFestivalId() {
+        return editingFestivalId;
+    }
+
+    public void setEditingFestivalId(@Nullable String editingFestivalId) {
+        this.editingFestivalId = editingFestivalId != null && !editingFestivalId.isBlank()
+            ? editingFestivalId.trim()
+            : null;
+    }
+
+    public boolean isFestivalPicked() {
+        return festivalPicked;
+    }
+
+    public void setFestivalPicked(boolean festivalPicked) {
+        this.festivalPicked = festivalPicked;
+    }
+
+    /** Drops the festival pick and unlocks the build box, for when the player switches the build type. */
+    public void clearFestivalSelection() {
+        festivalPicked = false;
+        festivalSizeLocked = false;
+        festivalId = null;
+        editingFestivalId = null;
+    }
+
+    /** Festival prefabs are a fixed size, so the drag box stops moving once a festival is picked. */
+    public boolean isFestivalSizeLocked() {
+        return festivalSizeLocked;
+    }
+
+    public void setFestivalSizeLocked(boolean festivalSizeLocked) {
+        this.festivalSizeLocked = festivalSizeLocked;
+    }
+
+    @Nonnull
+    public String getFestivalSeason() {
+        return festivalSeason != null ? festivalSeason : "Spring";
+    }
+
+    public void setFestivalSeason(@Nullable String festivalSeason) {
+        this.festivalSeason = festivalSeason != null && !festivalSeason.isBlank() ? festivalSeason.trim() : null;
+    }
+
+    public int getFestivalDayOfSeason() {
+        return festivalDayOfSeason;
+    }
+
+    public void setFestivalDayOfSeason(int festivalDayOfSeason) {
+        this.festivalDayOfSeason = festivalDayOfSeason;
+    }
+
+    public boolean isFestivalAllDay() {
+        return festivalAllDay;
+    }
+
+    public void setFestivalAllDay(boolean festivalAllDay) {
+        this.festivalAllDay = festivalAllDay;
+    }
+
+    public int getFestivalStartHour() {
+        return festivalStartHour;
+    }
+
+    public void setFestivalStartHour(int festivalStartHour) {
+        this.festivalStartHour = festivalStartHour;
+    }
+
+    public int getFestivalEndHour() {
+        return festivalEndHour;
+    }
+
+    public void setFestivalEndHour(int festivalEndHour) {
+        this.festivalEndHour = festivalEndHour;
+    }
+
+    @Nullable
+    public String getFestivalSeasonInput() {
+        return festivalSeasonInput;
+    }
+
+    public void setFestivalSeasonInput(@Nullable String festivalSeasonInput) {
+        this.festivalSeasonInput = festivalSeasonInput;
+    }
+
+    @Nullable
+    public String getFestivalDayInput() {
+        return festivalDayInput;
+    }
+
+    public void setFestivalDayInput(@Nullable String festivalDayInput) {
+        this.festivalDayInput = festivalDayInput;
+    }
+
+    @Nullable
+    public String getFestivalStartHourInput() {
+        return festivalStartHourInput;
+    }
+
+    public void setFestivalStartHourInput(@Nullable String festivalStartHourInput) {
+        this.festivalStartHourInput = festivalStartHourInput;
+    }
+
+    @Nullable
+    public String getFestivalEndHourInput() {
+        return festivalEndHourInput;
+    }
+
+    public void setFestivalEndHourInput(@Nullable String festivalEndHourInput) {
+        this.festivalEndHourInput = festivalEndHourInput;
     }
 
     @Nullable
