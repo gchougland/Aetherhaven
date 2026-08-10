@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.festival.pigrace;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.entity.EntityChunkUtil;
 import com.hexvane.aetherhaven.entity.TransformComponentUtil;
 import com.hexvane.aetherhaven.npc.NpcAnimationPlayback;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -105,16 +106,17 @@ public final class PigRaceSystem extends EntityTickingSystem<EntityStore> {
             double step = speed * Math.max(0f, dt);
             double nextProgress = Math.min(trackLen, racer.getRaceProgress() + step);
             boolean stillRunning = nextProgress + 1.0e-3 < trackLen;
-            placeAlongTrack(
-                ref,
-                store,
-                commandBuffer,
-                racer,
-                npc,
-                nextProgress,
-                stillRunning ? speed : 0.0
-            );
-            if (!stillRunning) {
+            boolean placed =
+                placeAlongTrack(
+                    ref,
+                    store,
+                    commandBuffer,
+                    racer,
+                    npc,
+                    nextProgress,
+                    stillRunning ? speed : 0.0
+                );
+            if (placed && !stillRunning) {
                 session.markLaneFinished(racer.getLaneIndex(), now);
             }
             return;
@@ -122,7 +124,7 @@ public final class PigRaceSystem extends EntityTickingSystem<EntityStore> {
         if (session.getPhase() == PigRaceSession.Phase.LOBBY) {
             if (session.consumeNeedsReturnToStart()) {
                 PigRaceSpawnService.resetRacersToStart(store, commandBuffer, session);
-            } else {
+            } else if (!isNearTrackProgress(tc, racer, 0.0)) {
                 placeAlongTrack(ref, store, commandBuffer, racer, npc, 0.0, 0.0);
             }
             return;
@@ -178,7 +180,9 @@ public final class PigRaceSystem extends EntityTickingSystem<EntityStore> {
         double speed = PigRaceLanes.BASE_SPEED_BLOCKS_PER_SEC * speedMult;
         double step = speed * Math.max(0f, dt);
         double nextProgress = Math.min(trackLen, racer.getRaceProgress() + step);
-        placeAlongTrack(ref, store, commandBuffer, racer, npc, nextProgress, speed);
+        if (!placeAlongTrack(ref, store, commandBuffer, racer, npc, nextProgress, speed)) {
+            return;
+        }
 
         if (session.consumeFinishCamera(nextProgress, trackLen)) {
             TownAudioContext finishCamCtx = resolveTownAudio(store, townId);
@@ -217,7 +221,8 @@ public final class PigRaceSystem extends EntityTickingSystem<EntityStore> {
         return new TownAudioContext(town, PigRaceAudio.squareCenter(plugin, town));
     }
 
-    private static void placeAlongTrack(
+    /** @return false when the destination chunk is unloaded (progress held; no transform write). */
+    private static boolean placeAlongTrack(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
@@ -237,6 +242,17 @@ public final class PigRaceSystem extends EntityTickingSystem<EntityStore> {
                 racer.getStartY() + ny * clamped,
                 racer.getStartZ() + nz * clamped
             );
+        World world = store.getExternalData().getWorld();
+        // Do not write into unloaded columns: replacePreservingChunk keeps the old chunkRef and
+        // UpdateLocationSystems warns every tick when position crosses into unloaded space.
+        if (world == null || !EntityChunkUtil.isPositionChunkInMemory(world, pos)) {
+            Velocity velocity = store.getComponent(ref, Velocity.getComponentType());
+            if (velocity != null) {
+                velocity.set(0, 0, 0);
+                commandBuffer.putComponent(ref, Velocity.getComponentType(), velocity);
+            }
+            return false;
+        }
         float yaw = PigRaceLanes.facingYawRadians(nx, nz);
         TransformComponentUtil.replacePreservingChunk(ref, store, commandBuffer, pos, new Rotation3f(0f, yaw, 0f));
         Velocity velocity = store.getComponent(ref, Velocity.getComponentType());
@@ -256,6 +272,26 @@ public final class PigRaceSystem extends EntityTickingSystem<EntityStore> {
         } else {
             NpcAnimationPlayback.play(ref, npc, AnimationSlot.Movement, null, commandBuffer);
         }
+        return true;
+    }
+
+    /** True when the pig is already on the lane pose for {@code progress} (lobby re-pin skip). */
+    private static boolean isNearTrackProgress(
+        @Nonnull TransformComponent tc,
+        @Nonnull PigRaceRacerComponent racer,
+        double progress
+    ) {
+        double trackLen = Math.max(racer.trackLength(), 1.0e-3);
+        double clamped = Math.max(0.0, Math.min(trackLen, progress));
+        double t = clamped / trackLen;
+        double x = racer.getStartX() + (racer.getFinishX() - racer.getStartX()) * t;
+        double y = racer.getStartY() + (racer.getFinishY() - racer.getStartY()) * t;
+        double z = racer.getStartZ() + (racer.getFinishZ() - racer.getStartZ()) * t;
+        Vector3d pos = tc.getPosition();
+        double dx = pos.x() - x;
+        double dy = pos.y() - y;
+        double dz = pos.z() - z;
+        return dx * dx + dy * dy + dz * dz < 0.01;
     }
 
     private record TownAudioContext(@Nonnull TownRecord town, @Nullable Vector3d center) {}

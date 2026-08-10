@@ -134,6 +134,9 @@ function extractBlockEntry(raw, byFileStem) {
     if (Array.isArray(block.TintUp) && block.TintUp[0]) {
       entry.tintUp = block.TintUp[0];
     }
+    if (Array.isArray(block.Tint) && block.Tint[0]) {
+      entry.tint = block.Tint[0];
+    }
   }
 
   if (isFluid || raw.MaxFluidLevel != null) {
@@ -197,6 +200,7 @@ function resolveParents(catalog) {
         "itemTexture",
         "opacity",
         "tintUp",
+        "tint",
         "kind",
       ]) {
         if (entry[key] == null && parent[key] != null) {

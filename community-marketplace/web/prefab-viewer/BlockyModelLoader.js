@@ -4,7 +4,7 @@
  * UV layout matches the official Blockbench codec (pixel offset + face size from settings.size, not stretch).
  */
 import * as THREE from "three";
-import { assetUrl } from "./BlockCatalog.js";
+import { assetUrl } from "./BlockCatalog.js?v=3";
 
 const BLOCK_SCALE = 1 / 32;
 
@@ -74,17 +74,17 @@ function switchIndices(arr, i1, i2) {
 
 /**
  * Compute Blockbench-style face UV rectangle in pixel space: [x0, y0, x1, y1]
- * (texture origin top-left, +Y down), then map to Three.js UVs for BoxGeometry verts
- * ordered TL, TR, BL, BR → (0,1),(1,1),(0,0),(1,0).
+ * (texture origin top-left, +Y down), then map to Three.js UVs for verts
+ * ordered TL, TR, BL, BR → (matches BoxGeometry / PlaneGeometry).
  *
  * @param {any} layout
  * @param {number} faceW settings.size component for face width (not stretch)
  * @param {number} faceH settings.size component for face height (not stretch)
- * @param {number} texW
- * @param {number} texH
+ * @param {number} denomW
+ * @param {number} denomH
  * @returns {Array<[number, number]>} four [u,v] for TL,TR,BL,BR
  */
-function faceUvsThree(layout, faceW, faceH, texW, texH) {
+function faceUvsThree(layout, faceW, faceH, denomW, denomH) {
   const ox = Number(layout?.offset?.x || 0);
   const oy = Number(layout?.offset?.y || 0);
   let uvSize = [Math.abs(faceW) || 0.01, Math.abs(faceH) || 0.01];
@@ -141,18 +141,84 @@ function faceUvsThree(layout, faceW, faceH, texW, texH) {
   }
 
   const [x0, y0, x1, y1] = result;
-  const toUv = (x, y) => [x / texW, 1 - y / texH];
-  // TL, TR, BL, BR in Three unit-square terms
+  const toUv = (x, y) => [x / denomW, 1 - y / denomH];
   return [toUv(x0, y0), toUv(x1, y0), toUv(x0, y1), toUv(x1, y1)];
+}
+
+/**
+ * Walk model JSON and find how large the UV layout is (for atlas vs texture mismatch).
+ * @param {any[]} nodes
+ * @returns {{ maxX: number, maxY: number }}
+ */
+function measureUvLayout(nodes) {
+  let maxX = 0;
+  let maxY = 0;
+
+  /** @param {any} node */
+  function walk(node) {
+    const shape = node?.shape;
+    if (shape && shape.visible !== false) {
+      const size = shape.settings?.size || {};
+      const sx = Math.abs(Number(size.x) || 0);
+      const sy = Math.abs(Number(size.y) || 0);
+      const sz = Math.abs(Number(size.z) || 0);
+      const layout = shape.textureLayout || {};
+      for (const [key, face] of Object.entries(layout)) {
+        if (!face || typeof face !== "object") {
+          continue;
+        }
+        let fw = sx;
+        let fh = sy;
+        const k = String(key);
+        if (k === "top" || k === "bottom" || k === "up" || k === "down") {
+          fw = sx;
+          fh = sz || sy;
+        } else if (k === "left" || k === "right" || k === "east" || k === "west") {
+          fw = sz || sx;
+          fh = sy;
+        } else if (k === "front" || k === "back" || k === "north" || k === "south") {
+          fw = sx;
+          fh = sy;
+        }
+        const angle = Number(face.angle || 0);
+        if (angle === 90 || angle === 270) {
+          const t = fw;
+          fw = fh;
+          fh = t;
+        }
+        const ox = Number(face.offset?.x || 0);
+        const oy = Number(face.offset?.y || 0);
+        // Mirrors can extend "backwards" from the offset.
+        const x0 = ox;
+        const x1 = ox + (face.mirror?.x ? -fw : fw);
+        const y0 = oy;
+        const y1 = oy + (face.mirror?.y ? -fh : fh);
+        maxX = Math.max(maxX, x0, x1);
+        maxY = Math.max(maxY, y0, y1);
+      }
+    }
+    if (Array.isArray(node?.children)) {
+      for (const child of node.children) {
+        walk(child);
+      }
+    }
+  }
+
+  for (const node of nodes || []) {
+    walk(node);
+  }
+  return { maxX, maxY };
 }
 
 /**
  * @param {THREE.Texture} texture
  * @param {any} shape
+ * @param {string|null} tintHex
  */
-function makeFaceMaterial(texture, shape) {
+function makeFaceMaterial(texture, shape, tintHex = null) {
   const mat = new THREE.MeshLambertMaterial({
     map: texture,
+    color: tintHex ? new THREE.Color(tintHex) : 0xffffff,
     transparent: true,
     alphaTest: 0.05,
     side: shape.doubleSided ? THREE.DoubleSide : THREE.FrontSide,
@@ -169,10 +235,11 @@ function makeFaceMaterial(texture, shape) {
  * Create a textured box mesh in model units (pre-scale).
  * @param {any} shape
  * @param {THREE.Texture} texture
- * @param {number} texW
- * @param {number} texH
+ * @param {number} denomW
+ * @param {number} denomH
+ * @param {string|null} tintHex
  */
-function buildBoxMesh(shape, texture, texW, texH) {
+function buildBoxMesh(shape, texture, denomW, denomH, tintHex = null) {
   const size = vec3(shape.settings?.size, 1, 1, 1);
   const stretch = vec3(shape.stretch, 1, 1, 1);
   const sx = Math.abs(size.x * stretch.x);
@@ -188,8 +255,7 @@ function buildBoxMesh(shape, texture, texW, texH) {
   const uvZ = Math.abs(size.z) || 0.01;
 
   const layout = shape.textureLayout || {};
-  const sharedMat = makeFaceMaterial(texture, shape);
-  const materials = [sharedMat, sharedMat, sharedMat, sharedMat, sharedMat, sharedMat];
+  const sharedMat = makeFaceMaterial(texture, shape, tintHex);
 
   const geom = new THREE.BoxGeometry(sx || 0.01, sy || 0.01, sz || 0.01);
   const uvAttr = geom.getAttribute("uv");
@@ -211,15 +277,16 @@ function buildBoxMesh(shape, texture, texW, texH) {
     [uvX, uvY], // back/-Z
   ];
   for (let f = 0; f < 6; f += 1) {
-    const uvs = faceUvsThree(faceLayouts[f], faceSizes[f][0], faceSizes[f][1], texW, texH);
+    const uvs = faceUvsThree(faceLayouts[f], faceSizes[f][0], faceSizes[f][1], denomW, denomH);
     const base = f * 4;
+    // BoxGeometry verts per face: TL, TR, BL, BR
     for (let i = 0; i < 4; i += 1) {
       uvAttr.setXY(base + i, uvs[i][0], uvs[i][1]);
     }
   }
   uvAttr.needsUpdate = true;
 
-  const mesh = new THREE.Mesh(geom, materials);
+  const mesh = new THREE.Mesh(geom, sharedMat);
   if (stretch.x < 0) {
     mesh.scale.x *= -1;
   }
@@ -235,10 +302,11 @@ function buildBoxMesh(shape, texture, texW, texH) {
 /**
  * @param {any} shape
  * @param {THREE.Texture} texture
- * @param {number} texW
- * @param {number} texH
+ * @param {number} denomW
+ * @param {number} denomH
+ * @param {string|null} tintHex
  */
-function buildQuadMesh(shape, texture, texW, texH) {
+function buildQuadMesh(shape, texture, denomW, denomH, tintHex = null) {
   const size = vec3(shape.settings?.size, 1, 1, 0);
   const stretch = vec3(shape.stretch, 1, 1, 1);
   const normal = String(shape.settings?.normal || "+Z");
@@ -259,18 +327,17 @@ function buildQuadMesh(shape, texture, texW, texH) {
   }
 
   const layout = shape.textureLayout?.front || shape.textureLayout?.south || null;
-  const uvs = faceUvsThree(layout, uvW, uvH, texW, texH);
+  const uvs = faceUvsThree(layout, uvW, uvH, denomW, denomH);
   const geom = new THREE.PlaneGeometry(w, h);
   const uvAttr = geom.getAttribute("uv");
-  // PlaneGeometry verts: 0=BL, 1=BR, 2=TL, 3=TR in local space
-  // Our uvs are TL,TR,BL,BR
-  uvAttr.setXY(0, uvs[2][0], uvs[2][1]);
-  uvAttr.setXY(1, uvs[3][0], uvs[3][1]);
-  uvAttr.setXY(2, uvs[0][0], uvs[0][1]);
-  uvAttr.setXY(3, uvs[1][0], uvs[1][1]);
+  // PlaneGeometry verts: 0=TL, 1=TR, 2=BL, 3=BR (see three.js PlaneGeometry / BoxGeometry)
+  uvAttr.setXY(0, uvs[0][0], uvs[0][1]);
+  uvAttr.setXY(1, uvs[1][0], uvs[1][1]);
+  uvAttr.setXY(2, uvs[2][0], uvs[2][1]);
+  uvAttr.setXY(3, uvs[3][0], uvs[3][1]);
   uvAttr.needsUpdate = true;
 
-  const mat = makeFaceMaterial(texture, { ...shape, doubleSided: true });
+  const mat = makeFaceMaterial(texture, { ...shape, doubleSided: true }, tintHex);
   const mesh = new THREE.Mesh(geom, mat);
   if (normal === "+X") {
     mesh.rotation.y = Math.PI / 2;
@@ -283,6 +350,12 @@ function buildQuadMesh(shape, texture, texW, texH) {
   } else if (normal === "-Z") {
     mesh.rotation.y = Math.PI;
   }
+  if (stretch.x < 0) {
+    mesh.scale.x *= -1;
+  }
+  if (stretch.y < 0) {
+    mesh.scale.y *= -1;
+  }
   return mesh;
 }
 
@@ -290,10 +363,11 @@ function buildQuadMesh(shape, texture, texW, texH) {
  * @param {any} node
  * @param {THREE.Object3D} parent
  * @param {THREE.Texture} texture
- * @param {number} texW
- * @param {number} texH
+ * @param {number} denomW
+ * @param {number} denomH
+ * @param {string|null} tintHex
  */
-function accumulateNode(node, parent, texture, texW, texH) {
+function accumulateNode(node, parent, texture, denomW, denomH, tintHex) {
   const shape = node.shape;
   const visible = !shape || shape.visible !== false;
 
@@ -311,9 +385,9 @@ function accumulateNode(node, parent, texture, texW, texH) {
     const type = shape.type || "none";
     let mesh = null;
     if (type === "box") {
-      mesh = buildBoxMesh(shape, texture, texW, texH);
+      mesh = buildBoxMesh(shape, texture, denomW, denomH, tintHex);
     } else if (type === "quad") {
-      mesh = buildQuadMesh(shape, texture, texW, texH);
+      mesh = buildQuadMesh(shape, texture, denomW, denomH, tintHex);
     }
     if (mesh) {
       group.add(mesh);
@@ -322,7 +396,7 @@ function accumulateNode(node, parent, texture, texW, texH) {
 
   if (Array.isArray(node.children)) {
     for (const child of node.children) {
-      accumulateNode(child, group, texture, texW, texH);
+      accumulateNode(child, group, texture, denomW, denomH, tintHex);
     }
   }
 }
@@ -330,10 +404,12 @@ function accumulateNode(node, parent, texture, texW, texH) {
 /**
  * @param {string} modelPath catalog-relative e.g. Blocks/.../Chair.blockymodel
  * @param {string|null} texturePath
+ * @param {string|null} [tintHex]
  * @returns {Promise<THREE.Group|null>}
  */
-export async function loadBlockyModel(modelPath, texturePath = null) {
-  const key = `${modelPath}|${texturePath || ""}`;
+export async function loadBlockyModel(modelPath, texturePath = null, tintHex = null) {
+  const tintKey = tintHex ? String(tintHex).toLowerCase() : "";
+  const key = `${modelPath}|${texturePath || ""}|${tintKey}`;
   if (modelCache.has(key)) {
     const cached = await modelCache.get(key);
     return cached ? cached.clone(true) : null;
@@ -358,7 +434,7 @@ export async function loadBlockyModel(modelPath, texturePath = null) {
       texPath = `${base}_Texture.png`;
     }
 
-    let texture;
+    let texture = null;
     let texW = 64;
     let texH = 64;
     const tryPaths = [
@@ -371,10 +447,15 @@ export async function loadBlockyModel(modelPath, texturePath = null) {
 
     for (const candidate of tryPaths) {
       try {
-        texture = await loadTexture(assetUrl(candidate));
-        if (texture.image) {
-          texW = texture.image.width || texW;
-          texH = texture.image.height || texH;
+        // Clone per model+tint path so wrap mode can differ (SimpleUV vs atlas).
+        const baseTex = await loadTexture(assetUrl(candidate));
+        texture = baseTex.clone();
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.needsUpdate = true;
+        if (baseTex.image) {
+          texture.image = baseTex.image;
+          texW = baseTex.image.width || texW;
+          texH = baseTex.image.height || texH;
         }
         break;
       } catch {
@@ -382,15 +463,34 @@ export async function loadBlockyModel(modelPath, texturePath = null) {
       }
     }
     if (!texture) {
-      texture = new THREE.Texture();
+      // Visible fallback so missing skins are obvious, not silent black.
+      const data = new Uint8Array([180, 180, 180, 255]);
+      texture = new THREE.DataTexture(data, 1, 1, THREE.RGBAFormat);
       texture.needsUpdate = true;
+      texture.magFilter = THREE.NearestFilter;
+      texture.minFilter = THREE.NearestFilter;
+    }
+
+    const nodes = Array.isArray(json.nodes) ? json.nodes : [];
+    const { maxX, maxY } = measureUvLayout(nodes);
+    // Stairs_SimpleUV etc. pack UVs in a larger virtual atlas than the BlockTexture.
+    // Repeat so those tiles sample the block skin instead of clamping to a flat edge.
+    if (maxX > texW + 1 || maxY > texH + 1) {
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+    }
+
+    // Greyscale plant skins (_GS) need a tint multiply; default leafy green if unset.
+    let resolvedTint = tintHex;
+    if (!resolvedTint && /_GS\.png$/i.test(String(texPath || ""))) {
+      resolvedTint = "#297430";
     }
 
     const root = new THREE.Group();
     root.name = modelPath;
-    const nodes = Array.isArray(json.nodes) ? json.nodes : [];
+    root.userData.hytaleCachedModel = true;
     for (const node of nodes) {
-      accumulateNode(node, root, texture, texW, texH);
+      accumulateNode(node, root, texture, texW, texH, resolvedTint);
     }
     root.scale.setScalar(BLOCK_SCALE);
     return root;

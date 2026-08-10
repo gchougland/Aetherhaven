@@ -36,28 +36,6 @@
     "PlacementSettings": {
       "RotationMode": "BlockNormal"
     },
-    "Support": {
-      "East": [
-        {
-          "FaceType": "Full"
-        }
-      ],
-      "West": [
-        {
-          "FaceType": "Full"
-        }
-      ],
-      "North": [
-        {
-          "FaceType": "Full"
-        }
-      ],
-      "South": [
-        {
-          "FaceType": "Full"
-        }
-      ]
-    },
     "VariantRotation": "NESW"
   },
   "Tags": {

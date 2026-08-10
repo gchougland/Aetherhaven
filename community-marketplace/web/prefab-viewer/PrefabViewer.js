@@ -3,8 +3,8 @@
  */
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { loadCatalogs } from "./BlockCatalog.js";
-import { buildPrefabMesh, disposeObject3D } from "./PrefabMeshBuilder.js";
+import { loadCatalogs } from "./BlockCatalog.js?v=3";
+import { buildPrefabMesh, disposeObject3D } from "./PrefabMeshBuilder.js?v=3";
 
 export class PrefabViewer {
   /**

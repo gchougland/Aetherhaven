@@ -7,8 +7,8 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js";
-import { loadBlockyModel } from "./BlockyModelLoader.js";
+} from "./BlockCatalog.js?v=3";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=3";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
@@ -157,13 +157,13 @@ export async function buildPrefabMesh(prefab, options = {}) {
   /** @type {Map<string, THREE.Group|null>} */
   const localModelCache = new Map();
 
-  async function getModel(modelPath, texturePath) {
-    const key = `${modelPath}|${texturePath || ""}`;
+  async function getModel(modelPath, texturePath, tintHex = null) {
+    const key = `${modelPath}|${texturePath || ""}|${tintHex || ""}`;
     if (localModelCache.has(key)) {
       const base = localModelCache.get(key);
       return base ? base.clone(true) : null;
     }
-    const loaded = await loadBlockyModel(modelPath, texturePath);
+    const loaded = await loadBlockyModel(modelPath, texturePath, tintHex);
     localModelCache.set(key, loaded);
     return loaded ? loaded.clone(true) : null;
   }
@@ -177,7 +177,8 @@ export async function buildPrefabMesh(prefab, options = {}) {
           // Many shaped blocks (roofs, stairs, halves) keep DrawType Cube but still set CustomModel.
           let placed = false;
           if (def.customModel) {
-            const model = await getModel(def.customModel, def.customModelTexture || null);
+            const tint = def.tint || def.tintUp || null;
+            const model = await getModel(def.customModel, def.customModelTexture || null, tint);
             if (model) {
               const holder = new THREE.Group();
               holder.position.set(Number(b.x) + 0.5, Number(b.y) + 0.5, Number(b.z) + 0.5);
@@ -284,19 +285,7 @@ export async function buildPrefabMesh(prefab, options = {}) {
 }
 
 export function disposeObject3D(object) {
-  object.traverse((child) => {
-    if (child.geometry) {
-      child.geometry.dispose();
-    }
-    const mat = child.material;
-    if (Array.isArray(mat)) {
-      for (const m of mat) {
-        m.map = null;
-        m.dispose?.();
-      }
-    } else if (mat) {
-      mat.map = null;
-      mat.dispose?.();
-    }
-  });
+  // Geometries, materials, and textures are shared via model/texture caches.
+  // Disposing them here would leave later clones grey / broken.
+  object.traverse(() => {});
 }
