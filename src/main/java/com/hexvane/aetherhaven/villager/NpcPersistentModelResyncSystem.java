@@ -1,9 +1,15 @@
 package com.hexvane.aetherhaven.villager;
 
+import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.monument.FounderMonumentStatueSkin;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticAppearanceService;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Holder;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.dependency.Dependency;
@@ -60,12 +66,38 @@ public final class NpcPersistentModelResyncSystem extends HolderSystem<EntitySto
         }
         var entityId = uuidComponent.getUuid();
         world.execute(() -> {
-            var ref = store.getExternalData().getRefFromUUID(entityId);
+            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityId);
             if (ref == null || !ref.isValid()) {
                 return;
             }
             NpcModelSpawnUtil.resyncFromPersistentModel(ref, store);
+            applyTownCosmeticsIfPresent(ref, store, world);
         });
+    }
+
+    private static void applyTownCosmeticsIfPresent(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull World world
+    ) {
+        TownVillagerBinding binding = store.getComponent(ref, TownVillagerBinding.getComponentType());
+        if (binding == null) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        String residentKey = com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticKeys.resolve(ref, store);
+        if (residentKey == null) {
+            return;
+        }
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.getTown(binding.getTownId());
+        if (town == null || !VillagerCosmeticAppearanceService.hasAnyOverride(town, residentKey)) {
+            return;
+        }
+        VillagerCosmeticAppearanceService.applySavedCosmetics(ref, store, town);
     }
 
     @Override

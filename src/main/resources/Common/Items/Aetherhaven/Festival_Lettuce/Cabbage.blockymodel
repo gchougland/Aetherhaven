@@ -1,0 +1,542 @@
+{
+  "nodes": [
+    {
+      "id": "2",
+      "name": "Cabbage",
+      "position": {
+        "x": 0,
+        "y": 7,
+        "z": 0
+      },
+      "orientation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "shape": {
+        "offset": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "stretch": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "textureLayout": {
+          "top": {
+            "offset": {
+              "x": 0,
+              "y": 0
+            },
+            "mirror": {
+              "x": false,
+              "y": false
+            },
+            "angle": 0
+          },
+          "bottom": {
+            "offset": {
+              "x": 20,
+              "y": 0
+            },
+            "mirror": {
+              "x": false,
+              "y": false
+            },
+            "angle": 0
+          },
+          "front": {
+            "offset": {
+              "x": 0,
+              "y": 20
+            },
+            "mirror": {
+              "x": false,
+              "y": false
+            },
+            "angle": 0
+          },
+          "back": {
+            "offset": {
+              "x": 0,
+              "y": 20
+            },
+            "mirror": {
+              "x": false,
+              "y": false
+            },
+            "angle": 0
+          },
+          "left": {
+            "offset": {
+              "x": 0,
+              "y": 20
+            },
+            "mirror": {
+              "x": false,
+              "y": false
+            },
+            "angle": 0
+          },
+          "right": {
+            "offset": {
+              "x": 0,
+              "y": 20
+            },
+            "mirror": {
+              "x": false,
+              "y": false
+            },
+            "angle": 0
+          }
+        },
+        "type": "box",
+        "settings": {
+          "size": {
+            "x": 20,
+            "y": 17,
+            "z": 20
+          }
+        },
+        "unwrapMode": "custom",
+        "visible": true,
+        "doubleSided": false,
+        "shadingMode": "flat"
+      },
+      "children": [
+        {
+          "id": "14",
+          "name": "Leaves1",
+          "position": {
+            "x": -2.224768,
+            "y": -6.349849,
+            "z": -1.06049
+          },
+          "orientation": {
+            "x": -0.568892,
+            "y": 0.386424,
+            "z": 0.216685,
+            "w": 0.692882
+          },
+          "shape": {
+            "offset": {
+              "x": 0,
+              "y": 6,
+              "z": 0
+            },
+            "stretch": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "textureLayout": {
+              "front": {
+                "offset": {
+                  "x": 20,
+                  "y": 32
+                },
+                "mirror": {
+                  "x": false,
+                  "y": false
+                },
+                "angle": 0
+              }
+            },
+            "type": "quad",
+            "settings": {
+              "size": {
+                "x": 26,
+                "y": 12
+              },
+              "normal": "+Z"
+            },
+            "unwrapMode": "custom",
+            "visible": true,
+            "doubleSided": true,
+            "shadingMode": "flat"
+          },
+          "children": [
+            {
+              "id": "15",
+              "name": "Leaves2",
+              "position": {
+                "x": 0,
+                "y": 6,
+                "z": 0
+              },
+              "orientation": {
+                "x": 0.21644,
+                "y": 0,
+                "z": 0,
+                "w": 0.976296
+              },
+              "shape": {
+                "offset": {
+                  "x": 0,
+                  "y": 6,
+                  "z": 0
+                },
+                "stretch": {
+                  "x": 1,
+                  "y": 1,
+                  "z": 1
+                },
+                "textureLayout": {
+                  "front": {
+                    "offset": {
+                      "x": 20,
+                      "y": 20
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  }
+                },
+                "type": "quad",
+                "settings": {
+                  "size": {
+                    "x": 26,
+                    "y": 12
+                  },
+                  "normal": "+Z"
+                },
+                "unwrapMode": "custom",
+                "visible": true,
+                "doubleSided": true,
+                "shadingMode": "flat"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "18",
+          "name": "Leaves1",
+          "children": [
+            {
+              "id": "19",
+              "name": "Leaves2",
+              "children": [],
+              "position": {
+                "x": 0,
+                "y": 6,
+                "z": 0
+              },
+              "orientation": {
+                "x": 0.21644,
+                "y": 0,
+                "z": 0,
+                "w": 0.976296
+              },
+              "shape": {
+                "offset": {
+                  "x": 0,
+                  "y": 6,
+                  "z": 0
+                },
+                "stretch": {
+                  "x": -0.9,
+                  "y": 1,
+                  "z": 1
+                },
+                "textureLayout": {
+                  "front": {
+                    "offset": {
+                      "x": 20,
+                      "y": 20
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  }
+                },
+                "type": "quad",
+                "settings": {
+                  "size": {
+                    "x": 26,
+                    "y": 12
+                  },
+                  "normal": "+Z"
+                },
+                "unwrapMode": "custom",
+                "visible": true,
+                "doubleSided": true,
+                "shadingMode": "flat"
+              }
+            }
+          ],
+          "position": {
+            "x": 2.224768,
+            "y": -6.349849,
+            "z": -1.06049
+          },
+          "orientation": {
+            "x": -0.551725,
+            "y": -0.335286,
+            "z": -0.257274,
+            "w": 0.719022
+          },
+          "shape": {
+            "offset": {
+              "x": 0,
+              "y": 6,
+              "z": 0
+            },
+            "stretch": {
+              "x": -0.9,
+              "y": 1,
+              "z": 1
+            },
+            "textureLayout": {
+              "front": {
+                "offset": {
+                  "x": 20,
+                  "y": 32
+                },
+                "mirror": {
+                  "x": false,
+                  "y": false
+                },
+                "angle": 0
+              }
+            },
+            "type": "quad",
+            "settings": {
+              "size": {
+                "x": 26,
+                "y": 12
+              },
+              "normal": "+Z"
+            },
+            "unwrapMode": "custom",
+            "visible": true,
+            "doubleSided": true,
+            "shadingMode": "flat"
+          }
+        },
+        {
+          "id": "20",
+          "name": "Leaves1",
+          "children": [
+            {
+              "id": "21",
+              "name": "Leaves2",
+              "children": [],
+              "position": {
+                "x": 0,
+                "y": 6,
+                "z": 0
+              },
+              "orientation": {
+                "x": -0.21644,
+                "y": 0,
+                "z": 0,
+                "w": 0.976296
+              },
+              "shape": {
+                "offset": {
+                  "x": 0,
+                  "y": 6,
+                  "z": 0
+                },
+                "stretch": {
+                  "x": -1,
+                  "y": 1,
+                  "z": -1
+                },
+                "textureLayout": {
+                  "front": {
+                    "offset": {
+                      "x": 20,
+                      "y": 20
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  }
+                },
+                "type": "quad",
+                "settings": {
+                  "size": {
+                    "x": 26,
+                    "y": 12
+                  },
+                  "normal": "+Z"
+                },
+                "unwrapMode": "custom",
+                "visible": true,
+                "doubleSided": true,
+                "shadingMode": "flat"
+              }
+            }
+          ],
+          "position": {
+            "x": 2.224768,
+            "y": -6.349849,
+            "z": 1.06049
+          },
+          "orientation": {
+            "x": 0.56672,
+            "y": 0.37955,
+            "z": -0.222304,
+            "w": 0.696672
+          },
+          "shape": {
+            "offset": {
+              "x": 0,
+              "y": 6,
+              "z": 0
+            },
+            "stretch": {
+              "x": -1,
+              "y": 1,
+              "z": -1
+            },
+            "textureLayout": {
+              "front": {
+                "offset": {
+                  "x": 20,
+                  "y": 32
+                },
+                "mirror": {
+                  "x": false,
+                  "y": false
+                },
+                "angle": 0
+              }
+            },
+            "type": "quad",
+            "settings": {
+              "size": {
+                "x": 26,
+                "y": 12
+              },
+              "normal": "+Z"
+            },
+            "unwrapMode": "custom",
+            "visible": true,
+            "doubleSided": true,
+            "shadingMode": "flat"
+          }
+        },
+        {
+          "id": "22",
+          "name": "Leaves1",
+          "children": [
+            {
+              "id": "23",
+              "name": "Leaves2",
+              "children": [],
+              "position": {
+                "x": 0,
+                "y": 6,
+                "z": 0
+              },
+              "orientation": {
+                "x": -0.21644,
+                "y": 0,
+                "z": 0,
+                "w": 0.976296
+              },
+              "shape": {
+                "offset": {
+                  "x": 0,
+                  "y": 6,
+                  "z": 0
+                },
+                "stretch": {
+                  "x": 1,
+                  "y": 1,
+                  "z": -1
+                },
+                "textureLayout": {
+                  "front": {
+                    "offset": {
+                      "x": 20,
+                      "y": 20
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  }
+                },
+                "type": "quad",
+                "settings": {
+                  "size": {
+                    "x": 26,
+                    "y": 12
+                  },
+                  "normal": "+Z"
+                },
+                "unwrapMode": "custom",
+                "visible": true,
+                "doubleSided": true,
+                "shadingMode": "flat"
+              }
+            }
+          ],
+          "position": {
+            "x": -2.224768,
+            "y": -6.349849,
+            "z": 1.06049
+          },
+          "orientation": {
+            "x": 0.604807,
+            "y": -0.225889,
+            "z": 0.117892,
+            "w": 0.754509
+          },
+          "shape": {
+            "offset": {
+              "x": 0,
+              "y": 6,
+              "z": 0
+            },
+            "stretch": {
+              "x": 1,
+              "y": 1,
+              "z": -1
+            },
+            "textureLayout": {
+              "front": {
+                "offset": {
+                  "x": 20,
+                  "y": 32
+                },
+                "mirror": {
+                  "x": false,
+                  "y": false
+                },
+                "angle": 0
+              }
+            },
+            "type": "quad",
+            "settings": {
+              "size": {
+                "x": 26,
+                "y": 12
+              },
+              "normal": "+Z"
+            },
+            "unwrapMode": "custom",
+            "visible": true,
+            "doubleSided": true,
+            "shadingMode": "flat"
+          }
+        }
+      ]
+    }
+  ],
+  "lod": "auto"
+}

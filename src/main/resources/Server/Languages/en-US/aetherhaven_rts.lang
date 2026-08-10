@@ -1,31 +1,31 @@
-items.Aetherhaven_Command_Post.name=Guard command post
+items.Aetherhaven_Command_Post.name=Guard Command Post
 items.Aetherhaven_Command_Post.description=Sit at this stool to command your town guards from above.
 
-items.Aetherhaven_Rts_Flag.name=Command flag
+items.Aetherhaven_Rts_Flag.name=Command Flag
 items.Aetherhaven_Rts_Flag.description=Send guards to a spot on the ground.
 
-items.Aetherhaven_Rts_Sword.name=Command sword
+items.Aetherhaven_Rts_Sword.name=Command Sword
 items.Aetherhaven_Rts_Sword.description=Focus your guards on one creature.
 
-items.Aetherhaven_Rts_Select_All.name=Select all guards
+items.Aetherhaven_Rts_Select_All.name=Select All Guards
 items.Aetherhaven_Rts_Select_All.description=Select every hired guard in town.
 
-items.Aetherhaven_Rts_Select_Knight.name=Select knights
+items.Aetherhaven_Rts_Select_Knight.name=Select Knights
 items.Aetherhaven_Rts_Select_Knight.description=Select all knight and rogue guards.
 
-items.Aetherhaven_Rts_Select_Archer.name=Select archers
+items.Aetherhaven_Rts_Select_Archer.name=Select Archers
 items.Aetherhaven_Rts_Select_Archer.description=Select all archer guards.
 
-items.Aetherhaven_Rts_Select_Mage.name=Select mages
+items.Aetherhaven_Rts_Select_Mage.name=Select Mages
 items.Aetherhaven_Rts_Select_Mage.description=Select all mage guards.
 
-items.Aetherhaven_Rts_Stance_Banner.name=Stance banner
+items.Aetherhaven_Rts_Stance_Banner.name=Stance Banner
 items.Aetherhaven_Rts_Stance_Banner.description=Set how selected guards fight.
 
-items.Aetherhaven_Rts_Free.name=Release staff
+items.Aetherhaven_Rts_Free.name=Release Staff
 items.Aetherhaven_Rts_Free.description=Return selected guards to normal duty.
 
-items.Aetherhaven_Rts_Exit.name=Leave command
+items.Aetherhaven_Rts_Exit.name=Leave Command
 items.Aetherhaven_Rts_Exit.description=Exit guard command mode and return to normal play.
 
 aetherhaven.rts.hudTitle=Guard Command

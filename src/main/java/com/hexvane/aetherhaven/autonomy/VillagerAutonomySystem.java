@@ -743,8 +743,18 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return false;
         }
         if (tc != null && isStandingAtFestivalSpot(tc, spot)) {
+            // Stay put: clear leftover travel seek so pathing does not pull them off the marker.
+            if (autonomy.getPhase() != VillagerAutonomyState.PHASE_IDLE) {
+                autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
+                clearAutonomySeekState(ref, npc, commandBuffer);
+            }
             autonomy.setNextDecisionEpochMs(now + FESTIVAL_SPOT_HOLD_MS);
             commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+            return true;
+        }
+        // Already walking to this spot: do not restart travel every tick (that strands villagers).
+        if (autonomy.getPhase() == VillagerAutonomyState.PHASE_TRAVEL
+            && spot.getId().equals(autonomy.getTargetPoiUuid())) {
             return true;
         }
         beginTravelToPoi(
@@ -1064,6 +1074,15 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         TownVillagerBinding travelBinding = store.getComponent(ref, TownVillagerBinding.getComponentType());
         TransformComponent tcEarly = store.getComponent(ref, TransformComponent.getComponentType());
+        // Festival spots outrank other trips: drop a wrong destination so idle re-routes to the square.
+        if (plugin != null && travelBinding != null && townRecord != null) {
+            PoiEntry festivalSpot =
+                FestivalAttendanceService.findSpot(store.getExternalData().getWorld(), plugin, townRecord, travelBinding.getKind());
+            if (festivalSpot != null && !festivalSpot.getId().equals(poiId)) {
+                failTravel(autonomy, now, "FESTIVAL", commandBuffer, ref, npc);
+                return;
+            }
+        }
         PoiScoring.UrgentNeedKind urgentKind = null;
         if (plugin != null && travelBinding != null && townRecord != null) {
             List<PoiEntry> poisForScoring =
@@ -1464,6 +1483,19 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         TransformComponent tcUse = store.getComponent(ref, TransformComponent.getComponentType());
         UUIDComponent villagerUuidComponent = store.getComponent(ref, UUIDComponent.getComponentType());
         UUID villagerUuid = villagerUuidComponent != null ? villagerUuidComponent.getUuid() : null;
+        // Leave a workplace / bed use early when this villager has a reserved festival spot.
+        if (plugin != null && townRecord != null) {
+            PoiEntry festivalSpot = FestivalAttendanceService.findSpot(world, plugin, townRecord, binding.getKind());
+            if (festivalSpot != null && (poiId == null || !festivalSpot.getId().equals(poiId))) {
+                abortActivePoiUseAndDismount(ref, store, commandBuffer, autonomy, needs, reg, true);
+                autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
+                autonomy.clearTravelAndPoiState();
+                autonomy.setNextDecisionEpochMs(now);
+                commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+                clearAutonomyRoleState(ref, npc, commandBuffer);
+                return;
+            }
+        }
         PoiScoring.UrgentNeedKind urgentKind = null;
         if (plugin != null && townRecord != null) {
             List<PoiEntry> poisForScoring =

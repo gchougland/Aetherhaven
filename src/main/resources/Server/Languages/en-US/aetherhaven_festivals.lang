@@ -1,7 +1,12 @@
 # Festivals: festival names, town announcements, and the festival admin command (en-US source).
 
 aetherhaven.festival.new_life.name=New Life Festival
-aetherhaven.festival.new_life.description=Spring begins. The town gathers around the Springheart Lettuce and feeds it life essence until it bursts with seeds.
+aetherhaven.festival.new_life.description=Spring begins. The town gathers around the Springheart Lettuce and feeds it life essence until it is ready to pop with seeds and spring festival tickets.
+
+aetherhaven.festival.pig_race.name=Pig Racing Festival
+aetherhaven.festival.pig_race.description=Late spring brings the pig races. Bet gold coins on a pig, cheer it down the track, and spend spring festival tickets at the race merchant.
+
+aetherhaven.festival.interactionHints.burstLettuce=Press [{key}] to pop the lettuce
 
 aetherhaven.festival.started={festival} has started at the festival square.
 aetherhaven.festival.banner.started.title={festival}
@@ -20,5 +25,20 @@ aetherhaven.festival.command.noneRunning=No festival is running.
 aetherhaven.festival.command.noTown=Stand in a town to use this.
 aetherhaven.festival.command.noSquare=This town has no finished festival square.
 
+aetherhaven.festival.npc.lettuce.name=Springheart Lettuce
 aetherhaven.festival.npc.seedSeller.name=Seed Seller
 aetherhaven.festival.shop.seeds.title=Festival Seeds
+
+aetherhaven.festival.npc.pigRaceMerchant.name=Race Merchant
+aetherhaven.festival.shop.pigRace.title=Race Goods
+
+aetherhaven.festival.pig_race.npc.pink.name=Pink Pig
+aetherhaven.festival.pig_race.npc.boar.name=Boar
+aetherhaven.festival.pig_race.npc.undead.name=Undead Pig
+aetherhaven.festival.pig_race.npc.wild.name=Fuzzy Pig
+aetherhaven.festival.pig_race.pig.pink=the pink pig
+aetherhaven.festival.pig_race.pig.boar=the boar
+aetherhaven.festival.pig_race.pig.undead=the undead pig
+aetherhaven.festival.pig_race.pig.fuzzy=the fuzzy pig
+aetherhaven.festival.pig_race.banner.winner.title={pig} wins!
+aetherhaven.festival.pig_race.banner.winner.subtitle=Talk to the race merchant for your tickets

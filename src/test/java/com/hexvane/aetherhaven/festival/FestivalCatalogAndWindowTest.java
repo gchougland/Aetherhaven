@@ -111,6 +111,62 @@ final class FestivalCatalogAndWindowTest {
         assertEquals("Aetherhaven_Festival_Seed_Seller", def.getNpcs().get(0).getNpcRoleId());
     }
 
+    @Test
+    void shippedPigRaceFestivalIsWiredUp() {
+        FestivalDefinition def = parseResource("/Server/Aetherhaven/Festivals/pig_race.json");
+
+        assertEquals("pig_race", def.getId());
+        assertEquals(Season.SPRING, def.getSeason());
+        assertEquals(20, def.getDayOfSeason());
+        assertEquals("Festivals/Festival_Pig_Race.prefab.json", def.getPrefabPath());
+        assertEquals("pig_race", def.getMechanicId());
+        assertEquals("UI/Custom/pig.png", def.getCalendarIconPath());
+        assertEquals(4, def.getSpots().size());
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("elder")));
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("innkeeper")));
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("blacksmith")));
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("rancher")));
+        assertEquals(1, def.getNpcs().size());
+        assertEquals("Aetherhaven_Festival_Pig_Race_Merchant", def.getNpcs().get(0).getNpcRoleId());
+        assertEquals(180.0, def.getNpcs().get(0).getYawDegrees(), 0.001);
+        assertEquals(8, def.getTouristSpots().size());
+        assertFalse(def.getGreetingLangKeys("default").isEmpty());
+    }
+
+    @Test
+    void pigRaceRacerRolesAreSpawnableGenerics() throws Exception {
+        String[] roles = {
+            "Aetherhaven_Festival_Pig_Race_Pink",
+            "Aetherhaven_Festival_Pig_Race_Boar",
+            "Aetherhaven_Festival_Pig_Race_Undead",
+            "Aetherhaven_Festival_Pig_Race_Wild"
+        };
+        for (String role : roles) {
+            try (var in = FestivalCatalogAndWindowTest.class.getResourceAsStream(
+                "/Server/NPC/Roles/Aetherhaven/" + role + ".json"
+            )) {
+                assertNotNull(in, role);
+                String json = new String(in.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+                assertTrue(json.contains("\"Type\": \"Generic\""), role);
+                assertTrue(json.contains("NameTranslationKey"), role);
+                assertTrue(json.contains("\"Type\": \"Nothing\""), role);
+            }
+        }
+    }
+
+    @Test
+    void pigRacePrefabHasNoMarkerBeams() throws Exception {
+        try (var in = FestivalCatalogAndWindowTest.class.getResourceAsStream(
+            "/Server/Prefabs/Festivals/Festival_Pig_Race.prefab.json"
+        )) {
+            assertNotNull(in);
+            String json = new String(in.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+            assertFalse(json.contains("Rock_Chalk_Brick_Beam"));
+            assertFalse(json.contains("Rock_Gold_Brick_Beam"));
+            assertFalse(json.contains("Rock_Aqua_Beam"));
+        }
+    }
+
     private static LocalDateTime dayOf(Season season, int dayOfSeason) {
         LocalDateTime start = LocalDateTime.of(2000, 1, 1, 0, 0);
         for (int i = 0; i < AetherhavenCalendar.DAYS_PER_SEASON * Season.values().length; i++) {

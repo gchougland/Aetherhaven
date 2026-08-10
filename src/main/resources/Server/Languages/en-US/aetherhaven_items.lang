@@ -8,31 +8,40 @@
 items.Aetherhaven_Lute.name=Lute
 items.Aetherhaven_Lute.description=A wooden lute with warm strings. Elias Thornwood keeps one close when he plays at the guild hall.
 
-items.Aetherhaven_Wood_Scaffold.name=Wood scaffolding
+items.Aetherhaven_Wood_Scaffold.name=Wood Scaffolding
 items.Aetherhaven_Wood_Scaffold.description=Climb like a ladder. Right-click places like a normal block. Hold Use (F) while aiming at scaffolding to extend the tower from the side or branch horizontally from the top face. Breaking the bottom unsupported piece collapses the stack.
 items.Aetherhaven_Wood_Scaffold.legendUse=Use (F): extend tower / branch from top while aiming at scaffold. Right-click: normal block placement.
 
 # === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
-items.Aetherhaven_Plot_Sign.name=Plot sign
+items.Aetherhaven_Plot_Sign.name=Plot Sign
 items.Aetherhaven_Plot_Sign.description=Marks where a building can be placed. Craft plot tokens at a plot crafting bench.
 
 items.Aetherhaven_Calendar.name=Calendar
 items.Aetherhaven_Calendar.description=Hang on a wall to see the season calendar and villager birthdays. Craft at the town planning desk with wood.
 
-items.Aetherhaven_Charter.name=Town charter
+items.Aetherhaven_Festival_Ticket_Spring.name=Spring Festival Ticket
+items.Aetherhaven_Festival_Ticket_Spring.description=A ticket for the spring festival.
+items.Aetherhaven_Festival_Ticket_Summer.name=Summer Festival Ticket
+items.Aetherhaven_Festival_Ticket_Summer.description=A ticket for the summer festival.
+items.Aetherhaven_Festival_Ticket_Autumn.name=Autumn Festival Ticket
+items.Aetherhaven_Festival_Ticket_Autumn.description=A ticket for the autumn festival.
+items.Aetherhaven_Festival_Ticket_Winter.name=Winter Festival Ticket
+items.Aetherhaven_Festival_Ticket_Winter.description=A ticket for the winter festival.
+
+items.Aetherhaven_Charter.name=Town Charter
 items.Aetherhaven_Charter.description=Place to found a town. Each player may have one town per world. Use to open town info.
 
-items.Aetherhaven_Town_Planning_Desk.name=Town planning desk
+items.Aetherhaven_Town_Planning_Desk.name=Town Planning Desk
 items.Aetherhaven_Town_Planning_Desk.description=Town planning bench. Charters, building staves, the plot crafting bench, and related recipes. Craft at a workbench.
-items.Aetherhaven_Plot_Crafting_Bench.name=Plot crafting bench
+items.Aetherhaven_Plot_Crafting_Bench.name=Plot Crafting Bench
 items.Aetherhaven_Plot_Crafting_Bench.description=Craft plot tokens for buildings and decorations. Use to pick a building, preview it, and pay gold to get a token. Craft at your town planning desk.
-items.Aetherhaven_Charter_Amendments_Table.name=Charter amendments table
+items.Aetherhaven_Charter_Amendments_Table.name=Charter Amendments Table
 items.Aetherhaven_Charter_Amendments_Table.description=Records how the town's tithe is counted and what trade the charter favors. Use to open amendments once your population supports it. Craft at your town planning desk; <color is="#ffa726">you must know the schematic</color>.
-items.Aetherhaven_Banquet_Table.name=Banquet table
+items.Aetherhaven_Banquet_Table.name=Banquet Table
 items.Aetherhaven_Banquet_Table.description=A long table for town feasts. Place in your territory and use it to serve a civic feast. Craft at the town planning desk once someone in town shares the pattern.
-items.Aetherhaven_Founder_Monument.name=Founder monument
+items.Aetherhaven_Founder_Monument.name=Founder Monument
 items.Aetherhaven_Founder_Monument.description=A stone pedestal that holds a likeness of the founder. Place inside town territory to honor them; the treasury's morning share grows slightly while it stands. Only one per town.
-items.Aetherhaven_Inn_Bell.name=Inn bell
+items.Aetherhaven_Inn_Bell.name=Inn Bell
 items.Aetherhaven_Inn_Bell.description=Ring to call inn visitors back to the guest area.
 
 items.Aetherhaven_Smokestack.name=Smokestack
@@ -43,19 +52,19 @@ benchCategories.aetherhaven.town_planning_misc=Miscellaneous
 benchCategories.aetherhaven.plot_tokens=Plot tokens
 creativeCategory.aetherhaven=Aetherhaven
 
-items.Aetherhaven_Plot_Placement_Tool.name=Plot placement staff
+items.Aetherhaven_Plot_Placement_Tool.name=Plot Placement Staff
 items.Aetherhaven_Plot_Placement_Tool.description=Carry the plot token for the building you want. Aim at the ground to preview it, move and rotate until it fits, then confirm to place the plot sign.
 
-items.Aetherhaven_Wall_Wand.name=Wall wand
+items.Aetherhaven_Wall_Wand.name=Wall Wand
 items.Aetherhaven_Wall_Wand.description=Plan stone walls around your town. Secondary use opens a top down view to chain wall, gate, and tower pieces. Primary use on an existing piece lets you extend the wall or remove it. Each piece uses a plot sign and builds like other town plots.
-items.Aetherhaven_Token_Wall.name=Wall piece marker
+items.Aetherhaven_Token_Wall.name=Wall Piece Marker
 items.Aetherhaven_Token_Wall.description=Shows on wall plot signs during placement. Not used from your inventory.
-items.Aetherhaven_Token_Wall_Gate.name=Gate piece marker
+items.Aetherhaven_Token_Wall_Gate.name=Gate Piece Marker
 items.Aetherhaven_Token_Wall_Gate.description=Shows on gate plot signs during placement. Not used from your inventory.
-items.Aetherhaven_Token_Wall_Tower.name=Tower piece marker
+items.Aetherhaven_Token_Wall_Tower.name=Tower Piece Marker
 items.Aetherhaven_Token_Wall_Tower.description=Shows on tower plot signs during placement. Not used from your inventory.
 
-items.Aetherhaven_Poi_Tool.name=POI debug tool
+items.Aetherhaven_Poi_Tool.name=POI Debug Tool
 items.Aetherhaven_Poi_Tool.description=Edit town POI spots, place new POI markers in prefabs, and set adventurer spawn markers (permission: <color is="#5AB5B5">aetherhaven.poi.tool</color>). Press Q to cycle modes.
 items.Aetherhaven_Poi_Tool.legendTitle=POI tool
 items.Aetherhaven_Poi_Tool.legendPrimary=Primary: select nearest POI near the block
@@ -269,10 +278,10 @@ commands.aetherhaven.path.revert.desc=Undo a placed path using the id from chat 
 commands.aetherhaven.path.revert.id=Path id from chat when you placed the path
 commands.aetherhaven.path.navviz.desc=Debug: toggle path navigation debug lines
 
-items.Aetherhaven_Path_Tool.name=Path designer shovel
+items.Aetherhaven_Path_Tool.name=Path Designer Shovel
 items.Aetherhaven_Path_Tool.description=Designs paths for your town. Q cycles mode. Secondary adds or removes nodes. F places, removes, or opens the style manager depending on mode. E opens width settings in Place, Move, or Rotate. R opens the style list in those modes.
 
-items.Aetherhaven_Patrol_Wand.name=Patrol wand
+items.Aetherhaven_Patrol_Wand.name=Patrol Wand
 items.Aetherhaven_Patrol_Wand.description=Sets guard patrol routes for your town. Craft at the town planning desk. See the on screen legend while holding it.
 
 aetherhaven.patrolWand.legendPageTitle=Patrol wand
@@ -369,54 +378,54 @@ aetherhaven.patrolWand.removedRoute=Deleted {name}.
 aetherhaven.patrolWand.toastRemovedRoute=Route deleted
 aetherhaven.patrolWand.wrongMode=That action is not available in this mode.
 
-items.Aetherhaven_Plot_Token_Inn.name=Inn plot token
+items.Aetherhaven_Plot_Token_Inn.name=Inn Plot Token
 items.Aetherhaven_Plot_Token_Inn.description=Required in inventory to use the plot placement staff for the inn footprint.
 
-items.Aetherhaven_Plot_Token_Market_Stall.name=Market stall plot token
+items.Aetherhaven_Plot_Token_Market_Stall.name=Market Stall Plot Token
 items.Aetherhaven_Plot_Token_Market_Stall.description=Required to place the market stall footprint from the plot placement staff.
-items.Aetherhaven_Plot_Token_Restaurant.name=Restaurant plot token
+items.Aetherhaven_Plot_Token_Restaurant.name=Restaurant Plot Token
 items.Aetherhaven_Plot_Token_Restaurant.description=Required to place the restaurant footprint from the plot placement staff.
-items.Aetherhaven_Plot_Token_Player_Shop.name=Player shop plot token
+items.Aetherhaven_Plot_Token_Player_Shop.name=Player Shop Plot Token
 items.Aetherhaven_Plot_Token_Player_Shop.description=Required to place the player shop footprint from the plot placement staff.
 
-items.Aetherhaven_Plot_Token_Farm.name=Farm plot token
+items.Aetherhaven_Plot_Token_Farm.name=Farm Plot Token
 items.Aetherhaven_Plot_Token_Farm.description=Required to place the farm plot footprint from the plot placement staff.
 
-items.Aetherhaven_Plot_Token.name=Plot token
+items.Aetherhaven_Plot_Token.name=Plot Token
 items.Aetherhaven_Plot_Token.description=Places a custom town building from the plot placement staff. Each token is tied to one building type.
-items.Aetherhaven_Plot_Token.instance.name={building} plot token
+items.Aetherhaven_Plot_Token.instance.name={building} Plot Token
 items.Aetherhaven_Plot_Token.instance.description=Required to place the {building} footprint from the plot placement staff.
-items.Aetherhaven_Plot_Token.move.name={building} move token
+items.Aetherhaven_Plot_Token.move.name={building} Move Token
 items.Aetherhaven_Plot_Token.move.description=Use with the plot placement staff to move this building to a new spot.
 
-items.Aetherhaven_Plot_Token_Unlock_Page.name=Plot blueprint
+items.Aetherhaven_Plot_Token_Unlock_Page.name=Plot Blueprint
 items.Aetherhaven_Plot_Token_Unlock_Page.description=Use this to gain an unlock point. Spend unlock points at your plot crafting bench to unlock new buildings.
-items.Aetherhaven_Plot_Token_Unlock_Page.instance.name=Plot blueprint
+items.Aetherhaven_Plot_Token_Unlock_Page.instance.name=Plot Blueprint
 items.Aetherhaven_Plot_Token_Unlock_Page.instance.description=Use this to gain an unlock point. Spend unlock points at your plot crafting bench to unlock new buildings.
 
-items.Aetherhaven_Plot_Creator_Staff.name=Plot creator staff
+items.Aetherhaven_Plot_Creator_Staff.name=Plot Creator Staff
 items.Aetherhaven_Plot_Creator_Staff.description=Turn a build into a custom town building. See the town journal Guide. F starts or acts on the current step. Primary-click blocks for bounds and spots. Q/E previous/next. R cancels.
-items.Aetherhaven_Building_Editor_Staff.name=Building editor staff
+items.Aetherhaven_Building_Editor_Staff.name=Building Editor Staff
 items.Aetherhaven_Building_Editor_Staff.description=Creative only. Pick an existing building, load it nearby, and edit its blocks and important spots. Saves over the building files when you finish.
 
-items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Blacksmith shop plot token
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Blacksmith Shop Plot Token
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Required to place the blacksmith shop footprint from the plot placement staff.
 
-items.Aetherhaven_Plot_Token_Park.name=Park plot token
+items.Aetherhaven_Plot_Token_Park.name=Park Plot Token
 items.Aetherhaven_Plot_Token_Park.description=Required to place the park footprint from the plot placement staff.
-items.Aetherhaven_Plot_Token_Tourist_Portal.name=Tourist portal plot token
+items.Aetherhaven_Plot_Token_Tourist_Portal.name=Tourist Portal Plot Token
 items.Aetherhaven_Plot_Token_Tourist_Portal.description=Required to place the tourist portal footprint from the plot placement staff.
 
-items.Aetherhaven_Plot_Token_House.name=House plot token
+items.Aetherhaven_Plot_Token_House.name=House Plot Token
 items.Aetherhaven_Plot_Token_House.description=Required to place the shared house footprint from the plot placement staff.
 
-items.Aetherhaven_Plot_Token_Town_Hall.name=Town hall plot token
+items.Aetherhaven_Plot_Token_Town_Hall.name=Town Hall Plot Token
 items.Aetherhaven_Plot_Token_Town_Hall.description=Required to place the town hall footprint from the plot placement staff.
 
-items.Aetherhaven_Plot_Token_Guild_Hall.name=Guild hall plot token
+items.Aetherhaven_Plot_Token_Guild_Hall.name=Guild Hall Plot Token
 items.Aetherhaven_Plot_Token_Guild_Hall.description=Marks where the guild hall prefab can be built. Craft at the town planning desk.
 
-items.Aetherhaven_Gold_Coin.name=Gold coin
+items.Aetherhaven_Gold_Coin.name=Gold Coin
 items.Aetherhaven_Gold_Coin.description=Town currency stored in the treasury.
 
 items.Aetherhaven_Geode.name=Geode
@@ -425,10 +434,34 @@ items.Aetherhaven_Geode.description=A hollow stone that may hold crystals, gems,
 
 items.Aetherhaven_Crystallized_Person.name=Crystallized Person
 
-items.Aetherhaven_Treasury.name=Town treasury
+items.Aetherhaven_Treasury.name=Town Treasury
 items.Aetherhaven_Treasury.description=Holds the town's gold coins. Use to deposit or withdraw (town owner).
-items.Aetherhaven_Shop_Safe.name=Shop safe
+items.Aetherhaven_Shop_Safe.name=Shop Safe
 items.Aetherhaven_Shop_Safe.description=Holds gold from your player shop sales. Use to collect your earnings.
 
 items.Aetherhaven_Quest_Journal.name=Town Journal
 items.Aetherhaven_Quest_Journal.description=Secondary use: open your town journal. You can check quests here.
+
+items.Aetherhaven_Villager_Wardrobe.name=Villager Wardrobe
+items.Aetherhaven_Villager_Wardrobe.description=Dress up residents of your town. Craft at the town planning desk with wood.
+
+items.Aetherhaven_Villager_Cosmetic_FlowerCrown_Pink.name=Pink Flower Crown Pattern
+items.Aetherhaven_Villager_Cosmetic_FlowerCrown_Pink.description=Use to unlock the pink flower crown for villagers in your town wardrobe.
+
+items.Aetherhaven_Villager_Cosmetic_FlowerCrown_White.name=White Flower Crown Pattern
+items.Aetherhaven_Villager_Cosmetic_FlowerCrown_White.description=Use to unlock the white flower crown for villagers in your town wardrobe.
+
+items.Aetherhaven_Villager_Cosmetic_FlowerCrown_Yellow.name=Yellow Flower Crown Pattern
+items.Aetherhaven_Villager_Cosmetic_FlowerCrown_Yellow.description=Use to unlock the yellow flower crown for villagers in your town wardrobe.
+
+items.Aetherhaven_Villager_Cosmetic_Pig_Ears.name=Pig Ears Pattern
+items.Aetherhaven_Villager_Cosmetic_Pig_Ears.description=Use to unlock pig ears for villagers in your town wardrobe.
+
+items.Aetherhaven_Villager_Cosmetic_Pig_Ears_Fuzzy.name=Fuzzy Pig Ears Pattern
+items.Aetherhaven_Villager_Cosmetic_Pig_Ears_Fuzzy.description=Use to unlock fuzzy pig ears for villagers in your town wardrobe.
+
+items.Aetherhaven_Villager_Cosmetic_Pig_Snout.name=Pig Snout Pattern
+items.Aetherhaven_Villager_Cosmetic_Pig_Snout.description=Use to unlock a pig snout for villagers in your town wardrobe.
+
+items.Aetherhaven_Villager_Cosmetic_Poop_Hat.name=Poop Hat Pattern
+items.Aetherhaven_Villager_Cosmetic_Poop_Hat.description=Use to unlock a poop hat for villagers in your town wardrobe.

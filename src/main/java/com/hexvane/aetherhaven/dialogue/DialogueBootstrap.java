@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.dialogue;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.command.DialogueCommand;
+import com.hexvane.aetherhaven.festival.lettuce.BuilderActionBurstFestivalLettuce;
 import com.hexvane.aetherhaven.npc.BuilderActionOpenAetherhavenDialogue;
 import com.hexvane.aetherhaven.npc.movement.BuilderBodyMotionWanderInRectGroundPreference;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -33,9 +34,12 @@ public final class DialogueBootstrap {
         NPCPlugin npc = NPCPlugin.get();
         if (npc != null) {
             npc.registerCoreComponentType("OpenAetherhavenDialogue", BuilderActionOpenAetherhavenDialogue::new);
+            npc.registerCoreComponentType("BurstFestivalLettuce", BuilderActionBurstFestivalLettuce::new);
             npc.registerCoreComponentType("WanderInRectGroundPreference", BuilderBodyMotionWanderInRectGroundPreference::new);
             npcCodecsRegistered = true;
-            LOGGER.atInfo().log("Registered NPC action OpenAetherhavenDialogue and body motion WanderInRectGroundPreference");
+            LOGGER.atInfo().log(
+                "Registered NPC actions OpenAetherhavenDialogue, BurstFestivalLettuce, and body motion WanderInRectGroundPreference"
+            );
         } else {
             LOGGER.atWarning().log("NPCPlugin not loaded; OpenAetherhavenDialogue action unavailable");
         }

@@ -17,6 +17,7 @@ Corin at the inn asks for one once the park is done. Take his token, place the f
 * The square swaps to the festival build in the morning and swaps back at the end of the festival.
 * A banner announces the festival by name when it opens, so you know to head over.
 * Villagers who have a spot at the festival drop what they are doing and go stand there until it is over.
+* Spot villagers and visitors at the square will sometimes break into a little dance.
 * Everyone in town has something to say about the festival while it runs, so it is worth doing the rounds.
 * Visitors from other worlds head to the square while the festival runs.
 * The calendar shows a marker on every festival day. Hover it to see which festival it is.
@@ -29,11 +30,25 @@ The square is looked after by the town, so nobody can dig it up or build on it. 
 
 Early spring, from morning to evening. The **Springheart Lettuce** sits in the middle of the square.
 
-* Throw **life essence** at the Springheart Lettuce and it grows.
-* Keep feeding it and it bursts into a fountain of vegetable seeds, then the Springheart Lettuce itself is gone. Grab what lands near you.
+* Throw **life essence** at the Springheart Lettuce and it pulls the essence in as it grows. Concentrated life essence counts for a lot more.
+* When it is full, press **F** to pop it. It throws vegetable seeds and spring festival tickets, then the Springheart Lettuce itself is gone.
+* You can keep feeding it after it is full. Extra essence makes the pop throw more seeds and tickets. Feed it a huge amount and it pops on its own.
 * It only pops once, so gather your life essence before the festival and share the moment with everyone.
 * The **Priestess**, **Farmer**, and **Elder** each have a place to stand, and a kweebec seed seller brings a cart for the day. Bring gold coins if you want to shop.
-* Every villager has their own thing to say about it, so make the rounds before the Springheart Lettuce fills up.
+* Every villager has their own thing to say about it, so make the rounds before the day is over.
+
+## The Pig Racing Festival
+
+Late spring, from morning to evening. Four pigs race down the track while the town cheers them on.
+
+* The four pigs wait at the starting line for the whole festival. When a race ends they pause at the finish, then head back to the start for the next one.
+* Talk to the **race merchant** to bet gold coins on a pig. You can pick 10, 25, 50, or 100 gold coins, then choose which pig you like.
+* Anyone can place a bet before the race starts. When you are ready, ask the merchant to start it.
+* Only one race runs at a time. When it ends, a banner at the top of the screen names the winning pig.
+* If your pig wins, talk to the merchant again to collect spring festival tickets. Bigger bets pay out more tickets. If you lose, the merchant will say so, then you can bet on another race.
+* The merchant also keeps a small shop that takes spring festival tickets. Expect ranch goods for now.
+* The **Elder**, **Innkeeper**, **Blacksmith**, and **Rancher** each have a place to stand by the track. Visitors watch from stands outside the lanes.
+* Every villager has their own thing to say about it, so make the rounds before the day is over.
 
 ## Making your own festival
 

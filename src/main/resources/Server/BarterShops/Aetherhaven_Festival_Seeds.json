@@ -8,6 +8,30 @@
     {
       "Type": "Fixed",
       "Trade": {
+        "Output": { "ItemId": "Aetherhaven_Villager_Cosmetic_FlowerCrown_Pink", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Spring", "Quantity": 3 }],
+        "Stock": 8
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Aetherhaven_Villager_Cosmetic_FlowerCrown_White", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Spring", "Quantity": 3 }],
+        "Stock": 8
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Aetherhaven_Villager_Cosmetic_FlowerCrown_Yellow", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Spring", "Quantity": 3 }],
+        "Stock": 8
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
         "Output": { "ItemId": "Plant_Seeds_Lettuce", "Quantity": 4 },
         "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 2 }],
         "Stock": 20

@@ -1,0 +1,38 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Festival_Ticket_Autumn.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Festival_Ticket_Autumn.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Festival_Ticket_Autumn.png",
+  "Model": "Items/Aetherhaven/Festival_Ticket/Festival_Ticket.blockymodel",
+  "Texture": "Items/Aetherhaven/Festival_Ticket/Ticket_Autumn.png",
+  "MaxStack": 100,
+  "PlayerAnimationsId": "Item",
+  "Categories": [
+    "Items.Utility",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "Quality": "Common",
+  "IconProperties": {
+    "Scale": 1.1,
+    "Rotation": [
+      22.5,
+      5,
+      22.5
+    ],
+    "Translation": [
+      2,
+      -6
+    ]
+  },
+  "Tags": {
+    "Type": [
+      "Misc"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

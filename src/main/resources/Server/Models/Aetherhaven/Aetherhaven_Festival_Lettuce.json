@@ -1,0 +1,10 @@
+{
+  "Model": "Items/Aetherhaven/Festival_Lettuce/Cabbage.blockymodel",
+  "Texture": "Items/Aetherhaven/Festival_Lettuce/Cabbage_Lettuce.png",
+  "HitBox": {
+    "Max": { "X": 0.22, "Y": 0.55, "Z": 0.22 },
+    "Min": { "X": -0.22, "Y": 0.05, "Z": -0.22 }
+  },
+  "MinScale": 4,
+  "MaxScale": 11.2
+}

@@ -69,28 +69,31 @@ public final class PrefabFootprintClearUtil {
      * <p>Safety: does not remove {@link Player}s; does not remove entities with {@link TownVillagerBinding}; does not
      * remove UUIDs listed by {@link TownRecord#collectTrackedNpcEntityUuids}.
      */
-    public static void removePrefabOnlyEntitiesInFootprint(
+    /** @return how many entities were removed */
+    public static int removePrefabOnlyEntitiesInFootprint(
         @Nonnull Store<EntityStore> store,
         @Nonnull PlotFootprintRecord fp,
         @Nonnull TownRecord townForNpcAllowlist
     ) {
         Set<UUID> npcAllowlist = new HashSet<>();
         townForNpcAllowlist.collectTrackedNpcEntityUuids(npcAllowlist);
-        removeEntitiesInFootprint(store, fp, npcAllowlist);
+        return removeEntitiesInFootprint(store, fp, npcAllowlist);
     }
 
     /**
      * Same as {@link #removePrefabOnlyEntitiesInFootprint(Store, PlotFootprintRecord, TownRecord)} but with no town
      * NPC allowlist (players and town-bound NPCs are still spared). For temporary pastes such as building editor.
+     *
+     * @return how many entities were removed
      */
-    public static void removeEntitiesInFootprint(
+    public static int removeEntitiesInFootprint(
         @Nonnull Store<EntityStore> store,
         @Nonnull PlotFootprintRecord fp
     ) {
-        removeEntitiesInFootprint(store, fp, Set.of());
+        return removeEntitiesInFootprint(store, fp, Set.of());
     }
 
-    private static void removeEntitiesInFootprint(
+    private static int removeEntitiesInFootprint(
         @Nonnull Store<EntityStore> store,
         @Nonnull PlotFootprintRecord fp,
         @Nonnull Set<UUID> npcAllowlist
@@ -128,12 +131,15 @@ public final class PrefabFootprintClearUtil {
                 }
             };
         store.forEachChunk(Query.and(TransformComponent.getComponentType()), collectFootprintEntities);
+        int removed = 0;
         for (Ref<EntityStore> r : toRemove) {
             if (r.isValid()) {
                 store.removeEntity(r, RemoveReason.REMOVE);
+                removed++;
             }
         }
         PrefabTriggerVolumeCleanup.removeVolumesInFootprint(store, fp);
+        return removed;
     }
 
     private static boolean footprintContainsEntityBlockColumn(

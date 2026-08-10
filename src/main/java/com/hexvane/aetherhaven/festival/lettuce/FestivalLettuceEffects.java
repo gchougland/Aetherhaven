@@ -29,6 +29,9 @@ public final class FestivalLettuceEffects {
 
     /** Absorb needs a little push so it cuts through outdoor ambience. */
     private static final float ABSORB_VOLUME = 1.8F;
+    /** Pop needs to carry across the festival square. */
+    private static final float BURST_VOLUME = 2.2F;
+    private static final String SOUND_BURST_FALLBACK = "SFX_Mushroom_Harvest";
 
     private FestivalLettuceEffects() {}
 
@@ -42,7 +45,8 @@ public final class FestivalLettuceEffects {
     }
 
     public static void playBurst(@Nonnull ComponentAccessor<EntityStore> accessor, @Nonnull Vector3d pos) {
-        play(accessor, pos, PARTICLE_BURST, SOUND_BURST, 1.0F);
+        playSound(accessor, pos, SOUND_BURST, SOUND_BURST_FALLBACK, BURST_VOLUME);
+        playParticles(accessor, pos, PARTICLE_BURST);
     }
 
     public static void playFestivalStart(@Nonnull ComponentAccessor<EntityStore> accessor, @Nonnull Vector3d pos) {

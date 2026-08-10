@@ -1,0 +1,70 @@
+{
+  "Type": "Generic",
+  "Parameters": {
+    "Invulnerable": {
+      "Value": true,
+      "Description": "Festival race pigs are invulnerable."
+    },
+    "NameTranslationKey": {
+      "Value": "aetherhaven_festivals.aetherhaven.festival.pig_race.npc.pink.name",
+      "Description": "Translation key for NPC name display"
+    }
+  },
+  "StartState": "Idle",
+  "AttitudeGroup": "Aetherhaven_Townsfolk",
+  "DefaultNPCAttitude": "Ignore",
+  "DefaultPlayerAttitude": "Revered",
+  "Appearance": "Pig",
+  "MaxHealth": 100,
+  "IsMemory": false,
+  "DisableDamageGroups": [
+    "Self",
+    "Player",
+    "Aetherhaven_Townsfolk",
+    "Friendly"
+  ],
+  "CombatConfig": {
+    "EntityEffect": "Immunity_Environmental"
+  },
+  "Invulnerable": {
+    "Compute": "Invulnerable"
+  },
+  "KnockbackScale": 0.0,
+  "ApplySeparation": false,
+  "MotionControllerList": [
+    {
+      "Type": "Walk",
+      "MaxWalkSpeed": 4,
+      "Gravity": 10,
+      "RunThreshold": 0.3,
+      "MaxFallSpeed": 15,
+      "MaxRotationSpeed": 360,
+      "Acceleration": 10
+    }
+  ],
+  "Instructions": [
+    {
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": "Idle"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "BodyMotion": {
+                "Type": "Nothing"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "NameTranslationKey": {
+    "Compute": "NameTranslationKey"
+  }
+}

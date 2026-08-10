@@ -2,24 +2,28 @@ package com.hexvane.aetherhaven.festival.lettuce;
 
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
-import com.hypixel.hytale.server.core.modules.entity.component.EntityScaleComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 
-/** Grows the lettuce toward its full size and gives it a wobble every time it drinks. */
+/**
+ * Grows the lettuce by rebuilding its Model scale. That keeps mesh size and the Use / F hit volume in sync (client aim
+ * uses the model box, not a separate EntityScale).
+ */
 public final class FestivalLettuceGrowthSystem extends EntityTickingSystem<EntityStore> {
-    /** How long the squash and stretch after an absorb lasts. */
     private static final double PULSE_SECONDS = 0.9;
     private static final double PULSE_CYCLES = 2.0;
     private static final double PULSE_STRENGTH = 0.18;
+    /** Avoid rebuilding the Model every tick for tiny easing steps. */
+    private static final float MODEL_APPLY_EPSILON = 0.05f;
 
     @Nonnull
     @Override
     public Query<EntityStore> getQuery() {
-        return Query.and(FestivalLettuceComponent.getComponentType(), EntityScaleComponent.getComponentType());
+        return Query.and(FestivalLettuceComponent.getComponentType());
     }
 
     @Override
@@ -31,17 +35,26 @@ public final class FestivalLettuceGrowthSystem extends EntityTickingSystem<Entit
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
         FestivalLettuceComponent lettuce = chunk.getComponent(index, FestivalLettuceComponent.getComponentType());
-        EntityScaleComponent scale = chunk.getComponent(index, EntityScaleComponent.getComponentType());
-        if (lettuce == null || scale == null || lettuce.isBursting() || lettuce.isSpent()) {
+        if (lettuce == null || lettuce.isBursting() || lettuce.isSpent()) {
             return;
         }
         float target = targetScale(lettuce);
         float pulsed = (float) (target * (1.0 + pulse(lettuce.getPulseStartEpochMs())));
-        // Ease toward the target so growth reads as a swell rather than a snap.
-        float next = scale.getScale() + (pulsed - scale.getScale()) * Math.min(1.0f, dt * 6.0f);
-        if (Math.abs(next - scale.getScale()) > 0.001f) {
-            scale.setScale(next);
+        float current = lettuce.getAppliedModelScale();
+        float next = current + (pulsed - current) * Math.min(1.0f, dt * 6.0f);
+        if (Math.abs(next - current) < 0.001f) {
+            return;
         }
+        lettuce.setAppliedModelScale(next);
+        if (Math.abs(next - current) < MODEL_APPLY_EPSILON && Math.abs(next - pulsed) > MODEL_APPLY_EPSILON) {
+            // Keep easing in the component; only push a Model update in larger steps.
+            return;
+        }
+        Ref<EntityStore> ref = chunk.getReferenceTo(index);
+        if (ref == null || !ref.isValid()) {
+            return;
+        }
+        FestivalLettuceSpawnService.applyModelScale(commandBuffer, ref, next);
     }
 
     static float targetScale(@Nonnull FestivalLettuceComponent lettuce) {
@@ -50,7 +63,6 @@ public final class FestivalLettuceGrowthSystem extends EntityTickingSystem<Entit
         return min + (max - min) * lettuce.fillRatio();
     }
 
-    /** Decaying sine that restarts on every absorb; zero once the pulse has run out. */
     static double pulse(long pulseStartEpochMs) {
         if (pulseStartEpochMs <= 0L) {
             return 0.0;

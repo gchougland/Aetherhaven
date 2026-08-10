@@ -9,10 +9,14 @@
 - **Set date command** Creative command to jump to a specific season day at midnight for testing.
 - **Corin's festival square quest** Once the park is finished, the innkeeper asks you to build a square where the whole town can gather.
 - **Festival square** New plot that sits as a quiet plaza most of the year and turns into a festival build on festival days. A banner announces the festival by name when it opens. Townsfolk and visitors gather there. The square is protected, so nobody can build on it or dig it up, though you can still use and harvest what is there.
-- **New Life Festival** Early spring holiday. Feed life essence to the Springheart Lettuce in the middle of the square until it bursts into a fountain of vegetable seeds and the Springheart Lettuce itself is gone. It only bursts once a year, so gather everyone for it. The priestess, farmer, and elder come to watch, and a kweebec seed seller brings a cart of seeds for the day, paid for in gold coins.
+- **New Life Festival** Early spring holiday. Feed life essence to the Springheart Lettuce in the middle of the square until it is full, then press F to pop it into vegetable seeds and spring festival tickets. You can keep feeding it for a bigger pop, and concentrated life essence counts for much more. It only pops once a year, so gather everyone for it. The priestess, farmer, and elder come to watch, and a kweebec seed seller brings a cart of seeds for the day, paid for in gold coins.
 - **Festival chatter** Every villager has their own things to say while a festival is on, so it is worth going around the town before the day is over.
+- **Festival dancing** Villagers at their festival spots and visitors at the square will sometimes dance.
 - **Festival day markers** The calendar shows an icon on every festival day. Hover it to see which festival it is.
 - **Make your own festivals** The plot creator has a Festival build type. Build inside the festival square, mark where villagers stand, and pick the season, day, and hours. Festivals made by other mods can bring their own villager chatter along with them.
+- **Festival tickets** Four seasonal festival tickets you can hold onto for now.
+- **Pig Racing Festival** Late spring holiday at the festival square. Bet gold coins on one of four pigs, watch them race, and a banner names the winner so you know who to cheer. Collect spring festival tickets if yours wins, or try another race after a loss. The elder, innkeeper, blacksmith, and rancher come to watch, and a race merchant sells ranch goods for spring festival tickets.
+- **Villager wardrobe** Craft a wardrobe at the town planning desk to dress up residents of your town. Pick someone, choose unlocked looks by slot, and save what they wear in that town.
 
 ## [2.7.1] - 8/7/2026
 
@@ -22,6 +26,8 @@
 
 ### Fixed
 
+- **Festival square cleanup** — Ending or swapping a festival now clears its trigger volumes and the props that sit in empty cells of the festival box, not only the solid build. Corner props such as the plaza statues are cleared even when their chunks were not loaded yet.
+- **Springheart Lettuce feeding** — You can see life essence get pulled into the middle of the lettuce before it is absorbed.
 - **Instant finish building** — The Town Journal “Finish one building now” button and the creative finish-assembly command complete a building right away instead of placing it block by block.
 - **Inn visitor variety** — The guild master no longer shows up at the inn every morning before the guild hall is built. Other visitors appear more often.
 - **Gaia statue revive** — You can revive a missing villager at the Gaia statue even if they seem to be somewhere else in town that is not loaded.

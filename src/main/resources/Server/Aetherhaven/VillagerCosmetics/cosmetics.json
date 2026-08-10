@@ -1,0 +1,60 @@
+{
+  "cosmetics": [
+    {
+      "id": "FlowerCrown.Pink",
+      "slot": "HeadAccessory",
+      "displayNameKey": "aetherhaven_villager_cosmetics.aetherhaven.villagerCosmetic.flowerCrown.pink",
+      "model": "Cosmetics/Head/FlowerCrown.blockymodel",
+      "texture": "Cosmetics/Head/FlowerCrown_Textures/Pink.png",
+      "unlockItemId": "Aetherhaven_Villager_Cosmetic_FlowerCrown_Pink"
+    },
+    {
+      "id": "FlowerCrown.White",
+      "slot": "HeadAccessory",
+      "displayNameKey": "aetherhaven_villager_cosmetics.aetherhaven.villagerCosmetic.flowerCrown.white",
+      "model": "Cosmetics/Head/FlowerCrown.blockymodel",
+      "texture": "Cosmetics/Head/FlowerCrown_Textures/White.png",
+      "unlockItemId": "Aetherhaven_Villager_Cosmetic_FlowerCrown_White"
+    },
+    {
+      "id": "FlowerCrown.Yellow",
+      "slot": "HeadAccessory",
+      "displayNameKey": "aetherhaven_villager_cosmetics.aetherhaven.villagerCosmetic.flowerCrown.yellow",
+      "model": "Cosmetics/Head/FlowerCrown.blockymodel",
+      "texture": "Cosmetics/Head/FlowerCrown_Textures/Yellow.png",
+      "unlockItemId": "Aetherhaven_Villager_Cosmetic_FlowerCrown_Yellow"
+    },
+    {
+      "id": "PigEars",
+      "slot": "HeadAccessory",
+      "displayNameKey": "aetherhaven_villager_cosmetics.aetherhaven.villagerCosmetic.pigEars",
+      "model": "Cosmetics/Head/Pig_Ears.blockymodel",
+      "texture": "NPC/Livestock/Pig/Models/Texture_Pink.png",
+      "unlockItemId": "Aetherhaven_Villager_Cosmetic_Pig_Ears"
+    },
+    {
+      "id": "PigEars.Fuzzy",
+      "slot": "HeadAccessory",
+      "displayNameKey": "aetherhaven_villager_cosmetics.aetherhaven.villagerCosmetic.pigEars.fuzzy",
+      "model": "Cosmetics/Head/Pig_Ears.blockymodel",
+      "texture": "NPC/Livestock/Pig/Models/Texture_Wild.png",
+      "unlockItemId": "Aetherhaven_Villager_Cosmetic_Pig_Ears_Fuzzy"
+    },
+    {
+      "id": "PigSnout",
+      "slot": "FaceAccessory",
+      "displayNameKey": "aetherhaven_villager_cosmetics.aetherhaven.villagerCosmetic.pigSnout",
+      "model": "Cosmetics/Face_Accessories/Pig_Nose.blockymodel",
+      "texture": "NPC/Livestock/Pig/Models/Texture_Pink.png",
+      "unlockItemId": "Aetherhaven_Villager_Cosmetic_Pig_Snout"
+    },
+    {
+      "id": "PoopHat",
+      "slot": "HeadAccessory",
+      "displayNameKey": "aetherhaven_villager_cosmetics.aetherhaven.villagerCosmetic.poopHat",
+      "model": "Cosmetics/Head/Poop_Hat.blockymodel",
+      "texture": "Items/Ingredients/Poop_Texture.png",
+      "unlockItemId": "Aetherhaven_Villager_Cosmetic_Poop_Hat"
+    }
+  ]
+}

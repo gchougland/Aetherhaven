@@ -479,6 +479,9 @@ public final class AetherhavenConstants {
     /** Kweebec trader who sets up a seed cart at the square while a festival is running. */
     public static final String NPC_FESTIVAL_SEED_SELLER = "Aetherhaven_Festival_Seed_Seller";
 
+    /** Trork ticket seller at the Pig Racing Festival. */
+    public static final String NPC_FESTIVAL_PIG_RACE_MERCHANT = "Aetherhaven_Festival_Pig_Race_Merchant";
+
     /** Shared role for all townsfolk; appearance set per character at spawn. */
     public static final String NPC_TOWNSFOLK = "Aetherhaven_Townsfolk";
 
@@ -528,6 +531,21 @@ public final class AetherhavenConstants {
     public static final String PAGE_QUEST_JOURNAL = "AetherhavenQuestJournal";
 
     public static final String PAGE_CALENDAR = "AetherhavenCalendar";
+
+    public static final String PAGE_VILLAGER_WARDROBE = "AetherhavenVillagerWardrobe";
+
+    public static final String PAGE_VILLAGER_WARDROBE_CUSTOMIZE = "AetherhavenVillagerWardrobeCustomize";
+
+    public static final String BLOCK_VILLAGER_WARDROBE = "Aetherhaven_Villager_Wardrobe";
+
+    public static final String ITEM_VILLAGER_COSMETIC_FLOWER_CROWN_PINK =
+        "Aetherhaven_Villager_Cosmetic_FlowerCrown_Pink";
+
+    public static final String ITEM_VILLAGER_COSMETIC_FLOWER_CROWN_WHITE =
+        "Aetherhaven_Villager_Cosmetic_FlowerCrown_White";
+
+    public static final String ITEM_VILLAGER_COSMETIC_FLOWER_CROWN_YELLOW =
+        "Aetherhaven_Villager_Cosmetic_FlowerCrown_Yellow";
 
     public static final String ITEM_QUEST_JOURNAL = "Aetherhaven_Quest_Journal";
 

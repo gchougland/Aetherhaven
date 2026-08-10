@@ -101,6 +101,7 @@ public final class VillagerRevivalService {
             binding = new TownVillagerBinding(town.getTownId(), kind, null);
         }
         store.putComponent(ref, TownVillagerBinding.getComponentType(), binding);
+        com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticAppearanceService.applySavedCosmetics(ref, store, town);
         String revivalSource = record.isPendingDawnRevival() ? "DAWN_REVIVAL" : "GAIA_REVIVAL";
         NpcSpawnOriginUtil.attach(
             store,

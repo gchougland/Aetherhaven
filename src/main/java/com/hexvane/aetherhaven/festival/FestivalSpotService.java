@@ -44,7 +44,7 @@ public final class FestivalSpotService {
             return;
         }
         PoiRegistry registry = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
-        List<String> poiIds = new ArrayList<>(spots.size());
+        List<String> poiIds = new ArrayList<>(spots.size() + festival.getTouristSpots().size());
         for (int i = 0; i < spots.size(); i++) {
             FestivalDefinition.SpotRow spot = spots.get(i);
             if (spot.getResidentKind().isEmpty()) {
@@ -76,6 +76,42 @@ public final class FestivalSpotService {
                 target.z,
                 (float) Math.toRadians(spot.getYawDegrees()),
                 spot.getResidentKind()
+            );
+            registry.registerEphemeral(entry);
+            poiIds.add(poiId.toString());
+        }
+        List<FestivalDefinition.TouristSpotRow> touristSpots = festival.getTouristSpots();
+        for (int i = 0; i < touristSpots.size(); i++) {
+            FestivalDefinition.TouristSpotRow spot = touristSpots.get(i);
+            Vector3d target =
+                FestivalPrefabSwapService.spotWorldPosition(plugin, square, spot.getLocalX(), spot.getLocalY(), spot.getLocalZ());
+            UUID poiId = UUID.nameUUIDFromBytes(
+                ("festival-tourist:" + town.getTownId() + ":" + festival.getId() + ":" + i)
+                    .getBytes(StandardCharsets.UTF_8)
+            );
+            Set<String> tags = new HashSet<>();
+            tags.add(AetherhavenConstants.POI_TAG_FESTIVAL);
+            tags.add(AetherhavenConstants.POI_TAG_FESTIVAL_EPHEMERAL);
+            tags.add(AetherhavenConstants.POI_TAG_TOURIST_VISIT);
+            tags.add("FUN");
+            PoiEntry entry = new PoiEntry(
+                poiId,
+                town.getTownId(),
+                (int) Math.floor(target.x),
+                (int) Math.floor(target.y),
+                (int) Math.floor(target.z),
+                tags,
+                2,
+                square.getPlotId(),
+                null,
+                PoiInteractionKind.NONE,
+                false,
+                null,
+                target.x,
+                target.y,
+                target.z,
+                (float) Math.toRadians(spot.getYawDegrees()),
+                null
             );
             registry.registerEphemeral(entry);
             poiIds.add(poiId.toString());
@@ -123,7 +159,9 @@ public final class FestivalSpotService {
             } catch (IllegalArgumentException e) {
                 continue;
             }
-            if (entry != null && kind.equalsIgnoreCase(entry.getWorkResidentKind())) {
+            if (entry != null
+                && entry.getWorkResidentKind() != null
+                && kind.equalsIgnoreCase(entry.getWorkResidentKind())) {
                 return entry;
             }
         }

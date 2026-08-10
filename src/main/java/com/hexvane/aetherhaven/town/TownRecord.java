@@ -312,6 +312,19 @@ public final class TownRecord {
     @SerializedName("townSharedCraftRecipeItemIds")
     private LinkedHashSet<String> townSharedCraftRecipeItemIds;
 
+    /** Town-wide unlocked villager cosmetic ids (e.g. {@code FlowerCrown.Pink}). */
+    @Nullable
+    @SerializedName("unlockedVillagerCosmeticIds")
+    private LinkedHashSet<String> unlockedVillagerCosmeticIds;
+
+    /**
+     * Per-resident cosmetic overrides: resident key ({@code role:...} / {@code character:...}) → slot id → cosmetic id.
+     * Missing slot or {@code default} means use the villager's catalog look for that slot.
+     */
+    @Nullable
+    @SerializedName("villagerCosmeticOverrides")
+    private Map<String, Map<String, String>> villagerCosmeticOverrides;
+
     /**
      * Player UUID string → recipe item ids to apply with {@code CraftingPlugin.learnRecipe} when that player next has
      * an entity in this world (offline at grant time, or new member after shared unlocks already exist).
@@ -536,7 +549,17 @@ public final class TownRecord {
         migrateFeastFieldsIfNeeded();
         migratePlotProductionIfNeeded();
         migrateSharedRecipeUnlockFieldsIfNeeded();
+        migrateVillagerCosmeticFieldsIfNeeded();
         migrateQuestBoardFieldsIfNeeded();
+    }
+
+    private void migrateVillagerCosmeticFieldsIfNeeded() {
+        if (unlockedVillagerCosmeticIds == null) {
+            unlockedVillagerCosmeticIds = new LinkedHashSet<>();
+        }
+        if (villagerCosmeticOverrides == null) {
+            villagerCosmeticOverrides = new LinkedHashMap<>();
+        }
     }
 
     private void migrateQuestBoardFieldsIfNeeded() {
@@ -2557,6 +2580,90 @@ public final class TownRecord {
     public boolean sharesCraftRecipeItem(@Nonnull String recipeItemId) {
         migrateSharedRecipeUnlockFieldsIfNeeded();
         return townSharedCraftRecipeItemIds.contains(recipeItemId.trim());
+    }
+
+    public boolean unlockVillagerCosmetic(@Nonnull String cosmeticId) {
+        migrateVillagerCosmeticFieldsIfNeeded();
+        String id = cosmeticId.trim();
+        if (id.isEmpty()) {
+            return false;
+        }
+        return unlockedVillagerCosmeticIds.add(id);
+    }
+
+    public boolean hasVillagerCosmeticUnlocked(@Nonnull String cosmeticId) {
+        migrateVillagerCosmeticFieldsIfNeeded();
+        return unlockedVillagerCosmeticIds.contains(cosmeticId.trim());
+    }
+
+    @Nonnull
+    public Set<String> getUnlockedVillagerCosmeticIds() {
+        migrateVillagerCosmeticFieldsIfNeeded();
+        return Collections.unmodifiableSet(unlockedVillagerCosmeticIds);
+    }
+
+    @Nonnull
+    public Map<String, String> getVillagerCosmeticOverridesForResident(@Nonnull String residentKey) {
+        migrateVillagerCosmeticFieldsIfNeeded();
+        Map<String, String> map = villagerCosmeticOverrides.get(residentKey.trim());
+        if (map == null || map.isEmpty()) {
+            return Map.of();
+        }
+        return Collections.unmodifiableMap(new LinkedHashMap<>(map));
+    }
+
+    public void setVillagerCosmeticOverride(
+        @Nonnull String residentKey,
+        @Nonnull String slotId,
+        @Nullable String cosmeticId
+    ) {
+        migrateVillagerCosmeticFieldsIfNeeded();
+        String key = residentKey.trim();
+        String slot = slotId.trim();
+        if (key.isEmpty() || slot.isEmpty()) {
+            return;
+        }
+        if (cosmeticId == null
+            || cosmeticId.isBlank()
+            || "default".equalsIgnoreCase(cosmeticId.trim())) {
+            Map<String, String> map = villagerCosmeticOverrides.get(key);
+            if (map != null) {
+                map.remove(slot);
+                if (map.isEmpty()) {
+                    villagerCosmeticOverrides.remove(key);
+                }
+            }
+            return;
+        }
+        villagerCosmeticOverrides
+            .computeIfAbsent(key, k -> new LinkedHashMap<>())
+            .put(slot, cosmeticId.trim());
+    }
+
+    public void replaceVillagerCosmeticOverrides(
+        @Nonnull String residentKey,
+        @Nonnull Map<String, String> slotToCosmeticId
+    ) {
+        migrateVillagerCosmeticFieldsIfNeeded();
+        String key = residentKey.trim();
+        if (key.isEmpty()) {
+            return;
+        }
+        Map<String, String> cleaned = new LinkedHashMap<>();
+        for (Map.Entry<String, String> e : slotToCosmeticId.entrySet()) {
+            if (e.getKey() == null || e.getKey().isBlank() || e.getValue() == null || e.getValue().isBlank()) {
+                continue;
+            }
+            if ("default".equalsIgnoreCase(e.getValue().trim())) {
+                continue;
+            }
+            cleaned.put(e.getKey().trim(), e.getValue().trim());
+        }
+        if (cleaned.isEmpty()) {
+            villagerCosmeticOverrides.remove(key);
+        } else {
+            villagerCosmeticOverrides.put(key, cleaned);
+        }
     }
 
     public void queuePendingCraftRecipeUnlock(@Nonnull UUID playerUuid, @Nonnull String recipeItemId) {

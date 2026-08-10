@@ -1,0 +1,76 @@
+{
+  "Parent": "Trork",
+  "Texture": "NPC/Intelligent/Trork/Models/Model_Textures/Yellow.png",
+  "DefaultAttachments": [
+    {
+      "Model": "NPC/Intelligent/Trork/Models/Attachments/Eyes/Eyes.blockymodel",
+      "Texture": "NPC/Intelligent/Trork/Models/Attachments/Eyes/Eyes_Textures/Orange.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Trork/Models/Attachments/Eyebrows/Eyebrows.blockymodel",
+      "Texture": "NPC/Intelligent/Trork/Models/Attachments/Eyebrows/Eyebrows_Textures/Black.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Trork/Models/Attachments/Haircuts/Mohawk.blockymodel",
+      "Texture": "NPC/Intelligent/Trork/Models/Attachments/Haircuts/Mohawk_Textures/Bubblegum.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Trork/Models/Attachments/Hunter/Chest.blockymodel",
+      "Texture": "NPC/Intelligent/Trork/Models/Attachments/Hunter/Chest_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Trork/Models/Attachments/Hunter/Hands.blockymodel",
+      "Texture": "NPC/Intelligent/Trork/Models/Attachments/Hunter/Hands_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Trork/Models/Attachments/Hunter/Feet.blockymodel",
+      "Texture": "NPC/Intelligent/Trork/Models/Attachments/Hunter/Feet_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Trork/Models/Attachments/Cosmetics/Necklace.blockymodel",
+      "Texture": "NPC/Intelligent/Trork/Models/Attachments/Cosmetics/Necklace_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Trork/Models/Attachments/Cosmetics/Tusks_Small.blockymodel",
+      "Texture": "NPC/Intelligent/Trork/Models/Attachments/Cosmetics/Tusks_Small_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Trork/Models/Attachments/Beards/DoubleBraided.blockymodel",
+      "Texture": "NPC/Intelligent/Trork/Models/Attachments/Beards/DoubleBraided_Textures/Brown.png"
+    }
+  ],
+  "MinScale": 1,
+  "MaxScale": 1,
+  "EyeHeight": 1.7,
+  "Icon": "Icons/ModelsGenerated/Aetherhaven_Festival_Pig_Race_Merchant.png",
+  "IconProperties": {
+    "Scale": 0.4,
+    "Rotation": [
+      0,
+      19,
+      0
+    ],
+    "Translation": [
+      -8,
+      -136
+    ]
+  },
+  "AnimationSets": {
+    "DanceBoogie": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Emote/Dance_Boogie.blockyanim",
+          "Looping": true
+        }
+      ]
+    },
+    "DancePop": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Emote/Dance_Pop.blockyanim",
+          "Looping": true
+        }
+      ]
+    }
+  }
+}

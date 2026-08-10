@@ -1,0 +1,144 @@
+{
+  "id": "pig_race",
+  "displayName": "Pig Racing Festival",
+  "displayNameLangKey": "aetherhaven_festivals.aetherhaven.festival.pig_race.name",
+  "description": "Late spring brings the pig races. Bet gold coins on a pig, cheer it down the track, and spend spring festival tickets at the race merchant.",
+  "prefabPath": "Festivals/Festival_Pig_Race.prefab.json",
+  "season": "Spring",
+  "dayOfSeason": 20,
+  "allDay": false,
+  "startHour": 8,
+  "startMinute": 0,
+  "endHour": 20,
+  "endMinute": 0,
+  "calendarIconPath": "UI/Custom/pig.png",
+  "mechanicId": "pig_race",
+  "spots": [
+    {
+      "residentKind": "elder",
+      "localX": -12,
+      "localY": 6,
+      "localZ": 5,
+      "yawDegrees": 90.0,
+      "required": true
+    },
+    {
+      "residentKind": "innkeeper",
+      "localX": -1,
+      "localY": 6,
+      "localZ": 13,
+      "yawDegrees": 180.0,
+      "required": true
+    },
+    {
+      "residentKind": "blacksmith",
+      "localX": 13,
+      "localY": 6,
+      "localZ": 1,
+      "yawDegrees": 270.0,
+      "required": true
+    },
+    {
+      "residentKind": "rancher",
+      "localX": 0,
+      "localY": 6,
+      "localZ": -13,
+      "yawDegrees": 0.0,
+      "required": true
+    }
+  ],
+  "npcs": [
+    {
+      "npcRoleId": "Aetherhaven_Festival_Pig_Race_Merchant",
+      "localX": -4,
+      "localY": 6,
+      "localZ": -12,
+      "yawDegrees": 180.0
+    }
+  ],
+  "touristSpots": [
+    { "localX": -13, "localY": 6, "localZ": -5, "yawDegrees": 90.0 },
+    { "localX": -13, "localY": 6, "localZ": 5, "yawDegrees": 90.0 },
+    { "localX": 14, "localY": 6, "localZ": -5, "yawDegrees": 270.0 },
+    { "localX": 14, "localY": 6, "localZ": 5, "yawDegrees": 270.0 },
+    { "localX": -6, "localY": 6, "localZ": -14, "yawDegrees": 180.0 },
+    { "localX": 6, "localY": 6, "localZ": -14, "yawDegrees": 180.0 },
+    { "localX": -6, "localY": 6, "localZ": 14, "yawDegrees": 0.0 },
+    { "localX": 6, "localY": 6, "localZ": 14, "yawDegrees": 0.0 }
+  ],
+  "tags": ["spring", "racing"],
+  "greetings": {
+    "elder": [
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.elder.0",
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.elder.1"
+    ],
+    "priestess": [
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.priestess.0",
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.priestess.1"
+    ],
+    "farmer": [
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.farmer.0",
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.farmer.1"
+    ],
+    "innkeeper": [
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.innkeeper.0",
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.innkeeper.1"
+    ],
+    "chef": [
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.chef.0",
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.chef.1"
+    ],
+    "merchant": [
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.merchant.0",
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.merchant.1"
+    ],
+    "blacksmith": [
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.blacksmith.0",
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.blacksmith.1"
+    ],
+    "florist": [
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.florist.0",
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.florist.1"
+    ],
+    "rancher": [
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.rancher.0",
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.rancher.1"
+    ],
+    "miner": [
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.miner.0",
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.miner.1"
+    ],
+    "logger": [
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.logger.0",
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.logger.1"
+    ],
+    "builder": [
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.builder.0",
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.builder.1"
+    ],
+    "crystal_keeper": [
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.crystal_keeper.0",
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.crystal_keeper.1"
+    ],
+    "pyrotechnic": [
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.pyrotechnic.0",
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.pyrotechnic.1"
+    ],
+    "bard": [
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.bard.0",
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.bard.1"
+    ],
+    "guild_master": [
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.guild_master.0",
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.guild_master.1"
+    ],
+    "guard": [
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.guard.0",
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.guard.1"
+    ],
+    "default": [
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.default.0",
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.default.1"
+    ]
+  }
+}

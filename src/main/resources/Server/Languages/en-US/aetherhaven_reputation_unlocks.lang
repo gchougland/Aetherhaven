@@ -8,28 +8,28 @@ items.Aetherhaven_Growth_Serum.name=Growth Serum
 items.Aetherhaven_Growth_Serum.description=Use on a young animal to help it grow up right away. Uses one vial.
 items.Aetherhaven_Heartberry.name=Heartberry
 items.Aetherhaven_Heartberry.description=Use on a villager you can befriend to grow closer by one heart. Uses one berry.
-items.Aetherhaven_Mining_Bomb.name=Mining bomb
+items.Aetherhaven_Mining_Bomb.name=Mining Bomb
 items.Aetherhaven_Mining_Bomb.description=Throw it to blast stone and ore nearby. You stay safe, and broken blocks drop as if you mined them with a pickaxe.
-items.Aetherhaven_Battle_Horn.name=Battle horn
+items.Aetherhaven_Battle_Horn.name=Battle Horn
 items.Aetherhaven_Battle_Horn.description=Hold right click to blow the horn and call your town guards. They will follow you until you tell them to stop, and they still fight monsters they see. How many can follow depends on your town rank.
 items.Aetherhaven_Hunting_Knife.name=Hunting Knife
 items.Aetherhaven_Hunting_Knife.description=A sharp knife for hunters. Kill animals with it to sometimes get extra raw meat, hide, and feathers.
-items.Aetherhaven_Geode_Anvil.name=Geode anvil
+items.Aetherhaven_Geode_Anvil.name=Geode Anvil
 items.Aetherhaven_Geode_Anvil.description=Opens geodes without a smith's fee. Place and use; <color is="#ffa726">you must know the schematic</color> to craft it at your town planning desk.
-items.Aetherhaven_Sprinkler_Iron.name=Iron sprinkler
+items.Aetherhaven_Sprinkler_Iron.name=Iron Sprinkler
 items.Aetherhaven_Sprinkler_Iron.description=Waters tilled soil one block below in a <color is="#4ade80">3×3</color> area. Runs once each in-game morning. Smallest coverage.
-items.Aetherhaven_Sprinkler_Thorium.name=Thorium sprinkler
+items.Aetherhaven_Sprinkler_Thorium.name=Thorium Sprinkler
 items.Aetherhaven_Sprinkler_Thorium.description=Waters tilled soil one block below in a <color is="#4ade80">5×5</color> area. Once each in-game morning. Larger than iron.
-items.Aetherhaven_Sprinkler_Cobalt.name=Cobalt sprinkler
+items.Aetherhaven_Sprinkler_Cobalt.name=Cobalt Sprinkler
 items.Aetherhaven_Sprinkler_Cobalt.description=Waters tilled soil one block below in a <color is="#4ade80">7×7</color> area. Once each in-game morning. Wide coverage.
-items.Aetherhaven_Sprinkler_Adamantite.name=Adamantite sprinkler
+items.Aetherhaven_Sprinkler_Adamantite.name=Adamantite Sprinkler
 items.Aetherhaven_Sprinkler_Adamantite.description=Waters tilled soil one block below in a <color is="#4ade80">9×9</color> area. Once each in-game morning. Widest coverage.
-items.Aetherhaven_Purification_Powder.name=Purification powder
+items.Aetherhaven_Purification_Powder.name=Purification Powder
 items.Aetherhaven_Purification_Powder.description=While held, nearby latent spawn points shimmer with Gaia-touched motes. Use on a highlighted spawn to banish it and spend one charge.
 items.Aetherhaven_Gaias_Draught.name=Gaia's Draught
 items.Aetherhaven_Gaias_Draught.description=A blessed flask of living water. Hold it and drink with secondary use like other potions. The bar shows how many sips remain. Serah at the Gaia altar can refill it and improve the flask you bring her. Craft more at the town planning desk when you know the recipe.
-items.Aetherhaven_Shard_Of_Gaia.name=Shard of Gaia
+items.Aetherhaven_Shard_Of_Gaia.name=Shard Of Gaia
 items.Aetherhaven_Shard_Of_Gaia.description=A token from Serah. Offer one with tithe at the Gaia altar to widen a flask you carry, or use one when crafting Gaia's Draught.
-items.Aetherhaven_Verdant_Catalyst.name=Verdant catalyst
+items.Aetherhaven_Verdant_Catalyst.name=Verdant Catalyst
 items.Aetherhaven_Verdant_Catalyst.description=A token from Serah. Offer one with tithe at the Gaia altar to strengthen a flask you carry, or use one when crafting Gaia's Draught.
 interactionHints.purifySpawn=Press [{key}] to Purify Spawn

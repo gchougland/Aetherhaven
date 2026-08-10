@@ -1,6 +1,6 @@
 # Shop spot block, config UI, look-at HUD, and purchase messages (en-US)
 
-items.Aetherhaven_Shop_Spot.name=Shop spot
+items.Aetherhaven_Shop_Spot.name=Shop Spot
 items.Aetherhaven_Shop_Spot.description=Place in a finished building plot to open a shop, or in creative / plot creator to embed configured stalls in prefabs. Stalls are open during the day and closed at night. NPC stock restocks at dawn. Town members can list items on player spots.
 
 aetherhaven.shop.notInTown=Place this inside a town.

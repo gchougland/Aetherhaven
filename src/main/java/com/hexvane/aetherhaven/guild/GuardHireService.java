@@ -378,6 +378,11 @@ public final class GuardHireService {
             new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_GUARD, jobPlot, jobPlot)
         );
         store.putComponent(guardRef, TownsfolkCharacterBinding.getComponentType(), tb);
+        com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticAppearanceService.applySavedCosmetics(
+            guardRef,
+            store,
+            town
+        );
         NpcSpawnOriginUtil.attach(
             store,
             guardRef,

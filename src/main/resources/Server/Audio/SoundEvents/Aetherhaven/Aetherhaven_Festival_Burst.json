@@ -4,23 +4,73 @@
       "Files": [
         "Sounds/Magic/Portals/Portal_Open_01.ogg"
       ],
+      "RandomSettings": {
+        "MinPitch": -1.0,
+        "MaxPitch": 2.0
+      },
       "StartDelay": 0,
-      "Volume": 0
+      "Volume": 3.0
+    },
+    {
+      "Files": [
+        "Sounds/Blocks/Mushroom/Mushroom_Harvest_01.ogg",
+        "Sounds/Blocks/Mushroom/Mushroom_Harvest_02.ogg",
+        "Sounds/Blocks/Mushroom/Mushroom_Harvest_03.ogg",
+        "Sounds/Blocks/Mushroom/Mushroom_Harvest_04.ogg"
+      ],
+      "RandomSettings": {
+        "MinPitch": -2.0,
+        "MaxPitch": 3.0,
+        "MinVolume": -1.0
+      },
+      "StartDelay": 0.02,
+      "Volume": 5.0
     },
     {
       "Files": [
         "Sounds/Items/Crops/Crops_Grow_02.ogg",
-        "Sounds/Items/Crops/Crops_Grow_05.ogg"
+        "Sounds/Items/Crops/Crops_Grow_05.ogg",
+        "Sounds/Items/Crops/Crops_Grow_08.ogg",
+        "Sounds/Items/Crops/Crops_Grow_11.ogg"
       ],
       "RandomSettings": {
-        "MinPitch": -4.0,
-        "MaxPitch": 4.0
+        "MinPitch": 0.0,
+        "MaxPitch": 6.0,
+        "MinVolume": -1.0
       },
-      "StartDelay": 0.12,
-      "Volume": -2.0
+      "StartDelay": 0.05,
+      "Volume": 4.0
+    },
+    {
+      "Files": [
+        "Sounds/Effects/Memory/Memory_Mote_01.ogg",
+        "Sounds/Effects/Memory/Memory_Mote_03.ogg",
+        "Sounds/Effects/Memory/Memory_Mote_05.ogg",
+        "Sounds/Effects/Memory/Memory_Mote_07.ogg"
+      ],
+      "RandomSettings": {
+        "MinPitch": 0.0,
+        "MaxPitch": 6.0
+      },
+      "StartDelay": 0.08,
+      "Volume": 3.0
+    },
+    {
+      "Files": [
+        "Sounds/Magic/Heal.ogg"
+      ],
+      "RandomSettings": {
+        "MinPitch": 0.0,
+        "MaxPitch": 7.0
+      },
+      "StartDelay": 0.1,
+      "Volume": 1.5
     }
   ],
-  "Volume": 4.0,
+  "Volume": 8.0,
+  "Pitch": 2.0,
+  "MaxDistance": 64,
+  "StartAttenuationDistance": 22,
   "PreventSoundInterruption": true,
-  "Parent": "SFX_Attn_Loud"
+  "Parent": "SFX_Attn_VeryLoud"
 }

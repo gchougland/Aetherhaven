@@ -1,0 +1,60 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Villager_Cosmetic_Poop_Hat.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Villager_Cosmetic_Poop_Hat.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Villager_Cosmetic_Poop_Hat.png",
+  "Categories": [
+    "Items.Misc",
+    "Aetherhaven.All"
+  ],
+  "PlayerAnimationsId": "Item",
+  "Model": "Items/Aetherhaven/VillagerCosmetics/PoopHat/Poop_Hat.blockymodel",
+  "Texture": "Items/Ingredients/Poop_Texture.png",
+  "IconProperties": {
+    "Scale": 0.7,
+    "Rotation": [
+      351,
+      347,
+      0
+    ],
+    "Translation": [
+      -6,
+      -150
+    ]
+  },
+  "Consumable": true,
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenVillagerCosmeticUnlockUse",
+          "Next": {
+            "Type": "ModifyInventory",
+            "AdjustHeldItemQuantity": -1
+          }
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenVillagerCosmeticUnlockUse",
+          "Next": {
+            "Type": "ModifyInventory",
+            "AdjustHeldItemQuantity": -1
+          }
+        }
+      ]
+    }
+  },
+  "Tags": {
+    "Type": [
+      "Misc"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "MaxStack": 10
+}

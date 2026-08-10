@@ -3,11 +3,18 @@ package com.hexvane.aetherhaven.festival;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.command.AetherhavenFestivalCommand;
 import com.hexvane.aetherhaven.festival.lettuce.FestivalLettuceAbsorbSystem;
+import com.hexvane.aetherhaven.festival.lettuce.FestivalLettuceBurstInteraction;
 import com.hexvane.aetherhaven.festival.lettuce.FestivalLettuceBurstSystem;
 import com.hexvane.aetherhaven.festival.lettuce.FestivalLettuceComponent;
 import com.hexvane.aetherhaven.festival.lettuce.FestivalLettuceGrowthSystem;
+import com.hexvane.aetherhaven.festival.lettuce.FestivalLettuceInteractSystem;
+import com.hexvane.aetherhaven.festival.pigrace.PigRaceDialogueHandlers;
+import com.hexvane.aetherhaven.festival.pigrace.PigRaceFestivalMechanic;
+import com.hexvane.aetherhaven.festival.pigrace.PigRaceRacerComponent;
+import com.hexvane.aetherhaven.festival.pigrace.PigRaceSystem;
 import com.hexvane.aetherhaven.plugin.GameTimeTickListener;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -20,14 +27,30 @@ import javax.annotation.Nonnull;
 public final class FestivalsBootstrap {
     private FestivalsBootstrap() {}
 
+    public static void registerAssetCodecs(@Nonnull AetherhavenPlugin core) {
+        core
+            .getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenFestivalLettuceBurst",
+                FestivalLettuceBurstInteraction.class,
+                FestivalLettuceBurstInteraction.CODEC
+            );
+    }
+
     public static void register(@Nonnull AetherhavenPlugin core, @Nonnull JavaPlugin plugin) {
         FestivalLettuceComponent.register(plugin.getEntityStoreRegistry());
+        PigRaceRacerComponent.register(plugin.getEntityStoreRegistry());
         plugin.getEntityStoreRegistry().registerSystem(new FestivalLettuceAbsorbSystem());
         plugin.getEntityStoreRegistry().registerSystem(new FestivalLettuceGrowthSystem());
         plugin.getEntityStoreRegistry().registerSystem(new FestivalLettuceBurstSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new FestivalLettuceInteractSystem());
         plugin.getEntityStoreRegistry().registerSystem(new FestivalSquareBreakBlockSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new FestivalSquarePlaceBlockSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new FestivalDanceSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new PigRaceSystem());
         core.getFestivalMechanicRegistry().register(NewLifeFestivalMechanic.MECHANIC_ID, new NewLifeFestivalMechanic());
+        core.getFestivalMechanicRegistry().register(PigRaceFestivalMechanic.MECHANIC_ID, new PigRaceFestivalMechanic());
+        PigRaceDialogueHandlers.register(core);
         core.registerAetherhavenSubcommand(new AetherhavenFestivalCommand());
     }
 

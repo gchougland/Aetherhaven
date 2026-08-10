@@ -1,0 +1,56 @@
+# What the townsfolk say while the Pig Racing Festival is running.
+# Full translation keys are aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.<lineKey>
+
+aetherhaven.dialogue.festival.pig_race.greeting.elder.0=I have watched pigs race for more springs than I can count. Still pick a favorite every year.
+aetherhaven.dialogue.festival.pig_race.greeting.elder.1=Bet a little, cheer a lot, and do not take the finish too hard. The pigs will be back next race.
+
+aetherhaven.dialogue.festival.pig_race.greeting.priestess.0=Gaia made many creatures. Today we celebrate the ones that run for fun.
+aetherhaven.dialogue.festival.pig_race.greeting.priestess.1=A fair race is a kind of blessing. May the fastest pig win, and may everyone laugh either way.
+
+aetherhaven.dialogue.festival.pig_race.greeting.farmer.0=I came for the pigs, not the betting. The track looks soft enough for happy feet.
+aetherhaven.dialogue.festival.pig_race.greeting.farmer.1=If the wild one wins again I will not be surprised. That fuzzy coat hides a lot of go.
+
+aetherhaven.dialogue.festival.pig_race.greeting.innkeeper.0=I closed the counter for the afternoon. Best seats in town are by this fence.
+aetherhaven.dialogue.festival.pig_race.greeting.innkeeper.1=Winner or not, come by later. I will have something warm waiting.
+
+aetherhaven.dialogue.festival.pig_race.greeting.chef.0=Do not ask me which pig looks tastiest. That is not the point of today.
+aetherhaven.dialogue.festival.pig_race.greeting.chef.1=I packed snacks for the crowd. A race is better with something to chew.
+
+aetherhaven.dialogue.festival.pig_race.greeting.merchant.0=Gold coins in, festival tickets out if you guess right. I respect a clean trade.
+aetherhaven.dialogue.festival.pig_race.greeting.merchant.1=The race merchant has goods for spring festival tickets. I already checked the prices.
+
+aetherhaven.dialogue.festival.pig_race.greeting.blacksmith.0=No hammering while the pigs run. Even steel can wait for a finish line.
+aetherhaven.dialogue.festival.pig_race.greeting.blacksmith.1=I put a small wager on the boar. Strong legs. Strong heart.
+
+aetherhaven.dialogue.festival.pig_race.greeting.florist.0=Look at them go! I brought flowers for whoever wins. The pigs like the smell.
+aetherhaven.dialogue.festival.pig_race.greeting.florist.1=Cheer loud. Soft voices never helped a pig find the finish.
+
+aetherhaven.dialogue.festival.pig_race.greeting.rancher.0=These are good animals. Treat them kindly and they will give you a show.
+aetherhaven.dialogue.festival.pig_race.greeting.rancher.1=I know that pink one. Steady runner. Not always first, never last for long.
+
+aetherhaven.dialogue.festival.pig_race.greeting.miner.0=Down in the dark we do not see much racing. This is a nice change.
+aetherhaven.dialogue.festival.pig_race.greeting.miner.1=I put a few coins on the undead pig. Spooky luck is still luck.
+
+aetherhaven.dialogue.festival.pig_race.greeting.logger.0=Saw the wild pig stretch before the start. That fur means business.
+aetherhaven.dialogue.festival.pig_race.greeting.logger.1=Best sound of the day is the crowd when someone crosses first.
+
+aetherhaven.dialogue.festival.pig_race.greeting.builder.0=Solid fences. Honest track. Whoever built this knew people would lean on it.
+aetherhaven.dialogue.festival.pig_race.greeting.builder.1=I am not betting much. I am here for the noise and the finish.
+
+aetherhaven.dialogue.festival.pig_race.greeting.crystal_keeper.0=Even crystals can wait while four pigs chase glory down a dirt lane.
+aetherhaven.dialogue.festival.pig_race.greeting.crystal_keeper.1=Speed is its own kind of light. Watch how it flashes past the posts.
+
+aetherhaven.dialogue.festival.pig_race.greeting.pyrotechnic.0=Grubble wants boom at the finish. They said no boom. Very sad. Still fun.
+aetherhaven.dialogue.festival.pig_race.greeting.pyrotechnic.1=Pigs go fast! Grubble cheers louder than the fence can hold.
+
+aetherhaven.dialogue.festival.pig_race.greeting.bard.0=A race writes its own song. Four feet, one finish, and a town full of guesses.
+aetherhaven.dialogue.festival.pig_race.greeting.bard.1=Pick a pig and I will hum for it. Losers get a soft verse too.
+
+aetherhaven.dialogue.festival.pig_race.greeting.guild_master.0=No patrols until the last race ends. Even guards deserve a finish line.
+aetherhaven.dialogue.festival.pig_race.greeting.guild_master.1=Keep the betting friendly. The pigs are the only ones who should shove.
+
+aetherhaven.dialogue.festival.pig_race.greeting.guard.0=Quiet post today. Everyone is watching the track instead of making trouble.
+aetherhaven.dialogue.festival.pig_race.greeting.guard.1=Mind the fence when the pigs come through. Excited crowds forget their elbows.
+
+aetherhaven.dialogue.festival.pig_race.greeting.default.0=Pig Racing today. Talk to the race merchant, pick a pig, and cheer it home.
+aetherhaven.dialogue.festival.pig_race.greeting.default.1=The whole town is at the square for the races. Come put a little gold on a favorite.

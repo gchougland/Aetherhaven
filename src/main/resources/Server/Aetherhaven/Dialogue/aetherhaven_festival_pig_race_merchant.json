@@ -1,0 +1,243 @@
+{
+  "id": "aetherhaven_festival_pig_race_merchant",
+  "entry": "main_hub",
+  "nodes": {
+    "main_hub": {
+      "speaker": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.speaker",
+      "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.main_hub.body",
+      "choices": [
+        {
+          "id": "bet",
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.main_hub.c_bet",
+          "icon": "UI/Custom/pig.png",
+          "visibilityCondition": { "type": "pig_race_can_bet" },
+          "whenFalse": "hide",
+          "next": "bet_amount"
+        },
+        {
+          "id": "start",
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.main_hub.c_start",
+          "icon": "UI/Custom/pig.png",
+          "visibilityCondition": { "type": "pig_race_can_start" },
+          "whenFalse": "hide",
+          "actions": [
+            { "type": "pig_race_start" }
+          ],
+          "next": "race_started"
+        },
+        {
+          "id": "collect",
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.main_hub.c_collect",
+          "icon": "UI/Custom/pig.png",
+          "visibilityCondition": { "type": "pig_race_has_winnings" },
+          "whenFalse": "hide",
+          "actions": [
+            { "type": "pig_race_collect" }
+          ],
+          "next": "collect_win"
+        },
+        {
+          "id": "loss",
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.main_hub.c_loss",
+          "icon": "UI/Custom/pig.png",
+          "visibilityCondition": { "type": "pig_race_has_loss" },
+          "whenFalse": "hide",
+          "actions": [
+            { "type": "pig_race_ack_loss" }
+          ],
+          "next": "race_lost"
+        },
+        {
+          "id": "shop",
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.main_hub.c_shop",
+          "icon": "UI/Custom/market.png",
+          "actions": [
+            {
+              "type": "open_barter_shop",
+              "shop": "Aetherhaven_Festival_Pig_Race"
+            }
+          ],
+          "next": null
+        },
+        {
+          "id": "about",
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.main_hub.c_about",
+          "next": "about"
+        },
+        {
+          "id": "goodbye",
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.main_hub.c_goodbye",
+          "next": null
+        }
+      ]
+    },
+    "about": {
+      "speaker": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.speaker",
+      "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.about.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.about.c_back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "bet_amount": {
+      "speaker": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.speaker",
+      "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.bet_amount.body",
+      "choices": [
+        {
+          "id": "stake_10",
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.bet_amount.c_10",
+          "icon": "UI/Custom/pig.png",
+          "itemRequirements": [{ "itemId": "Aetherhaven_Gold_Coin", "count": 10 }],
+          "actions": [{ "type": "pig_race_set_stake", "amount": 10 }],
+          "next": "bet_pig"
+        },
+        {
+          "id": "stake_25",
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.bet_amount.c_25",
+          "icon": "UI/Custom/pig.png",
+          "itemRequirements": [{ "itemId": "Aetherhaven_Gold_Coin", "count": 25 }],
+          "actions": [{ "type": "pig_race_set_stake", "amount": 25 }],
+          "next": "bet_pig"
+        },
+        {
+          "id": "stake_50",
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.bet_amount.c_50",
+          "icon": "UI/Custom/pig.png",
+          "itemRequirements": [{ "itemId": "Aetherhaven_Gold_Coin", "count": 50 }],
+          "actions": [{ "type": "pig_race_set_stake", "amount": 50 }],
+          "next": "bet_pig"
+        },
+        {
+          "id": "stake_100",
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.bet_amount.c_100",
+          "icon": "UI/Custom/pig.png",
+          "itemRequirements": [{ "itemId": "Aetherhaven_Gold_Coin", "count": 100 }],
+          "actions": [{ "type": "pig_race_set_stake", "amount": 100 }],
+          "next": "bet_pig"
+        },
+        {
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.bet_amount.c_back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "bet_pig": {
+      "speaker": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.speaker",
+      "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.bet_pig.body",
+      "choices": [
+        {
+          "id": "pig_0",
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.bet_pig.c_pig",
+          "icon": "UI/Custom/pig.png",
+          "actions": [{ "type": "pig_race_place_bet", "lane": 0 }],
+          "next": "bet_placed"
+        },
+        {
+          "id": "pig_1",
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.bet_pig.c_boar",
+          "icon": "UI/Custom/pig.png",
+          "actions": [{ "type": "pig_race_place_bet", "lane": 1 }],
+          "next": "bet_placed"
+        },
+        {
+          "id": "pig_2",
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.bet_pig.c_undead",
+          "icon": "UI/Custom/pig.png",
+          "actions": [{ "type": "pig_race_place_bet", "lane": 2 }],
+          "next": "bet_placed"
+        },
+        {
+          "id": "pig_3",
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.bet_pig.c_wild",
+          "icon": "UI/Custom/pig.png",
+          "actions": [{ "type": "pig_race_place_bet", "lane": 3 }],
+          "next": "bet_placed"
+        },
+        {
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.bet_pig.c_back",
+          "next": "bet_amount"
+        }
+      ]
+    },
+    "bet_placed": {
+      "speaker": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.speaker",
+      "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.bet_placed.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.bet_placed.c_back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "bet_failed": {
+      "speaker": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.speaker",
+      "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.bet_failed.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.bet_failed.c_back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "race_started": {
+      "speaker": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.speaker",
+      "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.race_started.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.race_started.c_back",
+          "next": null
+        }
+      ]
+    },
+    "race_busy": {
+      "speaker": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.speaker",
+      "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.race_busy.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.race_busy.c_back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "collect_win": {
+      "speaker": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.speaker",
+      "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.collect_win.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.collect_win.c_back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "collect_none": {
+      "speaker": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.speaker",
+      "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.collect_none.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.collect_none.c_back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "race_lost": {
+      "speaker": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.speaker",
+      "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.race_lost.body",
+      "choices": [
+        {
+          "id": "loss_bet_again",
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.race_lost.c_bet",
+          "icon": "UI/Custom/pig.png",
+          "visibilityCondition": { "type": "pig_race_can_bet" },
+          "whenFalse": "hide",
+          "next": "bet_amount"
+        },
+        {
+          "text": "aetherhaven_dialogue_festival_pig_race_merchant.aetherhaven.dialogue.festival_pig_race_merchant.race_lost.c_back",
+          "next": "main_hub"
+        }
+      ]
+    }
+  }
+}

@@ -165,6 +165,7 @@ public final class AetherhavenCoreBootstrap {
         );
 
         CalendarBootstrap.register(plugin);
+        com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticsBootstrap.register(plugin);
 
         plugin.initAetherhavenCommand(new AetherhavenCommand());
         CalendarBootstrap.registerCommands(plugin);

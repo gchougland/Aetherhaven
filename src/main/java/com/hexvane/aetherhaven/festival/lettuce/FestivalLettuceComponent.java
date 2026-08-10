@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.festival.lettuce;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -19,6 +20,27 @@ public final class FestivalLettuceComponent implements Component<EntityStore> {
     public static final String STATE_BURSTING = "BURSTING";
     /** Already popped for this festival; the entity is removed right after, so this only covers the last frame. */
     public static final String STATE_SPENT = "SPENT";
+
+    /** Essence needed for max size and for the player to pop it with F. */
+    public static final int DEFAULT_REQUIRED_ESSENCE = 20;
+    /** Extra essence past full that raises the drop multiplier by 0.5x. */
+    public static final int OVERCHARGE_STEP_ESSENCE = 100;
+    public static final double MULTIPLIER_STEP = 0.5;
+    public static final double MAX_MULTIPLIER = 5.0;
+    /** Spring festival tickets thrown at 1x. */
+    public static final int BASE_TICKETS = 4;
+    public static final String SPRING_TICKET_ITEM_ID = "Aetherhaven_Festival_Ticket_Spring";
+    public static final String ROOT_INTERACTION_BURST = "Aetherhaven_Festival_Lettuce_Burst_Root";
+    public static final String INTERACTION_HINT =
+        "aetherhaven_festivals.aetherhaven.festival.interactionHints.burstLettuce";
+
+    /**
+     * Essence at which the multiplier hits {@link #MAX_MULTIPLIER}:
+     * {@code required + OVERCHARGE_STEP_ESSENCE * ((MAX_MULTIPLIER - 1) / MULTIPLIER_STEP)}.
+     */
+    public static final int MAX_ESSENCE_AT_DEFAULT =
+        DEFAULT_REQUIRED_ESSENCE
+            + OVERCHARGE_STEP_ESSENCE * (int) Math.round((MAX_MULTIPLIER - 1.0) / MULTIPLIER_STEP);
 
     @Nonnull
     public static final BuilderCodec<FestivalLettuceComponent> CODEC =
@@ -45,9 +67,9 @@ public final class FestivalLettuceComponent implements Component<EntityStore> {
 
     private String state = STATE_GROWING;
     private int essence;
-    private int requiredEssence = 12;
+    private int requiredEssence = DEFAULT_REQUIRED_ESSENCE;
     private float minScale = 4.0f;
-    private float maxScale = 14.0f;
+    private float maxScale = 11.2f;
     /** Comma separated item ids the burst throws. */
     private String burstItemIds = "";
     private int seedsPerBurst = 24;
@@ -58,6 +80,14 @@ public final class FestivalLettuceComponent implements Component<EntityStore> {
     private long burstStartEpochMs;
     /** Seeds already thrown by the current burst. Not persisted. */
     private int seedsThrown;
+    /** Tickets already thrown by the current burst. Not persisted. */
+    private int ticketsThrown;
+    /** Seed count locked in when the burst starts. Not persisted. */
+    private int burstSeedTarget;
+    /** Ticket count locked in when the burst starts. Not persisted. */
+    private int burstTicketTarget;
+    /** Last Model scale applied for mesh + Use hitbox. Not persisted. */
+    private float appliedModelScale;
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
         componentType =
@@ -107,7 +137,10 @@ public final class FestivalLettuceComponent implements Component<EntityStore> {
     }
 
     public void addEssence(int amount) {
-        this.essence = Math.min(requiredEssence, this.essence + Math.max(0, amount));
+        if (amount <= 0) {
+            return;
+        }
+        this.essence = Math.min(maxEssenceCapacity(), this.essence + amount);
     }
 
     public void resetEssence() {
@@ -122,11 +155,45 @@ public final class FestivalLettuceComponent implements Component<EntityStore> {
         this.requiredEssence = Math.max(1, requiredEssence);
     }
 
+    /** Hard cap so the multiplier cannot climb past {@link #MAX_MULTIPLIER}. */
+    public int maxEssenceCapacity() {
+        int steps = (int) Math.round((MAX_MULTIPLIER - 1.0) / MULTIPLIER_STEP);
+        return getRequiredEssence() + OVERCHARGE_STEP_ESSENCE * steps;
+    }
+
     public boolean isFull() {
         return essence >= getRequiredEssence();
     }
 
-    /** 0 when empty, 1 when full. */
+    /** Ready for the player to pop with F. */
+    public boolean isReadyToBurst() {
+        return isGrowing() && isFull();
+    }
+
+    /** Overcharged to the multiplier cap; the lettuce pops on its own. */
+    public boolean isMaxOvercharge() {
+        return isGrowing() && seedMultiplier() >= MAX_MULTIPLIER - 1.0e-9;
+    }
+
+    /**
+     * Drop multiplier from overcharge: {@code 1 + 0.5 * floor((essence - required) / 100)}, capped at 5.
+     * At exactly {@link #getRequiredEssence()} this is 1x.
+     */
+    public double seedMultiplier() {
+        int extra = Math.max(0, essence - getRequiredEssence());
+        int steps = extra / OVERCHARGE_STEP_ESSENCE;
+        return Math.min(MAX_MULTIPLIER, 1.0 + MULTIPLIER_STEP * steps);
+    }
+
+    public int scaledSeedCount() {
+        return Math.max(1, (int) Math.round(getSeedsPerBurst() * seedMultiplier()));
+    }
+
+    public int scaledTicketCount() {
+        return Math.max(0, (int) Math.round(BASE_TICKETS * seedMultiplier()));
+    }
+
+    /** 0 when empty, 1 when full or overcharged (size stops growing past full). */
     public float fillRatio() {
         return Math.min(1.0f, (float) essence / getRequiredEssence());
     }
@@ -199,9 +266,56 @@ public final class FestivalLettuceComponent implements Component<EntityStore> {
         this.seedsThrown = 0;
     }
 
+    public int getTicketsThrown() {
+        return ticketsThrown;
+    }
+
+    public void addTicketsThrown(int count) {
+        this.ticketsThrown += count;
+    }
+
+    public void resetTicketsThrown() {
+        this.ticketsThrown = 0;
+    }
+
+    public int getBurstSeedTarget() {
+        return burstSeedTarget;
+    }
+
+    public void setBurstSeedTarget(int burstSeedTarget) {
+        this.burstSeedTarget = Math.max(0, burstSeedTarget);
+    }
+
+    public int getBurstTicketTarget() {
+        return burstTicketTarget;
+    }
+
+    public void setBurstTicketTarget(int burstTicketTarget) {
+        this.burstTicketTarget = Math.max(0, burstTicketTarget);
+    }
+
+    public float getAppliedModelScale() {
+        return appliedModelScale > 0.01f ? appliedModelScale : getMinScale();
+    }
+
+    public void setAppliedModelScale(float appliedModelScale) {
+        this.appliedModelScale = Math.max(0.01f, appliedModelScale);
+    }
+
     /** True when {@code itemId} counts as an offering the lettuce drinks. */
     public static boolean isEssenceItem(@Nullable String itemId) {
         return itemId != null && itemId.trim().toLowerCase(Locale.ROOT).contains("life_essence");
+    }
+
+    /** Fill credited per item in a stack: concentrated life essence is worth 100 regular essence. */
+    public static int essenceValue(@Nullable String itemId) {
+        if (!isEssenceItem(itemId)) {
+            return 0;
+        }
+        if (AetherhavenConstants.ITEM_LIFE_ESSENCE_CONCENTRATED.equalsIgnoreCase(itemId.trim())) {
+            return 100;
+        }
+        return 1;
     }
 
     @Nonnull

@@ -29,13 +29,13 @@ aetherhaven.banner.reputation.unlock.primary=Unlocked
 aetherhaven.banner.reputation.unlock.recipe={item}
 aetherhaven.banner.reputation.unlock.item={item} x{count}
 
-items.Aetherhaven_Building_Staff.name=Copper building staff
+items.Aetherhaven_Building_Staff.name=Copper Building Staff
 items.Aetherhaven_Building_Staff.description=Build faster at plot signs. Hold secondary on green markers to place up to a <color is="#4ade80">3×3×3</color> area at once. Left click sends a bolt to the nearest marker. Grants <color is="#60a5fa">+150 max mana</color>. Each block costs <color is="#60a5fa">1 mana</color>.
-items.Aetherhaven_Building_Staff_Iron.name=Iron building staff
+items.Aetherhaven_Building_Staff_Iron.name=Iron Building Staff
 items.Aetherhaven_Building_Staff_Iron.description=Same as the copper building staff. Secondary fills up to <color is="#4ade80">5×5×5</color> highlighted building nodes at once. While held, grants <color is="#60a5fa">+250 max mana</color> and faster mana recovery; each placed block costs <color is="#60a5fa">1 mana</color>.
-items.Aetherhaven_Building_Staff_Thorium.name=Thorium building staff
+items.Aetherhaven_Building_Staff_Thorium.name=Thorium Building Staff
 items.Aetherhaven_Building_Staff_Thorium.description=Same as the copper building staff. Secondary fills up to <color is="#4ade80">7×7×7</color> highlighted building nodes at once. While held, grants <color is="#60a5fa">+400 max mana</color> and faster mana recovery; each placed block costs <color is="#60a5fa">1 mana</color>.
-items.Aetherhaven_Building_Staff_Cobalt.name=Cobalt building staff
+items.Aetherhaven_Building_Staff_Cobalt.name=Cobalt Building Staff
 items.Aetherhaven_Building_Staff_Cobalt.description=Same as the copper building staff. Secondary fills up to <color is="#4ade80">9×9×9</color> highlighted building nodes at once. While held, grants <color is="#60a5fa">+600 max mana</color> and faster mana recovery; each placed block costs <color is="#60a5fa">1 mana</color>.
-items.Aetherhaven_Building_Staff_Adamantite.name=Adamantite building staff
+items.Aetherhaven_Building_Staff_Adamantite.name=Adamantite Building Staff
 items.Aetherhaven_Building_Staff_Adamantite.description=Same as the copper building staff. Secondary fills up to <color is="#4ade80">11×11×11</color> highlighted building nodes at once. While held, grants <color is="#60a5fa">+900 max mana</color> and faster mana recovery; each placed block costs <color is="#60a5fa">1 mana</color>.

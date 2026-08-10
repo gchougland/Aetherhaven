@@ -3,6 +3,8 @@ package com.hexvane.aetherhaven.townsfolk;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.guild.GuildHallDisplayAnchor;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterCatalog;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
@@ -247,6 +249,7 @@ public final class TownsfolkSpawnService {
                 personalities
             )
         );
+        com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticAppearanceService.applySavedCosmetics(ref, store, town);
         NpcSpawnOriginUtil.attach(
             store,
             ref,
@@ -439,8 +442,35 @@ public final class TownsfolkSpawnService {
             return;
         }
         var world = store.getExternalData().getWorld();
-        if (world != null) {
-            world.execute(() -> NpcModelSpawnUtil.resyncFromPersistentModel(ref, store));
+        TownVillagerBinding binding = store.getComponent(ref, TownVillagerBinding.getComponentType());
+        if (world == null) {
+            return;
         }
+        UUID townId = binding != null ? binding.getTownId() : null;
+        world.execute(
+            () -> {
+                if (!ref.isValid()) {
+                    return;
+                }
+                NpcModelSpawnUtil.resyncFromPersistentModel(ref, store);
+                if (townId == null) {
+                    return;
+                }
+                AetherhavenPlugin plugin = AetherhavenPlugin.get();
+                if (plugin == null) {
+                    return;
+                }
+                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                TownRecord town = tm.getTown(townId);
+                if (town != null) {
+                    com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticAppearanceService.applySavedCosmetics(
+                        ref,
+                        store,
+                        town
+                    );
+                }
+            }
+        );
     }
 }
+

@@ -1,0 +1,80 @@
+{
+  "Type": "Generic",
+  "Parameters": {
+    "Invulnerable": {
+      "Value": true,
+      "Description": "Festival centerpiece is invulnerable."
+    },
+    "NameTranslationKey": {
+      "Value": "aetherhaven_festivals.aetherhaven.festival.npc.lettuce.name",
+      "Description": "Translation key for NPC name display"
+    }
+  },
+  "StartState": "Idle",
+  "AttitudeGroup": "Aetherhaven_Townsfolk",
+  "DefaultNPCAttitude": "Neutral",
+  "DefaultPlayerAttitude": "Neutral",
+  "Appearance": "Aetherhaven_Festival_Lettuce",
+  "MaxHealth": 200,
+  "IsMemory": false,
+  "DisableDamageGroups": [
+    "Self",
+    "Player",
+    "Aetherhaven_Townsfolk",
+    "Friendly"
+  ],
+  "CombatConfig": {
+    "EntityEffect": "Immunity_Environmental"
+  },
+  "Invulnerable": {
+    "Compute": "Invulnerable"
+  },
+  "KnockbackScale": 0.0,
+  "ApplySeparation": false,
+  "MotionControllerList": [
+    {
+      "Type": "Walk",
+      "MaxWalkSpeed": 4,
+      "Gravity": 10,
+      "RunThreshold": 0.3,
+      "MaxFallSpeed": 15,
+      "MaxRotationSpeed": 360,
+      "Acceleration": 10
+    }
+  ],
+  "Instructions": [
+    {
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": "Idle"
+          },
+          "Instructions": [
+            {
+              "Continue": true,
+              "Sensor": {
+                "Type": "Target",
+                "Range": 16
+              },
+              "HeadMotion": {
+                "Type": "Watch"
+              }
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "BodyMotion": {
+                "Type": "Nothing"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "NameTranslationKey": {
+    "Compute": "NameTranslationKey"
+  }
+}

@@ -1,0 +1,274 @@
+package com.hexvane.aetherhaven.festival.pigrace;
+
+import com.google.gson.JsonObject;
+import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.plugin.DialogueActionRegistry;
+import com.hexvane.aetherhaven.plugin.DialogueConditionRegistry;
+import com.hexvane.aetherhaven.festival.FestivalService;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.UUID;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+/** Dialogue conditions and actions for the pig race merchant. */
+public final class PigRaceDialogueHandlers {
+    private PigRaceDialogueHandlers() {}
+
+    public static void register(@Nonnull AetherhavenPlugin plugin) {
+        DialogueConditionRegistry conditions = plugin.getDialogueConditionRegistry();
+        conditions.register("pig_race_can_bet", (c, playerRef, store, npcRef) -> canBet(playerRef, store));
+        conditions.register("pig_race_can_start", (c, playerRef, store, npcRef) -> canStart(playerRef, store));
+        conditions.register("pig_race_has_winnings", (c, playerRef, store, npcRef) -> hasWinnings(playerRef, store));
+        conditions.register("pig_race_has_loss", (c, playerRef, store, npcRef) -> hasLoss(playerRef, store));
+
+        DialogueActionRegistry actions = plugin.getDialogueActionRegistry();
+        actions.register("pig_race_set_stake", PigRaceDialogueHandlers::setStake);
+        actions.register("pig_race_place_bet", PigRaceDialogueHandlers::placeBet);
+        actions.register("pig_race_start", PigRaceDialogueHandlers::startRace);
+        actions.register("pig_race_collect", PigRaceDialogueHandlers::collect);
+        actions.register("pig_race_ack_loss", PigRaceDialogueHandlers::ackLoss);
+    }
+
+    private static boolean canBet(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        TownRecord town = resolveTown(playerRef, store);
+        UUID playerUuid = playerUuid(playerRef, store);
+        if (town == null || playerUuid == null || !isPigRaceActive(town)) {
+            return false;
+        }
+        ensureRacersReady(store, town);
+        PigRaceSession session = PigRaceSessionIndex.getOrCreate(town.getTownId());
+        return session.canPlaceBet(playerUuid);
+    }
+
+    private static boolean canStart(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        TownRecord town = resolveTown(playerRef, store);
+        if (town == null || !isPigRaceActive(town)) {
+            return false;
+        }
+        ensureRacersReady(store, town);
+        return PigRaceSessionIndex.getOrCreate(town.getTownId()).canStartRace();
+    }
+
+    private static boolean hasWinnings(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        TownRecord town = resolveTown(playerRef, store);
+        UUID playerUuid = playerUuid(playerRef, store);
+        if (town == null || playerUuid == null) {
+            return false;
+        }
+        PigRaceSession session = PigRaceSessionIndex.get(town.getTownId());
+        return session != null && session.hasWinnings(playerUuid);
+    }
+
+    private static boolean hasLoss(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        TownRecord town = resolveTown(playerRef, store);
+        UUID playerUuid = playerUuid(playerRef, store);
+        if (town == null || playerUuid == null) {
+            return false;
+        }
+        PigRaceSession session = PigRaceSessionIndex.get(town.getTownId());
+        return session != null && session.hasPendingLoss(playerUuid);
+    }
+
+    private static void setStake(
+        @Nonnull JsonObject action,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull DialogueActionBatchResult out,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store);
+        UUID playerUuid = playerUuid(playerRef, store);
+        int amount = intField(action, "amount", 0);
+        if (town == null || playerUuid == null || !PigRaceLanes.isAllowedBet(amount)) {
+            return;
+        }
+        PigRaceSessionIndex.getOrCreate(town.getTownId()).setPendingStake(playerUuid, amount);
+    }
+
+    private static void placeBet(
+        @Nonnull JsonObject action,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull DialogueActionBatchResult out,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store);
+        UUID playerUuid = playerUuid(playerRef, store);
+        int lane = intField(action, "lane", -1);
+        if (town == null || playerUuid == null || !isPigRaceActive(town)) {
+            out.setGotoNodeId("bet_failed");
+            return;
+        }
+        PigRaceSession session = PigRaceSessionIndex.getOrCreate(town.getTownId());
+        int amount = session.takePendingStake(playerUuid);
+        if (amount <= 0 || !session.canPlaceBet(playerUuid) || session.racersView().isEmpty()) {
+            out.setGotoNodeId("bet_failed");
+            return;
+        }
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        if (inv == null || !GoldCoinPayment.trySpend(null, inv, amount, false)) {
+            out.setGotoNodeId("bet_failed");
+            return;
+        }
+        if (!session.placeBet(playerUuid, lane, amount)) {
+            Player player = store.getComponent(playerRef, Player.getComponentType());
+            if (player != null) {
+                player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, amount), playerRef, store);
+            }
+            out.setGotoNodeId("bet_failed");
+            return;
+        }
+        // Pig positions are reset on the next lobby tick via needsReturnToStart (no Store writes here).
+    }
+
+    private static void startRace(
+        @Nonnull JsonObject action,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull DialogueActionBatchResult out,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store);
+        if (town == null || !isPigRaceActive(town)) {
+            out.setGotoNodeId("race_busy");
+            return;
+        }
+        PigRaceSession session = PigRaceSessionIndex.getOrCreate(town.getTownId());
+        if (!session.canStartRace()) {
+            out.setGotoNodeId("race_busy");
+            return;
+        }
+        // Speeds and start-line reset are applied by PigRaceSystem on the first race tick.
+        if (!session.beginRacing()) {
+            out.setGotoNodeId("race_busy");
+        }
+    }
+
+    private static void collect(
+        @Nonnull JsonObject action,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull DialogueActionBatchResult out,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store);
+        UUID playerUuid = playerUuid(playerRef, store);
+        Player player = store.getComponent(playerRef, Player.getComponentType());
+        if (town == null || playerUuid == null || player == null) {
+            out.setGotoNodeId("collect_none");
+            return;
+        }
+        PigRaceSession session = PigRaceSessionIndex.get(town.getTownId());
+        if (session == null) {
+            out.setGotoNodeId("collect_none");
+            return;
+        }
+        int tickets = session.collectWinnings(playerUuid);
+        if (tickets <= 0) {
+            out.setGotoNodeId("collect_none");
+            return;
+        }
+        player.giveItem(new ItemStack(PigRaceLanes.SPRING_TICKET_ITEM_ID, tickets), playerRef, store);
+    }
+
+    private static void ackLoss(
+        @Nonnull JsonObject action,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull DialogueActionBatchResult out,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store);
+        UUID playerUuid = playerUuid(playerRef, store);
+        if (town == null || playerUuid == null) {
+            return;
+        }
+        PigRaceSession session = PigRaceSessionIndex.get(town.getTownId());
+        if (session != null) {
+            session.acknowledgeLoss(playerUuid);
+        }
+    }
+
+    private static boolean isPigRaceActive(@Nonnull TownRecord town) {
+        return PigRaceLanes.FESTIVAL_ID.equals(town.getActiveFestivalId());
+    }
+
+    /** Rebuilds the race lobby after a restart when the festival is still active but pigs were forgotten. */
+    private static void ensureRacersReady(@Nonnull Store<EntityStore> store, @Nonnull TownRecord town) {
+        PigRaceSession session = PigRaceSessionIndex.getOrCreate(town.getTownId());
+        if (!session.racersView().isEmpty()) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        PlotInstance square = FestivalService.findFestivalSquare(plugin, town);
+        if (square == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        try {
+            PigRaceSpawnService.ensureRacersForFestival(world, store, plugin, town, square);
+        } catch (RuntimeException e) {
+            world.execute(() ->
+                PigRaceSpawnService.ensureRacersForFestival(world, store, plugin, town, square)
+            );
+        }
+    }
+
+    @Nullable
+    private static TownRecord resolveTown(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return null;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        UUID playerUuid = playerUuid(playerRef, store);
+        if (playerUuid != null) {
+            TownRecord affiliated = AetherhavenWorldRegistries.findTownForPlayerAcrossWorlds(playerUuid, tm);
+            if (affiliated != null && isPigRaceActive(affiliated)) {
+                return affiliated;
+            }
+        }
+        for (TownRecord town : tm.allTowns()) {
+            if (isPigRaceActive(town)) {
+                return town;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private static UUID playerUuid(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        UUIDComponent uc = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        return uc != null ? uc.getUuid() : null;
+    }
+
+    private static int intField(@Nonnull JsonObject o, @Nonnull String key, int def) {
+        if (!o.has(key) || !o.get(key).isJsonPrimitive()) {
+            return def;
+        }
+        try {
+            return o.get(key).getAsInt();
+        } catch (Exception e) {
+            return def;
+        }
+    }
+}

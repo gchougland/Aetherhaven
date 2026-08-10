@@ -3,11 +3,12 @@ package com.hexvane.aetherhaven.festival;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.placement.PlotBuildingRelocation;
-import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
 import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
+import com.hexvane.aetherhaven.placement.PrefabTriggerVolumeCleanup;
 import com.hexvane.aetherhaven.prefab.ConstructionAnimator;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.PlotFootprintChunkUtil;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -85,13 +86,33 @@ public final class FestivalPrefabSwapService {
             if (live == null || livePlot == null) {
                 return;
             }
-            PlotFootprintRecord oldFootprint = livePlot.toFootprint();
-            PlotBuildingRelocation.relocateTownNpcsOutOfFootprint(store, live, oldFootprint);
-            PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(store, oldFootprint, live);
+            // Festival prefabs reserve a full empty box; the solid AABB is shorter and misses props / volumes in air.
+            PlotFootprintRecord currentBox = PrefabTriggerVolumeCleanup.prefabBox(anchor, yaw, currentBuffer);
+            PlotFootprintRecord targetBox = PrefabTriggerVolumeCleanup.prefabBox(anchor, yaw, targetBuffer);
+            // Union current + target + stored plot so leftover corner props (statues) from either side are covered.
+            PlotFootprintRecord clearFootprint =
+                PlotFootprintRecord.union(PlotFootprintRecord.union(currentBox, targetBox), livePlot.toFootprint());
+            // Corner props live in edge chunks that are often unloaded when the swap runs from a game-time tick.
+            PlotFootprintChunkUtil.ensureFootprintChunksLoaded(world, clearFootprint);
+            PlotBuildingRelocation.relocateTownNpcsOutOfFootprint(store, live, clearFootprint);
+            int removed =
+                PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(store, clearFootprint, live);
             PrefabFootprintClearUtil.clearPrefabCellsAtAnchor(world, anchor, yaw, currentBuffer, preserveWater);
+            LOGGER.atInfo().log(
+                "Festival square swap cleared %d entities in box [%d,%d,%d]-[%d,%d,%d] (%s -> %s)",
+                removed,
+                clearFootprint.getMinX(),
+                clearFootprint.getMinY(),
+                clearFootprint.getMinZ(),
+                clearFootprint.getMaxX(),
+                clearFootprint.getMaxY(),
+                clearFootprint.getMaxZ(),
+                currentPrefabPath,
+                targetPrefabPath
+            );
 
-            PlotFootprintRecord newFootprint = PlotFootprintUtil.computeFootprint(anchor, yaw, targetBuffer);
-            livePlot.applySignAndFootprint(livePlot.getSignX(), livePlot.getSignY(), livePlot.getSignZ(), newFootprint);
+            // Keep the reserved box on the plot so the next swap clears the same volume, not only solid blocks.
+            livePlot.applySignAndFootprint(livePlot.getSignX(), livePlot.getSignY(), livePlot.getSignZ(), targetBox);
             livePlot.setPrefabWorldPlacement(anchor.x, anchor.y, anchor.z, yaw);
             tm.updateTown(live);
 

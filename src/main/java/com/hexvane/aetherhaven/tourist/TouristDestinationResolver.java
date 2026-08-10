@@ -209,6 +209,9 @@ public final class TouristDestinationResolver {
         int npcFeetY
     ) {
         List<PoiEntry> out = new ArrayList<>();
+        List<PoiEntry> festivalTouristStands = new ArrayList<>();
+        boolean festivalPlot =
+            town.getActiveFestivalId() != null && plotId.equals(town.getActiveFestivalPlotId());
         for (PoiEntry poi : poiRegistry.allEntries()) {
             if (!town.getTownId().equals(poi.getTownId())) {
                 continue;
@@ -222,7 +225,16 @@ public final class TouristDestinationResolver {
             if (world != null && plugin != null && !isReachableVisitPoi(world, plugin, town, poi, npcFeetY)) {
                 continue;
             }
+            if (festivalPlot
+                && poi.getTags().contains(AetherhavenConstants.POI_TAG_FESTIVAL_EPHEMERAL)
+                && poi.getTags().contains(AetherhavenConstants.POI_TAG_TOURIST_VISIT)) {
+                festivalTouristStands.add(poi);
+            }
             out.add(poi);
+        }
+        // During a festival on this plot, only use the festival's tourist stands (never everyday mid-square spots).
+        if (festivalPlot) {
+            return festivalTouristStands;
         }
         return out;
     }
@@ -461,9 +473,9 @@ public final class TouristDestinationResolver {
         if (def == null || !def.isTouristDestination()) {
             return false;
         }
-        // Festival standing spots belong to the villagers the festival called in.
+        // Festival villager markers are off limits; festival tourist stands are for visitors.
         if (poi.getTags().contains(AetherhavenConstants.POI_TAG_FESTIVAL_EPHEMERAL)) {
-            return false;
+            return poi.getTags().contains(AetherhavenConstants.POI_TAG_TOURIST_VISIT);
         }
         // Shops: only customer tourist stands — never merchant WORK desks behind the counter.
         if (isTouristShopPlot(town, catalog, plotId)) {

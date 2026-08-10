@@ -1,0 +1,60 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Villager_Cosmetic_Pig_Snout.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Villager_Cosmetic_Pig_Snout.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Villager_Cosmetic_Pig_Snout.png",
+  "Categories": [
+    "Items.Misc",
+    "Aetherhaven.All"
+  ],
+  "PlayerAnimationsId": "Item",
+  "Model": "Items/Aetherhaven/VillagerCosmetics/PigSnout/Pig_Nose.blockymodel",
+  "Texture": "NPC/Livestock/Pig/Models/Texture_Pink.png",
+  "IconProperties": {
+    "Scale": 1,
+    "Rotation": [
+      35,
+      347,
+      0
+    ],
+    "Translation": [
+      16,
+      -71
+    ]
+  },
+  "Consumable": true,
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenVillagerCosmeticUnlockUse",
+          "Next": {
+            "Type": "ModifyInventory",
+            "AdjustHeldItemQuantity": -1
+          }
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenVillagerCosmeticUnlockUse",
+          "Next": {
+            "Type": "ModifyInventory",
+            "AdjustHeldItemQuantity": -1
+          }
+        }
+      ]
+    }
+  },
+  "Tags": {
+    "Type": [
+      "Misc"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "MaxStack": 10
+}

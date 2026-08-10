@@ -12,6 +12,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3d;
@@ -42,18 +43,20 @@ public final class PrefabTriggerVolumeCleanup {
             return 0;
         }
         World world = store.getExternalData().getWorld();
-        String worldName = world != null ? world.getName() : null;
+        // Paste stores world names lower-cased; compare the same way or every volume is skipped.
+        String worldName = world != null ? world.getName().toLowerCase(Locale.ROOT) : null;
         int removed = 0;
         for (VolumeEntry entry : new ArrayList<>(manager.getVolumes())) {
             if (entry.isPendingDestroy()) {
                 continue;
             }
-            if (worldName != null && !worldName.equals(entry.getWorldName())) {
+            if (!sameWorld(worldName, entry.getWorldName())) {
                 continue;
             }
             if (!footprintContains(fp, entry.getPosition())) {
                 continue;
             }
+            // Disable first so the next trigger-volume tick can run EXIT (music/weather) before destroy.
             entry.setEnabled(false);
             entry.markPendingDestroy();
             removed++;
@@ -86,7 +89,7 @@ public final class PrefabTriggerVolumeCleanup {
 
     /** World space box a prefab covers, empty cells included. */
     @Nonnull
-    static PlotFootprintRecord prefabBox(
+    public static PlotFootprintRecord prefabBox(
         @Nonnull Vector3i anchor,
         @Nonnull Rotation yaw,
         @Nonnull IPrefabBuffer buffer
@@ -155,5 +158,16 @@ public final class PrefabTriggerVolumeCleanup {
             && by <= fp.getMaxY() + 2
             && bz >= fp.getMinZ()
             && bz <= fp.getMaxZ();
+    }
+
+    /** Paste writes {@code world.getName().toLowerCase}; blank means "already scoped to this store". */
+    static boolean sameWorld(@Nullable String worldName, @Nullable String entryWorldName) {
+        if (worldName == null || worldName.isBlank()) {
+            return true;
+        }
+        if (entryWorldName == null || entryWorldName.isBlank()) {
+            return true;
+        }
+        return worldName.toLowerCase(Locale.ROOT).equals(entryWorldName.toLowerCase(Locale.ROOT));
     }
 }

@@ -1,0 +1,89 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Villager_Wardrobe.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Villager_Wardrobe.description"
+  },
+  "Recipe": {
+    "TimeSeconds": 0,
+    "Input": [
+      {
+        "ResourceTypeId": "Wood_All",
+        "Quantity": 20
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": [
+          "Aetherhaven_TownPlanning_Misc"
+        ]
+      }
+    ]
+  },
+  "PlayerAnimationsId": "Block",
+  "Categories": [
+    "Furniture.Furniture",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "Icon": "Icons/ItemsGenerated/Furniture_Grand_Wizard_Wardrobe.png",
+  "IconProperties": {
+    "Scale": 0.2,
+    "Rotation": [22.5, 45, 22.5],
+    "Translation": [14.5, -43]
+  },
+  "BlockType": {
+    "BlockParticleSetId": "Wood",
+    "BlockSoundSetId": "Wood",
+    "PhysicalMaterialId": "Wood",
+    "CustomModel": "Blocks/Decorative_Sets/Royal_Magic/Wardrobe.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Decorative_Sets/Royal_Magic/Wardrobe_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "DrawType": "Model",
+    "Flags": {
+      "IsUsable": true
+    },
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Unbreakable"
+      }
+    },
+    "HitboxType": "Aetherhaven_Villager_Wardrobe",
+    "InteractionHitboxType": "Aetherhaven_Villager_Wardrobe",
+    "Material": "Solid",
+    "Support": {
+      "Down": [
+        {
+          "FaceType": "Full"
+        }
+      ]
+    },
+    "VariantRotation": "NESW",
+    "ParticleColor": "#632c46",
+    "TextureComputedColor": "#3A0F23",
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "OpenCustomUI",
+            "Page": {
+              "Id": "AetherhavenVillagerWardrobe"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "MaxStack": 1,
+  "Tags": {
+    "Type": ["Furniture"],
+    "Family": ["Aetherhaven"]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood",
+  "Scale": 0.8
+}

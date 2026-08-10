@@ -1,0 +1,55 @@
+﻿$C = "../Common.ui";
+
+$C.@PageOverlay {
+  LayoutMode: Left;
+
+  $C.@Container {
+    Anchor: (Left: 40, Top: 100, Width: 420, Bottom: 80);
+
+    #Title {
+      Label #WardrobeTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Text: "";
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Full: 12);
+
+      Label #ResidentName {
+        Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #e8dcc8, Wrap: true);
+        Anchor: (Bottom: 8);
+      }
+
+      Label #Hint {
+        Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c8b898);
+        Text: "";
+        Anchor: (Bottom: 10);
+      }
+
+      Group #SlotSections {
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+        FlexWeight: 1;
+      }
+
+      Group #BottomRow {
+        LayoutMode: Left;
+        Anchor: (Top: 12);
+
+        $C.@TextButton #SaveButton {
+          Anchor: (Width: 140, Height: 36, Right: 10);
+          Text: "";
+        }
+
+        $C.@TextButton #WardrobeBackButton {
+          Anchor: (Width: 140, Height: 36);
+          Text: "";
+        }
+      }
+    }
+  }
+
+  $C.@BackButton {}
+}

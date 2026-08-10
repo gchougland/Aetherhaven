@@ -1,0 +1,50 @@
+# Pig Racing Festival race merchant dialogue
+
+aetherhaven.dialogue.festival_pig_race_merchant.speaker=Race Merchant
+aetherhaven.dialogue.festival_pig_race_merchant.main_hub.body=Welcome to the pig races! Put gold coins on a pig, wait for a few friends to join if you like, then tell me when to start. Winners come back for spring festival tickets.
+aetherhaven.dialogue.festival_pig_race_merchant.main_hub.c_bet=I want to place a bet.
+aetherhaven.dialogue.festival_pig_race_merchant.main_hub.c_start=Start the race!
+aetherhaven.dialogue.festival_pig_race_merchant.main_hub.c_collect=I am here for my winnings.
+aetherhaven.dialogue.festival_pig_race_merchant.main_hub.c_loss=How did my pig do?
+aetherhaven.dialogue.festival_pig_race_merchant.main_hub.c_shop=Show me your goods.
+aetherhaven.dialogue.festival_pig_race_merchant.main_hub.c_about=How do the races work?
+aetherhaven.dialogue.festival_pig_race_merchant.main_hub.c_goodbye=Maybe later.
+
+aetherhaven.dialogue.festival_pig_race_merchant.about.body=Pick how many gold coins to bet, then pick a pig. When everyone who wants in has bet, ask me to start. The pigs each run at their own pace. If yours finishes first, talk to me again for spring festival tickets. Bigger bets pay more.
+aetherhaven.dialogue.festival_pig_race_merchant.about.c_back=Got it.
+
+aetherhaven.dialogue.festival_pig_race_merchant.bet_amount.body=How many gold coins are you putting down?
+aetherhaven.dialogue.festival_pig_race_merchant.bet_amount.c_10=10 gold coins
+aetherhaven.dialogue.festival_pig_race_merchant.bet_amount.c_25=25 gold coins
+aetherhaven.dialogue.festival_pig_race_merchant.bet_amount.c_50=50 gold coins
+aetherhaven.dialogue.festival_pig_race_merchant.bet_amount.c_100=100 gold coins
+aetherhaven.dialogue.festival_pig_race_merchant.bet_amount.c_back=Never mind.
+
+aetherhaven.dialogue.festival_pig_race_merchant.bet_pig.body=Which pig are you cheering for?
+aetherhaven.dialogue.festival_pig_race_merchant.bet_pig.c_pig=The pink pig
+aetherhaven.dialogue.festival_pig_race_merchant.bet_pig.c_boar=The boar
+aetherhaven.dialogue.festival_pig_race_merchant.bet_pig.c_undead=The undead pig
+aetherhaven.dialogue.festival_pig_race_merchant.bet_pig.c_wild=The fuzzy pig
+aetherhaven.dialogue.festival_pig_race_merchant.bet_pig.c_back=Pick a different amount.
+
+aetherhaven.dialogue.festival_pig_race_merchant.bet_placed.body=Your bet is in! Tell me when you want the race to start. Others can still bet until then.
+aetherhaven.dialogue.festival_pig_race_merchant.bet_placed.c_back=Sounds good.
+
+aetherhaven.dialogue.festival_pig_race_merchant.bet_failed.body=I could not take that bet. Check your gold coins, and make sure a race is not already running.
+aetherhaven.dialogue.festival_pig_race_merchant.bet_failed.c_back=I will try again.
+
+aetherhaven.dialogue.festival_pig_race_merchant.race_started.body=Get to the track! They will be off in a moment. Come back when it is over.
+aetherhaven.dialogue.festival_pig_race_merchant.race_started.c_back=I am watching!
+
+aetherhaven.dialogue.festival_pig_race_merchant.race_busy.body=A race is already going. Wait for the pigs to finish before we start another.
+aetherhaven.dialogue.festival_pig_race_merchant.race_busy.c_back=I will wait.
+
+aetherhaven.dialogue.festival_pig_race_merchant.collect_win.body=Your pig won! Here are your spring festival tickets.
+aetherhaven.dialogue.festival_pig_race_merchant.collect_win.c_back=Thank you!
+
+aetherhaven.dialogue.festival_pig_race_merchant.collect_none.body=Nothing waiting for you right now. Place a bet on the next race and hope for a win.
+aetherhaven.dialogue.festival_pig_race_merchant.collect_none.c_back=Fair enough.
+
+aetherhaven.dialogue.festival_pig_race_merchant.race_lost.body=Sorry friend, your pig did not finish first. Ready to try another race?
+aetherhaven.dialogue.festival_pig_race_merchant.race_lost.c_bet=I want to bet again.
+aetherhaven.dialogue.festival_pig_race_merchant.race_lost.c_back=Maybe later.

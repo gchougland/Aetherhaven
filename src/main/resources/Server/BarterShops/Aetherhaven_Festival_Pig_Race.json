@@ -1,0 +1,95 @@
+{
+  "DisplayNameKey": "aetherhaven_festivals.aetherhaven.festival.shop.pigRace.title",
+  "RefreshInterval": {
+    "Days": 1
+  },
+  "RestockHour": 6,
+  "TradeSlots": [
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Food_Egg", "Quantity": 4 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Spring", "Quantity": 1 }],
+        "Stock": 20
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Ingredient_Leather_Light", "Quantity": 2 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Spring", "Quantity": 2 }],
+        "Stock": 12
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Food_Wildmeat_Raw", "Quantity": 3 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Spring", "Quantity": 2 }],
+        "Stock": 16
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Aetherhaven_Villager_Cosmetic_Pig_Ears", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Spring", "Quantity": 3 }],
+        "Stock": 4
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Aetherhaven_Villager_Cosmetic_Pig_Ears_Fuzzy", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Spring", "Quantity": 3 }],
+        "Stock": 4
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Aetherhaven_Villager_Cosmetic_Pig_Snout", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Spring", "Quantity": 3 }],
+        "Stock": 4
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Aetherhaven_Villager_Cosmetic_Poop_Hat", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Spring", "Quantity": 5 }],
+        "Stock": 3
+      }
+    },
+    {
+      "Type": "Pool",
+      "SlotCount": 3,
+      "Trades": [
+        {
+          "Weight": 40,
+          "Output": { "ItemId": "Food_Egg", "Quantity": 6 },
+          "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Spring", "Quantity": 2 }],
+          "Stock": [6, 12]
+        },
+        {
+          "Weight": 35,
+          "Output": { "ItemId": "Ingredient_Leather_Light", "Quantity": 3 },
+          "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Spring", "Quantity": 3 }],
+          "Stock": [4, 8]
+        },
+        {
+          "Weight": 35,
+          "Output": { "ItemId": "Food_Wildmeat_Raw", "Quantity": 4 },
+          "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Spring", "Quantity": 3 }],
+          "Stock": [4, 10]
+        },
+        {
+          "Weight": 20,
+          "Output": { "ItemId": "Ingredient_Leather_Medium", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Spring", "Quantity": 4 }],
+          "Stock": [2, 4]
+        }
+      ]
+    }
+  ]
+}

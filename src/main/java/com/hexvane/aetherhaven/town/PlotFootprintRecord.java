@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.town;
 
 import com.google.gson.annotations.SerializedName;
+import javax.annotation.Nonnull;
 
 /** Axis-aligned footprint for overlap checks (inclusive integer bounds). */
 public final class PlotFootprintRecord {
@@ -64,6 +65,19 @@ public final class PlotFootprintRecord {
     /** True if this inclusive axis-aligned box contains the given block cell. */
     public boolean containsBlock(int x, int y, int z) {
         return x >= minX && x <= maxX && y >= minY && y <= maxY && z >= minZ && z <= maxZ;
+    }
+
+    /** Inclusive box covering both footprints. */
+    @Nonnull
+    public static PlotFootprintRecord union(@Nonnull PlotFootprintRecord a, @Nonnull PlotFootprintRecord b) {
+        return new PlotFootprintRecord(
+            Math.min(a.minX, b.minX),
+            Math.min(a.minY, b.minY),
+            Math.min(a.minZ, b.minZ),
+            Math.max(a.maxX, b.maxX),
+            Math.max(a.maxY, b.maxY),
+            Math.max(a.maxZ, b.maxZ)
+        );
     }
 
     /** Horizontal center block column (X) of this footprint. */

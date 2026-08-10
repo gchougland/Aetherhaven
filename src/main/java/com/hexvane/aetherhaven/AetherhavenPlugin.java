@@ -17,6 +17,7 @@ import com.hexvane.aetherhaven.dialogue.DialogueResolver;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.equipment.data.EquipmentProfileCatalog;
 import com.hexvane.aetherhaven.festival.FestivalCatalog;
+import com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticCatalog;
 import com.hexvane.aetherhaven.festival.FestivalMechanicRegistry;
 import com.hexvane.aetherhaven.guide.GuideTopicRepository;
 import com.hexvane.aetherhaven.jewelry.JewelryInventoryTooltipSync;
@@ -111,6 +112,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private VillagerScheduleRegistry villagerScheduleRegistry = VillagerScheduleRegistry.empty();
     private ScheduleLocationCatalog scheduleLocationCatalog = ScheduleLocationCatalog.empty();
     private FestivalCatalog festivalCatalog = FestivalCatalog.empty();
+    private VillagerCosmeticCatalog villagerCosmeticCatalog = VillagerCosmeticCatalog.empty();
     private final FestivalMechanicRegistry festivalMechanicRegistry = new FestivalMechanicRegistry();
     private VillagerDefinitionCatalog villagerDefinitionCatalog = VillagerDefinitionCatalog.empty();
     private TownsfolkPersonalityCatalog townsfolkPersonalityCatalog = TownsfolkPersonalityCatalog.empty();
@@ -314,6 +316,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public FestivalCatalog getFestivalCatalog() {
         return festivalCatalog;
+    }
+
+    @Nonnull
+    public VillagerCosmeticCatalog getVillagerCosmeticCatalog() {
+        return villagerCosmeticCatalog;
     }
 
     /** Crossmod hook: register a {@link FestivalMechanic} before festivals load so JSON can reference it. */
@@ -520,6 +527,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.worldQuestBoardCatalog = WorldQuestBoardCatalog.loadFromAssetPacks();
         this.scheduleLocationCatalog = ScheduleLocationCatalog.loadFromAssetPacks();
         this.festivalCatalog = FestivalCatalog.loadFromAssetPacksOrClasspath(cl, customData);
+        this.villagerCosmeticCatalog = VillagerCosmeticCatalog.loadFromClasspath(cl);
         this.villagerScheduleRegistry =
             VillagerScheduleRegistry.loadFromAssetPacksOrClasspath(cl, this.villagerDefinitionCatalog, this.scheduleLocationCatalog);
         this.townNameCatalog = TownNameCatalog.loadFromClasspath();

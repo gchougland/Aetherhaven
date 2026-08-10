@@ -19,9 +19,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 import org.joml.Vector3d;
 
-/** Pops the full lettuce into a fountain of seeds, then clears the centerpiece so nothing is left behind. */
+/** Pops a ready lettuce into a fountain of seeds and spring tickets, then clears the centerpiece. */
 public final class FestivalLettuceBurstSystem extends EntityTickingSystem<EntityStore> {
-    /** How long the fountain keeps throwing seeds. */
+    /** How long the fountain keeps throwing drops. */
     private static final long BURST_DURATION_MS = 1_400L;
 
     private static final float LAUNCH_SPEED_MIN = 6.0f;
@@ -50,7 +50,8 @@ public final class FestivalLettuceBurstSystem extends EntityTickingSystem<Entity
         }
         long now = System.currentTimeMillis();
         Vector3d center = new Vector3d(tc.getPosition());
-        if (lettuce.isGrowing() && lettuce.isFull()) {
+        // Only auto-pop at the overcharge cap; otherwise the player presses F.
+        if (lettuce.isMaxOvercharge()) {
             beginBurst(store, lettuce, center, now);
             return;
         }
@@ -59,15 +60,38 @@ public final class FestivalLettuceBurstSystem extends EntityTickingSystem<Entity
         }
     }
 
-    private static void beginBurst(
+    /**
+     * Starts the fountain if the lettuce is ready. Safe to call from absorb (max overcharge) or from the F interaction.
+     *
+     * @return true when a new burst was started
+     */
+    public static boolean tryBeginBurst(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull FestivalLettuceComponent lettuce,
+        @Nonnull Vector3d center
+    ) {
+        if (!lettuce.isReadyToBurst() && !lettuce.isMaxOvercharge()) {
+            return false;
+        }
+        if (!lettuce.isGrowing()) {
+            return false;
+        }
+        beginBurst(store, lettuce, center, System.currentTimeMillis());
+        return true;
+    }
+
+    static void beginBurst(
         @Nonnull Store<EntityStore> store,
         @Nonnull FestivalLettuceComponent lettuce,
         @Nonnull Vector3d center,
         long now
     ) {
+        lettuce.setBurstSeedTarget(lettuce.scaledSeedCount());
+        lettuce.setBurstTicketTarget(lettuce.scaledTicketCount());
         lettuce.setState(FestivalLettuceComponent.STATE_BURSTING);
         lettuce.setBurstStartEpochMs(now);
         lettuce.resetSeedsThrown();
+        lettuce.resetTicketsThrown();
         FestivalLettuceEffects.playBurst(store, center);
     }
 
@@ -81,15 +105,22 @@ public final class FestivalLettuceBurstSystem extends EntityTickingSystem<Entity
         long now
     ) {
         List<String> pool = lettuce.getBurstItemIds();
-        int total = lettuce.getSeedsPerBurst();
+        int seedTotal = lettuce.getBurstSeedTarget();
+        int ticketTotal = lettuce.getBurstTicketTarget();
+        int dropTotal = seedTotal + ticketTotal;
         long elapsed = Math.max(0L, now - lettuce.getBurstStartEpochMs());
-        int wanted = (int) Math.min(total, Math.round((double) total * elapsed / BURST_DURATION_MS) + 1L);
-        int toThrow = wanted - lettuce.getSeedsThrown();
-        if (toThrow > 0 && !pool.isEmpty()) {
-            throwSeeds(store, commandBuffer, center, pool, toThrow);
-            lettuce.addSeedsThrown(toThrow);
+        int wanted =
+            dropTotal <= 0
+                ? 0
+                : (int) Math.min(dropTotal, Math.round((double) dropTotal * elapsed / BURST_DURATION_MS) + 1L);
+        int already = lettuce.getSeedsThrown() + lettuce.getTicketsThrown();
+        int toThrow = wanted - already;
+        if (toThrow > 0) {
+            throwBurstDrops(store, commandBuffer, center, pool, lettuce, toThrow);
         }
-        if (elapsed < BURST_DURATION_MS && lettuce.getSeedsThrown() < total && !pool.isEmpty()) {
+        boolean seedsDone = lettuce.getSeedsThrown() >= seedTotal || pool.isEmpty();
+        boolean ticketsDone = lettuce.getTicketsThrown() >= ticketTotal;
+        if (elapsed < BURST_DURATION_MS && (!seedsDone || !ticketsDone) && dropTotal > 0) {
             return;
         }
         // Mark spent first so a late absorb tick cannot drink again before the remove lands.
@@ -101,33 +132,56 @@ public final class FestivalLettuceBurstSystem extends EntityTickingSystem<Entity
         }
     }
 
-    private static void throwSeeds(
+    private static void throwBurstDrops(
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull Vector3d center,
         @Nonnull List<String> pool,
+        @Nonnull FestivalLettuceComponent lettuce,
         int count
     ) {
         ThreadLocalRandom rnd = ThreadLocalRandom.current();
         for (int i = 0; i < count; i++) {
-            String itemId = pool.get(rnd.nextInt(pool.size()));
-            ItemStack stack = new ItemStack(itemId);
-            if (!stack.isValid()) {
-                continue;
+            boolean needSeeds = lettuce.getSeedsThrown() < lettuce.getBurstSeedTarget() && !pool.isEmpty();
+            boolean needTickets = lettuce.getTicketsThrown() < lettuce.getBurstTicketTarget();
+            if (!needSeeds && !needTickets) {
+                return;
             }
-            float[] v = launchVelocity(rnd);
-            Holder<EntityStore> holder = ItemComponent.generateItemDrop(
-                store,
-                stack,
-                new Vector3d(center.x, center.y + 1.0, center.z),
-                new Rotation3f(0.0f, rnd.nextFloat() * (float) Math.PI * 2.0f, 0.0f),
-                v[0],
-                v[1],
-                v[2]
-            );
-            if (holder != null) {
-                commandBuffer.addEntity(holder, AddReason.SPAWN);
+            String itemId;
+            if (needSeeds && (!needTickets || rnd.nextBoolean())) {
+                itemId = pool.get(rnd.nextInt(pool.size()));
+                lettuce.addSeedsThrown(1);
+            } else {
+                itemId = FestivalLettuceComponent.SPRING_TICKET_ITEM_ID;
+                lettuce.addTicketsThrown(1);
             }
+            spawnDrop(store, commandBuffer, center, itemId, rnd);
+        }
+    }
+
+    private static void spawnDrop(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull Vector3d center,
+        @Nonnull String itemId,
+        @Nonnull ThreadLocalRandom rnd
+    ) {
+        ItemStack stack = new ItemStack(itemId);
+        if (!stack.isValid()) {
+            return;
+        }
+        float[] v = launchVelocity(rnd);
+        Holder<EntityStore> holder = ItemComponent.generateItemDrop(
+            store,
+            stack,
+            new Vector3d(center.x, center.y + 1.0, center.z),
+            new Rotation3f(0.0f, rnd.nextFloat() * (float) Math.PI * 2.0f, 0.0f),
+            v[0],
+            v[1],
+            v[2]
+        );
+        if (holder != null) {
+            commandBuffer.addEntity(holder, AddReason.SPAWN);
         }
     }
 

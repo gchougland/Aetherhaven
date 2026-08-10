@@ -47,5 +47,23 @@
       0,
       -115
     ]
+  },
+  "AnimationSets": {
+    "DanceBoogie": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Emote/Dance_Boogie.blockyanim",
+          "Looping": true
+        }
+      ]
+    },
+    "DancePop": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Emote/Dance_Pop.blockyanim",
+          "Looping": true
+        }
+      ]
+    }
   }
 }

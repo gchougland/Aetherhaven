@@ -8,6 +8,7 @@
       "choices": [
         {
           "text": "aetherhaven_dialogue_festival_seed_seller.aetherhaven.dialogue.festival_seed_seller.main_hub.c_shop",
+          "icon": "UI/Custom/market.png",
           "actions": [
             {
               "type": "open_barter_shop",

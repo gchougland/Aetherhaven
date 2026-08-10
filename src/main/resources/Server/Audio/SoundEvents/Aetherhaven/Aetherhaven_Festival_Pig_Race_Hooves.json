@@ -1,0 +1,17 @@
+{
+  "Layers": [
+    {
+      "Files": [
+        "Sounds/Aetherhaven/Festival/Pig_Race_Hooves_Loop.ogg"
+      ],
+      "Volume": -2.0,
+      "Looping": true
+    }
+  ],
+  "Volume": 1.0,
+  "MaxDistance": 48,
+  "StartAttenuationDistance": 16,
+  "MaxInstance": 2,
+  "PreventSoundInterruption": true,
+  "Parent": "SFX_Attn_Moderate"
+}

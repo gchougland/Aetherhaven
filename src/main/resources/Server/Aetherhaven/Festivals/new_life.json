@@ -13,6 +13,7 @@
   "endMinute": 0,
   "calendarIconPath": "UI/Custom/cabbage.png",
   "mechanicId": "new_life",
+  "centerpieceLocal": [0, 6, 0],
   "spots": [
     {
       "residentKind": "priestess",

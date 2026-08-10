@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.placement;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -32,5 +33,27 @@ final class PrefabTriggerVolumeCleanupTest {
         assertFalse(PrefabTriggerVolumeCleanup.footprintContains(reserved, new Vector3d(-3.0, 10.0, 10.0)));
         assertFalse(PrefabTriggerVolumeCleanup.footprintContains(reserved, new Vector3d(10.0, 10.0, 42.0)));
         assertTrue(PrefabTriggerVolumeCleanup.footprintContains(reserved, new Vector3d(29.9, 54.0, 29.9)));
+    }
+
+    @Test
+    void pastedVolumesMatchWorldNameCaseInsensitively() {
+        // TriggerVolumePasteHandler stores world.getName().toLowerCase; world names are often mixed case.
+        assertTrue(PrefabTriggerVolumeCleanup.sameWorld("default", "default"));
+        assertTrue(PrefabTriggerVolumeCleanup.sameWorld("default", "Default"));
+        assertTrue(PrefabTriggerVolumeCleanup.sameWorld("MyWorld", "myworld"));
+        assertFalse(PrefabTriggerVolumeCleanup.sameWorld("default", "other"));
+        assertTrue(PrefabTriggerVolumeCleanup.sameWorld("default", ""));
+        assertTrue(PrefabTriggerVolumeCleanup.sameWorld(null, "default"));
+    }
+
+    @Test
+    void footprintUnionCoversCornerPropsFromEitherPrefab() {
+        PlotFootprintRecord square = new PlotFootprintRecord(0, 0, 0, 29, 54, 29);
+        PlotFootprintRecord festival = new PlotFootprintRecord(-1, 0, -1, 28, 54, 28);
+        PlotFootprintRecord combined = PlotFootprintRecord.union(square, festival);
+        assertEquals(-1, combined.getMinX());
+        assertEquals(29, combined.getMaxX());
+        assertTrue(combined.containsBlock(29, 6, 29));
+        assertTrue(combined.containsBlock(-1, 6, -1));
     }
 }

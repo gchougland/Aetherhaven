@@ -1,0 +1,25 @@
+aetherhaven.villagerCosmetic.flowerCrown.pink=Pink Flower Crown
+aetherhaven.villagerCosmetic.flowerCrown.white=White Flower Crown
+aetherhaven.villagerCosmetic.flowerCrown.yellow=Yellow Flower Crown
+aetherhaven.villagerCosmetic.pigEars=Pig Ears
+aetherhaven.villagerCosmetic.pigEars.fuzzy=Fuzzy Pig Ears
+aetherhaven.villagerCosmetic.pigSnout=Pig Snout
+aetherhaven.villagerCosmetic.poopHat=Poop Hat
+
+aetherhaven.villagerCosmetic.unlock.success=Unlocked {name} for your town wardrobe.
+aetherhaven.villagerCosmetic.unlock.already=Your town already has {name}.
+aetherhaven.villagerCosmetic.unlock.noTown=You need a town to unlock this.
+
+aetherhaven.ui.villagerWardrobe.title=Villager Wardrobe
+aetherhaven.ui.villagerWardrobe.pickResident=Tap a resident to dress them up.
+aetherhaven.ui.villagerWardrobe.close=Close
+aetherhaven.ui.villagerWardrobe.customizeTitle=Outfit
+aetherhaven.ui.villagerWardrobe.customizeHint=Use the arrows to change each look. The model on the right shows the change.
+aetherhaven.ui.villagerWardrobe.save=Save
+aetherhaven.ui.villagerWardrobe.back=Back
+aetherhaven.ui.villagerWardrobe.saved=Outfit saved for this town.
+aetherhaven.ui.villagerWardrobe.defaultLook=Default look
+aetherhaven.ui.villagerWardrobe.slot.headaccessory=Head
+aetherhaven.ui.villagerWardrobe.slot.faceaccessory=Face
+
+aetherhaven.ui.villagerWardrobe.noUnlocks=Unlock looks with cosmetic patterns, then change them here.

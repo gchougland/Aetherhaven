@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import java.util.concurrent.ThreadLocalRandom;
+import org.joml.Vector3d;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -58,7 +60,7 @@ final class FestivalSeedFountainTest {
         FestivalLettuceComponent lettuce = new FestivalLettuceComponent();
         lettuce.setRequiredEssence(10);
         lettuce.setMinScale(4.0f);
-        lettuce.setMaxScale(14.0f);
+        lettuce.setMaxScale(11.2f);
 
         double empty = FestivalLettuceAbsorbSystem.absorbRadius(lettuce);
         lettuce.addEssence(9);
@@ -73,10 +75,66 @@ final class FestivalSeedFountainTest {
     }
 
     @Test
+    void essenceIsPulledTowardTheMiddleOfTheLettuce() {
+        Vector3d mouth = FestivalLettuceAbsorbSystem.mouthPosition(new Vector3d(10.0, 64.0, 10.0), 8.0f);
+        assertEquals(10.0, mouth.x, 0.001);
+        assertEquals(10.0, mouth.z, 0.001);
+        assertTrue(mouth.y > 64.0, "the suck aim point sits up in the model, not at the feet");
+    }
+
+    @Test
     void slowestSeedsStillLeaveTheCentreAndFastestStayInsideTheSquare() {
         double[] range = FestivalLettuceBurstSystem.horizontalSpeedRange();
         assertTrue(range[0] > 0.5, "seeds should not drop straight back on the lettuce");
         assertTrue(range[1] < 8.0, "seeds should not clear the square");
         assertEquals(2, range.length);
+    }
+
+    @Test
+    void overchargeRaisesTheMultiplierInHalfStepsUpToFive() {
+        FestivalLettuceComponent lettuce = new FestivalLettuceComponent();
+        lettuce.setRequiredEssence(FestivalLettuceComponent.DEFAULT_REQUIRED_ESSENCE);
+        lettuce.setSeedsPerBurst(28);
+
+        lettuce.addEssence(20);
+        assertTrue(lettuce.isReadyToBurst());
+        assertFalse(lettuce.isMaxOvercharge(), "exactly full should wait for the player");
+        assertEquals(1.0, lettuce.seedMultiplier(), 0.0001);
+        assertEquals(4, lettuce.scaledTicketCount());
+        assertEquals(28, lettuce.scaledSeedCount());
+
+        lettuce.addEssence(100);
+        assertEquals(120, lettuce.getEssence());
+        assertEquals(1.5, lettuce.seedMultiplier(), 0.0001);
+        assertEquals(6, lettuce.scaledTicketCount());
+        assertEquals(42, lettuce.scaledSeedCount());
+
+        lettuce.addEssence(700);
+        assertEquals(FestivalLettuceComponent.MAX_ESSENCE_AT_DEFAULT, lettuce.getEssence());
+        assertEquals(5.0, lettuce.seedMultiplier(), 0.0001);
+        assertTrue(lettuce.isMaxOvercharge());
+        assertEquals(20, lettuce.scaledTicketCount());
+        assertEquals(140, lettuce.scaledSeedCount());
+    }
+
+    @Test
+    void concentratedLifeEssenceIsWorthOneHundred() {
+        assertEquals(1, FestivalLettuceComponent.essenceValue(AetherhavenConstants.ITEM_LIFE_ESSENCE));
+        assertEquals(
+            100,
+            FestivalLettuceComponent.essenceValue(AetherhavenConstants.ITEM_LIFE_ESSENCE_CONCENTRATED)
+        );
+        assertEquals(0, FestivalLettuceComponent.essenceValue("Plant_Seeds_Lettuce"));
+    }
+
+    @Test
+    void overchargePastFullDoesNotShrinkFillRatio() {
+        FestivalLettuceComponent lettuce = new FestivalLettuceComponent();
+        lettuce.setRequiredEssence(20);
+        lettuce.addEssence(20);
+        assertEquals(1.0f, lettuce.fillRatio(), 0.0001f);
+        lettuce.addEssence(50);
+        assertEquals(1.0f, lettuce.fillRatio(), 0.0001f);
+        assertTrue(lettuce.getEssence() > 20);
     }
 }

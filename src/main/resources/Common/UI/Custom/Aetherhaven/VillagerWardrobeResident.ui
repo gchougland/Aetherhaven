@@ -1,0 +1,45 @@
+﻿$C = "../Common.ui";
+
+$C.@PageOverlay {
+  LayoutMode: Left;
+
+  $C.@Container {
+    Anchor: (Left: 40, Top: 120, Width: 420, Bottom: 100);
+
+    #Title {
+      Label #WardrobeTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Text: "";
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Full: 12);
+
+      Label #Hint {
+        Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c8b898);
+        Text: "";
+        Anchor: (Bottom: 10);
+      }
+
+      Group #ResidentList {
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+        FlexWeight: 1;
+      }
+
+      Group #FooterRow {
+        LayoutMode: Center;
+        Anchor: (Top: 12);
+
+        $C.@CancelTextButton #WardrobeCloseButton {
+          Anchor: (Width: 140, Height: 36);
+          Text: "";
+        }
+      }
+    }
+  }
+
+  $C.@BackButton {}
+}

@@ -8,6 +8,24 @@ import javax.annotation.Nonnull;
 public final class PlotFootprintChunkUtil {
     private PlotFootprintChunkUtil() {}
 
+    /**
+     * Loads every chunk column overlapping {@code footprint}. Must run on the world thread. Needed before festival
+     * prefab entity clears: corner props (statues) live in edge chunks that are often unloaded when the swap runs.
+     */
+    public static void ensureFootprintChunksLoaded(@Nonnull World world, @Nonnull PlotFootprintRecord footprint) {
+        int minChunkX = Math.floorDiv(footprint.getMinX(), 16);
+        int maxChunkX = Math.floorDiv(footprint.getMaxX(), 16);
+        int minChunkZ = Math.floorDiv(footprint.getMinZ(), 16);
+        int maxChunkZ = Math.floorDiv(footprint.getMaxZ(), 16);
+        for (int cx = minChunkX; cx <= maxChunkX; cx++) {
+            for (int cz = minChunkZ; cz <= maxChunkZ; cz++) {
+                int bx = cx * 16 + 8;
+                int bz = cz * 16 + 8;
+                world.getChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
+            }
+        }
+    }
+
     public static boolean isFootprintFullyLoaded(@Nonnull World world, @Nonnull PlotFootprintRecord footprint) {
         int minX = footprint.getMinX();
         int maxX = footprint.getMaxX();

@@ -35,7 +35,7 @@ public final class FestivalAttendanceService {
         for (FestivalDefinition.SpotRow spot : festival.getSpots()) {
             String kind = spot.getResidentKind();
             if (!kind.isEmpty()) {
-                kinds.add(kind);
+                kinds.add(kind.trim().toLowerCase(Locale.ROOT));
             }
         }
         return kinds;

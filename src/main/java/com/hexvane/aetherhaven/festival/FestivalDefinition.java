@@ -81,6 +81,14 @@ public final class FestivalDefinition {
     @Nullable
     private List<NpcRow> npcs;
 
+    /**
+     * Extra tourist stand points while this festival runs. Used so visitors stay outside race tracks and other busy
+     * builds instead of walking through the middle of the square.
+     */
+    @SerializedName("touristSpots")
+    @Nullable
+    private List<TouristSpotRow> touristSpots;
+
     /** Prefab-local cell of the festival centerpiece; when unset the mechanic looks for its prefab placeholder. */
     @SerializedName("centerpieceLocal")
     @Nullable
@@ -180,6 +188,11 @@ public final class FestivalDefinition {
     @Nonnull
     public List<NpcRow> getNpcs() {
         return npcs != null ? List.copyOf(npcs) : List.of();
+    }
+
+    @Nonnull
+    public List<TouristSpotRow> getTouristSpots() {
+        return touristSpots != null ? List.copyOf(touristSpots) : List.of();
     }
 
     @Nullable
@@ -346,6 +359,37 @@ public final class FestivalDefinition {
             row.localZ = z;
             row.yawDegrees = yawDegrees;
             return row;
+        }
+    }
+
+    /** A stand tourists use while the festival is running. */
+    public static final class TouristSpotRow {
+        @SerializedName("localX")
+        private int localX;
+
+        @SerializedName("localY")
+        private int localY;
+
+        @SerializedName("localZ")
+        private int localZ;
+
+        @SerializedName("yawDegrees")
+        private float yawDegrees;
+
+        public int getLocalX() {
+            return localX;
+        }
+
+        public int getLocalY() {
+            return localY;
+        }
+
+        public int getLocalZ() {
+            return localZ;
+        }
+
+        public float getYawDegrees() {
+            return yawDegrees;
         }
     }
 

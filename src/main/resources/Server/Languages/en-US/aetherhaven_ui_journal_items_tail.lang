@@ -239,11 +239,11 @@ aetherhaven.ui.questjournal.dismissShort=×
 aetherhaven.ui.questjournal.detailPlaceholder=Quest details
 aetherhaven.ui.questjournal.detailPlaceholderBody=Choose a quest above.
 
-items.Aetherhaven_Management_Block.name=Town records shelf
+items.Aetherhaven_Management_Block.name=Town Records Shelf
 items.Aetherhaven_Management_Block.description=Clerk shelf for a completed building. Opens construction status for its plot.
 
 
-items.Aetherhaven_Wood_Scaffold.name=Wood scaffolding
+items.Aetherhaven_Wood_Scaffold.name=Wood Scaffolding
 items.Aetherhaven_Wood_Scaffold.description=Climb like a ladder. Right-click places like a normal block. Hold Use (F) while aiming at scaffolding to extend the tower from the side or branch horizontally from the top face. Breaking the bottom unsupported piece collapses the stack.
 items.Aetherhaven_Wood_Scaffold.legendUse=Use (F): extend tower / branch from top while aiming at scaffold. Right-click: normal block placement.
 
@@ -267,32 +267,32 @@ npcRoles.Aetherhaven_Chef.name=Pepper Ashford
 npcRoles.Aetherhaven_Builder.name=Rowan Ridgecraft
 npcRoles.Aetherhaven_Guard.name=Town guard
 
-items.Aetherhaven_Quest_Board.name=Quest board
+items.Aetherhaven_Quest_Board.name=Quest Board
 items.Aetherhaven_Quest_Board.description=A wooden board where townsfolk post fetch work and bounties. Use it to pick up jobs for your town.
 
-items.Aetherhaven_Production_Storage.name=Workplace stores
+items.Aetherhaven_Production_Storage.name=Workplace Stores
 items.Aetherhaven_Production_Storage.description=Holds what your workers bring in. Open to set outputs and take stacks. Part of the building and <color is="#ffa726">cannot be picked up</color>.
-items.Aetherhaven_Plot_Token_Miners_Hut.name=Miners hut plot token
+items.Aetherhaven_Plot_Token_Miners_Hut.name=Miners Hut Plot Token
 items.Aetherhaven_Plot_Token_Miners_Hut.description=Marks where the miners hut prefab can be built. Craft at the town planning desk.
-items.Aetherhaven_Plot_Token_Builders_Hut.name=Builder's hut plot token
+items.Aetherhaven_Plot_Token_Builders_Hut.name=Builder's Hut Plot Token
 items.Aetherhaven_Plot_Token_Builders_Hut.description=Marks where the builder's hut prefab can be built. Craft at the town planning desk.
-items.Aetherhaven_Plot_Token_Lumbermill.name=Lumbermill plot token
+items.Aetherhaven_Plot_Token_Lumbermill.name=Lumbermill Plot Token
 items.Aetherhaven_Plot_Token_Lumbermill.description=Marks where the lumbermill prefab can be built. Craft at the town planning desk.
-items.Aetherhaven_Plot_Token_Barn.name=Barn plot token
+items.Aetherhaven_Plot_Token_Barn.name=Barn Plot Token
 items.Aetherhaven_Plot_Token_Barn.description=Marks where the barn prefab can be built. Craft at the town planning desk.
-items.Aetherhaven_Plot_Token_Barn_Hytiny.name=Hytiny's barn plot token
+items.Aetherhaven_Plot_Token_Barn_Hytiny.name=Hytiny's Barn Plot Token
 items.Aetherhaven_Plot_Token_Barn_Hytiny.description=Marks where the compact Hytiny barn prefab can be built. Prefab by HytinyBuilds. Not sold at the planning desk. Salvage at a salvager for five gold coins back.
-items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage.name=Hytiny's cozy cottage plot token
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage.name=Hytiny's Cozy Cottage Plot Token
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage.description=Marks where Hytiny's cozy cottage can be built. Prefab by HytinyBuilds. Craft at the town planning desk. Salvage at a salvager for five gold coins back.
-items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.name=Hytiny's Japanese tea house plot token
+items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.name=Hytiny's Japanese Tea House Plot Token
 items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.description=Marks where Hytiny's Japanese tea house can be built. Prefab by HytinyBuilds. Craft at the town planning desk. Salvage at a salvager for five gold coins back.
-items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.name=Hytiny's cozy camper plot token
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.name=Hytiny's Cozy Camper Plot Token
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description=Marks where Hytiny's cozy camper can be built. Prefab by HytinyBuilds. Craft at the town planning desk. Salvage at a salvager for five gold coins back.
-items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.name=Hytiny's potted treehouse plot token
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.name=Hytiny's Potted Treehouse Plot Token
 items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Warning: this is a very large prefab and may noticeably slow down or hitch the client and server while it assembles. Place it when you have time to let it finish.</color> Marks where Hytiny's potted treehouse can be built (decorative only). Prefab by HytinyBuilds. Not sold at the planning desk. Salvage at a salvager for five gold coins back.
 
-items.Aetherhaven_Plot_Token_Gaia_Altar.name=Gaia altar plot token
+items.Aetherhaven_Plot_Token_Gaia_Altar.name=Gaia Altar Plot Token
 items.Aetherhaven_Plot_Token_Gaia_Altar.description=Marks where the Gaia altar prefab can be built. Craft at the town planning desk.
 
-items.Aetherhaven_Statue_Of_Gaia.name=Statue of Gaia
+items.Aetherhaven_Statue_Of_Gaia.name=Statue Of Gaia
 items.Aetherhaven_Statue_Of_Gaia.description=A blessed likeness for the altar. Town owners may call missing residents back with life essence.
