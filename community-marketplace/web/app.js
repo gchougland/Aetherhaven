@@ -1783,6 +1783,10 @@ async function openPrefabCaptureModal(ownerKind, ownerId, prefabUrl, asAdmin = f
   modal.hidden = false;
   document.body.classList.add("modal-open");
 
+  // Wait for the dialog to lay out so the canvas gets a real width/height
+  // (otherwise it can initialize as a short, very wide strip).
+  await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
   const api = await getPrefabViewerApi();
   if (!api?.PrefabViewer) {
     if (statusEl) {
@@ -1806,6 +1810,7 @@ async function openPrefabCaptureModal(ownerKind, ownerId, prefabUrl, asAdmin = f
       statusEl.hidden = true;
     }
     viewer.resize();
+    requestAnimationFrame(() => viewer.resize());
     if (saveBtn) {
       saveBtn.disabled = false;
     }

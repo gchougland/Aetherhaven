@@ -1981,7 +1981,17 @@ body.modal-open {
 }
 
 .prefab-capture-dialog {
-  width: min(960px, 100%);
+  width: min(720px, 100%);
+  max-height: min(90vh, 860px);
+  display: flex;
+  flex-direction: column;
+}
+
+.prefab-capture-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1 1 auto;
 }
 
 .prefab-capture-content h2 {
@@ -1989,8 +1999,13 @@ body.modal-open {
 }
 
 .prefab-capture-viewer {
+  flex: 0 0 auto;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  height: auto;
+  min-height: 360px;
+  max-height: min(58vh, 520px);
   margin: 0.75rem 0 1rem;
-  height: min(56vh, 520px);
 }
 
 .prefab-capture-actions {

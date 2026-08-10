@@ -173,44 +173,44 @@ export async function buildPrefabMesh(prefab, options = {}) {
       if (item.kind === "block") {
         const b = item.data;
         const def = getBlockDef(b.name);
-        if (!def) {
-          continue;
-        }
-
-        if (def.drawType === "Model" && def.customModel) {
-          const model = await getModel(def.customModel, def.customModelTexture || null);
-          if (!model) {
-            continue;
+        if (def) {
+          // Many shaped blocks (roofs, stairs, halves) keep DrawType Cube but still set CustomModel.
+          let placed = false;
+          if (def.customModel) {
+            const model = await getModel(def.customModel, def.customModelTexture || null);
+            if (model) {
+              const holder = new THREE.Group();
+              holder.position.set(Number(b.x) + 0.5, Number(b.y) + 0.5, Number(b.z) + 0.5);
+              if (b.rotation) {
+                holder.rotation.copy(rotationTupleToEuler(b.rotation));
+              }
+              model.position.y = -0.5;
+              holder.add(model);
+              root.add(holder);
+              placed = true;
+            }
           }
-          const holder = new THREE.Group();
-          holder.position.set(Number(b.x) + 0.5, Number(b.y) + 0.5, Number(b.z) + 0.5);
-          if (b.rotation) {
-            holder.rotation.copy(rotationTupleToEuler(b.rotation));
+          if (!placed && def.textures) {
+            const cube = await buildCubeMesh(def);
+            const holder = new THREE.Group();
+            holder.position.set(Number(b.x) + 0.5, Number(b.y) + 0.5, Number(b.z) + 0.5);
+            if (b.rotation) {
+              holder.rotation.copy(rotationTupleToEuler(b.rotation));
+            }
+            holder.add(cube);
+            root.add(holder);
           }
-          model.position.y = -0.5;
-          holder.add(model);
-          root.add(holder);
-        } else {
-          const cube = await buildCubeMesh(def);
-          const holder = new THREE.Group();
-          holder.position.set(Number(b.x) + 0.5, Number(b.y) + 0.5, Number(b.z) + 0.5);
-          if (b.rotation) {
-            holder.rotation.copy(rotationTupleToEuler(b.rotation));
-          }
-          holder.add(cube);
-          root.add(holder);
         }
       } else if (item.kind === "fluid") {
         const f = item.data;
         const def = getBlockDef(f.name);
-        if (!def) {
-          continue;
+        if (def) {
+          const mesh = await buildFluidMesh(def, f.level);
+          const holder = new THREE.Group();
+          holder.position.set(Number(f.x) + 0.5, Number(f.y) + 0.5, Number(f.z) + 0.5);
+          holder.add(mesh);
+          root.add(holder);
         }
-        const mesh = await buildFluidMesh(def, f.level);
-        const holder = new THREE.Group();
-        holder.position.set(Number(f.x) + 0.5, Number(f.y) + 0.5, Number(f.z) + 0.5);
-        holder.add(mesh);
-        root.add(holder);
       } else if (item.kind === "entity") {
         const comps = item.data?.Components || item.data?.components || {};
         const transform = comps.Transform || {};
@@ -240,21 +240,19 @@ export async function buildPrefabMesh(prefab, options = {}) {
         const itemId = comps.Item?.Item?.Id || comps.Item?.Id;
         if (!placed && itemId) {
           const idef = getBlockDef(itemId);
-          if (!idef) {
-            // Other-mod item — skip
-          } else if (idef.itemModel) {
+          if (idef?.itemModel) {
             const model = await getModel(idef.itemModel, idef.itemTexture || null);
             if (model) {
               holder.add(model);
               placed = true;
             }
-          } else if (idef.customModel) {
+          } else if (idef?.customModel) {
             const model = await getModel(idef.customModel, idef.customModelTexture || null);
             if (model) {
               holder.add(model);
               placed = true;
             }
-          } else if (idef.drawType === "Cube" || idef.textures) {
+          } else if (idef?.textures) {
             const cube = await buildCubeMesh(idef);
             cube.scale.setScalar(0.35);
             cube.position.y = 0.2;

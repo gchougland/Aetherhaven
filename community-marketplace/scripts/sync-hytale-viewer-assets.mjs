@@ -328,8 +328,8 @@ function copyReferencedCommon() {
   let missing = 0;
   for (const rel of referencedCommonPaths) {
     const n = normalizeAssetPath(rel);
-    // BlockTextures + Blocks trees are copied wholesale already.
-    if (n.startsWith("BlockTextures/") || n.startsWith("Blocks/")) {
+    // Trees copied wholesale already.
+    if (n.startsWith("BlockTextures/") || n.startsWith("Blocks/") || n.startsWith("Items/") || n.startsWith("NPC/")) {
       continue;
     }
     const dest = path.join(outDir, "Common", n);
@@ -394,11 +394,25 @@ function main() {
   );
   console.log(`BlockTextures: ${blockTexturesCopied + aetherBlockTextures} files`);
 
-  // Copy full Blocks trees (furniture models + textures) — ~33MB, needed for DrawType Model.
+  // Copy full Blocks trees (furniture / roofs / stairs models + textures).
   const blocksCopied =
     copyTree(path.join(hytaleRoot, "Common", "Blocks"), path.join(outDir, "Common", "Blocks")) +
     copyTree(path.join(aetherhavenRoot, "Common", "Blocks"), path.join(outDir, "Common", "Blocks"));
   console.log(`Blocks: ${blocksCopied} files`);
+
+  // Item-held models/textures (rubble skins, tools, etc. referenced as Items/...)
+  const itemsCopied =
+    copyTree(
+      path.join(hytaleRoot, "Common", "Items"),
+      path.join(outDir, "Common", "Items"),
+      (f) => /\.(blockymodel|png|jpg|jpeg|webp)$/i.test(f)
+    ) +
+    copyTree(
+      path.join(aetherhavenRoot, "Common", "Items"),
+      path.join(outDir, "Common", "Items"),
+      (f) => /\.(blockymodel|png|jpg|jpeg|webp)$/i.test(f)
+    );
+  console.log(`Items models/textures: ${itemsCopied} files`);
 
   /** @type {Record<string, any>} */
   const blockCatalog = {};
