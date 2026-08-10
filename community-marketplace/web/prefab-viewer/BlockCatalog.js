@@ -32,13 +32,52 @@ export async function loadCatalogs(assetBase = DEFAULT_ASSET_BASE) {
 }
 
 /**
+ * Connected wall/blocks are stored in prefabs as e.g.
+ * `*Wood_Village_Wall_Yellow_Full_State_Definitions_Middle`.
+ * Resolve those to the base block + state textures when present.
  * @param {string} name
  */
 export function getBlockDef(name) {
   if (!cached) {
     return null;
   }
-  return cached.blocks[name] || null;
+  const id = String(name || "");
+  if (!id) {
+    return null;
+  }
+  const direct = cached.blocks[id];
+  if (direct) {
+    return direct;
+  }
+
+  const stateMatch = id.match(/^\*?(.+)_State_Definitions_(Bottom|Middle|Top)$/i);
+  if (stateMatch) {
+    const baseId = stateMatch[1];
+    const stateName =
+      stateMatch[2].charAt(0).toUpperCase() + stateMatch[2].slice(1).toLowerCase();
+    const base = cached.blocks[baseId];
+    if (!base) {
+      return null;
+    }
+    const stateTextures = base.states?.[stateName];
+    if (stateTextures) {
+      return {
+        ...base,
+        drawType: "Cube",
+        textures: stateTextures,
+        // State variants are cube skins of the connected block, not the custom model.
+        customModel: null,
+        customModelTexture: null,
+      };
+    }
+    // Fallback: at least show the full/base wall block instead of skipping.
+    return base;
+  }
+
+  if (id.startsWith("*")) {
+    return cached.blocks[id.slice(1)] || null;
+  }
+  return null;
 }
 
 /**

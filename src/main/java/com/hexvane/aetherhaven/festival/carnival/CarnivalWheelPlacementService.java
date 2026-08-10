@@ -11,6 +11,7 @@ import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.math.shape.Box;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
@@ -19,12 +20,14 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.modules.entity.component.BoundingBox;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.Intangible;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
+import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -37,6 +40,14 @@ import org.joml.Vector3d;
 public final class CarnivalWheelPlacementService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final int PLACE_SETTINGS = 10;
+    /** Matches {@code Aetherhaven_Carnival_Wheel_Face} hitbox; needed so clients render the prop. */
+    private static final Box FACE_BOX = new Box(-2.0, -2.0, -0.1, 2.0, 2.0, 0.1);
+    /**
+     * Wheel art is centered on the block origin (hub at local y=0), so the spinning face shares that height.
+     * Forward nudge keeps it just in front of the backboard like {@code WheelFaceStatic}.
+     */
+    private static final double FACE_HEIGHT = 0.0;
+    private static final double FACE_FORWARD = 0.12;
 
     private CarnivalWheelPlacementService() {}
 
@@ -143,13 +154,14 @@ public final class CarnivalWheelPlacementService {
         }
         Model model = Model.createUnitScaleModel(asset);
         UUID entityUuid = UUID.randomUUID();
+        // Face the same way as the wall block (model +Z). Idle roll parks the pointer on a color edge.
         Rotation3f rot = new Rotation3f(0f, facingYaw, CarnivalIds.WHEEL_IDLE_OFFSET_RAD);
         Holder<EntityStore> holder = EntityStore.REGISTRY.newHolder();
-        // Nudge slightly off the wall so the face sits in front of the block model.
+        // Forward uses the same sin/cos convention as other festival facing offsets.
         Vector3d pos = new Vector3d(
-            center.x + Math.sin(facingYaw) * 0.2,
-            center.y + 2.0,
-            center.z + Math.cos(facingYaw) * 0.2
+            center.x + Math.sin(facingYaw) * FACE_FORWARD,
+            center.y + FACE_HEIGHT,
+            center.z + Math.cos(facingYaw) * FACE_FORWARD
         );
         holder.addComponent(TransformComponent.getComponentType(), new TransformComponent(pos, rot));
         holder.addComponent(HeadRotation.getComponentType(), new HeadRotation(rot));
@@ -165,7 +177,9 @@ public final class CarnivalWheelPlacementService {
                 )
             )
         );
+        holder.addComponent(BoundingBox.getComponentType(), new BoundingBox(FACE_BOX));
         holder.addComponent(NetworkId.getComponentType(), new NetworkId(store.getExternalData().takeNextNetworkId()));
+        holder.addComponent(Velocity.getComponentType(), new Velocity());
         holder.addComponent(UUIDComponent.getComponentType(), new UUIDComponent(entityUuid));
         holder.addComponent(Intangible.getComponentType(), Intangible.INSTANCE);
         CarnivalWheelFaceComponent face = new CarnivalWheelFaceComponent();
@@ -174,7 +188,11 @@ public final class CarnivalWheelPlacementService {
         face.setRoll(CarnivalIds.WHEEL_IDLE_OFFSET_RAD);
         holder.addComponent(CarnivalWheelFaceComponent.getComponentType(), face);
         Ref<EntityStore> ref = store.addEntity(holder, AddReason.SPAWN);
-        return ref != null && ref.isValid() ? entityUuid : null;
+        if (ref == null || !ref.isValid()) {
+            LOGGER.atWarning().log("Carnival wheel face spawn failed for town %s", townId);
+            return null;
+        }
+        return entityUuid;
     }
 
     private static void clearWheelBlockNear(@Nonnull World world, @Nonnull Vector3d pos) {

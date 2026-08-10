@@ -137,6 +137,24 @@ function extractBlockEntry(raw, byFileStem) {
     if (Array.isArray(block.Tint) && block.Tint[0]) {
       entry.tint = block.Tint[0];
     }
+    // Connected-block state skins (village walls, etc.)
+    const defs = block.State?.Definitions;
+    if (defs && typeof defs === "object") {
+      /** @type {Record<string, Record<string, string>>} */
+      const states = {};
+      for (const [stateName, stateDef] of Object.entries(defs)) {
+        if (!stateDef?.Textures?.[0]) {
+          continue;
+        }
+        const faces = pickTextures(stateDef.Textures[0]);
+        if (faces) {
+          states[stateName] = faces;
+        }
+      }
+      if (Object.keys(states).length) {
+        entry.states = states;
+      }
+    }
   }
 
   if (isFluid || raw.MaxFluidLevel != null) {
@@ -201,6 +219,7 @@ function resolveParents(catalog) {
         "opacity",
         "tintUp",
         "tint",
+        "states",
         "kind",
       ]) {
         if (entry[key] == null && parent[key] != null) {
@@ -245,6 +264,17 @@ function ingestItemTree(itemsRoot, catalog) {
     const entry = extractBlockEntry(raw, byStem);
     if (entry) {
       catalog[id] = { ...(catalog[id] || {}), ...entry };
+      // Prefabs reference connected states as *BlockId_State_Definitions_Bottom/etc.
+      if (entry.states) {
+        for (const [stateName, faces] of Object.entries(entry.states)) {
+          const alias = `*${id}_State_Definitions_${stateName}`;
+          catalog[alias] = {
+            drawType: "Cube",
+            opacity: entry.opacity || null,
+            textures: faces,
+          };
+        }
+      }
     }
   }
 }

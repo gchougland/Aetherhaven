@@ -7,8 +7,8 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=3";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=3";
+} from "./BlockCatalog.js?v=4";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=4";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
@@ -177,7 +177,18 @@ export async function buildPrefabMesh(prefab, options = {}) {
           // Many shaped blocks (roofs, stairs, halves) keep DrawType Cube but still set CustomModel.
           let placed = false;
           if (def.customModel) {
-            const tint = def.tint || def.tintUp || null;
+            let tint = def.tint || def.tintUp || null;
+            const tex = String(def.customModelTexture || "");
+            const modelPath = String(def.customModel || "");
+            if (
+              !tint &&
+              (/_GS\.png$/i.test(tex) ||
+                /Plant_Grass|Grassplant|Foliage\/Grass|Foliage\/Plants\/Cross/i.test(
+                  `${tex} ${modelPath} ${b.name || ""}`
+                ))
+            ) {
+              tint = "#67b62d";
+            }
             const model = await getModel(def.customModel, def.customModelTexture || null, tint);
             if (model) {
               const holder = new THREE.Group();

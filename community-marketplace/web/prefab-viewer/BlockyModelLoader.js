@@ -4,7 +4,7 @@
  * UV layout matches the official Blockbench codec (pixel offset + face size from settings.size, not stretch).
  */
 import * as THREE from "three";
-import { assetUrl } from "./BlockCatalog.js?v=3";
+import { assetUrl } from "./BlockCatalog.js?v=4";
 
 const BLOCK_SCALE = 1 / 32;
 
@@ -256,6 +256,13 @@ function buildBoxMesh(shape, texture, denomW, denomH, tintHex = null) {
 
   const layout = shape.textureLayout || {};
   const sharedMat = makeFaceMaterial(texture, shape, tintHex);
+  // Blockbench omits faces with no layout (texture=null). Rendering those
+  // anyway creates bogus "extra planes" on roofs and similar models.
+  const layoutKeys = Object.keys(layout);
+  const hideMissingFaces = layoutKeys.length > 0;
+  const hiddenMat = hideMissingFaces
+    ? new THREE.MeshBasicMaterial({ visible: false })
+    : null;
 
   const geom = new THREE.BoxGeometry(sx || 0.01, sy || 0.01, sz || 0.01);
   const uvAttr = geom.getAttribute("uv");
@@ -276,8 +283,16 @@ function buildBoxMesh(shape, texture, denomW, denomH, tintHex = null) {
     [uvX, uvY], // front/+Z
     [uvX, uvY], // back/-Z
   ];
+  /** @type {THREE.Material[]} */
+  const materials = [];
   for (let f = 0; f < 6; f += 1) {
-    const uvs = faceUvsThree(faceLayouts[f], faceSizes[f][0], faceSizes[f][1], denomW, denomH);
+    const faceLayout = faceLayouts[f];
+    if (hideMissingFaces && !faceLayout) {
+      materials.push(hiddenMat);
+      continue;
+    }
+    materials.push(sharedMat);
+    const uvs = faceUvsThree(faceLayout, faceSizes[f][0], faceSizes[f][1], denomW, denomH);
     const base = f * 4;
     // BoxGeometry verts per face: TL, TR, BL, BR
     for (let i = 0; i < 4; i += 1) {
@@ -286,7 +301,7 @@ function buildBoxMesh(shape, texture, denomW, denomH, tintHex = null) {
   }
   uvAttr.needsUpdate = true;
 
-  const mesh = new THREE.Mesh(geom, sharedMat);
+  const mesh = new THREE.Mesh(geom, materials);
   if (stretch.x < 0) {
     mesh.scale.x *= -1;
   }
@@ -480,10 +495,14 @@ export async function loadBlockyModel(modelPath, texturePath = null, tintHex = n
       texture.wrapT = THREE.RepeatWrapping;
     }
 
-    // Greyscale plant skins (_GS) need a tint multiply; default leafy green if unset.
+    // Greyscale / biome-tinted skins need a color multiply. Default to grass green.
     let resolvedTint = tintHex;
-    if (!resolvedTint && /_GS\.png$/i.test(String(texPath || ""))) {
-      resolvedTint = "#297430";
+    if (
+      !resolvedTint &&
+      (/_GS\.png$/i.test(String(texPath || "")) ||
+        /Grassplant|\/Grass\/|Foliage\/Plants\/Cross/i.test(String(texPath || modelPath || "")))
+    ) {
+      resolvedTint = "#67b62d";
     }
 
     const root = new THREE.Group();
