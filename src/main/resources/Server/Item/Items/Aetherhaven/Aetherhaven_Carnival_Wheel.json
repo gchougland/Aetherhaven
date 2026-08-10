@@ -1,0 +1,85 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Carnival_Wheel.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Carnival_Wheel.description"
+  },
+  "PlayerAnimationsId": "Block",
+  "Categories": [
+    "Furniture.Signs",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Carnival_Wheel.png",
+  "BlockType": {
+    "BlockParticleSetId": "Wood",
+    "BlockSoundSetId": "Wood",
+    "CustomModel": "Blocks/Carnival_Wheel.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Carnival_Wheel.png",
+        "Weight": 1
+      }
+    ],
+    "DrawType": "Model",
+    "Flags": {
+      "IsUsable": false
+    },
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Unbreakable"
+      }
+    },
+    "HitboxType": "Aetherhaven_Carnival_Wheel",
+    "Material": "Solid",
+    "Opacity": "Transparent",
+    "ParticleColor": "#c45c4a",
+    "PlacementSettings": {
+      "RotationMode": "BlockNormal"
+    },
+    "Support": {
+      "East": [
+        {
+          "FaceType": "Full"
+        }
+      ],
+      "West": [
+        {
+          "FaceType": "Full"
+        }
+      ],
+      "North": [
+        {
+          "FaceType": "Full"
+        }
+      ],
+      "South": [
+        {
+          "FaceType": "Full"
+        }
+      ]
+    },
+    "VariantRotation": "NESW"
+  },
+  "Tags": {
+    "Type": [
+      "Furniture"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "IconProperties": {
+    "Scale": 0.25,
+    "Rotation": [
+      349,
+      -8,
+      354
+    ],
+    "Translation": [
+      0,
+      -4
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood",
+  "MaxStack": 25
+}

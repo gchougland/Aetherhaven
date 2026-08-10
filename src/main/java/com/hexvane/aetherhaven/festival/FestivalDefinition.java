@@ -94,6 +94,27 @@ public final class FestivalDefinition {
     @Nullable
     private int[] centerpieceLocal;
 
+    /**
+     * Pig race (and similar) start/finish lanes in prefab-local space. When blank, race mechanics fall back to their
+     * built-in defaults.
+     */
+    @SerializedName("raceLanes")
+    @Nullable
+    private List<RaceLaneRow> raceLanes;
+
+    /** Carnival balloon pop spawn cells in prefab-local space. */
+    @SerializedName("balloonSpawns")
+    @Nullable
+    private List<BalloonSpawnRow> balloonSpawns;
+
+    /**
+     * Carnival wheel wall cell in prefab-local space. {@code yawDegrees} chooses NESW facing for the wall-mounted
+     * block.
+     */
+    @SerializedName("wheelLocal")
+    @Nullable
+    private WheelLocalRow wheelLocal;
+
     /** Item ids a mechanic may hand out, e.g. the New Life seed burst pool. */
     @SerializedName("burstItemIds")
     @Nullable
@@ -201,6 +222,21 @@ public final class FestivalDefinition {
             return null;
         }
         return new int[] {centerpieceLocal[0], centerpieceLocal[1], centerpieceLocal[2]};
+    }
+
+    @Nonnull
+    public List<RaceLaneRow> getRaceLanes() {
+        return raceLanes != null ? List.copyOf(raceLanes) : List.of();
+    }
+
+    @Nonnull
+    public List<BalloonSpawnRow> getBalloonSpawns() {
+        return balloonSpawns != null ? List.copyOf(balloonSpawns) : List.of();
+    }
+
+    @Nullable
+    public WheelLocalRow getWheelLocal() {
+        return wheelLocal;
     }
 
     @Nonnull
@@ -391,6 +427,165 @@ public final class FestivalDefinition {
         public float getYawDegrees() {
             return yawDegrees;
         }
+
+        @Nonnull
+        public static TouristSpotRow of(int x, int y, int z, float yawDegrees) {
+            TouristSpotRow row = new TouristSpotRow();
+            row.localX = x;
+            row.localY = y;
+            row.localZ = z;
+            row.yawDegrees = yawDegrees;
+            return row;
+        }
+    }
+
+    /** One pig race lane with start and finish cells in prefab-local space. */
+    public static final class RaceLaneRow {
+        @SerializedName("npcRoleId")
+        @Nullable
+        private String npcRoleId;
+
+        @SerializedName("startLocalX")
+        private int startLocalX;
+
+        @SerializedName("startLocalY")
+        private int startLocalY;
+
+        @SerializedName("startLocalZ")
+        private int startLocalZ;
+
+        @SerializedName("finishLocalX")
+        private int finishLocalX;
+
+        @SerializedName("finishLocalY")
+        private int finishLocalY;
+
+        @SerializedName("finishLocalZ")
+        private int finishLocalZ;
+
+        @Nonnull
+        public String getNpcRoleId() {
+            return npcRoleId != null ? npcRoleId.trim() : "";
+        }
+
+        public int getStartLocalX() {
+            return startLocalX;
+        }
+
+        public int getStartLocalY() {
+            return startLocalY;
+        }
+
+        public int getStartLocalZ() {
+            return startLocalZ;
+        }
+
+        public int getFinishLocalX() {
+            return finishLocalX;
+        }
+
+        public int getFinishLocalY() {
+            return finishLocalY;
+        }
+
+        public int getFinishLocalZ() {
+            return finishLocalZ;
+        }
+
+        @Nonnull
+        public static RaceLaneRow of(
+            @Nonnull String npcRoleId,
+            int startX,
+            int startY,
+            int startZ,
+            int finishX,
+            int finishY,
+            int finishZ
+        ) {
+            RaceLaneRow row = new RaceLaneRow();
+            row.npcRoleId = npcRoleId;
+            row.startLocalX = startX;
+            row.startLocalY = startY;
+            row.startLocalZ = startZ;
+            row.finishLocalX = finishX;
+            row.finishLocalY = finishY;
+            row.finishLocalZ = finishZ;
+            return row;
+        }
+    }
+
+    /** One carnival balloon spawn cell in prefab-local space. */
+    public static final class BalloonSpawnRow {
+        @SerializedName("localX")
+        private int localX;
+
+        @SerializedName("localY")
+        private int localY;
+
+        @SerializedName("localZ")
+        private int localZ;
+
+        public int getLocalX() {
+            return localX;
+        }
+
+        public int getLocalY() {
+            return localY;
+        }
+
+        public int getLocalZ() {
+            return localZ;
+        }
+
+        @Nonnull
+        public static BalloonSpawnRow of(int x, int y, int z) {
+            BalloonSpawnRow row = new BalloonSpawnRow();
+            row.localX = x;
+            row.localY = y;
+            row.localZ = z;
+            return row;
+        }
+    }
+
+    /** Wall-mounted carnival wheel cell and facing in prefab-local space. */
+    public static final class WheelLocalRow {
+        @SerializedName("localX")
+        private int localX;
+
+        @SerializedName("localY")
+        private int localY;
+
+        @SerializedName("localZ")
+        private int localZ;
+
+        @SerializedName("yawDegrees")
+        private float yawDegrees;
+
+        public int getLocalX() {
+            return localX;
+        }
+
+        public int getLocalY() {
+            return localY;
+        }
+
+        public int getLocalZ() {
+            return localZ;
+        }
+
+        public float getYawDegrees() {
+            return yawDegrees;
+        }
+
+        @Nonnull
+        public static WheelLocalRow of(int x, int y, int z, float yawDegrees) {
+            WheelLocalRow row = new WheelLocalRow();
+            row.localX = x;
+            row.localY = y;
+            row.localZ = z;
+            row.yawDegrees = yawDegrees;
+            return row;
+        }
     }
 
     /** A festival-only NPC spawned for the length of the festival. */
@@ -439,6 +634,17 @@ public final class FestivalDefinition {
 
         public float getYawDegrees() {
             return yawDegrees;
+        }
+
+        @Nonnull
+        public static NpcRow of(@Nonnull String npcRoleId, int x, int y, int z, float yawDegrees) {
+            NpcRow row = new NpcRow();
+            row.npcRoleId = npcRoleId;
+            row.localX = x;
+            row.localY = y;
+            row.localZ = z;
+            row.yawDegrees = yawDegrees;
+            return row;
         }
     }
 }

@@ -145,6 +145,19 @@ $C.@PageOverlay {
         Visible: false;
       }
 
+      Label #FestivalActivityLabel {
+        Style: $C.@DefaultLabelStyle;
+        Text: "";
+        Anchor: (Bottom: 4);
+        Visible: false;
+      }
+
+      $C.@TextField #FestivalActivityField {
+        Anchor: (Bottom: 10, Height: 36);
+        PlaceholderText: "";
+        Visible: false;
+      }
+
       Label #FestivalSeasonLabel {
         Style: $C.@DefaultLabelStyle;
         Text: "";

@@ -6,6 +6,9 @@ aetherhaven.festival.new_life.description=Spring begins. The town gathers around
 aetherhaven.festival.pig_race.name=Pig Racing Festival
 aetherhaven.festival.pig_race.description=Late spring brings the pig races. Bet gold coins on a pig, cheer it down the track, and spend spring festival tickets at the race merchant.
 
+aetherhaven.festival.carnival.name=Carnival Festival
+aetherhaven.festival.carnival.description=Late summer brings the carnival. Pop balloons, spin the wheel, and spend summer festival tickets at the carnival merchant.
+
 aetherhaven.festival.interactionHints.burstLettuce=Press [{key}] to pop the lettuce
 
 aetherhaven.festival.started={festival} has started at the festival square.
@@ -31,6 +34,11 @@ aetherhaven.festival.shop.seeds.title=Festival Seeds
 
 aetherhaven.festival.npc.pigRaceMerchant.name=Race Merchant
 aetherhaven.festival.shop.pigRace.title=Race Goods
+
+aetherhaven.festival.npc.carnivalMerchant.name=Carnival Merchant
+aetherhaven.festival.npc.carnivalBalloon.name=Balloon Attendant
+aetherhaven.festival.npc.carnivalWheel.name=Wheel Attendant
+aetherhaven.festival.shop.carnival.title=Carnival Goods
 
 aetherhaven.festival.pig_race.npc.pink.name=Pink Pig
 aetherhaven.festival.pig_race.npc.boar.name=Boar

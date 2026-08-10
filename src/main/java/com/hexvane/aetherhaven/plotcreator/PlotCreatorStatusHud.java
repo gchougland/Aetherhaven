@@ -8,6 +8,7 @@ import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import java.util.List;
+import java.util.Locale;
 import javax.annotation.Nonnull;
 
 /** In-world hints while the plot creator wizard is dismissed but the session is still active. */
@@ -44,18 +45,7 @@ public final class PlotCreatorStatusHud extends CustomUIHud {
         if (step == PlotCreatorStep.SUBSTEP) {
             PlotBuildingKindRequirements.SubstepRequirement sub = PlotCreatorService.currentSubstep(session.getDraft());
             if (sub != null) {
-                if (sub.type() == PlotCreatorSubstepType.WORK_POI
-                    && sub.workResidentKind() != null
-                    && !sub.workResidentKind().isBlank()) {
-                    String role = sub.workResidentKind().toLowerCase(java.util.Locale.ROOT);
-                    b.set("#StepHelp.TextSpans", Message.translation(LANG_PREFIX + "substep.workRole." + role));
-                    b.set(
-                        "#DetailLine.TextSpans",
-                        Message.translation(LANG_PREFIX + "spot.workRole." + role)
-                    );
-                } else {
-                    b.set("#DetailLine.TextSpans", Message.translation(LANG_PREFIX + "substep." + sub.type().name()));
-                }
+                applySubstepHelp(b, sub);
                 b.set("#DetailLine.Visible", true);
             } else {
                 b.set("#DetailLine.Visible", false);
@@ -117,5 +107,35 @@ public final class PlotCreatorStatusHud extends CustomUIHud {
             }
         }
         this.update(false, b);
+    }
+
+    private static void applySubstepHelp(
+        @Nonnull UICommandBuilder b,
+        @Nonnull PlotBuildingKindRequirements.SubstepRequirement sub
+    ) {
+        if (sub.type() == PlotCreatorSubstepType.WORK_POI
+            && sub.workResidentKind() != null
+            && !sub.workResidentKind().isBlank()) {
+            String role = sub.workResidentKind().toLowerCase(Locale.ROOT);
+            b.set("#StepHelp.TextSpans", Message.translation(LANG_PREFIX + "substep.workRole." + role));
+            b.set("#DetailLine.TextSpans", Message.translation(LANG_PREFIX + "spot.desc.workRole." + role));
+            return;
+        }
+        if (sub.type() == PlotCreatorSubstepType.FESTIVAL_NPC
+            && sub.workResidentKind() != null
+            && !sub.workResidentKind().isBlank()) {
+            String suffix = PlotCreatorFestivalNpcRoles.labelLangSuffix(sub.workResidentKind());
+            b.set(
+                "#StepHelp.TextSpans",
+                Message.translation(LANG_PREFIX + "substep.festivalNpc." + suffix)
+            );
+            b.set(
+                "#DetailLine.TextSpans",
+                Message.translation(LANG_PREFIX + "spot.desc.festivalNpc." + suffix)
+            );
+            return;
+        }
+        b.set("#StepHelp.TextSpans", Message.translation(LANG_PREFIX + "substep." + sub.type().name()));
+        b.set("#DetailLine.TextSpans", Message.translation(LANG_PREFIX + "spot.desc." + sub.type().name()));
     }
 }

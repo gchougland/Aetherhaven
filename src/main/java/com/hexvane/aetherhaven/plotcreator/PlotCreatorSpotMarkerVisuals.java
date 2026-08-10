@@ -17,10 +17,11 @@ public final class PlotCreatorSpotMarkerVisuals {
     @Nonnull
     public static String textureFor(@Nonnull PlotCreatorSubstepType type) {
         return switch (type) {
-            case VISITOR_SPAWN, TOURIST_VISIT_POI, TOURIST_PORTAL_BLOCK -> TEX_TEAL;
-            case ADVENTURER_SPAWN, INNKEEPER_SPAWN, GUILD_MASTER_SPAWN -> TEX_PURPLE;
-            case SLEEP_POI, EAT_POI, FUN_POI -> TEX_BLUE;
-            case WORK_POI, BARD_WORK_POI, PLANNING_DESK_POI, QUEST_BOARD_POI, SHOP_POI -> TEX_ORANGE;
+            case VISITOR_SPAWN, TOURIST_VISIT_POI, TOURIST_PORTAL_BLOCK, FESTIVAL_TOURIST_SPOT -> TEX_TEAL;
+            case ADVENTURER_SPAWN, INNKEEPER_SPAWN, GUILD_MASTER_SPAWN, FESTIVAL_NPC -> TEX_PURPLE;
+            case SLEEP_POI, EAT_POI, FUN_POI, FESTIVAL_CENTERPIECE, FESTIVAL_WHEEL -> TEX_BLUE;
+            case WORK_POI, BARD_WORK_POI, PLANNING_DESK_POI, QUEST_BOARD_POI, SHOP_POI, FESTIVAL_RACE_LANE,
+                FESTIVAL_BALLOON_SPAWN -> TEX_ORANGE;
             case MANAGEMENT_BLOCK,
                 PRODUCTION_STORAGE,
                 TREASURY_BLOCK,
@@ -66,6 +67,9 @@ public final class PlotCreatorSpotMarkerVisuals {
                 return activityLabel;
             }
         }
+        if (type == PlotCreatorSubstepType.FESTIVAL_NPC) {
+            return festivalNpcLabel(workResidentKind);
+        }
         return switch (type) {
             case MANAGEMENT_BLOCK -> "Town records shelf";
             case PRODUCTION_STORAGE -> "Production chest";
@@ -88,7 +92,27 @@ public final class PlotCreatorSpotMarkerVisuals {
             case ADVENTURER_SPAWN -> "Adventurer posts";
             case BARD_WORK_POI -> "Bard work spot";
             case QUEST_BOARD_POI -> "Quest board";
+            case FESTIVAL_NPC -> "Festival merchant";
+            case FESTIVAL_TOURIST_SPOT -> "Festival visitor stand";
+            case FESTIVAL_CENTERPIECE -> "Festival centerpiece";
+            case FESTIVAL_RACE_LANE -> "Pig race lane";
+            case FESTIVAL_BALLOON_SPAWN -> "Balloon spawn";
+            case FESTIVAL_WHEEL -> "Carnival wheel";
         };
+    }
+
+    @Nonnull
+    private static String festivalNpcLabel(@Nullable String npcRoleId) {
+        if (npcRoleId == null || npcRoleId.isBlank()) {
+            return "Festival merchant";
+        }
+        if (PlotCreatorFestivalNpcRoles.SEED_SELLER.equals(npcRoleId)) {
+            return "Seed seller";
+        }
+        if (PlotCreatorFestivalNpcRoles.PIG_RACE_MERCHANT.equals(npcRoleId)) {
+            return "Race merchant";
+        }
+        return "Festival merchant";
     }
 
     @Nonnull

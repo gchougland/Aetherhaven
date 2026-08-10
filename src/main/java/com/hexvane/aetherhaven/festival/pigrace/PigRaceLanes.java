@@ -46,14 +46,21 @@ public final class PigRaceLanes {
         int finishLocalZ
     ) {}
 
+    /** Built-in lane geometry used when a festival JSON does not define {@code raceLanes}. */
     @Nonnull
-    public static List<Lane> lanes() {
+    public static List<Lane> defaultLanes() {
         return List.of(
             new Lane(0, "Aetherhaven_Festival_Pig_Race_Pink", -7, STAND_Y, -8, -7, STAND_Y, 8),
             new Lane(1, "Aetherhaven_Festival_Pig_Race_Boar", -3, STAND_Y, -8, -3, STAND_Y, 8),
             new Lane(2, "Aetherhaven_Festival_Pig_Race_Undead", 4, STAND_Y, -8, 4, STAND_Y, 8),
             new Lane(3, "Aetherhaven_Festival_Pig_Race_Wild", 8, STAND_Y, -8, 8, STAND_Y, 8)
         );
+    }
+
+    /** Fallback when no festival definition is available; prefer festival JSON {@code raceLanes} at runtime. */
+    @Nonnull
+    public static List<Lane> lanes() {
+        return defaultLanes();
     }
 
     public static int ticketPayout(int betAmount) {

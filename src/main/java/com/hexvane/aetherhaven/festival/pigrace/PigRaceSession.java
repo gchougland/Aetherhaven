@@ -124,7 +124,8 @@ public final class PigRaceSession {
         if (!canPlaceBet(playerUuid) || !PigRaceLanes.isAllowedBet(amount)) {
             return false;
         }
-        if (laneIndex < 0 || laneIndex >= PigRaceLanes.lanes().size()) {
+        int laneCount = racersView().isEmpty() ? PigRaceLanes.defaultLanes().size() : racersView().size();
+        if (laneIndex < 0 || laneIndex >= laneCount) {
             return false;
         }
         bets.put(playerUuid, new Bet(laneIndex, amount));

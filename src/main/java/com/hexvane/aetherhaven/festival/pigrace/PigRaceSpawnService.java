@@ -2,7 +2,9 @@ package com.hexvane.aetherhaven.festival.pigrace;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.entity.TransformComponentUtil;
+import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import com.hexvane.aetherhaven.festival.FestivalPrefabSwapService;
+import com.hexvane.aetherhaven.festival.FestivalRaceLanes;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.townsfolk.PendingEntityRemovalService;
@@ -56,7 +58,8 @@ public final class PigRaceSpawnService {
         }
         List<PigRaceSession.Racer> racers = new ArrayList<>();
         UUID townId = town.getTownId();
-        for (PigRaceLanes.Lane lane : PigRaceLanes.lanes()) {
+        FestivalDefinition festival = resolveFestival(plugin, town);
+        for (PigRaceLanes.Lane lane : FestivalRaceLanes.resolve(festival)) {
             Vector3d start =
                 FestivalPrefabSwapService.spotWorldPosition(
                     plugin,
@@ -264,7 +267,8 @@ public final class PigRaceSpawnService {
     ) {
         UUID townId = town.getTownId();
         PigRaceSession session = PigRaceSessionIndex.getOrCreate(townId);
-        int expected = PigRaceLanes.lanes().size();
+        FestivalDefinition festival = resolveFestival(plugin, town);
+        int expected = FestivalRaceLanes.resolve(festival).size();
         if (countLivingSessionRacers(store, session) >= expected) {
             return;
         }
@@ -346,12 +350,23 @@ public final class PigRaceSpawnService {
             }
         });
         List<PigRaceSession.Racer> ordered = new ArrayList<>();
-        for (PigRaceLanes.Lane lane : PigRaceLanes.lanes()) {
-            PigRaceSession.Racer racer = byLane.get(lane.index());
+        List<Integer> laneIndexes = new ArrayList<>(byLane.keySet());
+        laneIndexes.sort(Integer::compareTo);
+        for (int index : laneIndexes) {
+            PigRaceSession.Racer racer = byLane.get(index);
             if (racer != null) {
                 ordered.add(racer);
             }
         }
         return ordered;
+    }
+
+    @Nullable
+    private static FestivalDefinition resolveFestival(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town
+    ) {
+        String festivalId = town.getActiveFestivalId();
+        return festivalId != null ? plugin.getFestivalCatalog().get(festivalId) : null;
     }
 }

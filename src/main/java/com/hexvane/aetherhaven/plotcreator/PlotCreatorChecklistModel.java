@@ -43,14 +43,16 @@ public final class PlotCreatorChecklistModel {
         out.add(
             new ChecklistItem(LANG + "checklist.prefab", nonBlank(draft.getPrefabPath()), false, null)
         );
-        out.add(
-            new ChecklistItem(
-                LANG + "checklist.materials",
-                !draft.getMaterials().isEmpty(),
-                false,
-                null
-            )
-        );
+        if (!draft.isFestivalMode()) {
+            out.add(
+                new ChecklistItem(
+                    LANG + "checklist.materials",
+                    !draft.getMaterials().isEmpty(),
+                    false,
+                    null
+                )
+            );
+        }
 
         if (draft.isDecorationOnly()) {
             return out;
@@ -74,6 +76,13 @@ public final class PlotCreatorChecklistModel {
             && req.workResidentKind() != null
             && !req.workResidentKind().isBlank()) {
             return LANG + "spot.workRole." + req.workResidentKind().toLowerCase(Locale.ROOT);
+        }
+        if (req.type() == PlotCreatorSubstepType.FESTIVAL_NPC
+            && req.workResidentKind() != null
+            && !req.workResidentKind().isBlank()) {
+            return LANG
+                + "spot.festivalNpc."
+                + PlotCreatorFestivalNpcRoles.labelLangSuffix(req.workResidentKind());
         }
         return LANG + "spot." + req.type().name();
     }

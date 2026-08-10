@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.entity.EntityPresenceUtil;
 import com.hexvane.aetherhaven.entity.EntityPresenceUtil.EntityPresence;
 import com.hexvane.aetherhaven.guild.GuildHallDisplayAnchor;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorSpotPreview;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.rts.RtsGuardDirectory;
 import com.hexvane.aetherhaven.shopspot.ShopSpotOpenService;
@@ -1513,19 +1514,24 @@ public final class TouristPortalTickService {
     /**
      * Legacy tourist spawns that lost {@link TownVillagerBinding} / {@link TownsfolkCharacterBinding} but kept the
      * townsfolk NPC role — not reachable via tourist save rows or the live townsfolk index.
+     * Plot-creator spot previews use the townsfolk role without bindings and must not be purged.
      */
     public static boolean isOrphanTownsfolkShellForPurge(
         @Nullable String npcRoleName,
         boolean hasVillagerBinding,
         boolean hasTownsfolkBinding,
         boolean hasGuildHallDisplayAnchor,
+        boolean hasPlotCreatorSpotPreview,
         @Nonnull UUID entityUuid,
         @Nonnull Set<UUID> trackedNpcUuids
     ) {
         if (!AetherhavenConstants.NPC_TOWNSFOLK.equals(npcRoleName)) {
             return false;
         }
-        if (hasVillagerBinding || hasTownsfolkBinding || hasGuildHallDisplayAnchor) {
+        if (hasVillagerBinding
+            || hasTownsfolkBinding
+            || hasGuildHallDisplayAnchor
+            || hasPlotCreatorSpotPreview) {
             return false;
         }
         return !trackedNpcUuids.contains(entityUuid);
@@ -1649,11 +1655,14 @@ public final class TouristPortalTickService {
             boolean hasVillagerBinding = chunk.getComponent(i, TownVillagerBinding.getComponentType()) != null;
             boolean hasTownsfolkBinding = chunk.getComponent(i, TownsfolkCharacterBinding.getComponentType()) != null;
             boolean hasGuildHallAnchor = chunk.getComponent(i, GuildHallDisplayAnchor.getComponentType()) != null;
+            boolean hasPlotCreatorSpotPreview =
+                chunk.getComponent(i, PlotCreatorSpotPreview.getComponentType()) != null;
             if (!isOrphanTownsfolkShellForPurge(
                 npc.getRoleName(),
                 hasVillagerBinding,
                 hasTownsfolkBinding,
                 hasGuildHallAnchor,
+                hasPlotCreatorSpotPreview,
                 entityUuid,
                 trackedNpcUuids
             )) {

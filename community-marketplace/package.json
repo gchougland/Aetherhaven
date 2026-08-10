@@ -11,7 +11,9 @@
     "start": "node server/index.js",
     "dev": "node --watch server/index.js",
     "test": "node --test",
-    "sync-wiki": "node scripts/sync-wiki.mjs"
+    "sync-wiki": "node scripts/sync-wiki.mjs",
+    "sync-hytale-assets": "node scripts/sync-hytale-viewer-assets.mjs",
+    "playwright-install": "npx playwright-core install chromium"
   },
   "dependencies": {
     "cookie-parser": "^1.4.7",
@@ -20,6 +22,7 @@
     "express-session": "^1.18.1",
     "marked": "^15.0.12",
     "multer": "^1.4.5-lts.1",
+    "playwright-core": "^1.50.1",
     "session-file-store": "^1.2.0",
     "sharp": "^0.35.3",
     "uuid": "^11.0.5"

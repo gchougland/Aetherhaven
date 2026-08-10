@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.festival.pigrace;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import com.hexvane.aetherhaven.festival.FestivalMechanic;
+import com.hexvane.aetherhaven.festival.FestivalRaceLanes;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Store;
@@ -34,11 +35,12 @@ public final class PigRaceFestivalMechanic implements FestivalMechanic {
         session.clearAll();
         List<PigRaceSession.Racer> racers =
             PigRaceSpawnService.spawnRacers(world, store, plugin, town, festivalPlot);
-        if (racers.size() < PigRaceLanes.lanes().size()) {
+        int expectedLanes = FestivalRaceLanes.resolve(festival).size();
+        if (racers.size() < expectedLanes) {
             LOGGER.atWarning().log(
                 "Pig race spawned %s/%s pigs for town %s",
                 racers.size(),
-                PigRaceLanes.lanes().size(),
+                expectedLanes,
                 town.getTownId()
             );
         }

@@ -135,7 +135,23 @@ public final class PlotCreatorValidator {
             case VISITOR_SPAWN -> draft.getVisitorSpawnLocals().size();
             case GUILD_MASTER_SPAWN -> draft.getGuildMasterSpawnLocal() != null ? 1 : 0;
             case ADVENTURER_SPAWN -> draft.getAdventurerSpawns().size();
+            case FESTIVAL_NPC -> countFestivalNpcs(draft, req.workResidentKind());
+            case FESTIVAL_TOURIST_SPOT -> draft.getFestivalTouristSpots().size();
+            case FESTIVAL_CENTERPIECE -> draft.getFestivalCenterpieceLocal() != null ? 1 : 0;
+            case FESTIVAL_RACE_LANE -> draft.getFestivalRaceLanes().size();
+            case FESTIVAL_BALLOON_SPAWN -> draft.getFestivalBalloonSpawns().size();
+            case FESTIVAL_WHEEL -> draft.getFestivalWheelLocal() != null ? 1 : 0;
         };
+    }
+
+    private static int countFestivalNpcs(@Nonnull PlotCreatorDraft draft, @Nullable String npcRoleId) {
+        int n = 0;
+        for (var npc : draft.getFestivalNpcs()) {
+            if (npcRoleId == null || npcRoleId.isBlank() || npcRoleId.equals(npc.getNpcRoleId())) {
+                n++;
+            }
+        }
+        return n;
     }
 
     private static int countPoiRequirement(

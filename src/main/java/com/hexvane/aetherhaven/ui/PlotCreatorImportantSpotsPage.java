@@ -4,6 +4,8 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plotcreator.PlotBuildingKind;
 import com.hexvane.aetherhaven.plotcreator.PlotBuildingKindRequirements;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorDraft;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorFestivalMechanicDefaults;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorFestivalNpcRoles;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorInteractions;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorService;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorSession;
@@ -145,7 +147,38 @@ public final class PlotCreatorImportantSpotsPage
                 PlotBuildingKindRequirements.workplaceRolesForDraft(session.getDraft(), AetherhavenPlugin.get())) {
                 out.add(PlotCreatorSpotEntry.work(role, 1));
             }
-            return new ArrayList<>(out);
+            for (String npcRole : PlotCreatorFestivalNpcRoles.mergeWithDraft(session.getDraft())) {
+                out.add(PlotCreatorSpotEntry.festivalNpc(npcRole, 1));
+            }
+            out.add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_TOURIST_SPOT,
+                    resolveMinCount(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_TOURIST_SPOT, 1))
+                )
+            );
+            out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_CENTERPIECE, 1));
+            out.add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_RACE_LANE,
+                    resolveMinCount(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_RACE_LANE, 1))
+                )
+            );
+            out.add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_BALLOON_SPAWN,
+                    resolveMinCount(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_BALLOON_SPAWN, 1))
+                )
+            );
+            out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_WHEEL, 1));
+            List<PlotCreatorSpotEntry> ranked = new ArrayList<>(out);
+            for (int i = 0; i < ranked.size(); i++) {
+                PlotCreatorSpotEntry spot = ranked.get(i);
+                int min = resolveMinCount(spot);
+                if (min != spot.minCount()) {
+                    ranked.set(i, new PlotCreatorSpotEntry(spot.type(), min, spot.workResidentKind()));
+                }
+            }
+            return ranked;
         }
         out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1));
         for (PlotCreatorSubstepType type : PlotCreatorSubstepType.values()) {
@@ -250,6 +283,12 @@ public final class PlotCreatorImportantSpotsPage
 
     private boolean isLockedSpot(@Nonnull PlotCreatorSpotEntry spot) {
         if (session.getDraft().isFestivalMode()) {
+            for (PlotCreatorSpotEntry required :
+                PlotCreatorFestivalMechanicDefaults.requiredSpotsForMechanic(session.getDraft())) {
+                if (required.equals(spot)) {
+                    return true;
+                }
+            }
             return false;
         }
         if (spot.type() == PlotCreatorSubstepType.MANAGEMENT_BLOCK) {
@@ -313,6 +352,11 @@ public final class PlotCreatorImportantSpotsPage
         if (spot.isWorkRoleSpot() && spot.workResidentKind() != null) {
             return MSG + ".spot.workRole." + spot.workResidentKind().toLowerCase(Locale.ROOT);
         }
+        if (spot.isFestivalNpcSpot() && spot.workResidentKind() != null) {
+            return MSG
+                + ".spot.festivalNpc."
+                + PlotCreatorFestivalNpcRoles.labelLangSuffix(spot.workResidentKind());
+        }
         return MSG + ".spot." + spot.type().name();
     }
 
@@ -321,11 +365,18 @@ public final class PlotCreatorImportantSpotsPage
         if (spot.isWorkRoleSpot() && spot.workResidentKind() != null) {
             return "WORK_ROLE:" + spot.workResidentKind();
         }
+        if (spot.isFestivalNpcSpot() && spot.workResidentKind() != null) {
+            return "FESTIVAL_NPC:" + spot.workResidentKind();
+        }
         return spot.type().name();
     }
 
     @Nullable
     private static PlotCreatorSpotEntry parseSpotKey(@Nonnull String key) {
+        if (key.startsWith("FESTIVAL_NPC:")) {
+            String role = key.substring("FESTIVAL_NPC:".length()).trim();
+            return role.isEmpty() ? null : PlotCreatorSpotEntry.festivalNpc(role, 1);
+        }
         if (key.startsWith("WORK_ROLE:")) {
             String role = key.substring("WORK_ROLE:".length()).trim();
             if (role.isEmpty()) {

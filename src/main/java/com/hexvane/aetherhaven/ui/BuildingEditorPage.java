@@ -5,6 +5,8 @@ import com.hexvane.aetherhaven.community.CommunityMySubmissionEntry;
 import com.hexvane.aetherhaven.community.CommunityMySubmissionsService;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.festival.FestivalDefinition;
+import com.hexvane.aetherhaven.plotcreator.BuildingEditorFestivalSessionStarter;
 import com.hexvane.aetherhaven.plotcreator.BuildingEditorSessionStarter;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -37,10 +39,12 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
     private static final String ROWS = "#BuildingRows";
     private static final String TAB_ALL = "All";
     private static final String TAB_MINE = "Mine";
+    private static final String TAB_FESTIVALS = "Festivals";
 
     private enum Tab {
         ALL,
-        MINE
+        MINE,
+        FESTIVALS
     }
 
     @Nonnull
@@ -98,22 +102,29 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
         boolean marketplaceEnabled =
             plugin != null && plugin.getConfig().get().getCommunityMarketplace().isEnabled();
         boolean mineTab = activeTab == Tab.MINE;
+        boolean festivalsTab = activeTab == Tab.FESTIVALS;
         boolean loadingMine = mineTab && (mySubmissionsFetchInFlight.get() || mineEditInFlight.get());
         boolean showMineEmpty = mineTab && mySubmissionsLoaded && filteredMineSubmissions().isEmpty();
+        boolean showFestivalsEmpty = festivalsTab && filteredFestivals().isEmpty();
 
         commandBuilder.set("#EditorTitleText.TextSpans", Message.translation(MSG + ".title"));
-        commandBuilder.set(
-            "#StepHint.TextSpans",
-            Message.translation(mineTab ? MSG + ".hint.pickMine" : MSG + ".hint.pick")
-        );
-        commandBuilder.set("#StepHint.Visible", !loadingMine && !showMineEmpty);
+        String hintKey =
+            mineTab ? MSG + ".hint.pickMine" : festivalsTab ? MSG + ".hint.pickFestival" : MSG + ".hint.pick";
+        commandBuilder.set("#StepHint.TextSpans", Message.translation(hintKey));
+        commandBuilder.set("#StepHint.Visible", !loadingMine && !showMineEmpty && !showFestivalsEmpty);
         commandBuilder.set("#LoadingLabel.Visible", loadingMine);
         commandBuilder.set("#LoadingLabel.TextSpans", Message.translation(MSG + ".loadingMine"));
-        commandBuilder.set("#EmptyLabel.Visible", showMineEmpty);
-        commandBuilder.set("#EmptyLabel.TextSpans", Message.translation(MSG + ".emptyMine"));
+        commandBuilder.set("#EmptyLabel.Visible", showMineEmpty || showFestivalsEmpty);
+        commandBuilder.set(
+            "#EmptyLabel.TextSpans",
+            Message.translation(showFestivalsEmpty ? MSG + ".emptyFestivals" : MSG + ".emptyMine")
+        );
         commandBuilder.set("#CloseButton.TextSpans", Message.translation(MSG + ".button.close"));
         commandBuilder.set("#SearchInput.Value", searchQuery);
-        commandBuilder.set("#SearchInput.PlaceholderText", Message.translation(MSG + ".searchPlaceholder"));
+        commandBuilder.set(
+            "#SearchInput.PlaceholderText",
+            Message.translation(festivalsTab ? MSG + ".searchFestivalPlaceholder" : MSG + ".searchPlaceholder")
+        );
         commandBuilder.set("#EditorTabs.SelectedTab", tabId(activeTab));
         commandBuilder.set("#RefreshRow.Visible", mineTab && marketplaceEnabled);
         commandBuilder.set("#RefreshLabel.TextSpans", Message.translation(MSG + ".refreshMine"));
@@ -122,6 +133,8 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
         commandBuilder.clear(ROWS);
         if (mineTab) {
             buildMineRows(commandBuilder, eventBuilder, plugin);
+        } else if (festivalsTab) {
+            buildFestivalRows(commandBuilder, eventBuilder, plugin);
         } else {
             buildAllRows(commandBuilder, eventBuilder, plugin);
         }
@@ -156,6 +169,53 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
                 false
             );
         }
+    }
+
+    private void buildFestivalRows(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nullable AetherhavenPlugin plugin
+    ) {
+        List<FestivalChoice> choices = filteredFestivals();
+        for (int i = 0; i < choices.size(); i++) {
+            FestivalChoice choice = choices.get(i);
+            commandBuilder.append(ROWS, "Aetherhaven/BuildingEditorRow.ui");
+            String row = ROWS + "[" + i + "]";
+            commandBuilder.set(row + " #SelectHilite.Visible", false);
+            if (choice.labelLang() != null) {
+                commandBuilder.set(row + " #BuildingName.TextSpans", Message.translation(choice.labelLang()));
+            } else {
+                commandBuilder.set(row + " #BuildingName.TextSpans", Message.raw(choice.fallbackLabel()));
+            }
+            commandBuilder.set(
+                row + " #BuildingId.TextSpans",
+                Message.raw(choice.festivalId() != null ? choice.festivalId() : "")
+            );
+            commandBuilder.set(row + " #IconBox #BuildingIcon.AssetPath", festivalIconPath(choice, plugin));
+            EventData select =
+                EventData.of("Action", "SelectFestival")
+                    .append("FestivalId", choice.festivalId() != null ? choice.festivalId() : "");
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                row + " #Select",
+                select,
+                false
+            );
+        }
+    }
+
+    @Nonnull
+    private static String festivalIconPath(@Nonnull FestivalChoice choice, @Nullable AetherhavenPlugin plugin) {
+        if (choice.festivalId() == null) {
+            return "UI/Custom/flags.png";
+        }
+        if (plugin != null) {
+            FestivalDefinition def = plugin.getFestivalCatalog().get(choice.festivalId());
+            if (def != null) {
+                return def.getCalendarIconPath();
+            }
+        }
+        return "UI/Custom/flags.png";
     }
 
     private void buildMineRows(
@@ -246,17 +306,60 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
     }
 
     @Nonnull
+    private List<FestivalChoice> filteredFestivals() {
+        List<FestivalChoice> out = new ArrayList<>();
+        String q = searchQuery.trim().toLowerCase(Locale.ROOT);
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null) {
+            List<FestivalDefinition> defs = new ArrayList<>(plugin.getFestivalCatalog().list());
+            defs.sort(Comparator.comparing(d -> d.getDisplayName().toLowerCase(Locale.ROOT)));
+            for (FestivalDefinition def : defs) {
+                out.add(new FestivalChoice(def.getId(), def.getDisplayNameLangKey(), def.getDisplayName()));
+            }
+        }
+        if (q.isEmpty()) {
+            return out;
+        }
+        List<FestivalChoice> filtered = new ArrayList<>();
+        for (FestivalChoice choice : out) {
+            String id = choice.festivalId() != null ? choice.festivalId().toLowerCase(Locale.ROOT) : "";
+            String name = choice.fallbackLabel().toLowerCase(Locale.ROOT);
+            if (id.contains(q) || name.contains(q)) {
+                filtered.add(choice);
+            }
+        }
+        return filtered;
+    }
+
+    private record FestivalChoice(
+        @Nullable String festivalId,
+        @Nullable String labelLang,
+        @Nonnull String fallbackLabel
+    ) {}
+
+    @Nonnull
     private static String displayName(@Nonnull ConstructionDefinition def) {
         String name = def.getDisplayName();
         return name != null && !name.isBlank() ? name : def.getId();
     }
 
     private static String tabId(@Nonnull Tab tab) {
-        return tab == Tab.MINE ? TAB_MINE : TAB_ALL;
+        return switch (tab) {
+            case MINE -> TAB_MINE;
+            case FESTIVALS -> TAB_FESTIVALS;
+            case ALL -> TAB_ALL;
+        };
     }
 
     private static Tab parseTab(@Nullable String tabId) {
-        return TAB_MINE.equalsIgnoreCase(tabId != null ? tabId.trim() : "") ? Tab.MINE : Tab.ALL;
+        String id = tabId != null ? tabId.trim() : "";
+        if (TAB_MINE.equalsIgnoreCase(id)) {
+            return Tab.MINE;
+        }
+        if (TAB_FESTIVALS.equalsIgnoreCase(id)) {
+            return Tab.FESTIVALS;
+        }
+        return Tab.ALL;
     }
 
     private void refresh(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
@@ -403,6 +506,12 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
         }
         if ("SelectMine".equals(data.action) && data.constructionId != null && !data.constructionId.isBlank()) {
             startMineEdit(ref, store, data.constructionId);
+            return;
+        }
+        if ("SelectFestival".equals(data.action)
+            && data.festivalId != null
+            && !data.festivalId.isBlank()) {
+            BuildingEditorFestivalSessionStarter.start(playerRef, ref, store, data.festivalId.trim());
         }
     }
 
@@ -411,6 +520,8 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
             .append(new KeyedCodec<>("Action", Codec.STRING), (d, a) -> d.action = a, d -> d.action)
             .add()
             .append(new KeyedCodec<>("ConstructionId", Codec.STRING), (d, v) -> d.constructionId = v, d -> d.constructionId)
+            .add()
+            .append(new KeyedCodec<>("FestivalId", Codec.STRING), (d, v) -> d.festivalId = v, d -> d.festivalId)
             .add()
             .append(new KeyedCodec<>("@SearchQuery", Codec.STRING), (d, v) -> d.searchQuery = v, d -> d.searchQuery)
             .add()
@@ -422,6 +533,8 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
         private String action;
         @Nullable
         private String constructionId;
+        @Nullable
+        private String festivalId;
         @Nullable
         private String searchQuery;
         @Nullable

@@ -8,6 +8,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.debug.DebugUtils;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -99,6 +100,7 @@ public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntitySt
             PlotCreatorService.refreshBoundsVisuals(session, pr);
         }
         syncImportantSpotMarkers(session, world, store, ref, commandBuffer);
+        tickSpotPreviewPoses(world, store, ref, commandBuffer);
     }
 
     private static void syncImportantSpotMarkers(
@@ -122,24 +124,98 @@ public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntitySt
             LAST_SPOT_MARKER_SIG.put(ownerUuid, spotSig);
             if (!showingSpots) {
                 PlotCreatorSpotMarkerSync.clearAll(world, ownerUuid, commandBuffer);
+                PlotCreatorSpotPreviewSync.clearAll(world, ownerUuid, commandBuffer);
                 return;
             }
             @Nullable
             PlotBuildingKindRequirements.SubstepRequirement filter =
                 step == PlotCreatorStep.SUBSTEP ? PlotCreatorService.currentSubstep(draft) : null;
-            List<PlotCreatorSpotMarkerCollector.DesiredSpotMarker> desired =
+            List<PlotCreatorSpotMarkerCollector.DesiredSpotMarker> desiredMarkers =
                 filter == null && step == PlotCreatorStep.SUBSTEP
                     ? Collections.emptyList()
                     : PlotCreatorSpotMarkerCollector.collect(draft, world, filter);
-            PlotCreatorSpotMarkerSync.sync(world, ownerUuid, desired, commandBuffer);
+            List<PlotCreatorSpotPreviewCollector.DesiredSpotPreview> desiredPreviews =
+                filter == null && step == PlotCreatorStep.SUBSTEP
+                    ? Collections.emptyList()
+                    : PlotCreatorSpotPreviewCollector.collect(draft, world, filter);
+            PlotCreatorSpotMarkerSync.sync(world, ownerUuid, desiredMarkers, commandBuffer);
+            PlotCreatorSpotPreviewSync.sync(world, ownerUuid, desiredPreviews, commandBuffer);
         } else if (!showingSpots) {
             return;
+        } else {
+            // Draft unchanged, but ambient NPC despawn can still delete preview entities.
+            PlotCreatorSpotPreviewSync.respawnMissing(world, ownerUuid);
         }
 
         PlayerRef playerRefComp = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (playerRefComp != null && showingSpots) {
             drawFacingHintLines(draft, world, playerRefComp, step);
         }
+    }
+
+    private static void tickSpotPreviewPoses(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        UUID ownerUuid;
+        try {
+            ownerUuid = PlotCreatorSpotPreviewSync.requireOwnerEntityUuid(store, playerRef);
+        } catch (IllegalStateException ignored) {
+            return;
+        }
+        long nowMs = System.currentTimeMillis();
+        store.forEachChunk(
+            Query.and(PlotCreatorSpotPreview.getComponentType()),
+            (chunk, chunkCommandBuffer) -> {
+                for (int i = 0; i < chunk.size(); i++) {
+                    PlotCreatorSpotPreview preview = chunk.getComponent(i, PlotCreatorSpotPreview.getComponentType());
+                    if (preview == null || !ownerUuid.equals(preview.getOwnerPlayerUuid())) {
+                        continue;
+                    }
+                    Ref<EntityStore> npcRef = chunk.getReferenceTo(i);
+                    if (!npcRef.isValid()) {
+                        continue;
+                    }
+                    UUIDComponent previewUuidComp = store.getComponent(npcRef, UUIDComponent.getComponentType());
+                    UUID previewUuid = previewUuidComp != null ? previewUuidComp.getUuid() : null;
+                    PlotCreatorSpotPreviewCollector.DesiredSpotPreview desired =
+                        PlotCreatorSpotPreviewSync.desiredForKey(ownerUuid, preview.getPreviewKey());
+                    if (desired == null) {
+                        continue;
+                    }
+                    // Pose writes must go through the player-tick CommandBuffer, not the forEach chunk buffer.
+                    // Track pose-applied outside the component so put/clone cannot re-apply the initial pose each tick.
+                    if (!PlotCreatorSpotPreviewSync.isPoseApplied(ownerUuid, previewUuid)) {
+                        PlotCreatorSpotPreviewPose.applyInitialPose(npcRef, store, commandBuffer, desired);
+                        PlotCreatorSpotPreviewSync.markPoseApplied(ownerUuid, previewUuid);
+                        preview.setPoseApplied(true);
+                        preview.setLastWorkBeatEpochMs(nowMs);
+                        commandBuffer.putComponent(npcRef, PlotCreatorSpotPreview.getComponentType(), preview);
+                        continue;
+                    }
+                    // Snap back if they drifted; do not re-enter NPC states (that clears Sit / work anims).
+                    PlotCreatorSpotPreviewPose.holdPosition(npcRef, store, commandBuffer, desired);
+                    if (desired.poiBlockX() == null) {
+                        continue;
+                    }
+                    long last = preview.getLastWorkBeatEpochMs();
+                    if (PlotCreatorSpotPreviewPose.tickWorkBeat(
+                        npcRef,
+                        store,
+                        commandBuffer,
+                        desired,
+                        null,
+                        nowMs,
+                        last
+                    )) {
+                        preview.setLastWorkBeatEpochMs(nowMs);
+                        commandBuffer.putComponent(npcRef, PlotCreatorSpotPreview.getComponentType(), preview);
+                    }
+                }
+            }
+        );
     }
 
     private static void drawFacingHintLines(
@@ -156,29 +232,43 @@ public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntitySt
         }
         for (PlotCreatorSpotMarkerCollector.DesiredSpotMarker m :
             PlotCreatorSpotMarkerCollector.collect(draft, world, filter)) {
-            if (m.facingYawWorldRadians() == null) {
-                continue;
-            }
-            float yaw = m.facingYawWorldRadians();
-            double sx = m.x() + 0.5;
-            double sy = m.y() + 1.05;
-            double sz = m.z() + 0.5;
-            double ex = sx + (-Math.sin(yaw)) * 1.35;
-            double ez = sz + (-Math.cos(yaw)) * 1.35;
-            PoiDebugLineHelper.addLineToPlayer(
-                playerRef,
-                sx,
-                sy,
-                sz,
-                ex,
-                sy,
-                ez,
-                DebugUtils.COLOR_YELLOW,
-                0.07,
-                1.25F,
-                0
-            );
+            drawFacingLine(playerRef, m.x(), m.y(), m.z(), m.facingYawWorldRadians());
         }
+        for (PlotCreatorSpotPreviewCollector.DesiredSpotPreview p :
+            PlotCreatorSpotPreviewCollector.collect(draft, world, filter)) {
+            drawFacingLine(playerRef, p.standX(), p.standY(), p.standZ(), p.facingYawWorldRadians());
+        }
+    }
+
+    private static void drawFacingLine(
+        @Nonnull PlayerRef playerRef,
+        int x,
+        int y,
+        int z,
+        @Nullable Float facingYawWorldRadians
+    ) {
+        if (facingYawWorldRadians == null) {
+            return;
+        }
+        float yaw = facingYawWorldRadians;
+        double sx = x + 0.5;
+        double sy = y + 1.05;
+        double sz = z + 0.5;
+        double ex = sx + (-Math.sin(yaw)) * 1.35;
+        double ez = sz + (-Math.cos(yaw)) * 1.35;
+        PoiDebugLineHelper.addLineToPlayer(
+            playerRef,
+            sx,
+            sy,
+            sz,
+            ex,
+            sy,
+            ez,
+            DebugUtils.COLOR_YELLOW,
+            0.07,
+            1.25F,
+            0
+        );
     }
 
     private static void clearSpotMarkers(
@@ -191,6 +281,7 @@ public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntitySt
             UUID ownerUuid = PlotCreatorSpotMarkerSync.requireOwnerEntityUuid(store, playerRef);
             LAST_SPOT_MARKER_SIG.remove(ownerUuid);
             PlotCreatorSpotMarkerSync.clearAll(world, ownerUuid, commandBuffer);
+            PlotCreatorSpotPreviewSync.clearAll(world, ownerUuid, commandBuffer);
         } catch (IllegalStateException ignored) {
             // Player missing UUID — nothing to clear.
         }

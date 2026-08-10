@@ -116,6 +116,14 @@ public final class PlotCreatorHudControls {
             rows.add(row(ToolKeybindSlot.SECONDARY, "hud.SUBSTEP.secondaryAdventurer"));
         } else if (sub != null && sub.type() == PlotCreatorSubstepType.VISITOR_SPAWN) {
             rows.add(row(ToolKeybindSlot.SECONDARY, "hud.SUBSTEP.secondaryVisitor"));
+        } else if (sub != null
+            && (sub.type() == PlotCreatorSubstepType.FESTIVAL_NPC
+                || sub.type() == PlotCreatorSubstepType.FESTIVAL_TOURIST_SPOT
+                || sub.type() == PlotCreatorSubstepType.FESTIVAL_CENTERPIECE
+                || sub.type() == PlotCreatorSubstepType.FESTIVAL_RACE_LANE
+                || sub.type() == PlotCreatorSubstepType.FESTIVAL_BALLOON_SPAWN
+                || sub.type() == PlotCreatorSubstepType.FESTIVAL_WHEEL)) {
+            rows.add(row(ToolKeybindSlot.SECONDARY, "hud.SUBSTEP.secondaryFestivalSpot"));
         }
         rows.add(row(ToolKeybindSlot.ABILITY1, "hud.SUBSTEP.q"));
         rows.add(row(ToolKeybindSlot.ABILITY2, "hud.common.e"));

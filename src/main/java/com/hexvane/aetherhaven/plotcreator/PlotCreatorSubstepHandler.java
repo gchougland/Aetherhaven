@@ -122,6 +122,17 @@ public final class PlotCreatorSubstepHandler {
             case SHOP_SPOT, TOURIST_PORTAL_BLOCK -> tryRemoveSpecialBlockNear(draft, targetBlock, playerRef);
             case WORK_POI, SLEEP_POI, EAT_POI, FUN_POI, SHOP_POI, TOURIST_VISIT_POI, PLANNING_DESK_POI, BARD_WORK_POI,
                 QUEST_BOARD_POI -> tryRemoveMatchingPoiNear(draft, targetBlock, req, playerRef);
+            case FESTIVAL_NPC ->
+                PlotCreatorFestivalPlacement.tryRemoveNpcNear(draft, targetBlock, req.workResidentKind(), playerRef);
+            case FESTIVAL_TOURIST_SPOT ->
+                PlotCreatorFestivalPlacement.tryRemoveTouristNear(draft, targetBlock, playerRef);
+            case FESTIVAL_CENTERPIECE ->
+                PlotCreatorFestivalPlacement.tryRemoveCenterpieceNear(draft, targetBlock, playerRef);
+            case FESTIVAL_RACE_LANE ->
+                PlotCreatorFestivalPlacement.tryRemoveRaceLaneNear(session, targetBlock, playerRef);
+            case FESTIVAL_BALLOON_SPAWN ->
+                PlotCreatorFestivalPlacement.tryRemoveBalloonNear(draft, targetBlock, playerRef);
+            case FESTIVAL_WHEEL -> PlotCreatorFestivalPlacement.tryRemoveWheelNear(draft, targetBlock, playerRef);
         };
     }
 
@@ -398,6 +409,32 @@ public final class PlotCreatorSubstepHandler {
                 blockId,
                 local,
                 req,
+                playerRef,
+                playerEntityRef,
+                store
+            );
+            case FESTIVAL_NPC -> PlotCreatorFestivalPlacement.placeNpc(
+                session,
+                targetBlock,
+                req.workResidentKind(),
+                playerRef,
+                playerEntityRef,
+                store
+            );
+            case FESTIVAL_TOURIST_SPOT -> PlotCreatorFestivalPlacement.placeTouristSpot(
+                session,
+                targetBlock,
+                playerRef,
+                playerEntityRef,
+                store
+            );
+            case FESTIVAL_CENTERPIECE -> PlotCreatorFestivalPlacement.placeCenterpiece(session, targetBlock, playerRef);
+            case FESTIVAL_RACE_LANE -> PlotCreatorFestivalPlacement.placeRaceLaneClick(session, targetBlock, playerRef);
+            case FESTIVAL_BALLOON_SPAWN ->
+                PlotCreatorFestivalPlacement.placeBalloonSpawn(session, targetBlock, playerRef);
+            case FESTIVAL_WHEEL -> PlotCreatorFestivalPlacement.placeWheel(
+                session,
+                targetBlock,
                 playerRef,
                 playerEntityRef,
                 store

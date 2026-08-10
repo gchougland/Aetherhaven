@@ -531,6 +531,7 @@ public final class PlotCreatorService {
     /** Restores spots that cannot be deselected for the draft's effective building kinds. */
     public static void ensureRequiredSpots(@Nonnull PlotCreatorDraft draft) {
         if (draft.isFestivalMode()) {
+            PlotCreatorFestivalMechanicDefaults.ensureRequiredSelectedSpots(draft);
             return;
         }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();

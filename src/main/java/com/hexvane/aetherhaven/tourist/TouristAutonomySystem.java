@@ -792,6 +792,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         UUID plotId = autonomy.getVisitPlotUuid();
         ConstructionCatalog catalog = plugin.getConstructionCatalog();
         boolean shopPlot = plotId != null && TouristDestinationResolver.isTouristShopPlot(town, catalog, plotId);
+        boolean festivalPlot = plotId != null && TouristDestinationResolver.isActiveFestivalPlot(town, plotId);
         long dur = visitDurationMs(now, salt, shopPlot);
         autonomy.setPhaseEndEpochMs(now + dur);
         if (shopPlot) {
@@ -805,8 +806,49 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
             if (tryTravelToNextShopSpot(ref, store, commandBuffer, npc, autonomy, now, town, world)) {
                 return;
             }
+        } else if (festivalPlot && tryTravelToFestivalVisitPoi(ref, store, commandBuffer, npc, autonomy, now, town, world, plotId)) {
+            return;
         }
         clearAutonomyRoleState(ref, npc, commandBuffer);
+    }
+
+    /** Walk straight to a festival visitor stand on arrival instead of lingering at the old mid-square entry. */
+    private boolean tryTravelToFestivalVisitPoi(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull NPCEntity npc,
+        @Nonnull TouristAutonomyState autonomy,
+        long now,
+        @Nonnull TownRecord town,
+        @Nonnull World world,
+        @Nonnull UUID plotId
+    ) {
+        TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+        int npcFeetY = tc != null ? (int) Math.floor(tc.getPosition().y) : 64;
+        PoiRegistry poiRegistry = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
+        Map<String, Integer> occupancy =
+            PoiOccupancy.cellOccupancyForTown(world, town.getTownId(), store, poiRegistry);
+        Random random = new Random(now ^ ref.hashCode() ^ plotId.hashCode() ^ 0xF357L);
+        PoiEntry poi =
+            TouristDestinationResolver.pickVisitPoiOnPlot(
+                town,
+                poiRegistry,
+                plugin.getConstructionCatalog(),
+                plotId,
+                autonomy.getLastPlotPoiUuid(),
+                random,
+                world,
+                plugin,
+                npcFeetY,
+                store,
+                occupancy
+            );
+        if (poi == null) {
+            return false;
+        }
+        beginTravelToPoi(ref, store, commandBuffer, npc, autonomy, now, town, world, poi);
+        return true;
     }
 
     private void beginPlotPoiUse(

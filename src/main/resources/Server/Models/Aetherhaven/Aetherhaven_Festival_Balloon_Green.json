@@ -1,0 +1,10 @@
+{
+  "Model": "NPC/Balloon.blockymodel",
+  "Texture": "Items/Aetherhaven/Floating_Gift/Floating_Gift_Green.png",
+  "HitBox": {
+    "Min": { "X": 0.15625, "Y": 1.03125, "Z": 0.125 },
+    "Max": { "X": 0.84375, "Y": 1.90625, "Z": 0.875 }
+  },
+  "MinScale": 1,
+  "MaxScale": 1
+}

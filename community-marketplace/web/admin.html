@@ -12,6 +12,14 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/styles.css?v=42" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.172.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.172.0/examples/jsm/"
+        }
+      }
+    </script>
   </head>
   <body>
     <header class="site-header">
@@ -232,7 +240,11 @@
         </div>
       </details>
     </main>
-    <script src="/app.js?v=34"></script>
+    <script type="module">
+      import { PrefabViewer, mountPrefabViewer } from "/prefab-viewer/PrefabViewer.js";
+      window.PrefabViewerAPI = { PrefabViewer, mountPrefabViewer };
+    </script>
+    <script src="/app.js?v=35"></script>
     <script>
       loadAdminPage();
     </script>

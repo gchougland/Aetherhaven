@@ -36,6 +36,24 @@ public final class PlotCreatorSpotEntry {
         return new PlotCreatorSpotEntry(PlotCreatorSubstepType.BARD_WORK_POI, minCount, null);
     }
 
+    /** Festival/building work stands: bard uses its own spot type so markers and removal match. */
+    @Nonnull
+    public static PlotCreatorSpotEntry workOrBard(@Nonnull String residentKind, int minCount) {
+        if (com.hexvane.aetherhaven.villager.TownVillagerBinding.KIND_BARD.equals(residentKind)) {
+            return bard(minCount);
+        }
+        return work(residentKind, minCount);
+    }
+
+    @Nonnull
+    public static PlotCreatorSpotEntry festivalNpc(@Nonnull String npcRoleId, int minCount) {
+        return new PlotCreatorSpotEntry(PlotCreatorSubstepType.FESTIVAL_NPC, minCount, npcRoleId);
+    }
+
+    public boolean isFestivalNpcSpot() {
+        return type == PlotCreatorSubstepType.FESTIVAL_NPC && workResidentKind != null;
+    }
+
     @Nonnull
     public PlotCreatorSubstepType type() {
         return type;

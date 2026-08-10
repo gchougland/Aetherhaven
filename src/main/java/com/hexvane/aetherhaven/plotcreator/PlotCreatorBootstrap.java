@@ -139,6 +139,7 @@ public final class PlotCreatorBootstrap {
     }
 
     public static void register(@Nonnull AetherhavenPlugin core, @Nonnull JavaPlugin plugin) {
+        PlotCreatorSpotPreview.register(plugin.getEntityStoreRegistry());
         plugin
             .getEntityRegistry()
             .registerEntity(
@@ -155,6 +156,8 @@ public final class PlotCreatorBootstrap {
             );
         plugin.getEntityStoreRegistry().registerSystem(new PlotCreatorBreakAllowSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new PlotCreatorPreviewSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new PlotCreatorSpotPreviewSanitizeSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new PlotCreatorSpotPreviewHideSystem());
         plugin.getEntityStoreRegistry().registerSystem(new PlotPlacementSpectatorSyncSystem());
         plugin.getEntityStoreRegistry().registerSystem(new PlotPlacementPlayerRemoveSystem());
         core.registerAetherhavenSubcommand(new AetherhavenPlotCreatorCommand());
@@ -164,7 +167,12 @@ public final class PlotCreatorBootstrap {
                 StartWorldEvent.class,
                 event -> {
                     World world = event.getWorld();
-                    world.execute(() -> PlotCreatorSpotMarkerSpawner.purgeAllInWorld(world));
+                    world.execute(
+                        () -> {
+                            PlotCreatorSpotMarkerSpawner.purgeAllInWorld(world);
+                            PlotCreatorSpotPreviewSpawner.purgeAllInWorld(world);
+                        }
+                    );
                 }
             );
         PlotCreatorBoundsInput.register(plugin.getEventRegistry());

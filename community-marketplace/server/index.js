@@ -60,6 +60,7 @@ import {
   buildSitemapXml,
   renderWikiTopic,
 } from "./wikiRender.js";
+import { createPreviewScreenshotService } from "./previewScreenshot.js";
 // sharp is loaded lazily inside processScreenshot so native-lib failures
 // do not crash startup before Railway's /api/v1/health check can succeed.
 
@@ -84,7 +85,31 @@ const ADSENSE_CLIENT_ID = (process.env.ADSENSE_CLIENT_ID || "").trim();
 const ADSENSE_SLOT_BROWSE = (process.env.ADSENSE_SLOT_BROWSE || "").trim();
 const ADSENSE_SLOT_WIKI = (process.env.ADSENSE_SLOT_WIKI || "").trim();
 const dataDir = process.env.DATA_DIR || path.join(__dirname, "..", "data");
+const hytaleAssetsDir = resolveHytaleAssetsDir();
+
+function resolveHytaleAssetsDir() {
+  const fromEnv = String(process.env.HYTALE_ASSETS_DIR || "").trim();
+  if (fromEnv) {
+    return path.resolve(fromEnv);
+  }
+  return path.join(__dirname, "..", "web", "hytale-assets");
+}
+
+function isLoopbackRequest(req) {
+  const raw = String(req.socket?.remoteAddress || req.ip || "");
+  return (
+    raw === "127.0.0.1" ||
+    raw === "::1" ||
+    raw === "::ffff:127.0.0.1" ||
+    raw.endsWith("127.0.0.1")
+  );
+}
 const storage = createStorage(dataDir);
+const previewScreenshots = createPreviewScreenshotService({
+  storage,
+  port: PORT,
+  publicBaseUrl: () => publicBaseUrl,
+});
 const votes = createVotes(dataDir);
 const favorites = createFavorites(dataDir);
 const downloads = createDownloads(dataDir);
@@ -820,6 +845,7 @@ function listSubmissionsForCreator(webUser) {
     .map((s) => ({
       kind: "pending",
       ...s,
+      prefabUrl: `/api/my-submissions/${encodeURIComponent(s.submissionId)}/prefab.json`,
       screenshots: enrichOwnerScreenshots("pending", s.submissionId, true),
     }));
 
@@ -850,6 +876,7 @@ function listSubmissionsForCreator(webUser) {
         usesCoverImage: card.usesCoverImage,
         iconUrl: card.iconUrl,
         coverImageUrl: card.coverImageUrl || null,
+        prefabUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/prefab.json`,
         screenshots: enrichOwnerScreenshots("approved", e.id, true),
       };
       if (goldCost > 0) {
@@ -1267,6 +1294,7 @@ app.post(
         creatorName: meta.creatorName,
         submittedAt: meta.submittedAt,
       }).catch(() => {});
+      previewScreenshots.enqueue(submissionId);
       res.status(201).json({ submissionId, proposedId: id, status: "pending" });
     } catch (e) {
       res.status(400).json({ error: e.message || "submission_failed" });
@@ -1364,6 +1392,9 @@ app.put(
         creatorName: String(req.get("X-Player-Name") || "Unknown").trim(),
         submittedAt: new Date().toISOString(),
       }).catch(() => {});
+      if (result.body.submissionId) {
+        previewScreenshots.enqueue(result.body.submissionId);
+      }
     }
     res.status(result.status).json(result.body);
   },
@@ -1597,6 +1628,7 @@ function getPublishedBuildingEditPayload(buildingId, webUser, options = {}) {
       usesCoverImage: card.usesCoverImage,
       iconUrl: card.iconUrl,
       coverImageUrl: card.coverImageUrl || null,
+      prefabUrl: `/api/v1/buildings/${encodeURIComponent(id)}/prefab.json`,
       screenshots: enrichOwnerScreenshots("approved", id, true),
     },
   };
@@ -1714,6 +1746,7 @@ function getPendingSubmissionEditPayload(submissionId) {
       coverScreenshotId: null,
       usesCoverImage: false,
       coverImageUrl: null,
+      prefabUrl: `/api/my-submissions/${encodeURIComponent(submissionId)}/prefab.json`,
       screenshots: enrichOwnerScreenshots("pending", submissionId, true),
     },
   };
@@ -1889,6 +1922,32 @@ app.get("/api/my-submissions", requireWebUser, (req, res) => {
     return;
   }
   res.json({ submissions: listSubmissionsForCreator(webUser) });
+});
+
+app.get("/api/my-submissions/:submissionId/prefab.json", requireWebUser, (req, res) => {
+  const submissionId = String(req.params.submissionId || "").trim();
+  if (!submissionId || submissionId.includes("..") || submissionId.includes("/") || submissionId.includes("\\")) {
+    res.status(400).json({ error: "invalid_id" });
+    return;
+  }
+  const meta = storage.loadSubmissionMeta(submissionId, "pending");
+  if (!meta) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  const webUser = sessionWebUser(req);
+  const profileUuid = String(webUser.profileUuid || "").trim().toLowerCase();
+  const isAdmin = Boolean(profileUuid && ADMIN_UUIDS.has(profileUuid));
+  if (!isOwnedByWebUser(meta, webUser) && !isAdmin) {
+    res.status(403).json({ error: "not_owner" });
+    return;
+  }
+  const file = path.join(storage.submissionDir(submissionId, "pending"), "prefab.prefab.json");
+  if (!fs.existsSync(file)) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  res.type("application/json").send(fs.readFileSync(file));
 });
 
 app.get("/api/my-buildings/:buildingId", requireWebUser, (req, res) => {
@@ -2605,6 +2664,48 @@ app.post("/api/v1/buildings/:id/favorite", requireInGamePlayer, (req, res) => {
 
 const webRoot = path.join(__dirname, "..", "web");
 
+app.get("/internal/prefab-render.html", (req, res) => {
+  if (!isLoopbackRequest(req)) {
+    res.status(403).json({ error: "loopback_only" });
+    return;
+  }
+  res.sendFile(path.join(webRoot, "internal", "prefab-render.html"));
+});
+
+app.get("/internal/pending-prefab/:submissionId.json", (req, res) => {
+  if (!isLoopbackRequest(req)) {
+    res.status(403).json({ error: "loopback_only" });
+    return;
+  }
+  const submissionId = String(req.params.submissionId || "").trim();
+  if (!submissionId || submissionId.includes("..") || submissionId.includes("/") || submissionId.includes("\\")) {
+    res.status(400).json({ error: "invalid_id" });
+    return;
+  }
+  const file = path.join(storage.submissionDir(submissionId, "pending"), "prefab.prefab.json");
+  if (!fs.existsSync(file)) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  res.type("application/json").send(fs.readFileSync(file));
+});
+
+if (fs.existsSync(hytaleAssetsDir)) {
+  app.use(
+    "/hytale-assets",
+    express.static(hytaleAssetsDir, {
+      maxAge: IS_PRODUCTION ? "7d" : 0,
+      fallthrough: true,
+      index: false,
+    })
+  );
+  console.log(`Serving Hytale viewer assets from ${hytaleAssetsDir}`);
+} else {
+  console.warn(
+    `Hytale viewer assets not found at ${hytaleAssetsDir}. Run: npm run sync-hytale-assets`
+  );
+}
+
 /** Inject AdSense site-verification script into HTML head when publisher ID is configured. */
 function sendHtmlWithAdSense(relativePath) {
   return (_req, res) => {
@@ -2710,6 +2811,7 @@ const server = app.listen(PORT, () => {
 
 function shutdown(signal) {
   console.log(`Received ${signal}, shutting down gracefully…`);
+  previewScreenshots.shutdown().catch(() => {});
   server.close((err) => {
     if (err) {
       console.error("Error during shutdown:", err);

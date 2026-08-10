@@ -117,6 +117,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
                 .append("@PlotTokenLocked", "#PlotTokenLockedToggle.Value")
                 .append("@SubmitToCommunity", "#SubmitToCommunityToggle.Value")
                 .append("@StyleId", "#StyleIdField.Value")
+                .append("@FestivalActivity", "#FestivalActivityField.Value")
                 .append("@FestivalSeason", "#FestivalSeasonField.Value")
                 .append("@FestivalDay", "#FestivalDayField.Value")
                 .append("@FestivalAllDay", "#FestivalAllDayToggle.Value")
@@ -212,6 +213,12 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         wireConfigureToggle(eventBuilder, "#FestivalAllDayToggle", "@FestivalAllDay");
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.ValueChanged,
+            "#FestivalActivityField",
+            EventData.of("@FestivalActivity", "#FestivalActivityField.Value"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
             "#FestivalSeasonField",
             EventData.of("@FestivalSeason", "#FestivalSeasonField.Value"),
             false
@@ -286,6 +293,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#SubmitToCommunityLabel.TextSpans", Message.translation(MSG + ".field.submitToCommunity"));
         b.set("#StyleIdLabel.TextSpans", Message.translation(MSG + ".field.styleId"));
         b.set("#StyleIdField.PlaceholderText", Message.translation(MSG + ".field.styleId.hint"));
+        b.set("#FestivalActivityLabel.TextSpans", Message.translation(MSG + ".field.festivalActivity"));
+        b.set("#FestivalActivityField.PlaceholderText", Message.translation(MSG + ".field.festivalActivity.hint"));
         b.set("#FestivalSeasonLabel.TextSpans", Message.translation(MSG + ".field.festivalSeason"));
         b.set("#FestivalSeasonField.PlaceholderText", Message.translation(MSG + ".field.festivalSeason.hint"));
         b.set("#FestivalDayLabel.TextSpans", Message.translation(MSG + ".field.festivalDay"));
@@ -543,6 +552,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         boolean show,
         boolean showTimes
     ) {
+        b.set("#FestivalActivityLabel.Visible", show);
+        b.set("#FestivalActivityField.Visible", show);
         b.set("#FestivalSeasonLabel.Visible", show);
         b.set("#FestivalSeasonField.Visible", show);
         b.set("#FestivalDayLabel.Visible", show);
@@ -600,6 +611,14 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         } else {
             b.set("#StyleIdField.Value", "");
         }
+        b.set(
+            "#FestivalActivityField.Value",
+            d.getFestivalMechanicInput() != null
+                ? d.getFestivalMechanicInput()
+                : com.hexvane.aetherhaven.plotcreator.PlotCreatorFestivalMechanicDefaults.displayLabel(
+                    d.getFestivalMechanicId()
+                )
+        );
         b.set(
             "#FestivalSeasonField.Value",
             d.getFestivalSeasonInput() != null ? d.getFestivalSeasonInput() : d.getFestivalSeason()
@@ -1041,6 +1060,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         if (data.styleId != null) {
             d.setStyleId(data.styleId);
         }
+        if (data.festivalActivity != null) {
+            d.setFestivalMechanicInput(data.festivalActivity);
+        }
         if (data.festivalSeason != null) {
             d.setFestivalSeasonInput(data.festivalSeason);
         }
@@ -1211,6 +1233,12 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             .append(new KeyedCodec<>("FestivalId", Codec.STRING), (d, v) -> d.festivalId = v, d -> d.festivalId)
             .add()
             .append(
+                new KeyedCodec<>("@FestivalActivity", Codec.STRING),
+                (d, v) -> d.festivalActivity = v,
+                d -> d.festivalActivity
+            )
+            .add()
+            .append(
                 new KeyedCodec<>("@FestivalSeason", Codec.STRING),
                 (d, v) -> d.festivalSeason = v,
                 d -> d.festivalSeason
@@ -1276,6 +1304,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         private String styleId;
         @Nullable
         private String festivalId;
+        @Nullable
+        private String festivalActivity;
         @Nullable
         private String festivalSeason;
         @Nullable

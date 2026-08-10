@@ -16,9 +16,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Writes a festival JSON from a plot creator draft. Fields the wizard does not expose (mechanic, festival NPCs, calendar
- * icon, centerpiece, burst items, villager greetings) are carried over from the festival being edited so hand authored
- * setups survive a round trip through the wizard.
+ * Writes a festival JSON from a plot creator draft. Fields the wizard does not expose (calendar icon, burst items,
+ * villager greetings, tags) are carried over from the festival being edited so hand authored setups survive a round
+ * trip through the wizard.
  */
 public final class PlotCreatorFestivalJsonWriter {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -57,22 +57,40 @@ public final class PlotCreatorFestivalJsonWriter {
         }
         if (existing != null) {
             root.put("calendarIconPath", existing.getCalendarIconPath());
-            if (existing.getMechanicId() != null) {
-                root.put("mechanicId", existing.getMechanicId());
-            }
+        }
+        if (draft.getFestivalMechanicId() != null) {
+            root.put("mechanicId", draft.getFestivalMechanicId());
         }
         List<FestivalDefinition.SpotRow> spots = PlotCreatorFestivalSpots.fromDraft(draft);
         if (!spots.isEmpty()) {
             root.put("spots", spotMaps(spots));
         }
+        if (!draft.getFestivalNpcs().isEmpty()) {
+            root.put("npcs", npcMaps(draft.getFestivalNpcs()));
+        }
+        if (!draft.getFestivalTouristSpots().isEmpty()) {
+            root.put("touristSpots", touristMaps(draft.getFestivalTouristSpots()));
+        }
+        int[] centerpiece = draft.getFestivalCenterpieceLocal();
+        if (centerpiece != null) {
+            root.put("centerpieceLocal", List.of(centerpiece[0], centerpiece[1], centerpiece[2]));
+        }
+        if (!draft.getFestivalRaceLanes().isEmpty()) {
+            root.put("raceLanes", raceLaneMaps(draft.getFestivalRaceLanes()));
+        }
+        if (!draft.getFestivalBalloonSpawns().isEmpty()) {
+            root.put("balloonSpawns", balloonMaps(draft.getFestivalBalloonSpawns()));
+        }
+        FestivalDefinition.WheelLocalRow wheel = draft.getFestivalWheelLocal();
+        if (wheel != null) {
+            Map<String, Object> wheelMap = new LinkedHashMap<>();
+            wheelMap.put("localX", wheel.getLocalX());
+            wheelMap.put("localY", wheel.getLocalY());
+            wheelMap.put("localZ", wheel.getLocalZ());
+            wheelMap.put("yawDegrees", wheel.getYawDegrees());
+            root.put("wheelLocal", wheelMap);
+        }
         if (existing != null) {
-            if (!existing.getNpcs().isEmpty()) {
-                root.put("npcs", npcMaps(existing.getNpcs()));
-            }
-            int[] centerpiece = existing.getCenterpieceLocal();
-            if (centerpiece != null) {
-                root.put("centerpieceLocal", List.of(centerpiece[0], centerpiece[1], centerpiece[2]));
-            }
             if (!existing.getBurstItemIds().isEmpty()) {
                 root.put("burstItemIds", new ArrayList<>(existing.getBurstItemIds()));
             }
@@ -121,6 +139,56 @@ public final class PlotCreatorFestivalJsonWriter {
             row.put("localY", npc.getLocalY());
             row.put("localZ", npc.getLocalZ());
             row.put("yawDegrees", npc.getYawDegrees());
+            out.add(row);
+        }
+        return out;
+    }
+
+    @Nonnull
+    private static List<Map<String, Object>> touristMaps(
+        @Nonnull List<FestivalDefinition.TouristSpotRow> spots
+    ) {
+        List<Map<String, Object>> out = new ArrayList<>();
+        for (FestivalDefinition.TouristSpotRow spot : spots) {
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("localX", spot.getLocalX());
+            row.put("localY", spot.getLocalY());
+            row.put("localZ", spot.getLocalZ());
+            row.put("yawDegrees", spot.getYawDegrees());
+            out.add(row);
+        }
+        return out;
+    }
+
+    @Nonnull
+    private static List<Map<String, Object>> raceLaneMaps(
+        @Nonnull List<FestivalDefinition.RaceLaneRow> lanes
+    ) {
+        List<Map<String, Object>> out = new ArrayList<>();
+        for (FestivalDefinition.RaceLaneRow lane : lanes) {
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("npcRoleId", lane.getNpcRoleId());
+            row.put("startLocalX", lane.getStartLocalX());
+            row.put("startLocalY", lane.getStartLocalY());
+            row.put("startLocalZ", lane.getStartLocalZ());
+            row.put("finishLocalX", lane.getFinishLocalX());
+            row.put("finishLocalY", lane.getFinishLocalY());
+            row.put("finishLocalZ", lane.getFinishLocalZ());
+            out.add(row);
+        }
+        return out;
+    }
+
+    @Nonnull
+    private static List<Map<String, Object>> balloonMaps(
+        @Nonnull List<FestivalDefinition.BalloonSpawnRow> spots
+    ) {
+        List<Map<String, Object>> out = new ArrayList<>();
+        for (FestivalDefinition.BalloonSpawnRow spot : spots) {
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("localX", spot.getLocalX());
+            row.put("localY", spot.getLocalY());
+            row.put("localZ", spot.getLocalZ());
             out.add(row);
         }
         return out;

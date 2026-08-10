@@ -13,9 +13,11 @@
 - **Festival chatter** Every villager has their own things to say while a festival is on, so it is worth going around the town before the day is over.
 - **Festival dancing** Villagers at their festival spots and visitors at the square will sometimes dance.
 - **Festival day markers** The calendar shows an icon on every festival day. Hover it to see which festival it is.
-- **Make your own festivals** The plot creator has a Festival build type. Build inside the festival square, mark where villagers stand, and pick the season, day, and hours. Festivals made by other mods can bring their own villager chatter along with them.
+- **Make your own festivals** The plot creator and building editor can create and edit festivals. Mark villager stands, festival merchants, visitor stands, the centerpiece, and pig race lanes, then pick the activity, season, day, and hours. Festivals made by other mods can bring their own villager chatter along with them.
+- **Building editor festivals** The building editor staff has a Festivals tab to load an existing festival nearby and set up every spot it needs. New festivals are still made with the plot creator.
 - **Festival tickets** Four seasonal festival tickets you can hold onto for now.
 - **Pig Racing Festival** Late spring holiday at the festival square. Bet gold coins on one of four pigs, watch them race, and a banner names the winner so you know who to cheer. Collect spring festival tickets if yours wins, or try another race after a loss. The elder, innkeeper, blacksmith, and rancher come to watch, and a race merchant sells ranch goods for spring festival tickets.
+- **Carnival Festival** Late summer holiday that runs all day at the festival square. Pop floating balloons with darts, spin the wall carnival wheel for a chance at summer festival tickets, and visit the carnival merchant for a kweebec plushie. The elder, bard, innkeeper, and florist come to watch.
 - **Villager wardrobe** Craft a wardrobe at the town planning desk to dress up residents of your town. Pick someone, choose unlocked looks by slot, and save what they wear in that town.
 
 ## [2.7.1] - 8/7/2026

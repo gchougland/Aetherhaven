@@ -22,5 +22,17 @@ public enum PlotCreatorSubstepType {
     VISITOR_SPAWN,
     GUILD_MASTER_SPAWN,
     ADVENTURER_SPAWN,
-    BARD_WORK_POI
+    BARD_WORK_POI,
+    /** Festival-only merchant or stand NPC; {@code workResidentKind} stores the NPC role id. */
+    FESTIVAL_NPC,
+    /** Visitor stand used while a festival is running. */
+    FESTIVAL_TOURIST_SPOT,
+    /** Festival centerpiece cell (for example the Springheart Lettuce). */
+    FESTIVAL_CENTERPIECE,
+    /** One pig race lane: click the start, then the finish. */
+    FESTIVAL_RACE_LANE,
+    /** Carnival balloon spawn cell. */
+    FESTIVAL_BALLOON_SPAWN,
+    /** Carnival wall mounted wheel cell (stores facing). */
+    FESTIVAL_WHEEL
 }

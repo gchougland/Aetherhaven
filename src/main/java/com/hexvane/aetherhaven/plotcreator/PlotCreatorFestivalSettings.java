@@ -78,7 +78,19 @@ public final class PlotCreatorFestivalSettings {
         if (dayError != null) {
             return dayError;
         }
-        return applyHours(draft);
+        String hoursError = applyHours(draft);
+        if (hoursError != null) {
+            return hoursError;
+        }
+        applyMechanic(draft);
+        return null;
+    }
+
+    private static void applyMechanic(@Nonnull PlotCreatorDraft draft) {
+        String normalized = PlotCreatorFestivalMechanicDefaults.normalizeMechanicId(draft.getFestivalMechanicInput());
+        draft.setFestivalMechanicId(normalized);
+        draft.setFestivalMechanicInput(PlotCreatorFestivalMechanicDefaults.displayLabel(normalized));
+        PlotCreatorFestivalMechanicDefaults.ensureRequiredSelectedSpots(draft);
     }
 
     @Nullable

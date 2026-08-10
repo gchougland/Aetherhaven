@@ -1,0 +1,56 @@
+# Carnival Festival villager greetings
+# Full translation keys are aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.<lineKey>
+
+aetherhaven.dialogue.festival.carnival.greeting.elder.0=A carnival in late summer. The square smells like snacks and laughter.
+aetherhaven.dialogue.festival.carnival.greeting.elder.1=I saved a few summer festival tickets from years past. Today feels like a good day to spend them.
+
+aetherhaven.dialogue.festival.carnival.greeting.priestess.0=Joy is a blessing too. Spin the wheel with a light heart.
+aetherhaven.dialogue.festival.carnival.greeting.priestess.1=Gaia likes a town that knows how to celebrate together.
+
+aetherhaven.dialogue.festival.carnival.greeting.farmer.0=I came for the balloons more than the wheel. Watching them float is enough fun.
+aetherhaven.dialogue.festival.carnival.greeting.farmer.1=If I win tickets I might buy that soft plushie. The kids would love it.
+
+aetherhaven.dialogue.festival.carnival.greeting.innkeeper.0=I closed early so everyone could come to the carnival. Best decision all week.
+aetherhaven.dialogue.festival.carnival.greeting.innkeeper.1=Win or lose, stop by later. I will keep something cool ready for hot summer days.
+
+aetherhaven.dialogue.festival.carnival.greeting.chef.0=Carnival snacks are fine, but I still packed a little something from the kitchen.
+aetherhaven.dialogue.festival.carnival.greeting.chef.1=Popping balloons works up an appetite. I came prepared.
+
+aetherhaven.dialogue.festival.carnival.greeting.merchant.0=Summer festival tickets are the coin of the day. I like a clean trade.
+aetherhaven.dialogue.festival.carnival.greeting.merchant.1=The carnival merchant has a plushie for tickets. Cute little thing.
+
+aetherhaven.dialogue.festival.carnival.greeting.blacksmith.0=No hammering while the wheel spins. Even steel can wait for a fair game.
+aetherhaven.dialogue.festival.carnival.greeting.blacksmith.1=I am better with a hammer than a dart. Still going to try.
+
+aetherhaven.dialogue.festival.carnival.greeting.florist.0=So many colors! The balloons look like flowers that learned to fly.
+aetherhaven.dialogue.festival.carnival.greeting.florist.1=Cheer loud when someone wins. Soft voices never helped a carnival.
+
+aetherhaven.dialogue.festival.carnival.greeting.rancher.0=Animals rest today. People get the games for once.
+aetherhaven.dialogue.festival.carnival.greeting.rancher.1=I put a few coins on the wheel. Red looks lucky.
+
+aetherhaven.dialogue.festival.carnival.greeting.miner.0=Down in the dark we do not see much carnival. This is a nice change.
+aetherhaven.dialogue.festival.carnival.greeting.miner.1=Darts and balloons beat pickaxes for an afternoon.
+
+aetherhaven.dialogue.festival.carnival.greeting.logger.0=I like the sound of the wheel clicking as it slows.
+aetherhaven.dialogue.festival.carnival.greeting.logger.1=Best sound of the day is a balloon pop and a happy shout.
+
+aetherhaven.dialogue.festival.carnival.greeting.builder.0=Solid booths. Honest games. Whoever set this up knew a crowd would lean in.
+aetherhaven.dialogue.festival.carnival.greeting.builder.1=I am not chasing every prize. I am here for the noise and the colors.
+
+aetherhaven.dialogue.festival.carnival.greeting.crystal_keeper.0=Even crystals can wait while the town plays for a day.
+aetherhaven.dialogue.festival.carnival.greeting.crystal_keeper.1=Summer light on the wheel looks almost like a gem catching fire.
+
+aetherhaven.dialogue.festival.carnival.greeting.pyrotechnic.0=A carnival without sparks still makes me smile. Next year maybe fireworks.
+aetherhaven.dialogue.festival.carnival.greeting.pyrotechnic.1=Pop goes the balloon! Reminds me of a tiny firework.
+
+aetherhaven.dialogue.festival.carnival.greeting.bard.0=I brought a tune for the carnival. Ask me later and I will play it.
+aetherhaven.dialogue.festival.carnival.greeting.bard.1=Music and games belong together. Listen for the whistle when a round starts.
+
+aetherhaven.dialogue.festival.carnival.greeting.guild_master.0=Even adventurers need a day of soft contests.
+aetherhaven.dialogue.festival.carnival.greeting.guild_master.1=I will try the balloons. Aim matters everywhere.
+
+aetherhaven.dialogue.festival.carnival.greeting.guard.0=I am here to keep things friendly. Also to watch the wheel.
+aetherhaven.dialogue.festival.carnival.greeting.guard.1=No trouble today. Just games and good moods.
+
+aetherhaven.dialogue.festival.carnival.greeting.default.0=The carnival is on! Try the balloons or the spinning wheel.
+aetherhaven.dialogue.festival.carnival.greeting.default.1=Summer festival tickets are the prize of the day. Have fun!

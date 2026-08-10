@@ -1812,6 +1812,13 @@ a.submissions-chip:hover {
   gap: var(--space-xs);
 }
 
+.screenshot-upload-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+}
+
 .screenshot-upload-label {
   display: inline-flex;
   width: fit-content;
@@ -1909,8 +1916,8 @@ body.modal-open {
 .building-modal-dialog {
   position: relative;
   z-index: 1;
-  width: min(720px, 100%);
-  max-height: min(90vh, 900px);
+  width: min(960px, 100%);
+  max-height: min(92vh, 960px);
   overflow: auto;
   padding: var(--space-lg);
   border: 1px solid var(--border-gold);
@@ -1919,6 +1926,78 @@ body.modal-open {
     radial-gradient(ellipse 80% 50% at 50% 0%, rgba(107, 21, 48, 0.18), transparent),
     var(--panel);
   box-shadow: var(--shadow-card-hover);
+}
+
+.building-prefab-viewer {
+  position: relative;
+  width: 100%;
+  height: min(52vh, 480px);
+  min-height: 280px;
+  margin: 0 0 var(--space-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #1a1418;
+}
+
+.building-prefab-viewer-hint {
+  position: absolute;
+  left: 0.65rem;
+  bottom: 0.55rem;
+  z-index: 2;
+  margin: 0;
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.45);
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.78rem;
+  pointer-events: none;
+}
+
+.building-prefab-viewer-status {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(20, 14, 16, 0.55);
+  font-size: 0.95rem;
+}
+
+.building-prefab-viewer-status[hidden] {
+  display: none;
+}
+
+.screenshot-capture-btn {
+  flex: 0 0 auto;
+}
+
+.screenshot-capture-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.prefab-capture-dialog {
+  width: min(960px, 100%);
+}
+
+.prefab-capture-content h2 {
+  margin: 0 0 0.35rem;
+}
+
+.prefab-capture-viewer {
+  margin: 0.75rem 0 1rem;
+  height: min(56vh, 520px);
+}
+
+.prefab-capture-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
 }
 
 .building-modal-close {

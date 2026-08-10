@@ -1,4 +1,10 @@
 # Ensure sharp can load libstdc++ at runtime on Nixpacks/Railway.
+# Chromium is used for auto-generated prefab preview screenshots (SwiftShader WebGL).
 # See https://nixpacks.com/docs/guides/configuring-builds (nixLibs)
 [phases.setup]
+nixPkgs = ["...", "chromium", "nss", "nspr", "freetype", "harfbuzz", "fontconfig"]
 nixLibs = ["...", "gcc-unwrapped"]
+
+[variables]
+CHROMIUM_PATH = "/bin/chromium"
+PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1"

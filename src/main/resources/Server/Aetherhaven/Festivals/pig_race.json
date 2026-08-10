@@ -66,6 +66,44 @@
     { "localX": -6, "localY": 6, "localZ": 14, "yawDegrees": 0.0 },
     { "localX": 6, "localY": 6, "localZ": 14, "yawDegrees": 0.0 }
   ],
+  "raceLanes": [
+    {
+      "npcRoleId": "Aetherhaven_Festival_Pig_Race_Pink",
+      "startLocalX": -7,
+      "startLocalY": 6,
+      "startLocalZ": -8,
+      "finishLocalX": -7,
+      "finishLocalY": 6,
+      "finishLocalZ": 8
+    },
+    {
+      "npcRoleId": "Aetherhaven_Festival_Pig_Race_Boar",
+      "startLocalX": -3,
+      "startLocalY": 6,
+      "startLocalZ": -8,
+      "finishLocalX": -3,
+      "finishLocalY": 6,
+      "finishLocalZ": 8
+    },
+    {
+      "npcRoleId": "Aetherhaven_Festival_Pig_Race_Undead",
+      "startLocalX": 4,
+      "startLocalY": 6,
+      "startLocalZ": -8,
+      "finishLocalX": 4,
+      "finishLocalY": 6,
+      "finishLocalZ": 8
+    },
+    {
+      "npcRoleId": "Aetherhaven_Festival_Pig_Race_Wild",
+      "startLocalX": 8,
+      "startLocalY": 6,
+      "startLocalZ": -8,
+      "finishLocalX": 8,
+      "finishLocalY": 6,
+      "finishLocalZ": 8
+    }
+  ],
   "tags": ["spring", "racing"],
   "greetings": {
     "elder": [

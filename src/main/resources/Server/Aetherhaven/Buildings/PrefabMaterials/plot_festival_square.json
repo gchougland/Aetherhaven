@@ -1,0 +1,70 @@
+{
+  "constructionId": "plot_festival_square",
+  "prefabPath": "Festivals/Festival_Square.prefab.json",
+  "materials": [
+    {
+      "resourceTypeId": "Soils",
+      "count": 4500
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 410
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Decorative",
+      "count": 175
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Smooth",
+      "count": 132
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 131
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 110
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Stairs",
+      "count": 64
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Mossy",
+      "count": 55
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Ornate",
+      "count": 53
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Smooth_Half",
+      "count": 20
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 16
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 16
+    },
+    {
+      "itemId": "Rock_Crystal_Cyan_Block",
+      "count": 12
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Pillar_Base",
+      "count": 8
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Pillar_Middle",
+      "count": 8
+    },
+    {
+      "itemId": "Furniture_Castle_Bench",
+      "count": 4
+    }
+  ]
+}

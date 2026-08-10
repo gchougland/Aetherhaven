@@ -84,6 +84,27 @@ public final class PlotCreatorDraft {
     private String festivalStartHourInput;
     @Nullable
     private String festivalEndHourInput;
+    /** Registered festival mechanic id, or null for a decoration-only festival. */
+    @Nullable
+    private String festivalMechanicId;
+    /** Typed activity field on the settings step (None, New Life, Pig Racing, or a mechanic id). */
+    @Nullable
+    private String festivalMechanicInput;
+    @Nonnull
+    private final List<com.hexvane.aetherhaven.festival.FestivalDefinition.NpcRow> festivalNpcs = new ArrayList<>();
+    @Nonnull
+    private final List<com.hexvane.aetherhaven.festival.FestivalDefinition.TouristSpotRow> festivalTouristSpots =
+        new ArrayList<>();
+    @Nullable
+    private int[] festivalCenterpieceLocal;
+    @Nonnull
+    private final List<com.hexvane.aetherhaven.festival.FestivalDefinition.RaceLaneRow> festivalRaceLanes =
+        new ArrayList<>();
+    @Nonnull
+    private final List<com.hexvane.aetherhaven.festival.FestivalDefinition.BalloonSpawnRow> festivalBalloonSpawns =
+        new ArrayList<>();
+    @Nullable
+    private com.hexvane.aetherhaven.festival.FestivalDefinition.WheelLocalRow festivalWheelLocal;
 
     /** Chosen important spots for the SUBSTEP loop; empty until IMPORTANT_SPOTS is committed. */
     @Nonnull
@@ -415,6 +436,78 @@ public final class PlotCreatorDraft {
         festivalSizeLocked = false;
         festivalId = null;
         editingFestivalId = null;
+        festivalMechanicId = null;
+        festivalMechanicInput = null;
+        festivalNpcs.clear();
+        festivalTouristSpots.clear();
+        festivalCenterpieceLocal = null;
+        festivalRaceLanes.clear();
+        festivalBalloonSpawns.clear();
+        festivalWheelLocal = null;
+    }
+
+    @Nullable
+    public String getFestivalMechanicId() {
+        return festivalMechanicId;
+    }
+
+    public void setFestivalMechanicId(@Nullable String festivalMechanicId) {
+        this.festivalMechanicId =
+            festivalMechanicId != null && !festivalMechanicId.isBlank() ? festivalMechanicId.trim() : null;
+    }
+
+    @Nullable
+    public String getFestivalMechanicInput() {
+        return festivalMechanicInput;
+    }
+
+    public void setFestivalMechanicInput(@Nullable String festivalMechanicInput) {
+        this.festivalMechanicInput = festivalMechanicInput;
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.festival.FestivalDefinition.NpcRow> getFestivalNpcs() {
+        return festivalNpcs;
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.festival.FestivalDefinition.TouristSpotRow> getFestivalTouristSpots() {
+        return festivalTouristSpots;
+    }
+
+    @Nullable
+    public int[] getFestivalCenterpieceLocal() {
+        return festivalCenterpieceLocal;
+    }
+
+    public void setFestivalCenterpieceLocal(@Nullable int[] festivalCenterpieceLocal) {
+        if (festivalCenterpieceLocal == null || festivalCenterpieceLocal.length < 3) {
+            this.festivalCenterpieceLocal = null;
+            return;
+        }
+        this.festivalCenterpieceLocal =
+            new int[] {festivalCenterpieceLocal[0], festivalCenterpieceLocal[1], festivalCenterpieceLocal[2]};
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.festival.FestivalDefinition.RaceLaneRow> getFestivalRaceLanes() {
+        return festivalRaceLanes;
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.festival.FestivalDefinition.BalloonSpawnRow> getFestivalBalloonSpawns() {
+        return festivalBalloonSpawns;
+    }
+
+    @Nullable
+    public com.hexvane.aetherhaven.festival.FestivalDefinition.WheelLocalRow getFestivalWheelLocal() {
+        return festivalWheelLocal;
+    }
+
+    public void setFestivalWheelLocal(
+        @Nullable com.hexvane.aetherhaven.festival.FestivalDefinition.WheelLocalRow festivalWheelLocal
+    ) {
+        this.festivalWheelLocal = festivalWheelLocal;
     }
 
     /** Festival prefabs are a fixed size, so the drag box stops moving once a festival is picked. */

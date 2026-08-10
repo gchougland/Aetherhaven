@@ -65,11 +65,11 @@ public final class PlotCreatorFestivalDraftSetup {
         draft.setBoundsDragEnd(null);
         draft.setActiveBoundsFaceDrag(null);
         draft.setHoveredBoundsFace(null);
-        // Shipped festival prefabs anchor at the middle of the square on the ground; match that exactly so spots and
-        // the centerpiece line up no matter which festival is swapped in.
-        draft.setPlotAnchor(
-            new Vector3i(min.x + FestivalPrefabSize.SPAN_X / 2, min.y, min.z + FestivalPrefabSize.SPAN_Z / 2)
-        );
+        // Shipped festival prefabs paste from the middle of the square (same as festival square swaps). Bounds stay
+        // the min/max box; the paste origin is the center so the build lines up with the wireframe.
+        Vector3i center =
+            new Vector3i(min.x + FestivalPrefabSize.SPAN_X / 2, min.y, min.z + FestivalPrefabSize.SPAN_Z / 2);
+        draft.setPlotAnchor(new Vector3i(center));
         draft.setPrefabOriginMin(new Vector3i(min));
         draft.setFestivalSizeLocked(true);
         draft.setFestivalPicked(true);
@@ -88,7 +88,7 @@ public final class PlotCreatorFestivalDraftSetup {
             ConstructionAnimator.start(
                 plugin,
                 world,
-                new Vector3i(min),
+                new Vector3i(center),
                 Rotation.None,
                 true,
                 false,
@@ -106,9 +106,14 @@ public final class PlotCreatorFestivalDraftSetup {
         return null;
     }
 
-    private static void applyFestivalFields(@Nonnull PlotCreatorDraft draft, @Nullable FestivalDefinition existing) {
+    /** Fills festival settings and important-spot selections from an existing definition or clears for a new one. */
+    public static void applyFestivalFields(@Nonnull PlotCreatorDraft draft, @Nullable FestivalDefinition existing) {
         draft.getSelectedSpots().clear();
         draft.getPois().clear();
+        draft.getFestivalNpcs().clear();
+        draft.getFestivalTouristSpots().clear();
+        draft.getFestivalRaceLanes().clear();
+        draft.setFestivalCenterpieceLocal(null);
         draft.setImportantSpotsConfirmed(false);
         if (existing == null) {
             draft.setEditingFestivalId(null);
@@ -118,6 +123,8 @@ public final class PlotCreatorFestivalDraftSetup {
             draft.setDisplayName(null);
             draft.setDescription(null);
             draft.setPrefabPath(CustomFestivalPaths.BASE_PREFAB_PATH);
+            draft.setFestivalMechanicId(null);
+            draft.setFestivalMechanicInput(PlotCreatorFestivalMechanicDefaults.displayLabel(null));
             return;
         }
         draft.setEditingFestivalId(existing.getId());
@@ -127,6 +134,7 @@ public final class PlotCreatorFestivalDraftSetup {
         draft.setDisplayName(existing.getDisplayName());
         draft.setDescription(existing.getDescription());
         draft.setPrefabPath(existing.getPrefabPath());
+        draft.setLockedPrefabPathKey(existing.getPrefabPath());
         draft.setFestivalSeason(existing.getSeason().name());
         draft.setFestivalSeasonInput(existing.getSeason().displayName());
         draft.setFestivalDayOfSeason(existing.getDayOfSeason());
@@ -136,12 +144,96 @@ public final class PlotCreatorFestivalDraftSetup {
         draft.setFestivalStartHourInput(String.valueOf(existing.getStartHour()));
         draft.setFestivalEndHour(existing.getEndHour());
         draft.setFestivalEndHourInput(String.valueOf(existing.getEndHour()));
+        draft.setFestivalMechanicId(existing.getMechanicId());
+        draft.setFestivalMechanicInput(PlotCreatorFestivalMechanicDefaults.displayLabel(existing.getMechanicId()));
+
         for (FestivalDefinition.SpotRow spot : existing.getSpots()) {
             if (spot.getResidentKind().isEmpty()) {
                 continue;
             }
-            draft.getSelectedSpots().add(PlotCreatorSpotEntry.work(spot.getResidentKind(), 1));
+            draft.getSelectedSpots().add(PlotCreatorSpotEntry.workOrBard(spot.getResidentKind(), 1));
             draft.getPois().add(PlotCreatorFestivalSpots.toPoiDraft(spot));
         }
+        for (FestivalDefinition.NpcRow npc : existing.getNpcs()) {
+            if (npc.getNpcRoleId().isEmpty()) {
+                continue;
+            }
+            draft.getFestivalNpcs().add(
+                FestivalDefinition.NpcRow.of(
+                    npc.getNpcRoleId(),
+                    npc.getLocalX(),
+                    npc.getLocalY(),
+                    npc.getLocalZ(),
+                    npc.getYawDegrees()
+                )
+            );
+            draft.getSelectedSpots().add(PlotCreatorSpotEntry.festivalNpc(npc.getNpcRoleId(), 1));
+        }
+        if (!existing.getTouristSpots().isEmpty()) {
+            for (FestivalDefinition.TouristSpotRow spot : existing.getTouristSpots()) {
+                draft.getFestivalTouristSpots().add(
+                    FestivalDefinition.TouristSpotRow.of(
+                        spot.getLocalX(),
+                        spot.getLocalY(),
+                        spot.getLocalZ(),
+                        spot.getYawDegrees()
+                    )
+                );
+            }
+            draft.getSelectedSpots().add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_TOURIST_SPOT,
+                    existing.getTouristSpots().size()
+                )
+            );
+        }
+        if (existing.getCenterpieceLocal() != null) {
+            draft.setFestivalCenterpieceLocal(existing.getCenterpieceLocal());
+            draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_CENTERPIECE, 1));
+        }
+        if (!existing.getRaceLanes().isEmpty()) {
+            for (FestivalDefinition.RaceLaneRow lane : existing.getRaceLanes()) {
+                draft.getFestivalRaceLanes().add(
+                    FestivalDefinition.RaceLaneRow.of(
+                        lane.getNpcRoleId(),
+                        lane.getStartLocalX(),
+                        lane.getStartLocalY(),
+                        lane.getStartLocalZ(),
+                        lane.getFinishLocalX(),
+                        lane.getFinishLocalY(),
+                        lane.getFinishLocalZ()
+                    )
+                );
+            }
+            draft.getSelectedSpots().add(
+                PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_RACE_LANE, existing.getRaceLanes().size())
+            );
+        }
+        if (!existing.getBalloonSpawns().isEmpty()) {
+            for (FestivalDefinition.BalloonSpawnRow spot : existing.getBalloonSpawns()) {
+                draft.getFestivalBalloonSpawns().add(
+                    FestivalDefinition.BalloonSpawnRow.of(spot.getLocalX(), spot.getLocalY(), spot.getLocalZ())
+                );
+            }
+            draft.getSelectedSpots().add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_BALLOON_SPAWN,
+                    existing.getBalloonSpawns().size()
+                )
+            );
+        }
+        if (existing.getWheelLocal() != null) {
+            FestivalDefinition.WheelLocalRow wheel = existing.getWheelLocal();
+            draft.setFestivalWheelLocal(
+                FestivalDefinition.WheelLocalRow.of(
+                    wheel.getLocalX(),
+                    wheel.getLocalY(),
+                    wheel.getLocalZ(),
+                    wheel.getYawDegrees()
+                )
+            );
+            draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_WHEEL, 1));
+        }
+        PlotCreatorFestivalMechanicDefaults.ensureRequiredSelectedSpots(draft);
     }
 }

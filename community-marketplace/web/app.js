@@ -1447,6 +1447,20 @@ function screenshotStatusLabel(status) {
   return "Pending review";
 }
 
+function resolveOwnerPrefabUrl(item) {
+  const direct = String(item?.prefabUrl || "").trim();
+  if (direct) {
+    return direct;
+  }
+  if (item?.kind === "approved" && item.id) {
+    return `/api/v1/buildings/${encodeURIComponent(item.id)}/prefab.json`;
+  }
+  if (item?.kind === "pending" && item.submissionId) {
+    return `/api/my-submissions/${encodeURIComponent(item.submissionId)}/prefab.json`;
+  }
+  return "";
+}
+
 function renderOwnerScreenshots(item, options = {}) {
   if (item.kind !== "pending" && item.kind !== "approved") {
     return "";
@@ -1459,6 +1473,7 @@ function renderOwnerScreenshots(item, options = {}) {
   const ownerId = item.kind === "approved" ? item.id : item.submissionId;
   const coverId = item.coverScreenshotId || "";
   const atLimit = shots.length >= MAX_SCREENSHOTS_PER_OWNER;
+  const prefabUrl = resolveOwnerPrefabUrl(item);
   const thumbs = shots.length
     ? shots
         .map((shot, index) => {
@@ -1485,27 +1500,39 @@ function renderOwnerScreenshots(item, options = {}) {
     : `<p class="meta screenshot-empty">No screenshots yet.</p>`;
 
   const uploadDisabled = atLimit ? "disabled" : "";
+  const captureDisabled = atLimit || !prefabUrl ? "disabled" : "";
   const approvalNote = asAdmin
     ? " Admin uploads are approved immediately."
     : " Screenshots need admin approval before they appear publicly.";
+  const captureBtn = prefabUrl
+    ? `<button
+          type="button"
+          class="secondary screenshot-capture-btn"
+          ${captureDisabled}
+          onclick="event.stopPropagation(); openPrefabCaptureModal(${jsString(ownerKind)}, ${jsString(ownerId)}, ${jsString(prefabUrl)}, ${asAdmin}, ${jsString(reloadFn)})"
+        >Capture from 3D</button>`
+    : "";
   return `
     <div class="screenshot-manager${compact ? "" : " screenshot-manager--edit"}">
       <div class="screenshot-strip${compact ? "" : " screenshot-strip--edit"}">${thumbs}</div>
       <div class="screenshot-upload-row">
-        <label class="screenshot-upload-label">
-          <input
-            type="file"
-            accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
-            ${uploadDisabled}
-            onchange="uploadMyScreenshot('${escapeAttr(ownerKind)}', '${escapeAttr(ownerId)}', this, ${asAdmin}, '${escapeAttr(reloadFn)}')"
-          />
-          <span class="screenshot-upload-btn">${atLimit ? "Screenshot limit reached" : "Add screenshot"}</span>
-        </label>
+        <div class="screenshot-upload-actions">
+          <label class="screenshot-upload-label">
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+              ${uploadDisabled}
+              onchange="uploadMyScreenshot('${escapeAttr(ownerKind)}', '${escapeAttr(ownerId)}', this, ${asAdmin}, '${escapeAttr(reloadFn)}')"
+            />
+            <span class="screenshot-upload-btn">${atLimit ? "Screenshot limit reached" : "Add screenshot"}</span>
+          </label>
+          ${captureBtn}
+        </div>
         <p class="meta">JPEG, PNG, or WebP · max ${SCREENSHOT_MAX_SIZE_LABEL} · up to ${MAX_SCREENSHOTS_PER_OWNER} per build.${approvalNote}${
           ownerKind === "approved"
             ? " Use an approved screenshot as the marketplace card image."
             : ""
-        }</p>
+        }${prefabUrl ? " Or open the 3D preview, rotate it, and capture that view." : ""}</p>
       </div>
     </div>`;
 }
@@ -1583,43 +1610,248 @@ async function reloadAfterScreenshotAction(reloadFn) {
   await loadSubmissions();
 }
 
+function screenshotUploadEndpoint(ownerKind, ownerId, asAdmin = false) {
+  if (asAdmin) {
+    return ownerKind === "approved"
+      ? `/api/admin/buildings/${encodeURIComponent(ownerId)}/screenshots`
+      : `/api/admin/submissions/${encodeURIComponent(ownerId)}/screenshots`;
+  }
+  return ownerKind === "approved"
+    ? `/api/my-buildings/${encodeURIComponent(ownerId)}/screenshots`
+    : `/api/my-submissions/${encodeURIComponent(ownerId)}/screenshots`;
+}
+
+/**
+ * @param {File|Blob} file
+ * @param {string} ownerKind
+ * @param {string} ownerId
+ * @param {boolean} [asAdmin]
+ * @param {string} [reloadFn]
+ * @returns {Promise<{ ok: boolean, message?: string }>}
+ */
+async function postScreenshotFile(file, ownerKind, ownerId, asAdmin = false, reloadFn = "loadSubmissions") {
+  if (!file) {
+    return { ok: false, message: "No image to upload." };
+  }
+  const type = file.type || "image/png";
+  if (!ALLOWED_SCREENSHOT_TYPES.includes(type)) {
+    return { ok: false, message: "Screenshots must be JPEG, PNG, or WebP." };
+  }
+  if (file.size > MAX_SCREENSHOT_BYTES) {
+    return { ok: false, message: `Screenshot too large (max ${SCREENSHOT_MAX_SIZE_LABEL}).` };
+  }
+  const form = new FormData();
+  const filename =
+    file instanceof File && file.name
+      ? file.name
+      : `prefab-preview-${Date.now()}.png`;
+  form.append("screenshot", file, filename);
+  const res = await fetch(screenshotUploadEndpoint(ownerKind, ownerId, asAdmin), {
+    method: "POST",
+    body: form,
+  });
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return { ok: false, message: body.message || body.error || "Upload failed" };
+  }
+  await reloadAfterScreenshotAction(reloadFn);
+  return { ok: true };
+}
+
 async function uploadMyScreenshot(ownerKind, ownerId, inputEl, asAdmin = false, reloadFn = "loadSubmissions") {
   const file = inputEl?.files?.[0];
   if (!file) {
     return;
   }
-  if (!ALLOWED_SCREENSHOT_TYPES.includes(file.type)) {
-    alert("Screenshots must be JPEG, PNG, or WebP.");
-    inputEl.value = "";
-    return;
-  }
-  if (file.size > MAX_SCREENSHOT_BYTES) {
-    alert(`Screenshot too large (max ${SCREENSHOT_MAX_SIZE_LABEL}).`);
-    inputEl.value = "";
-    return;
-  }
-  let endpoint;
-  if (asAdmin) {
-    endpoint =
-      ownerKind === "approved"
-        ? `/api/admin/buildings/${encodeURIComponent(ownerId)}/screenshots`
-        : `/api/admin/submissions/${encodeURIComponent(ownerId)}/screenshots`;
-  } else {
-    endpoint =
-      ownerKind === "approved"
-        ? `/api/my-buildings/${encodeURIComponent(ownerId)}/screenshots`
-        : `/api/my-submissions/${encodeURIComponent(ownerId)}/screenshots`;
-  }
-  const form = new FormData();
-  form.append("screenshot", file);
-  const res = await fetch(endpoint, { method: "POST", body: form });
-  const body = await res.json().catch(() => ({}));
+  const result = await postScreenshotFile(file, ownerKind, ownerId, asAdmin, reloadFn);
   inputEl.value = "";
-  if (!res.ok) {
-    alert(body.message || body.error || "Upload failed");
+  if (!result.ok) {
+    alert(result.message || "Upload failed");
+  }
+}
+
+/** @type {{ viewer: any, ownerKind: string, ownerId: string, asAdmin: boolean, reloadFn: string } | null} */
+let prefabCaptureState = null;
+let prefabCaptureEscBound = false;
+
+function closePrefabCaptureModal() {
+  const modal = document.getElementById("prefabCaptureModal");
+  if (prefabCaptureState?.viewer) {
+    try {
+      prefabCaptureState.viewer.dispose();
+    } catch {
+      /* ignore */
+    }
+  }
+  prefabCaptureState = null;
+  if (modal) {
+    modal.hidden = true;
+  }
+  if (!document.getElementById("buildingDetailModal") || document.getElementById("buildingDetailModal").hidden) {
+    document.body.classList.remove("modal-open");
+  }
+}
+
+function ensurePrefabCaptureModal() {
+  let modal = document.getElementById("prefabCaptureModal");
+  if (modal) {
+    return modal;
+  }
+  modal = document.createElement("div");
+  modal.id = "prefabCaptureModal";
+  modal.className = "building-modal prefab-capture-modal";
+  modal.hidden = true;
+  modal.innerHTML = `
+    <div class="building-modal-backdrop" data-close-capture="true"></div>
+    <div class="building-modal-dialog prefab-capture-dialog" role="dialog" aria-modal="true" aria-labelledby="prefabCaptureTitle">
+      <button type="button" class="building-modal-close" aria-label="Close" data-close-capture="true">×</button>
+      <div class="prefab-capture-content">
+        <h2 id="prefabCaptureTitle">Capture screenshot</h2>
+        <p class="meta">Drag to rotate and scroll to zoom, then save this view.</p>
+        <div class="building-prefab-viewer prefab-capture-viewer" id="prefabCaptureViewer">
+          <p class="building-prefab-viewer-status" id="prefabCaptureStatus">Loading 3D preview…</p>
+          <p class="building-prefab-viewer-hint">Drag to rotate · Scroll to zoom</p>
+        </div>
+        <div class="prefab-capture-actions">
+          <button type="button" id="prefabCaptureSaveBtn" disabled>Save this view</button>
+          <button type="button" class="secondary" data-close-capture="true">Cancel</button>
+          <span class="meta" id="prefabCaptureActionStatus" hidden></span>
+        </div>
+      </div>
+    </div>`;
+  modal.addEventListener("click", (event) => {
+    if (event.target?.dataset?.closeCapture === "true") {
+      closePrefabCaptureModal();
+    }
+  });
+  document.body.appendChild(modal);
+  document.getElementById("prefabCaptureSaveBtn")?.addEventListener("click", () => {
+    savePrefabCaptureScreenshot();
+  });
+  if (!prefabCaptureEscBound) {
+    prefabCaptureEscBound = true;
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") {
+        return;
+      }
+      const captureModal = document.getElementById("prefabCaptureModal");
+      if (captureModal && !captureModal.hidden) {
+        closePrefabCaptureModal();
+      }
+    });
+  }
+  return modal;
+}
+
+async function openPrefabCaptureModal(ownerKind, ownerId, prefabUrl, asAdmin = false, reloadFn = "loadSubmissions") {
+  if (!prefabUrl) {
+    alert("3D preview is not available for this build.");
     return;
   }
-  await reloadAfterScreenshotAction(reloadFn);
+  const modal = ensurePrefabCaptureModal();
+  const viewerEl = document.getElementById("prefabCaptureViewer");
+  const statusEl = document.getElementById("prefabCaptureStatus");
+  const actionStatus = document.getElementById("prefabCaptureActionStatus");
+  const saveBtn = document.getElementById("prefabCaptureSaveBtn");
+  if (!viewerEl) {
+    return;
+  }
+
+  if (prefabCaptureState?.viewer) {
+    try {
+      prefabCaptureState.viewer.dispose();
+    } catch {
+      /* ignore */
+    }
+  }
+  prefabCaptureState = { viewer: null, ownerKind, ownerId, asAdmin: Boolean(asAdmin), reloadFn };
+
+  // Reset viewer container children except status/hint
+  viewerEl.querySelectorAll("canvas").forEach((c) => c.remove());
+  if (statusEl) {
+    statusEl.hidden = false;
+    statusEl.textContent = "Loading 3D preview…";
+  }
+  if (actionStatus) {
+    actionStatus.hidden = true;
+    actionStatus.textContent = "";
+  }
+  if (saveBtn) {
+    saveBtn.disabled = true;
+  }
+
+  modal.hidden = false;
+  document.body.classList.add("modal-open");
+
+  const api = await getPrefabViewerApi();
+  if (!api?.PrefabViewer) {
+    if (statusEl) {
+      statusEl.textContent = "3D preview is unavailable in this browser.";
+    }
+    return;
+  }
+
+  try {
+    const viewer = new api.PrefabViewer(viewerEl, { interactive: true });
+    prefabCaptureState.viewer = viewer;
+    await viewer.loadPrefabUrl(prefabUrl, {
+      onProgress: (done, total) => {
+        if (statusEl) {
+          statusEl.hidden = false;
+          statusEl.textContent = `Loading preview… ${done}/${total}`;
+        }
+      },
+    });
+    if (statusEl) {
+      statusEl.hidden = true;
+    }
+    viewer.resize();
+    if (saveBtn) {
+      saveBtn.disabled = false;
+    }
+  } catch (err) {
+    console.warn("Capture preview failed", err);
+    if (statusEl) {
+      statusEl.hidden = false;
+      statusEl.textContent = "Could not load 3D preview. Make sure viewer assets are synced.";
+    }
+  }
+}
+
+async function savePrefabCaptureScreenshot() {
+  if (!prefabCaptureState?.viewer) {
+    return;
+  }
+  const { viewer, ownerKind, ownerId, asAdmin, reloadFn } = prefabCaptureState;
+  const saveBtn = document.getElementById("prefabCaptureSaveBtn");
+  const actionStatus = document.getElementById("prefabCaptureActionStatus");
+  if (saveBtn) {
+    saveBtn.disabled = true;
+  }
+  if (actionStatus) {
+    actionStatus.hidden = false;
+    actionStatus.textContent = "Saving…";
+  }
+  try {
+    const blob = await viewer.captureBlob("image/png");
+    if (!blob) {
+      throw new Error("Could not capture the preview.");
+    }
+    const result = await postScreenshotFile(blob, ownerKind, ownerId, asAdmin, reloadFn);
+    if (!result.ok) {
+      throw new Error(result.message || "Upload failed");
+    }
+    closePrefabCaptureModal();
+  } catch (err) {
+    if (actionStatus) {
+      actionStatus.textContent = err?.message || "Save failed";
+    } else {
+      alert(err?.message || "Save failed");
+    }
+    if (saveBtn) {
+      saveBtn.disabled = false;
+    }
+  }
 }
 
 async function deleteMyScreenshot(screenshotId, asAdmin = false, reloadFn = "loadSubmissions") {
@@ -2450,6 +2682,87 @@ async function deleteApprovedBuilding(buildingId, displayName) {
 
 let catalogEntriesById = new Map();
 let detailModalEscBound = false;
+/** @type {import("./prefab-viewer/PrefabViewer.js").PrefabViewer | null} */
+let activePrefabViewer = null;
+let prefabViewerLoadToken = 0;
+
+function disposeActivePrefabViewer() {
+  prefabViewerLoadToken += 1;
+  if (activePrefabViewer) {
+    try {
+      activePrefabViewer.dispose();
+    } catch {
+      /* ignore */
+    }
+    activePrefabViewer = null;
+  }
+}
+
+/**
+ * Wait briefly for the ES module bootstrap on index.html.
+ * @returns {Promise<{ PrefabViewer: any, mountPrefabViewer: Function } | null>}
+ */
+async function getPrefabViewerApi() {
+  if (window.PrefabViewerAPI?.PrefabViewer) {
+    return window.PrefabViewerAPI;
+  }
+  for (let i = 0; i < 40; i += 1) {
+    await new Promise((r) => setTimeout(r, 50));
+    if (window.PrefabViewerAPI?.PrefabViewer) {
+      return window.PrefabViewerAPI;
+    }
+  }
+  return null;
+}
+
+/**
+ * @param {HTMLElement} container
+ * @param {string} prefabUrl
+ * @param {number} token
+ */
+async function mountBuildingPrefabViewer(container, prefabUrl, token) {
+  const statusEl = container.querySelector(".building-prefab-viewer-status");
+  const api = await getPrefabViewerApi();
+  if (token !== prefabViewerLoadToken) {
+    return;
+  }
+  if (!api?.PrefabViewer) {
+    if (statusEl) {
+      statusEl.textContent = "3D preview is unavailable in this browser.";
+    }
+    return;
+  }
+  try {
+    const viewer = new api.PrefabViewer(container, { interactive: true });
+    if (token !== prefabViewerLoadToken) {
+      viewer.dispose();
+      return;
+    }
+    activePrefabViewer = viewer;
+    await viewer.loadPrefabUrl(prefabUrl, {
+      onProgress: (done, total) => {
+        if (statusEl && token === prefabViewerLoadToken) {
+          statusEl.hidden = false;
+          statusEl.textContent = `Loading preview… ${done}/${total}`;
+        }
+      },
+    });
+    if (token !== prefabViewerLoadToken) {
+      viewer.dispose();
+      return;
+    }
+    if (statusEl) {
+      statusEl.hidden = true;
+    }
+    viewer.resize();
+  } catch (err) {
+    console.warn("Prefab viewer failed", err);
+    if (statusEl && token === prefabViewerLoadToken) {
+      statusEl.hidden = false;
+      statusEl.textContent = "Could not load 3D preview. Make sure viewer assets are synced.";
+    }
+  }
+}
 
 function ensureBuildingDetailModal() {
   if (document.getElementById("buildingDetailModal")) {
@@ -2474,9 +2787,15 @@ function ensureBuildingDetailModal() {
   if (!detailModalEscBound) {
     detailModalEscBound = true;
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        closeBuildingDetail();
+      if (event.key !== "Escape") {
+        return;
       }
+      const captureModal = document.getElementById("prefabCaptureModal");
+      if (captureModal && !captureModal.hidden) {
+        closePrefabCaptureModal();
+        return;
+      }
+      closeBuildingDetail();
     });
   }
 }
@@ -2505,7 +2824,9 @@ async function openBuildingDetail(buildingId) {
     return;
   }
 
+  disposeActivePrefabViewer();
   const modalGold = goldCostHtml(entry, "gold-cost--inline");
+  const prefabUrl = String(entry.prefabUrl || "").trim();
   content.innerHTML = `
     <div class="building-modal-header">
       ${buildingIconHtml(buildingCardImageUrl(entry), "building-icon building-icon--modal", Boolean(entry.usesCoverImage))}
@@ -2528,11 +2849,27 @@ async function openBuildingDetail(buildingId) {
         ? `<div class="building-modal-description"><p>${escapeHtml(entry.description)}</p></div>`
         : ""
     }
+    ${
+      prefabUrl
+        ? `<div class="building-prefab-viewer" id="buildingPrefabViewer">
+            <p class="building-prefab-viewer-status">Loading 3D preview…</p>
+            <p class="building-prefab-viewer-hint">Drag to rotate · Scroll to zoom</p>
+          </div>`
+        : ""
+    }
     <div class="building-gallery">
       <p class="meta">Loading screenshots…</p>
     </div>`;
   modal.hidden = false;
   document.body.classList.add("modal-open");
+
+  if (prefabUrl) {
+    const token = prefabViewerLoadToken;
+    const viewerEl = document.getElementById("buildingPrefabViewer");
+    if (viewerEl) {
+      mountBuildingPrefabViewer(viewerEl, prefabUrl, token);
+    }
+  }
 
   try {
     const res = await fetch(`/api/buildings/${encodeURIComponent(buildingId)}/screenshots`);
@@ -2594,6 +2931,7 @@ function closeBuildingDetail() {
   if (!modal || modal.hidden) {
     return;
   }
+  disposeActivePrefabViewer();
   modal.hidden = true;
   document.body.classList.remove("modal-open");
 }

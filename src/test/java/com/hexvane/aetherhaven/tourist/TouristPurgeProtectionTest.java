@@ -78,6 +78,7 @@ class TouristPurgeProtectionTest {
                 false,
                 false,
                 false,
+                false,
                 uuid,
                 Set.of()
             )
@@ -91,6 +92,7 @@ class TouristPurgeProtectionTest {
             TouristPortalTickService.isOrphanTownsfolkShellForPurge(
                 AetherhavenConstants.NPC_TOWNSFOLK,
                 true,
+                false,
                 false,
                 false,
                 uuid,
@@ -108,8 +110,25 @@ class TouristPurgeProtectionTest {
                 false,
                 false,
                 false,
+                false,
                 uuid,
                 Set.of(uuid)
+            )
+        );
+    }
+
+    @Test
+    void plotCreatorSpotPreviewTownsfolkIsNotOrphanShell() {
+        UUID uuid = UUID.randomUUID();
+        assertFalse(
+            TouristPortalTickService.isOrphanTownsfolkShellForPurge(
+                AetherhavenConstants.NPC_TOWNSFOLK,
+                false,
+                false,
+                false,
+                true,
+                uuid,
+                Set.of()
             )
         );
     }

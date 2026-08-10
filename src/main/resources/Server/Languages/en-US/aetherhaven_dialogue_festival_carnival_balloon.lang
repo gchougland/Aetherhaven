@@ -1,0 +1,25 @@
+# Carnival balloon attendant dialogue
+
+aetherhaven.dialogue.festival_carnival_balloon.speaker=Balloon Attendant
+aetherhaven.dialogue.festival_carnival_balloon.main_hub.body=Ready to pop some balloons? Ten gold coins gets you ten darts. Pop as many as you can, then come back for summer festival tickets.
+aetherhaven.dialogue.festival_carnival_balloon.main_hub.c_start=Start for 10 gold coins.
+aetherhaven.dialogue.festival_carnival_balloon.main_hub.c_collect=I am here for my prize.
+aetherhaven.dialogue.festival_carnival_balloon.main_hub.c_busy=Someone else is playing.
+aetherhaven.dialogue.festival_carnival_balloon.main_hub.c_playing=How am I doing?
+aetherhaven.dialogue.festival_carnival_balloon.main_hub.c_about=How does this work?
+aetherhaven.dialogue.festival_carnival_balloon.main_hub.c_goodbye=Maybe later.
+
+aetherhaven.dialogue.festival_carnival_balloon.about.body=Pay ten gold coins and I hand you ten darts. Balloons float up from the booth. Pop them with those darts only. Talk to me again when the round is over for your tickets. More pops mean more tickets.
+aetherhaven.dialogue.festival_carnival_balloon.about.c_back=Got it.
+
+aetherhaven.dialogue.festival_carnival_balloon.game_started.body=Here are your darts! Watch the sky and aim true. Come back when the balloons are done.
+aetherhaven.dialogue.festival_carnival_balloon.game_started.c_ok=I am ready!
+
+aetherhaven.dialogue.festival_carnival_balloon.collect_result.body=Nice work! Here are your summer festival tickets for the balloons you popped.
+aetherhaven.dialogue.festival_carnival_balloon.collect_result.c_ok=Thank you!
+
+aetherhaven.dialogue.festival_carnival_balloon.busy.body=Someone else is at the booth right now. Come back when they are done.
+aetherhaven.dialogue.festival_carnival_balloon.busy.c_ok=I will wait.
+
+aetherhaven.dialogue.festival_carnival_balloon.playing.body=Keep popping! Talk to me again when the round ends.
+aetherhaven.dialogue.festival_carnival_balloon.playing.c_ok=Back to it!

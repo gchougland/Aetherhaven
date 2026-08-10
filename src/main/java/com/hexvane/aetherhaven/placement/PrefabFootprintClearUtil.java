@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
 import com.hexvane.aetherhaven.construction.ConstructionPrefabSequence;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorSpotPreview;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -110,6 +111,9 @@ public final class PrefabFootprintClearUtil {
                         continue;
                     }
                     if (store.getComponent(r, TownVillagerBinding.getComponentType()) != null) {
+                        continue;
+                    }
+                    if (store.getComponent(r, PlotCreatorSpotPreview.getComponentType()) != null) {
                         continue;
                     }
                     UUIDComponent uuidComp = store.getComponent(r, UUIDComponent.getComponentType());

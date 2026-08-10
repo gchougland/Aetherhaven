@@ -2,10 +2,15 @@
 
 aetherhaven.buildingeditor.title=Building editor
 aetherhaven.buildingeditor.searchPlaceholder=Search buildings
+aetherhaven.buildingeditor.searchFestivalPlaceholder=Search festivals
 aetherhaven.buildingeditor.hint.pick=Choose a building to load nearby. You can then change its shape and important spots.
 aetherhaven.buildingeditor.hint.pickMine=Choose one of your marketplace buildings to edit it.
+aetherhaven.buildingeditor.hint.pickFestival=Choose a festival to load nearby. You can then mark merchants, stands, and other festival spots. Make a new festival with the plot creator.
 aetherhaven.buildingeditor.hint.loading=Loading {name}…
+aetherhaven.buildingeditor.hint.loadingFestival=Loading {name}…
 aetherhaven.buildingeditor.hint.loaded=Loaded {name} ({id}). Mark and place important spots, then keep going with the usual steps until you save.
+aetherhaven.buildingeditor.hint.loadedFestival=Loaded {name}. Mark festival spots, then keep going until you save.
+aetherhaven.buildingeditor.emptyFestivals=No festivals match your search.
 aetherhaven.buildingeditor.button.close=Close
 aetherhaven.buildingeditor.loadingMine=Loading your buildings…
 aetherhaven.buildingeditor.emptyMine=You have not submitted any buildings yet.
@@ -18,6 +23,7 @@ aetherhaven.buildingeditor.status.rejected=Not approved
 
 aetherhaven.buildingeditor.error.creativeOnly=Creative mode only.
 aetherhaven.buildingeditor.error.unknownBuilding=No building found for {id}.
+aetherhaven.buildingeditor.error.unknownFestival=No festival found for {id}.
 aetherhaven.buildingeditor.error.wallNotSupported=Wall pieces cannot be edited with this staff.
 aetherhaven.buildingeditor.error.prefabMissing=Could not find the build shape for that building.
 aetherhaven.buildingeditor.error.pasteFailed=Could not load the building here. Try again from solid ground.

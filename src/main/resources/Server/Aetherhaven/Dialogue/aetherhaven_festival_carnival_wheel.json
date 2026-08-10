@@ -1,0 +1,114 @@
+{
+  "id": "aetherhaven_festival_carnival_wheel",
+  "entry": "main_hub",
+  "nodes": {
+    "main_hub": {
+      "speaker": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.speaker",
+      "text": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.main_hub.body",
+      "choices": [
+        {
+          "id": "start",
+          "text": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_start",
+          "icon": "UI/Custom/circus.png",
+          "visibilityCondition": { "type": "carnival_wheel_can_start" },
+          "whenFalse": "hide",
+          "itemRequirements": [{ "itemId": "Aetherhaven_Gold_Coin", "count": 10 }],
+          "actions": [{ "type": "carnival_wheel_start" }],
+          "next": "spinning"
+        },
+        {
+          "id": "collect_win",
+          "text": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_collect_win",
+          "icon": "UI/Custom/circus.png",
+          "visibilityCondition": { "type": "carnival_wheel_has_win" },
+          "whenFalse": "hide",
+          "actions": [{ "type": "carnival_wheel_collect" }],
+          "next": "won"
+        },
+        {
+          "id": "collect_loss",
+          "text": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_collect_loss",
+          "icon": "UI/Custom/circus.png",
+          "visibilityCondition": { "type": "carnival_wheel_has_loss" },
+          "whenFalse": "hide",
+          "actions": [{ "type": "carnival_wheel_ack_loss" }],
+          "next": "lost"
+        },
+        {
+          "id": "busy",
+          "text": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_busy",
+          "visibilityCondition": { "type": "carnival_wheel_busy" },
+          "whenFalse": "hide",
+          "next": "busy"
+        },
+        {
+          "id": "spinning_wait",
+          "text": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_spinning",
+          "visibilityCondition": { "type": "carnival_wheel_is_spinning" },
+          "whenFalse": "hide",
+          "next": "spinning"
+        },
+        {
+          "id": "about",
+          "text": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_about",
+          "next": "about"
+        },
+        {
+          "id": "goodbye",
+          "text": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_goodbye",
+          "next": null
+        }
+      ]
+    },
+    "about": {
+      "speaker": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.speaker",
+      "text": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.about.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.about.c_back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "spinning": {
+      "speaker": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.speaker",
+      "text": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.spinning.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.spinning.c_ok",
+          "next": null
+        }
+      ]
+    },
+    "won": {
+      "speaker": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.speaker",
+      "text": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.won.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.won.c_ok",
+          "next": null
+        }
+      ]
+    },
+    "lost": {
+      "speaker": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.speaker",
+      "text": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.lost.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.lost.c_ok",
+          "next": null
+        }
+      ]
+    },
+    "busy": {
+      "speaker": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.speaker",
+      "text": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.busy.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_carnival_wheel.aetherhaven.dialogue.festival_carnival_wheel.busy.c_ok",
+          "next": null
+        }
+      ]
+    }
+  }
+}

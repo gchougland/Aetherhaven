@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
+import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import com.hexvane.aetherhaven.poi.BuildingPoisDefinition;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiOccupancy;
@@ -122,13 +123,20 @@ public final class TouristDestinationResolver {
             if (def == null || !def.isTouristDestination()) {
                 continue;
             }
-            double[] entry = resolvePlotEntryPosition(world, plot, def);
+            double[] entry = resolvePlotEntryPosition(world, town, plot, def);
             if (entry == null) {
                 continue;
             }
             out.add(TouristPlotVisit.of(plotId, entry[0], entry[1], entry[2]));
         }
         return out;
+    }
+
+    /** True when this plot is the square currently hosting a festival. */
+    public static boolean isActiveFestivalPlot(@Nonnull TownRecord town, @Nullable UUID plotId) {
+        return plotId != null
+            && town.getActiveFestivalId() != null
+            && plotId.equals(town.getActiveFestivalPlotId());
     }
 
     @Nullable
@@ -361,16 +369,28 @@ public final class TouristDestinationResolver {
     @Nonnull
     private static double[] resolvePlotEntryPosition(
         @Nonnull World world,
+        @Nonnull TownRecord town,
         @Nonnull PlotInstance plot,
         @Nonnull ConstructionDefinition def
     ) {
         Vector3i anchor = plot.resolvePrefabAnchorWorld(def);
         Rotation yaw = plot.resolvePrefabYaw();
 
-        // Customer-facing tourist spots first — management/center dumps shoppers behind counters.
-        double[] touristEntry = firstTouristVisitStandFromDef(world, anchor, yaw, def);
-        if (touristEntry != null && isInsidePlotFootprint(touristEntry[0], touristEntry[2], plot, plotEdgePadding())) {
-            return touristEntry;
+        // During a festival, walk in to that festival's visitor stands — never the square's everyday mid-square
+        // stands (those land inside pig pens / race tracks after the festival prefab swaps in).
+        if (isActiveFestivalPlot(town, plot.getPlotId())) {
+            double[] festivalEntry = firstFestivalTouristStandEntry(world, town, anchor, yaw);
+            if (festivalEntry != null
+                && isInsidePlotFootprint(festivalEntry[0], festivalEntry[2], plot, plotEdgePadding())) {
+                return festivalEntry;
+            }
+        } else {
+            // Customer-facing tourist spots first — management/center dumps shoppers behind counters.
+            double[] touristEntry = firstTouristVisitStandFromDef(world, anchor, yaw, def);
+            if (touristEntry != null
+                && isInsidePlotFootprint(touristEntry[0], touristEntry[2], plot, plotEdgePadding())) {
+                return touristEntry;
+            }
         }
 
         int[][] visitorLocals = def.getVisitorSpawnLocals();
@@ -394,6 +414,47 @@ public final class TouristDestinationResolver {
         }
 
         return footprintCenterStand(world, plot);
+    }
+
+    @Nullable
+    private static double[] firstFestivalTouristStandEntry(
+        @Nonnull World world,
+        @Nonnull TownRecord town,
+        @Nonnull Vector3i anchor,
+        @Nonnull Rotation yaw
+    ) {
+        FestivalDefinition.TouristSpotRow spot = firstFestivalTouristSpot(town);
+        if (spot == null) {
+            return null;
+        }
+        return standFromLocal(world, anchor, yaw, spot.getLocalX(), spot.getLocalY(), spot.getLocalZ());
+    }
+
+    /**
+     * First authored visitor stand for the town's active festival, or null when the festival has none (callers should
+     * then avoid the square building's everyday mid-square stands).
+     */
+    @Nullable
+    static FestivalDefinition.TouristSpotRow firstFestivalTouristSpot(@Nonnull TownRecord town) {
+        String festivalId = town.getActiveFestivalId();
+        if (festivalId == null || festivalId.isBlank()) {
+            return null;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return null;
+        }
+        FestivalDefinition festival = plugin.getFestivalCatalog().get(festivalId);
+        return firstFestivalTouristSpot(festival);
+    }
+
+    /** Visible for tests: first visitor stand row from a festival definition. */
+    @Nullable
+    static FestivalDefinition.TouristSpotRow firstFestivalTouristSpot(@Nullable FestivalDefinition festival) {
+        if (festival == null || festival.getTouristSpots().isEmpty()) {
+            return null;
+        }
+        return festival.getTouristSpots().get(0);
     }
 
     @Nonnull

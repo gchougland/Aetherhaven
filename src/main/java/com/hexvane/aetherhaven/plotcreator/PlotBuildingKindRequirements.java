@@ -336,16 +336,31 @@ public final class PlotBuildingKindRequirements {
         };
     }
 
-    /** Festival spots are one stand-here marker per villager role the festival calls for. */
+    /**
+     * Festival setup markers: villager stands, festival merchants, visitor stands, centerpiece, and race lanes when
+     * the activity needs them.
+     */
     @Nonnull
     private static List<SubstepRequirement> festivalSubsteps(
         @Nonnull PlotCreatorDraft draft,
         @Nullable AetherhavenPlugin plugin
     ) {
-        List<SubstepRequirement> out = new ArrayList<>();
-        for (String role : festivalSpotRoles(draft, plugin)) {
-            out.add(new SubstepRequirement(PlotCreatorSubstepType.WORK_POI, 1, role));
+        if (draft.isImportantSpotsConfirmed() && !draft.getSelectedSpots().isEmpty()) {
+            return forSelectedSpots(draft);
         }
+        List<SubstepRequirement> out = new ArrayList<>();
+        LinkedHashSet<SubstepRequirement> merged = new LinkedHashSet<>();
+        for (String role : festivalSpotRoles(draft, plugin)) {
+            if (TownVillagerBinding.KIND_BARD.equals(role)) {
+                merged.add(new SubstepRequirement(PlotCreatorSubstepType.BARD_WORK_POI, 1));
+            } else {
+                merged.add(new SubstepRequirement(PlotCreatorSubstepType.WORK_POI, 1, role));
+            }
+        }
+        for (PlotCreatorSpotEntry entry : PlotCreatorFestivalMechanicDefaults.requiredSpotsForMechanic(draft)) {
+            merged.add(new SubstepRequirement(entry.type(), entry.minCount(), entry.workResidentKind()));
+        }
+        out.addAll(merged);
         return out;
     }
 
@@ -388,6 +403,7 @@ public final class PlotBuildingKindRequirements {
             TownVillagerBinding.KIND_FLORIST,
             TownVillagerBinding.KIND_BUILDER,
             TownVillagerBinding.KIND_GUILD_MASTER,
+            TownVillagerBinding.KIND_BARD,
             TownVillagerBinding.KIND_CRYSTAL_KEEPER,
             TownVillagerBinding.KIND_PYROTECHNIC,
             TownVillagerBinding.KIND_GUARD

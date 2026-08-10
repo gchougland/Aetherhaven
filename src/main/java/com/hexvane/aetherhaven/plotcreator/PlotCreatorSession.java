@@ -121,6 +121,9 @@ public final class PlotCreatorSession {
 
     @Nullable
     private PlotCreatorPendingPoiPlacement pendingPoiPlacement;
+    /** First click of an unfinished festival race lane (start cell), or null. */
+    @Nullable
+    private int[] pendingRaceLaneStartLocal;
 
     @Nullable
     public PlotCreatorPendingPoiPlacement getPendingPoiPlacement() {
@@ -133,5 +136,23 @@ public final class PlotCreatorSession {
 
     public void clearPendingPoiPlacement() {
         this.pendingPoiPlacement = null;
+    }
+
+    @Nullable
+    public int[] getPendingRaceLaneStartLocal() {
+        return pendingRaceLaneStartLocal;
+    }
+
+    public void setPendingRaceLaneStartLocal(@Nullable int[] pendingRaceLaneStartLocal) {
+        if (pendingRaceLaneStartLocal == null || pendingRaceLaneStartLocal.length < 3) {
+            this.pendingRaceLaneStartLocal = null;
+            return;
+        }
+        this.pendingRaceLaneStartLocal =
+            new int[] {pendingRaceLaneStartLocal[0], pendingRaceLaneStartLocal[1], pendingRaceLaneStartLocal[2]};
+    }
+
+    public void clearPendingRaceLaneStartLocal() {
+        this.pendingRaceLaneStartLocal = null;
     }
 }

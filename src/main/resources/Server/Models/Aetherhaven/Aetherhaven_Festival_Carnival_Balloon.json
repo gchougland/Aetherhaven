@@ -1,0 +1,86 @@
+{
+  "Parent": "Feran",
+  "Model": "NPC/Intelligent/Feran/Models/Model.blockymodel",
+  "Texture": "NPC/Intelligent/Feran/Models/Model_Foxy.png",
+  "DefaultAttachments": [
+    {
+      "Model": "NPC/Intelligent/Feran/Models/Attachments/Head/Eyes.blockymodel",
+      "Texture": "NPC/Intelligent/Feran/Models/Attachments/Head/Eyes_Green_Dark.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Feran/Models/Attachments/Head/Eyebrows.blockymodel",
+      "Texture": "NPC/Intelligent/Feran/Models/Attachments/Head/Eyebrows_Beige_Bushy.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Feran/Models/Attachments/Cosmetics/Slave_Bracer_Feet.blockymodel",
+      "Texture": "NPC/Intelligent/Feran/Models/Attachments/Cosmetics/Slave_Bracer_Feet_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Feran/Models/Attachments/Cosmetics/Slave_Bracer_Hands.blockymodel",
+      "Texture": "NPC/Intelligent/Feran/Models/Attachments/Cosmetics/Slave_Bracer_Hands_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Feran/Models/Attachments/Burrower/Assassin_Poncho.blockymodel",
+      "Texture": "NPC/Intelligent/Feran/Models/Attachments/Burrower/Assassin_Poncho_Beige.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Feran/Models/Attachments/Cosmetics/Side_Fur.blockymodel",
+      "Texture": "NPC/Intelligent/Feran/Models/Attachments/Cosmetics/Side_Fur_Texture.png"
+    }
+  ],
+  "RandomAttachmentSets": {
+    "Eyebrows": {
+      "Beige": {
+        "Model": "NPC/Intelligent/Feran/Models/Attachments/Head/Eyebrows.blockymodel",
+        "Texture": "NPC/Intelligent/Feran/Models/Attachments/Head/Eyebrows_Beige.png",
+        "Weight": 1
+      },
+      "Bushy": {
+        "Model": "NPC/Intelligent/Feran/Models/Attachments/Head/Eyebrows.blockymodel",
+        "Texture": "NPC/Intelligent/Feran/Models/Attachments/Head/Eyebrows_Beige_Bushy.png",
+        "Weight": 1
+      }
+    },
+    "Chest": {
+      "AssassinPoncho": {
+        "Model": "NPC/Intelligent/Feran/Models/Attachments/Burrower/Assassin_Poncho.blockymodel",
+        "Texture": "NPC/Intelligent/Feran/Models/Attachments/Burrower/Assassin_Poncho_Beige.png",
+        "Weight": 1
+      },
+      "Windwalker": {
+        "Model": "NPC/Intelligent/Feran/Models/Attachments/Windwalker/Chest.blockymodel",
+        "Texture": "NPC/Intelligent/Feran/Models/Attachments/Windwalker/Chest_Texture.png",
+        "Weight": 1
+      },
+      "PonchoBeige": {
+        "Model": "NPC/Intelligent/Feran/Models/Attachments/Cosmetics/Poncho.blockymodel",
+        "Texture": "NPC/Intelligent/Feran/Models/Attachments/Cosmetics/Poncho_Beige.png",
+        "Weight": 1
+      }
+    }
+  },
+  "Icon": "Icons/ModelsGenerated/Feran_Civilian.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [0, 19, 0],
+    "Translation": [0, -103]
+  },
+  "AnimationSets": {
+    "DanceBoogie": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Emote/Dance_Boogie.blockyanim",
+          "Looping": true
+        }
+      ]
+    },
+    "DancePop": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Emote/Dance_Pop.blockyanim",
+          "Looping": true
+        }
+      ]
+    }
+  }
+}

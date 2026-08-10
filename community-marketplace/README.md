@@ -9,10 +9,54 @@ cd community-marketplace
 cp .env.example .env
 # Fill in SESSION_SECRET and OIDC vars as needed
 npm install
+npm run sync-hytale-assets
+npm run playwright-install
 npm start
 ```
 
 Single server on **http://127.0.0.1:3847** (API + website).
+
+### Prefab 3D viewer assets
+
+Building cards open a zoomable / rotatable Three.js prefab preview. That needs Hytale (+ Aetherhaven) textures and models on disk — **not committed to git** (Hypixel IP). Blocks from other mods are skipped in the viewer.
+
+#### Local
+
+1. Make sure Hytale assets exist at  
+   `../HytaleSourceCode/hytale-shared-source/HytaleAssets`  
+   (or set `HYTALE_ASSETS_SRC` to your pack path).
+2. From `community-marketplace/`:
+
+   ```bash
+   npm run sync-hytale-assets
+   ```
+
+   This writes `web/hytale-assets/` (gitignored) and serves it at `/hytale-assets`.
+3. Optional, for auto cover screenshots on new submissions:
+
+   ```bash
+   npm run playwright-install
+   ```
+
+Re-run `sync-hytale-assets` after game updates or Aetherhaven asset changes.
+
+#### Production (Railway)
+
+Assets are not in the git deploy. Put them on the volume:
+
+1. On your PC, export a copy:
+
+   ```bash
+   cd community-marketplace
+   # Windows PowerShell example:
+   $env:OUT_DIR="C:\temp\hytale-assets"; npm run sync-hytale-assets
+   ```
+
+2. Upload that folder to the Railway volume at `/data/hytale-assets`  
+   (Railway CLI, volume browser, or any SFTP/rsync you use).
+3. Set service variable `HYTALE_ASSETS_DIR=/data/hytale-assets` and redeploy.
+
+See [docs/RailwayDeployment.md](../docs/RailwayDeployment.md) for volume + Chromium notes. If Chromium or assets are missing, submissions still work — only auto-covers / 3D preview are affected.
 
 ## Wiki
 

@@ -8,9 +8,9 @@
   "selfBuildGameDays": 3.0,
   "plotTokenItemId": "Aetherhaven_Plot_Token",
   "plotAnchorOffset": [
-    15,
-    -5,
-    15
+    0,
+    1,
+    0
   ],
   "rotationYaw": "None",
   "autonomyNavFloorYAboveMinY": 6.0,
@@ -19,8 +19,7 @@
   "treasuryGoldCoinCost": 140,
   "tags": [
     "amenity",
-    "fun",
-    "festival"
+    "fun"
   ],
   "materials": [
     {
@@ -42,9 +41,9 @@
   ],
   "pois": [
     {
-      "localX": -8,
-      "localY": 6,
-      "localZ": 0,
+      "localX": 24,
+      "localY": 0,
+      "localZ": 16,
       "tags": [
         "FUN",
         "SIT"
@@ -52,14 +51,14 @@
       "capacity": 2,
       "blockTypeId": "Furniture_Castle_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": -6,
-      "interactionTargetLocalY": 6,
-      "interactionTargetLocalZ": 0
+      "interactionTargetLocalX": 22,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 16
     },
     {
-      "localX": 9,
-      "localY": 6,
-      "localZ": 1,
+      "localX": 15,
+      "localY": 0,
+      "localZ": 7,
       "tags": [
         "FUN",
         "SIT"
@@ -67,14 +66,14 @@
       "capacity": 2,
       "blockTypeId": "Furniture_Castle_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 6,
-      "interactionTargetLocalZ": 1
+      "interactionTargetLocalX": 15,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 9
     },
     {
-      "localX": 0,
-      "localY": 6,
-      "localZ": -8,
+      "localX": 16,
+      "localY": 0,
+      "localZ": 24,
       "tags": [
         "FUN",
         "SIT"
@@ -82,90 +81,33 @@
       "capacity": 2,
       "blockTypeId": "Furniture_Castle_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 0,
-      "interactionTargetLocalY": 6,
-      "interactionTargetLocalZ": -6
+      "interactionTargetLocalX": 16,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 22
     },
     {
-      "localX": 1,
-      "localY": 6,
-      "localZ": 9,
+      "localX": 7,
+      "localY": 0,
+      "localZ": 16,
       "tags": [
         "FUN",
-        "SIT"
+        "SIT",
+        "workActivity:read"
       ],
-      "capacity": 2,
+      "capacity": 1,
       "blockTypeId": "Furniture_Castle_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 1,
-      "interactionTargetLocalY": 6,
-      "interactionTargetLocalZ": 7
-    },
-    {
-      "localX": -4,
-      "localY": 5,
-      "localZ": -4,
-      "tags": [
-        "TOURIST_VISIT",
-        "FUN"
-      ],
-      "capacity": 2,
-      "blockTypeId": "Rock_Stone_Brick_Ornate",
-      "interactionKind": "NONE",
-      "interactionTargetLocalX": -4,
-      "interactionTargetLocalY": 5,
-      "interactionTargetLocalZ": -4,
-      "interactionTargetYawDegrees": 135.0
-    },
-    {
-      "localX": 5,
-      "localY": 5,
-      "localZ": -4,
-      "tags": [
-        "TOURIST_VISIT",
-        "FUN"
-      ],
-      "capacity": 2,
-      "blockTypeId": "Rock_Stone_Brick_Ornate",
-      "interactionKind": "NONE",
-      "interactionTargetLocalX": 5,
-      "interactionTargetLocalY": 5,
-      "interactionTargetLocalZ": -4,
-      "interactionTargetYawDegrees": -135.0
-    },
-    {
-      "localX": -4,
-      "localY": 5,
-      "localZ": 5,
-      "tags": [
-        "TOURIST_VISIT",
-        "FUN"
-      ],
-      "capacity": 2,
-      "blockTypeId": "Rock_Stone_Brick_Ornate",
-      "interactionKind": "NONE",
-      "interactionTargetLocalX": -4,
-      "interactionTargetLocalY": 5,
-      "interactionTargetLocalZ": 5,
-      "interactionTargetYawDegrees": 45.0
-    },
-    {
-      "localX": 5,
-      "localY": 5,
-      "localZ": 5,
-      "tags": [
-        "TOURIST_VISIT",
-        "FUN"
-      ],
-      "capacity": 2,
-      "blockTypeId": "Rock_Stone_Brick_Ornate",
-      "interactionKind": "NONE",
-      "interactionTargetLocalX": 5,
-      "interactionTargetLocalY": 5,
-      "interactionTargetLocalZ": 5,
-      "interactionTargetYawDegrees": -45.0
+      "interactionTargetLocalX": 8,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 16,
+      "interactionTargetYawDegrees": 90.00001
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_festival_square.displayName",
-  "styleId": "core"
+  "styleId": "core",
+  "managementBlockLocalPos": [
+    14,
+    0,
+    24
+  ]
 }

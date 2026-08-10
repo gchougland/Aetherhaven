@@ -1,0 +1,26 @@
+# Carnival wheel attendant dialogue
+
+aetherhaven.dialogue.festival_carnival_wheel.speaker=Wheel Attendant
+aetherhaven.dialogue.festival_carnival_wheel.main_hub.body=Give the carnival wheel a spin! Ten gold coins, and if it lands on red you win two summer festival tickets.
+aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_start=Spin for 10 gold coins.
+aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_collect_win=Did I win?
+aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_collect_loss=What did I land on?
+aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_busy=Someone else is spinning.
+aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_spinning=Is it still spinning?
+aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_about=How does the wheel work?
+aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_goodbye=Maybe later.
+
+aetherhaven.dialogue.festival_carnival_wheel.about.body=Pay ten gold coins and I spin the wheel on the wall. Red wins you two summer festival tickets. White means try again next time. Only one person can spin at a time.
+aetherhaven.dialogue.festival_carnival_wheel.about.c_back=Got it.
+
+aetherhaven.dialogue.festival_carnival_wheel.spinning.body=Watch it go! Talk to me again when it stops.
+aetherhaven.dialogue.festival_carnival_wheel.spinning.c_ok=I am watching!
+
+aetherhaven.dialogue.festival_carnival_wheel.won.body=Red! Here are two summer festival tickets. Want to spin again later?
+aetherhaven.dialogue.festival_carnival_wheel.won.c_ok=Lucky day!
+
+aetherhaven.dialogue.festival_carnival_wheel.lost.body=White this time. Better luck on the next spin!
+aetherhaven.dialogue.festival_carnival_wheel.lost.c_ok=I will try again.
+
+aetherhaven.dialogue.festival_carnival_wheel.busy.body=Someone else is spinning right now. Come back when the wheel is free.
+aetherhaven.dialogue.festival_carnival_wheel.busy.c_ok=I will wait.

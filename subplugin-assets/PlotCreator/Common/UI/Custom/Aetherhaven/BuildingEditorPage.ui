@@ -78,6 +78,12 @@ $C.@PageOverlay {
           TooltipText: "";
           Id: "Mine";
         }
+
+        TabButton {
+          Icon: "../flags.png";
+          TooltipText: "";
+          Id: "Festivals";
+        }
       }
 
       Group #RefreshRow {

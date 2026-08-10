@@ -66,6 +66,7 @@ public final class PlotCreatorSpotMarkerCollector {
                 h = 31 * h + Float.floatToIntBits(m.facingYawWorldRadians());
             }
         }
+        h = 31 * h + PlotCreatorSpotPreviewCollector.signature(draft, world);
         return h;
     }
 
@@ -89,15 +90,6 @@ public final class PlotCreatorSpotMarkerCollector {
         addLocal(out, draft, draft.getShopSafeLocalPos(), PlotCreatorSubstepType.SHOP_SAFE_BLOCK, null, filter);
         addLocal(out, draft, draft.getInnBellLocalPos(), PlotCreatorSubstepType.INN_BELL_BLOCK, null, filter);
         addLocal(out, draft, draft.getGaiaStatueLocalPos(), PlotCreatorSubstepType.GAIA_STATUE_BLOCK, null, filter);
-        addLocal(out, draft, draft.getInnkeeperSpawnLocal(), PlotCreatorSubstepType.INNKEEPER_SPAWN, null, filter);
-        addLocal(out, draft, draft.getGuildMasterSpawnLocal(), PlotCreatorSubstepType.GUILD_MASTER_SPAWN, null, filter);
-
-        for (int[] local : draft.getVisitorSpawnLocals()) {
-            addLocal(out, draft, local, PlotCreatorSubstepType.VISITOR_SPAWN, null, filter);
-        }
-        for (PlotCreatorAdventurerSpawnEntry entry : draft.getAdventurerSpawns()) {
-            addLocal(out, draft, entry.localArray(), PlotCreatorSubstepType.ADVENTURER_SPAWN, null, filter);
-        }
 
         for (PlotCreatorPoiDraft poi : draft.getPois()) {
             addPoi(out, draft, poi, filter);
@@ -106,7 +98,99 @@ public final class PlotCreatorSpotMarkerCollector {
         for (Vector3i worldPos : draft.getPlacedSpecialBlocks()) {
             addSpecialBlock(out, world, worldPos, filter);
         }
+        addFestivalMarkers(out, draft, filter);
         return out;
+    }
+
+    private static void addFestivalMarkers(
+        @Nonnull List<DesiredSpotMarker> out,
+        @Nonnull PlotCreatorDraft draft,
+        @Nullable PlotBuildingKindRequirements.SubstepRequirement filter
+    ) {
+        int[] centerpiece = draft.getFestivalCenterpieceLocal();
+        if (centerpiece != null && passesTypeFilter(filter, PlotCreatorSubstepType.FESTIVAL_CENTERPIECE, null)) {
+            Vector3i block = PlotCreatorLocalCoords.toWorldBlock(draft, centerpiece);
+            out.add(
+                desired(
+                    block.x,
+                    block.y,
+                    block.z,
+                    PlotCreatorSubstepType.FESTIVAL_CENTERPIECE,
+                    null,
+                    null,
+                    null
+                )
+            );
+        }
+        for (var lane : draft.getFestivalRaceLanes()) {
+            if (!passesTypeFilter(filter, PlotCreatorSubstepType.FESTIVAL_RACE_LANE, null)) {
+                continue;
+            }
+            Vector3i start =
+                PlotCreatorLocalCoords.toWorldBlock(
+                    draft,
+                    new int[] {lane.getStartLocalX(), lane.getStartLocalY(), lane.getStartLocalZ()}
+                );
+            Vector3i finish =
+                PlotCreatorLocalCoords.toWorldBlock(
+                    draft,
+                    new int[] {lane.getFinishLocalX(), lane.getFinishLocalY(), lane.getFinishLocalZ()}
+                );
+            out.add(
+                desired(
+                    start.x,
+                    start.y,
+                    start.z,
+                    PlotCreatorSubstepType.FESTIVAL_RACE_LANE,
+                    lane.getNpcRoleId(),
+                    null,
+                    null
+                )
+            );
+            out.add(
+                desired(
+                    finish.x,
+                    finish.y,
+                    finish.z,
+                    PlotCreatorSubstepType.FESTIVAL_RACE_LANE,
+                    lane.getNpcRoleId(),
+                    null,
+                    null
+                )
+            );
+        }
+        for (var balloon : draft.getFestivalBalloonSpawns()) {
+            if (!passesTypeFilter(filter, PlotCreatorSubstepType.FESTIVAL_BALLOON_SPAWN, null)) {
+                continue;
+            }
+            Vector3i block =
+                PlotCreatorLocalCoords.toWorldBlock(
+                    draft,
+                    new int[] {balloon.getLocalX(), balloon.getLocalY(), balloon.getLocalZ()}
+                );
+            out.add(
+                desired(
+                    block.x,
+                    block.y,
+                    block.z,
+                    PlotCreatorSubstepType.FESTIVAL_BALLOON_SPAWN,
+                    null,
+                    null,
+                    null
+                )
+            );
+        }
+        var wheel = draft.getFestivalWheelLocal();
+        if (wheel != null && passesTypeFilter(filter, PlotCreatorSubstepType.FESTIVAL_WHEEL, null)) {
+            Vector3i block =
+                PlotCreatorLocalCoords.toWorldBlock(
+                    draft,
+                    new int[] {wheel.getLocalX(), wheel.getLocalY(), wheel.getLocalZ()}
+                );
+            out.add(
+                desired(block.x, block.y, block.z, PlotCreatorSubstepType.FESTIVAL_WHEEL, null, null, null)
+            );
+        }
     }
 
     private static void addLocal(
@@ -118,6 +202,9 @@ public final class PlotCreatorSpotMarkerCollector {
         @Nullable PlotBuildingKindRequirements.SubstepRequirement filter
     ) {
         if (local == null || local.length < 3) {
+            return;
+        }
+        if (PlotCreatorSpotPreviewRoles.usesVillagerPreview(type)) {
             return;
         }
         if (!passesTypeFilter(filter, type, workResidentKind)) {
@@ -134,7 +221,7 @@ public final class PlotCreatorSpotMarkerCollector {
         @Nullable PlotBuildingKindRequirements.SubstepRequirement filter
     ) {
         PlotCreatorSubstepType type = resolvePoiType(poi);
-        if (type == null) {
+        if (type == null || PlotCreatorSpotPreviewRoles.usesVillagerPreview(type)) {
             return;
         }
         String workKind = type == PlotCreatorSubstepType.WORK_POI ? poi.getWorkResidentKind() : null;
@@ -189,6 +276,11 @@ public final class PlotCreatorSpotMarkerCollector {
     }
 
     @Nullable
+    public static PlotCreatorSubstepType resolvePoiTypePublic(@Nonnull PlotCreatorPoiDraft poi) {
+        return resolvePoiType(poi);
+    }
+
+    @Nullable
     private static PlotCreatorSubstepType resolvePoiType(@Nonnull PlotCreatorPoiDraft poi) {
         if (PlotCreatorGaiaStatueSupport.isGaiaStatueBlockTypeId(poi.getBlockTypeId())) {
             return null;
@@ -236,12 +328,12 @@ public final class PlotCreatorSpotMarkerCollector {
         if (filter.type() != type) {
             return false;
         }
-        if (type != PlotCreatorSubstepType.WORK_POI) {
+        if (type != PlotCreatorSubstepType.WORK_POI && type != PlotCreatorSubstepType.FESTIVAL_NPC) {
             return true;
         }
         String want = filter.workResidentKind();
         if (want == null || want.isBlank()) {
-            return workResidentKind == null;
+            return workResidentKind == null || type == PlotCreatorSubstepType.FESTIVAL_NPC;
         }
         return Objects.equals(want, workResidentKind);
     }

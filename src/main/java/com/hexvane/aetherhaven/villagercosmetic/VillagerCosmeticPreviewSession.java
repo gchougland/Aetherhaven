@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.villagercosmetic;
 
+import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.NonSerialized;
@@ -15,6 +16,7 @@ import com.hypixel.hytale.protocol.RotationType;
 import com.hypixel.hytale.protocol.ServerCameraSettings;
 import com.hypixel.hytale.protocol.packets.camera.SetServerCamera;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.player.CameraManager;
@@ -67,12 +69,13 @@ public final class VillagerCosmeticPreviewSession {
         cleanup(playerEntityRef, store, playerRef);
         World world = store.getExternalData().getWorld();
         Vector3i block = new Vector3i(wardrobeX, wardrobeY, wardrobeZ);
-        int[] forward = horizontalForward(world, block);
+        // Door side of the Royal Magic wardrobe is local +Z; place the preview in open space that way.
+        int[] forward = previewForward(world, block, wardrobeY);
         double previewX = wardrobeX + 0.5 + forward[0] * PREVIEW_FORWARD;
         double previewZ = wardrobeZ + 0.5 + forward[2] * PREVIEW_FORWARD;
         double previewY = wardrobeY;
         Vector3d previewPos = new Vector3d(previewX, previewY, previewZ);
-        // Face the camera (further along the wardrobe forward axis).
+        // Face the camera (further along the wardrobe door-facing axis).
         Rotation3f bodyRot = Rotation3f.lookAt(new Vector3d(forward[0], 0, forward[2]));
 
         var holder = store.getRegistry().newHolder();
@@ -190,7 +193,10 @@ public final class VillagerCosmeticPreviewSession {
     ) {
         if (playerScaleHidden) {
             // Scale changes send ModelUpdate; without a follow-up skin refresh the client shows a naked avatar.
+            // Change Model only writes Model.scale and relies on entityScale=0 (no EntityScale component).
+            // Leaving Scale=1 stuck on the player after wardrobe hide blocks manual size changes.
             final float restore = previousEntityScale > 0f ? previousEntityScale : 1f;
+            final boolean keepPriorNonDefaultScale = hadEntityScale && Math.abs(restore - 1f) > 0.0001f;
             playerScaleHidden = false;
             hadEntityScale = false;
             previousEntityScale = 1f;
@@ -201,12 +207,34 @@ public final class VillagerCosmeticPreviewSession {
                     if (ref == null || !ref.isValid()) {
                         return;
                     }
+                    // Un-shrink first so the client is not left at the tiny hide scale.
                     store.putComponent(
                         ref,
                         EntityScaleComponent.getComponentType(),
                         new EntityScaleComponent(restore)
                     );
                     refreshPlayerSkinNetwork(ref, store);
+                    if (keepPriorNonDefaultScale) {
+                        return;
+                    }
+                    Runnable clearTempScale =
+                        () -> {
+                            if (!ref.isValid()) {
+                                return;
+                            }
+                            EntityScaleComponent cur = store.getComponent(ref, EntityScaleComponent.getComponentType());
+                            if (cur == null || Math.abs(cur.getScale() - restore) > 0.0001f) {
+                                return;
+                            }
+                            store.removeComponent(ref, EntityScaleComponent.getComponentType());
+                            reassertPlayerModelNetwork(ref, store);
+                        };
+                    if (world == null) {
+                        clearTempScale.run();
+                    } else {
+                        // Drop after the 1.0 update is queued so Change Model can size via Model.scale again.
+                        world.execute(clearTempScale);
+                    }
                 }
             );
         }
@@ -234,6 +262,15 @@ public final class VillagerCosmeticPreviewSession {
             skin.setNetworkOutdated();
         }
         PlayerSystems.PlayerSpawnedSystem.sendPlayerSelf(ref, store);
+    }
+
+    /** Force a fresh ModelUpdate (entityScale 0 when EntityScale was removed) plus skin. */
+    private static void reassertPlayerModelNetwork(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        ModelComponent model = store.getComponent(ref, ModelComponent.getComponentType());
+        if (model != null) {
+            store.putComponent(ref, ModelComponent.getComponentType(), new ModelComponent(model.getModel()));
+        }
+        refreshPlayerSkinNetwork(ref, store);
     }
 
     /** Store mutations are illegal while a tick system holds write processing (e.g. death UI dismiss). */
@@ -280,15 +317,33 @@ public final class VillagerCosmeticPreviewSession {
         playerRef.getPacketHandler().writeNoCache(new SetServerCamera(ClientCameraView.Custom, true, settings));
     }
 
+    /**
+     * World horizontal step toward the wardrobe doors (local +Z under NESW rotation).
+     * If that side is inside a solid wall, fall back to the opposite side.
+     */
     @Nonnull
-    private static int[] horizontalForward(@Nonnull World world, @Nonnull Vector3i blockWorldPos) {
+    private static int[] previewForward(@Nonnull World world, @Nonnull Vector3i blockWorldPos, int wardrobeY) {
         Rotation yaw = PlotBlockRotationUtil.readBlockYaw(world, blockWorldPos);
-        return switch (yaw) {
-            case None -> new int[] {0, 0, -1};
-            case Ninety -> new int[] {1, 0, 0};
-            case OneEighty -> new int[] {0, 0, 1};
-            case TwoSeventy -> new int[] {-1, 0, 0};
-            default -> new int[] {0, 0, -1};
-        };
+        RotationTuple rt = RotationTuple.of(yaw, Rotation.None, Rotation.None);
+        Vector3d doorFront = rt.rotatedVector(new Vector3d(0, 0, 1));
+        int fx = (int) Math.round(doorFront.x);
+        int fz = (int) Math.round(doorFront.z);
+        if (fx == 0 && fz == 0) {
+            fx = 0;
+            fz = 1;
+        } else if (Math.abs(fx) >= Math.abs(fz)) {
+            fx = Integer.signum(fx);
+            fz = 0;
+        } else {
+            fx = 0;
+            fz = Integer.signum(fz);
+        }
+        int[] forward = new int[] {fx, 0, fz};
+        int probeX = blockWorldPos.x + forward[0] * 2;
+        int probeZ = blockWorldPos.z + forward[2] * 2;
+        if (VillagerBlockUtil.isFullUnitBlock(world, probeX, wardrobeY + 1, probeZ)) {
+            return new int[] {-forward[0], 0, -forward[2]};
+        }
+        return forward;
     }
 }

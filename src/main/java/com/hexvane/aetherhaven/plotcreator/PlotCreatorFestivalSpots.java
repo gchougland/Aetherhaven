@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.plotcreator;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +17,15 @@ public final class PlotCreatorFestivalSpots {
     public static PlotCreatorPoiDraft toPoiDraft(@Nonnull FestivalDefinition.SpotRow spot) {
         PlotCreatorPoiDraft poi = new PlotCreatorPoiDraft();
         poi.setLocal(spot.getLocalX(), spot.getLocalY(), spot.getLocalZ());
-        poi.setTags(List.of("WORK"));
+        String kind = spot.getResidentKind();
+        if (com.hexvane.aetherhaven.villager.TownVillagerBinding.KIND_BARD.equals(kind)) {
+            poi.setTags(List.of("WORK", AetherhavenConstants.POI_TAG_BARD));
+        } else {
+            poi.setTags(List.of("WORK"));
+        }
         poi.setCapacity(1);
         poi.setInteractionKind("WORK_SURFACE");
-        poi.setWorkResidentKind(spot.getResidentKind());
+        poi.setWorkResidentKind(kind);
         poi.setInteractionTargetYawDegrees(spot.getYawDegrees());
         return poi;
     }
