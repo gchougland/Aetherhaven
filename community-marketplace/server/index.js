@@ -1653,7 +1653,8 @@ function patchPublishedBuilding(buildingId, body, webUser, options = {}) {
   if (!options.asAdmin && (!webUser || !isOwnedByWebUser(entry, webUser))) {
     return { status: 403, body: { error: "not_owner" } };
   }
-  const allowStyleAndTags = Boolean(options.asAdmin);
+  // Owners and admins may update style/tags (marketplace style filter / theme labels).
+  const allowStyleAndTags = true;
   const validated = validateBuildingEditPayload(body, { allowStyleAndTags });
   if (!validated.ok) {
     return { status: 400, body: { error: validated.error, message: validated.message } };
@@ -1675,10 +1676,8 @@ function patchPublishedBuilding(buildingId, body, webUser, options = {}) {
   } else {
     delete entry.description;
   }
-  if (allowStyleAndTags) {
-    entry.styleId = validated.value.styleId || "misc";
-    entry.tags = validated.value.tags || [];
-  }
+  entry.styleId = validated.value.styleId || "misc";
+  entry.tags = validated.value.tags || [];
   storage.writeManifest(manifest);
 
   if (fs.existsSync(paths.meta)) {
@@ -1690,10 +1689,8 @@ function patchPublishedBuilding(buildingId, body, webUser, options = {}) {
       } else {
         delete approvedMeta.description;
       }
-      if (allowStyleAndTags) {
-        approvedMeta.styleId = validated.value.styleId || "misc";
-        approvedMeta.tags = validated.value.tags || [];
-      }
+      approvedMeta.styleId = validated.value.styleId || "misc";
+      approvedMeta.tags = validated.value.tags || [];
       fs.writeFileSync(paths.meta, JSON.stringify(approvedMeta, null, 2));
     } catch {
       // meta is best-effort sync

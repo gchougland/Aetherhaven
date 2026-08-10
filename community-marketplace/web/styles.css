@@ -1769,7 +1769,7 @@ a.submissions-chip:hover {
 .screenshot-cover-btn {
   position: absolute;
   left: 0.2rem;
-  right: 0.2rem;
+  right: 1.6rem;
   top: 0.2rem;
   z-index: 1;
   margin: 0;
@@ -1786,16 +1786,28 @@ a.submissions-chip:hover {
   color: var(--gold-bright);
 }
 
+.screenshot-shot {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.35rem;
+}
+
+.screenshot-shot--edit {
+  width: min(100%, 220px);
+}
+
 .screenshot-thumb-delete {
   position: absolute;
   top: 2px;
   right: 2px;
+  z-index: 3;
   width: 1.35rem;
   height: 1.35rem;
   padding: 0;
   border: none;
   border-radius: var(--radius-sm);
-  background: rgba(12, 8, 8, 0.75);
+  background: rgba(12, 8, 8, 0.85);
   color: var(--danger-text);
   font-size: 1rem;
   line-height: 1;
@@ -1804,6 +1816,13 @@ a.submissions-chip:hover {
 
 .screenshot-thumb-delete:hover {
   background: var(--danger);
+}
+
+.screenshot-remove-btn {
+  width: 100%;
+  margin: 0;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
 }
 
 .screenshot-upload-row {

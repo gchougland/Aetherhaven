@@ -7,8 +7,8 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=4";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=4";
+} from "./BlockCatalog.js?v=5";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=5";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
@@ -27,6 +27,51 @@ export function rotationTupleToEuler(index) {
   const roll = Math.floor(i / 16) % 4;
   const deg = (n) => (n * Math.PI) / 2;
   return new THREE.Euler(deg(pitch), deg(yaw), deg(roll), "ZYX");
+}
+
+/**
+ * Prefab entity Transform.Rotation matches Rotation3f (pitch/yaw/roll).
+ * In-game exports use radians; some legacy asset prefabs store degrees.
+ * Quaternion matches Rotation3f.getQuaternion → JOML rotationYXZ(yaw, pitch, roll).
+ * @param {any} rot
+ * @returns {THREE.Quaternion}
+ */
+export function entityRotationToQuaternion(rot) {
+  let pitch = Number(rot?.Pitch ?? rot?.pitch ?? 0);
+  let yaw = Number(rot?.Yaw ?? rot?.yaw ?? 0);
+  let roll = Number(rot?.Roll ?? rot?.roll ?? 0);
+  if (!Number.isFinite(pitch)) {
+    pitch = 0;
+  }
+  if (!Number.isFinite(yaw)) {
+    yaw = 0;
+  }
+  if (!Number.isFinite(roll)) {
+    roll = 0;
+  }
+  const maxAbs = Math.max(Math.abs(pitch), Math.abs(yaw), Math.abs(roll));
+  if (maxAbs > Math.PI * 2 + 0.05) {
+    const toRad = Math.PI / 180;
+    pitch *= toRad;
+    yaw *= toRad;
+    roll *= toRad;
+  }
+  const qy = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
+  const qx = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), pitch);
+  const qz = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), roll);
+  return qy.multiply(qx).multiply(qz);
+}
+
+/**
+ * @param {any} pos
+ * @returns {THREE.Vector3}
+ */
+export function entityPositionToVector(pos) {
+  return new THREE.Vector3(
+    Number(pos?.X ?? pos?.x ?? 0) || 0,
+    Number(pos?.Y ?? pos?.y ?? 0) || 0,
+    Number(pos?.Z ?? pos?.z ?? 0) || 0
+  );
 }
 
 /**
@@ -225,14 +270,14 @@ export async function buildPrefabMesh(prefab, options = {}) {
         }
       } else if (item.kind === "entity") {
         const comps = item.data?.Components || item.data?.components || {};
-        const transform = comps.Transform || {};
-        const pos = transform.Position || { X: 0, Y: 0, Z: 0 };
-        const rot = transform.Rotation || { Pitch: 0, Yaw: 0, Roll: 0 };
+        const transform = comps.Transform || comps.transform || {};
+        const pos = transform.Position || transform.position || {};
+        const rot = transform.Rotation || transform.rotation || {};
         const scale = Number(comps.EntityScale?.Scale ?? comps.Model?.Model?.Scale ?? 1) || 1;
 
         const holder = new THREE.Group();
-        holder.position.set(Number(pos.X) || 0, Number(pos.Y) || 0, Number(pos.Z) || 0);
-        holder.rotation.set(Number(rot.Pitch) || 0, Number(rot.Yaw) || 0, Number(rot.Roll) || 0, "YXZ");
+        holder.position.copy(entityPositionToVector(pos));
+        holder.quaternion.copy(entityRotationToQuaternion(rot));
         holder.scale.setScalar(scale);
 
         let placed = false;

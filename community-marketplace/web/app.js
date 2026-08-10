@@ -1489,11 +1489,18 @@ function renderOwnerScreenshots(item, options = {}) {
                 : `<button type="button" class="secondary screenshot-cover-btn" onclick="setBuildingCover('${escapeAttr(ownerId)}', '${escapeAttr(shot.screenshotId)}', ${asAdmin}, '${escapeAttr(reloadFn)}')" title="Use as marketplace card image">Set card</button>`
               : "";
           return `
-      <div class="screenshot-thumb${isCover ? " screenshot-thumb--cover" : ""}${!compact ? " screenshot-thumb--large" : ""}" data-status="${escapeAttr(shot.status || "pending")}">
-        ${img}
-        <span class="screenshot-thumb-status">${escapeHtml(screenshotStatusLabel(shot.status))}${isCover ? " · Card" : ""}</span>
-        ${coverBtn}
-        <button type="button" class="screenshot-thumb-delete" title="Remove screenshot" aria-label="Remove screenshot" onclick="deleteMyScreenshot('${escapeAttr(shot.screenshotId)}', ${asAdmin}, '${escapeAttr(reloadFn)}')">×</button>
+      <div class="screenshot-shot${!compact ? " screenshot-shot--edit" : ""}">
+        <div class="screenshot-thumb${isCover ? " screenshot-thumb--cover" : ""}${!compact ? " screenshot-thumb--large" : ""}" data-status="${escapeAttr(shot.status || "pending")}">
+          ${img}
+          <span class="screenshot-thumb-status">${escapeHtml(screenshotStatusLabel(shot.status))}${isCover ? " · Card" : ""}</span>
+          ${coverBtn}
+          <button type="button" class="screenshot-thumb-delete" title="Remove screenshot" aria-label="Remove screenshot" onclick="event.stopPropagation(); deleteMyScreenshot('${escapeAttr(shot.screenshotId)}', ${asAdmin}, '${escapeAttr(reloadFn)}')">×</button>
+        </div>
+        ${
+          compact
+            ? ""
+            : `<button type="button" class="secondary screenshot-remove-btn" onclick="deleteMyScreenshot('${escapeAttr(shot.screenshotId)}', ${asAdmin}, '${escapeAttr(reloadFn)}')">Remove</button>`
+        }
       </div>`;
         })
         .join("")
@@ -3199,17 +3206,16 @@ async function loadEditPage() {
   }
   const data = await res.json();
   const materials = Array.isArray(data.materials) ? data.materials : [];
-  const adminFields = isAdmin
-    ? `
+  const styleFields = `
       <label class="edit-field">
         <span class="edit-field-label">Style</span>
-        <input id="editStyleId" type="text" value="${escapeAttr(data.styleId || "misc")}" placeholder="e.g. Coastal Ruins" />
+        <input id="editStyleId" type="text" value="${escapeAttr(data.styleId || "misc")}" placeholder="e.g. Coastal Ruins" maxlength="64" />
+        <span class="meta">Shown in the marketplace style filter.</span>
       </label>
       <label class="edit-field">
         <span class="edit-field-label">Tags (comma-separated)</span>
-        <input id="editTags" type="text" value="${escapeAttr((data.tags || []).join(", "))}" />
-      </label>`
-    : "";
+        <input id="editTags" type="text" value="${escapeAttr((data.tags || []).join(", "))}" placeholder="e.g. cozy, harbor, stone" />
+      </label>`;
   let backHref = "/submissions.html";
   if (fromParam === "admin" || submissionId) {
     backHref = "/admin.html";
@@ -3241,7 +3247,7 @@ async function loadEditPage() {
             <span class="edit-field-label">Gold cost</span>
             <input id="editGoldCost" type="number" min="0" step="1" value="${escapeAttr(String(data.treasuryGoldCoinCost || 0))}" />
           </label>
-          ${adminFields}
+          ${styleFields}
           <div class="edit-field">
             <span class="edit-field-label">Resource costs</span>
             <datalist id="resourceTypeDatalist">
@@ -3293,10 +3299,8 @@ async function saveEditPage() {
     description,
     treasuryGoldCoinCost,
     materials,
-  };
-  if (editPageContext.isAdmin) {
-    body.styleId = String(document.getElementById("editStyleId")?.value || "misc").trim() || "misc";
-    body.tags = parseTagsInput(document.getElementById("editTags")?.value);
+    styleId: String(document.getElementById("editStyleId")?.value || "misc").trim() || "misc",
+    tags: parseTagsInput(document.getElementById("editTags")?.value),
   }
 
   let endpoint;
