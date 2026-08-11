@@ -4,7 +4,7 @@
  * UV layout matches the official Blockbench codec (pixel offset + face size from settings.size, not stretch).
  */
 import * as THREE from "three";
-import { assetUrl } from "./BlockCatalog.js?v=8";
+import { assetUrl } from "./BlockCatalog.js?v=24";
 
 const BLOCK_SCALE = 1 / 32;
 
@@ -516,8 +516,15 @@ export async function loadBlockyModel(modelPath, texturePath = null, tintHex = n
   })();
 
   modelCache.set(key, promise);
-  const result = await promise;
-  return result ? result.clone(true) : null;
+  try {
+    const result = await promise;
+    return result ? result.clone(true) : null;
+  } catch (err) {
+    // Don't poison the cache with a rejected promise (entity-heavy prefabs retry the same model).
+    modelCache.delete(key);
+    console.warn("Blocky model load failed", modelPath, err);
+    return null;
+  }
 }
 
 export function clearModelCaches() {

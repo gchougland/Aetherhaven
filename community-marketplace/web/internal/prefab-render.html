@@ -14,8 +14,8 @@
         background: #1a1418;
       }
       #viewer {
-        width: 1280px;
-        height: 720px;
+        width: 100vw;
+        height: 100vh;
       }
       #status {
         position: absolute;
@@ -23,6 +23,8 @@
         top: 8px;
         color: #ccc;
         font: 14px sans-serif;
+        z-index: 2;
+        pointer-events: none;
       }
     </style>
     <script type="importmap">
@@ -38,13 +40,15 @@
     <div id="status">Loading…</div>
     <div id="viewer"></div>
     <script type="module">
-      import { PrefabViewer } from "/prefab-viewer/PrefabViewer.js?v=8";
+      import { PrefabViewer, PREFAB_VIEWER_TRANSFORM_REV } from "/prefab-viewer/PrefabViewer.js?v=24";
 
       window.__PREFAB_RENDER_READY__ = false;
       window.__PREFAB_RENDER_ERROR__ = null;
 
       const params = new URLSearchParams(location.search);
       const prefabUrl = params.get("prefabUrl");
+      // Default interactive for local debugging; ?interactive=0 keeps screenshot mode.
+      const interactive = params.get("interactive") !== "0";
       const statusEl = document.getElementById("status");
 
       async function main() {
@@ -52,17 +56,19 @@
           throw new Error("prefabUrl required");
         }
         const viewer = new PrefabViewer(document.getElementById("viewer"), {
-          interactive: false,
+          interactive,
           assetBase: "/hytale-assets",
         });
         await viewer.loadPrefabUrl(prefabUrl, {
           onProgress: (done, total) => {
-            statusEl.textContent = `Rendering ${done}/${total}`;
+            statusEl.textContent = `Rendering ${done}/${total} (${PREFAB_VIEWER_TRANSFORM_REV})`;
           },
         });
         // Settle textures / one more frame
         await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-        statusEl.textContent = "Ready";
+        statusEl.textContent = interactive
+          ? `${PREFAB_VIEWER_TRANSFORM_REV} · drag to orbit · scroll to zoom`
+          : `Ready (${PREFAB_VIEWER_TRANSFORM_REV})`;
         window.__PREFAB_VIEWER__ = viewer;
         window.__PREFAB_RENDER_READY__ = true;
       }

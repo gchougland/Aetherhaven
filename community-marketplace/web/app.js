@@ -1809,12 +1809,16 @@ async function openPrefabCaptureModal(ownerKind, ownerId, prefabUrl, asAdmin = f
       onProgress: (done, total) => {
         if (statusEl) {
           statusEl.hidden = false;
-          statusEl.textContent = `Loading preview… ${done}/${total}`;
+          const rev = viewer.transformRev || api.PREFAB_VIEWER_TRANSFORM_REV || "";
+          statusEl.textContent = `Loading preview… ${done}/${total}${rev ? ` (${rev})` : ""}`;
         }
       },
     });
     if (statusEl) {
-      statusEl.hidden = true;
+      const rev = viewer.transformRev || api.PREFAB_VIEWER_TRANSFORM_REV || "";
+      statusEl.hidden = !rev;
+      statusEl.classList.toggle("building-prefab-viewer-status--rev", Boolean(rev));
+      statusEl.textContent = rev || "";
     }
     viewer.resize();
     requestAnimationFrame(() => viewer.resize());
@@ -1825,7 +1829,11 @@ async function openPrefabCaptureModal(ownerKind, ownerId, prefabUrl, asAdmin = f
     console.warn("Capture preview failed", err);
     if (statusEl) {
       statusEl.hidden = false;
-      statusEl.textContent = "Could not load 3D preview. Make sure viewer assets are synced.";
+      statusEl.classList.remove("building-prefab-viewer-status--rev");
+      const detail = String(err?.message || err || "").trim();
+      statusEl.textContent = detail
+        ? `Could not load 3D preview: ${detail}`
+        : "Could not load 3D preview. Make sure viewer assets are synced.";
     }
   }
 }
@@ -2755,7 +2763,8 @@ async function mountBuildingPrefabViewer(container, prefabUrl, token) {
       onProgress: (done, total) => {
         if (statusEl && token === prefabViewerLoadToken) {
           statusEl.hidden = false;
-          statusEl.textContent = `Loading preview… ${done}/${total}`;
+          const rev = viewer.transformRev || window.PrefabViewerAPI?.PREFAB_VIEWER_TRANSFORM_REV || "";
+          statusEl.textContent = `Loading preview… ${done}/${total}${rev ? ` (${rev})` : ""}`;
         }
       },
     });
@@ -2764,14 +2773,21 @@ async function mountBuildingPrefabViewer(container, prefabUrl, token) {
       return;
     }
     if (statusEl) {
-      statusEl.hidden = true;
+      const rev = viewer.transformRev || window.PrefabViewerAPI?.PREFAB_VIEWER_TRANSFORM_REV || "";
+      statusEl.hidden = !rev;
+      statusEl.classList.toggle("building-prefab-viewer-status--rev", Boolean(rev));
+      statusEl.textContent = rev || "";
     }
     viewer.resize();
   } catch (err) {
     console.warn("Prefab viewer failed", err);
     if (statusEl && token === prefabViewerLoadToken) {
       statusEl.hidden = false;
-      statusEl.textContent = "Could not load 3D preview. Make sure viewer assets are synced.";
+      statusEl.classList.remove("building-prefab-viewer-status--rev");
+      const detail = String(err?.message || err || "").trim();
+      statusEl.textContent = detail
+        ? `Could not load 3D preview: ${detail}`
+        : "Could not load 3D preview. Make sure viewer assets are synced.";
     }
   }
 }

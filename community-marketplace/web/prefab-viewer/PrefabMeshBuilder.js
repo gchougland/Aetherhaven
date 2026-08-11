@@ -7,12 +7,43 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=8";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=8";
+} from "./BlockCatalog.js?v=24";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=24";
+
+/** Bump when transform math changes — shown in the viewer so we can confirm the live build. */
+export const PREFAB_VIEWER_TRANSFORM_REV = "xform-24";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
+/** @type {Map<string, THREE.MeshLambertMaterial>} */
+const cubeMatCache = new Map();
+const sharedCubeGeometry = new THREE.BoxGeometry(1, 1, 1);
 const textureLoader = new THREE.TextureLoader();
+
+/**
+ * @param {any} value catalog customModelTexture (string or weighted array)
+ * @returns {string|null}
+ */
+function resolveModelTexturePath(value) {
+  if (!value) {
+    return null;
+  }
+  if (typeof value === "string") {
+    return value;
+  }
+  if (Array.isArray(value)) {
+    for (const entry of value) {
+      const tex = entry?.Texture || entry?.texture;
+      if (typeof tex === "string" && tex) {
+        return tex;
+      }
+    }
+  }
+  if (typeof value === "object" && typeof value.Texture === "string") {
+    return value.Texture;
+  }
+  return null;
+}
 
 /**
  * Parse Pitch/Yaw/Roll from a prefab Transform.Rotation.
@@ -49,25 +80,56 @@ export function parseEntityEuler(rot) {
 }
 
 /**
- * Entity / prop model orientation as the *client* renders it.
+ * Entity / prop model orientation.
  *
- * Server `Rotation3f.getQuaternion` uses JOML `rotationYXZ` (Ry*Rx*Rz). That is
- * correct for server-side math, but `Box.enclosingRotatedAABB` documents that the
- * client composes intrinsic X→Y→Z for visuals. Three.js Euler order "XYZ" matches
- * that (R = Rz*Ry*Rx). Using YXZ here mirrors rolled props across their pivot.
+ * Matches Rotation3f.getQuaternion → JOML rotationYXZ(yaw, pitch, roll), which is
+ * Three.js Euler order "YXZ" with the stored roll sign.
  *
  * @param {any} rot
  * @returns {THREE.Quaternion}
  */
 export function entityRotationToQuaternion(rot) {
   const { pitch, yaw, roll } = parseEntityEuler(rot);
-  return new THREE.Quaternion().setFromEuler(new THREE.Euler(pitch, yaw, roll, "XYZ"));
+  return new THREE.Quaternion().setFromEuler(new THREE.Euler(pitch, yaw, roll, "YXZ"));
+}
+
+/**
+ * Blockymodels are authored standing on their origin, so a block entity turns around a
+ * point above that origin: the centre of its block, exactly like the grid path, which
+ * rotates a model lowered by a flat half block about the block centre.
+ *
+ * This is a world distance and does not scale with the entity, which is what the Cozy
+ * Crossing town hall clock measures: its frame is symmetric and its two hands meet in
+ * the middle, and both line up at 0.625 model units at that clock's 0.8 entity scale.
+ * See scripts/debug-clock-transform.mjs.
+ */
+export const BLOCK_ENTITY_PIVOT = 0.5;
+
+/**
+ * Block entities used to store facing in HeadRotation; on load the server copies that
+ * over Transform and drops HeadRotation. Prefabs still carry both — HeadRotation is
+ * the visual orientation (pitch tips beams horizontal). Body Transform.Rotation alone
+ * is often yaw-only.
+ *
+ * @param {any} comps
+ * @returns {any}
+ */
+export function resolveEntityRotationSource(comps) {
+  const isBlockStyle = Boolean(
+    comps?.BlockEntity || comps?.Prop || comps?.Item || comps?.blockEntity || comps?.prop || comps?.item
+  );
+  const head = comps?.HeadRotation?.Rotation || comps?.headRotation?.Rotation || comps?.headRotation?.rotation;
+  if (isBlockStyle && head) {
+    return head;
+  }
+  const transform = comps?.Transform || comps?.transform || {};
+  return transform.Rotation || transform.rotation || {};
 }
 
 /**
  * Decode RotationTuple index: (roll*16)+(pitch*4)+yaw, each axis 0..3 → 0/90/180/270°.
  * Block renderer expects R = Ry(yaw)*Rx(pitch)*Rz(roll) (see BuilderToolsPlugin /
- * RotationTuple). That is Three.js "YXZ" — different from entity client XYZ above.
+ * RotationTuple). Same Three.js "YXZ" as entities.
  * @param {number} index
  * @returns {THREE.Quaternion}
  */
@@ -92,8 +154,10 @@ export function rotationTupleToEuler(index) {
 }
 
 /**
- * Block/prop entity renderer uses EntityScale 2 as 1:1 with 32px blockymodels
- * (see BlockEntitySystems default). Character/NPC models use scale 1 as 1:1 with 64px.
+ * World scale for prefab entities.
+ * Block/prop EntityScale is identity-at-2 (EntitySpawnPage multiplies the UI value by
+ * BLOCK_ENTITY_BASE_SCALE = 2, and BlockEntitySystems defaults to 2), so render scale
+ * is the stored value halved.
  * @param {any} comps
  * @param {string|null} modelPath
  */
@@ -105,10 +169,10 @@ export function entityWorldScale(comps, modelPath = null) {
   if (!Number.isFinite(entityScale) || entityScale <= 0) {
     entityScale = hasBlockStyle ? 2 : 1;
   }
-  const defScale = hasBlockStyle ? entityScale / 2 : entityScale;
   // Character-density models are authored at 64 units/block; our loader uses 1/32.
   const characterDensity = /^(NPC|Characters)\//i.test(String(modelPath || ""));
-  return defScale * (characterDensity ? 0.5 : 1);
+  const blockEntityScale = hasBlockStyle ? entityScale / 2 : entityScale;
+  return blockEntityScale * (characterDensity ? 0.5 : 1);
 }
 
 /**
@@ -158,6 +222,11 @@ function loadCubeTexture(path) {
  * @param {string|null} [tintHex]
  */
 async function cubeMaterial(path, tintHex = null) {
+  const key = `${path || ""}|${tintHex || ""}`;
+  const hit = cubeMatCache.get(key);
+  if (hit) {
+    return hit;
+  }
   const map = await loadCubeTexture(path);
   const mat = new THREE.MeshLambertMaterial({
     map: map || undefined,
@@ -168,6 +237,7 @@ async function cubeMaterial(path, tintHex = null) {
   if (!map) {
     mat.color = new THREE.Color(tintHex || "#888888");
   }
+  cubeMatCache.set(key, mat);
   return mat;
 }
 
@@ -185,7 +255,7 @@ async function buildCubeMesh(def) {
     cubeMaterial(faces.south, null), // +Z
     cubeMaterial(faces.north, null), // -Z
   ]);
-  return new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), materials);
+  return new THREE.Mesh(sharedCubeGeometry, materials);
 }
 
 /**
@@ -235,7 +305,11 @@ export async function buildPrefabMesh(prefab, options = {}) {
     work.push({ kind: "block", data: b });
   }
   for (const f of fluids) {
-    if (!getBlockDef(f.name)) {
+    const name = String(f?.name || "");
+    if (!name || name === "Empty") {
+      continue;
+    }
+    if (!getBlockDef(name)) {
       continue;
     }
     work.push({ kind: "fluid", data: f });
@@ -252,14 +326,32 @@ export async function buildPrefabMesh(prefab, options = {}) {
   const localModelCache = new Map();
 
   async function getModel(modelPath, texturePath, tintHex = null) {
-    const key = `${modelPath}|${texturePath || ""}|${tintHex || ""}`;
+    const tex = resolveModelTexturePath(texturePath) || (typeof texturePath === "string" ? texturePath : null);
+    const key = `${modelPath}|${tex || ""}|${tintHex || ""}`;
     if (localModelCache.has(key)) {
       const base = localModelCache.get(key);
       return base ? base.clone(true) : null;
     }
-    const loaded = await loadBlockyModel(modelPath, texturePath, tintHex);
+    const loaded = await loadBlockyModel(modelPath, tex, tintHex);
     localModelCache.set(key, loaded);
     return loaded ? loaded.clone(true) : null;
+  }
+
+  /**
+   * Some defs (roof corner states) offer several spellings of the model name.
+   * @returns {Promise<{ model: THREE.Group, path: string }|null>}
+   */
+  async function getModelForDef(def, texture, tintHex = null) {
+    const paths = def?.customModelCandidates?.length
+      ? def.customModelCandidates
+      : [def?.customModel].filter(Boolean);
+    for (const path of paths) {
+      const model = await getModel(path, texture, tintHex);
+      if (model) {
+        return { model, path };
+      }
+    }
+    return null;
   }
 
   for (const item of work) {
@@ -272,7 +364,7 @@ export async function buildPrefabMesh(prefab, options = {}) {
           let placed = false;
           if (def.customModel) {
             let tint = def.tint || def.tintUp || null;
-            const tex = String(def.customModelTexture || "");
+            const tex = resolveModelTexturePath(def.customModelTexture) || "";
             const modelPath = String(def.customModel || "");
             if (
               !tint &&
@@ -283,7 +375,7 @@ export async function buildPrefabMesh(prefab, options = {}) {
             ) {
               tint = "#67b62d";
             }
-            const model = await getModel(def.customModel, def.customModelTexture || null, tint);
+            const model = (await getModelForDef(def, def.customModelTexture || null, tint))?.model;
             if (model) {
               const holder = new THREE.Group();
               holder.position.set(Number(b.x) + 0.5, Number(b.y) + 0.5, Number(b.z) + 0.5);
@@ -321,7 +413,10 @@ export async function buildPrefabMesh(prefab, options = {}) {
         const comps = item.data?.Components || item.data?.components || {};
         const transform = comps.Transform || comps.transform || {};
         const pos = transform.Position || transform.position || {};
-        const rot = transform.Rotation || transform.rotation || {};
+        const rot = resolveEntityRotationSource(comps);
+        const isBlockStyle = Boolean(
+          comps.BlockEntity || comps.Prop || comps.Item || comps.blockEntity || comps.prop || comps.item
+        );
 
         const holder = new THREE.Group();
         holder.position.copy(entityPositionToVector(pos));
@@ -331,6 +426,17 @@ export async function buildPrefabMesh(prefab, options = {}) {
         let modelPath = null;
         let customModelScale = 1;
 
+        /** @param {THREE.Object3D} model */
+        const addBlockModel = (model) => {
+          if (isBlockStyle) {
+            // A block entity's yaw points its front where the entity faces, and that is
+            // the opposite side from where blockymodels put theirs, so wall panels, signs
+            // and other one-sided props land on the far side of their block without this.
+            model.rotateY(Math.PI);
+          }
+          holder.add(model);
+        };
+
         const modelId = comps.Model?.Model?.Id || comps.Model?.Id;
         if (modelId) {
           const mdef = getModelDef(modelId);
@@ -338,7 +444,7 @@ export async function buildPrefabMesh(prefab, options = {}) {
             const model = await getModel(mdef.model, mdef.texture);
             if (model) {
               modelPath = mdef.model;
-              holder.add(model);
+              addBlockModel(model);
               placed = true;
             }
           }
@@ -355,26 +461,37 @@ export async function buildPrefabMesh(prefab, options = {}) {
             const model = await getModel(idef.itemModel, idef.itemTexture || null);
             if (model) {
               modelPath = idef.itemModel;
-              holder.add(model);
+              addBlockModel(model);
               placed = true;
             }
           } else if (idef?.customModel) {
-            const model = await getModel(idef.customModel, idef.customModelTexture || null);
-            if (model) {
-              modelPath = idef.customModel;
-              holder.add(model);
+            const resolved = await getModelForDef(idef, idef.customModelTexture || null);
+            if (resolved) {
+              modelPath = resolved.path;
+              addBlockModel(resolved.model);
               placed = true;
             }
           } else if (idef?.textures) {
             const cube = await buildCubeMesh(idef);
-            cube.scale.setScalar(0.35);
-            cube.position.y = 0.2;
-            holder.add(cube);
+            // Cube geometry is centred, but blockymodels start at their base, so lift it
+            // half a block to match before the shared pivot shift is applied.
+            cube.position.y += 0.5;
+            addBlockModel(cube);
             placed = true;
           }
         }
 
-        holder.scale.setScalar(entityWorldScale(comps, modelPath) * customModelScale);
+        const worldScale = entityWorldScale(comps, modelPath) * customModelScale;
+        holder.scale.setScalar(worldScale);
+        if (isBlockStyle) {
+          // Drop the models onto the pivot, then lift the holder by the same amount so the
+          // pivot only changes what the entity turns around: unrotated, it still stands on
+          // its stored position. Model space is scaled, the world offset is not.
+          for (const child of holder.children) {
+            child.position.y -= BLOCK_ENTITY_PIVOT / worldScale;
+          }
+          holder.position.y += BLOCK_ENTITY_PIVOT;
+        }
 
         // Skip entities we cannot resolve from vanilla/Aetherhaven catalogs (no placeholders).
         if (placed) {
@@ -389,11 +506,21 @@ export async function buildPrefabMesh(prefab, options = {}) {
     if (options.onProgress && (done % 25 === 0 || done === total)) {
       options.onProgress(done, total);
     }
+    // Keep the tab responsive on entity-heavy prefabs (tea house ~5k cells).
+    if (done % 100 === 0) {
+      await new Promise((r) => setTimeout(r, 0));
+    }
   }
 
-  const bounds = new THREE.Box3().setFromObject(root);
-  if (bounds.isEmpty()) {
-    bounds.set(new THREE.Vector3(-1, 0, -1), new THREE.Vector3(1, 2, 1));
+  let bounds;
+  try {
+    bounds = new THREE.Box3().setFromObject(root);
+  } catch (err) {
+    console.warn("Prefab bounds failed", err);
+    bounds = new THREE.Box3();
+  }
+  if (!bounds || bounds.isEmpty() || !Number.isFinite(bounds.min.x) || !Number.isFinite(bounds.max.x)) {
+    bounds = new THREE.Box3(new THREE.Vector3(-1, 0, -1), new THREE.Vector3(1, 2, 1));
   }
   return { root, bounds };
 }

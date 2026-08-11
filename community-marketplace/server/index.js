@@ -181,7 +181,12 @@ function resolveRequiredSecret(name, required) {
     return value.trim();
   }
   if (required) {
-    console.error(`[startup] Missing or weak ${name}. Set it in Railway Variables (see docs/RailwayDeployment.md).`);
+    console.error(
+      `[startup] Missing or weak ${name}.\n` +
+        `  Local: copy .env.example to .env and set ${name} to a long random string\n` +
+        `         (example: openssl rand -hex 32), with NODE_ENV=development.\n` +
+        `  Railway: set ${name} in the service Variables UI.`
+    );
     process.exit(1);
   }
   return "dev-only-local-session-secret-not-for-production";

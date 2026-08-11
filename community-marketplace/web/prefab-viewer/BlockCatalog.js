@@ -32,6 +32,41 @@ export async function loadCatalogs(assetBase = DEFAULT_ASSET_BASE) {
 }
 
 /**
+ * Roof corner states are their own blockymodel rather than a texture state, and the asset
+ * names order the variant and "Inverted" tokens differently per family
+ * (`Corner_Inverted_Shallow_Left` but `Corner_Rock_Shallow_Inverted_Left`), so return the
+ * plausible spellings and let the loader take the first that exists.
+ * @param {string} modelPath base slope model, e.g. Blocks/Structures/Roofs/Slope_Shallow.blockymodel
+ * @param {string} state e.g. Inverted_Corner_Left
+ * @returns {string[]}
+ */
+function cornerModelCandidates(modelPath, state) {
+  const parts = String(modelPath).match(/^(.*\/)?([^/]+)\.blockymodel$/i);
+  if (!parts) {
+    return [];
+  }
+  const slope = parts[2].match(/^Slope(_.*)?$/i);
+  if (!slope) {
+    return [];
+  }
+  const tokens = String(state).split("_").filter(Boolean);
+  if (!tokens.some((t) => /^Corner$/i.test(t))) {
+    return [];
+  }
+  const dir = parts[1] || "";
+  const variant = slope[1] || "";
+  const side = tokens.find((t) => /^(Left|Right)$/i.test(t));
+  const suffix = side ? `_${side}` : "";
+  const inverted = tokens.some((t) => /^Inverted$/i.test(t)) ? "_Inverted" : "";
+  const names = [
+    `Corner${inverted}${variant}${suffix}`,
+    `Corner${variant}${inverted}${suffix}`,
+    `Corner${variant}${suffix}`,
+  ];
+  return [...new Set(names)].map((n) => `${dir}${n}.blockymodel`);
+}
+
+/**
  * Connected wall/blocks are stored in prefabs as e.g.
  * `*Wood_Village_Wall_Yellow_Full_State_Definitions_Middle`.
  * Resolve those to the base block + state textures when present.
@@ -51,7 +86,7 @@ export function getBlockDef(name) {
   }
 
   // Connected / merged states: Bottom|Middle|Top walls, "Block" double-slabs, etc.
-  const stateMatch = id.match(/^\*?(.+)_State_Definitions_([A-Za-z0-9]+)$/i);
+  const stateMatch = id.match(/^\*?(.+)_State_Definitions_([A-Za-z0-9_]+)$/i);
   if (stateMatch) {
     const baseId = stateMatch[1];
     const stateRaw = stateMatch[2];
@@ -74,6 +109,12 @@ export function getBlockDef(name) {
         customModel: null,
         customModelTexture: null,
       };
+    }
+    if (base.customModel) {
+      const candidates = cornerModelCandidates(base.customModel, stateRaw);
+      if (candidates.length) {
+        return { ...base, customModel: candidates[0], customModelCandidates: candidates };
+      }
     }
     // Fallback: at least show the full/base wall block instead of skipping.
     return base;

@@ -3,8 +3,10 @@
  */
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { loadCatalogs } from "./BlockCatalog.js?v=8";
-import { buildPrefabMesh, disposeObject3D } from "./PrefabMeshBuilder.js?v=8";
+import { loadCatalogs } from "./BlockCatalog.js?v=24";
+import { buildPrefabMesh, disposeObject3D, PREFAB_VIEWER_TRANSFORM_REV } from "./PrefabMeshBuilder.js?v=24";
+
+export { PREFAB_VIEWER_TRANSFORM_REV };
 
 export class PrefabViewer {
   /**
@@ -15,9 +17,11 @@ export class PrefabViewer {
     this.container = container;
     this.assetBase = options.assetBase || "/hytale-assets";
     this.interactive = options.interactive !== false;
+    this.transformRev = PREFAB_VIEWER_TRANSFORM_REV;
     this._disposed = false;
     this._root = null;
     this._raf = 0;
+    container.dataset.prefabViewerRev = PREFAB_VIEWER_TRANSFORM_REV;
 
     const width = Math.max(100, container.clientWidth || 640);
     const height = Math.max(100, container.clientHeight || 400);

@@ -3,3 +3,5 @@ data/
 .env
 *.log
 web/hytale-assets/
+
+web/debug/
