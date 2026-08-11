@@ -41,11 +41,13 @@ public final class CarnivalWheelDirectorSystem extends TickingSystem<EntityStore
                 continue;
             }
             TownRecord town = tm.getTown(townId);
-            if (town == null || !CarnivalIds.FESTIVAL_ID.equals(town.getActiveFestivalId())) {
-                session.clearGameplay();
+            // Session state is process-global. Other loaded worlds must skip — never clear — or a lobby/extra
+            // world tick wipes a spinning carnival on the town's world (works on single-world run folders).
+            if (town == null || !worldName.equals(town.getWorldName())) {
                 continue;
             }
-            if (!worldName.equals(town.getWorldName())) {
+            if (!CarnivalIds.FESTIVAL_ID.equals(town.getActiveFestivalId())) {
+                session.clearGameplay();
                 continue;
             }
             session.addSpinElapsed(dt);
