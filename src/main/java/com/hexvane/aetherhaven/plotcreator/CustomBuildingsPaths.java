@@ -73,13 +73,15 @@ public final class CustomBuildingsPaths {
         if (prefabPathKey == null || prefabPathKey.isBlank()) {
             return null;
         }
-        String key = prefabPathKey.trim().replace('\\', '/');
-        String fileName = key.contains("/") ? key.substring(key.lastIndexOf('/') + 1) : key;
-        if (!fileName.endsWith(".prefab.json")) {
-            fileName = fileName + ".prefab.json";
+        String relative = BuildingEditorSavePaths.prefabRelativeUnderPrefabs(prefabPathKey);
+        Path nested = prefabsDirectory(dataDirectory).resolve(relative);
+        if (Files.isRegularFile(nested)) {
+            return nested;
         }
-        Path candidate = prefabsDirectory(dataDirectory).resolve(fileName);
-        return Files.isRegularFile(candidate) ? candidate : null;
+        // Older flat saves under Server/Prefabs/<file> (no Festivals/ subfolder).
+        String fileName = BuildingEditorSavePaths.prefabFileName(prefabPathKey);
+        Path flat = prefabsDirectory(dataDirectory).resolve(fileName);
+        return Files.isRegularFile(flat) ? flat : null;
     }
 
     public static boolean isUnderDataDirectory(@Nonnull Path dataDirectory, @Nonnull Path absoluteFile) {

@@ -90,9 +90,9 @@
       "localY": 0,
       "localZ": 16,
       "tags": [
+        "workActivity:read",
         "FUN",
-        "SIT",
-        "workActivity:read"
+        "SIT"
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Castle_Bench",
@@ -106,8 +106,8 @@
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_festival_square.displayName",
   "styleId": "core",
   "managementBlockLocalPos": [
-    14,
-    0,
-    24
+    -8,
+    6,
+    -1
   ]
 }

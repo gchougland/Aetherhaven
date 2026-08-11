@@ -5,7 +5,6 @@ import com.hexvane.aetherhaven.community.CommunitySubmissionService;
 import com.hexvane.aetherhaven.community.CommunitySubmitLocalSave;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
-import com.hexvane.aetherhaven.festival.CustomFestivalPaths;
 import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import com.hexvane.aetherhaven.placement.PlotFootprintOverlayRefresh;
 import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
@@ -812,8 +811,9 @@ public final class PlotCreatorService {
         FestivalDefinition existing =
             draft.getEditingFestivalId() != null ? plugin.getFestivalCatalog().get(draft.getEditingFestivalId()) : null;
         try {
+            Path writeRoot = BuildingEditorSavePaths.resolveWriteRootForFestival(plugin, id);
             PlotCreatorFestivalJsonWriter.writeFestival(
-                CustomFestivalPaths.festivalFile(plugin.getDataDirectory(), id),
+                BuildingEditorSavePaths.festivalFile(writeRoot, id),
                 draft,
                 existing
             );

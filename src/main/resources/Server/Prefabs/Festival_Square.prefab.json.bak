@@ -38487,6 +38487,190 @@
         "PreventItemMerging": {},
         "Prop": {},
         "BlockEntity": {
+          "BlockTypeKey": "Rock_Crystal_Yellow_Small"
+        },
+        "Transform": {
+          "Position": {
+            "X": -13.948638916015625,
+            "Y": 0.24709320068359375,
+            "Z": -7.465668678283691
+          },
+          "Rotation": {
+            "Pitch": -0.048301443457603455,
+            "Yaw": -0.09836709499359131,
+            "Roll": 3.096261501312256
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "H404V2feMgue92Hkj9XHog==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Crystal_Yellow_Small",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "Invulnerable": {},
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Deco_Rope"
+        },
+        "Transform": {
+          "Position": {
+            "X": -13.143096923828125,
+            "Y": 0.6344146728515625,
+            "Z": -7.5235981941223145
+          },
+          "Rotation": {
+            "Pitch": -0.076795794069767,
+            "Yaw": 0.014223902486264706,
+            "Roll": -1.680498480796814
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "Nd1OKs/nNMaSBt/kzZwJUA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Deco_Rope",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "Invulnerable": {},
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Crystal_Yellow_Small"
+        },
+        "Transform": {
+          "Position": {
+            "X": -12.258758544921875,
+            "Y": 0.02822113037109375,
+            "Z": -7.465685844421387
+          },
+          "Rotation": {
+            "Pitch": -0.09254710376262665,
+            "Yaw": 2.3184587955474854,
+            "Roll": 3.0552611351013184
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "W/xmVf2fOHaykBsP+6z2Fw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Crystal_Yellow_Small",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "Invulnerable": {},
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Deco_Rope"
+        },
+        "Transform": {
+          "Position": {
+            "X": -12.162109375,
+            "Y": 0.5553054809570312,
+            "Z": -7.524799823760986
+          },
+          "Rotation": {
+            "Pitch": -0.07729822397232056,
+            "Yaw": 0.011169479228556156,
+            "Roll": -1.6408159732818604
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "Nx6svEn5OEWJEvXSn6w8nQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Deco_Rope",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "Invulnerable": {},
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
           "BlockTypeKey": "Furniture_Village_Statue"
         },
         "Transform": {
@@ -38503,7 +38687,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "3HKsLotFM9O6ssatHTns2Q==",
+            "$binary": "xIvthNPyNGWN4HYFweX3zg==",
             "$type": "04"
           }
         },
@@ -38549,7 +38733,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "NgBzPYjPNbSgdhYYPpU5UQ==",
+            "$binary": "o3QPvIfsNQS5VW9MWUKoQw==",
             "$type": "04"
           }
         },
@@ -38595,7 +38779,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "wzdC5gw3Pq2oL9fx8tGMog==",
+            "$binary": "pgbXdGSyPgyqJorcXbKWgQ==",
             "$type": "04"
           }
         },
@@ -38641,7 +38825,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "ht7Xr1+ZMViayYJxhvMGpQ==",
+            "$binary": "G1iF8W1JMkakZfGGRlVfew==",
             "$type": "04"
           }
         },
@@ -38663,240 +38847,6 @@
           "RemovedByPlayerPickup": false
         },
         "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "UtilityInventory": {
-          "Inventory": {
-            "Id": "Empty"
-          },
-          "ActiveSlot": -1
-        },
-        "EffectController": {
-          "ActiveEntityEffects": [
-            {
-              "EntityEffectId": "Immunity_Fire",
-              "InitialDuration": 1.0,
-              "RemainingDuration": 1.0,
-              "SinceLastDamage": 0.0,
-              "HasBeenDamaged": true,
-              "SequentialHits": {
-                "Hits": 0
-              },
-              "Infinite": true,
-              "Debuff": false,
-              "StatusEffectIcon": "",
-              "Invulnerable": false
-            }
-          ]
-        },
-        "Transform": {
-          "Position": {
-            "X": 15.5,
-            "Y": 0.020000000000010232,
-            "Z": 9.5
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 0.0,
-            "Roll": 0.0
-          }
-        },
-        "AetherhavenNpcSpawnOrigin": {
-          "SpawnSource": "PLOT_CREATOR_SPOT_PREVIEW",
-          "SpawnDetail": "spot=FUN_POI",
-          "SpawnWorldName": "default",
-          "SpawnX": 26.5,
-          "SpawnY": 172.02,
-          "SpawnZ": 368.5,
-          "SpawnEpochMs": 1786425284017,
-          "SpawnGameEpochDay": 0
-        },
-        "StorageInventory": {
-          "Inventory": {
-            "Id": "Empty"
-          }
-        },
-        "Intangible": {},
-        "Frozen": {},
-        "UUID": {
-          "UUID": {
-            "$binary": "qkDA4mnePY6wss4dQlnLlw==",
-            "$type": "04"
-          }
-        },
-        "NPC": {
-          "Version": 5,
-          "UUID": {
-            "$binary": "qkDA4mnePY6wss4dQlnLlw==",
-            "$type": "04"
-          },
-          "Inventory": {
-            "Version": 4,
-            "ActiveHotbarSlot": 0,
-            "ActiveToolsSlot": -1,
-            "ActiveUtilitySlot": -1
-          },
-          "HvrPhs": 0.0,
-          "HvrHght": 0.0,
-          "MdlScl": 1.0,
-          "SpawnInstant": "0001-02-17T00:33:39.586189674Z",
-          "WorldgenId": 0,
-          "PathManager": {},
-          "LeashPos": {
-            "X": 26.5,
-            "Y": 172.02,
-            "Z": 368.5
-          },
-          "LeashHdg": 0.0,
-          "LeashPtch": 0.0,
-          "RoleName": "Aetherhaven_Townsfolk",
-          "ActiveMC": "Walk"
-        },
-        "ArmorInventory": {
-          "Inventory": {
-            "Id": "Simple",
-            "Capacity": 4,
-            "Items": {}
-          }
-        },
-        "UIComponentList": {},
-        "HotbarInventory": {
-          "Inventory": {
-            "Id": "Simple",
-            "Capacity": 3,
-            "Items": {}
-          },
-          "ActiveSlot": 0
-        },
-        "Velocity": {
-          "Velocity": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0
-          }
-        },
-        "PrefabCopyable": {},
-        "Interactions": {
-          "Interactions": {
-            "Use": "*UseNPC"
-          }
-        },
-        "Invulnerable": {},
-        "Model": {
-          "Model": {
-            "Id": "Male_Human_01",
-            "Scale": 1.0,
-            "Static": false
-          }
-        },
-        "EntityStats": {
-          "Version": 5,
-          "Stats": {
-            "EnchantmentGlow_Shield": {
-              "Id": "EnchantmentGlow_Shield",
-              "Value": 0.0
-            },
-            "Oxygen": {
-              "Id": "Oxygen",
-              "Value": 100.0
-            },
-            "Mana": {
-              "Id": "Mana",
-              "Value": 0.0
-            },
-            "Health": {
-              "Id": "Health",
-              "Value": 100.0,
-              "Modifiers": {
-                "NPC_Max": {
-                  "Id": "Static",
-                  "CalculationType": "Additive",
-                  "Amount": 100.0
-                }
-              }
-            },
-            "GlidingActive": {
-              "Id": "GlidingActive",
-              "Value": 0.0
-            },
-            "Immunity": {
-              "Id": "Immunity",
-              "Value": 0.0
-            },
-            "Stamina": {
-              "Id": "Stamina",
-              "Value": 10.0
-            },
-            "SignatureCharges": {
-              "Id": "SignatureCharges",
-              "Value": 0.0
-            },
-            "EnchantmentGlow_Head": {
-              "Id": "EnchantmentGlow_Head",
-              "Value": 0.0
-            },
-            "Ammo": {
-              "Id": "Ammo",
-              "Value": 0.0
-            },
-            "EnchantmentGlow_Primary": {
-              "Id": "EnchantmentGlow_Primary",
-              "Value": 0.0
-            },
-            "Unknown": {
-              "Id": "Unknown",
-              "Value": 0.0
-            },
-            "SignatureEnergy": {
-              "Id": "SignatureEnergy",
-              "Value": 0.0
-            },
-            "EnchantmentGlow_Legs": {
-              "Id": "EnchantmentGlow_Legs",
-              "Value": 0.0
-            },
-            "EnchantmentGlow_Hands": {
-              "Id": "EnchantmentGlow_Hands",
-              "Value": 0.0
-            },
-            "DeployablePreview": {
-              "Id": "DeployablePreview",
-              "Value": 0.0
-            },
-            "StaminaRegenDelay": {
-              "Id": "StaminaRegenDelay",
-              "Value": 0.0
-            },
-            "MagicCharges": {
-              "Id": "MagicCharges",
-              "Value": 0.0
-            },
-            "EnchantmentGlow_Chest": {
-              "Id": "EnchantmentGlow_Chest",
-              "Value": 0.0
-            },
-            "eternal_shot_active": {
-              "Id": "eternal_shot_active",
-              "Value": 0.0
-            }
-          }
-        },
-        "AetherhavenPlotCreatorSpotPreview": {
-          "OwnerPlayerUuid": {
-            "$binary": "v7RyWIT/TYKnXA2XcxdQtw==",
-            "$type": "04"
-          },
-          "PreviewKey": 3544836670106326
-        },
-        "HeadRotation": {
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 0.0,
-            "Roll": 0.0
-          }
-        }
       }
     }
   ]

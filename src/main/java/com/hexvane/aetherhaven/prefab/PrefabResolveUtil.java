@@ -22,6 +22,11 @@ public final class PrefabResolveUtil {
             return null;
         }
         String k = key.trim();
+        // Sync-assets / BuildingEditorWriteRoot first so author saves land where the game will reload them.
+        Path configured = resolveConfiguredWriteRootPrefab(k);
+        if (configured != null) {
+            return configured;
+        }
         // Player-saved festival prefabs must win over the shipped jar copy, or building-editor saves look like
         // they "reset" when the festival is loaded again.
         Path festivalOverride = resolveFestivalDataPrefabOverride(k);
@@ -57,6 +62,20 @@ public final class PrefabResolveUtil {
             return p;
         }
         return resolveDataDirectoryPrefab(k);
+    }
+
+    @Nullable
+    private static Path resolveConfiguredWriteRootPrefab(@Nonnull String key) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return null;
+        }
+        Path writeRoot = com.hexvane.aetherhaven.plotcreator.BuildingEditorSavePaths.configuredWriteRoot(plugin);
+        if (writeRoot == null) {
+            return null;
+        }
+        Path file = com.hexvane.aetherhaven.plotcreator.BuildingEditorSavePaths.prefabFile(writeRoot, key);
+        return Files.isRegularFile(file) ? file.toAbsolutePath().normalize() : null;
     }
 
     @Nullable

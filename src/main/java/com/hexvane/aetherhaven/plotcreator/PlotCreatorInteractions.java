@@ -516,13 +516,9 @@ public final class PlotCreatorInteractions {
                 d.getLockedPrefabPathKey() != null && !d.getLockedPrefabPathKey().isBlank()
                     ? d.getLockedPrefabPathKey().trim().replace('\\', '/')
                     : com.hexvane.aetherhaven.festival.CustomFestivalPaths.prefabPathKey(festivalId);
-            fileName =
-                prefabKey.contains("/")
-                    ? prefabKey.substring(prefabKey.lastIndexOf('/') + 1)
-                    : prefabKey;
-            out =
-                com.hexvane.aetherhaven.festival.CustomFestivalPaths.prefabsDirectory(plugin.getDataDirectory())
-                    .resolve(fileName);
+            fileName = BuildingEditorSavePaths.prefabFileName(prefabKey);
+            Path writeRoot = BuildingEditorSavePaths.resolveWriteRootForFestival(plugin, festivalId);
+            out = BuildingEditorSavePaths.prefabFile(writeRoot, prefabKey);
             d.setSaveEmptySpaces(true);
             PlotCreatorPrefabExporter.ExportResult festivalResult =
                 PlotCreatorPrefabExporter.export(session.getWorld(), d, out, true);

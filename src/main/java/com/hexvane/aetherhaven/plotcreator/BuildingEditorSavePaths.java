@@ -14,10 +14,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Resolves where the building editor writes building JSON and prefabs: config root, writable pack root that
- * already contains the file, then data-dir overlay.
+ * Resolves where the building editor writes building / festival JSON and prefabs: config root
+ * ({@code BuildingEditorWriteRoot}), writable pack root that already contains the file, then data-dir overlay.
  */
 public final class BuildingEditorSavePaths {
+    private static final String SERVER_PREFABS_PREFIX = "Server/Prefabs/";
+
     private BuildingEditorSavePaths() {}
 
     @Nonnull
@@ -32,12 +34,9 @@ public final class BuildingEditorSavePaths {
                 return CommunityPaths.communityRoot(dataDir);
             }
         }
-        String configured = plugin.getConfig().get().getBuildingEditorWriteRoot();
-        if (configured != null && !configured.isBlank()) {
-            Path root = Path.of(configured.trim()).toAbsolutePath().normalize();
-            if (Files.isDirectory(root) && Files.isWritable(root)) {
-                return root;
-            }
+        Path configured = configuredWriteRoot(plugin);
+        if (configured != null) {
+            return configured;
         }
         Path packRoot = findWritablePackRootContainingBuilding(constructionId);
         if (packRoot != null) {
@@ -46,28 +45,90 @@ public final class BuildingEditorSavePaths {
         return plugin.getDataDirectory().toAbsolutePath().normalize();
     }
 
+    /** Same sync-assets root as buildings, preferring a pack that already has the festival JSON. */
+    @Nonnull
+    public static Path resolveWriteRootForFestival(@Nonnull AetherhavenPlugin plugin, @Nonnull String festivalId) {
+        Path configured = configuredWriteRoot(plugin);
+        if (configured != null) {
+            return configured;
+        }
+        Path packRoot = findWritablePackRootContainingFestival(festivalId);
+        if (packRoot != null) {
+            return packRoot;
+        }
+        return plugin.getDataDirectory().toAbsolutePath().normalize();
+    }
+
+    @Nullable
+    public static Path configuredWriteRoot(@Nonnull AetherhavenPlugin plugin) {
+        String configured = plugin.getConfig().get().getBuildingEditorWriteRoot();
+        if (configured == null || configured.isBlank()) {
+            return null;
+        }
+        Path root = Path.of(configured.trim()).toAbsolutePath().normalize();
+        if (Files.isDirectory(root) && Files.isWritable(root)) {
+            return root;
+        }
+        return null;
+    }
+
     @Nonnull
     public static Path buildingFile(@Nonnull Path writeRoot, @Nonnull String constructionId) {
         return writeRoot.resolve(AetherhavenAssetPaths.BUILDINGS).resolve(constructionId.trim() + ".json");
     }
 
     @Nonnull
-    public static Path prefabFile(@Nonnull Path writeRoot, @Nullable String prefabPathKey) {
-        String fileName = prefabFileName(prefabPathKey);
-        return writeRoot.resolve(CustomBuildingsPaths.PREFABS_RELATIVE).resolve(fileName);
+    public static Path festivalFile(@Nonnull Path writeRoot, @Nonnull String festivalId) {
+        return writeRoot.resolve(AetherhavenAssetPaths.FESTIVALS).resolve(festivalId.trim() + ".json");
     }
 
+    /**
+     * Prefab on disk under {@code Server/Prefabs/}, preserving subfolders from the catalog key
+     * (e.g. {@code Festivals/Festival_Square.prefab.json}).
+     */
+    @Nonnull
+    public static Path prefabFile(@Nonnull Path writeRoot, @Nullable String prefabPathKey) {
+        return writeRoot.resolve(CustomBuildingsPaths.PREFABS_RELATIVE).resolve(prefabRelativeUnderPrefabs(prefabPathKey));
+    }
+
+    /** Filename only, for player-facing messages. */
     @Nonnull
     public static String prefabFileName(@Nullable String prefabPathKey) {
+        String relative = prefabRelativeUnderPrefabs(prefabPathKey).replace('\\', '/');
+        int slash = relative.lastIndexOf('/');
+        return slash >= 0 ? relative.substring(slash + 1) : relative;
+    }
+
+    /**
+     * Path relative to {@code Server/Prefabs/}. Keeps {@code Festivals/...} so festival-square saves do not land in
+     * the Prefabs root while the catalog still points at {@code Festivals/Festival_Square.prefab.json}.
+     */
+    @Nonnull
+    public static String prefabRelativeUnderPrefabs(@Nullable String prefabPathKey) {
         if (prefabPathKey == null || prefabPathKey.isBlank()) {
             return "missing.prefab.json";
         }
         String key = prefabPathKey.trim().replace('\\', '/');
-        String fileName = key.contains("/") ? key.substring(key.lastIndexOf('/') + 1) : key;
-        if (!fileName.endsWith(".prefab.json")) {
-            fileName = fileName + ".prefab.json";
+        while (key.startsWith("./")) {
+            key = key.substring(2);
         }
-        return fileName;
+        while (key.startsWith("/")) {
+            key = key.substring(1);
+        }
+        if (key.regionMatches(true, 0, SERVER_PREFABS_PREFIX, 0, SERVER_PREFABS_PREFIX.length())) {
+            key = key.substring(SERVER_PREFABS_PREFIX.length());
+        }
+        if (key.contains("..")) {
+            String fileName = key.contains("/") ? key.substring(key.lastIndexOf('/') + 1) : key;
+            if (!fileName.endsWith(".prefab.json")) {
+                fileName = fileName + ".prefab.json";
+            }
+            return fileName;
+        }
+        if (!key.endsWith(".prefab.json")) {
+            key = key + ".prefab.json";
+        }
+        return key;
     }
 
     /**
@@ -77,9 +138,9 @@ public final class BuildingEditorSavePaths {
     public static Path findExistingBuildingFile(@Nonnull AetherhavenPlugin plugin, @Nonnull String constructionId) {
         String id = constructionId.trim();
         Path configured = null;
-        String root = plugin.getConfig().get().getBuildingEditorWriteRoot();
-        if (root != null && !root.isBlank()) {
-            configured = buildingFile(Path.of(root.trim()).toAbsolutePath().normalize(), id);
+        Path writeRoot = configuredWriteRoot(plugin);
+        if (writeRoot != null) {
+            configured = buildingFile(writeRoot, id);
             if (Files.isRegularFile(configured)) {
                 return configured;
             }
@@ -136,6 +197,26 @@ public final class BuildingEditorSavePaths {
             }
             Path building = root.resolve(AetherhavenAssetPaths.BUILDINGS).resolve(id + ".json");
             if (Files.isRegularFile(building)) {
+                return root;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private static Path findWritablePackRootContainingFestival(@Nonnull String festivalId) {
+        AssetModule module = AssetModule.get();
+        if (module == null) {
+            return null;
+        }
+        String id = festivalId.trim().toLowerCase(Locale.ROOT);
+        for (AssetPack pack : module.getAssetPacks()) {
+            Path root = pack.getRoot().toAbsolutePath().normalize();
+            if (!Files.isDirectory(root) || !Files.isWritable(root)) {
+                continue;
+            }
+            Path festival = root.resolve(AetherhavenAssetPaths.FESTIVALS).resolve(id + ".json");
+            if (Files.isRegularFile(festival)) {
                 return root;
             }
         }

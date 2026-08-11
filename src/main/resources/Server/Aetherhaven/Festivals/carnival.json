@@ -4,43 +4,46 @@
   "displayNameLangKey": "aetherhaven_festivals.aetherhaven.festival.carnival.name",
   "description": "Late summer brings the carnival. Pop balloons, spin the wheel, whack goblins, and spend summer festival tickets at the carnival merchant.",
   "prefabPath": "Festivals/Festival_Carnival.prefab.json",
-  "season": "Summer",
+  "season": "SUMMER",
   "dayOfSeason": 20,
   "allDay": true,
   "calendarIconPath": "UI/Custom/circus.png",
   "mechanicId": "carnival",
   "spots": [
     {
-      "residentKind": "elder",
-      "localX": -10,
-      "localY": 6,
-      "localZ": 4,
-      "yawDegrees": 90.0,
-      "required": true
-    },
-    {
-      "residentKind": "bard",
-      "localX": 8,
-      "localY": 6,
-      "localZ": -6,
-      "yawDegrees": 270.0,
-      "required": true
-    },
-    {
       "residentKind": "innkeeper",
       "localX": -2,
       "localY": 6,
       "localZ": 12,
-      "yawDegrees": 180.0,
-      "required": true
+      "yawDegrees": 180.0
+    },
+    {
+      "residentKind": "elder",
+      "localX": -3,
+      "localY": 5,
+      "localZ": 3,
+      "yawDegrees": -111.90685
+    },
+    {
+      "residentKind": "bard",
+      "localX": -4,
+      "localY": 5,
+      "localZ": -10,
+      "yawDegrees": -131.81305
+    },
+    {
+      "residentKind": "innkeeper",
+      "localX": 4,
+      "localY": 5,
+      "localZ": 11,
+      "yawDegrees": 23.08851
     },
     {
       "residentKind": "florist",
-      "localX": 6,
-      "localY": 6,
-      "localZ": 10,
-      "yawDegrees": 200.0,
-      "required": true
+      "localX": 3,
+      "localY": 5,
+      "localZ": 2,
+      "yawDegrees": -75.895325
     }
   ],
   "npcs": [
@@ -48,136 +51,242 @@
       "npcRoleId": "Aetherhaven_Festival_Carnival_Merchant",
       "localX": -6,
       "localY": 6,
-      "localZ": -10,
-      "yawDegrees": 180.0
+      "localZ": 9,
+      "yawDegrees": 267.06122
     },
     {
       "npcRoleId": "Aetherhaven_Festival_Carnival_Balloon",
-      "localX": 4,
+      "localX": 7,
       "localY": 6,
-      "localZ": -8,
-      "yawDegrees": 180.0
+      "localZ": 9,
+      "yawDegrees": 85.58597
     },
     {
       "npcRoleId": "Aetherhaven_Festival_Carnival_Wheel",
-      "localX": -8,
+      "localX": 3,
       "localY": 6,
-      "localZ": 0,
-      "yawDegrees": 90.0
+      "localZ": -8,
+      "yawDegrees": 156.04901
     },
     {
       "npcRoleId": "Aetherhaven_Festival_Carnival_Whack",
-      "localX": 10,
+      "localX": -8,
       "localY": 6,
       "localZ": -4,
-      "yawDegrees": 270.0
+      "yawDegrees": 276.88965
     }
   ],
   "touristSpots": [
-    { "localX": -13, "localY": 6, "localZ": -4, "yawDegrees": 90.0 },
-    { "localX": -13, "localY": 6, "localZ": 4, "yawDegrees": 90.0 },
-    { "localX": 13, "localY": 6, "localZ": -4, "yawDegrees": 270.0 },
-    { "localX": 13, "localY": 6, "localZ": 4, "yawDegrees": 270.0 },
-    { "localX": -4, "localY": 6, "localZ": -13, "yawDegrees": 180.0 },
-    { "localX": 4, "localY": 6, "localZ": -13, "yawDegrees": 180.0 },
-    { "localX": -4, "localY": 6, "localZ": 13, "yawDegrees": 0.0 },
-    { "localX": 4, "localY": 6, "localZ": 13, "yawDegrees": 0.0 }
+    {
+      "localX": -1,
+      "localY": 6,
+      "localZ": 4,
+      "yawDegrees": 28.753052
+    },
+    {
+      "localX": -3,
+      "localY": 6,
+      "localZ": -6,
+      "yawDegrees": 136.59644
+    },
+    {
+      "localX": -7,
+      "localY": 6,
+      "localZ": 0,
+      "yawDegrees": 167.01672
+    },
+    {
+      "localX": -9,
+      "localY": 6,
+      "localZ": 1,
+      "yawDegrees": 221.1095
+    },
+    {
+      "localX": 8,
+      "localY": 6,
+      "localZ": -8,
+      "yawDegrees": 188.97546
+    },
+    {
+      "localX": -3,
+      "localY": 6,
+      "localZ": 11,
+      "yawDegrees": 68.86963
+    },
+    {
+      "localX": -4,
+      "localY": 6,
+      "localZ": 0,
+      "yawDegrees": 305.54724
+    },
+    {
+      "localX": -2,
+      "localY": 6,
+      "localZ": -9,
+      "yawDegrees": 161.60522
+    }
   ],
   "balloonSpawns": [
-    { "localX": 2, "localY": 7, "localZ": -6 },
-    { "localX": 5, "localY": 7, "localZ": -6 },
-    { "localX": 8, "localY": 7, "localZ": -6 },
-    { "localX": 2, "localY": 7, "localZ": -3 },
-    { "localX": 5, "localY": 7, "localZ": -3 },
-    { "localX": 8, "localY": 7, "localZ": -3 }
+    {
+      "localX": 10,
+      "localY": 6,
+      "localZ": -4
+    },
+    {
+      "localX": 10,
+      "localY": 6,
+      "localZ": -1
+    },
+    {
+      "localX": 10,
+      "localY": 6,
+      "localZ": 2
+    },
+    {
+      "localX": 10,
+      "localY": 6,
+      "localZ": 5
+    },
+    {
+      "localX": 8,
+      "localY": 6,
+      "localZ": 4
+    },
+    {
+      "localX": 8,
+      "localY": 6,
+      "localZ": 1
+    },
+    {
+      "localX": 8,
+      "localY": 6,
+      "localZ": -2
+    },
+    {
+      "localX": 8,
+      "localY": 6,
+      "localZ": -5
+    }
   ],
   "whackSpawns": [
-    { "localX": 12, "localY": 6, "localZ": -8 },
-    { "localX": 14, "localY": 6, "localZ": -8 },
-    { "localX": 16, "localY": 6, "localZ": -8 },
-    { "localX": 12, "localY": 6, "localZ": -6 },
-    { "localX": 14, "localY": 6, "localZ": -6 },
-    { "localX": 16, "localY": 6, "localZ": -6 }
+    {
+      "localX": 12,
+      "localY": 6,
+      "localZ": -6
+    },
+    {
+      "localX": -9,
+      "localY": 7,
+      "localZ": -5
+    },
+    {
+      "localX": -9,
+      "localY": 7,
+      "localZ": -6
+    },
+    {
+      "localX": -9,
+      "localY": 7,
+      "localZ": -7
+    },
+    {
+      "localX": -8,
+      "localY": 7,
+      "localZ": -5
+    },
+    {
+      "localX": -8,
+      "localY": 7,
+      "localZ": -6
+    },
+    {
+      "localX": -8,
+      "localY": 7,
+      "localZ": -7
+    }
   ],
   "wheelLocal": {
-    "localX": -10,
-    "localY": 8,
-    "localZ": 0,
-    "yawDegrees": 90.0
+    "localX": 1,
+    "localY": 7,
+    "localZ": -8,
+    "yawDegrees": 326.21762
   },
-  "tags": ["summer", "carnival"],
+  "tags": [
+    "summer",
+    "carnival"
+  ],
   "greetings": {
-    "elder": [
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.elder.0",
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.elder.1"
-    ],
-    "priestess": [
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.priestess.0",
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.priestess.1"
-    ],
-    "farmer": [
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.farmer.0",
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.farmer.1"
-    ],
-    "innkeeper": [
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.innkeeper.0",
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.innkeeper.1"
-    ],
-    "chef": [
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.chef.0",
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.chef.1"
-    ],
-    "merchant": [
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.merchant.0",
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.merchant.1"
-    ],
-    "blacksmith": [
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.blacksmith.0",
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.blacksmith.1"
+    "guild_master": [
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.guild_master.0",
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.guild_master.1"
     ],
     "florist": [
       "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.florist.0",
       "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.florist.1"
     ],
+    "merchant": [
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.merchant.0",
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.merchant.1"
+    ],
+    "farmer": [
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.farmer.0",
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.farmer.1"
+    ],
+    "priestess": [
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.priestess.0",
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.priestess.1"
+    ],
     "rancher": [
       "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.rancher.0",
       "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.rancher.1"
     ],
-    "miner": [
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.miner.0",
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.miner.1"
-    ],
-    "logger": [
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.logger.0",
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.logger.1"
+    "blacksmith": [
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.blacksmith.0",
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.blacksmith.1"
     ],
     "builder": [
       "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.builder.0",
       "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.builder.1"
     ],
+    "default": [
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.default.0",
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.default.1"
+    ],
     "crystal_keeper": [
       "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.crystal_keeper.0",
       "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.crystal_keeper.1"
+    ],
+    "innkeeper": [
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.innkeeper.0",
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.innkeeper.1"
     ],
     "pyrotechnic": [
       "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.pyrotechnic.0",
       "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.pyrotechnic.1"
     ],
-    "bard": [
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.bard.0",
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.bard.1"
+    "miner": [
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.miner.0",
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.miner.1"
     ],
-    "guild_master": [
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.guild_master.0",
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.guild_master.1"
+    "chef": [
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.chef.0",
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.chef.1"
     ],
     "guard": [
       "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.guard.0",
       "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.guard.1"
     ],
-    "default": [
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.default.0",
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.default.1"
+    "elder": [
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.elder.0",
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.elder.1"
+    ],
+    "bard": [
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.bard.0",
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.bard.1"
+    ],
+    "logger": [
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.logger.0",
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.logger.1"
     ]
   }
 }

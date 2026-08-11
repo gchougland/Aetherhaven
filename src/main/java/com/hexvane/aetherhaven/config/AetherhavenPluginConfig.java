@@ -550,8 +550,9 @@ public final class AetherhavenPluginConfig {
             o -> o.buildingEditorWriteRoot
         )
         .documentation(
-            "Optional filesystem root for the Creative building editor staff saves (must contain Server/Aetherhaven/Buildings "
-                + "and Server/Prefabs). When blank, saves prefer a writable asset pack that already has the building file "
+            "Optional filesystem root for the Creative building editor and festival authoring saves (must contain "
+                + "Server/Aetherhaven/Buildings, Server/Aetherhaven/Festivals, and Server/Prefabs). When blank, saves "
+                + "prefer a writable asset pack that already has the building/festival file "
                 + "(e.g. Gradle build/resources/main), otherwise the plugin data directory."
         )
         .add()
