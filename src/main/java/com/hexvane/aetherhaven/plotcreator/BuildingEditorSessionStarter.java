@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabYaw;
+import com.hexvane.aetherhaven.festival.FestivalPrefabSize;
 import com.hexvane.aetherhaven.guild.marker.AdventurerSpawnMarkerEntity;
 import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
 import com.hexvane.aetherhaven.prefab.ConstructionAnimator;
@@ -180,6 +181,24 @@ public final class BuildingEditorSessionStarter {
         PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, yaw, buffer);
         draft.setCornerFirst(new Vector3i(fp.getMinX(), fp.getMinY(), fp.getMinZ()));
         draft.setCornerSecond(new Vector3i(fp.getMaxX(), fp.getMaxY(), fp.getMaxZ()));
+        // Festival square / Festivals/* prefabs must keep the fixed air volume even if the on-disk prefab
+        // was saved without Empty layers (footprint would otherwise collapse to the solid shell).
+        if (isFestivalPrefabBuilding(def)) {
+            Vector3i min = new Vector3i(fp.getMinX(), fp.getMinY(), fp.getMinZ());
+            Vector3i max = FestivalPrefabSize.maxFromMin(min);
+            draft.setCornerFirst(min);
+            draft.setCornerSecond(max);
+            draft.setSaveEmptySpaces(true);
+            fp =
+                new PlotFootprintRecord(
+                    min.x,
+                    min.y,
+                    min.z,
+                    max.x,
+                    max.y,
+                    max.z
+                );
+        }
         draft.setPlotAnchor(def.resolvePreviewSignAnchorWorld(prefabOrigin, yaw));
         convertPrefabLocalsToSignSpace(draft, def.getPlotAnchorOffset());
         seedSpecialBlocksFromPois(draft);
@@ -469,6 +488,18 @@ public final class BuildingEditorSessionStarter {
     }
 
     private record SeededAdventurer(int x, int y, int z, float yaw) {}
+
+    private static boolean isFestivalPrefabBuilding(@Nonnull ConstructionDefinition def) {
+        if (AetherhavenConstants.CONSTRUCTION_PLOT_FESTIVAL_SQUARE.equals(def.getId())) {
+            return true;
+        }
+        String path = def.getPrefabPath();
+        if (path == null || path.isBlank()) {
+            return false;
+        }
+        String key = path.trim().replace('\\', '/');
+        return key.startsWith("Festivals/") || key.contains("/Festivals/");
+    }
 
     @Nonnull
     private static Vector3i pasteOriginNearPlayer(@Nonnull Vector3d pos, float yawRad) {

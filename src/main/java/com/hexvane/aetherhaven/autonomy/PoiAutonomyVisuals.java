@@ -434,6 +434,9 @@ public final class PoiAutonomyVisuals {
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull PoiEntry poi
     ) {
+        if (SafeBlockMount.isMountedOrPending(store, commandBuffer, npcRef)) {
+            return true;
+        }
         World world = store.getExternalData().getWorld();
         Vector3i block = VillagerBlockUtil.resolveMountBaseBlock(world, poi.getX(), poi.getY(), poi.getZ());
         TransformComponent tc = commandBuffer.getComponent(npcRef, TransformComponent.getComponentType());
@@ -461,7 +464,7 @@ public final class PoiAutonomyVisuals {
             }
             Vector3d primary = seatPos != null ? seatPos : blockCenter;
             BlockMountAPI.BlockMountResult result =
-                tryMountWithHits(npcRef, commandBuffer, block, primary, blockCenter);
+                tryMountWithHits(store, npcRef, commandBuffer, block, primary, blockCenter);
             if (!(result instanceof BlockMountAPI.Mounted)) {
                 return false;
             }
@@ -482,6 +485,7 @@ public final class PoiAutonomyVisuals {
 
     @Nonnull
     private static BlockMountAPI.BlockMountResult tryMountWithHits(
+        @Nonnull Store<EntityStore> store,
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull Vector3i mountBlock,
@@ -489,7 +493,8 @@ public final class PoiAutonomyVisuals {
     ) {
         BlockMountAPI.BlockMountResult last = BlockMountAPI.DidNotMount.NO_MOUNT_POINT_FOUND;
         for (Vector3d hit : hits) {
-            BlockMountAPI.BlockMountResult result = BlockMountAPI.mountOnBlock(npcRef, commandBuffer, mountBlock, hit);
+            BlockMountAPI.BlockMountResult result =
+                SafeBlockMount.mountOnBlock(store, npcRef, commandBuffer, mountBlock, hit);
             if (result instanceof BlockMountAPI.Mounted) {
                 return result;
             }

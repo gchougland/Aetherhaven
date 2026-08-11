@@ -2268,7 +2268,11 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (mounted == null) {
             mounted = store.getComponent(ref, MountedComponent.getComponentType());
         }
-        return mounted != null && mounted.getControllerType() == MountController.BlockMount;
+        if (mounted != null) {
+            return mounted.getControllerType() == MountController.BlockMount;
+        }
+        // Same-tick SafeBlockMount has queued MountedComponent but the store has not flushed yet.
+        return SafeBlockMount.isMountedOrPending(store, commandBuffer, ref);
     }
 
     /**

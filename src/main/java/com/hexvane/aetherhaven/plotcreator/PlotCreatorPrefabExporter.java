@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.plotcreator;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.festival.FestivalPrefabSize;
 import com.hexvane.aetherhaven.guild.marker.AdventurerSpawnMarkerEntity;
 import com.hexvane.aetherhaven.plotcreator.icon.PlotCreatorIconExporter;
 import com.hexvane.aetherhaven.shopspot.ShopSpotDisplayService;
@@ -74,6 +76,15 @@ public final class PlotCreatorPrefabExporter {
         if (anchor == null) {
             return ExportResult.FAILED;
         }
+        // Festival prefabs (and the base square) always fill the fixed box with Empty air, even when the
+        // "save air" checkbox is off or building-editor bounds shrank after a truncated paste.
+        boolean festivalPrefab = isFestivalPrefabExport(draft);
+        if (festivalPrefab) {
+            max = FestivalPrefabSize.maxFromMin(min);
+            draft.setCornerFirst(new Vector3i(min));
+            draft.setCornerSecond(new Vector3i(max));
+            draft.setSaveEmptySpaces(true);
+        }
         draft.setPrefabOriginMin(new Vector3i(min));
         PlotCreatorLocalCoords.recomputeAnchorOffset(draft);
 
@@ -99,7 +110,7 @@ public final class PlotCreatorPrefabExporter {
         int editorBlock = BlockType.getAssetMap().getIndex("Editor_Block");
         boolean skipEditorBlock = editorBlock != Integer.MIN_VALUE;
         // Festival squares must record air so broken blocks stay gone on the next paste/load.
-        boolean includeEmpty = draft.isSaveEmptySpaces() || draft.isFestivalMode();
+        boolean includeEmpty = draft.isSaveEmptySpaces() || festivalPrefab;
 
         int top = Math.max(yMin, yMax);
         int bottom = Math.min(yMin, yMax);
@@ -344,6 +355,24 @@ public final class PlotCreatorPrefabExporter {
         }
         String key = blockEntity.getBlockTypeKey();
         return EditorMarkerBlocks.isEditorMarkerTypeId(key);
+    }
+
+    static boolean isFestivalPrefabExport(@Nonnull PlotCreatorDraft draft) {
+        if (draft.isFestivalMode()) {
+            return true;
+        }
+        if (AetherhavenConstants.CONSTRUCTION_PLOT_FESTIVAL_SQUARE.equals(draft.getConstructionId())) {
+            return true;
+        }
+        String path =
+            draft.getLockedPrefabPathKey() != null && !draft.getLockedPrefabPathKey().isBlank()
+                ? draft.getLockedPrefabPathKey()
+                : draft.getPrefabPath();
+        if (path == null || path.isBlank()) {
+            return false;
+        }
+        String key = path.trim().replace('\\', '/');
+        return key.startsWith("Festivals/") || key.contains("/Festivals/");
     }
 
     /**

@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.guild;
 
 
 
+import com.hexvane.aetherhaven.autonomy.SafeBlockMount;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hexvane.aetherhaven.entity.TransformComponentUtil;
 
@@ -80,6 +81,10 @@ public final class GuildHallAdventurerChairMount {
 
     ) {
 
+        if (SafeBlockMount.isMountedOrPending(store, commandBuffer, npcRef)) {
+            return true;
+        }
+
         World world = store.getExternalData().getWorld();
 
         Vector3i mountBlock = VillagerBlockUtil.findGuildHallSeatBelowSpawn(world, anchor.getSpawnMarkerPosition());
@@ -108,7 +113,8 @@ public final class GuildHallAdventurerChairMount {
             Vector3d seatHit = seatWorldPosition(world, mountBlock);
             Vector3d feetPick = new Vector3d(feet.x, feet.y + 0.5, feet.z);
             Vector3d primaryHit = seatHit != null ? seatHit : feetPick;
-            BlockMountAPI.BlockMountResult result = tryMountWithHits(npcRef, commandBuffer, mountBlock, feetPick, primaryHit, hitBlockCenter);
+            BlockMountAPI.BlockMountResult result =
+                tryMountWithHits(store, npcRef, commandBuffer, mountBlock, feetPick, primaryHit, hitBlockCenter);
 
             if (!(result instanceof BlockMountAPI.Mounted)) {
 
@@ -279,6 +285,7 @@ public final class GuildHallAdventurerChairMount {
     @Nonnull
 
     private static BlockMountAPI.BlockMountResult tryMountWithHits(
+        @Nonnull Store<EntityStore> store,
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull Vector3i mountBlock,
@@ -286,7 +293,8 @@ public final class GuildHallAdventurerChairMount {
     ) {
         BlockMountAPI.BlockMountResult last = BlockMountAPI.DidNotMount.NO_MOUNT_POINT_FOUND;
         for (Vector3d hit : hits) {
-            BlockMountAPI.BlockMountResult result = BlockMountAPI.mountOnBlock(npcRef, commandBuffer, mountBlock, hit);
+            BlockMountAPI.BlockMountResult result =
+                SafeBlockMount.mountOnBlock(store, npcRef, commandBuffer, mountBlock, hit);
             if (result instanceof BlockMountAPI.Mounted) {
                 return result;
             }

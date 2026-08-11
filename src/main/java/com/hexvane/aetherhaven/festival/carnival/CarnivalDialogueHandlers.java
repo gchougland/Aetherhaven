@@ -314,7 +314,11 @@ public final class CarnivalDialogueHandlers {
             return;
         }
         World world = store.getExternalData().getWorld();
-        CarnivalWheelPlacementService.bindSessionToLiveFace(world, town.getTownId());
+        try {
+            CarnivalWheelPlacementService.bindSessionToLiveFace(world, town.getTownId());
+        } catch (RuntimeException ignored) {
+            // Binding must never abort payment / spin start.
+        }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, playerUuid);
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, playerUuid);

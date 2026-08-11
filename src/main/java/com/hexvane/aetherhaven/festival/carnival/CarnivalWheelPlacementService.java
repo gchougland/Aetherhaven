@@ -106,7 +106,8 @@ public final class CarnivalWheelPlacementService {
 
     /**
      * Rebinds the in-memory session to a live wheel-face entity after restart (session UUIDs are not saved). Does not
-     * spawn or delete faces — the face prop persists in the chunk like other props.
+     * spawn, delete, or mutate Store components — PropComponent / NetworkId repair happens in
+     * {@link CarnivalWheelSystem} via CommandBuffer.
      */
     public static void bindSessionToLiveFace(@Nonnull World world, @Nonnull UUID townId) {
         var entityStore = world.getEntityStore();
@@ -119,35 +120,12 @@ public final class CarnivalWheelPlacementService {
         if (tracked != null) {
             Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(tracked);
             if (ref != null && ref.isValid()) {
-                repairPropNetworking(store, ref);
                 return;
             }
         }
         UUID orphan = findFaceUuidForTown(world, townId);
-        if (orphan == null) {
-            return;
-        }
-        session.setFaceEntityUuid(orphan);
-        Ref<EntityStore> orphanRef = store.getExternalData().getRefFromUUID(orphan);
-        if (orphanRef != null && orphanRef.isValid()) {
-            repairPropNetworking(store, orphanRef);
-        }
-    }
-
-    /**
-     * Older faces were saved without {@link PropComponent}, so after restart they lost {@link NetworkId} and looked
-     * deleted. Repair once when we see them again.
-     */
-    private static void repairPropNetworking(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref) {
-        if (store.getComponent(ref, PropComponent.getComponentType()) == null) {
-            store.putComponent(ref, PropComponent.getComponentType(), PropComponent.get());
-        }
-        if (store.getComponent(ref, NetworkId.getComponentType()) == null) {
-            store.putComponent(
-                ref,
-                NetworkId.getComponentType(),
-                new NetworkId(store.getExternalData().takeNextNetworkId())
-            );
+        if (orphan != null) {
+            session.setFaceEntityUuid(orphan);
         }
     }
 
