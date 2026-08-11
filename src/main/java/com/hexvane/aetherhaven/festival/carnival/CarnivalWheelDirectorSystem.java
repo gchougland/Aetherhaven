@@ -31,6 +31,7 @@ public final class CarnivalWheelDirectorSystem extends TickingSystem<EntityStore
         if (world == null || !world.isAlive()) {
             return;
         }
+        String worldName = world.getName();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         for (Map.Entry<UUID, CarnivalWheelSession> entry : CarnivalWheelSessionIndex.entries()) {
             UUID townId = entry.getKey();
@@ -43,14 +44,26 @@ public final class CarnivalWheelDirectorSystem extends TickingSystem<EntityStore
                 session.clearGameplay();
                 continue;
             }
+            if (!worldName.equals(town.getWorldName())) {
+                continue;
+            }
             session.addSpinElapsed(dt);
             session.setTickSfxAccum(session.getTickSfxAccum() + dt);
-            if (session.getTickSfxAccum() >= CarnivalIds.WHEEL_TICK_SFX_INTERVAL) {
+            // Tick sounds follow spin speed: quick clicks early, slower as it coasts.
+            float progress = Math.min(1f, session.getSpinElapsed() / Math.max(0.01f, session.getSpinDuration()));
+            float tickInterval = CarnivalIds.WHEEL_TICK_SFX_INTERVAL * (0.55f + progress * 1.8f);
+            if (session.getTickSfxAccum() >= tickInterval) {
                 session.setTickSfxAccum(0f);
                 CarnivalAudio.playWheelTick(store, facePosition(store, session));
             }
             if (session.isSpinComplete()) {
                 session.finishSpin(session.currentRoll());
+                CarnivalAnnounce.announceWheelColor(
+                    store,
+                    town,
+                    session.didWin(),
+                    CarnivalAudio.squareCenter(plugin, town)
+                );
             }
         }
     }

@@ -23,6 +23,7 @@ public final class CarnivalBalloonSession {
     private int spawned;
     private int resolved;
     private float spawnCooldown;
+    private int lastSpawnSpotIndex = -1;
     private final List<UUID> activeBalloonUuids = new ArrayList<>();
     private int pendingTickets = -1;
     private boolean finishSfxPending;
@@ -65,8 +66,22 @@ public final class CarnivalBalloonSession {
         this.spawnCooldown = Math.max(0f, spawnCooldown);
     }
 
-    public void addSpawnCooldown(float dt) {
+    public synchronized void addSpawnCooldown(float dt) {
         spawnCooldown = Math.max(0f, spawnCooldown - dt);
+    }
+
+    /** @return true when the spawn interval has elapsed and another balloon may be reserved. */
+    public synchronized boolean tickSpawnCooldown(float dt) {
+        spawnCooldown = Math.max(0f, spawnCooldown - dt);
+        return phase == Phase.PLAYING && spawned < CarnivalIds.BALLOON_TOTAL && spawnCooldown <= 0f;
+    }
+
+    public int getLastSpawnSpotIndex() {
+        return lastSpawnSpotIndex;
+    }
+
+    public void setLastSpawnSpotIndex(int lastSpawnSpotIndex) {
+        this.lastSpawnSpotIndex = lastSpawnSpotIndex;
     }
 
     @Nonnull
@@ -76,7 +91,6 @@ public final class CarnivalBalloonSession {
 
     public void addActiveBalloon(@Nonnull UUID uuid) {
         activeBalloonUuids.add(uuid);
-        spawned++;
     }
 
     public void removeActiveBalloon(@Nonnull UUID uuid) {
@@ -112,10 +126,31 @@ public final class CarnivalBalloonSession {
         popped = 0;
         spawned = 0;
         resolved = 0;
-        spawnCooldown = 0.15f;
+        // Full interval before the first balloon so the director cannot double-fire on the opening tick.
+        spawnCooldown = CarnivalIds.BALLOON_SPAWN_INTERVAL;
+        lastSpawnSpotIndex = -1;
         activeBalloonUuids.clear();
         pendingTickets = -1;
         return true;
+    }
+
+    /**
+     * Reserves the next balloon slot and arm the spawn interval. Call before queueing a spawn so deferred
+     * {@code world.execute} work cannot schedule a second balloon for the same slot.
+     */
+    public synchronized boolean tryReserveSpawn() {
+        if (phase != Phase.PLAYING || spawned >= CarnivalIds.BALLOON_TOTAL || spawnCooldown > 0f) {
+            return false;
+        }
+        spawned++;
+        spawnCooldown = CarnivalIds.BALLOON_SPAWN_INTERVAL;
+        return true;
+    }
+
+    public synchronized void cancelReservedSpawn() {
+        if (spawned > 0) {
+            spawned--;
+        }
     }
 
     public void markPopped(@Nonnull UUID balloonUuid) {
@@ -163,6 +198,7 @@ public final class CarnivalBalloonSession {
         spawned = 0;
         resolved = 0;
         spawnCooldown = 0f;
+        lastSpawnSpotIndex = -1;
         activeBalloonUuids.clear();
         pendingTickets = -1;
         finishSfxPending = false;

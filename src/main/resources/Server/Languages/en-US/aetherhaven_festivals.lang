@@ -39,6 +39,11 @@ aetherhaven.festival.npc.carnivalMerchant.name=Carnival Merchant
 aetherhaven.festival.npc.carnivalBalloon.name=Balloon Attendant
 aetherhaven.festival.npc.carnivalWheel.name=Wheel Attendant
 aetherhaven.festival.shop.carnival.title=Carnival Goods
+aetherhaven.festival.carnival.banner.wheel.red.title=Red!
+aetherhaven.festival.carnival.banner.wheel.red.subtitle=Two summer festival tickets
+aetherhaven.festival.carnival.banner.wheel.white.title=White!
+aetherhaven.festival.carnival.banner.wheel.white.subtitle=Talk to the attendant to try again
+aetherhaven.festival.carnival.chat.balloons.popped=You popped {count} balloons!
 
 aetherhaven.festival.pig_race.npc.pink.name=Pink Pig
 aetherhaven.festival.pig_race.npc.boar.name=Boar

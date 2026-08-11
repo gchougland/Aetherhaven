@@ -68,17 +68,20 @@ public final class CarnivalBalloonSpawnService {
         }
         CarnivalBalloonSession session = CarnivalBalloonSessionIndex.get(townId);
         if (session == null || session.getPhase() != CarnivalBalloonSession.Phase.PLAYING) {
-            return null;
-        }
-        if (session.getSpawned() >= CarnivalIds.BALLOON_TOTAL) {
+            if (session != null) {
+                session.cancelReservedSpawn();
+            }
             return null;
         }
         List<FestivalDefinition.BalloonSpawnRow> spots = festival.getBalloonSpawns();
         if (spots.isEmpty()) {
             LOGGER.atWarning().log("Carnival balloon spawn skipped: no balloonSpawns for town %s", townId);
+            session.cancelReservedSpawn();
             return null;
         }
-        FestivalDefinition.BalloonSpawnRow spot = spots.get(ThreadLocalRandom.current().nextInt(spots.size()));
+        int spotIndex = pickSpotIndex(spots.size(), session.getLastSpawnSpotIndex());
+        session.setLastSpawnSpotIndex(spotIndex);
+        FestivalDefinition.BalloonSpawnRow spot = spots.get(spotIndex);
         Vector3d pos =
             FestivalPrefabSwapService.spotWorldPosition(
                 plugin,
@@ -94,6 +97,7 @@ public final class CarnivalBalloonSpawnService {
         ModelAsset asset = ModelAsset.getAssetMap().getAsset(modelId);
         if (asset == null) {
             LOGGER.atWarning().log("Carnival balloon model missing: %s", modelId);
+            session.cancelReservedSpawn();
             return null;
         }
         Model model = Model.createUnitScaleModel(asset);
@@ -118,10 +122,25 @@ public final class CarnivalBalloonSpawnService {
         Store<EntityStore> store = entityStore.getStore();
         Ref<EntityStore> ref = store.addEntity(holder, AddReason.SPAWN);
         if (ref == null || !ref.isValid()) {
+            session.cancelReservedSpawn();
             return null;
         }
         session.addActiveBalloon(entityUuid);
         return ref;
+    }
+
+    private static int pickSpotIndex(int spotCount, int lastSpotIndex) {
+        if (spotCount <= 1) {
+            return 0;
+        }
+        if (lastSpotIndex < 0 || lastSpotIndex >= spotCount) {
+            return ThreadLocalRandom.current().nextInt(spotCount);
+        }
+        int index = ThreadLocalRandom.current().nextInt(spotCount - 1);
+        if (index >= lastSpotIndex) {
+            index++;
+        }
+        return index;
     }
 
     public static void despawnAllForTown(@Nonnull World world, @Nonnull UUID townId) {

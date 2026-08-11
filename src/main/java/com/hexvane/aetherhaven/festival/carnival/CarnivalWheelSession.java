@@ -108,10 +108,12 @@ public final class CarnivalWheelSession {
         startRoll = currentRoll;
         int octant = ThreadLocalRandom.current().nextInt(8);
         // Land near the center of an octant; idle offset keeps rest pose between wedges.
+        // Plenty of full turns so the start feels quick, then the ease-out coasts to a stop.
+        int fullTurns = 8 + ThreadLocalRandom.current().nextInt(4);
         targetRoll = CarnivalIds.WHEEL_IDLE_OFFSET_RAD
             + octant * (float) (Math.PI / 4.0)
             + (float) (Math.PI / 8.0)
-            + (float) (Math.PI * 2.0 * (4 + ThreadLocalRandom.current().nextInt(3)));
+            + (float) (Math.PI * 2.0 * fullTurns);
         tickSfxAccum = 0f;
         won = false;
         resultPending = false;
@@ -126,14 +128,19 @@ public final class CarnivalWheelSession {
         return phase == Phase.SPINNING && spinElapsed >= spinDuration;
     }
 
+    public boolean didWin() {
+        return won;
+    }
+
     /** Current eased roll for the face prop while spinning (or the rest pose when idle). */
     public float currentRoll() {
         if (phase != Phase.SPINNING && phase != Phase.RESULTS) {
             return startRoll;
         }
         float t = Math.min(1f, spinElapsed / Math.max(0.01f, spinDuration));
-        // Ease-out cubic so the wheel slows near the end.
-        float eased = 1f - (1f - t) * (1f - t) * (1f - t);
+        // Ease-out quintic: fast at first, then a long slow finish.
+        float u = 1f - t;
+        float eased = 1f - u * u * u * u * u;
         return startRoll + (targetRoll - startRoll) * eased;
     }
 

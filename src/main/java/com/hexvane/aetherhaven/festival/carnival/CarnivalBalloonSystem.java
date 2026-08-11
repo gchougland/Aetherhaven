@@ -188,6 +188,10 @@ public final class CarnivalBalloonSystem extends EntityTickingSystem<EntityStore
             return;
         }
         CarnivalAudio.playBalloonFinish(store, CarnivalAudio.squareCenter(plugin, town));
+        UUID playerUuid = session.getPlayerUuid();
+        if (playerUuid != null) {
+            CarnivalAnnounce.announceBalloonPopCount(store, playerUuid, session.getPopped());
+        }
     }
 
     private static boolean isDartProjectileFromPlayer(

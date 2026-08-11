@@ -30,6 +30,7 @@ public final class CarnivalBalloonDirectorSystem extends TickingSystem<EntitySto
         if (world == null || !world.isAlive()) {
             return;
         }
+        String worldName = world.getName();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         for (Map.Entry<UUID, CarnivalBalloonSession> entry : CarnivalBalloonSessionIndex.entries()) {
             UUID townId = entry.getKey();
@@ -38,11 +39,14 @@ public final class CarnivalBalloonDirectorSystem extends TickingSystem<EntitySto
                 continue;
             }
             TownRecord town = tm.getTown(townId);
-            if (town == null || !CarnivalIds.FESTIVAL_ID.equals(town.getActiveFestivalId())) {
+            // Session state is process-global; only the town's own world may advance its timer or every loaded
+            // world would drain the cooldown and spawn balloons too quickly.
+            if (town == null
+                || !CarnivalIds.FESTIVAL_ID.equals(town.getActiveFestivalId())
+                || !worldName.equals(town.getWorldName())) {
                 continue;
             }
-            session.addSpawnCooldown(dt);
-            if (session.getSpawned() >= CarnivalIds.BALLOON_TOTAL || session.getSpawnCooldown() > 0f) {
+            if (!session.tickSpawnCooldown(dt)) {
                 continue;
             }
             PlotInstance square = FestivalService.findFestivalSquare(plugin, town);
@@ -50,8 +54,10 @@ public final class CarnivalBalloonDirectorSystem extends TickingSystem<EntitySto
             if (square == null || festival == null) {
                 continue;
             }
+            if (!session.tryReserveSpawn()) {
+                continue;
+            }
             CarnivalBalloonSpawnService.scheduleSpawn(world, townId, square, festival);
-            session.setSpawnCooldown(CarnivalIds.BALLOON_SPAWN_INTERVAL);
         }
     }
 }

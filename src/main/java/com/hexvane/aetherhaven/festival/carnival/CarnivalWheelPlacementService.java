@@ -40,14 +40,13 @@ import org.joml.Vector3d;
 public final class CarnivalWheelPlacementService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final int PLACE_SETTINGS = 10;
-    /** Matches {@code Aetherhaven_Carnival_Wheel_Face} hitbox; needed so clients render the prop. */
-    private static final Box FACE_BOX = new Box(-2.0, -2.0, -0.1, 2.0, 2.0, 0.1);
+    /** Matches the scaled face prop; needed so clients render it. */
+    private static final Box FACE_BOX = new Box(-4.0, -4.0, -0.2, 4.0, 4.0, 0.2);
     /**
-     * Block models sit on the cell floor while the hitbox/visual center reads about one block up from that origin.
-     * Forward nudge keeps the spinning face just in front of the backboard like {@code WheelFaceStatic}.
+     * Block models sit on the cell floor while the face center sits about one block up. A couple of model pixels
+     * (1/32 block each) nudge the spinning face up to match the frame.
      */
-    private static final double FACE_HEIGHT = 1.0;
-    private static final double FACE_FORWARD = 0.12;
+    private static final double FACE_HEIGHT = 1.0 + (2.0 / 32.0);
 
     private CarnivalWheelPlacementService() {}
 
@@ -80,7 +79,8 @@ public final class CarnivalWheelPlacementService {
         int bx = (int) Math.floor(center.x);
         int by = (int) Math.floor(center.y);
         int bz = (int) Math.floor(center.z);
-        Rotation yaw = yawDegreesToRotation(wheel.getYawDegrees());
+        // Prefab spots rotate with the plot; facing must use the same world yaw as the pasted wall.
+        Rotation yaw = worldWheelRotation(festivalPlot, wheel.getYawDegrees());
         RotationTuple rt = RotationTuple.of(yaw, Rotation.None, Rotation.None);
         WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(bx, bz));
         if (chunk == null) {
@@ -91,7 +91,7 @@ public final class CarnivalWheelPlacementService {
             LOGGER.atWarning().log("Carnival wheel placeBlock failed at %s %s %s", bx, by, bz);
         }
 
-        float facingYaw = yawDegreesToRadians(wheel.getYawDegrees());
+        float facingYaw = rotationToYawRadians(yaw);
         UUID faceUuid = spawnFace(entityStore.getStore(), townId, center, facingYaw);
         CarnivalWheelSession session = CarnivalWheelSessionIndex.getOrCreate(townId);
         session.clearGameplay();
@@ -152,17 +152,12 @@ public final class CarnivalWheelPlacementService {
             LOGGER.atWarning().log("Carnival wheel face model missing: %s", CarnivalIds.WHEEL_FACE_MODEL);
             return null;
         }
-        Model model = Model.createUnitScaleModel(asset);
+        Model model = Model.createScaledModel(asset, CarnivalIds.WHEEL_FACE_SCALE);
         UUID entityUuid = UUID.randomUUID();
         // Face the same way as the wall block (model +Z). Idle roll parks the pointer on a color edge.
         Rotation3f rot = new Rotation3f(0f, facingYaw, CarnivalIds.WHEEL_IDLE_OFFSET_RAD);
         Holder<EntityStore> holder = EntityStore.REGISTRY.newHolder();
-        // Forward uses the same sin/cos convention as other festival facing offsets.
-        Vector3d pos = new Vector3d(
-            center.x + Math.sin(facingYaw) * FACE_FORWARD,
-            center.y + FACE_HEIGHT,
-            center.z + Math.cos(facingYaw) * FACE_FORWARD
-        );
+        Vector3d pos = new Vector3d(center.x, center.y + FACE_HEIGHT, center.z);
         holder.addComponent(TransformComponent.getComponentType(), new TransformComponent(pos, rot));
         holder.addComponent(HeadRotation.getComponentType(), new HeadRotation(rot));
         holder.addComponent(ModelComponent.getComponentType(), new ModelComponent(model));
@@ -218,21 +213,49 @@ public final class CarnivalWheelPlacementService {
     }
 
     @Nonnull
+    static Rotation worldWheelRotation(@Nonnull PlotInstance festivalPlot, float localYawDegrees) {
+        int worldQuarter =
+            Math.floorMod(rotationToQuarter(festivalPlot.resolvePrefabYaw()) + yawDegreesToQuarter(localYawDegrees), 4);
+        return quarterToRotation(worldQuarter);
+    }
+
+    @Nonnull
     static Rotation yawDegreesToRotation(float yawDegrees) {
+        return quarterToRotation(yawDegreesToQuarter(yawDegrees));
+    }
+
+    static float rotationToYawRadians(@Nonnull Rotation rotation) {
+        return rotationToQuarter(rotation) * (float) (Math.PI / 2.0);
+    }
+
+    static float yawDegreesToRadians(float yawDegrees) {
+        return yawDegreesToQuarter(yawDegrees) * (float) (Math.PI / 2.0);
+    }
+
+    private static int yawDegreesToQuarter(float yawDegrees) {
         float normalized = yawDegrees % 360f;
         if (normalized < 0f) {
             normalized += 360f;
         }
-        int quarter = Math.floorMod(Math.round(normalized / 90f), 4);
-        return switch (quarter) {
+        return Math.floorMod(Math.round(normalized / 90f), 4);
+    }
+
+    private static int rotationToQuarter(@Nonnull Rotation rotation) {
+        return switch (rotation) {
+            case Ninety -> 1;
+            case OneEighty -> 2;
+            case TwoSeventy -> 3;
+            default -> 0;
+        };
+    }
+
+    @Nonnull
+    private static Rotation quarterToRotation(int quarter) {
+        return switch (Math.floorMod(quarter, 4)) {
             case 1 -> Rotation.Ninety;
             case 2 -> Rotation.OneEighty;
             case 3 -> Rotation.TwoSeventy;
             default -> Rotation.None;
         };
-    }
-
-    static float yawDegreesToRadians(float yawDegrees) {
-        return (float) Math.toRadians(yawDegrees);
     }
 }

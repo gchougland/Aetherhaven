@@ -7,21 +7,20 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=7";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=7";
+} from "./BlockCatalog.js?v=8";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=8";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
 const textureLoader = new THREE.TextureLoader();
 
 /**
- * Prefab entity Transform.Rotation matches Rotation3f (pitch/yaw/roll).
- * In-game exports use radians; some legacy asset prefabs store degrees.
- * Quaternion matches Rotation3f.getQuaternion → JOML rotationYXZ(yaw, pitch, roll).
+ * Parse Pitch/Yaw/Roll from a prefab Transform.Rotation.
+ * Live exports use radians; some legacy asset prefabs store degrees.
  * @param {any} rot
- * @returns {THREE.Quaternion}
+ * @returns {{ pitch: number, yaw: number, roll: number }}
  */
-export function entityRotationToQuaternion(rot) {
+export function parseEntityEuler(rot) {
   let pitch = Number(rot?.Pitch ?? rot?.pitch ?? 0);
   let yaw = Number(rot?.Yaw ?? rot?.yaw ?? 0);
   let roll = Number(rot?.Roll ?? rot?.roll ?? 0);
@@ -46,29 +45,29 @@ export function entityRotationToQuaternion(rot) {
     yaw *= toRad;
     roll *= toRad;
   }
-  // JOML Quaterniond.rotationYXZ(yaw, pitch, roll) closed form.
-  const sx = Math.sin(pitch * 0.5);
-  const cx = Math.cos(pitch * 0.5);
-  const sy = Math.sin(yaw * 0.5);
-  const cy = Math.cos(yaw * 0.5);
-  const sz = Math.sin(roll * 0.5);
-  const cz = Math.cos(roll * 0.5);
-  const x = cy * sx;
-  const y = sy * cx;
-  const z = sy * sx;
-  const w = cy * cx;
-  return new THREE.Quaternion(
-    x * cz + y * sz,
-    y * cz - x * sz,
-    w * sz - z * cz,
-    w * cz + z * sz
-  ).normalize();
+  return { pitch, yaw, roll };
+}
+
+/**
+ * Entity / prop model orientation as the *client* renders it.
+ *
+ * Server `Rotation3f.getQuaternion` uses JOML `rotationYXZ` (Ry*Rx*Rz). That is
+ * correct for server-side math, but `Box.enclosingRotatedAABB` documents that the
+ * client composes intrinsic X→Y→Z for visuals. Three.js Euler order "XYZ" matches
+ * that (R = Rz*Ry*Rx). Using YXZ here mirrors rolled props across their pivot.
+ *
+ * @param {any} rot
+ * @returns {THREE.Quaternion}
+ */
+export function entityRotationToQuaternion(rot) {
+  const { pitch, yaw, roll } = parseEntityEuler(rot);
+  return new THREE.Quaternion().setFromEuler(new THREE.Euler(pitch, yaw, roll, "XYZ"));
 }
 
 /**
  * Decode RotationTuple index: (roll*16)+(pitch*4)+yaw, each axis 0..3 → 0/90/180/270°.
- * Hytale applies R = Ry(yaw) * Rx(pitch) * Rz(roll) (see RotationTuple / Rotation3f.rotationYXZ).
- * Three.js Euler order for that composition is "YXZ" (not "ZYX").
+ * Block renderer expects R = Ry(yaw)*Rx(pitch)*Rz(roll) (see BuilderToolsPlugin /
+ * RotationTuple). That is Three.js "YXZ" — different from entity client XYZ above.
  * @param {number} index
  * @returns {THREE.Quaternion}
  */
@@ -77,7 +76,7 @@ export function rotationTupleToQuaternion(index) {
   const yaw = (i % 4) * (Math.PI / 2);
   const pitch = (Math.floor(i / 4) % 4) * (Math.PI / 2);
   const roll = (Math.floor(i / 16) % 4) * (Math.PI / 2);
-  return entityRotationToQuaternion({ Pitch: pitch, Yaw: yaw, Roll: roll });
+  return new THREE.Quaternion().setFromEuler(new THREE.Euler(pitch, yaw, roll, "YXZ"));
 }
 
 /**

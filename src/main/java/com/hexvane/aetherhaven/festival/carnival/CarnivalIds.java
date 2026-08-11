@@ -28,12 +28,15 @@ public final class CarnivalIds {
 
     public static final float BALLOON_FLOAT_SECONDS = 4.5f;
     public static final float BALLOON_RISE_SPEED = 0.675f;
-    public static final float BALLOON_SPAWN_INTERVAL = 0.55f;
+    /** Delay between each balloon appearing during a game. */
+    public static final float BALLOON_SPAWN_INTERVAL = 1.0f;
     public static final double BALLOON_HIT_PAD = 0.35;
 
-    public static final float WHEEL_SPIN_SECONDS = 5.0f;
+    public static final float WHEEL_SPIN_SECONDS = 5.5f;
     public static final float WHEEL_IDLE_OFFSET_RAD = (float) (Math.PI / 8.0);
-    public static final float WHEEL_TICK_SFX_INTERVAL = 0.18f;
+    public static final float WHEEL_TICK_SFX_INTERVAL = 0.12f;
+    /** Entity face is authored like the block static face but needs 2x world scale to match. */
+    public static final float WHEEL_FACE_SCALE = 2.0f;
 
     private CarnivalIds() {}
 
