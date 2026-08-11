@@ -1,7 +1,6 @@
 package com.hexvane.aetherhaven.festival.carnival;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.entity.EntityPresenceUtil;
 import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import com.hexvane.aetherhaven.festival.FestivalPrefabSwapService;
 import com.hexvane.aetherhaven.town.PlotInstance;
@@ -26,15 +25,14 @@ import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.Intangible;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
+import com.hypixel.hytale.server.core.modules.entity.component.PropComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3d;
@@ -55,10 +53,6 @@ public final class CarnivalWheelPlacementService {
      * the backboard.
      */
     private static final double FACE_FORWARD = -0.38 - (1.0 / 32.0);
-    /** Reject / reseat faces that drifted more than this from the tuned wheel seat (blocks). */
-    private static final double FACE_ANCHOR_SLACK = 0.2;
-
-    private static final Set<UUID> ENSURE_PENDING = ConcurrentHashMap.newKeySet();
 
     private CarnivalWheelPlacementService() {}
 
@@ -111,126 +105,50 @@ public final class CarnivalWheelPlacementService {
     }
 
     /**
-     * Keeps the spinning face on the wheel for the whole carnival. Safe from tick systems — Store writes are deferred.
-     *
-     * <p>Soft pulses never load the whole festival square (that caused empty-server task spam). They only touch the
-     * single wheel chunk, and only when someone is online or {@code forceLoadWheelChunk} is true.
+     * Rebinds the in-memory session to a live wheel-face entity after restart (session UUIDs are not saved). Does not
+     * spawn or delete faces — the face prop persists in the chunk like other props.
      */
-    public static void ensurePresent(
-        @Nonnull World world,
-        @Nonnull UUID townId,
-        @Nonnull PlotInstance festivalPlot,
-        @Nonnull FestivalDefinition festival
-    ) {
-        ensurePresent(world, townId, festivalPlot, festival, false);
-    }
-
-    public static void ensurePresent(
-        @Nonnull World world,
-        @Nonnull UUID townId,
-        @Nonnull PlotInstance festivalPlot,
-        @Nonnull FestivalDefinition festival,
-        boolean forceLoadWheelChunk
-    ) {
+    public static void bindSessionToLiveFace(@Nonnull World world, @Nonnull UUID townId) {
         var entityStore = world.getEntityStore();
         if (entityStore == null || !CarnivalWheelFaceComponent.isRegistered()) {
             return;
         }
         Store<EntityStore> store = entityStore.getStore();
         CarnivalWheelSession session = CarnivalWheelSessionIndex.getOrCreate(townId);
-        FaceAnchor expected = expectedFaceAnchor(festivalPlot, festival);
-        if (expected != null && isFaceUsable(store, session.getFaceEntityUuid(), expected.pos())) {
-            return;
-        }
-        if (!forceLoadWheelChunk && world.getPlayerRefs().isEmpty()) {
-            return;
-        }
-        if (!ENSURE_PENDING.add(townId)) {
-            return;
-        }
-        world.execute(() -> {
-            try {
-                ensurePresentNow(world, townId, festivalPlot, festival, forceLoadWheelChunk);
-            } finally {
-                ENSURE_PENDING.remove(townId);
+        UUID tracked = session.getFaceEntityUuid();
+        if (tracked != null) {
+            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(tracked);
+            if (ref != null && ref.isValid()) {
+                repairPropNetworking(store, ref);
+                return;
             }
-        });
+        }
+        UUID orphan = findFaceUuidForTown(world, townId);
+        if (orphan == null) {
+            return;
+        }
+        session.setFaceEntityUuid(orphan);
+        Ref<EntityStore> orphanRef = store.getExternalData().getRefFromUUID(orphan);
+        if (orphanRef != null && orphanRef.isValid()) {
+            repairPropNetworking(store, orphanRef);
+        }
     }
 
-    private static void ensurePresentNow(
-        @Nonnull World world,
-        @Nonnull UUID townId,
-        @Nonnull PlotInstance festivalPlot,
-        @Nonnull FestivalDefinition festival,
-        boolean forceLoadWheelChunk
-    ) {
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        var entityStore = world.getEntityStore();
-        if (plugin == null || entityStore == null || !CarnivalWheelFaceComponent.isRegistered()) {
-            return;
+    /**
+     * Older faces were saved without {@link PropComponent}, so after restart they lost {@link NetworkId} and looked
+     * deleted. Repair once when we see them again.
+     */
+    private static void repairPropNetworking(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref) {
+        if (store.getComponent(ref, PropComponent.getComponentType()) == null) {
+            store.putComponent(ref, PropComponent.getComponentType(), PropComponent.get());
         }
-        FestivalDefinition.WheelLocalRow wheel = festival.getWheelLocal();
-        if (wheel == null) {
-            return;
-        }
-        Store<EntityStore> store = entityStore.getStore();
-        CarnivalWheelSession session = CarnivalWheelSessionIndex.getOrCreate(townId);
-        FaceAnchor anchor = expectedFaceAnchor(festivalPlot, festival);
-        if (anchor == null) {
-            return;
-        }
-        Vector3d center = anchor.center();
-        Vector3d expected = anchor.pos();
-        float facingYaw = anchor.facingYaw();
-
-        if (isFaceUsable(store, session.getFaceEntityUuid(), expected)) {
-            return;
-        }
-
-        // Adopt an orphan only if it still sits on the wheel. Drifted faces get culled and respawned.
-        UUID orphan = findFaceUuidForTown(world, townId);
-        if (orphan != null && isFaceUsable(store, orphan, expected)) {
-            session.setFaceEntityUuid(orphan);
-            return;
-        }
-        removeFaceEntitiesOnly(world, townId);
-
-        int bx = (int) Math.floor(center.x);
-        int by = (int) Math.floor(center.y);
-        int bz = (int) Math.floor(center.z);
-        WorldChunk chunk =
-            forceLoadWheelChunk
-                ? world.getChunk(ChunkUtil.indexChunkFromBlock(bx, bz))
-                : world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(bx, bz));
-        if (chunk == null) {
-            // Soft path: square unloaded — wait until a player is nearby (or dialogue forces load).
-            return;
-        }
-
-        Rotation yaw = worldWheelRotation(festivalPlot, wheel.getYawDegrees());
-        BlockType at = BlockType.getAssetMap().getAsset(chunk.getBlock(bx, by, bz));
-        if (at == null || !CarnivalIds.WHEEL_BLOCK_ID.equals(at.getId())) {
-            chunk.placeBlock(
-                bx,
-                by,
-                bz,
-                CarnivalIds.WHEEL_BLOCK_ID,
-                RotationTuple.of(yaw, Rotation.None, Rotation.None),
-                PLACE_SETTINGS,
-                false
+        if (store.getComponent(ref, NetworkId.getComponentType()) == null) {
+            store.putComponent(
+                ref,
+                NetworkId.getComponentType(),
+                new NetworkId(store.getExternalData().takeNextNetworkId())
             );
         }
-
-        boolean keepGameplay = session.getPhase() != CarnivalWheelSession.Phase.IDLE;
-        UUID faceUuid = spawnFace(store, townId, center, facingYaw);
-        if (faceUuid == null) {
-            LOGGER.atWarning().log("Carnival wheel face ensure spawn failed for town %s", townId);
-            return;
-        }
-        if (!keepGameplay) {
-            session.clearGameplay();
-        }
-        session.setFaceEntityUuid(faceUuid);
     }
 
     public static void remove(@Nonnull World world, @Nonnull UUID townId) {
@@ -273,87 +191,6 @@ public final class CarnivalWheelPlacementService {
         if (session != null) {
             session.clearAll();
         }
-    }
-
-    /** Removes face entities for the town without clearing the wheel frame block. */
-    private static void removeFaceEntitiesOnly(@Nonnull World world, @Nonnull UUID townId) {
-        CarnivalWheelSession session = CarnivalWheelSessionIndex.get(townId);
-        UUID faceUuid = session != null ? session.getFaceEntityUuid() : null;
-        var entityStore = world.getEntityStore();
-        if (entityStore == null || !CarnivalWheelFaceComponent.isRegistered()) {
-            return;
-        }
-        Store<EntityStore> store = entityStore.getStore();
-        if (faceUuid != null) {
-            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(faceUuid);
-            if (ref != null && ref.isValid()) {
-                store.removeEntity(ref, RemoveReason.REMOVE);
-            }
-        }
-        store.forEachChunk(
-            Query.and(CarnivalWheelFaceComponent.getComponentType()),
-            (chunk, commandBuffer) -> {
-                for (int i = 0; i < chunk.size(); i++) {
-                    CarnivalWheelFaceComponent face =
-                        chunk.getComponent(i, CarnivalWheelFaceComponent.getComponentType());
-                    Ref<EntityStore> ref = chunk.getReferenceTo(i);
-                    if (face == null || ref == null || !ref.isValid()) {
-                        continue;
-                    }
-                    if (townId.equals(face.getTownId())) {
-                        commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
-                    }
-                }
-            }
-        );
-        if (session != null) {
-            session.setFaceEntityUuid(null);
-        }
-    }
-
-    private static boolean isFaceUsable(
-        @Nonnull Store<EntityStore> store,
-        @Nullable UUID faceUuid,
-        @Nonnull Vector3d expectedFacePos
-    ) {
-        if (faceUuid == null || !EntityPresenceUtil.isLoadedLive(EntityPresenceUtil.resolve(store, faceUuid))) {
-            return false;
-        }
-        Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(faceUuid);
-        if (ref == null || !ref.isValid()) {
-            return false;
-        }
-        TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
-        if (tc == null) {
-            return false;
-        }
-        Vector3d pos = tc.getPosition();
-        double dx = pos.x - expectedFacePos.x;
-        double dy = pos.y - expectedFacePos.y;
-        double dz = pos.z - expectedFacePos.z;
-        return (dx * dx + dy * dy + dz * dz) <= (FACE_ANCHOR_SLACK * FACE_ANCHOR_SLACK);
-    }
-
-    @Nullable
-    private static FaceAnchor expectedFaceAnchor(
-        @Nonnull PlotInstance festivalPlot,
-        @Nonnull FestivalDefinition festival
-    ) {
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        FestivalDefinition.WheelLocalRow wheel = festival.getWheelLocal();
-        if (plugin == null || wheel == null) {
-            return null;
-        }
-        Vector3d center =
-            FestivalPrefabSwapService.spotWorldPosition(
-                plugin,
-                festivalPlot,
-                wheel.getLocalX(),
-                wheel.getLocalY(),
-                wheel.getLocalZ()
-            );
-        float facingYaw = rotationToYawRadians(worldWheelRotation(festivalPlot, wheel.getYawDegrees()));
-        return new FaceAnchor(center, facePosFromCenter(center, facingYaw), facingYaw);
     }
 
     @Nonnull
@@ -429,6 +266,8 @@ public final class CarnivalWheelPlacementService {
         );
         holder.addComponent(BoundingBox.getComponentType(), new BoundingBox(FACE_BOX));
         holder.addComponent(NetworkId.getComponentType(), new NetworkId(store.getExternalData().takeNextNetworkId()));
+        // Required so NetworkId is reassigned after chunk load — without this the face saves but looks gone.
+        holder.addComponent(PropComponent.getComponentType(), PropComponent.get());
         holder.addComponent(Velocity.getComponentType(), new Velocity());
         holder.addComponent(UUIDComponent.getComponentType(), new UUIDComponent(entityUuid));
         holder.addComponent(Intangible.getComponentType(), Intangible.INSTANCE);
@@ -514,5 +353,4 @@ public final class CarnivalWheelPlacementService {
         };
     }
 
-    private record FaceAnchor(@Nonnull Vector3d center, @Nonnull Vector3d pos, float facingYaw) {}
 }

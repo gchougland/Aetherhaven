@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 /**
  * Sync Hytale + Aetherhaven assets used by the marketplace prefab viewer.
- * Assets stay out of git — run locally (or onto a Railway volume) before serving.
+ * Models and textures stay out of git — run locally (or onto a Railway volume) before
+ * serving. The small catalog JSON is committed instead, so viewer code and the block
+ * data it depends on always deploy together.
  *
  * Usage:
  *   node scripts/sync-hytale-viewer-assets.mjs
@@ -567,13 +569,10 @@ function main() {
   );
   console.log(`NPC models/textures: ${npcCopied} files`);
 
-  const catalogDir = path.join(outDir, "catalog");
-  ensureDir(catalogDir);
-  fs.writeFileSync(path.join(catalogDir, "block_catalog.json"), JSON.stringify(blockCatalog));
-  fs.writeFileSync(path.join(catalogDir, "model_catalog.json"), JSON.stringify(modelCatalog));
-  fs.writeFileSync(
-    path.join(catalogDir, "manifest.json"),
-    JSON.stringify(
+  const catalogFiles = {
+    "block_catalog.json": JSON.stringify(blockCatalog),
+    "model_catalog.json": JSON.stringify(modelCatalog),
+    "manifest.json": JSON.stringify(
       {
         generatedAt: new Date().toISOString(),
         blockCount: Object.keys(blockCatalog).length,
@@ -582,8 +581,18 @@ function main() {
       },
       null,
       2
-    )
-  );
+    ),
+  };
+
+  // The committed copy is what production serves, so refresh it even when OUT_DIR sends
+  // the bulky assets somewhere else for upload.
+  const repoCatalogDir = path.join(marketplaceRoot, "web", "hytale-assets", "catalog");
+  for (const dir of new Set([path.join(outDir, "catalog"), repoCatalogDir])) {
+    ensureDir(dir);
+    for (const [name, contents] of Object.entries(catalogFiles)) {
+      fs.writeFileSync(path.join(dir, name), contents);
+    }
+  }
 
   console.log(
     `Catalogs: ${Object.keys(blockCatalog).length} blocks/items/fluids, ${Object.keys(modelCatalog).length} entity models`

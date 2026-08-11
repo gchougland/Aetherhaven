@@ -2692,6 +2692,22 @@ app.get("/internal/pending-prefab/:submissionId.json", (req, res) => {
   res.type("application/json").send(fs.readFileSync(file));
 });
 
+// The catalog is committed and served from the repo so viewer code can never be paired
+// with an older catalog uploaded to the volume, which silently drops block states such
+// as roof corners. Models and textures still come from hytaleAssetsDir below.
+const bundledCatalogDir = path.join(webRoot, "hytale-assets", "catalog");
+if (fs.existsSync(path.join(bundledCatalogDir, "block_catalog.json"))) {
+  app.use(
+    "/hytale-assets/catalog",
+    express.static(bundledCatalogDir, {
+      maxAge: 0,
+      fallthrough: true,
+      index: false,
+    })
+  );
+  console.log(`Serving viewer catalog from ${bundledCatalogDir}`);
+}
+
 if (fs.existsSync(hytaleAssetsDir)) {
   app.use(
     "/hytale-assets",

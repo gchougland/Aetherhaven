@@ -20,6 +20,8 @@ Single server on **http://127.0.0.1:3847** (API + website).
 
 Building cards open a zoomable / rotatable Three.js prefab preview. That needs Hytale (+ Aetherhaven) textures and models on disk — **not committed to git** (Hypixel IP). Blocks from other mods are skipped in the viewer.
 
+The generated `web/hytale-assets/catalog/` JSON **is** committed. It is only block metadata (ids, draw types, state model paths), and keeping it with the code means a deploy can never pair new viewer logic with an older catalog uploaded to the volume — that mismatch silently drops block states such as roof corners and fence connections.
+
 #### Local
 
 1. Make sure Hytale assets exist at  
@@ -31,7 +33,8 @@ Building cards open a zoomable / rotatable Three.js prefab preview. That needs H
    npm run sync-hytale-assets
    ```
 
-   This writes `web/hytale-assets/` (gitignored) and serves it at `/hytale-assets`.
+   This writes `web/hytale-assets/` and serves it at `/hytale-assets`. Everything under
+   `Common/` is gitignored; `catalog/` is committed, so commit it whenever it changes.
 3. Optional, for auto cover screenshots on new submissions:
 
    ```bash
@@ -42,7 +45,9 @@ Re-run `sync-hytale-assets` after game updates or Aetherhaven asset changes.
 
 #### Production (Railway)
 
-Assets are not in the git deploy. Put them on the volume:
+The catalog rides along with the git deploy and the server always serves the committed
+copy at `/hytale-assets/catalog`. Models and textures are not in the deploy, so they go on
+the volume:
 
 1. On your PC, export a copy:
 
@@ -52,9 +57,14 @@ Assets are not in the git deploy. Put them on the volume:
    $env:OUT_DIR="C:\temp\hytale-assets"; npm run sync-hytale-assets
    ```
 
-2. Upload that folder to the Railway volume at `/data/hytale-assets`  
+   The run also refreshes the committed `web/hytale-assets/catalog/`, whatever `OUT_DIR` is.
+
+2. Upload that folder to the Railway volume at `/data/hytale-assets`
    (Railway CLI, volume browser, or any SFTP/rsync you use).
 3. Set service variable `HYTALE_ASSETS_DIR=/data/hytale-assets` and redeploy.
+
+Step 2 is only needed when models or textures change, such as after a game update. New or
+changed block **states** ship in the catalog, so commit and push is enough for those.
 
 See [docs/RailwayDeployment.md](../docs/RailwayDeployment.md) for volume + Chromium notes. If Chromium or assets are missing, submissions still work — only auto-covers / 3D preview are affected.
 

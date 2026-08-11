@@ -8,10 +8,7 @@ import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
 import com.hexvane.aetherhaven.plugin.DialogueActionRegistry;
 import com.hexvane.aetherhaven.plugin.DialogueConditionRegistry;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBuyerPayment;
-import com.hexvane.aetherhaven.festival.FestivalDefinition;
-import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
-import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
@@ -317,7 +314,7 @@ public final class CarnivalDialogueHandlers {
             return;
         }
         World world = store.getExternalData().getWorld();
-        ensureWheelFace(world, plugin, town);
+        CarnivalWheelPlacementService.bindSessionToLiveFace(world, town.getTownId());
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, playerUuid);
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, playerUuid);
@@ -582,19 +579,6 @@ public final class CarnivalDialogueHandlers {
 
     private static boolean isCarnivalActive(@Nonnull TownRecord town) {
         return CarnivalIds.FESTIVAL_ID.equals(town.getActiveFestivalId());
-    }
-
-    private static void ensureWheelFace(
-        @Nonnull World world,
-        @Nonnull AetherhavenPlugin plugin,
-        @Nonnull TownRecord town
-    ) {
-        PlotInstance square = FestivalService.findFestivalSquare(plugin, town);
-        FestivalDefinition festival = plugin.getFestivalCatalog().get(town.getActiveFestivalId());
-        if (square == null || festival == null) {
-            return;
-        }
-        CarnivalWheelPlacementService.ensurePresent(world, town.getTownId(), square, festival, true);
     }
 
     @Nullable

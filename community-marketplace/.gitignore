@@ -2,6 +2,8 @@ node_modules/
 data/
 .env
 *.log
-web/hytale-assets/
+# Models and textures are synced onto the server; the catalog ships with the code.
+web/hytale-assets/*
+!web/hytale-assets/catalog/
 
 web/debug/

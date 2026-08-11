@@ -9,7 +9,9 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
+import com.hypixel.hytale.server.core.modules.entity.component.PropComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -44,6 +46,17 @@ public final class CarnivalWheelSystem extends EntityTickingSystem<EntityStore> 
         Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
         if (face == null || transform == null || head == null || ref == null) {
             return;
+        }
+        // Legacy faces saved without PropComponent lose NetworkId on chunk load and look deleted.
+        if (archetypeChunk.getComponent(index, PropComponent.getComponentType()) == null) {
+            commandBuffer.putComponent(ref, PropComponent.getComponentType(), PropComponent.get());
+        }
+        if (archetypeChunk.getComponent(index, NetworkId.getComponentType()) == null) {
+            commandBuffer.putComponent(
+                ref,
+                NetworkId.getComponentType(),
+                new NetworkId(store.getExternalData().takeNextNetworkId())
+            );
         }
         UUID townId = face.getTownId();
         if (townId == null) {
