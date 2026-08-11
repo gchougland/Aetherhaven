@@ -13,6 +13,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
@@ -22,6 +23,9 @@ import org.joml.Vector3i;
 /**
  * Keeps the festival square exactly as it was built. The whole square is replaced every time a festival starts and
  * ends, so anything a player digs or builds there would vanish on the next swap.
+ *
+ * <p>Operators and Creative are not exempt. Use {@link #toggleBuildAllowed} (via {@code /ah festival build}) to allow
+ * one player to edit for the current session.
  */
 public final class FestivalPlotProtection {
     private static final String PROTECTED_MESSAGE_KEY = "aetherhaven_festivals.aetherhaven.festival.square.protected";
@@ -29,6 +33,8 @@ public final class FestivalPlotProtection {
     private static final long MESSAGE_COOLDOWN_MS = 6_000L;
 
     private static final Map<UUID, Long> LAST_WARNED_AT = new ConcurrentHashMap<>();
+    /** Players who turned on festival-square building for themselves (session only). */
+    private static final Set<UUID> BUILD_ALLOWED = ConcurrentHashMap.newKeySet();
 
     private FestivalPlotProtection() {}
 
@@ -50,6 +56,22 @@ public final class FestivalPlotProtection {
         return plugin
             .getConstructionCatalog()
             .matchesGameplayConstruction(plot.getConstructionId(), AetherhavenConstants.CONSTRUCTION_PLOT_FESTIVAL_SQUARE);
+    }
+
+    /** True when this player toggled festival-square building on for the current session. */
+    public static boolean isBuildAllowed(@Nullable UUID playerUuid) {
+        return playerUuid != null && BUILD_ALLOWED.contains(playerUuid);
+    }
+
+    /**
+     * Flips festival-square building for this player. Returns the new state ({@code true} = building allowed).
+     */
+    public static boolean toggleBuildAllowed(@Nonnull UUID playerUuid) {
+        if (BUILD_ALLOWED.remove(playerUuid)) {
+            return false;
+        }
+        BUILD_ALLOWED.add(playerUuid);
+        return true;
     }
 
     /** Tells the player why nothing happened, at most once every few seconds. */

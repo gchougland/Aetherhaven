@@ -1,0 +1,96 @@
+{
+  "Parent": "Aetherhaven_Human",
+  "Model": "Characters/Player.blockymodel",
+  "Texture": "Characters/Player_Textures/Player_Greyscale.png",
+  "GradientSet": "Skin",
+  "GradientId": "48",
+  "DefaultAttachments": [
+    {
+      "Model": "Cosmetics/Underwears/Underwear.blockymodel",
+      "Texture": "Cosmetics/Underwears/Underwear_Textures/Underwear_Suit_Texture.png",
+      "GradientSet": "Colored_Cotton",
+      "GradientId": "Red"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Faces/Player_Face_Detached.blockymodel",
+      "Texture": "Characters/Body_Attachments/Faces/Faces_Detached_Textures/Face_Stubble.png",
+      "GradientSet": "Skin",
+      "GradientId": "48"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Ears/Ears1.blockymodel",
+      "Texture": "Characters/Body_Attachments/Ears/Ears1_Textures/Ears1_Greyscale_Texture.png",
+      "GradientSet": "Skin",
+      "GradientId": "48"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Mouths/Mouth1.blockymodel",
+      "Texture": "Characters/Body_Attachments/Mouths/Mouth_Large.png",
+      "GradientSet": "Skin",
+      "GradientId": "48"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Eyes/Eyes_HalfPixel.blockymodel",
+      "Texture": "Characters/Body_Attachments/Eyes/Eyes_Textures/Plain_Square.png",
+      "GradientSet": "Eyes_Gradient",
+      "GradientId": "Brown"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Eyebrows/Eyebrows_Medium.blockymodel",
+      "Texture": "Characters/Body_Attachments/Eyebrows/Medium_Greyscale.png",
+      "GradientSet": "Hair",
+      "GradientId": "RedDark"
+    },
+    {
+      "Model": "Cosmetics/Pants/Pants_Straight.blockymodel",
+      "Texture": "Cosmetics/Pants/Pants_Straight_Textures/Pinstripe_Greyscale.png",
+      "GradientSet": "Shiny_Fabric",
+      "GradientId": "Red"
+    },
+    {
+      "Model": "Cosmetics/Undertops/LongSleeveShirt.blockymodel",
+      "Texture": "Cosmetics/Undertops/LongSleeveShirt_Textures/Paintspill_Shirt_Greyscale.png",
+      "GradientSet": "Colored_Cotton",
+      "GradientId": "Red"
+    },
+    {
+      "Model": "Cosmetics/Overtops/Overtops_Top.blockymodel",
+      "Texture": "Cosmetics/Overtops/Overtops_Top_Textures/Fancy_Waistcoat_Greyscale.png",
+      "GradientSet": "Colored_Cotton",
+      "GradientId": "Blue"
+    },
+    {
+      "Model": "Cosmetics/Shoes/Sneakers.blockymodel",
+      "Texture": "Cosmetics/Shoes/Sneakers_Textures/Sneakers_Greyscale.png",
+      "GradientSet": "Colored_Cotton",
+      "GradientId": "Red"
+    },
+    {
+      "Model": "Cosmetics/Gloves/BoxingGloves.blockymodel",
+      "Texture": "Cosmetics/Gloves/BoxingGloves_Greyscale.png",
+      "GradientSet": "Shiny_Fabric",
+      "GradientId": "Red"
+    },
+    {
+      "Model": "Cosmetics/Face_Accessories/Clown_Nose.blockymodel",
+      "Texture": "Cosmetics/Face_Accessories/Clown_Nose.png"
+    },
+    {
+      "Model": "Cosmetics/Head/RedAfro.blockymodel",
+      "Texture": "Characters/Hair/RedAfro.png"
+    }
+  ],
+  "Icon": "Icons/ModelsGenerated/Aetherhaven_Clown.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      19,
+      0
+    ],
+    "Translation": [
+      0,
+      -110
+    ]
+  }
+}

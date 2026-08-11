@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.festival.carnival;
 
 import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
@@ -269,7 +270,7 @@ public final class CarnivalDialogueHandlers {
     }
 
     @Nullable
-    private static String pickRandomUnownedBalloonHatItem(
+    static String pickRandomUnownedBalloonHatItem(
         @Nonnull TownRecord town,
         @Nonnull Store<EntityStore> store,
         @Nonnull Ref<EntityStore> playerRef
@@ -334,19 +335,9 @@ public final class CarnivalDialogueHandlers {
             out.setGotoNodeId("busy");
             return;
         }
-        float currentRoll = CarnivalIds.WHEEL_IDLE_OFFSET_RAD;
-        UUID faceUuid = session.getFaceEntityUuid();
-        if (faceUuid != null) {
-            Ref<EntityStore> faceRef = store.getExternalData().getRefFromUUID(faceUuid);
-            if (faceRef != null && faceRef.isValid()) {
-                CarnivalWheelFaceComponent face =
-                    store.getComponent(faceRef, CarnivalWheelFaceComponent.getComponentType());
-                if (face != null) {
-                    currentRoll = face.getRoll();
-                }
-            }
-        }
-        if (!session.tryBegin(playerUuid, currentRoll)) {
+        boolean special =
+            !town.hasQuestCompleted(AetherhavenConstants.QUEST_CLOWN_RESCUE);
+        if (!session.tryBegin(playerUuid, special)) {
             GoldCoinPayment.refund(payerTown, player, playerRef, store, paid);
             if (payerTown != null) {
                 tm.updateTown(payerTown);
@@ -354,6 +345,8 @@ public final class CarnivalDialogueHandlers {
             out.setGotoNodeId("busy");
             return;
         }
+        // Snap the face back to the idle rest pose so every spin starts from the same wedge alignment.
+        CarnivalWheelPlacementService.snapFaceRoll(store, session, session.getStartRoll());
         if (payerTown != null) {
             tm.updateTown(payerTown);
         }
@@ -569,7 +562,7 @@ public final class CarnivalDialogueHandlers {
         player.giveItem(new ItemStack(CarnivalIds.CLUB_ITEM_ID, 1), playerRef, store);
     }
 
-    private static void removeDarts(
+    static void removeDarts(
         @Nonnull Store<EntityStore> store,
         @Nonnull Ref<EntityStore> playerRef,
         int maxCount

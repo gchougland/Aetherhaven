@@ -15,6 +15,7 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHa
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.client.SimpleBlockInteraction;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockComponentChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -81,8 +82,14 @@ public final class OpenTownPlanningBenchInteraction extends SimpleBlockInteracti
         if (blockType == null) {
             return;
         }
-        var worldChunk = world.getChunk(ChunkUtil.indexChunkFromBlock(targetBlock.x, targetBlock.z));
-        var rotationIndex = worldChunk.getRotationIndex(targetBlock.x, targetBlock.y, targetBlock.z);
+        var rotationIndex = 0;
+        var sectionRef = chunkStore.getChunkSectionReferenceAtBlock(targetBlock.x, targetBlock.y, targetBlock.z);
+        if (sectionRef != null && sectionRef.isValid()) {
+            var section = chunkStore.getStore().getComponent(sectionRef, BlockSection.getComponentType());
+            if (section != null) {
+                rotationIndex = section.getRotationIndex(targetBlock.x, targetBlock.y, targetBlock.z);
+            }
+        }
 
         final var benchWindow = new TownPlanningCraftingWindow(
             targetBlock.x,

@@ -18,7 +18,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.bson.BsonDocument;
 
 /**
  * Plot blueprints and unified plot tokens carry per-building metadata for their name and unlock target.
@@ -99,7 +98,6 @@ public final class PlotBlueprintSalvageBenchSystem extends EntityTickingSystem<C
     }
 
     private static boolean hasSalvageMetadata(@Nonnull ItemStack stack) {
-        BsonDocument meta = stack.getMetadata();
-        return meta != null && !meta.isEmpty();
+        return !stack.isEquivalentType(new ItemStack(stack.getItemId(), stack.getQuantity()));
     }
 }

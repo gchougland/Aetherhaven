@@ -28,10 +28,14 @@ public final class CarnivalAnnounce {
     public static void announceWheelColor(
         @Nonnull Store<EntityStore> store,
         @Nonnull TownRecord town,
-        boolean redWin,
+        @Nonnull CarnivalWheelSession.Outcome outcome,
         @Nullable Vector3d squareCenter
     ) {
-        String color = redWin ? "red" : "white";
+        String color = switch (outcome) {
+            case WIN -> "red";
+            case LOSE -> "white";
+            case CLOWN -> "blue";
+        };
         Message title = Message.translation(LANG + "banner.wheel." + color + ".title");
         Message subtitle = Message.translation(LANG + "banner.wheel." + color + ".subtitle");
         int sting = SoundEvent.getAssetMap().getIndex(AetherhavenConstants.EVENT_TITLE_SHORT_SUCCESS_SOUND_ID);

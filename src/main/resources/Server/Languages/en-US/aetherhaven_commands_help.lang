@@ -146,6 +146,16 @@ commands.aetherhaven.argtype.calendarYear.name=year
 commands.aetherhaven.argtype.calendarYear.usage=Year number
 commands.aetherhaven.argtype.calendarYear.invalid=Year must be at least 1.
 
+commands.aetherhaven.festival.desc=Creative: festival helpers
+commands.aetherhaven.festival.list.desc=Creative: list festivals
+commands.aetherhaven.festival.start.desc=Creative: start a festival in your town
+commands.aetherhaven.festival.start.id.desc=Festival id
+commands.aetherhaven.festival.end.desc=Creative: end the festival in your town
+commands.aetherhaven.festival.build.desc=Creative: turn festival square building on or off for yourself
+commands.aetherhaven.festival.resetclown.desc=Creative: reset clown unlock so the wheel can award Bozo again
+commands.aetherhaven.festival.wheelforce.desc=Creative: force the next carnival wheel spin onto an octant (0-7, or negative to clear)
+commands.aetherhaven.festival.wheelforce.octant.desc=Octant index 0-7, or negative to clear
+
 commands.aetherhaven.walldebug.desc=Creative: wall wand placement debug lines in chat
 commands.aetherhaven.walldebug.on.desc=Turn wall wand debug on
 commands.aetherhaven.walldebug.off.desc=Turn wall wand debug off

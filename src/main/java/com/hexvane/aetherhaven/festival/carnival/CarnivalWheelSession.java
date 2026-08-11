@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.festival.carnival;
 
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -15,6 +16,15 @@ public final class CarnivalWheelSession {
         RESULTS
     }
 
+    public enum Outcome {
+        WIN,
+        LOSE,
+        CLOWN
+    }
+
+    /** Optional next-spin octant override for creative testing ({@code -1} = random). */
+    private static final AtomicInteger FORCE_NEXT_OCTANT = new AtomicInteger(-1);
+
     private Phase phase = Phase.IDLE;
     @Nullable
     private UUID playerUuid;
@@ -25,8 +35,24 @@ public final class CarnivalWheelSession {
     private float startRoll;
     private float targetRoll;
     private float tickSfxAccum;
-    private boolean won;
+    private Outcome outcome = Outcome.LOSE;
+    private boolean specialActive;
+    /** Octant chosen when the spin began; used for the result so float drift cannot shift the wedge. */
+    private int plannedOctant;
     private boolean resultPending;
+
+    /** Forces the next {@link #tryBegin} in this process to land on {@code octant} (0..7), or clears with {@code -1}. */
+    public static void setForceNextOctant(int octant) {
+        if (octant < 0) {
+            FORCE_NEXT_OCTANT.set(-1);
+            return;
+        }
+        FORCE_NEXT_OCTANT.set(Math.floorMod(octant, 8));
+    }
+
+    public static int getForceNextOctant() {
+        return FORCE_NEXT_OCTANT.get();
+    }
 
     @Nonnull
     public Phase getPhase() {
@@ -71,6 +97,10 @@ public final class CarnivalWheelSession {
         this.tickSfxAccum = tickSfxAccum;
     }
 
+    public int getPlannedOctant() {
+        return plannedOctant;
+    }
+
     public boolean isBusy() {
         return phase == Phase.SPINNING || phase == Phase.RESULTS;
     }
@@ -86,42 +116,55 @@ public final class CarnivalWheelSession {
     }
 
     public boolean hasWin(@Nonnull UUID player) {
-        return phase == Phase.RESULTS && resultPending && won && player.equals(playerUuid);
+        return phase == Phase.RESULTS && resultPending && outcome == Outcome.WIN && player.equals(playerUuid);
     }
 
     public boolean hasLoss(@Nonnull UUID player) {
-        return phase == Phase.RESULTS && resultPending && !won && player.equals(playerUuid);
+        return phase == Phase.RESULTS && resultPending && outcome == Outcome.LOSE && player.equals(playerUuid);
+    }
+
+    public boolean hasClown(@Nonnull UUID player) {
+        return phase == Phase.RESULTS && resultPending && outcome == Outcome.CLOWN && player.equals(playerUuid);
     }
 
     public boolean isBusyForOther(@Nonnull UUID player) {
         return isBusy() && (playerUuid == null || !playerUuid.equals(player));
     }
 
-    public boolean tryBegin(@Nonnull UUID player, float currentRoll) {
+    /**
+     * Begins a spin from the idle rest pose (not the previous landing). Returns the start roll so callers can snap the
+     * face prop before the director ticks.
+     */
+    public boolean tryBegin(@Nonnull UUID player, boolean specialActive) {
         if (!canStart(player)) {
             return false;
         }
         phase = Phase.SPINNING;
         playerUuid = player;
+        this.specialActive = specialActive;
         spinElapsed = 0f;
         spinDuration = CarnivalIds.WHEEL_SPIN_SECONDS;
-        startRoll = currentRoll;
-        int octant = ThreadLocalRandom.current().nextInt(8);
-        // Land near the center of an octant; idle offset keeps rest pose between wedges.
         float twoPi = (float) (Math.PI * 2.0);
-        float landing = CarnivalIds.WHEEL_IDLE_OFFSET_RAD
-            + octant * (float) (Math.PI / 4.0)
-            + (float) (Math.PI / 8.0);
-        // Extra turns for drama; then bump until the travel from the current roll is at least one full rotation
-        // (absolute landing angles alone can undershoot after previous spins accumulate).
-        int extraTurns = 7 + ThreadLocalRandom.current().nextInt(4);
-        float target = landing + twoPi * extraTurns;
-        while (target - startRoll < twoPi) {
-            target += twoPi;
+        // Always restart from the authored idle pose so wedge mapping stays stable across spins.
+        startRoll = CarnivalIds.WHEEL_IDLE_OFFSET_RAD;
+        int forced = FORCE_NEXT_OCTANT.getAndSet(-1);
+        plannedOctant = forced >= 0 ? Math.floorMod(forced, 8) : ThreadLocalRandom.current().nextInt(8);
+        // Land near the center of an octant; idle offset keeps rest pose between wedges.
+        float landing = normalizeRoll(
+            CarnivalIds.WHEEL_IDLE_OFFSET_RAD
+                + plannedOctant * (float) (Math.PI / 4.0)
+                + (float) (Math.PI / 8.0),
+            twoPi
+        );
+        float travel = landing - startRoll;
+        while (travel < twoPi * CarnivalIds.WHEEL_MIN_FULL_SPINS) {
+            travel += twoPi;
         }
-        targetRoll = target;
+        // A little extra drama on top of the guaranteed minimum.
+        travel += twoPi * ThreadLocalRandom.current().nextInt(3);
+        targetRoll = startRoll + travel;
         tickSfxAccum = 0f;
-        won = false;
+        outcome = Outcome.LOSE;
         resultPending = false;
         return true;
     }
@@ -135,7 +178,12 @@ public final class CarnivalWheelSession {
     }
 
     public boolean didWin() {
-        return won;
+        return outcome == Outcome.WIN;
+    }
+
+    @Nonnull
+    public Outcome getOutcome() {
+        return outcome;
     }
 
     /** Current eased roll for the face prop while spinning (or the rest pose when idle). */
@@ -154,11 +202,24 @@ public final class CarnivalWheelSession {
         if (phase != Phase.SPINNING) {
             return;
         }
-        int octant = octantAtTop(finalRoll);
-        won = (octant & 1) == 0;
+        // Prefer the octant chosen at start so a float edge case cannot flip the prize wedge.
+        int octant = plannedOctant;
+        if (specialActive && octant == CarnivalIds.WHEEL_CLOWN_OCTANT) {
+            outcome = Outcome.CLOWN;
+        } else {
+            outcome = (octant & 1) == 0 ? Outcome.WIN : Outcome.LOSE;
+        }
         phase = Phase.RESULTS;
         resultPending = true;
-        startRoll = finalRoll;
+        startRoll = normalizeRoll(finalRoll, (float) (Math.PI * 2.0));
+    }
+
+    private static float normalizeRoll(float roll, float twoPi) {
+        float n = roll % twoPi;
+        if (n < 0f) {
+            n += twoPi;
+        }
+        return n;
     }
 
     public int collectWin(@Nonnull UUID player) {
@@ -197,8 +258,11 @@ public final class CarnivalWheelSession {
         playerUuid = null;
         spinElapsed = 0f;
         tickSfxAccum = 0f;
-        won = false;
+        outcome = Outcome.LOSE;
+        specialActive = false;
+        plannedOctant = 0;
         resultPending = false;
+        startRoll = CarnivalIds.WHEEL_IDLE_OFFSET_RAD;
     }
 
     public void clearAll() {

@@ -406,6 +406,7 @@ public final class PlotBuildingKindRequirements {
             TownVillagerBinding.KIND_BARD,
             TownVillagerBinding.KIND_CRYSTAL_KEEPER,
             TownVillagerBinding.KIND_PYROTECHNIC,
+            TownVillagerBinding.KIND_CLOWN,
             TownVillagerBinding.KIND_GUARD
         );
     }

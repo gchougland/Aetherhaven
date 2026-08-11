@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.AutonomyStuckTeleportRecovery;
 import com.hexvane.aetherhaven.autonomy.PoiAutonomyVisuals;
+import com.hexvane.aetherhaven.autonomy.PoiScoring;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.autonomy.VillagerDoorUtil;
 import com.hexvane.aetherhaven.autonomy.pathnav.PathNavGraphService;
@@ -59,6 +60,8 @@ import org.joml.Vector3i;
 public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore> {
     /** Seek leash is ~0.5; stop arrival earlier so shoppers do not jog into counters/stalls. */
     private static final double ARRIVE_HORIZONTAL_SQ = 1.25 * 1.25;
+    /** Match villager festival stand hold so tourists can "arrive" in the aisle instead of Seeking into thin booth walls. */
+    private static final double FESTIVAL_ARRIVE_HORIZONTAL_SQ = 2.5 * 2.5;
     private static final double RETURN_ARRIVE_HORIZONTAL_SQ = 2.75 * 2.75;
     private static final long TRAVEL_PHASE_MAX_MS = 120_000L;
     private static final int BLOCKED_FAIL_TICKS = 100;
@@ -241,10 +244,12 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
             Double.isFinite(leash.x) ? leash.x : autonomy.getTargetX(),
             Double.isFinite(leash.z) ? leash.z : autonomy.getTargetZ()
         );
-        if (!AutonomyStuckTeleportRecovery.isStallTeleportDue(
-            autonomy,
-            AetherhavenConstants.TOURIST_STALL_TELEPORT_TICKS
-        )) {
+        PoiRegistry stallPoiRegistry = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
+        int stallTicks =
+            isFestivalTravelTarget(stallPoiRegistry, autonomy)
+                ? AetherhavenConstants.AUTONOMY_STALL_TELEPORT_TICKS
+                : AetherhavenConstants.TOURIST_STALL_TELEPORT_TICKS;
+        if (!AutonomyStuckTeleportRecovery.isStallTeleportDue(autonomy, stallTicks)) {
             return false;
         }
 
@@ -646,7 +651,11 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         Vector3d pos = tc.getPosition();
         Vector3d leash = npc.getLeashPoint();
         double horizSq = (pos.x - leash.x) * (pos.x - leash.x) + (pos.z - leash.z) * (pos.z - leash.z);
-        double arriveSq = returning ? RETURN_ARRIVE_HORIZONTAL_SQ : ARRIVE_HORIZONTAL_SQ;
+        boolean festivalTravel = !returning && isFestivalTravelTarget(poiRegistry, autonomy);
+        double arriveSq =
+            returning
+                ? RETURN_ARRIVE_HORIZONTAL_SQ
+                : festivalTravel ? FESTIVAL_ARRIVE_HORIZONTAL_SQ : ARRIVE_HORIZONTAL_SQ;
 
         PathNavTravelSupport.WaypointTickAction waypointAction =
             PathNavTravelSupport.tickTravelWaypoints(autonomy, pos, leash.x, leash.z, arriveSq, now);
@@ -868,8 +877,10 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
             PoiRegistry poiRegistry =
                 AetherhavenWorldRegistries.getOrCreatePoiRegistry(store.getExternalData().getWorld(), plugin);
             if (!PoiOccupancy.canBeginUse(store, townId, poiRegistry, poi, selfUuid)) {
+                // Spot already taken — drop the claim so we do not keep yanking toward a full stand.
                 autonomy.setPhase(TouristAutonomyState.PHASE_VISIT);
-                autonomy.setNextDecisionEpochMs(now + 2000L);
+                autonomy.clearTravelTarget();
+                scheduleNextPoiPick(autonomy, now, ref.hashCode());
                 commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
                 clearAutonomyRoleState(ref, npc, commandBuffer);
                 return;
@@ -1354,6 +1365,18 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         );
     }
 
+    private static boolean isFestivalTravelTarget(
+        @Nonnull PoiRegistry poiRegistry,
+        @Nonnull TouristAutonomyState autonomy
+    ) {
+        UUID targetId = autonomy.getTargetPoiUuid();
+        if (targetId == null) {
+            return false;
+        }
+        PoiEntry poi = poiRegistry.get(targetId);
+        return poi != null && PoiScoring.isFestivalPoi(poi);
+    }
+
     private void failTravel(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
@@ -1401,6 +1424,38 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
                     plot,
                     TouristDestinationResolver.plotEdgePadding()
                 )) {
+                // Festival stands sit behind thin booth walls. Soft-VISIT at the wall leaves stall teleport off —
+                // snap onto the stand instead (same recovery villagers get), but never onto a taken stand.
+                PoiRegistry poiRegistry = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
+                if (TouristDestinationResolver.isActiveFestivalPlot(town, visitPlotId)
+                    && isFestivalTravelTarget(poiRegistry, autonomy)) {
+                    UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+                    UUID selfUuid = uc != null ? uc.getUuid() : null;
+                    UUID targetId = autonomy.getTargetPoiUuid();
+                    PoiEntry standPoi = targetId != null ? poiRegistry.get(targetId) : null;
+                    if (standPoi != null
+                        && PoiOccupancy.canBeginUse(store, town.getTownId(), poiRegistry, standPoi, selfUuid)) {
+                        Vector3d stand =
+                            new Vector3d(autonomy.getTargetX(), autonomy.getTargetY(), autonomy.getTargetZ());
+                        AutonomyStuckTeleportRecovery.teleportNpc(ref, commandBuffer, store, stand, npc);
+                        AutonomyStuckTeleportRecovery.applyPostTeleportTravel(npc, autonomy, stand, false);
+                        autonomy.setPhase(TouristAutonomyState.PHASE_VISIT);
+                        autonomy.setTravelStuckTicks(0);
+                        autonomy.setPhaseEndEpochMs(now + visitDurationMs(now, ref.hashCode(), false));
+                        scheduleNextPoiPick(autonomy, now, ref.hashCode());
+                        autonomy.setLastPlotPoiId(standPoi.getId());
+                        commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+                        commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+                        clearAutonomyRoleState(ref, npc, commandBuffer);
+                        return;
+                    }
+                    autonomy.clearTravelTarget();
+                    autonomy.setPhase(TouristAutonomyState.PHASE_VISIT);
+                    scheduleNextPoiPick(autonomy, now, ref.hashCode());
+                    commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+                    clearAutonomyRoleState(ref, npc, commandBuffer);
+                    return;
+                }
                 autonomy.setPhase(TouristAutonomyState.PHASE_VISIT);
                 autonomy.clearTravelWaypoints();
                 commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);

@@ -101,7 +101,7 @@ public final class FestivalSpotService {
                 (int) Math.floor(target.y),
                 (int) Math.floor(target.z),
                 tags,
-                2,
+                1,
                 square.getPlotId(),
                 null,
                 PoiInteractionKind.NONE,
@@ -166,5 +166,58 @@ public final class FestivalSpotService {
             }
         }
         return null;
+    }
+
+    /**
+     * True when every resident spot for {@code festival} resolves in the live POI registry. Spot markers are
+     * runtime-only, so a world reload or plot POI refresh can leave the town pointing at missing ids.
+     */
+    public static boolean spotsIntact(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull FestivalDefinition festival
+    ) {
+        List<FestivalDefinition.SpotRow> spots = festival.getSpots();
+        if (spots.isEmpty()) {
+            return true;
+        }
+        if (town.getActiveFestivalSpotPoiIds().isEmpty()) {
+            return false;
+        }
+        for (FestivalDefinition.SpotRow spot : spots) {
+            String kind = spot.getResidentKind();
+            if (kind.isEmpty()) {
+                continue;
+            }
+            if (findSpotForKind(world, plugin, town, kind) == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Re-registers festival stand POIs when any are missing. Returns true when a rebuild happened so callers can
+     * nudge attendees back to the square.
+     */
+    public static boolean ensureSpots(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownManager tm,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance square,
+        @Nonnull FestivalDefinition festival
+    ) {
+        if (spotsIntact(world, plugin, town, festival)) {
+            return false;
+        }
+        LOGGER.atInfo().log(
+            "Rebuilding missing festival spots for %s in town %s",
+            festival.getId(),
+            town.getTownId()
+        );
+        registerSpots(world, plugin, tm, town, square, festival);
+        return true;
     }
 }

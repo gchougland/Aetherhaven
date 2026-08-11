@@ -239,6 +239,7 @@ public final class ProductionWorkplaceKinds {
                 case AetherhavenConstants.CONSTRUCTION_PLOT_BUILDERS_HUT -> TownVillagerBinding.KIND_BUILDER;
                 case AetherhavenConstants.CONSTRUCTION_PLOT_FLOWER_SHOP -> TownVillagerBinding.KIND_FLORIST;
                 case AetherhavenConstants.CONSTRUCTION_PLOT_BOMB_SHOP -> TownVillagerBinding.KIND_PYROTECHNIC;
+                case AetherhavenConstants.CONSTRUCTION_PLOT_CLOWN_TENT -> TownVillagerBinding.KIND_CLOWN;
                 case AetherhavenConstants.CONSTRUCTION_PLOT_CRYSTAL_KEEPERS_SHOP -> TownVillagerBinding.KIND_CRYSTAL_KEEPER;
                 case AetherhavenConstants.CONSTRUCTION_PLOT_RESTAURANT -> TownVillagerBinding.KIND_CHEF;
                 default -> null;

@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.autonomy;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.clown.ClownCheerAssistSystem;
 import com.hexvane.aetherhaven.command.AetherhavenNeedsCommand;
 import com.hexvane.aetherhaven.command.AetherhavenTownsfolkCommand;
 import com.hexvane.aetherhaven.command.AetherhavenVillagerCommand;
@@ -132,6 +133,7 @@ public final class VillagersBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new BlockMountDeathCleanupSystem());
         plugin.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new ClownCheerAssistSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new VillagerFollowPlayerSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new VillagerMoodVisualSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new DoorwaySeparationBypassSystem());

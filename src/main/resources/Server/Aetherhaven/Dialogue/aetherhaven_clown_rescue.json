@@ -1,0 +1,28 @@
+{
+  "id": "aetherhaven_clown_rescue",
+  "entry": "root",
+  "nodes": {
+    "root": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown_rescue.root.speaker",
+      "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown_rescue.root.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown_rescue.root.c0",
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_clown_rescue"
+            },
+            {
+              "type": "despawn_npc"
+            },
+            {
+              "type": "close"
+            }
+          ],
+          "next": null
+        }
+      ]
+    }
+  }
+}

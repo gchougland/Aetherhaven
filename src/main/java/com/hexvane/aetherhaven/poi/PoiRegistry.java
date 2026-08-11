@@ -134,9 +134,15 @@ public final class PoiRegistry {
     public void unregisterByPlotId(@Nonnull UUID plotId) {
         List<UUID> toRemove = new ArrayList<>();
         for (PoiEntry e : byId.values()) {
-            if (plotId.equals(e.getPlotId())) {
-                toRemove.add(e.getId());
+            if (!plotId.equals(e.getPlotId())) {
+                continue;
             }
+            // Festival stand markers are re-owned by FestivalSpotService for the whole festival day.
+            // Plot rebuild refresh must not wipe them or villagers fall back to normal work.
+            if (e.getTags().contains(AetherhavenConstants.POI_TAG_FESTIVAL_EPHEMERAL)) {
+                continue;
+            }
+            toRemove.add(e.getId());
         }
         boolean any = false;
         for (UUID id : toRemove) {
@@ -159,14 +165,19 @@ public final class PoiRegistry {
         return new ArrayList<>(byId.values());
     }
 
-    /** Entries persisted to disk (excludes {@link AetherhavenConstants#POI_TAG_FEAST_EPHEMERAL}). */
+    /**
+     * Entries persisted to disk (excludes feast/festival runtime markers — those are rebuilt while the event is
+     * active).
+     */
     @Nonnull
     public List<PoiEntry> allPersistentEntries() {
         List<PoiEntry> out = new ArrayList<>();
         for (PoiEntry e : byId.values()) {
-            if (!e.getTags().contains(AetherhavenConstants.POI_TAG_FEAST_EPHEMERAL)) {
-                out.add(e);
+            if (e.getTags().contains(AetherhavenConstants.POI_TAG_FEAST_EPHEMERAL)
+                || e.getTags().contains(AetherhavenConstants.POI_TAG_FESTIVAL_EPHEMERAL)) {
+                continue;
             }
+            out.add(e);
         }
         return out;
     }

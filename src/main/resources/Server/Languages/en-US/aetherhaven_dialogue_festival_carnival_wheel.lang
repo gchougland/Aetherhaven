@@ -1,7 +1,7 @@
 # Carnival wheel attendant dialogue
 
 aetherhaven.dialogue.festival_carnival_wheel.speaker=Wheel Attendant
-aetherhaven.dialogue.festival_carnival_wheel.main_hub.body=Give the carnival wheel a spin! Ten gold coins, and if it lands on red you win two summer festival tickets.
+aetherhaven.dialogue.festival_carnival_wheel.main_hub.body=Give the carnival wheel a spin! Ten gold coins, and if it lands on red you win two summer festival tickets. Sometimes there is a blue spot with a surprise.
 aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_start=Spin for 10 gold coins.
 aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_collect_win=Did I win?
 aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_collect_loss=What did I land on?
@@ -10,7 +10,7 @@ aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_spinning=Is it still spi
 aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_about=How does the wheel work?
 aetherhaven.dialogue.festival_carnival_wheel.main_hub.c_goodbye=Maybe later.
 
-aetherhaven.dialogue.festival_carnival_wheel.about.body=Pay ten gold coins and I spin the wheel on the wall. Red wins you two summer festival tickets. White means try again next time. Only one person can spin at a time.
+aetherhaven.dialogue.festival_carnival_wheel.about.body=Pay ten gold coins and I spin the wheel on the wall. Red wins you two summer festival tickets. White means try again next time. If you see a blue spot, that one has a special surprise. Only one person can spin at a time.
 aetherhaven.dialogue.festival_carnival_wheel.about.c_back=Got it.
 
 aetherhaven.dialogue.festival_carnival_wheel.spinning.body=Watch it go! Talk to me again when it stops.
@@ -18,6 +18,15 @@ aetherhaven.dialogue.festival_carnival_wheel.spinning.c_ok=I am watching!
 
 aetherhaven.dialogue.festival_carnival_wheel.won.body=Red! Here are two summer festival tickets. Want to spin again later?
 aetherhaven.dialogue.festival_carnival_wheel.won.c_ok=Lucky day!
+
+aetherhaven.dialogue.festival_carnival_wheel.won_clown.body=Blue! Looks like you won a clown. He is standing by the wheel. Go say hello.
+aetherhaven.dialogue.festival_carnival_wheel.won_clown.c_ok=I will talk to him.
+
+aetherhaven.dialogue.festival_carnival_wheel.won_clown_waiting.body=Blue again! Your clown prize is still waiting by the wheel. Go talk to him.
+aetherhaven.dialogue.festival_carnival_wheel.won_clown_waiting.c_ok=On my way.
+
+aetherhaven.dialogue.festival_carnival_wheel.won_clown_already.body=Blue landed, but that surprise already joined your town. Spin again for tickets next time.
+aetherhaven.dialogue.festival_carnival_wheel.won_clown_already.c_ok=Fair enough.
 
 aetherhaven.dialogue.festival_carnival_wheel.lost.body=White this time. Better luck on the next spin!
 aetherhaven.dialogue.festival_carnival_wheel.lost.c_ok=I will try again.

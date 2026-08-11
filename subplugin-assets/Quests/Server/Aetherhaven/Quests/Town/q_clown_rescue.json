@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "q_clown_rescue",
+  "category": "town",
+  "title": "Prize Clown",
+  "description": "You won a clown on the carnival wheel. He said he lives here now.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [],
+  "rewards": [],
+  "lifecycle": {
+    "onStart": [],
+    "onComplete": [],
+    "onAbandon": []
+  },
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_clown_rescue.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_clown_rescue.description"
+}

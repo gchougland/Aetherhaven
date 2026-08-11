@@ -84,7 +84,58 @@ public final class RescueVillagerSpawnService {
             );
             return null;
         }
-        Rotation3f rotation = rotationTowardPlayer(store, stand, breakerPlayerUuid);
+        return spawnRescueAt(
+            world,
+            store,
+            town,
+            stand,
+            breakerPlayerUuid,
+            trigger,
+            "RESCUE_BLOCK",
+            "kind=" + trigger.rescueBindingKind() + ",block=" + brokenBlock.x + "," + brokenBlock.y + "," + brokenBlock.z
+        );
+    }
+
+    /**
+     * Spawns a rescue NPC at an explicit stand position (e.g. beside the carnival wheel). Returns null when an active
+     * rescue of that kind already exists or spawn fails.
+     */
+    @Nullable
+    public static UUID spawnRescueAt(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull Vector3d stand,
+        @Nullable UUID faceTowardPlayerUuid,
+        @Nonnull RescueVillagerTrigger trigger
+    ) {
+        return spawnRescueAt(
+            world,
+            store,
+            town,
+            stand,
+            faceTowardPlayerUuid,
+            trigger,
+            "RESCUE_WHEEL",
+            "kind=" + trigger.rescueBindingKind()
+        );
+    }
+
+    @Nullable
+    private static UUID spawnRescueAt(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull Vector3d stand,
+        @Nullable UUID faceTowardPlayerUuid,
+        @Nonnull RescueVillagerTrigger trigger,
+        @Nonnull String originKind,
+        @Nonnull String originDetail
+    ) {
+        if (townHasActiveRescueNpc(store, town.getTownId(), trigger.rescueBindingKind())) {
+            return null;
+        }
+        Rotation3f rotation = rotationTowardPlayer(store, stand, faceTowardPlayerUuid);
         NPCPlugin npc = NPCPlugin.get();
         if (npc == null) {
             return null;
@@ -103,14 +154,7 @@ public final class RescueVillagerSpawnService {
             TownVillagerBinding.getComponentType(),
             new TownVillagerBinding(town.getTownId(), trigger.rescueBindingKind(), null)
         );
-        NpcSpawnOriginUtil.attach(
-            store,
-            ref,
-            "RESCUE_BLOCK",
-            "kind=" + trigger.rescueBindingKind() + ",block=" + brokenBlock.x + "," + brokenBlock.y + "," + brokenBlock.z,
-            world,
-            stand
-        );
+        NpcSpawnOriginUtil.attach(store, ref, originKind, originDetail, world, stand);
         NPCEntity npcEntity = store.getComponent(ref, NPCEntity.getComponentType());
         if (npcEntity != null) {
             npcEntity.getLeashPoint().set(stand);

@@ -1,0 +1,70 @@
+# Clown dialogue (Bozo Bleak)
+
+aetherhaven.dialogue.aetherhaven_clown_rescue.root.speaker=Bozo Bleak
+aetherhaven.dialogue.aetherhaven_clown_rescue.root.body=Congrats, you won me. Guess I live here now.
+aetherhaven.dialogue.aetherhaven_clown_rescue.root.c0=Welcome to town.
+
+aetherhaven.dialogue.aetherhaven_clown.root.speaker=Bozo Bleak
+aetherhaven.dialogue.aetherhaven_clown.main_hub.fallback=If you need a joke, I have plenty. None of them are happy. That is the joke.
+aetherhaven.dialogue.aetherhaven_clown.main_hub.greeting.0=Oh good. Another face that wants to smile. I will try not to ruin it.
+aetherhaven.dialogue.aetherhaven_clown.main_hub.greeting.1=Laugh if you want. I get paid either way. Well, I do not get paid. Forget I said that.
+aetherhaven.dialogue.aetherhaven_clown.main_hub.greeting.2=The nose stays on. The smile does not. Fair trade.
+
+aetherhaven.dialogue.aetherhaven_clown.root.c_house=Bozo, you wanted to talk about a house.
+aetherhaven.dialogue.aetherhaven_clown.root.c_house_done=Your name is on the house shelf. You should hear it from me.
+aetherhaven.dialogue.aetherhaven_clown.root.c_house_remind=The house is still in progress.
+aetherhaven.dialogue.aetherhaven_clown.root.c_tent_done=Bozo, I wanted to check in now that the tent is up.
+aetherhaven.dialogue.aetherhaven_clown.root.c_tent_complete=The clown tent is finished. Bozo, I am here to close things out.
+aetherhaven.dialogue.aetherhaven_clown.root.c_tent_building=The tent is still coming together. Where do things stand?
+aetherhaven.dialogue.aetherhaven_clown.root.c_tent_offer=Bozo, I want to help you set up a tent in town.
+aetherhaven.dialogue.aetherhaven_clown.root.c_goodbye=That is all for now.
+
+aetherhaven.dialogue.aetherhaven_clown.pip_quest_tent.speaker=Bozo Bleak
+aetherhaven.dialogue.aetherhaven_clown.pip_quest_tent.body=I cheer people up for a living. It is exhausting. Give me a tent, a little shade, and somewhere to hang the nose when nobody is looking. Take this token, stake the plot, and build the tent. When it stands, come tell me so I can pretend to be excited.
+aetherhaven.dialogue.aetherhaven_clown.pip_quest_tent.c0=We will get you a tent.
+aetherhaven.dialogue.aetherhaven_clown.pip_quest_tent.c1=Not right now.
+
+aetherhaven.dialogue.aetherhaven_clown.pip_tent_accepted.speaker=Bozo Bleak
+aetherhaven.dialogue.aetherhaven_clown.pip_tent_accepted.body=Fine. Stake it somewhere people can find me when they feel dull. I will wait at the inn and practice looking thrilled.
+aetherhaven.dialogue.aetherhaven_clown.pip_tent_accepted.c0=See you when the tent is up.
+
+aetherhaven.dialogue.aetherhaven_clown.pip_building.speaker=Bozo Bleak
+aetherhaven.dialogue.aetherhaven_clown.pip_building.body=Still no tent? Of course. I will keep waiting. Waiting is my second best act.
+aetherhaven.dialogue.aetherhaven_clown.pip_building.c0=I need to drop the quest for now.
+aetherhaven.dialogue.aetherhaven_clown.pip_building.c1=Still working on it.
+
+aetherhaven.dialogue.aetherhaven_clown.pip_abandoned.speaker=Bozo Bleak
+aetherhaven.dialogue.aetherhaven_clown.pip_abandoned.body=No tent today. Shocking. Talk again if you change your mind. I will try not to hold my breath.
+aetherhaven.dialogue.aetherhaven_clown.pip_abandoned.c0=Fair enough.
+
+aetherhaven.dialogue.aetherhaven_clown.pip_done.speaker=Bozo Bleak
+aetherhaven.dialogue.aetherhaven_clown.pip_done.body=The tent is up. Great. Now I have a place to work and a place to complain about working. Thanks. Really.
+aetherhaven.dialogue.aetherhaven_clown.pip_done.c0=Happy to help.
+
+aetherhaven.dialogue.aetherhaven_clown.pip_house_offer.speaker=Bozo Bleak
+aetherhaven.dialogue.aetherhaven_clown.pip_house_offer.body=The tent is for work. I still need a quiet bed where I can take the nose off and stop smiling at walls. Stake me a house like the others?
+aetherhaven.dialogue.aetherhaven_clown.pip_house_offer.c0=I will stake a house for you.
+aetherhaven.dialogue.aetherhaven_clown.pip_house_offer.c1=Another time.
+
+aetherhaven.dialogue.aetherhaven_clown.pip_house_accepted.speaker=Bozo Bleak
+aetherhaven.dialogue.aetherhaven_clown.pip_house_accepted.body=When the house stands, put my name on the block inside. Then come tell me with words. I like hearing good news twice. Or once. Once is fine.
+aetherhaven.dialogue.aetherhaven_clown.pip_house_accepted.c0=You will hear it from me.
+
+aetherhaven.dialogue.aetherhaven_clown.pip_house_remind.speaker=Bozo Bleak
+aetherhaven.dialogue.aetherhaven_clown.pip_house_remind.body=Take your time. When the house is ready, write my name inside and come back. I am not rushing. I am just standing here looking patient.
+aetherhaven.dialogue.aetherhaven_clown.pip_house_remind.c0=Understood.
+
+aetherhaven.dialogue.aetherhaven_clown.pip_house_finish.speaker=Bozo Bleak
+aetherhaven.dialogue.aetherhaven_clown.pip_house_finish.body=A real door. A real bed. I can go home without the whole town watching me frown. This will do.
+aetherhaven.dialogue.aetherhaven_clown.pip_house_finish.c0=Glad you got a proper place.
+
+aetherhaven.dialogue.aetherhaven_clown.gift.love=Huh. That one actually helped. Do not get used to me saying that.
+aetherhaven.dialogue.aetherhaven_clown.gift.like=Not bad. I will keep it. Try not to look so proud.
+aetherhaven.dialogue.aetherhaven_clown.gift.neutral=Fine. I will take it. The bar was on the floor.
+aetherhaven.dialogue.aetherhaven_clown.gift.dislike=No. That one goes back to wherever it came from.
+
+aetherhaven.dialogue.aetherhaven_clown.birthday.greeting=It is my birthday. Pretend to be surprised. I already did.
+aetherhaven.dialogue.aetherhaven_clown.gift.love.birthday=Birthday gift and a good one. I might almost smile for real.
+aetherhaven.dialogue.aetherhaven_clown.gift.like.birthday=A decent birthday gift. Keep this up and I will owe you a better joke.
+aetherhaven.dialogue.aetherhaven_clown.gift.neutral.birthday=Thanks. Even a plain gift on my birthday still counts.
+aetherhaven.dialogue.aetherhaven_clown.gift.dislike.birthday=It is my birthday and you brought that. Bold. I still noticed the thought.

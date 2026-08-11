@@ -1843,6 +1843,9 @@ public final class InnPoolService {
         if (AetherhavenConstants.NPC_PYROTECHNIC.equals(roleId)) {
             return town.hasQuestActive(AetherhavenConstants.QUEST_PYROTECHNIC_SHOP);
         }
+        if (AetherhavenConstants.NPC_CLOWN.equals(roleId)) {
+            return town.hasQuestActive(AetherhavenConstants.QUEST_CLOWN_TENT);
+        }
         if (AetherhavenConstants.NPC_FLORIST.equals(roleId)) {
             return town.hasQuestActive(AetherhavenConstants.QUEST_FLORIST_SHOP);
         }
@@ -1865,6 +1868,7 @@ public final class InnPoolService {
             || town.hasQuestActive(AetherhavenConstants.QUEST_BARN)
             || town.hasQuestActive(AetherhavenConstants.QUEST_CRYSTAL_KEEPERS_SHOP)
             || town.hasQuestActive(AetherhavenConstants.QUEST_PYROTECHNIC_SHOP)
+            || town.hasQuestActive(AetherhavenConstants.QUEST_CLOWN_TENT)
             || town.hasQuestActive(AetherhavenConstants.QUEST_FLORIST_SHOP)
             || town.hasQuestActive(AetherhavenConstants.QUEST_CHEF_RESTAURANT)
             || town.hasQuestActive(AetherhavenConstants.QUEST_BUILDERS_HUT)
@@ -1938,6 +1942,9 @@ public final class InnPoolService {
         }
         if (town.hasQuestActive(AetherhavenConstants.QUEST_PYROTECHNIC_SHOP)) {
             out.add(AetherhavenConstants.NPC_PYROTECHNIC);
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_CLOWN_TENT)) {
+            out.add(AetherhavenConstants.NPC_CLOWN);
         }
         if (town.hasQuestActive(AetherhavenConstants.QUEST_FLORIST_SHOP)) {
             out.add(AetherhavenConstants.NPC_FLORIST);
@@ -2318,6 +2325,9 @@ public final class InnPoolService {
             } else if (AetherhavenConstants.NPC_PYROTECHNIC.equals(roleId)) {
                 constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_BOMB_SHOP;
                 residentKind = TownVillagerBinding.KIND_PYROTECHNIC;
+            } else if (AetherhavenConstants.NPC_CLOWN.equals(roleId)) {
+                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_CLOWN_TENT;
+                residentKind = TownVillagerBinding.KIND_CLOWN;
             } else if (AetherhavenConstants.NPC_FLORIST.equals(roleId)) {
                 constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_FLOWER_SHOP;
                 residentKind = TownVillagerBinding.KIND_FLORIST;

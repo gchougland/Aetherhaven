@@ -25,7 +25,7 @@
       "Type": "Fixed",
       "Trade": {
         "Output": { "ItemId": "Aetherhaven_Villager_Cosmetic_Clown_Nose", "Quantity": 1 },
-        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Summer", "Quantity": 5 }],
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Summer", "Quantity": 8 }],
         "Stock": 4
       }
     },
@@ -33,7 +33,15 @@
       "Type": "Fixed",
       "Trade": {
         "Output": { "ItemId": "Aetherhaven_Villager_Cosmetic_Red_Afro", "Quantity": 1 },
-        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Summer", "Quantity": 8 }],
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Summer", "Quantity": 11 }],
+        "Stock": 3
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Aetherhaven_Villager_Cosmetic_Jester_Hat", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Summer", "Quantity": 10 }],
         "Stock": 3
       }
     }

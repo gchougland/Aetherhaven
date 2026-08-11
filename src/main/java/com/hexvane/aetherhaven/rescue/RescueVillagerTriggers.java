@@ -34,6 +34,18 @@ public final class RescueVillagerTriggers {
             AetherhavenConstants.PYROTECHNIC_RESCUE_VANISH_PARTICLE_SYSTEM_ID,
             AetherhavenConstants.PYROTECHNIC_RESCUE_VANISH_SOUND_EVENT_ID,
             "Pyrotechnic"
+        ),
+        new RescueVillagerTrigger(
+            AetherhavenConstants.CLOWN_WHEEL_RESCUE_BLOCK_TYPE_ID,
+            AetherhavenConstants.QUEST_CLOWN_RESCUE,
+            AetherhavenConstants.NPC_CLOWN_RESCUE,
+            TownVillagerBinding.KIND_RESCUE_CLOWN,
+            "aetherhaven_clown_rescue",
+            0,
+            0,
+            AetherhavenConstants.CLOWN_RESCUE_VANISH_PARTICLE_SYSTEM_ID,
+            AetherhavenConstants.CLOWN_RESCUE_VANISH_SOUND_EVENT_ID,
+            "Clown"
         )
     );
 

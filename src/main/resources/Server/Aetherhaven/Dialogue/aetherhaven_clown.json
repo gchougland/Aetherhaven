@@ -1,0 +1,413 @@
+{
+  "id": "aetherhaven_clown",
+  "entry": "main_hub",
+  "nodes": {
+    "main_hub": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.speaker",
+      "bodyMode": "villager_greeting",
+      "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.main_hub.fallback",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.offer",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              },
+              {
+                "type": "player_holds_any_item"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "giftDisableWhenNotAllowed": true,
+          "next": "gift_confirm"
+        },
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.c_house",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_completed",
+                "questId": "q_clown_tent"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "or",
+                  "conditions": [
+                    {
+                      "type": "town_quest_active",
+                      "questId": "q_house_clown"
+                    },
+                    {
+                      "type": "town_quest_completed",
+                      "questId": "q_house_clown"
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "pip_house_offer"
+        },
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.c_house_done",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_clown"
+              },
+              {
+                "type": "town_npc_home_resident_house"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_house_clown"
+            }
+          ],
+          "next": "pip_house_finish"
+        },
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.c_house_remind",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_clown"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_npc_home_resident_house"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "pip_house_remind"
+        },
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.c_tent_done",
+          "condition": {
+            "type": "town_quest_completed",
+            "questId": "q_clown_tent"
+          },
+          "next": "pip_done"
+        },
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.c_tent_complete",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_clown_tent"
+              },
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_clown_tent"
+              }
+            ]
+          },
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_clown_tent"
+            }
+          ],
+          "next": "pip_done"
+        },
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.c_tent_building",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_clown_tent"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_has_complete_plot",
+                  "constructionId": "plot_clown_tent"
+                }
+              }
+            ]
+          },
+          "next": "pip_building"
+        },
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.c_tent_offer",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_completed",
+                  "questId": "q_clown_tent"
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_active",
+                  "questId": "q_clown_tent"
+                }
+              }
+            ]
+          },
+          "next": "pip_quest_tent"
+        },
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.c_goodbye",
+          "next": null
+        }
+      ]
+    },
+    "pip_quest_tent": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_quest_tent.speaker",
+      "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_quest_tent.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_quest_tent.c0",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_clown_tent"
+            }
+          ],
+          "next": "pip_tent_accepted"
+        },
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_quest_tent.c1",
+          "next": null
+        }
+      ]
+    },
+    "pip_tent_accepted": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_tent_accepted.speaker",
+      "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_tent_accepted.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_tent_accepted.c0",
+          "next": null
+        }
+      ]
+    },
+    "pip_building": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_building.speaker",
+      "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_building.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_building.c0",
+          "actions": [
+            {
+              "type": "abandon_quest",
+              "id": "q_clown_tent"
+            }
+          ],
+          "next": "pip_abandoned"
+        },
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_building.c1",
+          "next": null
+        }
+      ]
+    },
+    "pip_abandoned": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_abandoned.speaker",
+      "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_abandoned.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_abandoned.c0",
+          "next": null
+        }
+      ]
+    },
+    "pip_done": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_done.speaker",
+      "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_done.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_done.c0",
+          "next": null
+        }
+      ]
+    },
+    "pip_house_offer": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_house_offer.speaker",
+      "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_house_offer.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_house_offer.c0",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_house_clown"
+            }
+          ],
+          "next": "pip_house_accepted"
+        },
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_house_offer.c1",
+          "next": null
+        }
+      ]
+    },
+    "pip_house_accepted": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_house_accepted.speaker",
+      "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_house_accepted.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_house_accepted.c0",
+          "next": null
+        }
+      ]
+    },
+    "pip_house_remind": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_house_remind.speaker",
+      "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_house_remind.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_house_remind.c0",
+          "next": null
+        }
+      ]
+    },
+    "pip_house_finish": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_house_finish.speaker",
+      "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_house_finish.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_house_finish.c0",
+          "next": null
+        }
+      ]
+    },
+    "gift_confirm": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.speaker",
+      "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmBody",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmYes",
+          "actions": [
+            {
+              "type": "gift_villager",
+              "reactionNodeLove": "gift_love",
+              "reactionNodeLike": "gift_like",
+              "reactionNodeNeutral": "gift_neutral",
+              "reactionNodeDislike": "gift_dislike"
+            }
+          ],
+          "next": "main_hub"
+        },
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmNo",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_love": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.speaker",
+      "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.gift.love",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_like": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.speaker",
+      "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.gift.like",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_neutral": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.speaker",
+      "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.gift.neutral",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_dislike": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.speaker",
+      "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.gift.dislike",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_love_birthday": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.speaker",
+      "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.gift.love.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_like_birthday": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.speaker",
+      "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.gift.like.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_neutral_birthday": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.speaker",
+      "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.gift.neutral.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_dislike_birthday": {
+      "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.speaker",
+      "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.gift.dislike.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    }
+  }
+}

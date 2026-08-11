@@ -32,13 +32,6 @@
       "yawDegrees": -131.81305
     },
     {
-      "residentKind": "innkeeper",
-      "localX": 4,
-      "localY": 5,
-      "localZ": 11,
-      "yawDegrees": 23.08851
-    },
-    {
       "residentKind": "florist",
       "localX": 3,
       "localY": 5,
@@ -169,11 +162,6 @@
     }
   ],
   "whackSpawns": [
-    {
-      "localX": 12,
-      "localY": 6,
-      "localZ": -6
-    },
     {
       "localX": -9,
       "localY": 7,

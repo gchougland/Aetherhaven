@@ -1,9 +1,13 @@
 package com.hexvane.aetherhaven.festival.carnival;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import com.hexvane.aetherhaven.festival.FestivalPrefabSwapService;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
@@ -98,10 +102,58 @@ public final class CarnivalWheelPlacementService {
         }
 
         float facingYaw = rotationToYawRadians(yaw);
-        UUID faceUuid = spawnFace(entityStore.getStore(), townId, center, facingYaw);
+        boolean specialFace = isSpecialWheelFace(world, plugin, townId);
+        UUID faceUuid = spawnFace(entityStore.getStore(), townId, center, facingYaw, specialFace);
         CarnivalWheelSession session = CarnivalWheelSessionIndex.getOrCreate(townId);
         session.clearGameplay();
         session.setFaceEntityUuid(faceUuid);
+    }
+
+    /** True when the town has not unlocked the clown yet (special blue wedge texture). */
+    public static boolean isSpecialWheelFace(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID townId
+    ) {
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.getTown(townId);
+        return town == null || !town.hasQuestCompleted(AetherhavenConstants.QUEST_CLOWN_RESCUE);
+    }
+
+    /**
+     * World position suitable for spawning the clown rescue beside the wheel face (or block center fallback).
+     */
+    @Nullable
+    public static Vector3d resolveClownStandNearWheel(@Nonnull World world, @Nonnull UUID townId) {
+        CarnivalWheelSession session = CarnivalWheelSessionIndex.get(townId);
+        UUID faceUuid = session != null ? session.getFaceEntityUuid() : null;
+        var entityStore = world.getEntityStore();
+        if (entityStore != null && faceUuid != null) {
+            Ref<EntityStore> faceRef = entityStore.getStore().getExternalData().getRefFromUUID(faceUuid);
+            if (faceRef != null && faceRef.isValid()) {
+                TransformComponent tc =
+                    entityStore.getStore().getComponent(faceRef, TransformComponent.getComponentType());
+                CarnivalWheelFaceComponent face =
+                    entityStore.getStore().getComponent(faceRef, CarnivalWheelFaceComponent.getComponentType());
+                if (tc != null) {
+                    Vector3d pos = tc.getPosition();
+                    float yaw = face != null ? face.getBaseYaw() : 0f;
+                    // Left of the wheel as you face it (perpendicular to facing), not behind the wall.
+                    double dist = 2.0;
+                    double ox = -Math.cos(yaw) * dist;
+                    double oz = Math.sin(yaw) * dist;
+                    int bx = (int) Math.floor(pos.x + ox);
+                    int bz = (int) Math.floor(pos.z + oz);
+                    int searchTop = (int) Math.floor(pos.y) + 2;
+                    int feetY = com.hexvane.aetherhaven.autonomy.VillagerBlockUtil.findStandY(world, bx, bz, searchTop);
+                    if (feetY == Integer.MIN_VALUE) {
+                        feetY = Math.max(0, (int) Math.floor(pos.y) - 1);
+                    }
+                    return new Vector3d(bx + 0.5, feetY, bz + 0.5);
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -127,6 +179,104 @@ public final class CarnivalWheelPlacementService {
         if (orphan != null) {
             session.setFaceEntityUuid(orphan);
         }
+    }
+
+    /**
+     * After the clown is unlocked, swap any live special face for the normal red/white face without respawning the
+     * wall block. Safe to call from {@code world.execute}.
+     */
+    public static void refreshFaceAfterClownUnlock(@Nonnull World world, @Nonnull UUID townId) {
+        refreshFaceModel(world, townId, false);
+    }
+
+    /** Swap the live wheel face to special (blue wedge) or normal texture. */
+    public static void refreshFaceModel(@Nonnull World world, @Nonnull UUID townId, boolean specialFace) {
+        var entityStore = world.getEntityStore();
+        if (entityStore == null || !CarnivalWheelFaceComponent.isRegistered()) {
+            return;
+        }
+        Store<EntityStore> store = entityStore.getStore();
+        bindSessionToLiveFace(world, townId);
+        CarnivalWheelSession session = CarnivalWheelSessionIndex.getOrCreate(townId);
+        UUID faceUuid = session.getFaceEntityUuid();
+        if (faceUuid == null) {
+            faceUuid = findFaceUuidForTown(world, townId);
+            if (faceUuid != null) {
+                session.setFaceEntityUuid(faceUuid);
+            }
+        }
+        if (faceUuid == null) {
+            return;
+        }
+        Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(faceUuid);
+        if (ref == null || !ref.isValid()) {
+            return;
+        }
+        String modelId = specialFace ? CarnivalIds.WHEEL_FACE_MODEL_SPECIAL : CarnivalIds.WHEEL_FACE_MODEL;
+        PersistentModel persistent = store.getComponent(ref, PersistentModel.getComponentType());
+        if (persistent != null) {
+            Model.ModelReference pref = persistent.getModelReference();
+            if (pref != null && modelId.equals(pref.getModelAssetId())) {
+                return;
+            }
+        }
+        ModelAsset asset = ModelAsset.getAssetMap().getAsset(modelId);
+        if (asset == null) {
+            LOGGER.atWarning().log("Carnival wheel face model missing: %s", modelId);
+            return;
+        }
+        Model model = Model.createScaledModel(asset, CarnivalIds.WHEEL_FACE_SCALE);
+        store.putComponent(ref, ModelComponent.getComponentType(), new ModelComponent(model));
+        store.putComponent(
+            ref,
+            PersistentModel.getComponentType(),
+            new PersistentModel(
+                new Model.ModelReference(
+                    modelId,
+                    model.getScale(),
+                    model.getRandomAttachmentIds(),
+                    false
+                )
+            )
+        );
+        snapFaceRoll(store, session, CarnivalIds.WHEEL_IDLE_OFFSET_RAD);
+    }
+
+    /** Instantly sets the face prop roll (e.g. snap to idle before a new spin). */
+    public static void snapFaceRoll(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CarnivalWheelSession session,
+        float roll
+    ) {
+        UUID faceUuid = session.getFaceEntityUuid();
+        if (faceUuid == null) {
+            return;
+        }
+        Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(faceUuid);
+        if (ref == null || !ref.isValid()) {
+            return;
+        }
+        CarnivalWheelFaceComponent face = store.getComponent(ref, CarnivalWheelFaceComponent.getComponentType());
+        TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
+        HeadRotation head = store.getComponent(ref, HeadRotation.getComponentType());
+        if (face == null || transform == null) {
+            return;
+        }
+        face.setRoll(roll);
+        Rotation3f rot = new Rotation3f(0f, face.getBaseYaw(), roll);
+        Ref<com.hypixel.hytale.server.core.universe.world.storage.ChunkStore> chunkRef = transform.getChunkRef();
+        @SuppressWarnings({ "deprecation", "removal" })
+        WorldChunk chunk = transform.getChunk();
+        TransformComponent updated = new TransformComponent(transform.getPosition(), rot);
+        if (chunkRef != null) {
+            updated.setChunkLocation(chunkRef, chunk);
+        }
+        store.putComponent(ref, TransformComponent.getComponentType(), updated);
+        if (head != null) {
+            head.teleportRotation(rot);
+            store.putComponent(ref, HeadRotation.getComponentType(), head);
+        }
+        store.putComponent(ref, CarnivalWheelFaceComponent.getComponentType(), face);
     }
 
     public static void remove(@Nonnull World world, @Nonnull UUID townId) {
@@ -215,11 +365,13 @@ public final class CarnivalWheelPlacementService {
         @Nonnull Store<EntityStore> store,
         @Nonnull UUID townId,
         @Nonnull Vector3d center,
-        float facingYaw
+        float facingYaw,
+        boolean specialFace
     ) {
-        ModelAsset asset = ModelAsset.getAssetMap().getAsset(CarnivalIds.WHEEL_FACE_MODEL);
+        String modelId = specialFace ? CarnivalIds.WHEEL_FACE_MODEL_SPECIAL : CarnivalIds.WHEEL_FACE_MODEL;
+        ModelAsset asset = ModelAsset.getAssetMap().getAsset(modelId);
         if (asset == null) {
-            LOGGER.atWarning().log("Carnival wheel face model missing: %s", CarnivalIds.WHEEL_FACE_MODEL);
+            LOGGER.atWarning().log("Carnival wheel face model missing: %s", modelId);
             return null;
         }
         Model model = Model.createScaledModel(asset, CarnivalIds.WHEEL_FACE_SCALE);
@@ -235,7 +387,7 @@ public final class CarnivalWheelPlacementService {
             PersistentModel.getComponentType(),
             new PersistentModel(
                 new Model.ModelReference(
-                    CarnivalIds.WHEEL_FACE_MODEL,
+                    modelId,
                     model.getScale(),
                     model.getRandomAttachmentIds(),
                     false

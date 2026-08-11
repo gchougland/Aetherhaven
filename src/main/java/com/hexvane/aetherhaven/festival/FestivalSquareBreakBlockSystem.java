@@ -49,11 +49,11 @@ public final class FestivalSquareBreakBlockSystem extends EntityEventSystem<Enti
             return;
         }
         Vector3i pos = event.getTargetBlock();
-        if (TownTerritoryGuard.shouldBypassPlayer(player, playerUuid, pos, store, ref)) {
-            return;
-        }
         World world = store.getExternalData().getWorld();
         if (!FestivalPlotProtection.isInsideFestivalSquare(plugin, world, pos)) {
+            return;
+        }
+        if (FestivalPlotProtection.isBuildAllowed(playerUuid)) {
             return;
         }
         event.setCancelled(true);

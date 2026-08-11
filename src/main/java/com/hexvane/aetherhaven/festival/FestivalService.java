@@ -82,6 +82,9 @@ public final class FestivalService {
                 || !FestivalWindow.isActive(running, gameTime);
             if (expired) {
                 endFestival(world, store, plugin, tm, town);
+            } else {
+                // Spot POIs are runtime-only. Rebuild them after reloads / plot refresh so villagers keep attending.
+                ensureActiveFestivalSpots(world, store, plugin, tm, town, running);
             }
             return;
         }
@@ -183,6 +186,35 @@ public final class FestivalService {
         if (running != null) {
             announce(store, town, LANG + "ended", running, null);
             LOGGER.atInfo().log("Festival %s ended for town %s", running.getId(), town.getTownId());
+        }
+    }
+
+    /**
+     * Rebuilds missing stand markers for a festival that is already marked active. Without this, a world reload or
+     * festival-square POI refresh leaves {@code activeFestivalSpotPoiIds} pointing at nothing and attendees resume
+     * normal work (Elder at the town hall, and so on).
+     */
+    public static void ensureActiveFestivalSpots(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownManager tm,
+        @Nonnull TownRecord town,
+        @Nonnull FestivalDefinition festival
+    ) {
+        PlotInstance square = null;
+        UUID activePlotId = town.getActiveFestivalPlotId();
+        if (activePlotId != null) {
+            square = town.findPlotById(activePlotId);
+        }
+        if (square == null) {
+            square = findFestivalSquare(plugin, town);
+        }
+        if (square == null) {
+            return;
+        }
+        if (FestivalSpotService.ensureSpots(world, plugin, tm, town, square, festival)) {
+            FestivalAttendanceService.sendAttendeesToFestival(world, store, plugin, town, square, festival);
         }
     }
 

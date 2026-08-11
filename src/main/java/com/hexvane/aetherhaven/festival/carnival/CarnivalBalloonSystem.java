@@ -192,6 +192,7 @@ public final class CarnivalBalloonSystem extends EntityTickingSystem<EntityStore
         if (playerUuid != null) {
             CarnivalAnnounce.announceBalloonPopCount(store, playerUuid, session.getPopped());
         }
+        CarnivalResultSettlement.settleBalloonAndPresent(store, town, session);
     }
 
     private static boolean isDartProjectileFromPlayer(

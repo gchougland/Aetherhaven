@@ -192,5 +192,6 @@ public final class CarnivalWhackSystem extends EntityTickingSystem<EntityStore> 
             CarnivalWhackClubUtil.removeAllWhackersForPlayer(store, playerUuid);
             CarnivalAnnounce.announceWhackHitCount(store, playerUuid, session.getHits(), session.getSpawned());
         }
+        CarnivalResultSettlement.settleWhackAndPresent(store, town, session);
     }
 }

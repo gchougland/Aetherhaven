@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.festival.FestivalDefinition;
+import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.map.TeleporterWarpSanitizer;
 import com.hexvane.aetherhaven.placement.CharterRelocationService;
 import com.hexvane.aetherhaven.placement.PlotPlacementCommit;
@@ -214,6 +216,15 @@ public final class PlotLinkReconcileService {
         ShopSpotExtractor.registerForCompletedBuild(world, plugin, entityStore, town, plot.getPlotId(), plot);
         TouristPortalExtractor.registerForCompletedBuild(world, plugin, entityStore, town, plot.getPlotId(), plot);
         TeleporterWarpSanitizer.schedulePlotFootprintSanitize(world, plot.toFootprint());
+        String festivalId = town.getActiveFestivalId();
+        UUID festivalPlotId = town.getActiveFestivalPlotId();
+        if (festivalId != null && plot.getPlotId().equals(festivalPlotId)) {
+            FestivalDefinition festival = plugin.getFestivalCatalog().get(festivalId);
+            if (festival != null) {
+                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                FestivalService.ensureActiveFestivalSpots(world, entityStore, plugin, tm, town, festival);
+            }
+        }
     }
 
     private static void mergePlotRepair(@Nonnull TownRepairReport target, @Nonnull PlotRepairReport source) {

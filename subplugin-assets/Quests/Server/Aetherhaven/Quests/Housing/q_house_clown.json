@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "id": "q_house_clown",
+  "category": "housing",
+  "grantPlotTokenConstructionId": "plot_house",
+  "title": "Pip's home",
+  "description": "Even a cynical clown needs somewhere quiet to take the nose off.",
+  "assignNpcRoleId": "Aetherhaven_Clown",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "plot_token_received",
+      "text": "Take the house plot token from Pip.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_clown.objective.token"
+    },
+    {
+      "id": "build",
+      "kind": "construction_built",
+      "constructionId": "plot_house",
+      "text": "Stake and build the house prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_clown.objective.build"
+    },
+    {
+      "id": "assign",
+      "kind": "assign_house_resident",
+      "npcRoleId": "Aetherhaven_Clown",
+      "text": "Assign Pip as resident on the house management block.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_clown.objective.assign"
+    },
+    {
+      "id": "talk",
+      "kind": "dialogue_turn_in",
+      "text": "Talk to Pip.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_clown.objective.talk"
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Clown",
+      "amount": 10,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 16,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [],
+    "onComplete": [],
+    "onAbandon": []
+  },
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_clown.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_clown.description"
+}

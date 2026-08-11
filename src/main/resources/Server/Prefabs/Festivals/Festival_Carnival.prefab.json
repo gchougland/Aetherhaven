@@ -95126,7 +95126,6 @@
       "y": 6,
       "z": 1,
       "name": "Wood_Hardwood_Fence",
-      "support": 15,
       "rotation": 1
     },
     {
@@ -95798,7 +95797,6 @@
       "y": 6,
       "z": 3,
       "name": "Wood_Hardwood_Fence",
-      "support": 15,
       "rotation": 1
     },
     {
@@ -96134,7 +96132,6 @@
       "y": 6,
       "z": 4,
       "name": "Wood_Hardwood_Fence",
-      "support": 15,
       "rotation": 1
     },
     {
@@ -646649,7 +646646,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "dUjjWScsPcCJ2hkOLJyV8w==",
+            "$binary": "1tEaBMZ2O3KYhXZQ8C8lGg==",
             "$type": "04"
           }
         },
@@ -646691,7 +646688,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "aMtABGkfPcqYmfAOTBqBOQ==",
+            "$binary": "zZ39dP06Mmed1epISf9IQA==",
             "$type": "04"
           }
         },
@@ -646733,7 +646730,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "mXSKgtBgMQy+C6pEvW2Tng==",
+            "$binary": "43pjbBsNMaGAnDAb+Ry0eA==",
             "$type": "04"
           }
         },
@@ -646772,7 +646769,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "asSwmsEDOUqK6tIPTV4bGQ==",
+            "$binary": "esMOlOt1MjKol/HnSvwJOA==",
             "$type": "04"
           }
         },
@@ -646818,7 +646815,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "CdE1dwW2PyqP1VJaTqfUtw==",
+            "$binary": "qd2u7OfWOo6YwupZrxDNXQ==",
             "$type": "04"
           }
         },
@@ -646864,7 +646861,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "s3c2/9pCMf+iNcdSlwzliA==",
+            "$binary": "tBSPwD/xNrKJr4PuomslLw==",
             "$type": "04"
           }
         },
@@ -646910,7 +646907,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "9kGDgbQePJ66o3kn2iHDEA==",
+            "$binary": "QVeWEGd+OvqG8UpafvhzwA==",
             "$type": "04"
           }
         },
@@ -646956,7 +646953,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "A9Oec30TNB+u/kMQGoeOSA==",
+            "$binary": "E2CPUmzZO/eD9gC9FjzF7Q==",
             "$type": "04"
           }
         },
@@ -647002,7 +646999,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "GfRXpfi9NqGY89gEtNeFEw==",
+            "$binary": "VIrFH4Q4O/+NUbLb0qQRWg==",
             "$type": "04"
           }
         },
@@ -647048,7 +647045,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "2BnZ4k76N2uzbxjtv9O13w==",
+            "$binary": "SvkyBAWyOUCMCZ2mUAfP4g==",
             "$type": "04"
           }
         },
@@ -647094,7 +647091,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "ToYfXcq4MYC/+IVwIICcWg==",
+            "$binary": "7Gyhgy90NsWZW0gKhdjIJA==",
             "$type": "04"
           }
         },
@@ -647140,7 +647137,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "TcEME6NQOdGjKYKHSFsssw==",
+            "$binary": "zUnvYWMoPSyORYlb0ETnkA==",
             "$type": "04"
           }
         },
@@ -647230,7 +647227,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "TCLXLjl9MRiGai5UcXjkvA==",
+            "$binary": "hG4wIUmdMRWOiTsIeHiJTQ==",
             "$type": "04"
           }
         },
@@ -647276,7 +647273,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "b/0+9hAtOvakUPPjJC8BXw==",
+            "$binary": "5pT8KOPYNIKESb2Jeq49mA==",
             "$type": "04"
           }
         },
@@ -647322,7 +647319,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "VF4KhVGUMyqEC0RHBGaKvQ==",
+            "$binary": "Jpvw2kvKOWCHMYabz6CpHw==",
             "$type": "04"
           }
         },
@@ -647368,7 +647365,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "ElM91pBnP92blqywSL0Zcw==",
+            "$binary": "HZqkpGqWMaa01TctwRhYLw==",
             "$type": "04"
           }
         },
@@ -647414,7 +647411,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "ZYrYnWdtPAugAhxT2yxUZA==",
+            "$binary": "ZQkeNieeMfiwmVMhz7tLyg==",
             "$type": "04"
           }
         },
@@ -647460,7 +647457,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "YsY7buXJM5C5FAUxDazpYg==",
+            "$binary": "AHY856+OMaStGszdu02ldA==",
             "$type": "04"
           }
         },
@@ -647550,7 +647547,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "fs37HCWmOgWQnTgtkLnO2g==",
+            "$binary": "0IO3lGmGMH6ORv2O30/Gdw==",
             "$type": "04"
           }
         },
@@ -647596,7 +647593,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "ctFtH3ovPXSN39wB0gnHdg==",
+            "$binary": "tHIbqpBkM0m/oxck5Dqdsg==",
             "$type": "04"
           }
         },
@@ -647642,7 +647639,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "j4BKQxV2OC68xdIh2KikBw==",
+            "$binary": "v+bN45xgOxyH3NoKhh9PXQ==",
             "$type": "04"
           }
         },
@@ -647688,7 +647685,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "e1bjbWknO2KTOZg0KRWf8A==",
+            "$binary": "gv7HMIaCMT2/RBAWW+EkTQ==",
             "$type": "04"
           }
         },
@@ -647734,7 +647731,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "wIt4PLC+Oi6zmbMTYimZCg==",
+            "$binary": "Nf4r8WKDOMGRoqEEhJJPNQ==",
             "$type": "04"
           }
         },
@@ -647780,7 +647777,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "IaqwBYTMPXqfYHSc8YSL+Q==",
+            "$binary": "GBcO43X1MvyF0wpIfOcuJA==",
             "$type": "04"
           }
         },
@@ -647958,7 +647955,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "SQs7ySUwOT27pjccoA6xUA==",
+            "$binary": "hZC3k2u8NyWK+GfjiyyAvQ==",
             "$type": "04"
           }
         },
@@ -647984,6 +647981,44 @@
     },
     {
       "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Aetherhaven_Festival_Balloon_Green",
+            "Scale": 1.0,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": -4.583160400390625,
+            "Y": 7.000457763671875,
+            "Z": 4.5152587890625
+          },
+          "Rotation": {
+            "Pitch": -0.15019457042217255,
+            "Yaw": 0.889103353023529,
+            "Roll": 0.12082847207784653
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "wpnXwpjdNympzktBE1WstA==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": -0.15019457042217255,
+            "Yaw": 0.8891023993492126,
+            "Roll": 0.12082874029874802
+          }
+        }
+      }
+    },
+    {
+      "Components": {
         "Invulnerable": {},
         "PreventItemMerging": {},
         "Prop": {},
@@ -648004,7 +648039,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "Cv7wZjGTM76WkHWcyPjzzw==",
+            "$binary": "qYRzCG6tPfWLziStoQ56eQ==",
             "$type": "04"
           }
         },
@@ -648030,6 +648065,310 @@
     },
     {
       "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Aetherhaven_Festival_Balloon",
+            "Scale": 1.0,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": -4.5442352294921875,
+            "Y": 6.962066650390625,
+            "Z": 1.476654052734375
+          },
+          "Rotation": {
+            "Pitch": -0.39860519766807556,
+            "Yaw": 1.8984229564666748,
+            "Roll": -0.13115960359573364
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "NHnx85wTPjG1IFIaFPEOtg==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": -0.3986039161682129,
+            "Yaw": 1.898423433303833,
+            "Roll": -0.13115918636322021
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Aetherhaven_Festival_Balloon_Red",
+            "Scale": 1.0,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": -4.52862548828125,
+            "Y": 6.8877105712890625,
+            "Z": -1.521270751953125
+          },
+          "Rotation": {
+            "Pitch": 0.21547526121139526,
+            "Yaw": -3.148256301879883,
+            "Roll": -0.24074134230613708
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "8BInv73eOpqjt6yz4salxQ==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.21547465026378632,
+            "Yaw": -3.1482551097869873,
+            "Roll": -0.24074144661426544
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Aetherhaven_Festival_Balloon",
+            "Scale": 1.0,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": -4.523345947265625,
+            "Y": 6.962066650390625,
+            "Z": -1.4557647705078125
+          },
+          "Rotation": {
+            "Pitch": -0.39860519766807556,
+            "Yaw": -2.8139660358428955,
+            "Roll": -0.13115960359573364
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "StlugCmdPfiSBtHHZhUbTQ==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": -0.3986039161682129,
+            "Yaw": -2.8139655590057373,
+            "Roll": -0.13115918636322021
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Aetherhaven_Festival_Balloon_Green",
+            "Scale": 1.0,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": -4.4847412109375,
+            "Y": 7.000457763671875,
+            "Z": 1.583160400390625
+          },
+          "Rotation": {
+            "Pitch": -0.15019457042217255,
+            "Yaw": 2.459899663925171,
+            "Roll": 0.12082847207784653
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "86U172RRMIOUQwLzQ5hGHg==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": -0.15019457042217255,
+            "Yaw": 2.4598987102508545,
+            "Roll": 0.12082874029874802
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Aetherhaven_Festival_Balloon_Red",
+            "Scale": 1.0,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": -4.478729248046875,
+            "Y": 6.8877105712890625,
+            "Z": 1.47137451171875
+          },
+          "Rotation": {
+            "Pitch": 0.21547526121139526,
+            "Yaw": 1.5641326904296875,
+            "Roll": -0.24074134230613708
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "rOocWRhgNKiO1tHnVtOXhw==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.21547465026378632,
+            "Yaw": 1.564133882522583,
+            "Roll": -0.24074144661426544
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Aetherhaven_Festival_Balloon",
+            "Scale": 1.0,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": -4.476654052734375,
+            "Y": 6.962066650390625,
+            "Z": 4.4557647705078125
+          },
+          "Rotation": {
+            "Pitch": -0.39860519766807556,
+            "Yaw": 0.32762661576271057,
+            "Roll": -0.13115960359573364
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "uBXCcwjiP6++98dJjqdldw==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": -0.3986039161682129,
+            "Yaw": 0.3276270925998688,
+            "Roll": -0.13115918636322021
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Aetherhaven_Festival_Balloon_Red",
+            "Scale": 1.0,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": -4.47137451171875,
+            "Y": 6.8877105712890625,
+            "Z": 4.521270751953125
+          },
+          "Rotation": {
+            "Pitch": 0.21547526121139526,
+            "Yaw": -0.006663636304438114,
+            "Roll": -0.24074134230613708
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "NszGE3dIOrSVCXeGZ4dODA==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.21547465026378632,
+            "Yaw": -0.006662444211542606,
+            "Roll": -0.24074144661426544
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Aetherhaven_Festival_Balloon_Green",
+            "Scale": 1.0,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": -4.416839599609375,
+            "Y": 7.000457763671875,
+            "Z": -1.5152587890625
+          },
+          "Rotation": {
+            "Pitch": -0.15019457042217255,
+            "Yaw": -2.2524893283843994,
+            "Roll": 0.12082847207784653
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "mEeEZ7nNPQC33TjTXfcWyA==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": -0.15019457042217255,
+            "Yaw": -2.252490282058716,
+            "Roll": 0.12082874029874802
+          }
+        }
+      }
+    },
+    {
+      "Components": {
         "Invulnerable": {},
         "PreventItemMerging": {},
         "Prop": {},
@@ -648050,7 +648389,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "KD1GqTQCOu+1ke3TaFXZ2A==",
+            "$binary": "bpXsBFZTNsG/lify1QCK4Q==",
             "$type": "04"
           }
         },
@@ -648096,7 +648435,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "mj6J0XU2PymaEjeRoUpCnw==",
+            "$binary": "MNqpBfUiPkeZjMt6XMw4uA==",
             "$type": "04"
           }
         },
@@ -648274,7 +648613,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "skYAFXHsMHuc4o3ZxXpGsg==",
+            "$binary": "QMgcFBk4OHusxK3T3lh20Q==",
             "$type": "04"
           }
         },
@@ -648320,7 +648659,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "QVz6N1zVPlesyiZ+No3u9w==",
+            "$binary": "VRM3ghXVOPCiJGWajt4MdQ==",
             "$type": "04"
           }
         },
@@ -648366,7 +648705,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "Fy3DbU/6ML2MJ0aioNTKJQ==",
+            "$binary": "SkRS+wRAM/WfagLIXIRsiQ==",
             "$type": "04"
           }
         },
@@ -648412,7 +648751,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "wFJ1NzGiNsmLlx6X2KkSHw==",
+            "$binary": "M/l3owX9NDOo/Qu769UqqA==",
             "$type": "04"
           }
         },
@@ -648458,7 +648797,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "xLirL7Q6MMOxFyNjk+JM4w==",
+            "$binary": "U1vn049YOZWIXTVIjePO8g==",
             "$type": "04"
           }
         },
@@ -648548,7 +648887,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "90goh9JeNTKTNK+pCOdhzg==",
+            "$binary": "Rq0Ro0OOMiqaheaH4VArDQ==",
             "$type": "04"
           }
         },
@@ -648594,7 +648933,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "IWpCaxeMM8qC7qCZDgrffg==",
+            "$binary": "KH9HQpqtPRexrbs7sCLAfQ==",
             "$type": "04"
           }
         },
@@ -648640,7 +648979,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "29893ObGPzC1v0IGBz2xaQ==",
+            "$binary": "1gGE/uMpMq62XRWEnOudyA==",
             "$type": "04"
           }
         },
@@ -648686,7 +649025,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "wh8rUNZcNA6XbOU0ydFSFw==",
+            "$binary": "mbuCwdnFND2HdL+awcQnEA==",
             "$type": "04"
           }
         },
@@ -648732,7 +649071,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "HShSCLWRNZioKflZAWKcKg==",
+            "$binary": "WpQLpp5BPDi1utRxdwHZpA==",
             "$type": "04"
           }
         },
@@ -648778,7 +649117,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "ErT3HZgpMuexCoxcln7IXA==",
+            "$binary": "foj4YecUMNithmVgxGUdSw==",
             "$type": "04"
           }
         },
@@ -648824,7 +649163,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "bnO3BAPIPxW9Wy/psnzr3Q==",
+            "$binary": "P6j0ZQVWNLaaM7ut57adJg==",
             "$type": "04"
           }
         },
@@ -648870,7 +649209,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "uS8XEg2rPxaDNGgBywqdHg==",
+            "$binary": "5IWpleVvOd+P8/Bx55q4kQ==",
             "$type": "04"
           }
         },
@@ -648916,7 +649255,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "R83mV9DJOECRXmTz/sKFcw==",
+            "$binary": "4lPqwrOFOgqnPNwQlOLc2g==",
             "$type": "04"
           }
         },
@@ -648962,7 +649301,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "Iicot11oNYOhLPGKTcQJjg==",
+            "$binary": "2EGwjOcJN0iWy2InfJLsnA==",
             "$type": "04"
           }
         },
@@ -649008,7 +649347,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "NieVJaZjPKKzuOHfq44/fw==",
+            "$binary": "80VCqwOGPvKjfy7iBZhyoQ==",
             "$type": "04"
           }
         },
@@ -649054,7 +649393,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "caYY8uEjPu6X5H8IWNXRGw==",
+            "$binary": "JNFAGRhzPymgWE3ApkzDnw==",
             "$type": "04"
           }
         },
@@ -649100,7 +649439,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "TQJh3a/OO8eh1mH53qkxhA==",
+            "$binary": "UnMTshhfOtOA0qjlbUMS8w==",
             "$type": "04"
           }
         },
@@ -649122,6 +649461,66 @@
           "RemovedByPlayerPickup": false
         },
         "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "Transform": {
+          "Position": {
+            "X": 1.0,
+            "Y": 17.0,
+            "Z": 7.0
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0,
+            "Roll": 0.0
+          }
+        },
+        "TriggerVolume": {
+          "Shape": {
+            "Type": "Box",
+            "Min": {
+              "X": -14.0,
+              "Y": -12.0,
+              "Z": -14.0
+            },
+            "Max": {
+              "X": 14.0,
+              "Y": 12.0,
+              "Z": 14.0
+            }
+          },
+          "Effects": [
+            {
+              "Type": "SetMusic",
+              "Event": "ENTER",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "Track_Aetherhaven_WelcomeFeast",
+              "ClearMusic": false
+            },
+            {
+              "Type": "SetMusic",
+              "Event": "EXIT",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "",
+              "ClearMusic": true
+            }
+          ],
+          "Enabled": true,
+          "TargetTypes": [
+            "Player"
+          ],
+          "KeepLoaded": false,
+          "Color": {
+            "X": 0.800000011920929,
+            "Y": 0.0,
+            "Z": 0.24313725531101227
+          },
+          "PrefabIndex": 0
+        }
       }
     },
     {
@@ -649180,7 +649579,187 @@
             "Y": 0.0,
             "Z": 0.24313725531101227
           },
-          "PrefabIndex": 0
+          "PrefabIndex": 1
+        }
+      }
+    },
+    {
+      "Components": {
+        "Transform": {
+          "Position": {
+            "X": -10.0,
+            "Y": 17.0,
+            "Z": 2.0
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0,
+            "Roll": 0.0
+          }
+        },
+        "TriggerVolume": {
+          "Shape": {
+            "Type": "Box",
+            "Min": {
+              "X": -14.000002113941028,
+              "Y": -12.0,
+              "Z": -14.000002113941028
+            },
+            "Max": {
+              "X": 14.000002113941028,
+              "Y": 12.0,
+              "Z": 14.000002113941028
+            }
+          },
+          "Effects": [
+            {
+              "Type": "SetMusic",
+              "Event": "ENTER",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "Track_Aetherhaven_WelcomeFeast",
+              "ClearMusic": false
+            },
+            {
+              "Type": "SetMusic",
+              "Event": "EXIT",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "",
+              "ClearMusic": true
+            }
+          ],
+          "Enabled": true,
+          "TargetTypes": [
+            "Player"
+          ],
+          "KeepLoaded": false,
+          "Color": {
+            "X": 0.800000011920929,
+            "Y": 0.0,
+            "Z": 0.24313725531101227
+          },
+          "PrefabIndex": 2
+        }
+      }
+    },
+    {
+      "Components": {
+        "Transform": {
+          "Position": {
+            "X": -7.0,
+            "Y": 17.0,
+            "Z": 7.0
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0,
+            "Roll": 0.0
+          }
+        },
+        "TriggerVolume": {
+          "Shape": {
+            "Type": "Box",
+            "Min": {
+              "X": -14.000000611959447,
+              "Y": -12.0,
+              "Z": -14.000000611959447
+            },
+            "Max": {
+              "X": 14.000000611959447,
+              "Y": 12.0,
+              "Z": 14.000000611959447
+            }
+          },
+          "Effects": [
+            {
+              "Type": "SetMusic",
+              "Event": "ENTER",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "Track_Aetherhaven_WelcomeFeast",
+              "ClearMusic": false
+            },
+            {
+              "Type": "SetMusic",
+              "Event": "EXIT",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "",
+              "ClearMusic": true
+            }
+          ],
+          "Enabled": true,
+          "TargetTypes": [
+            "Player"
+          ],
+          "KeepLoaded": false,
+          "Color": {
+            "X": 0.800000011920929,
+            "Y": 0.0,
+            "Z": 0.24313725531101227
+          },
+          "PrefabIndex": 3
+        }
+      }
+    },
+    {
+      "Components": {
+        "Transform": {
+          "Position": {
+            "X": 1.0,
+            "Y": 17.0,
+            "Z": 4.0
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0,
+            "Roll": 0.0
+          }
+        },
+        "TriggerVolume": {
+          "Shape": {
+            "Type": "Box",
+            "Min": {
+              "X": -14.0,
+              "Y": -12.0,
+              "Z": -14.0
+            },
+            "Max": {
+              "X": 14.0,
+              "Y": 12.0,
+              "Z": 14.0
+            }
+          },
+          "Effects": [
+            {
+              "Type": "SetMusic",
+              "Event": "ENTER",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "Track_Aetherhaven_WelcomeFeast",
+              "ClearMusic": false
+            },
+            {
+              "Type": "SetMusic",
+              "Event": "EXIT",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "",
+              "ClearMusic": true
+            }
+          ],
+          "Enabled": true,
+          "TargetTypes": [
+            "Player"
+          ],
+          "KeepLoaded": false,
+          "Color": {
+            "X": 0.800000011920929,
+            "Y": 0.0,
+            "Z": 0.24313725531101227
+          },
+          "PrefabIndex": 4
         }
       }
     }

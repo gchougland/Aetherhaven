@@ -187,6 +187,10 @@ public final class AetherhavenCoreBootstrap {
             AetherhavenConstants.PERMISSION_TOWN_ADMIN,
             HytalePermissionsProvider.GROUP_ADMIN
         );
+        PermissionsModule.registerPermission(
+            AetherhavenConstants.PERMISSION_FESTIVAL_SQUARE_BUILD,
+            HytalePermissionsProvider.GROUP_ADMIN
+        );
     }
 
     /** After {@link NPCPlugin#PRIORITY_LOAD_NPC}; logs whether {@link AetherhavenConstants#NPC_TOWNSFOLK} validated. */

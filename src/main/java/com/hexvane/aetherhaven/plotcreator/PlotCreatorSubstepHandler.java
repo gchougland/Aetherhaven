@@ -648,6 +648,7 @@ public final class PlotCreatorSubstepHandler {
             }
             case TOURIST_VISIT_POI -> {
                 poi.getTags().add(AetherhavenConstants.POI_TAG_TOURIST_VISIT);
+                poi.setCapacity(1);
                 poi.setInteractionKind("SIT");
             }
             case PLANNING_DESK_POI -> {

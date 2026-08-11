@@ -27,6 +27,12 @@ aetherhaven.festival.command.ended=Ended the festival.
 aetherhaven.festival.command.noneRunning=No festival is running.
 aetherhaven.festival.command.noTown=Stand in a town to use this.
 aetherhaven.festival.command.noSquare=This town has no finished festival square.
+aetherhaven.festival.command.build.enabled=You can build and dig on the festival square now.
+aetherhaven.festival.command.build.disabled=The festival square is protected for you again.
+aetherhaven.festival.command.build.noPermission=You do not have permission to build on the festival square.
+aetherhaven.festival.command.resetclown.done=Clown unlock reset. Removed {removed} clown NPCs. The wheel is special again.
+aetherhaven.festival.command.wheelforce.set=Next wheel spin will land on octant {octant}. Blue clown octant is {clown}.
+aetherhaven.festival.command.wheelforce.cleared=Cleared the forced wheel octant.
 
 aetherhaven.festival.npc.lettuce.name=Springheart Lettuce
 aetherhaven.festival.npc.seedSeller.name=Seed Seller
@@ -44,6 +50,8 @@ aetherhaven.festival.carnival.banner.wheel.red.title=Red!
 aetherhaven.festival.carnival.banner.wheel.red.subtitle=Two summer festival tickets
 aetherhaven.festival.carnival.banner.wheel.white.title=White!
 aetherhaven.festival.carnival.banner.wheel.white.subtitle=Talk to the attendant to try again
+aetherhaven.festival.carnival.banner.wheel.blue.title=Blue!
+aetherhaven.festival.carnival.banner.wheel.blue.subtitle=A clown is waiting by the wheel
 aetherhaven.festival.carnival.chat.balloons.popped=You popped {count} balloons!
 aetherhaven.festival.carnival.chat.whack.hits=You hit {hits} of {total} goblins!
 

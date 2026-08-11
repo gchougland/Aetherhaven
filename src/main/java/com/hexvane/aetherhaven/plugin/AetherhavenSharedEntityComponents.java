@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
 import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerState;
 import com.hexvane.aetherhaven.patrol.GuardFollowPlayerState;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistState;
+import com.hexvane.aetherhaven.clown.ClownCheerAssistState;
 import com.hexvane.aetherhaven.monument.FounderMonumentStatueSkin;
 import com.hexvane.aetherhaven.purification.PurificationPowderPlayerComponent;
 import com.hexvane.aetherhaven.tourist.TouristAutonomyState;
@@ -39,6 +40,7 @@ public final class AetherhavenSharedEntityComponents {
         TouristAutonomyState.register(registry);
         // Villagers (doorway bypass) and Construction (builder assist) both need this at system register time.
         BuilderConstructionAssistState.register(registry);
+        ClownCheerAssistState.register(registry);
         // Villagers (NPC model resync excludes statues) and Construction (monument) both need this.
         FounderMonumentStatueSkin.register(registry);
         // Registered on core so /plugin unload of ReputationUnlocks does not unregister while players still have it.

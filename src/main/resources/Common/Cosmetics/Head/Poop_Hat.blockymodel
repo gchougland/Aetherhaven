@@ -3,7 +3,7 @@
     {
       "id": "1",
       "name": "Head",
-      "position": {"x": 16.71794, "y": 100.71514, "z": -14},
+      "position": {"x": 0, "y": 86, "z": -1},
       "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
       "shape": {
         "type": "none",
@@ -22,7 +22,7 @@
         {
           "id": "4",
           "name": "Poop",
-          "position": {"x": 0, "y": 18, "z": 0},
+          "position": {"x": 0, "y": 16, "z": 0},
           "orientation": {"x": 0, "y": 0.04362, "z": 0, "w": 0.99905},
           "shape": {
             "type": "box",

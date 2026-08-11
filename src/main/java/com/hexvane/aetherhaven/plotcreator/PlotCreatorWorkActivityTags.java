@@ -59,7 +59,7 @@ public final class PlotCreatorWorkActivityTags {
             case TownVillagerBinding.KIND_FARMER -> "water";
             case TownVillagerBinding.KIND_BLACKSMITH -> "smith";
             case TownVillagerBinding.KIND_RANCHER, TownVillagerBinding.KIND_BUILDER -> "craft";
-            case TownVillagerBinding.KIND_BARD -> "leisure";
+            case TownVillagerBinding.KIND_BARD, TownVillagerBinding.KIND_CLOWN -> "leisure";
             case TownVillagerBinding.KIND_INNKEEPER,
                 TownVillagerBinding.KIND_GUILD_MASTER,
                 TownVillagerBinding.KIND_MERCHANT,

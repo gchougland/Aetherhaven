@@ -111,6 +111,14 @@ public final class AetherhavenConstants {
     public static final String PYROTECHNIC_RESCUE_VANISH_PARTICLE_SYSTEM_ID = "Explosion_Small";
 
     public static final String PYROTECHNIC_RESCUE_VANISH_SOUND_EVENT_ID = "SFX_Bomb_Fire_Goblin_Death";
+
+    /** Sentinel block id so the clown rescue is registered for dialogue/despawn but never break-spawned. */
+    public static final String CLOWN_WHEEL_RESCUE_BLOCK_TYPE_ID = "Aetherhaven_Carnival_Clown_Wheel_Unlock";
+
+    public static final String CLOWN_RESCUE_VANISH_PARTICLE_SYSTEM_ID = "Explosion_Small";
+
+    public static final String CLOWN_RESCUE_VANISH_SOUND_EVENT_ID = "SFX_Bomb_Fire_Goblin_Death";
+
     /** Root interaction id used by preview proxy entities so F/use invokes purification. */
     public static final String ROOT_INTERACTION_PURIFY_SPAWN_USE = "AetherhavenPurifySpawnUse";
 
@@ -282,6 +290,12 @@ public final class AetherhavenConstants {
     public static final String PERMISSION_TOWN_TERRITORY_BYPASS = "aetherhaven.town.territory.bypass";
 
     /**
+     * Toggle building and digging on finished festival squares for yourself ({@code /ah festival build}). Operators
+     * (hytale:Admin) receive this by default; Creative alone does not unlock the square.
+     */
+    public static final String PERMISSION_FESTIVAL_SQUARE_BUILD = "aetherhaven.festival.square.build";
+
+    /**
      * Town Journal Settings tab: live config save and repair tools. Operators always have access; grant this permission
      * on a role for trusted server staff without full operator.
      */
@@ -431,6 +445,12 @@ public final class AetherhavenConstants {
 
     public static final String QUEST_HOUSE_PYROTECHNIC = "q_house_pyrotechnic";
 
+    public static final String QUEST_CLOWN_RESCUE = "q_clown_rescue";
+
+    public static final String QUEST_CLOWN_TENT = "q_clown_tent";
+
+    public static final String QUEST_HOUSE_CLOWN = "q_house_clown";
+
     public static final String QUEST_FLORIST_SHOP = "q_florist_shop";
 
     public static final String QUEST_HOUSE_FLORIST = "q_house_florist";
@@ -442,6 +462,8 @@ public final class AetherhavenConstants {
     public static final String CONSTRUCTION_PLOT_CRYSTAL_KEEPERS_SHOP = "plot_crystal_keepers_shop";
 
     public static final String CONSTRUCTION_PLOT_BOMB_SHOP = "plot_bomb_shop";
+
+    public static final String CONSTRUCTION_PLOT_CLOWN_TENT = "plot_clown_tent";
 
     public static final String CONSTRUCTION_PLOT_FLOWER_SHOP = "plot_flower_shop";
 
@@ -456,6 +478,11 @@ public final class AetherhavenConstants {
 
     /** One-shot rescue spawn from a broken spider cocoon. */
     public static final String NPC_PYROTECHNIC_RESCUE = "Aetherhaven_Pyrotechnic_Rescue";
+
+    public static final String NPC_CLOWN = "Aetherhaven_Clown";
+
+    /** One-shot rescue spawn from the carnival wheel blue segment. */
+    public static final String NPC_CLOWN_RESCUE = "Aetherhaven_Clown_Rescue";
 
     public static final String NPC_FLORIST = "Aetherhaven_Florist";
 

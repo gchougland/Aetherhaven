@@ -25,6 +25,7 @@ public final class AetherhavenRoleLabels {
         Map.entry(AetherhavenConstants.NPC_RANCHER, "Thalen Meadowrun"),
         Map.entry(AetherhavenConstants.NPC_CRYSTAL_KEEPER, "Vaelith Prismshade"),
         Map.entry(AetherhavenConstants.NPC_PYROTECHNIC, "Grubble Sparkmatch"),
+        Map.entry(AetherhavenConstants.NPC_CLOWN, "Bozo Bleak"),
         Map.entry(AetherhavenConstants.NPC_FLORIST, "Ivy Bloomwell"),
         Map.entry(AetherhavenConstants.NPC_CHEF, "Pepper Ashford"),
         Map.entry(AetherhavenConstants.NPC_BUILDER, "Rowan Ridgecraft"),
@@ -44,6 +45,7 @@ public final class AetherhavenRoleLabels {
         Map.entry(TownVillagerBinding.KIND_RANCHER, "Rancher"),
         Map.entry(TownVillagerBinding.KIND_CRYSTAL_KEEPER, "Crystal Keeper"),
         Map.entry(TownVillagerBinding.KIND_PYROTECHNIC, "Pyrotechnic"),
+        Map.entry(TownVillagerBinding.KIND_CLOWN, "Clown"),
         Map.entry(TownVillagerBinding.KIND_FLORIST, "Florist"),
         Map.entry(TownVillagerBinding.KIND_BUILDER, "Builder"),
         Map.entry(TownVillagerBinding.KIND_GUILD_MASTER, "Guild Master"),
@@ -230,6 +232,9 @@ public final class AetherhavenRoleLabels {
         }
         if (AetherhavenConstants.NPC_PYROTECHNIC.equals(roleId)) {
             return TownVillagerBinding.KIND_PYROTECHNIC;
+        }
+        if (AetherhavenConstants.NPC_CLOWN.equals(roleId)) {
+            return TownVillagerBinding.KIND_CLOWN;
         }
         if (AetherhavenConstants.NPC_FLORIST.equals(roleId)) {
             return TownVillagerBinding.KIND_FLORIST;

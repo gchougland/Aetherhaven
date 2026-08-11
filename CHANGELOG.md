@@ -8,7 +8,7 @@
 - **Villager birthdays** Each story villager has a birthday on the calendar. Gifts on their birthday give double friendship. They greet you and react to gifts with special birthday lines.
 - **Set date command** Creative command to jump to a specific season day at midnight for testing.
 - **Corin's festival square quest** Once the park is finished, the innkeeper asks you to build a square where the whole town can gather.
-- **Festival square** New plot that sits as a quiet plaza most of the year and turns into a festival build on festival days. A banner announces the festival by name when it opens. Townsfolk and visitors gather there. The square is protected, so nobody can build on it or dig it up, though you can still use and harvest what is there.
+- **Festival square** New plot that sits as a quiet plaza most of the year and turns into a festival build on festival days. A banner announces the festival by name when it opens. Townsfolk and visitors gather there. The square is protected for everyone, including operators, so nobody can build on it or dig it up, though you can still use and harvest what is there. Operators can turn building on for themselves with a creative command.
 - **New Life Festival** Early spring holiday. Feed life essence to the Springheart Lettuce in the middle of the square until it is full, then press F to pop it into vegetable seeds and spring festival tickets. You can keep feeding it for a bigger pop, and concentrated life essence counts for much more. It only pops once a year, so gather everyone for it. The priestess, farmer, and elder come to watch, and a kweebec seed seller brings a cart of seeds for the day, paid for in gold coins.
 - **Festival chatter** Every villager has their own things to say while a festival is on, so it is worth going around the town before the day is over.
 - **Festival dancing** Villagers at their festival spots and visitors at the square will sometimes dance.
@@ -18,6 +18,8 @@
 - **Festival tickets** Four seasonal festival tickets you can hold onto for now.
 - **Pig Racing Festival** Late spring holiday at the festival square. Bet gold coins on one of four pigs, watch them race, and a banner names the winner so you know who to cheer. Collect spring festival tickets if yours wins, or try another race after a loss. The elder, innkeeper, blacksmith, and rancher come to watch, and a race merchant sells ranch goods for spring festival tickets.
 - **Carnival Festival** Late summer holiday that runs all day at the festival square. Pop floating balloons with darts, spin the wall carnival wheel for a chance at summer festival tickets, and visit the carnival merchant for a kweebec plushie. The elder, bard, innkeeper, and florist come to watch.
+- **Carnival clown** Land on the blue spot on the carnival wheel to unlock Bozo Bleak, a cynical clown who can join your town.
+- **Clown Tent** Build Bozo a tent workplace. During work hours he visits townsfolk who need fun and cheers them up.
 - **Villager wardrobe** Craft a wardrobe at the town planning desk to dress up residents of your town. Pick someone, choose unlocked looks by slot, and save what they wear in that town.
 
 ## [2.7.1] - 8/7/2026

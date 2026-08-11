@@ -9,6 +9,8 @@ import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.festival.FestivalAttendanceService;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistState;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistSystem;
+import com.hexvane.aetherhaven.clown.ClownCheerAssistState;
+import com.hexvane.aetherhaven.clown.ClownCheerAssistSystem;
 import com.hexvane.aetherhaven.restaurant.PlotRestaurantState;
 import com.hexvane.aetherhaven.restaurant.RestaurantBenefitService;
 import com.hexvane.aetherhaven.poi.PoiEffectTable;
@@ -212,6 +214,11 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         BuilderConstructionAssistState assist =
             archetypeChunk.getComponent(index, BuilderConstructionAssistState.getComponentType());
         if (BuilderConstructionAssistSystem.shouldSkipAutonomy(assist)) {
+            return;
+        }
+        ClownCheerAssistState cheer =
+            archetypeChunk.getComponent(index, ClownCheerAssistState.getComponentType());
+        if (ClownCheerAssistSystem.shouldSkipAutonomy(cheer)) {
             return;
         }
         VillagerFollowPlayerState follow = store.getComponent(ref, VillagerFollowPlayerState.getComponentType());
@@ -968,7 +975,10 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             double horizSq = dx * dx + dz * dz;
             double maxArriveSq = ARRIVE_HORIZONTAL_SQ;
             boolean mountKind = pick.getInteractionKind() == PoiInteractionKind.SIT || pick.getInteractionKind() == PoiInteractionKind.SLEEP;
-            if (mountKind && pick.hasInteractionTarget()) {
+            boolean festivalStand = PoiScoring.isFestivalPoi(pick);
+            if (festivalStand) {
+                maxArriveSq = FESTIVAL_SPOT_ARRIVED_DIST_SQ;
+            } else if (mountKind && pick.hasInteractionTarget()) {
                 maxArriveSq = POI_ENTRY_ARRIVE_HORIZONTAL_SQ;
             } else if (mountKind) {
                 maxArriveSq = MOUNT_ARRIVE_HORIZONTAL_SQ;
@@ -992,6 +1002,18 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 autonomy.clearTravelWaypoints();
                 npc.setLeashPoint(finalTarget);
                 closePendingDoorsAfterTravelArrival(ref, store, world, autonomy, tc.getPosition(), maxArriveSq);
+                if (festivalStand) {
+                    autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
+                    autonomy.setPathFailureReason("");
+                    autonomy.setTravelStuckTicks(0);
+                    autonomy.setFillingHunger(false);
+                    autonomy.setFillingEnergy(false);
+                    autonomy.setFillingFun(false);
+                    autonomy.setNextDecisionEpochMs(now);
+                    commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+                    clearAutonomySeekState(ref, npc, commandBuffer);
+                    return;
+                }
                 tryEnterPoiUse(ref, store, commandBuffer, world, npc, autonomy, now, townRecord, pathNavTownId, pick);
                 return;
             }
@@ -1075,6 +1097,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         TownVillagerBinding travelBinding = store.getComponent(ref, TownVillagerBinding.getComponentType());
         TransformComponent tcEarly = store.getComponent(ref, TransformComponent.getComponentType());
         // Festival spots outrank other trips: drop a wrong destination so idle re-routes to the square.
+        boolean travelingToFestival = poiEarly != null && PoiScoring.isFestivalPoi(poiEarly);
         if (plugin != null && travelBinding != null && townRecord != null) {
             PoiEntry festivalSpot =
                 FestivalAttendanceService.findSpot(store.getExternalData().getWorld(), plugin, townRecord, travelBinding.getKind());
@@ -1083,78 +1106,82 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 return;
             }
         }
-        PoiScoring.UrgentNeedKind urgentKind = null;
-        if (plugin != null && travelBinding != null && townRecord != null) {
-            List<PoiEntry> poisForScoring =
-                filterPoisForAutonomyScoring(townRecord, reg.listByTown(travelBinding.getTownId()));
-            urgentKind =
-                resolveUrgentNeedKind(
-                    ref,
-                    store,
-                    poisForScoring,
-                    needs,
-                    travelBinding,
-                    autonomy,
-                    plugin,
-                    townRecord,
-                    tcEarly,
-                    daytime
-                );
-        }
-        // Redirect travel only when a free POI exists for a higher-priority need.
-        if (daytime
-            && poiEarly != null
-            && !PoiScoring.isEatPoi(poiEarly)
-            && urgentKind == PoiScoring.UrgentNeedKind.HUNGER) {
-            autonomy.setFillingHunger(true);
-            failTravel(autonomy, now, "HUNGRY", commandBuffer, ref, npc);
-            return;
-        }
-        // Do not cross-cancel an active need-fill trip (e.g. low fun must not abort travel to an inn bed).
-        boolean onEnergyFillTrip =
-            autonomy.isFillingEnergy() && poiEarly != null && PoiScoring.isRestPoi(poiEarly);
-        boolean onFunFillTrip =
-            autonomy.isFillingFun() && poiEarly != null && PoiScoring.isFunPoi(poiEarly);
-        if (poiEarly != null
-            && !PoiScoring.isRestPoi(poiEarly)
-            && urgentKind == PoiScoring.UrgentNeedKind.ENERGY
-            && !onFunFillTrip) {
-            autonomy.setFillingEnergy(true);
-            failTravel(autonomy, now, "TIRED", commandBuffer, ref, npc);
-            return;
-        }
-        if (daytime
-            && poiEarly != null
-            && !PoiScoring.isFunPoi(poiEarly)
-            && urgentKind == PoiScoring.UrgentNeedKind.FUN
-            && !onEnergyFillTrip) {
-            autonomy.setFillingFun(true);
-            failTravel(autonomy, now, "BORED", commandBuffer, ref, npc);
-            return;
-        }
-        // Dawn quest-board posts preempt schedule commute / POI wander (not feast gather).
-        if (isQuestBoardPosterDue(ref, store, townRecord, now)
-            && !isQuestBoardPoi(poiEarly)
-            && (poiEarly == null || !poiEarly.getTags().contains(AetherhavenConstants.POI_TAG_FEAST_EPHEMERAL))) {
-            failTravel(autonomy, now, "QUEST_BOARD", commandBuffer, ref, npc);
-            return;
-        }
-        // Night: cancel hunger trips so they can sleep instead of arriving at the restaurant after dark.
-        if (!ShopSpotOpenService.isGameDay(store)
-            && poiEarly != null
-            && PoiScoring.isEatPoi(poiEarly)
-            && !poiEarly.getTags().contains(AetherhavenConstants.POI_TAG_FEAST)) {
-            autonomy.setFillingHunger(false);
-            failTravel(autonomy, now, "NIGHT", commandBuffer, ref, npc);
-            return;
-        }
-        VillagerScheduleTickState schedTick = store.getComponent(ref, VillagerScheduleTickState.getComponentType());
-        String scheduleSeg = schedTick != null ? schedTick.getLastAppliedScheduleSegment() : null;
-        if (poiEarly != null
-            && PoiScoring.isWorkPoi(poiEarly)
-            && !PoiScoring.isWorkScheduleSegment(scheduleSeg)) {
-            failTravel(autonomy, now, "OFF_SHIFT", commandBuffer, ref, npc);
-            return;
+        // Needs / quest board / off-shift must not yank someone off a walk to their festival stand (innkeeper was
+        // bouncing back to the inn whenever fun or energy dipped mid-trip).
+        if (!travelingToFestival) {
+            PoiScoring.UrgentNeedKind urgentKind = null;
+            if (plugin != null && travelBinding != null && townRecord != null) {
+                List<PoiEntry> poisForScoring =
+                    filterPoisForAutonomyScoring(townRecord, reg.listByTown(travelBinding.getTownId()));
+                urgentKind =
+                    resolveUrgentNeedKind(
+                        ref,
+                        store,
+                        poisForScoring,
+                        needs,
+                        travelBinding,
+                        autonomy,
+                        plugin,
+                        townRecord,
+                        tcEarly,
+                        daytime
+                    );
+            }
+            // Redirect travel only when a free POI exists for a higher-priority need.
+            if (daytime
+                && poiEarly != null
+                && !PoiScoring.isEatPoi(poiEarly)
+                && urgentKind == PoiScoring.UrgentNeedKind.HUNGER) {
+                autonomy.setFillingHunger(true);
+                failTravel(autonomy, now, "HUNGRY", commandBuffer, ref, npc);
+                return;
+            }
+            // Do not cross-cancel an active need-fill trip (e.g. low fun must not abort travel to an inn bed).
+            boolean onEnergyFillTrip =
+                autonomy.isFillingEnergy() && poiEarly != null && PoiScoring.isRestPoi(poiEarly);
+            boolean onFunFillTrip =
+                autonomy.isFillingFun() && poiEarly != null && PoiScoring.isFunPoi(poiEarly);
+            if (poiEarly != null
+                && !PoiScoring.isRestPoi(poiEarly)
+                && urgentKind == PoiScoring.UrgentNeedKind.ENERGY
+                && !onFunFillTrip) {
+                autonomy.setFillingEnergy(true);
+                failTravel(autonomy, now, "TIRED", commandBuffer, ref, npc);
+                return;
+            }
+            if (daytime
+                && poiEarly != null
+                && !PoiScoring.isFunPoi(poiEarly)
+                && urgentKind == PoiScoring.UrgentNeedKind.FUN
+                && !onEnergyFillTrip) {
+                autonomy.setFillingFun(true);
+                failTravel(autonomy, now, "BORED", commandBuffer, ref, npc);
+                return;
+            }
+            // Dawn quest-board posts preempt schedule commute / POI wander (not feast gather).
+            if (isQuestBoardPosterDue(ref, store, townRecord, now)
+                && !isQuestBoardPoi(poiEarly)
+                && (poiEarly == null || !poiEarly.getTags().contains(AetherhavenConstants.POI_TAG_FEAST_EPHEMERAL))) {
+                failTravel(autonomy, now, "QUEST_BOARD", commandBuffer, ref, npc);
+                return;
+            }
+            // Night: cancel hunger trips so they can sleep instead of arriving at the restaurant after dark.
+            if (!ShopSpotOpenService.isGameDay(store)
+                && poiEarly != null
+                && PoiScoring.isEatPoi(poiEarly)
+                && !poiEarly.getTags().contains(AetherhavenConstants.POI_TAG_FEAST)) {
+                autonomy.setFillingHunger(false);
+                failTravel(autonomy, now, "NIGHT", commandBuffer, ref, npc);
+                return;
+            }
+            VillagerScheduleTickState schedTick = store.getComponent(ref, VillagerScheduleTickState.getComponentType());
+            String scheduleSeg = schedTick != null ? schedTick.getLastAppliedScheduleSegment() : null;
+            if (poiEarly != null
+                && PoiScoring.isWorkPoi(poiEarly)
+                && !PoiScoring.isWorkScheduleSegment(scheduleSeg)) {
+                failTravel(autonomy, now, "OFF_SHIFT", commandBuffer, ref, npc);
+                return;
+            }
         }
 
         TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
@@ -1177,7 +1204,9 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             poiEarly != null
                 && (poiEarly.getInteractionKind() == PoiInteractionKind.SIT
                     || poiEarly.getInteractionKind() == PoiInteractionKind.SLEEP);
-        if (mountKind && poiEarly != null && poiEarly.hasInteractionTarget()) {
+        if (travelingToFestival) {
+            maxArriveSq = FESTIVAL_SPOT_ARRIVED_DIST_SQ;
+        } else if (mountKind && poiEarly != null && poiEarly.hasInteractionTarget()) {
             maxArriveSq = POI_ENTRY_ARRIVE_HORIZONTAL_SQ;
         } else if (mountKind) {
             maxArriveSq = MOUNT_ARRIVE_HORIZONTAL_SQ;
@@ -1292,6 +1321,19 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             PoiEntry poi = poiEarly;
             if (poi == null) {
                 failTravel(autonomy, now, "POI_GONE", commandBuffer, ref, npc);
+                return;
+            }
+            // Festival stands are for watching, not a timed POI use that can hand off to inn needs afterward.
+            if (PoiScoring.isFestivalPoi(poi)) {
+                autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
+                autonomy.setPathFailureReason("");
+                autonomy.setTravelStuckTicks(0);
+                autonomy.setFillingHunger(false);
+                autonomy.setFillingEnergy(false);
+                autonomy.setFillingFun(false);
+                autonomy.setNextDecisionEpochMs(now);
+                commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+                clearAutonomySeekState(ref, npc, commandBuffer);
                 return;
             }
             if (mountKind
@@ -1486,13 +1528,30 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         // Leave a workplace / bed use early when this villager has a reserved festival spot.
         if (plugin != null && townRecord != null) {
             PoiEntry festivalSpot = FestivalAttendanceService.findSpot(world, plugin, townRecord, binding.getKind());
-            if (festivalSpot != null && (poiId == null || !festivalSpot.getId().equals(poiId))) {
+            if (festivalSpot != null) {
+                if (poiId == null || !festivalSpot.getId().equals(poiId)) {
+                    abortActivePoiUseAndDismount(ref, store, commandBuffer, autonomy, needs, reg, true);
+                    autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
+                    autonomy.clearTravelAndPoiState();
+                    autonomy.setFillingHunger(false);
+                    autonomy.setFillingEnergy(false);
+                    autonomy.setFillingFun(false);
+                    autonomy.setNextDecisionEpochMs(now);
+                    commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+                    clearAutonomyRoleState(ref, npc, commandBuffer);
+                    return;
+                }
+                // Already "using" a festival stand — drop to idle hold so needs do not pull them back to the inn.
                 abortActivePoiUseAndDismount(ref, store, commandBuffer, autonomy, needs, reg, true);
                 autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
-                autonomy.clearTravelAndPoiState();
+                autonomy.setPathFailureReason("");
+                autonomy.setTravelStuckTicks(0);
+                autonomy.setFillingHunger(false);
+                autonomy.setFillingEnergy(false);
+                autonomy.setFillingFun(false);
                 autonomy.setNextDecisionEpochMs(now);
                 commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
-                clearAutonomyRoleState(ref, npc, commandBuffer);
+                clearAutonomySeekState(ref, npc, commandBuffer);
                 return;
             }
         }

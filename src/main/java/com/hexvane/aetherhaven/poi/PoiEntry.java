@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.poi;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -233,6 +234,10 @@ public final class PoiEntry {
     }
 
     public int getCapacity() {
+        // Tourist stands are single-file: one visitor per spot, including festival tourist stands.
+        if (tags.contains(AetherhavenConstants.POI_TAG_TOURIST_VISIT)) {
+            return 1;
+        }
         return capacity;
     }
 

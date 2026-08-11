@@ -34,6 +34,14 @@ public final class CarnivalIds {
     public static final String MERCHANT_NPC_ROLE = "Aetherhaven_Festival_Carnival_Merchant";
 
     public static final String WHEEL_FACE_MODEL = "Aetherhaven_Carnival_Wheel_Face";
+    /** Special face with a blue clown wedge; used until the town unlocks the clown. */
+    public static final String WHEEL_FACE_MODEL_SPECIAL = "Aetherhaven_Carnival_Wheel_Face_Special";
+    /**
+     * Octant under the top pointer for the blue wedge on {@link #WHEEL_FACE_MODEL_SPECIAL}. In game, {@code wheelforce
+     * 4} landed on the red after blue (two wedges past blue), so blue is octant 2. Spins restart from
+     * {@link #WHEEL_IDLE_OFFSET_RAD}.
+     */
+    public static final int WHEEL_CLOWN_OCTANT = 2;
     public static final String WHACK_GOBLIN_MODEL = "Aetherhaven_Festival_Carnival_Whack_Goblin";
 
     public static final String[] BALLOON_MODELS = {
@@ -54,6 +62,8 @@ public final class CarnivalIds {
     public static final double BALLOON_HIT_PAD = 0.35;
 
     public static final float WHEEL_SPIN_SECONDS = 5.5f;
+    /** Minimum full rotations every spin travels before landing. */
+    public static final int WHEEL_MIN_FULL_SPINS = 2;
     public static final float WHEEL_IDLE_OFFSET_RAD = (float) (Math.PI / 8.0);
     public static final float WHEEL_TICK_SFX_INTERVAL = 0.12f;
     /** Entity face is authored like the block static face but needs 2x world scale to match. */

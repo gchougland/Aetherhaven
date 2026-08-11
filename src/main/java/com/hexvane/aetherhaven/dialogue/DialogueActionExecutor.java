@@ -14,6 +14,7 @@ import com.hexvane.aetherhaven.tourist.TouristMoveInRequirements;
 import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerSystem;
+import com.hexvane.aetherhaven.festival.carnival.CarnivalWheelPlacementService;
 import com.hexvane.aetherhaven.patrol.GuardFollowPlayerSystem;
 import com.hexvane.aetherhaven.questboard.TownRankCapacity;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -488,6 +489,10 @@ public final class DialogueActionExecutor {
             });
         }
         tm.updateTown(town);
+        if (AetherhavenConstants.QUEST_CLOWN_RESCUE.equals(qid.trim())) {
+            UUID townId = town.getTownId();
+            world.execute(() -> CarnivalWheelPlacementService.refreshFaceAfterClownUnlock(world, townId));
+        }
         if (guardPromoteUuid != null && store != null) {
             VillagerDeathHandlerSystem.promoteGuardToCitizen(world, plugin, town, tm, guardPromoteUuid, store);
             tm.updateTown(town);

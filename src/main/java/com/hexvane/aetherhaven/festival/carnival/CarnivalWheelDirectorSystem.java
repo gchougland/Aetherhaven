@@ -64,9 +64,10 @@ public final class CarnivalWheelDirectorSystem extends TickingSystem<EntityStore
                 CarnivalAnnounce.announceWheelColor(
                     store,
                     town,
-                    session.didWin(),
+                    session.getOutcome(),
                     CarnivalAudio.squareCenter(plugin, town)
                 );
+                CarnivalResultSettlement.settleWheelAndPresent(store, town, session);
             }
         }
     }

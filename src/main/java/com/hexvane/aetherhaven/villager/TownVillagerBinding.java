@@ -70,6 +70,14 @@ public final class TownVillagerBinding implements Component<EntityStore> {
     /** One-shot rescue spawn from a broken spider cocoon. */
     public static final String KIND_RESCUE_PYROTECHNIC = "rescue_pyrotechnic";
 
+    public static final String KIND_VISITOR_CLOWN = "visitor_clown";
+
+    /** Permanent clown at the clown tent (after build). */
+    public static final String KIND_CLOWN = "clown";
+
+    /** One-shot rescue spawn from the carnival wheel blue segment. */
+    public static final String KIND_RESCUE_CLOWN = "rescue_clown";
+
     public static final String KIND_VISITOR_FLORIST = "visitor_florist";
 
     /** Permanent florist at the flower shop (after build). */

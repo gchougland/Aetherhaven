@@ -626,6 +626,7 @@ public final class ResidentRegistryService {
             || AetherhavenConstants.NPC_RANCHER.equals(roleId)
             || AetherhavenConstants.NPC_CRYSTAL_KEEPER.equals(roleId)
             || AetherhavenConstants.NPC_PYROTECHNIC.equals(roleId)
+            || AetherhavenConstants.NPC_CLOWN.equals(roleId)
             || AetherhavenConstants.NPC_FLORIST.equals(roleId)) {
             return 2;
         }

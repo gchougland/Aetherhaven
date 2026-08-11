@@ -65,6 +65,14 @@
       "unlockItemId": "Aetherhaven_Villager_Cosmetic_Red_Afro"
     },
     {
+      "id": "JesterHat",
+      "slot": "HeadAccessory",
+      "displayNameKey": "aetherhaven_villager_cosmetics.aetherhaven.villagerCosmetic.jesterHat",
+      "model": "Cosmetics/Head/Jester_Hat.blockymodel",
+      "texture": "Cosmetics/Head/Jester_Hat.png",
+      "unlockItemId": "Aetherhaven_Villager_Cosmetic_Jester_Hat"
+    },
+    {
       "id": "PoopHat",
       "slot": "HeadAccessory",
       "displayNameKey": "aetherhaven_villager_cosmetics.aetherhaven.villagerCosmetic.poopHat",

@@ -1,0 +1,53 @@
+{
+  "id": "plot_clown_tent",
+  "displayName": "Clown Tent",
+  "description": "A place of fun and enjoyment.",
+  "prefabPath": "plot_clown_tent.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 25,
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 10
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 25
+    }
+  ],
+  "pois": [
+    {
+      "localX": -1,
+      "localY": 0,
+      "localZ": 0,
+      "tags": [
+        "WORK",
+        "workActivity:leisure"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Soil_Pathway",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 0,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 0,
+      "interactionTargetYawDegrees": 104.29804,
+      "equipmentProfileId": "work_bard",
+      "workResidentKind": "clown"
+    }
+  ],
+  "managementBlockLocalPos": [
+    1,
+    1,
+    3
+  ],
+  "tags": [
+    "work"
+  ]
+}

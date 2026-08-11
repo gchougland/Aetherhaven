@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "id": "q_clown_tent",
+  "category": "town",
+  "grantPlotTokenConstructionId": "plot_clown_tent",
+  "title": "Pip's Clown Tent",
+  "description": "Pip wants a tent where he can work his sour jokes and cheer people up anyway.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "plot_token_received",
+      "text": "Take the clown tent plot token from Pip.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_clown_tent.objective.token"
+    },
+    {
+      "id": "build",
+      "kind": "construction_built",
+      "constructionId": "plot_clown_tent",
+      "text": "Stake and build the clown tent.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_clown_tent.objective.build"
+    },
+    {
+      "id": "talk",
+      "kind": "dialogue_turn_in",
+      "text": "Talk to Pip.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_clown_tent.objective.talk"
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Clown",
+      "amount": 14,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 14,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
+    ],
+    "onComplete": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ],
+    "onAbandon": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ]
+  },
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_clown_tent.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_clown_tent.description"
+}
