@@ -1768,13 +1768,13 @@ a.submissions-chip:hover {
 
 .screenshot-cover-btn {
   position: absolute;
-  left: 0.2rem;
-  right: 1.6rem;
-  top: 0.2rem;
+  left: 0.35rem;
+  right: 2.1rem;
+  top: 0.35rem;
   z-index: 1;
   margin: 0;
-  padding: 0.15rem 0.25rem;
-  font-size: 0.6rem;
+  padding: 0.35rem 0.45rem;
+  font-size: 0.78rem;
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -1794,22 +1794,22 @@ a.submissions-chip:hover {
 }
 
 .screenshot-shot--edit {
-  width: min(100%, 220px);
+  width: 100%;
 }
 
 .screenshot-thumb-delete {
   position: absolute;
-  top: 2px;
-  right: 2px;
+  top: 0.35rem;
+  right: 0.35rem;
   z-index: 3;
-  width: 1.35rem;
-  height: 1.35rem;
+  width: 1.7rem;
+  height: 1.7rem;
   padding: 0;
   border: none;
   border-radius: var(--radius-sm);
   background: rgba(12, 8, 8, 0.85);
   color: var(--danger-text);
-  font-size: 1rem;
+  font-size: 1.15rem;
   line-height: 1;
   cursor: pointer;
 }
@@ -2605,18 +2605,29 @@ a.edit-cancel {
 
 .screenshot-manager--edit .screenshot-strip--edit {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: var(--space-sm);
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+.screenshot-manager--edit .screenshot-thumb {
+  width: 100%;
+  height: auto;
+  min-height: 200px;
 }
 
 .screenshot-thumb--large {
-  min-height: 120px;
+  min-height: 200px;
 }
 
 .screenshot-thumb--large img {
   width: 100%;
-  height: 140px;
+  height: 220px;
   object-fit: cover;
+}
+
+.screenshot-manager--edit .screenshot-remove-btn {
+  padding: 0.45rem 0.65rem;
+  font-size: 0.9rem;
 }
 
 @media (max-width: 900px) {

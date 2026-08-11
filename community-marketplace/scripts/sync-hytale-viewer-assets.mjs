@@ -131,6 +131,9 @@ function extractBlockEntry(raw, byFileStem) {
       entry.customModelTexture = normalizeAssetPath(block.CustomModelTexture[0].Texture);
       trackCommonRef(entry.customModelTexture);
     }
+    if (block.CustomModelScale != null && Number.isFinite(Number(block.CustomModelScale))) {
+      entry.customModelScale = Number(block.CustomModelScale);
+    }
     if (Array.isArray(block.TintUp) && block.TintUp[0]) {
       entry.tintUp = block.TintUp[0];
     }
@@ -213,6 +216,7 @@ function resolveParents(catalog) {
         "textures",
         "customModel",
         "customModelTexture",
+        "customModelScale",
         "maxFluidLevel",
         "itemModel",
         "itemTexture",

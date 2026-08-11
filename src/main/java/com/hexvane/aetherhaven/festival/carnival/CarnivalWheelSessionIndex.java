@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.festival.carnival;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
@@ -20,6 +22,11 @@ public final class CarnivalWheelSessionIndex {
     @Nullable
     public static CarnivalWheelSession get(@Nonnull UUID townId) {
         return BY_TOWN.get(townId);
+    }
+
+    @Nonnull
+    public static Set<Map.Entry<UUID, CarnivalWheelSession>> entries() {
+        return Collections.unmodifiableSet(BY_TOWN.entrySet());
     }
 
     public static void remove(@Nonnull UUID townId) {

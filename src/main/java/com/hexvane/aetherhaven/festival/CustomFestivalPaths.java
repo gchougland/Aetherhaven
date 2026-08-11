@@ -54,12 +54,26 @@ public final class CustomFestivalPaths {
             return null;
         }
         String key = prefabPathKey.trim().replace('\\', '/');
-        String fileName = key.contains("/") ? key.substring(key.lastIndexOf('/') + 1) : key;
-        if (!fileName.endsWith(".prefab.json")) {
-            fileName = fileName + ".prefab.json";
+        String rawName = key.contains("/") ? key.substring(key.lastIndexOf('/') + 1) : key;
+        final String fileName = rawName.endsWith(".prefab.json") ? rawName : rawName + ".prefab.json";
+        Path dir = prefabsDirectory(dataDirectory);
+        Path candidate = dir.resolve(fileName);
+        if (java.nio.file.Files.isRegularFile(candidate)) {
+            return candidate;
         }
-        Path candidate = prefabsDirectory(dataDirectory).resolve(fileName);
-        return java.nio.file.Files.isRegularFile(candidate) ? candidate : null;
+        // Match Festival_Carnival vs Festival_carnival when the catalog key casing differs from the save.
+        if (!java.nio.file.Files.isDirectory(dir)) {
+            return null;
+        }
+        try (var stream = java.nio.file.Files.list(dir)) {
+            return stream
+                .filter(java.nio.file.Files::isRegularFile)
+                .filter(p -> p.getFileName().toString().equalsIgnoreCase(fileName))
+                .findFirst()
+                .orElse(null);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /** True when saving under this id or prefab name would clobber the shared base festival square prefab. */

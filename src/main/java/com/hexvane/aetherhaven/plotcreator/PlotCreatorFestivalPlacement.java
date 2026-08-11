@@ -89,7 +89,10 @@ public final class PlotCreatorFestivalPlacement {
         @Nonnull PlayerRef playerRef
     ) {
         PlotCreatorDraft draft = session.getDraft();
-        int[] local = PlotCreatorLocalCoords.toLocal(draft, targetBlock);
+        // Clicking a floor block should store the air cell above it, not the solid ground.
+        PlotCreatorSpotPlacement.ResolvedSpot spot =
+            PlotCreatorSpotPlacement.resolveStandSpawn(session.getWorld(), targetBlock);
+        int[] local = PlotCreatorLocalCoords.toLocal(draft, spot.worldBlock());
         if (hasBalloonAt(draft, local)) {
             playerRef.sendMessage(
                 Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalBalloonAlreadyRecorded")

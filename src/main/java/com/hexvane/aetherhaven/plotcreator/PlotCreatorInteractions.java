@@ -510,9 +510,20 @@ public final class PlotCreatorInteractions {
                 playerRef.sendMessage(Message.translation(MSG + ".error.festivalIdReserved"));
                 return;
             }
-            fileName = com.hexvane.aetherhaven.festival.CustomFestivalPaths.prefabFileName(festivalId);
-            out = com.hexvane.aetherhaven.festival.CustomFestivalPaths.prefabFile(plugin.getDataDirectory(), festivalId);
-            String prefabKey = com.hexvane.aetherhaven.festival.CustomFestivalPaths.prefabPathKey(festivalId);
+            // Keep the filename from the festival definition (e.g. Festival_Carnival) so overrides match the
+            // prefabPath key the catalog already uses.
+            String prefabKey =
+                d.getLockedPrefabPathKey() != null && !d.getLockedPrefabPathKey().isBlank()
+                    ? d.getLockedPrefabPathKey().trim().replace('\\', '/')
+                    : com.hexvane.aetherhaven.festival.CustomFestivalPaths.prefabPathKey(festivalId);
+            fileName =
+                prefabKey.contains("/")
+                    ? prefabKey.substring(prefabKey.lastIndexOf('/') + 1)
+                    : prefabKey;
+            out =
+                com.hexvane.aetherhaven.festival.CustomFestivalPaths.prefabsDirectory(plugin.getDataDirectory())
+                    .resolve(fileName);
+            d.setSaveEmptySpaces(true);
             PlotCreatorPrefabExporter.ExportResult festivalResult =
                 PlotCreatorPrefabExporter.export(session.getWorld(), d, out, true);
             if (festivalResult != PlotCreatorPrefabExporter.ExportResult.SUCCESS) {

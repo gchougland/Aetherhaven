@@ -76,7 +76,9 @@ public final class CarnivalWheelSession {
     }
 
     public boolean canStart(@Nonnull UUID player) {
-        return phase == Phase.IDLE && faceEntityUuid != null;
+        // Face entity is only required when the spin actually begins; dialogue stays available even if the
+        // decorative face failed to spawn so the attendant is not a dead end.
+        return phase == Phase.IDLE;
     }
 
     public boolean isSpinning(@Nonnull UUID player) {
@@ -124,6 +126,17 @@ public final class CarnivalWheelSession {
         return phase == Phase.SPINNING && spinElapsed >= spinDuration;
     }
 
+    /** Current eased roll for the face prop while spinning (or the rest pose when idle). */
+    public float currentRoll() {
+        if (phase != Phase.SPINNING && phase != Phase.RESULTS) {
+            return startRoll;
+        }
+        float t = Math.min(1f, spinElapsed / Math.max(0.01f, spinDuration));
+        // Ease-out cubic so the wheel slows near the end.
+        float eased = 1f - (1f - t) * (1f - t) * (1f - t);
+        return startRoll + (targetRoll - startRoll) * eased;
+    }
+
     public void finishSpin(float finalRoll) {
         if (phase != Phase.SPINNING) {
             return;
@@ -132,6 +145,7 @@ public final class CarnivalWheelSession {
         won = (octant & 1) == 0;
         phase = Phase.RESULTS;
         resultPending = true;
+        startRoll = finalRoll;
     }
 
     public int collectWin(@Nonnull UUID player) {

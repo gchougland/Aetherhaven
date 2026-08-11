@@ -87,6 +87,8 @@ public final class CarnivalBalloonSpawnService {
                 spot.getLocalY(),
                 spot.getLocalZ()
             );
+        // Float a little above the marked cell so ground-level markers still clear the floor.
+        pos.y += 0.75;
         String modelId =
             CarnivalIds.BALLOON_MODELS[ThreadLocalRandom.current().nextInt(CarnivalIds.BALLOON_MODELS.length)];
         ModelAsset asset = ModelAsset.getAssetMap().getAsset(modelId);

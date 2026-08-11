@@ -27,7 +27,7 @@ public final class CarnivalIds {
     public static final int WHEEL_WIN_TICKETS = 2;
 
     public static final float BALLOON_FLOAT_SECONDS = 4.5f;
-    public static final float BALLOON_RISE_SPEED = 1.35f;
+    public static final float BALLOON_RISE_SPEED = 0.675f;
     public static final float BALLOON_SPAWN_INTERVAL = 0.55f;
     public static final double BALLOON_HIT_PAD = 0.35;
 

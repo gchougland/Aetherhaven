@@ -1,6 +1,6 @@
 {
-  "Model": "Blocks/Carnival_Wheel_Face.blockymodel",
-  "Texture": "Blocks/Carnival_Wheel.png",
+  "Model": "NPC/Carnival_Wheel_Face.blockymodel",
+  "Texture": "Items/Aetherhaven/Carnival_Wheel.png",
   "HitBox": {
     "Min": { "X": -2.0, "Y": -2.0, "Z": -0.1 },
     "Max": { "X": 2.0, "Y": 2.0, "Z": 0.1 }

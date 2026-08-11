@@ -7,27 +7,12 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=5";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=5";
+} from "./BlockCatalog.js?v=7";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=7";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
 const textureLoader = new THREE.TextureLoader();
-
-/**
- * Decode RotationTuple index: (roll*16)+(pitch*4)+yaw, each axis 0..3 → 0/90/180/270°.
- * Apply order: roll Z → pitch X → yaw Y.
- * @param {number} index
- * @returns {THREE.Euler}
- */
-export function rotationTupleToEuler(index) {
-  const i = Number(index) || 0;
-  const yaw = i % 4;
-  const pitch = Math.floor(i / 4) % 4;
-  const roll = Math.floor(i / 16) % 4;
-  const deg = (n) => (n * Math.PI) / 2;
-  return new THREE.Euler(deg(pitch), deg(yaw), deg(roll), "ZYX");
-}
 
 /**
  * Prefab entity Transform.Rotation matches Rotation3f (pitch/yaw/roll).
@@ -49,17 +34,82 @@ export function entityRotationToQuaternion(rot) {
   if (!Number.isFinite(roll)) {
     roll = 0;
   }
-  const maxAbs = Math.max(Math.abs(pitch), Math.abs(yaw), Math.abs(roll));
-  if (maxAbs > Math.PI * 2 + 0.05) {
+  const vals = [pitch, yaw, roll];
+  const maxAbs = Math.max(...vals.map((v) => Math.abs(v)));
+  // Legacy degrees: any |angle| past a full turn, or near-integer angles beyond π.
+  const looksLikeDegrees =
+    maxAbs > Math.PI * 2 + 0.05 ||
+    (maxAbs > Math.PI + 0.01 && vals.every((v) => Math.abs(v - Math.round(v)) < 1e-3));
+  if (looksLikeDegrees) {
     const toRad = Math.PI / 180;
     pitch *= toRad;
     yaw *= toRad;
     roll *= toRad;
   }
-  const qy = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
-  const qx = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), pitch);
-  const qz = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), roll);
-  return qy.multiply(qx).multiply(qz);
+  // JOML Quaterniond.rotationYXZ(yaw, pitch, roll) closed form.
+  const sx = Math.sin(pitch * 0.5);
+  const cx = Math.cos(pitch * 0.5);
+  const sy = Math.sin(yaw * 0.5);
+  const cy = Math.cos(yaw * 0.5);
+  const sz = Math.sin(roll * 0.5);
+  const cz = Math.cos(roll * 0.5);
+  const x = cy * sx;
+  const y = sy * cx;
+  const z = sy * sx;
+  const w = cy * cx;
+  return new THREE.Quaternion(
+    x * cz + y * sz,
+    y * cz - x * sz,
+    w * sz - z * cz,
+    w * cz + z * sz
+  ).normalize();
+}
+
+/**
+ * Decode RotationTuple index: (roll*16)+(pitch*4)+yaw, each axis 0..3 → 0/90/180/270°.
+ * Hytale applies R = Ry(yaw) * Rx(pitch) * Rz(roll) (see RotationTuple / Rotation3f.rotationYXZ).
+ * Three.js Euler order for that composition is "YXZ" (not "ZYX").
+ * @param {number} index
+ * @returns {THREE.Quaternion}
+ */
+export function rotationTupleToQuaternion(index) {
+  const i = Number(index) || 0;
+  const yaw = (i % 4) * (Math.PI / 2);
+  const pitch = (Math.floor(i / 4) % 4) * (Math.PI / 2);
+  const roll = (Math.floor(i / 16) % 4) * (Math.PI / 2);
+  return entityRotationToQuaternion({ Pitch: pitch, Yaw: yaw, Roll: roll });
+}
+
+/**
+ * @param {number} index
+ * @returns {THREE.Euler}
+ */
+export function rotationTupleToEuler(index) {
+  const i = Number(index) || 0;
+  const yaw = (i % 4) * (Math.PI / 2);
+  const pitch = (Math.floor(i / 4) % 4) * (Math.PI / 2);
+  const roll = (Math.floor(i / 16) % 4) * (Math.PI / 2);
+  return new THREE.Euler(pitch, yaw, roll, "YXZ");
+}
+
+/**
+ * Block/prop entity renderer uses EntityScale 2 as 1:1 with 32px blockymodels
+ * (see BlockEntitySystems default). Character/NPC models use scale 1 as 1:1 with 64px.
+ * @param {any} comps
+ * @param {string|null} modelPath
+ */
+export function entityWorldScale(comps, modelPath = null) {
+  const hasBlockStyle = Boolean(
+    comps?.BlockEntity || comps?.Prop || comps?.Item || comps?.blockEntity || comps?.prop || comps?.item
+  );
+  let entityScale = Number(comps?.EntityScale?.Scale ?? comps?.entityScale?.Scale);
+  if (!Number.isFinite(entityScale) || entityScale <= 0) {
+    entityScale = hasBlockStyle ? 2 : 1;
+  }
+  const defScale = hasBlockStyle ? entityScale / 2 : entityScale;
+  // Character-density models are authored at 64 units/block; our loader uses 1/32.
+  const characterDensity = /^(NPC|Characters)\//i.test(String(modelPath || ""));
+  return defScale * (characterDensity ? 0.5 : 1);
 }
 
 /**
@@ -239,7 +289,7 @@ export async function buildPrefabMesh(prefab, options = {}) {
               const holder = new THREE.Group();
               holder.position.set(Number(b.x) + 0.5, Number(b.y) + 0.5, Number(b.z) + 0.5);
               if (b.rotation) {
-                holder.rotation.copy(rotationTupleToEuler(b.rotation));
+                holder.quaternion.copy(rotationTupleToQuaternion(b.rotation));
               }
               model.position.y = -0.5;
               holder.add(model);
@@ -252,7 +302,7 @@ export async function buildPrefabMesh(prefab, options = {}) {
             const holder = new THREE.Group();
             holder.position.set(Number(b.x) + 0.5, Number(b.y) + 0.5, Number(b.z) + 0.5);
             if (b.rotation) {
-              holder.rotation.copy(rotationTupleToEuler(b.rotation));
+              holder.quaternion.copy(rotationTupleToQuaternion(b.rotation));
             }
             holder.add(cube);
             root.add(holder);
@@ -273,14 +323,14 @@ export async function buildPrefabMesh(prefab, options = {}) {
         const transform = comps.Transform || comps.transform || {};
         const pos = transform.Position || transform.position || {};
         const rot = transform.Rotation || transform.rotation || {};
-        const scale = Number(comps.EntityScale?.Scale ?? comps.Model?.Model?.Scale ?? 1) || 1;
 
         const holder = new THREE.Group();
         holder.position.copy(entityPositionToVector(pos));
         holder.quaternion.copy(entityRotationToQuaternion(rot));
-        holder.scale.setScalar(scale);
 
         let placed = false;
+        let modelPath = null;
+        let customModelScale = 1;
 
         const modelId = comps.Model?.Model?.Id || comps.Model?.Id;
         if (modelId) {
@@ -288,6 +338,7 @@ export async function buildPrefabMesh(prefab, options = {}) {
           if (mdef?.model) {
             const model = await getModel(mdef.model, mdef.texture);
             if (model) {
+              modelPath = mdef.model;
               holder.add(model);
               placed = true;
             }
@@ -297,15 +348,21 @@ export async function buildPrefabMesh(prefab, options = {}) {
         const itemId = comps.Item?.Item?.Id || comps.Item?.Id;
         if (!placed && itemId) {
           const idef = getBlockDef(itemId);
+          customModelScale = Number(idef?.customModelScale);
+          if (!Number.isFinite(customModelScale) || customModelScale <= 0) {
+            customModelScale = 1;
+          }
           if (idef?.itemModel) {
             const model = await getModel(idef.itemModel, idef.itemTexture || null);
             if (model) {
+              modelPath = idef.itemModel;
               holder.add(model);
               placed = true;
             }
           } else if (idef?.customModel) {
             const model = await getModel(idef.customModel, idef.customModelTexture || null);
             if (model) {
+              modelPath = idef.customModel;
               holder.add(model);
               placed = true;
             }
@@ -317,6 +374,8 @@ export async function buildPrefabMesh(prefab, options = {}) {
             placed = true;
           }
         }
+
+        holder.scale.setScalar(entityWorldScale(comps, modelPath) * customModelScale);
 
         // Skip entities we cannot resolve from vanilla/Aetherhaven catalogs (no placeholders).
         if (placed) {

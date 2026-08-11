@@ -50,16 +50,21 @@ export function getBlockDef(name) {
     return direct;
   }
 
-  const stateMatch = id.match(/^\*?(.+)_State_Definitions_(Bottom|Middle|Top)$/i);
+  // Connected / merged states: Bottom|Middle|Top walls, "Block" double-slabs, etc.
+  const stateMatch = id.match(/^\*?(.+)_State_Definitions_([A-Za-z0-9]+)$/i);
   if (stateMatch) {
     const baseId = stateMatch[1];
+    const stateRaw = stateMatch[2];
     const stateName =
-      stateMatch[2].charAt(0).toUpperCase() + stateMatch[2].slice(1).toLowerCase();
+      stateRaw.charAt(0).toUpperCase() + stateRaw.slice(1).toLowerCase();
     const base = cached.blocks[baseId];
     if (!base) {
       return null;
     }
-    const stateTextures = base.states?.[stateName];
+    const stateTextures =
+      base.states?.[stateName] ||
+      base.states?.[stateRaw] ||
+      base.states?.[stateRaw.charAt(0).toUpperCase() + stateRaw.slice(1)];
     if (stateTextures) {
       return {
         ...base,

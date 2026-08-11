@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.festival.carnival.CarnivalBalloonDirectorSystem;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalBalloonSystem;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalDialogueHandlers;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalFestivalMechanic;
+import com.hexvane.aetherhaven.festival.carnival.CarnivalWheelDirectorSystem;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalWheelFaceComponent;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalWheelSystem;
 import com.hexvane.aetherhaven.festival.lettuce.FestivalLettuceAbsorbSystem;
@@ -59,6 +60,7 @@ public final class FestivalsBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new PigRaceSystem());
         plugin.getEntityStoreRegistry().registerSystem(new CarnivalBalloonSystem());
         plugin.getEntityStoreRegistry().registerSystem(new CarnivalBalloonDirectorSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new CarnivalWheelDirectorSystem());
         plugin.getEntityStoreRegistry().registerSystem(new CarnivalWheelSystem());
         core.getFestivalMechanicRegistry().register(NewLifeFestivalMechanic.MECHANIC_ID, new NewLifeFestivalMechanic());
         core.getFestivalMechanicRegistry().register(PigRaceFestivalMechanic.MECHANIC_ID, new PigRaceFestivalMechanic());

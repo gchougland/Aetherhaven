@@ -22,6 +22,12 @@ public final class PrefabResolveUtil {
             return null;
         }
         String k = key.trim();
+        // Player-saved festival prefabs must win over the shipped jar copy, or building-editor saves look like
+        // they "reset" when the festival is loaded again.
+        Path festivalOverride = resolveFestivalDataPrefabOverride(k);
+        if (festivalOverride != null) {
+            return festivalOverride;
+        }
         PrefabStore ps = PrefabStore.get();
         Path p = ps.findAssetPrefabPath(k);
         if (p != null) {
@@ -51,6 +57,16 @@ public final class PrefabResolveUtil {
             return p;
         }
         return resolveDataDirectoryPrefab(k);
+    }
+
+    @Nullable
+    private static Path resolveFestivalDataPrefabOverride(@Nonnull String key) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return null;
+        }
+        Path file = com.hexvane.aetherhaven.festival.CustomFestivalPaths.resolvePrefabFile(plugin.getDataDirectory(), key);
+        return file != null ? file.toAbsolutePath().normalize() : null;
     }
 
     @Nullable

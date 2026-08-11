@@ -98,7 +98,8 @@ public final class PlotCreatorPrefabExporter {
 
         int editorBlock = BlockType.getAssetMap().getIndex("Editor_Block");
         boolean skipEditorBlock = editorBlock != Integer.MIN_VALUE;
-        boolean includeEmpty = draft.isSaveEmptySpaces();
+        // Festival squares must record air so broken blocks stay gone on the next paste/load.
+        boolean includeEmpty = draft.isSaveEmptySpaces() || draft.isFestivalMode();
 
         int top = Math.max(yMin, yMax);
         int bottom = Math.min(yMin, yMax);

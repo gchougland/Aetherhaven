@@ -5,68 +5,53 @@ import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
-import com.hypixel.hytale.component.ArchetypeChunk;
-import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.component.query.Query;
-import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
+import com.hypixel.hytale.component.system.tick.TickingSystem;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
 /**
- * Advances balloon spawn cadence once per carnival town (driven off the wheel face entity so it runs even with no
- * balloons yet).
+ * Advances balloon spawn cadence for every town with an active balloon game. Runs as a world tick so it does not
+ * depend on the wheel face entity (wheel and balloon games can run at the same time).
  */
-public final class CarnivalBalloonDirectorSystem extends EntityTickingSystem<EntityStore> {
-    @Nonnull
+public final class CarnivalBalloonDirectorSystem extends TickingSystem<EntityStore> {
     @Override
-    public Query<EntityStore> getQuery() {
-        return Query.and(CarnivalWheelFaceComponent.getComponentType());
-    }
-
-    @Override
-    public void tick(
-        float dt,
-        int index,
-        @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
-        @Nonnull Store<EntityStore> store,
-        @Nonnull CommandBuffer<EntityStore> commandBuffer
-    ) {
-        CarnivalWheelFaceComponent face =
-            archetypeChunk.getComponent(index, CarnivalWheelFaceComponent.getComponentType());
-        if (face == null) {
-            return;
-        }
-        UUID townId = face.getTownId();
-        if (townId == null) {
-            return;
-        }
+    public void tick(float dt, int systemIndex, @Nonnull Store<EntityStore> store) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {
             return;
         }
         World world = store.getExternalData().getWorld();
-        TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).getTown(townId);
-        if (town == null || !CarnivalIds.FESTIVAL_ID.equals(town.getActiveFestivalId())) {
+        if (world == null || !world.isAlive()) {
             return;
         }
-        CarnivalBalloonSession session = CarnivalBalloonSessionIndex.get(townId);
-        if (session == null || session.getPhase() != CarnivalBalloonSession.Phase.PLAYING) {
-            return;
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        for (Map.Entry<UUID, CarnivalBalloonSession> entry : CarnivalBalloonSessionIndex.entries()) {
+            UUID townId = entry.getKey();
+            CarnivalBalloonSession session = entry.getValue();
+            if (session == null || session.getPhase() != CarnivalBalloonSession.Phase.PLAYING) {
+                continue;
+            }
+            TownRecord town = tm.getTown(townId);
+            if (town == null || !CarnivalIds.FESTIVAL_ID.equals(town.getActiveFestivalId())) {
+                continue;
+            }
+            session.addSpawnCooldown(dt);
+            if (session.getSpawned() >= CarnivalIds.BALLOON_TOTAL || session.getSpawnCooldown() > 0f) {
+                continue;
+            }
+            PlotInstance square = FestivalService.findFestivalSquare(plugin, town);
+            FestivalDefinition festival = plugin.getFestivalCatalog().get(town.getActiveFestivalId());
+            if (square == null || festival == null) {
+                continue;
+            }
+            CarnivalBalloonSpawnService.scheduleSpawn(world, townId, square, festival);
+            session.setSpawnCooldown(CarnivalIds.BALLOON_SPAWN_INTERVAL);
         }
-        session.addSpawnCooldown(dt);
-        if (session.getSpawned() >= CarnivalIds.BALLOON_TOTAL || session.getSpawnCooldown() > 0f) {
-            return;
-        }
-        PlotInstance square = FestivalService.findFestivalSquare(plugin, town);
-        FestivalDefinition festival = plugin.getFestivalCatalog().get(town.getActiveFestivalId());
-        if (square == null || festival == null) {
-            return;
-        }
-        CarnivalBalloonSpawnService.scheduleSpawn(world, townId, square, festival);
-        session.setSpawnCooldown(CarnivalIds.BALLOON_SPAWN_INTERVAL);
     }
 }

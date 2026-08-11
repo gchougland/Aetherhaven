@@ -43,10 +43,10 @@ public final class CarnivalWheelPlacementService {
     /** Matches {@code Aetherhaven_Carnival_Wheel_Face} hitbox; needed so clients render the prop. */
     private static final Box FACE_BOX = new Box(-2.0, -2.0, -0.1, 2.0, 2.0, 0.1);
     /**
-     * Wheel art is centered on the block origin (hub at local y=0), so the spinning face shares that height.
-     * Forward nudge keeps it just in front of the backboard like {@code WheelFaceStatic}.
+     * Block models sit on the cell floor while the hitbox/visual center reads about one block up from that origin.
+     * Forward nudge keeps the spinning face just in front of the backboard like {@code WheelFaceStatic}.
      */
-    private static final double FACE_HEIGHT = 0.0;
+    private static final double FACE_HEIGHT = 1.0;
     private static final double FACE_FORWARD = 0.12;
 
     private CarnivalWheelPlacementService() {}
