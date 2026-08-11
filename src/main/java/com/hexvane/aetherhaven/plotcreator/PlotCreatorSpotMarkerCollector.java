@@ -180,6 +180,27 @@ public final class PlotCreatorSpotMarkerCollector {
                 )
             );
         }
+        for (var whack : draft.getFestivalWhackSpawns()) {
+            if (!passesTypeFilter(filter, PlotCreatorSubstepType.FESTIVAL_WHACK_SPAWN, null)) {
+                continue;
+            }
+            Vector3i block =
+                PlotCreatorLocalCoords.toWorldBlock(
+                    draft,
+                    new int[] {whack.getLocalX(), whack.getLocalY(), whack.getLocalZ()}
+                );
+            out.add(
+                desired(
+                    block.x,
+                    block.y,
+                    block.z,
+                    PlotCreatorSubstepType.FESTIVAL_WHACK_SPAWN,
+                    null,
+                    null,
+                    null
+                )
+            );
+        }
         var wheel = draft.getFestivalWheelLocal();
         if (wheel != null && passesTypeFilter(filter, PlotCreatorSubstepType.FESTIVAL_WHEEL, null)) {
             Vector3i block =

@@ -31,45 +31,79 @@ export async function loadCatalogs(assetBase = DEFAULT_ASSET_BASE) {
   return cached;
 }
 
+const FACE_KEY = /^(All|Up|Down|Sides|UpDown|North|South|East|West|Left|Right)$/i;
+
 /**
- * Roof corner states are their own blockymodel rather than a texture state, and the asset
- * names order the variant and "Inverted" tokens differently per family
- * (`Corner_Inverted_Shallow_Left` but `Corner_Rock_Shallow_Inverted_Left`), so return the
- * plausible spellings and let the loader take the first that exists.
- * @param {string} modelPath base slope model, e.g. Blocks/Structures/Roofs/Slope_Shallow.blockymodel
- * @param {string} state e.g. Inverted_Corner_Left
- * @returns {string[]}
+ * Older catalogs stored a state as a bare texture face map; newer ones store what the
+ * state actually overrides.
+ * @param {any} override
  */
-function cornerModelCandidates(modelPath, state) {
-  const parts = String(modelPath).match(/^(.*\/)?([^/]+)\.blockymodel$/i);
-  if (!parts) {
-    return [];
+function normalizeStateOverride(override) {
+  if (!override || typeof override !== "object") {
+    return null;
   }
-  const slope = parts[2].match(/^Slope(_.*)?$/i);
-  if (!slope) {
-    return [];
+  if (Object.keys(override).some((k) => FACE_KEY.test(k))) {
+    return { textures: override };
   }
-  const tokens = String(state).split("_").filter(Boolean);
-  if (!tokens.some((t) => /^Corner$/i.test(t))) {
-    return [];
-  }
-  const dir = parts[1] || "";
-  const variant = slope[1] || "";
-  const side = tokens.find((t) => /^(Left|Right)$/i.test(t));
-  const suffix = side ? `_${side}` : "";
-  const inverted = tokens.some((t) => /^Inverted$/i.test(t)) ? "_Inverted" : "";
-  const names = [
-    `Corner${inverted}${variant}${suffix}`,
-    `Corner${variant}${inverted}${suffix}`,
-    `Corner${variant}${suffix}`,
-  ];
-  return [...new Set(names)].map((n) => `${dir}${n}.blockymodel`);
+  return override;
 }
 
 /**
- * Connected wall/blocks are stored in prefabs as e.g.
- * `*Wood_Village_Wall_Yellow_Full_State_Definitions_Middle`.
- * Resolve those to the base block + state textures when present.
+ * @param {Record<string, any>|null|undefined} states
+ * @param {string} wanted
+ */
+function findState(states, wanted) {
+  if (!states) {
+    return null;
+  }
+  if (states[wanted]) {
+    return states[wanted];
+  }
+  const lower = wanted.toLowerCase();
+  for (const [name, override] of Object.entries(states)) {
+    if (name.toLowerCase() === lower) {
+      return override;
+    }
+  }
+  return null;
+}
+
+/**
+ * Merge one state over the block it belongs to. Block states and item variants are looked
+ * up in whichever map the name came from, then the other, since a build should still draw
+ * if an id ever mixes the two spellings.
+ * @param {any} base
+ * @param {string} stateName
+ * @param {boolean} preferVariant
+ */
+function applyBlockState(base, stateName, preferVariant) {
+  const maps = preferVariant ? [base.variants, base.states] : [base.states, base.variants];
+  const override = normalizeStateOverride(findState(maps[0], stateName) || findState(maps[1], stateName));
+  if (!override) {
+    // Unknown state: draw the plain block rather than leaving a hole in the build.
+    return base;
+  }
+  const merged = { ...base, ...override };
+  // Only the state's own children are reachable from here, not its siblings.
+  merged.states = override.states || null;
+  merged.variants = override.variants || null;
+  if (override.customModel) {
+    merged.customModelTexture = override.customModelTexture || base.customModelTexture || null;
+  } else if (override.textures) {
+    // A state that just reskins the cube replaces the block's model, it does not wear it.
+    merged.customModel = null;
+    merged.customModelTexture = null;
+  }
+  return merged;
+}
+
+/**
+ * Prefabs store a placed block state two ways: `*BlockId_State_Definitions_Name` for block
+ * states (village wall segments, double slabs, roof corners, open doors, crop stages) and
+ * `*BlockId_State_Name` for item variants (a filled bucket or watering can). Either may
+ * reskin the block, swap its model, or both. State names contain underscores and a few
+ * blocks nest a state inside a state, so peel one state off the end and resolve what is
+ * left as a block in its own right.
  * @param {string} name
  */
 export function getBlockDef(name) {
@@ -85,39 +119,12 @@ export function getBlockDef(name) {
     return direct;
   }
 
-  // Connected / merged states: Bottom|Middle|Top walls, "Block" double-slabs, etc.
-  const stateMatch = id.match(/^\*?(.+)_State_Definitions_([A-Za-z0-9_]+)$/i);
+  // Block states first: their separator contains the item variant one.
+  const stateMatch =
+    id.match(/^(\*?.+)_State_Definitions_(.+)$/) || id.match(/^(\*?.+)_State_(.+)$/);
   if (stateMatch) {
-    const baseId = stateMatch[1];
-    const stateRaw = stateMatch[2];
-    const stateName =
-      stateRaw.charAt(0).toUpperCase() + stateRaw.slice(1).toLowerCase();
-    const base = cached.blocks[baseId];
-    if (!base) {
-      return null;
-    }
-    const stateTextures =
-      base.states?.[stateName] ||
-      base.states?.[stateRaw] ||
-      base.states?.[stateRaw.charAt(0).toUpperCase() + stateRaw.slice(1)];
-    if (stateTextures) {
-      return {
-        ...base,
-        drawType: "Cube",
-        textures: stateTextures,
-        // State variants are cube skins of the connected block, not the custom model.
-        customModel: null,
-        customModelTexture: null,
-      };
-    }
-    if (base.customModel) {
-      const candidates = cornerModelCandidates(base.customModel, stateRaw);
-      if (candidates.length) {
-        return { ...base, customModel: candidates[0], customModelCandidates: candidates };
-      }
-    }
-    // Fallback: at least show the full/base wall block instead of skipping.
-    return base;
+    const base = getBlockDef(stateMatch[1]);
+    return base ? applyBlockState(base, stateMatch[2], !id.includes("_State_Definitions_")) : null;
   }
 
   if (id.startsWith("*")) {

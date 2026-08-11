@@ -140,6 +140,7 @@ public final class PlotCreatorValidator {
             case FESTIVAL_CENTERPIECE -> draft.getFestivalCenterpieceLocal() != null ? 1 : 0;
             case FESTIVAL_RACE_LANE -> draft.getFestivalRaceLanes().size();
             case FESTIVAL_BALLOON_SPAWN -> draft.getFestivalBalloonSpawns().size();
+            case FESTIVAL_WHACK_SPAWN -> draft.getFestivalWhackSpawns().size();
             case FESTIVAL_WHEEL -> draft.getFestivalWheelLocal() != null ? 1 : 0;
         };
     }

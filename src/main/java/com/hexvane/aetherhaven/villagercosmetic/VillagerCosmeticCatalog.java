@@ -28,22 +28,25 @@ public final class VillagerCosmeticCatalog {
     private final Map<String, VillagerCosmeticDefinition> byUnlockItemId;
     private final Set<String> headAccessoryModelPaths;
     private final Set<String> faceAccessoryModelPaths;
+    private final Set<String> backAccessoryModelPaths;
 
     private VillagerCosmeticCatalog(
         @Nonnull Map<String, VillagerCosmeticDefinition> byId,
         @Nonnull Map<String, VillagerCosmeticDefinition> byUnlockItemId,
         @Nonnull Set<String> headAccessoryModelPaths,
-        @Nonnull Set<String> faceAccessoryModelPaths
+        @Nonnull Set<String> faceAccessoryModelPaths,
+        @Nonnull Set<String> backAccessoryModelPaths
     ) {
         this.byId = byId;
         this.byUnlockItemId = byUnlockItemId;
         this.headAccessoryModelPaths = headAccessoryModelPaths;
         this.faceAccessoryModelPaths = faceAccessoryModelPaths;
+        this.backAccessoryModelPaths = backAccessoryModelPaths;
     }
 
     @Nonnull
     public static VillagerCosmeticCatalog empty() {
-        return new VillagerCosmeticCatalog(Map.of(), Map.of(), Set.of(), Set.of());
+        return new VillagerCosmeticCatalog(Map.of(), Map.of(), Set.of(), Set.of(), Set.of());
     }
 
     @Nonnull
@@ -59,6 +62,7 @@ public final class VillagerCosmeticCatalog {
             Map<String, VillagerCosmeticDefinition> byItem = new LinkedHashMap<>();
             Set<String> headModels = new LinkedHashSet<>();
             Set<String> faceModels = new LinkedHashSet<>();
+            Set<String> backModels = new LinkedHashSet<>();
             if (arr != null) {
                 for (JsonElement el : arr) {
                     if (el == null || !el.isJsonObject()) {
@@ -82,18 +86,22 @@ public final class VillagerCosmeticCatalog {
                         headModels.add(model);
                     } else if (VillagerCosmeticDefinition.SLOT_FACE_ACCESSORY.equalsIgnoreCase(slot)) {
                         faceModels.add(model);
+                    } else if (VillagerCosmeticDefinition.SLOT_BACK_ACCESSORY.equalsIgnoreCase(slot)) {
+                        backModels.add(model);
                     }
                 }
             }
             // Folder prefixes count as their slot for strip/replace on base outfits.
             headModels.add("Cosmetics/Head/");
             faceModels.add("Cosmetics/Face_Accessories/");
+            backModels.add("Cosmetics/Back/");
             LOGGER.atInfo().log("Loaded %s villager cosmetic(s)", byId.size());
             return new VillagerCosmeticCatalog(
                 Collections.unmodifiableMap(byId),
                 Collections.unmodifiableMap(byItem),
                 Collections.unmodifiableSet(headModels),
-                Collections.unmodifiableSet(faceModels)
+                Collections.unmodifiableSet(faceModels),
+                Collections.unmodifiableSet(backModels)
             );
         } catch (Exception e) {
             LOGGER.atSevere().withCause(e).log("Failed to load villager cosmetics catalog");
@@ -164,12 +172,19 @@ public final class VillagerCosmeticCatalog {
         return matchesFolderOrKnown(modelPath, "Cosmetics/Face_Accessories/", faceAccessoryModelPaths);
     }
 
+    public boolean isBackAccessoryModel(@Nullable String modelPath) {
+        return matchesFolderOrKnown(modelPath, "Cosmetics/Back/", backAccessoryModelPaths);
+    }
+
     public boolean belongsToSlot(@Nonnull String slot, @Nullable String modelPath) {
         if (VillagerCosmeticDefinition.SLOT_HEAD_ACCESSORY.equalsIgnoreCase(slot)) {
             return isHeadAccessoryModel(modelPath);
         }
         if (VillagerCosmeticDefinition.SLOT_FACE_ACCESSORY.equalsIgnoreCase(slot)) {
             return isFaceAccessoryModel(modelPath);
+        }
+        if (VillagerCosmeticDefinition.SLOT_BACK_ACCESSORY.equalsIgnoreCase(slot)) {
+            return isBackAccessoryModel(modelPath);
         }
         String slotLower = slot.toLowerCase(Locale.ROOT);
         for (VillagerCosmeticDefinition def : byId.values()) {

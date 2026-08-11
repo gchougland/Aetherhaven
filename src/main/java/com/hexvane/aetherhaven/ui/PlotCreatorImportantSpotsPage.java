@@ -169,6 +169,12 @@ public final class PlotCreatorImportantSpotsPage
                     resolveMinCount(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_BALLOON_SPAWN, 1))
                 )
             );
+            out.add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_WHACK_SPAWN,
+                    resolveMinCount(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_WHACK_SPAWN, 1))
+                )
+            );
             out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_WHEEL, 1));
             List<PlotCreatorSpotEntry> ranked = new ArrayList<>(out);
             for (int i = 0; i < ranked.size(); i++) {

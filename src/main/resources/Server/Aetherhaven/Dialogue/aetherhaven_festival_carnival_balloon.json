@@ -81,6 +81,26 @@
         }
       ]
     },
+    "collect_perfect": {
+      "speaker": "aetherhaven_dialogue_festival_carnival_balloon.aetherhaven.dialogue.festival_carnival_balloon.speaker",
+      "text": "aetherhaven_dialogue_festival_carnival_balloon.aetherhaven.dialogue.festival_carnival_balloon.collect_perfect.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_carnival_balloon.aetherhaven.dialogue.festival_carnival_balloon.collect_perfect.c_ok",
+          "next": null
+        }
+      ]
+    },
+    "collect_perfect_already": {
+      "speaker": "aetherhaven_dialogue_festival_carnival_balloon.aetherhaven.dialogue.festival_carnival_balloon.speaker",
+      "text": "aetherhaven_dialogue_festival_carnival_balloon.aetherhaven.dialogue.festival_carnival_balloon.collect_perfect_already.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_carnival_balloon.aetherhaven.dialogue.festival_carnival_balloon.collect_perfect_already.c_ok",
+          "next": null
+        }
+      ]
+    },
     "busy": {
       "speaker": "aetherhaven_dialogue_festival_carnival_balloon.aetherhaven.dialogue.festival_carnival_balloon.speaker",
       "text": "aetherhaven_dialogue_festival_carnival_balloon.aetherhaven.dialogue.festival_carnival_balloon.busy.body",

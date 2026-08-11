@@ -108,12 +108,18 @@ public final class CarnivalWheelSession {
         startRoll = currentRoll;
         int octant = ThreadLocalRandom.current().nextInt(8);
         // Land near the center of an octant; idle offset keeps rest pose between wedges.
-        // Plenty of full turns so the start feels quick, then the ease-out coasts to a stop.
-        int fullTurns = 8 + ThreadLocalRandom.current().nextInt(4);
-        targetRoll = CarnivalIds.WHEEL_IDLE_OFFSET_RAD
+        float twoPi = (float) (Math.PI * 2.0);
+        float landing = CarnivalIds.WHEEL_IDLE_OFFSET_RAD
             + octant * (float) (Math.PI / 4.0)
-            + (float) (Math.PI / 8.0)
-            + (float) (Math.PI * 2.0 * fullTurns);
+            + (float) (Math.PI / 8.0);
+        // Extra turns for drama; then bump until the travel from the current roll is at least one full rotation
+        // (absolute landing angles alone can undershoot after previous spins accumulate).
+        int extraTurns = 7 + ThreadLocalRandom.current().nextInt(4);
+        float target = landing + twoPi * extraTurns;
+        while (target - startRoll < twoPi) {
+            target += twoPi;
+        }
+        targetRoll = target;
         tickSfxAccum = 0f;
         won = false;
         resultPending = false;

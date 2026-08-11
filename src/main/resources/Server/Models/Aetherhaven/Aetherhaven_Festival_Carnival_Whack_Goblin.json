@@ -1,0 +1,20 @@
+{
+  "Parent": "Goblin_Scrapper",
+  "Model": "NPC/Intelligent/Goblin/Models/Model.blockymodel",
+  "Texture": "NPC/Intelligent/Goblin/Models/Model_Textures/Moldy.png",
+  "DefaultAttachments": [
+    {
+      "Model": "NPC/Intelligent/Goblin/Models/Attachments/Cosmetics/Rag/Rag_Chest.blockymodel",
+      "Texture": "NPC/Intelligent/Goblin/Models/Attachments/Cosmetics/Rag/Rag_Chest_Brown.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Goblin/Models/Attachments/Cosmetics/Hair/Goblin_Hair.blockymodel",
+      "Texture": "NPC/Intelligent/Goblin/Models/Attachments/Cosmetics/Hair/Goblin_Hair_Textures/BrownLight.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Goblin/Models/Attachments/Cosmetics/Rag/Rag_Pelvis.blockymodel",
+      "Texture": "NPC/Intelligent/Goblin/Models/Attachments/Cosmetics/Rag/Rag_Pelvis_Textures/Brown.png"
+    }
+  ],
+  "Icon": "Icons/ModelsGenerated/Aetherhaven_Festival_Carnival_Whack_Goblin.png"
+}

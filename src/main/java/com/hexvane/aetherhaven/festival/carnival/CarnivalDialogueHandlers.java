@@ -24,12 +24,15 @@ import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3d;
 
-/** Dialogue conditions and actions for carnival balloon / wheel attendants. */
+/** Dialogue conditions and actions for carnival balloon / wheel / whack attendants. */
 public final class CarnivalDialogueHandlers {
     private CarnivalDialogueHandlers() {}
 
@@ -46,12 +49,21 @@ public final class CarnivalDialogueHandlers {
         conditions.register("carnival_wheel_has_win", (c, p, s, n) -> wheelHasWin(p, s, n));
         conditions.register("carnival_wheel_has_loss", (c, p, s, n) -> wheelHasLoss(p, s, n));
 
+        conditions.register("carnival_whack_can_start", (c, p, s, n) -> whackCanStart(p, s, n));
+        conditions.register("carnival_whack_busy", (c, p, s, n) -> whackBusy(p, s, n));
+        conditions.register("carnival_whack_is_playing", (c, p, s, n) -> whackPlaying(p, s, n));
+        conditions.register("carnival_whack_has_result", (c, p, s, n) -> whackHasResult(p, s, n));
+        conditions.register("carnival_whack_needs_club", (c, p, s, n) -> whackNeedsClub(p, s, n));
+
         DialogueActionRegistry actions = plugin.getDialogueActionRegistry();
         actions.register("carnival_balloon_start", CarnivalDialogueHandlers::balloonStart);
         actions.register("carnival_balloon_collect", CarnivalDialogueHandlers::balloonCollect);
         actions.register("carnival_wheel_start", CarnivalDialogueHandlers::wheelStart);
         actions.register("carnival_wheel_collect", CarnivalDialogueHandlers::wheelCollect);
         actions.register("carnival_wheel_ack_loss", CarnivalDialogueHandlers::wheelAckLoss);
+        actions.register("carnival_whack_start", CarnivalDialogueHandlers::whackStart);
+        actions.register("carnival_whack_collect", CarnivalDialogueHandlers::whackCollect);
+        actions.register("carnival_whack_give_club", CarnivalDialogueHandlers::whackGiveClub);
     }
 
     private static boolean balloonCanStart(
@@ -239,6 +251,7 @@ public final class CarnivalDialogueHandlers {
         if (session == null) {
             return;
         }
+        boolean perfectClear = session.isPendingPerfectClear(playerUuid);
         int tickets = session.collectResult(playerUuid);
         if (tickets < 0) {
             return;
@@ -247,6 +260,40 @@ public final class CarnivalDialogueHandlers {
         if (tickets > 0) {
             player.giveItem(new ItemStack(CarnivalIds.SUMMER_TICKET_ITEM_ID, tickets), playerRef, store);
         }
+        if (perfectClear) {
+            String hatItemId = pickRandomUnownedBalloonHatItem(town, store, playerRef);
+            if (hatItemId != null) {
+                player.giveItem(new ItemStack(hatItemId, 1), playerRef, store);
+                out.setGotoNodeId("collect_perfect");
+            } else {
+                out.setGotoNodeId("collect_perfect_already");
+            }
+        }
+    }
+
+    @Nullable
+    private static String pickRandomUnownedBalloonHatItem(
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> playerRef
+    ) {
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        List<String> available = new ArrayList<>();
+        for (int i = 0; i < CarnivalIds.BALLOON_HAT_COSMETIC_IDS.length; i++) {
+            String cosmeticId = CarnivalIds.BALLOON_HAT_COSMETIC_IDS[i];
+            String itemId = CarnivalIds.BALLOON_HAT_COSMETIC_ITEM_IDS[i];
+            if (town.hasVillagerCosmeticUnlocked(cosmeticId)) {
+                continue;
+            }
+            if (inv != null && inv.countItemStacks(stack -> itemId.equals(stack.getItemId())) > 0) {
+                continue;
+            }
+            available.add(itemId);
+        }
+        if (available.isEmpty()) {
+            return null;
+        }
+        return available.get(ThreadLocalRandom.current().nextInt(available.size()));
     }
 
     private static void wheelStart(
@@ -270,7 +317,7 @@ public final class CarnivalDialogueHandlers {
             return;
         }
         World world = store.getExternalData().getWorld();
-        ensureWheelFace(world, plugin, town, session);
+        ensureWheelFace(world, plugin, town);
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, playerUuid);
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, playerUuid);
@@ -352,6 +399,175 @@ public final class CarnivalDialogueHandlers {
         }
     }
 
+    private static boolean whackCanStart(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store, npcRef);
+        UUID playerUuid = playerUuid(playerRef, store);
+        if (town == null || playerUuid == null || !isCarnivalActive(town)) {
+            return false;
+        }
+        return CarnivalWhackSessionIndex.getOrCreate(town.getTownId()).canStart(playerUuid);
+    }
+
+    private static boolean whackBusy(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store, npcRef);
+        UUID playerUuid = playerUuid(playerRef, store);
+        if (town == null || playerUuid == null || !isCarnivalActive(town)) {
+            return false;
+        }
+        return CarnivalWhackSessionIndex.getOrCreate(town.getTownId()).isBusyForOther(playerUuid);
+    }
+
+    private static boolean whackPlaying(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store, npcRef);
+        UUID playerUuid = playerUuid(playerRef, store);
+        if (town == null || playerUuid == null || !isCarnivalActive(town)) {
+            return false;
+        }
+        return CarnivalWhackSessionIndex.getOrCreate(town.getTownId()).isPlaying(playerUuid);
+    }
+
+    private static boolean whackHasResult(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store, npcRef);
+        UUID playerUuid = playerUuid(playerRef, store);
+        if (town == null || playerUuid == null || !isCarnivalActive(town)) {
+            return false;
+        }
+        return CarnivalWhackSessionIndex.getOrCreate(town.getTownId()).hasResult(playerUuid);
+    }
+
+    private static boolean whackNeedsClub(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store, npcRef);
+        if (town == null || !isCarnivalActive(town)) {
+            return false;
+        }
+        return !CarnivalWhackClubUtil.playerHasWhacker(store, playerRef);
+    }
+
+    private static void whackStart(
+        @Nonnull JsonObject action,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull DialogueActionBatchResult out,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store, npcRef);
+        UUID playerUuid = playerUuid(playerRef, store);
+        Player player = store.getComponent(playerRef, Player.getComponentType());
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (town == null || playerUuid == null || player == null || plugin == null || !isCarnivalActive(town)) {
+            out.setGotoNodeId("busy");
+            return;
+        }
+        CarnivalWhackSession session = CarnivalWhackSessionIndex.getOrCreate(town.getTownId());
+        if (!session.canStart(playerUuid)) {
+            out.setGotoNodeId("busy");
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, playerUuid);
+        boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, playerUuid);
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        if (inv == null
+            || !GoldCoinPayment.canAfford(payerTown, inv, CarnivalIds.GAME_COST_GOLD, allowTreasury)) {
+            out.setGotoNodeId("busy");
+            return;
+        }
+        SpendBreakdown paid =
+            GoldCoinPayment.trySpendReturningBreakdown(payerTown, inv, CarnivalIds.GAME_COST_GOLD, allowTreasury);
+        if (paid == null) {
+            out.setGotoNodeId("busy");
+            return;
+        }
+        if (!session.tryBegin(playerUuid)) {
+            GoldCoinPayment.refund(payerTown, player, playerRef, store, paid);
+            if (payerTown != null) {
+                tm.updateTown(payerTown);
+            }
+            out.setGotoNodeId("busy");
+            return;
+        }
+        if (payerTown != null) {
+            tm.updateTown(payerTown);
+        }
+        // Re-check after payment; never grant a second Goblin Whacker if one is already held.
+        if (!CarnivalWhackClubUtil.playerHasWhacker(store, playerRef)) {
+            player.giveItem(new ItemStack(CarnivalIds.CLUB_ITEM_ID, 1), playerRef, store);
+        }
+        CarnivalAudio.playWhackStart(store, CarnivalAudio.squareCenter(plugin, town));
+    }
+
+    private static void whackCollect(
+        @Nonnull JsonObject action,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull DialogueActionBatchResult out,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store, npcRef);
+        UUID playerUuid = playerUuid(playerRef, store);
+        Player player = store.getComponent(playerRef, Player.getComponentType());
+        if (town == null || playerUuid == null || player == null) {
+            return;
+        }
+        CarnivalWhackSession session = CarnivalWhackSessionIndex.get(town.getTownId());
+        if (session == null) {
+            return;
+        }
+        boolean perfectClear = session.isPendingPerfectClear(playerUuid);
+        int tickets = session.collectResult(playerUuid);
+        if (tickets < 0) {
+            return;
+        }
+        CarnivalWhackClubUtil.removeAllWhackers(store, playerRef);
+        if (tickets > 0) {
+            player.giveItem(new ItemStack(CarnivalIds.SUMMER_TICKET_ITEM_ID, tickets), playerRef, store);
+        }
+        if (perfectClear && !town.hasVillagerCosmeticUnlocked(CarnivalIds.WHACK_PERFECT_COSMETIC_ID)) {
+            player.giveItem(new ItemStack(CarnivalIds.WHACK_PERFECT_COSMETIC_ITEM_ID, 1), playerRef, store);
+            out.setGotoNodeId("collect_perfect");
+        } else if (perfectClear) {
+            out.setGotoNodeId("collect_perfect_already");
+        }
+    }
+
+    private static void whackGiveClub(
+        @Nonnull JsonObject action,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull DialogueActionBatchResult out,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        Player player = store.getComponent(playerRef, Player.getComponentType());
+        if (player == null) {
+            return;
+        }
+        if (CarnivalWhackClubUtil.playerHasWhacker(store, playerRef)) {
+            return;
+        }
+        player.giveItem(new ItemStack(CarnivalIds.CLUB_ITEM_ID, 1), playerRef, store);
+    }
+
     private static void removeDarts(
         @Nonnull Store<EntityStore> store,
         @Nonnull Ref<EntityStore> playerRef,
@@ -371,25 +587,14 @@ public final class CarnivalDialogueHandlers {
     private static void ensureWheelFace(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
-        @Nonnull TownRecord town,
-        @Nonnull CarnivalWheelSession session
+        @Nonnull TownRecord town
     ) {
-        UUID faceUuid = session.getFaceEntityUuid();
-        if (faceUuid != null) {
-            var entityStore = world.getEntityStore();
-            if (entityStore != null) {
-                Ref<EntityStore> faceRef = entityStore.getStore().getExternalData().getRefFromUUID(faceUuid);
-                if (faceRef != null && faceRef.isValid()) {
-                    return;
-                }
-            }
-        }
         PlotInstance square = FestivalService.findFestivalSquare(plugin, town);
         FestivalDefinition festival = plugin.getFestivalCatalog().get(town.getActiveFestivalId());
         if (square == null || festival == null) {
             return;
         }
-        CarnivalWheelPlacementService.place(world, town.getTownId(), square, festival);
+        CarnivalWheelPlacementService.ensurePresent(world, town.getTownId(), square, festival, true);
     }
 
     @Nullable

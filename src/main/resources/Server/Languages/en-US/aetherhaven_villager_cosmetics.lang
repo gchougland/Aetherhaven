@@ -5,6 +5,12 @@ aetherhaven.villagerCosmetic.pigEars=Pig Ears
 aetherhaven.villagerCosmetic.pigEars.fuzzy=Fuzzy Pig Ears
 aetherhaven.villagerCosmetic.pigSnout=Pig Snout
 aetherhaven.villagerCosmetic.poopHat=Poop Hat
+aetherhaven.villagerCosmetic.goblinLobberBackpack=Goblin Backpack
+aetherhaven.villagerCosmetic.balloonHat.red=Red Balloon Hat
+aetherhaven.villagerCosmetic.balloonHat.yellow=Yellow Balloon Hat
+aetherhaven.villagerCosmetic.balloonHat.blue=Blue Balloon Hat
+aetherhaven.villagerCosmetic.clownNose=Clown Nose
+aetherhaven.villagerCosmetic.redAfro=Red Afro
 
 aetherhaven.villagerCosmetic.unlock.success=Unlocked {name} for your town wardrobe.
 aetherhaven.villagerCosmetic.unlock.already=Your town already has {name}.
@@ -21,5 +27,6 @@ aetherhaven.ui.villagerWardrobe.saved=Outfit saved for this town.
 aetherhaven.ui.villagerWardrobe.defaultLook=Default look
 aetherhaven.ui.villagerWardrobe.slot.headaccessory=Head
 aetherhaven.ui.villagerWardrobe.slot.faceaccessory=Face
+aetherhaven.ui.villagerWardrobe.slot.backaccessory=Back
 
 aetherhaven.ui.villagerWardrobe.noUnlocks=Unlock looks with cosmetic patterns, then change them here.

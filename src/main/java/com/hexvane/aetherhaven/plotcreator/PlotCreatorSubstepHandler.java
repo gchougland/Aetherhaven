@@ -132,6 +132,8 @@ public final class PlotCreatorSubstepHandler {
                 PlotCreatorFestivalPlacement.tryRemoveRaceLaneNear(session, targetBlock, playerRef);
             case FESTIVAL_BALLOON_SPAWN ->
                 PlotCreatorFestivalPlacement.tryRemoveBalloonNear(draft, targetBlock, playerRef);
+            case FESTIVAL_WHACK_SPAWN ->
+                PlotCreatorFestivalPlacement.tryRemoveWhackNear(draft, targetBlock, playerRef);
             case FESTIVAL_WHEEL -> PlotCreatorFestivalPlacement.tryRemoveWheelNear(draft, targetBlock, playerRef);
         };
     }
@@ -432,6 +434,8 @@ public final class PlotCreatorSubstepHandler {
             case FESTIVAL_RACE_LANE -> PlotCreatorFestivalPlacement.placeRaceLaneClick(session, targetBlock, playerRef);
             case FESTIVAL_BALLOON_SPAWN ->
                 PlotCreatorFestivalPlacement.placeBalloonSpawn(session, targetBlock, playerRef);
+            case FESTIVAL_WHACK_SPAWN ->
+                PlotCreatorFestivalPlacement.placeWhackSpawn(session, targetBlock, playerRef);
             case FESTIVAL_WHEEL -> PlotCreatorFestivalPlacement.placeWheel(
                 session,
                 targetBlock,

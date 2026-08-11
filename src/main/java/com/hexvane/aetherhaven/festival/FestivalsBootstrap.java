@@ -7,6 +7,10 @@ import com.hexvane.aetherhaven.festival.carnival.CarnivalBalloonDirectorSystem;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalBalloonSystem;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalDialogueHandlers;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalFestivalMechanic;
+import com.hexvane.aetherhaven.festival.carnival.CarnivalWhackComponent;
+import com.hexvane.aetherhaven.festival.carnival.CarnivalWhackDirectorSystem;
+import com.hexvane.aetherhaven.festival.carnival.CarnivalWhackHitSystem;
+import com.hexvane.aetherhaven.festival.carnival.CarnivalWhackSystem;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalWheelDirectorSystem;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalWheelFaceComponent;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalWheelSystem;
@@ -49,6 +53,7 @@ public final class FestivalsBootstrap {
         FestivalLettuceComponent.register(plugin.getEntityStoreRegistry());
         PigRaceRacerComponent.register(plugin.getEntityStoreRegistry());
         CarnivalBalloonComponent.register(plugin.getEntityStoreRegistry());
+        CarnivalWhackComponent.register(plugin.getEntityStoreRegistry());
         CarnivalWheelFaceComponent.register(plugin.getEntityStoreRegistry());
         plugin.getEntityStoreRegistry().registerSystem(new FestivalLettuceAbsorbSystem());
         plugin.getEntityStoreRegistry().registerSystem(new FestivalLettuceGrowthSystem());
@@ -60,6 +65,9 @@ public final class FestivalsBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new PigRaceSystem());
         plugin.getEntityStoreRegistry().registerSystem(new CarnivalBalloonSystem());
         plugin.getEntityStoreRegistry().registerSystem(new CarnivalBalloonDirectorSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new CarnivalWhackSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new CarnivalWhackDirectorSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new CarnivalWhackHitSystem());
         plugin.getEntityStoreRegistry().registerSystem(new CarnivalWheelDirectorSystem());
         plugin.getEntityStoreRegistry().registerSystem(new CarnivalWheelSystem());
         core.getFestivalMechanicRegistry().register(NewLifeFestivalMechanic.MECHANIC_ID, new NewLifeFestivalMechanic());

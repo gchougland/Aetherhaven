@@ -106,6 +106,28 @@ public final class PlotCreatorFestivalPlacement {
         return true;
     }
 
+    public static boolean placeWhackSpawn(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef
+    ) {
+        PlotCreatorDraft draft = session.getDraft();
+        PlotCreatorSpotPlacement.ResolvedSpot spot =
+            PlotCreatorSpotPlacement.resolveStandSpawn(session.getWorld(), targetBlock);
+        int[] local = PlotCreatorLocalCoords.toLocal(draft, spot.worldBlock());
+        if (hasWhackAt(draft, local)) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalWhackAlreadyRecorded")
+            );
+            return true;
+        }
+        draft.getFestivalWhackSpawns().add(FestivalDefinition.WhackSpawnRow.of(local[0], local[1], local[2]));
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalWhackRecorded")
+        );
+        return true;
+    }
+
     public static boolean placeWheel(
         @Nonnull PlotCreatorSession session,
         @Nonnull Vector3i targetBlock,
@@ -261,6 +283,30 @@ public final class PlotCreatorFestivalPlacement {
         return false;
     }
 
+    public static boolean tryRemoveWhackNear(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef
+    ) {
+        Iterator<FestivalDefinition.WhackSpawnRow> it = draft.getFestivalWhackSpawns().iterator();
+        while (it.hasNext()) {
+            FestivalDefinition.WhackSpawnRow spot = it.next();
+            Vector3i world =
+                PlotCreatorLocalCoords.toWorldBlock(
+                    draft,
+                    new int[] {spot.getLocalX(), spot.getLocalY(), spot.getLocalZ()}
+                );
+            if (near(world, targetBlock)) {
+                it.remove();
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalWhackRemoved")
+                );
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean tryRemoveWheelNear(
         @Nonnull PlotCreatorDraft draft,
         @Nonnull Vector3i targetBlock,
@@ -342,6 +388,15 @@ public final class PlotCreatorFestivalPlacement {
 
     private static boolean hasBalloonAt(@Nonnull PlotCreatorDraft draft, @Nonnull int[] local) {
         for (FestivalDefinition.BalloonSpawnRow spot : draft.getFestivalBalloonSpawns()) {
+            if (spot.getLocalX() == local[0] && spot.getLocalY() == local[1] && spot.getLocalZ() == local[2]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean hasWhackAt(@Nonnull PlotCreatorDraft draft, @Nonnull int[] local) {
+        for (FestivalDefinition.WhackSpawnRow spot : draft.getFestivalWhackSpawns()) {
             if (spot.getLocalX() == local[0] && spot.getLocalY() == local[1] && spot.getLocalZ() == local[2]) {
                 return true;
             }

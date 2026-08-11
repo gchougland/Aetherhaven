@@ -1,7 +1,10 @@
 package com.hexvane.aetherhaven.festival.carnival;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.festival.FestivalDefinition;
+import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
@@ -17,10 +20,13 @@ import javax.annotation.Nullable;
 import org.joml.Vector3d;
 
 /**
- * Advances wheel spin timers for every town. Kept separate from the face entity so a missing/broken prop cannot
- * leave the session stuck in {@code SPINNING}.
+ * Advances wheel spin timers and keeps the face prop present for the whole carnival (including after join / chunk
+ * load, when the in-memory session UUID may be gone).
  */
 public final class CarnivalWheelDirectorSystem extends TickingSystem<EntityStore> {
+    private static final float ENSURE_INTERVAL_SECONDS = 2.5f;
+    private float ensureAccum;
+
     @Override
     public void tick(float dt, int systemIndex, @Nonnull Store<EntityStore> store) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
@@ -33,6 +39,16 @@ public final class CarnivalWheelDirectorSystem extends TickingSystem<EntityStore
         }
         String worldName = world.getName();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+
+        ensureAccum += dt;
+        if (ensureAccum >= ENSURE_INTERVAL_SECONDS) {
+            ensureAccum = 0f;
+            // Soft ensure only — never force-loads chunks when the square is unloaded / empty.
+            if (!world.getPlayerRefs().isEmpty()) {
+                ensureFacesForCarnivalTowns(world, worldName, plugin, tm);
+            }
+        }
+
         for (Map.Entry<UUID, CarnivalWheelSession> entry : CarnivalWheelSessionIndex.entries()) {
             UUID townId = entry.getKey();
             CarnivalWheelSession session = entry.getValue();
@@ -65,6 +81,27 @@ public final class CarnivalWheelDirectorSystem extends TickingSystem<EntityStore
                     CarnivalAudio.squareCenter(plugin, town)
                 );
             }
+        }
+    }
+
+    private static void ensureFacesForCarnivalTowns(
+        @Nonnull World world,
+        @Nonnull String worldName,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownManager tm
+    ) {
+        for (TownRecord town : tm.allTowns()) {
+            if (town == null
+                || !CarnivalIds.FESTIVAL_ID.equals(town.getActiveFestivalId())
+                || !worldName.equals(town.getWorldName())) {
+                continue;
+            }
+            PlotInstance square = FestivalService.findFestivalSquare(plugin, town);
+            FestivalDefinition festival = plugin.getFestivalCatalog().get(town.getActiveFestivalId());
+            if (square == null || festival == null) {
+                continue;
+            }
+            CarnivalWheelPlacementService.ensurePresent(world, town.getTownId(), square, festival);
         }
     }
 

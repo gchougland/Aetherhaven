@@ -7,11 +7,11 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=24";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=24";
+} from "./BlockCatalog.js?v=26";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=26";
 
 /** Bump when transform math changes — shown in the viewer so we can confirm the live build. */
-export const PREFAB_VIEWER_TRANSFORM_REV = "xform-24";
+export const PREFAB_VIEWER_TRANSFORM_REV = "xform-26";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
@@ -106,20 +106,27 @@ export function entityRotationToQuaternion(rot) {
 export const BLOCK_ENTITY_PIVOT = 0.5;
 
 /**
- * Block entities used to store facing in HeadRotation; on load the server copies that
- * over Transform and drops HeadRotation. Prefabs still carry both — HeadRotation is
- * the visual orientation (pitch tips beams horizontal). Body Transform.Rotation alone
- * is often yaw-only.
+ * A placed block only counts as one if it carries BlockEntity. Props and pinned dropped
+ * items (the fish shop's hanging fish) look similar in a prefab, but the server treats
+ * them as ordinary item entities: no doubled spawn scale, no block pivot, no block model
+ * facing, and their body rotation rather than a leftover head rotation.
+ * @param {any} comps
+ */
+export function isBlockEntity(comps) {
+  return Boolean(comps?.BlockEntity || comps?.blockEntity);
+}
+
+/**
+ * Block entities used to store facing in HeadRotation; on load BlockEntitySystems copies
+ * that over Transform and drops HeadRotation, so it wins for them. Item entities get no
+ * such migration and keep the roll that hangs them on a rope, which HeadRotation lacks.
  *
  * @param {any} comps
  * @returns {any}
  */
 export function resolveEntityRotationSource(comps) {
-  const isBlockStyle = Boolean(
-    comps?.BlockEntity || comps?.Prop || comps?.Item || comps?.blockEntity || comps?.prop || comps?.item
-  );
   const head = comps?.HeadRotation?.Rotation || comps?.headRotation?.Rotation || comps?.headRotation?.rotation;
-  if (isBlockStyle && head) {
+  if (isBlockEntity(comps) && head) {
     return head;
   }
   const transform = comps?.Transform || comps?.transform || {};
@@ -155,16 +162,14 @@ export function rotationTupleToEuler(index) {
 
 /**
  * World scale for prefab entities.
- * Block/prop EntityScale is identity-at-2 (EntitySpawnPage multiplies the UI value by
+ * Block entity EntityScale is identity-at-2 (EntitySpawnPage multiplies the UI value by
  * BLOCK_ENTITY_BASE_SCALE = 2, and BlockEntitySystems defaults to 2), so render scale
- * is the stored value halved.
+ * is the stored value halved. Item entities store the UI value as-is.
  * @param {any} comps
  * @param {string|null} modelPath
  */
 export function entityWorldScale(comps, modelPath = null) {
-  const hasBlockStyle = Boolean(
-    comps?.BlockEntity || comps?.Prop || comps?.Item || comps?.blockEntity || comps?.prop || comps?.item
-  );
+  const hasBlockStyle = isBlockEntity(comps);
   let entityScale = Number(comps?.EntityScale?.Scale ?? comps?.entityScale?.Scale);
   if (!Number.isFinite(entityScale) || entityScale <= 0) {
     entityScale = hasBlockStyle ? 2 : 1;
@@ -338,13 +343,10 @@ export async function buildPrefabMesh(prefab, options = {}) {
   }
 
   /**
-   * Some defs (roof corner states) offer several spellings of the model name.
    * @returns {Promise<{ model: THREE.Group, path: string }|null>}
    */
   async function getModelForDef(def, texture, tintHex = null) {
-    const paths = def?.customModelCandidates?.length
-      ? def.customModelCandidates
-      : [def?.customModel].filter(Boolean);
+    const paths = [def?.customModel].filter(Boolean);
     for (const path of paths) {
       const model = await getModel(path, texture, tintHex);
       if (model) {
@@ -414,9 +416,7 @@ export async function buildPrefabMesh(prefab, options = {}) {
         const transform = comps.Transform || comps.transform || {};
         const pos = transform.Position || transform.position || {};
         const rot = resolveEntityRotationSource(comps);
-        const isBlockStyle = Boolean(
-          comps.BlockEntity || comps.Prop || comps.Item || comps.blockEntity || comps.prop || comps.item
-        );
+        const isBlockStyle = isBlockEntity(comps);
 
         const holder = new THREE.Group();
         holder.position.copy(entityPositionToVector(pos));

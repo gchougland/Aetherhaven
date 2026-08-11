@@ -81,6 +81,9 @@ public final class PlotCreatorFestivalJsonWriter {
         if (!draft.getFestivalBalloonSpawns().isEmpty()) {
             root.put("balloonSpawns", balloonMaps(draft.getFestivalBalloonSpawns()));
         }
+        if (!draft.getFestivalWhackSpawns().isEmpty()) {
+            root.put("whackSpawns", whackMaps(draft.getFestivalWhackSpawns()));
+        }
         FestivalDefinition.WheelLocalRow wheel = draft.getFestivalWheelLocal();
         if (wheel != null) {
             Map<String, Object> wheelMap = new LinkedHashMap<>();
@@ -185,6 +188,21 @@ public final class PlotCreatorFestivalJsonWriter {
     ) {
         List<Map<String, Object>> out = new ArrayList<>();
         for (FestivalDefinition.BalloonSpawnRow spot : spots) {
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("localX", spot.getLocalX());
+            row.put("localY", spot.getLocalY());
+            row.put("localZ", spot.getLocalZ());
+            out.add(row);
+        }
+        return out;
+    }
+
+    @Nonnull
+    private static List<Map<String, Object>> whackMaps(
+        @Nonnull List<FestivalDefinition.WhackSpawnRow> spots
+    ) {
+        List<Map<String, Object>> out = new ArrayList<>();
+        for (FestivalDefinition.WhackSpawnRow spot : spots) {
             Map<String, Object> row = new LinkedHashMap<>();
             row.put("localX", spot.getLocalX());
             row.put("localY", spot.getLocalY());

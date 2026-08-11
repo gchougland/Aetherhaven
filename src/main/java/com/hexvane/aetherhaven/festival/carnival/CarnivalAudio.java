@@ -33,6 +33,22 @@ public final class CarnivalAudio {
         FloatingGiftSounds.playPop3d(at, store);
     }
 
+    public static void playWhackStart(@Nonnull Store<EntityStore> store, @Nullable Vector3d at) {
+        play(store, at, PigRaceAudio.SOUND_WHISTLE_START);
+    }
+
+    public static void playWhackFinish(@Nonnull Store<EntityStore> store, @Nullable Vector3d at) {
+        play(store, at, PigRaceAudio.SOUND_FINISH);
+    }
+
+    public static void playGoblinHurt(@Nonnull Store<EntityStore> store, @Nullable Vector3d at) {
+        play(store, at, CarnivalIds.SOUND_GOBLIN_HURT);
+    }
+
+    public static void playGoblinAlert(@Nonnull Store<EntityStore> store, @Nullable Vector3d at) {
+        play(store, at, CarnivalIds.SOUND_GOBLIN_ALERT);
+    }
+
     public static void playWheelTick(@Nonnull Store<EntityStore> store, @Nullable Vector3d at) {
         play(store, at, SOUND_WHEEL_TICK);
     }

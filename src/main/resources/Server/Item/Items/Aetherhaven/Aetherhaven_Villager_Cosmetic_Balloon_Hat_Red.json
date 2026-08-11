@@ -1,0 +1,60 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Villager_Cosmetic_Balloon_Hat_Red.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Villager_Cosmetic_Balloon_Hat_Red.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Villager_Cosmetic_Balloon_Hat_Red.png",
+  "Categories": [
+    "Items.Misc",
+    "Aetherhaven.All"
+  ],
+  "PlayerAnimationsId": "Item",
+  "Model": "Items/Aetherhaven/VillagerCosmetics/BalloonHat/Balloon_Hat.blockymodel",
+  "Texture": "Items/Aetherhaven/Floating_Gift/Floating_Gift.png",
+  "IconProperties": {
+    "Scale": 0.45,
+    "Rotation": [
+      18,
+      40,
+      0
+    ],
+    "Translation": [
+      -29,
+      -143
+    ]
+  },
+  "Consumable": true,
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenVillagerCosmeticUnlockUse",
+          "Next": {
+            "Type": "ModifyInventory",
+            "AdjustHeldItemQuantity": -1
+          }
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenVillagerCosmeticUnlockUse",
+          "Next": {
+            "Type": "ModifyInventory",
+            "AdjustHeldItemQuantity": -1
+          }
+        }
+      ]
+    }
+  },
+  "Tags": {
+    "Type": [
+      "Misc"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "MaxStack": 10
+}

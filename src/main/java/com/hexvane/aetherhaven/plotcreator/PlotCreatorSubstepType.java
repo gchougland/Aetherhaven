@@ -33,6 +33,8 @@ public enum PlotCreatorSubstepType {
     FESTIVAL_RACE_LANE,
     /** Carnival balloon spawn cell. */
     FESTIVAL_BALLOON_SPAWN,
+    /** Carnival whack-a-goblin hole cell. */
+    FESTIVAL_WHACK_SPAWN,
     /** Carnival wall mounted wheel cell (stores facing). */
     FESTIVAL_WHEEL
 }

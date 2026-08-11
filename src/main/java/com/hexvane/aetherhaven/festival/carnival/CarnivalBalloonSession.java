@@ -26,6 +26,7 @@ public final class CarnivalBalloonSession {
     private int lastSpawnSpotIndex = -1;
     private final List<UUID> activeBalloonUuids = new ArrayList<>();
     private int pendingTickets = -1;
+    private boolean pendingPerfectClear;
     private boolean finishSfxPending;
 
     @Nonnull
@@ -131,6 +132,7 @@ public final class CarnivalBalloonSession {
         lastSpawnSpotIndex = -1;
         activeBalloonUuids.clear();
         pendingTickets = -1;
+        pendingPerfectClear = false;
         return true;
     }
 
@@ -178,8 +180,13 @@ public final class CarnivalBalloonSession {
         if (spawned >= CarnivalIds.BALLOON_TOTAL && resolved >= CarnivalIds.BALLOON_TOTAL) {
             phase = Phase.RESULTS;
             pendingTickets = CarnivalIds.balloonTicketReward(popped);
+            pendingPerfectClear = popped >= CarnivalIds.BALLOON_TOTAL;
             finishSfxPending = true;
         }
+    }
+
+    public boolean isPendingPerfectClear(@Nonnull UUID player) {
+        return hasResult(player) && pendingPerfectClear;
     }
 
     public int collectResult(@Nonnull UUID player) {
@@ -201,6 +208,7 @@ public final class CarnivalBalloonSession {
         lastSpawnSpotIndex = -1;
         activeBalloonUuids.clear();
         pendingTickets = -1;
+        pendingPerfectClear = false;
         finishSfxPending = false;
     }
 }

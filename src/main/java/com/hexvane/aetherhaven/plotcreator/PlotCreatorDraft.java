@@ -103,6 +103,9 @@ public final class PlotCreatorDraft {
     @Nonnull
     private final List<com.hexvane.aetherhaven.festival.FestivalDefinition.BalloonSpawnRow> festivalBalloonSpawns =
         new ArrayList<>();
+    @Nonnull
+    private final List<com.hexvane.aetherhaven.festival.FestivalDefinition.WhackSpawnRow> festivalWhackSpawns =
+        new ArrayList<>();
     @Nullable
     private com.hexvane.aetherhaven.festival.FestivalDefinition.WheelLocalRow festivalWheelLocal;
 
@@ -443,6 +446,7 @@ public final class PlotCreatorDraft {
         festivalCenterpieceLocal = null;
         festivalRaceLanes.clear();
         festivalBalloonSpawns.clear();
+        festivalWhackSpawns.clear();
         festivalWheelLocal = null;
     }
 
@@ -497,6 +501,11 @@ public final class PlotCreatorDraft {
     @Nonnull
     public List<com.hexvane.aetherhaven.festival.FestivalDefinition.BalloonSpawnRow> getFestivalBalloonSpawns() {
         return festivalBalloonSpawns;
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.festival.FestivalDefinition.WhackSpawnRow> getFestivalWhackSpawns() {
+        return festivalWhackSpawns;
     }
 
     @Nullable

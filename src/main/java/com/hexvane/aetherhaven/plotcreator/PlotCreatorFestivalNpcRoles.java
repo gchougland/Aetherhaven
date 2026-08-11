@@ -17,12 +17,20 @@ public final class PlotCreatorFestivalNpcRoles {
     public static final String CARNIVAL_MERCHANT = CarnivalIds.MERCHANT_NPC_ROLE;
     public static final String CARNIVAL_BALLOON = CarnivalIds.BALLOON_NPC_ROLE;
     public static final String CARNIVAL_WHEEL = CarnivalIds.WHEEL_NPC_ROLE;
+    public static final String CARNIVAL_WHACK = CarnivalIds.WHACK_NPC_ROLE;
 
     private PlotCreatorFestivalNpcRoles() {}
 
     @Nonnull
     public static List<String> choosableRoleIds() {
-        return List.of(SEED_SELLER, PIG_RACE_MERCHANT, CARNIVAL_MERCHANT, CARNIVAL_BALLOON, CARNIVAL_WHEEL);
+        return List.of(
+            SEED_SELLER,
+            PIG_RACE_MERCHANT,
+            CARNIVAL_MERCHANT,
+            CARNIVAL_BALLOON,
+            CARNIVAL_WHEEL,
+            CARNIVAL_WHACK
+        );
     }
 
     @Nullable
@@ -69,6 +77,9 @@ public final class PlotCreatorFestivalNpcRoles {
         }
         if (CARNIVAL_WHEEL.equals(id)) {
             return "carnivalWheel";
+        }
+        if (CARNIVAL_WHACK.equals(id)) {
+            return "carnivalWhack";
         }
         return "generic";
     }

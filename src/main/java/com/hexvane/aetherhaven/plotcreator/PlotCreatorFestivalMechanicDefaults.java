@@ -15,6 +15,7 @@ public final class PlotCreatorFestivalMechanicDefaults {
     public static final int DEFAULT_PIG_RACE_TOURIST_SPOTS = 8;
     public static final int DEFAULT_PIG_RACE_LANES = 4;
     public static final int DEFAULT_CARNIVAL_BALLOON_SPAWNS = 6;
+    public static final int DEFAULT_CARNIVAL_WHACK_SPAWNS = 6;
     public static final int DEFAULT_CARNIVAL_TOURIST_SPOTS = 8;
 
     private PlotCreatorFestivalMechanicDefaults() {}
@@ -134,12 +135,23 @@ public final class PlotCreatorFestivalMechanicDefaults {
                 );
             out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_BALLOON_SPAWN, balloonCount));
         }
+        if (!draft.getFestivalWhackSpawns().isEmpty() || CarnivalIds.MECHANIC_ID.equals(mechanic)) {
+            int whackCount =
+                Math.max(
+                    draft.getFestivalWhackSpawns().isEmpty()
+                        ? DEFAULT_CARNIVAL_WHACK_SPAWNS
+                        : draft.getFestivalWhackSpawns().size(),
+                    CarnivalIds.MECHANIC_ID.equals(mechanic) ? DEFAULT_CARNIVAL_WHACK_SPAWNS : 1
+                );
+            out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_WHACK_SPAWN, whackCount));
+        }
         if (draft.getFestivalWheelLocal() != null || CarnivalIds.MECHANIC_ID.equals(mechanic)) {
             out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_WHEEL, 1));
         }
         if (CarnivalIds.MECHANIC_ID.equals(mechanic)) {
             out.add(PlotCreatorSpotEntry.festivalNpc(CarnivalIds.BALLOON_NPC_ROLE, 1));
             out.add(PlotCreatorSpotEntry.festivalNpc(CarnivalIds.WHEEL_NPC_ROLE, 1));
+            out.add(PlotCreatorSpotEntry.festivalNpc(CarnivalIds.WHACK_NPC_ROLE, 1));
         }
         return out;
     }

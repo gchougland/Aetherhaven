@@ -222,6 +222,19 @@ public final class PlotCreatorFestivalDraftSetup {
                 )
             );
         }
+        if (!existing.getWhackSpawns().isEmpty()) {
+            for (FestivalDefinition.WhackSpawnRow spot : existing.getWhackSpawns()) {
+                draft.getFestivalWhackSpawns().add(
+                    FestivalDefinition.WhackSpawnRow.of(spot.getLocalX(), spot.getLocalY(), spot.getLocalZ())
+                );
+            }
+            draft.getSelectedSpots().add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_WHACK_SPAWN,
+                    existing.getWhackSpawns().size()
+                )
+            );
+        }
         if (existing.getWheelLocal() != null) {
             FestivalDefinition.WheelLocalRow wheel = existing.getWheelLocal();
             draft.setFestivalWheelLocal(

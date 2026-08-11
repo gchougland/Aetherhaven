@@ -107,6 +107,11 @@ public final class FestivalDefinition {
     @Nullable
     private List<BalloonSpawnRow> balloonSpawns;
 
+    /** Carnival whack-a-goblin hole cells in prefab-local space. */
+    @SerializedName("whackSpawns")
+    @Nullable
+    private List<WhackSpawnRow> whackSpawns;
+
     /**
      * Carnival wheel wall cell in prefab-local space. {@code yawDegrees} chooses NESW facing for the wall-mounted
      * block.
@@ -232,6 +237,11 @@ public final class FestivalDefinition {
     @Nonnull
     public List<BalloonSpawnRow> getBalloonSpawns() {
         return balloonSpawns != null ? List.copyOf(balloonSpawns) : List.of();
+    }
+
+    @Nonnull
+    public List<WhackSpawnRow> getWhackSpawns() {
+        return whackSpawns != null ? List.copyOf(whackSpawns) : List.of();
     }
 
     @Nullable
@@ -540,6 +550,39 @@ public final class FestivalDefinition {
         @Nonnull
         public static BalloonSpawnRow of(int x, int y, int z) {
             BalloonSpawnRow row = new BalloonSpawnRow();
+            row.localX = x;
+            row.localY = y;
+            row.localZ = z;
+            return row;
+        }
+    }
+
+    /** One carnival whack-a-goblin hole cell in prefab-local space. */
+    public static final class WhackSpawnRow {
+        @SerializedName("localX")
+        private int localX;
+
+        @SerializedName("localY")
+        private int localY;
+
+        @SerializedName("localZ")
+        private int localZ;
+
+        public int getLocalX() {
+            return localX;
+        }
+
+        public int getLocalY() {
+            return localY;
+        }
+
+        public int getLocalZ() {
+            return localZ;
+        }
+
+        @Nonnull
+        public static WhackSpawnRow of(int x, int y, int z) {
+            WhackSpawnRow row = new WhackSpawnRow();
             row.localX = x;
             row.localY = y;
             row.localZ = z;

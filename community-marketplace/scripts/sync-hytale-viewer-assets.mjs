@@ -28,6 +28,9 @@ const hytaleRoot = path.resolve(process.env.HYTALE_ASSETS_SRC || DEFAULT_HYTALE)
 const aetherhavenRoot = path.resolve(process.env.AETHERHAVEN_ASSETS_SRC || DEFAULT_AETHERHAVEN);
 const outDir = path.resolve(process.env.OUT_DIR || path.join(marketplaceRoot, "web", "hytale-assets"));
 
+/** Every tree laid out like a mod: Hytale itself, Aetherhaven, and each subplugin pack. */
+const assetRoots = [hytaleRoot, aetherhavenRoot, ...subpluginRoots()];
+
 /** @type {Set<string>} */
 const referencedCommonPaths = new Set();
 
@@ -101,6 +104,108 @@ function pickTextures(texEntry) {
 }
 
 /**
+ * The drawable part of one block state. A state can reskin the cube, swap the model, or
+ * both — roof corners and open doors are whole models, double slabs and coloured banners
+ * are textures. Everything else a state carries (hitboxes, loot, sounds) is not drawn.
+ * @param {any} stateDef
+ * @returns {any|null}
+ */
+function extractStateOverride(stateDef) {
+  if (!stateDef || typeof stateDef !== "object") {
+    return null;
+  }
+  /** @type {any} */
+  const out = {};
+  if (stateDef.DrawType) {
+    out.drawType = String(stateDef.DrawType);
+  }
+  if (Array.isArray(stateDef.Textures) && stateDef.Textures.length) {
+    const faces = pickTextures(stateDef.Textures[0]);
+    if (faces) {
+      out.textures = faces;
+    }
+  }
+  if (stateDef.CustomModel) {
+    out.customModel = normalizeAssetPath(stateDef.CustomModel);
+    trackCommonRef(out.customModel);
+  }
+  if (Array.isArray(stateDef.CustomModelTexture) && stateDef.CustomModelTexture[0]?.Texture) {
+    out.customModelTexture = normalizeAssetPath(stateDef.CustomModelTexture[0].Texture);
+    trackCommonRef(out.customModelTexture);
+  }
+  if (stateDef.CustomModelScale != null && Number.isFinite(Number(stateDef.CustomModelScale))) {
+    out.customModelScale = Number(stateDef.CustomModelScale);
+  }
+  if (stateDef.Opacity) {
+    out.opacity = String(stateDef.Opacity);
+  }
+  if (Array.isArray(stateDef.Tint) && stateDef.Tint[0]) {
+    out.tint = stateDef.Tint[0];
+  }
+  if (Array.isArray(stateDef.TintUp) && stateDef.TintUp[0]) {
+    out.tintUp = stateDef.TintUp[0];
+  }
+  // Furnaces and a few benches nest a state inside a state.
+  const nested = collectStates(stateDef.State?.Definitions);
+  if (nested) {
+    out.states = nested;
+  }
+  return Object.keys(out).length ? out : null;
+}
+
+/**
+ * Item variants are the other kind of state, written `*Id_State_Name` in prefabs rather
+ * than `*Id_State_Definitions_Name`. A filled bucket or watering can is the same item
+ * carrying its own block model.
+ * @param {any} state the item's top level State
+ * @returns {Record<string, any>|null}
+ */
+function collectVariants(state) {
+  if (!state || typeof state !== "object") {
+    return null;
+  }
+  /** @type {Record<string, any>} */
+  const variants = {};
+  for (const [name, variant] of Object.entries(state)) {
+    if (!variant || typeof variant !== "object") {
+      continue;
+    }
+    const override = extractStateOverride(variant.BlockType) || {};
+    if (variant.Model) {
+      override.itemModel = normalizeAssetPath(variant.Model);
+      trackCommonRef(override.itemModel);
+    }
+    if (variant.Texture) {
+      override.itemTexture = normalizeAssetPath(variant.Texture);
+      trackCommonRef(override.itemTexture);
+    }
+    if (Object.keys(override).length) {
+      variants[name] = override;
+    }
+  }
+  return Object.keys(variants).length ? variants : null;
+}
+
+/**
+ * @param {any} definitions BlockType.State.Definitions
+ * @returns {Record<string, any>|null}
+ */
+function collectStates(definitions) {
+  if (!definitions || typeof definitions !== "object") {
+    return null;
+  }
+  /** @type {Record<string, any>} */
+  const states = {};
+  for (const [stateName, stateDef] of Object.entries(definitions)) {
+    const override = extractStateOverride(stateDef);
+    if (override) {
+      states[stateName] = override;
+    }
+  }
+  return Object.keys(states).length ? states : null;
+}
+
+/**
  * @param {object} raw
  * @param {Map<string, object>} byFileStem parent lookup by filename stem
  */
@@ -140,24 +245,15 @@ function extractBlockEntry(raw, byFileStem) {
     if (Array.isArray(block.Tint) && block.Tint[0]) {
       entry.tint = block.Tint[0];
     }
-    // Connected-block state skins (village walls, etc.)
-    const defs = block.State?.Definitions;
-    if (defs && typeof defs === "object") {
-      /** @type {Record<string, Record<string, string>>} */
-      const states = {};
-      for (const [stateName, stateDef] of Object.entries(defs)) {
-        if (!stateDef?.Textures?.[0]) {
-          continue;
-        }
-        const faces = pickTextures(stateDef.Textures[0]);
-        if (faces) {
-          states[stateName] = faces;
-        }
-      }
-      if (Object.keys(states).length) {
-        entry.states = states;
-      }
+    const states = collectStates(block.State?.Definitions);
+    if (states) {
+      entry.states = states;
     }
+  }
+
+  const variants = collectVariants(raw.State);
+  if (variants) {
+    entry.variants = variants;
   }
 
   if (isFluid || raw.MaxFluidLevel != null) {
@@ -224,6 +320,7 @@ function resolveParents(catalog) {
         "tintUp",
         "tint",
         "states",
+        "variants",
         "kind",
       ]) {
         if (entry[key] == null && parent[key] != null) {
@@ -267,18 +364,9 @@ function ingestItemTree(itemsRoot, catalog) {
   for (const { id, raw } of parsed) {
     const entry = extractBlockEntry(raw, byStem);
     if (entry) {
+      // Prefabs name states as *BlockId_State_Definitions_Name; the viewer resolves those
+      // against the block's own states rather than storing a copy per state.
       catalog[id] = { ...(catalog[id] || {}), ...entry };
-      // Prefabs reference connected states as *BlockId_State_Definitions_Bottom/etc.
-      if (entry.states) {
-        for (const [stateName, faces] of Object.entries(entry.states)) {
-          const alias = `*${id}_State_Definitions_${stateName}`;
-          catalog[alias] = {
-            drawType: "Cube",
-            opacity: entry.opacity || null,
-            textures: faces,
-          };
-        }
-      }
     }
   }
 }
@@ -347,15 +435,11 @@ function copyTree(srcRoot, destRoot, filterFn) {
 
 function resolveCommonFile(relPath) {
   const n = normalizeAssetPath(relPath);
-  const candidates = [
-    path.join(hytaleRoot, "Common", n),
-    path.join(aetherhavenRoot, "Common", n),
-    path.join(hytaleRoot, n),
-    path.join(aetherhavenRoot, n),
-  ];
-  for (const c of candidates) {
-    if (fs.existsSync(c)) {
-      return c;
+  for (const root of assetRoots) {
+    for (const candidate of [path.join(root, "Common", n), path.join(root, n)]) {
+      if (fs.existsSync(candidate)) {
+        return candidate;
+      }
     }
   }
   return null;
@@ -406,9 +490,26 @@ function copyReferencedCommon() {
   return { copied, missing };
 }
 
+/**
+ * Aetherhaven ships its shop, quest and portal blocks from subplugin packs, each laid out
+ * like a mod of its own, so every pack is another asset root.
+ * @returns {string[]}
+ */
+function subpluginRoots() {
+  const packs = path.join(repoRoot, "subplugin-assets");
+  if (!fs.existsSync(packs)) {
+    return [];
+  }
+  return fs
+    .readdirSync(packs, { withFileTypes: true })
+    .filter((e) => e.isDirectory())
+    .map((e) => path.join(packs, e.name));
+}
+
 function main() {
   console.log("Hytale assets:", hytaleRoot);
   console.log("Aetherhaven assets:", aetherhavenRoot);
+  console.log(`Subplugin packs: ${assetRoots.length - 2}`);
   console.log("Output:", outDir);
 
   if (!fs.existsSync(hytaleRoot)) {
@@ -422,61 +523,48 @@ function main() {
     fs.rmSync(path.join(outDir, name), { recursive: true, force: true });
   }
 
-  const blockTexturesCopied = copyTree(
-    path.join(hytaleRoot, "Common", "BlockTextures"),
-    path.join(outDir, "Common", "BlockTextures")
+  const sumOverRoots = (fn) => assetRoots.reduce((total, root) => total + fn(root), 0);
+  const isModelOrTexture = (f) => /\.(blockymodel|png|jpg|jpeg|webp)$/i.test(f);
+
+  const blockTexturesCopied = sumOverRoots((root) =>
+    copyTree(path.join(root, "Common", "BlockTextures"), path.join(outDir, "Common", "BlockTextures"))
   );
-  const aetherBlockTextures = copyTree(
-    path.join(aetherhavenRoot, "Common", "BlockTextures"),
-    path.join(outDir, "Common", "BlockTextures")
-  );
-  console.log(`BlockTextures: ${blockTexturesCopied + aetherBlockTextures} files`);
+  console.log(`BlockTextures: ${blockTexturesCopied} files`);
 
   // Copy full Blocks trees (furniture / roofs / stairs models + textures).
-  const blocksCopied =
-    copyTree(path.join(hytaleRoot, "Common", "Blocks"), path.join(outDir, "Common", "Blocks")) +
-    copyTree(path.join(aetherhavenRoot, "Common", "Blocks"), path.join(outDir, "Common", "Blocks"));
+  const blocksCopied = sumOverRoots((root) =>
+    copyTree(path.join(root, "Common", "Blocks"), path.join(outDir, "Common", "Blocks"))
+  );
   console.log(`Blocks: ${blocksCopied} files`);
 
   // Item-held models/textures (rubble skins, tools, etc. referenced as Items/...)
-  const itemsCopied =
-    copyTree(
-      path.join(hytaleRoot, "Common", "Items"),
-      path.join(outDir, "Common", "Items"),
-      (f) => /\.(blockymodel|png|jpg|jpeg|webp)$/i.test(f)
-    ) +
-    copyTree(
-      path.join(aetherhavenRoot, "Common", "Items"),
-      path.join(outDir, "Common", "Items"),
-      (f) => /\.(blockymodel|png|jpg|jpeg|webp)$/i.test(f)
-    );
+  const itemsCopied = sumOverRoots((root) =>
+    copyTree(path.join(root, "Common", "Items"), path.join(outDir, "Common", "Items"), isModelOrTexture)
+  );
   console.log(`Items models/textures: ${itemsCopied} files`);
 
   /** @type {Record<string, any>} */
   const blockCatalog = {};
-  ingestItemTree(path.join(hytaleRoot, "Server", "Item", "Items"), blockCatalog);
-  ingestItemTree(path.join(aetherhavenRoot, "Server", "Item", "Items"), blockCatalog);
-  ingestFluids(path.join(hytaleRoot, "Server", "Item", "Block", "Fluids"), blockCatalog);
-  ingestFluids(path.join(aetherhavenRoot, "Server", "Item", "Block", "Fluids"), blockCatalog);
+  for (const root of assetRoots) {
+    ingestItemTree(path.join(root, "Server", "Item", "Items"), blockCatalog);
+    ingestFluids(path.join(root, "Server", "Item", "Block", "Fluids"), blockCatalog);
+  }
   resolveParents(blockCatalog);
 
   /** @type {Record<string, any>} */
   const modelCatalog = {};
-  ingestModels(path.join(hytaleRoot, "Server", "Models"), modelCatalog);
-  ingestModels(path.join(aetherhavenRoot, "Server", "Models"), modelCatalog);
+  for (const root of assetRoots) {
+    ingestModels(path.join(root, "Server", "Models"), modelCatalog);
+  }
 
   // Track model paths from catalogs already done; also pull NPC/Characters used by models.
   const refCopy = copyReferencedCommon();
   console.log(`Referenced Common files: ${refCopy.copied} copied, ${refCopy.missing} missing`);
 
   // Broaden NPC folder for entity models commonly referenced
-  const npcCopied =
-    copyTree(path.join(hytaleRoot, "Common", "NPC"), path.join(outDir, "Common", "NPC"), (f) =>
-      /\.(blockymodel|png|jpg|jpeg|webp)$/i.test(f)
-    ) +
-    copyTree(path.join(aetherhavenRoot, "Common", "NPC"), path.join(outDir, "Common", "NPC"), (f) =>
-      /\.(blockymodel|png|jpg|jpeg|webp)$/i.test(f)
-    );
+  const npcCopied = sumOverRoots((root) =>
+    copyTree(path.join(root, "Common", "NPC"), path.join(outDir, "Common", "NPC"), isModelOrTexture)
+  );
   console.log(`NPC models/textures: ${npcCopied} files`);
 
   const catalogDir = path.join(outDir, "catalog");

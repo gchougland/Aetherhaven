@@ -1,0 +1,63 @@
+{
+  "Type": "Simple",
+  "Effects": {
+    "ItemAnimationId": "SwingLeft"
+  },
+  "RunTime": 0.267,
+  "Next": {
+    "Type": "Parallel",
+    "Interactions": [
+      {
+        "Interactions": [
+          {
+            "Type": "Selector",
+            "RunTime": 0.05,
+            "MaxTargets": 1,
+            "Selector": {
+              "Id": "Horizontal",
+              "Direction": "ToLeft",
+              "TestLineOfSight": true,
+              "ExtendTop": 0.35,
+              "ExtendBottom": 0.35,
+              "StartDistance": 0.1,
+              "EndDistance": 2.6,
+              "Length": 70,
+              "RollOffset": 30,
+              "YawStartOffset": -35
+            },
+            "HitEntity": {
+              "Interactions": [
+                {
+                  "Type": "Replace",
+                  "DefaultValue": {
+                    "Interactions": [
+                      "Club_Swing_Left_Damage"
+                    ]
+                  },
+                  "Var": "Club_Swing_Left_Damage"
+                }
+              ]
+            },
+            "Next": {
+              "Type": "Simple",
+              "RunTime": 0.223
+            }
+          }
+        ]
+      },
+      {
+        "Interactions": [
+          {
+            "Type": "Replace",
+            "DefaultValue": {
+              "Interactions": [
+                "Club_Swing_Left_Effect"
+              ]
+            },
+            "Var": "Club_Swing_Left_Effect"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -13,5 +13,6 @@ public record VillagerCosmeticDefinition(
 ) {
     public static final String SLOT_HEAD_ACCESSORY = "HeadAccessory";
     public static final String SLOT_FACE_ACCESSORY = "FaceAccessory";
+    public static final String SLOT_BACK_ACCESSORY = "BackAccessory";
     public static final String DEFAULT_ID = "default";
 }

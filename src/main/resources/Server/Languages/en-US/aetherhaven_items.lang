@@ -20,6 +20,8 @@ items.Aetherhaven_Calendar.name=Calendar
 items.Aetherhaven_Calendar.description=Hang on a wall to see the season calendar and villager birthdays. Craft at the town planning desk with wood.
 items.Aetherhaven_Carnival_Wheel.name=Carnival Wheel
 items.Aetherhaven_Carnival_Wheel.description=A colorful wheel that hangs on a wall at the carnival.
+items.Aetherhaven_Carnival_Goblin_Whacker.name=Goblin Whacker
+items.Aetherhaven_Carnival_Goblin_Whacker.description=A carnival club for whacking goblins. Hits one at a time.
 
 items.Aetherhaven_Festival_Ticket_Spring.name=Spring Festival Ticket
 items.Aetherhaven_Festival_Ticket_Spring.description=A ticket for the spring festival.
@@ -467,3 +469,21 @@ items.Aetherhaven_Villager_Cosmetic_Pig_Snout.description=Use to unlock a pig sn
 
 items.Aetherhaven_Villager_Cosmetic_Poop_Hat.name=Poop Hat Pattern
 items.Aetherhaven_Villager_Cosmetic_Poop_Hat.description=Use to unlock a poop hat for villagers in your town wardrobe.
+
+items.Aetherhaven_Villager_Cosmetic_Goblin_Lobber_Backpack.name=Goblin Backpack Pattern
+items.Aetherhaven_Villager_Cosmetic_Goblin_Lobber_Backpack.description=Use to unlock a goblin backpack for villagers in your town wardrobe. Earn it by hitting every goblin in Whack a Goblin.
+
+items.Aetherhaven_Villager_Cosmetic_Balloon_Hat_Red.name=Red Balloon Hat Pattern
+items.Aetherhaven_Villager_Cosmetic_Balloon_Hat_Red.description=Use to unlock a red balloon hat for villagers in your town wardrobe. Earn balloon hat patterns by popping every balloon in a carnival round.
+
+items.Aetherhaven_Villager_Cosmetic_Balloon_Hat_Yellow.name=Yellow Balloon Hat Pattern
+items.Aetherhaven_Villager_Cosmetic_Balloon_Hat_Yellow.description=Use to unlock a yellow balloon hat for villagers in your town wardrobe. Earn balloon hat patterns by popping every balloon in a carnival round.
+
+items.Aetherhaven_Villager_Cosmetic_Balloon_Hat_Blue.name=Blue Balloon Hat Pattern
+items.Aetherhaven_Villager_Cosmetic_Balloon_Hat_Blue.description=Use to unlock a blue balloon hat for villagers in your town wardrobe. Earn balloon hat patterns by popping every balloon in a carnival round.
+
+items.Aetherhaven_Villager_Cosmetic_Clown_Nose.name=Clown Nose Pattern
+items.Aetherhaven_Villager_Cosmetic_Clown_Nose.description=Use to unlock a clown nose for villagers in your town wardrobe. Buy it from the carnival merchant with summer festival tickets.
+
+items.Aetherhaven_Villager_Cosmetic_Red_Afro.name=Red Afro Pattern
+items.Aetherhaven_Villager_Cosmetic_Red_Afro.description=Use to unlock a red afro for villagers in your town wardrobe. Buy it from the carnival merchant with summer festival tickets.

@@ -8,9 +8,33 @@
     {
       "Type": "Fixed",
       "Trade": {
+        "Output": { "ItemId": "Food_Popcorn", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Summer", "Quantity": 1 }],
+        "Stock": 24
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
         "Output": { "ItemId": "Deco_Kweebec_Plush", "Quantity": 1 },
         "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Summer", "Quantity": 2 }],
         "Stock": 8
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Aetherhaven_Villager_Cosmetic_Clown_Nose", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Summer", "Quantity": 5 }],
+        "Stock": 4
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Aetherhaven_Villager_Cosmetic_Red_Afro", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Summer", "Quantity": 8 }],
+        "Stock": 3
       }
     }
   ]

@@ -122,6 +122,7 @@ public final class PlotCreatorHudControls {
                 || sub.type() == PlotCreatorSubstepType.FESTIVAL_CENTERPIECE
                 || sub.type() == PlotCreatorSubstepType.FESTIVAL_RACE_LANE
                 || sub.type() == PlotCreatorSubstepType.FESTIVAL_BALLOON_SPAWN
+                || sub.type() == PlotCreatorSubstepType.FESTIVAL_WHACK_SPAWN
                 || sub.type() == PlotCreatorSubstepType.FESTIVAL_WHEEL)) {
             rows.add(row(ToolKeybindSlot.SECONDARY, "hud.SUBSTEP.secondaryFestivalSpot"));
         }

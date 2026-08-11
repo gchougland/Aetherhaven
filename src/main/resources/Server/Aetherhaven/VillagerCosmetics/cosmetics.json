@@ -49,12 +49,60 @@
       "unlockItemId": "Aetherhaven_Villager_Cosmetic_Pig_Snout"
     },
     {
+      "id": "ClownNose",
+      "slot": "FaceAccessory",
+      "displayNameKey": "aetherhaven_villager_cosmetics.aetherhaven.villagerCosmetic.clownNose",
+      "model": "Cosmetics/Face_Accessories/Clown_Nose.blockymodel",
+      "texture": "Cosmetics/Face_Accessories/Clown_Nose.png",
+      "unlockItemId": "Aetherhaven_Villager_Cosmetic_Clown_Nose"
+    },
+    {
+      "id": "RedAfro",
+      "slot": "HeadAccessory",
+      "displayNameKey": "aetherhaven_villager_cosmetics.aetherhaven.villagerCosmetic.redAfro",
+      "model": "Cosmetics/Head/RedAfro.blockymodel",
+      "texture": "Characters/Hair/RedAfro.png",
+      "unlockItemId": "Aetherhaven_Villager_Cosmetic_Red_Afro"
+    },
+    {
       "id": "PoopHat",
       "slot": "HeadAccessory",
       "displayNameKey": "aetherhaven_villager_cosmetics.aetherhaven.villagerCosmetic.poopHat",
       "model": "Cosmetics/Head/Poop_Hat.blockymodel",
       "texture": "Items/Ingredients/Poop_Texture.png",
       "unlockItemId": "Aetherhaven_Villager_Cosmetic_Poop_Hat"
+    },
+    {
+      "id": "GoblinLobberBackpack",
+      "slot": "BackAccessory",
+      "displayNameKey": "aetherhaven_villager_cosmetics.aetherhaven.villagerCosmetic.goblinLobberBackpack",
+      "model": "Cosmetics/Back/Aetherhaven_Goblin_Lobber_Backpack.blockymodel",
+      "texture": "Cosmetics/Back/Aetherhaven_Goblin_Lobber_Backpack_Texture.png",
+      "unlockItemId": "Aetherhaven_Villager_Cosmetic_Goblin_Lobber_Backpack"
+    },
+    {
+      "id": "BalloonHat.Red",
+      "slot": "HeadAccessory",
+      "displayNameKey": "aetherhaven_villager_cosmetics.aetherhaven.villagerCosmetic.balloonHat.red",
+      "model": "Cosmetics/Head/Balloon_Hat.blockymodel",
+      "texture": "Items/Aetherhaven/Floating_Gift/Floating_Gift.png",
+      "unlockItemId": "Aetherhaven_Villager_Cosmetic_Balloon_Hat_Red"
+    },
+    {
+      "id": "BalloonHat.Yellow",
+      "slot": "HeadAccessory",
+      "displayNameKey": "aetherhaven_villager_cosmetics.aetherhaven.villagerCosmetic.balloonHat.yellow",
+      "model": "Cosmetics/Head/Balloon_Hat.blockymodel",
+      "texture": "Items/Aetherhaven/Floating_Gift/Floating_Gift_Green.png",
+      "unlockItemId": "Aetherhaven_Villager_Cosmetic_Balloon_Hat_Yellow"
+    },
+    {
+      "id": "BalloonHat.Blue",
+      "slot": "HeadAccessory",
+      "displayNameKey": "aetherhaven_villager_cosmetics.aetherhaven.villagerCosmetic.balloonHat.blue",
+      "model": "Cosmetics/Head/Balloon_Hat.blockymodel",
+      "texture": "Items/Aetherhaven/Floating_Gift/Floating_Gift_Red.png",
+      "unlockItemId": "Aetherhaven_Villager_Cosmetic_Balloon_Hat_Blue"
     }
   ]
 }

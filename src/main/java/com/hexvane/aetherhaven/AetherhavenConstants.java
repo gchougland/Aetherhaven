@@ -482,6 +482,12 @@ public final class AetherhavenConstants {
     /** Trork ticket seller at the Pig Racing Festival. */
     public static final String NPC_FESTIVAL_PIG_RACE_MERCHANT = "Aetherhaven_Festival_Pig_Race_Merchant";
 
+    /** Feran carnival NPCs at the Carnival Festival. */
+    public static final String NPC_FESTIVAL_CARNIVAL_MERCHANT = "Aetherhaven_Festival_Carnival_Merchant";
+    public static final String NPC_FESTIVAL_CARNIVAL_BALLOON = "Aetherhaven_Festival_Carnival_Balloon";
+    public static final String NPC_FESTIVAL_CARNIVAL_WHEEL = "Aetherhaven_Festival_Carnival_Wheel";
+    public static final String NPC_FESTIVAL_CARNIVAL_WHACK = "Aetherhaven_Festival_Carnival_Whack";
+
     /** Shared role for all townsfolk; appearance set per character at spawn. */
     public static final String NPC_TOWNSFOLK = "Aetherhaven_Townsfolk";
 

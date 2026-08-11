@@ -68,6 +68,27 @@ public final class CarnivalAnnounce {
         int popped
     ) {
         Message chat = Message.translation(LANG + "chat.balloons.popped").param("count", String.valueOf(popped));
+        sendChatToPlayer(store, playerUuid, chat);
+    }
+
+    public static void announceWhackHitCount(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID playerUuid,
+        int hits,
+        int total
+    ) {
+        Message chat =
+            Message.translation(LANG + "chat.whack.hits")
+                .param("hits", String.valueOf(hits))
+                .param("total", String.valueOf(Math.max(total, hits)));
+        sendChatToPlayer(store, playerUuid, chat);
+    }
+
+    private static void sendChatToPlayer(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID playerUuid,
+        @Nonnull Message chat
+    ) {
         Query<EntityStore> query = Query.and(PlayerRef.getComponentType(), UUIDComponent.getComponentType());
         store.forEachChunk(query, (chunk, commandBuffer) -> {
             for (int i = 0; i < chunk.size(); i++) {

@@ -9,7 +9,7 @@ aetherhaven.dialogue.festival_carnival_balloon.main_hub.c_playing=How am I doing
 aetherhaven.dialogue.festival_carnival_balloon.main_hub.c_about=How does this work?
 aetherhaven.dialogue.festival_carnival_balloon.main_hub.c_goodbye=Maybe later.
 
-aetherhaven.dialogue.festival_carnival_balloon.about.body=Pay ten gold coins and I hand you ten darts. Balloons float up from the booth. Pop them with those darts only. Talk to me again when the round is over for your tickets. More pops mean more tickets.
+aetherhaven.dialogue.festival_carnival_balloon.about.body=Pay ten gold coins and I hand you ten darts. Balloons float up from the booth. Pop them with those darts only. Talk to me again when the round is over for your tickets. More pops mean more tickets. Pop every balloon and I will toss in a balloon hat pattern for your town wardrobe. Win three perfect rounds to collect all three colors.
 aetherhaven.dialogue.festival_carnival_balloon.about.c_back=Got it.
 
 aetherhaven.dialogue.festival_carnival_balloon.game_started.body=Here are your darts! Watch the sky and aim true. Come back when the balloons are done.
@@ -17,6 +17,12 @@ aetherhaven.dialogue.festival_carnival_balloon.game_started.c_ok=I am ready!
 
 aetherhaven.dialogue.festival_carnival_balloon.collect_result.body=Nice work! Here are your summer festival tickets for the balloons you popped.
 aetherhaven.dialogue.festival_carnival_balloon.collect_result.c_ok=Thank you!
+
+aetherhaven.dialogue.festival_carnival_balloon.collect_perfect.body=Every balloon! Take your summer festival tickets, and this balloon hat pattern for your town wardrobe. Use it to unlock the look, then dress a villager at the wardrobe.
+aetherhaven.dialogue.festival_carnival_balloon.collect_perfect.c_ok=Thank you!
+
+aetherhaven.dialogue.festival_carnival_balloon.collect_perfect_already.body=Every balloon again! Here are your summer festival tickets. Your town already has every balloon hat color unlocked.
+aetherhaven.dialogue.festival_carnival_balloon.collect_perfect_already.c_ok=Thank you!
 
 aetherhaven.dialogue.festival_carnival_balloon.busy.body=Someone else is at the booth right now. Come back when they are done.
 aetherhaven.dialogue.festival_carnival_balloon.busy.c_ok=I will wait.

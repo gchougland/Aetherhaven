@@ -21,7 +21,7 @@ public final class PlotCreatorSpotMarkerVisuals {
             case ADVENTURER_SPAWN, INNKEEPER_SPAWN, GUILD_MASTER_SPAWN, FESTIVAL_NPC -> TEX_PURPLE;
             case SLEEP_POI, EAT_POI, FUN_POI, FESTIVAL_CENTERPIECE, FESTIVAL_WHEEL -> TEX_BLUE;
             case WORK_POI, BARD_WORK_POI, PLANNING_DESK_POI, QUEST_BOARD_POI, SHOP_POI, FESTIVAL_RACE_LANE,
-                FESTIVAL_BALLOON_SPAWN -> TEX_ORANGE;
+                FESTIVAL_BALLOON_SPAWN, FESTIVAL_WHACK_SPAWN -> TEX_ORANGE;
             case MANAGEMENT_BLOCK,
                 PRODUCTION_STORAGE,
                 TREASURY_BLOCK,
@@ -97,6 +97,7 @@ public final class PlotCreatorSpotMarkerVisuals {
             case FESTIVAL_CENTERPIECE -> "Festival centerpiece";
             case FESTIVAL_RACE_LANE -> "Pig race lane";
             case FESTIVAL_BALLOON_SPAWN -> "Balloon spawn";
+            case FESTIVAL_WHACK_SPAWN -> "Whack hole";
             case FESTIVAL_WHEEL -> "Carnival wheel";
         };
     }
@@ -111,6 +112,15 @@ public final class PlotCreatorSpotMarkerVisuals {
         }
         if (PlotCreatorFestivalNpcRoles.PIG_RACE_MERCHANT.equals(npcRoleId)) {
             return "Race merchant";
+        }
+        if (PlotCreatorFestivalNpcRoles.CARNIVAL_BALLOON.equals(npcRoleId)) {
+            return "Balloon attendant";
+        }
+        if (PlotCreatorFestivalNpcRoles.CARNIVAL_WHEEL.equals(npcRoleId)) {
+            return "Wheel attendant";
+        }
+        if (PlotCreatorFestivalNpcRoles.CARNIVAL_WHACK.equals(npcRoleId)) {
+            return "Whack attendant";
         }
         return "Festival merchant";
     }

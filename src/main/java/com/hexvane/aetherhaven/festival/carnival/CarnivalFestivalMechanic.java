@@ -7,7 +7,7 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.server.core.universe.world.World;
 import javax.annotation.Nonnull;
 
-/** Carnival Festival: balloon popping and spin-the-wheel minigames at the festival square. */
+/** Carnival Festival: balloon, wheel, and whack-a-goblin minigames at the festival square. */
 public final class CarnivalFestivalMechanic implements FestivalMechanic {
     public static final String MECHANIC_ID = CarnivalIds.MECHANIC_ID;
 
@@ -20,6 +20,7 @@ public final class CarnivalFestivalMechanic implements FestivalMechanic {
     ) {
         CarnivalBalloonSessionIndex.getOrCreate(town.getTownId()).clearAll();
         CarnivalWheelSessionIndex.getOrCreate(town.getTownId()).clearAll();
+        CarnivalWhackSessionIndex.getOrCreate(town.getTownId()).clearAll();
         CarnivalWheelPlacementService.place(world, town.getTownId(), festivalPlot, festival);
     }
 
@@ -31,8 +32,15 @@ public final class CarnivalFestivalMechanic implements FestivalMechanic {
         @Nonnull FestivalDefinition festival
     ) {
         CarnivalBalloonSpawnService.despawnAllForTown(world, town.getTownId());
+        CarnivalWhackSpawnService.despawnAllForTown(world, town.getTownId());
         CarnivalWheelPlacementService.remove(world, town.getTownId());
+        var entityStore = world.getEntityStore();
+        CarnivalWhackSession whack = CarnivalWhackSessionIndex.get(town.getTownId());
+        if (whack != null && whack.getPlayerUuid() != null && entityStore != null) {
+            CarnivalWhackClubUtil.removeAllWhackersForPlayer(entityStore.getStore(), whack.getPlayerUuid());
+        }
         CarnivalBalloonSessionIndex.remove(town.getTownId());
         CarnivalWheelSessionIndex.remove(town.getTownId());
+        CarnivalWhackSessionIndex.remove(town.getTownId());
     }
 }

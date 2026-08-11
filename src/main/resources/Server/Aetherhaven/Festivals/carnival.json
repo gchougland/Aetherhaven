@@ -2,7 +2,7 @@
   "id": "carnival",
   "displayName": "Carnival Festival",
   "displayNameLangKey": "aetherhaven_festivals.aetherhaven.festival.carnival.name",
-  "description": "Late summer brings the carnival. Pop balloons, spin the wheel, and spend summer festival tickets at the carnival merchant.",
+  "description": "Late summer brings the carnival. Pop balloons, spin the wheel, whack goblins, and spend summer festival tickets at the carnival merchant.",
   "prefabPath": "Festivals/Festival_Carnival.prefab.json",
   "season": "Summer",
   "dayOfSeason": 20,
@@ -64,6 +64,13 @@
       "localY": 6,
       "localZ": 0,
       "yawDegrees": 90.0
+    },
+    {
+      "npcRoleId": "Aetherhaven_Festival_Carnival_Whack",
+      "localX": 10,
+      "localY": 6,
+      "localZ": -4,
+      "yawDegrees": 270.0
     }
   ],
   "touristSpots": [
@@ -83,6 +90,14 @@
     { "localX": 2, "localY": 7, "localZ": -3 },
     { "localX": 5, "localY": 7, "localZ": -3 },
     { "localX": 8, "localY": 7, "localZ": -3 }
+  ],
+  "whackSpawns": [
+    { "localX": 12, "localY": 6, "localZ": -8 },
+    { "localX": 14, "localY": 6, "localZ": -8 },
+    { "localX": 16, "localY": 6, "localZ": -8 },
+    { "localX": 12, "localY": 6, "localZ": -6 },
+    { "localX": 14, "localY": 6, "localZ": -6 },
+    { "localX": 16, "localY": 6, "localZ": -6 }
   ],
   "wheelLocal": {
     "localX": -10,
