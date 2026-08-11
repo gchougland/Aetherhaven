@@ -10,7 +10,7 @@ import fs from "node:fs";
 const ASSET_BASE = "web/hytale-assets";
 
 globalThis.fetch = async (url) => {
-  const file = String(url).replace(/^\/+/, "");
+  const file = String(url).replace(/^\/+/, "").replace(/\?.*$/, "");
   if (!fs.existsSync(file)) {
     return { ok: false, status: 404 };
   }

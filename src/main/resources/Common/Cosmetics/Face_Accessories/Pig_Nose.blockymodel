@@ -26,7 +26,7 @@
           "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
           "shape": {
             "type": "box",
-            "offset": {"x": 0, "y": 2, "z": 1.625},
+            "offset": {"x": 0, "y": -2, "z": 1.625},
             "stretch": {"x": -1, "y": 1, "z": 1},
             "settings": {
               "isPiece": false,
@@ -67,12 +67,12 @@
           "children": [
             {
               "id": "3",
-              "name": "Jaw",
-              "position": {"x": 0, "y": -4, "z": -3.25},
+              "name": "SnoutLower",
+              "position": {"x": 0, "y": 0, "z": -3.25},
               "orientation": {"x": -0.04362, "y": 0, "z": 0, "w": 0.99905},
               "shape": {
                 "type": "box",
-                "offset": {"x": 0, "y": -0.73478, "z": 3.07578},
+                "offset": {"x": 0, "y": -4.73478, "z": 3.07578},
                 "stretch": {"x": 0.95, "y": 1, "z": 1},
                 "settings": {
                   "isPiece": false,

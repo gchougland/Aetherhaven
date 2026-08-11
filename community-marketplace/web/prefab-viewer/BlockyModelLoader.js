@@ -4,7 +4,7 @@
  * UV layout matches the official Blockbench codec (pixel offset + face size from settings.size, not stretch).
  */
 import * as THREE from "three";
-import { assetUrl } from "./BlockCatalog.js?v=26";
+import { assetUrl } from "./BlockCatalog.js?v=27";
 
 const BLOCK_SCALE = 1 / 32;
 

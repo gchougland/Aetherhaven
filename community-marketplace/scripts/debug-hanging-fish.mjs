@@ -54,7 +54,7 @@ const entities = (doc.entities || []).map((e) => {
 const ropes = entities.filter((e) => /Deco_Rope/.test(e.id));
 const fish = entities.filter((e) => /^Fish_/.test(e.id) && !e.isBlock);
 
-console.log("fish                        mouth end                 nearest rope   distance");
+console.log("fish                        mouth end                 nearest rope           dist   mouth points");
 for (const f of fish) {
   const model = catalog[f.id]?.itemModel;
   const extent = model && modelZExtent(model);
@@ -65,18 +65,21 @@ for (const f of fish) {
   const quat = new THREE.Quaternion().setFromEuler(
     new THREE.Euler(Number(f.rot.Pitch) || 0, Number(f.rot.Yaw) || 0, Number(f.rot.Roll) || 0, "YXZ")
   );
-  // Entity forward is -Z, so the nose is the min-Z end of the model.
   const worldScale = f.scale * 0.5; // NPC models are authored at twice the block density
-  const nose = new THREE.Vector3(0, 0, extent.min * worldScale).applyQuaternion(quat).add(f.pos);
+  // The head is the model's +Z end, and the viewer turns models to face the entity's
+  // forward (-Z), so after that flip the head sits at -Z before the entity rotation.
+  const head = new THREE.Vector3(0, 0, -extent.max * worldScale).applyQuaternion(quat).add(f.pos);
+  const facing = new THREE.Vector3(0, 0, -1).applyQuaternion(quat);
   let best = null;
   for (const rope of ropes) {
-    const dist = rope.pos.distanceTo(nose);
+    const dist = rope.pos.distanceTo(head);
     if (!best || dist < best.dist) {
       best = { rope, dist };
     }
   }
+  const points = facing.y > 0.7 ? "up" : facing.y < -0.7 ? "down" : "sideways";
   console.log(
-    `${f.id.padEnd(28)}(${nose.toArray().map((v) => v.toFixed(2)).join(", ")})` +
-      `   (${best.rope.pos.toArray().map((v) => v.toFixed(2)).join(", ")})   ${best.dist.toFixed(2)}`
+    `${f.id.padEnd(28)}(${head.toArray().map((v) => v.toFixed(2)).join(", ")})` +
+      `   (${best.rope.pos.toArray().map((v) => v.toFixed(2)).join(", ")})   ${best.dist.toFixed(2)}   ${points}`
   );
 }

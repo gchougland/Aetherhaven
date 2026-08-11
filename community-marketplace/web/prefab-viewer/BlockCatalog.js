@@ -2,6 +2,13 @@
 
 const DEFAULT_ASSET_BASE = "/hytale-assets";
 
+/**
+ * The catalog changes shape along with this module, and a browser will happily pair new
+ * code with a catalog it cached weeks ago, so it is fetched with whatever cache busting
+ * query the page imported this module with.
+ */
+const CACHE_BUST = new URL(import.meta.url).search;
+
 /** @type {{ blocks: Record<string, any>, models: Record<string, any>, assetBase: string } | null} */
 let cached = null;
 
@@ -14,8 +21,8 @@ export async function loadCatalogs(assetBase = DEFAULT_ASSET_BASE) {
   }
   const base = assetBase.replace(/\/$/, "");
   const [blocksRes, modelsRes] = await Promise.all([
-    fetch(`${base}/catalog/block_catalog.json`),
-    fetch(`${base}/catalog/model_catalog.json`),
+    fetch(`${base}/catalog/block_catalog.json${CACHE_BUST}`),
+    fetch(`${base}/catalog/model_catalog.json${CACHE_BUST}`),
   ]);
   if (!blocksRes.ok) {
     throw new Error(`Block catalog unavailable (${blocksRes.status})`);

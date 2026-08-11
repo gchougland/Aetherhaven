@@ -3,15 +3,18 @@
  */
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { loadCatalogs } from "./BlockCatalog.js?v=26";
-import { buildPrefabMesh, disposeObject3D, PREFAB_VIEWER_TRANSFORM_REV } from "./PrefabMeshBuilder.js?v=26";
+import { loadCatalogs } from "./BlockCatalog.js?v=27";
+import { buildPrefabMesh, disposeObject3D, PREFAB_VIEWER_TRANSFORM_REV } from "./PrefabMeshBuilder.js?v=27";
 
 export { PREFAB_VIEWER_TRANSFORM_REV };
+
+const ICON_ENTER_FULLSCREEN = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6" /></svg>`;
+const ICON_EXIT_FULLSCREEN = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h6V3M21 9h-6V3M3 15h6v6M21 15h-6v6" /></svg>`;
 
 export class PrefabViewer {
   /**
    * @param {HTMLElement} container
-   * @param {{ assetBase?: string, interactive?: boolean }} [options]
+   * @param {{ assetBase?: string, interactive?: boolean, fullscreenButton?: boolean }} [options]
    */
   constructor(container, options = {}) {
     this.container = container;
@@ -73,6 +76,12 @@ export class PrefabViewer {
     this._onResize = () => this.resize();
     window.addEventListener("resize", this._onResize);
 
+    this._fullscreenButton = null;
+    this._onFullscreenChange = null;
+    if (options.fullscreenButton !== false) {
+      this._addFullscreenButton();
+    }
+
     this._animate = () => {
       if (this._disposed) {
         return;
@@ -82,6 +91,48 @@ export class PrefabViewer {
       this.renderer.render(this.scene, this.camera);
     };
     this._animate();
+  }
+
+  _addFullscreenButton() {
+    if (!(document.fullscreenEnabled || document.webkitFullscreenEnabled)) {
+      return;
+    }
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "prefab-viewer-fullscreen";
+    button.addEventListener("click", () => this.toggleFullscreen());
+    this.container.appendChild(button);
+    this._fullscreenButton = button;
+
+    this._onFullscreenChange = () => {
+      const on = this.isFullscreen();
+      this.container.classList.toggle("prefab-viewer-fullscreen-active", on);
+      button.innerHTML = on ? ICON_EXIT_FULLSCREEN : ICON_ENTER_FULLSCREEN;
+      button.title = on ? "Leave full screen" : "Full screen";
+      button.setAttribute("aria-label", button.title);
+      this.resize();
+      // The browser lays the element out after the event, so measure again next frame.
+      requestAnimationFrame(() => this.resize());
+    };
+    this._onFullscreenChange();
+    document.addEventListener("fullscreenchange", this._onFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", this._onFullscreenChange);
+  }
+
+  isFullscreen() {
+    const active = document.fullscreenElement || document.webkitFullscreenElement || null;
+    return active === this.container;
+  }
+
+  toggleFullscreen() {
+    if (this.isFullscreen()) {
+      const exit = document.exitFullscreen || document.webkitExitFullscreen;
+      exit?.call(document);
+      return;
+    }
+    const request = this.container.requestFullscreen || this.container.webkitRequestFullscreen;
+    // Rejects when the browser blocks it (no user gesture, or a policy says no).
+    request?.call(this.container)?.catch?.(() => {});
   }
 
   resize() {
@@ -176,6 +227,18 @@ export class PrefabViewer {
     this._disposed = true;
     cancelAnimationFrame(this._raf);
     window.removeEventListener("resize", this._onResize);
+    if (this._onFullscreenChange) {
+      document.removeEventListener("fullscreenchange", this._onFullscreenChange);
+      document.removeEventListener("webkitfullscreenchange", this._onFullscreenChange);
+      this._onFullscreenChange = null;
+    }
+    if (this.isFullscreen()) {
+      const exit = document.exitFullscreen || document.webkitExitFullscreen;
+      exit?.call(document);
+    }
+    this.container.classList.remove("prefab-viewer-fullscreen-active");
+    this._fullscreenButton?.remove();
+    this._fullscreenButton = null;
     this.controls.dispose();
     if (this._root) {
       this.scene.remove(this._root);

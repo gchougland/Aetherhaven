@@ -6,7 +6,7 @@
 import fs from "node:fs";
 
 globalThis.fetch = async (url) => {
-  const file = String(url).replace(/^\/+/, "");
+  const file = String(url).replace(/^\/+/, "").replace(/\?.*$/, "");
   if (!fs.existsSync(file)) {
     return { ok: false, status: 404 };
   }

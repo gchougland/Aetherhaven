@@ -7,11 +7,11 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=26";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=26";
+} from "./BlockCatalog.js?v=27";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=27";
 
 /** Bump when transform math changes — shown in the viewer so we can confirm the live build. */
-export const PREFAB_VIEWER_TRANSFORM_REV = "xform-26";
+export const PREFAB_VIEWER_TRANSFORM_REV = "xform-27";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
@@ -427,13 +427,12 @@ export async function buildPrefabMesh(prefab, options = {}) {
         let customModelScale = 1;
 
         /** @param {THREE.Object3D} model */
-        const addBlockModel = (model) => {
-          if (isBlockStyle) {
-            // A block entity's yaw points its front where the entity faces, and that is
-            // the opposite side from where blockymodels put theirs, so wall panels, signs
-            // and other one-sided props land on the far side of their block without this.
-            model.rotateY(Math.PI);
-          }
+        const addEntityModel = (model) => {
+          // An entity faces -Z at yaw 0 but blockymodels are authored facing +Z, for props
+          // and creatures alike: a wall panel's front is its +Z side and a fish's head is
+          // its +Z end. Without this they face backwards, so a fish hung by the mouth hangs
+          // by the tail instead.
+          model.rotateY(Math.PI);
           holder.add(model);
         };
 
@@ -444,7 +443,7 @@ export async function buildPrefabMesh(prefab, options = {}) {
             const model = await getModel(mdef.model, mdef.texture);
             if (model) {
               modelPath = mdef.model;
-              addBlockModel(model);
+              addEntityModel(model);
               placed = true;
             }
           }
@@ -461,14 +460,14 @@ export async function buildPrefabMesh(prefab, options = {}) {
             const model = await getModel(idef.itemModel, idef.itemTexture || null);
             if (model) {
               modelPath = idef.itemModel;
-              addBlockModel(model);
+              addEntityModel(model);
               placed = true;
             }
           } else if (idef?.customModel) {
             const resolved = await getModelForDef(idef, idef.customModelTexture || null);
             if (resolved) {
               modelPath = resolved.path;
-              addBlockModel(resolved.model);
+              addEntityModel(resolved.model);
               placed = true;
             }
           } else if (idef?.textures) {
@@ -476,7 +475,7 @@ export async function buildPrefabMesh(prefab, options = {}) {
             // Cube geometry is centred, but blockymodels start at their base, so lift it
             // half a block to match before the shared pivot shift is applied.
             cube.position.y += 0.5;
-            addBlockModel(cube);
+            addEntityModel(cube);
             placed = true;
           }
         }

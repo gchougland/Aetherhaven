@@ -1738,7 +1738,7 @@ function ensurePrefabCaptureModal() {
   if (!prefabCaptureEscBound) {
     prefabCaptureEscBound = true;
     document.addEventListener("keydown", (event) => {
-      if (event.key !== "Escape") {
+      if (event.key !== "Escape" || isPrefabViewerFullscreen()) {
         return;
       }
       const captureModal = document.getElementById("prefabCaptureModal");
@@ -2706,6 +2706,11 @@ let detailModalEscBound = false;
 let activePrefabViewer = null;
 let prefabViewerLoadToken = 0;
 
+/** Escape leaves the full screen preview first, so modals below it should stay open. */
+function isPrefabViewerFullscreen() {
+  return Boolean(document.fullscreenElement || document.webkitFullscreenElement);
+}
+
 function disposeActivePrefabViewer() {
   prefabViewerLoadToken += 1;
   if (activePrefabViewer) {
@@ -2815,7 +2820,7 @@ function ensureBuildingDetailModal() {
   if (!detailModalEscBound) {
     detailModalEscBound = true;
     document.addEventListener("keydown", (event) => {
-      if (event.key !== "Escape") {
+      if (event.key !== "Escape" || isPrefabViewerFullscreen()) {
         return;
       }
       const captureModal = document.getElementById("prefabCaptureModal");

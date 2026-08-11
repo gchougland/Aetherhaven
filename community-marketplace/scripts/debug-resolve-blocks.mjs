@@ -12,7 +12,7 @@ const ASSET_BASE = "web/hytale-assets";
 const COMMON = path.join(ASSET_BASE, "Common");
 
 globalThis.fetch = async (url) => {
-  const file = String(url).replace(/^\/+/, "");
+  const file = String(url).replace(/^\/+/, "").replace(/\?.*$/, "");
   if (!fs.existsSync(file)) {
     return { ok: false, status: 404 };
   }

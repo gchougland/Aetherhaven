@@ -40,7 +40,7 @@
     <div id="status">Loading…</div>
     <div id="viewer"></div>
     <script type="module">
-      import { PrefabViewer, PREFAB_VIEWER_TRANSFORM_REV } from "/prefab-viewer/PrefabViewer.js?v=26";
+      import { PrefabViewer, PREFAB_VIEWER_TRANSFORM_REV } from "/prefab-viewer/PrefabViewer.js?v=28";
 
       window.__PREFAB_RENDER_READY__ = false;
       window.__PREFAB_RENDER_ERROR__ = null;
@@ -58,6 +58,7 @@
         const viewer = new PrefabViewer(document.getElementById("viewer"), {
           interactive,
           assetBase: "/hytale-assets",
+          fullscreenButton: false,
         });
         await viewer.loadPrefabUrl(prefabUrl, {
           onProgress: (done, total) => {

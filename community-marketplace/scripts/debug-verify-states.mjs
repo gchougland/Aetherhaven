@@ -25,7 +25,7 @@ const SOURCES = [
 const verbose = process.argv.includes("--all");
 
 globalThis.fetch = async (url) => {
-  const file = String(url).replace(/^\/+/, "");
+  const file = String(url).replace(/^\/+/, "").replace(/\?.*$/, "");
   if (!fs.existsSync(file)) {
     return { ok: false, status: 404 };
   }

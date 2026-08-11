@@ -67,7 +67,7 @@
           "children": [
             {
               "id": "3",
-              "name": "Jaw",
+              "name": "SnoutLower",
               "position": {"x": 0, "y": -4, "z": -3.25},
               "orientation": {"x": -0.04362, "y": 0, "z": 0, "w": 0.99905},
               "shape": {
