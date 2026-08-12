@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.guide;
 
+import com.hexvane.aetherhaven.asset.AetherhavenAssetPaths;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -14,7 +15,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Loads Voile-style markdown topics from {@code Common/Docs/Hexvane_AetherhavenWiki/} and walks {@code welcome.md}
+ * Loads Voile-style markdown topics from {@code Server/Aetherhaven/GuideTopics/} and walks {@code welcome.md}
  * sub-topics for stable navigation order.
  *
  * <p>Display text ({@code name}, {@code description}, body) resolves per player locale; {@code sub-topics} order and
@@ -27,7 +28,7 @@ import javax.annotation.Nullable;
  */
 public final class GuideTopicRepository {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    private static final String PREFIX = "Common/Docs/Hexvane_AetherhavenWiki/";
+    private static final String PREFIX = AetherhavenAssetPaths.GUIDE_TOPICS + "/";
     private static final String DEFAULT_LOCALE = "en-US";
 
     private static final ConcurrentHashMap<String, GuideTopicRepository> CACHE = new ConcurrentHashMap<>();

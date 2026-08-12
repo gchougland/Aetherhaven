@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven;
 
+import com.hexvane.aetherhaven.asset.AetherhavenCommonAssetDelivery;
 import com.hexvane.aetherhaven.bard.data.BardSongCatalog;
 import com.hexvane.aetherhaven.command.AetherhavenCommand;
 import com.hexvane.aetherhaven.config.AetherhavenConfigJsonMigration;
@@ -34,6 +35,7 @@ import com.hexvane.aetherhaven.plugin.AetherhavenFeatureBootstrap;
 import com.hexvane.aetherhaven.plugin.DialogueActionRegistry;
 import com.hexvane.aetherhaven.plugin.DialogueConditionRegistry;
 import com.hexvane.aetherhaven.plugin.GameTimeTickListenerRegistry;
+import com.hexvane.aetherhaven.prefab.CorePrefabWarmup;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.WorkplaceUnlockCatalog;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
@@ -458,6 +460,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         }
         this.getEventRegistry().register(AssetPackRegisterEvent.class, e -> this.reloadAetherhavenAssetCatalogs());
         AetherhavenFeatureBootstrap.startEnabled(this);
+        CorePrefabWarmup.warmAsync(this.constructionCatalog, this.constructionScheduler);
         LOGGER.atInfo().log("Aetherhaven constructions loaded: %s", this.constructionCatalog.ids());
     }
 
@@ -508,9 +511,14 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 );
             return event;
         }
-        // forceRebuild=true: vanilla already rebuilt earlier in this event; runtime icons are added after
-        // that pass, so the client needs a second atlas rebuild or inventory shows missing textures.
-        module.sendAssetsToPlayer(event.getPacketHandler(), packAssets, true);
+        List<CommonAsset> toSend =
+            AetherhavenCommonAssetDelivery.assetsToForceSend(packAssets, event.getRequestedAssets());
+        if (toSend.isEmpty()) {
+            return event;
+        }
+        // forceRebuild=true: vanilla may have rebuilt earlier; runtime icons added after that pass need a second atlas
+        // rebuild or inventory shows missing textures.
+        module.sendAssetsToPlayer(event.getPacketHandler(), toSend, true);
         return event;
     }
 
@@ -526,7 +534,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.dialogueResolver.reloadFromVillagerCatalog(this.villagerDefinitionCatalog);
         Path customData = this.getDataDirectory();
         this.constructionCatalog = ConstructionCatalog.loadFromAssetPacksOrClasspath(cl, customData);
-        this.prefabMaterialsService.generateAllForCatalog(this.constructionCatalog, customData);
+        this.prefabMaterialsService.generateAllForCatalog(this.constructionCatalog, customData, cl);
         this.prefabMaterialsCatalog = PrefabMaterialsCatalog.loadFromAssetPacksOrClasspath(cl, customData);
         this.dialogueCatalog = DialogueCatalog.loadFromAssetPacksOrClasspath(cl);
         this.questCatalog = QuestCatalog.loadFromAssetPacksOrClasspath(cl);

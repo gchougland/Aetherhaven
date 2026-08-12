@@ -1,5 +1,9 @@
 package com.hexvane.aetherhaven.construction.prefabmaterials;
 
+import com.hexvane.aetherhaven.asset.AetherhavenAssetPaths;
+import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner;
+import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner.PackJsonFile;
+import com.hexvane.aetherhaven.asset.ClasspathResourceScanner;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
@@ -8,7 +12,10 @@ import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -36,9 +43,18 @@ public final class PrefabMaterialsService {
         );
     }
 
-    /** Writes PrefabMaterials for every construction in the catalog that has a resolvable prefab. */
-    public int generateAllForCatalog(@Nonnull ConstructionCatalog catalog, @Nonnull Path dataDirectory) {
+    /**
+     * Writes PrefabMaterials only for constructions that do not already have pack/classpath materials or a data-dir
+     * materials file. Explicit {@link #generateOne} still regenerates on building save.
+     */
+    public int generateAllForCatalog(
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull Path dataDirectory,
+        @Nonnull ClassLoader classLoader
+    ) {
+        Set<String> known = knownPackOrClasspathConstructionIds(classLoader);
         int written = 0;
+        int skipped = 0;
         for (String id : catalog.ids()) {
             ConstructionDefinition def = catalog.get(id);
             if (def == null) {
@@ -48,11 +64,19 @@ public final class PrefabMaterialsService {
             if (prefabPath == null || prefabPath.isBlank()) {
                 continue;
             }
+            if (known.contains(id) || Files.isRegularFile(PrefabMaterialsWriter.outputFile(dataDirectory, id))) {
+                skipped++;
+                continue;
+            }
             if (generateOne(id, prefabPath, dataDirectory)) {
                 written++;
             }
         }
-        LOGGER.atInfo().log("Generated prefab materials for %s construction(s)", written);
+        LOGGER.atInfo().log(
+            "Generated prefab materials for %s construction(s) (skipped %s already present)",
+            written,
+            skipped
+        );
         return written;
     }
 
@@ -106,6 +130,30 @@ public final class PrefabMaterialsService {
             LOGGER.atWarning().withCause(e).log("Failed to read prefab for suggested resources: %s", prefabPathKey);
             return List.of();
         }
+    }
+
+    @Nonnull
+    private static Set<String> knownPackOrClasspathConstructionIds(@Nonnull ClassLoader classLoader) {
+        Set<String> ids = new HashSet<>();
+        List<PackJsonFile> packFiles =
+            AetherhavenPackAssetScanner.listJsonFilesUnderAllPacks(AetherhavenAssetPaths.PREFAB_MATERIALS);
+        if (!packFiles.isEmpty()) {
+            for (PackJsonFile f : packFiles) {
+                String fileName = f.absolutePath().getFileName().toString();
+                if (fileName.toLowerCase(Locale.ROOT).endsWith(".json")) {
+                    ids.add(fileName.substring(0, fileName.length() - 5));
+                }
+            }
+            return ids;
+        }
+        for (String path : ClasspathResourceScanner.listJsonFiles(classLoader, AetherhavenAssetPaths.prefabMaterialsPrefix())) {
+            int slash = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
+            String fileName = slash >= 0 ? path.substring(slash + 1) : path;
+            if (fileName.toLowerCase(Locale.ROOT).endsWith(".json")) {
+                ids.add(fileName.substring(0, fileName.length() - 5));
+            }
+        }
+        return ids;
     }
 
     @Nullable

@@ -82,10 +82,22 @@ public final class FestivalService {
                 || !FestivalWindow.isActive(running, gameTime);
             if (expired) {
                 endFestival(world, store, plugin, tm, town);
-            } else {
-                // Spot POIs are runtime-only. Rebuild them after reloads / plot refresh so villagers keep attending.
-                ensureActiveFestivalSpots(world, store, plugin, tm, town, running);
+                return;
             }
+            PlotInstance square = findFestivalSquare(plugin, town);
+            UUID activePlotId = town.getActiveFestivalPlotId();
+            PlotInstance activeSquare = activePlotId != null ? town.findPlotById(activePlotId) : null;
+            // Square was destroyed/rebuilt while the festival was still marked active.
+            if (activeSquare == null) {
+                if (square == null || running == null) {
+                    abandonActiveFestivalWithoutSquare(world, store, plugin, tm, town);
+                } else {
+                    rebindActiveFestivalToSquare(world, store, plugin, tm, town, square, running);
+                }
+                return;
+            }
+            // Spot POIs are runtime-only. Rebuild them after reloads / plot refresh so villagers keep attending.
+            ensureActiveFestivalSpots(world, store, plugin, tm, town, running);
             return;
         }
         AetherhavenCalendar.CalendarDate date = AetherhavenCalendar.from(gameTime);
@@ -96,7 +108,65 @@ public final class FestivalService {
         startFestival(world, store, plugin, tm, town, today, gameTime, epochMinute);
     }
 
-    /** The first completed festival square in this town, or null when the town has not built one. */
+    /** Drops festival runtime when the host square is gone and there is nothing to paste onto. */
+    private static void abandonActiveFestivalWithoutSquare(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownManager tm,
+        @Nonnull TownRecord town
+    ) {
+        FestivalSpotService.clearSpots(world, plugin, town);
+        FestivalNpcSpawnService.despawnFestivalNpcs(world, store, plugin, town);
+        town.clearActiveFestival();
+        tm.updateTown(town);
+        FestivalAttendanceService.releaseAttendees(world, store, plugin, town);
+        LOGGER.atInfo().log("Abandoned active festival for town %s; festival square is missing", town.getTownId());
+    }
+
+    /** Pastes the running festival onto a rebuilt square that replaced the old host plot. */
+    private static void rebindActiveFestivalToSquare(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownManager tm,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance square,
+        @Nonnull FestivalDefinition festival
+    ) {
+        String everyday = everydayPrefabPath(plugin, square);
+        if (everyday == null) {
+            abandonActiveFestivalWithoutSquare(world, store, plugin, tm, town);
+            return;
+        }
+        boolean started = FestivalPrefabSwapService.swap(
+            world,
+            plugin,
+            town,
+            square,
+            everyday,
+            festival.getPrefabPath(),
+            () -> onFestivalPasted(world, plugin, town.getTownId(), square.getPlotId(), festival)
+        );
+        if (!started) {
+            LOGGER.atWarning().log(
+                "Could not rebind festival %s onto rebuilt square for town %s",
+                festival.getId(),
+                town.getTownId()
+            );
+            return;
+        }
+        town.setActiveFestivalPlotId(square.getPlotId());
+        tm.updateTown(town);
+        LOGGER.atInfo().log(
+            "Rebound festival %s onto rebuilt square %s for town %s",
+            festival.getId(),
+            square.getPlotId(),
+            town.getTownId()
+        );
+    }
+
+    /** The completed festival square in this town, or null when the town has not built one. */
     @Nullable
     public static PlotInstance findFestivalSquare(@Nonnull AetherhavenPlugin plugin, @Nonnull TownRecord town) {
         List<PlotInstance> plots = town.listCompletePlotsWithGameplayConstruction(
@@ -187,6 +257,49 @@ public final class FestivalService {
             announce(store, town, LANG + "ended", running, null);
             LOGGER.atInfo().log("Festival %s ended for town %s", running.getId(), town.getTownId());
         }
+    }
+
+    /**
+     * Call before removing a festival square plot from the town. Drops active festival state so a rebuilt square can
+     * host the next festival day instead of staying stuck on the destroyed plot id.
+     */
+    public static void onFestivalSquareRemoved(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownManager tm,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance removed
+    ) {
+        if (!plugin.getConstructionCatalog()
+            .matchesGameplayConstruction(removed.getConstructionId(), AetherhavenConstants.CONSTRUCTION_PLOT_FESTIVAL_SQUARE)) {
+            return;
+        }
+        if (town.getActiveFestivalId() == null) {
+            return;
+        }
+        UUID activePlotId = town.getActiveFestivalPlotId();
+        if (activePlotId != null && !activePlotId.equals(removed.getPlotId())) {
+            return;
+        }
+        String runningId = town.getActiveFestivalId();
+        FestivalDefinition running = runningId != null ? plugin.getFestivalCatalog().get(runningId) : null;
+        FestivalSpotService.clearSpots(world, plugin, town);
+        FestivalNpcSpawnService.despawnFestivalNpcs(world, store, plugin, town);
+        if (running != null) {
+            FestivalMechanic mechanic = plugin.getFestivalMechanicRegistry().get(running.getMechanicId());
+            if (mechanic != null) {
+                try {
+                    mechanic.onEnd(world, town, removed, running);
+                } catch (RuntimeException e) {
+                    LOGGER.atWarning().withCause(e).log("Festival mechanic %s failed to end", running.getMechanicId());
+                }
+            }
+        }
+        town.clearActiveFestival();
+        tm.updateTown(town);
+        FestivalAttendanceService.releaseAttendees(world, store, plugin, town);
+        LOGGER.atInfo().log("Cleared active festival for town %s after festival square removal", town.getTownId());
     }
 
     /**

@@ -519,7 +519,7 @@ public final class PlotCreatorInteractions {
             fileName = BuildingEditorSavePaths.prefabFileName(prefabKey);
             Path writeRoot = BuildingEditorSavePaths.resolveWriteRootForFestival(plugin, festivalId);
             out = BuildingEditorSavePaths.prefabFile(writeRoot, prefabKey);
-            d.setSaveEmptySpaces(true);
+            d.setSaveEmptySpaces(false);
             PlotCreatorPrefabExporter.ExportResult festivalResult =
                 PlotCreatorPrefabExporter.export(session.getWorld(), d, out, true);
             if (festivalResult != PlotCreatorPrefabExporter.ExportResult.SUCCESS) {

@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.guide;
 
+import com.hexvane.aetherhaven.asset.AetherhavenAssetPaths;
 import java.util.List;
 import java.util.Locale;
 import javax.annotation.Nonnull;
@@ -7,10 +8,10 @@ import javax.annotation.Nullable;
 
 /** Maps {@link com.hypixel.hytale.server.core.universe.PlayerRef#getLanguage()} to guide markdown folders. */
 public final class GuideLocaleResolver {
-    private static final String PREFIX = "Common/Docs/Hexvane_AetherhavenWiki/";
+    private static final String PREFIX = AetherhavenAssetPaths.GUIDE_TOPICS + "/";
     private static final String DEFAULT_LOCALE = "en-US";
 
-    /** Folders produced by {@code scripts/translate_guide_pages.py}. */
+    /** Folders under {@link AetherhavenAssetPaths#GUIDE_TOPICS}. */
     private static final List<String> GUIDE_LOCALES = List.of(
         "en-US",
         "zh-CN",

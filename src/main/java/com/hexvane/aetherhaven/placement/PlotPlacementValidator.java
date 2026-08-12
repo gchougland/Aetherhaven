@@ -1,8 +1,10 @@
 package com.hexvane.aetherhaven.placement;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
+import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import org.joml.Vector3i;
@@ -53,6 +55,10 @@ public final class PlotPlacementValidator {
         if (!town.playerCanPlacePlots(ownerUuid)) {
             return "You do not have permission to place buildings for this town.";
         }
+        String uniqueErr = uniqueFestivalSquareReason(town, def, plugin, excludePlotId);
+        if (uniqueErr != null) {
+            return uniqueErr;
+        }
         if (!townManager.isInsideTerritory(town, groundedSignCell.x, groundedSignCell.z)) {
             return "Plot sign position is outside your town territory.";
         }
@@ -62,7 +68,7 @@ public final class PlotPlacementValidator {
         }
         IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
         try {
-            PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(buildingPrefabAnchor, prefabYaw, buf);
+            PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(buildingPrefabAnchor, prefabYaw, buf, def.getPrefabPath());
             for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
                 for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
                     if (!townManager.isInsideTerritory(town, x, z)) {
@@ -107,6 +113,10 @@ public final class PlotPlacementValidator {
         if (!town.playerCanPlacePlots(ownerUuid)) {
             return "You do not have permission to place buildings for this town.";
         }
+        String uniqueErr = uniqueFestivalSquareReason(town, def, plugin, excludePlotId);
+        if (uniqueErr != null) {
+            return uniqueErr;
+        }
         if (!townManager.isInsideTerritory(town, signPosition.x, signPosition.z)) {
             return "Plot sign position is outside your town territory.";
         }
@@ -117,7 +127,7 @@ public final class PlotPlacementValidator {
         Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(signPosition, prefabYaw);
         IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
         try {
-            PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, prefabYaw, buf);
+            PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, prefabYaw, buf, def.getPrefabPath());
             for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
                 for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
                     if (!townManager.isInsideTerritory(town, x, z)) {
@@ -142,5 +152,32 @@ public final class PlotPlacementValidator {
             return null;
         } finally {
         }
+    }
+
+    /** Towns may only have one festival square; relocating the existing one is allowed via {@code excludePlotId}. */
+    @Nullable
+    private static String uniqueFestivalSquareReason(
+        @Nonnull TownRecord town,
+        @Nonnull ConstructionDefinition def,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nullable UUID excludePlotId
+    ) {
+        if (!plugin.getConstructionCatalog()
+            .matchesGameplayConstruction(def.getId(), AetherhavenConstants.CONSTRUCTION_PLOT_FESTIVAL_SQUARE)) {
+            return null;
+        }
+        for (PlotInstance existing : town.getPlotInstances()) {
+            if (excludePlotId != null && existing.getPlotId().equals(excludePlotId)) {
+                continue;
+            }
+            if (plugin.getConstructionCatalog()
+                .matchesGameplayConstruction(
+                    existing.getConstructionId(),
+                    AetherhavenConstants.CONSTRUCTION_PLOT_FESTIVAL_SQUARE
+                )) {
+                return "Your town already has a festival square.";
+            }
+        }
+        return null;
     }
 }

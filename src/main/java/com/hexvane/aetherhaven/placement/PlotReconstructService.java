@@ -108,7 +108,7 @@ public final class PlotReconstructService {
         );
         plot.clearAssemblyPersistence();
 
-        PlotFootprintRecord newFp = PlotFootprintUtil.computeFootprint(anchor, yaw, buffer);
+        PlotFootprintRecord newFp = PlotFootprintUtil.computeFootprint(anchor, yaw, buffer, def.getPrefabPath());
         plot.applySignAndFootprint(signX, signY, signZ, newFp);
         plot.setPrefabWorldPlacement(anchor.x, anchor.y, anchor.z, yaw);
 

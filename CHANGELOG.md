@@ -2,6 +2,10 @@
 
 ## [3.0.0] - Unreleased
 
+### Changed
+
+- **Faster loading** Worlds with Aetherhaven open and join more quickly.
+
 ### Added
 
 - **Calendar** Hang a calendar on a wall to open a season view with villager birthdays marked on their days. Craft it at the town planning desk with wood.

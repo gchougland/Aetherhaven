@@ -70,8 +70,7 @@ public final class AetherhavenAssetPaths {
     public static final String VILLAGER_GIFT_PATCHES = "Server/Aetherhaven/VillagerGiftPatches";
 
     /**
-     * Crossmod journal guide markdown ({@code <locale>/<topicId>.md}), same front matter as
-     * {@code Common/Docs/Hexvane_AetherhavenWiki/}.
+     * Journal guide markdown ({@code <locale>/<topicId>.md}), including the shipped wiki and crossmod overlays.
      */
     public static final String GUIDE_TOPICS = "Server/Aetherhaven/GuideTopics";
 

@@ -24,6 +24,7 @@ import com.hexvane.aetherhaven.map.TownSharedMapMarkerService;
 import com.hexvane.aetherhaven.poi.PoiPersistence;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.prop.PropWorldRegistries;
+import com.hexvane.aetherhaven.shopspot.ShopSpotBootstrap;
 import com.hexvane.aetherhaven.shopspot.ShopSpotDailyRerollService;
 import com.hexvane.aetherhaven.shopspot.ShopSpotPersistence;
 import com.hexvane.aetherhaven.shopspot.ShopSpotRegistry;
@@ -396,14 +397,27 @@ public final class AetherhavenWorldRegistries {
         getOrCreateWorldNpcRegistry(world, plugin);
         getOrCreatePathNavGraphService(world);
         TownNpcMigration.ensureElderBindingsOnWorldThread(world, plugin);
+        // Spread reconciles across the first second so world open is not one stacked hitch.
         WorldNpcSpawnService.reconcileAfterWorldLoad(world, plugin);
+        plugin.scheduleOnWorld(world, () -> ShopSpotBootstrap.reconcileAfterWorldLoad(world, plugin), 250L);
+        plugin.scheduleOnWorld(
+            world,
+            () -> InnkeeperSpawnService.reconcileAfterWorldLoad(world, plugin),
+            500L
+        );
+        plugin.scheduleOnWorld(
+            world,
+            () -> InnPoolService.reconcileAfterWorldLoad(world, plugin),
+            500L
+        );
+        plugin.scheduleOnWorld(
+            world,
+            () -> TownsfolkSpawnService.reconcileAfterWorldLoad(world, plugin),
+            750L
+        );
         TouristReconcileService.scheduleAfterWorldLoad(world, plugin);
         TownResidentReconcileService.scheduleAfterWorldLoad(world, plugin);
-        InnkeeperSpawnService.reconcileAfterWorldLoad(world, plugin);
-        InnPoolService.reconcileAfterWorldLoad(world, plugin);
-        TownsfolkSpawnService.reconcileAfterWorldLoad(world, plugin);
         PlotAssemblyService.scheduleRehydrateAfterWorldLoad(world, plugin);
-        com.hexvane.aetherhaven.shopspot.ShopSpotBootstrap.reconcileAfterWorldLoad(world, plugin);
         PlotLinkReconcileService.scheduleAfterWorldLoad(world, plugin);
         WorkplaceJobPlotReconcileService.scheduleAfterWorldLoad(world, plugin);
         TownBorderMapOverlayService.startWorld(world);

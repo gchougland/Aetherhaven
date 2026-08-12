@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Build localized guide markdown from English sources under
-`Common/Docs/Hexvane_AetherhavenWiki/en-US/`.
+`Server/Aetherhaven/GuideTopics/en-US/`.
 
 Uses the same translation backends as `build_server_translations.py`
 (GOOGLE_TRANSLATE_API_KEY or deep_translator).
@@ -25,7 +25,7 @@ import time
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
-GUIDE_BASE = REPO / "src/main/resources/Common/Docs/Hexvane_AetherhavenWiki"
+GUIDE_BASE = REPO / "src/main/resources/Server/Aetherhaven/GuideTopics"
 SRC_EN = GUIDE_BASE / "en-US"
 
 # Reuse backends from build_server_translations.py

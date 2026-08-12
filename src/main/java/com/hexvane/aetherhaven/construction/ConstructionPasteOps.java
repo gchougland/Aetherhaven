@@ -2,9 +2,11 @@ package com.hexvane.aetherhaven.construction;
 
 import com.hexvane.aetherhaven.entity.EntityRotationUtil;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyObstructionUtil;
+import com.hexvane.aetherhaven.festival.FestivalPrefabSize;
 import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
 import com.hexvane.aetherhaven.prefab.EditorMarkerBlocks;
 import com.hexvane.aetherhaven.prefab.PrefabSupportUtil;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.BlockMaterial;
@@ -141,6 +143,54 @@ public final class ConstructionPasteOps {
             Comparator.comparingInt(PendingBlock::y).thenComparingInt(PendingBlock::x).thenComparingInt(PendingBlock::z);
         pending.sort(byColumn);
         return new ConstructionPrefabSequence(pending, prefabEntitiesInOrder, prefabRotation);
+    }
+
+    /**
+     * Festival prefabs omit Empty air. Assembly clearing still needs every cell in the reserved box so trees, grass,
+     * and other terrain in the gaps are removed before paste.
+     */
+    @Nonnull
+    public static List<PendingBlock> withReservedFestivalAirCells(
+        @Nonnull List<PendingBlock> cells,
+        @Nonnull PrefabRotation rotation,
+        @Nullable String prefabPathKey
+    ) {
+        if (!FestivalPrefabSize.usesReservedFootprint(prefabPathKey)) {
+            return cells;
+        }
+        int reserved =
+            FestivalPrefabSize.WIDTH_X * FestivalPrefabSize.HEIGHT_Y * FestivalPrefabSize.DEPTH_Z;
+        LongOpenHashSet seen = new LongOpenHashSet(Math.max(cells.size(), reserved));
+        for (int i = 0; i < cells.size(); i++) {
+            PendingBlock pb = cells.get(i);
+            seen.add(packLocalCell(pb.x(), pb.y(), pb.z()));
+        }
+        List<PendingBlock> out = new ArrayList<>(reserved);
+        out.addAll(cells);
+        for (int x = FestivalPrefabSize.LOCAL_MIN_X; x <= FestivalPrefabSize.LOCAL_MAX_X; x++) {
+            for (int y = FestivalPrefabSize.LOCAL_MIN_Y; y <= FestivalPrefabSize.LOCAL_MAX_Y; y++) {
+                for (int z = FestivalPrefabSize.LOCAL_MIN_Z; z <= FestivalPrefabSize.LOCAL_MAX_Z; z++) {
+                    Vector3i corner = new Vector3i(x, y, z);
+                    rotation.rotate(corner);
+                    if (!seen.add(packLocalCell(corner.x, corner.y, corner.z))) {
+                        continue;
+                    }
+                    out.add(new PendingBlock(corner.x, corner.y, corner.z, 0, null, 0, 0, 0, 0, 0));
+                }
+            }
+        }
+        out.sort(
+            Comparator.comparingInt(PendingBlock::y).thenComparingInt(PendingBlock::x).thenComparingInt(PendingBlock::z)
+        );
+        return out;
+    }
+
+    private static long packLocalCell(int x, int y, int z) {
+        final int bias = 1 << 20;
+        long px = (long) x + bias;
+        long py = (long) y + bias;
+        long pz = (long) z + bias;
+        return px | (py << 21) | (pz << 42);
     }
 
     /**

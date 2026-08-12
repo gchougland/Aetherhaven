@@ -76,14 +76,14 @@ public final class PlotCreatorPrefabExporter {
         if (anchor == null) {
             return ExportResult.FAILED;
         }
-        // Festival prefabs (and the base square) always fill the fixed box with Empty air, even when the
-        // "save air" checkbox is off or building-editor bounds shrank after a truncated paste.
+        // Festival prefabs (and the base square) always use the fixed reserved box. Empty air is not saved; swaps
+        // clear the whole reserved volume before paste.
         boolean festivalPrefab = isFestivalPrefabExport(draft);
         if (festivalPrefab) {
             max = FestivalPrefabSize.maxFromMin(min);
             draft.setCornerFirst(new Vector3i(min));
             draft.setCornerSecond(new Vector3i(max));
-            draft.setSaveEmptySpaces(true);
+            draft.setSaveEmptySpaces(false);
         }
         draft.setPrefabOriginMin(new Vector3i(min));
         PlotCreatorLocalCoords.recomputeAnchorOffset(draft);
@@ -109,8 +109,8 @@ public final class PlotCreatorPrefabExporter {
 
         int editorBlock = BlockType.getAssetMap().getIndex("Editor_Block");
         boolean skipEditorBlock = editorBlock != Integer.MIN_VALUE;
-        // Festival squares must record air so broken blocks stay gone on the next paste/load.
-        boolean includeEmpty = draft.isSaveEmptySpaces() || festivalPrefab;
+        // Festivals omit Empty air; other buildings honor the save-air checkbox.
+        boolean includeEmpty = !festivalPrefab && draft.isSaveEmptySpaces();
 
         int top = Math.max(yMin, yMax);
         int bottom = Math.min(yMin, yMax);
@@ -150,6 +150,16 @@ public final class PlotCreatorPrefabExporter {
                         if (fluidSection != null) {
                             fluid = fluidSection.getFluidId(x, y, z);
                             fluidLevel = fluidSection.getFluidLevel(x, y, z);
+                        }
+                    }
+
+                    // Festival prefabs omit Empty air and Empty fluid markers; swaps clear the reserved box instead.
+                    if (festivalPrefab && fluid != 0) {
+                        var fluidType = com.hypixel.hytale.server.core.asset.type.fluid.Fluid.getAssetMap().getAsset(fluid);
+                        if (fluidType != null
+                            && com.hypixel.hytale.server.core.asset.type.fluid.Fluid.EMPTY_KEY.equals(fluidType.getId())) {
+                            fluid = 0;
+                            fluidLevel = 0;
                         }
                     }
 

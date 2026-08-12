@@ -303,7 +303,12 @@ public final class PlotAssemblyService {
         tmPay.updateTown(town);
 
         ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
-        List<PendingBlock> footprintCells = seq.pendingBlocks();
+        List<PendingBlock> footprintCells =
+            ConstructionPasteOps.withReservedFestivalAirCells(
+                seq.pendingBlocks(),
+                seq.prefabRotation(),
+                def.getPrefabPath()
+            );
         List<PendingBlock> nonAirCells = ConstructionPasteOps.withoutPureAirCells(footprintCells);
         ConstructionPasteOps.AssemblyDeferredPartition split =
             ConstructionPasteOps.partitionAssemblyDeferredBlocks(
@@ -561,7 +566,12 @@ public final class PlotAssemblyService {
         }
         int prefabId = start.getPrefabId();
         ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
-        List<PendingBlock> footprintCells = seq.pendingBlocks();
+        List<PendingBlock> footprintCells =
+            ConstructionPasteOps.withReservedFestivalAirCells(
+                seq.pendingBlocks(),
+                seq.prefabRotation(),
+                def.getPrefabPath()
+            );
         List<PendingBlock> nonAirCells = ConstructionPasteOps.withoutPureAirCells(footprintCells);
         ConstructionPasteOps.AssemblyDeferredPartition split =
             ConstructionPasteOps.partitionAssemblyDeferredBlocks(

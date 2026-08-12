@@ -6,7 +6,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** One wiki topic loaded from {@code Common/Docs/Hexvane_AetherhavenWiki/<locale>/<id>.md}. */
+/** One wiki topic loaded from {@code Server/Aetherhaven/GuideTopics/<locale>/<id>.md}. */
 public final class GuideTopicFile {
     private final String id;
     private final String displayName;

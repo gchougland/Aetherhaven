@@ -6,17 +6,16 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Reads the volume a prefab reserves so festival prefabs can be checked against {@link FestivalPrefabSize}. Uses the
- * buffer extents rather than the solid footprint: festival prefabs are saved with their empty cells so the swap clears
- * whatever the previous festival left behind, and every festival must reserve the same box even though the built
- * content is different heights.
+ * Validates festival prefab content against the reserved {@link FestivalPrefabSize} volume. Festival prefabs no longer
+ * store empty air for the full box; swaps clear the reserved volume explicitly, so solid AABBs are usually smaller
+ * than 30 x 55 x 30.
  */
 public final class FestivalPrefabMetrics {
     private FestivalPrefabMetrics() {}
 
     public record Size(int x, int y, int z) {}
 
-    /** @return reserved prefab volume, or null when the prefab is not loaded yet */
+    /** @return solid content size of the prefab buffer, or null when the prefab is not loaded yet */
     @Nullable
     public static Size sizeOf(@Nullable String prefabPathKey) {
         if (prefabPathKey == null || prefabPathKey.isBlank()) {
@@ -35,13 +34,23 @@ public final class FestivalPrefabMetrics {
         );
     }
 
-    /** @return a warning message when the prefab is loaded and the wrong size, otherwise null */
+    /** @return a warning message when loaded content extends outside the reserved festival box, otherwise null */
     @Nullable
     public static String validateFestivalSize(@Nullable String prefabPathKey) {
-        Size size = sizeOf(prefabPathKey);
-        if (size == null) {
+        if (prefabPathKey == null || prefabPathKey.isBlank()) {
             return null;
         }
-        return FestivalPrefabSize.mismatchReason(size.x(), size.y(), size.z());
+        IPrefabBuffer buffer = PrefabResolveUtil.resolvePrefabBuffer(prefabPathKey);
+        if (buffer == null) {
+            return null;
+        }
+        return FestivalPrefabSize.contentOutsideReservedReason(
+            buffer.getMinX(),
+            buffer.getMinY(),
+            buffer.getMinZ(),
+            buffer.getMaxX(),
+            buffer.getMaxY(),
+            buffer.getMaxZ()
+        );
     }
 }

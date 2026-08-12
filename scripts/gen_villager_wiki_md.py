@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1] / "src/main/resources"
 VILL = ROOT / "Server/Aetherhaven/Villagers"
 QUEST = ROOT / "Server/Aetherhaven/Quests"
 SCHED = ROOT / "Server/Aetherhaven/VillagerSchedules"
-OUT = ROOT / "Common/Docs/Hexvane_AetherhavenWiki"
+OUT = ROOT / "Server/Aetherhaven/GuideTopics"
 
 # Where they spend "work" hours on the schedule, in plain language.
 WORKPLACE_AT = {

@@ -78,7 +78,7 @@ npm run sync-wiki
 
 Sources:
 
-- Guide topics: `../src/main/resources/Common/Docs/Hexvane_AetherhavenWiki/en-US/`
+- Guide topics: `../src/main/resources/Server/Aetherhaven/GuideTopics/en-US/`
 - Guide images: `../src/main/resources/Common/UI/Custom/Aetherhaven/wiki/`
 - Crossmod guide: `../tutorials/crossmod-integration.md`
 - Website-only pages: `web/wiki/site-pages/`

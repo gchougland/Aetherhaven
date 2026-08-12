@@ -141,7 +141,7 @@ public final class PlotBuildingRelocation {
             world, oldAnchor, oldYaw, buffer, def.isPreserveWater()
         );
 
-        PlotFootprintRecord newFp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buffer);
+        PlotFootprintRecord newFp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buffer, def.getPrefabPath());
         plot.applySignAndFootprint(signPos.x, signPos.y, signPos.z, newFp);
         plot.setPrefabWorldPlacement(prefabOrigin.x, prefabOrigin.y, prefabOrigin.z, session.getPrefabYaw());
         tm.updateTown(town);

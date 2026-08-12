@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.construction.PrefabMaterialsCatalog;
 import com.hexvane.aetherhaven.difficulty.EffectiveBuildingCosts;
 import com.hexvane.aetherhaven.difficulty.WorldDifficultyState;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.inventory.BenchAdjacentChestUtil;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
@@ -2587,6 +2588,9 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         PlotInstance piPickup = town.findPlotById(plotId);
         List<MaterialRequirement> refunded =
             piPickup != null ? PlotMaterialDepositService.refundAll(piPickup) : List.of();
+        if (piPickup != null) {
+            FestivalService.onFestivalSquareRemoved(world, store, plugin, tm, town, piPickup);
+        }
         if (!town.removePlotInstance(plotId)) {
             sendBuildError(store, ref, "Could not remove plot from town data.");
             return;

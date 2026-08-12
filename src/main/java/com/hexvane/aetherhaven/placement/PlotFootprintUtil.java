@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.placement;
 
+import com.hexvane.aetherhaven.festival.FestivalPrefabSize;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hypixel.hytale.math.util.FastRandom;
 import org.joml.Vector3i;
@@ -9,6 +10,7 @@ import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferCall;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import java.util.Random;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public final class PlotFootprintUtil {
     private PlotFootprintUtil() {}
@@ -21,6 +23,23 @@ public final class PlotFootprintUtil {
      */
     @Nonnull
     public static PlotFootprintRecord computeFootprint(@Nonnull Vector3i origin, @Nonnull Rotation yaw, @Nonnull IPrefabBuffer buffer) {
+        return computeFootprint(origin, yaw, buffer, null);
+    }
+
+    /**
+     * Like {@link #computeFootprint(Vector3i, Rotation, IPrefabBuffer)} but festival square / festival activity prefabs
+     * always use the fixed {@link FestivalPrefabSize} reserved box (they omit empty air in the file).
+     */
+    @Nonnull
+    public static PlotFootprintRecord computeFootprint(
+        @Nonnull Vector3i origin,
+        @Nonnull Rotation yaw,
+        @Nonnull IPrefabBuffer buffer,
+        @Nullable String prefabPathKey
+    ) {
+        if (FestivalPrefabSize.usesReservedFootprint(prefabPathKey)) {
+            return FestivalPrefabSize.footprintAt(origin, yaw);
+        }
         PrefabRotation pr = PrefabRotation.fromRotation(yaw);
         Random random = new FastRandom();
         PrefabBufferCall call = new PrefabBufferCall(random, pr);

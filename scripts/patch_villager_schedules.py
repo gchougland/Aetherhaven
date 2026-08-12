@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1] / "src/main/resources"
 SCHED = ROOT / "Server/Aetherhaven/VillagerSchedules"
 VILL = ROOT / "Server/Aetherhaven/Villagers"
-OUT = ROOT / "Common/Docs/Hexvane_AetherhavenWiki/en-US"
+OUT = ROOT / "Server/Aetherhaven/GuideTopics/en-US"
 
 WORKPLACE_AT = {
     "Aetherhaven_Bard": "the guild hall",

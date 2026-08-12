@@ -144,7 +144,7 @@ public final class StarterTownLayoutPlanner {
             return null;
         }
         PlotFootprintRecord relative =
-            PlotFootprintUtil.computeFootprint(new Vector3i(anchorX, 0, anchorZ), yaw, buffer);
+            PlotFootprintUtil.computeFootprint(new Vector3i(anchorX, 0, anchorZ), yaw, buffer, def.getPrefabPath());
         List<Integer> heights = new ArrayList<>();
         int minHeight = Integer.MAX_VALUE;
         int maxHeight = Integer.MIN_VALUE;
@@ -171,7 +171,7 @@ public final class StarterTownLayoutPlanner {
         }
         int anchorY = groundY - relative.getMinY();
         Vector3i anchor = new Vector3i(anchorX, anchorY, anchorZ);
-        PlotFootprintRecord footprint = PlotFootprintUtil.computeFootprint(anchor, yaw, buffer);
+        PlotFootprintRecord footprint = PlotFootprintUtil.computeFootprint(anchor, yaw, buffer, def.getPrefabPath());
         if (!insideTerritory(townManager, town, footprint)
             || town.findOverlappingNonWallPlot(footprint, null) != null
             || overlapsCharter(town, footprint)

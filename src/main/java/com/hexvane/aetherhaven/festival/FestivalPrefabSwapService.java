@@ -26,10 +26,11 @@ import javax.annotation.Nullable;
 
 /**
  * Replaces what stands on a festival square plot: the everyday prefab from its construction definition, or a festival's
- * own prefab for the length of the festival. Every festival prefab reserves the same volume, so the swap clears the old
- * cells at the plot's stored anchor and pastes the new prefab at the same anchor and yaw.
+ * own prefab for the length of the festival. Every festival reserves the same {@link FestivalPrefabSize} volume, so the
+ * swap clears that full box at the plot's stored anchor and pastes the new prefab at the same anchor and yaw.
  *
- * <p>Anything a player left inside the square is removed by the swap.
+ * <p>Anything a player left inside the square is removed by the swap. Festival prefabs omit empty air; clearing uses the
+ * fixed reserved box rather than listed prefab cells.
  */
 public final class FestivalPrefabSwapService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -60,13 +61,10 @@ public final class FestivalPrefabSwapService {
             LOGGER.atWarning().log("Festival square plot %s has unknown construction %s", plot.getPlotId(), plot.getConstructionId());
             return false;
         }
-        IPrefabBuffer currentBuffer = PrefabResolveUtil.resolvePrefabBuffer(currentPrefabPath);
+        // Only the target prefab is pasted; the reserved box is cleared regardless of the current prefab contents.
         IPrefabBuffer targetBuffer = PrefabResolveUtil.resolvePrefabBuffer(targetPrefabPath);
-        if (currentBuffer == null || targetBuffer == null) {
-            LOGGER.atWarning().log(
-                "Could not swap festival square prefab: missing %s",
-                currentBuffer == null ? currentPrefabPath : targetPrefabPath
-            );
+        if (targetBuffer == null) {
+            LOGGER.atWarning().log("Could not swap festival square prefab: missing %s", targetPrefabPath);
             return false;
         }
         Rotation yaw = plot.resolvePrefabYaw();
@@ -87,19 +85,17 @@ public final class FestivalPrefabSwapService {
             if (live == null || livePlot == null) {
                 return;
             }
-            // Festival prefabs reserve a full empty box; the solid AABB is shorter and misses props / volumes in air.
-            PlotFootprintRecord currentBox = PrefabTriggerVolumeCleanup.prefabBox(anchor, yaw, currentBuffer);
-            PlotFootprintRecord targetBox = PrefabTriggerVolumeCleanup.prefabBox(anchor, yaw, targetBuffer);
-            // Union current + target + stored plot so leftover corner props (statues) from either side are covered.
-            PlotFootprintRecord clearFootprint =
-                PlotFootprintRecord.union(PlotFootprintRecord.union(currentBox, targetBox), livePlot.toFootprint());
+            // Always clear the reserved festival volume (airless prefabs no longer list Empty cells).
+            PlotFootprintRecord reservedBox = FestivalPrefabSize.footprintAt(anchor, yaw);
+            PlotFootprintRecord clearFootprint = PlotFootprintRecord.union(reservedBox, livePlot.toFootprint());
             // Corner props live in edge chunks that are often unloaded when the swap runs from a game-time tick.
             PlotFootprintChunkUtil.ensureFootprintChunksLoaded(world, clearFootprint);
             PropPlotTeardown.packageIntersecting(world, plugin, clearFootprint, null, store);
             PlotBuildingRelocation.relocateTownNpcsOutOfFootprint(store, live, clearFootprint);
             int removed =
                 PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(store, clearFootprint, live);
-            PrefabFootprintClearUtil.clearPrefabCellsAtAnchor(world, anchor, yaw, currentBuffer, preserveWater);
+            PrefabFootprintClearUtil.clearFootprint(world, clearFootprint);
+            PrefabTriggerVolumeCleanup.removeVolumesInFootprint(store, clearFootprint);
             LOGGER.atInfo().log(
                 "Festival square swap cleared %d entities in box [%d,%d,%d]-[%d,%d,%d] (%s -> %s)",
                 removed,
@@ -114,7 +110,7 @@ public final class FestivalPrefabSwapService {
             );
 
             // Keep the reserved box on the plot so the next swap clears the same volume, not only solid blocks.
-            livePlot.applySignAndFootprint(livePlot.getSignX(), livePlot.getSignY(), livePlot.getSignZ(), targetBox);
+            livePlot.applySignAndFootprint(livePlot.getSignX(), livePlot.getSignY(), livePlot.getSignZ(), reservedBox);
             livePlot.setPrefabWorldPlacement(anchor.x, anchor.y, anchor.z, yaw);
             tm.updateTown(live);
 

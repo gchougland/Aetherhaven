@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.community.CommunityPrefabSafety;
 import com.hexvane.aetherhaven.community.CommunityPaths;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
+import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.prefab.PrefabStore;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
@@ -152,7 +153,15 @@ public final class PrefabResolveUtil {
         if (path == null) {
             return null;
         }
-        return PrefabBufferUtil.getCached(path);
+        try {
+            return PrefabBufferUtil.getCached(path);
+        } catch (Throwable t) {
+            HytaleLogger.forEnclosingClass()
+                .atWarning()
+                .withCause(t)
+                .log("Failed to load prefab buffer for %s (%s)", prefabPathKey, path);
+            return null;
+        }
     }
 
     /**

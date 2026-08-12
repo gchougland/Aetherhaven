@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.command;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService;
+import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.placement.PlotReconstructService;
 import com.hexvane.aetherhaven.placement.PlotBlockClearMode;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -421,6 +422,7 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
             TownDissolutionService.clearPlotFromWorld(
                 world, plugin, town, plot, store, reg, PlotBlockClearMode.FULL_FOOTPRINT, null, ref
             );
+            FestivalService.onFestivalSquareRemoved(world, store, plugin, tm, town, plot);
             if (!town.removePlotInstance(plotId)) {
                 playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.plots.removeDataFailed"));
                 return;

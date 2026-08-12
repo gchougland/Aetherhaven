@@ -39,7 +39,7 @@ public final class PlotSignGrounding {
         @Nonnull IPrefabBuffer buf
     ) {
         Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(previewSignAnchor, prefabYaw);
-        PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, prefabYaw, buf);
+        PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, prefabYaw, buf, def.getPrefabPath());
         int sx = fp.horizontalCenterX();
         int sz = fp.horizontalCenterZ();
         int startY = Math.max(previewSignAnchor.y, fp.getMaxY());

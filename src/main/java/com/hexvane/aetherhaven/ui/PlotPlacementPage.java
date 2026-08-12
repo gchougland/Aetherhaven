@@ -560,7 +560,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
         try {
             Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(anchor, session.getPrefabYaw());
-            PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf);
+            PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf, def.getPrefabPath());
             session.setBirdsEyeSnapshot(
                 (fp.getMinX() + fp.getMaxX() + 1) / 2.0,
                 (fp.getMinY() + fp.getMaxY() + 1) / 2.0,
@@ -766,7 +766,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
             IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
             try {
                 Vector3i prefabOrigin = buildingAnchor;
-                PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf);
+                PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf, def.getPrefabPath());
                 PlotInstance inst =
                     new PlotInstance(
                         plotId,
@@ -949,7 +949,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         }
         boolean placementValid = placementErr == null;
         Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(session.getAnchor(), session.getPrefabYaw());
-        PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf);
+                PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf, def.getPrefabPath());
         if (pr != null) {
             boolean placerNeedFull =
                 !clientPrefabPreviewActive

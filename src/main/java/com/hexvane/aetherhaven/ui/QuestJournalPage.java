@@ -51,6 +51,7 @@ import com.hexvane.aetherhaven.town.PlotLinkReconcileService;
 import com.hexvane.aetherhaven.town.TownDissolutionService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownResidentReconcileService;
 import com.hexvane.aetherhaven.town.TownResidentEligibility;
@@ -2939,6 +2940,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                     : new Vector3d(plot.getSignX() + 0.5, plot.getSignY(), plot.getSignZ() + 0.5);
             PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
             TownDissolutionService.clearPlotFromWorld(world, plugin, town, plot, store, reg, PlotBlockClearMode.FULL_FOOTPRINT, null, ref);
+            FestivalService.onFestivalSquareRemoved(world, store, plugin, tm, town, plot);
             if (!town.removePlotInstance(plotUuid)) {
                 playerRef.sendMessage(
                     Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.removePlotFailed")

@@ -11,6 +11,7 @@ import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.inn.InnVisitorShopPromotion;
 import com.hexvane.aetherhaven.inn.MerchantStallCompletion;
 import com.hexvane.aetherhaven.inn.MinerHutCompletion;
+import com.hexvane.aetherhaven.festival.FestivalPrefabSize;
 import com.hexvane.aetherhaven.guild.GuildHallCompletion;
 import com.hexvane.aetherhaven.map.TeleporterWarpSanitizer;
 import com.hexvane.aetherhaven.poi.PoiExtractor;
@@ -96,7 +97,7 @@ public final class ConstructionCompleter {
             if (prefabPath != null) {
                 IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
                 try {
-                    fp = PlotFootprintUtil.computeFootprint(prefabAnchorWorld, prefabYaw, buf);
+                    fp = PlotFootprintUtil.computeFootprint(prefabAnchorWorld, prefabYaw, buf, def.getPrefabPath());
                 } finally {
                 }
             }
@@ -118,6 +119,14 @@ public final class ConstructionCompleter {
 
         plot.setState(PlotInstanceState.COMPLETE);
         plot.setLastStateChangeEpochMs(now);
+        if (def != null && FestivalPrefabSize.usesReservedFootprint(def.getPrefabPath())) {
+            plot.applySignAndFootprint(
+                plot.getSignX(),
+                plot.getSignY(),
+                plot.getSignZ(),
+                FestivalPrefabSize.footprintAt(prefabAnchorWorld, prefabYaw)
+            );
+        }
         QuestProgressionService.onConstructionBuilt(plugin, town, plot.getConstructionId());
         tm.updateTown(town);
 

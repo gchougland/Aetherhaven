@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.prefabmaterials.PrefabMaterialsWriter;
+import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintChunkUtil;
@@ -236,6 +237,7 @@ public final class LocalBuildingRemovalService {
         Set<UUID> updatedTowns = new LinkedHashSet<>();
         for (TownPlot match : matches) {
             TownDissolutionService.clearPlotFromWorld(world, plugin, match.town(), match.plot(), entityStore, reg);
+            FestivalService.onFestivalSquareRemoved(world, entityStore, plugin, tm, match.town(), match.plot());
             match.town().removePlotInstance(match.plot().getPlotId());
             updatedTowns.add(match.town().getTownId());
         }
