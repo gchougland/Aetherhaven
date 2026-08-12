@@ -1,0 +1,263 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 1,
+      "name": "Soil_Mud"
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 1,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Piglet",
+            "Scale": 1.0,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": -0.05157470703125,
+            "Y": 0.8920669555664062,
+            "Z": 1.3251953125
+          },
+          "Rotation": {
+            "Pitch": 0.4695761203765869,
+            "Yaw": 1.4118155241012573,
+            "Roll": -0.009325138293206692
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "2sco87diORmbpkEdqU+urg==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.4695834815502167,
+            "Yaw": 1.4118096828460693,
+            "Roll": -0.009328366257250309
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Piglet",
+            "Scale": 1.0,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.4752349853515625,
+            "Y": 0.6566314697265625,
+            "Z": 2.09210205078125
+          },
+          "Rotation": {
+            "Pitch": 0.46957555413246155,
+            "Yaw": -2.097785472869873,
+            "Roll": -0.00932555366307497
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "MAu7v25nQ/CUkIdEIWkvIw==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.4695766568183899,
+            "Yaw": -2.0977861881256104,
+            "Roll": -0.009327715262770653
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Piglet",
+            "Scale": 1.0,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.1918792724609375,
+            "Y": 0.8920669555664062,
+            "Z": 0.70660400390625
+          },
+          "Rotation": {
+            "Pitch": 0.46957528591156006,
+            "Yaw": -0.9355785846710205,
+            "Roll": -0.009325353428721428
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "S1tM5k7iRtSJhsMc3R/hXw==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.46957913041114807,
+            "Yaw": -0.9355849027633667,
+            "Roll": -0.009327760897576809
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Ingredient_Poop"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.57183837890625,
+            "Y": 0.0,
+            "Z": 1.33245849609375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.5240105390548706,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "MVqXhWcPOkaw2EU/nfL8XQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 7.900000095367432
+        },
+        "Item": {
+          "Item": {
+            "Id": "Ingredient_Poop",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "Transform": {
+          "Position": {
+            "X": 4.0,
+            "Y": 7.5,
+            "Z": -13.0
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0,
+            "Roll": 0.0
+          }
+        },
+        "TriggerVolume": {
+          "Shape": {
+            "Type": "Box",
+            "Min": {
+              "X": -14.0,
+              "Y": -6.5,
+              "Z": -14.0
+            },
+            "Max": {
+              "X": 14.0,
+              "Y": 6.5,
+              "Z": 14.0
+            }
+          },
+          "Effects": [
+            {
+              "Type": "SetMusic",
+              "Event": "ENTER",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "Track_Aetherhaven_FunkyLittleDudes",
+              "ClearMusic": false
+            },
+            {
+              "Type": "SetMusic",
+              "Event": "EXIT",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "",
+              "ClearMusic": true
+            },
+            {
+              "Type": "SetWeather",
+              "Event": "ENTER",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "Weather": "Zone1_Sunny_Fireflies",
+              "PlayerOnly": true,
+              "ResetWeather": false
+            },
+            {
+              "Type": "SetWeather",
+              "Event": "EXIT",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "Weather": "",
+              "PlayerOnly": true,
+              "ResetWeather": true
+            }
+          ],
+          "Enabled": true,
+          "TargetTypes": [
+            "Player"
+          ],
+          "KeepLoaded": false,
+          "Color": {
+            "X": 0.003921568859368563,
+            "Y": 0.800000011920929,
+            "Z": 0.0
+          },
+          "PrefabIndex": 0
+        }
+      }
+    }
+  ]
+}

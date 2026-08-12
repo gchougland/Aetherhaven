@@ -1,0 +1,34 @@
+# Props: placement UI, packaging, commands, break protection
+
+aetherhaven.prop.protected=This prop cannot be broken. Use a packaging wand to pick it up, or turn breaking on with /ah prop break.
+
+aetherhaven.prop.placement.error.notHoldingProp=Hold a prop item to place it.
+aetherhaven.prop.placement.error.unknownProp=That prop is unknown.
+aetherhaven.prop.placement.error.prefabMissing=That prop's build data is missing.
+aetherhaven.prop.placement.error.blocked=Something is in the way.
+
+aetherhaven.prop.packaging.nothingFound=No prop found to package.
+
+aetherhaven.prop.command.unknown=Unknown prop: {id}
+aetherhaven.prop.command.playerNotFound=Could not find player {name}.
+aetherhaven.prop.command.gave=Gave {amount} {name} to {player}.
+aetherhaven.prop.command.gaveWand=Gave a packaging wand to {player}.
+aetherhaven.prop.command.break.enabled=You can break props for now.
+aetherhaven.prop.command.break.disabled=Props are protected from breaking again.
+aetherhaven.prop.command.break.noPermission=You do not have permission to turn prop breaking on.
+
+aetherhaven.ui.propplacement.title=Place Prop
+aetherhaven.ui.propplacement.place=Place
+aetherhaven.ui.propplacement.cancel=Cancel
+aetherhaven.ui.propplacement.summary=Placing {prop}
+aetherhaven.ui.propplacement.details=Position {x}, {y}, {z}  Turn {step}
+aetherhaven.ui.propplacement.error.notHoldingProp=Hold a prop item to place it.
+aetherhaven.ui.propplacement.error.blocked=Something is in the way.
+
+aetherhaven.ui.propprefabbrowser.title=Create Prop
+aetherhaven.ui.propprefabbrowser.previewTitle=Preview
+aetherhaven.ui.propprefabbrowser.create=Create Prop
+aetherhaven.ui.propprefabbrowser.error.prefabMissing=That prefab could not be loaded.
+aetherhaven.ui.propprefabbrowser.error.noSolids=That prefab has no solid blocks to place.
+aetherhaven.ui.propprefabbrowser.error.saveFailed=Could not save that prop.
+aetherhaven.ui.propprefabbrowser.created=Created prop {prop} and gave you the item.

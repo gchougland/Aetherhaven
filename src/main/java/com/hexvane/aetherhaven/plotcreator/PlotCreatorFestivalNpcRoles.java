@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.plotcreator;
 import com.hexvane.aetherhaven.festival.NewLifeFestivalMechanic;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalIds;
 import com.hexvane.aetherhaven.festival.pigrace.PigRaceLanes;
+import com.hexvane.aetherhaven.festival.treeclimb.TreeClimbIds;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -18,6 +19,8 @@ public final class PlotCreatorFestivalNpcRoles {
     public static final String CARNIVAL_BALLOON = CarnivalIds.BALLOON_NPC_ROLE;
     public static final String CARNIVAL_WHEEL = CarnivalIds.WHEEL_NPC_ROLE;
     public static final String CARNIVAL_WHACK = CarnivalIds.WHACK_NPC_ROLE;
+    public static final String TREE_CLIMB_MERCHANT = TreeClimbIds.MERCHANT_NPC_ROLE;
+    public static final String TREE_CLIMB_ATTENDANT = TreeClimbIds.ATTENDANT_NPC_ROLE;
 
     private PlotCreatorFestivalNpcRoles() {}
 
@@ -29,7 +32,9 @@ public final class PlotCreatorFestivalNpcRoles {
             CARNIVAL_MERCHANT,
             CARNIVAL_BALLOON,
             CARNIVAL_WHEEL,
-            CARNIVAL_WHACK
+            CARNIVAL_WHACK,
+            TREE_CLIMB_MERCHANT,
+            TREE_CLIMB_ATTENDANT
         );
     }
 
@@ -47,6 +52,9 @@ public final class PlotCreatorFestivalNpcRoles {
         }
         if (CarnivalIds.MECHANIC_ID.equals(key)) {
             return CARNIVAL_MERCHANT;
+        }
+        if (TreeClimbIds.MECHANIC_ID.equals(key)) {
+            return TREE_CLIMB_MERCHANT;
         }
         return null;
     }
@@ -80,6 +88,12 @@ public final class PlotCreatorFestivalNpcRoles {
         }
         if (CARNIVAL_WHACK.equals(id)) {
             return "carnivalWhack";
+        }
+        if (TREE_CLIMB_MERCHANT.equals(id)) {
+            return "treeClimbMerchant";
+        }
+        if (TREE_CLIMB_ATTENDANT.equals(id)) {
+            return "treeClimbAttendant";
         }
         return "generic";
     }

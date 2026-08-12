@@ -1,0 +1,16 @@
+{
+  "Spawners": [
+    {
+      "SpawnerId": "Aetherhaven_Firework_Flash",
+      "PositionOffset": { "X": 0, "Y": 0, "Z": 0 }
+    },
+    {
+      "SpawnerId": "Aetherhaven_Firework_Blue",
+      "PositionOffset": { "X": 0, "Y": 0, "Z": 0 },
+      "StartDelay": 0.02
+    }
+  ],
+  "BoundingRadius": 36.0,
+  "CullDistance": 120.0,
+  "IsImportant": true
+}

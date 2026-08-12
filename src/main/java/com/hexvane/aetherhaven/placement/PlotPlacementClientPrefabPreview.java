@@ -186,18 +186,29 @@ public final class PlotPlacementClientPrefabPreview {
         return flooredOrigin(resolveClientPreviewPosition(prefabBufferOriginWorld, payload, placementYaw));
     }
 
-    @Nullable
-    static Payload resolvePayload(
+    /**
+     * Full prefab ghost without a {@link PlotPlacementSession} cache (props placement UI).
+     *
+     * @return {@code false} when prefab could not be loaded (caller should {@link #hide})
+     */
+    public static boolean sendFullStandalone(
+        @Nonnull PlayerRef playerRef,
         @Nonnull String prefabPathKey,
         int rotationSteps,
-        @Nonnull PlotPlacementSession session
+        @Nonnull Vector3i prefabOriginWorld,
+        @Nonnull Rotation placementYaw
     ) {
-        int steps = (rotationSteps % 4 + 4) % 4;
-        String pathKey = prefabPathKey;
-        Payload cached = session.getClientPrefabPreviewPayload();
-        if (cached != null && steps == session.getClientPrefabPreviewRotationSteps() && pathKey.equals(session.getClientPrefabPreviewPathKey())) {
-            return cached;
+        Payload payload = loadPayload(prefabPathKey, rotationSteps);
+        if (payload == null) {
+            return false;
         }
+        writeShow(playerRef, flooredPosition(resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw)), payload);
+        return true;
+    }
+
+    @Nullable
+    public static Payload loadPayload(@Nonnull String prefabPathKey, int rotationSteps) {
+        int steps = (rotationSteps % 4 + 4) % 4;
         Path resolved = PrefabResolveUtil.resolvePrefabPath(prefabPathKey);
         if (resolved == null) {
             return null;
@@ -223,15 +234,32 @@ public final class PlotPlacementClientPrefabPreview {
             rotated = rotated.rotate(Axis.Y, 90 * steps, RotateBlockMode.ALL);
         }
         EditorBlocksChange editor = rotated.toPacket();
-        Payload payload =
-            new Payload(
-                editor.blocksChange,
-                editor.fluidsChange,
-                editor.entityChanges,
-                selection.getAnchorX(),
-                selection.getAnchorY(),
-                selection.getAnchorZ()
-            );
+        return new Payload(
+            editor.blocksChange,
+            editor.fluidsChange,
+            editor.entityChanges,
+            selection.getAnchorX(),
+            selection.getAnchorY(),
+            selection.getAnchorZ()
+        );
+    }
+
+    @Nullable
+    static Payload resolvePayload(
+        @Nonnull String prefabPathKey,
+        int rotationSteps,
+        @Nonnull PlotPlacementSession session
+    ) {
+        int steps = (rotationSteps % 4 + 4) % 4;
+        String pathKey = prefabPathKey;
+        Payload cached = session.getClientPrefabPreviewPayload();
+        if (cached != null && steps == session.getClientPrefabPreviewRotationSteps() && pathKey.equals(session.getClientPrefabPreviewPathKey())) {
+            return cached;
+        }
+        Payload payload = loadPayload(prefabPathKey, steps);
+        if (payload == null) {
+            return null;
+        }
         session.setClientPrefabPreviewCache(pathKey, steps, payload);
         return payload;
     }

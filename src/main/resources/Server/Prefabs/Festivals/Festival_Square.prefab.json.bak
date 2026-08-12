@@ -644188,6 +644188,212 @@
         },
         "PrefabCopyable": {}
       }
+    },
+    {
+      "Components": {
+        "UtilityInventory": {
+          "Inventory": {
+            "Id": "Empty"
+          },
+          "ActiveSlot": -1
+        },
+        "EffectController": {
+          "ActiveEntityEffects": [
+            {
+              "EntityEffectId": "Immunity_Fire",
+              "InitialDuration": 1.0,
+              "RemainingDuration": 1.0,
+              "SinceLastDamage": 0.0,
+              "HasBeenDamaged": true,
+              "SequentialHits": {
+                "Hits": 0
+              },
+              "Infinite": true,
+              "Debuff": false,
+              "StatusEffectIcon": "",
+              "Invulnerable": false
+            }
+          ]
+        },
+        "Transform": {
+          "Position": {
+            "X": 15.5,
+            "Y": 0.020000000000010232,
+            "Z": 9.5
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0,
+            "Roll": 0.0
+          }
+        },
+        "AetherhavenNpcSpawnOrigin": {
+          "SpawnSource": "PLOT_CREATOR_SPOT_PREVIEW",
+          "SpawnDetail": "spot=FUN_POI",
+          "SpawnWorldName": "default",
+          "SpawnX": 310.5,
+          "SpawnY": 136.02,
+          "SpawnZ": 239.5,
+          "SpawnEpochMs": 1786476438385,
+          "SpawnGameEpochDay": 0
+        },
+        "StorageInventory": {
+          "Inventory": {
+            "Id": "Empty"
+          }
+        },
+        "Intangible": {},
+        "Frozen": {},
+        "UUID": {
+          "UUID": {
+            "$binary": "cstrHnYBPiO15ZoCGqImNw==",
+            "$type": "04"
+          }
+        },
+        "NPC": {
+          "Version": 5,
+          "UUID": {
+            "$binary": "cstrHnYBPiO15ZoCGqImNw==",
+            "$type": "04"
+          },
+          "Inventory": {
+            "Version": 4,
+            "ActiveHotbarSlot": 0,
+            "ActiveToolsSlot": -1,
+            "ActiveUtilitySlot": -1
+          },
+          "HvrPhs": 0.0,
+          "HvrHght": 0.0,
+          "MdlScl": 1.0,
+          "SpawnInstant": "0001-01-01T07:32:26.269506936Z",
+          "WorldgenId": 0,
+          "PathManager": {},
+          "LeashPos": {
+            "X": 310.5,
+            "Y": 136.02,
+            "Z": 239.5
+          },
+          "LeashHdg": 0.0,
+          "LeashPtch": 0.0,
+          "RoleName": "Aetherhaven_Townsfolk",
+          "ActiveMC": "Walk"
+        },
+        "ArmorInventory": {
+          "Inventory": {
+            "Id": "Simple",
+            "Capacity": 4,
+            "Items": {}
+          }
+        },
+        "UIComponentList": {},
+        "HotbarInventory": {
+          "Inventory": {
+            "Id": "Simple",
+            "Capacity": 3,
+            "Items": {}
+          },
+          "ActiveSlot": 0
+        },
+        "Velocity": {
+          "Velocity": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          }
+        },
+        "PrefabCopyable": {},
+        "Interactions": {
+          "Interactions": {
+            "Use": "*UseNPC"
+          }
+        },
+        "Invulnerable": {},
+        "Model": {
+          "Model": {
+            "Id": "Male_Human_01",
+            "Scale": 1.0,
+            "Static": false
+          }
+        },
+        "EntityStats": {
+          "Version": 5,
+          "Stats": {
+            "Oxygen": {
+              "Id": "Oxygen",
+              "Value": 100.0
+            },
+            "Mana": {
+              "Id": "Mana",
+              "Value": 0.0
+            },
+            "Health": {
+              "Id": "Health",
+              "Value": 100.0,
+              "Modifiers": {
+                "NPC_Max": {
+                  "Id": "Static",
+                  "CalculationType": "Additive",
+                  "Amount": 100.0
+                }
+              }
+            },
+            "GlidingActive": {
+              "Id": "GlidingActive",
+              "Value": 0.0
+            },
+            "Immunity": {
+              "Id": "Immunity",
+              "Value": 0.0
+            },
+            "Stamina": {
+              "Id": "Stamina",
+              "Value": 10.0
+            },
+            "SignatureCharges": {
+              "Id": "SignatureCharges",
+              "Value": 0.0
+            },
+            "Ammo": {
+              "Id": "Ammo",
+              "Value": 0.0
+            },
+            "Unknown": {
+              "Id": "Unknown",
+              "Value": 0.0
+            },
+            "SignatureEnergy": {
+              "Id": "SignatureEnergy",
+              "Value": 0.0
+            },
+            "DeployablePreview": {
+              "Id": "DeployablePreview",
+              "Value": 0.0
+            },
+            "StaminaRegenDelay": {
+              "Id": "StaminaRegenDelay",
+              "Value": 0.0
+            },
+            "MagicCharges": {
+              "Id": "MagicCharges",
+              "Value": 0.0
+            }
+          }
+        },
+        "AetherhavenPlotCreatorSpotPreview": {
+          "OwnerPlayerUuid": {
+            "$binary": "v7RyWIT/TYKnXA2XcxdQtw==",
+            "$type": "04"
+          },
+          "PreviewKey": 42265235813711990
+        },
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0,
+            "Roll": 0.0
+          }
+        }
+      }
     }
   ]
 }

@@ -1,0 +1,40 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Packaging_Wand.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Packaging_Wand.description"
+  },
+  "Categories": ["Items.Tools", "Aetherhaven.All"],
+  "Icon": "Icons/ItemsGenerated/Weapon_Wand_Wood.png",
+  "Quality": "Common",
+  "Model": "Items/Weapons/Wand/Wood.blockymodel",
+  "Texture": "Items/Weapons/Wand/Wood_Texture.png",
+  "PlayerAnimationsId": "Wand",
+  "MaxStack": 1,
+  "Set": "Aetherhaven",
+  "Recipe": null,
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPackageProp"
+        }
+      ]
+    }
+  },
+  "InteractionConfig": {
+    "UseDistance": {
+      "Adventure": 10,
+      "Creative": 64
+    }
+  },
+  "IconProperties": {
+    "Scale": 0.6,
+    "Translation": [-13, -16],
+    "Rotation": [45, 90, 0]
+  },
+  "Tags": {
+    "Family": ["Aetherhaven"],
+    "Type": ["Tool"]
+  },
+  "ItemSoundSetId": "ISS_Weapons_Wood"
+}

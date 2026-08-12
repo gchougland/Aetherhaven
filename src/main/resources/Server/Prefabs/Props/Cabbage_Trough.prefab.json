@@ -1,0 +1,191 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Bench_Trough",
+      "components": {
+        "Components": {
+          "PlacedByInteraction": {
+            "WhoPlacedUuid": {
+              "$binary": "v7RyWIT/TYKnXA2XcxdQtw==",
+              "$type": "04"
+            }
+          },
+          "BenchBlock": {
+            "TierLevel": 1,
+            "UpgradeItems": []
+          }
+        }
+      },
+      "rotation": 2
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 0,
+      "name": "Bench_Trough",
+      "filler": 1,
+      "rotation": 2
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.9869537353515625,
+            "Y": 0.57879638671875,
+            "Z": 0.446563720703125
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.01302926242351532,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "p2mIk/wQQ+243mkrabsAMw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.600000023841858
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Lettuce_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.5394134521484375,
+            "Y": 0.5576095581054688,
+            "Z": 0.421356201171875
+          },
+          "Rotation": {
+            "Pitch": 0.03265468403697014,
+            "Yaw": 0.32777976989746094,
+            "Roll": -0.09571962803602219
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "n4RM65r1RCO0J059XSTJSQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.600000023841858
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Lettuce_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.3750457763671875,
+            "Y": 0.5601272583007812,
+            "Z": 0.455413818359375
+          },
+          "Rotation": {
+            "Pitch": 0.03573163226246834,
+            "Yaw": -0.3605010509490967,
+            "Roll": 0.09448274970054626
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "ixtycUW7P2ey2guGNR2ePw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.600000023841858
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Lettuce_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    }
+  ]
+}

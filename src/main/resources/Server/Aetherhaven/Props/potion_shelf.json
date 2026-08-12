@@ -1,0 +1,5 @@
+﻿{
+  "id": "potion_shelf",
+  "displayName": "Potion Shelf",
+  "prefabPath": "Props/Potion_Shelf.prefab.json"
+}

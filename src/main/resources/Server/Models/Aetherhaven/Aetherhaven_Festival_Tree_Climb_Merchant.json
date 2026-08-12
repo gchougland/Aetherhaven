@@ -1,0 +1,58 @@
+{
+  "Parent": "Slothian",
+  "Model": "NPC/Intelligent/Slothian/Models/Model.blockymodel",
+  "Texture": "NPC/Intelligent/Slothian/Models/Blond_Texture.png",
+  "EyeHeight": 1.75,
+  "HitBox": {
+    "Max": { "X": 0.35, "Y": 1.9, "Z": 0.35 },
+    "Min": { "X": -0.35, "Y": 0, "Z": -0.35 }
+  },
+  "DefaultAttachments": [
+    {
+      "Model": "NPC/Intelligent/Slothian/Models/Attachments/Eyes.blockymodel",
+      "Texture": "NPC/Intelligent/Slothian/Models/Attachments/Eyes_Brown.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Slothian/Models/Attachments/Warrior/Chest.blockymodel",
+      "Texture": "NPC/Intelligent/Slothian/Models/Attachments/Warrior/Chest_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Slothian/Models/Attachments/Warrior/Hand.blockymodel",
+      "Texture": "NPC/Intelligent/Slothian/Models/Attachments/Warrior/Hand_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Slothian/Models/Attachments/Warrior/Head.blockymodel",
+      "Texture": "NPC/Intelligent/Slothian/Models/Attachments/Warrior/Head_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Slothian/Models/Attachments/Warrior/Leg.blockymodel",
+      "Texture": "NPC/Intelligent/Slothian/Models/Attachments/Warrior/Leg_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Slothian/Models/Attachments/Villager/ScarfNecklace.blockymodel",
+      "Texture": "NPC/Intelligent/Slothian/Models/Attachments/Villager/ScarfNecklace_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Slothian/Models/Attachments/Haircuts/SumoBun.blockymodel",
+      "Texture": "NPC/Intelligent/Slothian/Models/Attachments/Haircuts/SumoBun_Blond_Texture.png"
+    }
+  ],
+  "Icon": "Icons/ModelsGenerated/Haku_Mistclaw.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [0, 19, 0],
+    "Translation": [0, -122]
+  },
+  "AnimationSets": {
+    "DanceBoogie": {
+      "Animations": [
+        { "Animation": "Characters/Animations/Emote/Dance_Boogie.blockyanim", "Looping": true }
+      ]
+    },
+    "DancePop": {
+      "Animations": [
+        { "Animation": "Characters/Animations/Emote/Dance_Pop.blockyanim", "Looping": true }
+      ]
+    }
+  }
+}

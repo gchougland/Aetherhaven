@@ -36,5 +36,9 @@ public enum PlotCreatorSubstepType {
     /** Carnival whack-a-goblin hole cell. */
     FESTIVAL_WHACK_SPAWN,
     /** Carnival wall mounted wheel cell (stores facing). */
-    FESTIVAL_WHEEL
+    FESTIVAL_WHEEL,
+    /** Tree climb race start pad. */
+    FESTIVAL_TREE_CLIMB_START,
+    /** Tree climb finish crystal cell. */
+    FESTIVAL_TREE_CLIMB_FINISH
 }

@@ -78,8 +78,14 @@ public final class VillagerCosmeticCatalog {
                     if (id.isEmpty() || slot.isEmpty() || model.isEmpty() || unlockItemId.isEmpty()) {
                         continue;
                     }
+                    VillagerCosmeticHeadAccessoryType headType =
+                        VillagerCosmeticDefinition.SLOT_HEAD_ACCESSORY.equalsIgnoreCase(slot)
+                            ? VillagerCosmeticHeadAccessoryType.parse(text(o, "headAccessoryType"))
+                            : VillagerCosmeticHeadAccessoryType.Simple;
                     VillagerCosmeticDefinition def =
-                        new VillagerCosmeticDefinition(id, slot, nameKey, model, texture, unlockItemId);
+                        new VillagerCosmeticDefinition(
+                            id, slot, nameKey, model, texture, unlockItemId, headType
+                        );
                     byId.put(id, def);
                     byItem.put(unlockItemId, def);
                     if (VillagerCosmeticDefinition.SLOT_HEAD_ACCESSORY.equalsIgnoreCase(slot)) {

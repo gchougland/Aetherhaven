@@ -1,0 +1,13 @@
+{
+  "Spawners": [
+    {
+      "SpawnerId": "Aetherhaven_Firework_Trail",
+      "SpawnRate": { "Min": 1, "Max": 1 },
+      "MaxConcurrent": 1,
+      "LifeSpan": { "Min": 0.15, "Max": 0.15 },
+      "TotalSpawners": 1
+    }
+  ],
+  "CullDistance": 80.0,
+  "BoundingRadius": 8.0
+}

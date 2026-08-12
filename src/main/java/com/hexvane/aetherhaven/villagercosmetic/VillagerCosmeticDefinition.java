@@ -9,10 +9,22 @@ public record VillagerCosmeticDefinition(
     @Nonnull String displayNameKey,
     @Nonnull String model,
     @Nonnull String texture,
-    @Nonnull String unlockItemId
+    @Nonnull String unlockItemId,
+    @Nonnull VillagerCosmeticHeadAccessoryType headAccessoryType
 ) {
     public static final String SLOT_HEAD_ACCESSORY = "HeadAccessory";
     public static final String SLOT_FACE_ACCESSORY = "FaceAccessory";
     public static final String SLOT_BACK_ACCESSORY = "BackAccessory";
     public static final String DEFAULT_ID = "default";
+
+    public VillagerCosmeticDefinition(
+        @Nonnull String id,
+        @Nonnull String slot,
+        @Nonnull String displayNameKey,
+        @Nonnull String model,
+        @Nonnull String texture,
+        @Nonnull String unlockItemId
+    ) {
+        this(id, slot, displayNameKey, model, texture, unlockItemId, VillagerCosmeticHeadAccessoryType.Simple);
+    }
 }

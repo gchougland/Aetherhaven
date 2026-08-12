@@ -1,0 +1,143 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Rock_Stone_Cobble_Beam"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 0,
+      "name": "Wood_Softwood_Beam"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 0,
+      "name": "Wood_Softwood_Beam"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 0,
+      "name": "Deco_Lantern"
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "Transform": {
+          "Position": {
+            "X": -6.0,
+            "Y": 7.5,
+            "Z": -13.0
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0,
+            "Roll": 0.0
+          }
+        },
+        "TriggerVolume": {
+          "Shape": {
+            "Type": "Box",
+            "Min": {
+              "X": -14.0,
+              "Y": -6.5,
+              "Z": -14.0
+            },
+            "Max": {
+              "X": 14.0,
+              "Y": 6.5,
+              "Z": 14.0
+            }
+          },
+          "Effects": [
+            {
+              "Type": "SetMusic",
+              "Event": "ENTER",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "Track_Aetherhaven_FunkyLittleDudes",
+              "ClearMusic": false
+            },
+            {
+              "Type": "SetMusic",
+              "Event": "EXIT",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "",
+              "ClearMusic": true
+            },
+            {
+              "Type": "SetWeather",
+              "Event": "ENTER",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "Weather": "Zone1_Sunny_Fireflies",
+              "PlayerOnly": true,
+              "ResetWeather": false
+            },
+            {
+              "Type": "SetWeather",
+              "Event": "EXIT",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "Weather": "",
+              "PlayerOnly": true,
+              "ResetWeather": true
+            }
+          ],
+          "Enabled": true,
+          "TargetTypes": [
+            "Player"
+          ],
+          "KeepLoaded": false,
+          "Color": {
+            "X": 0.003921568859368563,
+            "Y": 0.800000011920929,
+            "Z": 0.0
+          },
+          "PrefabIndex": 0
+        }
+      }
+    }
+  ]
+}

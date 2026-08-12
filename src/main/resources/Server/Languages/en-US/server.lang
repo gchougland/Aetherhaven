@@ -20,6 +20,7 @@
 #   aetherhaven_commands_help.lang — /aetherhaven subcommand descriptions (tab help)
 #   aetherhaven_feasts_production.lang — feasts; workplace production / unlocks
 #   aetherhaven_festivals.lang       — festival names, town announcements, festival admin command
+#   aetherhaven_props.lang           — prop placement, packaging wand, create prop menu, prop commands
 #   aetherhaven_misc.lang            — blacksmith repair; dialogue test command; banners; building staff
 #   aetherhaven_shop.lang            — shop spot block, config UI, HUD, purchases
 #   aetherhaven_rts.lang             — RTS guard command mode HUD, tools, command post

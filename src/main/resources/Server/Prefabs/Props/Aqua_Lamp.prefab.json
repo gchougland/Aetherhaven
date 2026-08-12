@@ -1,0 +1,131 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": -1,
+      "y": 3,
+      "z": 0,
+      "name": "*Furniture_Human_Ruins_Trapdoor_State_Definitions_OpenDoorOut",
+      "rotation": 3
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": -1,
+      "name": "*Furniture_Human_Ruins_Trapdoor_State_Definitions_OpenDoorOut",
+      "rotation": 2
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Rock_Aqua_Brick_Pillar_Base"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 0,
+      "name": "Rock_Aqua_Brick_Beam"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 0,
+      "name": "Rock_Aqua_Brick_Beam"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 0,
+      "name": "Rock_Crystal_Blue_Block"
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": 0,
+      "name": "Rock_Aqua_Brick_Half"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 1,
+      "name": "*Furniture_Human_Ruins_Trapdoor_State_Definitions_OpenDoorOut"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 0,
+      "name": "*Furniture_Human_Ruins_Trapdoor_State_Definitions_OpenDoorOut",
+      "rotation": 1
+    }
+  ],
+  "fluids": [
+    {
+      "x": -1,
+      "y": 3,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": -1,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 1,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ]
+}

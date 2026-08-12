@@ -1,0 +1,206 @@
+package com.hexvane.aetherhaven.prop;
+
+import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
+import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
+import com.hexvane.aetherhaven.construction.ConstructionPrefabSequence;
+import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
+import com.hexvane.aetherhaven.placement.PrefabTriggerVolumeCleanup;
+import com.hexvane.aetherhaven.town.PlotFootprintRecord;
+import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.RemoveReason;
+import com.hypixel.hytale.math.util.ChunkUtil;
+import com.hypixel.hytale.protocol.BlockMaterial;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
+import com.hypixel.hytale.server.core.universe.world.SetBlockSettings;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.hypixel.hytale.server.core.util.FillerBlockUtil;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import org.joml.Vector3i;
+
+/**
+ * Prop prefab paste / remove / validity checks, built on {@link ConstructionPasteOps}. Only solid block cells are
+ * handled here; entity pasting/removal lives in {@link PropEntityOps}.
+ */
+public final class PropPrefabOps {
+    /**
+     * Teardown clear must update block-entity state; matches {@link com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil}'s
+     * {@code FORCE_CLEAR_SETTINGS} (that method is private there, so it is replicated here).
+     */
+    private static final int FORCE_CLEAR_SETTINGS =
+        SetBlockSettings.NO_SEND_PARTICLES | SetBlockSettings.NO_DROP_ITEMS;
+
+    private PropPrefabOps() {}
+
+    /** Pastes every solid cell of the prop prefab at {@code origin} (world-space prefab corner), plus interactive block entities. */
+    public static void pasteSolidsOnly(
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        @Nonnull Rotation yaw,
+        @Nonnull IPrefabBuffer buffer
+    ) {
+        ConstructionPasteOps.forcePasteAllSolids(world, origin, yaw, false, buffer);
+        ConstructionPasteOps.placeInteractiveBlockEntitiesFromPrefab(world, origin, yaw, buffer);
+    }
+
+    /** Clears every origin solid cell that still matches the prefab's expected block (skips cells a player has since edited). */
+    public static void removeSolidsOnly(
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        @Nonnull Rotation yaw,
+        @Nonnull IPrefabBuffer buffer
+    ) {
+        ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
+        BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
+        for (PendingBlock pb : ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks())) {
+            if (!isOriginSolidCell(pb)) {
+                continue;
+            }
+            BlockType expected = blockTypeMap.getAsset(pb.blockId());
+            if (expected == null || expected.getId() == null) {
+                continue;
+            }
+            int bx = origin.x + pb.x();
+            int by = origin.y + pb.y();
+            int bz = origin.z + pb.z();
+            BlockType worldBlock = blockTypeAt(world, bx, by, bz);
+            if (worldBlock == null || worldBlock.getId() == null || !worldBlock.getId().equals(expected.getId())) {
+                continue;
+            }
+            clearBlockCell(world, bx, by, bz);
+        }
+    }
+
+    /**
+     * Strict placement check: every origin solid destination must be empty ({@link BlockType#EMPTY} or
+     * {@link BlockMaterial#Empty}). Air cells in the prefab are ignored. Unloaded chunks fail the check (safer than
+     * assuming empty).
+     */
+    public static boolean canPlaceSolids(
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        @Nonnull Rotation yaw,
+        @Nonnull IPrefabBuffer buffer
+    ) {
+        ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
+        for (PendingBlock pb : ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks())) {
+            if (!isOriginSolidCell(pb)) {
+                continue;
+            }
+            int bx = origin.x + pb.x();
+            int by = origin.y + pb.y();
+            int bz = origin.z + pb.z();
+            BlockType worldBlock = blockTypeAt(world, bx, by, bz);
+            if (worldBlock == null) {
+                return false;
+            }
+            if (worldBlock != BlockType.EMPTY && worldBlock.getMaterial() != BlockMaterial.Empty) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** True when every origin solid cell still matches the prefab's expected block (nothing has been dug out/replaced). */
+    public static boolean isIntact(
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        @Nonnull Rotation yaw,
+        @Nonnull IPrefabBuffer buffer
+    ) {
+        ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
+        BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
+        for (PendingBlock pb : ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks())) {
+            if (!isOriginSolidCell(pb)) {
+                continue;
+            }
+            BlockType expected = blockTypeMap.getAsset(pb.blockId());
+            if (expected == null || expected.getId() == null) {
+                continue;
+            }
+            int bx = origin.x + pb.x();
+            int by = origin.y + pb.y();
+            int bz = origin.z + pb.z();
+            BlockType worldBlock = blockTypeAt(world, bx, by, bz);
+            if (worldBlock == null || worldBlock.getId() == null || !worldBlock.getId().equals(expected.getId())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** True when this world block cell is one of the prop's origin solid voxels at its current placement. */
+    public static boolean blockBelongsToProp(
+        @Nonnull Vector3i origin,
+        @Nonnull Rotation yaw,
+        @Nonnull IPrefabBuffer buffer,
+        int x,
+        int y,
+        int z
+    ) {
+        PlotFootprintRecord fp = footprint(origin, yaw, buffer);
+        if (!fp.containsBlock(x, y, z)) {
+            return false;
+        }
+        ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
+        for (PendingBlock pb : ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks())) {
+            if (!isOriginSolidCell(pb)) {
+                continue;
+            }
+            if (origin.x + pb.x() == x && origin.y + pb.y() == y && origin.z + pb.z() == z) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** True when the prefab has at least one origin solid voxel (i.e. is not empty/decorative-only air). */
+    public static boolean hasOriginSolids(@Nonnull Rotation yaw, @Nonnull IPrefabBuffer buffer) {
+        return PlotFootprintUtil.hasSolidVoxels(yaw, buffer);
+    }
+
+    @Nonnull
+    public static PlotFootprintRecord footprint(@Nonnull Vector3i origin, @Nonnull Rotation yaw, @Nonnull IPrefabBuffer buffer) {
+        // Reserved prefab volume (empty cells included). Solid-only footprints miss furniture companions /
+        // unresolved *state blocks that still appear in the ghost, so the overlay looked too small.
+        return PrefabTriggerVolumeCleanup.prefabBox(origin, yaw, buffer);
+    }
+
+    private static boolean isOriginSolidCell(@Nonnull PendingBlock pb) {
+        return pb.filler() == FillerBlockUtil.NO_FILLER && pb.blockId() != 0;
+    }
+
+    /**
+     * Reads block type without promoting chunks to ticking (safe off the world tick); returns {@code null} when the
+     * chunk is not currently in memory.
+     */
+    @Nullable
+    private static BlockType blockTypeAt(@Nonnull World world, int x, int y, int z) {
+        if (y < 0 || y >= 320) {
+            return null;
+        }
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        if (chunk == null) {
+            return null;
+        }
+        return BlockType.getAssetMap().getAsset(chunk.getBlock(x, y, z));
+    }
+
+    /** Mirrors {@code PrefabFootprintClearUtil#forceClearBlockCell} (private there). */
+    private static void clearBlockCell(@Nonnull World world, int x, int y, int z) {
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        if (chunk == null) {
+            return;
+        }
+        Ref<ChunkStore> blockEntityRef = chunk.getBlockComponentEntity(x, y, z);
+        chunk.setBlock(x, y, z, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, FORCE_CLEAR_SETTINGS);
+        if (blockEntityRef != null && blockEntityRef.isValid()) {
+            world.getChunkStore().getStore().removeEntity(blockEntityRef, RemoveReason.REMOVE);
+        }
+    }
+}

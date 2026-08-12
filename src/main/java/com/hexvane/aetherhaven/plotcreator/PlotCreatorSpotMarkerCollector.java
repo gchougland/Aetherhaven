@@ -212,6 +212,46 @@ public final class PlotCreatorSpotMarkerCollector {
                 desired(block.x, block.y, block.z, PlotCreatorSubstepType.FESTIVAL_WHEEL, null, null, null)
             );
         }
+        for (var start : draft.getFestivalRaceStartSpots()) {
+            if (!passesTypeFilter(filter, PlotCreatorSubstepType.FESTIVAL_TREE_CLIMB_START, null)) {
+                continue;
+            }
+            Vector3i block =
+                PlotCreatorLocalCoords.toWorldBlock(
+                    draft,
+                    new int[] {start.getLocalX(), start.getLocalY(), start.getLocalZ()}
+                );
+            out.add(
+                desired(
+                    block.x,
+                    block.y,
+                    block.z,
+                    PlotCreatorSubstepType.FESTIVAL_TREE_CLIMB_START,
+                    null,
+                    null,
+                    null
+                )
+            );
+        }
+        var finish = draft.getFestivalRaceFinishLocal();
+        if (finish != null && passesTypeFilter(filter, PlotCreatorSubstepType.FESTIVAL_TREE_CLIMB_FINISH, null)) {
+            Vector3i block =
+                PlotCreatorLocalCoords.toWorldBlock(
+                    draft,
+                    new int[] {finish.getLocalX(), finish.getLocalY(), finish.getLocalZ()}
+                );
+            out.add(
+                desired(
+                    block.x,
+                    block.y,
+                    block.z,
+                    PlotCreatorSubstepType.FESTIVAL_TREE_CLIMB_FINISH,
+                    null,
+                    null,
+                    null
+                )
+            );
+        }
     }
 
     private static void addLocal(

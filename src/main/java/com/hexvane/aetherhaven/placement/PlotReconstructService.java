@@ -15,6 +15,7 @@ import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownDissolutionService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
@@ -101,8 +102,9 @@ public final class PlotReconstructService {
 
         PoiRegistry poiReg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
         PlotBuildingRelocation.relocateTownNpcsOutOfFootprint(entityStore, town, oldFootprint);
+        Ref<EntityStore> actorRef = findPlayerRef(entityStore, actorUuid);
         TownDissolutionService.clearPlotFromWorld(
-            world, plugin, town, plot, entityStore, poiReg, PlotBlockClearMode.NONE, null
+            world, plugin, town, plot, entityStore, poiReg, PlotBlockClearMode.NONE, null, actorRef
         );
         plot.clearAssemblyPersistence();
 
@@ -135,5 +137,19 @@ public final class PlotReconstructService {
             onComplete
         );
         return ReconstructResult.OK;
+    }
+
+    @Nullable
+    private static Ref<EntityStore> findPlayerRef(@Nonnull Store<EntityStore> store, @Nonnull UUID actorUuid) {
+        World world = store.getExternalData().getWorld();
+        for (var playerRef : world.getPlayerRefs()) {
+            if (actorUuid.equals(playerRef.getUuid())) {
+                Ref<EntityStore> ref = playerRef.getReference();
+                if (ref != null && ref.isValid()) {
+                    return ref;
+                }
+            }
+        }
+        return null;
     }
 }

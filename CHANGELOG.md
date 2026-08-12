@@ -17,10 +17,15 @@
 - **Building editor festivals** The building editor staff has a Festivals tab to load an existing festival nearby and set up every spot it needs. New festivals are still made with the plot creator.
 - **Festival tickets** Four seasonal festival tickets you can hold onto for now.
 - **Pig Racing Festival** Late spring holiday at the festival square. Bet gold coins on one of four pigs, watch them race, and a banner names the winner so you know who to cheer. Collect spring festival tickets if yours wins, or try another race after a loss. The elder, innkeeper, blacksmith, and rancher come to watch, and a race merchant sells ranch goods for spring festival tickets.
-- **Carnival Festival** Late summer holiday that runs all day at the festival square. Pop floating balloons with darts, spin the wall carnival wheel for a chance at summer festival tickets, and visit the carnival merchant for a kweebec plushie. The elder, bard, innkeeper, and florist come to watch.
+- **Carnival Festival** Late summer holiday that runs all day at the festival square. Pop floating balloons with darts, spin the wall carnival wheel for a chance at summer festival tickets, and visit the carnival merchant for fireworks, popcorn, a kweebec plushie, and clown wardrobe looks. The elder, bard, innkeeper, and florist come to watch.
+- **Carnival fireworks** Buy a firework from the carnival merchant for one summer festival ticket. Use it on the ground to send it up and watch it burst in color.
 - **Carnival clown** Land on the blue spot on the carnival wheel to unlock Bozo Bleak, a cynical clown who can join your town.
 - **Clown Tent** Build Bozo a tent workplace. During work hours he visits townsfolk who need fun and cheers them up.
-- **Villager wardrobe** Craft a wardrobe at the town planning desk to dress up residents of your town. Pick someone, choose unlocked looks by slot, and save what they wear in that town.
+- **Villager wardrobe** Craft a wardrobe at the town planning desk to dress up residents of your town. Pick someone, choose unlocked looks by slot, and save what they wear in that town. Head looks can leave hair alone, trim it under a hat, or hide it fully, matching how player hats work.
+- **Tree Climbing Festival** Mid summer holiday at the festival square. Join a climb race at the attendant, race up the big tree to the pink crystal, earn summer festival tickets for a fast time, check the shared leaderboard, and buy rare saplings plus bush, beehive, and jungle sapling wardrobe hats from the merchant.
+- **Props** Place small decoration builds almost anywhere with a crate style prop item. Move and turn them in a placement menu before you set them down. They will not go into other blocks. Ships with Aqua Lamp, Palm Streetlight, Streetlight, Cabbage Trough, Fish Barrel, Potion Shelf, Plant Arch, Pig Pile, Balloons, and Festival Flag. Festival merchants sell some of these for festival tickets.
+- **Packaging wand** Point at a prop and use the wand to pack it back into an item. Props stay safe from breaking for everyone unless you turn breaking on for yourself with a creative command.
+- **Create and give props** Creative commands let you turn an existing prefab into a prop, give prop items, and hand out the packaging wand.
 
 ## [2.7.1] - 8/7/2026
 

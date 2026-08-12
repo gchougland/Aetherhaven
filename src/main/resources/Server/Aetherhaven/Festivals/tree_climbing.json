@@ -1,0 +1,218 @@
+{
+  "id": "tree_climbing",
+  "displayName": "Tree Climbing Festival",
+  "displayNameLangKey": "aetherhaven_festivals.aetherhaven.festival.tree_climbing.name",
+  "description": "Mid summer brings the big tree climb. Race to the pink crystal at the top, earn summer festival tickets for a fast climb, and spend them on rare saplings.",
+  "prefabPath": "Festivals/Festival_Tree_Climbing.prefab.json",
+  "season": "SUMMER",
+  "dayOfSeason": 7,
+  "startHour": 7,
+  "endHour": 20,
+  "calendarIconPath": "UI/Custom/jungle.png",
+  "mechanicId": "tree_climbing",
+  "spots": [
+    {
+      "residentKind": "elder",
+      "localX": -11,
+      "localY": 5,
+      "localZ": -10,
+      "yawDegrees": -129.66327
+    },
+    {
+      "residentKind": "innkeeper",
+      "localX": 11,
+      "localY": 5,
+      "localZ": -10,
+      "yawDegrees": 136.72968
+    },
+    {
+      "residentKind": "florist",
+      "localX": 9,
+      "localY": 5,
+      "localZ": 12,
+      "yawDegrees": 105.80444
+    },
+    {
+      "residentKind": "farmer",
+      "localX": 3,
+      "localY": 5,
+      "localZ": 13,
+      "yawDegrees": -10.3654175
+    }
+  ],
+  "npcs": [
+    {
+      "npcRoleId": "Aetherhaven_Festival_Tree_Climb_Attendant",
+      "localX": -7,
+      "localY": 6,
+      "localZ": 6,
+      "yawDegrees": 90.0
+    },
+    {
+      "npcRoleId": "Aetherhaven_Festival_Tree_Climb_Merchant",
+      "localX": -5,
+      "localY": 6,
+      "localZ": -1,
+      "yawDegrees": 77.83423
+    }
+  ],
+  "touristSpots": [
+    {
+      "localX": -1,
+      "localY": 6,
+      "localZ": -9,
+      "yawDegrees": 210.28326
+    },
+    {
+      "localX": -9,
+      "localY": 6,
+      "localZ": -6,
+      "yawDegrees": 251.27625
+    },
+    {
+      "localX": -11,
+      "localY": 6,
+      "localZ": 2,
+      "yawDegrees": 255.9454
+    },
+    {
+      "localX": -6,
+      "localY": 6,
+      "localZ": -12,
+      "yawDegrees": 240.2992
+    },
+    {
+      "localX": 9,
+      "localY": 6,
+      "localZ": -10,
+      "yawDegrees": 208.00952
+    },
+    {
+      "localX": 11,
+      "localY": 6,
+      "localZ": 5,
+      "yawDegrees": 36.757263
+    },
+    {
+      "localX": 2,
+      "localY": 6,
+      "localZ": 12,
+      "yawDegrees": 111.41431
+    },
+    {
+      "localX": -7,
+      "localY": 6,
+      "localZ": 12,
+      "yawDegrees": 350.70215
+    }
+  ],
+  "raceStartSpots": [
+    {
+      "localX": -8,
+      "localY": 6,
+      "localZ": 11,
+      "yawDegrees": 323.26648
+    },
+    {
+      "localX": -9,
+      "localY": 6,
+      "localZ": 9,
+      "yawDegrees": 265.37335
+    },
+    {
+      "localX": -9,
+      "localY": 6,
+      "localZ": 7,
+      "yawDegrees": 292.08203
+    },
+    {
+      "localX": -6,
+      "localY": 6,
+      "localZ": 12,
+      "yawDegrees": 308.23193
+    }
+  ],
+  "raceFinishLocal": {
+    "localX": -4,
+    "localY": 44,
+    "localZ": 3
+  },
+  "tags": [
+    "summer",
+    "racing"
+  ],
+  "greetings": {
+    "bard": [
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.bard.0",
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.bard.1"
+    ],
+    "elder": [
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.elder.0",
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.elder.1"
+    ],
+    "guard": [
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.guard.0",
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.guard.1"
+    ],
+    "chef": [
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.chef.0",
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.chef.1"
+    ],
+    "miner": [
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.miner.0",
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.miner.1"
+    ],
+    "pyrotechnic": [
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.pyrotechnic.0",
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.pyrotechnic.1"
+    ],
+    "innkeeper": [
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.innkeeper.0",
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.innkeeper.1"
+    ],
+    "crystal_keeper": [
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.crystal_keeper.0",
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.crystal_keeper.1"
+    ],
+    "default": [
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.default.0",
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.default.1"
+    ],
+    "builder": [
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.builder.0",
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.builder.1"
+    ],
+    "blacksmith": [
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.blacksmith.0",
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.blacksmith.1"
+    ],
+    "rancher": [
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.rancher.0",
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.rancher.1"
+    ],
+    "priestess": [
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.priestess.0",
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.priestess.1"
+    ],
+    "farmer": [
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.farmer.0",
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.farmer.1"
+    ],
+    "merchant": [
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.merchant.0",
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.merchant.1"
+    ],
+    "florist": [
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.florist.0",
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.florist.1"
+    ],
+    "guild_master": [
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.guild_master.0",
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.guild_master.1"
+    ],
+    "logger": [
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.logger.0",
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.logger.1"
+    ]
+  }
+}

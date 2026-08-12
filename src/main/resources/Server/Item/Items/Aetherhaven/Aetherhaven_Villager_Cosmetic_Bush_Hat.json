@@ -1,0 +1,60 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Villager_Cosmetic_Bush_Hat.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Villager_Cosmetic_Bush_Hat.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Villager_Cosmetic_Bush_Hat.png",
+  "Categories": [
+    "Items.Misc",
+    "Aetherhaven.All"
+  ],
+  "PlayerAnimationsId": "Item",
+  "Model": "Items/Aetherhaven/VillagerCosmetics/BushHat/Bush_Hat.blockymodel",
+  "Texture": "Items/Aetherhaven/VillagerCosmetics/BushHat/Bush_Hat.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      18,
+      40,
+      0
+    ],
+    "Translation": [
+      -22,
+      -122
+    ]
+  },
+  "Consumable": true,
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenVillagerCosmeticUnlockUse",
+          "Next": {
+            "Type": "ModifyInventory",
+            "AdjustHeldItemQuantity": -1
+          }
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenVillagerCosmeticUnlockUse",
+          "Next": {
+            "Type": "ModifyInventory",
+            "AdjustHeldItemQuantity": -1
+          }
+        }
+      ]
+    }
+  },
+  "Tags": {
+    "Type": [
+      "Misc"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "MaxStack": 10
+}

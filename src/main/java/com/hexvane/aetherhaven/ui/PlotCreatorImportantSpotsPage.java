@@ -176,6 +176,13 @@ public final class PlotCreatorImportantSpotsPage
                 )
             );
             out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_WHEEL, 1));
+            out.add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_TREE_CLIMB_START,
+                    resolveMinCount(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_TREE_CLIMB_START, 1))
+                )
+            );
+            out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_TREE_CLIMB_FINISH, 1));
             List<PlotCreatorSpotEntry> ranked = new ArrayList<>(out);
             for (int i = 0; i < ranked.size(); i++) {
                 PlotCreatorSpotEntry spot = ranked.get(i);

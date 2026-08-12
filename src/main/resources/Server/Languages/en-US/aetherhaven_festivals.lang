@@ -9,6 +9,9 @@ aetherhaven.festival.pig_race.description=Late spring brings the pig races. Bet 
 aetherhaven.festival.carnival.name=Carnival Festival
 aetherhaven.festival.carnival.description=Late summer brings the carnival. Pop balloons, spin the wheel, and spend summer festival tickets at the carnival merchant.
 
+aetherhaven.festival.tree_climbing.name=Tree Climbing Festival
+aetherhaven.festival.tree_climbing.description=Mid summer brings the big tree climb. Race to the pink crystal at the top, earn summer festival tickets for a fast climb, and spend them on rare saplings.
+
 aetherhaven.festival.interactionHints.burstLettuce=Press [{key}] to pop the lettuce
 
 aetherhaven.festival.started={festival} has started at the festival square.
@@ -65,3 +68,14 @@ aetherhaven.festival.pig_race.pig.undead=the undead pig
 aetherhaven.festival.pig_race.pig.fuzzy=the fuzzy pig
 aetherhaven.festival.pig_race.banner.winner.title={pig} wins!
 aetherhaven.festival.pig_race.banner.winner.subtitle=Talk to the race merchant for your tickets
+
+aetherhaven.festival.npc.treeClimbMerchant.name=Sapling Merchant
+aetherhaven.festival.npc.treeClimbAttendant.name=Race Attendant
+aetherhaven.festival.shop.tree_climbing.title=Rare Saplings
+aetherhaven.festival.tree_climbing.hud.timerLabel=Climb time
+aetherhaven.festival.tree_climbing.leaderboard.title=Tree Climb Times
+aetherhaven.festival.tree_climbing.leaderboard.hint=Best climb times for this world.
+aetherhaven.festival.tree_climbing.leaderboard.close=Close
+aetherhaven.festival.tree_climbing.leaderboard.empty=No climbs recorded yet.
+aetherhaven.festival.tree_climbing.leaderboard.your_best=Your best time: {time}
+aetherhaven.festival.tree_climbing.leaderboard.your_best_none=You have not finished a climb yet.

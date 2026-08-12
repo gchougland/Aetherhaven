@@ -98,6 +98,8 @@ public final class PlotBlueprintSalvageBenchSystem extends EntityTickingSystem<C
     }
 
     private static boolean hasSalvageMetadata(@Nonnull ItemStack stack) {
-        return !stack.isEquivalentType(new ItemStack(stack.getItemId(), stack.getQuantity()));
+        // Prefer keyed metadata reads over deprecated ItemStack#getMetadata / constructing a bare comparison stack.
+        return PlotTokenMetadata.readConstructionId(stack) != null
+            || PlotTokenUnlockPageMetadata.readConstructionId(stack) != null;
     }
 }

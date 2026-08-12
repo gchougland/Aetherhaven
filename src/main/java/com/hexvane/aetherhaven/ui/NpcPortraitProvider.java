@@ -44,6 +44,8 @@ public final class NpcPortraitProvider {
         Map.entry(AetherhavenConstants.NPC_FESTIVAL_CARNIVAL_BALLOON, "Aetherhaven_Festival_Carnival_Balloon.png"),
         Map.entry(AetherhavenConstants.NPC_FESTIVAL_CARNIVAL_WHEEL, "Aetherhaven_Festival_Carnival_Wheel.png"),
         Map.entry(AetherhavenConstants.NPC_FESTIVAL_CARNIVAL_WHACK, "Aetherhaven_Festival_Carnival_Whack.png"),
+        Map.entry(AetherhavenConstants.NPC_FESTIVAL_TREE_CLIMB_MERCHANT, "Haku_Mistclaw.png"),
+        Map.entry(AetherhavenConstants.NPC_FESTIVAL_TREE_CLIMB_ATTENDANT, "Momo_Canopy.png"),
         Map.entry(AetherhavenConstants.NPC_GUARD_KNIGHT, "Guild_Master.png"),
         Map.entry(AetherhavenConstants.NPC_GUARD_ARCHER, "Guild_Master.png"),
         Map.entry(AetherhavenConstants.NPC_GUARD_MAGE, "Guild_Master.png"),

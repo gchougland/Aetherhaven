@@ -1,0 +1,238 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Furniture_Tavern_Shelf",
+      "rotation": 3
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 0.680938720703125,
+            "Y": 1.0,
+            "Z": 0.75360107421875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 2.8022594451904297,
+            "Roll": 0.0
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.7999999523162842
+        },
+        "Item": {
+          "Item": {
+            "Id": "Weapon_Bomb_Potion_Poison",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 2.802259922027588,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Potion_Regen_Mana_Small"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.8630218505859375,
+            "Y": 1.0,
+            "Z": 0.18402099609375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5071425437927246,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "vXOihsrIMoKCMXyvL9yI2A==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Potion_Regen_Mana_Small",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Potion_Regen_Health"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.7129669189453125,
+            "Y": 1.0,
+            "Z": 0.385650634765625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.4043604135513306,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "O6otp1D5Mv2PsQ8JizOyOQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Potion_Regen_Health",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "Transform": {
+          "Position": {
+            "X": -10.0,
+            "Y": 6.5,
+            "Z": -9.0
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0,
+            "Roll": 0.0
+          }
+        },
+        "TriggerVolume": {
+          "Shape": {
+            "Type": "Box",
+            "Min": {
+              "X": -14.0,
+              "Y": -6.5,
+              "Z": -14.0
+            },
+            "Max": {
+              "X": 14.0,
+              "Y": 6.5,
+              "Z": 14.0
+            }
+          },
+          "Effects": [
+            {
+              "Type": "SetMusic",
+              "Event": "ENTER",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "Track_Aetherhaven_FunkyLittleDudes",
+              "ClearMusic": false
+            },
+            {
+              "Type": "SetMusic",
+              "Event": "EXIT",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "",
+              "ClearMusic": true
+            },
+            {
+              "Type": "SetWeather",
+              "Event": "ENTER",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "Weather": "Zone1_Sunny_Fireflies",
+              "PlayerOnly": true,
+              "ResetWeather": false
+            },
+            {
+              "Type": "SetWeather",
+              "Event": "EXIT",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "Weather": "",
+              "PlayerOnly": true,
+              "ResetWeather": true
+            }
+          ],
+          "Enabled": true,
+          "TargetTypes": [
+            "Player"
+          ],
+          "KeepLoaded": false,
+          "Color": {
+            "X": 0.003921568859368563,
+            "Y": 0.800000011920929,
+            "Z": 0.0
+          },
+          "PrefabIndex": 0
+        }
+      }
+    }
+  ]
+}

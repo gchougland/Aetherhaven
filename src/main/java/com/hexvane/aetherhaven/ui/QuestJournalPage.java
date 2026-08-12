@@ -35,6 +35,7 @@ import com.hexvane.aetherhaven.rts.RtsPickTuning;
 import com.hexvane.aetherhaven.rts.RtsScreenPickUtil;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleDefinition;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleResolver;
+import com.hexvane.aetherhaven.placement.PlotBlockClearMode;
 import com.hexvane.aetherhaven.placement.PlotConstructionOpenHelper;
 import com.hexvane.aetherhaven.placement.PlotConstructionOpenHelper.OpenResult;
 import com.hexvane.aetherhaven.plot.ConstructionFavoritesService;
@@ -2937,7 +2938,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                     ? new Vector3d(tc.getPosition())
                     : new Vector3d(plot.getSignX() + 0.5, plot.getSignY(), plot.getSignZ() + 0.5);
             PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
-            TownDissolutionService.clearPlotFromWorld(world, plugin, town, plot, store, reg);
+            TownDissolutionService.clearPlotFromWorld(world, plugin, town, plot, store, reg, PlotBlockClearMode.FULL_FOOTPRINT, null, ref);
             if (!town.removePlotInstance(plotUuid)) {
                 playerRef.sendMessage(
                     Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.removePlotFailed")

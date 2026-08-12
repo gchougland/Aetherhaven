@@ -23,6 +23,7 @@ import com.hexvane.aetherhaven.map.TownMapMarkerProvider;
 import com.hexvane.aetherhaven.map.TownSharedMapMarkerService;
 import com.hexvane.aetherhaven.poi.PoiPersistence;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
+import com.hexvane.aetherhaven.prop.PropWorldRegistries;
 import com.hexvane.aetherhaven.shopspot.ShopSpotDailyRerollService;
 import com.hexvane.aetherhaven.shopspot.ShopSpotPersistence;
 import com.hexvane.aetherhaven.shopspot.ShopSpotRegistry;
@@ -285,6 +286,7 @@ public final class AetherhavenWorldRegistries {
             WorldNpcExistenceReconcile.clearWorld(world.getName());
             WorldDifficultyPersistence.unloadWorld(world);
             TownsfolkPoolPersistence.unloadWorld(world);
+            PropWorldRegistries.unloadWorld(world);
             return;
         }
         TownManager tm = TOWN_MANAGERS.remove(world.getName());
@@ -292,6 +294,7 @@ public final class AetherhavenWorldRegistries {
             tm.saveToDisk();
         }
         PlotLinkReconcileService.clearWorldState(world.getName());
+        PropWorldRegistries.unloadWorld(world);
         PoiRegistry pr = POI_REGISTRIES.remove(world.getName());
         if (pr != null) {
             AetherhavenPlugin p = AetherhavenPlugin.get();
@@ -373,6 +376,7 @@ public final class AetherhavenWorldRegistries {
         }
         WorldDifficultyPersistence.saveAll();
         TownsfolkPoolPersistence.saveAll();
+        PropWorldRegistries.saveAll();
     }
 
     public static void bootstrapWorld(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
@@ -383,6 +387,7 @@ public final class AetherhavenWorldRegistries {
         refreshTownDataFromDisk(world, plugin);
         getOrCreateTownManager(world, plugin);
         getOrCreatePoiRegistry(world, plugin);
+        PropWorldRegistries.getOrCreatePropRegistry(world, plugin);
         getOrCreatePathToolRegistry(world, plugin);
         getOrCreatePatrolRouteRegistry(world, plugin);
         getOrCreateShopSpotRegistry(world, plugin);

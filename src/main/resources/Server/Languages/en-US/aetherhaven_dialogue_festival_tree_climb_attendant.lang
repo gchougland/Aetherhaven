@@ -1,0 +1,40 @@
+aetherhaven.dialogue.festival_tree_climb_attendant.speaker=Race Attendant
+aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.body=Ready to climb? Joining costs ten gold coins. Wait for friends, then start when everyone is set. Up to four climbers at a time.
+aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_join=Join the race (10 gold)
+aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_leave=Leave the race
+aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_start=Start the race
+aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_busy=A race is already going
+aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_collect=Collect my tickets
+aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_leaderboard=Look at the leaderboard
+aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_about=How does the climb work?
+aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_goodbye=Goodbye
+
+aetherhaven.dialogue.festival_tree_climb_attendant.about.body=Joining costs ten gold coins. When everyone who wants to climb has joined, start the race. You move to a start spot and the timer begins. Stand on the pink crystal at the very top to finish. Climbs of thirteen seconds or faster earn the most summer festival tickets. Slower than seventeen seconds earns none. Leave before the race starts and you get your gold back. Only one race runs at a time.
+aetherhaven.dialogue.festival_tree_climb_attendant.about.c_back=Back
+
+aetherhaven.dialogue.festival_tree_climb_attendant.joined.body=You are in! Tell me when you want to start, or wait for friends to join. Leave before we start and I will give your gold back.
+aetherhaven.dialogue.festival_tree_climb_attendant.joined.c_back=Back
+
+aetherhaven.dialogue.festival_tree_climb_attendant.join_failed.body=I cannot add you right now. The race may be full or already going.
+aetherhaven.dialogue.festival_tree_climb_attendant.join_failed.c_back=Back
+
+aetherhaven.dialogue.festival_tree_climb_attendant.join_need_gold.body=Joining costs ten gold coins. Come back when you can pay.
+aetherhaven.dialogue.festival_tree_climb_attendant.join_need_gold.c_back=Back
+
+aetherhaven.dialogue.festival_tree_climb_attendant.left.body=You left the race. I returned your gold. Come back when you are ready.
+aetherhaven.dialogue.festival_tree_climb_attendant.left.c_back=Back
+
+aetherhaven.dialogue.festival_tree_climb_attendant.race_started.body=Go! Climb to the pink crystal at the top. Your timer is running.
+aetherhaven.dialogue.festival_tree_climb_attendant.race_started.c_go=On my way!
+
+aetherhaven.dialogue.festival_tree_climb_attendant.start_failed.body=I cannot start the race yet. Join first, and wait until no other race is going.
+aetherhaven.dialogue.festival_tree_climb_attendant.start_failed.c_back=Back
+
+aetherhaven.dialogue.festival_tree_climb_attendant.race_busy.body=A race is already going. Wait until everyone finishes, then you can join the next one.
+aetherhaven.dialogue.festival_tree_climb_attendant.race_busy.c_back=Back
+
+aetherhaven.dialogue.festival_tree_climb_attendant.collect_win.body=Nice climb! Here are {count} summer festival tickets. Spend them at the sapling merchant.
+aetherhaven.dialogue.festival_tree_climb_attendant.collect_win.c_back=Thanks
+
+aetherhaven.dialogue.festival_tree_climb_attendant.collect_none.body=I do not have any tickets waiting for you.
+aetherhaven.dialogue.festival_tree_climb_attendant.collect_none.c_back=Back

@@ -1,0 +1,44 @@
+{
+  "id": "aetherhaven_festival_tree_climb_merchant",
+  "entry": "main_hub",
+  "nodes": {
+    "main_hub": {
+      "speaker": "aetherhaven_dialogue_festival_tree_climb_merchant.aetherhaven.dialogue.festival_tree_climb_merchant.speaker",
+      "text": "aetherhaven_dialogue_festival_tree_climb_merchant.aetherhaven.dialogue.festival_tree_climb_merchant.main_hub.body",
+      "choices": [
+        {
+          "id": "shop",
+          "text": "aetherhaven_dialogue_festival_tree_climb_merchant.aetherhaven.dialogue.festival_tree_climb_merchant.main_hub.c_shop",
+          "icon": "UI/Custom/jungle.png",
+          "actions": [
+            {
+              "type": "open_barter_shop",
+              "shop": "Aetherhaven_Festival_Tree_Climb"
+            }
+          ],
+          "next": null
+        },
+        {
+          "id": "about",
+          "text": "aetherhaven_dialogue_festival_tree_climb_merchant.aetherhaven.dialogue.festival_tree_climb_merchant.main_hub.c_about",
+          "next": "about"
+        },
+        {
+          "id": "goodbye",
+          "text": "aetherhaven_dialogue_festival_tree_climb_merchant.aetherhaven.dialogue.festival_tree_climb_merchant.main_hub.c_goodbye",
+          "next": null
+        }
+      ]
+    },
+    "about": {
+      "speaker": "aetherhaven_dialogue_festival_tree_climb_merchant.aetherhaven.dialogue.festival_tree_climb_merchant.speaker",
+      "text": "aetherhaven_dialogue_festival_tree_climb_merchant.aetherhaven.dialogue.festival_tree_climb_merchant.about.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_tree_climb_merchant.aetherhaven.dialogue.festival_tree_climb_merchant.about.c_back",
+          "next": "main_hub"
+        }
+      ]
+    }
+  }
+}

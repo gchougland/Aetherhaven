@@ -18,6 +18,22 @@ public final class AetherhavenConstants {
     public static final String PAGE_CHARTER_TOWN = "AetherhavenCharterTown";
     public static final String PAGE_PLOT_PLACEMENT = "AetherhavenPlotPlacement";
 
+    /** Crate-style placeable decoration prefab item (BSON carries prop id). */
+    public static final String PROP_ITEM_ID = "Aetherhaven_Prop_Item";
+
+    /** Wand that packages placed props back into prop items. */
+    public static final String PACKAGING_WAND_ITEM_ID = "Aetherhaven_Packaging_Wand";
+
+    public static final String PAGE_PROP_PLACEMENT = "AetherhavenPropPlacement";
+
+    public static final String PAGE_PROP_PREFAB_BROWSER = "AetherhavenPropPrefabBrowser";
+
+    /** Padding around prop footprint debug cubes. */
+    public static final double PROP_BOUNDS_PADDING = 0.2;
+
+    /** Creative: allow this player to break prop blocks for the current session. */
+    public static final String PERMISSION_PROP_BREAK = "aetherhaven.prop.break";
+
     /** Reserved for OpenCustomUI wiring; dialogue is opened from NPC action or commands. */
     public static final String PAGE_DIALOGUE = "AetherhavenDialogue";
 
@@ -514,6 +530,8 @@ public final class AetherhavenConstants {
     public static final String NPC_FESTIVAL_CARNIVAL_BALLOON = "Aetherhaven_Festival_Carnival_Balloon";
     public static final String NPC_FESTIVAL_CARNIVAL_WHEEL = "Aetherhaven_Festival_Carnival_Wheel";
     public static final String NPC_FESTIVAL_CARNIVAL_WHACK = "Aetherhaven_Festival_Carnival_Whack";
+    public static final String NPC_FESTIVAL_TREE_CLIMB_MERCHANT = "Aetherhaven_Festival_Tree_Climb_Merchant";
+    public static final String NPC_FESTIVAL_TREE_CLIMB_ATTENDANT = "Aetherhaven_Festival_Tree_Climb_Attendant";
 
     /** Shared role for all townsfolk; appearance set per character at spawn. */
     public static final String NPC_TOWNSFOLK = "Aetherhaven_Townsfolk";

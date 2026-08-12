@@ -1,0 +1,51 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Festival_Firework.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Festival_Firework.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Festival_Firework.png",
+  "Categories": [
+    "Items.Misc",
+    "Aetherhaven.All"
+  ],
+  "PlayerAnimationsId": "Item",
+  "Model": "Items/Aetherhaven/Firework.blockymodel",
+  "Texture": "Items/Aetherhaven/Firework_Red.png",
+  "IconProperties": {
+    "Scale": 0.9,
+    "Rotation": [
+      24,
+      40,
+      318
+    ],
+    "Translation": [
+      -9,
+      -10
+    ]
+  },
+  "Consumable": true,
+  "Interactions": {
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenFireworkLaunch",
+          "Next": {
+            "Type": "ModifyInventory",
+            "AdjustHeldItemQuantity": -1
+          }
+        }
+      ]
+    }
+  },
+  "Tags": {
+    "Type": [
+      "Misc"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "MaxStack": 25,
+  "Quality": "Common",
+  "Set": "Aetherhaven"
+}

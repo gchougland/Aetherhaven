@@ -93,6 +93,17 @@ public final class PlotCreatorFestivalJsonWriter {
             wheelMap.put("yawDegrees", wheel.getYawDegrees());
             root.put("wheelLocal", wheelMap);
         }
+        if (!draft.getFestivalRaceStartSpots().isEmpty()) {
+            root.put("raceStartSpots", raceStartMaps(draft.getFestivalRaceStartSpots()));
+        }
+        FestivalDefinition.RaceFinishLocalRow finish = draft.getFestivalRaceFinishLocal();
+        if (finish != null) {
+            Map<String, Object> finishMap = new LinkedHashMap<>();
+            finishMap.put("localX", finish.getLocalX());
+            finishMap.put("localY", finish.getLocalY());
+            finishMap.put("localZ", finish.getLocalZ());
+            root.put("raceFinishLocal", finishMap);
+        }
         if (existing != null) {
             if (!existing.getBurstItemIds().isEmpty()) {
                 root.put("burstItemIds", new ArrayList<>(existing.getBurstItemIds()));
@@ -207,6 +218,22 @@ public final class PlotCreatorFestivalJsonWriter {
             row.put("localX", spot.getLocalX());
             row.put("localY", spot.getLocalY());
             row.put("localZ", spot.getLocalZ());
+            out.add(row);
+        }
+        return out;
+    }
+
+    @Nonnull
+    private static List<Map<String, Object>> raceStartMaps(
+        @Nonnull List<FestivalDefinition.RaceStartSpotRow> spots
+    ) {
+        List<Map<String, Object>> out = new ArrayList<>();
+        for (FestivalDefinition.RaceStartSpotRow spot : spots) {
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("localX", spot.getLocalX());
+            row.put("localY", spot.getLocalY());
+            row.put("localZ", spot.getLocalZ());
+            row.put("yawDegrees", spot.getYawDegrees());
             out.add(row);
         }
         return out;

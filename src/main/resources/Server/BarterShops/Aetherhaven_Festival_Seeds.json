@@ -32,6 +32,30 @@
     {
       "Type": "Fixed",
       "Trade": {
+        "Output": { "ItemId": "Aetherhaven_Prop_Cabbage_Trough", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Spring", "Quantity": 5 }],
+        "Stock": 6
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Aetherhaven_Prop_Palm_Streetlight", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Spring", "Quantity": 5 }],
+        "Stock": 6
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Aetherhaven_Prop_Plant_Arch", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Spring", "Quantity": 5 }],
+        "Stock": 6
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
         "Output": { "ItemId": "Plant_Seeds_Lettuce", "Quantity": 4 },
         "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 2 }],
         "Stock": 20

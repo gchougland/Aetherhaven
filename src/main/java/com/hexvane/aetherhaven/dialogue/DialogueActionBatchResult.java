@@ -18,6 +18,8 @@ public final class DialogueActionBatchResult {
 
     private boolean jewelryAppraisalChargeGold = true;
 
+    private boolean openTreeClimbLeaderboardAfterClose;
+
     @Nullable
     private Runnable afterClose;
 
@@ -77,6 +79,14 @@ public final class DialogueActionBatchResult {
 
     public void setJewelryAppraisalChargeGold(boolean jewelryAppraisalChargeGold) {
         this.jewelryAppraisalChargeGold = jewelryAppraisalChargeGold;
+    }
+
+    public boolean isOpenTreeClimbLeaderboardAfterClose() {
+        return openTreeClimbLeaderboardAfterClose;
+    }
+
+    public void setOpenTreeClimbLeaderboardAfterClose(boolean openTreeClimbLeaderboardAfterClose) {
+        this.openTreeClimbLeaderboardAfterClose = openTreeClimbLeaderboardAfterClose;
     }
 
     /**

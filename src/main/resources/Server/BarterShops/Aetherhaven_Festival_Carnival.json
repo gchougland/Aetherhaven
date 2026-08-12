@@ -8,6 +8,14 @@
     {
       "Type": "Fixed",
       "Trade": {
+        "Output": { "ItemId": "Aetherhaven_Festival_Firework", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Summer", "Quantity": 1 }],
+        "Stock": 24
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
         "Output": { "ItemId": "Food_Popcorn", "Quantity": 1 },
         "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Summer", "Quantity": 1 }],
         "Stock": 24
@@ -43,6 +51,22 @@
         "Output": { "ItemId": "Aetherhaven_Villager_Cosmetic_Jester_Hat", "Quantity": 1 },
         "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Summer", "Quantity": 10 }],
         "Stock": 3
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Aetherhaven_Prop_Balloons", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Summer", "Quantity": 5 }],
+        "Stock": 6
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Aetherhaven_Prop_Festival_Flag", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Summer", "Quantity": 5 }],
+        "Stock": 6
       }
     }
   ]

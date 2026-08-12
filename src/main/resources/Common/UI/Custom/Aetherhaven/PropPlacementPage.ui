@@ -1,0 +1,209 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@IconLbl = (
+  FontSize: 6,
+  TextColor: #ffffff(0.01),
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+@IconUpStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../arrow_up_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../arrow_up_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../arrow_up_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Common/Buttons/Disabled.png", Border: 12), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@IconDownStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../arrow_down_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../arrow_down_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../arrow_down_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Common/Buttons/Disabled.png", Border: 12), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@IconBackStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Common/Buttons/Disabled.png", Border: 12), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@IconFwdStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Common/Buttons/Disabled.png", Border: 12), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@IconMinusStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../minus_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../minus_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../minus_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Common/Buttons/Disabled.png", Border: 12), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@IconPlusStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../add_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../add_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../add_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Common/Buttons/Disabled.png", Border: 12), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@IconRotStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../rotate_clockwise_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../rotate_clockwise_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../rotate_clockwise_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Common/Buttons/Disabled.png", Border: 12), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+@SummaryLabelStyle = (
+  FontSize: 18,
+  TextColor: #e8f0f4,
+  RenderBold: true,
+  Wrap: true,
+  HorizontalAlignment: Start
+);
+
+@MutedBodyStyle = (
+  FontSize: 14,
+  TextColor: $C.@ColorGrayCaption,
+  Wrap: true,
+  HorizontalAlignment: Start
+);
+
+$C.@PageOverlay {
+  LayoutMode: Top;
+  Anchor: (Left: 16, Top: 28, Bottom: 80, Width: 420);
+
+  $C.@DecoratedContainer {
+    FlexWeight: 1;
+    Anchor: (Width: 420, Top: 0, Bottom: 0);
+
+    #Title {
+      Label #PropPlacementTitle {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Anchor: (Top: $C.@TitleHeight, Bottom: 0);
+      Padding: (Top: 14, Left: 14, Right: 14, Bottom: 44);
+
+      Label #Summary {
+        Anchor: (Bottom: 8, Width: 392);
+        Style: (...@SummaryLabelStyle);
+      }
+
+      Label #Details {
+        Anchor: (Bottom: 10, Width: 392);
+        Style: (...@MutedBodyStyle);
+      }
+
+      Group #NudgePad {
+        LayoutMode: Center;
+        Anchor: (Bottom: 14);
+
+        Group {
+          LayoutMode: Top;
+
+          Group {
+            LayoutMode: Center;
+            Anchor: (Bottom: 22);
+            TextButton #BtnNudgeZm {
+              Style: @IconUpStyle;
+              Anchor: (Width: 44, Height: 40);
+              Padding: (Full: 0);
+              Text: ".";
+            }
+          }
+
+          Group {
+            LayoutMode: Center;
+            Anchor: (Bottom: 22);
+            Group {
+              LayoutMode: Left;
+              TextButton #BtnNudgeXm {
+                Style: @IconBackStyle;
+                Anchor: (Width: 44, Height: 40);
+                Padding: (Full: 0);
+                Text: ".";
+              }
+              AssetImage #NudgePadIcon {
+                Anchor: (Width: 36, Height: 36, Left: 8);
+                AssetPath: "UI/Custom/move_icon_256.png";
+              }
+              TextButton #BtnNudgeXp {
+                Style: @IconFwdStyle;
+                Anchor: (Width: 44, Height: 40, Left: 8);
+                Padding: (Full: 0);
+                Text: ".";
+              }
+            }
+          }
+
+          Group {
+            LayoutMode: Center;
+            TextButton #BtnNudgeZp {
+              Style: @IconDownStyle;
+              Anchor: (Width: 44, Height: 40);
+              Padding: (Full: 0);
+              Text: ".";
+            }
+          }
+        }
+      }
+
+      Group #RowYRotate {
+        LayoutMode: Center;
+        Anchor: (Bottom: 12);
+        Group {
+          LayoutMode: Left;
+          TextButton #BtnYm {
+            Style: @IconMinusStyle;
+            Anchor: (Width: 40, Height: 40);
+            Padding: (Full: 0);
+            Text: ".";
+          }
+          TextButton #BtnYp {
+            Style: @IconPlusStyle;
+            Anchor: (Width: 40, Height: 40, Left: 8);
+            Padding: (Full: 0);
+            Text: ".";
+          }
+          TextButton #BtnRotate {
+            Style: @IconRotStyle;
+            Anchor: (Width: 44, Height: 40, Left: 12);
+            Padding: (Full: 0);
+            Text: ".";
+          }
+        }
+      }
+
+      Group {
+        FlexWeight: 1;
+      }
+
+      Group #RowActions {
+        LayoutMode: Top;
+        Anchor: (Top: 8, Width: 392);
+        $C.@TextButton #PlaceButton {
+          Text: "";
+          Anchor: (Width: 392, Height: 48);
+          Padding: (Horizontal: 10, Vertical: 10);
+        }
+        $C.@CancelTextButton #CancelButton {
+          Text: "";
+          Anchor: (Top: 8, Width: 392, Height: 48);
+          Padding: (Horizontal: 10, Vertical: 10);
+        }
+      }
+    }
+  }
+}
+
+$C.@BackButton {}

@@ -37,108 +37,42 @@ public final class PlotPlacementNudgeUtil {
     public static void nudgeHorizontal(
         @Nonnull PlotPlacementSession session, boolean birdsEye, float yawRadians, @Nonnull Horizontal kind
     ) {
-        int dx = 0;
-        int dz = 0;
+        int[] step = horizontalStep(birdsEye, yawRadians, kind);
+        session.nudge(step[0], 0, step[1]);
+    }
+
+    /**
+     * One-block XZ step for a D-pad direction. When {@code birdsEye} is false, buttons follow the player's look
+     * (forward / back / left / right on the ground plane).
+     *
+     * @return {@code {dx, dz}}
+     */
+    @Nonnull
+    public static int[] horizontalStep(boolean birdsEye, float yawRadians, @Nonnull Horizontal kind) {
         if (birdsEye) {
-            switch (kind) {
-                case NEG_Z -> {
-                    dx = 0;
-                    dz = -1;
-                }
-                case POS_Z -> {
-                    dx = 0;
-                    dz = 1;
-                }
-                case NEG_X -> {
-                    dx = -1;
-                    dz = 0;
-                }
-                case POS_X -> {
-                    dx = 1;
-                    dz = 0;
-                }
-            }
-        } else {
-            double sin = Math.sin(yawRadians);
-            double cos = Math.cos(yawRadians);
-            switch (kind) {
-                case NEG_Z -> {
-                    int[] xz = dominantUnitXZ(-sin, -cos);
-                    dx = xz[0];
-                    dz = xz[1];
-                }
-                case POS_Z -> {
-                    int[] xz = dominantUnitXZ(sin, cos);
-                    dx = xz[0];
-                    dz = xz[1];
-                }
-                case NEG_X -> {
-                    int[] xz = dominantUnitXZ(-cos, sin);
-                    dx = xz[0];
-                    dz = xz[1];
-                }
-                case POS_X -> {
-                    int[] xz = dominantUnitXZ(cos, -sin);
-                    dx = xz[0];
-                    dz = xz[1];
-                }
-            }
+            return switch (kind) {
+                case NEG_Z -> new int[] {0, -1};
+                case POS_Z -> new int[] {0, 1};
+                case NEG_X -> new int[] {-1, 0};
+                case POS_X -> new int[] {1, 0};
+            };
         }
-        session.nudge(dx, 0, dz);
+        double sin = Math.sin(yawRadians);
+        double cos = Math.cos(yawRadians);
+        return switch (kind) {
+            case NEG_Z -> dominantUnitXZ(-sin, -cos);
+            case POS_Z -> dominantUnitXZ(sin, cos);
+            case NEG_X -> dominantUnitXZ(-cos, sin);
+            case POS_X -> dominantUnitXZ(cos, -sin);
+        };
     }
 
     /** Same semantics for charter relocation (ghost block). */
     public static void nudgeCharterHorizontal(
         @Nonnull CharterRelocationSession session, boolean birdsEye, float yawRadians, @Nonnull Horizontal kind
     ) {
-        int dx = 0;
-        int dz = 0;
-        if (birdsEye) {
-            switch (kind) {
-                case NEG_Z -> {
-                    dx = 0;
-                    dz = -1;
-                }
-                case POS_Z -> {
-                    dx = 0;
-                    dz = 1;
-                }
-                case NEG_X -> {
-                    dx = -1;
-                    dz = 0;
-                }
-                case POS_X -> {
-                    dx = 1;
-                    dz = 0;
-                }
-            }
-        } else {
-            double sin = Math.sin(yawRadians);
-            double cos = Math.cos(yawRadians);
-            switch (kind) {
-                case NEG_Z -> {
-                    int[] xz = dominantUnitXZ(-sin, -cos);
-                    dx = xz[0];
-                    dz = xz[1];
-                }
-                case POS_Z -> {
-                    int[] xz = dominantUnitXZ(sin, cos);
-                    dx = xz[0];
-                    dz = xz[1];
-                }
-                case NEG_X -> {
-                    int[] xz = dominantUnitXZ(-cos, sin);
-                    dx = xz[0];
-                    dz = xz[1];
-                }
-                case POS_X -> {
-                    int[] xz = dominantUnitXZ(cos, -sin);
-                    dx = xz[0];
-                    dz = xz[1];
-                }
-            }
-        }
-        session.nudge(dx, 0, dz);
+        int[] step = horizontalStep(birdsEye, yawRadians, kind);
+        session.nudge(step[0], 0, step[1]);
     }
 
     /**

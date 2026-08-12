@@ -1,0 +1,84 @@
+$C = "../Common.ui";
+$Browser = "../Pages/PrefabBrowser.ui";
+
+$C.@PageOverlay {
+  Anchor: (Top: 130);
+  Background: #000000(0.15);
+}
+
+Group #PrefabGroup {
+  Anchor: (Height: 700);
+  LayoutMode: Center;
+
+  $C.@Container {
+    Anchor: (Width: 600, Height: 700);
+
+    #Title {
+      Label #BrowserTitle {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+
+      Label #CurrentPath {
+        Anchor: (Bottom: 8, Horizontal: 4);
+        Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #6a7d8f);
+        Text: "";
+      }
+
+      $Browser.@PrefabBrowserContent {
+        FlexWeight: 1;
+      }
+
+      Label #StatusText {
+        Anchor: (Top: 4, Bottom: 4, Horizontal: 4);
+        Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #c8d4de, Wrap: true);
+        Text: "";
+        Visible: false;
+      }
+
+      Group #ActionRow {
+        LayoutMode: Left;
+        Anchor: (Top: 8, Height: 36);
+
+        $C.@TextButton #CreatePropButton {
+          Text: "";
+          Anchor: (Height: 36);
+          FlexWeight: 1;
+          Visible: false;
+        }
+      }
+    }
+  }
+
+  $C.@Container #PreviewBackdrop {
+    Anchor: (Left: 10, Top: 0, Width: 600, Height: 700);
+    Visible: true;
+
+    #Title {
+      Label #PreviewTitle {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
+      }
+    }
+
+    #Content {
+      LayoutMode: Full;
+
+      PrefabPreviewComponent #PrefabPreview {
+        AllowDragYaw: true;
+        AllowDragPitch: true;
+        AllowZoom: true;
+        AllowPan: true;
+        ShowAnchor: true;
+      }
+    }
+  }
+}
+
+$C.@BackButton {}

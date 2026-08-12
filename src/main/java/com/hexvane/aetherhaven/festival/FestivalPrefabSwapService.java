@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
 import com.hexvane.aetherhaven.placement.PrefabTriggerVolumeCleanup;
 import com.hexvane.aetherhaven.prefab.ConstructionAnimator;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
+import com.hexvane.aetherhaven.prop.PropPlotTeardown;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintChunkUtil;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
@@ -94,6 +95,7 @@ public final class FestivalPrefabSwapService {
                 PlotFootprintRecord.union(PlotFootprintRecord.union(currentBox, targetBox), livePlot.toFootprint());
             // Corner props live in edge chunks that are often unloaded when the swap runs from a game-time tick.
             PlotFootprintChunkUtil.ensureFootprintChunksLoaded(world, clearFootprint);
+            PropPlotTeardown.packageIntersecting(world, plugin, clearFootprint, null, store);
             PlotBuildingRelocation.relocateTownNpcsOutOfFootprint(store, live, clearFootprint);
             int removed =
                 PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(store, clearFootprint, live);

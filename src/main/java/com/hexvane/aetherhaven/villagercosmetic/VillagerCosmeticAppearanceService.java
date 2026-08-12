@@ -9,6 +9,9 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
 import com.hypixel.hytale.server.core.asset.type.model.config.ModelAttachment;
+import com.hypixel.hytale.server.core.cosmetics.CosmeticRegistry;
+import com.hypixel.hytale.server.core.cosmetics.CosmeticsModule;
+import com.hypixel.hytale.server.core.cosmetics.PlayerSkinPart;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -16,6 +19,7 @@ import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -23,6 +27,7 @@ import javax.annotation.Nullable;
 /** Merges town cosmetic overrides onto villager models and applies them to live entities. */
 public final class VillagerCosmeticAppearanceService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+    private static final String HAIRCUT_MODEL_PREFIX = "Characters/Haircuts/";
 
     private VillagerCosmeticAppearanceService() {}
 
@@ -91,6 +96,7 @@ public final class VillagerCosmeticAppearanceService {
             }
             effective.put(slot, cosmeticId);
         }
+        VillagerCosmeticDefinition headDef = null;
         for (Map.Entry<String, String> e : effective.entrySet()) {
             String slot = e.getKey();
             String cosmeticId = e.getValue();
@@ -103,8 +109,131 @@ public final class VillagerCosmeticAppearanceService {
                 continue;
             }
             list.add(new ModelAttachment(def.model(), def.texture(), null, null, 1.0));
+            if (VillagerCosmeticDefinition.SLOT_HEAD_ACCESSORY.equalsIgnoreCase(slot)) {
+                headDef = def;
+            }
+        }
+        if (headDef != null) {
+            applyHeadAccessoryHairRules(list, headDef.headAccessoryType());
         }
         return list.toArray(ModelAttachment[]::new);
+    }
+
+    /**
+     * Matches player hat hair rules for NPC attachment lists: fully covering hides haircuts, half covering swaps
+     * styles that require a generic base, simple leaves hair alone.
+     */
+    private static void applyHeadAccessoryHairRules(
+        @Nonnull List<ModelAttachment> list,
+        @Nonnull VillagerCosmeticHeadAccessoryType type
+    ) {
+        if (type == VillagerCosmeticHeadAccessoryType.Simple) {
+            return;
+        }
+        if (type == VillagerCosmeticHeadAccessoryType.FullyCovering) {
+            list.removeIf(a -> isHaircutModel(a.getModel()));
+            return;
+        }
+        CosmeticRegistry registry = resolveCosmeticRegistry();
+        if (registry == null) {
+            return;
+        }
+        Map<String, PlayerSkinPart> haircuts = registry.getHaircuts();
+        for (int i = 0; i < list.size(); i++) {
+            ModelAttachment current = list.get(i);
+            if (!isHaircutModel(current.getModel())) {
+                continue;
+            }
+            PlayerSkinPart haircutPart = findHaircutByModel(haircuts, current.getModel());
+            if (haircutPart == null
+                || !haircutPart.doesRequireGenericHaircut()
+                || haircutPart.getHairType() == null) {
+                continue;
+            }
+            PlayerSkinPart generic = haircuts.get("Generic" + haircutPart.getHairType().name());
+            if (generic == null || generic.getModel() == null || generic.getModel().isBlank()) {
+                continue;
+            }
+            String texture =
+                generic.getGreyscaleTexture() != null && !generic.getGreyscaleTexture().isBlank()
+                    ? generic.getGreyscaleTexture()
+                    : current.getTexture();
+            String gradientSet =
+                generic.getGradientSet() != null && !generic.getGradientSet().isBlank()
+                    ? generic.getGradientSet()
+                    : current.getGradientSet();
+            list.set(
+                i,
+                new ModelAttachment(
+                    generic.getModel(),
+                    texture,
+                    gradientSet,
+                    current.getGradientId(),
+                    current.getWeight()
+                )
+            );
+        }
+    }
+
+    private static boolean isHaircutModel(@Nullable String modelPath) {
+        if (modelPath == null || modelPath.isBlank()) {
+            return false;
+        }
+        String path = modelPath.trim();
+        return path.regionMatches(true, 0, HAIRCUT_MODEL_PREFIX, 0, HAIRCUT_MODEL_PREFIX.length());
+    }
+
+    @Nullable
+    private static PlayerSkinPart findHaircutByModel(
+        @Nonnull Map<String, PlayerSkinPart> haircuts,
+        @Nonnull String modelPath
+    ) {
+        String needle = modelPath.trim();
+        for (PlayerSkinPart part : haircuts.values()) {
+            if (part == null || part.getModel() == null) {
+                continue;
+            }
+            if (needle.equalsIgnoreCase(part.getModel().trim())) {
+                return part;
+            }
+        }
+        String stem = haircutStem(needle);
+        if (stem.isEmpty()) {
+            return null;
+        }
+        PlayerSkinPart byId = haircuts.get(stem);
+        if (byId != null) {
+            return byId;
+        }
+        for (Map.Entry<String, PlayerSkinPart> e : haircuts.entrySet()) {
+            if (e.getKey() != null && e.getKey().equalsIgnoreCase(stem)) {
+                return e.getValue();
+            }
+        }
+        return null;
+    }
+
+    @Nonnull
+    private static String haircutStem(@Nonnull String modelPath) {
+        String path = modelPath.replace('\\', '/');
+        int slash = path.lastIndexOf('/');
+        String file = slash >= 0 ? path.substring(slash + 1) : path;
+        String lower = file.toLowerCase(Locale.ROOT);
+        if (lower.endsWith(".blockymodel")) {
+            file = file.substring(0, file.length() - ".blockymodel".length());
+        }
+        return file.trim();
+    }
+
+    @Nullable
+    private static CosmeticRegistry resolveCosmeticRegistry() {
+        try {
+            CosmeticsModule module = CosmeticsModule.get();
+            return module != null ? module.getRegistry() : null;
+        } catch (Exception e) {
+            LOGGER.atFine().withCause(e).log("Cosmetic registry unavailable for villager hair covering");
+            return null;
+        }
     }
 
     @Nonnull

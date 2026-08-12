@@ -120,6 +120,16 @@ public final class FestivalDefinition {
     @Nullable
     private WheelLocalRow wheelLocal;
 
+    /** Tree climb race start pads in prefab-local space (up to four players). */
+    @SerializedName("raceStartSpots")
+    @Nullable
+    private List<RaceStartSpotRow> raceStartSpots;
+
+    /** Tree climb finish crystal cell in prefab-local space. */
+    @SerializedName("raceFinishLocal")
+    @Nullable
+    private RaceFinishLocalRow raceFinishLocal;
+
     /** Item ids a mechanic may hand out, e.g. the New Life seed burst pool. */
     @SerializedName("burstItemIds")
     @Nullable
@@ -247,6 +257,16 @@ public final class FestivalDefinition {
     @Nullable
     public WheelLocalRow getWheelLocal() {
         return wheelLocal;
+    }
+
+    @Nonnull
+    public List<RaceStartSpotRow> getRaceStartSpots() {
+        return raceStartSpots != null ? List.copyOf(raceStartSpots) : List.of();
+    }
+
+    @Nullable
+    public RaceFinishLocalRow getRaceFinishLocal() {
+        return raceFinishLocal;
     }
 
     @Nonnull
@@ -627,6 +647,80 @@ public final class FestivalDefinition {
             row.localY = y;
             row.localZ = z;
             row.yawDegrees = yawDegrees;
+            return row;
+        }
+    }
+
+    /** One tree climb race start pad in prefab-local space. */
+    public static final class RaceStartSpotRow {
+        @SerializedName("localX")
+        private int localX;
+
+        @SerializedName("localY")
+        private int localY;
+
+        @SerializedName("localZ")
+        private int localZ;
+
+        @SerializedName("yawDegrees")
+        private float yawDegrees;
+
+        public int getLocalX() {
+            return localX;
+        }
+
+        public int getLocalY() {
+            return localY;
+        }
+
+        public int getLocalZ() {
+            return localZ;
+        }
+
+        public float getYawDegrees() {
+            return yawDegrees;
+        }
+
+        @Nonnull
+        public static RaceStartSpotRow of(int x, int y, int z, float yawDegrees) {
+            RaceStartSpotRow row = new RaceStartSpotRow();
+            row.localX = x;
+            row.localY = y;
+            row.localZ = z;
+            row.yawDegrees = yawDegrees;
+            return row;
+        }
+    }
+
+    /** Tree climb finish crystal cell in prefab-local space. */
+    public static final class RaceFinishLocalRow {
+        @SerializedName("localX")
+        private int localX;
+
+        @SerializedName("localY")
+        private int localY;
+
+        @SerializedName("localZ")
+        private int localZ;
+
+        public int getLocalX() {
+            return localX;
+        }
+
+        public int getLocalY() {
+            return localY;
+        }
+
+        public int getLocalZ() {
+            return localZ;
+        }
+
+        @Nonnull
+        public static RaceFinishLocalRow of(int x, int y, int z) {
+            RaceFinishLocalRow row = new RaceFinishLocalRow();
+            row.localX = x;
+            row.localY = y;
+            row.localZ = z;
             return row;
         }
     }

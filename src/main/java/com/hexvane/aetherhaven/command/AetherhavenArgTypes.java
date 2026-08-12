@@ -91,6 +91,37 @@ public final class AetherhavenArgTypes {
         }
     };
 
+    public static final SingleArgumentType<String> PROP_ID = new SingleArgumentType<>(
+        langName("propId"),
+        langUsage("propId"),
+        "aqua_lamp"
+    ) {
+        @Override
+        public String parse(@Nonnull String input, @Nonnull ParseResult parseResult) {
+            return input;
+        }
+
+        @Override
+        public void suggest(
+            @Nonnull CommandSender sender,
+            @Nonnull String textAlreadyEntered,
+            int numParametersTyped,
+            @Nonnull SuggestionResult result
+        ) {
+            AetherhavenPlugin plugin = AetherhavenCommandSuggest.plugin();
+            if (plugin == null) {
+                return;
+            }
+            AetherhavenCommandSuggest.suggestPrefix(result, textAlreadyEntered, plugin.getPropCatalog().ids());
+        }
+
+        @Override
+        public int getSuggestionValueCount() {
+            AetherhavenPlugin plugin = AetherhavenCommandSuggest.plugin();
+            return plugin != null ? plugin.getPropCatalog().ids().size() : -1;
+        }
+    };
+
     public static final SingleArgumentType<String> CUSTOM_BUILDING_ID = new SingleArgumentType<>(
         langName("customBuildingId"),
         langUsage("customBuildingId"),

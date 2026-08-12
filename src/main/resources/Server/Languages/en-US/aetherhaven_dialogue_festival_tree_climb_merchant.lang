@@ -1,0 +1,8 @@
+aetherhaven.dialogue.festival_tree_climb_merchant.speaker=Sapling Merchant
+aetherhaven.dialogue.festival_tree_climb_merchant.main_hub.body=Rare saplings and leafy looks for summer festival tickets. Climb well, then come spend what you earn.
+aetherhaven.dialogue.festival_tree_climb_merchant.main_hub.c_shop=Browse saplings
+aetherhaven.dialogue.festival_tree_climb_merchant.main_hub.c_about=What do you sell?
+aetherhaven.dialogue.festival_tree_climb_merchant.main_hub.c_goodbye=Goodbye
+
+aetherhaven.dialogue.festival_tree_climb_merchant.about.body=I trade rare saplings and leafy looks for summer festival tickets. Willow, poisoned, frostwood, crystal, spiral, and stormbark saplings, plus bush, beehive, and jungle sapling hats for your town wardrobe. Talk to the race attendant if you still need tickets.
+aetherhaven.dialogue.festival_tree_climb_merchant.about.c_back=Back

@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.placement.PlotBlockClearMode;
 import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
 import com.hexvane.aetherhaven.placement.PrefabVolumeClearSpec;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
+import com.hexvane.aetherhaven.prop.PropPlotTeardown;
 import com.hexvane.aetherhaven.shopspot.ShopSpotPlotRelocation;
 import com.hexvane.aetherhaven.shopspot.ShopSpotRegistry;
 import com.hexvane.aetherhaven.tourist.TouristPortalPlotRelocation;
@@ -16,6 +17,7 @@ import com.hexvane.aetherhaven.tourist.TouristPortalRegistry;
 import com.hexvane.aetherhaven.townsfolk.PendingEntityRemovalService;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkExistenceService;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -99,7 +101,7 @@ public final class TownDissolutionService {
         @Nonnull Store<EntityStore> entityStore,
         @Nonnull PoiRegistry reg
     ) {
-        clearPlotFromWorld(world, plugin, town, p, entityStore, reg, PlotBlockClearMode.FULL_FOOTPRINT, null);
+        clearPlotFromWorld(world, plugin, town, p, entityStore, reg, PlotBlockClearMode.FULL_FOOTPRINT, null, null);
     }
 
     public static void clearPlotFromWorld(
@@ -112,6 +114,21 @@ public final class TownDissolutionService {
         @Nonnull PlotBlockClearMode blockClearMode,
         @Nullable PrefabVolumeClearSpec sparseClear
     ) {
+        clearPlotFromWorld(world, plugin, town, p, entityStore, reg, blockClearMode, sparseClear, null);
+    }
+
+    public static void clearPlotFromWorld(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance p,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull PoiRegistry reg,
+        @Nonnull PlotBlockClearMode blockClearMode,
+        @Nullable PrefabVolumeClearSpec sparseClear,
+        @Nullable Ref<EntityStore> actingPlayer
+    ) {
+        PropPlotTeardown.packageIntersecting(world, plugin, p.toFootprint(), actingPlayer, entityStore);
         if (p.getState() == PlotInstanceState.BLUEPRINTING) {
             world.breakBlock(p.getSignX(), p.getSignY(), p.getSignZ(), BREAK_SETTINGS);
         } else if (p.getState() == PlotInstanceState.ASSEMBLING) {

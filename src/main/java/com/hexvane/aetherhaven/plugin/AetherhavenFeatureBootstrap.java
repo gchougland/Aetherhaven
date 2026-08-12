@@ -17,6 +17,7 @@ import com.hexvane.aetherhaven.pathtool.PathDesignerBootstrap;
 import com.hexvane.aetherhaven.patrol.PatrolRoutesBootstrap;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorBootstrap;
 import com.hexvane.aetherhaven.production.ProductionBootstrap;
+import com.hexvane.aetherhaven.prop.PropsBootstrap;
 import com.hexvane.aetherhaven.purification.PurificationPowderPlayerComponent;
 import com.hexvane.aetherhaven.quest.QuestsBootstrap;
 import com.hexvane.aetherhaven.reputation.ReputationBootstrap;

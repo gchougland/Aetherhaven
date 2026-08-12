@@ -18,6 +18,26 @@ items.Aetherhaven_Plot_Sign.description=Marks where a building can be placed. Cr
 
 items.Aetherhaven_Calendar.name=Calendar
 items.Aetherhaven_Calendar.description=Hang on a wall to see the season calendar and villager birthdays. Craft at the town planning desk with wood.
+
+items.Aetherhaven_Prop_Item.name=Prop
+items.Aetherhaven_Prop_Item.description=Right click to place this decoration. Use a packaging wand to pick it back up.
+items.Aetherhaven_Prop_Item.instance.name={prop}
+items.Aetherhaven_Prop_Item.instance.description=Right click to place {prop}. Use a packaging wand to pick it back up.
+items.Aetherhaven_Prop_Cabbage_Trough.name=Cabbage Trough
+items.Aetherhaven_Prop_Cabbage_Trough.description=A trough packed with cabbages. Right click to place it.
+items.Aetherhaven_Prop_Palm_Streetlight.name=Palm Streetlight
+items.Aetherhaven_Prop_Palm_Streetlight.description=A leafy palm streetlight. Right click to place it.
+items.Aetherhaven_Prop_Plant_Arch.name=Plant Arch
+items.Aetherhaven_Prop_Plant_Arch.description=A vine covered arch. Right click to place it.
+items.Aetherhaven_Prop_Pig_Pile.name=Pig Pile
+items.Aetherhaven_Prop_Pig_Pile.description=A silly pile of pigs. Right click to place it.
+items.Aetherhaven_Prop_Balloons.name=Balloons
+items.Aetherhaven_Prop_Balloons.description=A bunch of festival balloons. Right click to place them.
+items.Aetherhaven_Prop_Festival_Flag.name=Festival Flag
+items.Aetherhaven_Prop_Festival_Flag.description=A bright festival flag. Right click to place it.
+items.Aetherhaven_Packaging_Wand.name=Packaging Wand
+items.Aetherhaven_Packaging_Wand.description=Point at a prop and use to pack it back into an item.
+
 items.Aetherhaven_Carnival_Wheel.name=Carnival Wheel
 items.Aetherhaven_Carnival_Wheel.description=A colorful wheel that hangs on a wall at the carnival.
 items.Aetherhaven_Carnival_Goblin_Whacker.name=Goblin Whacker
@@ -27,6 +47,9 @@ items.Aetherhaven_Festival_Ticket_Spring.name=Spring Festival Ticket
 items.Aetherhaven_Festival_Ticket_Spring.description=A ticket for the spring festival.
 items.Aetherhaven_Festival_Ticket_Summer.name=Summer Festival Ticket
 items.Aetherhaven_Festival_Ticket_Summer.description=A ticket for the summer festival.
+
+items.Aetherhaven_Festival_Firework.name=Firework
+items.Aetherhaven_Festival_Firework.description=Use on the ground to send it up and watch it burst.
 items.Aetherhaven_Festival_Ticket_Autumn.name=Autumn Festival Ticket
 items.Aetherhaven_Festival_Ticket_Autumn.description=A ticket for the autumn festival.
 items.Aetherhaven_Festival_Ticket_Winter.name=Winter Festival Ticket
@@ -490,3 +513,9 @@ items.Aetherhaven_Villager_Cosmetic_Red_Afro.description=Use to unlock a red afr
 
 items.Aetherhaven_Villager_Cosmetic_Jester_Hat.name=Jester Hat Pattern
 items.Aetherhaven_Villager_Cosmetic_Jester_Hat.description=Use to unlock a jester hat for villagers in your town wardrobe. Buy it from the carnival merchant with summer festival tickets.
+items.Aetherhaven_Villager_Cosmetic_Bush_Hat.name=Bush Hat Pattern
+items.Aetherhaven_Villager_Cosmetic_Bush_Hat.description=Use to unlock a green bush hat for villagers in your town wardrobe. Buy it from the tree climb merchant with summer festival tickets.
+items.Aetherhaven_Villager_Cosmetic_Beehive_Hat.name=Beehive Hat Pattern
+items.Aetherhaven_Villager_Cosmetic_Beehive_Hat.description=Use to unlock a beehive hat for villagers in your town wardrobe. Buy it from the tree climb merchant with summer festival tickets.
+items.Aetherhaven_Villager_Cosmetic_Jungle_Sapling_Hat.name=Jungle Sapling Hat Pattern
+items.Aetherhaven_Villager_Cosmetic_Jungle_Sapling_Hat.description=Use to unlock a jungle sapling hat for villagers in your town wardrobe. Buy it from the tree climb merchant with summer festival tickets.

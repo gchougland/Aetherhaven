@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.prefab.ConstructionAnimator;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
+import com.hexvane.aetherhaven.prop.PropPlotTeardown;
 import com.hexvane.aetherhaven.shopspot.ShopSpotPlotRelocation;
 import com.hexvane.aetherhaven.shopspot.ShopSpotRegistry;
 import com.hexvane.aetherhaven.tourist.TouristPortalPlotRelocation;
@@ -132,6 +133,8 @@ public final class PlotBuildingRelocation {
         );
 
         relocateTownNpcsOutOfFootprint(store, town, oldFootprint);
+
+        PropPlotTeardown.packageIntersecting(world, plugin, oldFootprint, ref, store);
 
         PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(store, oldFootprint, town);
         PrefabFootprintClearUtil.clearPrefabCellsAtAnchor(

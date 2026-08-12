@@ -135,6 +135,10 @@ public final class PlotCreatorSubstepHandler {
             case FESTIVAL_WHACK_SPAWN ->
                 PlotCreatorFestivalPlacement.tryRemoveWhackNear(draft, targetBlock, playerRef);
             case FESTIVAL_WHEEL -> PlotCreatorFestivalPlacement.tryRemoveWheelNear(draft, targetBlock, playerRef);
+            case FESTIVAL_TREE_CLIMB_START ->
+                PlotCreatorFestivalPlacement.tryRemoveTreeClimbStartNear(draft, targetBlock, playerRef);
+            case FESTIVAL_TREE_CLIMB_FINISH ->
+                PlotCreatorFestivalPlacement.tryRemoveTreeClimbFinishNear(draft, targetBlock, playerRef);
         };
     }
 
@@ -443,6 +447,15 @@ public final class PlotCreatorSubstepHandler {
                 playerEntityRef,
                 store
             );
+            case FESTIVAL_TREE_CLIMB_START -> PlotCreatorFestivalPlacement.placeTreeClimbStart(
+                session,
+                targetBlock,
+                playerRef,
+                playerEntityRef,
+                store
+            );
+            case FESTIVAL_TREE_CLIMB_FINISH ->
+                PlotCreatorFestivalPlacement.placeTreeClimbFinish(session, targetBlock, playerRef);
         };
     }
 

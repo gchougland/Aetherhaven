@@ -17,6 +17,7 @@ import com.hexvane.aetherhaven.dialogue.DialogueResolver;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.equipment.data.EquipmentProfileCatalog;
 import com.hexvane.aetherhaven.festival.FestivalCatalog;
+import com.hexvane.aetherhaven.prop.PropCatalog;
 import com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticCatalog;
 import com.hexvane.aetherhaven.festival.FestivalMechanicRegistry;
 import com.hexvane.aetherhaven.guide.GuideTopicRepository;
@@ -112,6 +113,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private VillagerScheduleRegistry villagerScheduleRegistry = VillagerScheduleRegistry.empty();
     private ScheduleLocationCatalog scheduleLocationCatalog = ScheduleLocationCatalog.empty();
     private FestivalCatalog festivalCatalog = FestivalCatalog.empty();
+    private PropCatalog propCatalog = PropCatalog.empty();
     private VillagerCosmeticCatalog villagerCosmeticCatalog = VillagerCosmeticCatalog.empty();
     private final FestivalMechanicRegistry festivalMechanicRegistry = new FestivalMechanicRegistry();
     private VillagerDefinitionCatalog villagerDefinitionCatalog = VillagerDefinitionCatalog.empty();
@@ -316,6 +318,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public FestivalCatalog getFestivalCatalog() {
         return festivalCatalog;
+    }
+
+    @Nonnull
+    public PropCatalog getPropCatalog() {
+        return propCatalog;
     }
 
     @Nonnull
@@ -527,6 +534,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.worldQuestBoardCatalog = WorldQuestBoardCatalog.loadFromAssetPacks();
         this.scheduleLocationCatalog = ScheduleLocationCatalog.loadFromAssetPacks();
         this.festivalCatalog = FestivalCatalog.loadFromAssetPacksOrClasspath(cl, customData);
+        this.propCatalog = PropCatalog.loadFromAssetPacksOrClasspath(cl, customData);
         this.villagerCosmeticCatalog = VillagerCosmeticCatalog.loadFromClasspath(cl);
         this.villagerScheduleRegistry =
             VillagerScheduleRegistry.loadFromAssetPacksOrClasspath(cl, this.villagerDefinitionCatalog, this.scheduleLocationCatalog);

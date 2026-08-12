@@ -1,0 +1,443 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Wood_Softwood_Beam"
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "Invulnerable": {},
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Aetherhaven_Festival_Balloon_Green",
+            "Scale": 1.0,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.416839599609375,
+            "Y": 1.000457763671875,
+            "Z": 0.5152587890625
+          },
+          "Rotation": {
+            "Pitch": -0.15019457042217255,
+            "Yaw": 0.889103353023529,
+            "Roll": 0.12082847207784653
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "9n9JEYHlNfeU9wNTufjfXQ==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": -0.15019457042217255,
+            "Yaw": 0.8891023993492126,
+            "Roll": 0.12082874029874802
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Invulnerable": {},
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Aetherhaven_Festival_Balloon",
+            "Scale": 1.0,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.523345947265625,
+            "Y": 0.962066650390625,
+            "Z": 0.4557647705078125
+          },
+          "Rotation": {
+            "Pitch": -0.39860519766807556,
+            "Yaw": 0.32762661576271057,
+            "Roll": -0.13115960359573364
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "1oy+fLxCOOymPma9vGQM9Q==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": -0.3986039161682129,
+            "Yaw": 0.3276270925998688,
+            "Roll": -0.13115918636322021
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Invulnerable": {},
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Aetherhaven_Festival_Balloon_Red",
+            "Scale": 1.0,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.52862548828125,
+            "Y": 0.8877105712890625,
+            "Z": 0.521270751953125
+          },
+          "Rotation": {
+            "Pitch": 0.21547526121139526,
+            "Yaw": -0.006663636304438114,
+            "Roll": -0.24074134230613708
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "fHcT6oHPObyM+dYBahl6uQ==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.21547465026378632,
+            "Yaw": -0.006662444211542606,
+            "Roll": -0.24074144661426544
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Transform": {
+          "Position": {
+            "X": 6.0,
+            "Y": 11.0,
+            "Z": 0.0
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0,
+            "Roll": 0.0
+          }
+        },
+        "TriggerVolume": {
+          "Shape": {
+            "Type": "Box",
+            "Min": {
+              "X": -14.0,
+              "Y": -12.0,
+              "Z": -14.0
+            },
+            "Max": {
+              "X": 14.0,
+              "Y": 12.0,
+              "Z": 14.0
+            }
+          },
+          "Effects": [
+            {
+              "Type": "SetMusic",
+              "Event": "ENTER",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "Track_Aetherhaven_WelcomeFeast",
+              "ClearMusic": false
+            },
+            {
+              "Type": "SetMusic",
+              "Event": "EXIT",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "",
+              "ClearMusic": true
+            }
+          ],
+          "Enabled": true,
+          "TargetTypes": [
+            "Player"
+          ],
+          "KeepLoaded": false,
+          "Color": {
+            "X": 0.800000011920929,
+            "Y": 0.0,
+            "Z": 0.24313725531101227
+          },
+          "PrefabIndex": 0
+        }
+      }
+    },
+    {
+      "Components": {
+        "Transform": {
+          "Position": {
+            "X": 6.0,
+            "Y": 11.0,
+            "Z": -3.0
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0,
+            "Roll": 0.0
+          }
+        },
+        "TriggerVolume": {
+          "Shape": {
+            "Type": "Box",
+            "Min": {
+              "X": -14.0,
+              "Y": -12.0,
+              "Z": -14.0
+            },
+            "Max": {
+              "X": 14.0,
+              "Y": 12.0,
+              "Z": 14.0
+            }
+          },
+          "Effects": [
+            {
+              "Type": "SetMusic",
+              "Event": "ENTER",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "Track_Aetherhaven_WelcomeFeast",
+              "ClearMusic": false
+            },
+            {
+              "Type": "SetMusic",
+              "Event": "EXIT",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "",
+              "ClearMusic": true
+            }
+          ],
+          "Enabled": true,
+          "TargetTypes": [
+            "Player"
+          ],
+          "KeepLoaded": false,
+          "Color": {
+            "X": 0.800000011920929,
+            "Y": 0.0,
+            "Z": 0.24313725531101227
+          },
+          "PrefabIndex": 1
+        }
+      }
+    },
+    {
+      "Components": {
+        "Transform": {
+          "Position": {
+            "X": -5.0,
+            "Y": 11.0,
+            "Z": -2.0
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0,
+            "Roll": 0.0
+          }
+        },
+        "TriggerVolume": {
+          "Shape": {
+            "Type": "Box",
+            "Min": {
+              "X": -14.000002113941028,
+              "Y": -12.0,
+              "Z": -14.000002113941028
+            },
+            "Max": {
+              "X": 14.000002113941028,
+              "Y": 12.0,
+              "Z": 14.000002113941028
+            }
+          },
+          "Effects": [
+            {
+              "Type": "SetMusic",
+              "Event": "ENTER",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "Track_Aetherhaven_WelcomeFeast",
+              "ClearMusic": false
+            },
+            {
+              "Type": "SetMusic",
+              "Event": "EXIT",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "",
+              "ClearMusic": true
+            }
+          ],
+          "Enabled": true,
+          "TargetTypes": [
+            "Player"
+          ],
+          "KeepLoaded": false,
+          "Color": {
+            "X": 0.800000011920929,
+            "Y": 0.0,
+            "Z": 0.24313725531101227
+          },
+          "PrefabIndex": 2
+        }
+      }
+    },
+    {
+      "Components": {
+        "Transform": {
+          "Position": {
+            "X": -2.0,
+            "Y": 11.0,
+            "Z": 3.0
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0,
+            "Roll": 0.0
+          }
+        },
+        "TriggerVolume": {
+          "Shape": {
+            "Type": "Box",
+            "Min": {
+              "X": -14.000000611959447,
+              "Y": -12.0,
+              "Z": -14.000000611959447
+            },
+            "Max": {
+              "X": 14.000000611959447,
+              "Y": 12.0,
+              "Z": 14.000000611959447
+            }
+          },
+          "Effects": [
+            {
+              "Type": "SetMusic",
+              "Event": "ENTER",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "Track_Aetherhaven_WelcomeFeast",
+              "ClearMusic": false
+            },
+            {
+              "Type": "SetMusic",
+              "Event": "EXIT",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "",
+              "ClearMusic": true
+            }
+          ],
+          "Enabled": true,
+          "TargetTypes": [
+            "Player"
+          ],
+          "KeepLoaded": false,
+          "Color": {
+            "X": 0.800000011920929,
+            "Y": 0.0,
+            "Z": 0.24313725531101227
+          },
+          "PrefabIndex": 3
+        }
+      }
+    },
+    {
+      "Components": {
+        "Transform": {
+          "Position": {
+            "X": 6.0,
+            "Y": 11.0,
+            "Z": 3.0
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0,
+            "Roll": 0.0
+          }
+        },
+        "TriggerVolume": {
+          "Shape": {
+            "Type": "Box",
+            "Min": {
+              "X": -14.0,
+              "Y": -12.0,
+              "Z": -14.0
+            },
+            "Max": {
+              "X": 14.0,
+              "Y": 12.0,
+              "Z": 14.0
+            }
+          },
+          "Effects": [
+            {
+              "Type": "SetMusic",
+              "Event": "ENTER",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "Track_Aetherhaven_WelcomeFeast",
+              "ClearMusic": false
+            },
+            {
+              "Type": "SetMusic",
+              "Event": "EXIT",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "",
+              "ClearMusic": true
+            }
+          ],
+          "Enabled": true,
+          "TargetTypes": [
+            "Player"
+          ],
+          "KeepLoaded": false,
+          "Color": {
+            "X": 0.800000011920929,
+            "Y": 0.0,
+            "Z": 0.24313725531101227
+          },
+          "PrefabIndex": 4
+        }
+      }
+    }
+  ]
+}

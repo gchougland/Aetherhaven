@@ -1,0 +1,36 @@
+$C = "../Common.ui";
+
+Group #TreeClimbRaceHudRoot {
+  LayoutMode: Top;
+  Anchor: (Top: 52);
+
+  Group {
+    LayoutMode: Left;
+
+    Group {
+      FlexWeight: 1;
+    }
+
+    Group #TreeClimbTimerPanel {
+      LayoutMode: Top;
+      Anchor: (Width: 220);
+      Padding: (Horizontal: 12, Vertical: 8);
+      Background: #121820(0.88);
+
+      Label #TreeClimbTimerLabel {
+        Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #c8d4a8, HorizontalAlignment: Center);
+        Anchor: (Bottom: 2);
+        Text: "";
+      }
+
+      Label #TreeClimbTimerText {
+        Style: (...$C.@DefaultLabelStyle, FontSize: 28, TextColor: #f4e8c8, RenderBold: true, HorizontalAlignment: Center);
+        Text: "0.00";
+      }
+    }
+
+    Group {
+      FlexWeight: 1;
+    }
+  }
+}

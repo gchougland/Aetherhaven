@@ -12,6 +12,9 @@ aetherhaven.villagerCosmetic.balloonHat.blue=Blue Balloon Hat
 aetherhaven.villagerCosmetic.clownNose=Clown Nose
 aetherhaven.villagerCosmetic.redAfro=Red Afro
 aetherhaven.villagerCosmetic.jesterHat=Jester Hat
+aetherhaven.villagerCosmetic.bushHat=Bush Hat
+aetherhaven.villagerCosmetic.beehiveHat=Beehive Hat
+aetherhaven.villagerCosmetic.jungleSaplingHat=Jungle Sapling Hat
 
 aetherhaven.villagerCosmetic.unlock.success=Unlocked {name} for your town wardrobe.
 aetherhaven.villagerCosmetic.unlock.already=Your town already has {name}.

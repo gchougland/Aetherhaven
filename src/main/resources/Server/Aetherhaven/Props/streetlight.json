@@ -1,0 +1,5 @@
+﻿{
+  "id": "streetlight",
+  "displayName": "Streetlight",
+  "prefabPath": "Props/Streetlight.prefab.json"
+}

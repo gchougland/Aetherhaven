@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.plotcreator;
 import com.hexvane.aetherhaven.festival.NewLifeFestivalMechanic;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalIds;
 import com.hexvane.aetherhaven.festival.pigrace.PigRaceLanes;
+import com.hexvane.aetherhaven.festival.treeclimb.TreeClimbIds;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -17,6 +18,8 @@ public final class PlotCreatorFestivalMechanicDefaults {
     public static final int DEFAULT_CARNIVAL_BALLOON_SPAWNS = 6;
     public static final int DEFAULT_CARNIVAL_WHACK_SPAWNS = 6;
     public static final int DEFAULT_CARNIVAL_TOURIST_SPOTS = 8;
+    public static final int DEFAULT_TREE_CLIMB_TOURIST_SPOTS = TreeClimbIds.DEFAULT_TOURIST_SPOTS;
+    public static final int DEFAULT_TREE_CLIMB_STARTS = TreeClimbIds.MAX_RACERS;
 
     private PlotCreatorFestivalMechanicDefaults() {}
 
@@ -42,6 +45,12 @@ public final class PlotCreatorFestivalMechanicDefaults {
         if ("carnival".equals(lower) || "carnival festival".equals(lower)) {
             return CarnivalIds.MECHANIC_ID;
         }
+        if ("tree climbing".equals(lower)
+            || "tree climb".equals(lower)
+            || "tree_climbing".equals(lower)
+            || "treeclimb".equals(lower)) {
+            return TreeClimbIds.MECHANIC_ID;
+        }
         return lower;
     }
 
@@ -59,6 +68,9 @@ public final class PlotCreatorFestivalMechanicDefaults {
         }
         if (CarnivalIds.MECHANIC_ID.equals(key)) {
             return "Carnival";
+        }
+        if (TreeClimbIds.MECHANIC_ID.equals(key)) {
+            return "Tree Climbing";
         }
         return mechanicId.trim();
     }
@@ -96,19 +108,24 @@ public final class PlotCreatorFestivalMechanicDefaults {
         }
         if (!draft.getFestivalTouristSpots().isEmpty()
             || PigRaceLanes.MECHANIC_ID.equals(mechanic)
-            || CarnivalIds.MECHANIC_ID.equals(mechanic)) {
+            || CarnivalIds.MECHANIC_ID.equals(mechanic)
+            || TreeClimbIds.MECHANIC_ID.equals(mechanic)) {
             int defaultTourists =
                 CarnivalIds.MECHANIC_ID.equals(mechanic)
                     ? DEFAULT_CARNIVAL_TOURIST_SPOTS
-                    : DEFAULT_PIG_RACE_TOURIST_SPOTS;
+                    : TreeClimbIds.MECHANIC_ID.equals(mechanic)
+                        ? DEFAULT_TREE_CLIMB_TOURIST_SPOTS
+                        : DEFAULT_PIG_RACE_TOURIST_SPOTS;
+            boolean forceTourists =
+                PigRaceLanes.MECHANIC_ID.equals(mechanic)
+                    || CarnivalIds.MECHANIC_ID.equals(mechanic)
+                    || TreeClimbIds.MECHANIC_ID.equals(mechanic);
             int touristCount =
                 Math.max(
                     draft.getFestivalTouristSpots().isEmpty()
                         ? defaultTourists
                         : draft.getFestivalTouristSpots().size(),
-                    (PigRaceLanes.MECHANIC_ID.equals(mechanic) || CarnivalIds.MECHANIC_ID.equals(mechanic))
-                        ? defaultTourists
-                        : 1
+                    forceTourists ? defaultTourists : 1
                 );
             out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_TOURIST_SPOT, touristCount));
         }
@@ -152,6 +169,22 @@ public final class PlotCreatorFestivalMechanicDefaults {
             out.add(PlotCreatorSpotEntry.festivalNpc(CarnivalIds.BALLOON_NPC_ROLE, 1));
             out.add(PlotCreatorSpotEntry.festivalNpc(CarnivalIds.WHEEL_NPC_ROLE, 1));
             out.add(PlotCreatorSpotEntry.festivalNpc(CarnivalIds.WHACK_NPC_ROLE, 1));
+        }
+        if (!draft.getFestivalRaceStartSpots().isEmpty() || TreeClimbIds.MECHANIC_ID.equals(mechanic)) {
+            int startCount =
+                Math.max(
+                    draft.getFestivalRaceStartSpots().isEmpty()
+                        ? DEFAULT_TREE_CLIMB_STARTS
+                        : draft.getFestivalRaceStartSpots().size(),
+                    TreeClimbIds.MECHANIC_ID.equals(mechanic) ? DEFAULT_TREE_CLIMB_STARTS : 1
+                );
+            out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_TREE_CLIMB_START, startCount));
+        }
+        if (draft.getFestivalRaceFinishLocal() != null || TreeClimbIds.MECHANIC_ID.equals(mechanic)) {
+            out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_TREE_CLIMB_FINISH, 1));
+        }
+        if (TreeClimbIds.MECHANIC_ID.equals(mechanic)) {
+            out.add(PlotCreatorSpotEntry.festivalNpc(TreeClimbIds.ATTENDANT_NPC_ROLE, 1));
         }
         return out;
     }

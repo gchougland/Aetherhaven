@@ -23,6 +23,7 @@ import com.hexvane.aetherhaven.plot.PlotBlueprintSalvageBenchSystem;
 import com.hexvane.aetherhaven.plot.PlotTokenUnlockPageUseInteraction;
 import com.hexvane.aetherhaven.plot.PlotTokenUnlockPlayerInitSystem;
 import com.hexvane.aetherhaven.placement.PlotConstructionBlockResolver;
+import com.hexvane.aetherhaven.prop.PropsBootstrap;
 import com.hexvane.aetherhaven.quest.IntroQuestPromptService;
 import com.hexvane.aetherhaven.questboard.QuestBoardOnlineDawnService;
 import com.hexvane.aetherhaven.rts.RtsCommandService;
@@ -97,6 +98,7 @@ public final class AetherhavenCoreBootstrap {
             );
         registerGaiaStatueOpenUi(plugin);
         AetherhavenSubpluginAssetCodecs.registerAll(plugin);
+        PropsBootstrap.registerAssetCodecs(plugin);
         DialogueBootstrap.registerLoadHooks(plugin);
         AetherhavenNpcRoleLoader.register(plugin);
         registerTownsfolkRoleValidation(plugin);
@@ -173,6 +175,8 @@ public final class AetherhavenCoreBootstrap {
         plugin.registerAetherhavenSubcommand(new AetherhavenHudCommand());
         plugin.registerAetherhavenSubcommand(new AetherhavenCommunityCommand());
         plugin.registerAetherhavenSubcommand(new AetherhavenSupportCommand());
+        // After /ah command tree — props register systems and the prop subcommand.
+        PropsBootstrap.register(plugin, plugin);
         // After shared components and the /ah command tree — feature packs register systems and subcommands.
         AetherhavenFeatureBootstrap.registerEnabled(plugin);
         LOGGER.atInfo().log("Aetherhaven core v%s setup complete", plugin.getManifest().getVersion().toString());
@@ -189,6 +193,10 @@ public final class AetherhavenCoreBootstrap {
         );
         PermissionsModule.registerPermission(
             AetherhavenConstants.PERMISSION_FESTIVAL_SQUARE_BUILD,
+            HytalePermissionsProvider.GROUP_ADMIN
+        );
+        PermissionsModule.registerPermission(
+            AetherhavenConstants.PERMISSION_PROP_BREAK,
             HytalePermissionsProvider.GROUP_ADMIN
         );
     }

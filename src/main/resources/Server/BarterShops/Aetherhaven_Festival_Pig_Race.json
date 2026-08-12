@@ -62,6 +62,14 @@
       }
     },
     {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Aetherhaven_Prop_Pig_Pile", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Spring", "Quantity": 5 }],
+        "Stock": 4
+      }
+    },
+    {
       "Type": "Pool",
       "SlotCount": 3,
       "Trades": [

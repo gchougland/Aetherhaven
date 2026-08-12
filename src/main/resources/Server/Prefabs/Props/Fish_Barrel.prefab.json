@@ -1,0 +1,161 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Furniture_Tavern_Planter"
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Food_Fish_Raw"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.6440277099609375,
+            "Y": 0.6291122436523438,
+            "Z": 1.1103456020355225
+          },
+          "Rotation": {
+            "Pitch": -0.7852018475532532,
+            "Yaw": -1.1520724296569824,
+            "Roll": -1.825755000114441
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "5iLDvrYROEWq1x6ifHyAMg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0999999046325684
+        },
+        "Item": {
+          "Item": {
+            "Id": "Food_Fish_Raw",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Food_Fish_Raw"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.82342529296875,
+            "Y": 0.6291122436523438,
+            "Z": 9.306967258453369E-4
+          },
+          "Rotation": {
+            "Pitch": -0.7852005958557129,
+            "Yaw": 1.1227495670318604,
+            "Roll": -1.8257524967193604
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "PlHJcg+UMxiTuXwYlTk9Lg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.1999999284744263
+        },
+        "Item": {
+          "Item": {
+            "Id": "Food_Fish_Raw",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Food_Fish_Raw"
+        },
+        "Transform": {
+          "Position": {
+            "X": -0.0385894775390625,
+            "Y": 0.6291122436523438,
+            "Z": 0.22800609469413757
+          },
+          "Rotation": {
+            "Pitch": -0.8109612464904785,
+            "Yaw": -3.339974880218506,
+            "Roll": -1.8424407243728638
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "xNz7nZXGO4+rm2wuUNkt5A==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0999999046325684
+        },
+        "Item": {
+          "Item": {
+            "Id": "Food_Fish_Raw",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    }
+  ]
+}

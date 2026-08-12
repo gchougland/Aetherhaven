@@ -145,6 +145,53 @@ public final class PlotCreatorFestivalPlacement {
         return true;
     }
 
+    public static boolean placeTreeClimbStart(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> playerEntityRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        PlotCreatorDraft draft = session.getDraft();
+        PlotCreatorSpotPlacement.ResolvedSpot spot =
+            PlotCreatorSpotPlacement.resolveStandSpawn(session.getWorld(), targetBlock);
+        int[] local = PlotCreatorLocalCoords.toLocal(draft, spot.worldBlock());
+        if (hasRaceStartAt(draft, local)) {
+            playerRef.sendMessage(
+                Message.translation(
+                    "aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalTreeClimbStartAlreadyRecorded"
+                )
+            );
+            return true;
+        }
+        float yaw = playerYawDegrees(draft, playerEntityRef, store);
+        draft.getFestivalRaceStartSpots().add(
+            FestivalDefinition.RaceStartSpotRow.of(local[0], local[1], local[2], yaw)
+        );
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalTreeClimbStartRecorded")
+        );
+        return true;
+    }
+
+    public static boolean placeTreeClimbFinish(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef
+    ) {
+        PlotCreatorDraft draft = session.getDraft();
+        PlotCreatorSpotPlacement.ResolvedSpot spot =
+            PlotCreatorSpotPlacement.resolveStandSpawn(session.getWorld(), targetBlock);
+        int[] local = PlotCreatorLocalCoords.toLocal(draft, spot.worldBlock());
+        draft.setFestivalRaceFinishLocal(
+            FestivalDefinition.RaceFinishLocalRow.of(local[0], local[1], local[2])
+        );
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalTreeClimbFinishRecorded")
+        );
+        return true;
+    }
+
     public static boolean placeRaceLaneClick(
         @Nonnull PlotCreatorSession session,
         @Nonnull Vector3i targetBlock,
@@ -331,6 +378,56 @@ public final class PlotCreatorFestivalPlacement {
         return true;
     }
 
+    public static boolean tryRemoveTreeClimbStartNear(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef
+    ) {
+        Iterator<FestivalDefinition.RaceStartSpotRow> it = draft.getFestivalRaceStartSpots().iterator();
+        while (it.hasNext()) {
+            FestivalDefinition.RaceStartSpotRow spot = it.next();
+            Vector3i world =
+                PlotCreatorLocalCoords.toWorldBlock(
+                    draft,
+                    new int[] {spot.getLocalX(), spot.getLocalY(), spot.getLocalZ()}
+                );
+            if (near(world, targetBlock)) {
+                it.remove();
+                playerRef.sendMessage(
+                    Message.translation(
+                        "aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalTreeClimbStartRemoved"
+                    )
+                );
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean tryRemoveTreeClimbFinishNear(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef
+    ) {
+        FestivalDefinition.RaceFinishLocalRow finish = draft.getFestivalRaceFinishLocal();
+        if (finish == null) {
+            return false;
+        }
+        Vector3i world =
+            PlotCreatorLocalCoords.toWorldBlock(
+                draft,
+                new int[] {finish.getLocalX(), finish.getLocalY(), finish.getLocalZ()}
+            );
+        if (!near(world, targetBlock)) {
+            return false;
+        }
+        draft.setFestivalRaceFinishLocal(null);
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalTreeClimbFinishRemoved")
+        );
+        return true;
+    }
+
     public static boolean tryRemoveRaceLaneNear(
         @Nonnull PlotCreatorSession session,
         @Nonnull Vector3i targetBlock,
@@ -397,6 +494,15 @@ public final class PlotCreatorFestivalPlacement {
 
     private static boolean hasWhackAt(@Nonnull PlotCreatorDraft draft, @Nonnull int[] local) {
         for (FestivalDefinition.WhackSpawnRow spot : draft.getFestivalWhackSpawns()) {
+            if (spot.getLocalX() == local[0] && spot.getLocalY() == local[1] && spot.getLocalZ() == local[2]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean hasRaceStartAt(@Nonnull PlotCreatorDraft draft, @Nonnull int[] local) {
+        for (FestivalDefinition.RaceStartSpotRow spot : draft.getFestivalRaceStartSpots()) {
             if (spot.getLocalX() == local[0] && spot.getLocalY() == local[1] && spot.getLocalZ() == local[2]) {
                 return true;
             }

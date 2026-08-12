@@ -101,6 +101,126 @@
       "interactionTargetLocalY": 0,
       "interactionTargetLocalZ": 16,
       "interactionTargetYawDegrees": 90.00001
+    },
+    {
+      "localX": 9,
+      "localY": 6,
+      "localZ": 0,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Castle_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 8,
+      "interactionTargetLocalY": 6,
+      "interactionTargetLocalZ": 0,
+      "interactionTargetYawDegrees": -90.00001
+    },
+    {
+      "localX": 1,
+      "localY": 6,
+      "localZ": 9,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Castle_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 1,
+      "interactionTargetLocalY": 6,
+      "interactionTargetLocalZ": 8,
+      "interactionTargetYawDegrees": 180.0
+    },
+    {
+      "localX": -8,
+      "localY": 6,
+      "localZ": 1,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Castle_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": -7,
+      "interactionTargetLocalY": 6,
+      "interactionTargetLocalZ": 1,
+      "interactionTargetYawDegrees": 90.00001
+    },
+    {
+      "localX": 0,
+      "localY": 6,
+      "localZ": -8,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Castle_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 0,
+      "interactionTargetLocalY": 6,
+      "interactionTargetLocalZ": -7,
+      "interactionTargetYawDegrees": 0.0
+    },
+    {
+      "localX": -9,
+      "localY": 5,
+      "localZ": -9,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Rock_Stone_Cobble",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": -9,
+      "interactionTargetLocalY": 5,
+      "interactionTargetLocalZ": -10,
+      "interactionTargetYawDegrees": 152.34515
+    },
+    {
+      "localX": -7,
+      "localY": 5,
+      "localZ": 10,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Rock_Stone_Cobble",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": -7,
+      "interactionTargetLocalY": 5,
+      "interactionTargetLocalZ": 9,
+      "interactionTargetYawDegrees": -155.54828
+    },
+    {
+      "localX": 9,
+      "localY": 5,
+      "localZ": 9,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Rock_Stone_Cobble_Mossy",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 8,
+      "interactionTargetLocalY": 5,
+      "interactionTargetLocalZ": 9,
+      "interactionTargetYawDegrees": -125.013794
+    },
+    {
+      "localX": 8,
+      "localY": 5,
+      "localZ": -8,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Rock_Stone_Cobble",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 9,
+      "interactionTargetLocalY": 5,
+      "interactionTargetLocalZ": -8,
+      "interactionTargetYawDegrees": 43.11499
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_festival_square.displayName",

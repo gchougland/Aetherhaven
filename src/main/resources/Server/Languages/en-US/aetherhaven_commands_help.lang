@@ -156,6 +156,16 @@ commands.aetherhaven.festival.resetclown.desc=Creative: reset clown unlock so th
 commands.aetherhaven.festival.wheelforce.desc=Creative: force the next carnival wheel spin onto an octant (0-7, or negative to clear)
 commands.aetherhaven.festival.wheelforce.octant.desc=Octant index 0-7, or negative to clear
 
+commands.aetherhaven.prop.desc=Creative: give props, create props from prefabs, and toggle prop breaking
+commands.aetherhaven.prop.give.desc=Give a prop item
+commands.aetherhaven.prop.give.propId.desc=Prop id
+commands.aetherhaven.prop.give.player.desc=Player to give to
+commands.aetherhaven.prop.give.amount.desc=How many to give
+commands.aetherhaven.prop.wand.desc=Give a packaging wand
+commands.aetherhaven.prop.wand.player.desc=Player to give to
+commands.aetherhaven.prop.create.desc=Open a menu to turn a prefab into a prop
+commands.aetherhaven.prop.break.desc=Turn prop breaking on or off for yourself
+
 commands.aetherhaven.walldebug.desc=Creative: wall wand placement debug lines in chat
 commands.aetherhaven.walldebug.on.desc=Turn wall wand debug on
 commands.aetherhaven.walldebug.off.desc=Turn wall wand debug off
@@ -268,6 +278,8 @@ aetherhaven.worldnpc.poseSet=Updated pose for {id}.
 # Command argument type hints (tab completion)
 commands.aetherhaven.argtype.constructionId.name=construction id
 commands.aetherhaven.argtype.constructionId.usage=Returns a building construction id from the catalog
+commands.aetherhaven.argtype.propId.name=prop id
+commands.aetherhaven.argtype.propId.usage=Returns a prop id from the prop catalog
 commands.aetherhaven.argtype.customBuildingId.name=building id
 commands.aetherhaven.argtype.customBuildingId.usage=Returns a saved custom building id or catalog construction id
 commands.aetherhaven.argtype.questId.name=quest id

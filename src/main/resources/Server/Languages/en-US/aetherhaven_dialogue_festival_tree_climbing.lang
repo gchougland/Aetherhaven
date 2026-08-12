@@ -1,0 +1,55 @@
+# What the townsfolk say while the Tree Climbing Festival is running.
+
+aetherhaven.dialogue.festival.tree_climbing.greeting.elder.0=That tree has watched this town grow. Today we climb it for fun.
+aetherhaven.dialogue.festival.tree_climbing.greeting.elder.1=A fast climb is fine. A careful climb is fine too. Just reach the pink crystal.
+
+aetherhaven.dialogue.festival.tree_climbing.greeting.priestess.0=The pink crystal at the top feels like a blessing waiting for steady hands.
+aetherhaven.dialogue.festival.tree_climbing.greeting.priestess.1=Climb with joy. Gaia loves a town that plays together.
+
+aetherhaven.dialogue.festival.tree_climbing.greeting.farmer.0=I left the fields for this. Watching folks scramble up that trunk is better than weeding.
+aetherhaven.dialogue.festival.tree_climbing.greeting.farmer.1=If you slip, laugh and try again. The saplings can wait.
+
+aetherhaven.dialogue.festival.tree_climbing.greeting.innkeeper.0=I will keep drinks ready when climbers come down. They always look thirsty.
+aetherhaven.dialogue.festival.tree_climbing.greeting.innkeeper.1=Join the race if you can. The attendant on the green crystal will set you up.
+
+aetherhaven.dialogue.festival.tree_climbing.greeting.chef.0=Do not eat the rare saplings. Buy them from the merchant and plant them later.
+aetherhaven.dialogue.festival.tree_climbing.greeting.chef.1=I packed fruit for the climbers. Energy for the middle branches.
+
+aetherhaven.dialogue.festival.tree_climbing.greeting.merchant.0=Summer festival tickets buy rare saplings today. Worth every climb.
+aetherhaven.dialogue.festival.tree_climbing.greeting.merchant.1=I already priced the stormbark sapling. Save a few tickets for that one.
+
+aetherhaven.dialogue.festival.tree_climbing.greeting.blacksmith.0=No forge work until someone hits that pink crystal. I want to see the finish.
+aetherhaven.dialogue.festival.tree_climbing.greeting.blacksmith.1=Strong arms help on the climb. Strong legs help more.
+
+aetherhaven.dialogue.festival.tree_climbing.greeting.florist.0=Look at the leaves flash when someone climbs past. Beautiful.
+aetherhaven.dialogue.festival.tree_climbing.greeting.florist.1=Cheer them on. Soft voices never helped anyone reach the top.
+
+aetherhaven.dialogue.festival.tree_climbing.greeting.rancher.0=Animals climb trees for food. People climb this one for glory. Both make sense today.
+aetherhaven.dialogue.festival.tree_climbing.greeting.rancher.1=I bet the first climber takes less than twenty seconds. Maybe.
+
+aetherhaven.dialogue.festival.tree_climbing.greeting.miner.0=I climb rock every day. Wood is a nice change.
+aetherhaven.dialogue.festival.tree_climbing.greeting.miner.1=Watch your footing near the top. The pink crystal is slippery.
+
+aetherhaven.dialogue.festival.tree_climbing.greeting.logger.0=I know that trunk. Respect it and it will hold you.
+aetherhaven.dialogue.festival.tree_climbing.greeting.logger.1=Best sound of the day is the cheer when someone stands on the pink crystal.
+
+aetherhaven.dialogue.festival.tree_climbing.greeting.builder.0=Solid platforms. Honest holds. Whoever set this tree up knew climbers would lean hard.
+aetherhaven.dialogue.festival.tree_climbing.greeting.builder.1=I am not racing. I am here for the view from the ground.
+
+aetherhaven.dialogue.festival.tree_climbing.greeting.crystal_keeper.0=Green below, pink above. Crystals mark the path of the day.
+aetherhaven.dialogue.festival.tree_climbing.greeting.crystal_keeper.1=A good climb leaves no cracks. Touch the finish crystal gently.
+
+aetherhaven.dialogue.festival.tree_climbing.greeting.pyrotechnic.0=No fireworks during the race. Sparks and climbing do not mix.
+aetherhaven.dialogue.festival.tree_climbing.greeting.pyrotechnic.1=When the race ends I might light something soft. Ask me later.
+
+aetherhaven.dialogue.festival.tree_climbing.greeting.bard.0=I wrote a climbing song. Ask me after someone finishes and I will play it.
+aetherhaven.dialogue.festival.tree_climbing.greeting.bard.1=Rhythm helps the climb. Step, reach, breathe, step again.
+
+aetherhaven.dialogue.festival.tree_climbing.greeting.guild_master.0=Four climbers at a time. Fair rules. I like this festival.
+aetherhaven.dialogue.festival.tree_climbing.greeting.guild_master.1=Check the leaderboard with the attendant. Pride is allowed today.
+
+aetherhaven.dialogue.festival.tree_climbing.greeting.guard.0=I am here to keep the square calm. Climb hard, land soft.
+aetherhaven.dialogue.festival.tree_climbing.greeting.guard.1=If you fall, stand up and try again. Nobody gets left behind on festival day.
+
+aetherhaven.dialogue.festival.tree_climbing.greeting.default.0=Race to the pink crystal at the top. The attendant will start you.
+aetherhaven.dialogue.festival.tree_climbing.greeting.default.1=Summer festival tickets wait for fast climbs. Have fun.

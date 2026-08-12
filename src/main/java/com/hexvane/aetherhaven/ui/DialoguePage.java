@@ -36,6 +36,8 @@ import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.hexvane.aetherhaven.calendar.VillagerBirthdayGreetingPicker;
 import com.hexvane.aetherhaven.calendar.VillagerBirthdayService;
 import com.hexvane.aetherhaven.festival.FestivalDialogueGreetings;
+import com.hexvane.aetherhaven.festival.treeclimb.TreeClimbSession;
+import com.hexvane.aetherhaven.festival.treeclimb.TreeClimbSessionIndex;
 import com.hexvane.aetherhaven.villager.data.VillagerGreetingPicker;
 import com.hexvane.aetherhaven.villager.data.VillagerNeedsDialoguePicker;
 import com.hexvane.aetherhaven.worldnpc.WorldNpcBinding;
@@ -57,6 +59,7 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentDisplayName;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
@@ -71,6 +74,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector3d;
 
 /** Custom dialogue UI: full node text and choices in one build (no progressive reveal). */
 public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<DialoguePage.DialogueEventData> {
@@ -479,7 +483,56 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             return Message.translation(GREETING_FALLBACK_LANG);
         }
         String body = node.getText() != null ? node.getText() : "";
-        return withTouristMoveInParams(ref, store, dialogueMessage(body), body);
+        return withTreeClimbCollectParams(
+            ref,
+            store,
+            withTouristMoveInParams(ref, store, dialogueMessage(body), body),
+            body
+        );
+    }
+
+    @Nonnull
+    private Message withTreeClimbCollectParams(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Message message,
+        @Nullable String translationKey
+    ) {
+        if (translationKey == null
+            || !isTranslationKey(translationKey)
+            || !translationKey.contains("festival_tree_climb_attendant.collect_win")) {
+            return message;
+        }
+        UUIDComponent pu = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (pu == null) {
+            return message;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return message;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = resolvePlayerTown(store, ref);
+        if (town == null) {
+            TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+            if (tc != null) {
+                Vector3d pos = tc.getPosition();
+                town = tm.findTownContainingBlock(world.getName(), (int) Math.floor(pos.x), (int) Math.floor(pos.z));
+            }
+        }
+        if (town == null) {
+            return message;
+        }
+        TreeClimbSession session = TreeClimbSessionIndex.get(town.getTownId());
+        if (session == null) {
+            return message;
+        }
+        int count = session.peekLastCollectedTickets(pu.getUuid());
+        if (count <= 0) {
+            return message;
+        }
+        return message.param("count", Integer.toString(count));
     }
 
     @Nonnull
@@ -1142,6 +1195,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                 || batch.isOpenBlacksmithRepairAfterClose()
                 || batch.isOpenGeodePageAfterClose()
                 || batch.isOpenJewelryAppraisalAfterClose()
+                || batch.isOpenTreeClimbLeaderboardAfterClose()
                 || batch.hasAfterClose()) {
                 finishClose(ref, store, world, batch);
                 return;
@@ -1154,6 +1208,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             || batch.isOpenBlacksmithRepairAfterClose()
             || batch.isOpenGeodePageAfterClose()
             || batch.isOpenJewelryAppraisalAfterClose()
+            || batch.isOpenTreeClimbLeaderboardAfterClose()
             || batch.hasAfterClose()) {
             finishClose(ref, store, world, batch);
             return;
@@ -1235,6 +1290,23 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                     return;
                 }
                 player.getPageManager().openCustomPage(pref, st, new JewelryAppraisalPage(pr, chargeGold));
+            });
+        } else if (world != null && batch.isOpenTreeClimbLeaderboardAfterClose()) {
+            // Do not call close() before openCustomPage: setPage(None) increments
+            // PageManager's custom-page ack counter, and openCustomPage increments again,
+            // leaving Data events (Close) ignored until multiple client ACKs arrive.
+            world.execute(() -> {
+                Ref<EntityStore> pref = playerRef.getReference();
+                if (pref == null || !pref.isValid()) {
+                    return;
+                }
+                Store<EntityStore> st = pref.getStore();
+                Player player = st.getComponent(pref, Player.getComponentType());
+                PlayerRef pr = st.getComponent(pref, PlayerRef.getComponentType());
+                if (player == null || pr == null) {
+                    return;
+                }
+                player.getPageManager().openCustomPage(pref, st, new TreeClimbLeaderboardPage(pr));
             });
         } else if (world != null && batch.hasAfterClose()) {
             Runnable after = batch.getAfterClose();

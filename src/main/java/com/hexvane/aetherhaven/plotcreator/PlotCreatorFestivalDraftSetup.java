@@ -113,6 +113,11 @@ public final class PlotCreatorFestivalDraftSetup {
         draft.getFestivalNpcs().clear();
         draft.getFestivalTouristSpots().clear();
         draft.getFestivalRaceLanes().clear();
+        draft.getFestivalBalloonSpawns().clear();
+        draft.getFestivalWhackSpawns().clear();
+        draft.setFestivalWheelLocal(null);
+        draft.getFestivalRaceStartSpots().clear();
+        draft.setFestivalRaceFinishLocal(null);
         draft.setFestivalCenterpieceLocal(null);
         draft.setImportantSpotsConfirmed(false);
         if (existing == null) {
@@ -246,6 +251,37 @@ public final class PlotCreatorFestivalDraftSetup {
                 )
             );
             draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_WHEEL, 1));
+        }
+        if (!existing.getRaceStartSpots().isEmpty()) {
+            for (FestivalDefinition.RaceStartSpotRow spot : existing.getRaceStartSpots()) {
+                draft.getFestivalRaceStartSpots().add(
+                    FestivalDefinition.RaceStartSpotRow.of(
+                        spot.getLocalX(),
+                        spot.getLocalY(),
+                        spot.getLocalZ(),
+                        spot.getYawDegrees()
+                    )
+                );
+            }
+            draft.getSelectedSpots().add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_TREE_CLIMB_START,
+                    existing.getRaceStartSpots().size()
+                )
+            );
+        }
+        if (existing.getRaceFinishLocal() != null) {
+            FestivalDefinition.RaceFinishLocalRow finish = existing.getRaceFinishLocal();
+            draft.setFestivalRaceFinishLocal(
+                FestivalDefinition.RaceFinishLocalRow.of(
+                    finish.getLocalX(),
+                    finish.getLocalY(),
+                    finish.getLocalZ()
+                )
+            );
+            draft.getSelectedSpots().add(
+                PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_TREE_CLIMB_FINISH, 1)
+            );
         }
         PlotCreatorFestivalMechanicDefaults.ensureRequiredSelectedSpots(draft);
     }

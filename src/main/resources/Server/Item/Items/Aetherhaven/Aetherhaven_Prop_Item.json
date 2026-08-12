@@ -1,0 +1,32 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Prop_Item.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Prop_Item.description"
+  },
+  "Parent": "Furniture_Village_Crate",
+  "Categories": ["Items.Tools", "Aetherhaven.All"],
+  "Quality": "Common",
+  "Recipe": null,
+  "MaxStack": 16,
+  "Set": "Aetherhaven",
+  "Interactions": {
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "OpenCustomUI",
+          "Page": { "Id": "AetherhavenPropPlacement" }
+        }
+      ]
+    }
+  },
+  "InteractionConfig": {
+    "UseDistance": {
+      "Adventure": 10,
+      "Creative": 64
+    }
+  },
+  "Tags": {
+    "Family": ["Aetherhaven"],
+    "Type": ["Tool"]
+  }
+}
