@@ -1,0 +1,142 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Furniture_Village_Shelf_Full",
+      "support": 1,
+      "rotation": 1
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Goblin_Hermit",
+            "Scale": 0.20000000298023224,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.365936279296875,
+            "Y": 0.11981201171875,
+            "Z": 0.20013427734375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.107905387878418,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "/yOY8T79PMiv1PVn4OSqIQ==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.107905626296997,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Goblin_Duke",
+            "Scale": 0.20000000298023224,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.209075927734375,
+            "Y": 0.11852264404296875,
+            "Z": 0.52923583984375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.5654363632202148,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "molKTfr3OeW8pJ6flHgZEQ==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.5654363632202148,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Goblin_Thief",
+            "Scale": 0.20000000298023224,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.30474853515625,
+            "Y": 0.12586212158203125,
+            "Z": 0.779083251953125
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.0664284229278564,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "uu1tEModOYCxSQPgWpGN/w==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.0664280652999878,
+            "Roll": 0.0
+          }
+        }
+      }
+    }
+  ]
+}

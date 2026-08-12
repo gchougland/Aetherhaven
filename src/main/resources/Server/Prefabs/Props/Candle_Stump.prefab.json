@@ -1,0 +1,701 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": -1,
+      "y": 0,
+      "z": -1,
+      "name": "Wood_Oak_Trunk_Half"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": 0,
+      "name": "Wood_Oak_Trunk_Half",
+      "rotation": 7
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": 1,
+      "name": "Wood_Oak_Trunk_Half"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": -1,
+      "name": "Wood_Oak_Trunk_Half",
+      "rotation": 6
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Wood_Oak_Trunk_Full",
+      "support": 15,
+      "rotation": 4
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 0,
+      "name": "Wood_Oak_Trunk",
+      "support": 15
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 1,
+      "name": "Wood_Oak_Trunk_Full",
+      "support": 15
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 1,
+      "name": "Wood_Oak_Trunk",
+      "support": 15
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": -1,
+      "name": "Wood_Oak_Trunk_Half"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 0,
+      "name": "Wood_Oak_Trunk_Full",
+      "support": 15,
+      "rotation": 4
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 1,
+      "name": "Wood_Oak_Trunk_Full",
+      "support": 15
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": 1,
+      "name": "Wood_Oak_Trunk_Half"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 2,
+      "name": "Wood_Oak_Trunk_Half"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 1,
+      "name": "Wood_Oak_Trunk_Half",
+      "rotation": 5
+    }
+  ],
+  "fluids": [
+    {
+      "x": -1,
+      "y": 0,
+      "z": -1,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": 1,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": -1,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 1,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 1,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": -1,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 1,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": 1,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 2,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 1,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Furniture_Crude_Candle"
+        },
+        "Transform": {
+          "Position": {
+            "X": -0.3000030517578125,
+            "Y": 0.20000457763671875,
+            "Z": 1.399993896484375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.6414167881011963,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "w0TLDO13PLu3EgzbxBbA2g==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.4459600448608398
+        },
+        "Item": {
+          "Item": {
+            "Id": "Furniture_Crude_Candle",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Furniture_Tavern_Candle"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.5,
+            "Y": 0.20000457763671875,
+            "Z": -0.399993896484375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.0929630994796753,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "GkfRzjOeSIKPB2bQvQ9wug==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.100000023841858
+        },
+        "Item": {
+          "Item": {
+            "Id": "Furniture_Tavern_Candle",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Furniture_Crude_Candle"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.5,
+            "Y": 1.5,
+            "Z": 0.899993896484375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -3.381132125854492,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "XD21EpymSUWXe11OJP9uSA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.123138904571533
+        },
+        "Item": {
+          "Item": {
+            "Id": "Furniture_Crude_Candle",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Furniture_Crude_Candle"
+        },
+        "Transform": {
+          "Position": {
+            "X": -0.3000030517578125,
+            "Y": 0.8000030517578125,
+            "Z": 0.600006103515625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.6414167881011963,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "9pVExBsyT4Cth8NjVTjS4A==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.9767500162124634
+        },
+        "Item": {
+          "Item": {
+            "Id": "Furniture_Crude_Candle",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Furniture_Tavern_Candle"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.4000091552734375,
+            "Y": 0.20000457763671875,
+            "Z": 2.399993896484375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -0.31428244709968567,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "KQXUncnSQSCzlk6OVWSmIA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Furniture_Tavern_Candle",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Furniture_Crude_Candle"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.600006103515625,
+            "Y": 0.3000030517578125,
+            "Z": 2.600006103515625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.3477540016174316,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "AhV9z0KhS3mZ6U3qAUUV4w==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.9767500162124634
+        },
+        "Item": {
+          "Item": {
+            "Id": "Furniture_Crude_Candle",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Furniture_Tavern_Candle"
+        },
+        "Transform": {
+          "Position": {
+            "X": -0.399993896484375,
+            "Y": 0.20000457763671875,
+            "Z": 1.600006103515625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.0929630994796753,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "ThuQuL1gSFK0r8TZuv6/tw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Furniture_Tavern_Candle",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Furniture_Tavern_Candle"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.3000030517578125,
+            "Y": 1.7000045776367188,
+            "Z": 1.100006103515625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5443061590194702,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "OWOd1tuiS6OjvzCwZVvyWQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Furniture_Tavern_Candle",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Furniture_Crude_Candle"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.5,
+            "Y": 1.0,
+            "Z": 1.5
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.9249377250671387,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "jMMKczt5QYedt5/r+ZAPIw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.123138904571533
+        },
+        "Item": {
+          "Item": {
+            "Id": "Furniture_Crude_Candle",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Furniture_Tavern_Candle"
+        },
+        "Transform": {
+          "Position": {
+            "X": -0.5,
+            "Y": 0.20000457763671875,
+            "Z": -0.399993896484375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.0929630994796753,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "qUiX2eMITeCOit/VZcthYw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Furniture_Tavern_Candle",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Furniture_Tavern_Candle"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.600006103515625,
+            "Y": 0.7000045776367188,
+            "Z": 0.5
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5443061590194702,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "EwhWlipETxe7LsHzVwvqZw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Furniture_Tavern_Candle",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    }
+  ]
+}

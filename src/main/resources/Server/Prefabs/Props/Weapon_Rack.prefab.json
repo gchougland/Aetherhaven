@@ -1,0 +1,227 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Rock_Slate_Brick_Roof_Flat",
+      "rotation": 1
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 1,
+      "name": "Rock_Slate_Brick_Roof_Flat",
+      "rotation": 1
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 1,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "HitboxCollision": {
+          "Version": 1,
+          "HitboxCollisionConfigId": "HardCollision"
+        },
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 0.7220001220703125,
+            "Y": 0.21269989013671875,
+            "Z": 0.615386962890625
+          },
+          "Rotation": {
+            "Pitch": 0.02342168055474758,
+            "Yaw": -0.8653314113616943,
+            "Roll": 0.019943173974752426
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Weapon_Spear_Iron",
+            "Quantity": 1,
+            "Durability": 30.0,
+            "MaxDurability": 30.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.023421678692102432,
+            "Yaw": -0.8653310537338257,
+            "Roll": 0.019943181425333023
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "HitboxCollision": {
+          "Version": 1,
+          "HitboxCollisionConfigId": "HardCollision"
+        },
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 0.6658477783203125,
+            "Y": 1.6829757690429688,
+            "Z": 1.484832763671875
+          },
+          "Rotation": {
+            "Pitch": 0.012423834763467312,
+            "Yaw": 0.012409210205078125,
+            "Roll": -3.1181492805480957
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Weapon_Sword_Iron",
+            "Quantity": 1,
+            "Durability": 120.0,
+            "MaxDurability": 120.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.012427244335412979,
+            "Yaw": 0.012409210205078125,
+            "Roll": -3.118154287338257
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "HitboxCollision": {
+          "Version": 1,
+          "HitboxCollisionConfigId": "HardCollision"
+        },
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 0.720306396484375,
+            "Y": 0.2075042724609375,
+            "Z": 0.99481201171875
+          },
+          "Rotation": {
+            "Pitch": -0.0018436831887811422,
+            "Yaw": 3.1142687797546387,
+            "Roll": -0.06735619157552719
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Weapon_Battleaxe_Iron",
+            "Quantity": 1,
+            "Durability": 120.0,
+            "MaxDurability": 120.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": -0.0018437652615830302,
+            "Yaw": 3.1142678260803223,
+            "Roll": -0.06735620647668839
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Furniture_Lumberjack_Ladder"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.10797119140625,
+            "Y": 0.16828155517578125,
+            "Z": 1.02447509765625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.5625526905059814,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "HP3wHxz2Ng2Lrhs8JrugEw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 3.4000000953674316
+        },
+        "Item": {
+          "Item": {
+            "Id": "Furniture_Lumberjack_Ladder",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    }
+  ]
+}

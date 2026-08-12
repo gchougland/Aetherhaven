@@ -1,0 +1,207 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Halloween_Basket_Straw",
+      "rotation": 1
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Flower_Common_Red"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.4061126708984375,
+            "Y": 0.5500869750976562,
+            "Z": 0.366119384765625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.6099064350128174,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "pdGRTGEYNDigt06302Ab5A==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.6000000238418579
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Flower_Common_Red",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Flower_Tall_Yellow"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.283172607421875,
+            "Y": 0.5110702514648438,
+            "Z": 0.51226806640625
+          },
+          "Rotation": {
+            "Pitch": -0.09295519441366196,
+            "Yaw": 1.1261900663375854,
+            "Roll": 0.04419315606355667
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "7ZUY5u+FM72CXagjSLyQyQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.6000000238418579
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Flower_Tall_Yellow",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Flower_Orchid_Yellow"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.6951141357421875,
+            "Y": 0.452178955078125,
+            "Z": 0.4698486328125
+          },
+          "Rotation": {
+            "Pitch": 6.43990992102772E-4,
+            "Yaw": -1.4088226556777954,
+            "Roll": -0.11335217207670212
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "1aBriu5gMCqRyeRxBVWCQA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.800000011920929
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Flower_Orchid_Yellow",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Flower_Common_Pink"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.61029052734375,
+            "Y": 0.454803466796875,
+            "Z": 0.7427978515625
+          },
+          "Rotation": {
+            "Pitch": -0.40082815289497375,
+            "Yaw": -3.1091058254241943,
+            "Roll": -0.012679480947554111
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "pB2uuYiQOSe7DuDh5ff5Dg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.4000000059604645
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Flower_Common_Pink",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    }
+  ]
+}

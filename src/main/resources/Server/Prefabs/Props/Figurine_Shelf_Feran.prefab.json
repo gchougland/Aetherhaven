@@ -1,0 +1,147 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Furniture_Village_Shelf_Full",
+      "rotation": 1
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Feran_Cub",
+            "Scale": 0.30000001192092896,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.244171142578125,
+            "Y": 0.1298370361328125,
+            "Z": 0.50286865234375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.5056089162826538,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "mTRc0WgYP1a/YyaTDYq3Tw==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.5056089162826538,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Feran_Civilian",
+            "Scale": 0.4000000059604645,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.2347869873046875,
+            "Y": 0.12680816650390625,
+            "Z": 0.2445068359375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.0349154472351074,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "pw4BdFJPOUWQx+VfZUXT2g==",
+            "$type": "04"
+          }
+        },
+        "EntityScale": {
+          "Scale": 0.30000001192092896
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.03491473197937,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Feran_Burrower",
+            "Scale": 0.20000000298023224,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.305450439453125,
+            "Y": 0.1253204345703125,
+            "Z": 0.746002197265625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.0296995639801025,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "B+JfI/doMVO1UrQJu3UPhA==",
+            "$type": "04"
+          }
+        },
+        "EntityScale": {
+          "Scale": 0.30000001192092896
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.029699444770813,
+            "Roll": 0.0
+          }
+        }
+      }
+    }
+  ]
+}

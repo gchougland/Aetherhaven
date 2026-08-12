@@ -1,0 +1,180 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Furniture_Village_Shelf_Full",
+      "support": 1,
+      "rotation": 1
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Crawler_Void",
+            "Scale": 0.20000000298023224,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.22991943359375,
+            "Y": 0.28951263427734375,
+            "Z": 0.270355224609375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.930686593055725,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "+irK21SeOs+dhSTaAmFZNQ==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.930686593055725,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Eye_Void",
+            "Scale": 0.20000000298023224,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.235687255859375,
+            "Y": 0.5908126831054688,
+            "Z": 0.539215087890625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.5330191850662231,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "FryO/hbpNx2mkKuG3rGXrg==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.5330194234848022,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Spawn_Void",
+            "Scale": 0.20000000298023224,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.31329345703125,
+            "Y": 0.106719970703125,
+            "Z": 0.744781494140625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.2562164068222046,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "uo6l5taIPb29ploEtOC5Yg==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.2562158107757568,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Larva_Void",
+            "Scale": 0.20000000298023224,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.2877044677734375,
+            "Y": 0.130767822265625,
+            "Z": 0.52362060546875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.2908425331115723,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "VkCP9W8DOQ+E/GLeVzK3nQ==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.2908430099487305,
+            "Roll": 0.0
+          }
+        }
+      }
+    }
+  ]
+}

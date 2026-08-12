@@ -1,0 +1,356 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Rock_Slate_Brick_Wall",
+      "rotation": 2
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 0,
+      "name": "Rock_Slate_Brick_Roof_Flat",
+      "rotation": 1
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rubble_Stone_Mossy_Medium"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.5,
+            "Y": 1.2000045776367188,
+            "Z": 0.399993896484375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.2893140316009521,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "LA0LRMbyMyqWmontbTlQCg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.4000000059604645
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rubble_Stone_Mossy_Medium",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Potion_Empty"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.5,
+            "Y": 1.2000045776367188,
+            "Z": 0.5
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.3782901763916016,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "dScA/SV7MVK8d9jpffcs2w==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Potion_Empty",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Flower_Orchid_Purple"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.5,
+            "Y": 1.2000045776367188,
+            "Z": 0.5
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.968857765197754,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "8CI9Mtm5O5+YxN+xRaLOoQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.6000000238418579
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Flower_Orchid_Purple",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Moss_Rug_Green_Dark"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.5,
+            "Y": 1.2000045776367188,
+            "Z": 0.5
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.7221896648406982,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "IcpjEMlIPcSxGIss5APbXQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.7000000476837158
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Moss_Rug_Green_Dark",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rubble_Stone_Mossy"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.600006103515625,
+            "Y": 1.2000045776367188,
+            "Z": 0.600006103515625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 2.189333915710449,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "8Pm6fKFjOkm/nQ/sLbV2TA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.4000000059604645
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rubble_Stone_Mossy",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rubble_Stone_Mossy"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.4000091552734375,
+            "Y": 1.2000045776367188,
+            "Z": 0.600006103515625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.229487657546997,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "UnDrQnGSRcOKw68QQwYSWg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.4000000059604645
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rubble_Stone_Mossy",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Slate_Brick_Roof_Flat"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.5,
+            "Y": 0.0,
+            "Z": 0.5
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.136991024017334,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "MhKUt6/dOQKqll3ODuBIJw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.100000023841858
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Slate_Brick_Roof_Flat",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    }
+  ]
+}

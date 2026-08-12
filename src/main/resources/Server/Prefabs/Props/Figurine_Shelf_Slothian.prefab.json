@@ -1,0 +1,141 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Furniture_Village_Shelf_Full",
+      "rotation": 1
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Slothian",
+            "Scale": 0.20000000298023224,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.33868408203125,
+            "Y": 0.12738037109375,
+            "Z": 0.697784423828125
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.3675519227981567,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "+syutzqCNeyBKMwQLQXdEQ==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.3675519227981567,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Slothian_Kid",
+            "Scale": 0.20000000298023224,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.305572509765625,
+            "Y": 0.1287994384765625,
+            "Z": 0.220184326171875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.8141133785247803,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "rUMivIPoPQ2I/3L8XQj/Gw==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.8141133785247803,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Slothian_Elder",
+            "Scale": 0.20000000298023224,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.2887115478515625,
+            "Y": 0.12505340576171875,
+            "Z": 0.453948974609375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.5608266592025757,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "5gjKdJDnO/myeMqxSa9rKw==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.5608266592025757,
+            "Roll": 0.0
+          }
+        }
+      }
+    }
+  ]
+}

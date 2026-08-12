@@ -1,0 +1,148 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Furniture_Village_Shelf_Full",
+      "support": 1,
+      "rotation": 1
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Fox",
+            "Scale": 0.30000001192092896,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.35064697265625,
+            "Y": 0.12060546875,
+            "Z": 0.694427490234375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -0.9056012630462646,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "NHN4NZgjM3qKsxB6dIClqA==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -0.9056012630462646,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Mouse",
+            "Scale": 0.20000000298023224,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.3855743408203125,
+            "Y": 0.12042236328125,
+            "Z": 0.22113037109375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.1166625022888184,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "jqTcecsyPaG0wjQTCplQmA==",
+            "$type": "04"
+          }
+        },
+        "EntityScale": {
+          "Scale": 0.30000001192092896
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.1166627407073975,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Rabbit",
+            "Scale": 0.30000001192092896,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.330322265625,
+            "Y": 0.1180267333984375,
+            "Z": 0.420318603515625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.642125129699707,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "ooZyLE7vMdegITyBVi25Kw==",
+            "$type": "04"
+          }
+        },
+        "EntityScale": {
+          "Scale": 0.20000001788139343
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.642125129699707,
+            "Roll": 0.0
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Furniture_Village_Shelf_Full",
+      "support": 1,
+      "rotation": 1
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Trork_Chieftain",
+            "Scale": 0.4000000059604645,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.1981658935546875,
+            "Y": 0.1190032958984375,
+            "Z": 0.492950439453125
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.6060197353363037,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "Gavcn0bvPv2vhlYRnKbCFQ==",
+            "$type": "04"
+          }
+        },
+        "EntityScale": {
+          "Scale": 0.30000001192092896
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.606019377708435,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Trork_Brawler",
+            "Scale": 0.10000000149011612,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.3338165283203125,
+            "Y": 0.1233978271484375,
+            "Z": 0.2213134765625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.8584370613098145,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "s7nEa5jROkeHMl6tEAL0Ow==",
+            "$type": "04"
+          }
+        },
+        "EntityScale": {
+          "Scale": 0.20000000298023224
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.8584375381469727,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Trork_Doctor_Witch",
+            "Scale": 0.4000000059604645,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.3830413818359375,
+            "Y": 0.09535980224609375,
+            "Z": 0.773681640625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -0.825388491153717,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "VaW65uTBPnOyOJ/as2WY5w==",
+            "$type": "04"
+          }
+        },
+        "EntityScale": {
+          "Scale": 0.20000001788139343
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -0.8253887295722961,
+            "Roll": 0.0
+          }
+        }
+      }
+    }
+  ]
+}

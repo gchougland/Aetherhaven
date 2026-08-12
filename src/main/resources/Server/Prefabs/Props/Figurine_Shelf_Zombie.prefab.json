@@ -1,0 +1,145 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Furniture_Village_Shelf_Full",
+      "support": 1,
+      "rotation": 1
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Zombie",
+            "Scale": 0.20000000298023224,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.272735595703125,
+            "Y": 0.1278839111328125,
+            "Z": 0.216796875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.3025453090667725,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "BETfSRd5NLyW1Rrg5GHmjA==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.302544355392456,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Zombie_Burnt",
+            "Scale": 0.20000000298023224,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.3078460693359375,
+            "Y": 0.12357330322265625,
+            "Z": 0.786529541015625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.0148366689682007,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "hYrXaz5DOFKEp4vAPwsLYw==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.0148367881774902,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Zombie_Aberrant",
+            "Scale": 0.10000000149011612,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.1435394287109375,
+            "Y": 0.105743408203125,
+            "Z": 0.51654052734375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.554543137550354,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "UQrBLnzEM4ezG11/aWMa7w==",
+            "$type": "04"
+          }
+        },
+        "EntityScale": {
+          "Scale": 0.20000000298023224
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.554542899131775,
+            "Roll": 0.0
+          }
+        }
+      }
+    }
+  ]
+}

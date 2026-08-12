@@ -1,0 +1,142 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Furniture_Village_Shelf_Full",
+      "support": 1,
+      "rotation": 1
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Kweebec_Rootling",
+            "Scale": 0.20000000298023224,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.2883453369140625,
+            "Y": 0.12180328369140625,
+            "Z": 0.2215576171875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.219186305999756,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "7QBPLYBcMvKDriJ0iookCw==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.219187021255493,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Kweebec_Sapling_Brown",
+            "Scale": 0.20000000298023224,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.3026123046875,
+            "Y": 0.11832427978515625,
+            "Z": 0.823486328125
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.2767990827560425,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "wz8hIoJmOxCBgSaNSiH5Sw==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.2767988443374634,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Kweebec_Seedling",
+            "Scale": 0.6000000238418579,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.2191162109375,
+            "Y": 0.12473297119140625,
+            "Z": 0.54608154296875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.5575892925262451,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "F+tgcZpDMheZftu+UBzqJw==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.5575895309448242,
+            "Roll": 0.0
+          }
+        }
+      }
+    }
+  ]
+}

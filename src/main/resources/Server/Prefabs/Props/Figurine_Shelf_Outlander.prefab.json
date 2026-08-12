@@ -1,0 +1,145 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Furniture_Village_Shelf_Full",
+      "support": 1,
+      "rotation": 1
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Outlander_Brute",
+            "Scale": 0.20000000298023224,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.1952362060546875,
+            "Y": 0.13736724853515625,
+            "Z": 0.533447265625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.5736287832260132,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "nCMfL4ZxOsWDII5ZfzFT7Q==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.573629379272461,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Outlander_Cultist",
+            "Scale": 0.20000000298023224,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.28924560546875,
+            "Y": 0.1138916015625,
+            "Z": 0.815521240234375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -0.9073195457458496,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "Pe5yxEwmNO2cS+WnvrNeJQ==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -0.907319962978363,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Outlander_Berserker",
+            "Scale": 0.10000000149011612,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.218292236328125,
+            "Y": 0.1189727783203125,
+            "Z": 0.203857421875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.2695207595825195,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "KiAZUiy7NYa7ui0agOq1eQ==",
+            "$type": "04"
+          }
+        },
+        "EntityScale": {
+          "Scale": 0.20000000298023224
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.2695207595825195,
+            "Roll": 0.0
+          }
+        }
+      }
+    }
+  ]
+}

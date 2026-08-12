@@ -1,0 +1,150 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Furniture_Village_Shelf_Full",
+      "rotation": 1
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Skeleton",
+            "Scale": 0.10000000149011612,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.300689697265625,
+            "Y": 0.122467041015625,
+            "Z": 0.236419677734375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.2418665885925293,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "LL5QharmOYCMoj0ZkGqdLg==",
+            "$type": "04"
+          }
+        },
+        "EntityScale": {
+          "Scale": 0.20000000298023224
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.2418665885925293,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Skeleton_Archmage",
+            "Scale": 0.10000000149011612,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.2684783935546875,
+            "Y": 0.07636260986328125,
+            "Z": 0.711151123046875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.2314531803131104,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "LFchzHoVMxKWDJYSl6cF4Q==",
+            "$type": "04"
+          }
+        },
+        "EntityScale": {
+          "Scale": 0.20000000298023224
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.2314530611038208,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Skeleton_Burnt_Gunner",
+            "Scale": 0.5,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.22930908203125,
+            "Y": 0.13301849365234375,
+            "Z": 0.46392822265625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.053215980529785,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "X9AVtZrCNTCAHhfNXKCJxg==",
+            "$type": "04"
+          }
+        },
+        "EntityScale": {
+          "Scale": 0.30000001192092896
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.053215980529785,
+            "Roll": 0.0
+          }
+        }
+      }
+    }
+  ]
+}

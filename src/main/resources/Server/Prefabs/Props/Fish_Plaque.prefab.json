@@ -1,0 +1,373 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 1,
+      "z": 0,
+      "name": "Wood_Hardwood_Planks_Half",
+      "rotation": 7
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 1,
+      "name": "Wood_Hardwood_Planks_Half",
+      "rotation": 7
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 1,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 1,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Planks_Half"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.408782958984375,
+            "Y": 0.9846954345703125,
+            "Z": 0.04726409912109375
+          },
+          "Rotation": {
+            "Pitch": -1.560706377029419,
+            "Yaw": 1.5708030462265015,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "mHzo0ex0SWiGAAAthJ5HzA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.5999999046325684
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Planks_Half",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Planks_Half"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.4087982177734375,
+            "Y": 0.9845504760742188,
+            "Z": 1.888916015625
+          },
+          "Rotation": {
+            "Pitch": -1.560706377029419,
+            "Yaw": 1.5708030462265015,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "q/m0JL7lOxGxHBNb3PvmNw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.5999999046325684
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Planks_Half",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 0.4238433837890625,
+            "Y": 1.3862075805664062,
+            "Z": 1.1734504699707031
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.1311159133911133,
+            "Roll": 0.0
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Fish_Pike_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.1311159133911133,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 0.55908203125,
+            "Y": 1.1698455810546875,
+            "Z": 1.0497398376464844
+          },
+          "Rotation": {
+            "Pitch": 0.007469320669770241,
+            "Yaw": 3.1424331665039062,
+            "Roll": -1.5473006963729858
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.3000000715255737
+        },
+        "Item": {
+          "Item": {
+            "Id": "Ingredient_Bar_Gold",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0074697574600577354,
+            "Yaw": 3.142432689666748,
+            "Roll": -1.5473049879074097
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Transform": {
+          "Position": {
+            "X": -14.0,
+            "Y": 7.5,
+            "Z": 8.0
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0,
+            "Roll": 0.0
+          }
+        },
+        "TriggerVolume": {
+          "Shape": {
+            "Type": "Box",
+            "Min": {
+              "X": -14.000001223918867,
+              "Y": -6.5,
+              "Z": -14.000001223918867
+            },
+            "Max": {
+              "X": 14.000001223918867,
+              "Y": 6.5,
+              "Z": 14.000001223918867
+            }
+          },
+          "Effects": [
+            {
+              "Type": "SetMusic",
+              "Event": "ENTER",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "Track_Aetherhaven_FunkyLittleDudes",
+              "ClearMusic": false
+            },
+            {
+              "Type": "SetMusic",
+              "Event": "EXIT",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "",
+              "ClearMusic": true
+            },
+            {
+              "Type": "SetWeather",
+              "Event": "ENTER",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "Weather": "Zone1_Sunny_Fireflies",
+              "PlayerOnly": true,
+              "ResetWeather": false
+            },
+            {
+              "Type": "SetWeather",
+              "Event": "EXIT",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "Weather": "",
+              "PlayerOnly": true,
+              "ResetWeather": true
+            }
+          ],
+          "Enabled": true,
+          "TargetTypes": [
+            "Player"
+          ],
+          "KeepLoaded": false,
+          "Color": {
+            "X": 0.003921568859368563,
+            "Y": 0.800000011920929,
+            "Z": 0.0
+          },
+          "PrefabIndex": 0
+        }
+      }
+    },
+    {
+      "Components": {
+        "Transform": {
+          "Position": {
+            "X": -12.0,
+            "Y": 6.5,
+            "Z": 15.0
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0,
+            "Roll": 0.0
+          }
+        },
+        "TriggerVolume": {
+          "Shape": {
+            "Type": "Box",
+            "Min": {
+              "X": -14.000001223918867,
+              "Y": -6.5,
+              "Z": -14.000001223918867
+            },
+            "Max": {
+              "X": 14.000001223918867,
+              "Y": 6.5,
+              "Z": 14.000001223918867
+            }
+          },
+          "Effects": [
+            {
+              "Type": "SetMusic",
+              "Event": "ENTER",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "Track_Aetherhaven_FunkyLittleDudes",
+              "ClearMusic": false
+            },
+            {
+              "Type": "SetMusic",
+              "Event": "EXIT",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "MusicContainer": "",
+              "ClearMusic": true
+            },
+            {
+              "Type": "SetWeather",
+              "Event": "ENTER",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "Weather": "Zone1_Sunny_Fireflies",
+              "PlayerOnly": true,
+              "ResetWeather": false
+            },
+            {
+              "Type": "SetWeather",
+              "Event": "EXIT",
+              "Interval": 0.0,
+              "Delay": 0.0,
+              "Weather": "",
+              "PlayerOnly": true,
+              "ResetWeather": true
+            }
+          ],
+          "Enabled": true,
+          "TargetTypes": [
+            "Player"
+          ],
+          "KeepLoaded": false,
+          "Color": {
+            "X": 0.003921568859368563,
+            "Y": 0.800000011920929,
+            "Z": 0.0
+          },
+          "PrefabIndex": 1
+        }
+      }
+    }
+  ]
+}

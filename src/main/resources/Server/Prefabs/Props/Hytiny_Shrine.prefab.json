@@ -1,0 +1,5210 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 1,
+      "z": 0,
+      "name": "Rock_Stone_Cobble",
+      "rotation": 1
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": 0,
+      "name": "Rock_Stone_Brick_Roof_Hollow",
+      "rotation": 3
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 1,
+      "name": "Rock_Stone_Cobble",
+      "rotation": 1
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": 1,
+      "name": "Rock_Stone_Brick_Roof_Hollow",
+      "rotation": 3
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": 0,
+      "name": "Rock_Stone_Cobble",
+      "rotation": 1
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": 0,
+      "name": "Rock_Stone_Brick_Roof_Hollow",
+      "rotation": 1
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": 1,
+      "name": "Rock_Stone_Cobble",
+      "rotation": 1
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": 1,
+      "name": "Rock_Stone_Brick_Roof_Hollow",
+      "rotation": 1
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 1,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 1,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": 1,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": 1,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": 1,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.782470703125,
+            "Y": 1.974945068359375,
+            "Z": 0.194305419921875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "EA+w9Iq2PJ2XtAu94yKA6w==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.18975830078125,
+            "Y": 2.9626083374023438,
+            "Z": 1.326141357421875
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "fuSEameoPJCAu9gt/5i2gw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.21124267578125,
+            "Y": 2.458526611328125,
+            "Z": 1.808624267578125
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "6QiiYmgBOUGoQyPtzp2rgg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Oak_Branch_Long"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.3096923828125,
+            "Y": 1.6911697387695312,
+            "Z": 0.590179443359375
+          },
+          "Rotation": {
+            "Pitch": -1.5667155981063843,
+            "Yaw": 0.0014186660991981626,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "BqV8KsRgOCmonV5mBJAr8w==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Oak_Branch_Long",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.71539306640625,
+            "Y": 3.2858657836914062,
+            "Z": 1.323638916015625
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "jolg7zHnP/uCWdjjxKSjWA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Cloth_Roof_White_Vertical"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.60870361328125,
+            "Y": 2.5624771118164062,
+            "Z": -0.289520263671875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.010067419148981571,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "ZyeuNj/HP2OS9asdsa9s6g==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Cloth_Roof_White_Vertical",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Cloth_Roof_White_Vertical"
+        },
+        "Transform": {
+          "Position": {
+            "X": 2.22894287109375,
+            "Y": 2.4570846557617188,
+            "Z": 1.250244140625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.5726042985916138,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "Daj8RaJEPEen9CLWNUKCSQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Cloth_Roof_White_Vertical",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.20013427734375,
+            "Y": 2.4777755737304688,
+            "Z": 0.680419921875
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "crPejUk8PheZqI7fAHcGaw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.2115478515625,
+            "Y": 3.0241622924804688,
+            "Z": 1.808502197265625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "v1sQTgYKOuuN6BhWEHeaAA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.9835205078125,
+            "Y": 3.377471923828125,
+            "Z": 1.8150634765625
+          },
+          "Rotation": {
+            "Pitch": -0.0010137856006622314,
+            "Yaw": 1.5673532485961914,
+            "Roll": 1.0842026894733873E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "BeThnU3IPuGfClVfllkUgA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Cloth_Roof_White_Vertical"
+        },
+        "Transform": {
+          "Position": {
+            "X": -0.2845458984375,
+            "Y": 2.8967666625976562,
+            "Z": 1.2750244140625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5582183599472046,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "a9S6+qB1PqSITzRYC5Qz9Q==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Cloth_Roof_White_Vertical",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Stone_Cobble_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.5076904296875,
+            "Y": 0.6760177612304688,
+            "Z": -0.0328369140625
+          },
+          "Rotation": {
+            "Pitch": -1.2750217548429532E-16,
+            "Yaw": 0.014568881131708622,
+            "Roll": -1.5585657358169556
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "CDtWIz/oNnSceG/2Dwyh/g==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Stone_Cobble_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Stone_Cobble_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.0025634765625,
+            "Y": 0.6760177612304688,
+            "Z": 1.5067138671875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.565996527671814,
+            "Roll": -1.5585657358169556
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "nPYomJZ+NeONMA/ZzPO1FQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Stone_Cobble_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.71539306640625,
+            "Y": 2.3210067749023438,
+            "Z": 0.8050537109375
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": -1.5697669982910156
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "1roNqI8zMGG8LqJffj9F3Q==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Oak_Branch_Long"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.59588623046875,
+            "Y": 1.6911697387695312,
+            "Z": 1.683197021484375
+          },
+          "Rotation": {
+            "Pitch": -1.5667155981063843,
+            "Yaw": -1.563815712928772,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "AcoM2HCuNPqfq3qr5qHEcw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Oak_Branch_Long",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.195068359375,
+            "Y": 2.844482421875,
+            "Z": 0.680419921875
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "L1+RQ5CDO5qNGlc8orIlWw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.2060546875,
+            "Y": 3.1603546142578125,
+            "Z": 1.565673828125
+          },
+          "Rotation": {
+            "Pitch": -1.5669753551483154,
+            "Yaw": -3.1390490531921387,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "Sa2WrJe8NZKmYD/8SZ8HOw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.71539306640625,
+            "Y": 3.1222152709960938,
+            "Z": 1.323638916015625
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": -1.5697669982910156
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "6lEiLTanOtOgP/HC3HImMg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.97418212890625,
+            "Y": 3.479278564453125,
+            "Z": 0.201080322265625
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "e47JV6+qOmGIyqlC7JIXSQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.21514892578125,
+            "Y": 2.3117294311523438,
+            "Z": 1.807220458984375
+          },
+          "Rotation": {
+            "Pitch": -1.5661685466766357,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "sCnFWyTNOYC9N3wSNb1mcg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Cloth_Roof_White_Vertical"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.71844482421875,
+            "Y": 2.4120864868164062,
+            "Z": 1.33026123046875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.010067419148981571,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "GD7YbT8CMHKquPpu/MCCLA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Cloth_Roof_White_Vertical",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.21234130859375,
+            "Y": 1.9777297973632812,
+            "Z": 1.807281494140625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "dhRcQmLiN0S7VwLaYPDvvQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.2060546875,
+            "Y": 2.308135986328125,
+            "Z": 1.565704345703125
+          },
+          "Rotation": {
+            "Pitch": -1.5669753551483154,
+            "Yaw": -3.1390490531921387,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "oeVsMKkXOoWnIwoyATuuQw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Cloth_Roof_White_Vertical"
+        },
+        "Transform": {
+          "Position": {
+            "X": 2.22894287109375,
+            "Y": 2.4570846557617188,
+            "Z": 0.78472900390625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.5726042985916138,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "7YBNuDAeOxaFWeOYEr0xIA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Cloth_Roof_White_Vertical",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Oak_Branch_Long"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.771484375,
+            "Y": 3.7781753540039062,
+            "Z": 0.296783447265625
+          },
+          "Rotation": {
+            "Pitch": -1.5667155981063843,
+            "Yaw": -1.563815712928772,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "VRjCJ+cOOQiB36XG3vom+w==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Oak_Branch_Long",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Oak_Branch_Long"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.39508056640625,
+            "Y": 3.7781753540039062,
+            "Z": 0.296783447265625
+          },
+          "Rotation": {
+            "Pitch": -1.5667155981063843,
+            "Yaw": -1.563815712928772,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "yjbjIWgrOByMBOY10A2img==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Oak_Branch_Long",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.19036865234375,
+            "Y": 3.2760467529296875,
+            "Z": 0.680419921875
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "mRqpwL3rMc+ugBiOfMV77w==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.71539306640625,
+            "Y": 2.9588775634765625,
+            "Z": 1.323638916015625
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "4rxVYADAOv2uXEl3QmWtTA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.44158935546875,
+            "Y": 3.2265167236328125,
+            "Z": 1.80902099609375
+          },
+          "Rotation": {
+            "Pitch": -1.5661685466766357,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "9r1IYYfINtCJm24KY/KU5Q==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.3284912109375,
+            "Y": 2.7758941650390625,
+            "Z": 1.815093994140625
+          },
+          "Rotation": {
+            "Pitch": -0.0010137856006622314,
+            "Yaw": 1.5673532485961914,
+            "Roll": 1.0842026894733873E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "n2Fju8qONEiiisCL2lJW8w==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.97418212890625,
+            "Y": 2.426666259765625,
+            "Z": 0.201080322265625
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "aFAcx2cpMXyNgIzFe7NvYw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.98358154296875,
+            "Y": 2.919158935546875,
+            "Z": 1.8150634765625
+          },
+          "Rotation": {
+            "Pitch": -0.0010137856006622314,
+            "Yaw": 1.5673532485961914,
+            "Roll": 1.0842026894733873E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "jH+J25gwMRytk5PKoVlFoQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Stone_Cobble_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.0025634765625,
+            "Y": 0.6760177612304688,
+            "Z": 0.26092529296875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.565996527671814,
+            "Roll": -1.5585657358169556
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "E6bTK5i4MCGdx728MRUjKw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Stone_Cobble_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.1988525390625,
+            "Y": 2.43426513671875,
+            "Z": 1.326141357421875
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "mPpiEgJOOCeuVFOKdRzCvA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Cloth_Roof_White_Vertical"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.21356201171875,
+            "Y": 3.0827713012695312,
+            "Z": -0.289520263671875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.010067419148981571,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "1fLDuCdyMxeZz7P0+die7Q==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Cloth_Roof_White_Vertical",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.71539306640625,
+            "Y": 2.5588302612304688,
+            "Z": 0.705963134765625
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "n9cGxi/cOw2KR9ve/DCxmQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Cloth_Roof_White_Vertical"
+        },
+        "Transform": {
+          "Position": {
+            "X": -0.2845458984375,
+            "Y": 2.5495681762695312,
+            "Z": 0.635345458984375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5582183599472046,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "qasY3g7vNKC3XLe5+jEUMQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Cloth_Roof_White_Vertical",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.8262939453125,
+            "Y": 2.310028076171875,
+            "Z": 0.201080322265625
+          },
+          "Rotation": {
+            "Pitch": -1.5661685466766357,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "vWZRyGAoPFmzmo5IzOl46g==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Cloth_Roof_White_Vertical"
+        },
+        "Transform": {
+          "Position": {
+            "X": 2.22894287109375,
+            "Y": 3.0827713012695312,
+            "Z": 1.250244140625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.5726042985916138,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "qQc8LFuCPAiAtSiWHa31Ww==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Cloth_Roof_White_Vertical",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.3284912109375,
+            "Y": 2.318817138671875,
+            "Z": 1.815093994140625
+          },
+          "Rotation": {
+            "Pitch": -0.0010137856006622314,
+            "Yaw": 1.5673532485961914,
+            "Roll": 1.0842026894733873E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "veXHBbLCMKCzY2+MPucWFQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Stone_Cobble_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.5052490234375,
+            "Y": 0.6760330200195312,
+            "Z": -0.0328369140625
+          },
+          "Rotation": {
+            "Pitch": -1.2750217548429532E-16,
+            "Yaw": 0.014568881131708622,
+            "Roll": -1.5585657358169556
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "XYBcZ+LgPQWDFpEXsleQXQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Stone_Cobble_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Oak_Branch_Long"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.59588623046875,
+            "Y": 1.6911697387695312,
+            "Z": 0.296783447265625
+          },
+          "Rotation": {
+            "Pitch": -1.5667155981063843,
+            "Yaw": -1.563815712928772,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "hXaAbb9QNjiTc3hjA67FPA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Oak_Branch_Long",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Stone_Cobble_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.0025634765625,
+            "Y": 0.6760177612304688,
+            "Z": 1.229644775390625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.565996527671814,
+            "Roll": -1.5585657358169556
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "iJ1ePGTBNyuPFAMCZp4LPQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Stone_Cobble_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.21221923828125,
+            "Y": 1.9777374267578125,
+            "Z": 0.1951904296875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "btjxzq7VMtSk2zV3dTPN/Q==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Oak_Branch_Long"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.6964111328125,
+            "Y": 3.7024612426757812,
+            "Z": 1.7364501953125
+          },
+          "Rotation": {
+            "Pitch": -1.5667155981063843,
+            "Yaw": -1.563815712928772,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "P0rv+6r9MTmp9wuJLXQlMg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Oak_Branch_Long",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.3150634765625,
+            "Y": 2.8749542236328125,
+            "Z": 0.201080322265625
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "X0QN7qLqMJmpXcwu5/sfdg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Cloth_Roof_White_Vertical"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.21356201171875,
+            "Y": 2.9824752807617188,
+            "Z": 1.33026123046875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.010067419148981571,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "6XbTljB9NCe8KO24am/LIQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Cloth_Roof_White_Vertical",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Stone_Cobble_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 2.0440673828125,
+            "Y": 0.6760177612304688,
+            "Z": 0.232940673828125
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.565996527671814,
+            "Roll": -1.5585657358169556
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "PJjFGLEMMoCjGKEl8YsxeA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Stone_Cobble_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.318359375,
+            "Y": 3.2265167236328125,
+            "Z": 0.201080322265625
+          },
+          "Rotation": {
+            "Pitch": -1.5661685466766357,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "dlA/P/XONviqxyHuOp4fDQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.97418212890625,
+            "Y": 2.901031494140625,
+            "Z": 0.201080322265625
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "pj4HQtP0O7CGNXtAwLE+FQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.21221923828125,
+            "Y": 2.7688674926757812,
+            "Z": 0.1905517578125
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "qsUItyZOOLK1zrPTIMlJVQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.71539306640625,
+            "Y": 2.7182769775390625,
+            "Z": 0.705963134765625
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "dz1jCpbFPnaCiT3wEomfFg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Cloth_Roof_White_Vertical"
+        },
+        "Transform": {
+          "Position": {
+            "X": -0.291015625,
+            "Y": 2.9409866333007812,
+            "Z": 0.635345458984375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5582183599472046,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "E9IMFTKRM9aNIjAGysMxbw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Cloth_Roof_White_Vertical",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.71539306640625,
+            "Y": 2.5588302612304688,
+            "Z": 1.323638916015625
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "9+8G9zbXO1aKdPdvMJygWA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.98358154296875,
+            "Y": 2.3731231689453125,
+            "Z": 1.8150634765625
+          },
+          "Rotation": {
+            "Pitch": -0.0010137856006622314,
+            "Yaw": 1.5673532485961914,
+            "Roll": 1.0842026894733873E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "/JRCJDfPPq6YTU8XNp8KWg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Cloth_Roof_White_Vertical"
+        },
+        "Transform": {
+          "Position": {
+            "X": 2.22894287109375,
+            "Y": 2.8976364135742188,
+            "Z": 0.78472900390625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.5726042985916138,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "8k5T4nkkPM+jvMZS67cLqA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Cloth_Roof_White_Vertical",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Stone_Cobble_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 2.04656982421875,
+            "Y": 0.6760177612304688,
+            "Z": 0.90966796875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.565996527671814,
+            "Roll": -1.5585657358169556
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "e8ekdoOAN1mDtuj6kby9UQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Stone_Cobble_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.6258544921875,
+            "Y": 2.9171066284179688,
+            "Z": 0.2010498046875
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "XUWvKftqMeu3R5vezVc6LQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Oak_Branch_Long"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.59588623046875,
+            "Y": 1.6911544799804688,
+            "Z": 1.708953857421875
+          },
+          "Rotation": {
+            "Pitch": -1.5667155981063843,
+            "Yaw": -1.563815712928772,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "5smSl+F6O6+PbtVLLjgu2Q==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Oak_Branch_Long",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.6258544921875,
+            "Y": 3.377471923828125,
+            "Z": 1.81512451171875
+          },
+          "Rotation": {
+            "Pitch": -0.0010137856006622314,
+            "Yaw": 1.5673532485961914,
+            "Roll": 1.0842026894733873E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "Tp9xp6Q1OKiw2FneG5CS5w==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.71539306640625,
+            "Y": 2.5304107666015625,
+            "Z": 0.9981689453125
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "1kM1lNf5NGW42D45rj1Mlg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.779296875,
+            "Y": 2.8306045532226562,
+            "Z": 0.19244384765625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "kvo8S1iQOua6/OrLHVzq5A==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Oak_Branch_Long"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.6849365234375,
+            "Y": 1.6951141357421875,
+            "Z": 0.5916748046875
+          },
+          "Rotation": {
+            "Pitch": -1.5667155981063843,
+            "Yaw": 3.1346242427825928,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "nA6Ab4X2MSiWZVXShc3APw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Oak_Branch_Long",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Oak_Branch_Long"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.395751953125,
+            "Y": 3.6967391967773438,
+            "Z": 1.731658935546875
+          },
+          "Rotation": {
+            "Pitch": -1.5667155981063843,
+            "Yaw": -1.563815712928772,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "m0bwL8xZND2OD10KbY1eEw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Oak_Branch_Long",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.21221923828125,
+            "Y": 3.1059188842773438,
+            "Z": 0.190460205078125
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "sm0zwgxFNAW5asi/y3fziw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.77337646484375,
+            "Y": 3.2171173095703125,
+            "Z": 1.802276611328125
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "GYrRh7p9Pnyu2JyIPh1K8Q==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.2060546875,
+            "Y": 2.308135986328125,
+            "Z": 0.788360595703125
+          },
+          "Rotation": {
+            "Pitch": -1.5669753551483154,
+            "Yaw": -3.1390490531921387,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "Q6923pCkOw6eRH4OlmRBaw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Cloth_Roof_White_Vertical"
+        },
+        "Transform": {
+          "Position": {
+            "X": -0.2845458984375,
+            "Y": 2.5495681762695312,
+            "Z": 1.27508544921875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5582183599472046,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "hzDtdS5aMdmf00FhYg9fbQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Cloth_Roof_White_Vertical",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.2060546875,
+            "Y": 2.308135986328125,
+            "Z": 1.275360107421875
+          },
+          "Rotation": {
+            "Pitch": -1.5669753551483154,
+            "Yaw": -3.1390490531921387,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "axoGjBkmNCO4lojAdpGWmA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.7154541015625,
+            "Y": 2.3210067749023438,
+            "Z": 0.362091064453125
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": -1.5697669982910156
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "1xBfHq5mOtuzfuUhNta+6g==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.71539306640625,
+            "Y": 3.3028793334960938,
+            "Z": 0.705963134765625
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "a9ZGMYcaO5ewClqUTZr3yg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.6258544921875,
+            "Y": 2.4342803955078125,
+            "Z": 0.201019287109375
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "Qn+Nj+tmNim4/FCDgHFmfg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.4415283203125,
+            "Y": 2.310028076171875,
+            "Z": 0.201080322265625
+          },
+          "Rotation": {
+            "Pitch": -1.5661685466766357,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "ieRjB5XSN8ecCn0v7gOJ/A==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.77801513671875,
+            "Y": 3.2004776000976562,
+            "Z": 0.192474365234375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "caqai9aTPvO50nfTrmUTiw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.4404296875,
+            "Y": 2.3117218017578125,
+            "Z": 1.809112548828125
+          },
+          "Rotation": {
+            "Pitch": -1.5661685466766357,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "SbqaK9JpPMWPfsyRn27kXg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.19989013671875,
+            "Y": 2.4342727661132812,
+            "Z": 0.99627685546875
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "MWgiribDMHaWaNuUAeoCWw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.71539306640625,
+            "Y": 2.321014404296875,
+            "Z": 1.323638916015625
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": -1.5697669982910156
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "rnOPcNJLPDSnXnEmHkqRGg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.3150634765625,
+            "Y": 2.310028076171875,
+            "Z": 0.201080322265625
+          },
+          "Rotation": {
+            "Pitch": -1.5661685466766357,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "5jVSG5lJOvm2aKCVdv2eRA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.3284912109375,
+            "Y": 3.377471923828125,
+            "Z": 1.815093994140625
+          },
+          "Rotation": {
+            "Pitch": -0.0010137856006622314,
+            "Yaw": 1.5673532485961914,
+            "Roll": 1.0842026894733873E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "fAMvIhwrNiCM/pIUSqzwnQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Oak_Branch_Long"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.39508056640625,
+            "Y": 1.6911697387695312,
+            "Z": 0.296783447265625
+          },
+          "Rotation": {
+            "Pitch": -1.5667155981063843,
+            "Yaw": -1.563815712928772,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "OFlWPRtlO72OdITuFZ3Gig==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Oak_Branch_Long",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.4415283203125,
+            "Y": 3.2265167236328125,
+            "Z": 0.201080322265625
+          },
+          "Rotation": {
+            "Pitch": -1.5661685466766357,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "cC+039PtPHGVoBDPPYyjCw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.1884765625,
+            "Y": 3.2265167236328125,
+            "Z": 1.80902099609375
+          },
+          "Rotation": {
+            "Pitch": -1.5661685466766357,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "Qx9M17/qORmkFDaRBkdh2A==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.77337646484375,
+            "Y": 2.7096023559570312,
+            "Z": 1.800506591796875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "xCB7RVM9M+qxISfvLi1wGA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Oak_Branch_Long"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.30810546875,
+            "Y": 1.6911697387695312,
+            "Z": 1.38775634765625
+          },
+          "Rotation": {
+            "Pitch": -1.5667155981063843,
+            "Yaw": 0.0014186660991981626,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "RYThW9XgMn6XGsJf+vGGhg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Oak_Branch_Long",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.3150634765625,
+            "Y": 3.4792861938476562,
+            "Z": 0.201080322265625
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "ZoyXbb4ROw2YCrHSjXSRGw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Cloth_Roof_White_Vertical"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.60870361328125,
+            "Y": 2.8996353149414062,
+            "Z": -0.289520263671875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.010067419148981571,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "XNXh8iJ8Mv6g13RmtBnM7g==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Cloth_Roof_White_Vertical",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.6258544921875,
+            "Y": 3.0757598876953125,
+            "Z": 1.81512451171875
+          },
+          "Rotation": {
+            "Pitch": -0.0010137856006622314,
+            "Yaw": 1.5673532485961914,
+            "Roll": 1.0842026894733873E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "sanRcwpsOxuKwdwz4aXVYQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.71533203125,
+            "Y": 3.1245803833007812,
+            "Z": 0.345916748046875
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": -1.5697669982910156
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "cXvwQ2A1PJetMjlUFJRpCw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.3150634765625,
+            "Y": 2.4398880004882812,
+            "Z": 0.201080322265625
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "aZ78ivAXN1K20QcCTyp6Fg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Cloth_Roof_White_Vertical"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.71844482421875,
+            "Y": 2.9824752807617188,
+            "Z": 1.33026123046875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.010067419148981571,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "HP6EJLYKP8GU1euAJyvBTg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Cloth_Roof_White_Vertical",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.2060546875,
+            "Y": 3.1615982055664062,
+            "Z": 0.738037109375
+          },
+          "Rotation": {
+            "Pitch": -1.5669753551483154,
+            "Yaw": -3.1390490531921387,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "fs8g6G0QP+22zuhZekXbBQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Oak_Branch_Long"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.95947265625,
+            "Y": 4.056770324707031,
+            "Z": 1.7364501953125
+          },
+          "Rotation": {
+            "Pitch": -1.5667155981063843,
+            "Yaw": -1.563815712928772,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "TnDtr7HvMiWUexv2XISY/w==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Oak_Branch_Long",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.77337646484375,
+            "Y": 1.9744644165039062,
+            "Z": 1.799224853515625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "fTBVuXQWOsup3VivDZwxww==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.192138671875,
+            "Y": 2.885498046875,
+            "Z": 0.996246337890625
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "9tLWRmTeP3GmMklTbjSZDA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.17987060546875,
+            "Y": 3.2658615112304688,
+            "Z": 1.326141357421875
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "FkOND590PGy8X048AfzFEg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.98419189453125,
+            "Y": 3.2265167236328125,
+            "Z": 0.201080322265625
+          },
+          "Rotation": {
+            "Pitch": -1.5661685466766357,
+            "Yaw": 1.5673532485961914,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "BQavhlH7Md+ohaQb2QWXhg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Oak_Branch_Long"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.37744140625,
+            "Y": 1.6911697387695312,
+            "Z": 1.703704833984375
+          },
+          "Rotation": {
+            "Pitch": -1.5667155981063843,
+            "Yaw": -1.563815712928772,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "4XZH2WefMkuaBY8bogdzqw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Oak_Branch_Long",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.71539306640625,
+            "Y": 3.0100326538085938,
+            "Z": 0.9981689453125
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "fBmbFJY9M0a2bZ/eLaM+Pg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.71533203125,
+            "Y": 3.1245803833007812,
+            "Z": 0.705352783203125
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": -1.5697669982910156
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "kYX7Pm1EOMGjy14HTLqhlA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.18878173828125,
+            "Y": 3.2238922119140625,
+            "Z": 0.9947509765625
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "hGddpnFaOLiNs5zqr7Adsg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Cloth_Roof_White_Vertical"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.21356201171875,
+            "Y": 2.5602874755859375,
+            "Z": 1.33026123046875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.010067419148981571,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "r7yhtHfrO2mI1+/OGLCDIA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Cloth_Roof_White_Vertical",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.2060546875,
+            "Y": 3.1608200073242188,
+            "Z": 0.891998291015625
+          },
+          "Rotation": {
+            "Pitch": -1.5669753551483154,
+            "Yaw": -3.1390490531921387,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "tO5eOBKBPUWAr3X6sF6TRQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.71539306640625,
+            "Y": 3.3027191162109375,
+            "Z": 0.9981689453125
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "zjjOOUzLMj29XrTymUx9Kg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Oak_Branch_Long"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.6849365234375,
+            "Y": 1.6951141357421875,
+            "Z": 1.3023681640625
+          },
+          "Rotation": {
+            "Pitch": -1.5667155981063843,
+            "Yaw": 3.1346242427825928,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "jRDvFKTTP2iDeIqgg1YluA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Oak_Branch_Long",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Oak_Branch_Long"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.114501953125,
+            "Y": 4.0672454833984375,
+            "Z": 0.296783447265625
+          },
+          "Rotation": {
+            "Pitch": -1.5667155981063843,
+            "Yaw": -1.563815712928772,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "I/qfz2yDMrSI4M3YkmsWDA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Oak_Branch_Long",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.6258544921875,
+            "Y": 3.4792861938476562,
+            "Z": 0.2010498046875
+          },
+          "Rotation": {
+            "Pitch": -0.01542961597442627,
+            "Yaw": 1.5673532485961914,
+            "Roll": 8.674650321673961E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "BoBKLVTtPUCEepJyxtyHAg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Wood_Hardwood_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.6258544921875,
+            "Y": 2.4342803955078125,
+            "Z": 1.81512451171875
+          },
+          "Rotation": {
+            "Pitch": -0.005814075469970703,
+            "Yaw": 1.5673532485961914,
+            "Roll": 4.336882102221382E-19
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "zeF+uSb9M1+AXFIEENZS6Q==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.299999713897705
+        },
+        "Item": {
+          "Item": {
+            "Id": "Wood_Hardwood_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Cloth_Roof_White_Vertical"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.21356201171875,
+            "Y": 2.5602951049804688,
+            "Z": -0.289520263671875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.010067419148981571,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "9LH+pImjMvmQUo6IzOb80A==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Cloth_Roof_White_Vertical",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Stone_Cobble_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.20849609375,
+            "Y": 0.6760330200195312,
+            "Z": 2.094757080078125
+          },
+          "Rotation": {
+            "Pitch": -1.2750217548429532E-16,
+            "Yaw": 0.014568881131708622,
+            "Roll": -1.5585657358169556
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "okkgusk/P3+xyCo8kLvJbg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Stone_Cobble_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Stone_Cobble_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 1.425537109375,
+            "Y": 0.6760330200195312,
+            "Z": 2.094757080078125
+          },
+          "Rotation": {
+            "Pitch": -1.2750217548429532E-16,
+            "Yaw": 0.014568881131708622,
+            "Roll": -1.5585657358169556
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "KPTaHMBPP5SU4PwxUZc/4w==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Stone_Cobble_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Stone_Cobble_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 2.04034423828125,
+            "Y": 0.6760177612304688,
+            "Z": 1.805816650390625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.565996527671814,
+            "Roll": -1.5585657358169556
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "oWZC1ldMO+qJJPSQN+Gqsg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Stone_Cobble_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Stone_Cobble_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.29229736328125,
+            "Y": 0.6760330200195312,
+            "Z": 2.094757080078125
+          },
+          "Rotation": {
+            "Pitch": -1.2750217548429532E-16,
+            "Yaw": 0.014568881131708622,
+            "Roll": -1.5585657358169556
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "HXvWZA0ZMrGez1wH6/EXtQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Stone_Cobble_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Deco_Lantern"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.9569091796875,
+            "Y": 2.340911865234375,
+            "Z": 0.990875244140625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0071081677451729774,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "z3ZUrAERNCqJBvl1pdoHLg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 4.199999809265137
+        },
+        "Item": {
+          "Item": {
+            "Id": "Deco_Lantern",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    }
+  ]
+}

@@ -1,0 +1,439 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": -1,
+      "name": "Soil_Needles"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Soil_Needles"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 1,
+      "name": "Soil_Needles"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 1,
+      "name": "Furniture_Village_Tombstone",
+      "rotation": 2
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 1,
+      "name": "Furniture_Village_Tombstone",
+      "filler": 1024,
+      "rotation": 2
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": -1,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 1,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 1,
+      "name": "Empty",
+      "level": 0
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 1,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Stone_Brick_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.39508056640625,
+            "Y": 0.5413970947265625,
+            "Z": -0.797454833984375
+          },
+          "Rotation": {
+            "Pitch": 1.5631847381591797,
+            "Yaw": -1.5644216537475586,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "4n3/MyMONxOOpcdtyhfaSA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.5999997854232788
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Stone_Brick_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Stone_Brick_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.9745330810546875,
+            "Y": 0.568511962890625,
+            "Z": 1.089019775390625
+          },
+          "Rotation": {
+            "Pitch": 1.5633270740509033,
+            "Yaw": -5.749987394665368E-6,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "uAxwI+onTLqa7COh1jRF5A==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.5999997854232788
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Stone_Brick_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Stone_Brick_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.0128631591796875,
+            "Y": 0.5724334716796875,
+            "Z": 0.3211669921875
+          },
+          "Rotation": {
+            "Pitch": 1.5633270740509033,
+            "Yaw": -5.749987394665368E-6,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "ZolNDksnR1K7lMzh8khgOw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.5999997854232788
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Stone_Brick_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Stone_Brick_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.010223388671875,
+            "Y": 0.5664215087890625,
+            "Z": -0.474273681640625
+          },
+          "Rotation": {
+            "Pitch": 1.5633270740509033,
+            "Yaw": -5.749987394665368E-6,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "Fi7o053ZRFWPpVLsnxA/rw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.5999997854232788
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Stone_Brick_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 0.52264404296875,
+            "Y": 0.8231124877929688,
+            "Z": 0.436126708984375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.5868949890136719,
+            "Roll": 0.0
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Weapon_Club_Zombie_Arm",
+            "Quantity": 1,
+            "Durability": 16.0,
+            "MaxDurability": 16.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.5868949890136719,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Stone_Brick_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.9745330810546875,
+            "Y": 0.5685043334960938,
+            "Z": -0.49017333984375
+          },
+          "Rotation": {
+            "Pitch": 1.5633270740509033,
+            "Yaw": -5.749987394665368E-6,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "wO5lFaALSyem4DfO5+NYYQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.5999997854232788
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Stone_Brick_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Stone_Brick_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.9745330810546875,
+            "Y": 0.568511962890625,
+            "Z": 0.3057861328125
+          },
+          "Rotation": {
+            "Pitch": 1.5633270740509033,
+            "Yaw": -5.749987394665368E-6,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "JP6XRz87S1SLfFu18TtXCA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.5999997854232788
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Stone_Brick_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Stone_Brick_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.0128631591796875,
+            "Y": 0.5724334716796875,
+            "Z": 1.115478515625
+          },
+          "Rotation": {
+            "Pitch": 1.5633270740509033,
+            "Yaw": -5.749987394665368E-6,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "tCpPntimTB6QeO7zfAr24g==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.5999997854232788
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Stone_Brick_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    }
+  ]
+}

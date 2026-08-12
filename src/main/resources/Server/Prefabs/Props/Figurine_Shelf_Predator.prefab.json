@@ -1,0 +1,148 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Furniture_Village_Shelf_Full",
+      "support": 1,
+      "rotation": 1
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Bear_Grizzly",
+            "Scale": 0.20000000298023224,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.28814697265625,
+            "Y": 0.12694549560546875,
+            "Z": 0.3072509765625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.413667678833008,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "G/LUpQeBPemtUgBIk5BXOQ==",
+            "$type": "04"
+          }
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.4136672019958496,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Wolf_Black",
+            "Scale": 0.10000000149011612,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.277496337890625,
+            "Y": 0.12567901611328125,
+            "Z": 0.81365966796875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.19522225856781,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "qcDSkEDUMW+xyu4Cq88HVw==",
+            "$type": "04"
+          }
+        },
+        "EntityScale": {
+          "Scale": 0.20000000298023224
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.1952229738235474,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "Prop": {},
+        "Model": {
+          "Model": {
+            "Id": "Rat",
+            "Scale": 0.10000000149011612,
+            "Static": true
+          }
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.284515380859375,
+            "Y": 0.13442230224609375,
+            "Z": 0.62030029296875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.4286985397338867,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "epHZ6LXpNR6C3bKDh9yt5Q==",
+            "$type": "04"
+          }
+        },
+        "EntityScale": {
+          "Scale": 0.20000000298023224
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.4286984205245972,
+            "Roll": 0.0
+          }
+        }
+      }
+    }
+  ]
+}

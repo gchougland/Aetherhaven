@@ -1,0 +1,342 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Furniture_Temple_Dark_Brazier",
+      "rotation": 1
+    }
+  ],
+  "fluids": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty",
+      "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Shale_Brick_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.744140625,
+            "Y": 0.6089553833007812,
+            "Z": 0.2874755859375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0337802916765213,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "Owos2zxSOsmcfXGwOA260g==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Shale_Brick_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Shale_Stalactites_Small"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.52886962890625,
+            "Y": 1.1494522094726562,
+            "Z": 0.46856689453125
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.006135896779596806,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "h8v4sHi8M9O+SuxlWfwrjA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.800000011920929
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Shale_Stalactites_Small",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Shale_Brick_Roof_Flat"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.5072021484375,
+            "Y": 1.0647659301757812,
+            "Z": 0.490570068359375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -0.01078085508197546,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "eOQA/DyqOW2DJ8dgtN4Fzg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.5999997854232788
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Shale_Brick_Roof_Flat",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Shale_Brick_Smooth_Half"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.514892578125,
+            "Y": 0.38980865478515625,
+            "Z": 0.5020751953125
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.009571150876581669,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "YYCSafc7MIaMAx/1j426MA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.6000001430511475
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Shale_Brick_Smooth_Half",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Shale_Brick_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.30780029296875,
+            "Y": 0.6089553833007812,
+            "Z": 0.722137451171875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0337802916765213,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "AIzgu6RZOFqvHJobqJUaTA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Shale_Brick_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Shale_Brick_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.29364013671875,
+            "Y": 0.6089553833007812,
+            "Z": 0.2874755859375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0337802916765213,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "d4E+o/87PkeIPvX+ZBgRvg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Shale_Brick_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Rock_Shale_Brick_Beam"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.744140625,
+            "Y": 0.6089553833007812,
+            "Z": 0.722137451171875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0337802916765213,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "dI9pJqlmMcqyOvAzR4nKJA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Rock_Shale_Brick_Beam",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    }
+  ]
+}
