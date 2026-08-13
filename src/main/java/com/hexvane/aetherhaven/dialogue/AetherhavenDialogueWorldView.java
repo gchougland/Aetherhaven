@@ -617,6 +617,27 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
     }
 
     @Override
+    public int hiredGuardCount(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        TownRecord town = townFor(playerRef, store);
+        return town != null ? town.getHiredGuardRecords().size() : 0;
+    }
+
+    @Override
+    public int maxHiredGuards(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        TownRecord town = townFor(playerRef, store);
+        if (town == null) {
+            return 0;
+        }
+        return TownRankCapacity.maxHiredGuards(town, plugin.getQuestBoardCatalog());
+    }
+
+    @Override
+    public boolean guardHireAtLimit(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        TownRecord town = townFor(playerRef, store);
+        return town != null && !TownRankCapacity.canHireGuard(town, plugin.getQuestBoardCatalog());
+    }
+
+    @Override
     @Nonnull
     public String guardHireGuardTypeLangKey(
         @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
@@ -650,6 +671,20 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
         TownRecord town = townFor(playerRef, store);
         return nu != null && town != null && GuardHireService.isUnhousedHiredGuard(town, nu.getUuid());
+    }
+
+    @Override
+    public boolean npcIsHiredGuard(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return false;
+        }
+        UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        TownRecord town = townFor(playerRef, store);
+        return nu != null && town != null && GuardHireService.isHiredGuard(town, nu.getUuid());
     }
 
     @Override

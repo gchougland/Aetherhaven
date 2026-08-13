@@ -2,6 +2,7 @@ aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house=About a place to live...
 aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_finish=Your house is finished.
 aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_remind=About your house...
 aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_waiting=About housing...
+aetherhaven.dialogue.aetherhaven_guard.main_hub.dismiss=I need to let you go
 aetherhaven.dialogue.aetherhaven_guard.main_hub.leave=Goodbye
 
 aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.body=I joined your town but I still sleep in the open. Could you build me a house and put my name on the sign?
@@ -19,3 +20,7 @@ aetherhaven.dialogue.aetherhaven_guard.guard_house_waiting.ok=Understood
 
 aetherhaven.dialogue.aetherhaven_guard.guard_house_finish.body=Good. I have a door and a bed. I will pay my share like everyone else.
 aetherhaven.dialogue.aetherhaven_guard.guard_house_finish.ok=Thank you
+
+aetherhaven.dialogue.aetherhaven_guard.dismiss_confirm.body=I will leave town and free my house so you can hire someone else.
+aetherhaven.dialogue.aetherhaven_guard.dismiss_confirm.yes=Yes, you can leave
+aetherhaven.dialogue.aetherhaven_guard.dismiss_confirm.no=Stay on

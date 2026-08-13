@@ -6,17 +6,21 @@ import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.entity.EntityRotationUtil;
 import com.hexvane.aetherhaven.equipment.VillagerEquipmentService;
 import com.hexvane.aetherhaven.equipment.data.EquipmentProfileDefinition;
+import com.hexvane.aetherhaven.patrol.GuardFollowPlayerSystem;
+import com.hexvane.aetherhaven.patrol.GuardPatrolSystem;
 import com.hexvane.aetherhaven.questboard.TownRankCapacity;
 import com.hexvane.aetherhaven.town.HiredGuardRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.townsfolk.PendingEntityRemovalService;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkExistenceService;
 import com.hexvane.aetherhaven.villager.audit.VillagerAuditContext;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolCheckoutRecord;
 import com.hexvane.aetherhaven.ui.GuardRoleLabels;
+import java.util.Iterator;
 import java.util.List;
 import com.hexvane.aetherhaven.villager.NpcModelSpawnUtil;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
@@ -225,6 +229,52 @@ public final class GuardHireService {
         return true;
     }
 
+    public static boolean tryDismiss(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (pu == null || !town.hasMemberOrOwner(pu.getUuid())) {
+            return false;
+        }
+        UUID npcUuid = npcUuid(store, npcRef);
+        if (npcUuid == null || !isHiredGuard(town, npcUuid)) {
+            return false;
+        }
+        TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+        if (binding == null
+            || !town.getTownId().equals(binding.getTownId())
+            || !TownVillagerBinding.KIND_GUARD.equals(binding.getKind())) {
+            return false;
+        }
+        TownsfolkCharacterBinding tb = store.getComponent(npcRef, TownsfolkCharacterBinding.getComponentType());
+        String characterId = tb != null ? tb.getCharacterId() : null;
+
+        GuardFollowPlayerSystem.stopFollow(npcRef, store, false);
+        characterId = removeHiredGuardFromTown(town, npcUuid, characterId);
+        if (characterId != null && !characterId.isBlank()) {
+            TownsfolkExistenceService.releaseCharacter(
+                world,
+                plugin,
+                town.getTownId(),
+                characterId,
+                TownsfolkExistenceService.ReleaseReason.DESPAWN
+            );
+        } else {
+            TownsfolkExistenceService.releaseByEntity(world, plugin, npcUuid);
+        }
+        GuardPatrolSystem.clearAssignmentsForGuard(world, plugin, npcUuid);
+        PendingEntityRemovalService.schedule(world, npcUuid, "hired_guard_dismiss");
+        tm.updateTown(town);
+        LOGGER.atInfo().log("Dismissed hired guard %s from town %s", characterId, town.getTownId());
+        return true;
+    }
+
     /**
      * Respawns a hired guard near {@code spawnPos} (e.g. after {@code /ah villager reset}). Keeps character identity,
      * equipment, and display name. Updates the townsfolk ledger when a checkout row exists.
@@ -416,6 +466,66 @@ public final class GuardHireService {
     private static UUID npcUuid(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> npcRef) {
         UUIDComponent uc = store.getComponent(npcRef, UUIDComponent.getComponentType());
         return uc != null ? uc.getUuid() : null;
+    }
+
+    public static boolean isHiredGuard(@Nonnull TownRecord town, @Nonnull UUID entityUuid) {
+        for (HiredGuardRecord rec : town.getHiredGuardRecords()) {
+            UUID u = rec.getEntityUuid();
+            if (u != null && u.equals(entityUuid)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Drops the hired-guard slot, frees their house, and clears housing-quest / resident rows.
+     * Does not despawn the entity or release the townsfolk ledger.
+     *
+     * @return character id from the matching record, or {@code characterIdHint} if none matched
+     */
+    @Nullable
+    public static String removeHiredGuardFromTown(
+        @Nonnull TownRecord town,
+        @Nullable UUID entityUuid,
+        @Nullable String characterIdHint
+    ) {
+        String characterId = characterIdHint != null && !characterIdHint.isBlank() ? characterIdHint.trim() : null;
+        UUID occupancyUuid = entityUuid;
+        Iterator<HiredGuardRecord> it = town.getHiredGuardRecords().iterator();
+        while (it.hasNext()) {
+            HiredGuardRecord rec = it.next();
+            UUID recUuid = rec.getEntityUuid();
+            if (occupancyUuid != null && occupancyUuid.equals(recUuid)) {
+                if (characterId == null || characterId.isBlank()) {
+                    characterId = rec.getCharacterId();
+                }
+                it.remove();
+                break;
+            }
+            if (characterId != null && characterId.equalsIgnoreCase(rec.getCharacterId())) {
+                if (occupancyUuid == null) {
+                    occupancyUuid = recUuid;
+                }
+                it.remove();
+                break;
+            }
+        }
+        if (occupancyUuid != null) {
+            UUID residentUuid = occupancyUuid;
+            for (var plot : town.getPlotInstances()) {
+                if (plot.hasHomeResident(residentUuid)) {
+                    plot.clearHomeResidentUuid(residentUuid);
+                }
+            }
+            town.getResidentNpcRecords().removeIf(r -> residentUuid.equals(r.getLastEntityUuid()));
+            UUID questTarget = town.getQuestTargetEntityUuid(AetherhavenConstants.QUEST_HOUSE_GUARD);
+            if (residentUuid.equals(questTarget)
+                || (questTarget == null && town.hasQuestActive(AetherhavenConstants.QUEST_HOUSE_GUARD))) {
+                town.clearActiveQuest(AetherhavenConstants.QUEST_HOUSE_GUARD);
+            }
+        }
+        return characterId;
     }
 
     public static boolean isUnhousedHiredGuard(@Nonnull TownRecord town, @Nonnull UUID entityUuid) {

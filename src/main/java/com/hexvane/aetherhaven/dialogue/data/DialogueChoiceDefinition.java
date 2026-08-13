@@ -264,7 +264,8 @@ public final class DialogueChoiceDefinition {
                  "start_quest",
                  "gift_villager",
                  "goto",
-                 "hire_guild_adventurer" -> true;
+                 "hire_guild_adventurer",
+                 "dismiss_hired_guard" -> true;
             default -> false;
         };
     }

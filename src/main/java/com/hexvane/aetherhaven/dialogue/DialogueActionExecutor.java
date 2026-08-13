@@ -2,9 +2,7 @@ package com.hexvane.aetherhaven.dialogue;
 
 import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.AetherhavenConstants;
-import com.hexvane.aetherhaven.bard.BardEnvironmentMusic;
-import com.hexvane.aetherhaven.bard.BardMusicProximityState;
-import com.hexvane.aetherhaven.bard.BardPerformanceComponent;
+import com.hexvane.aetherhaven.bard.BardPlaybackMode;
 import com.hexvane.aetherhaven.bard.BardPerformanceService;
 import com.hexvane.aetherhaven.rescue.RescueVillagerDespawnEffects;
 import com.hexvane.aetherhaven.rescue.RescueVillagerTriggers;
@@ -51,7 +49,6 @@ import com.hexvane.aetherhaven.worldnpc.WorldNpcRegistry;
 import com.hexvane.aetherhaven.worldnpc.WorldNpcReputationService;
 import com.hexvane.aetherhaven.worldnpc.WorldQuestProgressionService;
 import com.hypixel.hytale.builtin.crafting.CraftingPlugin;
-import com.hypixel.hytale.builtin.audio.components.ForcedMusicTracker;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -153,8 +150,11 @@ public final class DialogueActionExecutor {
             case "gaia_draught_upgrade_catalyst" -> gaiaDraughtUpgradeCatalyst(playerRef, store, npcRef);
             case "priestess_gold_heal" -> priestessGoldHeal(playerRef, store, npcRef);
             case "hire_guild_adventurer" -> hireGuildAdventurer(playerRef, store, npcRef, out);
+            case "dismiss_hired_guard" -> dismissHiredGuard(playerRef, store, npcRef, out);
             case "despawn_npc" -> despawnNpc(a, playerRef, store, npcRef);
             case "play_bard_song" -> playBardSong(a, playerRef, store, npcRef);
+            case "start_bard_shuffle" -> startBardShuffle(playerRef, store, npcRef);
+            case "loop_current_bard_song" -> loopCurrentBardSong(store, npcRef);
             case "stop_bard_song" -> stopBardSong(playerRef, store, npcRef);
             case "start_follow_player" -> startFollowPlayer(playerRef, store, npcRef);
             case "stop_follow_player" -> stopFollowPlayer(store, npcRef);
@@ -1156,28 +1156,43 @@ public final class DialogueActionExecutor {
         if (plugin == null) {
             return;
         }
-        BardPerformanceService.startSong(store, null, npcRef, plugin, songId.trim());
-        BardPerformanceComponent perf =
-            store.getComponent(npcRef, BardPerformanceComponent.getComponentType());
-        if (perf == null || perf.getMusicContainerIndex() == 0) {
-            return;
-        }
-        ForcedMusicTracker tracker = store.getComponent(playerRef, ForcedMusicTracker.getComponentType());
-        PlayerRef playerRefComponent = store.getComponent(playerRef, PlayerRef.getComponentType());
-        UUIDComponent playerUuid = store.getComponent(playerRef, UUIDComponent.getComponentType());
-        if (tracker == null || playerRefComponent == null || playerUuid == null) {
-            return;
-        }
-        BardEnvironmentMusic.setForcedMusic(
-            playerRef,
-            null,
+        boolean loop = boolField(a, "loop", false);
+        BardPerformanceService.startSong(
             store,
-            playerRefComponent,
-            tracker,
-            perf.getMusicContainerIndex()
+            null,
+            npcRef,
+            plugin,
+            songId.trim(),
+            loop ? BardPlaybackMode.LOOP : BardPlaybackMode.ONCE,
+            new String[0]
         );
-        store.getResource(BardMusicProximityState.getResourceType())
-            .setActive(playerUuid.getUuid(), perf.getMusicContainerIndex());
+        BardPerformanceService.applyForcedMusicForPlayer(playerRef, store, npcRef);
+    }
+
+    private static void startBardShuffle(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        BardPerformanceService.startShuffle(store, null, npcRef, plugin);
+        BardPerformanceService.applyForcedMusicForPlayer(playerRef, store, npcRef);
+    }
+
+    private static void loopCurrentBardSong(
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return;
+        }
+        BardPerformanceService.enableLoop(store, null, npcRef);
     }
 
     private static void stopBardSong(
@@ -1426,6 +1441,33 @@ public final class DialogueActionExecutor {
             out.setCloseDialogue(true);
         } else {
             out.setGotoNodeId("hire_confirm");
+        }
+    }
+
+    private static void dismissHiredGuard(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        @Nonnull DialogueActionBatchResult out
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
+        if (town == null) {
+            return;
+        }
+        TownManager tm = owningTownManager(town, localTm);
+        if (GuardHireService.tryDismiss(world, plugin, town, tm, playerRef, npcRef, store)) {
+            out.setCloseDialogue(true);
+        } else {
+            out.setGotoNodeId("dismiss_confirm");
         }
     }
 

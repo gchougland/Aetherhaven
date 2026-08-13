@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
 import com.hexvane.aetherhaven.guild.marker.AdventurerSpawnMarkerLocator;
 import com.hexvane.aetherhaven.guild.marker.AdventurerSpawnSlot;
+import com.hexvane.aetherhaven.patrol.GuardPatrolSystem;
 import com.hexvane.aetherhaven.time.AetherhavenMorningWindow;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
@@ -192,12 +193,14 @@ public final class GuildHallAdventurerPoolService {
         int despawned = 0;
         for (var rec : new ArrayList<>(town.getHiredGuardRecords())) {
             UUID entityUuid = rec.getEntityUuid();
+            GuardHireService.removeHiredGuardFromTown(town, entityUuid, rec.getCharacterId());
             if (entityUuid != null) {
                 Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityUuid);
                 if (ref != null && ref.isValid()) {
                     PendingEntityRemovalService.schedule(world, entityUuid, "hired_guard_clear");
                     despawned++;
                 }
+                GuardPatrolSystem.clearAssignmentsForGuard(world, plugin, entityUuid);
             }
             String characterId = rec.getCharacterId();
             if (characterId != null && !characterId.isBlank()) {

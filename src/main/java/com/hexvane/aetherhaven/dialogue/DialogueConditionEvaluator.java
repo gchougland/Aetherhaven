@@ -162,6 +162,7 @@ public final class DialogueConditionEvaluator {
             case "player_has_unhoused_hired_guard" -> worldView.playerHasUnhousedHiredGuard(playerRef, store);
             case "guard_house_quest_target_housed" -> worldView.guardHouseQuestTargetHoused(playerRef, store);
             case "npc_is_unhoused_hired_guard" -> worldView.npcIsUnhousedHiredGuard(playerRef, store, npcRef);
+            case "npc_is_hired_guard" -> worldView.npcIsHiredGuard(playerRef, store, npcRef);
             case "npc_is_quest_target" -> worldView.npcIsQuestTarget(
                 playerRef,
                 store,
@@ -197,6 +198,8 @@ public final class DialogueConditionEvaluator {
             case "npc_schedule_at_work" -> npcScheduleAtWork(store, npcRef);
             case "bard_can_offer_music" -> bardCanOfferMusic(store, npcRef);
             case "bard_is_performing" -> BardPerformanceService.isPerforming(store, npcRef);
+            case "bard_is_looping" -> BardPerformanceService.isLooping(store, npcRef);
+            case "bard_is_shuffling" -> BardPerformanceService.isShuffling(store, npcRef);
             case "npc_following_this_player" -> npcFollowingThisPlayer(playerRef, store, npcRef);
             case "subplugin_enabled" -> subpluginEnabled(o);
             case "npc_other_villager_nearby" -> worldView.npcOtherVillagerNearby(

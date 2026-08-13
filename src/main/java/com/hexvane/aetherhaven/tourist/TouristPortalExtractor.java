@@ -51,6 +51,7 @@ public final class TouristPortalExtractor {
                         if (bound != null
                             && town.getTownId().equals(bound.getTownId())
                             && plotId.equals(bound.getPlotId())) {
+                            TouristPortalVisualService.applyColorVariantAtBlock(world, pos, town);
                             continue;
                         }
                     }

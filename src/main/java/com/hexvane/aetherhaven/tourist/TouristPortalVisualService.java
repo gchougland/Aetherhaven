@@ -1,12 +1,12 @@
 package com.hexvane.aetherhaven.tourist;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.universe.world.SetBlockSettings;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import java.util.List;
@@ -56,6 +56,13 @@ public final class TouristPortalVisualService {
             return;
         }
 
+        TouristPortalBlock saved = TouristPortalBlockUtil.getBlockComponent(world, base);
+        int settings =
+            SetBlockSettings.NO_UPDATE_STATE
+                | SetBlockSettings.NO_SEND_PARTICLES
+                | SetBlockSettings.NO_BREAK_FILLER
+                | SetBlockSettings.NO_SET_FILLER;
+
         TouristPortalBlockUtil.forEachPlatformCell(world, base, cell -> {
             WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(cell.x, cell.z));
             if (chunk == null) {
@@ -78,8 +85,12 @@ public final class TouristPortalVisualService {
                 targetType,
                 rotationIndex,
                 filler,
-                ConstructionPasteOps.SET_BLOCK_SETTINGS_PLACE
+                settings
             );
         });
+
+        if (saved != null) {
+            TouristPortalBlockUtil.writeBlockComponent(world, base, saved);
+        }
     }
 }

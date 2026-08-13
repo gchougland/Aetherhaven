@@ -219,6 +219,24 @@ public interface DialogueWorldView {
         return 0L;
     }
 
+    default int hiredGuardCount(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store
+    ) {
+        return 0;
+    }
+
+    default int maxHiredGuards(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store
+    ) {
+        return 0;
+    }
+
+    default boolean guardHireAtLimit(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store
+    ) {
+        return false;
+    }
+
     @Nonnull
     default String guardHireGuardTypeLangKey(
         @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
@@ -239,6 +257,14 @@ public interface DialogueWorldView {
     }
 
     default boolean npcIsUnhousedHiredGuard(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        return false;
+    }
+
+    default boolean npcIsHiredGuard(
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store,
         @Nullable Ref<EntityStore> npcRef

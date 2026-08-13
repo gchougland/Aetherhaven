@@ -300,22 +300,7 @@ public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem
     ) {
         TownsfolkCharacterBinding tb = store.getComponent(victimRef, TownsfolkCharacterBinding.getComponentType());
         String characterId = tb != null ? tb.getCharacterId() : null;
-
-        Iterator<HiredGuardRecord> it = town.getHiredGuardRecords().iterator();
-        while (it.hasNext()) {
-            HiredGuardRecord rec = it.next();
-            if (entityUuid != null && entityUuid.equals(rec.getEntityUuid())) {
-                it.remove();
-                if (characterId == null) {
-                    characterId = rec.getCharacterId();
-                }
-                break;
-            }
-            if (characterId != null && characterId.equalsIgnoreCase(rec.getCharacterId())) {
-                it.remove();
-                break;
-            }
-        }
+        characterId = GuardHireService.removeHiredGuardFromTown(town, entityUuid, characterId);
 
         if (characterId != null && !characterId.isBlank()) {
             if (entityUuid != null) {
@@ -333,12 +318,6 @@ public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem
 
         if (entityUuid != null) {
             GuardPatrolSystem.clearAssignmentsForGuard(world, AetherhavenPlugin.get(), entityUuid);
-            clearHomeResident(town, entityUuid);
-            town.getResidentNpcRecords().removeIf(r -> entityUuid.equals(r.getLastEntityUuid()));
-            UUID questTarget = town.getQuestTargetEntityUuid(AetherhavenConstants.QUEST_HOUSE_GUARD);
-            if (entityUuid.equals(questTarget) || (questTarget == null && town.hasQuestActive(AetherhavenConstants.QUEST_HOUSE_GUARD))) {
-                town.clearActiveQuest(AetherhavenConstants.QUEST_HOUSE_GUARD);
-            }
         }
         tm.updateTown(town);
     }

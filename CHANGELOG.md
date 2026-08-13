@@ -5,9 +5,16 @@
 ### Changed
 
 - **Faster loading** Worlds with Aetherhaven open and join more quickly.
+- **Jewelry** Tooltips say to equip with a Hand Mirror.
+- **Path designer shovel** Starts in Place mode.
+- **Hiring guards** The guild hall hire talk shows how many guards you have and the town rank limit. If you are full, it tells you to raise your town rank.
+- **Banquet table** Crafts with any wood instead of darkwood.
 
 ### Added
 
+- **Dismiss guards** Talk to a hired guard and let them go. They leave town, their house is free, and you can hire someone else.
+- **Bard music** Ask Elias to shuffle through his songs, or to loop one song until you tell him to stop.
+- **Miner's hut** Can produce limestone and limestone cobble.
 - **Calendar** Hang a calendar on a wall to open a season view with villager birthdays marked on their days. Craft it at the town planning desk with wood.
 - **Villager birthdays** Each story villager has a birthday on the calendar. Gifts on their birthday give double friendship. They greet you and react to gifts with special birthday lines.
 - **Set date command** Creative command to jump to a specific season day at midnight for testing.
@@ -30,6 +37,12 @@
 - **Props** Place small decoration builds almost anywhere with a crate style prop item. Move and turn them in a placement menu before you set them down. They will not go into other blocks. Ships with Aqua Lamp, Palm Streetlight, Streetlight, Cabbage Trough, Fish Barrel, Potion Shelf, Plant Arch, Pig Pile, Balloons, and Festival Flag. Festival merchants sell some of these for festival tickets.
 - **Packaging wand** Point at a prop and use the wand to pack it back into an item. Props stay safe from breaking for everyone unless you turn breaking on for yourself with a creative command.
 - **Create and give props** Creative commands let you turn an existing prefab into a prop, give prop items, and hand out the packaging wand.
+
+### Fixed
+
+- **Tourist portal** After you finish the tourist portal building, the portal now lights up in your town color and works without you having to replace the block by hand.
+- **Battle horn** Nearby players see you blow the horn.
+- **Item tooltips** Item names and styled text stay readable when the shop gold price is shown.
 
 ## [2.7.1] - 8/7/2026
 

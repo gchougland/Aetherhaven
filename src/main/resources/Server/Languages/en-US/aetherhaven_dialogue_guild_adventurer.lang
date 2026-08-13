@@ -1,8 +1,9 @@
 aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire=Hire {type} guard ({gold} gold)
 aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.leave=Goodbye
-aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.body=Pay the fee and this adventurer will patrol for your town. They stay until they fall in battle.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.body=Pay the fee and this adventurer will patrol for your town. They stay until they fall in battle or you let them go. You have {current} of {max} guards.
 aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes=Yes, hire them
 aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.no=Not now
 aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.body=They are yours. Keep them fed and housed if you want them to stay long.
 aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.leave=Goodbye
-aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_limitReached=Your town can only hire {limit} guards at its current rank.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_roster=Guards hired: {current}/{max}.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_limitReached=Raise your town rank to hire more.

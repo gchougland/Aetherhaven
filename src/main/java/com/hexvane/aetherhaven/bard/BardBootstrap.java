@@ -13,7 +13,7 @@ public final class BardBootstrap {
         BardPerformanceComponent.register(plugin.getEntityStoreRegistry());
         BardActivePerformancesResource.register(plugin.getEntityStoreRegistry());
         BardMusicProximityState.register(plugin.getEntityStoreRegistry());
-        plugin.getEntityStoreRegistry().registerSystem(new BardPerformanceTickSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new BardPerformanceTickSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new BardMusicProximitySystem());
     }
 }

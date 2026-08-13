@@ -109,6 +109,12 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         "aetherhaven_dialogue_follow.aetherhaven.dialogue.follow.stop";
     private static final String LANG_GUILD_ADVENTURER_HIRE =
         "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire";
+    private static final String LANG_GUILD_ADVENTURER_HIRE_YES =
+        "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes";
+    private static final String LANG_GUILD_ADVENTURER_ROSTER =
+        "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_roster";
+    private static final String LANG_GUILD_ADVENTURER_LIMIT =
+        "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_limitReached";
     private static final String LANG_PRIESTESS_DRAUGHT_SHARD =
         "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_shard";
     private static final String LANG_PRIESTESS_DRAUGHT_CATALYST =
@@ -286,6 +292,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         applyPortrait(commandBuilder, store);
 
         Message bodyMsg = resolveDialogueBody(ref, store, node, firstEverTalk);
+        bodyMsg = withGuildAdventurerHireBody(ref, store, node, bodyMsg);
         if ("main_hub".equals(nodeId) && npcRef != null && npcRef.isValid()) {
             AetherhavenPlugin openerPlugin = AetherhavenPlugin.get();
             if (openerPlugin != null) {
@@ -536,6 +543,46 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
     }
 
     @Nonnull
+    private Message withGuildAdventurerHireBody(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull DialogueNodeDefinition node,
+        @Nonnull Message bodyMsg
+    ) {
+        if (!"aetherhaven_guild_adventurer".equals(treeId)) {
+            return bodyMsg;
+        }
+        String nodeText = node.getText();
+        if (nodeText != null && isTranslationKey(nodeText) && nodeText.contains("hire_confirm.body")) {
+            return withGuardHireCountParams(ref, store, bodyMsg);
+        }
+        if (!"main_hub".equals(nodeId)) {
+            return bodyMsg;
+        }
+        Message roster = withGuardHireCountParams(ref, store, Message.translation(LANG_GUILD_ADVENTURER_ROSTER));
+        bodyMsg = bodyMsg.insert(Message.raw("\n\n")).insert(roster);
+        if (dialogueWorldView.guardHireAtLimit(ref, store)) {
+            bodyMsg = bodyMsg.insert(Message.raw(" ")).insert(Message.translation(LANG_GUILD_ADVENTURER_LIMIT));
+        }
+        return bodyMsg;
+    }
+
+    @Nonnull
+    private Message withGuardHireCountParams(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Message message
+    ) {
+        return message
+            .param("current", Integer.toString(dialogueWorldView.hiredGuardCount(ref, store)))
+            .param("max", Integer.toString(dialogueWorldView.maxHiredGuards(ref, store)));
+    }
+
+    private static boolean isGuildAdventurerHireChoice(@Nullable String text) {
+        return LANG_GUILD_ADVENTURER_HIRE.equals(text) || LANG_GUILD_ADVENTURER_HIRE_YES.equals(text);
+    }
+
+    @Nonnull
     private Message withTouristMoveInParams(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
@@ -621,9 +668,11 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         if (LANG_GUILD_ADVENTURER_HIRE.equals(text)) {
             long gold = dialogueWorldView.guardHireGoldCost(ref, store, npcRef);
             String typeKey = dialogueWorldView.guardHireGuardTypeLangKey(ref, store, npcRef);
-            return m
-                .param("gold", Long.toString(gold))
-                .param("type", Message.translation(typeKey));
+            return withGuardHireCountParams(
+                ref,
+                store,
+                m.param("gold", Long.toString(gold)).param("type", Message.translation(typeKey))
+            );
         }
         if (usesTouristMoveInParams(text)) {
             return withTouristMoveInParams(ref, store, m, text);
@@ -752,6 +801,9 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                 if (reason != null && !reason.isBlank()) {
                     reasonMsg = dialogueMessage(reason);
                 }
+            }
+            if (reasonMsg == null && isGuildAdventurerHireChoice(text) && dialogueWorldView.guardHireAtLimit(ref, store)) {
+                reasonMsg = Message.translation(LANG_GUILD_ADVENTURER_LIMIT);
             }
             choiceLine =
                 reasonMsg != null
@@ -901,7 +953,14 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
     @Nullable
     private static boolean isBardSongListNode(@Nonnull DialogueNodeDefinition node) {
         String mode = node.getBodyMode();
-        return mode != null && "bard_song_list".equalsIgnoreCase(mode.trim());
+        return mode != null
+            && ("bard_song_list".equalsIgnoreCase(mode.trim())
+                || "bard_song_list_loop".equalsIgnoreCase(mode.trim()));
+    }
+
+    private static boolean isBardLoopSongList(@Nonnull DialogueNodeDefinition node) {
+        String mode = node.getBodyMode();
+        return mode != null && "bard_song_list_loop".equalsIgnoreCase(mode.trim());
     }
 
     @Nonnull
@@ -914,7 +973,11 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         if (isBardSongListNode(node)) {
             AetherhavenPlugin plugin = AetherhavenPlugin.get();
             if (plugin != null) {
-                choices.addAll(BardDialogueSongs.buildSongChoices(plugin));
+                choices.addAll(
+                    isBardLoopSongList(node)
+                        ? BardDialogueSongs.buildLoopSongChoices(plugin)
+                        : BardDialogueSongs.buildSongChoices(plugin)
+                );
             }
         }
         choices.addAll(node.getChoices());
@@ -1035,10 +1098,15 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         if (ch.hasAction("open_geode_ui")) {
             return ICON_GEODE_OPEN;
         }
-        if (ch.hasAction("play_bard_song") || ch.hasAction("stop_bard_song")) {
+        if (ch.hasAction("play_bard_song")
+            || ch.hasAction("stop_bard_song")
+            || ch.hasAction("start_bard_shuffle")
+            || ch.hasAction("loop_current_bard_song")) {
             return ICON_MUSICAL_NOTE;
         }
-        if (ch.getNext() != null && "music_pick".equalsIgnoreCase(ch.getNext().trim())) {
+        if (ch.getNext() != null
+            && ("music_pick".equalsIgnoreCase(ch.getNext().trim())
+                || "music_loop_pick".equalsIgnoreCase(ch.getNext().trim()))) {
             return ICON_MUSICAL_NOTE;
         }
         if (ch.hasAction("teleport_world")) {

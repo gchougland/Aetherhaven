@@ -103,6 +103,59 @@ class ShopPriceTooltipMessagesTest {
         assertFalse(descriptionPlainText(merged).contains(CUSTOM_TEXT));
     }
 
+    @Test
+    void mergeFooter_priceIsSiblingOfBodyNotChildOfDescription() {
+        BsonDocument meta = metadataWithTranslationDescription(
+            "aetherhaven_items.items.Widget.description",
+            "Can be smelted at a furnace."
+        );
+
+        BsonDocument merged = ShopPriceTooltipMessages.mergeFooterIntoMetadata(meta, ITEM_ID, pricedCatalog);
+
+        BsonDocument description = descriptionDocument(merged);
+        BsonDocument price = findNodeWithMessageId(description, PRICE_KEY);
+        BsonDocument body = findNodeWithMessageId(description, "aetherhaven_items.items.Widget.description");
+        assertTrue(hasPriceFooter(merged));
+        assertTrue(body != null, "expected description translation node");
+        assertTrue(price != null, "expected shop price footer node");
+        assertFalse(containsMessageId(body, PRICE_KEY), "price must not be nested inside the description translation");
+        assertTrue(isDirectChild(description, price), "price should be a sibling under the joined root");
+    }
+
+    @Test
+    void mergeFooter_enablesMarkupOnDescriptionButNotPrice() {
+        BsonDocument meta = metadataWithTranslationDescription(
+            "aetherhaven_items.items.Widget.description",
+            "Can be smelted at a <item is=\"Bench_Furnace\"/>."
+        );
+
+        BsonDocument merged = ShopPriceTooltipMessages.mergeFooterIntoMetadata(meta, ITEM_ID, pricedCatalog);
+
+        BsonDocument description = descriptionDocument(merged);
+        BsonDocument body = findNodeWithMessageId(description, "aetherhaven_items.items.Widget.description");
+        BsonDocument price = findNodeWithMessageId(description, PRICE_KEY);
+        assertTrue(body != null && isMarkupEnabled(body), "description translation should keep markup");
+        assertTrue(price != null && !isMarkupEnabled(price), "price footer must not enable markup");
+    }
+
+    @Test
+    void mergeFooter_preservesCustomColorAndBold() {
+        Message colored = Message.raw("Sharpness III").color("#C76CFF").bold(true);
+        BsonDocument meta = new BsonDocument();
+        BsonDocument display = new BsonDocument();
+        display.put("Description", Message.CODEC.encode(colored, new ExtraInfo()));
+        meta.put(ItemDisplayMetadata.KEY, display);
+
+        BsonDocument merged = ShopPriceTooltipMessages.mergeFooterIntoMetadata(meta, ITEM_ID, pricedCatalog);
+
+        BsonDocument description = descriptionDocument(merged);
+        BsonDocument sharpness = findNodeWithRawText(description, "Sharpness III");
+        assertTrue(sharpness != null, "expected custom colored line");
+        assertEquals("#C76CFF", sharpness.getString("Color").getValue());
+        assertTrue(sharpness.getBoolean("Bold").getValue());
+        assertTrue(hasPriceFooter(merged));
+    }
+
     @Nonnull
     private static BsonDocument metadataWithDisplay(@Nonnull String descriptionText, @Nullable String nameText) {
         BsonDocument meta = new BsonDocument();
@@ -113,6 +166,96 @@ class ShopPriceTooltipMessagesTest {
         }
         meta.put(ItemDisplayMetadata.KEY, display);
         return meta;
+    }
+
+    @Nonnull
+    private static BsonDocument metadataWithTranslationDescription(@Nonnull String messageId, @Nonnull String rawText) {
+        Message body = Message.join(Message.translation(messageId), Message.raw(rawText));
+        BsonDocument meta = new BsonDocument();
+        BsonDocument display = new BsonDocument();
+        display.put("Description", Message.CODEC.encode(body, new ExtraInfo()));
+        meta.put(ItemDisplayMetadata.KEY, display);
+        return meta;
+    }
+
+    @Nonnull
+    private static BsonDocument descriptionDocument(@Nonnull BsonDocument metadata) {
+        return metadata.getDocument(ItemDisplayMetadata.KEY).getDocument("Description");
+    }
+
+    private static boolean isMarkupEnabled(@Nonnull BsonDocument node) {
+        BsonValue flag = node.get("MarkupEnabled");
+        return flag != null && flag.isBoolean() && flag.asBoolean().getValue();
+    }
+
+    private static boolean isDirectChild(@Nonnull BsonDocument parent, @Nonnull BsonDocument child) {
+        BsonValue children = parent.get("Children");
+        if (children == null || !children.isArray()) {
+            return false;
+        }
+        for (BsonValue value : children.asArray()) {
+            if (value.isDocument() && value.asDocument().equals(child)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Nullable
+    private static BsonDocument findNodeWithMessageId(@Nonnull BsonDocument node, @Nonnull String messageId) {
+        BsonValue id = node.get("MessageId");
+        if (id != null && id.isString() && messageId.equals(id.asString().getValue())) {
+            return node;
+        }
+        BsonValue children = node.get("Children");
+        if (children != null && children.isArray()) {
+            for (BsonValue value : children.asArray()) {
+                if (value.isDocument()) {
+                    BsonDocument found = findNodeWithMessageId(value.asDocument(), messageId);
+                    if (found != null) {
+                        return found;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private static BsonDocument findNodeWithRawText(@Nonnull BsonDocument node, @Nonnull String rawText) {
+        BsonValue raw = node.get("RawText");
+        if (raw != null && raw.isString() && rawText.equals(raw.asString().getValue())) {
+            return node;
+        }
+        BsonValue children = node.get("Children");
+        if (children != null && children.isArray()) {
+            for (BsonValue value : children.asArray()) {
+                if (value.isDocument()) {
+                    BsonDocument found = findNodeWithRawText(value.asDocument(), rawText);
+                    if (found != null) {
+                        return found;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private static boolean containsMessageId(@Nonnull BsonDocument node, @Nonnull String messageId) {
+        BsonValue children = node.get("Children");
+        if (children == null || !children.isArray()) {
+            return false;
+        }
+        for (BsonValue value : children.asArray()) {
+            if (!value.isDocument()) {
+                continue;
+            }
+            BsonDocument child = value.asDocument();
+            if (findNodeWithMessageId(child, messageId) != null) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean hasPriceFooter(@Nonnull BsonDocument metadata) {

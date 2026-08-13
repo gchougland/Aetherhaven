@@ -76,7 +76,7 @@ public final class ShopPriceTooltipMessages {
         if (!shouldIncludeDescriptionBody(metadata, itemId, body)) {
             return footer;
         }
-        return body.insert(Message.raw("\n")).insert(footer);
+        return Message.join(body, Message.raw("\n"), footer);
     }
 
     /** Skip missing/blank vanilla description keys (e.g. blocks with no {@code server.items.*.description} line). */
@@ -224,10 +224,15 @@ public final class ShopPriceTooltipMessages {
             return true;
         }
         if (node.rawText != null) {
-            String t = node.rawText.trim();
-            return !t.isEmpty() && t.contains("Gold Coins");
+            return isPriceShapedGoldCoinsLine(node.rawText);
         }
         return false;
+    }
+
+    /** Trailing flattened shop line only, e.g. {@code 42 Gold Coins} or {@code 42 Gold Coins per 8}. */
+    private static boolean isPriceShapedGoldCoinsLine(@Nonnull String rawText) {
+        String t = rawText.trim();
+        return t.matches("\\d+ Gold Coins(?: per \\d+)?");
     }
 
     private static boolean isIgnorableSeparator(@Nonnull FormattedMessage node) {
@@ -280,13 +285,11 @@ public final class ShopPriceTooltipMessages {
     }
 
     /**
-     * {@link Message#CODEC} omits {@code markupEnabled}. Enable it only on vanilla item description translation nodes so
-     * {@code <item/>} tags resolve; leave price/footer nodes untouched so {@code Color} still applies.
+     * {@link Message#CODEC} omits {@code markupEnabled}. Enable it on translation nodes so {@code <item/>} and italics
+     * resolve; skip shop-price keys and colored nodes so {@code Color} still applies.
      */
     private static void patchMarkupEnabledSelective(@Nonnull BsonDocument node) {
-        BsonValue messageIdVal = node.get("MessageId");
-        if (messageIdVal instanceof BsonString messageId
-            && shouldEnableMarkupForMessageId(messageId.getValue())) {
+        if (shouldEnableMarkup(node)) {
             node.put("MarkupEnabled", BsonBoolean.TRUE);
         }
         BsonValue children = node.get("Children");
@@ -307,8 +310,17 @@ public final class ShopPriceTooltipMessages {
         }
     }
 
-    private static boolean shouldEnableMarkupForMessageId(@Nonnull String messageId) {
-        return messageId.startsWith(SERVER_ITEM_DESC_PREFIX) && messageId.endsWith(SERVER_ITEM_DESC_SUFFIX);
+    private static boolean shouldEnableMarkup(@Nonnull BsonDocument node) {
+        BsonValue messageIdVal = node.get("MessageId");
+        if (!(messageIdVal instanceof BsonString messageId) || messageId.getValue().isBlank()) {
+            return false;
+        }
+        String id = messageId.getValue();
+        if (PRICE_KEY.equals(id) || BATCH_KEY.equals(id) || TOOLTIP_WITH_PRICE_KEY.equals(id)) {
+            return false;
+        }
+        BsonValue color = node.get("Color");
+        return !(color instanceof BsonString colorText) || colorText.getValue().isBlank();
     }
 
     @Nullable

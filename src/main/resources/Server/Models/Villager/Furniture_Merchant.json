@@ -1,0 +1,85 @@
+{
+  "Parent": "Player",
+  "Model": "Characters/Player.blockymodel",
+  "Texture": "Characters/Player_Textures/Player_Greyscale.png",
+  "GradientSet": "Skin",
+  "GradientId": "38",
+  "DefaultAttachments": [
+    {
+      "Model": "Cosmetics/Underwears/Underwear.blockymodel",
+      "Texture": "Cosmetics/Underwears/Underwear_Textures/Underwear_Suit_Texture.png",
+      "GradientSet": "Colored_Cotton",
+      "GradientId": "Red"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Faces/Player_Face_Detached.blockymodel",
+      "Texture": "Characters/Body_Attachments/Faces/Faces_Detached_Textures/Face.png",
+      "GradientSet": "Skin",
+      "GradientId": "38"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Ears/Ears1.blockymodel",
+      "Texture": "Characters/Body_Attachments/Ears/Ears1_Textures/Ears1_Greyscale_Texture.png",
+      "GradientSet": "Skin",
+      "GradientId": "38"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Mouths/Mouth1.blockymodel",
+      "Texture": "Characters/Body_Attachments/Mouths/Mouth_Large.png",
+      "GradientSet": "Skin",
+      "GradientId": "38"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Eyes/Eyes_HalfPixel.blockymodel",
+      "Texture": "Characters/Body_Attachments/Eyes/Eyes_Textures/Plain_Square.png",
+      "GradientSet": "Eyes_Gradient",
+      "GradientId": "BrownLight"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Eyebrows/Eyebrows_Medium.blockymodel",
+      "Texture": "Characters/Body_Attachments/Eyebrows/Feral.png",
+      "GradientSet": "Hair",
+      "GradientId": "PitchBlack"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Beards/Full.blockymodel",
+      "Texture": "Characters/Body_Attachments/Beards/Medium_Greyscale.png",
+      "GradientSet": "Hair",
+      "GradientId": "PitchBlack"
+    },
+    {
+      "Model": "Characters/Haircuts/Puffy.blockymodel",
+      "Texture": "Characters/Haircuts/Puffy_Greyscale.png",
+      "GradientSet": "Hair",
+      "GradientId": "PitchBlack"
+    },
+    {
+      "Model": "Cosmetics/Pants/Pants_Straight.blockymodel",
+      "Texture": "Cosmetics/Pants/Pants_Straight_Textures/Khaki_Greyscale.png",
+      "GradientSet": "Flashy_Synthetic",
+      "GradientId": "Grey"
+    },
+    {
+      "Model": "Cosmetics/Undertops/LongSleeveShirt.blockymodel",
+      "Texture": "Cosmetics/Undertops/LongSleeveShirt_Textures/ButtonUp_Greyscale.png",
+      "GradientSet": "Colored_Cotton",
+      "GradientId": "Turquoise"
+    },
+    {
+      "Model": "Cosmetics/Overtops/Dress.blockymodel",
+      "Texture": "Cosmetics/Overtops/Dress_Textures/Ronin_Greyscale.png",
+      "GradientSet": "Colored_Cotton",
+      "GradientId": "Cream"
+    },
+    {
+      "Model": "Cosmetics/Shoes/BootsBasic.blockymodel",
+      "Texture": "Cosmetics/Shoes/BootsBasic_Textures/Black.png"
+    },
+    {
+      "Model": "Cosmetics/Head/PirateCaptain.blockymodel",
+      "Texture": "Cosmetics/Head/PirateCaptain_Textures/PirateCaptain_Greyscale_Texture.png",
+      "GradientSet": "Faded_Leather",
+      "GradientId": "Brown"
+    }
+  ]
+}

@@ -57,6 +57,93 @@
           "next": "music_pick"
         },
         {
+          "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.main_hub.c_shuffle",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              },
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_guild_hall"
+              },
+              {
+                "type": "bard_can_offer_music"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "bard_is_shuffling"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "start_bard_shuffle"
+            }
+          ],
+          "next": "shuffle_started"
+        },
+        {
+          "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.main_hub.c_loop",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              },
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_guild_hall"
+              },
+              {
+                "type": "bard_can_offer_music"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "bard_is_performing"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "music_loop_pick"
+        },
+        {
+          "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.main_hub.c_loop_current",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "bard_is_performing"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "bard_is_looping"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "loop_current_bard_song"
+            }
+          ],
+          "next": "loop_started"
+        },
+        {
           "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.main_hub.c_stop",
           "condition": {
             "type": "bard_is_performing"
@@ -162,6 +249,37 @@
         {
           "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.music_pick.c_back",
           "next": "main_hub"
+        }
+      ]
+    },
+    "music_loop_pick": {
+      "speaker": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.music_pick.speaker",
+      "bodyMode": "bard_song_list_loop",
+      "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.music_loop_pick.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.music_pick.c_back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "shuffle_started": {
+      "speaker": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.shuffle_started.speaker",
+      "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.shuffle_started.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.shuffle_started.c_ok",
+          "next": null
+        }
+      ]
+    },
+    "loop_started": {
+      "speaker": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.loop_started.speaker",
+      "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.loop_started.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.loop_started.c_ok",
+          "next": null
         }
       ]
     },

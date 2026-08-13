@@ -168,6 +168,7 @@ aetherhaven.ui.jewelryCrafting.noGemsDropdown=No cut gems nearby (find rock gems
 
 # === Jewelry: affinities, stats, rarity tiers (shared tooltips) ===
 aetherhaven.jewelry.traitLine={stat} {amount}
+aetherhaven.jewelry.equipHint=Equip with Hand Mirror
 aetherhaven.jewelry.stat.Health=Max health
 aetherhaven.jewelry.stat.Mana=Max mana
 aetherhaven.jewelry.stat.Stamina=Max stamina

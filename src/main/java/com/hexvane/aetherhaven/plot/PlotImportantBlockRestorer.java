@@ -182,6 +182,10 @@ public final class PlotImportantBlockRestorer {
         if (expectedId == null) {
             return false;
         }
+        if (TownPortalTravelColor.isTouristPortalBlockTypeId(expectedId)
+            && TownPortalTravelColor.isTouristPortalBlockTypeId(at.getId())) {
+            return false;
+        }
         return !blockTypeIdMatches(expectedId, at.getId(), BlockType.getAssetMap());
     }
 }

@@ -56,7 +56,20 @@ public final class BardEnvironmentMusic {
         @Nonnull ForcedMusicTracker tracker,
         int musicContainerIndex
     ) {
-        if (tracker.getCurrentContainerIndex() == musicContainerIndex
+        setForcedMusic(playerEntityRef, commandBuffer, store, playerRef, tracker, musicContainerIndex, false);
+    }
+
+    public static void setForcedMusic(
+        @Nonnull Ref<EntityStore> playerEntityRef,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull ForcedMusicTracker tracker,
+        int musicContainerIndex,
+        boolean force
+    ) {
+        if (!force
+            && tracker.getCurrentContainerIndex() == musicContainerIndex
             && tracker.getLastSentContainerIndex() == musicContainerIndex) {
             return;
         }
@@ -108,6 +121,58 @@ public final class BardEnvironmentMusic {
                     }
                     setForcedMusic(playerEntityRef, writeBuffer, store, playerRef, tracker, 0);
                     proximityState.clear(playerId);
+                }
+            }
+        );
+    }
+
+    /** Re-sends the current bard track to listeners so a looped song starts again. */
+    public static void resendToListeningPlayers(
+        @Nonnull Store<EntityStore> store,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
+        int musicContainerIndex
+    ) {
+        if (musicContainerIndex == 0) {
+            return;
+        }
+        BardMusicProximityState proximityState = store.getResource(BardMusicProximityState.getResourceType());
+        store.forEachChunk(
+            Archetype.of(
+                Player.getComponentType(),
+                PlayerRef.getComponentType(),
+                UUIDComponent.getComponentType(),
+                ForcedMusicTracker.getComponentType()
+            ),
+            (archetypeChunk, chunkCommandBuffer) -> {
+                CommandBuffer<EntityStore> writeBuffer =
+                    commandBuffer != null ? commandBuffer : chunkCommandBuffer;
+                for (int i = 0; i < archetypeChunk.size(); i++) {
+                    Ref<EntityStore> playerEntityRef = archetypeChunk.getReferenceTo(i);
+                    PlayerRef playerRef = archetypeChunk.getComponent(i, PlayerRef.getComponentType());
+                    UUIDComponent uuidComponent = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
+                    ForcedMusicTracker tracker =
+                        archetypeChunk.getComponent(i, ForcedMusicTracker.getComponentType());
+                    if (playerEntityRef == null
+                        || !playerEntityRef.isValid()
+                        || playerRef == null
+                        || uuidComponent == null
+                        || tracker == null) {
+                        continue;
+                    }
+                    UUID playerId = uuidComponent.getUuid();
+                    if (!proximityState.isListening(playerId)) {
+                        continue;
+                    }
+                    setForcedMusic(
+                        playerEntityRef,
+                        writeBuffer,
+                        store,
+                        playerRef,
+                        tracker,
+                        musicContainerIndex,
+                        true
+                    );
+                    proximityState.setActive(playerId, musicContainerIndex);
                 }
             }
         );

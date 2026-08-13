@@ -35,6 +35,18 @@ public final class BardPerformanceComponent implements Component<EntityStore> {
                 c -> c.ambienceFxIndex
             )
             .add()
+            .append(
+                new KeyedCodec<>("PlaybackMode", Codec.STRING),
+                (c, v) -> c.playbackMode = BardPlaybackMode.fromString(v),
+                c -> c.playbackMode.wireName()
+            )
+            .add()
+            .append(
+                new KeyedCodec<>("ShuffleRemaining", Codec.STRING_ARRAY),
+                (c, v) -> c.shuffleRemaining = v != null ? v : new String[0],
+                c -> c.shuffleRemaining
+            )
+            .add()
             .build();
 
     @Nullable
@@ -59,13 +71,29 @@ public final class BardPerformanceComponent implements Component<EntityStore> {
     private long endAtEpochMs = 0L;
     private long lastParticleSpawnMs = 0L;
     private int ambienceFxIndex = 0;
+    @Nonnull
+    private BardPlaybackMode playbackMode = BardPlaybackMode.ONCE;
+    @Nonnull
+    private String[] shuffleRemaining = new String[0];
 
     public BardPerformanceComponent() {}
 
     public BardPerformanceComponent(@Nonnull String songId, long endAtEpochMs, int ambienceFxIndex) {
+        this(songId, endAtEpochMs, ambienceFxIndex, BardPlaybackMode.ONCE, new String[0]);
+    }
+
+    public BardPerformanceComponent(
+        @Nonnull String songId,
+        long endAtEpochMs,
+        int ambienceFxIndex,
+        @Nonnull BardPlaybackMode playbackMode,
+        @Nonnull String[] shuffleRemaining
+    ) {
         this.songId = songId;
         this.endAtEpochMs = endAtEpochMs;
         this.ambienceFxIndex = ambienceFxIndex;
+        this.playbackMode = playbackMode != null ? playbackMode : BardPlaybackMode.ONCE;
+        this.shuffleRemaining = shuffleRemaining != null ? shuffleRemaining.clone() : new String[0];
     }
 
     @Nonnull
@@ -89,10 +117,29 @@ public final class BardPerformanceComponent implements Component<EntityStore> {
         return ambienceFxIndex;
     }
 
+    @Nonnull
+    public BardPlaybackMode getPlaybackMode() {
+        return playbackMode;
+    }
+
+    public boolean isLooping() {
+        return playbackMode == BardPlaybackMode.LOOP;
+    }
+
+    public boolean isShuffling() {
+        return playbackMode == BardPlaybackMode.SHUFFLE;
+    }
+
+    @Nonnull
+    public String[] getShuffleRemaining() {
+        return shuffleRemaining.clone();
+    }
+
     @Nullable
     @Override
     public Component<EntityStore> clone() {
-        BardPerformanceComponent c = new BardPerformanceComponent(songId, endAtEpochMs, ambienceFxIndex);
+        BardPerformanceComponent c =
+            new BardPerformanceComponent(songId, endAtEpochMs, ambienceFxIndex, playbackMode, shuffleRemaining);
         c.lastParticleSpawnMs = lastParticleSpawnMs;
         return c;
     }

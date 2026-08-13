@@ -5,6 +5,9 @@ aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.1=Hello friend. I was ju
 aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.2=Welcome. Music makes a town feel alive.
 
 aetherhaven.dialogue.aetherhaven_bard.main_hub.c_play=Ask him to play a song
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_shuffle=Ask him to shuffle
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_loop=Ask him to loop a song
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_loop_current=Keep this song going
 aetherhaven.dialogue.aetherhaven_bard.main_hub.c_stop=Ask him to stop playing
 aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house=Ask about a home for Elias
 aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house_finish=Confirm Elias has a home
@@ -14,6 +17,15 @@ aetherhaven.dialogue.aetherhaven_bard.main_hub.c_goodbye=Say goodbye
 aetherhaven.dialogue.aetherhaven_bard.music_pick.speaker=Elias Thornwood
 aetherhaven.dialogue.aetherhaven_bard.music_pick.body=Which tune would you like?
 aetherhaven.dialogue.aetherhaven_bard.music_pick.c_back=Go back
+aetherhaven.dialogue.aetherhaven_bard.music_loop_pick.body=Which tune should I keep playing?
+
+aetherhaven.dialogue.aetherhaven_bard.shuffle_started.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.shuffle_started.body=I will mix the tunes until you ask me to stop.
+aetherhaven.dialogue.aetherhaven_bard.shuffle_started.c_ok=Sounds good
+
+aetherhaven.dialogue.aetherhaven_bard.loop_started.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.loop_started.body=I will keep this one going until you ask me to stop.
+aetherhaven.dialogue.aetherhaven_bard.loop_started.c_ok=Sounds good
 
 aetherhaven.dialogue.aetherhaven_bard.music_stopped.speaker=Elias Thornwood
 aetherhaven.dialogue.aetherhaven_bard.music_stopped.body=All quiet again. Let me know if you want another song.

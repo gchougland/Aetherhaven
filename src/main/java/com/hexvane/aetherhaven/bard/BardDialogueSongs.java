@@ -26,4 +26,21 @@ public final class BardDialogueSongs {
         }
         return out;
     }
+
+    @Nonnull
+    public static List<DialogueChoiceDefinition> buildLoopSongChoices(@Nonnull AetherhavenPlugin plugin) {
+        List<DialogueChoiceDefinition> out = new ArrayList<>();
+        for (BardSongDefinition song : plugin.getBardSongCatalog().songsOrdered()) {
+            DialogueChoiceDefinition ch = new DialogueChoiceDefinition();
+            ch.setText(song.getDisplayLangKey());
+            JsonObject play = new JsonObject();
+            play.addProperty("type", "play_bard_song");
+            play.addProperty("songId", song.getId());
+            play.addProperty("loop", true);
+            ch.setActions(List.of(play));
+            ch.setNext("loop_started");
+            out.add(ch);
+        }
+        return out;
+    }
 }

@@ -90,7 +90,7 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
     private static volatile ComponentType<EntityStore, PathToolPlayerComponent> componentType;
 
     @Nonnull
-    private PathToolGizmoMode gizmoMode = PathToolGizmoMode.Translate;
+    private PathToolGizmoMode gizmoMode = PathToolGizmoMode.Commit;
     private int pathWidthBlocks = 5;
     private int pathStyleIndex;
     @Nullable
@@ -294,12 +294,12 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
     @Nonnull
     private static PathToolGizmoMode parseGizmo(@Nullable String s) {
         if (s == null) {
-            return PathToolGizmoMode.Translate;
+            return PathToolGizmoMode.Commit;
         }
         try {
             return PathToolGizmoMode.valueOf(s);
         } catch (Exception e) {
-            return PathToolGizmoMode.Translate;
+            return PathToolGizmoMode.Commit;
         }
     }
 

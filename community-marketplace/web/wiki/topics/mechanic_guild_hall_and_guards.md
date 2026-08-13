@@ -14,6 +14,8 @@ Once the hall is finished you can hire **guards**, draw **patrol routes**, and u
 
 Talk to adventurers at the guild hall to hire them as **guards**. Guards come as knights, archers, and mages. They patrol your town and fight hostile mobs. They will not attack villagers, tourists, or other guards.
 
+Talk to a hired guard and choose **I need to let you go** if you want them to leave. They vanish, their house is freed, and you get the hire slot back.
+
 Guards need a route or orders to know where to go. Unassigned guards still defend nearby threats when they can.
 
 ## Patrol wand

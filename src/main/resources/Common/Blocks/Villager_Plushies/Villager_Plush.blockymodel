@@ -39,8 +39,8 @@
                 "angle": 0
               },
               "right": {
-                "offset": {"x": 17, "y": 28},
-                "mirror": {"x": false, "y": false},
+                "offset": {"x": 16, "y": 32},
+                "mirror": {"x": true, "y": false},
                 "angle": 0
               },
               "front": {
@@ -73,45 +73,45 @@
             {
               "id": "3",
               "name": "Head--C1",
-              "position": {"x": 0, "y": 12, "z": 0},
+              "position": {"x": 0, "y": 12.25, "z": 0},
               "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
               "shape": {
                 "type": "box",
-                "offset": {"x": 0, "y": -4, "z": 0},
+                "offset": {"x": 0, "y": -3, "z": 0},
                 "stretch": {"x": 1, "y": 1, "z": 1},
                 "settings": {
                   "isPiece": false,
-                  "size": {"x": 19, "y": 6, "z": 18},
+                  "size": {"x": 19, "y": 8, "z": 16},
                   "isStaticBox": true
                 },
                 "textureLayout": {
                   "back": {
-                    "offset": {"x": 96, "y": 28},
+                    "offset": {"x": 96, "y": 26},
                     "mirror": {"x": false, "y": false},
                     "angle": 0
                   },
                   "right": {
-                    "offset": {"x": 96, "y": 40},
+                    "offset": {"x": 97, "y": 38},
                     "mirror": {"x": false, "y": false},
                     "angle": 0
                   },
                   "front": {
-                    "offset": {"x": 96, "y": 34},
+                    "offset": {"x": 96, "y": 32},
                     "mirror": {"x": false, "y": false},
                     "angle": 0
                   },
                   "left": {
-                    "offset": {"x": 96, "y": 46},
+                    "offset": {"x": 97, "y": 44},
                     "mirror": {"x": false, "y": false},
                     "angle": 0
                   },
                   "top": {
-                    "offset": {"x": 96, "y": 34},
+                    "offset": {"x": 96, "y": 33},
                     "mirror": {"x": true, "y": true},
                     "angle": 0
                   },
                   "bottom": {
-                    "offset": {"x": 96, "y": 34},
+                    "offset": {"x": 96, "y": 35},
                     "mirror": {"x": true, "y": false},
                     "angle": 0
                   }
@@ -124,6 +124,110 @@
             },
             {
               "id": "4",
+              "name": "Head--C2",
+              "position": {"x": 0, "y": 15.25, "z": 0},
+              "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
+              "shape": {
+                "type": "box",
+                "offset": {"x": 0, "y": -3, "z": 0},
+                "stretch": {"x": 1, "y": 1, "z": 1},
+                "settings": {
+                  "isPiece": false,
+                  "size": {"x": 13, "y": 8, "z": 18},
+                  "isStaticBox": true
+                },
+                "textureLayout": {
+                  "back": {
+                    "offset": {"x": 33, "y": 88},
+                    "mirror": {"x": false, "y": false},
+                    "angle": 0
+                  },
+                  "right": {
+                    "offset": {"x": 30, "y": 104},
+                    "mirror": {"x": false, "y": false},
+                    "angle": 0
+                  },
+                  "front": {
+                    "offset": {"x": 33, "y": 96},
+                    "mirror": {"x": false, "y": false},
+                    "angle": 0
+                  },
+                  "left": {
+                    "offset": {"x": 30, "y": 112},
+                    "mirror": {"x": false, "y": false},
+                    "angle": 0
+                  },
+                  "top": {
+                    "offset": {"x": 27, "y": 98},
+                    "mirror": {"x": true, "y": true},
+                    "angle": 0
+                  },
+                  "bottom": {
+                    "offset": {"x": 27, "y": 98},
+                    "mirror": {"x": true, "y": false},
+                    "angle": 0
+                  }
+                },
+                "unwrapMode": "custom",
+                "visible": true,
+                "doubleSided": false,
+                "shadingMode": "standard"
+              }
+            },
+            {
+              "id": "5",
+              "name": "Head--C3",
+              "position": {"x": 0, "y": 12, "z": 0},
+              "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
+              "shape": {
+                "type": "box",
+                "offset": {"x": 0, "y": -5, "z": 0},
+                "stretch": {"x": 1, "y": 1, "z": 1},
+                "settings": {
+                  "isPiece": false,
+                  "size": {"x": 21, "y": 4, "z": 20},
+                  "isStaticBox": true
+                },
+                "textureLayout": {
+                  "back": {
+                    "offset": {"x": 99, "y": 72},
+                    "mirror": {"x": false, "y": false},
+                    "angle": 0
+                  },
+                  "right": {
+                    "offset": {"x": 99, "y": 84},
+                    "mirror": {"x": false, "y": false},
+                    "angle": 0
+                  },
+                  "front": {
+                    "offset": {"x": 99, "y": 78},
+                    "mirror": {"x": false, "y": false},
+                    "angle": 0
+                  },
+                  "left": {
+                    "offset": {"x": 99, "y": 90},
+                    "mirror": {"x": false, "y": false},
+                    "angle": 0
+                  },
+                  "top": {
+                    "offset": {"x": 98, "y": 77},
+                    "mirror": {"x": true, "y": true},
+                    "angle": 0
+                  },
+                  "bottom": {
+                    "offset": {"x": 98, "y": 75},
+                    "mirror": {"x": true, "y": false},
+                    "angle": 0
+                  }
+                },
+                "unwrapMode": "custom",
+                "visible": true,
+                "doubleSided": false,
+                "shadingMode": "standard"
+              }
+            },
+            {
+              "id": "6",
               "name": "Chest",
               "position": {"x": 0, "y": -11, "z": 0},
               "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -169,7 +273,7 @@
               },
               "children": [
                 {
-                  "id": "5",
+                  "id": "7",
                   "name": "Belly",
                   "position": {"x": 0, "y": -2, "z": 0},
                   "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -220,7 +324,7 @@
                   },
                   "children": [
                     {
-                      "id": "6",
+                      "id": "8",
                       "name": "Butt",
                       "position": {"x": 0, "y": -3.73293, "z": 0.01088},
                       "orientation": {"x": 0.02036, "y": 0, "z": 0, "w": 0.99979},
@@ -271,7 +375,7 @@
                       },
                       "children": [
                         {
-                          "id": "7",
+                          "id": "9",
                           "name": "Legs",
                           "position": {"x": -4.89675, "y": -0.38974, "z": 2.63821},
                           "orientation": {"x": -0.00125, "y": -0.19321, "z": 0.0873, "w": 0.97726},
@@ -322,7 +426,7 @@
                           },
                           "children": [
                             {
-                              "id": "8",
+                              "id": "10",
                               "name": "LeftLeg",
                               "position": {"x": 9.10855, "y": -1.66122, "z": -3.56473},
                               "orientation": {"x": 0, "y": 0.37784, "z": -0.17015, "w": 0.9101},
@@ -373,7 +477,7 @@
                               },
                               "children": [
                                 {
-                                  "id": "9",
+                                  "id": "11",
                                   "name": "RightFoot",
                                   "position": {"x": -14.89945, "y": -1.22897, "z": 1.53336},
                                   "orientation": {"x": 0.07187, "y": -0.36323, "z": 0.19945, "w": 0.90726},
@@ -424,7 +528,7 @@
                                   }
                                 },
                                 {
-                                  "id": "10",
+                                  "id": "12",
                                   "name": "LeftFoot",
                                   "position": {"x": -0.03345, "y": 1.55029, "z": 7.70522},
                                   "orientation": {"x": 0.07897, "y": 0, "z": 0, "w": 0.99688},
@@ -438,32 +542,32 @@
                                     },
                                     "textureLayout": {
                                       "back": {
-                                        "offset": {"x": 16, "y": 56},
+                                        "offset": {"x": 37, "y": 49},
                                         "mirror": {"x": false, "y": false},
                                         "angle": 0
                                       },
                                       "right": {
-                                        "offset": {"x": 3, "y": 68},
+                                        "offset": {"x": 45, "y": 67},
                                         "mirror": {"x": false, "y": false},
                                         "angle": 0
                                       },
                                       "front": {
-                                        "offset": {"x": 22, "y": 56},
+                                        "offset": {"x": 55, "y": 15},
                                         "mirror": {"x": false, "y": false},
                                         "angle": 0
                                       },
                                       "left": {
-                                        "offset": {"x": 6, "y": 68},
+                                        "offset": {"x": 0, "y": 68},
                                         "mirror": {"x": false, "y": false},
                                         "angle": 0
                                       },
                                       "top": {
-                                        "offset": {"x": 54, "y": 71},
+                                        "offset": {"x": 74, "y": 12},
                                         "mirror": {"x": true, "y": true},
                                         "angle": 0
                                       },
                                       "bottom": {
-                                        "offset": {"x": 60, "y": 68},
+                                        "offset": {"x": 74, "y": 12},
                                         "mirror": {"x": true, "y": false},
                                         "angle": 0
                                       }
@@ -485,7 +589,7 @@
               ]
             },
             {
-              "id": "11",
+              "id": "13",
               "name": "LeftArm",
               "position": {"x": 6.44882, "y": -11.50092, "z": 0},
               "orientation": {"x": 0, "y": 0, "z": 0.26643, "w": 0.96385},
@@ -499,12 +603,12 @@
                 },
                 "textureLayout": {
                   "back": {
-                    "offset": {"x": 56, "y": 37},
+                    "offset": {"x": 0, "y": 59},
                     "mirror": {"x": false, "y": false},
                     "angle": 0
                   },
                   "right": {
-                    "offset": {"x": 37, "y": 57},
+                    "offset": {"x": 0, "y": 59},
                     "mirror": {"x": false, "y": false},
                     "angle": 0
                   },
@@ -514,7 +618,7 @@
                     "angle": 0
                   },
                   "left": {
-                    "offset": {"x": 5, "y": 59},
+                    "offset": {"x": 0, "y": 59},
                     "mirror": {"x": false, "y": false},
                     "angle": 0
                   },
@@ -524,7 +628,7 @@
                     "angle": 0
                   },
                   "bottom": {
-                    "offset": {"x": 72, "y": 15},
+                    "offset": {"x": 72, "y": 0},
                     "mirror": {"x": true, "y": false},
                     "angle": 0
                   }
@@ -536,7 +640,7 @@
               }
             },
             {
-              "id": "12",
+              "id": "14",
               "name": "RightArm",
               "position": {"x": -6.44882, "y": -11.50092, "z": 0},
               "orientation": {"x": 0, "y": 0, "z": -0.26643, "w": 0.96385},
@@ -550,32 +654,32 @@
                 },
                 "textureLayout": {
                   "back": {
-                    "offset": {"x": 50, "y": 59},
+                    "offset": {"x": 0, "y": 59},
                     "mirror": {"x": false, "y": false},
                     "angle": 0
                   },
                   "right": {
-                    "offset": {"x": 55, "y": 59},
+                    "offset": {"x": 0, "y": 59},
                     "mirror": {"x": false, "y": false},
                     "angle": 0
                   },
                   "front": {
-                    "offset": {"x": 10, "y": 60},
+                    "offset": {"x": 0, "y": 59},
                     "mirror": {"x": false, "y": false},
                     "angle": 0
                   },
                   "left": {
-                    "offset": {"x": 60, "y": 23},
+                    "offset": {"x": 0, "y": 59},
                     "mirror": {"x": false, "y": false},
                     "angle": 0
                   },
                   "top": {
-                    "offset": {"x": 72, "y": 40},
+                    "offset": {"x": 72, "y": 5},
                     "mirror": {"x": true, "y": true},
                     "angle": 0
                   },
                   "bottom": {
-                    "offset": {"x": 45, "y": 67},
+                    "offset": {"x": 72, "y": 0},
                     "mirror": {"x": true, "y": false},
                     "angle": 0
                   }
@@ -587,7 +691,7 @@
               }
             },
             {
-              "id": "13",
+              "id": "15",
               "name": "LeftHand",
               "position": {"x": 9.08591, "y": -15.74972, "z": 0},
               "orientation": {"x": 0, "y": 0, "z": 0.26643, "w": 0.96385},
@@ -601,22 +705,22 @@
                 },
                 "textureLayout": {
                   "back": {
-                    "offset": {"x": 60, "y": 59},
-                    "mirror": {"x": false, "y": false},
+                    "offset": {"x": 27, "y": 64},
+                    "mirror": {"x": true, "y": false},
                     "angle": 0
                   },
                   "right": {
-                    "offset": {"x": 61, "y": 0},
+                    "offset": {"x": 15, "y": 64},
                     "mirror": {"x": false, "y": false},
                     "angle": 0
                   },
                   "front": {
-                    "offset": {"x": 61, "y": 15},
+                    "offset": {"x": 21, "y": 64},
                     "mirror": {"x": false, "y": false},
                     "angle": 0
                   },
                   "left": {
-                    "offset": {"x": 61, "y": 35},
+                    "offset": {"x": 65, "y": 21},
                     "mirror": {"x": false, "y": false},
                     "angle": 0
                   },
@@ -626,7 +730,7 @@
                     "angle": 0
                   },
                   "bottom": {
-                    "offset": {"x": 34, "y": 63},
+                    "offset": {"x": 40, "y": 66},
                     "mirror": {"x": true, "y": false},
                     "angle": 0
                   }
@@ -638,7 +742,7 @@
               }
             },
             {
-              "id": "14",
+              "id": "16",
               "name": "RightHand",
               "position": {"x": -9.08591, "y": -15.74972, "z": 0},
               "orientation": {"x": 0, "y": 0, "z": -0.26643, "w": 0.96385},
@@ -652,8 +756,8 @@
                 },
                 "textureLayout": {
                   "back": {
-                    "offset": {"x": 63, "y": 49},
-                    "mirror": {"x": false, "y": false},
+                    "offset": {"x": 27, "y": 64},
+                    "mirror": {"x": true, "y": false},
                     "angle": 0
                   },
                   "right": {
@@ -691,13 +795,13 @@
           ]
         },
         {
-          "id": "15",
+          "id": "17",
           "name": "RightEar",
           "position": {"x": -12.84864, "y": 16.09831, "z": 0},
           "orientation": {"x": 0, "y": 0, "z": -0.04704, "w": 0.99889},
           "shape": {
             "type": "quad",
-            "offset": {"x": 1.5, "y": 0, "z": 0},
+            "offset": {"x": 0.31206, "y": 1.99115, "z": 0},
             "stretch": {"x": 1, "y": 1, "z": 1},
             "settings": {
               "isPiece": false,
@@ -718,13 +822,13 @@
           }
         },
         {
-          "id": "16",
+          "id": "18",
           "name": "LeftEar",
           "position": {"x": 11.90913, "y": 16.00961, "z": 0},
           "orientation": {"x": 0, "y": 0, "z": 0.04704, "w": 0.99889},
           "shape": {
             "type": "quad",
-            "offset": {"x": 0, "y": 0, "z": 0},
+            "offset": {"x": 1.18794, "y": 1.99115, "z": 0},
             "stretch": {"x": -1, "y": 1, "z": 1},
             "settings": {
               "isPiece": false,

@@ -19,7 +19,7 @@ public final class JewelryTooltipMessages {
             return Message.translation("aetherhaven_jewelry_geode.aetherhaven.jewelry.artifact.wornLight").color("#C9E8FF");
         }
         if (!JewelryMetadata.hasJewelryMeta(stack)) {
-            return Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.tooltipUnattuned");
+            return withEquipHint(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.tooltipUnattuned"));
         }
         JewelryRarity rarity = JewelryMetadata.readRarity(stack);
         String rarityKey = rarity != null ? rarity.wireName() : "COMMON";
@@ -48,7 +48,14 @@ public final class JewelryTooltipMessages {
                 body = body.insert(Message.raw("\n")).insert(line);
             }
         }
-        return body;
+        return withEquipHint(body);
+    }
+
+    @Nonnull
+    private static Message withEquipHint(@Nonnull Message body) {
+        return body
+            .insert(Message.raw("\n"))
+            .insert(Message.translation("aetherhaven_jewelry_geode.aetherhaven.jewelry.equipHint").color("#8A8F98"));
     }
 
     /**

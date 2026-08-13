@@ -9,6 +9,7 @@ npcRoleId: Aetherhaven_Bard
 
 **Elias Thornwood** is the town **bard**. He appears at the inn after the **guild hall** is built and plays music in the guild hall during the day.
 
+Talk to him to pick a song, ask him to **shuffle** through his tunes, or **loop** one song until you tell him to stop.
 
 ### Quests
 

@@ -2,18 +2,24 @@ package com.hexvane.aetherhaven.bard;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.bard.data.BardSongDefinition;
+import com.hypixel.hytale.builtin.audio.components.ForcedMusicTracker;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.RoleUtils;
 import com.hypixel.hytale.protocol.AnimationSlot;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3d;
@@ -32,10 +38,28 @@ public final class BardPerformanceService {
   private BardPerformanceService() {}
 
   public static boolean isPerforming(@Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef) {
+    return performance(store, npcRef) != null;
+  }
+
+  public static boolean isLooping(@Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef) {
+    BardPerformanceComponent perf = performance(store, npcRef);
+    return perf != null && perf.isLooping();
+  }
+
+  public static boolean isShuffling(@Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef) {
+    BardPerformanceComponent perf = performance(store, npcRef);
+    return perf != null && perf.isShuffling();
+  }
+
+  @Nullable
+  private static BardPerformanceComponent performance(
+      @Nonnull Store<EntityStore> store,
+      @Nullable Ref<EntityStore> npcRef
+  ) {
     if (npcRef == null || !npcRef.isValid()) {
-      return false;
+      return null;
     }
-    return store.getComponent(npcRef, BardPerformanceComponent.getComponentType()) != null;
+    return store.getComponent(npcRef, BardPerformanceComponent.getComponentType());
   }
 
   public static void startSong(
@@ -45,21 +69,186 @@ public final class BardPerformanceService {
       @Nonnull AetherhavenPlugin plugin,
       @Nonnull String songId
   ) {
-    if (!npcRef.isValid()) {
+    startSong(store, commandBuffer, npcRef, plugin, songId, BardPlaybackMode.ONCE, new String[0]);
+  }
+
+  public static void startSong(
+      @Nonnull Store<EntityStore> store,
+      @Nullable CommandBuffer<EntityStore> commandBuffer,
+      @Nonnull Ref<EntityStore> npcRef,
+      @Nonnull AetherhavenPlugin plugin,
+      @Nonnull String songId,
+      @Nonnull BardPlaybackMode mode,
+      @Nonnull String[] shuffleRemaining
+  ) {
+    beginSong(store, commandBuffer, npcRef, plugin, songId, mode, shuffleRemaining, true);
+  }
+
+  public static boolean startShuffle(
+      @Nonnull Store<EntityStore> store,
+      @Nullable CommandBuffer<EntityStore> commandBuffer,
+      @Nonnull Ref<EntityStore> npcRef,
+      @Nonnull AetherhavenPlugin plugin
+  ) {
+    List<String> queue =
+        BardShufflePlaylist.buildQueue(plugin.getBardSongCatalog().songsOrdered(), null, ThreadLocalRandom.current());
+    if (queue.isEmpty()) {
+      return false;
+    }
+    String first = queue.remove(0);
+    startSong(
+        store,
+        commandBuffer,
+        npcRef,
+        plugin,
+        first,
+        BardPlaybackMode.SHUFFLE,
+        queue.toArray(String[]::new)
+    );
+    return true;
+  }
+
+  public static boolean enableLoop(
+      @Nonnull Store<EntityStore> store,
+      @Nullable CommandBuffer<EntityStore> commandBuffer,
+      @Nonnull Ref<EntityStore> npcRef
+  ) {
+    BardPerformanceComponent perf = performance(store, npcRef);
+    if (perf == null) {
+      return false;
+    }
+    BardPerformanceComponent next =
+        new BardPerformanceComponent(
+            perf.getSongId(),
+            perf.getEndAtEpochMs(),
+            perf.getMusicContainerIndex(),
+            BardPlaybackMode.LOOP,
+            new String[0]
+        );
+    next.setLastParticleSpawnMs(perf.getLastParticleSpawnMs());
+    putPerformanceComponent(npcRef, commandBuffer, store, next);
+    return true;
+  }
+
+  /** Called from the performance tick when a song's duration elapses. */
+  public static void continueOrStop(
+      @Nonnull Store<EntityStore> store,
+      @Nonnull CommandBuffer<EntityStore> commandBuffer,
+      @Nonnull Ref<EntityStore> npcRef,
+      @Nonnull AetherhavenPlugin plugin,
+      @Nonnull BardPerformanceComponent perf
+  ) {
+    if (perf.isLooping()) {
+      int containerIndex =
+          beginSong(
+              store,
+              commandBuffer,
+              npcRef,
+              plugin,
+              perf.getSongId(),
+              BardPlaybackMode.LOOP,
+              new String[0],
+              false
+          );
+      if (containerIndex != 0) {
+        BardEnvironmentMusic.resendToListeningPlayers(store, commandBuffer, containerIndex);
+      } else {
+        stopOnStore(store, commandBuffer, npcRef);
+      }
       return;
+    }
+    if (perf.isShuffling()) {
+      List<String> remaining = new ArrayList<>(List.of(perf.getShuffleRemaining()));
+      if (remaining.isEmpty()) {
+        remaining =
+            BardShufflePlaylist.buildQueue(
+                plugin.getBardSongCatalog().songsOrdered(),
+                perf.getSongId(),
+                ThreadLocalRandom.current()
+            );
+      }
+      if (remaining.isEmpty()) {
+        stopOnStore(store, commandBuffer, npcRef);
+        return;
+      }
+      String nextId = remaining.remove(0);
+      int containerIndex =
+          beginSong(
+              store,
+              commandBuffer,
+              npcRef,
+              plugin,
+              nextId,
+              BardPlaybackMode.SHUFFLE,
+              remaining.toArray(String[]::new),
+              false
+          );
+      if (containerIndex != 0) {
+        BardEnvironmentMusic.resendToListeningPlayers(store, commandBuffer, containerIndex);
+      } else {
+        stopOnStore(store, commandBuffer, npcRef);
+      }
+      return;
+    }
+    stopOnStore(store, commandBuffer, npcRef);
+  }
+
+  public static void applyForcedMusicForPlayer(
+      @Nonnull Ref<EntityStore> playerRef,
+      @Nonnull Store<EntityStore> store,
+      @Nullable Ref<EntityStore> npcRef
+  ) {
+    BardPerformanceComponent perf = performance(store, npcRef);
+    if (perf == null || perf.getMusicContainerIndex() == 0) {
+      return;
+    }
+    ForcedMusicTracker tracker = store.getComponent(playerRef, ForcedMusicTracker.getComponentType());
+    PlayerRef playerRefComponent = store.getComponent(playerRef, PlayerRef.getComponentType());
+    UUIDComponent playerUuid = store.getComponent(playerRef, UUIDComponent.getComponentType());
+    if (tracker == null || playerRefComponent == null || playerUuid == null) {
+      return;
+    }
+    BardEnvironmentMusic.setForcedMusic(
+        playerRef,
+        null,
+        store,
+        playerRefComponent,
+        tracker,
+        perf.getMusicContainerIndex()
+    );
+    store.getResource(BardMusicProximityState.getResourceType())
+        .setActive(playerUuid.getUuid(), perf.getMusicContainerIndex());
+  }
+
+  private static int beginSong(
+      @Nonnull Store<EntityStore> store,
+      @Nullable CommandBuffer<EntityStore> commandBuffer,
+      @Nonnull Ref<EntityStore> npcRef,
+      @Nonnull AetherhavenPlugin plugin,
+      @Nonnull String songId,
+      @Nonnull BardPlaybackMode mode,
+      @Nonnull String[] shuffleRemaining,
+      boolean stopPrevious
+  ) {
+    if (!npcRef.isValid()) {
+      return 0;
     }
     BardSongDefinition song = plugin.getBardSongCatalog().byId(songId);
     if (song == null) {
       LOGGER.atWarning().log("Unknown bard song id %s", songId);
-      return;
+      return 0;
     }
-    stopOnStore(store, commandBuffer, npcRef);
+    if (stopPrevious) {
+      stopOnStore(store, commandBuffer, npcRef);
+    }
     int musicContainerIndex = BardEnvironmentMusic.resolveMusicContainerIndex(song);
     long endAt = System.currentTimeMillis() + song.getDurationSeconds() * 1000L;
-    BardPerformanceComponent perf = new BardPerformanceComponent(song.getId(), endAt, musicContainerIndex);
+    BardPerformanceComponent perf =
+        new BardPerformanceComponent(song.getId(), endAt, musicContainerIndex, mode, shuffleRemaining);
     putPerformanceComponent(npcRef, commandBuffer, store, perf);
     applyPerformanceVisuals(npcRef, store, commandBuffer);
     spawnNoteParticles(npcRef, store, commandBuffer, perf);
+    return musicContainerIndex;
   }
 
   /** Legacy entry for callers that only have a world reference. */

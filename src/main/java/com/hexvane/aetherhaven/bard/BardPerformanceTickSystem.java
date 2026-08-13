@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.bard;
 
+import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -10,9 +11,16 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 
-/** Spawns note particles and ends performances when the song duration elapses. */
+/** Spawns note particles and ends or continues performances when the song duration elapses. */
 public final class BardPerformanceTickSystem extends EntityTickingSystem<EntityStore> {
     private static final long PARTICLE_INTERVAL_MS = 1200L;
+
+    @Nonnull
+    private final AetherhavenPlugin plugin;
+
+    public BardPerformanceTickSystem(@Nonnull AetherhavenPlugin plugin) {
+        this.plugin = plugin;
+    }
 
     @Nonnull
     @Override
@@ -38,7 +46,7 @@ public final class BardPerformanceTickSystem extends EntityTickingSystem<EntityS
         }
         long now = System.currentTimeMillis();
         if (now >= perf.getEndAtEpochMs()) {
-            BardPerformanceService.stopOnStore(store, commandBuffer, ref);
+            BardPerformanceService.continueOrStop(store, commandBuffer, ref, plugin, perf);
             return;
         }
         BardPerformanceService.maintainPerformanceVisuals(ref, store, commandBuffer);

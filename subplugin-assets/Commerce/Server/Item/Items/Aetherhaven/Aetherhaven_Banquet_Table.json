@@ -8,7 +8,7 @@
     "KnowledgeRequired": true,
     "Input": [
       {
-        "ResourceTypeId": "Wood_Darkwood",
+        "ResourceTypeId": "Wood_All",
         "Quantity": 10
       },
       {
