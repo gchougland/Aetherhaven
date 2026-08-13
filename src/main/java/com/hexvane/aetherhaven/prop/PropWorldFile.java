@@ -49,6 +49,9 @@ public final class PropWorldFile {
         /** Optional; UUIDs of decorative entities spawned with this prop. */
         @Nullable
         public List<String> linkedEntityIds;
+        /** Optional; trigger volume manager ids registered when this prop was pasted. */
+        @Nullable
+        public List<String> linkedTriggerVolumeIds;
     }
 
     @Nonnull
@@ -90,7 +93,8 @@ public final class PropWorldFile {
                 UUID id = UUID.fromString(row.instanceId);
                 Rotation yaw = parseRotation(row.rotationYaw);
                 List<UUID> linked = parseLinkedEntityIds(row.linkedEntityIds);
-                out.add(new PropInstance(id, row.propId, row.anchorX, row.anchorY, row.anchorZ, yaw, linked));
+                List<String> volumes = parseLinkedTriggerVolumeIds(row.linkedTriggerVolumeIds);
+                out.add(new PropInstance(id, row.propId, row.anchorX, row.anchorY, row.anchorZ, yaw, linked, volumes));
             } catch (IllegalArgumentException e) {
                 LOGGER.atWarning().withCause(e).log("Skipping invalid prop row instanceId=%s", row.instanceId);
             }
@@ -116,6 +120,9 @@ public final class PropWorldFile {
                 }
                 r.linkedEntityIds = ids;
             }
+            if (!p.getLinkedTriggerVolumeIds().isEmpty()) {
+                r.linkedTriggerVolumeIds = new ArrayList<>(p.getLinkedTriggerVolumeIds());
+            }
             f.getProps().add(r);
         }
         return f;
@@ -136,6 +143,21 @@ public final class PropWorldFile {
             } catch (IllegalArgumentException ignored) {
                 // Skip bad ids from older or hand-edited files.
             }
+        }
+        return out;
+    }
+
+    @Nonnull
+    private static List<String> parseLinkedTriggerVolumeIds(@Nullable List<String> raw) {
+        if (raw == null || raw.isEmpty()) {
+            return List.of();
+        }
+        List<String> out = new ArrayList<>();
+        for (String s : raw) {
+            if (s == null || s.isBlank()) {
+                continue;
+            }
+            out.add(s.trim());
         }
         return out;
     }

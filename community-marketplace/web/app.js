@@ -1519,6 +1519,14 @@ function renderOwnerScreenshots(item, options = {}) {
           onclick="event.stopPropagation(); openPrefabCaptureModal(${jsString(ownerKind)}, ${jsString(ownerId)}, ${jsString(prefabUrl)}, ${asAdmin}, ${jsString(reloadFn)})"
         >Capture from 3D</button>`
     : "";
+  const generateCoverBtn =
+    asAdmin && ownerKind === "approved" && !item.usesCoverImage
+      ? `<button
+          type="button"
+          class="secondary"
+          onclick="event.stopPropagation(); generatePreviewCover(${jsString(ownerId)}, ${jsString(reloadFn)})"
+        >Generate 3D cover</button>`
+      : "";
   return `
     <div class="screenshot-manager${compact ? "" : " screenshot-manager--edit"}">
       <div class="screenshot-strip${compact ? "" : " screenshot-strip--edit"}">${thumbs}</div>
@@ -1534,6 +1542,7 @@ function renderOwnerScreenshots(item, options = {}) {
             <span class="screenshot-upload-btn">${atLimit ? "Screenshot limit reached" : "Add screenshot"}</span>
           </label>
           ${captureBtn}
+          ${generateCoverBtn}
         </div>
         <p class="meta">JPEG, PNG, or WebP · max ${SCREENSHOT_MAX_SIZE_LABEL} · up to ${MAX_SCREENSHOTS_PER_OWNER} per build.${approvalNote}${
           ownerKind === "approved"
@@ -1603,6 +1612,27 @@ function renderMySubmissionItem(item) {
         <div class="submission-card-actions" onclick="event.stopPropagation()">${actions}</div>
       </div>
     </article>`;
+}
+
+async function generatePreviewCover(buildingId, reloadFn) {
+  const res = await fetch(`/api/admin/buildings/${encodeURIComponent(buildingId)}/preview-screenshot`, {
+    method: "POST",
+    headers: { Accept: "application/json" },
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    alert(data.message || data.error || "Could not create the 3D cover.");
+    return;
+  }
+  if (data.queued) {
+    alert("Queued. Refresh this page in a minute to see the card image.");
+    return;
+  }
+  if (data.coverSet) {
+    await reloadAfterScreenshotAction(reloadFn);
+    return;
+  }
+  alert(data.message || "No cover was created.");
 }
 
 async function reloadAfterScreenshotAction(reloadFn) {
@@ -2264,7 +2294,7 @@ function getFilteredAdminPending() {
 }
 
 function renderAdminPendingCard(s) {
-  const cardImg = s.iconUrl || buildingCardImageUrl(s) || "";
+  const cardImg = buildingCardImageUrl(s);
   const icon = cardImg
     ? `<img class="submission-card-thumb" src="${escapeAttr(cardImg)}" alt="" onerror="this.outerHTML='<div class=\\'submission-card-thumb submission-card-thumb--placeholder\\' aria-hidden=\\'true\\'></div>';" />`
     : `<div class="submission-card-thumb submission-card-thumb--placeholder" aria-hidden="true"></div>`;

@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.prop;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.placement.PrefabTriggerVolumeCleanup;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
@@ -8,7 +9,10 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.world.World;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import org.joml.Vector3i;
@@ -41,18 +45,24 @@ public final class PropPlacementCommit {
             LOGGER.atWarning().log("Prop %s has no resolvable prefab (%s)", def.getId(), def.getPrefabPath());
             return false;
         }
-        if (!PropPrefabOps.canPlaceSolids(world, anchor, yaw, buffer)) {
+        if (PropPlacementValidator.validate(world, catalog, propId, anchor, yaw) != null) {
             return false;
         }
         if (!consumeMatchingPropItem(playerInventory, def.getId())) {
             return false;
         }
         UUID instanceId = UUID.randomUUID();
+        var entityStore = world.getEntityStore().getStore();
+        // Diff the whole world manager: volume centres often sit outside the prop block AABB.
+        Set<String> volumesBefore = new HashSet<>(PrefabTriggerVolumeCleanup.listVolumeIdsInWorld(entityStore));
         PropPrefabOps.pasteSolidsOnly(world, anchor, yaw, buffer);
         List<UUID> linked =
             PropEntityOps.pasteEntities(world, anchor, yaw, def.getPrefabPath(), buffer, instanceId);
+        Set<String> volumesAfter = new HashSet<>(PrefabTriggerVolumeCleanup.listVolumeIdsInWorld(entityStore));
+        volumesAfter.removeAll(volumesBefore);
+        List<String> linkedVolumes = new ArrayList<>(volumesAfter);
         PropRegistry registry = PropWorldRegistries.getOrCreatePropRegistry(world, plugin);
-        registry.add(new PropInstance(instanceId, def.getId(), anchor, yaw, linked));
+        registry.add(new PropInstance(instanceId, def.getId(), anchor, yaw, linked, linkedVolumes));
         return true;
     }
 

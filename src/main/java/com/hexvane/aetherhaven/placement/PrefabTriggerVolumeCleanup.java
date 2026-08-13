@@ -30,6 +30,19 @@ public final class PrefabTriggerVolumeCleanup {
     private PrefabTriggerVolumeCleanup() {}
 
     /**
+     * Removes every trigger volume centred inside {@code fp} using exact block bounds (no Y padding). Prefer this for
+     * prop packaging so neighboring props' volumes are not swept.
+     *
+     * @return how many volumes were marked for removal
+     */
+    public static int removeVolumesInExactFootprint(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotFootprintRecord fp
+    ) {
+        return removeVolumesInFootprint(store, fp, true);
+    }
+
+    /**
      * Removes every trigger volume centred inside {@code fp}.
      *
      * @return how many volumes were marked for removal
@@ -37,6 +50,14 @@ public final class PrefabTriggerVolumeCleanup {
     public static int removeVolumesInFootprint(
         @Nonnull Store<EntityStore> store,
         @Nonnull PlotFootprintRecord fp
+    ) {
+        return removeVolumesInFootprint(store, fp, false);
+    }
+
+    private static int removeVolumesInFootprint(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotFootprintRecord fp,
+        boolean exactBounds
     ) {
         TriggerVolumeManager manager = resolveManager(store);
         if (manager == null) {
@@ -53,18 +74,56 @@ public final class PrefabTriggerVolumeCleanup {
             if (!sameWorld(worldName, entry.getWorldName())) {
                 continue;
             }
-            if (!footprintContains(fp, entry.getPosition())) {
+            if (exactBounds
+                ? !exactFootprintContains(fp, entry.getPosition())
+                : !footprintContains(fp, entry.getPosition())) {
                 continue;
             }
-            // Disable first so the next trigger-volume tick can run EXIT (music/weather) before destroy.
-            entry.setEnabled(false);
-            entry.markPendingDestroy();
+            markVolumePendingDestroy(entry);
             removed++;
         }
         if (removed > 0) {
             manager.markSpatialDirty();
         }
         return removed;
+    }
+
+    /**
+     * Marks specific trigger volumes for removal by id (prop-linked volumes). Missing / already-destroying ids are
+     * ignored.
+     *
+     * @return how many volumes were marked for removal
+     */
+    public static int removeVolumesByIds(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Iterable<String> volumeIds
+    ) {
+        TriggerVolumeManager manager = resolveManager(store);
+        if (manager == null) {
+            return 0;
+        }
+        int removed = 0;
+        for (String id : volumeIds) {
+            if (id == null || id.isBlank()) {
+                continue;
+            }
+            VolumeEntry entry = manager.getVolume(id.trim());
+            if (entry == null || entry.isPendingDestroy()) {
+                continue;
+            }
+            markVolumePendingDestroy(entry);
+            removed++;
+        }
+        if (removed > 0) {
+            manager.markSpatialDirty();
+        }
+        return removed;
+    }
+
+    private static void markVolumePendingDestroy(@Nonnull VolumeEntry entry) {
+        // Disable first so the next trigger-volume tick can run EXIT (music/weather) before destroy.
+        entry.setEnabled(false);
+        entry.markPendingDestroy();
     }
 
     /**
@@ -85,6 +144,20 @@ public final class PrefabTriggerVolumeCleanup {
             return 0;
         }
         return removeVolumesInFootprint(entityStore.getStore(), prefabBox(anchor, yaw, buffer));
+    }
+
+    /** Exact-bounds variant for prop packaging (no padded Y sweep). */
+    public static int removeVolumesInExactPrefabBox(
+        @Nonnull World world,
+        @Nonnull Vector3i anchor,
+        @Nonnull Rotation yaw,
+        @Nonnull IPrefabBuffer buffer
+    ) {
+        var entityStore = world.getEntityStore();
+        if (entityStore == null) {
+            return 0;
+        }
+        return removeVolumesInExactFootprint(entityStore.getStore(), prefabBox(anchor, yaw, buffer));
     }
 
     /** World space box a prefab covers, empty cells included. */
@@ -124,13 +197,62 @@ public final class PrefabTriggerVolumeCleanup {
         @Nonnull Store<EntityStore> store,
         @Nonnull PlotFootprintRecord fp
     ) {
+        return listVolumeIdsInFootprint(store, fp, false);
+    }
+
+    /** Exact-bounds volume ids (for diagnostics). Prefer {@link #listVolumeIdsInWorld} when linking a paste. */
+    @Nonnull
+    public static List<String> listVolumeIdsInExactFootprint(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotFootprintRecord fp
+    ) {
+        return listVolumeIdsInFootprint(store, fp, true);
+    }
+
+    /**
+     * Every non-pending trigger volume id in this world's manager. Used to diff before/after a prop paste so volumes
+     * whose centres sit outside the block AABB are still linked to the prop.
+     */
+    @Nonnull
+    public static List<String> listVolumeIdsInWorld(@Nonnull Store<EntityStore> store) {
+        TriggerVolumeManager manager = resolveManager(store);
+        if (manager == null) {
+            return List.of();
+        }
+        World world = store.getExternalData().getWorld();
+        String worldName = world != null ? world.getName().toLowerCase(Locale.ROOT) : null;
+        List<String> ids = new ArrayList<>();
+        for (VolumeEntry entry : new ArrayList<>(manager.getVolumes())) {
+            if (entry.isPendingDestroy()) {
+                continue;
+            }
+            if (!sameWorld(worldName, entry.getWorldName())) {
+                continue;
+            }
+            ids.add(entry.getId());
+        }
+        return ids;
+    }
+
+    @Nonnull
+    private static List<String> listVolumeIdsInFootprint(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotFootprintRecord fp,
+        boolean exactBounds
+    ) {
         TriggerVolumeManager manager = resolveManager(store);
         if (manager == null) {
             return List.of();
         }
         List<String> ids = new ArrayList<>();
         for (VolumeEntry entry : new ArrayList<>(manager.getVolumes())) {
-            if (footprintContains(fp, entry.getPosition())) {
+            if (entry.isPendingDestroy()) {
+                continue;
+            }
+            boolean inside = exactBounds
+                ? exactFootprintContains(fp, entry.getPosition())
+                : footprintContains(fp, entry.getPosition());
+            if (inside) {
                 ids.add(entry.getId());
             }
         }
@@ -156,6 +278,19 @@ public final class PrefabTriggerVolumeCleanup {
             && bx <= fp.getMaxX()
             && by >= fp.getMinY() - 1
             && by <= fp.getMaxY() + 2
+            && bz >= fp.getMinZ()
+            && bz <= fp.getMaxZ();
+    }
+
+    /** Block-inclusive AABB with no padding (prop package / link capture). */
+    static boolean exactFootprintContains(@Nonnull PlotFootprintRecord fp, @Nonnull Vector3d position) {
+        int bx = (int) Math.floor(position.x);
+        int by = (int) Math.floor(position.y);
+        int bz = (int) Math.floor(position.z);
+        return bx >= fp.getMinX()
+            && bx <= fp.getMaxX()
+            && by >= fp.getMinY()
+            && by <= fp.getMaxY()
             && bz >= fp.getMinZ()
             && bz <= fp.getMaxZ();
     }

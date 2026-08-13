@@ -2,17 +2,82 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { processScreenshot, ScreenshotProcessingError } from "./imageProcessing.js";
+import { autoSetCoverFromExistingApprovedScreenshots } from "./coverScreenshots.js";
+import { resolveChromiumExecutable } from "./chromiumExecutable.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const RENDER_TIMEOUT_MS = 45_000;
 const MAX_CONCURRENT = 1;
+const MAX_QUEUE = 32;
 
 let activeJobs = 0;
-/** @type {string[]} */
+/** @type {{ ownerKind: "pending"|"approved", ownerId: string }[]} */
 const queue = [];
 /** @type {import("playwright-core").Browser | null} */
 let sharedBrowser = null;
+
+/**
+ * @param {ReturnType<import("./storage.js").createStorage>} storage
+ * @param {number} port
+ * @param {"pending"|"approved"} ownerKind
+ * @param {string} ownerId
+ * @returns {{
+ *   ownerKind: "pending"|"approved",
+ *   ownerId: string,
+ *   meta: object,
+ *   prefabPath: string,
+ *   prefabUrl: string,
+ * } | null}
+ */
+export function resolvePreviewScreenshotTarget(storage, port, ownerKind, ownerId) {
+  const kind = ownerKind === "approved" ? "approved" : "pending";
+  const id = String(ownerId || "").trim();
+  if (!id) {
+    return null;
+  }
+
+  if (kind === "pending") {
+    const meta = storage.loadSubmissionMeta(id, "pending");
+    if (meta) {
+      const prefabPath = path.join(storage.submissionDir(id, "pending"), "prefab.prefab.json");
+      if (!fs.existsSync(prefabPath)) {
+        return null;
+      }
+      return {
+        ownerKind: "pending",
+        ownerId: id,
+        meta,
+        prefabPath,
+        prefabUrl: `http://127.0.0.1:${port}/internal/pending-prefab/${encodeURIComponent(id)}.json`,
+      };
+    }
+    const approved = storage.findApprovedBySubmissionId(id);
+    const approvedId = String(approved?.id || "").trim();
+    if (!approvedId) {
+      return null;
+    }
+    return resolvePreviewScreenshotTarget(storage, port, "approved", approvedId);
+  }
+
+  const paths = storage.approvedPaths(id);
+  if (!fs.existsSync(paths.meta) || !fs.existsSync(paths.prefab)) {
+    return null;
+  }
+  let meta;
+  try {
+    meta = JSON.parse(fs.readFileSync(paths.meta, "utf8"));
+  } catch {
+    return null;
+  }
+  return {
+    ownerKind: "approved",
+    ownerId: id,
+    meta,
+    prefabPath: paths.prefab,
+    prefabUrl: `http://127.0.0.1:${port}/internal/approved-prefab/${encodeURIComponent(id)}.json`,
+  };
+}
 
 /**
  * @param {object} options
@@ -39,27 +104,20 @@ export function createPreviewScreenshotService(options) {
     return false;
   }
 
-  async function resolveChromiumExecutable() {
-    const fromEnv = String(process.env.CHROMIUM_PATH || process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || "").trim();
-    if (fromEnv && fs.existsSync(fromEnv)) {
-      return fromEnv;
-    }
-    for (const candidate of ["/bin/chromium", "/usr/bin/chromium", "/usr/bin/chromium-browser"]) {
-      if (fs.existsSync(candidate)) {
-        return candidate;
-      }
-    }
-    try {
-      const playwright = await import("playwright-core");
-      const exe = playwright.chromium.executablePath();
-      if (exe && fs.existsSync(exe)) {
-        return exe;
-      }
-    } catch {
-      /* no bundled browser */
-    }
-    return "";
+  async function status() {
+    const chromiumPath = await resolveChromiumExecutable();
+    return {
+      assetsReady: assetsReady(),
+      chromiumFound: Boolean(chromiumPath),
+    };
   }
+
+  resolveChromiumExecutable()
+    .then((exe) => {
+      log(`[preview-screenshot] chromium: ${exe || "not found"}`);
+      log(`[preview-screenshot] hytale-assets: ${assetsReady() ? "ready" : "not synced"}`);
+    })
+    .catch((err) => log("[preview-screenshot] startup check failed", err));
 
   async function getBrowser() {
     if (sharedBrowser) {
@@ -74,7 +132,9 @@ export function createPreviewScreenshotService(options) {
       executablePath,
       headless: true,
       args: [
-        "--use-gl=swiftshader",
+        "--use-gl=angle",
+        "--use-angle=swiftshader",
+        "--enable-unsafe-swiftshader",
         "--enable-webgl",
         "--ignore-gpu-blocklist",
         "--no-sandbox",
@@ -88,30 +148,35 @@ export function createPreviewScreenshotService(options) {
   }
 
   /**
-   * @param {string} submissionId
+   * @param {string} ownerId
+   * @param {"pending"|"approved"} [ownerKind]
    */
-  function enqueue(submissionId) {
-    const id = String(submissionId || "").trim();
-    if (!id || queue.includes(id)) {
+  function enqueue(ownerId, ownerKind = "pending") {
+    const kind = ownerKind === "approved" ? "approved" : "pending";
+    const id = String(ownerId || "").trim();
+    if (!id) {
       return;
     }
-    if (queue.length >= 32) {
-      log(`[preview-screenshot] queue full, dropping ${id}`);
+    if (queue.some((job) => job.ownerKind === kind && job.ownerId === id)) {
       return;
     }
-    queue.push(id);
+    if (queue.length >= MAX_QUEUE) {
+      log(`[preview-screenshot] queue full, dropping ${kind}:${id}`);
+      return;
+    }
+    queue.push({ ownerKind: kind, ownerId: id });
     pump();
   }
 
   function pump() {
     while (activeJobs < MAX_CONCURRENT && queue.length) {
-      const id = queue.shift();
-      if (!id) {
+      const job = queue.shift();
+      if (!job) {
         break;
       }
       activeJobs += 1;
-      runJob(id)
-        .catch((err) => log(`[preview-screenshot] failed for ${id}`, err))
+      runJob(job.ownerKind, job.ownerId)
+        .catch((err) => log(`[preview-screenshot] failed for ${job.ownerKind}:${job.ownerId}`, err))
         .finally(() => {
           activeJobs -= 1;
           pump();
@@ -120,38 +185,34 @@ export function createPreviewScreenshotService(options) {
   }
 
   /**
-   * @param {string} submissionId
+   * @param {"pending"|"approved"} ownerKind
+   * @param {string} ownerId
    */
-  async function runJob(submissionId) {
-    const meta = storage.loadSubmissionMeta(submissionId, "pending");
-    if (!meta) {
-      log(`[preview-screenshot] submission gone: ${submissionId}`);
+  async function runJob(ownerKind, ownerId) {
+    const target = resolvePreviewScreenshotTarget(storage, port, ownerKind, ownerId);
+    if (!target) {
+      log(`[preview-screenshot] submission gone: ${ownerKind}:${ownerId}`);
       return;
     }
-    if (storage.countScreenshotsForOwner("pending", submissionId) > 0) {
-      log(`[preview-screenshot] skip ${submissionId}: already has screenshots`);
+    if (storage.countScreenshotsForOwner(target.ownerKind, target.ownerId) > 0) {
+      log(`[preview-screenshot] skip ${target.ownerKind}:${target.ownerId}: already has screenshots`);
+      if (target.ownerKind === "approved") {
+        autoSetCoverFromExistingApprovedScreenshots(storage, target.ownerId);
+      }
       return;
     }
     if (!assetsReady()) {
-      log(`[preview-screenshot] skip ${submissionId}: hytale-assets not synced`);
+      log(`[preview-screenshot] skip ${target.ownerKind}:${target.ownerId}: hytale-assets not synced`);
       return;
     }
 
-    const prefabPath = path.join(storage.submissionDir(submissionId, "pending"), "prefab.prefab.json");
-    if (!fs.existsSync(prefabPath)) {
-      log(`[preview-screenshot] skip ${submissionId}: missing prefab`);
-      return;
-    }
-
-    const prefabUrl = `http://127.0.0.1:${port}/internal/pending-prefab/${encodeURIComponent(submissionId)}.json`;
     const pageUrl =
       `http://127.0.0.1:${port}/internal/prefab-render.html` +
-      `?prefabUrl=${encodeURIComponent(prefabUrl)}`;
+      `?prefabUrl=${encodeURIComponent(target.prefabUrl)}&interactive=0`;
 
-    let browser;
     let context;
     try {
-      browser = await getBrowser();
+      const browser = await getBrowser();
       context = await browser.newContext({
         viewport: { width: 1280, height: 720 },
         deviceScaleFactor: 1,
@@ -169,8 +230,8 @@ export function createPreviewScreenshotService(options) {
       }
 
       const png = await page.screenshot({ type: "png", fullPage: false });
-      await saveAutoScreenshot(submissionId, meta, Buffer.from(png));
-      log(`[preview-screenshot] saved for ${submissionId}`);
+      await saveAutoScreenshot(target.ownerKind, target.ownerId, target.meta, Buffer.from(png));
+      log(`[preview-screenshot] saved for ${target.ownerKind}:${target.ownerId}`);
     } finally {
       try {
         await context?.close();
@@ -181,13 +242,30 @@ export function createPreviewScreenshotService(options) {
   }
 
   /**
-   * @param {string} submissionId
+   * @param {"pending"|"approved"} ownerKind
+   * @param {string} ownerId
    * @param {object} ownerMeta
    * @param {Buffer} buffer
    */
-  async function saveAutoScreenshot(submissionId, ownerMeta, buffer) {
-    // Re-check after render — owner may have uploaded meanwhile
-    if (storage.countScreenshotsForOwner("pending", submissionId) > 0) {
+  async function saveAutoScreenshot(ownerKind, ownerId, ownerMeta, buffer) {
+    let kind = ownerKind;
+    let id = ownerId;
+    let meta = ownerMeta;
+    if (kind === "pending" && !storage.loadSubmissionMeta(id, "pending")) {
+      const approved = storage.findApprovedBySubmissionId(id);
+      const approvedId = String(approved?.id || "").trim();
+      if (!approvedId) {
+        log(`[preview-screenshot] submission gone before save: ${id}`);
+        return;
+      }
+      kind = "approved";
+      id = approvedId;
+      meta = approved;
+    }
+    if (storage.countScreenshotsForOwner(kind, id) > 0) {
+      if (kind === "approved") {
+        autoSetCoverFromExistingApprovedScreenshots(storage, id);
+      }
       return;
     }
     let processed;
@@ -209,10 +287,10 @@ export function createPreviewScreenshotService(options) {
       fs.writeFileSync(paths.card, processed.cardBuffer);
       const shotMeta = {
         screenshotId,
-        ownerKind: "pending",
-        ownerId: submissionId,
-        creatorUuid: ownerMeta.creatorUuid || "",
-        creatorName: ownerMeta.creatorName || "Unknown",
+        ownerKind: kind,
+        ownerId: id,
+        creatorUuid: meta.creatorUuid || "",
+        creatorName: meta.creatorName || "Unknown",
         status: "approved",
         source: "auto_preview",
         uploadedAt: new Date().toISOString(),
@@ -223,6 +301,9 @@ export function createPreviewScreenshotService(options) {
         cardBytes: processed.cardBuffer.length,
       };
       storage.writeScreenshotMeta(shotMeta);
+      if (kind === "approved") {
+        autoSetCoverFromExistingApprovedScreenshots(storage, id);
+      }
     } catch (err) {
       storage.deleteScreenshot(screenshotId);
       throw err;
@@ -241,5 +322,5 @@ export function createPreviewScreenshotService(options) {
     }
   }
 
-  return { enqueue, shutdown, assetsReady };
+  return { enqueue, shutdown, assetsReady, status };
 }

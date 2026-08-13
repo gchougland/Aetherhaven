@@ -72,9 +72,15 @@ public final class PropDefinitionFactory {
         }
     }
 
-    /** A prop prefab must contain at least one solid voxel; a purely-air prefab has nothing to place/protect. */
+    /** A prop prefab must contain at least one solid voxel or one entity; empty prefabs have nothing to place. */
     public static boolean validatePropPrefab(@Nonnull IPrefabBuffer buffer) {
-        return PropPrefabOps.hasOriginSolids(Rotation.None, buffer);
+        return validatePropPrefab(buffer, null);
+    }
+
+    /** Like {@link #validatePropPrefab(IPrefabBuffer)} but also checks the prefab file entity list (NPCs, etc.). */
+    public static boolean validatePropPrefab(@Nonnull IPrefabBuffer buffer, @Nullable String prefabPathKey) {
+        return PropPrefabOps.hasOriginSolids(Rotation.None, buffer)
+            || PropPrefabOps.hasPrefabEntities(buffer, prefabPathKey);
     }
 
     @Nonnull

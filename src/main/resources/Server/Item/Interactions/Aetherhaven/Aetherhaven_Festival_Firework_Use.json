@@ -1,0 +1,15 @@
+{
+  "Type": "Serial",
+  "Interactions": [
+    {
+      "Type": "AetherhavenFireworkLaunch"
+    },
+    {
+      "Type": "ModifyInventory",
+      "ItemToRemove": {
+        "Id": "Aetherhaven_Festival_Firework",
+        "Quantity": 1
+      }
+    }
+  ]
+}

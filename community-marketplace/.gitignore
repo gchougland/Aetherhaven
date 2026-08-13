@@ -7,3 +7,4 @@ web/hytale-assets/*
 !web/hytale-assets/catalog/
 
 web/debug/
+.playwright-browsers/

@@ -50,6 +50,9 @@
       // Default interactive for local debugging; ?interactive=0 keeps screenshot mode.
       const interactive = params.get("interactive") !== "0";
       const statusEl = document.getElementById("status");
+      if (!interactive && statusEl) {
+        statusEl.style.display = "none";
+      }
 
       async function main() {
         if (!prefabUrl) {

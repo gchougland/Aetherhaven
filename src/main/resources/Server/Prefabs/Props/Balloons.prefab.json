@@ -152,50 +152,6 @@
             "Yaw": 0.0,
             "Roll": 0.0
           }
-        },
-        "TriggerVolume": {
-          "Shape": {
-            "Type": "Box",
-            "Min": {
-              "X": -14.0,
-              "Y": -12.0,
-              "Z": -14.0
-            },
-            "Max": {
-              "X": 14.0,
-              "Y": 12.0,
-              "Z": 14.0
-            }
-          },
-          "Effects": [
-            {
-              "Type": "SetMusic",
-              "Event": "ENTER",
-              "Interval": 0.0,
-              "Delay": 0.0,
-              "MusicContainer": "Track_Aetherhaven_WelcomeFeast",
-              "ClearMusic": false
-            },
-            {
-              "Type": "SetMusic",
-              "Event": "EXIT",
-              "Interval": 0.0,
-              "Delay": 0.0,
-              "MusicContainer": "",
-              "ClearMusic": true
-            }
-          ],
-          "Enabled": true,
-          "TargetTypes": [
-            "Player"
-          ],
-          "KeepLoaded": false,
-          "Color": {
-            "X": 0.800000011920929,
-            "Y": 0.0,
-            "Z": 0.24313725531101227
-          },
-          "PrefabIndex": 0
         }
       }
     },
@@ -212,50 +168,6 @@
             "Yaw": 0.0,
             "Roll": 0.0
           }
-        },
-        "TriggerVolume": {
-          "Shape": {
-            "Type": "Box",
-            "Min": {
-              "X": -14.0,
-              "Y": -12.0,
-              "Z": -14.0
-            },
-            "Max": {
-              "X": 14.0,
-              "Y": 12.0,
-              "Z": 14.0
-            }
-          },
-          "Effects": [
-            {
-              "Type": "SetMusic",
-              "Event": "ENTER",
-              "Interval": 0.0,
-              "Delay": 0.0,
-              "MusicContainer": "Track_Aetherhaven_WelcomeFeast",
-              "ClearMusic": false
-            },
-            {
-              "Type": "SetMusic",
-              "Event": "EXIT",
-              "Interval": 0.0,
-              "Delay": 0.0,
-              "MusicContainer": "",
-              "ClearMusic": true
-            }
-          ],
-          "Enabled": true,
-          "TargetTypes": [
-            "Player"
-          ],
-          "KeepLoaded": false,
-          "Color": {
-            "X": 0.800000011920929,
-            "Y": 0.0,
-            "Z": 0.24313725531101227
-          },
-          "PrefabIndex": 1
         }
       }
     },
@@ -272,50 +184,6 @@
             "Yaw": 0.0,
             "Roll": 0.0
           }
-        },
-        "TriggerVolume": {
-          "Shape": {
-            "Type": "Box",
-            "Min": {
-              "X": -14.000002113941028,
-              "Y": -12.0,
-              "Z": -14.000002113941028
-            },
-            "Max": {
-              "X": 14.000002113941028,
-              "Y": 12.0,
-              "Z": 14.000002113941028
-            }
-          },
-          "Effects": [
-            {
-              "Type": "SetMusic",
-              "Event": "ENTER",
-              "Interval": 0.0,
-              "Delay": 0.0,
-              "MusicContainer": "Track_Aetherhaven_WelcomeFeast",
-              "ClearMusic": false
-            },
-            {
-              "Type": "SetMusic",
-              "Event": "EXIT",
-              "Interval": 0.0,
-              "Delay": 0.0,
-              "MusicContainer": "",
-              "ClearMusic": true
-            }
-          ],
-          "Enabled": true,
-          "TargetTypes": [
-            "Player"
-          ],
-          "KeepLoaded": false,
-          "Color": {
-            "X": 0.800000011920929,
-            "Y": 0.0,
-            "Z": 0.24313725531101227
-          },
-          "PrefabIndex": 2
         }
       }
     },
@@ -332,50 +200,6 @@
             "Yaw": 0.0,
             "Roll": 0.0
           }
-        },
-        "TriggerVolume": {
-          "Shape": {
-            "Type": "Box",
-            "Min": {
-              "X": -14.000000611959447,
-              "Y": -12.0,
-              "Z": -14.000000611959447
-            },
-            "Max": {
-              "X": 14.000000611959447,
-              "Y": 12.0,
-              "Z": 14.000000611959447
-            }
-          },
-          "Effects": [
-            {
-              "Type": "SetMusic",
-              "Event": "ENTER",
-              "Interval": 0.0,
-              "Delay": 0.0,
-              "MusicContainer": "Track_Aetherhaven_WelcomeFeast",
-              "ClearMusic": false
-            },
-            {
-              "Type": "SetMusic",
-              "Event": "EXIT",
-              "Interval": 0.0,
-              "Delay": 0.0,
-              "MusicContainer": "",
-              "ClearMusic": true
-            }
-          ],
-          "Enabled": true,
-          "TargetTypes": [
-            "Player"
-          ],
-          "KeepLoaded": false,
-          "Color": {
-            "X": 0.800000011920929,
-            "Y": 0.0,
-            "Z": 0.24313725531101227
-          },
-          "PrefabIndex": 3
         }
       }
     },
@@ -392,50 +216,6 @@
             "Yaw": 0.0,
             "Roll": 0.0
           }
-        },
-        "TriggerVolume": {
-          "Shape": {
-            "Type": "Box",
-            "Min": {
-              "X": -14.0,
-              "Y": -12.0,
-              "Z": -14.0
-            },
-            "Max": {
-              "X": 14.0,
-              "Y": 12.0,
-              "Z": 14.0
-            }
-          },
-          "Effects": [
-            {
-              "Type": "SetMusic",
-              "Event": "ENTER",
-              "Interval": 0.0,
-              "Delay": 0.0,
-              "MusicContainer": "Track_Aetherhaven_WelcomeFeast",
-              "ClearMusic": false
-            },
-            {
-              "Type": "SetMusic",
-              "Event": "EXIT",
-              "Interval": 0.0,
-              "Delay": 0.0,
-              "MusicContainer": "",
-              "ClearMusic": true
-            }
-          ],
-          "Enabled": true,
-          "TargetTypes": [
-            "Player"
-          ],
-          "KeepLoaded": false,
-          "Color": {
-            "X": 0.800000011920929,
-            "Y": 0.0,
-            "Z": 0.24313725531101227
-          },
-          "PrefabIndex": 4
         }
       }
     }

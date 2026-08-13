@@ -204,14 +204,6 @@
     "carnival"
   ],
   "greetings": {
-    "bard": [
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.bard.0",
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.bard.1"
-    ],
-    "elder": [
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.elder.0",
-      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.elder.1"
-    ],
     "guard": [
       "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.guard.0",
       "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.guard.1"
@@ -275,6 +267,14 @@
     "logger": [
       "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.logger.0",
       "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.logger.1"
+    ],
+    "bard": [
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.bard.0",
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.bard.1"
+    ],
+    "elder": [
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.elder.0",
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.elder.1"
     ]
   }
 }

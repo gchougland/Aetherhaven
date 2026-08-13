@@ -105,6 +105,49 @@ final class PlotCreatorFestivalFlowTest {
         assertTrue(draft.isFestivalAllDay());
     }
 
+    @Test
+    void festivalExportOmitsTownRecordsShelfEvenWhenStartingFromTheBasePrefab() {
+        PlotCreatorDraft draft = festivalDraft();
+        draft.setPrefabPath(CustomFestivalPaths.BASE_PREFAB_PATH);
+
+        assertTrue(PlotCreatorPrefabExporter.shouldOmitManagementBlockFromFestivalExport(draft));
+    }
+
+    @Test
+    void carnivalPrefabExportOmitsTownRecordsShelf() {
+        PlotCreatorDraft draft = festivalDraft();
+        draft.setPrefabPath("Festivals/Festival_Carnival.prefab.json");
+        draft.setLockedPrefabPathKey("Festivals/Festival_Carnival.prefab.json");
+
+        assertTrue(PlotCreatorPrefabExporter.shouldOmitManagementBlockFromFestivalExport(draft));
+    }
+
+    @Test
+    void festivalFolderPrefabWithoutFestivalModeOmitsTownRecordsShelf() {
+        PlotCreatorDraft draft = new PlotCreatorDraft();
+        draft.setPrefabPath("Festivals/Festival_Carnival.prefab.json");
+
+        assertTrue(PlotCreatorPrefabExporter.shouldOmitManagementBlockFromFestivalExport(draft));
+    }
+
+    @Test
+    void everydayFestivalSquareExportKeepsTownRecordsShelf() {
+        PlotCreatorDraft draft = new PlotCreatorDraft();
+        draft.setConstructionId("plot_festival_square");
+        draft.setPrefabPath(CustomFestivalPaths.BASE_PREFAB_PATH);
+
+        assertFalse(PlotCreatorPrefabExporter.shouldOmitManagementBlockFromFestivalExport(draft));
+    }
+
+    @Test
+    void ordinaryBuildingExportKeepsTownRecordsShelf() {
+        PlotCreatorDraft draft = new PlotCreatorDraft();
+        draft.setConstructionId("plot_inn");
+        draft.setPrefabPath("plot_inn.prefab.json");
+
+        assertFalse(PlotCreatorPrefabExporter.shouldOmitManagementBlockFromFestivalExport(draft));
+    }
+
     private static PlotCreatorDraft festivalDraft() {
         PlotCreatorDraft draft = new PlotCreatorDraft();
         draft.setKinds(List.of(PlotBuildingKind.FESTIVAL));

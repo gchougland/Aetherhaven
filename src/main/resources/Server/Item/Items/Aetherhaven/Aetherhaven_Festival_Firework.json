@@ -25,15 +25,14 @@
   },
   "Consumable": true,
   "Interactions": {
+    "Primary": {
+      "Interactions": [
+        "Aetherhaven_Festival_Firework_Use"
+      ]
+    },
     "Secondary": {
       "Interactions": [
-        {
-          "Type": "AetherhavenFireworkLaunch",
-          "Next": {
-            "Type": "ModifyInventory",
-            "AdjustHeldItemQuantity": -1
-          }
-        }
+        "Aetherhaven_Festival_Firework_Use"
       ]
     }
   },

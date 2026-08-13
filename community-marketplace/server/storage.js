@@ -205,6 +205,28 @@ export function createStorage(dataDir) {
     return listScreenshotsForOwner(ownerKind, ownerId).length;
   }
 
+  /**
+   * After a pending submission is approved, its folder is deleted. Look up the
+   * published building that still records the original submission id.
+   * @param {string} submissionId
+   */
+  function findApprovedBySubmissionId(submissionId) {
+    const id = String(submissionId || "").trim();
+    if (!id || !fs.existsSync(dirs.approved)) {
+      return null;
+    }
+    for (const entry of fs.readdirSync(dirs.approved, { withFileTypes: true })) {
+      if (!entry.isDirectory()) {
+        continue;
+      }
+      const meta = loadSubmissionMeta(entry.name, "approved");
+      if (meta && String(meta.submissionId || "").trim() === id) {
+        return meta;
+      }
+    }
+    return null;
+  }
+
   return {
     dirs,
     readManifest,
@@ -227,5 +249,6 @@ export function createStorage(dataDir) {
     deleteScreenshotsForOwner,
     reassignScreenshotsToApproved,
     countScreenshotsForOwner,
+    findApprovedBySubmissionId,
   };
 }

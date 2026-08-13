@@ -29,13 +29,20 @@ public final class PropInstance {
     @Nonnull
     private final List<UUID> linkedEntityIds;
 
+    /**
+     * Trigger volume manager ids registered when this prop was pasted. Trigger volumes are not entities after paste, so
+     * they cannot carry {@link AetherhavenPlacedInstance}; empty for older saves.
+     */
+    @Nonnull
+    private final List<String> linkedTriggerVolumeIds;
+
     public PropInstance(
         @Nonnull UUID instanceId,
         @Nonnull String propId,
         @Nonnull Vector3i anchor,
         @Nonnull Rotation yaw
     ) {
-        this(instanceId, propId, anchor.x, anchor.y, anchor.z, yaw, List.of());
+        this(instanceId, propId, anchor.x, anchor.y, anchor.z, yaw, List.of(), List.of());
     }
 
     public PropInstance(
@@ -45,7 +52,18 @@ public final class PropInstance {
         @Nonnull Rotation yaw,
         @Nonnull List<UUID> linkedEntityIds
     ) {
-        this(instanceId, propId, anchor.x, anchor.y, anchor.z, yaw, linkedEntityIds);
+        this(instanceId, propId, anchor.x, anchor.y, anchor.z, yaw, linkedEntityIds, List.of());
+    }
+
+    public PropInstance(
+        @Nonnull UUID instanceId,
+        @Nonnull String propId,
+        @Nonnull Vector3i anchor,
+        @Nonnull Rotation yaw,
+        @Nonnull List<UUID> linkedEntityIds,
+        @Nonnull List<String> linkedTriggerVolumeIds
+    ) {
+        this(instanceId, propId, anchor.x, anchor.y, anchor.z, yaw, linkedEntityIds, linkedTriggerVolumeIds);
     }
 
     public PropInstance(
@@ -56,7 +74,7 @@ public final class PropInstance {
         int anchorZ,
         @Nonnull Rotation yaw
     ) {
-        this(instanceId, propId, anchorX, anchorY, anchorZ, yaw, List.of());
+        this(instanceId, propId, anchorX, anchorY, anchorZ, yaw, List.of(), List.of());
     }
 
     public PropInstance(
@@ -68,6 +86,19 @@ public final class PropInstance {
         @Nonnull Rotation yaw,
         @Nullable List<UUID> linkedEntityIds
     ) {
+        this(instanceId, propId, anchorX, anchorY, anchorZ, yaw, linkedEntityIds, List.of());
+    }
+
+    public PropInstance(
+        @Nonnull UUID instanceId,
+        @Nonnull String propId,
+        int anchorX,
+        int anchorY,
+        int anchorZ,
+        @Nonnull Rotation yaw,
+        @Nullable List<UUID> linkedEntityIds,
+        @Nullable List<String> linkedTriggerVolumeIds
+    ) {
         this.instanceId = instanceId;
         this.propId = propId.trim();
         this.anchorX = anchorX;
@@ -78,6 +109,10 @@ public final class PropInstance {
             linkedEntityIds == null || linkedEntityIds.isEmpty()
                 ? List.of()
                 : Collections.unmodifiableList(new ArrayList<>(linkedEntityIds));
+        this.linkedTriggerVolumeIds =
+            linkedTriggerVolumeIds == null || linkedTriggerVolumeIds.isEmpty()
+                ? List.of()
+                : Collections.unmodifiableList(new ArrayList<>(linkedTriggerVolumeIds));
     }
 
     @Nonnull
@@ -115,5 +150,10 @@ public final class PropInstance {
     @Nonnull
     public List<UUID> getLinkedEntityIds() {
         return linkedEntityIds;
+    }
+
+    @Nonnull
+    public List<String> getLinkedTriggerVolumeIds() {
+        return linkedTriggerVolumeIds;
     }
 }

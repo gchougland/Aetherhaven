@@ -154,8 +154,8 @@ public final class PropPrefabBrowserPage extends AetherhavenInteractiveCustomUIP
             sendActionUpdate();
             return;
         }
-        if (!PropDefinitionFactory.validatePropPrefab(buffer)) {
-            setStatus(MSG_UI + ".error.noSolids");
+        if (!PropDefinitionFactory.validatePropPrefab(buffer, pathKey)) {
+            setStatus(MSG_UI + ".error.empty");
             sendActionUpdate();
             return;
         }

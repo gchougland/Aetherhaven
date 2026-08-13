@@ -264,7 +264,32 @@ function enrichPendingSubmission(meta) {
   if (iconFile) {
     enriched.iconUrl = `/api/admin/submissions/${encodeURIComponent(submissionId)}/icon.png`;
   }
+  Object.assign(enriched, pendingCoverImage(submissionId, { asAdmin: true }));
   return enriched;
+}
+
+/**
+ * First approved screenshot for a pending submission, used as the queue card image.
+ * @param {string} submissionId
+ * @param {{ asAdmin?: boolean }} [options]
+ */
+function pendingCoverImage(submissionId, options = {}) {
+  const shots = storage.listScreenshotsForOwner("pending", submissionId, "approved");
+  if (!shots.length) {
+    return { coverScreenshotId: null, usesCoverImage: false, coverImageUrl: null };
+  }
+  shots.sort((a, b) =>
+    String(a.approvedAt || a.uploadedAt || "").localeCompare(String(b.approvedAt || b.uploadedAt || ""))
+  );
+  const shot = shots[0];
+  const baseUrl = options.asAdmin
+    ? `/api/admin/screenshots/${encodeURIComponent(shot.screenshotId)}/image`
+    : `/api/my-screenshots/${encodeURIComponent(shot.screenshotId)}/image`;
+  return {
+    coverScreenshotId: shot.screenshotId,
+    usesCoverImage: true,
+    coverImageUrl: withScreenshotVariant(baseUrl, "card"),
+  };
 }
 
 function listEnrichedPending() {
@@ -721,6 +746,9 @@ function approveSubmission(submissionId, requestedId, requiredModsOverride) {
   fs.rmSync(pendingDir, { recursive: true, force: true });
   storage.reassignScreenshotsToApproved(submissionId, id);
   autoSetCoverFromExistingApprovedScreenshots(storage, id);
+  if (storage.countScreenshotsForOwner("approved", id) === 0) {
+    previewScreenshots.enqueue(id, "approved");
+  }
   if (!wasAlreadyPublished) {
     notifyBuildingApproved({
       publicBaseUrl,
@@ -852,6 +880,7 @@ function listSubmissionsForCreator(webUser) {
       ...s,
       prefabUrl: `/api/my-submissions/${encodeURIComponent(s.submissionId)}/prefab.json`,
       screenshots: enrichOwnerScreenshots("pending", s.submissionId, true),
+      ...pendingCoverImage(s.submissionId, { asAdmin: false }),
     }));
 
   const rejected = storage
@@ -1006,8 +1035,22 @@ function removeOwnApprovedBuilding(buildingId, webUser) {
 
 // --- Public API (mod + downloads) ---
 
-app.get("/api/v1/health", (_req, res) => {
-  res.json({ ok: true });
+app.get("/api/v1/health", async (_req, res) => {
+  try {
+    const preview = await previewScreenshots.status();
+    res.json({
+      ok: true,
+      previewScreenshots: {
+        assetsReady: preview.assetsReady,
+        chromiumFound: preview.chromiumFound,
+      },
+    });
+  } catch {
+    res.json({
+      ok: true,
+      previewScreenshots: { assetsReady: false, chromiumFound: false },
+    });
+  }
 });
 
 function sortCatalogEntries(entries) {
@@ -1745,9 +1788,7 @@ function getPendingSubmissionEditPayload(submissionId) {
       iconUrl: iconFile
         ? `/api/admin/submissions/${encodeURIComponent(submissionId)}/icon.png`
         : null,
-      coverScreenshotId: null,
-      usesCoverImage: false,
-      coverImageUrl: null,
+      ...pendingCoverImage(submissionId, { asAdmin: true }),
       prefabUrl: `/api/my-submissions/${encodeURIComponent(submissionId)}/prefab.json`,
       screenshots: enrichOwnerScreenshots("pending", submissionId, true),
     },
@@ -2445,6 +2486,33 @@ app.post("/api/admin/buildings/:buildingId/cover", requireWebUser, requireAdmin,
   res.status(result.status).json(result.body);
 });
 
+app.post("/api/admin/buildings/:buildingId/preview-screenshot", requireWebUser, requireAdmin, (req, res) => {
+  const id = normalizeCommunityId(req.params.buildingId);
+  if (!id) {
+    res.status(400).json({ error: "invalid_id", message: "That build id is not valid." });
+    return;
+  }
+  const paths = storage.approvedPaths(id);
+  if (!fs.existsSync(paths.prefab) || !fs.existsSync(paths.meta)) {
+    res.status(404).json({ error: "not_found", message: "Build not found." });
+    return;
+  }
+  if (storage.countScreenshotsForOwner("approved", id) > 0) {
+    const coverSet = autoSetCoverFromExistingApprovedScreenshots(storage, id);
+    res.json({ queued: false, coverSet });
+    return;
+  }
+  if (!previewScreenshots.assetsReady()) {
+    res.status(503).json({
+      error: "assets_unavailable",
+      message: "The 3D preview is not ready on the server yet.",
+    });
+    return;
+  }
+  previewScreenshots.enqueue(id, "approved");
+  res.json({ queued: true, coverSet: false });
+});
+
 function handleScreenshotUploadMiddleware(req, res, next) {
   screenshotUpload.single("screenshot")(req, res, (err) => {
     if (err) {
@@ -2685,6 +2753,24 @@ app.get("/internal/pending-prefab/:submissionId.json", (req, res) => {
     return;
   }
   const file = path.join(storage.submissionDir(submissionId, "pending"), "prefab.prefab.json");
+  if (!fs.existsSync(file)) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  res.type("application/json").send(fs.readFileSync(file));
+});
+
+app.get("/internal/approved-prefab/:buildingId.json", (req, res) => {
+  if (!isLoopbackRequest(req)) {
+    res.status(403).json({ error: "loopback_only" });
+    return;
+  }
+  const id = normalizeCommunityId(req.params.buildingId);
+  if (!id) {
+    res.status(400).json({ error: "invalid_id" });
+    return;
+  }
+  const file = storage.approvedPaths(id).prefab;
   if (!fs.existsSync(file)) {
     res.status(404).json({ error: "not_found" });
     return;

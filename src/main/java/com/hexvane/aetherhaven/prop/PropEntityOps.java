@@ -48,8 +48,9 @@ import org.joml.Vector3i;
 
 /**
  * Prop prefab entity paste / removal. Prefers {@link BlockSelection} (full entity list from the prefab file), tags each
- * spawned entity with {@link AetherhavenPlacedInstance}, and on package also sweeps the footprint for leftovers that
- * lost their tag (common with decorative item props such as cabbage trough lettuce).
+ * spawned entity with {@link AetherhavenPlacedInstance} for that prop instance, and on package removes by linked UUIDs
+ * and matching tags. An exact-footprint sweep only cleans untagged decorative leftovers (never a neighbor prop's
+ * tagged entities, and never padded visual bounds).
  */
 public final class PropEntityOps {
     private PropEntityOps() {}
@@ -192,8 +193,8 @@ public final class PropEntityOps {
     }
 
     /**
-     * Removes entities linked to this prop: known UUIDs, {@link AetherhavenPlacedInstance} tags, and a footprint sweep
-     * for decorative leftovers (item props / FromPrefab / vanilla Prop) that lost their tag.
+     * Removes entities linked to this prop: known UUIDs, matching {@link AetherhavenPlacedInstance} tags, then an
+     * exact-footprint sweep for untagged decorative leftovers only.
      */
     public static void removeLinkedEntities(
         @Nonnull World world,
@@ -231,8 +232,9 @@ public final class PropEntityOps {
             }
         );
 
+        // Exact reserved footprint (no visual padding). Skip anything already tagged to a prop instance.
         PlotFootprintRecord fp = PropPrefabOps.footprint(origin, yaw, buffer);
-        collectFootprintPropEntities(store, fp, toRemove);
+        collectUntaggedFootprintLeftovers(store, fp, toRemove);
 
         for (Ref<EntityStore> ref : toRemove) {
             if (ref.isValid()) {
@@ -266,15 +268,19 @@ public final class PropEntityOps {
         }
     }
 
-    private static void collectFootprintPropEntities(
+    /**
+     * Exact block-inclusive footprint (min … max+1), no padding. Only untagged decorative leftovers — never entities
+     * already owned by any {@link AetherhavenPlacedInstance} (neighbors must stay).
+     */
+    private static void collectUntaggedFootprintLeftovers(
         @Nonnull Store<EntityStore> store, @Nonnull PlotFootprintRecord fp, @Nonnull Set<Ref<EntityStore>> toRemove
     ) {
-        double minX = fp.getMinX() - 0.25;
-        double minY = fp.getMinY() - 0.25;
-        double minZ = fp.getMinZ() - 0.25;
-        double maxX = fp.getMaxX() + 1.25;
-        double maxY = fp.getMaxY() + 1.25;
-        double maxZ = fp.getMaxZ() + 1.25;
+        double minX = fp.getMinX();
+        double minY = fp.getMinY();
+        double minZ = fp.getMinZ();
+        double maxX = fp.getMaxX() + 1.0;
+        double maxY = fp.getMaxY() + 1.0;
+        double maxZ = fp.getMaxZ() + 1.0;
         ComponentType<EntityStore, PropComponent> propType = null;
         try {
             EntityModule module = EntityModule.get();
@@ -294,7 +300,7 @@ public final class PropEntityOps {
                         continue;
                     }
                     Vector3d p = tc.getPosition();
-                    if (p.x < minX || p.x > maxX || p.y < minY || p.y > maxY || p.z < minZ || p.z > maxZ) {
+                    if (p.x < minX || p.x >= maxX || p.y < minY || p.y >= maxY || p.z < minZ || p.z >= maxZ) {
                         continue;
                     }
                     Ref<EntityStore> ref = archetypeChunk.getReferenceTo(i);
@@ -305,9 +311,12 @@ public final class PropEntityOps {
                         || archetypeChunk.getComponent(i, NPCEntity.getComponentType()) != null) {
                         continue;
                     }
+                    // Owned by a specific prop (this one already collected, or a neighbor) — do not footprint-sweep.
+                    if (archetypeChunk.getComponent(i, AetherhavenPlacedInstance.getComponentType()) != null) {
+                        continue;
+                    }
                     boolean decorative =
                         archetypeChunk.getComponent(i, FromPrefab.getComponentType()) != null
-                            || archetypeChunk.getComponent(i, AetherhavenPlacedInstance.getComponentType()) != null
                             || (propComponentType != null && archetypeChunk.getComponent(i, propComponentType) != null)
                             || (archetypeChunk.getComponent(i, ItemComponent.getComponentType()) != null
                                 && archetypeChunk.getComponent(i, PreventPickup.getComponentType()) != null);

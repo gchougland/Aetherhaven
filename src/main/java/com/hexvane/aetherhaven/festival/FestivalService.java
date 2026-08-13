@@ -166,6 +166,13 @@ public final class FestivalService {
         );
     }
 
+    /** True when this plot is the square currently hosting a festival. */
+    public static boolean isLiveFestivalSquare(@Nonnull TownRecord town, @Nullable UUID plotId) {
+        return plotId != null
+            && town.getActiveFestivalId() != null
+            && plotId.equals(town.getActiveFestivalPlotId());
+    }
+
     /** The completed festival square in this town, or null when the town has not built one. */
     @Nullable
     public static PlotInstance findFestivalSquare(@Nonnull AetherhavenPlugin plugin, @Nonnull TownRecord town) {

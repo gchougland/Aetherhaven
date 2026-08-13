@@ -11,6 +11,11 @@ import org.joml.Vector3d;
 /** While holding the packaging wand: blue cubes on nearby props, a brighter cube on the one under the crosshair. */
 public final class PropPackagingOverlay {
     private static final double NEARBY_RADIUS = 24.0;
+    /**
+     * Must exceed {@link PropPackagingWandTickSystem}'s refresh interval with margin. Each show clears then redraws;
+     * if hold expires before the next refresh the cubes vanish until the next tick redraw.
+     */
+    private static final float HOLD_SECONDS = 2.5f;
     private static final float NEARBY_R = 0.35f;
     private static final float NEARBY_G = 0.55f;
     private static final float NEARBY_B = 1.0f;
@@ -49,16 +54,15 @@ public final class PropPackagingOverlay {
             }
             PlotFootprintRecord fp = PropPrefabOps.footprint(instance.getAnchor(), instance.getYaw(), buffer);
             boolean isLookedAt = lookedAt != null && sameInstance(lookedAt, instance);
-            // Short hold: wand tick refreshes often; avoids leftover cubes after packaging / looking away.
-            float holdSeconds = 0.75f;
+            // Padding is visual-only (pick + clarity). Entity teardown uses exact footprint elsewhere.
             double pad = isLookedAt ? PropBoundsUtil.PROP_BOUNDS_PADDING : PropBoundsUtil.PROP_BOUNDS_PADDING * 0.5;
             if (isLookedAt) {
                 PropDebugCubeUtil.sendFootprintCube(
-                    player, fp, pad, LOOKED_AT_R, LOOKED_AT_G, LOOKED_AT_B, LOOKED_AT_A, holdSeconds
+                    player, fp, pad, LOOKED_AT_R, LOOKED_AT_G, LOOKED_AT_B, LOOKED_AT_A, HOLD_SECONDS
                 );
             } else {
                 PropDebugCubeUtil.sendFootprintCube(
-                    player, fp, pad, NEARBY_R, NEARBY_G, NEARBY_B, NEARBY_A, holdSeconds
+                    player, fp, pad, NEARBY_R, NEARBY_G, NEARBY_B, NEARBY_A, HOLD_SECONDS
                 );
             }
         }

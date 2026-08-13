@@ -188,6 +188,14 @@ public final class PropPlacementPage extends AetherhavenInteractiveCustomUIPage<
             return false;
         }
         World world = store.getExternalData().getWorld();
+        String err =
+            PropPlacementValidator.validate(
+                world, plugin.getPropCatalog(), session.getPropId(), session.getAnchor(), session.getYaw()
+            );
+        if (err != null) {
+            sendError(store, ref, MSG_UI + ".error." + err);
+            return false;
+        }
         boolean placed =
             PropPlacementCommit.commit(world, plugin, inv, session.getPropId(), session.getAnchor(), session.getYaw());
         if (!placed) {
@@ -212,7 +220,7 @@ public final class PropPlacementPage extends AetherhavenInteractiveCustomUIPage<
             return;
         }
         String err = PropPlacementValidator.validate(world, catalog, session.getPropId(), session.getAnchor(), session.getYaw());
-        PlotFootprintRecord fp = PropPrefabOps.footprint(session.getAnchor(), session.getYaw(), buffer);
+        PlotFootprintRecord fp = PropPrefabOps.placementOutlineFootprint(session.getAnchor(), session.getYaw(), buffer);
         PropPlacementWireframeOverlay.send(pr, fp, err == null);
         PropDefinition def = catalog.get(session.getPropId());
         if (def != null) {
@@ -238,6 +246,11 @@ public final class PropPlacementPage extends AetherhavenInteractiveCustomUIPage<
             }
             refreshPreview(ref, store);
         });
+    }
+
+    /** Re-send outline after another system issued {@code ClearDebugShapes}. */
+    public void refreshFootprintOverlayAfterDebugClear(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        refreshPreview(ref, store);
     }
 
     private void sendError(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref, @Nonnull String messageKey) {

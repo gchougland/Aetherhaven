@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
 import com.hexvane.aetherhaven.construction.ConstructionPrefabSequence;
 import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
 import com.hexvane.aetherhaven.placement.PrefabTriggerVolumeCleanup;
+import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.component.Ref;
@@ -13,19 +14,23 @@ import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.prefab.PrefabRotation;
+import com.hypixel.hytale.server.core.prefab.PrefabStore;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.world.SetBlockSettings;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
+import java.nio.file.Path;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3i;
 
 /**
- * Prop prefab paste / remove / validity checks, built on {@link ConstructionPasteOps}. Only solid block cells are
- * handled here; entity pasting/removal lives in {@link PropEntityOps}.
+ * Prop prefab paste / remove / validity checks, built on {@link ConstructionPasteOps}. Solids, interactive block
+ * entities, and fluids are handled here; entity pasting/removal lives in {@link PropEntityOps}.
  */
 public final class PropPrefabOps {
     /**
@@ -37,7 +42,10 @@ public final class PropPrefabOps {
 
     private PropPrefabOps() {}
 
-    /** Pastes every solid cell of the prop prefab at {@code origin} (world-space prefab corner), plus interactive block entities. */
+    /**
+     * Pastes every solid cell of the prop prefab at {@code origin} (world-space prefab corner), plus interactive block
+     * entities and prefab fluid cells (liquids are not written by {@link ConstructionPasteOps#forcePasteAllSolids}).
+     */
     public static void pasteSolidsOnly(
         @Nonnull World world,
         @Nonnull Vector3i origin,
@@ -46,9 +54,15 @@ public final class PropPrefabOps {
     ) {
         ConstructionPasteOps.forcePasteAllSolids(world, origin, yaw, false, buffer);
         ConstructionPasteOps.placeInteractiveBlockEntitiesFromPrefab(world, origin, yaw, buffer);
+        ConstructionPasteOps.applyCompletionFluids(
+            world, origin, PrefabRotation.fromRotation(yaw), false, buffer
+        );
     }
 
-    /** Clears every origin solid cell that still matches the prefab's expected block (skips cells a player has since edited). */
+    /**
+     * Clears every origin solid cell that still matches the prefab's expected block (skips cells a player has since
+     * edited), then clears fluids listed in the prefab footprint.
+     */
     public static void removeSolidsOnly(
         @Nonnull World world,
         @Nonnull Vector3i origin,
@@ -74,6 +88,10 @@ public final class PropPrefabOps {
             }
             clearBlockCell(world, bx, by, bz);
         }
+        LocalCachedChunkAccessor chunkAccessor = ConstructionPasteOps.createAccessor(world, origin, buffer);
+        ConstructionPasteOps.clearAllFluidsInPrefabFootprint(
+            world, origin, seq.pendingBlocks(), false, chunkAccessor
+        );
     }
 
     /**
@@ -164,11 +182,69 @@ public final class PropPrefabOps {
         return PlotFootprintUtil.hasSolidVoxels(yaw, buffer);
     }
 
+    /** True when the prefab lists at least one entity in the buffer columns or the prefab file's entity list. */
+    public static boolean hasPrefabEntities(@Nonnull IPrefabBuffer buffer) {
+        return hasPrefabEntities(buffer, null);
+    }
+
+    /**
+     * True when the prefab has entities. NPCs and other holders often live only on {@link
+     * com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection}, not in the cached buffer columns used by
+     * {@link ConstructionPasteOps#buildSequence}.
+     */
+    public static boolean hasPrefabEntities(@Nonnull IPrefabBuffer buffer, @Nullable String prefabPathKey) {
+        if (!ConstructionPasteOps.buildSequence(buffer, Rotation.None).prefabEntitiesInOrder().isEmpty()) {
+            return true;
+        }
+        return blockSelectionEntityCount(prefabPathKey) > 0;
+    }
+
+    private static int blockSelectionEntityCount(@Nullable String prefabPathKey) {
+        if (prefabPathKey == null || prefabPathKey.isBlank()) {
+            return 0;
+        }
+        Path path = PrefabResolveUtil.resolvePrefabPath(prefabPathKey);
+        if (path == null) {
+            return 0;
+        }
+        try {
+            var selection = PrefabStore.get().getPrefab(path);
+            return selection != null ? selection.getEntityCount() : 0;
+        } catch (RuntimeException e) {
+            return 0;
+        }
+    }
+
+    /**
+     * Placement wireframe / validity outline: solid origin voxels when present. Entity-only props use a single block at
+     * the placement anchor. Packaging overlays still use {@link #footprint}.
+     */
+    @Nonnull
+    public static PlotFootprintRecord placementOutlineFootprint(
+        @Nonnull Vector3i origin,
+        @Nonnull Rotation yaw,
+        @Nonnull IPrefabBuffer buffer
+    ) {
+        if (!hasOriginSolids(yaw, buffer)) {
+            return unitFootprint(origin);
+        }
+        return PlotFootprintUtil.computeFootprint(origin, yaw, buffer);
+    }
+
     @Nonnull
     public static PlotFootprintRecord footprint(@Nonnull Vector3i origin, @Nonnull Rotation yaw, @Nonnull IPrefabBuffer buffer) {
-        // Reserved prefab volume (empty cells included). Solid-only footprints miss furniture companions /
-        // unresolved *state blocks that still appear in the ghost, so the overlay looked too small.
+        // Entity-only props have no reserved solid volume; use a 1x1x1 pick/protect box at the anchor.
+        if (!hasOriginSolids(yaw, buffer)) {
+            return unitFootprint(origin);
+        }
+        // Reserved prefab volume (empty cells included). Used for packaging pick / padded visual cubes and exact
+        // entity leftover sweeps. Solid-only footprints can miss furniture companions that still sit in the volume.
         return PrefabTriggerVolumeCleanup.prefabBox(origin, yaw, buffer);
+    }
+
+    @Nonnull
+    private static PlotFootprintRecord unitFootprint(@Nonnull Vector3i origin) {
+        return new PlotFootprintRecord(origin.x, origin.y, origin.z, origin.x, origin.y, origin.z);
     }
 
     private static boolean isOriginSolidCell(@Nonnull PendingBlock pb) {

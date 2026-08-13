@@ -6,6 +6,7 @@ aetherhaven.prop.placement.error.notHoldingProp=Hold a prop item to place it.
 aetherhaven.prop.placement.error.unknownProp=That prop is unknown.
 aetherhaven.prop.placement.error.prefabMissing=That prop's build data is missing.
 aetherhaven.prop.placement.error.blocked=Something is in the way.
+aetherhaven.prop.placement.error.festivalSquare=Props cannot be placed on the festival square.
 
 aetherhaven.prop.packaging.nothingFound=No prop found to package.
 
@@ -24,11 +25,15 @@ aetherhaven.ui.propplacement.summary=Placing {prop}
 aetherhaven.ui.propplacement.details=Position {x}, {y}, {z}  Turn {step}
 aetherhaven.ui.propplacement.error.notHoldingProp=Hold a prop item to place it.
 aetherhaven.ui.propplacement.error.blocked=Something is in the way.
+aetherhaven.ui.propplacement.error.unknownProp=That prop is unknown.
+aetherhaven.ui.propplacement.error.prefabMissing=That prop's build data is missing.
+aetherhaven.ui.propplacement.error.festivalSquare=Props cannot be placed on the festival square.
 
 aetherhaven.ui.propprefabbrowser.title=Create Prop
 aetherhaven.ui.propprefabbrowser.previewTitle=Preview
 aetherhaven.ui.propprefabbrowser.create=Create Prop
 aetherhaven.ui.propprefabbrowser.error.prefabMissing=That prefab could not be loaded.
-aetherhaven.ui.propprefabbrowser.error.noSolids=That prefab has no solid blocks to place.
+aetherhaven.ui.propprefabbrowser.error.empty=That prefab has no blocks or entities to place.
+aetherhaven.ui.propprefabbrowser.error.noSolids=That prefab has no blocks or entities to place.
 aetherhaven.ui.propprefabbrowser.error.saveFailed=Could not save that prop.
 aetherhaven.ui.propprefabbrowser.created=Created prop {prop} and gave you the item.

@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
 import com.hexvane.aetherhaven.construction.ConstructionPrefabSequence;
+import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.poi.BuildingPoisDefinition;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.PlotInstance;
@@ -41,6 +42,9 @@ public final class PlotImportantBlockRestorer {
         @Nonnull Vector3i anchor,
         @Nonnull Rotation yaw
     ) {
+        if (FestivalService.isLiveFestivalSquare(town, plot.getPlotId())) {
+            return 0;
+        }
         return restoreImportantCellsFromPrefab(world, def, anchor, yaw);
     }
 

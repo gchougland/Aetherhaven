@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.prop;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.placement.PrefabTriggerVolumeCleanup;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.shopspot.ShopSpotItemDelivery;
 import com.hypixel.hytale.component.ComponentAccessor;
@@ -89,12 +90,19 @@ public final class PropPackageCommit {
         final Ref<EntityStore> playerRefSnapshot = playerRefOrNull;
         final var yaw = instance.getYaw();
         final List<UUID> linkedIds = new ArrayList<>(instance.getLinkedEntityIds());
+        final List<String> linkedVolumeIds = new ArrayList<>(instance.getLinkedTriggerVolumeIds());
         world.execute(
             () -> {
+                Store<EntityStore> entityStore = world.getEntityStore().getStore();
                 PropEntityOps.removeLinkedEntities(world, instanceId, linkedIds, anchorFinal, yaw, bufferFinal);
+                // Trigger volumes are manager entries (not tagged entities). Linked ids are authoritative.
+                PrefabTriggerVolumeCleanup.removeVolumesByIds(entityStore, linkedVolumeIds);
+                if (linkedVolumeIds.isEmpty()) {
+                    // Older props (or failed capture): padded reserved box, same as plot teardown.
+                    PrefabTriggerVolumeCleanup.removeVolumesInPrefabBox(world, anchorFinal, yaw, bufferFinal);
+                }
                 PropPrefabOps.removeSolidsOnly(world, anchorFinal, yaw, bufferFinal);
                 removeFromRegistry(world, plugin, instance);
-                Store<EntityStore> entityStore = world.getEntityStore().getStore();
                 deliverItem(world, playerRefSnapshot, entityStore, defFinal, anchorFinal);
             }
         );

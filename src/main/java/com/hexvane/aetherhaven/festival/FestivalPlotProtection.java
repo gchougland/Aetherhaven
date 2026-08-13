@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.festival;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -25,7 +26,8 @@ import org.joml.Vector3i;
  * ends, so anything a player digs or builds there would vanish on the next swap.
  *
  * <p>Operators and Creative are not exempt. Use {@link #toggleBuildAllowed} (via {@code /ah festival build}) to allow
- * one player to edit for the current session.
+ * one player to edit for the current session. Props are never allowed on the square (they would be wiped by the next
+ * festival swap).
  */
 public final class FestivalPlotProtection {
     private static final String PROTECTED_MESSAGE_KEY = "aetherhaven_festivals.aetherhaven.festival.square.protected";
@@ -56,6 +58,26 @@ public final class FestivalPlotProtection {
         return plugin
             .getConstructionCatalog()
             .matchesGameplayConstruction(plot.getConstructionId(), AetherhavenConstants.CONSTRUCTION_PLOT_FESTIVAL_SQUARE);
+    }
+
+    /** True when {@code footprint} overlaps any finished festival square in this world. */
+    public static boolean overlapsFestivalSquare(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull World world,
+        @Nonnull PlotFootprintRecord footprint
+    ) {
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        String worldName = world.getName();
+        for (TownRecord town : tm.allTowns()) {
+            if (!worldName.equals(town.getWorldName())) {
+                continue;
+            }
+            PlotInstance square = FestivalService.findFestivalSquare(plugin, town);
+            if (square != null && square.intersectsFootprint(footprint)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** True when this player toggled festival-square building on for the current session. */

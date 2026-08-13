@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.prop;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.placement.PlotFootprintOverlayRefresh;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -47,7 +48,8 @@ public final class PropPackagingWandTickSystem extends TickingSystem<EntityStore
         if (timer < REFRESH_INTERVAL_SEC) {
             return;
         }
-        timer = 0.0f;
+        // Keep remainder so hitchy ticks do not stretch the gap past the overlay hold lifetime.
+        timer -= REFRESH_INTERVAL_SEC;
         World world = store.getExternalData().getWorld();
         if (!world.isAlive()) {
             return;
@@ -82,6 +84,7 @@ public final class PropPackagingWandTickSystem extends TickingSystem<EntityStore
             if (!holdingWand) {
                 if (OVERLAY_ACTIVE.remove(playerUuid)) {
                     PropPackagingOverlay.clearFor(playerRef);
+                    PlotFootprintOverlayRefresh.afterClearDebugShapes(ref, store);
                 }
                 continue;
             }

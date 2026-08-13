@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.festival.CustomFestivalPaths;
 import com.hexvane.aetherhaven.festival.FestivalPrefabSize;
 import com.hexvane.aetherhaven.guild.marker.AdventurerSpawnMarkerEntity;
 import com.hexvane.aetherhaven.plotcreator.icon.PlotCreatorIconExporter;
@@ -109,6 +110,9 @@ public final class PlotCreatorPrefabExporter {
 
         int editorBlock = BlockType.getAssetMap().getIndex("Editor_Block");
         boolean skipEditorBlock = editorBlock != Integer.MIN_VALUE;
+        int managementBlock = BlockType.getAssetMap().getIndex(AetherhavenConstants.MANAGEMENT_BLOCK_TYPE_ID);
+        boolean omitManagement =
+            shouldOmitManagementBlockFromFestivalExport(draft) && managementBlock != Integer.MIN_VALUE;
         // Festivals omit Empty air; other buildings honor the save-air checkbox.
         boolean includeEmpty = !festivalPrefab && draft.isSaveEmptySpaces();
 
@@ -163,6 +167,9 @@ public final class PlotCreatorPrefabExporter {
                         }
                     }
 
+                    if (omitManagement && block == managementBlock) {
+                        continue;
+                    }
                     if ((block != 0 || fluid != 0 || includeEmpty) && (!skipEditorBlock || block != editorBlock)) {
                     if (EditorMarkerBlocks.isEditorEmpty(block)) {
                         selection.addBlockAtWorldPos(x, y, z, 0, 0, 0, 0);
@@ -374,15 +381,41 @@ public final class PlotCreatorPrefabExporter {
         if (AetherhavenConstants.CONSTRUCTION_PLOT_FESTIVAL_SQUARE.equals(draft.getConstructionId())) {
             return true;
         }
+        String key = festivalPrefabPathKey(draft);
+        if (key == null) {
+            return false;
+        }
+        return key.startsWith("Festivals/") || key.contains("/Festivals/");
+    }
+
+    /**
+     * Festival activity prefabs must not bake in the everyday square's town records shelf. The reserved base square
+     * keeps it.
+     */
+    static boolean shouldOmitManagementBlockFromFestivalExport(@Nonnull PlotCreatorDraft draft) {
+        if (!isFestivalPrefabExport(draft)) {
+            return false;
+        }
+        if (draft.isFestivalMode()) {
+            return true;
+        }
+        if (AetherhavenConstants.CONSTRUCTION_PLOT_FESTIVAL_SQUARE.equals(draft.getConstructionId())) {
+            return false;
+        }
+        String path = festivalPrefabPathKey(draft);
+        return path != null && !CustomFestivalPaths.isReserved(path);
+    }
+
+    @Nullable
+    static String festivalPrefabPathKey(@Nonnull PlotCreatorDraft draft) {
         String path =
             draft.getLockedPrefabPathKey() != null && !draft.getLockedPrefabPathKey().isBlank()
                 ? draft.getLockedPrefabPathKey()
                 : draft.getPrefabPath();
         if (path == null || path.isBlank()) {
-            return false;
+            return null;
         }
-        String key = path.trim().replace('\\', '/');
-        return key.startsWith("Festivals/") || key.contains("/Festivals/");
+        return path.trim().replace('\\', '/');
     }
 
     /**

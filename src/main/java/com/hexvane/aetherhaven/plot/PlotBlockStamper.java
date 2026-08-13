@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.plot;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
+import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
 import com.hexvane.aetherhaven.poi.BuildingPoisDefinition;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
@@ -396,6 +397,10 @@ public final class PlotBlockStamper {
     ) {
         int[] local = def.getManagementBlockLocalPos();
         if (local == null) {
+            return StampOutcome.ALREADY_OK;
+        }
+        // Festival prefabs do not include the everyday square's town records shelf. Repair must not put it back.
+        if (FestivalService.isLiveFestivalSquare(town, plotId)) {
             return StampOutcome.ALREADY_OK;
         }
         Vector3i d = PrefabLocalOffset.rotate(yaw, local[0], local[1], local[2]);

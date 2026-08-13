@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.placement;
 
 import com.hexvane.aetherhaven.ui.CharterRelocationPage;
 import com.hexvane.aetherhaven.ui.PlotPlacementPage;
+import com.hexvane.aetherhaven.ui.PropPlacementPage;
 import com.hexvane.aetherhaven.ui.WallPlacementPage;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -25,6 +26,8 @@ public final class PlotFootprintOverlayRefresh {
         CustomUIPage page = player.getPageManager().getCustomPage();
         if (page instanceof PlotPlacementPage p) {
             p.refreshFootprintOverlayAfterDebugClear(ref, store);
+        } else if (page instanceof PropPlacementPage propPage) {
+            propPage.refreshFootprintOverlayAfterDebugClear(ref, store);
         } else if (page instanceof CharterRelocationPage c) {
             c.refreshFootprintOverlayAfterDebugClear(ref, store);
         } else if (page instanceof WallPlacementPage w) {

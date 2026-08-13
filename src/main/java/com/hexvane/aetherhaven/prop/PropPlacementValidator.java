@@ -1,6 +1,10 @@
 package com.hexvane.aetherhaven.prop;
 
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.festival.FestivalPlotProtection;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
+import com.hexvane.aetherhaven.town.PlotFootprintRecord;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.world.World;
 import javax.annotation.Nonnull;
@@ -16,6 +20,7 @@ public final class PropPlacementValidator {
     public static final String ERROR_UNKNOWN_PROP = "unknownProp";
     public static final String ERROR_PREFAB_MISSING = "prefabMissing";
     public static final String ERROR_BLOCKED = "blocked";
+    public static final String ERROR_FESTIVAL_SQUARE = "festivalSquare";
 
     private PropPlacementValidator() {}
 
@@ -25,7 +30,7 @@ public final class PropPlacementValidator {
         @Nonnull PropCatalog catalog,
         @Nonnull String propId,
         @Nonnull Vector3i anchor,
-        @Nonnull com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation yaw
+        @Nonnull Rotation yaw
     ) {
         PropDefinition def = catalog.get(propId);
         if (def == null) {
@@ -34,6 +39,13 @@ public final class PropPlacementValidator {
         IPrefabBuffer buffer = PrefabResolveUtil.resolvePrefabBuffer(def.getPrefabPath());
         if (buffer == null) {
             return ERROR_PREFAB_MISSING;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null) {
+            PlotFootprintRecord fp = PropPrefabOps.footprint(anchor, yaw, buffer);
+            if (FestivalPlotProtection.overlapsFestivalSquare(plugin, world, fp)) {
+                return ERROR_FESTIVAL_SQUARE;
+            }
         }
         if (!PropPrefabOps.canPlaceSolids(world, anchor, yaw, buffer)) {
             return ERROR_BLOCKED;
@@ -48,7 +60,7 @@ public final class PropPlacementValidator {
         @Nonnull PropCatalog catalog,
         @Nonnull String propId,
         @Nonnull Vector3i anchor,
-        @Nonnull com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation yaw
+        @Nonnull Rotation yaw
     ) {
         PropDefinition def = catalog.get(propId);
         if (def == null) {
