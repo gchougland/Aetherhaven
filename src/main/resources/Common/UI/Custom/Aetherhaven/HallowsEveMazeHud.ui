@@ -1,0 +1,57 @@
+$C = "../Common.ui";
+
+Group #HallowsEveMazeHudRoot {
+  LayoutMode: Top;
+  Anchor: (Top: 52);
+
+  Group {
+    LayoutMode: Left;
+
+    Group {
+      FlexWeight: 1;
+    }
+
+    Group #HallowsEveTimerPanel {
+      LayoutMode: Top;
+      Anchor: (Width: 220);
+      Padding: (Horizontal: 12, Vertical: 8);
+      Background: #121820(0.88);
+
+      Group #HallowsEveCountdownPanel {
+        LayoutMode: Top;
+        Visible: false;
+
+        Label #HallowsEveCountdownText {
+          Style: (...$C.@DefaultLabelStyle, FontSize: 48, TextColor: #f4e8c8, RenderBold: true, HorizontalAlignment: Center);
+          Text: "";
+        }
+      }
+
+      Group #HallowsEveRacePanel {
+        LayoutMode: Top;
+        Visible: false;
+
+        Label #HallowsEveTimerLabel {
+          Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #c8d4a8, HorizontalAlignment: Center);
+          Anchor: (Bottom: 2);
+          Text: "";
+        }
+
+        Label #HallowsEveTimerText {
+          Style: (...$C.@DefaultLabelStyle, FontSize: 28, TextColor: #f4e8c8, RenderBold: true, HorizontalAlignment: Center);
+          Text: "";
+        }
+
+        Label #HallowsEveOrbsText {
+          Style: (...$C.@DefaultLabelStyle, FontSize: 16, TextColor: #9ec8ff, HorizontalAlignment: Center);
+          Anchor: (Top: 4);
+          Text: "";
+        }
+      }
+    }
+
+    Group {
+      FlexWeight: 1;
+    }
+  }
+}

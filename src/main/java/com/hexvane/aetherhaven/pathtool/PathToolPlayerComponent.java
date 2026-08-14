@@ -84,6 +84,12 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
             c -> c.replaceFilterBlockIdsCsv != null ? c.replaceFilterBlockIdsCsv : ""
         )
         .add()
+        .append(
+            new KeyedCodec<>("VillagerNav", Codec.BOOLEAN),
+            (c, v) -> c.villagerNav = v == null || v,
+            c -> c.villagerNav
+        )
+        .add()
         .build();
 
     @Nullable
@@ -99,6 +105,7 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
     private UUID selectedRemovePathId;
     @Nonnull
     private String replaceFilterBlockIdsCsv = "";
+    private boolean villagerNav = true;
     @Nonnull
     private final List<PathToolNode> nodes = new ArrayList<>();
 
@@ -178,6 +185,18 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
     @Nonnull
     public Set<String> getReplaceFilterBlockIds() {
         return parseReplaceFilterCsv(replaceFilterBlockIdsCsv);
+    }
+
+    public boolean isVillagerNav() {
+        return villagerNav;
+    }
+
+    public void setVillagerNav(boolean villagerNav) {
+        this.villagerNav = villagerNav;
+    }
+
+    public void toggleVillagerNav() {
+        this.villagerNav = !this.villagerNav;
     }
 
     public void setReplaceFilterBlockIds(@Nonnull Set<String> ids) {
@@ -287,6 +306,7 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
         c.selectedNodeId = this.selectedNodeId;
         c.selectedRemovePathId = this.selectedRemovePathId;
         c.replaceFilterBlockIdsCsv = this.replaceFilterBlockIdsCsv;
+        c.villagerNav = this.villagerNav;
         c.nodes.addAll(this.nodes);
         return c;
     }

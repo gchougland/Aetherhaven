@@ -16,4 +16,4 @@ White gifts often hold building blueprints, gold coins, and useful supplies.
 
 Green gifts hold jewelry, gold coins, and useful supplies.
 
-Red gifts hold furniture pieces, gold coins, and useful supplies.
+Red gifts hold two furniture pieces, a random decoration prop, gold coins, and useful supplies.

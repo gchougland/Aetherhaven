@@ -40,6 +40,7 @@ public final class NpcPortraitProvider {
         Map.entry(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID, "Aetherhaven_Guild_Master.png"),
         Map.entry(AetherhavenConstants.NPC_FESTIVAL_SEED_SELLER, "Aetherhaven_Festival_Seed_Seller.png"),
         Map.entry(AetherhavenConstants.NPC_FESTIVAL_PIG_RACE_MERCHANT, "Aetherhaven_Festival_Pig_Race_Merchant.png"),
+        Map.entry(AetherhavenConstants.NPC_FESTIVAL_HALLOWS_EVE_MERCHANT, "Aetherhaven_Festival_Hallows_Eve_Merchant.png"),
         Map.entry(AetherhavenConstants.NPC_FESTIVAL_CARNIVAL_MERCHANT, "Aetherhaven_Festival_Carnival_Merchant.png"),
         Map.entry(AetherhavenConstants.NPC_FESTIVAL_CARNIVAL_BALLOON, "Aetherhaven_Festival_Carnival_Balloon.png"),
         Map.entry(AetherhavenConstants.NPC_FESTIVAL_CARNIVAL_WHEEL, "Aetherhaven_Festival_Carnival_Wheel.png"),

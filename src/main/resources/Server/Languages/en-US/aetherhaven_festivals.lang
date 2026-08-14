@@ -9,10 +9,14 @@ aetherhaven.festival.pig_race.description=Late spring brings the pig races. Bet 
 aetherhaven.festival.carnival.name=Carnival Festival
 aetherhaven.festival.carnival.description=Late summer brings the carnival. Pop balloons, spin the wheel, and spend summer festival tickets at the carnival merchant.
 
+aetherhaven.festival.hallows_eve.name=Hallow's Eve
+aetherhaven.festival.hallows_eve.description=Late autumn brings a spooky maze night. Collect glowing orbs before time runs out, pop the jack o lantern, and spend autumn festival tickets at the merchant.
+
 aetherhaven.festival.tree_climbing.name=Tree Climbing Festival
 aetherhaven.festival.tree_climbing.description=Mid summer brings the big tree climb. Race to the pink crystal at the top, earn summer festival tickets for a fast climb, and spend them on rare saplings.
 
 aetherhaven.festival.interactionHints.burstLettuce=Press [{key}] to pop the lettuce
+aetherhaven.festival.interactionHints.burstJackLantern=Press [{key}] to pop the jack o lantern
 
 aetherhaven.festival.started={festival} has started at the festival square.
 aetherhaven.festival.banner.started.title={festival}
@@ -38,6 +42,12 @@ aetherhaven.festival.command.wheelforce.set=Next wheel spin will land on octant 
 aetherhaven.festival.command.wheelforce.cleared=Cleared the forced wheel octant.
 
 aetherhaven.festival.npc.lettuce.name=Springheart Lettuce
+aetherhaven.festival.npc.jackLantern.name=Jack o lantern
+aetherhaven.festival.npc.mazeOrb.name=Maze Orb
+aetherhaven.festival.npc.hallowsEveMerchant.name=Hallow's Eve Merchant
+aetherhaven.festival.shop.hallowsEve.title=Hallow's Eve Goods
+aetherhaven.festival.hallows_eve.hud.timerLabel=Time left
+aetherhaven.festival.hallows_eve.chat.timeUp=Time is up. Burst the jack o lantern in the center.
 aetherhaven.festival.npc.seedSeller.name=Seed Seller
 aetherhaven.festival.shop.seeds.title=Festival Seeds
 

@@ -191,4 +191,57 @@ final class PlotCreatorFestivalAuthoringTest {
         assertEquals(PigRaceLanes.MECHANIC_ID, draft.getFestivalMechanicId());
         assertEquals("Pig Racing", draft.getFestivalMechanicInput());
     }
+
+    @Test
+    void hallowsEveDefaultsAddMerchantMazeStartCenterpieceAndOrbs() {
+        PlotCreatorDraft draft = new PlotCreatorDraft();
+        draft.setKinds(List.of(PlotBuildingKind.FESTIVAL));
+        draft.setFestivalMechanicId(com.hexvane.aetherhaven.festival.hallowseve.HallowsEveIds.MECHANIC_ID);
+
+        PlotCreatorFestivalMechanicDefaults.ensureRequiredSelectedSpots(draft);
+
+        assertTrue(
+            draft.getSelectedSpots().stream()
+                .anyMatch(
+                    s ->
+                        s.type() == PlotCreatorSubstepType.FESTIVAL_NPC
+                            && PlotCreatorFestivalNpcRoles.HALLOWS_EVE_MERCHANT.equals(s.workResidentKind())
+                )
+        );
+        assertTrue(
+            draft.getSelectedSpots().stream().anyMatch(s -> s.type() == PlotCreatorSubstepType.FESTIVAL_CENTERPIECE)
+        );
+        assertTrue(
+            draft.getSelectedSpots().stream().anyMatch(s -> s.type() == PlotCreatorSubstepType.FESTIVAL_MAZE_START)
+        );
+        assertTrue(
+            draft.getSelectedSpots().stream()
+                .anyMatch(
+                    s ->
+                        s.type() == PlotCreatorSubstepType.FESTIVAL_MAZE_ORB_SPAWN
+                            && s.minCount() == PlotCreatorFestivalMechanicDefaults.DEFAULT_HALLOWS_EVE_ORB_SPAWNS
+                )
+        );
+        assertTrue(
+            draft.getSelectedSpots().stream().anyMatch(s -> s.type() == PlotCreatorSubstepType.FESTIVAL_TOURIST_SPOT)
+        );
+    }
+
+    @Test
+    void settingsAcceptHallowsEveActivityLabel() {
+        PlotCreatorDraft draft = new PlotCreatorDraft();
+        draft.setKinds(List.of(PlotBuildingKind.FESTIVAL));
+        draft.setDisplayName("Hallow's Eve");
+        draft.setFestivalSeasonInput("Autumn");
+        draft.setFestivalDayInput("25");
+        draft.setFestivalStartHourInput("15");
+        draft.setFestivalEndHourInput("0");
+        draft.setFestivalMechanicInput("Hallow's Eve");
+
+        assertNull(PlotCreatorFestivalSettings.applyInput(draft));
+        assertEquals(
+            com.hexvane.aetherhaven.festival.hallowseve.HallowsEveIds.MECHANIC_ID,
+            draft.getFestivalMechanicId()
+        );
+    }
 }

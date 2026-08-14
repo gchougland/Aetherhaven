@@ -1,0 +1,13 @@
+{
+  "excludedPropIds": [
+    "cabbage_trough",
+    "palm_streetlight",
+    "plant_arch",
+    "pig_pile",
+    "balloons",
+    "festival_flag",
+    "skeleton_coffin",
+    "spooky_terrarium",
+    "zombie_grave"
+  ]
+}

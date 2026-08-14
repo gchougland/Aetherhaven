@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.festival.NewLifeFestivalMechanic;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalIds;
+import com.hexvane.aetherhaven.festival.hallowseve.HallowsEveIds;
 import com.hexvane.aetherhaven.festival.pigrace.PigRaceLanes;
 import com.hexvane.aetherhaven.festival.treeclimb.TreeClimbIds;
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ public final class PlotCreatorFestivalMechanicDefaults {
     public static final int DEFAULT_CARNIVAL_TOURIST_SPOTS = 8;
     public static final int DEFAULT_TREE_CLIMB_TOURIST_SPOTS = TreeClimbIds.DEFAULT_TOURIST_SPOTS;
     public static final int DEFAULT_TREE_CLIMB_STARTS = TreeClimbIds.MAX_RACERS;
+    public static final int DEFAULT_HALLOWS_EVE_TOURIST_SPOTS = HallowsEveIds.DEFAULT_TOURIST_SPOTS;
+    public static final int DEFAULT_HALLOWS_EVE_ORB_SPAWNS = HallowsEveIds.DEFAULT_ORB_SPAWNS;
 
     private PlotCreatorFestivalMechanicDefaults() {}
 
@@ -51,6 +54,13 @@ public final class PlotCreatorFestivalMechanicDefaults {
             || "treeclimb".equals(lower)) {
             return TreeClimbIds.MECHANIC_ID;
         }
+        if ("hallow's eve".equals(lower)
+            || "hallows eve".equals(lower)
+            || "hallows_eve".equals(lower)
+            || "hallowseve".equals(lower)
+            || "halloween".equals(lower)) {
+            return HallowsEveIds.MECHANIC_ID;
+        }
         return lower;
     }
 
@@ -71,6 +81,9 @@ public final class PlotCreatorFestivalMechanicDefaults {
         }
         if (TreeClimbIds.MECHANIC_ID.equals(key)) {
             return "Tree Climbing";
+        }
+        if (HallowsEveIds.MECHANIC_ID.equals(key)) {
+            return "Hallow's Eve";
         }
         return mechanicId.trim();
     }
@@ -109,17 +122,21 @@ public final class PlotCreatorFestivalMechanicDefaults {
         if (!draft.getFestivalTouristSpots().isEmpty()
             || PigRaceLanes.MECHANIC_ID.equals(mechanic)
             || CarnivalIds.MECHANIC_ID.equals(mechanic)
-            || TreeClimbIds.MECHANIC_ID.equals(mechanic)) {
+            || TreeClimbIds.MECHANIC_ID.equals(mechanic)
+            || HallowsEveIds.MECHANIC_ID.equals(mechanic)) {
             int defaultTourists =
                 CarnivalIds.MECHANIC_ID.equals(mechanic)
                     ? DEFAULT_CARNIVAL_TOURIST_SPOTS
                     : TreeClimbIds.MECHANIC_ID.equals(mechanic)
                         ? DEFAULT_TREE_CLIMB_TOURIST_SPOTS
-                        : DEFAULT_PIG_RACE_TOURIST_SPOTS;
+                        : HallowsEveIds.MECHANIC_ID.equals(mechanic)
+                            ? DEFAULT_HALLOWS_EVE_TOURIST_SPOTS
+                            : DEFAULT_PIG_RACE_TOURIST_SPOTS;
             boolean forceTourists =
                 PigRaceLanes.MECHANIC_ID.equals(mechanic)
                     || CarnivalIds.MECHANIC_ID.equals(mechanic)
-                    || TreeClimbIds.MECHANIC_ID.equals(mechanic);
+                    || TreeClimbIds.MECHANIC_ID.equals(mechanic)
+                    || HallowsEveIds.MECHANIC_ID.equals(mechanic);
             int touristCount =
                 Math.max(
                     draft.getFestivalTouristSpots().isEmpty()
@@ -129,7 +146,9 @@ public final class PlotCreatorFestivalMechanicDefaults {
                 );
             out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_TOURIST_SPOT, touristCount));
         }
-        if (draft.getFestivalCenterpieceLocal() != null || NewLifeFestivalMechanic.MECHANIC_ID.equals(mechanic)) {
+        if (draft.getFestivalCenterpieceLocal() != null
+            || NewLifeFestivalMechanic.MECHANIC_ID.equals(mechanic)
+            || HallowsEveIds.MECHANIC_ID.equals(mechanic)) {
             out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_CENTERPIECE, 1));
         }
         if (!draft.getFestivalRaceLanes().isEmpty() || PigRaceLanes.MECHANIC_ID.equals(mechanic)) {
@@ -185,6 +204,19 @@ public final class PlotCreatorFestivalMechanicDefaults {
         }
         if (TreeClimbIds.MECHANIC_ID.equals(mechanic)) {
             out.add(PlotCreatorSpotEntry.festivalNpc(TreeClimbIds.ATTENDANT_NPC_ROLE, 1));
+        }
+        if (draft.getFestivalMazeStartLocal() != null || HallowsEveIds.MECHANIC_ID.equals(mechanic)) {
+            out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_MAZE_START, 1));
+        }
+        if (!draft.getFestivalOrbSpawns().isEmpty() || HallowsEveIds.MECHANIC_ID.equals(mechanic)) {
+            int orbCount =
+                Math.max(
+                    draft.getFestivalOrbSpawns().isEmpty()
+                        ? DEFAULT_HALLOWS_EVE_ORB_SPAWNS
+                        : draft.getFestivalOrbSpawns().size(),
+                    HallowsEveIds.MECHANIC_ID.equals(mechanic) ? DEFAULT_HALLOWS_EVE_ORB_SPAWNS : 1
+                );
+            out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_MAZE_ORB_SPAWN, orbCount));
         }
         return out;
     }

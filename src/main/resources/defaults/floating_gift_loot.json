@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "filler": {
     "rollsMin": 3,
     "rollsMax": 6,
@@ -1207,6 +1207,7 @@
         "weight": 2
       }
     ],
-    "furnitureRolls": 3
+    "furnitureRolls": 2,
+    "propRolls": 1
   }
 }

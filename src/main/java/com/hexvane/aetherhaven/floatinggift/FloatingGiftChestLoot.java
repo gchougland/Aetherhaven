@@ -4,6 +4,8 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.jewelry.JewelryChestLoot;
 import com.hexvane.aetherhaven.jewelry.LootChestBonusApplier;
+import com.hexvane.aetherhaven.prop.PropLoot;
+import com.hexvane.aetherhaven.prop.PropLootExclusions;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -41,7 +43,7 @@ public final class FloatingGiftChestLoot {
         switch (type) {
             case REGULAR -> addRegularLoot(stacks, bundle, ownerRef, ownerStore, rnd);
             case GREEN -> addGreenLoot(stacks, bundle, cfg, rnd);
-            case RED -> addRedLoot(stacks, bundle, rnd);
+            case RED -> addRedLoot(stacks, bundle, plugin, rnd);
         }
         addZoneFillerLoot(stacks, bundle, rnd);
         placeStacksRandomly(inv, stacks, rnd);
@@ -81,9 +83,18 @@ public final class FloatingGiftChestLoot {
     private static void addRedLoot(
         @Nonnull List<ItemStack> out,
         @Nonnull FloatingGiftLootBundle bundle,
+        @Nonnull AetherhavenPlugin plugin,
         @Nonnull ThreadLocalRandom rnd
     ) {
         out.addAll(bundle.tableFor(FloatingGiftType.RED).rollUniqueStacks(bundle.getRedFurnitureRolls(), rnd));
+        out.addAll(
+            PropLoot.rollUnique(
+                plugin.getPropCatalog(),
+                PropLootExclusions.load(plugin),
+                bundle.getRedPropRolls(),
+                rnd
+            )
+        );
     }
 
     private static void addZoneFillerLoot(

@@ -89,10 +89,10 @@ public final class FestivalDefinition {
     @Nullable
     private List<TouristSpotRow> touristSpots;
 
-    /** Prefab-local cell of the festival centerpiece; when unset the mechanic looks for its prefab placeholder. */
+    /** Prefab-local point of the festival centerpiece; when unset the mechanic looks for its prefab placeholder. */
     @SerializedName("centerpieceLocal")
     @Nullable
-    private int[] centerpieceLocal;
+    private double[] centerpieceLocal;
 
     /**
      * Pig race (and similar) start/finish lanes in prefab-local space. When blank, race mechanics fall back to their
@@ -129,6 +129,16 @@ public final class FestivalDefinition {
     @SerializedName("raceFinishLocal")
     @Nullable
     private RaceFinishLocalRow raceFinishLocal;
+
+    /** Hallow's Eve maze start pad in prefab-local space (cell plus facing). */
+    @SerializedName("mazeStartLocal")
+    @Nullable
+    private MazeStartLocalRow mazeStartLocal;
+
+    /** Hallow's Eve orb spawn points in prefab-local space. Exact decimals, not block cells. */
+    @SerializedName("orbSpawns")
+    @Nullable
+    private List<OrbSpawnRow> orbSpawns;
 
     /** Item ids a mechanic may hand out, e.g. the New Life seed burst pool. */
     @SerializedName("burstItemIds")
@@ -233,10 +243,23 @@ public final class FestivalDefinition {
 
     @Nullable
     public int[] getCenterpieceLocal() {
+        double[] exact = getCenterpieceLocalExact();
+        if (exact == null) {
+            return null;
+        }
+        return new int[] {
+            (int) Math.round(exact[0]),
+            (int) Math.round(exact[1]),
+            (int) Math.round(exact[2])
+        };
+    }
+
+    @Nullable
+    public double[] getCenterpieceLocalExact() {
         if (centerpieceLocal == null || centerpieceLocal.length < 3) {
             return null;
         }
-        return new int[] {centerpieceLocal[0], centerpieceLocal[1], centerpieceLocal[2]};
+        return new double[] {centerpieceLocal[0], centerpieceLocal[1], centerpieceLocal[2]};
     }
 
     @Nonnull
@@ -267,6 +290,16 @@ public final class FestivalDefinition {
     @Nullable
     public RaceFinishLocalRow getRaceFinishLocal() {
         return raceFinishLocal;
+    }
+
+    @Nullable
+    public MazeStartLocalRow getMazeStartLocal() {
+        return mazeStartLocal;
+    }
+
+    @Nonnull
+    public List<OrbSpawnRow> getOrbSpawns() {
+        return orbSpawns != null ? List.copyOf(orbSpawns) : List.of();
     }
 
     @Nonnull
@@ -688,6 +721,85 @@ public final class FestivalDefinition {
             row.localY = y;
             row.localZ = z;
             row.yawDegrees = yawDegrees;
+            return row;
+        }
+    }
+
+    /** One Hallow's Eve maze start pad in prefab-local space. */
+    public static final class MazeStartLocalRow {
+        @SerializedName("localX")
+        private int localX;
+
+        @SerializedName("localY")
+        private int localY;
+
+        @SerializedName("localZ")
+        private int localZ;
+
+        @SerializedName("yawDegrees")
+        private float yawDegrees;
+
+        public int getLocalX() {
+            return localX;
+        }
+
+        public int getLocalY() {
+            return localY;
+        }
+
+        public int getLocalZ() {
+            return localZ;
+        }
+
+        public float getYawDegrees() {
+            return yawDegrees;
+        }
+
+        @Nonnull
+        public static MazeStartLocalRow of(int x, int y, int z, float yawDegrees) {
+            MazeStartLocalRow row = new MazeStartLocalRow();
+            row.localX = x;
+            row.localY = y;
+            row.localZ = z;
+            row.yawDegrees = yawDegrees;
+            return row;
+        }
+    }
+
+    /** One Hallow's Eve orb spawn point in prefab-local space. */
+    public static final class OrbSpawnRow {
+        @SerializedName("localX")
+        private double localX;
+
+        @SerializedName("localY")
+        private double localY;
+
+        @SerializedName("localZ")
+        private double localZ;
+
+        public double getLocalX() {
+            return localX;
+        }
+
+        public double getLocalY() {
+            return localY;
+        }
+
+        public double getLocalZ() {
+            return localZ;
+        }
+
+        @Nonnull
+        public static OrbSpawnRow of(int x, int y, int z) {
+            return of((double) x, (double) y, (double) z);
+        }
+
+        @Nonnull
+        public static OrbSpawnRow of(double x, double y, double z) {
+            OrbSpawnRow row = new OrbSpawnRow();
+            row.localX = x;
+            row.localY = y;
+            row.localZ = z;
             return row;
         }
     }

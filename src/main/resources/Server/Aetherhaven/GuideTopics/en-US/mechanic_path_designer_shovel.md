@@ -34,6 +34,7 @@ The HUD reminds you to switch to **Place** mode when you are ready to lay path b
 * **F (Place mode)** — place the path on the ground.
 * **E** — cycle path width.
 * **R** — cycle path style.
+* **Middle click** — toggle whether townsfolk walk the path.
 * **Q** — next mode.
 
 ### Remove

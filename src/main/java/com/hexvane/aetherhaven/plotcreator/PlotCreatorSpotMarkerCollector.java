@@ -252,6 +252,42 @@ public final class PlotCreatorSpotMarkerCollector {
                 )
             );
         }
+        var mazeStart = draft.getFestivalMazeStartLocal();
+        if (mazeStart != null && passesTypeFilter(filter, PlotCreatorSubstepType.FESTIVAL_MAZE_START, null)) {
+            Vector3i block =
+                PlotCreatorLocalCoords.toWorldBlock(
+                    draft,
+                    new int[] {mazeStart.getLocalX(), mazeStart.getLocalY(), mazeStart.getLocalZ()}
+                );
+            out.add(
+                desired(block.x, block.y, block.z, PlotCreatorSubstepType.FESTIVAL_MAZE_START, null, null, null)
+            );
+        }
+        for (var orb : draft.getFestivalOrbSpawns()) {
+            if (!passesTypeFilter(filter, PlotCreatorSubstepType.FESTIVAL_MAZE_ORB_SPAWN, null)) {
+                continue;
+            }
+            Vector3i block =
+                PlotCreatorLocalCoords.toWorldBlock(
+                    draft,
+                    new int[] {
+                        (int) Math.round(orb.getLocalX()),
+                        (int) Math.round(orb.getLocalY()),
+                        (int) Math.round(orb.getLocalZ())
+                    }
+                );
+            out.add(
+                desired(
+                    block.x,
+                    block.y,
+                    block.z,
+                    PlotCreatorSubstepType.FESTIVAL_MAZE_ORB_SPAWN,
+                    null,
+                    null,
+                    null
+                )
+            );
+        }
     }
 
     private static void addLocal(

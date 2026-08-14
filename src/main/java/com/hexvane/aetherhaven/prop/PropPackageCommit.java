@@ -10,7 +10,6 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.modules.item.ItemModule;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -121,13 +120,7 @@ public final class PropPackageCommit {
         @Nonnull PropDefinition def,
         @Nonnull Vector3i anchor
     ) {
-        ItemStack stack;
-        String shopItemId = PropShopItemIds.forPropId(def.getId());
-        if (ItemModule.exists(shopItemId)) {
-            stack = new ItemStack(shopItemId, 1);
-        } else {
-            stack = PropItemMetadata.withProp(new ItemStack(PropItemMetadata.PROP_ITEM_ID, 1), def.getId(), def.getDisplayName());
-        }
+        ItemStack stack = PropItemMetadata.createStack(def);
         if (playerRefOrNull != null && accessor instanceof Store<EntityStore> store) {
             Player player = store.getComponent(playerRefOrNull, Player.getComponentType());
             if (player != null) {

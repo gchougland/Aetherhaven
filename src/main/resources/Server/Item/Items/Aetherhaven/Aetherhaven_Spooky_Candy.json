@@ -1,0 +1,80 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Spooky_Candy.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Spooky_Candy.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T3"
+  },
+  "Quality": "Uncommon",
+  "Categories": [
+    "Items.Food",
+    "Aetherhaven.All"
+  ],
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Spooky_Candy.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Aetherhaven/Candy/Candy.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Aetherhaven/Candy/Halloween_Candy_Purple.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#9a4cff",
+    "TextureComputedColor": "#7a3cc8"
+  },
+  "InteractionVars": {
+    "Consume_Charge": {
+      "Interactions": [
+        {
+          "Parent": "Consume_Charge_Food_T1_Inner",
+          "Effects": {
+            "Particles": [
+              {
+                "SystemId": "Food_Eat",
+                "Color": "#9a4cff",
+                "TargetNodeName": "Mouth",
+                "TargetEntityPart": "Entity"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T3"
+        }
+      ]
+    }
+  },
+  "Recipe": null,
+  "ItemLevel": 10,
+  "MaxStack": 25,
+  "DropOnDeath": true,
+  "Tags": {
+    "Family": [
+      "Aetherhaven"
+    ],
+    "Type": [
+      "Food"
+    ]
+  },
+  "IconProperties": {
+    "Scale": 1.1,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -2
+    ]
+  }
+}

@@ -40,5 +40,9 @@ public enum PlotCreatorSubstepType {
     /** Tree climb race start pad. */
     FESTIVAL_TREE_CLIMB_START,
     /** Tree climb finish crystal cell. */
-    FESTIVAL_TREE_CLIMB_FINISH
+    FESTIVAL_TREE_CLIMB_FINISH,
+    /** Hallow's Eve maze start pad (stores facing). */
+    FESTIVAL_MAZE_START,
+    /** Hallow's Eve glowing orb spawn cell. */
+    FESTIVAL_MAZE_ORB_SPAWN
 }

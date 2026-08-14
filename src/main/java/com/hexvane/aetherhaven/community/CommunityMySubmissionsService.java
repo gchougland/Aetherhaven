@@ -79,7 +79,12 @@ public final class CommunityMySubmissionsService {
             if (manifestEntry == null) {
                 return "download_failed";
             }
-            CommunityDownloadService.InstallResult result = CommunityDownloadService.install(plugin, manifestEntry);
+            CommunityDownloadService.InstallResult result = CommunityDownloadService.install(
+                plugin,
+                manifestEntry,
+                false,
+                playerUuid
+            );
             return installResultToError(result);
         }
         return downloadPendingSubmissionFiles(plugin, entry, playerUuid, playerName);

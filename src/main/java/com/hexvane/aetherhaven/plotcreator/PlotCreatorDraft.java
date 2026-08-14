@@ -113,6 +113,11 @@ public final class PlotCreatorDraft {
         new ArrayList<>();
     @Nullable
     private com.hexvane.aetherhaven.festival.FestivalDefinition.RaceFinishLocalRow festivalRaceFinishLocal;
+    @Nullable
+    private com.hexvane.aetherhaven.festival.FestivalDefinition.MazeStartLocalRow festivalMazeStartLocal;
+    @Nonnull
+    private final List<com.hexvane.aetherhaven.festival.FestivalDefinition.OrbSpawnRow> festivalOrbSpawns =
+        new ArrayList<>();
 
     /** Chosen important spots for the SUBSTEP loop; empty until IMPORTANT_SPOTS is committed. */
     @Nonnull
@@ -455,6 +460,8 @@ public final class PlotCreatorDraft {
         festivalWheelLocal = null;
         festivalRaceStartSpots.clear();
         festivalRaceFinishLocal = null;
+        festivalMazeStartLocal = null;
+        festivalOrbSpawns.clear();
     }
 
     @Nullable
@@ -540,6 +547,22 @@ public final class PlotCreatorDraft {
         @Nullable com.hexvane.aetherhaven.festival.FestivalDefinition.RaceFinishLocalRow festivalRaceFinishLocal
     ) {
         this.festivalRaceFinishLocal = festivalRaceFinishLocal;
+    }
+
+    @Nullable
+    public com.hexvane.aetherhaven.festival.FestivalDefinition.MazeStartLocalRow getFestivalMazeStartLocal() {
+        return festivalMazeStartLocal;
+    }
+
+    public void setFestivalMazeStartLocal(
+        @Nullable com.hexvane.aetherhaven.festival.FestivalDefinition.MazeStartLocalRow festivalMazeStartLocal
+    ) {
+        this.festivalMazeStartLocal = festivalMazeStartLocal;
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.festival.FestivalDefinition.OrbSpawnRow> getFestivalOrbSpawns() {
+        return festivalOrbSpawns;
     }
 
     /** Festival prefabs are a fixed size, so the drag box stops moving once a festival is picked. */

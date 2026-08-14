@@ -21,9 +21,21 @@ public final class PathCommitRecord {
     @SerializedName("navNodes")
     @Nonnull
     public List<PathNavPoint> navNodes = new ArrayList<>();
+    /** When false, townsfolk ignore this path. Missing JSON field stays true. */
+    @SerializedName("villagerNav")
+    public boolean villagerNav = true;
 
     @Nonnull
     public UUID getIdUuid() {
         return UUID.fromString(id);
+    }
+
+    /** True when this commit should be added to the townsfolk walking graph. */
+    public boolean includeInTownsfolkGraph() {
+        return villagerNav
+            && townId != null
+            && !townId.isBlank()
+            && navNodes != null
+            && navNodes.size() >= 2;
     }
 }

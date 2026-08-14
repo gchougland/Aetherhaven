@@ -192,6 +192,49 @@ public final class PlotCreatorFestivalPlacement {
         return true;
     }
 
+    public static boolean placeMazeStart(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> playerEntityRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        PlotCreatorDraft draft = session.getDraft();
+        PlotCreatorSpotPlacement.ResolvedSpot spot =
+            PlotCreatorSpotPlacement.resolveStandSpawn(session.getWorld(), targetBlock);
+        int[] local = PlotCreatorLocalCoords.toLocal(draft, spot.worldBlock());
+        float yaw = playerYawDegrees(draft, playerEntityRef, store);
+        draft.setFestivalMazeStartLocal(
+            FestivalDefinition.MazeStartLocalRow.of(local[0], local[1], local[2], yaw)
+        );
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalMazeStartRecorded")
+        );
+        return true;
+    }
+
+    public static boolean placeOrbSpawn(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef
+    ) {
+        PlotCreatorDraft draft = session.getDraft();
+        PlotCreatorSpotPlacement.ResolvedSpot spot =
+            PlotCreatorSpotPlacement.resolveStandSpawn(session.getWorld(), targetBlock);
+        int[] local = PlotCreatorLocalCoords.toLocal(draft, spot.worldBlock());
+        if (hasOrbAt(draft, local)) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalMazeOrbAlreadyRecorded")
+            );
+            return true;
+        }
+        draft.getFestivalOrbSpawns().add(FestivalDefinition.OrbSpawnRow.of(local[0], local[1], local[2]));
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalMazeOrbRecorded")
+        );
+        return true;
+    }
+
     public static boolean placeRaceLaneClick(
         @Nonnull PlotCreatorSession session,
         @Nonnull Vector3i targetBlock,
@@ -428,6 +471,52 @@ public final class PlotCreatorFestivalPlacement {
         return true;
     }
 
+    public static boolean tryRemoveMazeStartNear(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef
+    ) {
+        FestivalDefinition.MazeStartLocalRow start = draft.getFestivalMazeStartLocal();
+        if (start == null) {
+            return false;
+        }
+        Vector3i world =
+            PlotCreatorLocalCoords.toWorldBlock(
+                draft,
+                new int[] {start.getLocalX(), start.getLocalY(), start.getLocalZ()}
+            );
+        if (!near(world, targetBlock)) {
+            return false;
+        }
+        draft.setFestivalMazeStartLocal(null);
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalMazeStartRemoved")
+        );
+        return true;
+    }
+
+    public static boolean tryRemoveOrbNear(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef
+    ) {
+        Iterator<FestivalDefinition.OrbSpawnRow> it = draft.getFestivalOrbSpawns().iterator();
+        while (it.hasNext()) {
+            FestivalDefinition.OrbSpawnRow spot = it.next();
+            Vector3i world = PlotCreatorLocalCoords.toWorldBlock(draft, orbLocalBlock(spot));
+            if (near(world, targetBlock)) {
+                it.remove();
+                playerRef.sendMessage(
+                    Message.translation(
+                        "aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalMazeOrbRemoved"
+                    )
+                );
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean tryRemoveRaceLaneNear(
         @Nonnull PlotCreatorSession session,
         @Nonnull Vector3i targetBlock,
@@ -508,6 +597,25 @@ public final class PlotCreatorFestivalPlacement {
             }
         }
         return false;
+    }
+
+    private static boolean hasOrbAt(@Nonnull PlotCreatorDraft draft, @Nonnull int[] local) {
+        for (FestivalDefinition.OrbSpawnRow spot : draft.getFestivalOrbSpawns()) {
+            int[] block = orbLocalBlock(spot);
+            if (block[0] == local[0] && block[1] == local[1] && block[2] == local[2]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Nonnull
+    private static int[] orbLocalBlock(@Nonnull FestivalDefinition.OrbSpawnRow spot) {
+        return new int[] {
+            (int) Math.round(spot.getLocalX()),
+            (int) Math.round(spot.getLocalY()),
+            (int) Math.round(spot.getLocalZ())
+        };
     }
 
     private static float playerYawDegrees(

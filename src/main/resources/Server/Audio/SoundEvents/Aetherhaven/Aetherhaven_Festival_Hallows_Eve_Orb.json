@@ -1,0 +1,28 @@
+{
+  "Layers": [
+    {
+      "Files": [
+        "Sounds/Effects/Memory/Memory_Mote_01.ogg",
+        "Sounds/Effects/Memory/Memory_Mote_02.ogg",
+        "Sounds/Effects/Memory/Memory_Mote_03.ogg",
+        "Sounds/Effects/Memory/Memory_Mote_04.ogg",
+        "Sounds/Effects/Memory/Memory_Mote_05.ogg",
+        "Sounds/Effects/Memory/Memory_Mote_06.ogg",
+        "Sounds/Effects/Memory/Memory_Mote_07.ogg"
+      ],
+      "RandomSettings": {
+        "MinVolume": -1,
+        "MinPitch": -2,
+        "MaxPitch": 4
+      },
+      "StartDelay": 0,
+      "Volume": 2
+    }
+  ],
+  "Volume": 4,
+  "MaxDistance": 32,
+  "StartAttenuationDistance": 12,
+  "MaxInstance": 16,
+  "PreventSoundInterruption": false,
+  "Parent": "SFX_Attn_Loud"
+}

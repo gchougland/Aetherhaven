@@ -1,0 +1,56 @@
+# Hallow's Eve Festival villager greetings
+# Full translation keys are aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.<lineKey>
+
+aetherhaven.dialogue.festival.hallows_eve.greeting.elder.0=Late autumn always brings a chill to the square. The maze looks lively tonight.
+aetherhaven.dialogue.festival.hallows_eve.greeting.elder.1=I used to run that maze when I was younger. The orbs still glow the same way.
+
+aetherhaven.dialogue.festival.hallows_eve.greeting.priestess.0=A little fright can be a blessing. Walk the maze with a steady heart.
+aetherhaven.dialogue.festival.hallows_eve.greeting.priestess.1=The jack o lantern in the middle feels like a friendly watch. Pop it when you are ready.
+
+aetherhaven.dialogue.festival.hallows_eve.greeting.farmer.0=Those glowing orbs look like harvest lights. I want to collect a handful myself.
+aetherhaven.dialogue.festival.hallows_eve.greeting.farmer.1=If I win tickets I might buy a pumpkin for the garden. Cute or scary, I have not decided.
+
+aetherhaven.dialogue.festival.hallows_eve.greeting.innkeeper.0=I closed a little early so everyone could come to Hallow's Eve. Best night of autumn.
+aetherhaven.dialogue.festival.hallows_eve.greeting.innkeeper.1=Win or lose, stop by later. I will keep something warm ready.
+
+aetherhaven.dialogue.festival.hallows_eve.greeting.chef.0=Spooky candy is fine, but I still packed a snack from the kitchen.
+aetherhaven.dialogue.festival.hallows_eve.greeting.chef.1=Running a maze works up an appetite. I came prepared.
+
+aetherhaven.dialogue.festival.hallows_eve.greeting.merchant.0=Autumn festival tickets are the coin of the night. I like a clean trade.
+aetherhaven.dialogue.festival.hallows_eve.greeting.merchant.1=The maze merchant has decorations for tickets. I might pick up a lantern.
+
+aetherhaven.dialogue.festival.hallows_eve.greeting.blacksmith.0=No hammering while the maze is on. Even steel can wait for a night of fun.
+aetherhaven.dialogue.festival.hallows_eve.greeting.blacksmith.1=I am better with a hammer than a maze. Still going to try.
+
+aetherhaven.dialogue.festival.hallows_eve.greeting.florist.0=Orange pumpkins and blue lights. Autumn never looked this bright.
+aetherhaven.dialogue.festival.hallows_eve.greeting.florist.1=Cheer when someone pops the jack o lantern. Soft voices never helped a festival.
+
+aetherhaven.dialogue.festival.hallows_eve.greeting.rancher.0=Animals rest tonight. People get the maze for once.
+aetherhaven.dialogue.festival.hallows_eve.greeting.rancher.1=I am watching from the stands. Those hedges are too tight for me.
+
+aetherhaven.dialogue.festival.hallows_eve.greeting.miner.0=Down in the dark we see plenty of glow. These maze orbs still feel special.
+aetherhaven.dialogue.festival.hallows_eve.greeting.miner.1=A timed maze beats pickaxes for an evening.
+
+aetherhaven.dialogue.festival.hallows_eve.greeting.logger.0=I like the hush inside the hedges. Then someone shouts when they find an orb.
+aetherhaven.dialogue.festival.hallows_eve.greeting.logger.1=Best sound of the night is that jack o lantern popping.
+
+aetherhaven.dialogue.festival.hallows_eve.greeting.builder.0=Solid hedges. Honest maze. Whoever set this up knew a crowd would wander in.
+aetherhaven.dialogue.festival.hallows_eve.greeting.builder.1=I am not chasing every orb. I am here for the lights and the candy.
+
+aetherhaven.dialogue.festival.hallows_eve.greeting.crystal_keeper.0=Even crystals can wait while the town plays for a night.
+aetherhaven.dialogue.festival.hallows_eve.greeting.crystal_keeper.1=Blue orbs in the maze look almost like tiny gems catching moonlight.
+
+aetherhaven.dialogue.festival.hallows_eve.greeting.pyrotechnic.0=A maze without sparks still makes me smile. That pumpkin pop is close enough.
+aetherhaven.dialogue.festival.hallows_eve.greeting.pyrotechnic.1=When the jack o lantern bursts I want a front row seat.
+
+aetherhaven.dialogue.festival.hallows_eve.greeting.bard.0=I brought a tune for Hallow's Eve. Ask me later and I will play it.
+aetherhaven.dialogue.festival.hallows_eve.greeting.bard.1=Music and mazes belong together. Listen for the cheer when someone finishes.
+
+aetherhaven.dialogue.festival.hallows_eve.greeting.guild_master.0=Even adventurers need a night of friendly scares.
+aetherhaven.dialogue.festival.hallows_eve.greeting.guild_master.1=I will try the maze. Speed matters everywhere.
+
+aetherhaven.dialogue.festival.hallows_eve.greeting.guard.0=I am here to keep things friendly. Also to watch the maze.
+aetherhaven.dialogue.festival.hallows_eve.greeting.guard.1=No trouble tonight. Just orbs, candy, and good moods.
+
+aetherhaven.dialogue.festival.hallows_eve.greeting.default.0=Hallow's Eve is on! Talk to the merchant to try the maze.
+aetherhaven.dialogue.festival.hallows_eve.greeting.default.1=Autumn festival tickets are the prize of the night. Have fun!

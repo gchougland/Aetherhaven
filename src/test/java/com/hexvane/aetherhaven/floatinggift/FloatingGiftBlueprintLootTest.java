@@ -74,6 +74,28 @@ class FloatingGiftBlueprintLootTest {
     }
 
     @Test
+    void parseBundle_readsFurnitureAndPropRolls() {
+        String json =
+            """
+            {"version":4,"regular":{"entries":[]},"green":{"entries":[]},"red":{"furnitureRolls":2,"propRolls":1,"entries":[]}}
+            """;
+        FloatingGiftLootBundle bundle = FloatingGiftLootBundle.parseJson(json);
+        assertEquals(2, bundle.getRedFurnitureRolls());
+        assertEquals(1, bundle.getRedPropRolls());
+    }
+
+    @Test
+    void parseBundle_defaultsPropRollsWhenMissing() {
+        String json =
+            """
+            {"version":4,"regular":{"entries":[]},"green":{"entries":[]},"red":{"furnitureRolls":2,"entries":[]}}
+            """;
+        FloatingGiftLootBundle bundle = FloatingGiftLootBundle.parseJson(json);
+        assertEquals(2, bundle.getRedFurnitureRolls());
+        assertEquals(1, bundle.getRedPropRolls());
+    }
+
+    @Test
     void parseBundle_readsFillerEntriesAndRolls() {
         String json =
             """

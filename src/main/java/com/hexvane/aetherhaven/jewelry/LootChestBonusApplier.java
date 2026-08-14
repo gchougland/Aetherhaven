@@ -4,6 +4,8 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.loot.LootChestPlotBlueprintLoot;
+import com.hexvane.aetherhaven.prop.PropLoot;
+import com.hexvane.aetherhaven.prop.PropLootExclusions;
 import com.hexvane.aetherhaven.world.WorldZoneIndex;
 import com.hypixel.hytale.builtin.adventure.stash.StashGameplayConfig;
 import com.hypixel.hytale.builtin.adventure.stash.StashPlugin;
@@ -244,6 +246,53 @@ public final class LootChestBonusApplier {
         return tx.succeeded();
     }
 
+    public static void tryInjectProp(
+        @Nonnull Store<ChunkStore> s,
+        @Nonnull BlockModule.BlockStateInfo state,
+        @Nonnull ItemContainerBlock c,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ThreadLocalRandom rnd,
+        boolean force
+    ) {
+        SimpleItemContainer inv = c.getItemContainer();
+        if (inv == null) {
+            return;
+        }
+        if (tryInjectPropToContainer(inv, cfg, rnd, force)) {
+            state.markNeedsSaving(s);
+        }
+    }
+
+    public static boolean tryInjectPropToContainer(
+        @Nonnull SimpleItemContainer inv,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ThreadLocalRandom rnd,
+        boolean force
+    ) {
+        if (!force) {
+            if (cfg.getLootChestPropChance() <= 0.0) {
+                return false;
+            }
+            if (rnd.nextDouble() >= cfg.getLootChestPropChance()) {
+                return false;
+            }
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return false;
+        }
+        ItemStack stack = PropLoot.roll(plugin.getPropCatalog(), PropLootExclusions.load(plugin), rnd);
+        if (stack == null || ItemStack.isEmpty(stack)) {
+            return false;
+        }
+        short slot = randomEmptySlot(inv, rnd);
+        if (slot < 0) {
+            return false;
+        }
+        ItemStackSlotTransaction tx = inv.addItemStackToSlot(slot, stack);
+        return tx.succeeded();
+    }
+
     public static void applyAll(
         @Nonnull Store<ChunkStore> s,
         @Nonnull BlockModule.BlockStateInfo state,
@@ -261,6 +310,7 @@ public final class LootChestBonusApplier {
         tryInjectJewelry(s, state, c, cfg, rnd, zone, forceJewelry);
         tryInjectGoldCoins(s, state, c, cfg, rnd, forceGold);
         tryInjectPlotBlueprint(s, state, c, cfg, catalog, rnd, forcePlotBlueprint);
+        tryInjectProp(s, state, c, cfg, rnd, forcePlotBlueprint);
         tryInjectGaiaDraughtBonuses(s, state, c, cfg, rnd, false);
     }
 
@@ -287,6 +337,7 @@ public final class LootChestBonusApplier {
     ) {
         boolean changed = false;
         changed |= tryInjectPlotBlueprintToContainer(inv, cfg, catalog, rnd, force);
+        changed |= tryInjectPropToContainer(inv, cfg, rnd, force);
         changed |= tryInjectGaiaDraughtBonusesToContainer(inv, cfg, rnd, force);
         return changed;
     }

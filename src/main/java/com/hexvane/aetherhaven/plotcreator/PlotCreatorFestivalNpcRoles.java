@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.festival.NewLifeFestivalMechanic;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalIds;
+import com.hexvane.aetherhaven.festival.hallowseve.HallowsEveIds;
 import com.hexvane.aetherhaven.festival.pigrace.PigRaceLanes;
 import com.hexvane.aetherhaven.festival.treeclimb.TreeClimbIds;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public final class PlotCreatorFestivalNpcRoles {
     public static final String CARNIVAL_WHACK = CarnivalIds.WHACK_NPC_ROLE;
     public static final String TREE_CLIMB_MERCHANT = TreeClimbIds.MERCHANT_NPC_ROLE;
     public static final String TREE_CLIMB_ATTENDANT = TreeClimbIds.ATTENDANT_NPC_ROLE;
+    public static final String HALLOWS_EVE_MERCHANT = HallowsEveIds.MERCHANT_NPC_ROLE;
 
     private PlotCreatorFestivalNpcRoles() {}
 
@@ -34,7 +36,8 @@ public final class PlotCreatorFestivalNpcRoles {
             CARNIVAL_WHEEL,
             CARNIVAL_WHACK,
             TREE_CLIMB_MERCHANT,
-            TREE_CLIMB_ATTENDANT
+            TREE_CLIMB_ATTENDANT,
+            HALLOWS_EVE_MERCHANT
         );
     }
 
@@ -55,6 +58,9 @@ public final class PlotCreatorFestivalNpcRoles {
         }
         if (TreeClimbIds.MECHANIC_ID.equals(key)) {
             return TREE_CLIMB_MERCHANT;
+        }
+        if (HallowsEveIds.MECHANIC_ID.equals(key)) {
+            return HALLOWS_EVE_MERCHANT;
         }
         return null;
     }
@@ -94,6 +100,9 @@ public final class PlotCreatorFestivalNpcRoles {
         }
         if (TREE_CLIMB_ATTENDANT.equals(id)) {
             return "treeClimbAttendant";
+        }
+        if (HALLOWS_EVE_MERCHANT.equals(id)) {
+            return "hallowsEveMerchant";
         }
         return "generic";
     }

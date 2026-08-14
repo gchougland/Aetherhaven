@@ -167,6 +167,56 @@ final class FestivalCatalogAndWindowTest {
         }
     }
 
+    @Test
+    void hallowsEvePrefabHasNoIceEssenceMarkers() throws Exception {
+        try (var in = FestivalCatalogAndWindowTest.class.getResourceAsStream(
+            "/Server/Prefabs/Festivals/Festival_Hallows_Eve.prefab.json"
+        )) {
+            assertNotNull(in);
+            String json = new String(in.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+            assertFalse(json.contains("Ingredient_Ice_Essence"));
+        }
+    }
+
+    @Test
+    void shippedHallowsEveFestivalIsWiredUp() {
+        FestivalDefinition def = parseResource("/Server/Aetherhaven/Festivals/hallows_eve.json");
+
+        assertEquals("hallows_eve", def.getId());
+        assertEquals(Season.AUTUMN, def.getSeason());
+        assertEquals(25, def.getDayOfSeason());
+        assertEquals(15, def.getStartHour());
+        assertEquals(0, def.getEndHour());
+        assertEquals("Festivals/Festival_Hallows_Eve.prefab.json", def.getPrefabPath());
+        assertEquals("hallows_eve", def.getMechanicId());
+        assertEquals("UI/Custom/maze.png", def.getCalendarIconPath());
+        assertEquals(5, def.getSpots().size());
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("priestess")));
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("elder")));
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("innkeeper")));
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("bard")));
+        assertEquals(1, def.getNpcs().size());
+        assertEquals("Aetherhaven_Festival_Hallows_Eve_Merchant", def.getNpcs().get(0).getNpcRoleId());
+        assertNotNull(def.getMazeStartLocal());
+        assertEquals(14, def.getMazeStartLocal().getLocalX());
+        assertEquals(6, def.getMazeStartLocal().getLocalY());
+        assertEquals(2, def.getMazeStartLocal().getLocalZ());
+        assertEquals(86.62329, def.getMazeStartLocal().getYawDegrees(), 0.001);
+        assertNotNull(def.getCenterpieceLocalExact());
+        assertEquals(1.0, def.getCenterpieceLocalExact()[0], 1e-9);
+        assertEquals(7.0, def.getCenterpieceLocalExact()[1], 1e-9);
+        assertEquals(1.0, def.getCenterpieceLocalExact()[2], 1e-9);
+        assertEquals(25, def.getOrbSpawns().size());
+        assertEquals(6.0, def.getOrbSpawns().get(0).getLocalX(), 1e-9);
+        assertEquals(7.5, def.getOrbSpawns().get(0).getLocalY(), 1e-9);
+        assertEquals(1.250607, def.getOrbSpawns().get(0).getLocalZ(), 1e-5);
+        assertEquals(10.0, def.getOrbSpawns().get(1).getLocalX(), 1e-9);
+        assertEquals(7.0, def.getOrbSpawns().get(1).getLocalY(), 1e-9);
+        assertEquals(-9.0, def.getOrbSpawns().get(1).getLocalZ(), 1e-9);
+        assertEquals(8, def.getTouristSpots().size());
+        assertFalse(def.getGreetingLangKeys("default").isEmpty());
+    }
+
     private static LocalDateTime dayOf(Season season, int dayOfSeason) {
         LocalDateTime start = LocalDateTime.of(2000, 1, 1, 0, 0);
         for (int i = 0; i < AetherhavenCalendar.DAYS_PER_SEASON * Season.values().length; i++) {

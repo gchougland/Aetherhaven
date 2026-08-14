@@ -78,6 +78,13 @@
           "Type": "AetherhavenPathToolStyleCycle"
         }
       ]
+    },
+    "Pick": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPathToolTownsfolkToggle"
+        }
+      ]
     }
   },
   "InteractionConfig": {

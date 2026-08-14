@@ -1,0 +1,101 @@
+{
+  "id": "aetherhaven_festival_hallows_eve_merchant",
+  "entry": "main_hub",
+  "nodes": {
+    "main_hub": {
+      "speaker": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.speaker",
+      "text": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.main_hub.body",
+      "choices": [
+        {
+          "id": "start",
+          "text": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.main_hub.c_start",
+          "icon": "UI/Custom/maze.png",
+          "visibilityCondition": { "type": "hallows_eve_maze_can_start" },
+          "whenFalse": "hide",
+          "actions": [
+            { "type": "hallows_eve_maze_start" }
+          ],
+          "next": "maze_started"
+        },
+        {
+          "id": "busy",
+          "text": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.main_hub.c_busy",
+          "icon": "UI/Custom/maze.png",
+          "visibilityCondition": { "type": "hallows_eve_maze_busy" },
+          "whenFalse": "hide",
+          "next": "maze_busy"
+        },
+        {
+          "id": "playing",
+          "text": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.main_hub.c_playing",
+          "icon": "UI/Custom/maze.png",
+          "visibilityCondition": { "type": "hallows_eve_maze_playing" },
+          "whenFalse": "hide",
+          "next": "maze_playing"
+        },
+        {
+          "id": "shop",
+          "text": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.main_hub.c_shop",
+          "icon": "UI/Custom/market.png",
+          "actions": [
+            {
+              "type": "open_barter_shop",
+              "shop": "Aetherhaven_Festival_Hallows_Eve"
+            }
+          ],
+          "next": null
+        },
+        {
+          "id": "about",
+          "text": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.main_hub.c_about",
+          "next": "about"
+        },
+        {
+          "id": "goodbye",
+          "text": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.main_hub.c_goodbye",
+          "next": null
+        }
+      ]
+    },
+    "about": {
+      "speaker": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.speaker",
+      "text": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.about.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.about.c_back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "maze_started": {
+      "speaker": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.speaker",
+      "text": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.maze_started.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.maze_started.c_back",
+          "next": null
+        }
+      ]
+    },
+    "maze_busy": {
+      "speaker": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.speaker",
+      "text": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.maze_busy.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.maze_busy.c_back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "maze_playing": {
+      "speaker": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.speaker",
+      "text": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.maze_playing.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.maze_playing.c_back",
+          "next": null
+        }
+      ]
+    }
+  }
+}

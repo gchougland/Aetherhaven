@@ -50,6 +50,18 @@ Late spring, from morning to evening. Four pigs race down the track while the to
 * The **Elder**, **Innkeeper**, **Blacksmith**, and **Rancher** each have a place to stand by the track. Visitors watch from stands outside the lanes.
 * Every villager has their own thing to say about it, so make the rounds before the day is over.
 
+## Hallow's Eve
+
+Late autumn, from mid afternoon until midnight. A hedge maze fills the square with glowing orbs and a jack o lantern in the middle.
+
+* Talk to the **Hallow's Eve merchant** to start the maze. You are sent to the entrance, freeze for a short countdown, then the orbs appear.
+* Collect as many glowing orbs as you can before time runs out. The jack o lantern grows as you gather them.
+* Only one person can run the maze at a time. Wait if someone else is already inside.
+* When time is up, or when you have every orb, press **F** on the jack o lantern to pop autumn festival tickets and spooky candy. Then someone else can try.
+* The merchant takes autumn festival tickets for candy, decorations, and a jack o lantern hat pattern.
+* The **Priestess**, **Elder**, **Innkeeper**, and **Bard** each have a place to stand, and visitors watch from outside the hedges.
+* Every villager has their own thing to say about it, so make the rounds before the night is over.
+
 ## Making your own festival
 
 The plot creator has a **Festival** build type. Pick it, choose **New festival** or one you already made, and the square is placed for you at the fixed festival size. Build inside it, mark where villagers should stand, then name the festival and pick its season, day, and hours.

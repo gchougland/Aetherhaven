@@ -1,0 +1,37 @@
+{
+  "Type": "Generic",
+  "Appearance": "Aetherhaven_Festival_Maze_Orb",
+  "Invulnerable": true,
+  "KnockbackScale": 0,
+  "DropList": "Empty",
+  "DisableDamageGroups": ["Self"],
+  "DefaultNPCAttitude": "Ignore",
+  "DefaultPlayerAttitude": "Ignore",
+  "ApplySeparation": false,
+  "ApplyAvoidance": false,
+  "MotionControllerList": [
+    {
+      "Type": "Fly"
+    }
+  ],
+  "MaxHealth": 1,
+  "Instructions": [
+    {
+      "Continue": true,
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "BodyMotion": {
+            "Type": "Nothing"
+          },
+          "HeadMotion": {
+            "Type": "Nothing"
+          }
+        }
+      ]
+    }
+  ],
+  "NameTranslationKey": "aetherhaven_festivals.aetherhaven.festival.npc.mazeOrb.name"
+}

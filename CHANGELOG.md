@@ -9,9 +9,14 @@
 - **Path designer shovel** Starts in Place mode.
 - **Hiring guards** The guild hall hire talk shows how many guards you have and the town rank limit. If you are full, it tells you to raise your town rank.
 - **Banquet table** Crafts with any wood instead of darkwood.
+- **Red floating gifts** Hold two furniture pieces and a random decoration prop.
 
 ### Added
 
+- **Hallow's Eve** Late autumn holiday at the festival square. Talk to the merchant to run a timed maze, collect glowing orbs, and pop the jack o lantern for autumn festival tickets and spooky candy. Only one person runs the maze at a time.
+- **Hallow's Eve merchant** Sells spooky candy, autumn decorations, and a jack o lantern hat pattern for autumn festival tickets.
+- **Spooky Candy** A sweet treat from the maze and the merchant shop. Eat it to feel better.
+- **Jack o lantern hat** A fully covering pumpkin hat for villagers, unlocked from the Hallow's Eve merchant.
 - **Dismiss guards** Talk to a hired guard and let them go. They leave town, their house is free, and you can hire someone else.
 - **Bard music** Ask Elias to shuffle through his songs, or to loop one song until you tell him to stop.
 - **Miner's hut** Can produce limestone and limestone cobble.
@@ -37,9 +42,12 @@
 - **Props** Place small decoration builds almost anywhere with a crate style prop item. Move and turn them in a placement menu before you set them down. They will not go into other blocks. Ships with Aqua Lamp, Palm Streetlight, Streetlight, Cabbage Trough, Fish Barrel, Potion Shelf, Plant Arch, Pig Pile, Balloons, and Festival Flag. Festival merchants sell some of these for festival tickets.
 - **Packaging wand** Point at a prop and use the wand to pack it back into an item. Props stay safe from breaking for everyone unless you turn breaking on for yourself with a creative command.
 - **Create and give props** Creative commands let you turn an existing prefab into a prop, give prop items, and hand out the packaging wand.
+- **Loot chest props** World loot chests can hold a random decoration prop, about as often as a plot blueprint. Festival merchant decorations stay exclusive to those shops.
+- **Path designer shovel** You can choose whether townsfolk walk a path you place.
 
 ### Fixed
 
+- **Community downloads** Website download counts go up once per save or server, not each time you remove and download the same building.
 - **Tourist portal** After you finish the tourist portal building, the portal now lights up in your town color and works without you having to replace the block by hand.
 - **Battle horn** Nearby players see you blow the horn.
 - **Item tooltips** Item names and styled text stay readable when the shop gold price is shown.

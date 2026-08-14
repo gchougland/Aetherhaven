@@ -78,7 +78,7 @@ Most of what you need to learn is explained inside the game through the **Town J
 
 ### Exploration and extras
 
-- **Floating gifts** drift by on balloons. Shoot them down for gold, furniture, blueprints, and other loot
+- **Floating gifts** drift by on balloons. Shoot them down for gold, furniture, decoration props, blueprints, and other loot
 - **Jewelry** (rings and necklaces) can be found, appraised, and worn through the **hand mirror** for stat bonuses
 - **Geodes** can be cracked open for gems used in crafting
 - Recipe unlocks include useful town tools: **firewood**, **root remover**, **growth serum**, **hunting knife**, and **glow rings**

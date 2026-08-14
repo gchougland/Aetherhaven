@@ -118,6 +118,8 @@ public final class PlotCreatorFestivalDraftSetup {
         draft.setFestivalWheelLocal(null);
         draft.getFestivalRaceStartSpots().clear();
         draft.setFestivalRaceFinishLocal(null);
+        draft.setFestivalMazeStartLocal(null);
+        draft.getFestivalOrbSpawns().clear();
         draft.setFestivalCenterpieceLocal(null);
         draft.setImportantSpotsConfirmed(false);
         if (existing == null) {
@@ -281,6 +283,31 @@ public final class PlotCreatorFestivalDraftSetup {
             );
             draft.getSelectedSpots().add(
                 PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_TREE_CLIMB_FINISH, 1)
+            );
+        }
+        if (existing.getMazeStartLocal() != null) {
+            FestivalDefinition.MazeStartLocalRow start = existing.getMazeStartLocal();
+            draft.setFestivalMazeStartLocal(
+                FestivalDefinition.MazeStartLocalRow.of(
+                    start.getLocalX(),
+                    start.getLocalY(),
+                    start.getLocalZ(),
+                    start.getYawDegrees()
+                )
+            );
+            draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_MAZE_START, 1));
+        }
+        if (!existing.getOrbSpawns().isEmpty()) {
+            for (FestivalDefinition.OrbSpawnRow spot : existing.getOrbSpawns()) {
+                draft.getFestivalOrbSpawns().add(
+                    FestivalDefinition.OrbSpawnRow.of(spot.getLocalX(), spot.getLocalY(), spot.getLocalZ())
+                );
+            }
+            draft.getSelectedSpots().add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_MAZE_ORB_SPAWN,
+                    existing.getOrbSpawns().size()
+                )
             );
         }
         PlotCreatorFestivalMechanicDefaults.ensureRequiredSelectedSpots(draft);

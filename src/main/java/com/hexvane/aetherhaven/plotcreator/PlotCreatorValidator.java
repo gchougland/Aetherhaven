@@ -144,6 +144,8 @@ public final class PlotCreatorValidator {
             case FESTIVAL_WHEEL -> draft.getFestivalWheelLocal() != null ? 1 : 0;
             case FESTIVAL_TREE_CLIMB_START -> draft.getFestivalRaceStartSpots().size();
             case FESTIVAL_TREE_CLIMB_FINISH -> draft.getFestivalRaceFinishLocal() != null ? 1 : 0;
+            case FESTIVAL_MAZE_START -> draft.getFestivalMazeStartLocal() != null ? 1 : 0;
+            case FESTIVAL_MAZE_ORB_SPAWN -> draft.getFestivalOrbSpawns().size();
         };
     }
 

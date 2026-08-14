@@ -1329,6 +1329,14 @@ public final class AetherhavenPluginConfig {
         return Math.min(v, 1.0);
     }
 
+    public double getLootChestPropChance() {
+        double v = getLootChest().getProp().getChance();
+        if (v < 0.0) {
+            return 0.0;
+        }
+        return Math.min(v, 1.0);
+    }
+
     public double getLootChestGaiaShardChance() {
         double v = getLootChest().getGaiaDraughtBonuses().getShardChance();
         if (v < 0.0) {

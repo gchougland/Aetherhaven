@@ -29,6 +29,13 @@ public final class PathDesignerBootstrap {
         core
             .getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenPathToolStyleCycle", PathToolStyleCycleInteraction.class, PathToolStyleCycleInteraction.CODEC);
+        core
+            .getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPathToolTownsfolkToggle",
+                PathToolTownsfolkToggleInteraction.class,
+                PathToolTownsfolkToggleInteraction.CODEC
+            );
     }
 
     public static void register(@Nonnull AetherhavenPlugin core, @Nonnull JavaPlugin plugin) {

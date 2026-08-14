@@ -104,6 +104,18 @@ public final class PlotCreatorFestivalJsonWriter {
             finishMap.put("localZ", finish.getLocalZ());
             root.put("raceFinishLocal", finishMap);
         }
+        FestivalDefinition.MazeStartLocalRow mazeStart = draft.getFestivalMazeStartLocal();
+        if (mazeStart != null) {
+            Map<String, Object> mazeMap = new LinkedHashMap<>();
+            mazeMap.put("localX", mazeStart.getLocalX());
+            mazeMap.put("localY", mazeStart.getLocalY());
+            mazeMap.put("localZ", mazeStart.getLocalZ());
+            mazeMap.put("yawDegrees", mazeStart.getYawDegrees());
+            root.put("mazeStartLocal", mazeMap);
+        }
+        if (!draft.getFestivalOrbSpawns().isEmpty()) {
+            root.put("orbSpawns", orbMaps(draft.getFestivalOrbSpawns()));
+        }
         if (existing != null) {
             if (!existing.getBurstItemIds().isEmpty()) {
                 root.put("burstItemIds", new ArrayList<>(existing.getBurstItemIds()));
@@ -234,6 +246,21 @@ public final class PlotCreatorFestivalJsonWriter {
             row.put("localY", spot.getLocalY());
             row.put("localZ", spot.getLocalZ());
             row.put("yawDegrees", spot.getYawDegrees());
+            out.add(row);
+        }
+        return out;
+    }
+
+    @Nonnull
+    private static List<Map<String, Object>> orbMaps(
+        @Nonnull List<FestivalDefinition.OrbSpawnRow> spots
+    ) {
+        List<Map<String, Object>> out = new ArrayList<>();
+        for (FestivalDefinition.OrbSpawnRow spot : spots) {
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("localX", spot.getLocalX());
+            row.put("localY", spot.getLocalY());
+            row.put("localZ", spot.getLocalZ());
             out.add(row);
         }
         return out;

@@ -139,6 +139,10 @@ public final class PlotCreatorSubstepHandler {
                 PlotCreatorFestivalPlacement.tryRemoveTreeClimbStartNear(draft, targetBlock, playerRef);
             case FESTIVAL_TREE_CLIMB_FINISH ->
                 PlotCreatorFestivalPlacement.tryRemoveTreeClimbFinishNear(draft, targetBlock, playerRef);
+            case FESTIVAL_MAZE_START ->
+                PlotCreatorFestivalPlacement.tryRemoveMazeStartNear(draft, targetBlock, playerRef);
+            case FESTIVAL_MAZE_ORB_SPAWN ->
+                PlotCreatorFestivalPlacement.tryRemoveOrbNear(draft, targetBlock, playerRef);
         };
     }
 
@@ -456,6 +460,15 @@ public final class PlotCreatorSubstepHandler {
             );
             case FESTIVAL_TREE_CLIMB_FINISH ->
                 PlotCreatorFestivalPlacement.placeTreeClimbFinish(session, targetBlock, playerRef);
+            case FESTIVAL_MAZE_START -> PlotCreatorFestivalPlacement.placeMazeStart(
+                session,
+                targetBlock,
+                playerRef,
+                playerEntityRef,
+                store
+            );
+            case FESTIVAL_MAZE_ORB_SPAWN ->
+                PlotCreatorFestivalPlacement.placeOrbSpawn(session, targetBlock, playerRef);
         };
     }
 

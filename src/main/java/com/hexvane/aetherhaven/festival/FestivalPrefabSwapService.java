@@ -131,7 +131,7 @@ public final class FestivalPrefabSwapService {
         return true;
     }
 
-    /** World position of a festival spot given in prefab-local cells. */
+    /** World position of a festival spot given in prefab-local cells. Centers on the block. */
     @Nonnull
     public static org.joml.Vector3d spotWorldPosition(
         @Nonnull AetherhavenPlugin plugin,
@@ -140,14 +140,76 @@ public final class FestivalPrefabSwapService {
         int localY,
         int localZ
     ) {
-        ConstructionDefinition def = plugin.getConstructionCatalog().get(plot.getConstructionId());
+        org.joml.Vector3i anchor = resolvePrefabAnchor(plugin, plot);
         Rotation yaw = plot.resolvePrefabYaw();
-        org.joml.Vector3i anchor =
-            def != null
-                ? plot.resolvePrefabAnchorWorld(def)
-                : new org.joml.Vector3i(plot.getSignX(), plot.getSignY(), plot.getSignZ());
         org.joml.Vector3i local = new org.joml.Vector3i(localX, localY, localZ);
         com.hypixel.hytale.server.core.prefab.PrefabRotation.fromRotation(yaw).rotate(local);
         return new org.joml.Vector3d(anchor.x + local.x + 0.5, anchor.y + local.y, anchor.z + local.z + 0.5);
+    }
+
+    /**
+     * World position for festival JSON / building-editor local coords. Whole-number cells spawn at the block center,
+     * same as {@link #spotWorldPosition}. Fractional points rotate around the origin with no extra snap.
+     */
+    @Nonnull
+    public static org.joml.Vector3d spotWorldPositionAuthorLocal(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull PlotInstance plot,
+        double localX,
+        double localY,
+        double localZ
+    ) {
+        if (isWholeNumber(localX) && isWholeNumber(localZ)) {
+            int ix = (int) Math.round(localX);
+            int iz = (int) Math.round(localZ);
+            if (isWholeNumber(localY)) {
+                return spotWorldPosition(plugin, plot, ix, (int) Math.round(localY), iz);
+            }
+            org.joml.Vector3d centered = spotWorldPosition(plugin, plot, ix, 0, iz);
+            org.joml.Vector3i anchor = resolvePrefabAnchor(plugin, plot);
+            centered.y = anchor.y + localY;
+            return centered;
+        }
+        org.joml.Vector3i anchor = resolvePrefabAnchor(plugin, plot);
+        Rotation yaw = plot.resolvePrefabYaw();
+        org.joml.Vector3d local = new org.joml.Vector3d(localX, localY, localZ);
+        com.hypixel.hytale.server.core.prefab.PrefabRotation.fromRotation(yaw).rotate(local);
+        return new org.joml.Vector3d(anchor.x + local.x, anchor.y + local.y, anchor.z + local.z);
+    }
+
+    private static boolean isWholeNumber(double value) {
+        return Math.abs(value - Math.round(value)) < 1e-4;
+    }
+
+    /**
+     * World position of a prefab-local point that already includes entity-precise decimals. Rotates around the same
+     * 0.5 xz pivot prefab paste uses, so a rotated square does not shift spots by a block.
+     */
+    @Nonnull
+    public static org.joml.Vector3d spotWorldPositionExact(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull PlotInstance plot,
+        double localX,
+        double localY,
+        double localZ
+    ) {
+        org.joml.Vector3i anchor = resolvePrefabAnchor(plugin, plot);
+        Rotation yaw = plot.resolvePrefabYaw();
+        org.joml.Vector3d local = new org.joml.Vector3d(localX, localY, localZ);
+        local.sub(0.5, 0.0, 0.5);
+        com.hypixel.hytale.server.core.prefab.PrefabRotation.fromRotation(yaw).rotate(local);
+        local.add(0.5, 0.0, 0.5);
+        return new org.joml.Vector3d(anchor.x + local.x, anchor.y + local.y, anchor.z + local.z);
+    }
+
+    @Nonnull
+    private static org.joml.Vector3i resolvePrefabAnchor(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull PlotInstance plot
+    ) {
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(plot.getConstructionId());
+        return def != null
+            ? plot.resolvePrefabAnchorWorld(def)
+            : new org.joml.Vector3i(plot.getSignX(), plot.getSignY(), plot.getSignZ());
     }
 }

@@ -24,7 +24,7 @@ Some buildings are gated behind **plot blueprints** instead of dropping ready-ma
 2. Open the bench and craft the plot token (materials plus gold, same as other tokens).
 3. Equip the **plot placement staff** and stake the footprint.
 
-**White floating gifts** often carry blueprints. Green gifts favor jewelry; red gifts favor furniture. Balloon gifts are rarer than before.
+**White floating gifts** often carry blueprints. Green gifts favor jewelry; red gifts favor furniture and decoration props. Balloon gifts are rarer than before.
 
 ## Salvage
 

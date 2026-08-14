@@ -1,0 +1,22 @@
+# Hallow's Eve merchant dialogue
+
+aetherhaven.dialogue.festival_hallows_eve_merchant.speaker=Hallow's Eve Merchant
+aetherhaven.dialogue.festival_hallows_eve_merchant.main_hub.body=The maze is lit tonight. Collect the glowing orbs before time runs out, then pop the jack o lantern for autumn festival tickets. I also take those tickets for treats and decorations.
+aetherhaven.dialogue.festival_hallows_eve_merchant.main_hub.c_start=Start the maze.
+aetherhaven.dialogue.festival_hallows_eve_merchant.main_hub.c_busy=Is the maze free?
+aetherhaven.dialogue.festival_hallows_eve_merchant.main_hub.c_playing=How is my maze run going?
+aetherhaven.dialogue.festival_hallows_eve_merchant.main_hub.c_shop=Show me your goods.
+aetherhaven.dialogue.festival_hallows_eve_merchant.main_hub.c_about=How does the maze work?
+aetherhaven.dialogue.festival_hallows_eve_merchant.main_hub.c_goodbye=Maybe later.
+
+aetherhaven.dialogue.festival_hallows_eve_merchant.about.body=I send you to the maze start. Grab as many glowing orbs as you can before the time runs out. The jack o lantern in the middle grows as you collect them. When time is up, press F on it to pop tickets and spooky candy. Only one person runs the maze at a time.
+aetherhaven.dialogue.festival_hallows_eve_merchant.about.c_back=Got it.
+
+aetherhaven.dialogue.festival_hallows_eve_merchant.maze_started.body=In you go! Collect the orbs, then pop the jack o lantern when the time is up.
+aetherhaven.dialogue.festival_hallows_eve_merchant.maze_started.c_back=I am ready!
+
+aetherhaven.dialogue.festival_hallows_eve_merchant.maze_busy.body=Someone is already in the maze. Wait until they pop the jack o lantern, then I can send you in.
+aetherhaven.dialogue.festival_hallows_eve_merchant.maze_busy.c_back=I will wait.
+
+aetherhaven.dialogue.festival_hallows_eve_merchant.maze_playing.body=You are already in a run. Grab the orbs, then pop the jack o lantern when time is up.
+aetherhaven.dialogue.festival_hallows_eve_merchant.maze_playing.c_back=Back to it.

@@ -440,6 +440,34 @@ public final class PathToolInteractions {
         pathToast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.pathTool.toastStyleCycled");
     }
 
+    public static void handleToggleTownsfolkWalk(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull InteractionContext context
+    ) {
+        if (!hasPathToolPermission(playerRef, commandBuffer) || !isPathToolItem(getHand(commandBuffer, playerRef))) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        ensureState(playerRef, commandBuffer);
+        PathToolPlayerComponent st = commandBuffer.getComponent(playerRef, PathToolPlayerComponent.getComponentType());
+        if (st == null) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        if (!isPathLayoutEditMode(st.getGizmoMode())) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        st.toggleVillagerNav();
+        String messageId =
+            st.isVillagerNav()
+                ? "aetherhaven_items.aetherhaven.pathTool.hudTownsfolkOn"
+                : "aetherhaven_items.aetherhaven.pathTool.hudTownsfolkOff";
+        send(playerRef, commandBuffer, Message.translation(messageId));
+        pathToast(playerRef, commandBuffer, messageId);
+    }
+
     public static void handleUse(
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
@@ -545,6 +573,11 @@ public final class PathToolInteractions {
         @Nonnull
         PathCommitRecord rec;
         if (plan.isEmpty()) {
+            if (!st.isVillagerNav()) {
+                send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.emptyPlan"));
+                context.getState().state = InteractionState.Failed;
+                return;
+            }
             rec = PathCementService.newShellRecord();
             navOnly = true;
         } else {
@@ -566,8 +599,14 @@ public final class PathToolInteractions {
             }
             rec = cemented;
             navOnly = rec.undo.isEmpty();
+            if (navOnly && !st.isVillagerNav()) {
+                send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.cementFail"));
+                context.getState().state = InteractionState.Failed;
+                return;
+            }
         }
         rec.navNodes = PathNavPolylineUtil.resampleCenterline(samples, plugin.getConfig().get().getPathNavNodeSpacing());
+        rec.villagerNav = st.isVillagerNav();
         rec.townId = resolveTownIdForPath(world, plugin, st, samples);
         PathToolRegistry reg = AetherhavenWorldRegistries.getOrCreatePathToolRegistry(world, plugin);
         reg.addRecord(rec);

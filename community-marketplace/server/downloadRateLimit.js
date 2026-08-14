@@ -18,7 +18,7 @@ function consume(key, max, windowMs) {
 export function createDownloadRateLimit(options) {
   const maxPerIp = options.maxPerIp ?? 120;
   const maxPerBuildingIp = options.maxPerBuildingIp ?? 5;
-  const maxPerPlayer = options.maxPerPlayer ?? 60;
+  const maxPerPlayer = options.maxPerPlayer ?? 120;
   const windowMs = options.windowMs ?? 60 * 60 * 1000;
 
   return function downloadRateLimit(req, res, next) {

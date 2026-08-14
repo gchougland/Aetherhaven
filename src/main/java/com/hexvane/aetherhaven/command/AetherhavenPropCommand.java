@@ -96,7 +96,7 @@ public final class AetherhavenPropCommand extends AbstractCommandCollection {
             if (targetPlayer == null) {
                 return;
             }
-            ItemStack stack = PropItemMetadata.withProp(new ItemStack(PropItemMetadata.PROP_ITEM_ID, amount), def.getId(), def.getDisplayName());
+            ItemStack stack = PropItemMetadata.createStack(def, amount);
             Player.giveItem(stack, targetEntityRef, targetStore);
             playerRef.sendMessage(
                 Message.translation(LANG + "gave").param("amount", amount).param("name", def.getDisplayName()).param("player", targetRef.getUsername())

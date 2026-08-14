@@ -149,6 +149,15 @@
       "texture": "Cosmetics/Head/Jungle_Sapling_Hat.png",
       "unlockItemId": "Aetherhaven_Villager_Cosmetic_Jungle_Sapling_Hat",
       "headAccessoryType": "Simple"
+    },
+    {
+      "id": "JackOLanternHat",
+      "slot": "HeadAccessory",
+      "displayNameKey": "aetherhaven_villager_cosmetics.aetherhaven.villagerCosmetic.jackOLanternHat",
+      "model": "Cosmetics/Head/Jack_O_Lantern_Hat.blockymodel",
+      "texture": "Items/Halloween_Props/Pumpkin_Carve_Texture_02.png",
+      "unlockItemId": "Aetherhaven_Villager_Cosmetic_Jack_O_Lantern_Hat",
+      "headAccessoryType": "FullyCovering"
     }
   ]
 }

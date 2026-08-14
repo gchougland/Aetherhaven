@@ -1,0 +1,30 @@
+{
+  "Model": "Characters/Empty_Cube.blockymodel",
+  "Texture": "Characters/Empty_Cube_Texture.png",
+  "EyeHeight": 0.5,
+  "HitBox": {
+    "Max": {
+      "X": 0.35,
+      "Y": 0.75,
+      "Z": 0.35
+    },
+    "Min": {
+      "X": -0.35,
+      "Y": 0,
+      "Z": -0.35
+    }
+  },
+  "Particles": [
+    {
+      "SystemId": "Aetherhaven_Festival_Maze_Orb",
+      "PositionOffset": {
+        "Y": 0.35
+      },
+      "Scale": 0.55
+    }
+  ],
+  "Light": {
+    "Color": "#4488ff",
+    "Radius": 7
+  }
+}

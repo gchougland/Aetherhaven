@@ -31,6 +31,10 @@ public final class LootChestSupplementalLoot {
         return cfg.getLootChestPlotBlueprintChance() > 0.0;
     }
 
+    public static boolean needsPropRoll(@Nonnull AetherhavenPluginConfig cfg) {
+        return cfg.getLootChestPropChance() > 0.0;
+    }
+
     public static boolean needsGaiaShardRoll(@Nonnull AetherhavenPluginConfig cfg) {
         return cfg.getLootChestGaiaShardChance() > 0.0 && !cfg.getLootChestGaiaShardItemId().isBlank();
     }
@@ -45,7 +49,7 @@ public final class LootChestSupplementalLoot {
 
     /** True when any configured supplemental roll needs a free inventory slot. */
     public static boolean anySupplementalRollConfigured(@Nonnull AetherhavenPluginConfig cfg) {
-        return needsPlotBlueprintRoll(cfg) || needsGaiaShardRoll(cfg) || needsGaiaCatalystRoll(cfg);
+        return needsPlotBlueprintRoll(cfg) || needsPropRoll(cfg) || needsGaiaShardRoll(cfg) || needsGaiaCatalystRoll(cfg);
     }
 
     private static boolean hasItemAsset(@Nonnull String itemId) {

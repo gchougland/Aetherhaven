@@ -9,8 +9,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -41,7 +44,7 @@ public final class CommunityDownloadService {
 
     @Nonnull
     public static InstallResult install(@Nonnull AetherhavenPlugin plugin, @Nonnull CommunityManifestEntry entry) {
-        return install(plugin, entry, false);
+        return install(plugin, entry, false, null);
     }
 
     @Nonnull
@@ -50,13 +53,23 @@ public final class CommunityDownloadService {
         @Nonnull CommunityManifestEntry entry,
         boolean forceRefresh
     ) {
+        return install(plugin, entry, forceRefresh, null);
+    }
+
+    @Nonnull
+    public static InstallResult install(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull CommunityManifestEntry entry,
+        boolean forceRefresh,
+        @Nullable UUID playerUuid
+    ) {
         FileInstallOutcome outcome = installFiles(plugin, entry, forceRefresh, true);
         if (outcome.result() != InstallResult.SUCCESS) {
             return outcome.result();
         }
         plugin.reloadConfigsAndAssetCatalogs();
         if (!forceRefresh) {
-            reportInstall(plugin, entry.getId());
+            reportInstall(plugin, entry.getId(), playerUuid);
         }
         LOGGER.atInfo().log(forceRefresh ? "Updated community building %s" : "Installed community building %s", entry.getId());
         return InstallResult.SUCCESS;
@@ -73,6 +86,16 @@ public final class CommunityDownloadService {
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull List<CommunityManifestEntry> entries,
         @Nullable IntConsumer onProgress
+    ) {
+        return installBatch(plugin, entries, onProgress, null);
+    }
+
+    @Nonnull
+    public static BatchResult installBatch(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull List<CommunityManifestEntry> entries,
+        @Nullable IntConsumer onProgress,
+        @Nullable UUID playerUuid
     ) {
         if (entries.isEmpty()) {
             return new BatchResult(0, 0, 0);
@@ -164,7 +187,7 @@ public final class CommunityDownloadService {
         if (ok.get() > 0) {
             plugin.reloadConfigsAndAssetCatalogs();
             for (SuccessfulInstall success : successes) {
-                reportInstall(plugin, success.constructionId());
+                reportInstall(plugin, success.constructionId(), playerUuid);
             }
             LOGGER.atInfo().log("Batch installed %s community buildings (%s failed)", ok.get(), failed.get());
         }
@@ -342,14 +365,27 @@ public final class CommunityDownloadService {
     }
 
     /** Best-effort install counter for the marketplace website; never fails the local install. */
-    private static void reportInstall(@Nonnull AetherhavenPlugin plugin, @Nonnull String constructionId) {
+    private static void reportInstall(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull String constructionId,
+        @Nullable UUID playerUuid
+    ) {
         try {
+            String instanceId = CommunityInstallInstance.loadOrCreate(plugin.getDataDirectory());
+            if (instanceId == null || instanceId.isBlank()) {
+                return;
+            }
             String base = plugin.getConfig().get().getCommunityMarketplace().getApiBaseUrl();
             if (base == null || base.isBlank()) {
                 return;
             }
             String url = base.replaceAll("/+$", "") + "/api/v1/buildings/" + constructionId.trim() + "/download";
-            CommunityHttpClient.postJson(url, Map.of(), "{}");
+            Map<String, String> headers = new LinkedHashMap<>();
+            headers.put("X-Install-Instance-Id", instanceId);
+            if (playerUuid != null) {
+                headers.put("X-Player-Uuid", playerUuid.toString().trim().toLowerCase(Locale.ROOT));
+            }
+            CommunityHttpClient.postJson(url, headers, "{}");
         } catch (Exception e) {
             LOGGER.atWarning().withCause(e).log("Failed to report community download for %s", constructionId);
         }

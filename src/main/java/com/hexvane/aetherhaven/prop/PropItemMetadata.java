@@ -6,6 +6,7 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.item.config.metadata.ItemDisplayMetadata;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.i18n.I18nModule;
+import com.hypixel.hytale.server.core.modules.item.ItemModule;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.bson.BsonDocument;
@@ -30,6 +31,23 @@ public final class PropItemMetadata {
     private static final String LANG_DESC = "aetherhaven_items.items.Aetherhaven_Prop_Item.instance.description";
 
     private PropItemMetadata() {}
+
+    /** Shop SKU when one exists, otherwise the generic crate; always applies the instance tooltip. */
+    @Nonnull
+    public static ItemStack createStack(@Nonnull PropDefinition def) {
+        return createStack(def, 1);
+    }
+
+    @Nonnull
+    public static ItemStack createStack(@Nonnull PropDefinition def, int amount) {
+        int qty = Math.max(1, amount);
+        String shopItemId = PropShopItemIds.forPropId(def.getId());
+        ItemStack base =
+            ItemModule.exists(shopItemId)
+                ? new ItemStack(shopItemId, qty)
+                : new ItemStack(PROP_ITEM_ID, qty);
+        return withProp(base, def.getId(), def.getDisplayName());
+    }
 
     @Nonnull
     public static ItemStack withProp(@Nonnull ItemStack base, @Nonnull String propId, @Nullable String displayName) {

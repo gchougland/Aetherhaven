@@ -15,7 +15,8 @@ import javax.annotation.Nonnull;
 public final class FloatingGiftLootBundle {
     private static final int DEFAULT_FILLER_ROLLS_MIN = 2;
     private static final int DEFAULT_FILLER_ROLLS_MAX = 4;
-    private static final int DEFAULT_RED_FURNITURE_ROLLS = 3;
+    private static final int DEFAULT_RED_FURNITURE_ROLLS = 2;
+    private static final int DEFAULT_RED_PROP_ROLLS = 1;
     private static final int DEFAULT_REGULAR_PLOT_BLUEPRINT_WEIGHT = 5;
 
     private final FloatingGiftLootTable regularTable;
@@ -26,6 +27,7 @@ public final class FloatingGiftLootBundle {
     private final int fillerRollsMin;
     private final int fillerRollsMax;
     private final int redFurnitureRolls;
+    private final int redPropRolls;
 
     private FloatingGiftLootBundle(
         @Nonnull FloatingGiftLootTable regularTable,
@@ -35,7 +37,8 @@ public final class FloatingGiftLootBundle {
         int regularPlotBlueprintWeight,
         int fillerRollsMin,
         int fillerRollsMax,
-        int redFurnitureRolls
+        int redFurnitureRolls,
+        int redPropRolls
     ) {
         this.regularTable = regularTable;
         this.greenTable = greenTable;
@@ -45,6 +48,7 @@ public final class FloatingGiftLootBundle {
         this.fillerRollsMin = fillerRollsMin;
         this.fillerRollsMax = fillerRollsMax;
         this.redFurnitureRolls = redFurnitureRolls;
+        this.redPropRolls = redPropRolls;
     }
 
     @Nonnull
@@ -57,7 +61,8 @@ public final class FloatingGiftLootBundle {
             DEFAULT_REGULAR_PLOT_BLUEPRINT_WEIGHT,
             DEFAULT_FILLER_ROLLS_MIN,
             DEFAULT_FILLER_ROLLS_MAX,
-            DEFAULT_RED_FURNITURE_ROLLS
+            DEFAULT_RED_FURNITURE_ROLLS,
+            DEFAULT_RED_PROP_ROLLS
         );
     }
 
@@ -79,7 +84,8 @@ public final class FloatingGiftLootBundle {
                 DEFAULT_REGULAR_PLOT_BLUEPRINT_WEIGHT,
                 DEFAULT_FILLER_ROLLS_MIN,
                 DEFAULT_FILLER_ROLLS_MAX,
-                DEFAULT_RED_FURNITURE_ROLLS
+                DEFAULT_RED_FURNITURE_ROLLS,
+                DEFAULT_RED_PROP_ROLLS
             );
         }
 
@@ -114,9 +120,15 @@ public final class FloatingGiftLootBundle {
         rollsMax = Math.max(rollsMin, rollsMax);
 
         int furnitureRolls = DEFAULT_RED_FURNITURE_ROLLS;
+        int propRolls = DEFAULT_RED_PROP_ROLLS;
         JsonObject redSection = obj.getAsJsonObject("red");
-        if (redSection != null && redSection.has("furnitureRolls")) {
-            furnitureRolls = Math.max(0, redSection.get("furnitureRolls").getAsInt());
+        if (redSection != null) {
+            if (redSection.has("furnitureRolls")) {
+                furnitureRolls = Math.max(0, redSection.get("furnitureRolls").getAsInt());
+            }
+            if (redSection.has("propRolls")) {
+                propRolls = Math.max(0, redSection.get("propRolls").getAsInt());
+            }
         }
 
         return new FloatingGiftLootBundle(
@@ -127,7 +139,8 @@ public final class FloatingGiftLootBundle {
             plotBlueprintWeight,
             rollsMin,
             rollsMax,
-            furnitureRolls
+            furnitureRolls,
+            propRolls
         );
     }
 
@@ -141,7 +154,8 @@ public final class FloatingGiftLootBundle {
             regularPlotBlueprintWeight,
             fillerRollsMin,
             fillerRollsMax,
-            redFurnitureRolls
+            redFurnitureRolls,
+            redPropRolls
         );
     }
 
@@ -199,6 +213,10 @@ public final class FloatingGiftLootBundle {
 
     public int getRedFurnitureRolls() {
         return redFurnitureRolls;
+    }
+
+    public int getRedPropRolls() {
+        return redPropRolls;
     }
 
     public int getRegularPlotBlueprintWeight() {

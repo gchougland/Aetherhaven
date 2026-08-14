@@ -27,6 +27,17 @@ import com.hexvane.aetherhaven.festival.pigrace.PigRaceDialogueHandlers;
 import com.hexvane.aetherhaven.festival.pigrace.PigRaceFestivalMechanic;
 import com.hexvane.aetherhaven.festival.pigrace.PigRaceRacerComponent;
 import com.hexvane.aetherhaven.festival.pigrace.PigRaceSystem;
+import com.hexvane.aetherhaven.festival.hallowseve.HallowsEveDialogueHandlers;
+import com.hexvane.aetherhaven.festival.hallowseve.HallowsEveFestivalMechanic;
+import com.hexvane.aetherhaven.festival.hallowseve.HallowsEveOrbCollectSystem;
+import com.hexvane.aetherhaven.festival.hallowseve.HallowsEveOrbComponent;
+import com.hexvane.aetherhaven.festival.hallowseve.HallowsEveOrbVisibilitySystem;
+import com.hexvane.aetherhaven.festival.hallowseve.HallowsEvePumpkinBurstInteraction;
+import com.hexvane.aetherhaven.festival.hallowseve.HallowsEvePumpkinBurstSystem;
+import com.hexvane.aetherhaven.festival.hallowseve.HallowsEvePumpkinComponent;
+import com.hexvane.aetherhaven.festival.hallowseve.HallowsEvePumpkinGrowthSystem;
+import com.hexvane.aetherhaven.festival.hallowseve.HallowsEvePumpkinInteractSystem;
+import com.hexvane.aetherhaven.festival.hallowseve.HallowsEveRaceSystem;
 import com.hexvane.aetherhaven.festival.treeclimb.TreeClimbDialogueHandlers;
 import com.hexvane.aetherhaven.festival.treeclimb.TreeClimbFestivalMechanic;
 import com.hexvane.aetherhaven.festival.treeclimb.TreeClimbRaceSystem;
@@ -60,6 +71,13 @@ public final class FestivalsBootstrap {
                 FireworkLaunchInteraction.class,
                 FireworkLaunchInteraction.CODEC
             );
+        core
+            .getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenFestivalJackLanternBurst",
+                HallowsEvePumpkinBurstInteraction.class,
+                HallowsEvePumpkinBurstInteraction.CODEC
+            );
     }
 
     public static void register(@Nonnull AetherhavenPlugin core, @Nonnull JavaPlugin plugin) {
@@ -69,6 +87,8 @@ public final class FestivalsBootstrap {
         CarnivalWhackComponent.register(plugin.getEntityStoreRegistry());
         CarnivalWheelFaceComponent.register(plugin.getEntityStoreRegistry());
         FireworkRocketComponent.register(plugin.getEntityStoreRegistry());
+        HallowsEveOrbComponent.register(plugin.getEntityStoreRegistry());
+        HallowsEvePumpkinComponent.register(plugin.getEntityStoreRegistry());
         plugin.getEntityStoreRegistry().registerSystem(new FestivalLettuceAbsorbSystem());
         plugin.getEntityStoreRegistry().registerSystem(new FestivalLettuceGrowthSystem());
         plugin.getEntityStoreRegistry().registerSystem(new FestivalLettuceBurstSystem());
@@ -86,13 +106,21 @@ public final class FestivalsBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new CarnivalWheelSystem());
         plugin.getEntityStoreRegistry().registerSystem(new TreeClimbRaceSystem());
         plugin.getEntityStoreRegistry().registerSystem(new FireworkRocketSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new HallowsEveRaceSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new HallowsEveOrbCollectSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new HallowsEveOrbVisibilitySystem());
+        plugin.getEntityStoreRegistry().registerSystem(new HallowsEvePumpkinGrowthSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new HallowsEvePumpkinBurstSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new HallowsEvePumpkinInteractSystem());
         core.getFestivalMechanicRegistry().register(NewLifeFestivalMechanic.MECHANIC_ID, new NewLifeFestivalMechanic());
         core.getFestivalMechanicRegistry().register(PigRaceFestivalMechanic.MECHANIC_ID, new PigRaceFestivalMechanic());
         core.getFestivalMechanicRegistry().register(CarnivalFestivalMechanic.MECHANIC_ID, new CarnivalFestivalMechanic());
         core.getFestivalMechanicRegistry().register(TreeClimbFestivalMechanic.MECHANIC_ID, new TreeClimbFestivalMechanic());
+        core.getFestivalMechanicRegistry().register(HallowsEveFestivalMechanic.MECHANIC_ID, new HallowsEveFestivalMechanic());
         PigRaceDialogueHandlers.register(core);
         CarnivalDialogueHandlers.register(core);
         TreeClimbDialogueHandlers.register(core);
+        HallowsEveDialogueHandlers.register(core);
         core.registerAetherhavenSubcommand(new AetherhavenFestivalCommand());
     }
 

@@ -1,0 +1,62 @@
+{
+  "Parent": "Zombie",
+  "Model": "NPC/Undead/Zombie/Models/Model.blockymodel",
+  "Texture": "NPC/Undead/Zombie/Models/Zombie.png",
+  "DefaultAttachments": [
+    {
+      "Model": "NPC/Undead/Zombie/Models/Attachments/Head/Eyes.blockymodel",
+      "Texture": "NPC/Undead/Zombie/Models/Attachments/Head/Eyes_Blue.png"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Ears/Ears1.blockymodel",
+      "Texture": "Characters/Body_Attachments/Ears/Ears1_Textures/Zombie.png"
+    },
+    {
+      "Model": "Cosmetics/Head/Hood.blockymodel",
+      "Texture": "NPC/Undead/Zombie/Models/Attachments/Head/Hood_Texture/Monk_Cap.png"
+    },
+    {
+      "Model": "NPC/Undead/Zombie/Models/Attachments/Head/Haircuts/Goatee.blockymodel",
+      "Texture": "NPC/Undead/Zombie/Models/Attachments/Head/Haircuts/Goatee_Black.png"
+    },
+    {
+      "Model": "Cosmetics/Overtops/TrenchCoat_Asymetrical.blockymodel",
+      "Texture": "NPC/Undead/Zombie/Models/Attachments/Chest/TrenchCoat_Asymetrical_Textures/Ragged_TrenchCoat.png"
+    },
+    {
+      "Model": "Cosmetics/Pants/Pants_Asymetrical.blockymodel",
+      "Texture": "NPC/Undead/Zombie/Models/Attachments/Legs/Pants_Asymetrical_Textures/Dark_Trousers.png"
+    },
+    {
+      "Model": "Cosmetics/Shoes/Single_Boot.blockymodel",
+      "Texture": "NPC/Undead/Zombie/Models/Attachments/Shoes/Boots_Leather_Textures/Worned_Boot.png"
+    }
+  ],
+  "RandomAttachmentSets": {
+    "Head": {
+      "null": {}
+    },
+    "Chest": {
+      "null": {}
+    },
+    "Legs": {
+      "null": {}
+    },
+    "Shoes": {
+      "null": {}
+    }
+  },
+  "Icon": "Icons/ModelsGenerated/Aetherhaven_Festival_Hallows_Eve_Merchant.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      19,
+      0
+    ],
+    "Translation": [
+      0,
+      -99
+    ]
+  }
+}

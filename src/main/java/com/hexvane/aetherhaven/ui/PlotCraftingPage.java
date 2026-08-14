@@ -1774,11 +1774,13 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         boolean forceRefresh = community.isInstalled(variant.constructionId());
         refresh(ref, store);
         World world = store.getExternalData().getWorld();
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        UUID playerUuid = uc != null ? uc.getUuid() : null;
         CompletableFuture.runAsync(
             () -> {
                 CommunityDownloadService.InstallResult installResult;
                 try {
-                    installResult = CommunityDownloadService.install(plugin, entry, forceRefresh);
+                    installResult = CommunityDownloadService.install(plugin, entry, forceRefresh, playerUuid);
                 } catch (RuntimeException e) {
                     installResult = CommunityDownloadService.InstallResult.IO_ERROR;
                 }
@@ -1864,6 +1866,8 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         World world = store.getExternalData().getWorld();
         int total = targets.size();
         AtomicInteger lastNotified = new AtomicInteger(-1);
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        UUID playerUuid = uc != null ? uc.getUuid() : null;
         CompletableFuture.runAsync(
             () -> {
                 CommunityDownloadService.BatchResult batchResult;
@@ -1899,7 +1903,8 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                                     },
                                     1L
                                 );
-                            }
+                            },
+                            playerUuid
                         );
                 } catch (RuntimeException e) {
                     batchResult = new CommunityDownloadService.BatchResult(0, total, 0);

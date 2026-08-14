@@ -1,0 +1,16 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Prop_Skeleton_Coffin.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Prop_Skeleton_Coffin.description"
+  },
+  "Parent": "Aetherhaven_Prop_Item",
+  "Categories": ["Items.Tools", "Aetherhaven.All"],
+  "Quality": "Common",
+  "Recipe": null,
+  "MaxStack": 16,
+  "Set": "Aetherhaven",
+  "Tags": {
+    "Family": ["Aetherhaven"],
+    "Type": ["Tool"]
+  }
+}

@@ -67,6 +67,7 @@ public final class PathToolStatusHud extends CustomUIHud {
         b.set("#StyleLine.Visible", showEditStats);
         b.set("#WidthLine.Visible", showEditStats);
         b.set("#NodesLine.Visible", showEditStats);
+        b.set("#TownsfolkLine.Visible", showEditStats);
         if (showEditStats) {
             b.set(
                 "#StyleLine.TextSpans",
@@ -85,6 +86,15 @@ public final class PathToolStatusHud extends CustomUIHud {
                 Message
                     .translation(LANG_PREFIX + "aetherhaven.pathTool.hudNodes")
                     .param("n", String.valueOf(st.getNodes().size()))
+            );
+            b.set(
+                "#TownsfolkLine.TextSpans",
+                Message.translation(
+                    LANG_PREFIX
+                        + (st.isVillagerNav()
+                            ? "aetherhaven.pathTool.hudTownsfolkOn"
+                            : "aetherhaven.pathTool.hudTownsfolkOff")
+                )
             );
         }
         boolean showPlaceReminder = mode != PathToolGizmoMode.Commit;

@@ -105,6 +105,11 @@ Group #PathToolStatusRoot {
       Label #NodesLine {
         Text: " ";
         Style: (...$C.@DefaultLabelStyle, TextColor: #c8d0d8, FontSize: 15, Wrap: true);
+        Anchor: (Bottom: 6);
+      }
+      Label #TownsfolkLine {
+        Text: " ";
+        Style: (...$C.@DefaultLabelStyle, TextColor: #c8d0d8, FontSize: 15, Wrap: true);
         Anchor: (Bottom: 8);
       }
 

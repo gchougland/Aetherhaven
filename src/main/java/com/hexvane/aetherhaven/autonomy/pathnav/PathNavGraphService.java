@@ -44,7 +44,7 @@ public final class PathNavGraphService {
         byTown.clear();
         Map<UUID, List<PathCommitRecord>> grouped = new HashMap<>();
         for (PathCommitRecord rec : registry.all()) {
-            if (rec == null || rec.townId == null || rec.townId.isBlank() || rec.navNodes == null || rec.navNodes.size() < 2) {
+            if (rec == null || !rec.includeInTownsfolkGraph()) {
                 continue;
             }
             try {

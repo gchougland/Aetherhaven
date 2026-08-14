@@ -59,6 +59,7 @@ public final class PropsBootstrap {
     }
 
     public static void register(@Nonnull AetherhavenPlugin core, @Nonnull JavaPlugin plugin) {
+        PropLootExclusions.ensureDefaultFile(core);
         AetherhavenPlacedInstance.register(plugin.getEntityStoreRegistry());
         plugin.getEntityStoreRegistry().registerSystem(new PropBreakBlockSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new PropPackagingWandTickSystem(core));

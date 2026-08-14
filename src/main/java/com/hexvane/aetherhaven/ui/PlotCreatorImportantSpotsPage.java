@@ -183,6 +183,13 @@ public final class PlotCreatorImportantSpotsPage
                 )
             );
             out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_TREE_CLIMB_FINISH, 1));
+            out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_MAZE_START, 1));
+            out.add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_MAZE_ORB_SPAWN,
+                    resolveMinCount(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_MAZE_ORB_SPAWN, 1))
+                )
+            );
             List<PlotCreatorSpotEntry> ranked = new ArrayList<>(out);
             for (int i = 0; i < ranked.size(); i++) {
                 PlotCreatorSpotEntry spot = ranked.get(i);
@@ -207,6 +214,9 @@ public final class PlotCreatorImportantSpotsPage
             }
             // Older drafts could mark a planning desk POI; town halls now use elder work instead.
             if (type == PlotCreatorSubstepType.PLANNING_DESK_POI) {
+                continue;
+            }
+            if (type.name().startsWith("FESTIVAL_")) {
                 continue;
             }
             if (type == PlotCreatorSubstepType.GUILD_MASTER_SPAWN

@@ -175,8 +175,7 @@ public final class PropPrefabBrowserPage extends AetherhavenInteractiveCustomUIP
         if (player == null) {
             return;
         }
-        ItemStack stack =
-            PropItemMetadata.withProp(new ItemStack(PropItemMetadata.PROP_ITEM_ID, 1), def.getId(), def.getDisplayName());
+        ItemStack stack = PropItemMetadata.createStack(def);
         Player.giveItem(stack, ref, store);
         playerRef.sendMessage(Message.translation(MSG_UI + ".created").param("prop", def.getDisplayName()));
         statusMessageKey = null;

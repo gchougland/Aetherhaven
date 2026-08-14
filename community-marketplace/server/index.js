@@ -308,7 +308,7 @@ const voteRateLimit = createVoteRateLimit({
 const downloadRateLimit = createDownloadRateLimit({
   maxPerIp: Number(process.env.DOWNLOAD_MAX_PER_IP_PER_HOUR || 120),
   maxPerBuildingIp: Number(process.env.DOWNLOAD_MAX_PER_BUILDING_IP_PER_HOUR || 5),
-  maxPerPlayer: Number(process.env.DOWNLOAD_MAX_PER_PLAYER_PER_HOUR || 60),
+  maxPerPlayer: Number(process.env.DOWNLOAD_MAX_PER_PLAYER_PER_HOUR || 120),
 });
 
 function readBuildingJson(buildingPath) {
@@ -1208,7 +1208,7 @@ function toggleBuildingUpvote(buildingId, webUser) {
   return { status: 200, body: result };
 }
 
-function recordBuildingDownload(buildingId) {
+function recordBuildingDownload(buildingId, req) {
   const id = normalizeCommunityId(buildingId);
   if (!id) {
     return { status: 400, body: { error: "invalid_id" } };
@@ -1218,7 +1218,8 @@ function recordBuildingDownload(buildingId) {
   if (!entry) {
     return { status: 404, body: { error: "not_found" } };
   }
-  return { status: 200, body: downloads.increment(id) };
+  const instanceId = String(req?.get?.("X-Install-Instance-Id") || "").trim();
+  return { status: 200, body: downloads.increment(id, instanceId) };
 }
 
 app.get("/api/v1/manifest", sendManifest);
@@ -2703,7 +2704,7 @@ app.get("/ads.txt", (_req, res) => {
 });
 
 app.post("/api/v1/buildings/:id/download", downloadRateLimit, (req, res) => {
-  const result = recordBuildingDownload(req.params.id);
+  const result = recordBuildingDownload(req.params.id, req);
   res.status(result.status).json(result.body);
 });
 

@@ -525,6 +525,9 @@ public final class AetherhavenConstants {
     /** Trork ticket seller at the Pig Racing Festival. */
     public static final String NPC_FESTIVAL_PIG_RACE_MERCHANT = "Aetherhaven_Festival_Pig_Race_Merchant";
 
+    /** Zombie ticket seller at the Hallow's Eve Festival. */
+    public static final String NPC_FESTIVAL_HALLOWS_EVE_MERCHANT = "Aetherhaven_Festival_Hallows_Eve_Merchant";
+
     /** Feran carnival NPCs at the Carnival Festival. */
     public static final String NPC_FESTIVAL_CARNIVAL_MERCHANT = "Aetherhaven_Festival_Carnival_Merchant";
     public static final String NPC_FESTIVAL_CARNIVAL_BALLOON = "Aetherhaven_Festival_Carnival_Balloon";

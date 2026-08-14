@@ -19,10 +19,12 @@ public final class PlotCreatorSpotMarkerVisuals {
         return switch (type) {
             case VISITOR_SPAWN, TOURIST_VISIT_POI, TOURIST_PORTAL_BLOCK, FESTIVAL_TOURIST_SPOT -> TEX_TEAL;
             case ADVENTURER_SPAWN, INNKEEPER_SPAWN, GUILD_MASTER_SPAWN, FESTIVAL_NPC -> TEX_PURPLE;
-            case SLEEP_POI, EAT_POI, FUN_POI, FESTIVAL_CENTERPIECE, FESTIVAL_WHEEL, FESTIVAL_TREE_CLIMB_FINISH ->
+            case SLEEP_POI, EAT_POI, FUN_POI, FESTIVAL_CENTERPIECE, FESTIVAL_WHEEL, FESTIVAL_TREE_CLIMB_FINISH,
+                FESTIVAL_MAZE_START ->
                 TEX_BLUE;
             case WORK_POI, BARD_WORK_POI, PLANNING_DESK_POI, QUEST_BOARD_POI, SHOP_POI, FESTIVAL_RACE_LANE,
-                FESTIVAL_BALLOON_SPAWN, FESTIVAL_WHACK_SPAWN, FESTIVAL_TREE_CLIMB_START -> TEX_ORANGE;
+                FESTIVAL_BALLOON_SPAWN, FESTIVAL_WHACK_SPAWN, FESTIVAL_TREE_CLIMB_START, FESTIVAL_MAZE_ORB_SPAWN ->
+                TEX_ORANGE;
             case MANAGEMENT_BLOCK,
                 PRODUCTION_STORAGE,
                 TREASURY_BLOCK,
@@ -102,6 +104,8 @@ public final class PlotCreatorSpotMarkerVisuals {
             case FESTIVAL_WHEEL -> "Carnival wheel";
             case FESTIVAL_TREE_CLIMB_START -> "Tree climb start";
             case FESTIVAL_TREE_CLIMB_FINISH -> "Tree climb finish";
+            case FESTIVAL_MAZE_START -> "Maze start";
+            case FESTIVAL_MAZE_ORB_SPAWN -> "Maze orb spawn";
         };
     }
 
@@ -130,6 +134,9 @@ public final class PlotCreatorSpotMarkerVisuals {
         }
         if (PlotCreatorFestivalNpcRoles.TREE_CLIMB_ATTENDANT.equals(npcRoleId)) {
             return "Tree climb attendant";
+        }
+        if (PlotCreatorFestivalNpcRoles.HALLOWS_EVE_MERCHANT.equals(npcRoleId)) {
+            return "Hallow's Eve merchant";
         }
         return "Festival merchant";
     }

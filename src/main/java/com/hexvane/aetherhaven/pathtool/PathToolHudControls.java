@@ -53,7 +53,8 @@ public final class PathToolHudControls {
                 row(ToolKeybindSlot.SECONDARY, "aetherhaven.pathTool.hud.move.secondary"),
                 row(ToolKeybindSlot.ABILITY1, "aetherhaven.pathTool.hud.move.q"),
                 row(ToolKeybindSlot.ABILITY2, "aetherhaven.pathTool.hud.move.e"),
-                row(ToolKeybindSlot.ABILITY3, "aetherhaven.pathTool.hud.move.r")
+                row(ToolKeybindSlot.ABILITY3, "aetherhaven.pathTool.hud.move.r"),
+                row(ToolKeybindSlot.PICK, "aetherhaven.pathTool.hud.townsfolkToggle")
             );
             case Rotate -> List.of(
                 row(ToolKeybindSlot.PRIMARY, "aetherhaven.pathTool.hud.rotate.primary"),
@@ -61,7 +62,8 @@ public final class PathToolHudControls {
                 row(ToolKeybindSlot.USE, "aetherhaven.pathTool.hud.rotate.f"),
                 row(ToolKeybindSlot.ABILITY1, "aetherhaven.pathTool.hud.rotate.q"),
                 row(ToolKeybindSlot.ABILITY2, "aetherhaven.pathTool.hud.rotate.e"),
-                row(ToolKeybindSlot.ABILITY3, "aetherhaven.pathTool.hud.rotate.r")
+                row(ToolKeybindSlot.ABILITY3, "aetherhaven.pathTool.hud.rotate.r"),
+                row(ToolKeybindSlot.PICK, "aetherhaven.pathTool.hud.townsfolkToggle")
             );
             case Commit -> List.of(
                 row(ToolKeybindSlot.PRIMARY, "aetherhaven.pathTool.hud.place.primary"),
@@ -69,7 +71,8 @@ public final class PathToolHudControls {
                 row(ToolKeybindSlot.USE, "aetherhaven.pathTool.hud.place.f"),
                 row(ToolKeybindSlot.ABILITY1, "aetherhaven.pathTool.hud.place.q"),
                 row(ToolKeybindSlot.ABILITY2, "aetherhaven.pathTool.hud.place.e"),
-                row(ToolKeybindSlot.ABILITY3, "aetherhaven.pathTool.hud.place.r")
+                row(ToolKeybindSlot.ABILITY3, "aetherhaven.pathTool.hud.place.r"),
+                row(ToolKeybindSlot.PICK, "aetherhaven.pathTool.hud.townsfolkToggle")
             );
             case Remove -> List.of(
                 row(ToolKeybindSlot.PRIMARY, "aetherhaven.pathTool.hud.remove.primary"),
