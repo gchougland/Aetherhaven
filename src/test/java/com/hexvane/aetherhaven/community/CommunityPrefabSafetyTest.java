@@ -5,7 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 import java.util.Set;
+import com.hexvane.aetherhaven.prefab.PrefabJsonStream;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -41,7 +45,57 @@ class CommunityPrefabSafetyTest {
         CommunityPrefabSafety.Result result = validate("{\"version\":8,\"blocks\":[{\"x\":0}]}".getBytes(StandardCharsets.UTF_8), Set.of(), Set.of());
 
         assertEquals(CommunityPrefabSafety.Status.MALFORMED, result.status());
+        assertEquals("Prefab blocks[0] has no string name", result.detail());
         assertFalse(result.isSafe());
+    }
+
+    @Test
+    void skipsCoordinatesAndStillValidates() {
+        byte[] json =
+            """
+            {
+              "version": 8,
+              "blockIdVersion": 8,
+              "blocks": [
+                { "x": 1, "y": 2, "z": 3, "name": "Stone" },
+                { "x": 4, "y": 5, "z": 6, "name": "Empty" }
+              ],
+              "fluids": [
+                { "x": 0, "y": 0, "z": 0, "name": "Water", "level": 0 }
+              ]
+            }
+            """
+                .getBytes(StandardCharsets.UTF_8);
+        CommunityPrefabSafety.Result result = validate(json, Set.of("Stone", "Empty"), Set.of("Water"));
+
+        assertTrue(result.isSafe());
+        assertEquals(List.of("Stone", "Empty"), result.referencedBlocks());
+        assertEquals(List.of("Water"), result.referencedFluids());
+    }
+
+    @Test
+    void validatePathStreamsDiskPrefab() throws Exception {
+        Path file = Files.createTempFile("aetherhaven-prefab-safety", ".json");
+        try {
+            Files.writeString(
+                file,
+                """
+                {"version":8,"blockIdVersion":8,"blocks":[{"name":"Stone","x":0,"y":0,"z":0}],"fluids":[]}
+                """
+            );
+            PrefabJsonStream.Scan scan = PrefabJsonStream.scan(file);
+            CommunityPrefabSafety.Result result =
+                CommunityPrefabSafety.validate(
+                    scan,
+                    versioned -> versioned.key(),
+                    Set.of("Stone")::contains,
+                    ignored -> false
+                );
+            assertTrue(result.isSafe());
+            assertEquals(List.of("Stone"), result.referencedBlocks());
+        } finally {
+            Files.deleteIfExists(file);
+        }
     }
 
     @Test

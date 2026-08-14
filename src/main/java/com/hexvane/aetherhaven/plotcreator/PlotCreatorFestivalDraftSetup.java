@@ -84,7 +84,7 @@ public final class PlotCreatorFestivalDraftSetup {
             if (worldStore != null) {
                 PrefabFootprintClearUtil.removeEntitiesInFootprint(worldStore, volume);
             }
-            PrefabFootprintClearUtil.clearFootprint(world, volume);
+            PrefabFootprintClearUtil.clearFootprint(world, volume, true);
             ConstructionAnimator.start(
                 plugin,
                 world,

@@ -81,7 +81,7 @@ public final class BardPerformanceService {
       @Nonnull BardPlaybackMode mode,
       @Nonnull String[] shuffleRemaining
   ) {
-    beginSong(store, commandBuffer, npcRef, plugin, songId, mode, shuffleRemaining, true);
+    beginSong(store, commandBuffer, npcRef, plugin, songId, mode, shuffleRemaining, true, null);
   }
 
   public static boolean startShuffle(
@@ -126,6 +126,7 @@ public final class BardPerformanceService {
             new String[0]
         );
     next.setLastParticleSpawnMs(perf.getLastParticleSpawnMs());
+    next.copyMusicOriginFrom(perf);
     putPerformanceComponent(npcRef, commandBuffer, store, next);
     return true;
   }
@@ -148,7 +149,8 @@ public final class BardPerformanceService {
               perf.getSongId(),
               BardPlaybackMode.LOOP,
               new String[0],
-              false
+              false,
+              perf
           );
       if (containerIndex != 0) {
         BardEnvironmentMusic.resendToListeningPlayers(store, commandBuffer, containerIndex);
@@ -181,7 +183,8 @@ public final class BardPerformanceService {
               nextId,
               BardPlaybackMode.SHUFFLE,
               remaining.toArray(String[]::new),
-              false
+              false,
+              perf
           );
       if (containerIndex != 0) {
         BardEnvironmentMusic.resendToListeningPlayers(store, commandBuffer, containerIndex);
@@ -228,7 +231,8 @@ public final class BardPerformanceService {
       @Nonnull String songId,
       @Nonnull BardPlaybackMode mode,
       @Nonnull String[] shuffleRemaining,
-      boolean stopPrevious
+      boolean stopPrevious,
+      @Nullable BardPerformanceComponent previous
   ) {
     if (!npcRef.isValid()) {
       return 0;
@@ -245,6 +249,11 @@ public final class BardPerformanceService {
     long endAt = System.currentTimeMillis() + song.getDurationSeconds() * 1000L;
     BardPerformanceComponent perf =
         new BardPerformanceComponent(song.getId(), endAt, musicContainerIndex, mode, shuffleRemaining);
+    if (previous != null && previous.hasMusicOrigin()) {
+      perf.copyMusicOriginFrom(previous);
+    } else {
+      captureMusicOrigin(npcRef, store, perf);
+    }
     putPerformanceComponent(npcRef, commandBuffer, store, perf);
     applyPerformanceVisuals(npcRef, store, commandBuffer);
     spawnNoteParticles(npcRef, store, commandBuffer, perf);
@@ -343,6 +352,19 @@ public final class BardPerformanceService {
     spawnPerformanceNoteParticles(tc, store);
     perf.setLastParticleSpawnMs(System.currentTimeMillis());
     putPerformanceComponent(npcRef, commandBuffer, store, perf);
+  }
+
+  private static void captureMusicOrigin(
+      @Nonnull Ref<EntityStore> npcRef,
+      @Nonnull Store<EntityStore> store,
+      @Nonnull BardPerformanceComponent perf
+  ) {
+    TransformComponent tc = store.getComponent(npcRef, TransformComponent.getComponentType());
+    if (tc == null) {
+      return;
+    }
+    Vector3d pos = tc.getPosition();
+    perf.setMusicOrigin(pos.x, pos.y, pos.z);
   }
 
   private static void putPerformanceComponent(

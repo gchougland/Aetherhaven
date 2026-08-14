@@ -251,8 +251,7 @@ public final class CommunityDownloadService {
                 Files.write(installedPrefab, prefab);
                 wrotePrefabThisAttempt = true;
             }
-            CommunityPrefabSafety.Result installedSafety =
-                CommunityPrefabSafety.validate(Files.readAllBytes(installedPrefab));
+            CommunityPrefabSafety.Result installedSafety = CommunityPrefabSafety.validate(installedPrefab);
             if (!installedSafety.isSafe()) {
                 if (wrotePrefabThisAttempt) {
                     Files.deleteIfExists(installedPrefab);

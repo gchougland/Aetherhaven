@@ -47,6 +47,9 @@
 
 ### Fixed
 
+- **Hallow's Eve maze** Glowing orbs stay in the path instead of sliding into the hedges.
+- **Hallow's Eve maze** Starting the maze faces you toward the middle, even if the festival square is turned.
+- **Community downloads** Downloading a marketplace building no longer freezes the game on very large prefabs.
 - **Community downloads** Website download counts go up once per save or server, not each time you remove and download the same building.
 - **Tourist portal** After you finish the tourist portal building, the portal now lights up in your town color and works without you having to replace the block by hand.
 - **Battle horn** Nearby players see you blow the horn.

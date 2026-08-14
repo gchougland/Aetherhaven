@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.UUID;
+import org.joml.Vector3d;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -28,6 +29,20 @@ final class HallowsEveRewardsTest {
         assertEquals(4, HallowsEveRewards.candyCount(8));
         assertEquals(6, HallowsEveRewards.candyCount(12));
         assertEquals(12, HallowsEveRewards.candyCount(24));
+    }
+
+    @Test
+    void mazeStartYawLooksTowardTheCenterEvenAfterSquareRotation() {
+        Vector3d start = new Vector3d(14.5, 6.0, 2.5);
+        Vector3d center = new Vector3d(1.5, 7.0, 1.5);
+        float yaw = HallowsEveTeleport.yawDegreesToward(start, center);
+        assertEquals(Math.toDegrees(Math.atan2(13.0, 1.0)), yaw, 0.01);
+
+        // Prefab 90 degree rotation: (x, z) -> (z, -x), then block-center offset.
+        Vector3d startRotated = new Vector3d(2.5, 6.0, -13.5);
+        Vector3d centerRotated = new Vector3d(1.5, 7.0, -0.5);
+        float yawRotated = HallowsEveTeleport.yawDegreesToward(startRotated, centerRotated);
+        assertEquals(yaw + 90.0, yawRotated, 0.01);
     }
 
     @Test

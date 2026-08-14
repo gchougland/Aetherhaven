@@ -47,6 +47,18 @@ public final class BardPerformanceComponent implements Component<EntityStore> {
                 c -> c.shuffleRemaining
             )
             .add()
+            .append(
+                new KeyedCodec<>("HasMusicOrigin", Codec.BOOLEAN),
+                (c, v) -> c.hasMusicOrigin = v != null && v,
+                c -> c.hasMusicOrigin
+            )
+            .add()
+            .append(new KeyedCodec<>("OriginX", Codec.DOUBLE), (c, v) -> c.originX = v, c -> c.originX)
+            .add()
+            .append(new KeyedCodec<>("OriginY", Codec.DOUBLE), (c, v) -> c.originY = v, c -> c.originY)
+            .add()
+            .append(new KeyedCodec<>("OriginZ", Codec.DOUBLE), (c, v) -> c.originZ = v, c -> c.originZ)
+            .add()
             .build();
 
     @Nullable
@@ -75,6 +87,10 @@ public final class BardPerformanceComponent implements Component<EntityStore> {
     private BardPlaybackMode playbackMode = BardPlaybackMode.ONCE;
     @Nonnull
     private String[] shuffleRemaining = new String[0];
+    private boolean hasMusicOrigin;
+    private double originX;
+    private double originY;
+    private double originZ;
 
     public BardPerformanceComponent() {}
 
@@ -135,12 +151,43 @@ public final class BardPerformanceComponent implements Component<EntityStore> {
         return shuffleRemaining.clone();
     }
 
+    public boolean hasMusicOrigin() {
+        return hasMusicOrigin;
+    }
+
+    public double getOriginX() {
+        return originX;
+    }
+
+    public double getOriginY() {
+        return originY;
+    }
+
+    public double getOriginZ() {
+        return originZ;
+    }
+
+    public void setMusicOrigin(double x, double y, double z) {
+        hasMusicOrigin = true;
+        originX = x;
+        originY = y;
+        originZ = z;
+    }
+
+    public void copyMusicOriginFrom(@Nonnull BardPerformanceComponent other) {
+        if (!other.hasMusicOrigin) {
+            return;
+        }
+        setMusicOrigin(other.originX, other.originY, other.originZ);
+    }
+
     @Nullable
     @Override
     public Component<EntityStore> clone() {
         BardPerformanceComponent c =
             new BardPerformanceComponent(songId, endAtEpochMs, ambienceFxIndex, playbackMode, shuffleRemaining);
         c.lastParticleSpawnMs = lastParticleSpawnMs;
+        c.copyMusicOriginFrom(this);
         return c;
     }
 }

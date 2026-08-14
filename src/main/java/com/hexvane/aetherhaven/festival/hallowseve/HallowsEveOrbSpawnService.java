@@ -5,30 +5,49 @@ import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import com.hexvane.aetherhaven.festival.FestivalPrefabSwapService;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Holder;
+import com.hypixel.hytale.component.NonSerialized;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.math.shape.Box;
 import com.hypixel.hytale.math.vector.Rotation3f;
+import com.hypixel.hytale.server.core.asset.type.model.config.Model;
+import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.modules.entity.component.BoundingBox;
+import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
+import com.hypixel.hytale.server.core.modules.entity.component.Intangible;
+import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
+import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.item.ItemComponent;
+import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
+import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.npc.NPCPlugin;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.joml.Vector3d;
 
 /** Spawns maze orbs from festival JSON and clears leftover ice essence markers. */
 public final class HallowsEveOrbSpawnService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final double DEDUPE_DIST_SQ = 0.25;
+
+    /** From {@code Aetherhaven_Festival_Maze_Orb} hitbox Min/Max. */
+    private static final Box ORB_BOX = new Box(-0.35, 0.0, -0.35, 0.35, 0.75, 0.35);
+
+    /** JSON cells sit one block above the walkway; keep a small hover after dropping them. */
+    private static final double SPAWN_Y_OFFSET = -1.0 + 0.35;
 
     private HallowsEveOrbSpawnService() {}
 
@@ -48,12 +67,12 @@ public final class HallowsEveOrbSpawnService {
         List<Vector3d> fromJson = new ArrayList<>();
         for (FestivalDefinition.OrbSpawnRow row : festival.getOrbSpawns()) {
             fromJson.add(
-                FestivalPrefabSwapService.spotWorldPositionAuthorLocal(
+                FestivalPrefabSwapService.spotWorldPosition(
                     plugin,
                     festivalPlot,
-                    row.getLocalX(),
-                    row.getLocalY(),
-                    row.getLocalZ()
+                    (int) Math.round(row.getLocalX()),
+                    (int) Math.round(row.getLocalY()),
+                    (int) Math.round(row.getLocalZ())
                 )
             );
         }
@@ -129,28 +148,64 @@ public final class HallowsEveOrbSpawnService {
             return;
         }
         var entityStore = world.getEntityStore();
-        NPCPlugin npcPlugin = NPCPlugin.get();
-        if (entityStore == null || npcPlugin == null) {
+        if (entityStore == null) {
+            return;
+        }
+        ModelAsset asset = ModelAsset.getAssetMap().getAsset(HallowsEveIds.ORB_MODEL_ASSET_ID);
+        if (asset == null) {
+            LOGGER.atWarning().log("Hallow's Eve maze orb model missing: %s", HallowsEveIds.ORB_MODEL_ASSET_ID);
             return;
         }
         despawnRaceOrbs(world, townId);
         Store<EntityStore> store = entityStore.getStore();
         session.clearActiveOrbs();
         for (Vector3d stored : session.orbWorldPositionsView()) {
-            Vector3d pos = new Vector3d(stored);
-            var pair = npcPlugin.spawnNPC(store, HallowsEveIds.ORB_NPC_ROLE, null, pos, Rotation3f.ZERO);
-            if (pair == null) {
-                continue;
-            }
-            Ref<EntityStore> ref = pair.first();
-            HallowsEveOrbComponent orb = new HallowsEveOrbComponent();
-            orb.setTownId(townId);
-            store.putComponent(ref, HallowsEveOrbComponent.getComponentType(), orb);
-            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-            if (uc != null) {
-                session.addActiveOrb(uc.getUuid());
+            Vector3d pos = new Vector3d(stored.x, stored.y + SPAWN_Y_OFFSET, stored.z);
+            UUID entityUuid = spawnStillOrb(store, townId, pos, asset);
+            if (entityUuid != null) {
+                session.addActiveOrb(entityUuid);
             }
         }
+    }
+
+    @Nullable
+    private static UUID spawnStillOrb(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID townId,
+        @Nonnull Vector3d pos,
+        @Nonnull ModelAsset asset
+    ) {
+        Model model = Model.createUnitScaleModel(asset);
+        UUID entityUuid = UUID.randomUUID();
+        Holder<EntityStore> holder = EntityStore.REGISTRY.newHolder();
+        holder.addComponent(TransformComponent.getComponentType(), new TransformComponent(pos, Rotation3f.ZERO));
+        holder.addComponent(HeadRotation.getComponentType(), new HeadRotation(Rotation3f.ZERO));
+        holder.addComponent(ModelComponent.getComponentType(), new ModelComponent(model));
+        holder.addComponent(
+            PersistentModel.getComponentType(),
+            new PersistentModel(
+                new Model.ModelReference(
+                    HallowsEveIds.ORB_MODEL_ASSET_ID,
+                    model.getScale(),
+                    model.getRandomAttachmentIds(),
+                    false
+                )
+            )
+        );
+        holder.addComponent(BoundingBox.getComponentType(), new BoundingBox(ORB_BOX));
+        holder.addComponent(NetworkId.getComponentType(), new NetworkId(store.getExternalData().takeNextNetworkId()));
+        holder.addComponent(Velocity.getComponentType(), new Velocity());
+        holder.addComponent(UUIDComponent.getComponentType(), new UUIDComponent(entityUuid));
+        holder.addComponent(Intangible.getComponentType(), Intangible.INSTANCE);
+        holder.addComponent(EntityStore.REGISTRY.getNonSerializedComponentType(), NonSerialized.get());
+        HallowsEveOrbComponent orb = new HallowsEveOrbComponent();
+        orb.setTownId(townId);
+        holder.addComponent(HallowsEveOrbComponent.getComponentType(), orb);
+        Ref<EntityStore> ref = store.addEntity(holder, AddReason.SPAWN);
+        if (ref == null || !ref.isValid()) {
+            return null;
+        }
+        return entityUuid;
     }
 
     public static void despawnRaceOrbs(@Nonnull World world, @Nonnull UUID townId) {

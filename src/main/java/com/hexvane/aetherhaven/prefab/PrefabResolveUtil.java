@@ -126,7 +126,7 @@ public final class PrefabResolveUtil {
     private static Path safeCommunityPath(@Nonnull Path file) {
         Path normalized = file.toAbsolutePath().normalize();
         try {
-            return CommunityPrefabSafety.validate(Files.readAllBytes(normalized)).isSafe() ? normalized : null;
+            return CommunityPrefabSafety.validate(normalized).isSafe() ? normalized : null;
         } catch (Exception e) {
             return null;
         }

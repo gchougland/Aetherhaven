@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.festival.hallowseve;
 import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
+import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.plugin.DialogueActionRegistry;
 import com.hexvane.aetherhaven.plugin.DialogueConditionRegistry;
@@ -95,15 +96,9 @@ public final class HallowsEveDialogueHandlers {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin != null && session.getStartX() == 0.0 && session.getStartY() == 0.0 && session.getStartZ() == 0.0) {
             var square = FestivalService.findFestivalSquare(plugin, town);
-            if (square != null) {
-                var pos = com.hexvane.aetherhaven.festival.FestivalPrefabSwapService.spotWorldPosition(
-                    plugin,
-                    square,
-                    13,
-                    6,
-                    2
-                );
-                session.setStartPad(pos.x, pos.y, pos.z, 270f);
+            FestivalDefinition festival = plugin.getFestivalCatalog().get(HallowsEveIds.FESTIVAL_ID);
+            if (square != null && festival != null) {
+                HallowsEveTeleport.bindStartPad(plugin, square, festival, session);
             }
         }
         out.setCloseDialogue(true);

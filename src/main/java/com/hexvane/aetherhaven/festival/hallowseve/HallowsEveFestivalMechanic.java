@@ -3,7 +3,6 @@ package com.hexvane.aetherhaven.festival.hallowseve;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import com.hexvane.aetherhaven.festival.FestivalMechanic;
-import com.hexvane.aetherhaven.festival.FestivalPrefabSwapService;
 import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -39,18 +38,7 @@ public final class HallowsEveFestivalMechanic implements FestivalMechanic {
         if (square == null) {
             square = festivalPlot;
         }
-        FestivalDefinition.MazeStartLocalRow start = festival.getMazeStartLocal();
-        if (start != null) {
-            var pos =
-                FestivalPrefabSwapService.spotWorldPosition(
-                    plugin,
-                    square,
-                    start.getLocalX(),
-                    start.getLocalY(),
-                    start.getLocalZ()
-                );
-            session.setStartPad(pos.x, pos.y, pos.z, start.getYawDegrees());
-        }
+        HallowsEveTeleport.bindStartPad(plugin, square, festival, session);
         HallowsEveOrbSpawnService.captureMarkers(world, square, festival, session);
         HallowsEvePumpkinSpawnService.spawnCenterpiece(world, town, square, festival);
     }

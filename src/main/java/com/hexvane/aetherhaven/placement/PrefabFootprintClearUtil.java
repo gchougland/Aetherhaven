@@ -26,6 +26,7 @@ import org.joml.Vector3d;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
 import com.hypixel.hytale.server.core.universe.world.SetBlockSettings;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.ChunkColumn;
@@ -213,7 +214,7 @@ public final class PrefabFootprintClearUtil {
             )) {
                 continue;
             }
-            forceClearBlockCell(world, bx, by, bz);
+            forceClearBlockCell(world, bx, by, bz, false);
             forceClearProductionStorageAt(world, bx, by, bz);
         }
         ConstructionPasteOps.clearAllFluidsInPrefabFootprint(
@@ -244,13 +245,26 @@ public final class PrefabFootprintClearUtil {
     }
 
     public static void clearFootprint(@Nonnull World world, @Nonnull PlotFootprintRecord fp) {
+        clearFootprint(world, fp, false);
+    }
+
+    /**
+     * @param discardContainerContents when true, chests and other item containers are emptied before the block entity
+     *     is removed so contents are not spilled on the ground. Festival swaps use this so maze secret chests stay
+     *     secret. Town teardown leaves this false so players can still recover stored items.
+     */
+    public static void clearFootprint(
+        @Nonnull World world,
+        @Nonnull PlotFootprintRecord fp,
+        boolean discardContainerContents
+    ) {
         Store<ChunkStore> fluidStore = world.getChunkStore().getStore();
         for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
             for (int y = fp.getMinY(); y <= fp.getMaxY(); y++) {
                 for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
                     // Prefer setBlock over breakBlock so multi-block furniture (aquariums, etc.) always loses its
                     // block-entity. Orphan block entities keep ticking and can restore fluids/props after teardown.
-                    forceClearBlockCell(world, x, y, z);
+                    forceClearBlockCell(world, x, y, z, discardContainerContents);
                     WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
                     if (chunk != null) {
                         clearFluidAtColumn(fluidStore, chunk, x, y, z);
@@ -281,7 +295,7 @@ public final class PrefabFootprintClearUtil {
                     if (!clearedBases.add(key)) {
                         continue;
                     }
-                    forceClearBlockCell(world, base.x, base.y, base.z);
+                    forceClearBlockCell(world, base.x, base.y, base.z, false);
                 }
             }
         }
@@ -294,7 +308,7 @@ public final class PrefabFootprintClearUtil {
             return;
         }
         BlockPosition base = productionStorageBaseBlock(world, wx, wy, wz);
-        forceClearBlockCell(world, base.x, base.y, base.z);
+        forceClearBlockCell(world, base.x, base.y, base.z, false);
     }
 
     /**
@@ -358,7 +372,13 @@ public final class PrefabFootprintClearUtil {
         return ((long) x & 0x3FFFFFFL) << 38 | ((long) y & 0xFFFL) << 26 | (long) z & 0x3FFFFFFL;
     }
 
-    private static void forceClearBlockCell(@Nonnull World world, int x, int y, int z) {
+    private static void forceClearBlockCell(
+        @Nonnull World world,
+        int x,
+        int y,
+        int z,
+        boolean discardContainerContents
+    ) {
         WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
         if (chunk == null) {
             return;
@@ -366,6 +386,9 @@ public final class PrefabFootprintClearUtil {
         // Grab any block-entity before setBlock; some clears leave the chunk-store entity alive (aquarium heartbeat
         // then restores fluid/fish after teardown).
         Ref<ChunkStore> blockEntityRef = chunk.getBlockComponentEntity(x, y, z);
+        if (discardContainerContents && blockEntityRef != null && blockEntityRef.isValid()) {
+            discardItemContainerContents(world, blockEntityRef);
+        }
         chunk.setBlock(
             x,
             y,
@@ -379,5 +402,21 @@ public final class PrefabFootprintClearUtil {
         if (blockEntityRef != null && blockEntityRef.isValid()) {
             world.getChunkStore().getStore().removeEntity(blockEntityRef, RemoveReason.REMOVE);
         }
+    }
+
+    /**
+     * Item containers dump their stacks when the block entity is removed. Empty them first so festival teardown does
+     * not spill chest loot onto the square.
+     */
+    private static void discardItemContainerContents(
+        @Nonnull World world,
+        @Nonnull Ref<ChunkStore> blockEntityRef
+    ) {
+        ItemContainerBlock containerBlock =
+            world.getChunkStore().getStore().getComponent(blockEntityRef, ItemContainerBlock.getComponentType());
+        if (containerBlock == null || containerBlock.getItemContainer() == null) {
+            return;
+        }
+        containerBlock.getItemContainer().dropAllItemStacks();
     }
 }

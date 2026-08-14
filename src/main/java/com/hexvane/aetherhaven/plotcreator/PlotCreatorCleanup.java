@@ -59,7 +59,7 @@ public final class PlotCreatorCleanup {
             () -> {
                 Store<EntityStore> entityStore = world.getEntityStore().getStore();
                 PrefabFootprintClearUtil.removeEntitiesInFootprint(entityStore, fp);
-                PrefabFootprintClearUtil.clearFootprint(world, fp);
+                PrefabFootprintClearUtil.clearFootprint(world, fp, true);
             }
         );
     }

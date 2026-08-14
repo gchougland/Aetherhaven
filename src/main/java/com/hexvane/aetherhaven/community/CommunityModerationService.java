@@ -219,7 +219,7 @@ public final class CommunityModerationService {
         if (CommunityPaths.isInstalled(plugin.getDataDirectory(), proposedId)) {
             Path installed = CommunityPaths.installedPrefabFile(plugin.getDataDirectory(), proposedId);
             try {
-                CommunityPrefabSafety.Result safety = CommunityPrefabSafety.validate(Files.readAllBytes(installed));
+                CommunityPrefabSafety.Result safety = CommunityPrefabSafety.validate(installed);
                 return safety.isSafe()
                     ? CommunityDownloadService.InstallResult.SUCCESS
                     : CommunityDownloadService.InstallResult.UNSAFE_PREFAB;
@@ -239,7 +239,7 @@ public final class CommunityModerationService {
             Path previewPrefab = CommunityPaths.moderationPreviewPrefabFile(dataDir, entry.getSubmissionId());
             if (Files.isRegularFile(previewPrefab)) {
                 CommunityPrefabSafety.Result safety =
-                    CommunityPrefabSafety.validate(Files.readAllBytes(previewPrefab));
+                    CommunityPrefabSafety.validate(previewPrefab);
                 if (!safety.isSafe()) {
                     LOGGER.atWarning().log(
                         "Moderation review install refused for %s: %s",
@@ -322,7 +322,7 @@ public final class CommunityModerationService {
         }
         Path preview = CommunityPaths.moderationPreviewPrefabFile(plugin.getDataDirectory(), entry.getSubmissionId());
         try {
-            if (!Files.isRegularFile(preview) || !CommunityPrefabSafety.validate(Files.readAllBytes(preview)).isSafe()) {
+            if (!Files.isRegularFile(preview) || !CommunityPrefabSafety.validate(preview).isSafe()) {
                 LOGGER.atWarning().log("Moderation approval refused for %s: no validated preview", submissionId);
                 return false;
             }

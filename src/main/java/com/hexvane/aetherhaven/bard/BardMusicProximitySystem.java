@@ -26,6 +26,8 @@ import javax.annotation.Nonnull;
  * after vanilla {@link ForcedMusicSystems.Tick} so only nearby players hear the performance.
  * Clears forced music only for players this system marked as listening; does not wipe
  * trigger-volume or command forced music.
+ * <p>Listeners use a larger leave radius so standing at the edge, or the bard walking a few
+ * blocks toward another player, does not resend the track and restart it.
  */
 public final class BardMusicProximitySystem extends EntityTickingSystem<EntityStore> {
     @Nonnull
@@ -79,12 +81,14 @@ public final class BardMusicProximitySystem extends EntityTickingSystem<EntitySt
 
         UUID playerId = uuidComponent.getUuid();
         BardMusicProximityState proximityState = store.getResource(BardMusicProximityState.getResourceType());
+        boolean alreadyListening = proximityState.isListening(playerId);
 
         var pos = transform.getPosition();
-        int desiredContainer = performances.nearestMusic(pos.x, pos.y, pos.z).musicContainerIndex();
+        int desiredContainer =
+            performances.nearestMusic(pos.x, pos.y, pos.z, alreadyListening).musicContainerIndex();
         int have = tracker.getCurrentContainerIndex();
         BardForcedMusicOwnership.Decision decision =
-            BardForcedMusicOwnership.decide(desiredContainer, have, proximityState.isListening(playerId));
+            BardForcedMusicOwnership.decide(desiredContainer, have, alreadyListening);
 
         if (decision.updateTracker()) {
             BardEnvironmentMusic.setForcedMusic(

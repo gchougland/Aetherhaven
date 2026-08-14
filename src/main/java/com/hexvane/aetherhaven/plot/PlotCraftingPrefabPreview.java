@@ -17,7 +17,6 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -44,7 +43,7 @@ public final class PlotCraftingPrefabPreview {
             return;
         }
         try {
-            if (!CommunityPrefabSafety.validate(Files.readAllBytes(resolved)).isSafe()) {
+            if (!CommunityPrefabSafety.validate(resolved).isSafe()) {
                 clear(playerRef);
                 return;
             }

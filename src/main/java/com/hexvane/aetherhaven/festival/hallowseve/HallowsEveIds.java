@@ -16,7 +16,7 @@ public final class HallowsEveIds {
     public static final String MERCHANT_NPC_ROLE = "Aetherhaven_Festival_Hallows_Eve_Merchant";
     public static final String PUMPKIN_NPC_ROLE = "Aetherhaven_Festival_Jack_Lantern";
     public static final String PUMPKIN_MODEL_ASSET_ID = "Aetherhaven_Festival_Jack_Lantern";
-    public static final String ORB_NPC_ROLE = "Aetherhaven_Festival_Maze_Orb";
+    public static final String ORB_MODEL_ASSET_ID = "Aetherhaven_Festival_Maze_Orb";
 
     public static final String HUD_KEY = "AetherhavenHallowsEveMaze";
     public static final String ROOT_INTERACTION_BURST = "Aetherhaven_Festival_Jack_Lantern_Burst_Root";

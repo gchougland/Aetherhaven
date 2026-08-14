@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
+import com.hexvane.aetherhaven.prefab.PrefabJsonStream;
 import com.hypixel.hytale.assetstore.AssetPack;
 import com.hypixel.hytale.assetstore.map.DefaultAssetMap;
 import com.hypixel.hytale.common.plugin.PluginManifest;
@@ -85,12 +86,22 @@ public final class CommunityRequiredMods {
      */
     @Nonnull
     public static List<RequiredMod> computeFromPrefabBytes(@Nonnull byte[] prefabBytes) {
-        CommunityPrefabSafety.Result safety = CommunityPrefabSafety.validate(prefabBytes);
+        PrefabJsonStream.Scan scan = PrefabJsonStream.scan(prefabBytes);
+        CommunityPrefabSafety.Result safety = CommunityPrefabSafety.validate(scan);
         if (!safety.isSafe()) {
             throw new IllegalArgumentException(safety.detail());
         }
-        JsonObject root = GSON.fromJson(new String(prefabBytes, StandardCharsets.UTF_8), JsonObject.class);
-        return computeFromPrefabJson(root, safety.referencedBlocks(), safety.referencedFluids());
+        Set<String> candidateKeys = new LinkedHashSet<>();
+        for (String name : scan.blockNames()) {
+            candidateKeys.add(CommunityPrefabSafety.normalizeChanceName(name));
+        }
+        for (String name : scan.fluidNames()) {
+            candidateKeys.add(CommunityPrefabSafety.normalizeChanceName(name));
+        }
+        candidateKeys.addAll(scan.entityAssetStrings());
+        candidateKeys.addAll(safety.referencedBlocks());
+        candidateKeys.addAll(safety.referencedFluids());
+        return resolveRequiredMods(candidateKeys);
     }
 
     @Nonnull
@@ -110,7 +121,11 @@ public final class CommunityRequiredMods {
         collectEntityAssetStrings(root.get("entities"), candidateKeys);
         candidateKeys.addAll(migratedBlocks);
         candidateKeys.addAll(validatedFluids);
+        return resolveRequiredMods(candidateKeys);
+    }
 
+    @Nonnull
+    private static List<RequiredMod> resolveRequiredMods(@Nonnull Set<String> candidateKeys) {
         LinkedHashMap<String, String> packNamesById = new LinkedHashMap<>();
         for (String key : candidateKeys) {
             AssetSource source = resolveAssetSource(key);

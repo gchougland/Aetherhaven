@@ -72,15 +72,11 @@ public final class CommunityPreviewCache {
     }
 
     private boolean isSafe(@Nonnull Path prefabFile, @Nonnull String constructionId) {
-        try {
-            CommunityPrefabSafety.Result safety = CommunityPrefabSafety.validate(Files.readAllBytes(prefabFile));
-            if (safety.isSafe()) {
-                return true;
-            }
-            LOGGER.atWarning().log("Refused unsafe cached community preview %s: %s", constructionId, safety.detail());
-        } catch (IOException e) {
-            LOGGER.atWarning().withCause(e).log("Failed to validate cached community preview %s", constructionId);
+        CommunityPrefabSafety.Result safety = CommunityPrefabSafety.validate(prefabFile);
+        if (safety.isSafe()) {
+            return true;
         }
+        LOGGER.atWarning().log("Refused unsafe cached community preview %s: %s", constructionId, safety.detail());
         try {
             Files.deleteIfExists(prefabFile);
         } catch (IOException ignored) {

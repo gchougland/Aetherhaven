@@ -2,6 +2,5 @@
   "Type": "SingleTrack",
   "Track": "Music/zUnused/TreeFolk.ogg",
   "LoopCount": 0,
-  "Volume": 4.3,
-  "AudioCategory": "AudioCat_Music_In_Game"
+  "AudioCategory": "AudioCat_Music"
 }

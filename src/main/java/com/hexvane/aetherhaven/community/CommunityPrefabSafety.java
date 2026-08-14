@@ -1,20 +1,20 @@
 package com.hexvane.aetherhaven.community;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.hexvane.aetherhaven.prefab.PrefabJsonStream;
+import com.hexvane.aetherhaven.prefab.PrefabJsonStream.Scan;
 import com.hypixel.hytale.assetstore.map.AssetMapWithIndexes;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockMigration;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.fluid.Fluid;
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Read-only preflight for community prefab JSON.
@@ -24,7 +24,6 @@ import javax.annotation.Nonnull;
  * lock and can deadlock the game.
  */
 public final class CommunityPrefabSafety {
-    private static final Gson GSON = new Gson();
     private static final int MIN_PREFAB_VERSION = 8;
     private static final int MAX_PREFAB_VERSION = 8;
     private static final int LEGACY_BLOCK_ID_VERSION = 8;
@@ -52,25 +51,27 @@ public final class CommunityPrefabSafety {
 
     @Nonnull
     public static Result validate(@Nonnull byte[] prefabBytes) {
+        return validate(PrefabJsonStream.scan(prefabBytes));
+    }
+
+    @Nonnull
+    public static Result validate(@Nonnull Path prefabPath) {
+        Scan scan;
+        try {
+            scan = PrefabJsonStream.scan(prefabPath);
+        } catch (IOException e) {
+            return failure(Status.MALFORMED, "Prefab is not valid JSON");
+        }
+        return validate(scan);
+    }
+
+    @Nonnull
+    static Result validate(@Nonnull Scan scan) {
         return validate(
-            prefabBytes,
+            scan,
             CommunityPrefabSafety::migrateBlockKey,
-            key -> {
-                int index = BlockType.getAssetMap().getIndex(key);
-                if (index == AssetMapWithIndexes.NOT_FOUND) {
-                    return false;
-                }
-                BlockType asset = BlockType.getAssetMap().getAsset(index);
-                return asset != null && !asset.isUnknown();
-            },
-            key -> {
-                int index = Fluid.getAssetMap().getIndex(key);
-                if (index == AssetMapWithIndexes.NOT_FOUND) {
-                    return false;
-                }
-                Fluid asset = Fluid.getAssetMap().getAsset(index);
-                return asset != null && !asset.isUnknown();
-            }
+            CommunityPrefabSafety::blockExists,
+            CommunityPrefabSafety::fluidExists
         );
     }
 
@@ -81,40 +82,34 @@ public final class CommunityPrefabSafety {
         @Nonnull Function<String, Boolean> blockExists,
         @Nonnull Function<String, Boolean> fluidExists
     ) {
-        JsonObject root;
-        try {
-            root = GSON.fromJson(new String(prefabBytes, StandardCharsets.UTF_8), JsonObject.class);
-        } catch (RuntimeException e) {
-            return failure(Status.MALFORMED, "Prefab is not valid JSON");
-        }
-        if (root == null) {
-            return failure(Status.MALFORMED, "Prefab JSON root is missing");
-        }
+        return validate(PrefabJsonStream.scan(prefabBytes), blockMigration, blockExists, fluidExists);
+    }
 
-        Integer version = integer(root, "version");
+    @Nonnull
+    static Result validate(
+        @Nonnull Scan scan,
+        @Nonnull Function<VersionedKey, String> blockMigration,
+        @Nonnull Function<String, Boolean> blockExists,
+        @Nonnull Function<String, Boolean> fluidExists
+    ) {
+        if (isRootParseError(scan.malformed())) {
+            return failure(Status.MALFORMED, scan.malformed());
+        }
+        Integer version = scan.version();
         if (version == null) {
             return failure(Status.MALFORMED, "Prefab version is missing");
         }
         if (version < MIN_PREFAB_VERSION || version > MAX_PREFAB_VERSION) {
             return failure(Status.UNSUPPORTED_VERSION, "Unsupported prefab version " + version);
         }
-        int blockIdVersion = integer(root, "blockIdVersion") != null
-            ? integer(root, "blockIdVersion")
-            : LEGACY_BLOCK_ID_VERSION;
+        if (scan.malformed() != null) {
+            return failure(Status.MALFORMED, scan.malformed());
+        }
+        int blockIdVersion = scan.blockIdVersion() != null ? scan.blockIdVersion() : LEGACY_BLOCK_ID_VERSION;
 
-        Set<String> blocks = new LinkedHashSet<>();
-        Set<String> fluids = new LinkedHashSet<>();
         Set<String> unresolved = new LinkedHashSet<>();
-        String malformed = collectNames(root, "blocks", blocks);
-        if (malformed == null) {
-            malformed = collectNames(root, "fluids", fluids);
-        }
-        if (malformed != null) {
-            return failure(Status.MALFORMED, malformed);
-        }
-
         Set<String> migratedBlocks = new LinkedHashSet<>();
-        for (String raw : blocks) {
+        for (String raw : scan.blockNames()) {
             String normalized = normalizeChanceName(raw);
             String migrated;
             try {
@@ -127,7 +122,7 @@ public final class CommunityPrefabSafety {
                 unresolved.add(migrated);
             }
         }
-        for (String raw : fluids) {
+        for (String raw : scan.fluidNames()) {
             String normalized = normalizeChanceName(raw);
             if (!Boolean.TRUE.equals(fluidExists.apply(normalized))) {
                 unresolved.add(normalized);
@@ -138,7 +133,7 @@ public final class CommunityPrefabSafety {
             unresolved.isEmpty() ? Status.SAFE : Status.UNRESOLVED_ASSETS,
             List.copyOf(unresolved),
             List.copyOf(migratedBlocks),
-            List.copyOf(fluids),
+            List.copyOf(scan.fluidNames()),
             unresolved.isEmpty() ? "" : "Unresolved prefab assets: " + String.join(", ", unresolved)
         );
     }
@@ -147,6 +142,24 @@ public final class CommunityPrefabSafety {
     static String normalizeChanceName(@Nonnull String name) {
         int percent = name.indexOf('%');
         return percent >= 0 && percent < name.length() - 1 ? name.substring(percent + 1).trim() : name.trim();
+    }
+
+    private static boolean blockExists(@Nonnull String key) {
+        int index = BlockType.getAssetMap().getIndex(key);
+        if (index == AssetMapWithIndexes.NOT_FOUND) {
+            return false;
+        }
+        BlockType asset = BlockType.getAssetMap().getAsset(index);
+        return asset != null && !asset.isUnknown();
+    }
+
+    private static boolean fluidExists(@Nonnull String key) {
+        int index = Fluid.getAssetMap().getIndex(key);
+        if (index == AssetMapWithIndexes.NOT_FOUND) {
+            return false;
+        }
+        Fluid asset = Fluid.getAssetMap().getAsset(index);
+        return asset != null && !asset.isUnknown();
     }
 
     @Nonnull
@@ -162,47 +175,8 @@ public final class CommunityPrefabSafety {
         return key;
     }
 
-    private static String collectNames(
-        @Nonnull JsonObject root,
-        @Nonnull String field,
-        @Nonnull Set<String> output
-    ) {
-        JsonElement value = root.get(field);
-        if (value == null || value.isJsonNull()) {
-            return null;
-        }
-        if (!value.isJsonArray()) {
-            return "Prefab " + field + " must be an array";
-        }
-        JsonArray values = value.getAsJsonArray();
-        for (int i = 0; i < values.size(); i++) {
-            JsonElement element = values.get(i);
-            if (!element.isJsonObject()) {
-                return "Prefab " + field + "[" + i + "] must be an object";
-            }
-            JsonElement name = element.getAsJsonObject().get("name");
-            if (name == null || !name.isJsonPrimitive() || !name.getAsJsonPrimitive().isString()) {
-                return "Prefab " + field + "[" + i + "] has no string name";
-            }
-            String key = name.getAsString().trim();
-            if (key.isEmpty()) {
-                return "Prefab " + field + "[" + i + "] has an empty name";
-            }
-            output.add(key);
-        }
-        return null;
-    }
-
-    private static Integer integer(@Nonnull JsonObject root, @Nonnull String field) {
-        JsonElement value = root.get(field);
-        if (value == null || !value.isJsonPrimitive() || !value.getAsJsonPrimitive().isNumber()) {
-            return null;
-        }
-        try {
-            return value.getAsInt();
-        } catch (RuntimeException e) {
-            return null;
-        }
+    private static boolean isRootParseError(@Nullable String detail) {
+        return "Prefab is not valid JSON".equals(detail) || "Prefab JSON root is missing".equals(detail);
     }
 
     private static Result failure(@Nonnull Status status, @Nonnull String detail) {

@@ -2175,7 +2175,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         }
         try {
             Path prefab = CommunityPaths.installedPrefabFile(plugin.getDataDirectory(), constructionId);
-            return CommunityPrefabSafety.validate(Files.readAllBytes(prefab)).isSafe();
+            return CommunityPrefabSafety.validate(prefab).isSafe();
         } catch (Exception e) {
             return false;
         }

@@ -1,13 +1,10 @@
 package com.hexvane.aetherhaven.construction.prefabmaterials;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
+import com.hexvane.aetherhaven.prefab.PrefabJsonStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.io.Reader;
+import java.io.StringReader;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -15,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /** Counts prefab blocks and applies conversion rules (mirrors {@code scripts/generate_prefab_materials.py}). */
 public final class PrefabMaterialsGenerator {
@@ -32,51 +30,53 @@ public final class PrefabMaterialsGenerator {
 
     @Nonnull
     public List<MaterialRequirement> generateFromPrefabPath(@Nonnull Path prefabPath) throws IOException {
-        String json = Files.readString(prefabPath, StandardCharsets.UTF_8);
-        return generateFromPrefabJson(json);
+        Map<String, Integer> items = new HashMap<>();
+        Map<String, Integer> resources = new HashMap<>();
+        PrefabJsonStream.forEachBlock(prefabPath, (name, filler) -> countBlock(name, filler, items, resources));
+        return toSortedRequirements(items, resources);
     }
 
     @Nonnull
     public List<MaterialRequirement> generateFromPrefabJson(@Nonnull String prefabJson) {
-        JsonObject data = JsonParser.parseString(prefabJson).getAsJsonObject();
-        JsonArray blocks = data.getAsJsonArray("blocks");
-        if (blocks == null) {
-            throw new IllegalArgumentException("No blocks array in prefab");
+        try (Reader reader = new StringReader(prefabJson)) {
+            Map<String, Integer> items = new HashMap<>();
+            Map<String, Integer> resources = new HashMap<>();
+            PrefabJsonStream.forEachBlock(reader, (name, filler) -> countBlock(name, filler, items, resources));
+            return toSortedRequirements(items, resources);
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Failed to parse prefab JSON", e);
         }
-        Map<String, Integer> items = new HashMap<>();
-        Map<String, Integer> resources = new HashMap<>();
-        for (JsonElement el : blocks) {
-            if (!el.isJsonObject()) {
-                continue;
-            }
-            JsonObject b = el.getAsJsonObject();
-            if (b.has("filler") && !b.get("filler").isJsonNull()) {
-                int filler = b.get("filler").getAsInt();
-                if (filler != 0) {
-                    continue;
-                }
-            }
-            if (!b.has("name") || !b.get("name").isJsonPrimitive()) {
-                continue;
-            }
-            String raw = b.get("name").getAsString();
-            String itemId = PrefabBlockNormalizer.normalizeBlockToItemId(raw);
-            if (itemId == null) {
-                continue;
-            }
-            ConversionRule rule = conversions.lookup(itemId);
-            if (rule != null) {
-                if (rule.skip) {
-                    continue;
-                }
-                for (OutputSpec spec : rule.outputs) {
-                    addOutput(items, resources, spec, 1);
-                }
-                continue;
-            }
-            items.merge(itemId, 1, Integer::sum);
+    }
+
+    private void countBlock(
+        @Nullable String rawName,
+        @Nullable Integer filler,
+        @Nonnull Map<String, Integer> items,
+        @Nonnull Map<String, Integer> resources
+    ) {
+        if (filler != null && filler != 0) {
+            return;
         }
-        return toSortedRequirements(items, resources);
+        if (rawName == null) {
+            return;
+        }
+        String itemId = PrefabBlockNormalizer.normalizeBlockToItemId(rawName);
+        if (itemId == null) {
+            return;
+        }
+        ConversionRule rule = conversions.lookup(itemId);
+        if (rule != null) {
+            if (rule.skip) {
+                return;
+            }
+            for (OutputSpec spec : rule.outputs) {
+                addOutput(items, resources, spec, 1);
+            }
+            return;
+        }
+        items.merge(itemId, 1, Integer::sum);
     }
 
     private static void addOutput(
