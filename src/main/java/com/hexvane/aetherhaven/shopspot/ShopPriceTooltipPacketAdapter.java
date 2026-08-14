@@ -12,6 +12,7 @@ import com.hypixel.hytale.server.core.io.adapter.PacketAdapters;
 import com.hypixel.hytale.server.core.io.adapter.PacketFilter;
 import com.hypixel.hytale.server.core.io.adapter.PlayerPacketFilter;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -88,9 +89,14 @@ public final class ShopPriceTooltipPacketAdapter {
         if (section == null || section.items == null || section.items.isEmpty()) {
             return;
         }
-        for (ItemWithAllMetadata item : section.items.values()) {
-            if (item != null) {
-                ShopPriceTooltipWire.applyToPacketItem(item, catalog);
+        for (Map.Entry<Integer, ItemWithAllMetadata> entry : section.items.entrySet()) {
+            ItemWithAllMetadata item = entry.getValue();
+            if (item == null) {
+                continue;
+            }
+            ItemWithAllMetadata copy = ShopPriceTooltipWire.copyWithFooter(item, catalog);
+            if (copy != null) {
+                entry.setValue(copy);
             }
         }
     }

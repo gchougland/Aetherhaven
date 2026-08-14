@@ -11,6 +11,7 @@ import com.hypixel.hytale.server.core.asset.type.item.config.metadata.ItemDispla
 import com.hypixel.hytale.server.core.util.MessageUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.bson.BsonArray;
 import org.bson.BsonDocument;
 import org.bson.BsonValue;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,6 +70,48 @@ class ShopPriceTooltipMessagesTest {
         assertTrue(plain.contains("Sharpness III"));
         assertTrue(hasPriceFooter(twice));
         assertEquals(1, countMessageId(twice, PRICE_KEY), "expected single price footer node");
+        assertTrue(
+            childrenZeroDepth(descriptionDocument(twice)) <= 8,
+            "idempotent merge must not grow Description.Children[0] nesting"
+        );
+    }
+
+    @Test
+    void mergeFooter_repeatedMergesStayShallow() {
+        BsonDocument meta = metadataWithDisplay(CUSTOM_TEXT, null);
+
+        BsonDocument current = meta;
+        for (int i = 0; i < 80; i++) {
+            current = ShopPriceTooltipMessages.mergeFooterIntoMetadata(current.clone(), ITEM_ID, pricedCatalog);
+        }
+
+        assertTrue(descriptionPlainText(current).contains("Sharpness III"));
+        assertEquals(1, countMessageId(current, PRICE_KEY), "expected single price footer node after repeated merges");
+        int depth = childrenZeroDepth(descriptionDocument(current));
+        assertTrue(depth <= 8, () -> "expected Children[0] depth <= 8 after 80 merges, got " + depth);
+    }
+
+    @Test
+    void mergeFooter_unwrapsLeftoverJoinWrappers() {
+        BsonDocument inner = Message.CODEC.encode(Message.raw(CUSTOM_TEXT), new ExtraInfo()).asDocument();
+        for (int i = 0; i < 20; i++) {
+            BsonDocument wrap = new BsonDocument();
+            BsonArray children = new BsonArray();
+            children.add(inner);
+            wrap.put("Children", children);
+            inner = wrap;
+        }
+        BsonDocument meta = new BsonDocument();
+        BsonDocument display = new BsonDocument();
+        display.put("Description", inner);
+        meta.put(ItemDisplayMetadata.KEY, display);
+
+        BsonDocument merged = ShopPriceTooltipMessages.mergeFooterIntoMetadata(meta, ITEM_ID, pricedCatalog);
+
+        assertTrue(descriptionPlainText(merged).contains("Sharpness III"));
+        assertEquals(1, countMessageId(merged, PRICE_KEY));
+        int depth = childrenZeroDepth(descriptionDocument(merged));
+        assertTrue(depth <= 8, () -> "expected unwrap of leftover join roots, got Children[0] depth " + depth);
     }
 
     @Test
@@ -181,6 +224,24 @@ class ShopPriceTooltipMessagesTest {
     @Nonnull
     private static BsonDocument descriptionDocument(@Nonnull BsonDocument metadata) {
         return metadata.getDocument(ItemDisplayMetadata.KEY).getDocument("Description");
+    }
+
+    /** Length of the {@code Children[0].Children[0]...} chain (client JSON max depth is 64). */
+    private static int childrenZeroDepth(@Nonnull BsonDocument node) {
+        int depth = 0;
+        BsonDocument current = node;
+        while (true) {
+            BsonValue children = current.get("Children");
+            if (children == null || !children.isArray() || children.asArray().isEmpty()) {
+                return depth;
+            }
+            BsonValue first = children.asArray().get(0);
+            if (!first.isDocument()) {
+                return depth;
+            }
+            depth++;
+            current = first.asDocument();
+        }
     }
 
     private static boolean isMarkupEnabled(@Nonnull BsonDocument node) {

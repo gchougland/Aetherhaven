@@ -43,7 +43,8 @@ public final class ShopPriceTooltipMessages {
 
     /**
      * Merges the catalog shop-value footer into packet/UI metadata. Only items with an explicit catalog entry are
-     * changed. Idempotent: strips any prior footer before appending once.
+     * changed. Idempotent: if a shop footer is already present the document is returned unchanged; otherwise any prior
+     * footer is stripped (and leftover join wrappers unwrapped) before appending once.
      */
     @Nonnull
     public static BsonDocument mergeFooterIntoMetadata(
@@ -58,6 +59,9 @@ public final class ShopPriceTooltipMessages {
         Message footer = footerFor(baseId, catalog);
         if (footer == null) {
             return metadata != null ? metadata : new BsonDocument();
+        }
+        if (metadata != null && hasShopPriceFooter(metadata)) {
+            return metadata;
         }
         BsonDocument meta = metadata != null ? metadata.clone() : new BsonDocument();
         Message body = resolveBaseDescription(meta, baseId);
@@ -193,14 +197,80 @@ public final class ShopPriceTooltipMessages {
         return assetMap != null ? assetMap.getAsset(itemId) : null;
     }
 
+    private static boolean hasShopPriceFooter(@Nonnull BsonDocument metadata) {
+        ItemDisplayMetadata display = decodeDisplay(metadata);
+        if (display == null || display.getDescription() == null) {
+            return false;
+        }
+        return containsFooterMessageId(display.getDescription().getFormattedMessage());
+    }
+
+    private static boolean containsFooterMessageId(@Nonnull FormattedMessage node) {
+        if (isFooterFormatted(node)) {
+            return true;
+        }
+        if (node.children != null) {
+            for (FormattedMessage child : node.children) {
+                if (containsFooterMessageId(child)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @Nonnull
     private static Message stripShopPriceFooter(@Nonnull Message message) {
         FormattedMessage root = message.getFormattedMessage().clone();
         stripTrailingFooterNodes(root);
+        root = unwrapTrivialJoinRoots(root);
         if (isFormattedEmpty(root)) {
             return Message.raw("");
         }
         return new Message(root);
+    }
+
+    /** Drop empty join roots left after stripping a trailing footer ({@code Children: [body]}). */
+    @Nonnull
+    private static FormattedMessage unwrapTrivialJoinRoots(@Nonnull FormattedMessage node) {
+        while (isTrivialSingleChildWrapper(node)) {
+            node = node.children[0];
+        }
+        return node;
+    }
+
+    private static boolean isTrivialSingleChildWrapper(@Nonnull FormattedMessage node) {
+        if (node.children == null || node.children.length != 1) {
+            return false;
+        }
+        if (node.messageId != null && !node.messageId.isBlank()) {
+            return false;
+        }
+        if (node.rawText != null && !node.rawText.isEmpty()) {
+            return false;
+        }
+        if (node.color != null && !node.color.isBlank()) {
+            return false;
+        }
+        if (Boolean.TRUE.equals(node.bold)
+            || Boolean.TRUE.equals(node.italic)
+            || Boolean.TRUE.equals(node.monospace)
+            || Boolean.TRUE.equals(node.underlined)) {
+            return false;
+        }
+        if (node.link != null && !node.link.isBlank()) {
+            return false;
+        }
+        if (node.image != null) {
+            return false;
+        }
+        if (node.params != null && !node.params.isEmpty()) {
+            return false;
+        }
+        if (node.messageParams != null && !node.messageParams.isEmpty()) {
+            return false;
+        }
+        return true;
     }
 
     private static void stripTrailingFooterNodes(@Nonnull FormattedMessage node) {

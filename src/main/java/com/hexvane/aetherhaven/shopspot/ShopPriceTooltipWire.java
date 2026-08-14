@@ -12,17 +12,31 @@ public final class ShopPriceTooltipWire {
 
     private ShopPriceTooltipWire() {}
 
-    public static void applyToPacketItem(@Nonnull ItemWithAllMetadata item, @Nonnull ShopPriceCatalog catalog) {
-        if (item.itemId == null || item.itemId.isEmpty()) {
-            return;
+    /**
+     * Returns a detached copy with the shop-price footer, or {@code null} if the packet item should be left as-is.
+     * Never mutates {@code item} — inventory packets reuse {@code ItemStack.cachedPacket}.
+     */
+    @Nullable
+    public static ItemWithAllMetadata copyWithFooter(
+        @Nonnull ItemWithAllMetadata item,
+        @Nonnull ShopPriceCatalog catalog
+    ) {
+        if (item.itemId.isEmpty()) {
+            return null;
         }
         String before = item.metadata;
         BsonDocument meta = parseMetadata(before);
         BsonDocument merged = ShopPriceTooltipMessages.mergeFooterIntoMetadata(meta, item.itemId, catalog);
         String after = merged.toJson();
-        if (!Objects.equals(before, after)) {
-            item.metadata = after;
+        if (Objects.equals(before, after)) {
+            return null;
         }
+        if ((before == null || before.isBlank()) && merged.isEmpty()) {
+            return null;
+        }
+        ItemWithAllMetadata copy = new ItemWithAllMetadata(item);
+        copy.metadata = after;
+        return copy;
     }
 
     public static boolean applyToItemStackDocument(@Nonnull BsonDocument stackDoc, @Nonnull ShopPriceCatalog catalog) {

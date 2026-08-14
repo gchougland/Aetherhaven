@@ -263,11 +263,15 @@ public final class JewelryTooltipPacketAdapter {
             if (item == null || item.itemId == null || item.itemId.isEmpty()) {
                 continue;
             }
-            applyToPacketItem(item, newVirtual);
+            applyToPacketItem(entry, newVirtual);
         }
     }
 
-    private void applyToPacketItem(@Nonnull ItemWithAllMetadata item, @Nonnull Map<String, ItemBase> newVirtual) {
+    private void applyToPacketItem(
+        @Nonnull Map.Entry<Integer, ItemWithAllMetadata> entry,
+        @Nonnull Map<String, ItemBase> newVirtual
+    ) {
+        ItemWithAllMetadata item = entry.getValue();
         String itemId = item.itemId;
         String baseId = itemId;
         if (JewelryVirtualItemRegistry.isVirtualId(itemId)) {
@@ -291,7 +295,9 @@ public final class JewelryTooltipPacketAdapter {
         }
         newVirtual.put(virtualId, virtualBase);
         if (!virtualId.equals(item.itemId)) {
-            item.itemId = virtualId;
+            ItemWithAllMetadata copy = new ItemWithAllMetadata(item);
+            copy.itemId = virtualId;
+            entry.setValue(copy);
         }
     }
 

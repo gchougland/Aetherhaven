@@ -253,7 +253,10 @@ public final class PlotTokenIconPacketAdapter {
             if (item == null || item.itemId == null || item.itemId.isEmpty()) {
                 continue;
             }
-            PlotTokenIconWire.applyToPacketItem(item, virtualItems, newVirtual);
+            ItemWithAllMetadata copy = new ItemWithAllMetadata(item);
+            if (PlotTokenIconWire.applyToPacketItem(copy, virtualItems, newVirtual)) {
+                entry.setValue(copy);
+            }
         }
     }
 
