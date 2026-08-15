@@ -3,16 +3,22 @@ package com.hexvane.aetherhaven.festival.hallowseve;
 import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
 import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.plugin.DialogueActionRegistry;
 import com.hexvane.aetherhaven.plugin.DialogueConditionRegistry;
+import com.hexvane.aetherhaven.shopspot.ShopSpotBuyerPayment;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -33,6 +39,7 @@ public final class HallowsEveDialogueHandlers {
 
         DialogueActionRegistry actions = plugin.getDialogueActionRegistry();
         actions.register("hallows_eve_maze_start", HallowsEveDialogueHandlers::mazeStart);
+        actions.register("hallows_eve_open_scoreboard", HallowsEveDialogueHandlers::openScoreboard);
     }
 
     private static boolean mazeCanStart(
@@ -84,17 +91,47 @@ public final class HallowsEveDialogueHandlers {
     ) {
         TownRecord town = resolveTown(playerRef, store, npcRef);
         UUID playerUuid = playerUuid(playerRef, store);
-        if (town == null || playerUuid == null || !isHallowsEveActive(town)) {
+        Player player = store.getComponent(playerRef, Player.getComponentType());
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (town == null || playerUuid == null || player == null || plugin == null || !isHallowsEveActive(town)) {
             out.setGotoNodeId("maze_busy");
             return;
         }
         HallowsEveSession session = HallowsEveSessionIndex.getOrCreate(town.getTownId());
-        if (!session.tryBegin(playerUuid, System.currentTimeMillis())) {
+        if (!session.canStart(playerUuid)) {
             out.setGotoNodeId("maze_busy");
             return;
         }
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin != null && session.getStartX() == 0.0 && session.getStartY() == 0.0 && session.getStartZ() == 0.0) {
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, playerUuid);
+        boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, playerUuid);
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        if (inv == null
+            || !GoldCoinPayment.canAfford(payerTown, inv, HallowsEveIds.MAZE_COST_GOLD, allowTreasury)) {
+            out.setGotoNodeId("maze_need_gold");
+            return;
+        }
+        SpendBreakdown paid =
+            GoldCoinPayment.trySpendReturningBreakdown(
+                payerTown, inv, HallowsEveIds.MAZE_COST_GOLD, allowTreasury
+            );
+        if (paid == null) {
+            out.setGotoNodeId("maze_need_gold");
+            return;
+        }
+        if (!session.tryBegin(playerUuid, System.currentTimeMillis())) {
+            GoldCoinPayment.refund(payerTown, player, playerRef, store, paid);
+            if (payerTown != null) {
+                tm.updateTown(payerTown);
+            }
+            out.setGotoNodeId("maze_busy");
+            return;
+        }
+        if (payerTown != null) {
+            tm.updateTown(payerTown);
+        }
+        if (session.getStartX() == 0.0 && session.getStartY() == 0.0 && session.getStartZ() == 0.0) {
             var square = FestivalService.findFestivalSquare(plugin, town);
             FestivalDefinition festival = plugin.getFestivalCatalog().get(HallowsEveIds.FESTIVAL_ID);
             if (square != null && festival != null) {
@@ -102,6 +139,17 @@ public final class HallowsEveDialogueHandlers {
             }
         }
         out.setCloseDialogue(true);
+    }
+
+    private static void openScoreboard(
+        @Nonnull JsonObject action,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull DialogueActionBatchResult out,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        out.setCloseDialogue(true);
+        out.setOpenHallowsEveLeaderboardAfterClose(true);
     }
 
     private static boolean isHallowsEveActive(@Nonnull TownRecord town) {

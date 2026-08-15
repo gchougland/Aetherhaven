@@ -134,8 +134,9 @@ public final class PlotCreatorJsonWriter {
         return out;
     }
 
+    /** Build cost rows as the construction JSON stores them, shared with the wall style writer. */
     @Nonnull
-    private static List<Map<String, Object>> materialMaps(@Nonnull List<MaterialRequirement> materials) {
+    static List<Map<String, Object>> materialMaps(@Nonnull List<MaterialRequirement> materials) {
         List<Map<String, Object>> out = new ArrayList<>();
         for (MaterialRequirement m : materials) {
             Map<String, Object> row = new LinkedHashMap<>();

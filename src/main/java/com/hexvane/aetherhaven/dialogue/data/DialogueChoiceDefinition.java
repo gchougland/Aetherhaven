@@ -261,6 +261,7 @@ public final class DialogueChoiceDefinition {
                  "open_blacksmith_repair",
                  "open_geode_ui",
                  "open_jewelry_appraisal",
+                 "market_open_stall",
                  "start_quest",
                  "gift_villager",
                  "goto",

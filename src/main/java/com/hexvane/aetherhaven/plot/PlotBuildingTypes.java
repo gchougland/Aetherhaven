@@ -19,6 +19,8 @@ import javax.annotation.Nullable;
 public final class PlotBuildingTypes {
     /** Sentinel filter id for decoration plots. */
     public static final String DECORATION = "decoration";
+    /** Sentinel filter id for wall pieces, which are grouped into styles rather than crafted one at a time. */
+    public static final String WALLS = "walls";
 
     private PlotBuildingTypes() {}
 
@@ -49,6 +51,10 @@ public final class PlotBuildingTypes {
     @Nonnull
     public static Set<String> typeIdsOf(@Nonnull ConstructionDefinition def) {
         LinkedHashSet<String> out = new LinkedHashSet<>();
+        if (def.isWallSegment()) {
+            out.add(WALLS);
+            return out;
+        }
         if (def.isDecorationPlot()) {
             out.add(DECORATION);
             return out;
@@ -84,7 +90,24 @@ public final class PlotBuildingTypes {
         @Nullable Collection<String> countsAsConstructionIds,
         @Nullable String constructionId
     ) {
+        return typeIdsOf(decorationPlot, false, countsAsConstructionIds, constructionId);
+    }
+
+    /**
+     * @param wallSegment true when the entry is one piece of a wall style
+     */
+    @Nonnull
+    public static Set<String> typeIdsOf(
+        boolean decorationPlot,
+        boolean wallSegment,
+        @Nullable Collection<String> countsAsConstructionIds,
+        @Nullable String constructionId
+    ) {
         LinkedHashSet<String> out = new LinkedHashSet<>();
+        if (wallSegment) {
+            out.add(WALLS);
+            return out;
+        }
         if (decorationPlot
             || (constructionId != null && constructionId.trim().toLowerCase(Locale.ROOT).startsWith("plot_decoration"))) {
             out.add(DECORATION);
@@ -136,7 +159,13 @@ public final class PlotBuildingTypes {
     public static List<String> craftableTypeIds(@Nonnull ConstructionCatalog catalog) {
         TreeSet<String> ids = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
         boolean anyDecoration = false;
+        boolean anyWall = false;
         for (ConstructionDefinition def : catalog.list()) {
+            // Wall pieces are not craftable on their own, but the marketplace still needs a Walls filter.
+            if (def.isWallSegment()) {
+                anyWall = true;
+                continue;
+            }
             if (!PlotCraftingCatalog.isCraftable(def)) {
                 continue;
             }
@@ -145,7 +174,7 @@ public final class PlotBuildingTypes {
                 continue;
             }
             // Canonical cores only (no countsAs): House, Inn, Town Hall, …
-            if (!def.getCountsAsConstructionIds().isEmpty() || def.isWallSegment()) {
+            if (!def.getCountsAsConstructionIds().isEmpty()) {
                 continue;
             }
             String self = normalize(def.getId());
@@ -157,6 +186,9 @@ public final class PlotBuildingTypes {
         if (anyDecoration) {
             out.add(DECORATION);
         }
+        if (anyWall) {
+            out.add(WALLS);
+        }
         out.addAll(ids);
         return out;
     }
@@ -165,6 +197,9 @@ public final class PlotBuildingTypes {
     public static String displayLabel(@Nonnull ConstructionCatalog catalog, @Nonnull String typeId) {
         if (DECORATION.equalsIgnoreCase(typeId)) {
             return "Decorations";
+        }
+        if (WALLS.equalsIgnoreCase(typeId)) {
+            return "Walls";
         }
         ConstructionDefinition def = catalog.get(typeId);
         if (def != null && def.getDisplayName() != null && !def.getDisplayName().isBlank()) {

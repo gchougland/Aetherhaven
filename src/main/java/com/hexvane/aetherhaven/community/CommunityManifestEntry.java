@@ -33,6 +33,14 @@ public final class CommunityManifestEntry {
     @SerializedName("decorationPlot")
     private boolean decorationPlot;
 
+    /** One piece of a wall style. Wall entries are grouped by {@link #styleId} into a single bench card. */
+    @SerializedName("wallSegment")
+    private boolean wallSegment;
+
+    /** Which job the piece does in its style: segment, gate, tower_end, tower_straight, tower_corner. */
+    @SerializedName("wallPieceRole")
+    private String wallPieceRole;
+
     /** String or array of core construction ids this variant counts as. */
     @SerializedName("countsAsConstructionId")
     private com.google.gson.JsonElement countsAsConstructionId;
@@ -139,10 +147,22 @@ public final class CommunityManifestEntry {
         return List.copyOf(out);
     }
 
-    /** Type filter keys: decoration or core countsAs / self id. */
+    public boolean isWallSegment() {
+        return wallSegment;
+    }
+
+    /** Role inside the wall style, or null on entries that are not wall pieces. */
+    @Nullable
+    public com.hexvane.aetherhaven.wall.WallPieceRole getWallPieceRole() {
+        return com.hexvane.aetherhaven.wall.WallPieceRole.fromSerialized(wallPieceRole);
+    }
+
+    /** Type filter keys: walls, decoration, or core countsAs / self id. */
     @Nonnull
     public Set<String> getTypeIds() {
-        return PlotBuildingTypes.typeIdsOf(isDecorationPlot(), getCountsAsConstructionIds(), getId());
+        return PlotBuildingTypes.typeIdsOf(
+            isDecorationPlot(), isWallSegment(), getCountsAsConstructionIds(), getId()
+        );
     }
 
     public int getBlockIdVersion() {

@@ -36,6 +36,9 @@ import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.hexvane.aetherhaven.calendar.VillagerBirthdayGreetingPicker;
 import com.hexvane.aetherhaven.calendar.VillagerBirthdayService;
 import com.hexvane.aetherhaven.festival.FestivalDialogueGreetings;
+import com.hexvane.aetherhaven.festival.market.MarketIds;
+import com.hexvane.aetherhaven.festival.market.MarketSession;
+import com.hexvane.aetherhaven.festival.market.MarketSessionIndex;
 import com.hexvane.aetherhaven.festival.treeclimb.TreeClimbSession;
 import com.hexvane.aetherhaven.festival.treeclimb.TreeClimbSessionIndex;
 import com.hexvane.aetherhaven.villager.data.VillagerGreetingPicker;
@@ -103,6 +106,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
     private static final String ICON_MUSICAL_NOTE = "UI/Custom/musical-note.png";
     private static final String ICON_FOLLOW = "UI/Custom/man-walking.png";
     private static final String ICON_TELEPORT = "UI/Custom/teleport.png";
+    private static final String ICON_MARKET = "UI/Custom/market.png";
     private static final String LANG_FOLLOW_START =
         "aetherhaven_dialogue_follow.aetherhaven.dialogue.follow.start";
     private static final String LANG_FOLLOW_STOP =
@@ -982,6 +986,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         }
         choices.addAll(node.getChoices());
         injectFollowChoice(choices, playerRef, store);
+        injectMarketChoices(choices, playerRef, store);
         return choices;
     }
 
@@ -1045,6 +1050,139 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             }
         }
         choices.add(insertAt, follow);
+    }
+
+    private void injectMarketChoices(
+        @Nonnull List<DialogueChoiceDefinition> choices,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        if (!"main_hub".equals(nodeId) || npcRef == null || !npcRef.isValid()) {
+            return;
+        }
+        TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+        UUIDComponent npcUuid = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        if (binding == null || npcUuid == null) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        World world = store.getExternalData().getWorld();
+        if (plugin == null || world == null) {
+            return;
+        }
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.getTown(binding.getTownId());
+        if (town == null || !MarketIds.FESTIVAL_ID.equals(town.getActiveFestivalId())) {
+            return;
+        }
+        MarketSession session = MarketSessionIndex.getOrCreate(town.getTownId());
+        if (TownVillagerBinding.KIND_ELDER.equalsIgnoreCase(binding.getKind())) {
+            insertMarketHowChoice(choices);
+            if (session.isJudging()) {
+                insertMarketChoice(
+                    choices,
+                    "market_walking",
+                    "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.choice.walking",
+                    null,
+                    null
+                );
+            } else if (session.isJudged()) {
+                insertMarketChoice(
+                    choices,
+                    "market_results",
+                    "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.choice.results",
+                    "market_claim_results",
+                    ICON_MARKET
+                );
+                insertMarketChoice(
+                    choices,
+                    "market_scoreboard",
+                    "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.choice.scoreboard",
+                    "market_open_scoreboard",
+                    ICON_MARKET
+                );
+            } else {
+                insertMarketChoice(
+                    choices,
+                    "market_fill",
+                    "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.choice.fill",
+                    "market_open_stall",
+                    ICON_MARKET
+                );
+                insertMarketChoice(
+                    choices,
+                    "market_start",
+                    "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.choice.start",
+                    "market_start_judging",
+                    ICON_MARKET
+                );
+            }
+        }
+        if (session.isVendor(npcUuid.getUuid())) {
+            String shopId = MarketIds.shopIdForKind(binding.getKind());
+            if (!shopId.isEmpty()) {
+                insertMarketShopChoice(choices, shopId);
+            }
+        }
+    }
+
+    private void insertMarketChoice(
+        @Nonnull List<DialogueChoiceDefinition> choices,
+        @Nonnull String id,
+        @Nonnull String textKey,
+        @Nullable String actionType,
+        @Nullable String icon
+    ) {
+        DialogueChoiceDefinition choice = new DialogueChoiceDefinition();
+        choice.setId(id);
+        choice.setText(textKey);
+        choice.setNext(null);
+        if (icon != null && !icon.isBlank()) {
+            choice.setIcon(icon);
+        }
+        List<JsonObject> actions = new ArrayList<>();
+        if (actionType != null) {
+            JsonObject action = new JsonObject();
+            action.addProperty("type", actionType);
+            actions.add(action);
+        }
+        JsonObject close = new JsonObject();
+        close.addProperty("type", "close");
+        actions.add(close);
+        choice.setActions(actions);
+        choices.add(insertBeforeClose(choices), choice);
+    }
+
+    private void insertMarketHowChoice(@Nonnull List<DialogueChoiceDefinition> choices) {
+        DialogueChoiceDefinition choice = new DialogueChoiceDefinition();
+        choice.setId("market_how");
+        choice.setText("aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.choice.how");
+        choice.setNext("market_how");
+        choice.setIcon(ICON_MARKET);
+        choices.add(insertBeforeClose(choices), choice);
+    }
+
+    private void insertMarketShopChoice(@Nonnull List<DialogueChoiceDefinition> choices, @Nonnull String shopId) {
+        DialogueChoiceDefinition choice = new DialogueChoiceDefinition();
+        choice.setId("market_shop");
+        choice.setText("aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.choice.shop");
+        choice.setNext(null);
+        choice.setIcon(ICON_MARKET);
+        JsonObject action = new JsonObject();
+        action.addProperty("type", "open_barter_shop");
+        action.addProperty("shop", shopId);
+        choice.setActions(List.of(action));
+        choices.add(insertBeforeClose(choices), choice);
+    }
+
+    private static int insertBeforeClose(@Nonnull List<DialogueChoiceDefinition> choices) {
+        for (int i = 0; i < choices.size(); i++) {
+            DialogueChoiceDefinition ch = choices.get(i);
+            if (ch.closesDialogue() || ch.endsConversation()) {
+                return i;
+            }
+        }
+        return choices.size();
     }
 
     @Nullable
@@ -1148,6 +1286,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             case "repair" -> ICON_BLACKSMITH_REPAIR;
             case "geode" -> ICON_GEODE_OPEN;
             case "music" -> ICON_MUSICAL_NOTE;
+            case "market" -> ICON_MARKET;
             default -> trimmed;
         };
     }
@@ -1264,6 +1403,8 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                 || batch.isOpenGeodePageAfterClose()
                 || batch.isOpenJewelryAppraisalAfterClose()
                 || batch.isOpenTreeClimbLeaderboardAfterClose()
+                || batch.isOpenHallowsEveLeaderboardAfterClose()
+                || batch.isOpenMarketLeaderboardAfterClose()
                 || batch.hasAfterClose()) {
                 finishClose(ref, store, world, batch);
                 return;
@@ -1277,6 +1418,8 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             || batch.isOpenGeodePageAfterClose()
             || batch.isOpenJewelryAppraisalAfterClose()
             || batch.isOpenTreeClimbLeaderboardAfterClose()
+            || batch.isOpenHallowsEveLeaderboardAfterClose()
+            || batch.isOpenMarketLeaderboardAfterClose()
             || batch.hasAfterClose()) {
             finishClose(ref, store, world, batch);
             return;
@@ -1375,6 +1518,34 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                     return;
                 }
                 player.getPageManager().openCustomPage(pref, st, new TreeClimbLeaderboardPage(pr));
+            });
+        } else if (world != null && batch.isOpenHallowsEveLeaderboardAfterClose()) {
+            world.execute(() -> {
+                Ref<EntityStore> pref = playerRef.getReference();
+                if (pref == null || !pref.isValid()) {
+                    return;
+                }
+                Store<EntityStore> st = pref.getStore();
+                Player player = st.getComponent(pref, Player.getComponentType());
+                PlayerRef pr = st.getComponent(pref, PlayerRef.getComponentType());
+                if (player == null || pr == null) {
+                    return;
+                }
+                player.getPageManager().openCustomPage(pref, st, new HallowsEveLeaderboardPage(pr));
+            });
+        } else if (world != null && batch.isOpenMarketLeaderboardAfterClose()) {
+            world.execute(() -> {
+                Ref<EntityStore> pref = playerRef.getReference();
+                if (pref == null || !pref.isValid()) {
+                    return;
+                }
+                Store<EntityStore> st = pref.getStore();
+                Player player = st.getComponent(pref, Player.getComponentType());
+                PlayerRef pr = st.getComponent(pref, PlayerRef.getComponentType());
+                if (player == null || pr == null) {
+                    return;
+                }
+                player.getPageManager().openCustomPage(pref, st, new MarketLeaderboardPage(pr));
             });
         } else if (world != null && batch.hasAfterClose()) {
             Runnable after = batch.getAfterClose();

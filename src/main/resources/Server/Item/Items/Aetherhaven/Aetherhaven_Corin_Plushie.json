@@ -1,0 +1,99 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Corin_Plushie.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Corin_Plushie.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Corin_Plushie.png",
+  "Categories": [
+    "Blocks.Deco",
+    "Aetherhaven.All"
+  ],
+  "Recipe": null,
+  "MaxStack": 8,
+  "Set": "Aetherhaven",
+  "Interactions": {
+    "Primary": "Block_Primary",
+    "Secondary": "Block_Secondary"
+  },
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Model",
+    "Opacity": "Transparent",
+    "CustomModel": "Blocks/Villager_Plushies/Villager_Plush.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Villager_Plushies/Plushie_Innkeeper.png",
+        "Weight": 1
+      }
+    ],
+    "Group": "Wood",
+    "HitboxType": "Plant_Full",
+    "VariantRotation": "NESW",
+    "Flags": {},
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Woods"
+      }
+    },
+    "BlockParticleSetId": "Stone",
+    "BlockSoundSetId": "Plushie",
+    "PhysicalMaterialId": "Wool",
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "Simple",
+            "Effects": {
+              "WorldSoundEventId": "SFX_Plushie_Build"
+            }
+          }
+        ]
+      }
+    },
+    "Support": {
+      "Down": [
+        {
+          "FaceType": "Full"
+        }
+      ],
+      "Up": [
+        {
+          "FaceType": "Full"
+        }
+      ],
+      "East": [
+        {
+          "FaceType": "Full"
+        }
+      ],
+      "West": [
+        {
+          "FaceType": "Full"
+        }
+      ]
+    },
+    "TextureComputedColor": "#C4A484"
+  },
+  "PlayerAnimationsId": "Block",
+  "IconProperties": {
+    "Scale": 0.685,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      -1.7,
+      -13.1
+    ]
+  },
+  "Tags": {
+    "Type": [
+      "Deco"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

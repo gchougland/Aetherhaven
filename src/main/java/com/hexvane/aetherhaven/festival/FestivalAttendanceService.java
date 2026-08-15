@@ -2,6 +2,9 @@ package com.hexvane.aetherhaven.festival;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
+import com.hexvane.aetherhaven.festival.market.MarketIds;
+import com.hexvane.aetherhaven.festival.market.MarketSession;
+import com.hexvane.aetherhaven.festival.market.MarketSessionIndex;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -9,6 +12,7 @@ import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
@@ -17,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -102,6 +107,39 @@ public final class FestivalAttendanceService {
         }
     }
 
+    /** Interrupts specific villagers so they pick up a new festival spot. */
+    public static void interruptVillagerUuids(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull List<UUID> villagerUuids
+    ) {
+        if (villagerUuids.isEmpty()) {
+            return;
+        }
+        Set<UUID> wanted = new HashSet<>(villagerUuids);
+        long now = VillagerAutonomySystem.resolveAutonomyNowMs(store);
+        List<Ref<EntityStore>> targets = new ArrayList<>();
+        store.forEachChunk(
+            Query.and(TownVillagerBinding.getComponentType(), UUIDComponent.getComponentType()),
+            (chunk, commandBuffer) -> {
+                for (int i = 0; i < chunk.size(); i++) {
+                    UUIDComponent uc = chunk.getComponent(i, UUIDComponent.getComponentType());
+                    if (uc == null || !wanted.contains(uc.getUuid())) {
+                        continue;
+                    }
+                    Ref<EntityStore> ref = chunk.getReferenceTo(i);
+                    if (ref != null && ref.isValid()) {
+                        targets.add(ref);
+                    }
+                }
+            }
+        );
+        for (Ref<EntityStore> ref : targets) {
+            if (ref.isValid()) {
+                VillagerAutonomySystem.resetAutonomyForRescue(ref, store, now);
+            }
+        }
+    }
+
     /** True when this villager kind is expected at the running festival. */
     public static boolean hasFestivalSpot(
         @Nonnull World world,
@@ -120,10 +158,41 @@ public final class FestivalAttendanceService {
         @Nullable TownRecord town,
         @Nullable String residentKind
     ) {
-        if (town == null || residentKind == null || residentKind.isBlank()) {
+        return findSpot(world, plugin, town, residentKind, null);
+    }
+
+    /**
+     * Festival stand for this villager. Assigned Market Festival vendors walk to their {@code market_shop} pad
+     * even though their binding kind is still farmer, florist, and so on.
+     */
+    @Nullable
+    public static PoiEntry findSpot(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nullable TownRecord town,
+        @Nullable String residentKind,
+        @Nullable UUID villagerUuid
+    ) {
+        if (town == null) {
             return null;
         }
         if (town.getActiveFestivalId() == null || town.getActiveFestivalSpotPoiIds().isEmpty()) {
+            return null;
+        }
+        if (villagerUuid != null && MarketIds.FESTIVAL_ID.equals(town.getActiveFestivalId())) {
+            MarketSession session = MarketSessionIndex.get(town.getTownId());
+            if (session != null) {
+                int vendorIndex = session.vendorIndex(villagerUuid);
+                if (vendorIndex >= 0) {
+                    PoiEntry shop =
+                        FestivalSpotService.findNthSpotForKind(world, plugin, town, MarketIds.KIND_MARKET_SHOP, vendorIndex);
+                    if (shop != null) {
+                        return shop;
+                    }
+                }
+            }
+        }
+        if (residentKind == null || residentKind.isBlank()) {
             return null;
         }
         return FestivalSpotService.findSpotForKind(world, plugin, town, residentKind);

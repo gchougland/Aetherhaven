@@ -1,31 +1,56 @@
 package com.hexvane.aetherhaven.wall;
 
-import com.hexvane.aetherhaven.AetherhavenConstants;
-import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import java.util.EnumSet;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector3i;
 
 /**
- * Pure wall-wand chaining logic (anchors, rotations, tower connections, allowed pads). No world/plugin/UI
- * dependencies beyond prefab math types.
+ * Wall wand chaining: where the next piece sits, how it is turned, and which direction pads are open. Everything comes
+ * from the authored connection points of the pieces in the chosen {@link WallStyle}, so there is only one rule for
+ * every direction and every piece pairing.
  */
 public final class WallPlacementChainPlanner {
     public enum PieceKind {
         SEGMENT,
         GATE,
-        TOWER
+        TOWER;
+
+        @Nonnull
+        public WallPieceRole roleForFirstPiece() {
+            return switch (this) {
+                case GATE -> WallPieceRole.GATE;
+                case TOWER -> WallPieceRole.TOWER_END;
+                default -> WallPieceRole.SEGMENT;
+            };
+        }
     }
 
+    /**
+     * @param placedTowerConnectionDirs doors this tower had when it went down, before the run carried on through it.
+     *     A tower that started with one door can still be reshaped while it is the last piece, so this is what decides
+     *     which way the run may leave it.
+     */
     public record ChainCommittedPiece(
         @Nonnull String constructionId,
         @Nonnull Vector3i signAnchor,
         int rotationSteps,
         @Nullable EnumSet<WallCardinal> towerConnectionDirs,
-        @Nullable WallCardinal chainExpandDir
+        @Nullable WallCardinal chainExpandDir,
+        @Nullable EnumSet<WallCardinal> placedTowerConnectionDirs
     ) {
+        public ChainCommittedPiece(
+            @Nonnull String constructionId,
+            @Nonnull Vector3i signAnchor,
+            int rotationSteps,
+            @Nullable EnumSet<WallCardinal> towerConnectionDirs,
+            @Nullable WallCardinal chainExpandDir
+        ) {
+            this(constructionId, signAnchor, rotationSteps, towerConnectionDirs, chainExpandDir, towerConnectionDirs);
+        }
+
         @Nonnull
         public Rotation prefabYaw() {
             return rotationStepsFrom(rotationSteps);
@@ -34,521 +59,222 @@ public final class WallPlacementChainPlanner {
         public boolean isTower() {
             return WallPieceGeometry.isTowerConstructionId(constructionId);
         }
+
+        /** Doors this tower can be reshaped from, which is what it was placed with. */
+        @Nullable
+        public EnumSet<WallCardinal> reshapeFromDirs() {
+            return placedTowerConnectionDirs != null ? placedTowerConnectionDirs : towerConnectionDirs;
+        }
     }
 
     public record ExpandPreviewPlan(
         @Nonnull Vector3i anchor,
         int rotationSteps,
         @Nonnull WallCardinal outgoingExpandDir,
-        @Nonnull WallCardinal positionDir,
         @Nullable WallCardinal arrivalFromSide,
         @Nullable EnumSet<WallCardinal> towerConnections,
-        @Nullable String resolvedConstructionId,
+        @Nonnull String resolvedConstructionId,
         @Nonnull EnumSet<WallCardinal> allowedExpandDirections
     ) {}
 
     private WallPlacementChainPlanner() {}
 
-    @Nonnull
+    /**
+     * Plans the piece that follows {@code committed} when the player picks the {@code outgoingExpandDir} pad. With
+     * nothing placed yet the piece stays where it is and is only turned so it carries on toward that pad.
+     */
+    @Nullable
     public static ExpandPreviewPlan planExpandPreview(
+        @Nonnull WallStyle style,
         @Nonnull Vector3i currentAnchor,
-        int currentRotationSteps,
         @Nonnull PieceKind pieceKind,
         @Nonnull List<ChainCommittedPiece> committed,
         @Nonnull WallCardinal outgoingExpandDir
     ) {
-        return planExpandPreview(
-            currentAnchor, currentRotationSteps, pieceKind, committed, outgoingExpandDir, null
-        );
-    }
-
-    @Nonnull
-    public static ExpandPreviewPlan planExpandPreview(
-        @Nonnull Vector3i currentAnchor,
-        int currentRotationSteps,
-        @Nonnull PieceKind pieceKind,
-        @Nonnull List<ChainCommittedPiece> committed,
-        @Nonnull WallCardinal outgoingExpandDir,
-        @Nullable FootprintAnchorResolver footprintResolver
-    ) {
         ChainCommittedPiece last = last(committed);
         if (last == null) {
-            boolean newIsTower = pieceKind == PieceKind.TOWER;
-            EnumSet<WallCardinal> towerConnections = null;
-            if (newIsTower) {
-                towerConnections = EnumSet.of(outgoingExpandDir);
-            }
-            String resolvedId = constructionIdFor(pieceKind, towerConnections);
-            int rot = outgoingExpandDir.rotationStepsForLocalNorthAlongAxis();
-            if (newIsTower) {
-                WallTowerPrefabResolver.ResolvedTower resolved = WallTowerPrefabResolver.resolve(towerConnections);
-                if (resolved != null) {
-                    resolvedId = resolved.constructionId();
-                    rot = resolved.rotationSteps();
-                }
+            WallStyle.ResolvedPiece first =
+                style.resolvePiece(pieceKind.roleForFirstPiece(), outgoingExpandDir, null);
+            if (first == null) {
+                return null;
             }
             return new ExpandPreviewPlan(
                 new Vector3i(currentAnchor),
-                rot,
-                outgoingExpandDir,
+                first.rotationSteps(),
                 outgoingExpandDir,
                 null,
-                towerConnections,
-                resolvedId,
+                pieceKind == PieceKind.TOWER ? EnumSet.of(outgoingExpandDir) : null,
+                first.constructionId(),
                 EnumSet.allOf(WallCardinal.class)
             );
         }
-        boolean newIsTower = pieceKind == PieceKind.TOWER;
-        WallCardinal jointDir =
-            newIsTower && !last.isTower() ? towerJointExpandDir(last, outgoingExpandDir) : outgoingExpandDir;
-        WallCardinal seatDir =
-            newIsTower && !last.isTower() ? towerSeatDirection(last, outgoingExpandDir) : jointDir;
-        WallCardinal positionDir = jointDir;
-        ChainCommittedPiece prev = previous(committed);
-        int rotationSteps = rotationStepsForChainAfter(pieceKind, last, prev, outgoingExpandDir);
-        Rotation newYaw = rotationStepsFrom(rotationSteps);
-        Vector3i anchor;
-        EnumSet<WallCardinal> towerConnections = null;
-        String resolvedId = constructionIdFor(pieceKind, towerConnections);
-        if (newIsTower) {
-            Vector3i probeAnchor =
-                computeChainedSignAnchor(
-                    last, rotationSteps, newYaw, seatDir, outgoingExpandDir, true, pieceKind, null, null
-                );
-            towerConnections =
-                towerConnectionsForOutgoing(
-                    probeAnchor, last.signAnchor(), outgoingExpandDir, last.chainExpandDir(), jointDir
-                );
-            resolvedId = resolveTowerConstructionId(towerConnections);
-            WallTowerPrefabResolver.ResolvedTower resolved = WallTowerPrefabResolver.resolve(towerConnections);
-            if (resolved != null) {
-                resolvedId = resolved.constructionId();
-                rotationSteps = resolved.rotationSteps();
-                newYaw = rotationStepsFrom(rotationSteps);
-            }
-            anchor =
-                computeChainedSignAnchor(
-                    last,
-                    rotationSteps,
-                    newYaw,
-                    seatDir,
-                    outgoingExpandDir,
-                    true,
-                    pieceKind,
-                    resolvedId,
-                    footprintResolver
-                );
-            towerConnections =
-                towerConnectionsForOutgoing(
-                    anchor, last.signAnchor(), outgoingExpandDir, last.chainExpandDir(), jointDir
-                );
-            resolvedId = resolveTowerConstructionId(towerConnections);
-        } else {
-            anchor =
-                computeChainedSignAnchor(
-                    last,
-                    rotationSteps,
-                    newYaw,
-                    positionDir,
-                    outgoingExpandDir,
-                    false,
-                    pieceKind,
-                    resolvedId,
-                    footprintResolver
-                );
+
+        WallPieceDefinition fromDef = definitionFor(style, last.constructionId());
+        if (fromDef == null) {
+            return null;
         }
-        WallCardinal arrival = positionDir.opposite();
-        EnumSet<WallCardinal> allowed =
-            allowedExpandDirections(pieceKind, committed, arrival);
+        WallCardinal entryFace = outgoingExpandDir.opposite();
+
+        EnumSet<WallCardinal> towerConnections = null;
+        WallStyle.ResolvedPiece next;
+        if (pieceKind == PieceKind.TOWER) {
+            towerConnections = EnumSet.of(entryFace);
+            next = style.resolveTower(towerConnections);
+        } else {
+            WallPieceRole role = pieceKind == PieceKind.GATE ? WallPieceRole.GATE : WallPieceRole.SEGMENT;
+            next = style.resolvePiece(role, entryFace, outgoingExpandDir);
+            next = preferRotation(next, last.rotationSteps(), entryFace, outgoingExpandDir);
+        }
+        if (next == null) {
+            return null;
+        }
+
+        Vector3i anchor =
+            WallPieceGeometry.joinedSignAnchor(
+                fromDef,
+                last.signAnchor(),
+                last.rotationSteps(),
+                outgoingExpandDir,
+                next.definition(),
+                next.rotationSteps()
+            );
+        if (anchor == null) {
+            return null;
+        }
         return new ExpandPreviewPlan(
             anchor,
-            rotationSteps,
+            next.rotationSteps(),
             outgoingExpandDir,
-            positionDir,
-            arrival,
+            entryFace,
             towerConnections,
-            resolvedId,
-            allowed
-        );
-    }
-
-    @Nonnull
-    public static ExpandPreviewPlan planAfterPlace(
-        @Nonnull ChainCommittedPiece placed,
-        @Nonnull PieceKind nextPieceKind,
-        @Nonnull WallCardinal chainExpandDir
-    ) {
-        return planExpandPreview(
-            new Vector3i(placed.signAnchor()),
-            placed.rotationSteps(),
-            nextPieceKind,
-            List.of(placed),
-            chainExpandDir
-        );
-    }
-
-    @Nonnull
-    public static Vector3i computeChainedSignAnchor(
-        @Nonnull ChainCommittedPiece last,
-        int newRotationSteps,
-        @Nonnull Rotation newYaw,
-        @Nonnull WallCardinal positionDir,
-        @Nonnull WallCardinal outgoingExpandDir,
-        boolean newPieceIsTower,
-        @Nonnull PieceKind pieceKind,
-        @Nullable String resolvedConstructionId,
-        @Nullable FootprintAnchorResolver footprintResolver
-    ) {
-        boolean lastTower = last.isTower();
-        if (newPieceIsTower && !lastTower) {
-            WallCardinal seatDir = towerSeatDirection(last, outgoingExpandDir);
-            boolean straightEndCap =
-                isStraightRunTowerAlongChain(last.chainExpandDir(), outgoingExpandDir, towerJointExpandDir(last, outgoingExpandDir));
-            if (footprintResolver != null) {
-                Vector3i footprint =
-                    footprintResolver.resolve(
-                        last, newYaw, seatDir, true, pieceKind, resolvedConstructionId
-                    );
-                if (footprint != null) {
-                    return footprint;
-                }
-            }
-            String towerId =
-                resolvedConstructionId != null
-                    ? resolvedConstructionId
-                    : AetherhavenConstants.CONSTRUCTION_PLOT_WALL_TOWER_ENDCAP_S;
-            if (straightEndCap) {
-                return WallPieceGeometry.seatTowerSignAtSegmentRunEnd(
-                    last.constructionId(),
-                    towerId,
-                    last.signAnchor(),
-                    last.prefabYaw(),
-                    newYaw,
-                    seatDir,
-                    last.signAnchor()
-                );
-            }
-            return WallPieceGeometry.nextSignPosition(
-                last.constructionId(),
-                last.signAnchor(),
-                last.prefabYaw(),
-                towerId,
-                newYaw,
-                seatDir,
-                false,
-                true
-            );
-        }
-        String newConsId =
-            resolvedConstructionId != null ? resolvedConstructionId : constructionIdFor(pieceKind, null);
-        if (lastTower != newPieceIsTower || !last.constructionId().equals(newConsId)) {
-            if (footprintResolver != null) {
-                Vector3i footprint =
-                    footprintResolver.resolve(
-                        last, newYaw, positionDir, newPieceIsTower, pieceKind, resolvedConstructionId
-                    );
-                if (footprint != null
-                    && (!newPieceIsTower
-                        || isPlausibleTowerAnchor(last.signAnchor(), footprint))) {
-                    return footprint;
-                }
-            }
-        }
-        return WallPieceGeometry.nextSignPosition(
-            last.constructionId(),
-            last.signAnchor(),
-            last.prefabYaw(),
-            newConsId,
-            newYaw,
-            positionDir,
-            lastTower,
-            newPieceIsTower
-        );
-    }
-
-    @FunctionalInterface
-    public interface FootprintAnchorResolver {
-        @Nullable
-        Vector3i resolve(
-            @Nonnull ChainCommittedPiece last,
-            @Nonnull Rotation newYaw,
-            @Nonnull WallCardinal positionDir,
-            boolean newPieceIsTower,
-            @Nonnull PieceKind pieceKind,
-            @Nullable String resolvedConstructionId
+            next.constructionId(),
+            allowedExpandDirections(style, pieceKind, committed, entryFace)
         );
     }
 
     /**
-     * Which axis to use when seating a tower on the last segment. N/S wall runs attach at the chain end (run tip);
-     * E/W runs attach on the face you clicked (N/S), not the east/west run end.
+     * Sign anchor for a tower whose connections changed after it was committed, so its join with the wall behind it
+     * stays flush.
      */
-    /**
-     * Which wall face the new tower meets. Pads on the chain axis use that run end; perpendicular pads use the
-     * long-side face you clicked (E/W on an N/S run, N/S on an E/W run).
-     */
-    /** Reject footprint anchors that collapsed to world origin or jumped far from the wall sign. */
-    public static boolean isPlausibleTowerAnchor(@Nonnull Vector3i wallSign, @Nonnull Vector3i towerSign) {
-        int dx = Math.abs(towerSign.x - wallSign.x);
-        int dz = Math.abs(towerSign.z - wallSign.z);
-        if (dx > 32 || dz > 32) {
-            return false;
-        }
-        long wallDist2 = (long) wallSign.x * wallSign.x + (long) wallSign.z * wallSign.z;
-        long towerDist2 = (long) towerSign.x * towerSign.x + (long) towerSign.z * towerSign.z;
-        return wallDist2 <= 10_000 || towerDist2 >= 256;
-    }
-
-    @Nonnull
-    public static WallCardinal towerJointExpandDir(@Nonnull ChainCommittedPiece last, @Nonnull WallCardinal outgoingExpandDir) {
-        return last.chainExpandDir() == null ? outgoingExpandDir.opposite() : outgoingExpandDir;
-    }
-
-    /**
-     * World face where the tower meets the wall segment. Straight-run pads use the pad direction (run end). Corner pads
-     * (perpendicular to the chain) keep the tower at the chain tip ({@code chainExpandDir}) while {@code outgoingExpandDir}
-     * only adds the second tower opening.
-     */
-    @Nonnull
-    public static WallCardinal towerSeatDirection(
-        @Nonnull ChainCommittedPiece last, @Nonnull WallCardinal outgoingExpandDir
+    @Nullable
+    public static Vector3i reseatUpgradedTower(
+        @Nonnull WallStyle style,
+        @Nonnull ChainCommittedPiece previous,
+        @Nonnull WallCardinal incomingFace,
+        @Nonnull WallStyle.ResolvedPiece upgraded
     ) {
-        WallCardinal jointDir = towerJointExpandDir(last, outgoingExpandDir);
-        if (last.chainExpandDir() == null) {
-            return jointDir;
+        WallPieceDefinition fromDef = definitionFor(style, previous.constructionId());
+        if (fromDef == null) {
+            return null;
         }
-        if (isStraightRunTowerAlongChain(last.chainExpandDir(), outgoingExpandDir, jointDir)) {
-            return jointDir;
-        }
-        return last.chainExpandDir();
-    }
-
-    /** Run-axis tower tab along the wall run (not a perpendicular corner). */
-    public static boolean isStraightRunTowerAlongChain(
-        @Nullable WallCardinal chainExpandDir,
-        @Nonnull WallCardinal outgoingExpandDir,
-        @Nonnull WallCardinal positionDir
-    ) {
-        return chainExpandDir != null
-            && positionDir == outgoingExpandDir
-            && (outgoingExpandDir == chainExpandDir || outgoingExpandDir == chainExpandDir.opposite());
+        return WallPieceGeometry.joinedSignAnchor(
+            fromDef,
+            previous.signAnchor(),
+            previous.rotationSteps(),
+            incomingFace.opposite(),
+            upgraded.definition(),
+            upgraded.rotationSteps()
+        );
     }
 
     /**
-     * Tower at the run tip continuing the chain (e.g. west pad on a west-going run): opens toward the existing wall and
-     * along the run (E/W or N/S passage tower), not a single-face end cap.
+     * Direction pads the player may use next. A piece can only be left through a face that carries a connection, and
+     * never back into the piece it came from, so a straight wall only ever carries on the way it is already pointing. A
+     * tower waiting on a direction is the exception: the run may leave it any way, because the tower is reshaped into
+     * the straight or corner tower that suits.
      */
-    public static boolean isStraightRunTowerContinuingChain(
-        @Nullable WallCardinal chainExpandDir,
-        @Nonnull WallCardinal outgoingExpandDir,
-        @Nonnull WallCardinal positionDir
-    ) {
-        return chainExpandDir != null && positionDir == outgoingExpandDir && outgoingExpandDir == chainExpandDir;
-    }
-
-    /** Tower at the far end of the run facing back along the chain (single opening toward the wall). */
-    public static boolean isStraightRunTowerDeadEnd(
-        @Nullable WallCardinal chainExpandDir,
-        @Nonnull WallCardinal outgoingExpandDir,
-        @Nonnull WallCardinal positionDir
-    ) {
-        return chainExpandDir != null
-            && positionDir == outgoingExpandDir
-            && outgoingExpandDir == chainExpandDir.opposite();
-    }
-
-    /** @deprecated use {@link #isStraightRunTowerAlongChain} */
-    @Deprecated
-    public static boolean isStraightRunTowerEndCap(
-        @Nullable WallCardinal chainExpandDir,
-        @Nonnull WallCardinal outgoingExpandDir,
-        @Nonnull WallCardinal positionDir
-    ) {
-        return isStraightRunTowerAlongChain(chainExpandDir, outgoingExpandDir, positionDir);
-    }
-
-    @Nonnull
-    public static EnumSet<WallCardinal> towerConnectionsForOutgoing(
-        @Nonnull Vector3i previewAnchor,
-        @Nonnull Vector3i lastSignAnchor,
-        @Nonnull WallCardinal outgoingExpandDir,
-        @Nullable WallCardinal chainExpandDir,
-        @Nonnull WallCardinal positionDir
-    ) {
-        EnumSet<WallCardinal> dirs = EnumSet.noneOf(WallCardinal.class);
-        WallCardinal incoming = WallCardinal.fromVector(previewAnchor, lastSignAnchor);
-        if (incoming != null) {
-            dirs.add(incoming);
-        } else {
-            dirs.add(outgoingExpandDir.opposite());
-        }
-        if (isStraightRunTowerContinuingChain(chainExpandDir, outgoingExpandDir, positionDir)) {
-            if (chainExpandDir != null) {
-                dirs.add(chainExpandDir);
-            }
-        } else if (!isStraightRunTowerAlongChain(chainExpandDir, outgoingExpandDir, positionDir)) {
-            dirs.add(outgoingExpandDir);
-        }
-        return dirs;
-    }
-
-    public static int rotationStepsForChainAfter(
-        @Nonnull PieceKind pieceKind,
-        @Nonnull ChainCommittedPiece last,
-        @Nullable ChainCommittedPiece previous,
-        @Nonnull WallCardinal expandDir
-    ) {
-        if (pieceKind == PieceKind.TOWER) {
-            return last.rotationSteps();
-        }
-        if (last.isTower()) {
-            if (last.towerConnectionDirs() != null
-                && last.towerConnectionDirs().size() == 1
-                && previous != null
-                && !previous.isTower()
-                && last.chainExpandDir() != null
-                && (expandDir == last.chainExpandDir() || expandDir == last.chainExpandDir().opposite())) {
-                return previous.rotationSteps();
-            }
-            if (last.towerConnectionDirs() != null && last.towerConnectionDirs().size() == 2) {
-                boolean nsThrough =
-                    last.towerConnectionDirs().contains(WallCardinal.NORTH)
-                        && last.towerConnectionDirs().contains(WallCardinal.SOUTH);
-                boolean ewThrough =
-                    last.towerConnectionDirs().contains(WallCardinal.EAST)
-                        && last.towerConnectionDirs().contains(WallCardinal.WEST);
-                if (previous != null && !previous.isTower()) {
-                    boolean prevAlongZ = (previous.rotationSteps() % 2) == 0;
-                    if (nsThrough && prevAlongZ && (expandDir == WallCardinal.NORTH || expandDir == WallCardinal.SOUTH)) {
-                        return previous.rotationSteps();
-                    }
-                    if (ewThrough && !prevAlongZ && (expandDir == WallCardinal.EAST || expandDir == WallCardinal.WEST)) {
-                        return previous.rotationSteps();
-                    }
-                }
-            }
-            return expandDir.rotationStepsForLocalNorthAlongAxis();
-        }
-        return last.rotationSteps();
-    }
-
     @Nonnull
     public static EnumSet<WallCardinal> allowedExpandDirections(
+        @Nonnull WallStyle style,
         @Nonnull PieceKind pieceKind,
         @Nonnull List<ChainCommittedPiece> committed,
         @Nullable WallCardinal arrivalFromSide
     ) {
-        EnumSet<WallCardinal> allowed = EnumSet.allOf(WallCardinal.class);
         ChainCommittedPiece last = last(committed);
-        if (pieceKind == PieceKind.TOWER && last != null && !last.isTower()) {
-            WallCardinal back =
-                last.chainExpandDir() != null ? last.chainExpandDir().opposite() : arrivalFromSide;
-            if (back != null) {
-                allowed.remove(back);
-            }
-            return allowed;
+        if (last == null) {
+            return EnumSet.allOf(WallCardinal.class);
         }
-        if (last != null && pieceKind != PieceKind.TOWER) {
-            if (last.isTower()) {
-                if (isSeededContinueFromEdit(last, committed)) {
-                    blockExpandIntoTowerOpenings(allowed, last);
-                } else {
-                    retainTowerOutgoingDirections(allowed, last, arrivalFromSide, previous(committed));
-                }
-            } else {
-                boolean alongZ = (last.rotationSteps() % 2) == 0;
-                allowed.retainAll(
-                    alongZ ? EnumSet.of(WallCardinal.NORTH, WallCardinal.SOUTH) : EnumSet.of(WallCardinal.EAST, WallCardinal.WEST)
-                );
-            }
+        WallPieceDefinition def = definitionFor(style, last.constructionId());
+        if (def == null) {
+            return EnumSet.allOf(WallCardinal.class);
         }
-        if (arrivalFromSide != null) {
-            allowed.remove(arrivalFromSide);
+        WallCardinal back = incomingFace(last, arrivalFromSide);
+        EnumSet<WallCardinal> faces = def.worldFaces(last.rotationSteps());
+        EnumSet<WallCardinal> allowed = canStillTurnAtTower(style, last) ? EnumSet.allOf(WallCardinal.class) : EnumSet.copyOf(faces);
+        if (back != null && allowed.size() > 1) {
+            allowed.remove(back);
         }
-        return allowed;
-    }
-
-    /** Single seeded piece from primary-use Continue (no {@code chainExpandDir} yet). */
-    private static boolean isSeededContinueFromEdit(
-        @Nonnull ChainCommittedPiece last, @Nonnull List<ChainCommittedPiece> committed
-    ) {
-        return committed.size() == 1 && last.chainExpandDir() == null;
+        return allowed.isEmpty() ? EnumSet.copyOf(faces) : allowed;
     }
 
     /**
-     * After Continue on an existing tower: block pads into existing openings (toward built wall), allow run
-     * continuation and corners on the other faces.
+     * Direction pads open while a tower is being lined up against the piece behind it. The tower can only sit on that
+     * piece's open face, so the pads pick where the run leaves the tower: straight on, or a turn either way. Styles
+     * without a corner tower can only carry straight on.
+     *
+     * @param attachDir direction from the piece behind to the tower
      */
-    private static void blockExpandIntoTowerOpenings(
-        @Nonnull EnumSet<WallCardinal> allowed, @Nonnull ChainCommittedPiece last
+    @Nonnull
+    public static EnumSet<WallCardinal> allowedExpandDirectionsForNewTower(
+        @Nonnull WallStyle style, @Nonnull WallCardinal attachDir
     ) {
-        if (last.towerConnectionDirs() != null) {
-            for (WallCardinal face : last.towerConnectionDirs()) {
-                allowed.remove(face);
-            }
+        if (style.piece(WallPieceRole.TOWER_CORNER) == null) {
+            return EnumSet.of(attachDir);
         }
+        EnumSet<WallCardinal> out = EnumSet.allOf(WallCardinal.class);
+        out.remove(attachDir.opposite());
+        return out;
     }
 
-    private static void retainTowerOutgoingDirections(
-        @Nonnull EnumSet<WallCardinal> allowed,
-        @Nonnull ChainCommittedPiece last,
-        @Nullable WallCardinal arrivalFromSide,
-        @Nullable ChainCommittedPiece previous
+    /**
+     * True when {@code piece} is a tower still sitting on a single door, so the run has not been sent anywhere from it
+     * yet and the wand can swap it for the straight or corner tower that suits whichever way the player picks. Once a
+     * direction is taken the tower has that door and the run carries on through it like any other piece.
+     */
+    public static boolean canStillTurnAtTower(@Nonnull WallStyle style, @Nonnull ChainCommittedPiece piece) {
+        if (!piece.isTower() || style.piece(WallPieceRole.TOWER_CORNER) == null) {
+            return false;
+        }
+        EnumSet<WallCardinal> doors = piece.towerConnectionDirs();
+        return doors != null && doors.size() == 1;
+    }
+
+    /** Face of {@code piece} that the chain arrived through, when known. */
+    @Nullable
+    public static WallCardinal incomingFace(
+        @Nonnull ChainCommittedPiece piece, @Nullable WallCardinal arrivalFromSide
     ) {
-        WallCardinal back = arrivalFromSide;
-        if (back == null && last.chainExpandDir() != null) {
-            back = last.chainExpandDir().opposite();
+        if (piece.chainExpandDir() != null) {
+            return piece.chainExpandDir().opposite();
         }
-        if (last.towerConnectionDirs() != null && !last.towerConnectionDirs().isEmpty()) {
-            EnumSet<WallCardinal> forward = EnumSet.noneOf(WallCardinal.class);
-            for (WallCardinal face : last.towerConnectionDirs()) {
-                if (back == null || face != back) {
-                    forward.add(face);
-                }
-            }
-            if (previous != null && !previous.isTower()) {
-                WallCardinal incoming = WallCardinal.fromVector(last.signAnchor(), previous.signAnchor());
-                if (incoming != null) {
-                    forward.remove(incoming);
-                }
-            }
-            if (!forward.isEmpty()) {
-                allowed.retainAll(forward);
-                return;
-            }
-            if (last.towerConnectionDirs().size() == 1 && last.chainExpandDir() != null) {
-                EnumSet<WallCardinal> exits = EnumSet.allOf(WallCardinal.class);
-                if (back != null) {
-                    exits.remove(back);
-                }
-                allowed.retainAll(exits);
-                return;
-            }
+        return arrivalFromSide;
+    }
+
+    /** Keeps a straight run visually consistent by reusing the previous rotation when it also fits. */
+    @Nullable
+    private static WallStyle.ResolvedPiece preferRotation(
+        @Nullable WallStyle.ResolvedPiece resolved,
+        int preferredSteps,
+        @Nonnull WallCardinal entryFace,
+        @Nonnull WallCardinal exitFace
+    ) {
+        if (resolved == null) {
+            return null;
         }
-        if (last.chainExpandDir() != null) {
-            allowed.retainAll(EnumSet.of(last.chainExpandDir()));
+        EnumSet<WallCardinal> faces = resolved.definition().worldFaces(preferredSteps);
+        if (faces.contains(entryFace) && faces.contains(exitFace)) {
+            return new WallStyle.ResolvedPiece(resolved.piece(), preferredSteps);
         }
+        return resolved;
     }
 
     @Nullable
-    public static String resolveTowerConstructionId(@Nullable EnumSet<WallCardinal> towerConnections) {
-        if (towerConnections == null || towerConnections.isEmpty()) {
-            return AetherhavenConstants.CONSTRUCTION_PLOT_WALL_TOWER_ENDCAP_S;
+    private static WallPieceDefinition definitionFor(@Nonnull WallStyle style, @Nonnull String constructionId) {
+        WallStyle.Piece piece = style.pieceByConstructionId(constructionId);
+        if (piece != null) {
+            return piece.definition();
         }
-        WallTowerPrefabResolver.ResolvedTower r = WallTowerPrefabResolver.resolve(towerConnections);
-        return r != null ? r.constructionId() : AetherhavenConstants.CONSTRUCTION_PLOT_WALL_TOWER_ENDCAP_S;
-    }
-
-    @Nonnull
-    private static String constructionIdFor(@Nonnull PieceKind pieceKind, @Nullable EnumSet<WallCardinal> towerConnections) {
-        if (pieceKind == PieceKind.TOWER) {
-            return resolveTowerConstructionId(towerConnections);
-        }
-        return switch (pieceKind) {
-            case GATE -> AetherhavenConstants.CONSTRUCTION_PLOT_WALL_GATE;
-            case SEGMENT -> AetherhavenConstants.CONSTRUCTION_PLOT_WALL_SEGMENT;
-            default -> AetherhavenConstants.CONSTRUCTION_PLOT_WALL_SEGMENT;
-        };
+        return WallStyleCatalog.get().definitionFor(constructionId);
     }
 
     @Nullable
@@ -556,19 +282,8 @@ public final class WallPlacementChainPlanner {
         return committed.isEmpty() ? null : committed.get(committed.size() - 1);
     }
 
-    @Nullable
-    private static ChainCommittedPiece previous(@Nonnull List<ChainCommittedPiece> committed) {
-        int n = committed.size();
-        return n >= 2 ? committed.get(n - 2) : null;
-    }
-
     @Nonnull
     public static Rotation rotationStepsFrom(int steps) {
-        return switch ((steps % 4 + 4) % 4) {
-            case 1 -> Rotation.Ninety;
-            case 2 -> Rotation.OneEighty;
-            case 3 -> Rotation.TwoSeventy;
-            default -> Rotation.None;
-        };
+        return WallCardinal.prefabYawFromSteps(steps);
     }
 }

@@ -11,6 +11,8 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3i;
@@ -46,22 +48,48 @@ public final class PlotCreatorCleanup {
 
     /** Clears the temporary building-editor paste (full footprint) on the world thread. */
     private static void clearBuildingEditorPaste(@Nonnull World world, @Nonnull PlotCreatorDraft draft) {
-        Vector3i min = draft.boundsMin();
-        Vector3i max = draft.boundsMax();
-        if (min == null || max == null) {
+        List<PlotFootprintRecord> boxes = editorPasteBoxes(draft);
+        if (boxes.isEmpty()) {
             for (Vector3i pos : draft.getPlacedSpecialBlocks()) {
                 breakBlock(world, pos);
             }
             return;
         }
-        PlotFootprintRecord fp = new PlotFootprintRecord(min.x, min.y, min.z, max.x, max.y, max.z);
         world.execute(
             () -> {
                 Store<EntityStore> entityStore = world.getEntityStore().getStore();
-                PrefabFootprintClearUtil.removeEntitiesInFootprint(entityStore, fp);
-                PrefabFootprintClearUtil.clearFootprint(world, fp, true);
+                for (PlotFootprintRecord fp : boxes) {
+                    PrefabFootprintClearUtil.removeEntitiesInFootprint(entityStore, fp);
+                    PrefabFootprintClearUtil.clearFootprint(world, fp, true);
+                }
             }
         );
+    }
+
+    /**
+     * Every box the building editor pasted. A wall style is pasted one piece at a time side by side, so each piece has
+     * its own box and they are cleared separately to leave the ground between them alone.
+     */
+    @Nonnull
+    private static List<PlotFootprintRecord> editorPasteBoxes(@Nonnull PlotCreatorDraft draft) {
+        List<PlotFootprintRecord> out = new ArrayList<>();
+        if (!draft.getWallPieces().isEmpty()) {
+            for (PlotCreatorWallPieceDraft piece : draft.getWallPieces()) {
+                if (piece.hasBounds()) {
+                    out.add(box(piece.boundsMin(), piece.boundsMax()));
+                }
+            }
+            return out;
+        }
+        if (PlotCreatorAnchorRules.hasBounds(draft)) {
+            out.add(box(draft.boundsMin(), draft.boundsMax()));
+        }
+        return out;
+    }
+
+    @Nonnull
+    private static PlotFootprintRecord box(@Nonnull Vector3i min, @Nonnull Vector3i max) {
+        return new PlotFootprintRecord(min.x, min.y, min.z, max.x, max.y, max.z);
     }
 
     private static void returnDepositChestIfOpen(

@@ -78,8 +78,12 @@ public final class PlotCreatorInteractions {
             context.getState().state = InteractionState.Failed;
             return;
         }
-        if (draft.getStep() == PlotCreatorStep.BOUNDS && draft.getBoundsPhase() == PlotCreatorBoundsPhase.FACE_ADJUST) {
+        if (draft.isEditingBounds() && draft.getBoundsPhase() == PlotCreatorBoundsPhase.FACE_ADJUST) {
             draft.resetBoundsEditing();
+            PlotCreatorWallPieceDraft wallPiece = draft.currentWallPiece();
+            if (draft.getStep() == PlotCreatorStep.WALL_PIECES && wallPiece != null) {
+                wallPiece.clearShape();
+            }
             PlotCreatorService.refreshBoundsVisuals(session, playerRef);
             refreshHud(playerRef, ref, commandBuffer.getStore(), session);
             context.getState().state = InteractionState.Finished;
@@ -386,6 +390,20 @@ public final class PlotCreatorInteractions {
             PlotCreatorService.advanceSubstepOrStep(session, ref, store);
             return true;
         }
+        if (step == PlotCreatorStep.WALL_PIECES) {
+            if (!PlotCreatorWallPieceAuthoring.currentSubstepSatisfied(d)) {
+                playerRef.sendMessage(
+                    PlotCreatorWallPieceAuthoring.isBoundsSubstep(d)
+                        ? Message.translation(MSG + ".error.needBounds")
+                        : Message
+                            .translation(MSG + ".error.wallConnectionMissing")
+                            .param("side", wallSideMessage(d))
+                );
+                return false;
+            }
+            PlotCreatorService.advanceWallPieceOrStep(session, ref, store);
+            return true;
+        }
         if (step == PlotCreatorStep.MATERIALS) {
             PlotCreatorService.advance(session, ref, store);
             return true;
@@ -419,6 +437,15 @@ public final class PlotCreatorInteractions {
         return true;
     }
 
+    /** Name of the side the current wall piece substep is asking for, for use as a {@code side} message parameter. */
+    @Nonnull
+    private static Message wallSideMessage(@Nonnull PlotCreatorDraft draft) {
+        com.hexvane.aetherhaven.wall.WallCardinal face = PlotCreatorWallPieceAuthoring.expectedFace(draft);
+        return face == null
+            ? Message.raw("")
+            : Message.translation(MSG + ".wallSide." + face.name().toLowerCase(java.util.Locale.ROOT));
+    }
+
     public static boolean runStepUseAction(
         @Nonnull PlotCreatorSession session,
         @Nonnull PlayerRef playerRef,
@@ -443,6 +470,18 @@ public final class PlotCreatorInteractions {
             }
             case SUBSTEP -> {
                 playerRef.sendMessage(Message.translation(MSG + ".hint.clickBlock"));
+                yield true;
+            }
+            case WALL_PIECES -> {
+                if (PlotCreatorWallPieceAuthoring.isMaterialsSubstep(d)) {
+                    PlotCreatorMaterialsActions.openMaterialsPanel(session, playerRef, ref, store);
+                    yield true;
+                }
+                playerRef.sendMessage(
+                    PlotCreatorWallPieceAuthoring.isBoundsSubstep(d)
+                        ? Message.translation(MSG + ".hint.boundsHelp")
+                        : Message.translation(MSG + ".hint.wallConnectionHelp").param("side", wallSideMessage(d))
+                );
                 yield true;
             }
             case PREFAB_SAVE -> exportPrefab(session, playerRef, commandBuffer);

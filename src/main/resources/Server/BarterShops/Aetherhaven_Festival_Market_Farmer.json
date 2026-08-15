@@ -1,0 +1,105 @@
+{
+  "DisplayNameKey": "aetherhaven_festivals.aetherhaven.festival.shop.market.farmer",
+  "RefreshInterval": {
+    "Days": 1
+  },
+  "RestockHour": 6,
+  "TradeSlots": [
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Plant_Crop_Wheat_Item",
+          "Quantity": 8
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 2
+          }
+        ],
+        "Stock": 16
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Plant_Crop_Carrot_Item",
+          "Quantity": 8
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 2
+          }
+        ],
+        "Stock": 16
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Plant_Crop_Potato_Item",
+          "Quantity": 8
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 2
+          }
+        ],
+        "Stock": 16
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Plant_Crop_Tomato_Item",
+          "Quantity": 8
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 3
+          }
+        ],
+        "Stock": 12
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Plant_Crop_Pumpkin_Item",
+          "Quantity": 4
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 4
+          }
+        ],
+        "Stock": 8
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Plant_Crop_Corn_Item",
+          "Quantity": 8
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 3
+          }
+        ],
+        "Stock": 12
+      }
+    }
+  ]
+}

@@ -31,6 +31,7 @@ import com.hexvane.aetherhaven.community.CommunityPrefabSafety;
 import com.hexvane.aetherhaven.community.CommunityPaths;
 import com.hexvane.aetherhaven.community.CommunityPreviewCache;
 import com.hexvane.aetherhaven.community.CommunityRequiredMods;
+import com.hexvane.aetherhaven.community.CommunityWallStyleGrouping;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -329,6 +330,9 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
 
         GroupEntry selectedGroup = findGroup(allGroups, selectedGroupKey);
         VariantEntry variant = selectedVariant(selectedGroup);
+        // A whole wall style sits behind one card, so the arrows walk its pieces instead of style variants.
+        boolean wallStyleGroup =
+            selectedGroup != null && CommunityWallStyleGrouping.isWallStyleGroupKey(selectedGroup.groupKey());
         int variantCount = selectedGroup != null ? selectedGroup.variants().size() : 0;
         int variantDisplayIndex = selectedVariantIndex(selectedGroup);
         Player player = store.getComponent(ref, Player.getComponentType());
@@ -340,7 +344,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                 && variant != null
                 && communityCatalog.hasUpdateAvailable(variant.constructionId());
         boolean variantLocked = false;
-        if (variant != null && !moderationTab) {
+        if (variant != null && !moderationTab && !wallStyleGroup) {
             variantLocked = !PlotTokenUnlockService.isUnlocked(ref, store, variant.constructionId());
         }
         boolean moderationPreviewReady =
@@ -387,8 +391,9 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                         .param("total", Message.raw(String.valueOf(variantCount)))
                 );
             }
-            commandBuilder.set("#VariantPrev.Disabled", marketplaceTab || variantCount <= 1);
-            commandBuilder.set("#VariantNext.Disabled", marketplaceTab || variantCount <= 1);
+            boolean arrowsLocked = marketplaceTab && !wallStyleGroup;
+            commandBuilder.set("#VariantPrev.Disabled", arrowsLocked || variantCount <= 1);
+            commandBuilder.set("#VariantNext.Disabled", arrowsLocked || variantCount <= 1);
             commandBuilder.set("#PreviewLockOverlay.Visible", variantLocked);
             commandBuilder.set("#PreviewLockIconWrap.Visible", variantLocked);
             boolean favoritesCommunitySelected =
@@ -460,7 +465,8 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         commandBuilder.set("#ModerationActionRow.Visible", moderationTab);
         commandBuilder.set("#CostLine.Visible", false);
         commandBuilder.set("#FundsLine.Visible", false);
-        commandBuilder.set("#CraftButton.Visible", !moderationTab);
+        // Wall styles are placed with the wand, so there is nothing to craft a token for.
+        commandBuilder.set("#CraftButton.Visible", !moderationTab && !wallStyleGroup);
         if (marketplaceTab) {
             if (marketplaceLoading) {
                 commandBuilder.set(
@@ -1755,6 +1761,10 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                     showCommunityBuildsWithMissingMods
                 );
         GroupEntry group = findGroup(sourceGroups, selectedGroupKey);
+        if (group != null && CommunityWallStyleGrouping.isWallStyleGroupKey(group.groupKey())) {
+            downloadWallStyle(ref, store, plugin, community, pr, group);
+            return;
+        }
         VariantEntry variant = selectedVariant(group);
         if (variant == null) {
             refresh(ref, store);
@@ -1824,6 +1834,94 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                                         : "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.downloaded"
                                 )
                                     .param("name", Message.raw(entry.getDisplayName())),
+                                NotificationStyle.Success
+                            );
+                        }
+                        refresh(ref, store);
+                    },
+                    1L
+                );
+            }
+        );
+    }
+
+    /** Downloading a wall style installs every piece in it, since a style is only useful complete. */
+    private void downloadWallStyle(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull CommunityCatalogService community,
+        @Nonnull PlayerRef pr,
+        @Nonnull GroupEntry group
+    ) {
+        List<CommunityManifestEntry> pieces = new ArrayList<>();
+        boolean anyInstalled = false;
+        for (VariantEntry v : group.variants()) {
+            CommunityManifestEntry piece = community.findEntry(v.constructionId());
+            if (piece == null) {
+                continue;
+            }
+            anyInstalled |= community.isInstalled(piece.getId());
+            pieces.add(piece);
+        }
+        if (pieces.isEmpty()) {
+            refresh(ref, store);
+            return;
+        }
+        if (!marketplaceRefreshInFlight.compareAndSet(false, true)) {
+            return;
+        }
+        boolean forceRefresh = anyInstalled;
+        String styleName = group.displayName();
+        refresh(ref, store);
+        World world = store.getExternalData().getWorld();
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        UUID playerUuid = uc != null ? uc.getUuid() : null;
+        int total = pieces.size();
+        CompletableFuture.runAsync(
+            () -> {
+                CommunityDownloadService.BatchResult batchResult;
+                try {
+                    batchResult =
+                        CommunityDownloadService.installBatch(plugin, pieces, done -> {}, playerUuid);
+                } catch (RuntimeException e) {
+                    batchResult = new CommunityDownloadService.BatchResult(0, total, 0);
+                }
+                CommunityDownloadService.BatchResult result = batchResult;
+                plugin.scheduleOnWorld(
+                    world,
+                    () -> {
+                        marketplaceRefreshInFlight.set(false);
+                        if (!ref.isValid() || isDismissed()) {
+                            return;
+                        }
+                        communityPreviewConstructionId = null;
+                        if (result.ok() <= 0) {
+                            NotificationUtil.sendNotification(
+                                pr.getPacketHandler(),
+                                Message.translation(
+                                    forceRefresh
+                                        ? "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.updateFailed"
+                                        : "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.downloadFailed"
+                                ),
+                                NotificationStyle.Danger
+                            );
+                        } else if (result.failed() > 0) {
+                            NotificationUtil.sendNotification(
+                                pr.getPacketHandler(),
+                                Message.translation(
+                                        "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.wallStylePartial"
+                                    )
+                                    .param("name", Message.raw(styleName)),
+                                NotificationStyle.Warning
+                            );
+                        } else {
+                            NotificationUtil.sendNotification(
+                                pr.getPacketHandler(),
+                                Message.translation(
+                                        "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.wallStyleDownloaded"
+                                    )
+                                    .param("name", Message.raw(styleName)),
                                 NotificationStyle.Success
                             );
                         }
@@ -3195,6 +3293,9 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         List<String> out = new ArrayList<>();
         if (ordered.remove(PlotBuildingTypes.DECORATION)) {
             out.add(PlotBuildingTypes.DECORATION);
+        }
+        if (ordered.remove(PlotBuildingTypes.WALLS)) {
+            out.add(PlotBuildingTypes.WALLS);
         }
         List<String> rest = new ArrayList<>(ordered);
         rest.sort(

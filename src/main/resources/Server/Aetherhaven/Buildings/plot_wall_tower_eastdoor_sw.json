@@ -30,5 +30,17 @@
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_wall_tower_eastdoor_sw.displayName",
-  "styleId": "core"
+  "styleId": "core",
+  "wallPiece": {
+    "role": "tower_corner",
+    "selectable": false,
+    "boundsLocal": {
+      "min": [-4, 0, -4],
+      "max": [4, 16, 4]
+    },
+    "connections": [
+      { "face": "south", "local": [0, 4] },
+      { "face": "west", "local": [-4, 0] }
+    ]
+  }
 }

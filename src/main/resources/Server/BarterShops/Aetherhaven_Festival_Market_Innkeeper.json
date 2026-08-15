@@ -1,0 +1,105 @@
+{
+  "DisplayNameKey": "aetherhaven_festivals.aetherhaven.festival.shop.market.innkeeper",
+  "RefreshInterval": {
+    "Days": 1
+  },
+  "RestockHour": 6,
+  "TradeSlots": [
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Food_Bread",
+          "Quantity": 6
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 2
+          }
+        ],
+        "Stock": 16
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Food_Cheese",
+          "Quantity": 4
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 3
+          }
+        ],
+        "Stock": 12
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Food_Egg",
+          "Quantity": 6
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 2
+          }
+        ],
+        "Stock": 16
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Food_Popcorn",
+          "Quantity": 4
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 3
+          }
+        ],
+        "Stock": 10
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Food_Pie_Apple",
+          "Quantity": 2
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 5
+          }
+        ],
+        "Stock": 8
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Food_Fish_Grilled",
+          "Quantity": 2
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 5
+          }
+        ],
+        "Stock": 8
+      }
+    }
+  ]
+}

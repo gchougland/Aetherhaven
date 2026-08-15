@@ -46,6 +46,63 @@ final class HallowsEveRewardsTest {
     }
 
     @Test
+    void jackLanternFacesAwayFromTheEntranceEvenAfterSquareRotation() {
+        Vector3d pumpkin = new Vector3d(1.0, 7.0, 0.0);
+        Vector3d entrance = new Vector3d(2.5, 6.0, -12.5);
+        float toward = HallowsEveTeleport.yawDegreesToward(pumpkin, entrance);
+        float away = HallowsEveTeleport.yawDegreesAwayFrom(pumpkin, entrance);
+        assertEquals(toward + 180.0, away, 0.01);
+
+        // Prefab 90 degree rotation: (x, z) -> (z, -x), then block-center offset.
+        Vector3d pumpkinRotated = new Vector3d(0.0, 7.0, -1.0);
+        Vector3d entranceRotated = new Vector3d(-12.5, 6.0, -2.5);
+        float awayRotated = HallowsEveTeleport.yawDegreesAwayFrom(pumpkinRotated, entranceRotated);
+        assertEquals(away + 90.0, awayRotated, 0.01);
+    }
+
+    @Test
+    void mazeRunCostsTenGoldLikeOtherFestivalGames() {
+        assertEquals(10, HallowsEveIds.MAZE_COST_GOLD);
+    }
+
+    @Test
+    void festivalBatsUseTheVanillaBatLook() {
+        assertEquals("Aetherhaven_Festival_Hallows_Eve_Bat", HallowsEveIds.BAT_NPC_ROLE);
+        assertEquals(6, HallowsEveIds.BAT_COUNT);
+    }
+
+    @Test
+    void mazeScoreboardRanksFullClearsByTimeLeftThenByOrbCount() {
+        HallowsEveScore twenty = HallowsEveScore.of(20, 25, 0L);
+        HallowsEveScore twentyFour = HallowsEveScore.of(24, 25, 0L);
+        HallowsEveScore allSlow = HallowsEveScore.of(25, 25, 4_000L);
+        HallowsEveScore allFast = HallowsEveScore.of(25, 25, 12_000L);
+
+        assertTrue(twentyFour.isBetterThan(twenty));
+        assertTrue(allSlow.isBetterThan(twentyFour));
+        assertTrue(allFast.isBetterThan(allSlow));
+        assertFalse(twenty.isBetterThan(twentyFour));
+        assertFalse(allSlow.isBetterThan(allFast));
+        assertEquals("20 orbs", twenty.scoreLabel());
+        assertEquals("25 orbs, 12 seconds left", allFast.scoreLabel());
+        assertEquals("1 orb", HallowsEveScore.of(1, 25, 0L).scoreLabel());
+    }
+
+    @Test
+    void scoreboardFileKeepsTheBetterRun() {
+        HallowsEveLeaderboardWorldFile file = new HallowsEveLeaderboardWorldFile();
+        assertTrue(file.recordBest("p", "Pat", 18, 25, 0L));
+        assertFalse(file.recordBest("p", "Pat", 12, 25, 0L));
+        assertTrue(file.recordBest("p", "Pat", 25, 25, 5_000L));
+        assertTrue(file.recordBest("p", "Pat", 25, 25, 9_000L));
+        assertFalse(file.recordBest("p", "Pat", 25, 25, 8_000L));
+        HallowsEveLeaderboard.Entry best = file.find("p");
+        assertEquals(25, best.collected());
+        assertEquals(9_000L, best.remainingMs());
+        assertFalse(file.recordBest("p", "Pat", 0, 25, 0L));
+    }
+
+    @Test
     void collectSoundUsesARealEventId() {
         assertEquals("Aetherhaven_Festival_Hallows_Eve_Orb", HallowsEveIds.COLLECT_SOUND);
     }

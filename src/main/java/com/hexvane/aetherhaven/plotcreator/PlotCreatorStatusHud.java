@@ -42,7 +42,10 @@ public final class PlotCreatorStatusHud extends CustomUIHud {
         } else {
             b.set("#StepHelp.TextSpans", Message.translation(LANG_PREFIX + stepKey + ".hint"));
         }
-        if (step == PlotCreatorStep.SUBSTEP) {
+        if (step == PlotCreatorStep.WALL_PIECES) {
+            applyWallPieceHelp(b, session.getDraft());
+            b.set("#DetailLine.Visible", true);
+        } else if (step == PlotCreatorStep.SUBSTEP) {
             PlotBuildingKindRequirements.SubstepRequirement sub = PlotCreatorService.currentSubstep(session.getDraft());
             if (sub != null) {
                 applySubstepHelp(b, sub);
@@ -107,6 +110,31 @@ public final class PlotCreatorStatusHud extends CustomUIHud {
             }
         }
         this.update(false, b);
+    }
+
+    /** Names the piece being authored, and says whether the player is sizing its box or marking a connection point. */
+    private static void applyWallPieceHelp(@Nonnull UICommandBuilder b, @Nonnull PlotCreatorDraft draft) {
+        draft.ensureWallPieces();
+        PlotCreatorWallPieceDraft piece = draft.currentWallPiece();
+        if (piece == null) {
+            b.set("#DetailLine.Visible", false);
+            return;
+        }
+        String roleKey = LANG_PREFIX + "wallPiece." + PlotCreatorWallPieceAuthoring.roleLangSuffix(piece.getRole());
+        com.hexvane.aetherhaven.wall.WallCardinal face = PlotCreatorWallPieceAuthoring.expectedFace(draft);
+        if (PlotCreatorWallPieceAuthoring.isMaterialsSubstep(draft)) {
+            b.set("#StepHelp.TextSpans", Message.translation(LANG_PREFIX + "wallPiece.hint.materials"));
+        } else if (face == null) {
+            b.set("#StepHelp.TextSpans", Message.translation(LANG_PREFIX + "wallPiece.hint.bounds"));
+        } else {
+            b.set(
+                "#StepHelp.TextSpans",
+                Message
+                    .translation(LANG_PREFIX + "wallPiece.hint.connection")
+                    .param("side", Message.translation(LANG_PREFIX + "wallSide." + face.name().toLowerCase(Locale.ROOT)))
+            );
+        }
+        b.set("#DetailLine.TextSpans", Message.translation(roleKey));
     }
 
     private static void applySubstepHelp(

@@ -44,5 +44,9 @@ public enum PlotCreatorSubstepType {
     /** Hallow's Eve maze start pad (stores facing). */
     FESTIVAL_MAZE_START,
     /** Hallow's Eve glowing orb spawn cell. */
-    FESTIVAL_MAZE_ORB_SPAWN
+    FESTIVAL_MAZE_ORB_SPAWN,
+    /** Market Festival judging stand (player stall first, then rival stands). */
+    FESTIVAL_MARKET_STAND,
+    /** Market Festival floating item display slot on the town stall. */
+    FESTIVAL_MARKET_DISPLAY
 }

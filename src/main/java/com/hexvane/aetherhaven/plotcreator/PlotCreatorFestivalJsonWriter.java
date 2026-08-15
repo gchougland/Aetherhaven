@@ -116,6 +116,12 @@ public final class PlotCreatorFestivalJsonWriter {
         if (!draft.getFestivalOrbSpawns().isEmpty()) {
             root.put("orbSpawns", orbMaps(draft.getFestivalOrbSpawns()));
         }
+        if (!draft.getFestivalMarketStands().isEmpty()) {
+            root.put("marketStands", raceStartMaps(draft.getFestivalMarketStands()));
+        }
+        if (!draft.getFestivalMarketDisplaySlots().isEmpty()) {
+            root.put("marketDisplaySlots", orbMaps(draft.getFestivalMarketDisplaySlots()));
+        }
         if (existing != null) {
             if (!existing.getBurstItemIds().isEmpty()) {
                 root.put("burstItemIds", new ArrayList<>(existing.getBurstItemIds()));

@@ -12,6 +12,7 @@
           "icon": "UI/Custom/maze.png",
           "visibilityCondition": { "type": "hallows_eve_maze_can_start" },
           "whenFalse": "hide",
+          "itemRequirements": [{ "itemId": "Aetherhaven_Gold_Coin", "count": 10 }],
           "actions": [
             { "type": "hallows_eve_maze_start" }
           ],
@@ -43,6 +44,13 @@
               "shop": "Aetherhaven_Festival_Hallows_Eve"
             }
           ],
+          "next": null
+        },
+        {
+          "id": "scoreboard",
+          "text": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.main_hub.c_scoreboard",
+          "icon": "UI/Custom/maze.png",
+          "actions": [{ "type": "hallows_eve_open_scoreboard" }],
           "next": null
         },
         {
@@ -94,6 +102,16 @@
         {
           "text": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.maze_playing.c_back",
           "next": null
+        }
+      ]
+    },
+    "maze_need_gold": {
+      "speaker": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.speaker",
+      "text": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.maze_need_gold.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_festival_hallows_eve_merchant.aetherhaven.dialogue.festival_hallows_eve_merchant.maze_need_gold.c_back",
+          "next": "main_hub"
         }
       ]
     }

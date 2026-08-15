@@ -92,7 +92,7 @@ public final class PlotCreatorBoundsAdjustInteraction extends SimpleInstantInter
             context.getState().state = InteractionState.Failed;
             return;
         }
-        if (draft.getStep() != PlotCreatorStep.BOUNDS
+        if (!draft.isEditingBounds()
             || draft.getBoundsPhase() != PlotCreatorBoundsPhase.FACE_ADJUST) {
             context.getState().state = InteractionState.Failed;
             return;

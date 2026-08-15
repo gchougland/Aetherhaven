@@ -12,6 +12,8 @@ public enum PlotCreatorStep {
     FESTIVAL,
     IMPORTANT_SPOTS,
     SUBSTEP,
+    /** Wall style authoring: one node per wall piece, with bounds and connection point substeps inside each. */
+    WALL_PIECES,
     MATERIALS,
     CONFIGURE,
     REVIEW,

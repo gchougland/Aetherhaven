@@ -1,0 +1,105 @@
+{
+  "DisplayNameKey": "aetherhaven_festivals.aetherhaven.festival.shop.market.chef",
+  "RefreshInterval": {
+    "Days": 1
+  },
+  "RestockHour": 6,
+  "TradeSlots": [
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Food_Bread",
+          "Quantity": 4
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 3
+          }
+        ],
+        "Stock": 16
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Food_Pie_Apple",
+          "Quantity": 2
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 5
+          }
+        ],
+        "Stock": 8
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Food_Pie_Pumpkin",
+          "Quantity": 2
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 5
+          }
+        ],
+        "Stock": 8
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Food_Kebab_Vegetable",
+          "Quantity": 2
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 4
+          }
+        ],
+        "Stock": 10
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Food_Salad_Caesar",
+          "Quantity": 2
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 4
+          }
+        ],
+        "Stock": 10
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Food_Fish_Grilled",
+          "Quantity": 2
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 5
+          }
+        ],
+        "Stock": 8
+      }
+    }
+  ]
+}

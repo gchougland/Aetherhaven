@@ -12,11 +12,15 @@ aetherhaven.festival.carnival.description=Late summer brings the carnival. Pop b
 aetherhaven.festival.hallows_eve.name=Hallow's Eve
 aetherhaven.festival.hallows_eve.description=Late autumn brings a spooky maze night. Collect glowing orbs before time runs out, pop the jack o lantern, and spend autumn festival tickets at the merchant.
 
+aetherhaven.festival.market.name=Market Festival
+aetherhaven.festival.market.description=Mid autumn brings the market contest. Townsfolk fill one shared stall, Elder Lyren judges it against three rival stands, and first place earns a Corin Plushie and a Heartberry.
+
 aetherhaven.festival.tree_climbing.name=Tree Climbing Festival
 aetherhaven.festival.tree_climbing.description=Mid summer brings the big tree climb. Race to the pink crystal at the top, earn summer festival tickets for a fast climb, and spend them on rare saplings.
 
 aetherhaven.festival.interactionHints.burstLettuce=Press [{key}] to pop the lettuce
 aetherhaven.festival.interactionHints.burstJackLantern=Press [{key}] to pop the jack o lantern
+aetherhaven.festival.interactionHints.openMarketStall=Press [{key}] to set out goods
 
 aetherhaven.festival.started={festival} has started at the festival square.
 aetherhaven.festival.banner.started.title={festival}
@@ -45,9 +49,50 @@ aetherhaven.festival.npc.lettuce.name=Springheart Lettuce
 aetherhaven.festival.npc.jackLantern.name=Jack o lantern
 aetherhaven.festival.npc.mazeOrb.name=Maze Orb
 aetherhaven.festival.npc.hallowsEveMerchant.name=Hallow's Eve Merchant
+aetherhaven.festival.npc.hallowsEveBat.name=Bat
 aetherhaven.festival.shop.hallowsEve.title=Hallow's Eve Goods
 aetherhaven.festival.hallows_eve.hud.timerLabel=Time left
-aetherhaven.festival.hallows_eve.chat.timeUp=Time is up. Burst the jack o lantern in the center.
+aetherhaven.festival.hallows_eve.chat.timeUp=Time is up. You collected {collected} of {total} orbs. Burst the jack o lantern in the center.
+aetherhaven.festival.hallows_eve.chat.timeUp.none=Time is up. You did not collect any orbs.
+aetherhaven.festival.hallows_eve.chat.collectedAll=You found every orb with {time} left. Burst the jack o lantern in the center.
+aetherhaven.festival.hallows_eve.leaderboard.title=Hallow's Eve Scoreboard
+aetherhaven.festival.hallows_eve.leaderboard.hint=Most orbs wins. Finding every orb ranks by how much time you had left.
+aetherhaven.festival.hallows_eve.leaderboard.close=Close
+aetherhaven.festival.hallows_eve.leaderboard.empty=No maze runs recorded yet.
+aetherhaven.festival.hallows_eve.leaderboard.your_best=Your best: {score}
+aetherhaven.festival.hallows_eve.leaderboard.your_best_none=You have not collected any orbs yet.
+
+aetherhaven.festival.market.stall.locked=Judging has started. The stall is closed for now.
+aetherhaven.festival.market.stall.notMember=Only town members can set out goods at this stall.
+aetherhaven.festival.market.banner.winner.title={winner} wins the market!
+aetherhaven.festival.market.banner.winner.subtitle=Talk to Elder Lyren for your prizes
+aetherhaven.festival.market.banner.place.1=Your town took first place
+aetherhaven.festival.market.banner.place.2=Your town took second place
+aetherhaven.festival.market.banner.place.3=Your town took third place
+aetherhaven.festival.market.banner.place.4=Your town took fourth place
+aetherhaven.festival.market.rival.brambleford=Brambleford
+aetherhaven.festival.market.rival.millshade=Millshade
+aetherhaven.festival.market.rival.goldhollow=Goldhollow
+aetherhaven.festival.market.leaderboard.title=Market Festival Scoreboard
+aetherhaven.festival.market.leaderboard.hint=Towns ranked by their stall score.
+aetherhaven.festival.market.leaderboard.close=Close
+aetherhaven.festival.market.leaderboard.empty=No town scores recorded yet.
+aetherhaven.festival.market.leaderboard.your_best=Your town best: {score}
+aetherhaven.festival.market.leaderboard.your_best_none=Your town has not been judged yet.
+aetherhaven.festival.shop.market.farmer=Farmer stall
+aetherhaven.festival.shop.market.florist=Florist stall
+aetherhaven.festival.shop.market.blacksmith=Blacksmith stall
+aetherhaven.festival.shop.market.chef=Chef stall
+aetherhaven.festival.shop.market.miner=Miner stall
+aetherhaven.festival.shop.market.logger=Logger stall
+aetherhaven.festival.shop.market.rancher=Rancher stall
+aetherhaven.festival.shop.market.innkeeper=Innkeeper stall
+aetherhaven.festival.shop.market.merchant=Merchant stall
+aetherhaven.festival.shop.market.priestess=Priestess stall
+aetherhaven.festival.shop.market.builder=Builder stall
+aetherhaven.festival.shop.market.bard=Bard stall
+aetherhaven.festival.shop.market.crystal_keeper=Crystal keeper stall
+aetherhaven.festival.shop.market.pyrotechnic=Pyrotechnic stall
 aetherhaven.festival.npc.seedSeller.name=Seed Seller
 aetherhaven.festival.shop.seeds.title=Festival Seeds
 

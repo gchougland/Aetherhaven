@@ -1,0 +1,78 @@
+{
+  "Type": "Generic",
+  "Parameters": {
+    "Invulnerable": {
+      "Value": true,
+      "Description": "Festival bats are invulnerable."
+    },
+    "NameTranslationKey": {
+      "Value": "aetherhaven_festivals.aetherhaven.festival.npc.hallowsEveBat.name",
+      "Description": "Translation key for NPC name display"
+    }
+  },
+  "StartState": "Idle",
+  "AttitudeGroup": "Aetherhaven_Townsfolk",
+  "DefaultNPCAttitude": "Ignore",
+  "DefaultPlayerAttitude": "Ignore",
+  "Appearance": "Bat",
+  "MaxHealth": 15,
+  "IsMemory": false,
+  "DropList": "Empty",
+  "DisableDamageGroups": [
+    "Self",
+    "Player",
+    "Aetherhaven_Townsfolk",
+    "Friendly"
+  ],
+  "CombatConfig": {
+    "EntityEffect": "Immunity_Environmental"
+  },
+  "Invulnerable": {
+    "Compute": "Invulnerable"
+  },
+  "KnockbackScale": 0.0,
+  "ApplySeparation": true,
+  "MotionControllerList": [
+    {
+      "Type": "Fly",
+      "MaxHorizontalSpeed": 10,
+      "MaxSinkSpeed": 3,
+      "MaxClimbSpeed": 6,
+      "MinAirSpeed": 3,
+      "Acceleration": 4,
+      "MinHeightOverGround": 14,
+      "MaxHeightOverGround": 22,
+      "MaxRollAngle": 180,
+      "MaxTurnSpeed": 360
+    }
+  ],
+  "Instructions": [
+    {
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": "Idle"
+          },
+          "Instructions": [
+            {
+              "Continue": true,
+              "Sensor": {
+                "Type": "Any"
+              },
+              "BodyMotion": {
+                "Type": "WanderInCircle",
+                "Radius": 14,
+                "MaxHeadingChange": 60,
+                "RelativeSpeed": 0.35
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "NameTranslationKey": {
+    "Compute": "NameTranslationKey"
+  }
+}

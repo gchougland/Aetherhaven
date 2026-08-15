@@ -143,6 +143,10 @@ public final class PlotCreatorSubstepHandler {
                 PlotCreatorFestivalPlacement.tryRemoveMazeStartNear(draft, targetBlock, playerRef);
             case FESTIVAL_MAZE_ORB_SPAWN ->
                 PlotCreatorFestivalPlacement.tryRemoveOrbNear(draft, targetBlock, playerRef);
+            case FESTIVAL_MARKET_STAND ->
+                PlotCreatorFestivalPlacement.tryRemoveMarketStandNear(draft, targetBlock, playerRef);
+            case FESTIVAL_MARKET_DISPLAY ->
+                PlotCreatorFestivalPlacement.tryRemoveMarketDisplayNear(draft, targetBlock, playerRef);
         };
     }
 
@@ -219,12 +223,40 @@ public final class PlotCreatorSubstepHandler {
         @Nonnull Ref<EntityStore> ref,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
-        Store<EntityStore> store = commandBuffer.getStore();
         PlotCreatorDraft draft = session.getDraft();
+        if (draft.getStep() == PlotCreatorStep.WALL_PIECES) {
+            return handleWallConnectionClick(draft, targetBlock, playerRef);
+        }
         if (draft.getStep() != PlotCreatorStep.SUBSTEP) {
             return false;
         }
         return handleSubstepClick(session, targetBlock, playerRef, ref, commandBuffer);
+    }
+
+    private static boolean handleWallConnectionClick(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef
+    ) {
+        // Nothing to click while the build cost of a piece is being set.
+        if (!PlotCreatorWallPieceAuthoring.isConnectionSubstep(draft)) {
+            return true;
+        }
+        String prefix = "aetherhaven_plot_creator.aetherhaven.plotcreator.";
+        com.hexvane.aetherhaven.wall.WallCardinal face = PlotCreatorWallPieceAuthoring.expectedFace(draft);
+        Message side =
+            face == null
+                ? Message.raw("")
+                : Message.translation(prefix + "wallSide." + face.name().toLowerCase(java.util.Locale.ROOT));
+        String err = PlotCreatorWallPieceAuthoring.recordConnectionClick(draft, targetBlock);
+        if (err != null) {
+            playerRef.sendMessage(Message.translation(prefix + "error." + err).param("side", side));
+            return true;
+        }
+        playerRef.sendMessage(
+            Message.translation(prefix + "hint.wallConnectionRecorded").param("side", side)
+        );
+        return true;
     }
 
     private static boolean handleSubstepClick(
@@ -469,6 +501,15 @@ public final class PlotCreatorSubstepHandler {
             );
             case FESTIVAL_MAZE_ORB_SPAWN ->
                 PlotCreatorFestivalPlacement.placeOrbSpawn(session, targetBlock, playerRef);
+            case FESTIVAL_MARKET_STAND -> PlotCreatorFestivalPlacement.placeMarketStand(
+                session,
+                targetBlock,
+                playerRef,
+                playerEntityRef,
+                store
+            );
+            case FESTIVAL_MARKET_DISPLAY ->
+                PlotCreatorFestivalPlacement.placeMarketDisplay(session, targetBlock, playerRef);
         };
     }
 

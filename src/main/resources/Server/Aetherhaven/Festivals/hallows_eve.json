@@ -5,7 +5,7 @@
   "description": "Late autumn brings a spooky maze night. Collect glowing orbs before time runs out, pop the jack o lantern, and spend autumn festival tickets at the merchant.",
   "prefabPath": "Festivals/Festival_Hallows_Eve.prefab.json",
   "season": "AUTUMN",
-  "dayOfSeason": 25,
+  "dayOfSeason": 10,
   "startHour": 15,
   "endHour": 0,
   "calendarIconPath": "UI/Custom/maze.png",
@@ -13,97 +13,97 @@
   "spots": [
     {
       "residentKind": "priestess",
-      "localX": 0,
+      "localX": -12,
       "localY": 6,
-      "localZ": 13,
-      "yawDegrees": 180.0
+      "localZ": 0,
+      "yawDegrees": 270.0
     },
     {
       "residentKind": "elder",
-      "localX": -12,
+      "localX": 1,
+      "localY": 6,
+      "localZ": -12,
+      "yawDegrees": 180.0
+    },
+    {
+      "residentKind": "innkeeper",
+      "localX": 14,
       "localY": 6,
       "localZ": 0,
       "yawDegrees": 90.0
     },
     {
-      "residentKind": "innkeeper",
-      "localX": 0,
+      "residentKind": "bard",
+      "localX": -7,
       "localY": 6,
-      "localZ": -13,
+      "localZ": 13,
       "yawDegrees": 0.0
     },
     {
-      "residentKind": "bard",
-      "localX": 13,
-      "localY": 6,
-      "localZ": 8,
-      "yawDegrees": 270.0
-    },
-    {
       "residentKind": "elder",
-      "localX": 14,
+      "localX": -9,
       "localY": 5,
-      "localZ": 10,
-      "yawDegrees": -54.851685
+      "localZ": 14,
+      "yawDegrees": 35.148315
     }
   ],
   "npcs": [
     {
       "npcRoleId": "Aetherhaven_Festival_Hallows_Eve_Merchant",
-      "localX": 13,
+      "localX": 6,
       "localY": 6,
-      "localZ": -5,
-      "yawDegrees": 270.0
+      "localZ": 13,
+      "yawDegrees": 0.0
     }
   ],
   "touristSpots": [
     {
-      "localX": -8,
+      "localX": -12,
       "localY": 6,
-      "localZ": 13,
-      "yawDegrees": 180.0
+      "localZ": -8,
+      "yawDegrees": 270.0
     },
     {
-      "localX": 8,
+      "localX": -12,
       "localY": 6,
-      "localZ": 13,
-      "yawDegrees": 180.0
+      "localZ": 8,
+      "yawDegrees": 270.0
     },
     {
-      "localX": -8,
+      "localX": 14,
       "localY": 6,
-      "localZ": -13,
-      "yawDegrees": 0.0
-    },
-    {
-      "localX": 8,
-      "localY": 6,
-      "localZ": -13,
-      "yawDegrees": 0.0
-    },
-    {
-      "localX": -13,
-      "localY": 6,
-      "localZ": -6,
-      "yawDegrees": 90.0
-    },
-    {
-      "localX": -13,
-      "localY": 6,
-      "localZ": 6,
+      "localZ": -8,
       "yawDegrees": 90.0
     },
     {
       "localX": 14,
       "localY": 6,
-      "localZ": 10,
-      "yawDegrees": 270.0
+      "localZ": 8,
+      "yawDegrees": 90.0
     },
     {
-      "localX": 2,
+      "localX": 7,
+      "localY": 6,
+      "localZ": -13,
+      "yawDegrees": 180.0
+    },
+    {
+      "localX": -5,
+      "localY": 6,
+      "localZ": -13,
+      "yawDegrees": 180.0
+    },
+    {
+      "localX": -9,
+      "localY": 6,
+      "localZ": 14,
+      "yawDegrees": 0.0
+    },
+    {
+      "localX": -1,
       "localY": 6,
       "localZ": 2,
-      "yawDegrees": 84.760254
+      "yawDegrees": 174.76025
     }
   ],
   "centerpieceLocal": [
@@ -112,56 +112,21 @@
     1
   ],
   "mazeStartLocal": {
-    "localX": 14,
+    "localX": -1,
     "localY": 6,
-    "localZ": 2,
-    "yawDegrees": 86.62329
+    "localZ": 14,
+    "yawDegrees": 176.62329
   },
   "orbSpawns": [
     {
-      "localX": 6.0,
-      "localY": 7.5,
-      "localZ": 1.250607
+      "localX": 10.0,
+      "localY": 7.0,
+      "localZ": 10.0
     },
     {
       "localX": 10.0,
       "localY": 7.0,
-      "localZ": -9.0
-    },
-    {
-      "localX": 5.0,
-      "localY": 7.0,
-      "localZ": -9.0
-    },
-    {
-      "localX": 0.0,
-      "localY": 7.0,
-      "localZ": -9.0
-    },
-    {
-      "localX": -4.0,
-      "localY": 7.0,
-      "localZ": -8.0
-    },
-    {
-      "localX": 0.0,
-      "localY": 7.0,
-      "localZ": -5.0
-    },
-    {
-      "localX": 4.0,
-      "localY": 7.0,
-      "localZ": -5.0
-    },
-    {
-      "localX": 8.0,
-      "localY": 7.0,
-      "localZ": -5.0
-    },
-    {
-      "localX": 10.0,
-      "localY": 7.0,
-      "localZ": -3.0
+      "localZ": 5.0
     },
     {
       "localX": 10.0,
@@ -169,79 +134,114 @@
       "localZ": 0.0
     },
     {
-      "localX": 10.0,
+      "localX": 9.0,
       "localY": 7.0,
-      "localZ": 4.0
-    },
-    {
-      "localX": 10.0,
-      "localY": 7.0,
-      "localZ": 7.0
-    },
-    {
-      "localX": 10.0,
-      "localY": 7.0,
-      "localZ": 10.0
+      "localZ": -4.0
     },
     {
       "localX": 6.0,
       "localY": 7.0,
+      "localZ": 0.0
+    },
+    {
+      "localX": 6.0,
+      "localY": 7.0,
+      "localZ": 4.0
+    },
+    {
+      "localX": 6.0,
+      "localY": 7.0,
+      "localZ": 8.0
+    },
+    {
+      "localX": 4.0,
+      "localY": 7.0,
       "localZ": 10.0
     },
     {
-      "localX": 5.0,
+      "localX": 1.0,
+      "localY": 7.0,
+      "localZ": 10.0
+    },
+    {
+      "localX": -3.0,
+      "localY": 7.0,
+      "localZ": 10.0
+    },
+    {
+      "localX": -6.0,
+      "localY": 7.0,
+      "localZ": 10.0
+    },
+    {
+      "localX": -9.0,
+      "localY": 7.0,
+      "localZ": 10.0
+    },
+    {
+      "localX": -9.0,
       "localY": 7.0,
       "localZ": 6.0
     },
     {
-      "localX": 3.0,
+      "localX": -5.0,
       "localY": 7.0,
-      "localZ": 6.0
+      "localZ": 5.0
     },
     {
-      "localX": 2.0,
+      "localX": -5.0,
       "localY": 7.0,
-      "localZ": 10.0
+      "localZ": 3.0
     },
     {
-      "localX": -2.0,
-      "localY": 7.0,
-      "localZ": 11.0
-    },
-    {
-      "localX": -4.0,
-      "localY": 7.0,
-      "localZ": 7.0
-    },
-    {
-      "localX": -8.0,
-      "localY": 7.0,
-      "localZ": 7.0
-    },
-    {
-      "localX": -7.0,
-      "localY": 7.0,
-      "localZ": 11.0
-    },
-    {
-      "localX": -10.0,
+      "localX": -9.0,
       "localY": 7.0,
       "localZ": 2.0
     },
     {
       "localX": -10.0,
       "localY": 7.0,
-      "localZ": -4.0
+      "localZ": -2.0
     },
     {
-      "localX": -5.0,
+      "localX": -6.0,
       "localY": 7.0,
       "localZ": -4.0
     },
     {
       "localX": -6.0,
       "localY": 7.0,
-      "localZ": 2.0
+      "localZ": -8.0
+    },
+    {
+      "localX": -10.0,
+      "localY": 7.0,
+      "localZ": -7.0
+    },
+    {
+      "localX": -1.0,
+      "localY": 7.0,
+      "localZ": -10.0
+    },
+    {
+      "localX": 5.0,
+      "localY": 7.0,
+      "localZ": -10.0
+    },
+    {
+      "localX": 5.0,
+      "localY": 7.0,
+      "localZ": -5.0
+    },
+    {
+      "localX": -1.0,
+      "localY": 7.0,
+      "localZ": -6.0
+    },
+    {
+      "localX": 0.0,
+      "localY": 7.0,
+      "localZ": 5.0
     }
   ],
   "tags": [
@@ -249,21 +249,69 @@
     "maze"
   ],
   "greetings": {
-    "guard": [
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.guard.0",
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.guard.1"
-    ],
-    "chef": [
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.chef.0",
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.chef.1"
+    "pyrotechnic": [
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.pyrotechnic.0",
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.pyrotechnic.1"
     ],
     "miner": [
       "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.miner.0",
       "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.miner.1"
     ],
-    "pyrotechnic": [
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.pyrotechnic.0",
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.pyrotechnic.1"
+    "chef": [
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.chef.0",
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.chef.1"
+    ],
+    "guard": [
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.guard.0",
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.guard.1"
+    ],
+    "elder": [
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.elder.0",
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.elder.1"
+    ],
+    "bard": [
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.bard.0",
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.bard.1"
+    ],
+    "logger": [
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.logger.0",
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.logger.1"
+    ],
+    "guild_master": [
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.guild_master.0",
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.guild_master.1"
+    ],
+    "florist": [
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.florist.0",
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.florist.1"
+    ],
+    "merchant": [
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.merchant.0",
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.merchant.1"
+    ],
+    "farmer": [
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.farmer.0",
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.farmer.1"
+    ],
+    "priestess": [
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.priestess.0",
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.priestess.1"
+    ],
+    "rancher": [
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.rancher.0",
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.rancher.1"
+    ],
+    "blacksmith": [
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.blacksmith.0",
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.blacksmith.1"
+    ],
+    "builder": [
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.builder.0",
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.builder.1"
+    ],
+    "default": [
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.default.0",
+      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.default.1"
     ],
     "crystal_keeper": [
       "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.crystal_keeper.0",
@@ -272,54 +320,6 @@
     "innkeeper": [
       "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.innkeeper.0",
       "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.innkeeper.1"
-    ],
-    "default": [
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.default.0",
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.default.1"
-    ],
-    "builder": [
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.builder.0",
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.builder.1"
-    ],
-    "blacksmith": [
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.blacksmith.0",
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.blacksmith.1"
-    ],
-    "rancher": [
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.rancher.0",
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.rancher.1"
-    ],
-    "priestess": [
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.priestess.0",
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.priestess.1"
-    ],
-    "farmer": [
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.farmer.0",
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.farmer.1"
-    ],
-    "merchant": [
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.merchant.0",
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.merchant.1"
-    ],
-    "florist": [
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.florist.0",
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.florist.1"
-    ],
-    "guild_master": [
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.guild_master.0",
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.guild_master.1"
-    ],
-    "logger": [
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.logger.0",
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.logger.1"
-    ],
-    "bard": [
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.bard.0",
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.bard.1"
-    ],
-    "elder": [
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.elder.0",
-      "aetherhaven_dialogue_festival_hallows_eve.aetherhaven.dialogue.festival.hallows_eve.greeting.elder.1"
     ]
   }
 }

@@ -116,6 +116,43 @@ public final class FestivalSpotService {
             registry.registerEphemeral(entry);
             poiIds.add(poiId.toString());
         }
+        List<FestivalDefinition.RaceStartSpotRow> marketStands = festival.getMarketStands();
+        int standLimit = Math.min(marketStands.size(), com.hexvane.aetherhaven.festival.market.MarketIds.STAND_COUNT);
+        for (int i = 0; i < standLimit; i++) {
+            FestivalDefinition.RaceStartSpotRow stand = marketStands.get(i);
+            Vector3d target =
+                FestivalPrefabSwapService.spotWorldPosition(
+                    plugin, square, stand.getLocalX(), stand.getLocalY(), stand.getLocalZ()
+                );
+            UUID poiId = UUID.nameUUIDFromBytes(
+                ("festival-market-stand:" + town.getTownId() + ":" + festival.getId() + ":" + i)
+                    .getBytes(StandardCharsets.UTF_8)
+            );
+            Set<String> tags = new HashSet<>();
+            tags.add(AetherhavenConstants.POI_TAG_FESTIVAL);
+            tags.add(AetherhavenConstants.POI_TAG_FESTIVAL_EPHEMERAL);
+            PoiEntry entry = new PoiEntry(
+                poiId,
+                town.getTownId(),
+                (int) Math.floor(target.x),
+                (int) Math.floor(target.y),
+                (int) Math.floor(target.z),
+                tags,
+                1,
+                square.getPlotId(),
+                null,
+                PoiInteractionKind.NONE,
+                false,
+                null,
+                target.x,
+                target.y,
+                target.z,
+                (float) Math.toRadians(stand.getYawDegrees()),
+                com.hexvane.aetherhaven.festival.market.MarketIds.standKind(i)
+            );
+            registry.registerEphemeral(entry);
+            poiIds.add(poiId.toString());
+        }
         town.setActiveFestivalSpotPoiIds(poiIds);
         tm.updateTown(town);
         LOGGER.atInfo().log("Registered %s festival spot(s) for %s", poiIds.size(), festival.getId());
@@ -163,6 +200,44 @@ public final class FestivalSpotService {
                 && entry.getWorkResidentKind() != null
                 && kind.equalsIgnoreCase(entry.getWorkResidentKind())) {
                 return entry;
+            }
+        }
+        return null;
+    }
+
+    /** The Nth festival spot with this villager kind, or null. */
+    @javax.annotation.Nullable
+    public static PoiEntry findNthSpotForKind(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull String residentKind,
+        int index
+    ) {
+        if (index < 0) {
+            return null;
+        }
+        List<String> ids = town.getActiveFestivalSpotPoiIds();
+        if (ids.isEmpty() || residentKind.isBlank()) {
+            return null;
+        }
+        PoiRegistry registry = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
+        String kind = residentKind.trim();
+        int seen = 0;
+        for (String id : ids) {
+            PoiEntry entry;
+            try {
+                entry = registry.get(UUID.fromString(id.trim()));
+            } catch (IllegalArgumentException e) {
+                continue;
+            }
+            if (entry != null
+                && entry.getWorkResidentKind() != null
+                && kind.equalsIgnoreCase(entry.getWorkResidentKind())) {
+                if (seen == index) {
+                    return entry;
+                }
+                seen++;
             }
         }
         return null;

@@ -125,14 +125,47 @@ public enum WallCardinal {
         return "#BtnExpandXm";
     }
 
-    /** Rotation steps (0..3) so prefab local north (-Z) aligns with this world direction. */
-    public int rotationStepsForLocalNorthAlongAxis() {
-        return switch (this) {
-            case NORTH -> 0;
-            case EAST -> 1;
-            case SOUTH -> 2;
-            case WEST -> 3;
+    /** Unit vector for this direction on the XZ plane. */
+    @Nonnull
+    public Vector3i unitVector() {
+        return new Vector3i(dx, 0, dz);
+    }
+
+    /** World direction a prefab local direction faces after {@code steps} 90 degree prefab rotations. */
+    @Nonnull
+    public static WallCardinal rotated(@Nonnull WallCardinal localDir, int steps) {
+        Vector3i v = localDir.unitVector();
+        PrefabRotation.fromRotation(prefabYawFromSteps(steps)).rotate(v);
+        WallCardinal out = fromVector(new Vector3i(0, 0, 0), v);
+        return out != null ? out : localDir;
+    }
+
+    /** Rotation steps that make {@code localDir} face {@code worldDir}. */
+    public static int stepsAligning(@Nonnull WallCardinal localDir, @Nonnull WallCardinal worldDir) {
+        for (int steps = 0; steps < 4; steps++) {
+            if (rotated(localDir, steps) == worldDir) {
+                return steps;
+            }
+        }
+        return 0;
+    }
+
+    @Nonnull
+    public static Rotation prefabYawFromSteps(int steps) {
+        return switch ((steps % 4 + 4) % 4) {
+            case 1 -> Rotation.Ninety;
+            case 2 -> Rotation.OneEighty;
+            case 3 -> Rotation.TwoSeventy;
+            default -> Rotation.None;
         };
+    }
+
+    /** Rotates a prefab local offset into world space for {@code steps} 90 degree prefab rotations. */
+    @Nonnull
+    public static Vector3i rotateOffset(@Nonnull Vector3i local, int steps) {
+        Vector3i copy = new Vector3i(local);
+        PrefabRotation.fromRotation(prefabYawFromSteps(steps)).rotate(copy);
+        return copy;
     }
 
     @Nonnull
@@ -143,23 +176,6 @@ public enum WallCardinal {
             case 3 -> WEST;
             default -> NORTH;
         };
-    }
-
-    @Nonnull
-    public Rotation toPrefabYaw() {
-        return switch ((rotationStepsForLocalNorthAlongAxis() % 4 + 4) % 4) {
-            case 1 -> Rotation.Ninety;
-            case 2 -> Rotation.OneEighty;
-            case 3 -> Rotation.TwoSeventy;
-            default -> Rotation.None;
-        };
-    }
-
-    @Nonnull
-    public Vector3i rotateOffset(@Nonnull Vector3i local) {
-        Vector3i copy = new Vector3i(local);
-        PrefabRotation.fromRotation(toPrefabYaw()).rotate(copy);
-        return copy;
     }
 
     /** Dominant horizontal direction from {@code from} to {@code to} (zero vector → null). */

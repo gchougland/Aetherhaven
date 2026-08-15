@@ -1,0 +1,105 @@
+{
+  "DisplayNameKey": "aetherhaven_festivals.aetherhaven.festival.shop.market.florist",
+  "RefreshInterval": {
+    "Days": 1
+  },
+  "RestockHour": 6,
+  "TradeSlots": [
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Plant_Flower_Common_Yellow2",
+          "Quantity": 4
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 2
+          }
+        ],
+        "Stock": 16
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Plant_Flower_Common_Red2",
+          "Quantity": 4
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 2
+          }
+        ],
+        "Stock": 16
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Plant_Sunflower_Block",
+          "Quantity": 2
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 3
+          }
+        ],
+        "Stock": 10
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Plant_Lavender_Block",
+          "Quantity": 2
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 3
+          }
+        ],
+        "Stock": 10
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Plant_Cactus_Flower",
+          "Quantity": 2
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 4
+          }
+        ],
+        "Stock": 8
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Plant_Flower_Common_Pink",
+          "Quantity": 4
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 2
+          }
+        ],
+        "Stock": 12
+      }
+    }
+  ]
+}

@@ -103,16 +103,7 @@ public final class PrefabMaterialsService {
         @Nonnull String prefabPathKey,
         @Nonnull Path dataDirectory
     ) {
-        Path prefabFile = resolvePrefabFile(prefabPathKey, dataDirectory);
-        if (prefabFile == null || !Files.isRegularFile(prefabFile)) {
-            return List.of();
-        }
-        try {
-            return generator.generateFromPrefabPath(prefabFile);
-        } catch (Exception e) {
-            LOGGER.atWarning().withCause(e).log("Failed to read prefab for materials: %s", prefabPathKey);
-            return List.of();
-        }
+        return generateFromPrefabFile(resolvePrefabFile(prefabPathKey, dataDirectory));
     }
 
     @Nonnull
@@ -120,14 +111,33 @@ public final class PrefabMaterialsService {
         @Nonnull String prefabPathKey,
         @Nonnull Path dataDirectory
     ) {
-        Path prefabFile = resolvePrefabFile(prefabPathKey, dataDirectory);
+        return generateSuggestedResourcesFromPrefabFile(resolvePrefabFile(prefabPathKey, dataDirectory));
+    }
+
+    /** Exact block counts for a prefab file, for callers holding a path rather than a catalog key. */
+    @Nonnull
+    public List<MaterialRequirement> generateFromPrefabFile(@Nullable Path prefabFile) {
+        if (prefabFile == null || !Files.isRegularFile(prefabFile)) {
+            return List.of();
+        }
+        try {
+            return generator.generateFromPrefabPath(prefabFile);
+        } catch (Exception e) {
+            LOGGER.atWarning().withCause(e).log("Failed to read prefab for materials: %s", prefabFile);
+            return List.of();
+        }
+    }
+
+    /** Simplified resource type costs for a prefab file. */
+    @Nonnull
+    public List<MaterialRequirement> generateSuggestedResourcesFromPrefabFile(@Nullable Path prefabFile) {
         if (prefabFile == null || !Files.isRegularFile(prefabFile)) {
             return List.of();
         }
         try {
             return suggestedGenerator.generateFromPrefabPath(prefabFile);
         } catch (Exception e) {
-            LOGGER.atWarning().withCause(e).log("Failed to read prefab for suggested resources: %s", prefabPathKey);
+            LOGGER.atWarning().withCause(e).log("Failed to read prefab for suggested resources: %s", prefabFile);
             return List.of();
         }
     }

@@ -1,0 +1,26 @@
+$C = "../Common.ui";
+
+Group #MarketLeaderboardRow {
+  LayoutMode: Left;
+  Anchor: (Bottom: 6);
+  Padding: (Horizontal: 12, Vertical: 8);
+  Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16);
+
+  Label #RankLabel {
+    Style: (...$C.@DefaultLabelStyle, TextColor: #9a8c78, FontSize: 15, RenderBold: true);
+    Anchor: (Width: 36);
+    Text: "";
+  }
+
+  Label #NameLabel {
+    Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, FontSize: 15, Wrap: true);
+    FlexWeight: 1;
+    Text: "";
+  }
+
+  Label #ScoreLabel {
+    Style: (...$C.@DefaultLabelStyle, TextColor: #c8d4a8, FontSize: 15, RenderBold: true, HorizontalAlignment: End);
+    Anchor: (Width: 170);
+    Text: "";
+  }
+}

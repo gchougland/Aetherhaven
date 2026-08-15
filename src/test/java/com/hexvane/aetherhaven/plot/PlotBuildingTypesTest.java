@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -49,5 +51,12 @@ final class PlotBuildingTypesTest {
     void coreCanonicalUsesSelfId() {
         Set<String> ids = PlotBuildingTypes.typeIdsOf(false, List.of(), "plot_town_hall");
         assertEquals(Set.of("plot_town_hall"), ids);
+    }
+
+    @Test
+    void wallPiecesUseTheWallsSentinel() {
+        Set<String> ids = PlotBuildingTypes.typeIdsOf(false, true, List.of(), "plot_community_x_segment");
+        assertEquals(Set.of(PlotBuildingTypes.WALLS), ids);
+        assertEquals("Walls", PlotBuildingTypes.displayLabel(ConstructionCatalog.forTests(Map.of()), "walls"));
     }
 }

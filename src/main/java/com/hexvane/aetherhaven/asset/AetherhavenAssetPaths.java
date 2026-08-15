@@ -25,6 +25,9 @@ public final class AetherhavenAssetPaths {
      */
     public static final String FESTIVALS = "Server/Aetherhaven/Festivals";
 
+    /** Market Festival item scoring catalog (not a festival definition). */
+    public static final String MARKET = "Server/Aetherhaven/Market";
+
     public static final String PROPS = "Server/Aetherhaven/Props";
 
     /** Relative to pack root: villager weekly schedule JSON per NPC role id (recursive). */

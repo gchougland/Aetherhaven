@@ -310,6 +310,37 @@ public final class PlotCreatorFestivalDraftSetup {
                 )
             );
         }
+        if (!existing.getMarketStands().isEmpty()) {
+            for (FestivalDefinition.RaceStartSpotRow spot : existing.getMarketStands()) {
+                draft.getFestivalMarketStands().add(
+                    FestivalDefinition.RaceStartSpotRow.of(
+                        spot.getLocalX(),
+                        spot.getLocalY(),
+                        spot.getLocalZ(),
+                        spot.getYawDegrees()
+                    )
+                );
+            }
+            draft.getSelectedSpots().add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_MARKET_STAND,
+                    com.hexvane.aetherhaven.festival.market.MarketIds.STAND_COUNT
+                )
+            );
+        }
+        if (!existing.getMarketDisplaySlots().isEmpty()) {
+            for (FestivalDefinition.OrbSpawnRow spot : existing.getMarketDisplaySlots()) {
+                draft.getFestivalMarketDisplaySlots().add(
+                    FestivalDefinition.OrbSpawnRow.of(spot.getLocalX(), spot.getLocalY(), spot.getLocalZ())
+                );
+            }
+            draft.getSelectedSpots().add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_MARKET_DISPLAY,
+                    com.hexvane.aetherhaven.festival.market.MarketIds.SLOT_COUNT
+                )
+            );
+        }
         PlotCreatorFestivalMechanicDefaults.ensureRequiredSelectedSpots(draft);
     }
 }

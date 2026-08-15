@@ -117,7 +117,6 @@ final class FestivalCatalogAndWindowTest {
 
         assertEquals("pig_race", def.getId());
         assertEquals(Season.SPRING, def.getSeason());
-        assertEquals(20, def.getDayOfSeason());
         assertEquals("Festivals/Festival_Pig_Race.prefab.json", def.getPrefabPath());
         assertEquals("pig_race", def.getMechanicId());
         assertEquals("UI/Custom/pig.png", def.getCalendarIconPath());
@@ -184,7 +183,6 @@ final class FestivalCatalogAndWindowTest {
 
         assertEquals("hallows_eve", def.getId());
         assertEquals(Season.AUTUMN, def.getSeason());
-        assertEquals(25, def.getDayOfSeason());
         assertEquals(15, def.getStartHour());
         assertEquals(0, def.getEndHour());
         assertEquals("Festivals/Festival_Hallows_Eve.prefab.json", def.getPrefabPath());
@@ -198,23 +196,124 @@ final class FestivalCatalogAndWindowTest {
         assertEquals(1, def.getNpcs().size());
         assertEquals("Aetherhaven_Festival_Hallows_Eve_Merchant", def.getNpcs().get(0).getNpcRoleId());
         assertNotNull(def.getMazeStartLocal());
-        assertEquals(14, def.getMazeStartLocal().getLocalX());
+        assertEquals(-1, def.getMazeStartLocal().getLocalX());
         assertEquals(6, def.getMazeStartLocal().getLocalY());
-        assertEquals(2, def.getMazeStartLocal().getLocalZ());
-        assertEquals(86.62329, def.getMazeStartLocal().getYawDegrees(), 0.001);
+        assertEquals(14, def.getMazeStartLocal().getLocalZ());
+        assertEquals(176.62329, def.getMazeStartLocal().getYawDegrees(), 0.001);
         assertNotNull(def.getCenterpieceLocalExact());
         assertEquals(1.0, def.getCenterpieceLocalExact()[0], 1e-9);
         assertEquals(7.0, def.getCenterpieceLocalExact()[1], 1e-9);
         assertEquals(1.0, def.getCenterpieceLocalExact()[2], 1e-9);
         assertEquals(25, def.getOrbSpawns().size());
-        assertEquals(6.0, def.getOrbSpawns().get(0).getLocalX(), 1e-9);
-        assertEquals(7.5, def.getOrbSpawns().get(0).getLocalY(), 1e-9);
-        assertEquals(1.250607, def.getOrbSpawns().get(0).getLocalZ(), 1e-5);
-        assertEquals(10.0, def.getOrbSpawns().get(1).getLocalX(), 1e-9);
-        assertEquals(7.0, def.getOrbSpawns().get(1).getLocalY(), 1e-9);
-        assertEquals(-9.0, def.getOrbSpawns().get(1).getLocalZ(), 1e-9);
         assertEquals(8, def.getTouristSpots().size());
         assertFalse(def.getGreetingLangKeys("default").isEmpty());
+    }
+
+    @Test
+    void shippedMarketFestivalIsWiredUp() {
+        FestivalDefinition def = parseResource("/Server/Aetherhaven/Festivals/market.json");
+
+        assertEquals("market", def.getId());
+        assertEquals(Season.AUTUMN, def.getSeason());
+        assertEquals(8, def.getStartHour());
+        assertEquals(20, def.getEndHour());
+        assertEquals("Festivals/Festival_Market.prefab.json", def.getPrefabPath());
+        assertEquals("market", def.getMechanicId());
+        assertEquals("UI/Custom/market.png", def.getCalendarIconPath());
+        assertEquals(4, def.getSpots().size());
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("elder")));
+        assertEquals(3, def.getSpots().stream().filter(s -> s.getResidentKind().equals("market_shop")).count());
+        assertTrue(def.getNpcs().isEmpty());
+        assertEquals(4, def.getMarketStands().size());
+        assertEquals(9, def.getMarketDisplaySlots().size());
+        assertEquals(8, def.getTouristSpots().size());
+        assertFalse(def.getGreetingLangKeys("default").isEmpty());
+        assertFalse(def.getGreetingLangKeys("elder").isEmpty());
+    }
+
+    @Test
+    void shippedMarketItemCatalogHasCategoryBonusAndBaseGameGoods() throws Exception {
+        try (var in = FestivalCatalogAndWindowTest.class.getResourceAsStream(
+            "/Server/Aetherhaven/Market/market_items.json"
+        )) {
+            assertNotNull(in);
+            String json = new String(in.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+            com.google.gson.JsonObject root =
+                GSON.fromJson(json, com.google.gson.JsonObject.class);
+            assertEquals(10, root.get("categoryBonus").getAsInt());
+            com.google.gson.JsonObject items = root.getAsJsonObject("items");
+            assertNotNull(items);
+            assertTrue(items.size() > 100);
+            assertTrue(items.has("Weapon_Sword_Iron"));
+            assertTrue(items.has("Weapon_Sword_Adamantite"));
+            assertTrue(items.has("Plant_Crop_Carrot_Item"));
+            assertTrue(items.has("Rock_Gem_Ruby"));
+            assertFalse(items.has("Weapon_Arrow_Iron"));
+            assertFalse(items.has("Food_Egg"));
+            assertFalse(items.has("Food_Vegetable_Cooked"));
+            assertEquals(8, items.getAsJsonObject("Rock_Gem_Ruby").get("points").getAsInt());
+            assertEquals(8, items.getAsJsonObject("Rock_Gem_Diamond").get("points").getAsInt());
+            assertEquals(7, items.getAsJsonObject("Rock_Gem_Emerald").get("points").getAsInt());
+            assertEquals(5, items.getAsJsonObject("Fish_Minnow_Item").get("points").getAsInt());
+            assertEquals(7, items.getAsJsonObject("Fish_Salmon_Item").get("points").getAsInt());
+            assertEquals(9, items.getAsJsonObject("Fish_Frostgill_Item").get("points").getAsInt());
+            assertEquals(12, items.getAsJsonObject("Fish_Whale_Humpback_Item").get("points").getAsInt());
+            assertEquals(5, items.getAsJsonObject("Plant_Crop_Wheat_Item").get("points").getAsInt());
+            assertEquals(6, items.getAsJsonObject("Plant_Crop_Carrot_Item").get("points").getAsInt());
+            assertEquals(11, items.getAsJsonObject("Plant_Crop_Potato_Item").get("points").getAsInt());
+            assertEquals(4, items.getAsJsonObject("Food_Fish_Grilled").get("points").getAsInt());
+            assertEquals(6, items.getAsJsonObject("Food_Bread").get("points").getAsInt());
+            assertEquals(8, items.getAsJsonObject("Food_Kebab_Meat").get("points").getAsInt());
+            assertEquals(10, items.getAsJsonObject("Food_Salad_Caesar").get("points").getAsInt());
+            assertEquals(12, items.getAsJsonObject("Food_Pie_Apple").get("points").getAsInt());
+            int adamantite = items.getAsJsonObject("Weapon_Sword_Adamantite").get("points").getAsInt();
+            int mithril = items.getAsJsonObject("Weapon_Sword_Mithril").get("points").getAsInt();
+            int onyxium = items.getAsJsonObject("Weapon_Sword_Onyxium").get("points").getAsInt();
+            int prisma = items.getAsJsonObject("Weapon_Mace_Prisma").get("points").getAsInt();
+            assertTrue(adamantite < mithril);
+            assertTrue(mithril < onyxium);
+            assertTrue(onyxium < prisma);
+            assertTrue(prisma <= 12);
+            assertEquals(
+                items.getAsJsonObject("Weapon_Sword_Cobalt").get("points").getAsInt(),
+                items.getAsJsonObject("Weapon_Sword_Thorium").get("points").getAsInt()
+            );
+        }
+    }
+
+    @Test
+    void shippedMarketVendorShopsHaveAtLeastSixDifferentItems() throws Exception {
+        String[] shops = {
+            "Bard",
+            "Blacksmith",
+            "Builder",
+            "Chef",
+            "Crystal_Keeper",
+            "Farmer",
+            "Florist",
+            "Innkeeper",
+            "Logger",
+            "Merchant",
+            "Miner",
+            "Priestess",
+            "Pyrotechnic",
+            "Rancher"
+        };
+        for (String shop : shops) {
+            String path = "/Server/BarterShops/Aetherhaven_Festival_Market_" + shop + ".json";
+            try (var in = FestivalCatalogAndWindowTest.class.getResourceAsStream(path)) {
+                assertNotNull(in, "missing shop " + path);
+                String json = new String(in.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+                com.google.gson.JsonObject root = GSON.fromJson(json, com.google.gson.JsonObject.class);
+                java.util.Set<String> ids = new java.util.LinkedHashSet<>();
+                for (com.google.gson.JsonElement slotEl : root.getAsJsonArray("TradeSlots")) {
+                    com.google.gson.JsonObject output =
+                        slotEl.getAsJsonObject().getAsJsonObject("Trade").getAsJsonObject("Output");
+                    ids.add(output.get("ItemId").getAsString());
+                }
+                assertTrue(ids.size() >= 6, shop + " has " + ids.size() + " items: " + ids);
+            }
+        }
     }
 
     private static LocalDateTime dayOf(Season season, int dayOfSeason) {

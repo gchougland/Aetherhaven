@@ -35,11 +35,39 @@
 	"Model": "Items/Aetherhaven/Heartberry.blockymodel",
 	"Texture": "Items/Aetherhaven/Heartberry.png",
 	"PlayerAnimationsId": "Item",
+	"BlockType": {
+		"Material": "Empty",
+		"DrawType": "Model",
+		"HitboxType": "Food_Small",
+		"CustomModel": "Items/Aetherhaven/Heartberry.blockymodel",
+		"CustomModelTexture": [
+			{
+				"Texture": "Items/Aetherhaven/Heartberry.png",
+				"Weight": 1
+			}
+		],
+		"ParticleColor": "#e05050",
+		"TextureComputedColor": "#c43c4a",
+		"RandomRotation": "YawStep1",
+		"Gathering": {
+			"Harvest": {},
+			"Soft": {}
+		}
+	},
 	"Interactions": {
 		"Use": {
 			"Interactions": [
 				{
-					"Type": "AetherhavenHeartberryUse"
+					"Type": "AetherhavenHeartberryUse",
+					"Failed": "Block_Secondary"
+				}
+			]
+		},
+		"Secondary": {
+			"Interactions": [
+				{
+					"Type": "AetherhavenHeartberryUse",
+					"Failed": "Block_Secondary"
 				}
 			]
 		}

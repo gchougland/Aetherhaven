@@ -100,11 +100,7 @@ public final class WallPlacementEditHelper {
                                     new Vector3i(plot.getSignX(), plot.getSignY(), plot.getSignZ())
                                 );
                             session.setCurrentRotationSteps(PlotPlacementSession.rotationStepsFromPrefabYaw(plot.resolvePrefabYaw()));
-                            if (WallPieceGeometry.isTowerConstructionId(plot.getConstructionId())) {
-                                session.setPieceKind(WallPlacementSession.PieceKind.TOWER);
-                            } else if (AetherhavenConstants.CONSTRUCTION_PLOT_WALL_GATE.equals(plot.getConstructionId())) {
-                                session.setPieceKind(WallPlacementSession.PieceKind.GATE);
-                            }
+                            session.adoptPieceForEdit(plot.getConstructionId());
                             session.setEditTargetPlotId(plotId);
                             WallPlacementSessions.put(uc.getUuid(), session);
                             return new WallPlacementPage(playerRef, session);
@@ -125,11 +121,7 @@ public final class WallPlacementEditHelper {
         Vector3i anchor = groundedSignAnchorForSegment(world, plugin, seg, cx, cz, fp.getMaxY());
         WallPlacementSession session = new WallPlacementSession(world, anchor);
         session.setCurrentRotationSteps(PlotPlacementSession.rotationStepsFromPrefabYaw(seg.resolvePrefabYaw()));
-        if (WallPieceGeometry.isTowerConstructionId(seg.getConstructionId())) {
-            session.setPieceKind(WallPlacementSession.PieceKind.TOWER);
-        } else if (AetherhavenConstants.CONSTRUCTION_PLOT_WALL_GATE.equals(seg.getConstructionId())) {
-            session.setPieceKind(WallPlacementSession.PieceKind.GATE);
-        }
+        session.adoptPieceForEdit(seg.getConstructionId());
         session.setEditTargetSegmentId(seg.getSegmentId());
         WallPlacementSessions.put(uc.getUuid(), session);
         return new WallPlacementPage(playerRef, session);
@@ -164,13 +156,7 @@ public final class WallPlacementEditHelper {
                             session.setCurrentRotationSteps(
                                 PlotPlacementSession.rotationStepsFromPrefabYaw(plot.resolvePrefabYaw())
                             );
-                            if (WallPieceGeometry.isTowerConstructionId(plot.getConstructionId())) {
-                                session.setPieceKind(WallPlacementSession.PieceKind.TOWER);
-                            } else if (AetherhavenConstants.CONSTRUCTION_PLOT_WALL_GATE.equals(plot.getConstructionId())) {
-                                session.setPieceKind(WallPlacementSession.PieceKind.GATE);
-                            } else {
-                                session.setPieceKind(WallPlacementSession.PieceKind.SEGMENT);
-                            }
+                            session.adoptPieceForEdit(plot.getConstructionId());
                         }
                         return true;
                     }
@@ -189,13 +175,7 @@ public final class WallPlacementEditHelper {
         int cz = (fp.getMinZ() + fp.getMaxZ()) / 2;
         session.setCurrentAnchor(groundedSignAnchorForSegment(world, plugin, seg, cx, cz, fp.getMaxY()));
         session.setCurrentRotationSteps(PlotPlacementSession.rotationStepsFromPrefabYaw(seg.resolvePrefabYaw()));
-        if (WallPieceGeometry.isTowerConstructionId(seg.getConstructionId())) {
-            session.setPieceKind(WallPlacementSession.PieceKind.TOWER);
-        } else if (AetherhavenConstants.CONSTRUCTION_PLOT_WALL_GATE.equals(seg.getConstructionId())) {
-            session.setPieceKind(WallPlacementSession.PieceKind.GATE);
-        } else {
-            session.setPieceKind(WallPlacementSession.PieceKind.SEGMENT);
-        }
+        session.adoptPieceForEdit(seg.getConstructionId());
         return true;
     }
 

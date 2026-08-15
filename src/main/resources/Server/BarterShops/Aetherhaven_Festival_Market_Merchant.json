@@ -1,0 +1,105 @@
+{
+  "DisplayNameKey": "aetherhaven_festivals.aetherhaven.festival.shop.market.merchant",
+  "RefreshInterval": {
+    "Days": 1
+  },
+  "RestockHour": 6,
+  "TradeSlots": [
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Food_Bread",
+          "Quantity": 4
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 3
+          }
+        ],
+        "Stock": 12
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Ingredient_Bar_Copper",
+          "Quantity": 2
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 4
+          }
+        ],
+        "Stock": 8
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Plant_Flower_Common_Yellow2",
+          "Quantity": 4
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 3
+          }
+        ],
+        "Stock": 12
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Rock_Gem_Topaz",
+          "Quantity": 1
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 7
+          }
+        ],
+        "Stock": 4
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Food_Cheese",
+          "Quantity": 4
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 3
+          }
+        ],
+        "Stock": 12
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": {
+          "ItemId": "Ore_Copper",
+          "Quantity": 6
+        },
+        "Input": [
+          {
+            "ItemId": "Aetherhaven_Festival_Ticket_Autumn",
+            "Quantity": 4
+          }
+        ],
+        "Stock": 10
+      }
+    }
+  ]
+}

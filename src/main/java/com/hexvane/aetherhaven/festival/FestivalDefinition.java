@@ -140,6 +140,16 @@ public final class FestivalDefinition {
     @Nullable
     private List<OrbSpawnRow> orbSpawns;
 
+    /** Market Festival judging stands in prefab-local space (player stall first, then rival stands). */
+    @SerializedName("marketStands")
+    @Nullable
+    private List<RaceStartSpotRow> marketStands;
+
+    /** Market Festival player-stall display slots in prefab-local space (nine floating item pads). */
+    @SerializedName("marketDisplaySlots")
+    @Nullable
+    private List<OrbSpawnRow> marketDisplaySlots;
+
     /** Item ids a mechanic may hand out, e.g. the New Life seed burst pool. */
     @SerializedName("burstItemIds")
     @Nullable
@@ -300,6 +310,16 @@ public final class FestivalDefinition {
     @Nonnull
     public List<OrbSpawnRow> getOrbSpawns() {
         return orbSpawns != null ? List.copyOf(orbSpawns) : List.of();
+    }
+
+    @Nonnull
+    public List<RaceStartSpotRow> getMarketStands() {
+        return marketStands != null ? List.copyOf(marketStands) : List.of();
+    }
+
+    @Nonnull
+    public List<OrbSpawnRow> getMarketDisplaySlots() {
+        return marketDisplaySlots != null ? List.copyOf(marketDisplaySlots) : List.of();
     }
 
     @Nonnull

@@ -166,12 +166,12 @@ public final class PlotCreatorMaterialsPage extends AetherhavenInteractiveCustom
             return;
         }
         if ("FillFromBuildShape".equals(data.action)) {
-            PlotCreatorMaterialsActions.requestFillFromBuildShape(session, playerRef);
+            PlotCreatorMaterialsActions.requestFillFromBuildShape(session, playerRef, () -> refreshIfOpen(ref, store));
             refreshIfOpen(ref, store);
             return;
         }
         if ("SuggestResources".equals(data.action)) {
-            PlotCreatorMaterialsActions.requestSuggestResources(session, playerRef);
+            PlotCreatorMaterialsActions.requestSuggestResources(session, playerRef, () -> refreshIfOpen(ref, store));
             refreshIfOpen(ref, store);
             return;
         }

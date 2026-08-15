@@ -138,6 +138,7 @@ public final class BuildingEditorFestivalSessionStarter {
         draft.setFestivalSizeLocked(true);
         draft.setFestivalPicked(true);
         PlotCreatorFestivalDraftSetup.applyFestivalFields(draft, existing);
+        draft.setSaveEmptySpaces(false);
         PlotCreatorStep startStep = editorStartStep(draft);
         draft.setStep(startStep);
         draft.setMaxReachedStepIndex(Math.max(0, PlotCreatorService.stepOrder(draft).indexOf(startStep)));

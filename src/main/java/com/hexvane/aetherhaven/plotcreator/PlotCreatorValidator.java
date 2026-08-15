@@ -17,6 +17,19 @@ public final class PlotCreatorValidator {
 
     @Nullable
     public static String validateId(@Nullable String raw, @Nonnull ConstructionCatalog catalog, @Nullable String editingId) {
+        return validateId(raw, catalog, editingId, false);
+    }
+
+    /**
+     * @param wallStyle true for the wall style flow, which owns the {@code plot_wall_} id space
+     */
+    @Nullable
+    public static String validateId(
+        @Nullable String raw,
+        @Nonnull ConstructionCatalog catalog,
+        @Nullable String editingId,
+        boolean wallStyle
+    ) {
         if (raw == null) {
             return "id_empty";
         }
@@ -27,7 +40,7 @@ public final class PlotCreatorValidator {
         if (!id.startsWith("plot_")) {
             return "id_prefix";
         }
-        if (id.startsWith("plot_wall")) {
+        if (id.startsWith("plot_wall") && !wallStyle) {
             return "id_wall";
         }
         if (!id.matches("plot_[a-z0-9_]+")) {
@@ -73,10 +86,40 @@ public final class PlotCreatorValidator {
         return null;
     }
 
+    /** A wall style is five buildings, so it checks the derived piece ids and each piece's shape instead of one prefab. */
+    @Nullable
+    public static String validateWallStyleBeforeSave(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        if (draft.getDisplayName() == null || draft.getDisplayName().isBlank()) {
+            return "id_empty";
+        }
+        String idErr =
+            validateId(draft.getConstructionId(), plugin.getConstructionCatalog(), draft.getEditingConstructionId(), true);
+        if (idErr != null) {
+            return idErr;
+        }
+        // Saving a style loaded in the building editor writes over its own pieces, so those ids are not clashes.
+        String base = PlotCreatorWallStyleIds.baseId(draft);
+        boolean overwriting = base != null && PlotCreatorWallStyleIds.isSavingLoadedStyle(draft, base);
+        for (String pieceId : PlotCreatorWallStyleIds.pieceConstructionIds(draft)) {
+            String pieceErr =
+                validateId(pieceId, plugin.getConstructionCatalog(), overwriting ? pieceId : null, true);
+            if (pieceErr != null) {
+                return pieceErr;
+            }
+        }
+        return PlotCreatorWallPieceAuthoring.validateStyle(draft);
+    }
+
     @Nullable
     public static String validateBeforeSave(@Nonnull PlotCreatorDraft draft, @Nonnull AetherhavenPlugin plugin) {
         if (draft.isFestivalMode()) {
             return validateFestivalBeforeSave(draft, plugin);
+        }
+        if (draft.isWallMode()) {
+            return validateWallStyleBeforeSave(draft, plugin);
         }
         if (draft.getConstructionId() == null || draft.getDisplayName() == null || draft.getPrefabPath() == null) {
             return "incomplete";
@@ -146,6 +189,8 @@ public final class PlotCreatorValidator {
             case FESTIVAL_TREE_CLIMB_FINISH -> draft.getFestivalRaceFinishLocal() != null ? 1 : 0;
             case FESTIVAL_MAZE_START -> draft.getFestivalMazeStartLocal() != null ? 1 : 0;
             case FESTIVAL_MAZE_ORB_SPAWN -> draft.getFestivalOrbSpawns().size();
+            case FESTIVAL_MARKET_STAND -> draft.getFestivalMarketStands().size();
+            case FESTIVAL_MARKET_DISPLAY -> draft.getFestivalMarketDisplaySlots().size();
         };
     }
 

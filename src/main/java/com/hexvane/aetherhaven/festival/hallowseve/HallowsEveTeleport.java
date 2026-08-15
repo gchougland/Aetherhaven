@@ -32,6 +32,11 @@ public final class HallowsEveTeleport {
         return (float) Math.toDegrees(Math.atan2(-dx, -dz));
     }
 
+    /** World body yaw so something at {@code from} looks away from {@code awayFrom}. */
+    public static float yawDegreesAwayFrom(@Nonnull Vector3d from, @Nonnull Vector3d awayFrom) {
+        return yawDegreesToward(from, awayFrom) + 180f;
+    }
+
     /** Sets the maze start pad in world space and faces the player toward the maze center. */
     public static void bindStartPad(
         @Nonnull AetherhavenPlugin plugin,

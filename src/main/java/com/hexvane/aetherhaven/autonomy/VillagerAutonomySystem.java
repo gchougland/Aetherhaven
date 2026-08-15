@@ -7,6 +7,11 @@ import com.hexvane.aetherhaven.autonomy.pathnav.PathNavTravelSupport;
 import com.hexvane.aetherhaven.autonomy.pathnav.PathNavTravelWaypoints;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.festival.FestivalAttendanceService;
+import com.hexvane.aetherhaven.festival.market.MarketIds;
+import com.hexvane.aetherhaven.festival.market.MarketJudgeDirectorSystem;
+import com.hexvane.aetherhaven.festival.market.MarketSession;
+import com.hexvane.aetherhaven.festival.market.MarketSessionIndex;
+import com.hexvane.aetherhaven.entity.EntityRotationUtil;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistState;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistSystem;
 import com.hexvane.aetherhaven.clown.ClownCheerAssistState;
@@ -50,6 +55,7 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import org.joml.Vector3d;
 import com.hypixel.hytale.protocol.AnimationSlot;
+import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.time.TimeModule;
@@ -745,18 +751,45 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (townRecord == null || TownVillagerBinding.isScheduleSuppressedKind(binding.getKind())) {
             return false;
         }
-        PoiEntry spot = FestivalAttendanceService.findSpot(world, plugin, townRecord, binding.getKind());
+        UUID villagerUuid = null;
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc != null) {
+            villagerUuid = uc.getUuid();
+        }
+        PoiEntry judging = MarketJudgeDirectorSystem.redirectSpot(world, plugin, townRecord, binding, villagerUuid);
+        PoiEntry spot =
+            judging != null
+                ? judging
+                : FestivalAttendanceService.findSpot(world, plugin, townRecord, binding.getKind(), villagerUuid);
         if (spot == null) {
             return false;
         }
-        if (tc != null && isStandingAtFestivalSpot(tc, spot)) {
+        boolean tightStand = judging != null || isTightFestivalStandPoi(spot);
+        boolean pondering = judging != null && isJudgingPonder(townRecord);
+        if (tc != null && isStandingAtFestivalSpot(tc, spot, tightStand ? MarketIds.STALL_ARRIVED_DIST_SQ : FESTIVAL_SPOT_ARRIVED_DIST_SQ)) {
+            if (tightStand && judging == null) {
+                snapToFestivalSpot(ref, commandBuffer, tc, spot);
+            }
+            if (!pondering) {
+                faceFestivalSpotYaw(ref, store, commandBuffer, tc, spot);
+            }
+            boolean parkStill = tightStand || isMarketStallVendor(townRecord, villagerUuid);
             // Stay put: clear leftover travel seek so pathing does not pull them off the marker.
             if (autonomy.getPhase() != VillagerAutonomyState.PHASE_IDLE) {
                 autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
-                clearAutonomySeekState(ref, npc, commandBuffer);
+                if (!parkStill) {
+                    clearAutonomySeekState(ref, npc, commandBuffer);
+                }
             }
             autonomy.setNextDecisionEpochMs(now + FESTIVAL_SPOT_HOLD_MS);
             commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+            if (judging != null) {
+                // Leave the leash on his feet so Seek does not keep running through the marker.
+                npc.setLeashPoint(new Vector3d(tc.getPosition()));
+                commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+            } else if (parkStill) {
+                applyAutonomyRoleState(ref, npc, commandBuffer);
+            }
             return true;
         }
         // Already walking to this spot: do not restart travel every tick (that strands villagers).
@@ -771,11 +804,116 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
     }
 
     private static boolean isStandingAtFestivalSpot(@Nonnull TransformComponent tc, @Nonnull PoiEntry spot) {
+        return isStandingAtFestivalSpot(tc, spot, FESTIVAL_SPOT_ARRIVED_DIST_SQ);
+    }
+
+    private static boolean isStandingAtFestivalSpot(
+        @Nonnull TransformComponent tc,
+        @Nonnull PoiEntry spot,
+        double limitSq
+    ) {
         double tx = spot.getInteractionTargetX() != null ? spot.getInteractionTargetX() : spot.getX() + 0.5;
         double tz = spot.getInteractionTargetZ() != null ? spot.getInteractionTargetZ() : spot.getZ() + 0.5;
         double dx = tc.getPosition().x - tx;
         double dz = tc.getPosition().z - tz;
-        return dx * dx + dz * dz <= FESTIVAL_SPOT_ARRIVED_DIST_SQ;
+        return dx * dx + dz * dz <= limitSq;
+    }
+
+    private static boolean isJudgingPonder(@Nullable TownRecord town) {
+        if (town == null) {
+            return false;
+        }
+        MarketSession session = MarketSessionIndex.get(town.getTownId());
+        return session != null && session.isJudging() && session.isPondering();
+    }
+
+    /**
+     * Park on a market stand or ticket stall. Judging stands keep Seek but move the leash to his feet so he does not
+     * run through the marker, and they do not snap (that looks like a teleport).
+     */
+    private static void parkArrivedFestivalStand(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull NPCEntity npc,
+        @Nonnull TransformComponent tc,
+        @Nonnull PoiEntry spot,
+        boolean snap
+    ) {
+        if (MarketIds.isStandKind(spot.getWorkResidentKind())) {
+            npc.setLeashPoint(new Vector3d(tc.getPosition()));
+            applyAutonomyRoleState(ref, npc, commandBuffer);
+            commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+            faceFestivalSpotYaw(ref, store, commandBuffer, tc, spot);
+            return;
+        }
+        if (snap) {
+            snapToFestivalSpot(ref, commandBuffer, tc, spot);
+        }
+        applyAutonomyRoleState(ref, npc, commandBuffer);
+        faceFestivalSpotYaw(ref, store, commandBuffer, tc, spot);
+    }
+
+    private static boolean isMarketStallVendor(@Nullable TownRecord town, @Nullable UUID villagerUuid) {
+        if (town == null || villagerUuid == null) {
+            return false;
+        }
+        MarketSession session = MarketSessionIndex.get(town.getTownId());
+        return session != null && session.isVendor(villagerUuid);
+    }
+
+    /** Watch / dance markers on the square, not Market Festival judging stands or ticket stalls. */
+    private static boolean isFestivalWatchPoi(@Nullable PoiEntry poi) {
+        return poi != null && PoiScoring.isFestivalPoi(poi) && !isTightFestivalStandPoi(poi);
+    }
+
+    private static boolean isTightFestivalStandPoi(@Nullable PoiEntry poi) {
+        if (poi == null) {
+            return false;
+        }
+        String kind = poi.getWorkResidentKind();
+        return MarketIds.isStandKind(kind) || MarketIds.isMarketShopKind(kind);
+    }
+
+    private static boolean isJudgingStandPoi(@Nullable PoiEntry poi) {
+        return poi != null && MarketIds.isStandKind(poi.getWorkResidentKind());
+    }
+
+    private static void snapToFestivalSpot(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull TransformComponent tc,
+        @Nonnull PoiEntry spot
+    ) {
+        double tx = spot.getInteractionTargetX() != null ? spot.getInteractionTargetX() : spot.getX() + 0.5;
+        double tz = spot.getInteractionTargetZ() != null ? spot.getInteractionTargetZ() : spot.getZ() + 0.5;
+        Vector3d pos = tc.getPosition();
+        if (Math.abs(pos.x - tx) < 0.01 && Math.abs(pos.z - tz) < 0.01) {
+            return;
+        }
+        pos.x = tx;
+        pos.z = tz;
+        commandBuffer.putComponent(ref, TransformComponent.getComponentType(), tc);
+    }
+
+    private static void faceFestivalSpotYaw(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull TransformComponent tc,
+        @Nonnull PoiEntry spot
+    ) {
+        Float yaw = spot.getInteractionTargetYawRadians();
+        if (yaw == null) {
+            return;
+        }
+        EntityRotationUtil.setBodyYaw(tc.getRotation(), yaw);
+        commandBuffer.putComponent(ref, TransformComponent.getComponentType(), tc);
+        HeadRotation head = store.getComponent(ref, HeadRotation.getComponentType());
+        if (head != null) {
+            EntityRotationUtil.setBodyYaw(head.getRotation(), yaw);
+            commandBuffer.putComponent(ref, HeadRotation.getComponentType(), head);
+        }
     }
 
     private static boolean tryBeginFeastGatherTravel(
@@ -975,9 +1113,12 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             double horizSq = dx * dx + dz * dz;
             double maxArriveSq = ARRIVE_HORIZONTAL_SQ;
             boolean mountKind = pick.getInteractionKind() == PoiInteractionKind.SIT || pick.getInteractionKind() == PoiInteractionKind.SLEEP;
-            boolean festivalStand = PoiScoring.isFestivalPoi(pick);
-            if (festivalStand) {
+            boolean festivalWatch = isFestivalWatchPoi(pick);
+            boolean tightStand = isTightFestivalStandPoi(pick);
+            if (festivalWatch) {
                 maxArriveSq = FESTIVAL_SPOT_ARRIVED_DIST_SQ;
+            } else if (tightStand) {
+                maxArriveSq = MarketIds.STALL_ARRIVED_DIST_SQ;
             } else if (mountKind && pick.hasInteractionTarget()) {
                 maxArriveSq = POI_ENTRY_ARRIVE_HORIZONTAL_SQ;
             } else if (mountKind) {
@@ -1002,7 +1143,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 autonomy.clearTravelWaypoints();
                 npc.setLeashPoint(finalTarget);
                 closePendingDoorsAfterTravelArrival(ref, store, world, autonomy, tc.getPosition(), maxArriveSq);
-                if (festivalStand) {
+                if (festivalWatch || tightStand) {
                     autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
                     autonomy.setPathFailureReason("");
                     autonomy.setTravelStuckTicks(0);
@@ -1011,7 +1152,13 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                     autonomy.setFillingFun(false);
                     autonomy.setNextDecisionEpochMs(now);
                     commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
-                    clearAutonomySeekState(ref, npc, commandBuffer);
+                    UUIDComponent arrivedUuid = store.getComponent(ref, UUIDComponent.getComponentType());
+                    if (tightStand
+                        || isMarketStallVendor(townRecord, arrivedUuid != null ? arrivedUuid.getUuid() : null)) {
+                        parkArrivedFestivalStand(ref, store, commandBuffer, npc, tc, pick, tightStand);
+                    } else {
+                        clearAutonomySeekState(ref, npc, commandBuffer);
+                    }
                     return;
                 }
                 tryEnterPoiUse(ref, store, commandBuffer, world, npc, autonomy, now, townRecord, pathNavTownId, pick);
@@ -1097,13 +1244,30 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         TownVillagerBinding travelBinding = store.getComponent(ref, TownVillagerBinding.getComponentType());
         TransformComponent tcEarly = store.getComponent(ref, TransformComponent.getComponentType());
         // Festival spots outrank other trips: drop a wrong destination so idle re-routes to the square.
-        boolean travelingToFestival = poiEarly != null && PoiScoring.isFestivalPoi(poiEarly);
+        // Judging walks to market stands, which are not the elder's watch marker — do not cancel those.
+        boolean travelingToFestival = isFestivalWatchPoi(poiEarly) || isTightFestivalStandPoi(poiEarly);
         if (plugin != null && travelBinding != null && townRecord != null) {
-            PoiEntry festivalSpot =
-                FestivalAttendanceService.findSpot(store.getExternalData().getWorld(), plugin, townRecord, travelBinding.getKind());
-            if (festivalSpot != null && !festivalSpot.getId().equals(poiId)) {
-                failTravel(autonomy, now, "FESTIVAL", commandBuffer, ref, npc);
-                return;
+            World festivalWorld = store.getExternalData().getWorld();
+            if (festivalWorld != null) {
+                UUIDComponent travelUuid = store.getComponent(ref, UUIDComponent.getComponentType());
+                PoiEntry expectedFestival =
+                    MarketJudgeDirectorSystem.redirectSpot(
+                        festivalWorld,
+                        plugin,
+                        townRecord,
+                        travelBinding,
+                        travelUuid != null ? travelUuid.getUuid() : null
+                    );
+                if (expectedFestival == null) {
+                    expectedFestival =
+                        FestivalAttendanceService.findSpot(
+                            festivalWorld, plugin, townRecord, travelBinding.getKind()
+                        );
+                }
+                if (expectedFestival != null && !expectedFestival.getId().equals(poiId)) {
+                    failTravel(autonomy, now, "FESTIVAL", commandBuffer, ref, npc);
+                    return;
+                }
             }
         }
         // Needs / quest board / off-shift must not yank someone off a walk to their festival stand (innkeeper was
@@ -1189,7 +1353,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return;
         }
 
-        if (tryStallTeleportRecovery(ref, store, commandBuffer, npc, autonomy, tc.getPosition())) {
+        if (!isJudgingStandPoi(poiEarly) && tryStallTeleportRecovery(ref, store, commandBuffer, npc, autonomy, tc.getPosition())) {
             return;
         }
 
@@ -1204,8 +1368,11 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             poiEarly != null
                 && (poiEarly.getInteractionKind() == PoiInteractionKind.SIT
                     || poiEarly.getInteractionKind() == PoiInteractionKind.SLEEP);
-        if (travelingToFestival) {
+        boolean tightStandTravel = isTightFestivalStandPoi(poiEarly);
+        if (travelingToFestival && isFestivalWatchPoi(poiEarly)) {
             maxArriveSq = FESTIVAL_SPOT_ARRIVED_DIST_SQ;
+        } else if (tightStandTravel) {
+            maxArriveSq = MarketIds.STALL_ARRIVED_DIST_SQ;
         } else if (mountKind && poiEarly != null && poiEarly.hasInteractionTarget()) {
             maxArriveSq = POI_ENTRY_ARRIVE_HORIZONTAL_SQ;
         } else if (mountKind) {
@@ -1290,7 +1457,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                     return;
                 }
                 Vector3d recovery = AutonomyStuckTeleportRecovery.resolveVillagerRecoveryTarget(autonomy);
-                if (recovery != null) {
+                if (recovery != null && !isJudgingStandPoi(poiEarly)) {
                     AutonomyStuckTeleportRecovery.teleportNpc(ref, commandBuffer, store, recovery, npc);
                     AutonomyStuckTeleportRecovery.applyPostTeleportTravel(npc, autonomy, recovery);
                     commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
@@ -1324,7 +1491,9 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 return;
             }
             // Festival stands are for watching, not a timed POI use that can hand off to inn needs afterward.
-            if (PoiScoring.isFestivalPoi(poi)) {
+            boolean festivalWatch = isFestivalWatchPoi(poi);
+            boolean tightStand = isTightFestivalStandPoi(poi);
+            if (festivalWatch || tightStand) {
                 autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
                 autonomy.setPathFailureReason("");
                 autonomy.setTravelStuckTicks(0);
@@ -1333,7 +1502,13 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 autonomy.setFillingFun(false);
                 autonomy.setNextDecisionEpochMs(now);
                 commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
-                clearAutonomySeekState(ref, npc, commandBuffer);
+                UUIDComponent arrivedUuid = store.getComponent(ref, UUIDComponent.getComponentType());
+                if (tightStand
+                    || isMarketStallVendor(townRecord, arrivedUuid != null ? arrivedUuid.getUuid() : null)) {
+                    parkArrivedFestivalStand(ref, store, commandBuffer, npc, tc, poi, tightStand);
+                } else {
+                    clearAutonomySeekState(ref, npc, commandBuffer);
+                }
                 return;
             }
             if (mountKind

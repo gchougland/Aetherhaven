@@ -75,7 +75,7 @@ public final class PlotCreatorBoundsDragInteraction extends ChargingInteraction 
             return;
         }
         PlotCreatorSession session = PlotCreatorSessions.get(playerRef.getUuid());
-        if (session == null || session.getDraft().getStep() != PlotCreatorStep.BOUNDS) {
+        if (session == null || !session.getDraft().isEditingBounds()) {
             context.getState().state = InteractionState.Finished;
             return;
         }

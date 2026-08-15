@@ -534,6 +534,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.dialogueResolver.reloadFromVillagerCatalog(this.villagerDefinitionCatalog);
         Path customData = this.getDataDirectory();
         this.constructionCatalog = ConstructionCatalog.loadFromAssetPacksOrClasspath(cl, customData);
+        com.hexvane.aetherhaven.wall.WallStyleCatalog.invalidate();
         this.prefabMaterialsService.generateAllForCatalog(this.constructionCatalog, customData, cl);
         this.prefabMaterialsCatalog = PrefabMaterialsCatalog.loadFromAssetPacksOrClasspath(cl, customData);
         this.dialogueCatalog = DialogueCatalog.loadFromAssetPacksOrClasspath(cl);

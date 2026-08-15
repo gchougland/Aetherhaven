@@ -20,10 +20,11 @@ public final class PlotCreatorSpotMarkerVisuals {
             case VISITOR_SPAWN, TOURIST_VISIT_POI, TOURIST_PORTAL_BLOCK, FESTIVAL_TOURIST_SPOT -> TEX_TEAL;
             case ADVENTURER_SPAWN, INNKEEPER_SPAWN, GUILD_MASTER_SPAWN, FESTIVAL_NPC -> TEX_PURPLE;
             case SLEEP_POI, EAT_POI, FUN_POI, FESTIVAL_CENTERPIECE, FESTIVAL_WHEEL, FESTIVAL_TREE_CLIMB_FINISH,
-                FESTIVAL_MAZE_START ->
+                FESTIVAL_MAZE_START, FESTIVAL_MARKET_STAND ->
                 TEX_BLUE;
             case WORK_POI, BARD_WORK_POI, PLANNING_DESK_POI, QUEST_BOARD_POI, SHOP_POI, FESTIVAL_RACE_LANE,
-                FESTIVAL_BALLOON_SPAWN, FESTIVAL_WHACK_SPAWN, FESTIVAL_TREE_CLIMB_START, FESTIVAL_MAZE_ORB_SPAWN ->
+                FESTIVAL_BALLOON_SPAWN, FESTIVAL_WHACK_SPAWN, FESTIVAL_TREE_CLIMB_START, FESTIVAL_MAZE_ORB_SPAWN,
+                FESTIVAL_MARKET_DISPLAY ->
                 TEX_ORANGE;
             case MANAGEMENT_BLOCK,
                 PRODUCTION_STORAGE,
@@ -106,6 +107,8 @@ public final class PlotCreatorSpotMarkerVisuals {
             case FESTIVAL_TREE_CLIMB_FINISH -> "Tree climb finish";
             case FESTIVAL_MAZE_START -> "Maze start";
             case FESTIVAL_MAZE_ORB_SPAWN -> "Maze orb spawn";
+            case FESTIVAL_MARKET_STAND -> "Market stand";
+            case FESTIVAL_MARKET_DISPLAY -> "Market display";
         };
     }
 
@@ -161,6 +164,7 @@ public final class PlotCreatorSpotMarkerVisuals {
             case "crystal_keeper" -> "Crystal keeper work spot";
             case "chef" -> "Chef work spot";
             case "priestess" -> "Priestess work spot";
+            case "market_shop" -> "Market stall";
             default -> "Work spot";
         };
     }

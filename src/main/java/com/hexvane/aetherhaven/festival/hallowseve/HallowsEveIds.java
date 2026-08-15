@@ -17,6 +17,7 @@ public final class HallowsEveIds {
     public static final String PUMPKIN_NPC_ROLE = "Aetherhaven_Festival_Jack_Lantern";
     public static final String PUMPKIN_MODEL_ASSET_ID = "Aetherhaven_Festival_Jack_Lantern";
     public static final String ORB_MODEL_ASSET_ID = "Aetherhaven_Festival_Maze_Orb";
+    public static final String BAT_NPC_ROLE = "Aetherhaven_Festival_Hallows_Eve_Bat";
 
     public static final String HUD_KEY = "AetherhavenHallowsEveMaze";
     public static final String ROOT_INTERACTION_BURST = "Aetherhaven_Festival_Jack_Lantern_Burst_Root";
@@ -24,6 +25,8 @@ public final class HallowsEveIds {
         "aetherhaven_festivals.aetherhaven.festival.interactionHints.burstJackLantern";
 
     public static final String COLLECT_SOUND = "Aetherhaven_Festival_Hallows_Eve_Orb";
+
+    public static final int MAZE_COST_GOLD = 10;
 
     public static final int DEFAULT_TOURIST_SPOTS = 8;
     public static final int DEFAULT_ORB_SPAWNS = 8;
@@ -37,6 +40,11 @@ public final class HallowsEveIds {
 
     public static final float PUMPKIN_MIN_SCALE = 1.2f;
     public static final float PUMPKIN_MAX_SCALE = 4.0f;
+
+    public static final int BAT_COUNT = 6;
+    public static final float BAT_RESTOCK_SECONDS = 4.0f;
+    public static final double BAT_HEIGHT_ABOVE_PLOT = 8.0;
+    public static final double BAT_HEIGHT_JITTER = 4.0;
 
     private HallowsEveIds() {}
 

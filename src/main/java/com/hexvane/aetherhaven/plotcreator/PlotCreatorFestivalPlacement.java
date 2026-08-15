@@ -235,6 +235,68 @@ public final class PlotCreatorFestivalPlacement {
         return true;
     }
 
+    public static boolean placeMarketStand(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> playerEntityRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        PlotCreatorDraft draft = session.getDraft();
+        PlotCreatorSpotPlacement.ResolvedSpot spot =
+            PlotCreatorSpotPlacement.resolveStandSpawn(session.getWorld(), targetBlock);
+        int[] local = PlotCreatorLocalCoords.toLocal(draft, spot.worldBlock());
+        if (hasMarketStandAt(draft, local)) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalMarketStandAlreadyRecorded")
+            );
+            return true;
+        }
+        if (com.hexvane.aetherhaven.festival.market.MarketIds.MECHANIC_ID.equals(draft.getFestivalMechanicId())
+            && draft.getFestivalMarketStands().size() >= com.hexvane.aetherhaven.festival.market.MarketIds.STAND_COUNT) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalMarketStandFull")
+            );
+            return true;
+        }
+        float yaw = playerYawDegrees(draft, playerEntityRef, store);
+        draft.getFestivalMarketStands().add(FestivalDefinition.RaceStartSpotRow.of(local[0], local[1], local[2], yaw));
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalMarketStandRecorded")
+        );
+        return true;
+    }
+
+    public static boolean placeMarketDisplay(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef
+    ) {
+        PlotCreatorDraft draft = session.getDraft();
+        PlotCreatorSpotPlacement.ResolvedSpot spot =
+            PlotCreatorSpotPlacement.resolveStandSpawn(session.getWorld(), targetBlock);
+        int[] local = PlotCreatorLocalCoords.toLocal(draft, spot.worldBlock());
+        if (hasMarketDisplayAt(draft, local)) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalMarketDisplayAlreadyRecorded")
+            );
+            return true;
+        }
+        if (com.hexvane.aetherhaven.festival.market.MarketIds.MECHANIC_ID.equals(draft.getFestivalMechanicId())
+            && draft.getFestivalMarketDisplaySlots().size()
+                >= com.hexvane.aetherhaven.festival.market.MarketIds.SLOT_COUNT) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalMarketDisplayFull")
+            );
+            return true;
+        }
+        draft.getFestivalMarketDisplaySlots().add(FestivalDefinition.OrbSpawnRow.of(local[0], local[1], local[2]));
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalMarketDisplayRecorded")
+        );
+        return true;
+    }
+
     public static boolean placeRaceLaneClick(
         @Nonnull PlotCreatorSession session,
         @Nonnull Vector3i targetBlock,
@@ -517,6 +579,50 @@ public final class PlotCreatorFestivalPlacement {
         return false;
     }
 
+    public static boolean tryRemoveMarketStandNear(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef
+    ) {
+        Iterator<FestivalDefinition.RaceStartSpotRow> it = draft.getFestivalMarketStands().iterator();
+        while (it.hasNext()) {
+            FestivalDefinition.RaceStartSpotRow spot = it.next();
+            Vector3i world =
+                PlotCreatorLocalCoords.toWorldBlock(
+                    draft,
+                    new int[] {spot.getLocalX(), spot.getLocalY(), spot.getLocalZ()}
+                );
+            if (near(world, targetBlock)) {
+                it.remove();
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalMarketStandRemoved")
+                );
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean tryRemoveMarketDisplayNear(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef
+    ) {
+        Iterator<FestivalDefinition.OrbSpawnRow> it = draft.getFestivalMarketDisplaySlots().iterator();
+        while (it.hasNext()) {
+            FestivalDefinition.OrbSpawnRow spot = it.next();
+            Vector3i world = PlotCreatorLocalCoords.toWorldBlock(draft, orbLocalBlock(spot));
+            if (near(world, targetBlock)) {
+                it.remove();
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalMarketDisplayRemoved")
+                );
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean tryRemoveRaceLaneNear(
         @Nonnull PlotCreatorSession session,
         @Nonnull Vector3i targetBlock,
@@ -601,6 +707,25 @@ public final class PlotCreatorFestivalPlacement {
 
     private static boolean hasOrbAt(@Nonnull PlotCreatorDraft draft, @Nonnull int[] local) {
         for (FestivalDefinition.OrbSpawnRow spot : draft.getFestivalOrbSpawns()) {
+            int[] block = orbLocalBlock(spot);
+            if (block[0] == local[0] && block[1] == local[1] && block[2] == local[2]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean hasMarketStandAt(@Nonnull PlotCreatorDraft draft, @Nonnull int[] local) {
+        for (FestivalDefinition.RaceStartSpotRow spot : draft.getFestivalMarketStands()) {
+            if (spot.getLocalX() == local[0] && spot.getLocalY() == local[1] && spot.getLocalZ() == local[2]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean hasMarketDisplayAt(@Nonnull PlotCreatorDraft draft, @Nonnull int[] local) {
+        for (FestivalDefinition.OrbSpawnRow spot : draft.getFestivalMarketDisplaySlots()) {
             int[] block = orbLocalBlock(spot);
             if (block[0] == local[0] && block[1] == local[1] && block[2] == local[2]) {
                 return true;

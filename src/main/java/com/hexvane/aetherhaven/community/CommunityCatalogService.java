@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -456,6 +457,8 @@ public final class CommunityCatalogService {
         ObjectArrayList<PlotCraftingCatalog.GroupEntry> groups = new ObjectArrayList<>();
         ObjectArrayList<CommunityManifestEntry> entries = new ObjectArrayList<>(cachedEntries.get());
         entries.sort(comparatorFor(sort));
+        // Wall pieces show as one card per style, with the arrows cycling the pieces inside it.
+        LinkedHashMap<String, List<CommunityManifestEntry>> wallStyles = new LinkedHashMap<>();
         for (CommunityManifestEntry entry : entries) {
             if (!PlotBuildingStyles.matchesFilter(entry.getStyleId(), activeStyleFilters)) {
                 continue;
@@ -464,6 +467,12 @@ public final class CommunityCatalogService {
                 continue;
             }
             if (!includeMissingMods && !CommunityRequiredMods.isSatisfied(entry.getRequiredMods())) {
+                continue;
+            }
+            if (entry.isWallSegment()) {
+                wallStyles
+                    .computeIfAbsent(CommunityWallStyleGrouping.groupKeyFor(entry), k -> new ArrayList<>())
+                    .add(entry);
                 continue;
             }
             groups.add(
@@ -476,6 +485,7 @@ public final class CommunityCatalogService {
                 )
             );
         }
+        groups.addAll(CommunityWallStyleGrouping.toGroups(wallStyles));
         return groups;
     }
 
@@ -505,9 +515,24 @@ public final class CommunityCatalogService {
             }
         }
         ObjectArrayList<PlotCraftingCatalog.GroupEntry> groups = new ObjectArrayList<>();
+        LinkedHashMap<String, List<CommunityManifestEntry>> favoriteWallStyles = new LinkedHashMap<>();
         for (CommunityManifestEntry entry : cachedEntries.get()) {
             String id = entry.getId().trim().toLowerCase(Locale.ROOT);
-            if (!normalized.contains(id) || catalogGroupKeys.contains(id)) {
+            if (!normalized.contains(id)) {
+                continue;
+            }
+            if (entry.isWallSegment()) {
+                String groupKey = CommunityWallStyleGrouping.groupKeyFor(entry);
+                if (catalogGroupKeys.contains(groupKey)) {
+                    continue;
+                }
+                if (PlotBuildingStyles.matchesFilter(entry.getStyleId(), activeStyleFilters)
+                    && PlotBuildingTypes.matchesFilter(entry.getTypeIds(), activeTypeFilters)) {
+                    favoriteWallStyles.computeIfAbsent(groupKey, k -> new ArrayList<>()).add(entry);
+                }
+                continue;
+            }
+            if (catalogGroupKeys.contains(id)) {
                 continue;
             }
             if (!PlotBuildingStyles.matchesFilter(entry.getStyleId(), activeStyleFilters)) {
@@ -526,6 +551,7 @@ public final class CommunityCatalogService {
                 )
             );
         }
+        groups.addAll(CommunityWallStyleGrouping.toGroups(favoriteWallStyles));
         groups.sort(Comparator.comparing(g -> g.displayName().toLowerCase(Locale.ROOT)));
         return groups;
     }
@@ -565,10 +591,13 @@ public final class CommunityCatalogService {
     public List<String> listTypeIds() {
         TreeSet<String> ids = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
         boolean anyDecoration = false;
+        boolean anyWall = false;
         for (CommunityManifestEntry entry : cachedEntries.get()) {
             for (String typeId : entry.getTypeIds()) {
                 if (PlotBuildingTypes.DECORATION.equals(typeId)) {
                     anyDecoration = true;
+                } else if (PlotBuildingTypes.WALLS.equals(typeId)) {
+                    anyWall = true;
                 } else {
                     ids.add(typeId);
                 }
@@ -577,6 +606,9 @@ public final class CommunityCatalogService {
         List<String> out = new ArrayList<>();
         if (anyDecoration) {
             out.add(PlotBuildingTypes.DECORATION);
+        }
+        if (anyWall) {
+            out.add(PlotBuildingTypes.WALLS);
         }
         out.addAll(ids);
         return out;

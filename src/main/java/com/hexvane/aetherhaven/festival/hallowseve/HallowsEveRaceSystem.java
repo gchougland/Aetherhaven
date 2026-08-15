@@ -102,15 +102,48 @@ public final class HallowsEveRaceSystem extends TickingSystem<EntityStore> {
                     );
                 }
                 boolean timeUp = session.raceRemainingMs(now) <= 0L;
+                int collected = session.getCollected();
+                int total = session.getTotalOrbs();
+                long remainingMs = session.raceRemainingMs(now);
                 if (session.tickRace(now)) {
                     HallowsEveAudio.playRaceFinish(store, session);
-                    if (timeUp && session.getPhase() == HallowsEveSession.Phase.READY_TO_BURST && bundle != null) {
-                        bundle.playerRef()
-                            .sendMessage(
-                                Message.translation(
-                                    "aetherhaven_festivals.aetherhaven.festival.hallows_eve.chat.timeUp"
-                                )
-                            );
+                    if (bundle != null && racer != null && collected > 0) {
+                        HallowsEveLeaderboard.recordRun(
+                            world,
+                            plugin,
+                            racer,
+                            bundle.playerRef(),
+                            collected,
+                            total,
+                            remainingMs
+                        );
+                    }
+                    if (bundle != null) {
+                        if (total > 0 && collected >= total) {
+                            bundle.playerRef()
+                                .sendMessage(
+                                    Message.translation(
+                                            "aetherhaven_festivals.aetherhaven.festival.hallows_eve.chat.collectedAll"
+                                        )
+                                        .param("time", HallowsEveScore.formatSecondsLeft(remainingMs))
+                                );
+                        } else if (timeUp && collected > 0) {
+                            bundle.playerRef()
+                                .sendMessage(
+                                    Message.translation(
+                                            "aetherhaven_festivals.aetherhaven.festival.hallows_eve.chat.timeUp"
+                                        )
+                                        .param("collected", String.valueOf(collected))
+                                        .param("total", String.valueOf(total))
+                                );
+                        } else if (timeUp) {
+                            bundle.playerRef()
+                                .sendMessage(
+                                    Message.translation(
+                                        "aetherhaven_festivals.aetherhaven.festival.hallows_eve.chat.timeUp.none"
+                                    )
+                                );
+                        }
                     }
                     world.execute(() -> HallowsEveOrbSpawnService.despawnRaceOrbs(world, townId));
                     markPumpkinReadyOrReset(store, townId, session);

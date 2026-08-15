@@ -1,0 +1,244 @@
+{
+  "id": "market",
+  "displayName": "Market Festival",
+  "displayNameLangKey": "aetherhaven_festivals.aetherhaven.festival.market.name",
+  "description": "Mid autumn brings the market contest. Townsfolk fill one shared stall, Elder Lyren judges it against three rival stands, and first place earns a Corin Plushie and a Heartberry.",
+  "prefabPath": "Festivals/Festival_Market.prefab.json",
+  "season": "AUTUMN",
+  "dayOfSeason": 21,
+  "startHour": 8,
+  "endHour": 20,
+  "calendarIconPath": "UI/Custom/market.png",
+  "mechanicId": "market",
+  "spots": [
+    {
+      "residentKind": "elder",
+      "localX": 11,
+      "localY": 5,
+      "localZ": 2,
+      "yawDegrees": 49.140762
+    },
+    {
+      "residentKind": "market_shop",
+      "localX": 11,
+      "localY": 5,
+      "localZ": 7,
+      "yawDegrees": 94.88218
+    },
+    {
+      "residentKind": "market_shop",
+      "localX": 7,
+      "localY": 5,
+      "localZ": 11,
+      "yawDegrees": -2.8864276
+    },
+    {
+      "residentKind": "market_shop",
+      "localX": 2,
+      "localY": 5,
+      "localZ": 11,
+      "yawDegrees": -11.808781
+    }
+  ],
+  "touristSpots": [
+    {
+      "localX": -12,
+      "localY": 6,
+      "localZ": -8,
+      "yawDegrees": 270.0
+    },
+    {
+      "localX": -12,
+      "localY": 6,
+      "localZ": 8,
+      "yawDegrees": 270.0
+    },
+    {
+      "localX": 13,
+      "localY": 6,
+      "localZ": -8,
+      "yawDegrees": 90.0
+    },
+    {
+      "localX": 13,
+      "localY": 6,
+      "localZ": 8,
+      "yawDegrees": 90.0
+    },
+    {
+      "localX": 7,
+      "localY": 6,
+      "localZ": -13,
+      "yawDegrees": 180.0
+    },
+    {
+      "localX": -5,
+      "localY": 6,
+      "localZ": -13,
+      "yawDegrees": 180.0
+    },
+    {
+      "localX": -9,
+      "localY": 6,
+      "localZ": 13,
+      "yawDegrees": 0.0
+    },
+    {
+      "localX": 1,
+      "localY": 6,
+      "localZ": 6,
+      "yawDegrees": 180.0
+    }
+  ],
+  "marketStands": [
+    {
+      "localX": -9,
+      "localY": 6,
+      "localZ": -7,
+      "yawDegrees": 355.1698
+    },
+    {
+      "localX": -3,
+      "localY": 6,
+      "localZ": -7,
+      "yawDegrees": 323.4242
+    },
+    {
+      "localX": 4,
+      "localY": 6,
+      "localZ": -7,
+      "yawDegrees": 321.93616
+    },
+    {
+      "localX": 10,
+      "localY": 6,
+      "localZ": -7,
+      "yawDegrees": 346.54565
+    }
+  ],
+  "marketDisplaySlots": [
+    {
+      "localX": -10.0,
+      "localY": 7.0,
+      "localZ": -9.0
+    },
+    {
+      "localX": -9.0,
+      "localY": 7.0,
+      "localZ": -9.0
+    },
+    {
+      "localX": -8.0,
+      "localY": 7.0,
+      "localZ": -9.0
+    },
+    {
+      "localX": -8.0,
+      "localY": 8.0,
+      "localZ": -10.0
+    },
+    {
+      "localX": -9.0,
+      "localY": 8.0,
+      "localZ": -10.0
+    },
+    {
+      "localX": -10.0,
+      "localY": 8.0,
+      "localZ": -10.0
+    },
+    {
+      "localX": -10.0,
+      "localY": 9.0,
+      "localZ": -11.0
+    },
+    {
+      "localX": -9.0,
+      "localY": 9.0,
+      "localZ": -11.0
+    },
+    {
+      "localX": -8.0,
+      "localY": 9.0,
+      "localZ": -11.0
+    }
+  ],
+  "tags": [
+    "autumn",
+    "market"
+  ],
+  "greetings": {
+    "crystal_keeper": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.crystal_keeper.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.crystal_keeper.1"
+    ],
+    "innkeeper": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.innkeeper.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.innkeeper.1"
+    ],
+    "default": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.default.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.default.1"
+    ],
+    "builder": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.builder.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.builder.1"
+    ],
+    "blacksmith": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.blacksmith.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.blacksmith.1"
+    ],
+    "rancher": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.rancher.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.rancher.1"
+    ],
+    "priestess": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.priestess.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.priestess.1"
+    ],
+    "farmer": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.farmer.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.farmer.1"
+    ],
+    "merchant": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.merchant.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.merchant.1"
+    ],
+    "florist": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.florist.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.florist.1"
+    ],
+    "guild_master": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.guild_master.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.guild_master.1"
+    ],
+    "logger": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.logger.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.logger.1"
+    ],
+    "bard": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.bard.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.bard.1"
+    ],
+    "elder": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.elder.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.elder.1"
+    ],
+    "guard": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.guard.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.guard.1"
+    ],
+    "chef": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.chef.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.chef.1"
+    ],
+    "miner": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.miner.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.miner.1"
+    ],
+    "pyrotechnic": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.pyrotechnic.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.pyrotechnic.1"
+    ]
+  }
+}

@@ -20,6 +20,10 @@ public final class DialogueActionBatchResult {
 
     private boolean openTreeClimbLeaderboardAfterClose;
 
+    private boolean openHallowsEveLeaderboardAfterClose;
+
+    private boolean openMarketLeaderboardAfterClose;
+
     @Nullable
     private Runnable afterClose;
 
@@ -87,6 +91,22 @@ public final class DialogueActionBatchResult {
 
     public void setOpenTreeClimbLeaderboardAfterClose(boolean openTreeClimbLeaderboardAfterClose) {
         this.openTreeClimbLeaderboardAfterClose = openTreeClimbLeaderboardAfterClose;
+    }
+
+    public boolean isOpenHallowsEveLeaderboardAfterClose() {
+        return openHallowsEveLeaderboardAfterClose;
+    }
+
+    public void setOpenHallowsEveLeaderboardAfterClose(boolean openHallowsEveLeaderboardAfterClose) {
+        this.openHallowsEveLeaderboardAfterClose = openHallowsEveLeaderboardAfterClose;
+    }
+
+    public boolean isOpenMarketLeaderboardAfterClose() {
+        return openMarketLeaderboardAfterClose;
+    }
+
+    public void setOpenMarketLeaderboardAfterClose(boolean openMarketLeaderboardAfterClose) {
+        this.openMarketLeaderboardAfterClose = openMarketLeaderboardAfterClose;
     }
 
     /**

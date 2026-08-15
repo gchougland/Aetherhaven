@@ -10,10 +10,12 @@
 - **Hiring guards** The guild hall hire talk shows how many guards you have and the town rank limit. If you are full, it tells you to raise your town rank.
 - **Banquet table** Crafts with any wood instead of darkwood.
 - **Red floating gifts** Hold two furniture pieces and a random decoration prop.
+- **Heartberry** You can set it down like food, and pick it back up.
 
 ### Added
 
-- **Hallow's Eve** Late autumn holiday at the festival square. Talk to the merchant to run a timed maze, collect glowing orbs, and pop the jack o lantern for autumn festival tickets and spooky candy. Only one person runs the maze at a time.
+- **Market Festival** Mid autumn holiday at the festival square. Town members set out goods on one shared stall, Elder Lyren judges it, and you collect a place, autumn festival tickets, and a town scoreboard. Some townsfolk open ticket stalls for the day.
+- **Hallow's Eve** Late autumn holiday at the festival square. Talk to the merchant to run a timed maze for ten gold coins, collect glowing orbs, and pop the jack o lantern for autumn festival tickets and spooky candy. Only one person runs the maze at a time. Bats fly above the square for the night. The merchant keeps a scoreboard of the best maze runs.
 - **Hallow's Eve merchant** Sells spooky candy, autumn decorations, and a jack o lantern hat pattern for autumn festival tickets.
 - **Spooky Candy** A sweet treat from the maze and the merchant shop. Eat it to feel better.
 - **Jack o lantern hat** A fully covering pumpkin hat for villagers, unlocked from the Hallow's Eve merchant.
@@ -44,9 +46,14 @@
 - **Create and give props** Creative commands let you turn an existing prefab into a prop, give prop items, and hand out the packaging wand.
 - **Loot chest props** World loot chests can hold a random decoration prop, about as often as a plot blueprint. Festival merchant decorations stay exclusive to those shops.
 - **Path designer shovel** You can choose whether townsfolk walk a path you place.
+- **Make your own wall styles** The plot creator can build a whole wall style. Set up the straight wall, the gate, and the three towers, mark where each one joins the next, set what each one costs to build, and share the finished style on the marketplace.
+- **Wall styles in the crafting bench** The marketplace has a Walls filter. A wall style shows as one card with arrows to look through its pieces, and downloading it brings the whole set in at once.
+- **Pick a wall style** The wall wand has arrows to switch between the wall styles you have installed.
 
 ### Fixed
 
+- **Wall wand** Pieces now line up flush instead of leaving a gap or overlapping, whichever way you build.
+- **Wall wand** A tower at the end of a run only has the one doorway it needs, and gains a second one when you carry the wall on through it.
 - **Hallow's Eve maze** Glowing orbs stay in the path instead of sliding into the hedges.
 - **Hallow's Eve maze** Starting the maze faces you toward the middle, even if the festival square is turned.
 - **Community downloads** Downloading a marketplace building no longer freezes the game on very large prefabs.

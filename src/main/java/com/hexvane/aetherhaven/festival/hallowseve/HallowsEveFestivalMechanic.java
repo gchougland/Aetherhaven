@@ -41,6 +41,7 @@ public final class HallowsEveFestivalMechanic implements FestivalMechanic {
         HallowsEveTeleport.bindStartPad(plugin, square, festival, session);
         HallowsEveOrbSpawnService.captureMarkers(world, square, festival, session);
         HallowsEvePumpkinSpawnService.spawnCenterpiece(world, town, square, festival);
+        HallowsEveBatSpawnService.ensureBats(world, town.getTownId(), square);
     }
 
     @Override
@@ -55,6 +56,7 @@ public final class HallowsEveFestivalMechanic implements FestivalMechanic {
         UUID racer = session != null ? session.getPlayerUuid() : null;
         HallowsEveOrbSpawnService.despawnRaceOrbs(world, townId);
         HallowsEvePumpkinSpawnService.despawnCenterpiece(world, townId);
+        HallowsEveBatSpawnService.despawnBats(world, townId);
         var entityStore = world.getEntityStore();
         if (entityStore != null && racer != null) {
             Store<EntityStore> store = entityStore.getStore();

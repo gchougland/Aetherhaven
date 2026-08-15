@@ -2,7 +2,7 @@
 
 aetherhaven.ui.wallplacement.title=Wall wand
 aetherhaven.ui.wallplacement.summary=Lay out wall pieces for your town. Direction arrows place a sign and start the next piece. Complete wall commits the current preview and ends this session. Build each sign like other plots.
-aetherhaven.ui.wallplacement.tips=Pick wall, gate, or tower. Use the middle arrows to slide the start spot and the turn button to spin it before your first place. Arrows on the right place and continue the run. Complete Wall commits the current preview and ends this session (including an end-cap tower). Creative: /ah walldebug on logs each step in chat. The left pad picks which side you view from. Undo removes the last sign. Cancel ends this session.
+aetherhaven.ui.wallplacement.tips=Pick wall, gate, or tower. Use the middle arrows to slide the start spot and the turn button to spin it before your first place. Arrows on the right place and continue the run. Pick tower and every arrow opens up straight away, so choose the one you want the wall to carry on toward. Stop at a tower and it stays an end tower. Complete Wall commits the current preview and ends this session. Creative: /ah walldebug on logs each step in chat. The left pad picks which side you view from. Undo removes the last sign. Cancel ends this session.
 aetherhaven.ui.wallplacement.place=Place sign
 aetherhaven.ui.wallplacement.completeWall=Complete wall
 aetherhaven.ui.wallplacement.pieceWall=Wall
@@ -46,3 +46,6 @@ aetherhaven.ui.wallplacement.errorTowerConnMax=You can pick at most two connecti
 aetherhaven.ui.wallplacement.errorUnknownPiece=Unknown wall piece.
 aetherhaven.ui.wallplacement.errorBlocked=Could not place the sign here.
 aetherhaven.ui.wallplacement.errorPickDirection=Pick a direction with the arrows first.
+aetherhaven.ui.wallplacement.styleUnknown=No wall style
+aetherhaven.ui.wallplacement.stylePrev=Previous wall style
+aetherhaven.ui.wallplacement.styleNext=Next wall style

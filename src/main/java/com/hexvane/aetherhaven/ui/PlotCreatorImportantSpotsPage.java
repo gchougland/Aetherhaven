@@ -190,6 +190,18 @@ public final class PlotCreatorImportantSpotsPage
                     resolveMinCount(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_MAZE_ORB_SPAWN, 1))
                 )
             );
+            out.add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_MARKET_STAND,
+                    resolveMinCount(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_MARKET_STAND, 1))
+                )
+            );
+            out.add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_MARKET_DISPLAY,
+                    resolveMinCount(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_MARKET_DISPLAY, 1))
+                )
+            );
             List<PlotCreatorSpotEntry> ranked = new ArrayList<>(out);
             for (int i = 0; i < ranked.size(); i++) {
                 PlotCreatorSpotEntry spot = ranked.get(i);

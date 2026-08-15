@@ -64,6 +64,7 @@ public final class HallowsEvePumpkinSpawnService {
                 )
                 : FestivalPrefabSwapService.spotWorldPositionExact(plugin, festivalPlot, 1.0, 6.0, 1.0);
         pos.y += HallowsEveIds.PUMPKIN_SPAWN_Y_OFFSET;
+        Rotation3f facing = facingAwayFromEntrance(plugin, festivalPlot, festival, pos);
 
         NPCPlugin npcPlugin = NPCPlugin.get();
         if (npcPlugin == null) {
@@ -85,7 +86,7 @@ public final class HallowsEvePumpkinSpawnService {
             store,
             roleIndex,
             pos,
-            new Rotation3f(),
+            facing,
             spawnModel,
             (npcEntity, holder, st) -> npcEntity.setInitialModelScale(spawnScale),
             null
@@ -113,6 +114,33 @@ public final class HallowsEvePumpkinSpawnService {
             store.putComponent(centerpiece, NPCEntity.getComponentType(), npc);
         }
         NpcSpawnOriginUtil.attach(store, centerpiece, "FESTIVAL_JACK_LANTERN", "festival=hallows_eve", world, pos);
+    }
+
+    /**
+     * Faces the lantern away from the maze entrance in world space, so a rotated festival square still points
+     * the face toward the back of the maze.
+     */
+    @Nonnull
+    static Rotation3f facingAwayFromEntrance(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull PlotInstance festivalPlot,
+        @Nonnull FestivalDefinition festival,
+        @Nonnull Vector3d pumpkinPos
+    ) {
+        FestivalDefinition.MazeStartLocalRow start = festival.getMazeStartLocal();
+        if (start == null) {
+            return new Rotation3f();
+        }
+        Vector3d entrance =
+            FestivalPrefabSwapService.spotWorldPosition(
+                plugin,
+                festivalPlot,
+                start.getLocalX(),
+                start.getLocalY(),
+                start.getLocalZ()
+            );
+        float yawRad = (float) Math.toRadians(HallowsEveTeleport.yawDegreesAwayFrom(pumpkinPos, entrance));
+        return new Rotation3f(0f, yawRad, 0f);
     }
 
     static void applyModelScale(

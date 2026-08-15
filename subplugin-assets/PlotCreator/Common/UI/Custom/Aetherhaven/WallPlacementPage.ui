@@ -247,6 +247,32 @@ $C.@PageOverlay {
         }
       }
 
+      Group #WallStyleRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 10);
+        Visible: false;
+
+        TextButton #BtnStylePrev {
+          Style: @IconBackStyle;
+          Anchor: (Width: 40, Height: 36, Right: 8);
+          Padding: (Full: 0);
+          Text: ".";
+        }
+
+        Label #WallStyleName {
+          FlexWeight: 1;
+          Style: (...$C.@DefaultLabelStyle, HorizontalAlignment: Center, VerticalAlignment: Center);
+          Text: "";
+        }
+
+        TextButton #BtnStyleNext {
+          Style: @IconFwdStyle;
+          Anchor: (Width: 40, Height: 36, Left: 8);
+          Padding: (Full: 0);
+          Text: ".";
+        }
+      }
+
       Group #BirdsEyeZoomRow {
         LayoutMode: Left;
         Anchor: (Bottom: 10);

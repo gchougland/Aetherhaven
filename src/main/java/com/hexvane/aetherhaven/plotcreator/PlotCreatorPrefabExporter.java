@@ -71,6 +71,20 @@ public final class PlotCreatorPrefabExporter {
         @Nonnull Path outputFile,
         boolean overwrite
     ) {
+        return export(world, draft, outputFile, overwrite, true);
+    }
+
+    /**
+     * @param writeIcon false for throwaway exports, such as counting up what a build costs, which must not leave an
+     *     icon behind for an id that is not saved yet
+     */
+    public static ExportResult export(
+        @Nonnull World world,
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull Path outputFile,
+        boolean overwrite,
+        boolean writeIcon
+    ) {
         Vector3i min = draft.boundsMin();
         Vector3i max = draft.boundsMax();
         Vector3i anchor = draft.getPlotAnchor();
@@ -170,8 +184,14 @@ public final class PlotCreatorPrefabExporter {
                     if (omitManagement && block == managementBlock) {
                         continue;
                     }
+                    boolean editorEmpty = EditorMarkerBlocks.isEditorEmpty(block);
+                    // Editor_Empty is a real block id, so it would otherwise be written as prefab Empty even when
+                    // festivals omit air. Swaps already clear the reserved box.
+                    if (festivalPrefab && editorEmpty) {
+                        continue;
+                    }
                     if ((block != 0 || fluid != 0 || includeEmpty) && (!skipEditorBlock || block != editorBlock)) {
-                    if (EditorMarkerBlocks.isEditorEmpty(block)) {
+                    if (editorEmpty) {
                         selection.addBlockAtWorldPos(x, y, z, 0, 0, 0, 0);
                     } else if (block == 0 && fluid == 0) {
                         selection.addBlockAtWorldPos(x, y, z, 0, 0, 0, 0);
@@ -252,7 +272,7 @@ public final class PlotCreatorPrefabExporter {
                     prefab.addFluidAtLocalPos(fx - originX, fy - originY, fz - originZ, fluidId, level));
             }
             AetherhavenPlugin plugin = AetherhavenPlugin.get();
-            if (plugin != null) {
+            if (writeIcon && plugin != null) {
                 PlotCreatorIconExporter.tryExportIcon(prefab, draft.getConstructionId(), plugin.getDataDirectory());
             }
             PrefabStore.get().savePrefab(outputFile, prefab, overwrite);

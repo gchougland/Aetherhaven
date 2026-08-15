@@ -309,6 +309,10 @@ function renderBuildingCard(entry, options = {}) {
     ? `role="button" tabindex="0" onclick="openBuildingDetail('${escapeAttr(entry.id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openBuildingDetail('${escapeAttr(entry.id)}');}"`
     : "";
   const goldBadge = goldCostHtml(entry, "gold-cost--inline");
+  const wallStyleHint =
+    entry.wallStylePieceCount > 1
+      ? `<p class="meta">Wall style with ${escapeHtml(String(entry.wallStylePieceCount))} pieces</p>`
+      : "";
   return `
     <article class="${cardClass}" data-building-id="${escapeAttr(entry.id)}" ${openAttrs}>
       <div class="building-card-header">
@@ -317,6 +321,7 @@ function renderBuildingCard(entry, options = {}) {
       <div class="building-card-body">
         <h3>${escapeHtml(entry.displayName)}</h3>
         ${idMeta}
+        ${wallStyleHint}
         <p class="meta">by ${escapeHtml(entry.creatorName || "Unknown")}</p>
         <p class="meta building-card-stats">${formatBytes(entry.prefabBytes || 0)} · <span class="download-count">${escapeHtml(formatDownloadCount(entry.downloadCount))}</span> · v${escapeHtml(entry.version)}${goldBadge ? ` · ${goldBadge}` : ""}</p>
         ${requiredModsHtml(entry, true)}
@@ -849,11 +854,14 @@ function normalizeCountsAsConstructionIds(value) {
   return out;
 }
 
-/** Core building type ids (countsAs / decoration), not freeform tags. */
+/** Core building type ids (countsAs / decoration / walls), not freeform tags. */
 function entryTypeIds(entry) {
   const id = String(entry?.id || "")
     .trim()
     .toLowerCase();
+  if (entry?.wallSegment) {
+    return ["walls"];
+  }
   if (entry?.decorationPlot || id.startsWith("plot_decoration")) {
     return ["decoration"];
   }
@@ -870,6 +878,9 @@ function entryTypeIds(entry) {
 function formatBuildingTypeLabel(typeId) {
   if (typeId === "decoration") {
     return "Decorations";
+  }
+  if (typeId === "walls") {
+    return "Walls";
   }
   return String(typeId || "")
     .replace(/^plot_/i, "")
@@ -1127,6 +1138,40 @@ function renderCatalogPage() {
   renderCatalogPagination(totalPages);
 }
 
+const WALL_PIECE_ORDER = ["segment", "gate", "tower_end", "tower_straight", "tower_corner"];
+
+function wallPieceOrder(entry) {
+  const index = WALL_PIECE_ORDER.indexOf(String(entry?.wallPieceRole || "").toLowerCase());
+  return index < 0 ? WALL_PIECE_ORDER.length : index;
+}
+
+/**
+ * A wall style is a set of pieces that only work together, so the catalog shows one card per style. The straight run
+ * fronts the card and carries the count of pieces in the style.
+ */
+function collapseWallStyles(entries) {
+  const styles = new Map();
+  const out = [];
+  for (const entry of entries) {
+    if (!entry?.wallSegment) {
+      out.push(entry);
+      continue;
+    }
+    const key = String(entry.styleId || entry.id || "").toLowerCase();
+    const group = styles.get(key);
+    if (group) {
+      group.push(entry);
+    } else {
+      styles.set(key, [entry]);
+    }
+  }
+  for (const group of styles.values()) {
+    const ordered = [...group].sort((a, b) => wallPieceOrder(a) - wallPieceOrder(b));
+    out.push({ ...ordered[0], wallStylePieceCount: ordered.length });
+  }
+  return out;
+}
+
 function applyCatalogFilters({ resetPage = true } = {}) {
   const el = document.getElementById("catalog");
   if (!el) {
@@ -1141,7 +1186,7 @@ function applyCatalogFilters({ resetPage = true } = {}) {
   }
   history.replaceState(null, "", url);
   filteredCatalogEntries = sortCatalogEntries(
-    allCatalogEntries.filter((e) => entryMatchesCatalogFilters(e, filters)),
+    collapseWallStyles(allCatalogEntries.filter((e) => entryMatchesCatalogFilters(e, filters))),
     getCatalogSortMode()
   );
   if (resetPage) {

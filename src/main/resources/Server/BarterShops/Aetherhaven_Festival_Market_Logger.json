@@ -1,0 +1,57 @@
+{
+  "DisplayNameKey": "aetherhaven_festivals.aetherhaven.festival.shop.market.logger",
+  "RefreshInterval": {
+    "Days": 1
+  },
+  "RestockHour": 6,
+  "TradeSlots": [
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Wood_Maple_Trunk", "Quantity": 8 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Autumn", "Quantity": 2 }],
+        "Stock": 16
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Wood_Hardwood_Planks", "Quantity": 8 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Autumn", "Quantity": 3 }],
+        "Stock": 16
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Wood_Maple_Branch_Long", "Quantity": 4 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Autumn", "Quantity": 2 }],
+        "Stock": 12
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Wood_Hardwood_Decorative", "Quantity": 4 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Autumn", "Quantity": 4 }],
+        "Stock": 10
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Plant_Sapling_Windwillow", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Autumn", "Quantity": 5 }],
+        "Stock": 6
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Plant_Sapling_Spiral", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Autumn", "Quantity": 6 }],
+        "Stock": 4
+      }
+    }
+  ]
+}

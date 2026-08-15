@@ -1,0 +1,57 @@
+{
+  "DisplayNameKey": "aetherhaven_festivals.aetherhaven.festival.shop.market.crystal_keeper",
+  "RefreshInterval": {
+    "Days": 1
+  },
+  "RestockHour": 6,
+  "TradeSlots": [
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Rock_Gem_Topaz", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Autumn", "Quantity": 6 }],
+        "Stock": 6
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Rock_Gem_Sapphire", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Autumn", "Quantity": 8 }],
+        "Stock": 4
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Rock_Gem_Ruby", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Autumn", "Quantity": 10 }],
+        "Stock": 3
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Rock_Gem_Emerald", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Autumn", "Quantity": 9 }],
+        "Stock": 3
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Rock_Gem_Diamond", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Autumn", "Quantity": 12 }],
+        "Stock": 2
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Rock_Gem_Zephyr", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Autumn", "Quantity": 11 }],
+        "Stock": 2
+      }
+    }
+  ]
+}

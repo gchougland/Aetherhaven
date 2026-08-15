@@ -33,6 +33,14 @@ public final class PlotCreatorMaterialsActions {
         @Nonnull PlotCreatorSession session,
         @Nonnull PlayerRef playerRef
     ) {
+        requestFillFromBuildShape(session, playerRef, null);
+    }
+
+    public static void requestFillFromBuildShape(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull PlayerRef playerRef,
+        @Nullable Runnable afterChange
+    ) {
         if (!session.getDraft().getMaterials().isEmpty() && !session.isMaterialsFillConfirmPending()) {
             session.setMaterialsFillConfirmPending(true);
             session.setMaterialsSuggestConfirmPending(false);
@@ -40,15 +48,29 @@ public final class PlotCreatorMaterialsActions {
             return;
         }
         session.setMaterialsFillConfirmPending(false);
-        tryAutoFillFromBuildShape(session, true);
-        if (session.getDraft().getMaterials().isEmpty()) {
-            playerRef.sendMessage(Message.translation(MSG + ".materials.fillFailed"));
-        }
+        // Reading the blocks of a wall piece needs the world, so the fill always runs on the world thread.
+        session.getWorld().execute(() -> {
+            tryAutoFillFromBuildShape(session, true);
+            if (session.getDraft().getMaterials().isEmpty()) {
+                playerRef.sendMessage(Message.translation(MSG + ".materials.fillFailed"));
+            }
+            if (afterChange != null) {
+                afterChange.run();
+            }
+        });
     }
 
     public static void requestSuggestResources(
         @Nonnull PlotCreatorSession session,
         @Nonnull PlayerRef playerRef
+    ) {
+        requestSuggestResources(session, playerRef, null);
+    }
+
+    public static void requestSuggestResources(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull PlayerRef playerRef,
+        @Nullable Runnable afterChange
     ) {
         if (!session.getDraft().getMaterials().isEmpty() && !session.isMaterialsSuggestConfirmPending()) {
             session.setMaterialsSuggestConfirmPending(true);
@@ -57,10 +79,15 @@ public final class PlotCreatorMaterialsActions {
             return;
         }
         session.setMaterialsSuggestConfirmPending(false);
-        trySuggestResources(session, true);
-        if (session.getDraft().getMaterials().isEmpty()) {
-            playerRef.sendMessage(Message.translation(MSG + ".materials.fillFailed"));
-        }
+        session.getWorld().execute(() -> {
+            trySuggestResources(session, true);
+            if (session.getDraft().getMaterials().isEmpty()) {
+                playerRef.sendMessage(Message.translation(MSG + ".materials.fillFailed"));
+            }
+            if (afterChange != null) {
+                afterChange.run();
+            }
+        });
     }
 
     public static void requestClearPrefabMaterials(
@@ -80,46 +107,46 @@ public final class PlotCreatorMaterialsActions {
     }
 
     private static void tryAutoFillFromBuildShape(@Nonnull PlotCreatorSession session, boolean overwrite) {
-        PlotCreatorDraft draft = session.getDraft();
-        if (!overwrite && !draft.getMaterials().isEmpty()) {
+        applyIfAny(session, generateMaterials(session, false), overwrite);
+    }
+
+    private static void trySuggestResources(@Nonnull PlotCreatorSession session, boolean overwrite) {
+        applyIfAny(session, generateMaterials(session, true), overwrite);
+    }
+
+    private static void applyIfAny(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull List<MaterialRequirement> materials,
+        boolean overwrite
+    ) {
+        if (!overwrite && !session.getDraft().getMaterials().isEmpty()) {
             return;
         }
-        String prefabPath = draft.getPrefabPath();
-        if (prefabPath == null || prefabPath.isBlank()) {
-            return;
-        }
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            return;
-        }
-        PrefabMaterialsService service = plugin.getPrefabMaterialsService();
-        List<MaterialRequirement> materials = service.generateFromSessionPrefab(prefabPath, plugin.getDataDirectory());
         if (materials.isEmpty()) {
             return;
         }
         PlotCreatorMaterialsHelper.applyGeneratedMaterials(session, materials, true);
     }
 
-    private static void trySuggestResources(@Nonnull PlotCreatorSession session, boolean overwrite) {
+    /** Counts up the saved prefab, or the box of the wall piece being authored when there is no prefab yet. */
+    @Nonnull
+    private static List<MaterialRequirement> generateMaterials(
+        @Nonnull PlotCreatorSession session,
+        boolean suggested
+    ) {
         PlotCreatorDraft draft = session.getDraft();
-        if (!overwrite && !draft.getMaterials().isEmpty()) {
-            return;
+        if (draft.isWallMode()) {
+            return PlotCreatorWallPieceMaterials.generate(session, suggested);
         }
         String prefabPath = draft.getPrefabPath();
-        if (prefabPath == null || prefabPath.isBlank()) {
-            return;
-        }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            return;
+        if (prefabPath == null || prefabPath.isBlank() || plugin == null) {
+            return List.of();
         }
         PrefabMaterialsService service = plugin.getPrefabMaterialsService();
-        List<MaterialRequirement> materials =
-            service.generateSuggestedResourcesFromSessionPrefab(prefabPath, plugin.getDataDirectory());
-        if (materials.isEmpty()) {
-            return;
-        }
-        PlotCreatorMaterialsHelper.applyGeneratedMaterials(session, materials, true);
+        return suggested
+            ? service.generateSuggestedResourcesFromSessionPrefab(prefabPath, plugin.getDataDirectory())
+            : service.generateFromSessionPrefab(prefabPath, plugin.getDataDirectory());
     }
 
     public static void openMaterialsPanel(

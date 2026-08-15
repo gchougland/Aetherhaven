@@ -1,0 +1,74 @@
+$C = "../Common.ui";
+
+$C.@PageOverlay {
+  LayoutMode: Top;
+
+  Group {
+    FlexWeight: 1;
+    Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
+
+    Group {
+      LayoutMode: Middle;
+      Anchor: (Full: 0);
+
+      $C.@DecoratedContainer {
+        Anchor: (Width: 560);
+
+        #Title {
+          Label #LeaderboardTitleText {
+            Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+            Padding: (Horizontal: 19);
+            Text: "";
+          }
+        }
+
+        #Content {
+          LayoutMode: Top;
+          Padding: (Full: 16);
+
+          Label #LeaderboardHintText {
+            Style: (...$C.@DefaultLabelStyle, TextColor: #c8bca8, FontSize: 14, Wrap: true, HorizontalAlignment: Center);
+            Anchor: (Bottom: 10);
+            Text: "";
+          }
+
+          Label #YourBestText {
+            Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, FontSize: 15, Wrap: true, HorizontalAlignment: Center);
+            Anchor: (Bottom: 12);
+            Text: "";
+          }
+
+          Group #LeaderboardListPanel {
+            LayoutMode: Top;
+            FlexWeight: 1;
+            Anchor: (Height: 320);
+
+            Group #LeaderboardScroll {
+              LayoutMode: TopScrolling;
+              ScrollbarStyle: $C.@DefaultScrollbarStyle;
+              Anchor: (Top: 0, Left: 0, Right: 0, Height: 320, Bottom: 0);
+
+              Group #LeaderboardRows {
+                LayoutMode: Top;
+              }
+            }
+          }
+
+          Group {
+            LayoutMode: Left;
+            Anchor: (Top: 14);
+
+            Group { FlexWeight: 1; }
+
+            $C.@SecondaryTextButton #CloseButton {
+              Text: "";
+              Anchor: (Width: 140, Height: 36);
+            }
+
+            Group { FlexWeight: 1; }
+          }
+        }
+      }
+    }
+  }
+}

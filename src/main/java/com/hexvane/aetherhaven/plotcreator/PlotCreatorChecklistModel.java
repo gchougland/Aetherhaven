@@ -23,6 +23,9 @@ public final class PlotCreatorChecklistModel {
     @Nonnull
     public static List<ChecklistItem> items(@Nonnull PlotCreatorDraft draft) {
         List<ChecklistItem> out = new ArrayList<>();
+        if (draft.isWallMode()) {
+            return wallItems(draft);
+        }
         out.add(
             new ChecklistItem(
                 LANG + "checklist.corners",
@@ -63,9 +66,38 @@ public final class PlotCreatorChecklistModel {
             int have = PlotCreatorValidator.countForRequirement(draft, req);
             int min = req.minCount();
             boolean optional = min <= 0;
-            boolean completed = optional ? have >= 1 : have >= min;
+            boolean exact = isExactCountRequirement(draft, req);
+            boolean completed = optional ? have >= 1 : exact ? have == min : have >= min;
             String hint = optional ? null : have + "/" + min;
             out.add(new ChecklistItem(spotLangKey(req), completed, optional, hint));
+        }
+        return out;
+    }
+
+    /** A wall style is checked off one piece at a time: its box, then the connection points on it. */
+    @Nonnull
+    private static List<ChecklistItem> wallItems(@Nonnull PlotCreatorDraft draft) {
+        draft.ensureWallPieces();
+        List<ChecklistItem> out = new ArrayList<>();
+        out.add(
+            new ChecklistItem(
+                LANG + "checklist.identity",
+                nonBlank(draft.getDisplayName()) && nonBlank(draft.getConstructionId()),
+                false,
+                null
+            )
+        );
+        for (PlotCreatorWallPieceDraft piece : draft.getWallPieces()) {
+            int need = piece.getRole().connectionCount();
+            int have = Math.min(piece.getConnections().size(), need);
+            out.add(
+                new ChecklistItem(
+                    LANG + "wallPiece." + PlotCreatorWallPieceAuthoring.roleLangSuffix(piece.getRole()),
+                    piece.isComplete(),
+                    false,
+                    piece.hasBounds() ? have + "/" + need : null
+                )
+            );
         }
         return out;
     }
@@ -85,6 +117,17 @@ public final class PlotCreatorChecklistModel {
                 + PlotCreatorFestivalNpcRoles.labelLangSuffix(req.workResidentKind());
         }
         return LANG + "spot." + req.type().name();
+    }
+
+    private static boolean isExactCountRequirement(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull PlotBuildingKindRequirements.SubstepRequirement req
+    ) {
+        if (!com.hexvane.aetherhaven.festival.market.MarketIds.MECHANIC_ID.equals(draft.getFestivalMechanicId())) {
+            return false;
+        }
+        return req.type() == PlotCreatorSubstepType.FESTIVAL_MARKET_STAND
+            || req.type() == PlotCreatorSubstepType.FESTIVAL_MARKET_DISPLAY;
     }
 
     private static boolean nonBlank(@Nullable String s) {

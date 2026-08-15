@@ -39,7 +39,7 @@ public final class PlotBuildingKindRequirements {
      */
     @Nonnull
     public static List<SubstepRequirement> forDraft(@Nonnull PlotCreatorDraft draft, @Nullable AetherhavenPlugin plugin) {
-        if (draft.isDecorationOnly()) {
+        if (draft.isDecorationOnly() || draft.isWallMode()) {
             return List.of();
         }
         if (draft.isImportantSpotsConfirmed() && !draft.getSelectedSpots().isEmpty()) {
@@ -63,7 +63,7 @@ public final class PlotBuildingKindRequirements {
         @Nonnull PlotCreatorDraft draft,
         @Nullable AetherhavenPlugin plugin
     ) {
-        if (draft.isDecorationOnly()) {
+        if (draft.isDecorationOnly() || draft.isWallMode()) {
             return List.of();
         }
         if (draft.isFestivalMode()) {
@@ -116,6 +116,9 @@ public final class PlotBuildingKindRequirements {
         }
         if (draft.isDecorationOnly()) {
             return List.of(PlotBuildingKind.DECORATION);
+        }
+        if (draft.isWallMode()) {
+            return List.of(PlotBuildingKind.WALL);
         }
         LinkedHashSet<PlotBuildingKind> out = new LinkedHashSet<>();
         boolean wantsTouristPortal = selected.contains(PlotBuildingKind.TOURIST_PORTAL);
@@ -298,7 +301,7 @@ public final class PlotBuildingKindRequirements {
         @Nullable AetherhavenPlugin plugin
     ) {
         return switch (kind) {
-            case DECORATION, VARIANT -> List.of();
+            case DECORATION, VARIANT, WALL -> List.of();
             case FESTIVAL -> festivalSubsteps(draft, plugin);
             case HOME -> List.of(
                 new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1),

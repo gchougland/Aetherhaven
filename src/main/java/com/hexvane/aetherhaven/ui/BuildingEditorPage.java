@@ -8,6 +8,11 @@ import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import com.hexvane.aetherhaven.plotcreator.BuildingEditorFestivalSessionStarter;
 import com.hexvane.aetherhaven.plotcreator.BuildingEditorSessionStarter;
+import com.hexvane.aetherhaven.plotcreator.BuildingEditorWallStyleSessionStarter;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorWallStyleLoader;
+import com.hexvane.aetherhaven.wall.WallPieceRole;
+import com.hexvane.aetherhaven.wall.WallStyle;
+import com.hexvane.aetherhaven.wall.WallStyleCatalog;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -40,11 +45,13 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
     private static final String TAB_ALL = "All";
     private static final String TAB_MINE = "Mine";
     private static final String TAB_FESTIVALS = "Festivals";
+    private static final String TAB_WALLS = "Walls";
 
     private enum Tab {
         ALL,
         MINE,
-        FESTIVALS
+        FESTIVALS,
+        WALLS
     }
 
     @Nonnull
@@ -103,27 +110,43 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
             plugin != null && plugin.getConfig().get().getCommunityMarketplace().isEnabled();
         boolean mineTab = activeTab == Tab.MINE;
         boolean festivalsTab = activeTab == Tab.FESTIVALS;
+        boolean wallsTab = activeTab == Tab.WALLS;
         boolean loadingMine = mineTab && (mySubmissionsFetchInFlight.get() || mineEditInFlight.get());
         boolean showMineEmpty = mineTab && mySubmissionsLoaded && filteredMineSubmissions().isEmpty();
         boolean showFestivalsEmpty = festivalsTab && filteredFestivals().isEmpty();
+        boolean showWallsEmpty = wallsTab && filteredWallStyles().isEmpty();
 
         commandBuilder.set("#EditorTitleText.TextSpans", Message.translation(MSG + ".title"));
         String hintKey =
-            mineTab ? MSG + ".hint.pickMine" : festivalsTab ? MSG + ".hint.pickFestival" : MSG + ".hint.pick";
+            mineTab
+                ? MSG + ".hint.pickMine"
+                : festivalsTab
+                    ? MSG + ".hint.pickFestival"
+                    : wallsTab ? MSG + ".hint.pickWall" : MSG + ".hint.pick";
         commandBuilder.set("#StepHint.TextSpans", Message.translation(hintKey));
-        commandBuilder.set("#StepHint.Visible", !loadingMine && !showMineEmpty && !showFestivalsEmpty);
+        commandBuilder.set(
+            "#StepHint.Visible", !loadingMine && !showMineEmpty && !showFestivalsEmpty && !showWallsEmpty
+        );
         commandBuilder.set("#LoadingLabel.Visible", loadingMine);
         commandBuilder.set("#LoadingLabel.TextSpans", Message.translation(MSG + ".loadingMine"));
-        commandBuilder.set("#EmptyLabel.Visible", showMineEmpty || showFestivalsEmpty);
+        commandBuilder.set("#EmptyLabel.Visible", showMineEmpty || showFestivalsEmpty || showWallsEmpty);
         commandBuilder.set(
             "#EmptyLabel.TextSpans",
-            Message.translation(showFestivalsEmpty ? MSG + ".emptyFestivals" : MSG + ".emptyMine")
+            Message.translation(
+                showFestivalsEmpty
+                    ? MSG + ".emptyFestivals"
+                    : showWallsEmpty ? MSG + ".emptyWalls" : MSG + ".emptyMine"
+            )
         );
         commandBuilder.set("#CloseButton.TextSpans", Message.translation(MSG + ".button.close"));
         commandBuilder.set("#SearchInput.Value", searchQuery);
         commandBuilder.set(
             "#SearchInput.PlaceholderText",
-            Message.translation(festivalsTab ? MSG + ".searchFestivalPlaceholder" : MSG + ".searchPlaceholder")
+            Message.translation(
+                festivalsTab
+                    ? MSG + ".searchFestivalPlaceholder"
+                    : wallsTab ? MSG + ".searchWallPlaceholder" : MSG + ".searchPlaceholder"
+            )
         );
         commandBuilder.set("#EditorTabs.SelectedTab", tabId(activeTab));
         commandBuilder.set("#RefreshRow.Visible", mineTab && marketplaceEnabled);
@@ -135,6 +158,8 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
             buildMineRows(commandBuilder, eventBuilder, plugin);
         } else if (festivalsTab) {
             buildFestivalRows(commandBuilder, eventBuilder, plugin);
+        } else if (wallsTab) {
+            buildWallStyleRows(commandBuilder, eventBuilder, plugin);
         } else {
             buildAllRows(commandBuilder, eventBuilder, plugin);
         }
@@ -166,6 +191,36 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
                 CustomUIEventBindingType.Activating,
                 row + " #Select",
                 EventData.of("Action", "Select").append("ConstructionId", def.getId()),
+                false
+            );
+        }
+    }
+
+    private void buildWallStyleRows(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nullable AetherhavenPlugin plugin
+    ) {
+        List<WallStyleChoice> choices = filteredWallStyles();
+        for (int i = 0; i < choices.size(); i++) {
+            WallStyleChoice choice = choices.get(i);
+            commandBuilder.append(ROWS, "Aetherhaven/BuildingEditorRow.ui");
+            String row = ROWS + "[" + i + "]";
+            commandBuilder.set(row + " #SelectHilite.Visible", false);
+            commandBuilder.set(row + " #BuildingName.TextSpans", Message.raw(choice.displayName()));
+            commandBuilder.set(
+                row + " #BuildingId.TextSpans",
+                Message.translation(MSG + ".rowWall").param("pieces", choice.pieceCount())
+            );
+            String iconPath =
+                plugin != null
+                    ? ConstructionTokenIconPath.forConstructionId(choice.segmentId(), plugin.getDataDirectory())
+                    : ConstructionTokenIconPath.forConstructionId(choice.segmentId(), null);
+            commandBuilder.set(row + " #IconBox #BuildingIcon.AssetPath", iconPath);
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                row + " #Select",
+                EventData.of("Action", "SelectWallStyle").append("StyleId", choice.styleId()),
                 false
             );
         }
@@ -331,6 +386,45 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
         return filtered;
     }
 
+    /** Wall styles saved on this server, which are the only ones the editor can write back. */
+    @Nonnull
+    private List<WallStyleChoice> filteredWallStyles() {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return List.of();
+        }
+        ConstructionCatalog catalog = plugin.getConstructionCatalog();
+        String q = searchQuery.trim().toLowerCase(Locale.ROOT);
+        List<WallStyleChoice> out = new ArrayList<>();
+        for (WallStyle style : WallStyleCatalog.get(catalog).completeStyles()) {
+            if (!PlotCreatorWallStyleLoader.isEditable(catalog, style)) {
+                continue;
+            }
+            WallStyle.Piece segment = style.piece(WallPieceRole.SEGMENT);
+            if (segment == null) {
+                continue;
+            }
+            String name = BuildingEditorWallStyleSessionStarter.styleDisplayName(catalog, style);
+            if (!q.isEmpty()
+                && !name.toLowerCase(Locale.ROOT).contains(q)
+                && !style.styleId().toLowerCase(Locale.ROOT).contains(q)) {
+                continue;
+            }
+            out.add(
+                new WallStyleChoice(style.styleId(), name, segment.constructionId(), style.piecesInOrder().size())
+            );
+        }
+        out.sort(Comparator.comparing(c -> c.displayName().toLowerCase(Locale.ROOT)));
+        return out;
+    }
+
+    private record WallStyleChoice(
+        @Nonnull String styleId,
+        @Nonnull String displayName,
+        @Nonnull String segmentId,
+        int pieceCount
+    ) {}
+
     private record FestivalChoice(
         @Nullable String festivalId,
         @Nullable String labelLang,
@@ -347,6 +441,7 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
         return switch (tab) {
             case MINE -> TAB_MINE;
             case FESTIVALS -> TAB_FESTIVALS;
+            case WALLS -> TAB_WALLS;
             case ALL -> TAB_ALL;
         };
     }
@@ -358,6 +453,9 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
         }
         if (TAB_FESTIVALS.equalsIgnoreCase(id)) {
             return Tab.FESTIVALS;
+        }
+        if (TAB_WALLS.equalsIgnoreCase(id)) {
+            return Tab.WALLS;
         }
         return Tab.ALL;
     }
@@ -508,6 +606,10 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
             startMineEdit(ref, store, data.constructionId);
             return;
         }
+        if ("SelectWallStyle".equals(data.action) && data.styleId != null && !data.styleId.isBlank()) {
+            BuildingEditorWallStyleSessionStarter.start(playerRef, ref, store, data.styleId.trim());
+            return;
+        }
         if ("SelectFestival".equals(data.action)
             && data.festivalId != null
             && !data.festivalId.isBlank()) {
@@ -523,6 +625,8 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
             .add()
             .append(new KeyedCodec<>("FestivalId", Codec.STRING), (d, v) -> d.festivalId = v, d -> d.festivalId)
             .add()
+            .append(new KeyedCodec<>("StyleId", Codec.STRING), (d, v) -> d.styleId = v, d -> d.styleId)
+            .add()
             .append(new KeyedCodec<>("@SearchQuery", Codec.STRING), (d, v) -> d.searchQuery = v, d -> d.searchQuery)
             .add()
             .append(new KeyedCodec<>("@SelectedTab", Codec.STRING), (d, v) -> d.selectedTab = v, d -> d.selectedTab)
@@ -535,6 +639,8 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
         private String constructionId;
         @Nullable
         private String festivalId;
+        @Nullable
+        private String styleId;
         @Nullable
         private String searchQuery;
         @Nullable

@@ -181,14 +181,14 @@ public final class BuildingEditorSessionStarter {
         PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, yaw, buffer);
         draft.setCornerFirst(new Vector3i(fp.getMinX(), fp.getMinY(), fp.getMinZ()));
         draft.setCornerSecond(new Vector3i(fp.getMaxX(), fp.getMaxY(), fp.getMaxZ()));
-        // Festival square / Festivals/* prefabs must keep the fixed air volume even if the on-disk prefab
-        // was saved without Empty layers (footprint would otherwise collapse to the solid shell).
+        // Festival square / Festivals/* prefabs keep the fixed reserved box. Empty air is not saved;
+        // swaps clear the whole reserved volume before paste.
         if (isFestivalPrefabBuilding(def)) {
             Vector3i min = new Vector3i(fp.getMinX(), fp.getMinY(), fp.getMinZ());
             Vector3i max = FestivalPrefabSize.maxFromMin(min);
             draft.setCornerFirst(min);
             draft.setCornerSecond(max);
-            draft.setSaveEmptySpaces(true);
+            draft.setSaveEmptySpaces(false);
             fp =
                 new PlotFootprintRecord(
                     min.x,

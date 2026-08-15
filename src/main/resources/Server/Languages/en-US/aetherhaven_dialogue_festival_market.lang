@@ -1,0 +1,66 @@
+# Market Festival villager greetings
+# Full translation keys are aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.<lineKey>
+
+aetherhaven.dialogue.festival.market.greeting.default.0=The square smells like pies and woodsmoke. Everyone brought something to show.
+aetherhaven.dialogue.festival.market.greeting.default.1=I like a day when the whole town sets out its best.
+
+aetherhaven.dialogue.festival.market.greeting.elder.0=Bring your finest goods to the town stall. I will walk the stands when you are ready.
+aetherhaven.dialogue.festival.market.greeting.elder.1=Four stands, one prize. Fill the town stall together and I will judge with care.
+
+aetherhaven.dialogue.festival.market.greeting.priestess.0=A shared stall is a kind of offering. Set out what you are proud of.
+aetherhaven.dialogue.festival.market.greeting.priestess.1=I will bless the judging with a quiet look, then enjoy the stalls.
+
+aetherhaven.dialogue.festival.market.greeting.farmer.0=I packed extra crops in case the stall looks thin. Autumn is generous if you planted well.
+aetherhaven.dialogue.festival.market.greeting.farmer.1=Seeds and squash belong on a harvest table. I hope someone brought flowers too.
+
+aetherhaven.dialogue.festival.market.greeting.innkeeper.0=I closed the inn early so we could fill the stall. Corin would have loved this day.
+aetherhaven.dialogue.festival.market.greeting.innkeeper.1=If we take first place I want that plushie on a shelf and a heartberry in the kitchen.
+
+aetherhaven.dialogue.festival.market.greeting.chef.0=I brought pies. A stall without cooked food is only half a stall.
+aetherhaven.dialogue.festival.market.greeting.chef.1=Do not crowd the table with the same dish. Mix it up.
+
+aetherhaven.dialogue.festival.market.greeting.merchant.0=Quality and variety. That is how you beat the other towns.
+aetherhaven.dialogue.festival.market.greeting.merchant.1=I would not put junk in the stall. Judges notice.
+
+aetherhaven.dialogue.festival.market.greeting.blacksmith.0=A good blade on the table says a lot about a town.
+aetherhaven.dialogue.festival.market.greeting.blacksmith.1=I can spare a spare tool if the stall needs metal.
+
+aetherhaven.dialogue.festival.market.greeting.florist.0=Flowers make a stall look alive. I cut a fresh bunch this morning.
+aetherhaven.dialogue.festival.market.greeting.florist.1=Even a simple bloom helps. Empty wood looks sad.
+
+aetherhaven.dialogue.festival.market.greeting.rancher.0=Wool and eggs travel well. I left a basket by the stall.
+aetherhaven.dialogue.festival.market.greeting.rancher.1=The animals are resting. People get the square today.
+
+aetherhaven.dialogue.festival.market.greeting.miner.0=A gem catches the eye even from across the square.
+aetherhaven.dialogue.festival.market.greeting.miner.1=Ore is honest. It shows the work that went into the year.
+
+aetherhaven.dialogue.festival.market.greeting.logger.0=Wood and saplings are plain, but they fill a table nicely.
+aetherhaven.dialogue.festival.market.greeting.logger.1=I like the sound of a busy market more than a quiet forest today.
+
+aetherhaven.dialogue.festival.market.greeting.builder.0=Solid tables. Honest goods. Whoever set this up knew a crowd would lean in.
+aetherhaven.dialogue.festival.market.greeting.builder.1=I am here to see what the town can put together.
+
+aetherhaven.dialogue.festival.market.greeting.crystal_keeper.0=A crystal on the stall catches lantern light. Beautiful and a little showy.
+aetherhaven.dialogue.festival.market.greeting.crystal_keeper.1=I saved a small stone in case the table needs sparkle.
+
+aetherhaven.dialogue.festival.market.greeting.pyrotechnic.0=No fireworks on the contest table. Save those for the ticket stalls.
+aetherhaven.dialogue.festival.market.greeting.pyrotechnic.1=I like a market that stays cheerful after the judging.
+
+aetherhaven.dialogue.festival.market.greeting.bard.0=I will play something light while Lyren walks the stands.
+aetherhaven.dialogue.festival.market.greeting.bard.1=A market needs a tune. Quiet judging still deserves a little music.
+
+aetherhaven.dialogue.festival.market.greeting.guild_master.0=Teamwork fills a stall faster than one hero with a backpack.
+aetherhaven.dialogue.festival.market.greeting.guild_master.1=I came to see if the town can work together for once.
+
+aetherhaven.dialogue.festival.market.greeting.guard.0=I am watching the stall, not shopping. Mostly watching.
+aetherhaven.dialogue.festival.market.greeting.guard.1=Keep your hands off other towns stands. Ours is the one we fill together.
+
+aetherhaven.dialogue.festival.market.choice.fill=Set out goods
+aetherhaven.dialogue.festival.market.choice.start=Start the judging
+aetherhaven.dialogue.festival.market.choice.walking=Lyren is still looking at the stands
+aetherhaven.dialogue.festival.market.choice.results=See who won
+aetherhaven.dialogue.festival.market.choice.scoreboard=View the town scoreboard
+aetherhaven.dialogue.festival.market.choice.shop=See my stall
+aetherhaven.dialogue.festival.market.choice.how=How the contest works
+aetherhaven.dialogue.festival.market.how.body=Fill the town stall with up to nine goods. I walk four stands and score what your town set out. Mixing kinds scores higher. I look for gemstones, fish, fruit, vegetables, cooked food, weapons, armor, tools, flowers, and ores. Anything else still counts a little. After I finish, talk to me again to collect your prize and take your goods back.
+

@@ -118,6 +118,23 @@ public final class PlotCreatorDraft {
     @Nonnull
     private final List<com.hexvane.aetherhaven.festival.FestivalDefinition.OrbSpawnRow> festivalOrbSpawns =
         new ArrayList<>();
+    @Nonnull
+    private final List<com.hexvane.aetherhaven.festival.FestivalDefinition.RaceStartSpotRow> festivalMarketStands =
+        new ArrayList<>();
+    @Nonnull
+    private final List<com.hexvane.aetherhaven.festival.FestivalDefinition.OrbSpawnRow> festivalMarketDisplaySlots =
+        new ArrayList<>();
+
+    /** Wall style pieces in {@link com.hexvane.aetherhaven.wall.WallPieceRole#AUTHORING_ORDER}; empty until WALL is picked. */
+    @Nonnull
+    private final List<PlotCreatorWallPieceDraft> wallPieces = new ArrayList<>();
+    /** Index into {@link #wallPieces} of the piece being authored. */
+    private int wallPieceIndex;
+    /** 0 marks the build box substep; 1 and up are the connection points of the current piece. */
+    private int wallPieceSubstepIndex;
+    /** Base id of the wall style opened from the building editor, so saving replaces it instead of clashing. */
+    @Nullable
+    private String editingWallStyleBaseId;
 
     /** Chosen important spots for the SUBSTEP loop; empty until IMPORTANT_SPOTS is committed. */
     @Nonnull
@@ -304,6 +321,12 @@ public final class PlotCreatorDraft {
         this.boundsPrimaryHeld = boundsPrimaryHeld;
     }
 
+    /** True while the drag and face adjust tools own a build box: the bounds step, or a wall piece's box. */
+    public boolean isEditingBounds() {
+        return step == PlotCreatorStep.BOUNDS
+            || (step == PlotCreatorStep.WALL_PIECES && wallPieceSubstepIndex == 0);
+    }
+
     /** Clears committed corners and returns to the initial drag sub-phase. */
     public void resetBoundsEditing() {
         cornerFirst = null;
@@ -414,6 +437,72 @@ public final class PlotCreatorDraft {
         return ks.size() == 1 && ks.get(0) == PlotBuildingKind.FESTIVAL;
     }
 
+    /** True while the wizard is building a wall style rather than a single plot. */
+    public boolean isWallMode() {
+        List<PlotBuildingKind> ks = getKinds();
+        return ks.size() == 1 && ks.get(0) == PlotBuildingKind.WALL;
+    }
+
+    @Nonnull
+    public List<PlotCreatorWallPieceDraft> getWallPieces() {
+        return wallPieces;
+    }
+
+    /** Creates one empty piece per role the first time the wall step is entered. */
+    public void ensureWallPieces() {
+        if (!wallPieces.isEmpty()) {
+            return;
+        }
+        for (com.hexvane.aetherhaven.wall.WallPieceRole role
+            : com.hexvane.aetherhaven.wall.WallPieceRole.AUTHORING_ORDER) {
+            wallPieces.add(new PlotCreatorWallPieceDraft(role));
+        }
+    }
+
+    public int getWallPieceIndex() {
+        return wallPieceIndex;
+    }
+
+    public void setWallPieceIndex(int wallPieceIndex) {
+        this.wallPieceIndex = Math.max(0, wallPieceIndex);
+    }
+
+    public int getWallPieceSubstepIndex() {
+        return wallPieceSubstepIndex;
+    }
+
+    public void setWallPieceSubstepIndex(int wallPieceSubstepIndex) {
+        this.wallPieceSubstepIndex = Math.max(0, wallPieceSubstepIndex);
+    }
+
+    @Nullable
+    public PlotCreatorWallPieceDraft currentWallPiece() {
+        if (wallPieceIndex < 0 || wallPieceIndex >= wallPieces.size()) {
+            return null;
+        }
+        return wallPieces.get(wallPieceIndex);
+    }
+
+    /** Drops every authored wall piece, for when the player switches the build type. */
+    public void clearWallSelection() {
+        wallPieces.clear();
+        wallPieceIndex = 0;
+        wallPieceSubstepIndex = 0;
+        editingWallStyleBaseId = null;
+    }
+
+    @Nullable
+    public String getEditingWallStyleBaseId() {
+        return editingWallStyleBaseId;
+    }
+
+    public void setEditingWallStyleBaseId(@Nullable String editingWallStyleBaseId) {
+        this.editingWallStyleBaseId =
+            editingWallStyleBaseId == null || editingWallStyleBaseId.isBlank()
+                ? null
+                : editingWallStyleBaseId.trim().toLowerCase(Locale.ROOT);
+    }
+
     @Nullable
     public String getFestivalId() {
         return festivalId;
@@ -462,6 +551,8 @@ public final class PlotCreatorDraft {
         festivalRaceFinishLocal = null;
         festivalMazeStartLocal = null;
         festivalOrbSpawns.clear();
+        festivalMarketStands.clear();
+        festivalMarketDisplaySlots.clear();
     }
 
     @Nullable
@@ -563,6 +654,16 @@ public final class PlotCreatorDraft {
     @Nonnull
     public List<com.hexvane.aetherhaven.festival.FestivalDefinition.OrbSpawnRow> getFestivalOrbSpawns() {
         return festivalOrbSpawns;
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.festival.FestivalDefinition.RaceStartSpotRow> getFestivalMarketStands() {
+        return festivalMarketStands;
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.festival.FestivalDefinition.OrbSpawnRow> getFestivalMarketDisplaySlots() {
+        return festivalMarketDisplaySlots;
     }
 
     /** Festival prefabs are a fixed size, so the drag box stops moving once a festival is picked. */

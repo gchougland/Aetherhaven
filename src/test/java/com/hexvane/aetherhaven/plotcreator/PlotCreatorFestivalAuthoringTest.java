@@ -244,4 +244,93 @@ final class PlotCreatorFestivalAuthoringTest {
             draft.getFestivalMechanicId()
         );
     }
+
+    @Test
+    void marketDefaultsAddElderShopStandsDisplaysAndTourists() {
+        PlotCreatorDraft draft = new PlotCreatorDraft();
+        draft.setKinds(List.of(PlotBuildingKind.FESTIVAL));
+        draft.setFestivalMechanicId(com.hexvane.aetherhaven.festival.market.MarketIds.MECHANIC_ID);
+
+        PlotCreatorFestivalMechanicDefaults.ensureRequiredSelectedSpots(draft);
+
+        assertTrue(
+            draft.getSelectedSpots().stream()
+                .anyMatch(
+                    s ->
+                        s.type() == PlotCreatorSubstepType.WORK_POI
+                            && "elder".equals(s.workResidentKind())
+                )
+        );
+        assertTrue(
+            draft.getSelectedSpots().stream()
+                .anyMatch(
+                    s ->
+                        s.type() == PlotCreatorSubstepType.WORK_POI
+                            && "market_shop".equals(s.workResidentKind())
+                            && s.minCount() == com.hexvane.aetherhaven.festival.market.MarketIds.SHOP_SPOT_COUNT
+                )
+        );
+        assertTrue(
+            draft.getSelectedSpots().stream()
+                .anyMatch(
+                    s ->
+                        s.type() == PlotCreatorSubstepType.FESTIVAL_MARKET_STAND
+                            && s.minCount() == PlotCreatorFestivalMechanicDefaults.DEFAULT_MARKET_STANDS
+                )
+        );
+        assertTrue(
+            draft.getSelectedSpots().stream()
+                .anyMatch(
+                    s ->
+                        s.type() == PlotCreatorSubstepType.FESTIVAL_MARKET_DISPLAY
+                            && s.minCount() == PlotCreatorFestivalMechanicDefaults.DEFAULT_MARKET_DISPLAYS
+                )
+        );
+        assertTrue(
+            draft.getSelectedSpots().stream().anyMatch(s -> s.type() == PlotCreatorSubstepType.FESTIVAL_TOURIST_SPOT)
+        );
+        assertFalse(
+            draft.getSelectedSpots().stream().anyMatch(s -> s.type() == PlotCreatorSubstepType.FESTIVAL_NPC)
+        );
+        assertNull(PlotCreatorFestivalNpcRoles.defaultMerchantForMechanic(
+            com.hexvane.aetherhaven.festival.market.MarketIds.MECHANIC_ID
+        ));
+    }
+
+    @Test
+    void marketStandRequirementStaysAtFourWhenExtraStandsArePlaced() {
+        PlotCreatorDraft draft = new PlotCreatorDraft();
+        draft.setKinds(List.of(PlotBuildingKind.FESTIVAL));
+        draft.setFestivalMechanicId(com.hexvane.aetherhaven.festival.market.MarketIds.MECHANIC_ID);
+        for (int i = 0; i < 6; i++) {
+            draft.getFestivalMarketStands().add(FestivalDefinition.RaceStartSpotRow.of(i, 6, 0, 0f));
+        }
+        PlotCreatorFestivalMechanicDefaults.ensureRequiredSelectedSpots(draft);
+        assertEquals(
+            PlotCreatorFestivalMechanicDefaults.DEFAULT_MARKET_STANDS,
+            draft.getSelectedSpots().stream()
+                .filter(s -> s.type() == PlotCreatorSubstepType.FESTIVAL_MARKET_STAND)
+                .findFirst()
+                .orElseThrow()
+                .minCount()
+        );
+    }
+
+    @Test
+    void settingsAcceptMarketFestivalActivityLabel() {
+        PlotCreatorDraft draft = new PlotCreatorDraft();
+        draft.setKinds(List.of(PlotBuildingKind.FESTIVAL));
+        draft.setDisplayName("Market Festival");
+        draft.setFestivalSeasonInput("Autumn");
+        draft.setFestivalDayInput("12");
+        draft.setFestivalStartHourInput("8");
+        draft.setFestivalEndHourInput("20");
+        draft.setFestivalMechanicInput("Market Festival");
+
+        assertNull(PlotCreatorFestivalSettings.applyInput(draft));
+        assertEquals(
+            com.hexvane.aetherhaven.festival.market.MarketIds.MECHANIC_ID,
+            draft.getFestivalMechanicId()
+        );
+    }
 }

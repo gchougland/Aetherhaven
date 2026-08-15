@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.festival;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.festival.market.MarketSession;
+import com.hexvane.aetherhaven.festival.market.MarketSessionIndex;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.npc.NpcAnimationPlayback;
@@ -113,6 +115,13 @@ public final class FestivalDanceSystem extends EntityTickingSystem<EntityStore> 
         }
         UUID entityUuid = uuidComp.getUuid();
         long nowMs = System.currentTimeMillis();
+        if (isMarketStallVendor(binding, entityUuid) || isJudgingElder(binding)) {
+            DanceHold activeVendorDance = ACTIVE_DANCE.remove(entityUuid);
+            if (activeVendorDance != null) {
+                NpcAnimationPlayback.stop(ref, AnimationSlot.Emote, commandBuffer);
+            }
+            return;
+        }
 
         DanceHold active = ACTIVE_DANCE.get(entityUuid);
         if (active != null) {
@@ -347,6 +356,27 @@ public final class FestivalDanceSystem extends EntityTickingSystem<EntityStore> 
             return null;
         }
         return DANCE_EMOTES[index];
+    }
+
+    private static boolean isMarketStallVendor(@Nonnull TownVillagerBinding binding, @Nonnull UUID entityUuid) {
+        UUID townId = binding.getTownId();
+        if (townId == null) {
+            return false;
+        }
+        MarketSession session = MarketSessionIndex.get(townId);
+        return session != null && session.isVendor(entityUuid);
+    }
+
+    private static boolean isJudgingElder(@Nonnull TownVillagerBinding binding) {
+        if (!TownVillagerBinding.KIND_ELDER.equalsIgnoreCase(binding.getKind())) {
+            return false;
+        }
+        UUID townId = binding.getTownId();
+        if (townId == null) {
+            return false;
+        }
+        MarketSession session = MarketSessionIndex.get(townId);
+        return session != null && session.isJudging();
     }
 
     private record DanceHold(@Nonnull String emote, long untilMs) {}

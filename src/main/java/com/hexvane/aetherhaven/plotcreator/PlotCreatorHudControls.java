@@ -69,6 +69,7 @@ public final class PlotCreatorHudControls {
                 row(ToolKeybindSlot.ABILITY3, "hud.common.r")
             );
             case SUBSTEP -> substepRows(session);
+            case WALL_PIECES -> wallPieceRows(session);
             case MATERIALS -> List.of(
                 row(ToolKeybindSlot.USE, "hud.MATERIALS.f"),
                 row(ToolKeybindSlot.ABILITY1, "hud.common.q"),
@@ -108,6 +109,32 @@ public final class PlotCreatorHudControls {
     }
 
     @Nonnull
+    private static List<Row> wallPieceRows(@Nonnull PlotCreatorSession session) {
+        PlotCreatorDraft draft = session.getDraft();
+        if (PlotCreatorWallPieceAuthoring.isBoundsSubstep(draft)) {
+            List<Row> rows = boundsRows(session);
+            rows.add(info("step.WALL_PIECES.boundsDetail"));
+            return rows;
+        }
+        if (PlotCreatorWallPieceAuthoring.isMaterialsSubstep(draft)) {
+            return List.of(
+                row(ToolKeybindSlot.USE, "hud.MATERIALS.f"),
+                row(ToolKeybindSlot.ABILITY1, "hud.common.q"),
+                row(ToolKeybindSlot.ABILITY2, "hud.common.e"),
+                row(ToolKeybindSlot.ABILITY3, "hud.common.r"),
+                info("step.MATERIALS.detail")
+            );
+        }
+        List<Row> rows = new ArrayList<>();
+        rows.add(row(ToolKeybindSlot.PRIMARY, "hud.WALL_PIECES.primary"));
+        rows.add(row(ToolKeybindSlot.SECONDARY, "hud.WALL_PIECES.secondary"));
+        rows.add(row(ToolKeybindSlot.ABILITY1, "hud.WALL_PIECES.q"));
+        rows.add(row(ToolKeybindSlot.ABILITY2, "hud.common.e"));
+        rows.add(row(ToolKeybindSlot.ABILITY3, "hud.common.r"));
+        return rows;
+    }
+
+    @Nonnull
     private static List<Row> substepRows(@Nonnull PlotCreatorSession session) {
         List<Row> rows = new ArrayList<>();
         rows.add(row(ToolKeybindSlot.PRIMARY, "hud.SUBSTEP.primary"));
@@ -127,7 +154,9 @@ public final class PlotCreatorHudControls {
                 || sub.type() == PlotCreatorSubstepType.FESTIVAL_TREE_CLIMB_START
                 || sub.type() == PlotCreatorSubstepType.FESTIVAL_TREE_CLIMB_FINISH
                 || sub.type() == PlotCreatorSubstepType.FESTIVAL_MAZE_START
-                || sub.type() == PlotCreatorSubstepType.FESTIVAL_MAZE_ORB_SPAWN)) {
+                || sub.type() == PlotCreatorSubstepType.FESTIVAL_MAZE_ORB_SPAWN
+                || sub.type() == PlotCreatorSubstepType.FESTIVAL_MARKET_STAND
+                || sub.type() == PlotCreatorSubstepType.FESTIVAL_MARKET_DISPLAY)) {
             rows.add(row(ToolKeybindSlot.SECONDARY, "hud.SUBSTEP.secondaryFestivalSpot"));
         }
         rows.add(row(ToolKeybindSlot.ABILITY1, "hud.SUBSTEP.q"));

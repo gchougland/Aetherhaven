@@ -38,7 +38,7 @@ public final class PlotCreatorBoundsInput {
         @Nonnull PlayerRef playerRef
     ) {
         PlotCreatorDraft draft = session.getDraft();
-        if (draft.getStep() != PlotCreatorStep.BOUNDS
+        if (!draft.isEditingBounds()
             || draft.getBoundsPhase() != PlotCreatorBoundsPhase.FACE_ADJUST
             || draft.isBoundsPrimaryHeld()
             || draft.getActiveBoundsFaceDrag() != null) {
@@ -64,7 +64,7 @@ public final class PlotCreatorBoundsInput {
             return false;
         }
         PlotCreatorSession session = PlotCreatorSessions.get(playerRef.getUuid());
-        if (session == null || session.getDraft().getStep() != PlotCreatorStep.BOUNDS) {
+        if (session == null || !session.getDraft().isEditingBounds()) {
             return false;
         }
         return PlotCreatorInteractions.isPlotCreatorStaff(activeItem(store, ref));

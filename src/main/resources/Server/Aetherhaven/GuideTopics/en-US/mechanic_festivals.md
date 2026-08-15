@@ -52,15 +52,27 @@ Late spring, from morning to evening. Four pigs race down the track while the to
 
 ## Hallow's Eve
 
-Late autumn, from mid afternoon until midnight. A hedge maze fills the square with glowing orbs and a jack o lantern in the middle.
+Late autumn, from mid afternoon until midnight. A hedge maze fills the square with glowing orbs and a jack o lantern in the middle. Bats fly above the square for the night.
 
-* Talk to the **Hallow's Eve merchant** to start the maze. You are sent to the entrance, freeze for a short countdown, then the orbs appear.
+* Talk to the **Hallow's Eve merchant** to start the maze for ten gold coins. You are sent to the entrance, freeze for a short countdown, then the orbs appear.
 * Collect as many glowing orbs as you can before time runs out. The jack o lantern grows as you gather them.
 * Only one person can run the maze at a time. Wait if someone else is already inside.
 * When time is up, or when you have every orb, press **F** on the jack o lantern to pop autumn festival tickets and spooky candy. Then someone else can try.
-* The merchant takes autumn festival tickets for candy, decorations, and a jack o lantern hat pattern.
+* The merchant takes autumn festival tickets for candy, decorations, and a jack o lantern hat pattern. Ask to see the scoreboard to compare maze runs. Most orbs wins, and a full clear ranks by how much time was left.
 * The **Priestess**, **Elder**, **Innkeeper**, and **Bard** each have a place to stand, and visitors watch from outside the hedges.
 * Every villager has their own thing to say about it, so make the rounds before the night is over.
+
+## Market Festival
+
+Mid autumn, from morning until evening. Town members fill one shared stall at the square. Elder Lyren walks four stands, then names a winner.
+
+* Press **F** on the town stall to set out up to nine goods. Everyone in town shares that stall, so mix what you bring.
+* Variety and rarer goods score better. Empty slots score nothing.
+* Talk to **Elder Lyren** when the stall is ready. Ask how the contest works if you want the scoring kinds. She walks the stands, then you can ask who won.
+* First, second, and third place earn extra autumn festival tickets. First place also earns a **Corin Plushie** and a **Heartberry** once for the town that year. Tickets can be collected once per person per year. Collecting also gives back the goods from the town stall.
+* Ask Lyren to see the town scoreboard. It ranks towns by stall score, not people.
+* A few townsfolk open ticket stalls for the day. Talk to them to spend autumn festival tickets on goods that fit their work.
+* Visitors watch from around the square. Every villager has their own thing to say, so make the rounds before the day is over.
 
 ## Making your own festival
 

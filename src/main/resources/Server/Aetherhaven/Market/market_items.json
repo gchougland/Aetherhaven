@@ -1,0 +1,2173 @@
+{
+  "categoryBonus": 10,
+  "items": {
+    "Rock_Gem_Topaz": {
+      "category": "gemstones",
+      "points": 8
+    },
+    "Rock_Gem_Sapphire": {
+      "category": "gemstones",
+      "points": 8
+    },
+    "Rock_Gem_Ruby": {
+      "category": "gemstones",
+      "points": 8
+    },
+    "Rock_Gem_Emerald": {
+      "category": "gemstones",
+      "points": 7
+    },
+    "Rock_Gem_Diamond": {
+      "category": "gemstones",
+      "points": 8
+    },
+    "Rock_Gem_Zephyr": {
+      "category": "gemstones",
+      "points": 8
+    },
+    "Rock_Gem_Voidstone": {
+      "category": "gemstones",
+      "points": 8
+    },
+    "Fish_Bluegill_Item": {
+      "category": "fish",
+      "points": 5
+    },
+    "Fish_Catfish_Item": {
+      "category": "fish",
+      "points": 7
+    },
+    "Fish_Clownfish_Item": {
+      "category": "fish",
+      "points": 5
+    },
+    "Fish_Crab_Item": {
+      "category": "fish",
+      "points": 5
+    },
+    "Fish_Eel_Moray_Item": {
+      "category": "fish",
+      "points": 7
+    },
+    "Fish_Frostgill_Item": {
+      "category": "fish",
+      "points": 9
+    },
+    "Fish_Jellyfish_Blue_Item": {
+      "category": "fish",
+      "points": 7
+    },
+    "Fish_Jellyfish_Cyan_Item": {
+      "category": "fish",
+      "points": 7
+    },
+    "Fish_Jellyfish_Green_Item": {
+      "category": "fish",
+      "points": 7
+    },
+    "Fish_Jellyfish_Man_Of_War_Item": {
+      "category": "fish",
+      "points": 9
+    },
+    "Fish_Jellyfish_Red_Item": {
+      "category": "fish",
+      "points": 7
+    },
+    "Fish_Jellyfish_Yellow_Item": {
+      "category": "fish",
+      "points": 7
+    },
+    "Fish_Lobster_Item": {
+      "category": "fish",
+      "points": 7
+    },
+    "Fish_Minnow_Item": {
+      "category": "fish",
+      "points": 5
+    },
+    "Fish_Pike_Item": {
+      "category": "fish",
+      "points": 7
+    },
+    "Fish_Piranha_Black_Item": {
+      "category": "fish",
+      "points": 9
+    },
+    "Fish_Piranha_Item": {
+      "category": "fish",
+      "points": 7
+    },
+    "Fish_Pufferfish_Item": {
+      "category": "fish",
+      "points": 7
+    },
+    "Fish_Salmon_Item": {
+      "category": "fish",
+      "points": 7
+    },
+    "Fish_Shark_Hammerhead_Item": {
+      "category": "fish",
+      "points": 12
+    },
+    "Fish_Shellfish_Lava_Item": {
+      "category": "fish",
+      "points": 12
+    },
+    "Fish_Snapjaw_Item": {
+      "category": "fish",
+      "points": 9
+    },
+    "Fish_Tang_Blue_Item": {
+      "category": "fish",
+      "points": 7
+    },
+    "Fish_Tang_Chevron_Item": {
+      "category": "fish",
+      "points": 7
+    },
+    "Fish_Tang_Lemon_Peel_Item": {
+      "category": "fish",
+      "points": 7
+    },
+    "Fish_Tang_Sailfin_Item": {
+      "category": "fish",
+      "points": 7
+    },
+    "Fish_Trilobite_Black_Item": {
+      "category": "fish",
+      "points": 9
+    },
+    "Fish_Trilobite_Item": {
+      "category": "fish",
+      "points": 9
+    },
+    "Fish_Trout_Rainbow_Item": {
+      "category": "fish",
+      "points": 5
+    },
+    "Fish_Whale_Humpback_Item": {
+      "category": "fish",
+      "points": 12
+    },
+    "Plant_Fruit_Apple": {
+      "category": "fruit",
+      "points": 5
+    },
+    "Plant_Fruit_Azure": {
+      "category": "fruit",
+      "points": 8
+    },
+    "Plant_Fruit_Berries_Red": {
+      "category": "fruit",
+      "points": 5
+    },
+    "Plant_Fruit_Coconut": {
+      "category": "fruit",
+      "points": 7
+    },
+    "Plant_Fruit_Mango": {
+      "category": "fruit",
+      "points": 7
+    },
+    "Plant_Fruit_Pinkberry": {
+      "category": "fruit",
+      "points": 6
+    },
+    "Plant_Fruit_Poison": {
+      "category": "fruit",
+      "points": 8
+    },
+    "Plant_Fruit_Spiral": {
+      "category": "fruit",
+      "points": 8
+    },
+    "Plant_Fruit_Windwillow": {
+      "category": "fruit",
+      "points": 8
+    },
+    "Plant_Crop_Carrot_Item": {
+      "category": "vegetables",
+      "points": 6
+    },
+    "Plant_Crop_Lettuce_Item": {
+      "category": "vegetables",
+      "points": 5
+    },
+    "Plant_Crop_Onion_Item": {
+      "category": "vegetables",
+      "points": 11
+    },
+    "Plant_Crop_Potato_Item": {
+      "category": "vegetables",
+      "points": 11
+    },
+    "Plant_Crop_Tomato_Item": {
+      "category": "vegetables",
+      "points": 9
+    },
+    "Plant_Crop_Turnip_Item": {
+      "category": "vegetables",
+      "points": 7
+    },
+    "Plant_Crop_Wheat_Item": {
+      "category": "vegetables",
+      "points": 5
+    },
+    "Plant_Crop_Rice_Item": {
+      "category": "vegetables",
+      "points": 10
+    },
+    "Plant_Crop_Corn_Item": {
+      "category": "vegetables",
+      "points": 6
+    },
+    "Plant_Crop_Chilli_Item": {
+      "category": "vegetables",
+      "points": 9
+    },
+    "Plant_Crop_Cauliflower_Item": {
+      "category": "vegetables",
+      "points": 7
+    },
+    "Plant_Crop_Aubergine_Item": {
+      "category": "vegetables",
+      "points": 8
+    },
+    "Plant_Crop_Pumpkin_Item": {
+      "category": "vegetables",
+      "points": 8
+    },
+    "Food_Bread": {
+      "category": "cooked_food",
+      "points": 6
+    },
+    "Food_Cheese": {
+      "category": "cooked_food",
+      "points": 6
+    },
+    "Food_Popcorn": {
+      "category": "cooked_food",
+      "points": 6
+    },
+    "Food_Fish_Grilled": {
+      "category": "cooked_food",
+      "points": 4
+    },
+    "Food_Pie_Apple": {
+      "category": "cooked_food",
+      "points": 12
+    },
+    "Food_Pie_Meat": {
+      "category": "cooked_food",
+      "points": 12
+    },
+    "Food_Pie_Pumpkin": {
+      "category": "cooked_food",
+      "points": 12
+    },
+    "Food_Kebab_Fruit": {
+      "category": "cooked_food",
+      "points": 8
+    },
+    "Food_Kebab_Meat": {
+      "category": "cooked_food",
+      "points": 8
+    },
+    "Food_Kebab_Mushroom": {
+      "category": "cooked_food",
+      "points": 8
+    },
+    "Food_Kebab_Vegetable": {
+      "category": "cooked_food",
+      "points": 8
+    },
+    "Food_Salad_Caesar": {
+      "category": "cooked_food",
+      "points": 10
+    },
+    "Food_Salad_Mushroom": {
+      "category": "cooked_food",
+      "points": 10
+    },
+    "Food_Salad_Berry": {
+      "category": "cooked_food",
+      "points": 10
+    },
+    "Food_Candy_Cane": {
+      "category": "cooked_food",
+      "points": 6
+    },
+    "Flamethrower_Goblin": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Halloween_Broomstick": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Axe_Adamantite": {
+      "category": "weapons",
+      "points": 9
+    },
+    "Weapon_Axe_Bone": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Axe_Cobalt": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Axe_Copper": {
+      "category": "weapons",
+      "points": 6
+    },
+    "Weapon_Axe_Crude": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Axe_Doomed": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Axe_Iron": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Axe_Iron_Rusty": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Axe_Mithril": {
+      "category": "weapons",
+      "points": 10
+    },
+    "Weapon_Axe_Onyxium": {
+      "category": "weapons",
+      "points": 11
+    },
+    "Weapon_Axe_Stone_Trork": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Axe_Thorium": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Axe_Tribal": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Battleaxe_Adamantite": {
+      "category": "weapons",
+      "points": 9
+    },
+    "Weapon_Battleaxe_Cobalt": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Battleaxe_Copper": {
+      "category": "weapons",
+      "points": 6
+    },
+    "Weapon_Battleaxe_Crude": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Battleaxe_Doomed": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Battleaxe_Iron": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Battleaxe_Mithril": {
+      "category": "weapons",
+      "points": 10
+    },
+    "Weapon_Battleaxe_Onyxium": {
+      "category": "weapons",
+      "points": 11
+    },
+    "Weapon_Battleaxe_Scarab": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Battleaxe_Scythe_Void": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Battleaxe_Steel_Rusty": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Battleaxe_Stone_Trork": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Battleaxe_Thorium": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Battleaxe_Tribal": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Battleaxe_Wood_Fence": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Blowgun_Tribal": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Bomb": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Bomb_Continuous": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Bomb_Fire": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Bomb_Large_Fire": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Bomb_Popberry": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Bomb_Potion_Poison": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Bomb_Stun": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Claws_Tribal": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Club_Adamantite": {
+      "category": "weapons",
+      "points": 9
+    },
+    "Weapon_Club_Cobalt": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Club_Copper": {
+      "category": "weapons",
+      "points": 6
+    },
+    "Weapon_Club_Crude": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Club_Doomed": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Club_Iron": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Club_Iron_Rusty": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Club_Mithril": {
+      "category": "weapons",
+      "points": 10
+    },
+    "Weapon_Club_Onyxium": {
+      "category": "weapons",
+      "points": 11
+    },
+    "Weapon_Club_Scrap": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Club_Steel_Flail_Rusty": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Club_Stone_Trork": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Club_Thorium": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Club_Tribal": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Club_Zombie_Arm": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Club_Zombie_Burnt_Arm": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Club_Zombie_Burnt_Leg": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Club_Zombie_Frost_Arm": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Club_Zombie_Frost_Leg": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Club_Zombie_Leg": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Club_Zombie_Sand_Arm": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Club_Zombie_Sand_Leg": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Crossbow_Ancient_Steel": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Crossbow_Iron": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Daggers_Adamantite": {
+      "category": "weapons",
+      "points": 9
+    },
+    "Weapon_Daggers_Adamantite_Saurian": {
+      "category": "weapons",
+      "points": 9
+    },
+    "Weapon_Daggers_Bone": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Daggers_Bronze": {
+      "category": "weapons",
+      "points": 6
+    },
+    "Weapon_Daggers_Bronze_Ancient": {
+      "category": "weapons",
+      "points": 6
+    },
+    "Weapon_Daggers_Claw_Bone": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Daggers_Cobalt": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Daggers_Copper": {
+      "category": "weapons",
+      "points": 6
+    },
+    "Weapon_Daggers_Crude": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Daggers_Doomed": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Daggers_Fang_Doomed": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Daggers_Iron": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Daggers_Mithril": {
+      "category": "weapons",
+      "points": 10
+    },
+    "Weapon_Daggers_Onyxium": {
+      "category": "weapons",
+      "points": 11
+    },
+    "Weapon_Daggers_Stone_Trork": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Daggers_Thorium": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Dart_Tribal": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Deployable_Healing_Totem": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Deployable_Slowness_Totem": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Deployable_Turret": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Gun": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Gun_Blunderbuss": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Gun_Blunderbuss_Rusty": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Kunai": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Longsword_Adamantite": {
+      "category": "weapons",
+      "points": 9
+    },
+    "Weapon_Longsword_Adamantite_Saurian": {
+      "category": "weapons",
+      "points": 9
+    },
+    "Weapon_Longsword_Cobalt": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Longsword_Copper": {
+      "category": "weapons",
+      "points": 6
+    },
+    "Weapon_Longsword_Crude": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Longsword_Flame": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Longsword_Iron": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Longsword_Katana": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Longsword_Mithril": {
+      "category": "weapons",
+      "points": 10
+    },
+    "Weapon_Longsword_Onyxium": {
+      "category": "weapons",
+      "points": 11
+    },
+    "Weapon_Longsword_Praetorian": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Longsword_Praetorian_NPC": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Longsword_Scarab": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Longsword_Spectral": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Longsword_Stone_Trork": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Longsword_Thorium": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Longsword_Tribal": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Longsword_Void": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Mace_Adamantite": {
+      "category": "weapons",
+      "points": 9
+    },
+    "Weapon_Mace_Cobalt": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Mace_Copper": {
+      "category": "weapons",
+      "points": 6
+    },
+    "Weapon_Mace_Crude": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Mace_Iron": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Mace_Mithril": {
+      "category": "weapons",
+      "points": 10
+    },
+    "Weapon_Mace_Onyxium": {
+      "category": "weapons",
+      "points": 11
+    },
+    "Weapon_Mace_Prisma": {
+      "category": "weapons",
+      "points": 12
+    },
+    "Weapon_Mace_Scrap": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Mace_Scrap_NPC": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Mace_Stone_Trork": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Mace_Thorium": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Shield_Adamantite": {
+      "category": "weapons",
+      "points": 9
+    },
+    "Weapon_Shield_Cobalt": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Shield_Copper": {
+      "category": "weapons",
+      "points": 6
+    },
+    "Weapon_Shield_Doomed": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Shield_Iron": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Shield_Mithril": {
+      "category": "weapons",
+      "points": 10
+    },
+    "Weapon_Shield_Onyxium": {
+      "category": "weapons",
+      "points": 11
+    },
+    "Weapon_Shield_Orbis_Incandescent": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Shield_Orbis_Knight": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Shield_Praetorian": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Shield_Rusty": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Shield_Scrap": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Shield_Scrap_Spiked": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Shield_Thorium": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Shield_Wood": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Shortbow_Adamantite": {
+      "category": "weapons",
+      "points": 9
+    },
+    "Weapon_Shortbow_Bomb": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Shortbow_Bronze": {
+      "category": "weapons",
+      "points": 6
+    },
+    "Weapon_Shortbow_Cobalt": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Shortbow_Combat": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Shortbow_Copper": {
+      "category": "weapons",
+      "points": 6
+    },
+    "Weapon_Shortbow_Crude": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Shortbow_Doomed": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Shortbow_Flame": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Shortbow_Frost": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Shortbow_Iron": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Shortbow_Iron_Rusty": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Shortbow_Mithril": {
+      "category": "weapons",
+      "points": 10
+    },
+    "Weapon_Shortbow_Onyxium": {
+      "category": "weapons",
+      "points": 11
+    },
+    "Weapon_Shortbow_Pull": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Shortbow_Ricochet": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Shortbow_Thorium": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Shortbow_Vampire": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Spear_Adamantite": {
+      "category": "weapons",
+      "points": 9
+    },
+    "Weapon_Spear_Adamantite_Saurian": {
+      "category": "weapons",
+      "points": 9
+    },
+    "Weapon_Spear_Bone": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Spear_Bronze": {
+      "category": "weapons",
+      "points": 6
+    },
+    "Weapon_Spear_Cobalt": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Spear_Copper": {
+      "category": "weapons",
+      "points": 6
+    },
+    "Weapon_Spear_Crude": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Spear_Double_Incandescent": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Spear_Fishbone": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Spear_Iron": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Spear_Leaf": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Spear_Mithril": {
+      "category": "weapons",
+      "points": 10
+    },
+    "Weapon_Spear_Onyxium": {
+      "category": "weapons",
+      "points": 11
+    },
+    "Weapon_Spear_Scrap": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Spear_Stone_Trork": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Spear_Thorium": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Spear_Tribal": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Spellbook_Demon": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Spellbook_Fire": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Spellbook_Frost": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Spellbook_Grimoire_Brown": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Spellbook_Grimoire_Purple": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Spellbook_Rekindle_Embers": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Staff_Adamantite": {
+      "category": "weapons",
+      "points": 9
+    },
+    "Weapon_Staff_Bo_Bamboo": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Staff_Bo_Wood": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Staff_Bone": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Staff_Bronze": {
+      "category": "weapons",
+      "points": 6
+    },
+    "Weapon_Staff_Cane": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Staff_Cobalt": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Staff_Copper": {
+      "category": "weapons",
+      "points": 6
+    },
+    "Weapon_Staff_Crystal_Fire_Trork": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Staff_Crystal_Flame": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Staff_Crystal_Ice": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Staff_Crystal_Purple": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Staff_Crystal_Red": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Staff_Doomed": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Staff_Frost": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Staff_Iron": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Staff_Mithril": {
+      "category": "weapons",
+      "points": 10
+    },
+    "Weapon_Staff_Onion": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Staff_Onyxium": {
+      "category": "weapons",
+      "points": 11
+    },
+    "Weapon_Staff_Thorium": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Staff_Wizard": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Staff_Wood": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Staff_Wood_Kweebec": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Staff_Wood_Rotten": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Sword_Adamantite": {
+      "category": "weapons",
+      "points": 9
+    },
+    "Weapon_Sword_Bone": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Sword_Bronze": {
+      "category": "weapons",
+      "points": 6
+    },
+    "Weapon_Sword_Bronze_Ancient": {
+      "category": "weapons",
+      "points": 6
+    },
+    "Weapon_Sword_Cobalt": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Sword_Copper": {
+      "category": "weapons",
+      "points": 6
+    },
+    "Weapon_Sword_Crude": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Sword_Cutlass": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Sword_Doomed": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Sword_Frost": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Sword_Iron": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Sword_Mithril": {
+      "category": "weapons",
+      "points": 10
+    },
+    "Weapon_Sword_Nexus": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Sword_Onyxium": {
+      "category": "weapons",
+      "points": 11
+    },
+    "Weapon_Sword_Runic": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Sword_Scrap": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Sword_Silversteel": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Sword_Steel": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Sword_Steel_Incandescent": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Sword_Steel_Rusty": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Sword_Stone_Trork": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Sword_Thorium": {
+      "category": "weapons",
+      "points": 8
+    },
+    "Weapon_Sword_Wood": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Wand_Root": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Wand_Stoneskin": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Wand_Tribal": {
+      "category": "weapons",
+      "points": 7
+    },
+    "Weapon_Wand_Wood": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Weapon_Wand_Wood_Rotten": {
+      "category": "weapons",
+      "points": 5
+    },
+    "Armor_Adamantite_Chest": {
+      "category": "armor",
+      "points": 9
+    },
+    "Armor_Adamantite_Hands": {
+      "category": "armor",
+      "points": 9
+    },
+    "Armor_Adamantite_Head": {
+      "category": "armor",
+      "points": 9
+    },
+    "Armor_Adamantite_Legs": {
+      "category": "armor",
+      "points": 9
+    },
+    "Armor_Bronze_Chest": {
+      "category": "armor",
+      "points": 6
+    },
+    "Armor_Bronze_Hands": {
+      "category": "armor",
+      "points": 6
+    },
+    "Armor_Bronze_Head": {
+      "category": "armor",
+      "points": 6
+    },
+    "Armor_Bronze_Legs": {
+      "category": "armor",
+      "points": 6
+    },
+    "Armor_Bronze_Ornate_Chest": {
+      "category": "armor",
+      "points": 6
+    },
+    "Armor_Bronze_Ornate_Hands": {
+      "category": "armor",
+      "points": 6
+    },
+    "Armor_Bronze_Ornate_Head": {
+      "category": "armor",
+      "points": 6
+    },
+    "Armor_Cloth_Cindercloth_Chest": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Cloth_Cindercloth_Hands": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Cloth_Cindercloth_Head": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Cloth_Cindercloth_Legs": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Cloth_Cotton_Chest": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Cloth_Cotton_Hands": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Cloth_Cotton_Head": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Cloth_Cotton_Legs": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Cloth_Linen_Chest": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Cloth_Linen_Hands": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Cloth_Linen_Head": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Cloth_Linen_Legs": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Cloth_Silk_Chest": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Cloth_Silk_Hands": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Cloth_Silk_Head": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Cloth_Silk_Legs": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Cloth_Wool_Chest": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Cloth_Wool_Hands": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Cloth_Wool_Head": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Cloth_Wool_Legs": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Cobalt_Chest": {
+      "category": "armor",
+      "points": 8
+    },
+    "Armor_Cobalt_Hands": {
+      "category": "armor",
+      "points": 8
+    },
+    "Armor_Cobalt_Head": {
+      "category": "armor",
+      "points": 8
+    },
+    "Armor_Cobalt_Legs": {
+      "category": "armor",
+      "points": 8
+    },
+    "Armor_Copper_Chest": {
+      "category": "armor",
+      "points": 6
+    },
+    "Armor_Copper_Hands": {
+      "category": "armor",
+      "points": 6
+    },
+    "Armor_Copper_Head": {
+      "category": "armor",
+      "points": 6
+    },
+    "Armor_Copper_Legs": {
+      "category": "armor",
+      "points": 6
+    },
+    "Armor_Diving_Crude_Chest": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Diving_Crude_Hands": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Diving_Crude_Head": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Diving_Crude_Legs": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Iron_Chest": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Iron_Hands": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Iron_Head": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Iron_Legs": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Kweebec_Chest": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Kweebec_Head": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Leather_Heavy_Chest": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Leather_Heavy_Hands": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Leather_Heavy_Head": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Leather_Heavy_Legs": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Leather_Light_Chest": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Leather_Light_Hands": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Leather_Light_Head": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Leather_Light_Legs": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Leather_Medium_Chest": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Leather_Medium_Hands": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Leather_Medium_Head": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Leather_Medium_Legs": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Leather_Raven_Chest": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Leather_Raven_Hands": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Leather_Raven_Head": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Leather_Raven_Legs": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Leather_Soft_Chest": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Leather_Soft_Hands": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Leather_Soft_Head": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Leather_Soft_Legs": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Mithril_Chest": {
+      "category": "armor",
+      "points": 10
+    },
+    "Armor_Mithril_Hands": {
+      "category": "armor",
+      "points": 10
+    },
+    "Armor_Mithril_Head": {
+      "category": "armor",
+      "points": 10
+    },
+    "Armor_Mithril_Legs": {
+      "category": "armor",
+      "points": 10
+    },
+    "Armor_Onyxium_Chest": {
+      "category": "armor",
+      "points": 11
+    },
+    "Armor_Onyxium_Hands": {
+      "category": "armor",
+      "points": 11
+    },
+    "Armor_Onyxium_Head": {
+      "category": "armor",
+      "points": 11
+    },
+    "Armor_Onyxium_Legs": {
+      "category": "armor",
+      "points": 11
+    },
+    "Armor_Prisma_Chest": {
+      "category": "armor",
+      "points": 12
+    },
+    "Armor_Prisma_Hands": {
+      "category": "armor",
+      "points": 12
+    },
+    "Armor_Prisma_Head": {
+      "category": "armor",
+      "points": 12
+    },
+    "Armor_Prisma_Legs": {
+      "category": "armor",
+      "points": 12
+    },
+    "Armor_Steel_Ancient_Chest": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Steel_Ancient_Hands": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Steel_Ancient_Head": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Steel_Ancient_Legs": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Steel_Chest": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Steel_Hands": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Steel_Head": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Steel_Legs": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Thorium_Chest": {
+      "category": "armor",
+      "points": 8
+    },
+    "Armor_Thorium_Hands": {
+      "category": "armor",
+      "points": 8
+    },
+    "Armor_Thorium_Head": {
+      "category": "armor",
+      "points": 8
+    },
+    "Armor_Thorium_Legs": {
+      "category": "armor",
+      "points": 8
+    },
+    "Armor_Trooper_Chest": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Trooper_Head": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Trooper_Legs": {
+      "category": "armor",
+      "points": 7
+    },
+    "Armor_Wood_Chest": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Wood_Hands": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Wood_Head": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Wood_Legs": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Wool_Chest": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Wool_Hands": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Wool_Head": {
+      "category": "armor",
+      "points": 5
+    },
+    "Armor_Wool_Legs": {
+      "category": "armor",
+      "points": 5
+    },
+    "Tool_Bark_Scraper": {
+      "category": "tools",
+      "points": 5
+    },
+    "Tool_Capture_Crate": {
+      "category": "tools",
+      "points": 7
+    },
+    "Tool_Feedbag": {
+      "category": "tools",
+      "points": 7
+    },
+    "Tool_Fertilizer": {
+      "category": "tools",
+      "points": 7
+    },
+    "Tool_Fertilizer_Crystal": {
+      "category": "tools",
+      "points": 7
+    },
+    "Tool_Fishing_Trap": {
+      "category": "tools",
+      "points": 7
+    },
+    "Tool_Growth_Potion": {
+      "category": "tools",
+      "points": 7
+    },
+    "Tool_Hammer_Crude": {
+      "category": "tools",
+      "points": 5
+    },
+    "Tool_Hammer_Iron": {
+      "category": "tools",
+      "points": 7
+    },
+    "Tool_Hatchet_Adamantite": {
+      "category": "tools",
+      "points": 9
+    },
+    "Tool_Hatchet_Cobalt": {
+      "category": "tools",
+      "points": 8
+    },
+    "Tool_Hatchet_Copper": {
+      "category": "tools",
+      "points": 6
+    },
+    "Tool_Hatchet_Crude": {
+      "category": "tools",
+      "points": 5
+    },
+    "Tool_Hatchet_Iron": {
+      "category": "tools",
+      "points": 7
+    },
+    "Tool_Hatchet_Mithril": {
+      "category": "tools",
+      "points": 10
+    },
+    "Tool_Hatchet_Onyxium": {
+      "category": "tools",
+      "points": 11
+    },
+    "Tool_Hatchet_Thorium": {
+      "category": "tools",
+      "points": 8
+    },
+    "Tool_Hatchet_Wood": {
+      "category": "tools",
+      "points": 5
+    },
+    "Tool_Hoe_Copper": {
+      "category": "tools",
+      "points": 6
+    },
+    "Tool_Hoe_Crude": {
+      "category": "tools",
+      "points": 5
+    },
+    "Tool_Hoe_Iron": {
+      "category": "tools",
+      "points": 7
+    },
+    "Tool_Hoe_Thorium": {
+      "category": "tools",
+      "points": 8
+    },
+    "Tool_Map": {
+      "category": "tools",
+      "points": 7
+    },
+    "Tool_Pickaxe_Adamantite": {
+      "category": "tools",
+      "points": 9
+    },
+    "Tool_Pickaxe_Cobalt": {
+      "category": "tools",
+      "points": 8
+    },
+    "Tool_Pickaxe_Copper": {
+      "category": "tools",
+      "points": 6
+    },
+    "Tool_Pickaxe_Crude": {
+      "category": "tools",
+      "points": 5
+    },
+    "Tool_Pickaxe_Iron": {
+      "category": "tools",
+      "points": 7
+    },
+    "Tool_Pickaxe_Mithril": {
+      "category": "tools",
+      "points": 10
+    },
+    "Tool_Pickaxe_Onyxium": {
+      "category": "tools",
+      "points": 11
+    },
+    "Tool_Pickaxe_Scrap": {
+      "category": "tools",
+      "points": 5
+    },
+    "Tool_Pickaxe_Thorium": {
+      "category": "tools",
+      "points": 8
+    },
+    "Tool_Pickaxe_Wood": {
+      "category": "tools",
+      "points": 5
+    },
+    "Tool_Repair_Kit_Crude": {
+      "category": "tools",
+      "points": 5
+    },
+    "Tool_Repair_Kit_Iron": {
+      "category": "tools",
+      "points": 7
+    },
+    "Tool_Repair_Kit_Rare": {
+      "category": "tools",
+      "points": 7
+    },
+    "Tool_Sap_Shunt": {
+      "category": "tools",
+      "points": 7
+    },
+    "Tool_Shears_Basic": {
+      "category": "tools",
+      "points": 7
+    },
+    "Tool_Shovel_Cobalt": {
+      "category": "tools",
+      "points": 8
+    },
+    "Tool_Shovel_Copper": {
+      "category": "tools",
+      "points": 6
+    },
+    "Tool_Shovel_Crude": {
+      "category": "tools",
+      "points": 5
+    },
+    "Tool_Shovel_Iron": {
+      "category": "tools",
+      "points": 7
+    },
+    "Tool_Shovel_Thorium": {
+      "category": "tools",
+      "points": 8
+    },
+    "Tool_Sickle_Copper": {
+      "category": "tools",
+      "points": 6
+    },
+    "Tool_Sickle_Crude": {
+      "category": "tools",
+      "points": 5
+    },
+    "Tool_Sickle_Iron": {
+      "category": "tools",
+      "points": 7
+    },
+    "Tool_Sickle_Steel_Rusty": {
+      "category": "tools",
+      "points": 7
+    },
+    "Tool_Trap_Bait": {
+      "category": "tools",
+      "points": 7
+    },
+    "Tool_Watering_Can": {
+      "category": "tools",
+      "points": 7
+    },
+    "Plant_Flower_Bushy_Blue": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Bushy_Cyan": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Bushy_Green": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Bushy_Grey": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Bushy_Orange": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Bushy_Poisoned": {
+      "category": "flowers",
+      "points": 6
+    },
+    "Plant_Flower_Bushy_Purple": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Bushy_Red": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Bushy_Violet": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Bushy_White": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Bushy_Yellow": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Blue": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Blue2": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Cyan": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Cyan2": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Grey": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Grey2": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Lime": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Lime2": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Orange": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Orange2": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Pink": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Pink2": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Poisoned": {
+      "category": "flowers",
+      "points": 6
+    },
+    "Plant_Flower_Common_Poisoned2": {
+      "category": "flowers",
+      "points": 6
+    },
+    "Plant_Flower_Common_Purple": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Purple2": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Red": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Red2": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Violet": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Violet2": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_White": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_White2": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Yellow": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Common_Yellow2": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Flax_Blue": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Flax_Orange": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Flax_Pink": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Flax_Purple": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Flax_White": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Flax_Yellow": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Hemlock": {
+      "category": "flowers",
+      "points": 6
+    },
+    "Plant_Flower_Orchid_Blue": {
+      "category": "flowers",
+      "points": 7
+    },
+    "Plant_Flower_Orchid_Cyan": {
+      "category": "flowers",
+      "points": 7
+    },
+    "Plant_Flower_Orchid_Orange": {
+      "category": "flowers",
+      "points": 7
+    },
+    "Plant_Flower_Orchid_Pink": {
+      "category": "flowers",
+      "points": 7
+    },
+    "Plant_Flower_Orchid_Poisoned": {
+      "category": "flowers",
+      "points": 7
+    },
+    "Plant_Flower_Orchid_Purple": {
+      "category": "flowers",
+      "points": 7
+    },
+    "Plant_Flower_Orchid_Red": {
+      "category": "flowers",
+      "points": 7
+    },
+    "Plant_Flower_Orchid_White": {
+      "category": "flowers",
+      "points": 7
+    },
+    "Plant_Flower_Orchid_Yellow": {
+      "category": "flowers",
+      "points": 7
+    },
+    "Plant_Flower_Poisoned_Orange": {
+      "category": "flowers",
+      "points": 6
+    },
+    "Plant_Flower_Tall_Blue": {
+      "category": "flowers",
+      "points": 7
+    },
+    "Plant_Flower_Tall_Cyan": {
+      "category": "flowers",
+      "points": 7
+    },
+    "Plant_Flower_Tall_Cyan2": {
+      "category": "flowers",
+      "points": 7
+    },
+    "Plant_Flower_Tall_Pink": {
+      "category": "flowers",
+      "points": 7
+    },
+    "Plant_Flower_Tall_Purple": {
+      "category": "flowers",
+      "points": 7
+    },
+    "Plant_Flower_Tall_Red": {
+      "category": "flowers",
+      "points": 7
+    },
+    "Plant_Flower_Tall_Violet": {
+      "category": "flowers",
+      "points": 7
+    },
+    "Plant_Flower_Tall_Yellow": {
+      "category": "flowers",
+      "points": 7
+    },
+    "Plant_Flower_Water_Blue": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Water_Duckweed": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Water_Green": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Water_Purple": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Water_Red": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Flower_Water_White": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Sunflower_Block": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Lavender_Block": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Plant_Cactus_Flower": {
+      "category": "flowers",
+      "points": 5
+    },
+    "Ore_Copper": {
+      "category": "ores",
+      "points": 6
+    },
+    "Ore_Iron": {
+      "category": "ores",
+      "points": 7
+    },
+    "Ore_Gold": {
+      "category": "ores",
+      "points": 6
+    },
+    "Ore_Silver": {
+      "category": "ores",
+      "points": 6
+    },
+    "Ore_Cobalt": {
+      "category": "ores",
+      "points": 8
+    },
+    "Ore_Thorium": {
+      "category": "ores",
+      "points": 8
+    },
+    "Ore_Mithril": {
+      "category": "ores",
+      "points": 10
+    },
+    "Ore_Adamantite": {
+      "category": "ores",
+      "points": 9
+    },
+    "Ore_Onyxium": {
+      "category": "ores",
+      "points": 11
+    },
+    "Ore_Prisma": {
+      "category": "ores",
+      "points": 12
+    },
+    "Ingredient_Bar_Copper": {
+      "category": "ores",
+      "points": 6
+    },
+    "Ingredient_Bar_Bronze": {
+      "category": "ores",
+      "points": 6
+    },
+    "Ingredient_Bar_Iron": {
+      "category": "ores",
+      "points": 7
+    },
+    "Ingredient_Bar_Gold": {
+      "category": "ores",
+      "points": 6
+    },
+    "Ingredient_Bar_Silver": {
+      "category": "ores",
+      "points": 6
+    },
+    "Ingredient_Bar_Cobalt": {
+      "category": "ores",
+      "points": 8
+    },
+    "Ingredient_Bar_Thorium": {
+      "category": "ores",
+      "points": 8
+    },
+    "Ingredient_Bar_Mithril": {
+      "category": "ores",
+      "points": 10
+    },
+    "Ingredient_Bar_Adamantite": {
+      "category": "ores",
+      "points": 9
+    },
+    "Ingredient_Bar_Onyxium": {
+      "category": "ores",
+      "points": 11
+    },
+    "Ingredient_Bar_Prisma": {
+      "category": "ores",
+      "points": 12
+    }
+  }
+}

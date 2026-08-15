@@ -740,6 +740,16 @@
           "next": "main_hub"
         }
       ]
+    },
+    "market_how": {
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.speaker",
+      "text": "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.how.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
     }
   }
 }

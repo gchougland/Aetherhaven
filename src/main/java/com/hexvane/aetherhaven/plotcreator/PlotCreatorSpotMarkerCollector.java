@@ -288,6 +288,44 @@ public final class PlotCreatorSpotMarkerCollector {
                 )
             );
         }
+        for (var stand : draft.getFestivalMarketStands()) {
+            if (!passesTypeFilter(filter, PlotCreatorSubstepType.FESTIVAL_MARKET_STAND, null)) {
+                continue;
+            }
+            Vector3i block =
+                PlotCreatorLocalCoords.toWorldBlock(
+                    draft,
+                    new int[] {stand.getLocalX(), stand.getLocalY(), stand.getLocalZ()}
+                );
+            out.add(
+                desired(block.x, block.y, block.z, PlotCreatorSubstepType.FESTIVAL_MARKET_STAND, null, null, null)
+            );
+        }
+        for (var display : draft.getFestivalMarketDisplaySlots()) {
+            if (!passesTypeFilter(filter, PlotCreatorSubstepType.FESTIVAL_MARKET_DISPLAY, null)) {
+                continue;
+            }
+            Vector3i block =
+                PlotCreatorLocalCoords.toWorldBlock(
+                    draft,
+                    new int[] {
+                        (int) Math.round(display.getLocalX()),
+                        (int) Math.round(display.getLocalY()),
+                        (int) Math.round(display.getLocalZ())
+                    }
+                );
+            out.add(
+                desired(
+                    block.x,
+                    block.y,
+                    block.z,
+                    PlotCreatorSubstepType.FESTIVAL_MARKET_DISPLAY,
+                    null,
+                    null,
+                    null
+                )
+            );
+        }
     }
 
     private static void addLocal(

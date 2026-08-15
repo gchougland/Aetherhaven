@@ -12,6 +12,8 @@ import com.hexvane.aetherhaven.plotcreator.PlotCreatorStep;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorInteractions;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorSessions;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorValidator;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorWallPieceAuthoring;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorWallPieceDraft;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -406,6 +408,10 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
                 applyFestivalSettingsVisibility(b);
                 return;
             }
+            if (session.getDraft().isWallMode()) {
+                applyWallSettingsVisibility(b);
+                return;
+            }
             applyCombinedSettingsVisibility(
                 b,
                 PlotBuildingKindRequirements.effectiveKinds(session.getDraft(), AetherhavenPlugin.get())
@@ -442,14 +448,53 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#PlotTokenLockedHint.Visible", false);
         b.set("#StyleIdLabel.Visible", false);
         b.set("#StyleIdField.Visible", false);
+        boolean wallPieceCost =
+            step == PlotCreatorStep.WALL_PIECES
+                && PlotCreatorWallPieceAuthoring.isMaterialsSubstep(session.getDraft());
         b.set("#OpenMaterialsButton.Visible", false);
-        b.set("#FillFromBuildShapeButton.Visible", step == PlotCreatorStep.MATERIALS);
+        b.set("#FillFromBuildShapeButton.Visible", step == PlotCreatorStep.MATERIALS || wallPieceCost);
         b.set("#MaterialsPageLabel.Visible", false);
         b.set("#MaterialsPageRow.Visible", false);
         b.set("#MaterialsPrevPageButton.Visible", false);
         b.set("#MaterialsNextPageButton.Visible", false);
         b.set("#ReviewSummary.Visible", step == PlotCreatorStep.REVIEW || step == PlotCreatorStep.DONE);
-        b.set("#DetailHint.Visible", step == PlotCreatorStep.SUBSTEP || step == PlotCreatorStep.MATERIALS);
+        b.set(
+            "#DetailHint.Visible",
+            step == PlotCreatorStep.SUBSTEP
+                || step == PlotCreatorStep.MATERIALS
+                || step == PlotCreatorStep.WALL_PIECES
+        );
+        if (wallPieceCost) {
+            b.set("#FillFromBuildShapeButton.TextSpans", Message.translation(MSG + ".button.useBuildShape"));
+        }
+        if (step == PlotCreatorStep.WALL_PIECES) {
+            PlotCreatorWallPieceDraft piece = session.getDraft().currentWallPiece();
+            if (piece != null) {
+                com.hexvane.aetherhaven.wall.WallCardinal face =
+                    PlotCreatorWallPieceAuthoring.expectedFace(session.getDraft());
+                b.set(
+                    "#StepHint.TextSpans",
+                    wallPieceCost
+                        ? Message.translation(MSG + ".wallPiece.hint.materials")
+                        : face == null
+                            ? Message.translation(MSG + ".wallPiece.hint.bounds")
+                            : Message
+                                .translation(MSG + ".wallPiece.hint.connection")
+                                .param(
+                                    "side",
+                                    Message.translation(
+                                        MSG + ".wallSide." + face.name().toLowerCase(java.util.Locale.ROOT)
+                                    )
+                                )
+                );
+                b.set(
+                    "#DetailHint.TextSpans",
+                    Message.translation(
+                        MSG + ".wallPiece." + PlotCreatorWallPieceAuthoring.roleLangSuffix(piece.getRole())
+                    )
+                );
+            }
+        }
         if (step == PlotCreatorStep.SUBSTEP) {
             PlotBuildingKindRequirements.SubstepRequirement sub = PlotCreatorService.currentSubstep(session.getDraft());
             if (sub != null) {
@@ -506,6 +551,51 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#ReviewSummary.Visible", false);
         b.set("#DetailHint.Visible", false);
         b.set("#SubmitToCommunityRow.Visible", showCommunitySubmit);
+    }
+
+    /**
+     * A wall style needs a name, an id, and whether to share it. There is no plot token and no gold cost, because each
+     * piece sets its own build cost while it is being authored.
+     */
+    private void applyWallSettingsVisibility(@Nonnull UICommandBuilder b) {
+        b.set("#DisplayNameField.Visible", true);
+        b.set("#DescriptionField.Visible", true);
+        b.set("#ConstructionIdField.Visible", true);
+        b.set("#PrefabNameField.Visible", false);
+        b.set("#KindDropdown.Visible", false);
+        b.set("#KindCheckScroll.Visible", false);
+        b.set("#TagsField.Visible", true);
+        b.set("#VariantOfDropdown.Visible", false);
+        b.set("#VariantCheckScroll.Visible", false);
+        b.set("#GoldCostLabel.Visible", false);
+        b.set("#GoldCostField.Visible", false);
+        b.set("#SelfBuildDaysLabel.Visible", false);
+        b.set("#SelfBuildDaysField.Visible", false);
+        b.set("#MaxHomeResidentsLabel.Visible", false);
+        b.set("#MaxHomeResidentsField.Visible", false);
+        b.set("#SaveEmptySpacesRow.Visible", true);
+        b.set("#SaveEmptySpacesHint.Visible", true);
+        b.set("#PreserveWaterRow.Visible", false);
+        b.set("#PreserveWaterHint.Visible", false);
+        b.set("#TouristDestinationRow.Visible", false);
+        b.set("#TouristDestinationHint.Visible", false);
+        b.set("#PlotTokenLockedRow.Visible", false);
+        b.set("#PlotTokenLockedHint.Visible", false);
+        b.set("#StyleIdLabel.Visible", false);
+        b.set("#StyleIdField.Visible", false);
+        b.set("#OpenMaterialsButton.Visible", false);
+        b.set("#FillFromBuildShapeButton.Visible", false);
+        b.set("#MaterialsPageLabel.Visible", false);
+        b.set("#MaterialsPageRow.Visible", false);
+        b.set("#MaterialsPrevPageButton.Visible", false);
+        b.set("#MaterialsNextPageButton.Visible", false);
+        b.set("#ReviewSummary.Visible", false);
+        b.set("#DetailHint.Visible", false);
+        b.set(
+            "#SubmitToCommunityRow.Visible",
+            isCommunityMarketplaceEnabled() && !session.getDraft().isCommunitySubmissionEdit()
+        );
+        applyFestivalFieldVisibility(b, false, false);
     }
 
     /** Festivals only need a name, an id, and when they happen. */
@@ -644,7 +734,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         StringBuilder sb = new StringBuilder();
         sb.append(d.getDisplayName()).append("\n");
         sb.append(d.getConstructionId()).append("\n");
-        sb.append(d.getPrefabPath()).append("\n");
+        if (!d.isWallMode()) {
+            sb.append(d.getPrefabPath()).append("\n");
+        }
         if (!d.getKinds().isEmpty()) {
             for (int i = 0; i < d.getKinds().size(); i++) {
                 if (i > 0) {
@@ -791,6 +883,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             } else {
                 kinds.remove(PlotBuildingKind.DECORATION);
                 kinds.remove(PlotBuildingKind.FESTIVAL);
+                kinds.remove(PlotBuildingKind.WALL);
                 if (!kinds.contains(kind)) {
                     kinds.add(kind);
                 }
@@ -801,6 +894,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         session.getDraft().setKinds(kinds);
         if (!kinds.contains(PlotBuildingKind.FESTIVAL)) {
             session.getDraft().clearFestivalSelection();
+        }
+        if (!kinds.contains(PlotBuildingKind.WALL)) {
+            session.getDraft().clearWallSelection();
         }
         PlotCreatorService.applyDefaultTagsForKind(session.getDraft());
     }
@@ -870,8 +966,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         }
         applyIncomingFields(data);
         if ("FillFromBuildShape".equals(data.action)) {
-            PlotCreatorMaterialsActions.requestFillFromBuildShape(session, playerRef);
-            refreshPartial();
+            PlotCreatorMaterialsActions.requestFillFromBuildShape(session, playerRef, this::refreshPartial);
             return;
         }
         if ("Cancel".equals(data.action)) {

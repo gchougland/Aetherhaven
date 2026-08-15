@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.plotcreator;
 import com.hexvane.aetherhaven.festival.NewLifeFestivalMechanic;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalIds;
 import com.hexvane.aetherhaven.festival.hallowseve.HallowsEveIds;
+import com.hexvane.aetherhaven.festival.market.MarketIds;
 import com.hexvane.aetherhaven.festival.pigrace.PigRaceLanes;
 import com.hexvane.aetherhaven.festival.treeclimb.TreeClimbIds;
 import java.util.ArrayList;
@@ -23,6 +24,9 @@ public final class PlotCreatorFestivalMechanicDefaults {
     public static final int DEFAULT_TREE_CLIMB_STARTS = TreeClimbIds.MAX_RACERS;
     public static final int DEFAULT_HALLOWS_EVE_TOURIST_SPOTS = HallowsEveIds.DEFAULT_TOURIST_SPOTS;
     public static final int DEFAULT_HALLOWS_EVE_ORB_SPAWNS = HallowsEveIds.DEFAULT_ORB_SPAWNS;
+    public static final int DEFAULT_MARKET_TOURIST_SPOTS = MarketIds.DEFAULT_TOURIST_SPOTS;
+    public static final int DEFAULT_MARKET_STANDS = MarketIds.DEFAULT_STANDS;
+    public static final int DEFAULT_MARKET_DISPLAYS = MarketIds.DEFAULT_DISPLAY_SLOTS;
 
     private PlotCreatorFestivalMechanicDefaults() {}
 
@@ -61,6 +65,9 @@ public final class PlotCreatorFestivalMechanicDefaults {
             || "halloween".equals(lower)) {
             return HallowsEveIds.MECHANIC_ID;
         }
+        if ("market".equals(lower) || "market festival".equals(lower)) {
+            return MarketIds.MECHANIC_ID;
+        }
         return lower;
     }
 
@@ -85,6 +92,9 @@ public final class PlotCreatorFestivalMechanicDefaults {
         if (HallowsEveIds.MECHANIC_ID.equals(key)) {
             return "Hallow's Eve";
         }
+        if (MarketIds.MECHANIC_ID.equals(key)) {
+            return "Market Festival";
+        }
         return mechanicId.trim();
     }
 
@@ -94,6 +104,7 @@ public final class PlotCreatorFestivalMechanicDefaults {
     public static void ensureRequiredSelectedSpots(@Nonnull PlotCreatorDraft draft) {
         LinkedHashSet<PlotCreatorSpotEntry> merged = new LinkedHashSet<>(draft.getSelectedSpots());
         for (PlotCreatorSpotEntry req : requiredSpotsForMechanic(draft)) {
+            merged.remove(req);
             merged.add(req);
         }
         draft.getSelectedSpots().clear();
@@ -123,7 +134,8 @@ public final class PlotCreatorFestivalMechanicDefaults {
             || PigRaceLanes.MECHANIC_ID.equals(mechanic)
             || CarnivalIds.MECHANIC_ID.equals(mechanic)
             || TreeClimbIds.MECHANIC_ID.equals(mechanic)
-            || HallowsEveIds.MECHANIC_ID.equals(mechanic)) {
+            || HallowsEveIds.MECHANIC_ID.equals(mechanic)
+            || MarketIds.MECHANIC_ID.equals(mechanic)) {
             int defaultTourists =
                 CarnivalIds.MECHANIC_ID.equals(mechanic)
                     ? DEFAULT_CARNIVAL_TOURIST_SPOTS
@@ -131,12 +143,15 @@ public final class PlotCreatorFestivalMechanicDefaults {
                         ? DEFAULT_TREE_CLIMB_TOURIST_SPOTS
                         : HallowsEveIds.MECHANIC_ID.equals(mechanic)
                             ? DEFAULT_HALLOWS_EVE_TOURIST_SPOTS
-                            : DEFAULT_PIG_RACE_TOURIST_SPOTS;
+                            : MarketIds.MECHANIC_ID.equals(mechanic)
+                                ? DEFAULT_MARKET_TOURIST_SPOTS
+                                : DEFAULT_PIG_RACE_TOURIST_SPOTS;
             boolean forceTourists =
                 PigRaceLanes.MECHANIC_ID.equals(mechanic)
                     || CarnivalIds.MECHANIC_ID.equals(mechanic)
                     || TreeClimbIds.MECHANIC_ID.equals(mechanic)
-                    || HallowsEveIds.MECHANIC_ID.equals(mechanic);
+                    || HallowsEveIds.MECHANIC_ID.equals(mechanic)
+                    || MarketIds.MECHANIC_ID.equals(mechanic);
             int touristCount =
                 Math.max(
                     draft.getFestivalTouristSpots().isEmpty()
@@ -217,6 +232,24 @@ public final class PlotCreatorFestivalMechanicDefaults {
                     HallowsEveIds.MECHANIC_ID.equals(mechanic) ? DEFAULT_HALLOWS_EVE_ORB_SPAWNS : 1
                 );
             out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_MAZE_ORB_SPAWN, orbCount));
+        }
+        if (MarketIds.MECHANIC_ID.equals(mechanic)) {
+            out.add(PlotCreatorSpotEntry.workOrBard(com.hexvane.aetherhaven.villager.TownVillagerBinding.KIND_ELDER, 1));
+            out.add(PlotCreatorSpotEntry.workOrBard(MarketIds.KIND_MARKET_SHOP, MarketIds.SHOP_SPOT_COUNT));
+        }
+        if (MarketIds.MECHANIC_ID.equals(mechanic) || !draft.getFestivalMarketStands().isEmpty()) {
+            int standCount =
+                MarketIds.MECHANIC_ID.equals(mechanic)
+                    ? DEFAULT_MARKET_STANDS
+                    : Math.max(1, draft.getFestivalMarketStands().size());
+            out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_MARKET_STAND, standCount));
+        }
+        if (MarketIds.MECHANIC_ID.equals(mechanic) || !draft.getFestivalMarketDisplaySlots().isEmpty()) {
+            int displayCount =
+                MarketIds.MECHANIC_ID.equals(mechanic)
+                    ? DEFAULT_MARKET_DISPLAYS
+                    : Math.max(1, draft.getFestivalMarketDisplaySlots().size());
+            out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_MARKET_DISPLAY, displayCount));
         }
         return out;
     }

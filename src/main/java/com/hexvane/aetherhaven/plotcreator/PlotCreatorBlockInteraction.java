@@ -55,7 +55,7 @@ public final class PlotCreatorBlockInteraction extends SimpleBlockInteraction {
         }
         PlotCreatorDraft draft = session.getDraft();
         Store<EntityStore> store = commandBuffer.getStore();
-        if (draft.getStep() == PlotCreatorStep.BOUNDS) {
+        if (draft.isEditingBounds()) {
             context.getState().state = InteractionState.Finished;
             return;
         }
@@ -70,6 +70,14 @@ public final class PlotCreatorBlockInteraction extends SimpleBlockInteraction {
                 if (PlotCreatorSubstepHandler.tryRemoveCurrentSubstepAt(session, block, playerRef, commandBuffer)) {
                     PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
                 }
+            } else if (draft.getStep() == PlotCreatorStep.WALL_PIECES
+                && PlotCreatorWallPieceAuthoring.removeCurrentConnectionNear(draft, block)) {
+                playerRef.sendMessage(
+                    com.hypixel.hytale.server.core.Message.translation(
+                        "aetherhaven_plot_creator.aetherhaven.plotcreator.hint.wallConnectionRemoved"
+                    )
+                );
+                PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
             }
             context.getState().state = InteractionState.Finished;
             return;

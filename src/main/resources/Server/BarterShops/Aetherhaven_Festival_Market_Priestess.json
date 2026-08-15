@@ -1,0 +1,57 @@
+{
+  "DisplayNameKey": "aetherhaven_festivals.aetherhaven.festival.shop.market.priestess",
+  "RefreshInterval": {
+    "Days": 1
+  },
+  "RestockHour": 6,
+  "TradeSlots": [
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Potion_Health", "Quantity": 2 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Autumn", "Quantity": 5 }],
+        "Stock": 8
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Potion_Stamina", "Quantity": 2 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Autumn", "Quantity": 5 }],
+        "Stock": 8
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Potion_Health_Lesser", "Quantity": 2 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Autumn", "Quantity": 3 }],
+        "Stock": 12
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Potion_Stamina_Lesser", "Quantity": 2 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Autumn", "Quantity": 3 }],
+        "Stock": 12
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Potion_Antidote", "Quantity": 2 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Autumn", "Quantity": 4 }],
+        "Stock": 8
+      }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Potion_Regen_Health", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Autumn", "Quantity": 6 }],
+        "Stock": 6
+      }
+    }
+  ]
+}

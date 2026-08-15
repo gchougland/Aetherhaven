@@ -228,6 +228,11 @@ public final class ConstructionDefinition {
     @SerializedName("wallSegment")
     private boolean wallSegment;
 
+    /** Role and connection points used by the wall wand to join this piece flush to its neighbours. */
+    @SerializedName("wallPiece")
+    @Nullable
+    private com.hexvane.aetherhaven.wall.WallPieceDefinition wallPiece;
+
     /**
      * Decorative build: uses plot placement and assembly, but on completion is removed from town data and left as world
      * blocks only (no management block, journal entry, or villager systems).
@@ -585,6 +590,11 @@ public final class ConstructionDefinition {
 
     public boolean isWallSegment() {
         return wallSegment;
+    }
+
+    @Nullable
+    public com.hexvane.aetherhaven.wall.WallPieceDefinition getWallPiece() {
+        return wallPiece;
     }
 
     public boolean isDecorationPlot() {

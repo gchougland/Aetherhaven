@@ -489,23 +489,45 @@ function normalizeCountsAsConstructionId(value) {
   return ids.length === 1 ? ids[0] : ids;
 }
 
+const WALL_PIECE_ROLES = ["segment", "gate", "tower_end", "tower_straight", "tower_corner"];
+
+/**
+ * @param {unknown} value
+ * @returns {string|undefined}
+ */
+function normalizeWallPieceRole(value) {
+  if (typeof value !== "string") {
+    return undefined;
+  }
+  const role = value.trim().toLowerCase();
+  return WALL_PIECE_ROLES.includes(role) ? role : undefined;
+}
+
 /**
  * @param {string} buildingPath
- * @returns {{ decorationPlot: boolean, countsAsConstructionId: string|string[]|undefined }}
+ * @returns {{ decorationPlot: boolean, wallSegment: boolean, wallPieceRole: string|undefined, countsAsConstructionId: string|string[]|undefined }}
  */
 function readBuildingTypeMeta(buildingPath) {
+  const empty = {
+    decorationPlot: false,
+    wallSegment: false,
+    wallPieceRole: undefined,
+    countsAsConstructionId: undefined,
+  };
   try {
     if (!fs.existsSync(buildingPath)) {
-      return { decorationPlot: false, countsAsConstructionId: undefined };
+      return empty;
     }
     const building = JSON.parse(fs.readFileSync(buildingPath, "utf8"));
     const id = String(building.id || "").trim();
     const decorationPlot =
       Boolean(building.decorationPlot) || id.toLowerCase().startsWith("plot_decoration");
+    const wallSegment = Boolean(building.wallSegment);
+    const wallPieceRole = normalizeWallPieceRole(building.wallPiece?.role);
     const countsAsConstructionId = normalizeCountsAsConstructionId(building.countsAsConstructionId);
-    return { decorationPlot, countsAsConstructionId };
+    return { decorationPlot, wallSegment, wallPieceRole, countsAsConstructionId };
   } catch {
-    return { decorationPlot: false, countsAsConstructionId: undefined };
+    return empty;
   }
 }
 
@@ -518,6 +540,7 @@ function buildManifestEntry(id, meta, prefabBytes) {
     styleId: meta.styleId || "misc",
     tags: normalizeTags(meta.tags),
     decorationPlot: Boolean(meta.decorationPlot),
+    wallSegment: Boolean(meta.wallSegment),
     blockIdVersion: meta.blockIdVersion,
     prefabBytes,
     version: meta.version || "1",
@@ -526,6 +549,10 @@ function buildManifestEntry(id, meta, prefabBytes) {
   const countsAsConstructionId = normalizeCountsAsConstructionId(meta.countsAsConstructionId);
   if (countsAsConstructionId) {
     entry.countsAsConstructionId = countsAsConstructionId;
+  }
+  const wallPieceRole = normalizeWallPieceRole(meta.wallPieceRole);
+  if (wallPieceRole) {
+    entry.wallPieceRole = wallPieceRole;
   }
   const description = normalizeDescription(meta.description);
   if (description) {
@@ -718,6 +745,8 @@ function approveSubmission(submissionId, requestedId, requiredModsOverride) {
     description: normalizeDescription(building.description) || normalizeDescription(meta.description),
     tags: buildingTags.length ? buildingTags : normalizeTags(meta.tags),
     decorationPlot: typeMeta.decorationPlot,
+    wallSegment: typeMeta.wallSegment,
+    wallPieceRole: typeMeta.wallPieceRole,
     requiredMods: buildingRequiredMods.length
       ? buildingRequiredMods
       : normalizeRequiredMods(meta.requiredMods),
@@ -1088,6 +1117,9 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
     const typeMeta = readBuildingTypeMeta(paths.building);
     const decorationPlot =
       typeof e.decorationPlot === "boolean" ? e.decorationPlot : typeMeta.decorationPlot;
+    const wallSegment =
+      typeof e.wallSegment === "boolean" ? e.wallSegment : typeMeta.wallSegment;
+    const wallPieceRole = normalizeWallPieceRole(e.wallPieceRole) ?? typeMeta.wallPieceRole;
     const countsAsConstructionId =
       normalizeCountsAsConstructionId(e.countsAsConstructionId) ?? typeMeta.countsAsConstructionId;
     const card = resolveCardImage(e.id, e.coverScreenshotId);
@@ -1095,6 +1127,7 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
       ...e,
       tags,
       decorationPlot,
+      wallSegment,
       prefabBytes,
       compatible,
       upvoteCount: voteCounts[e.id] || 0,
@@ -1112,6 +1145,11 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
       entry.countsAsConstructionId = countsAsConstructionId;
     } else {
       delete entry.countsAsConstructionId;
+    }
+    if (wallPieceRole) {
+      entry.wallPieceRole = wallPieceRole;
+    } else {
+      delete entry.wallPieceRole;
     }
     if (goldCost > 0) {
       entry.treasuryGoldCoinCost = goldCost;

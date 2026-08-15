@@ -38882,6 +38882,13 @@
     },
     {
       "x": 10,
+      "y": 6,
+      "z": 9,
+      "name": "Aetherhaven_Heartberry",
+      "support": 15
+    },
+    {
+      "x": 10,
       "y": 9,
       "z": 9,
       "name": "Wood_Lightwood_Decorative",
@@ -47268,7 +47275,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "NNE8OqESNx6YDfWEus0U0Q==",
+            "$binary": "A/nZ8/GlMciD0BdnmxEUBA==",
             "$type": "04"
           }
         },
@@ -47310,7 +47317,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "NRUFY3pYPb6AVXXdbzBYpg==",
+            "$binary": "7mToliThNRGAz2SafESHWg==",
             "$type": "04"
           }
         },
@@ -47352,7 +47359,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "8Agrs2B9MViTdrtrfLWBkA==",
+            "$binary": "p8/iPEdnMeGPQdMrIMQL+w==",
             "$type": "04"
           }
         },
@@ -47391,7 +47398,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "pLByAEjtNcm1eOmqOl2hQQ==",
+            "$binary": "buUUxcFhNA60TI8betZC6A==",
             "$type": "04"
           }
         },
@@ -47437,7 +47444,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "qY3Cx+lYO6uEuFDPfn657Q==",
+            "$binary": "dplKYiL+M4GZEN5Sy0EXBg==",
             "$type": "04"
           }
         },
@@ -47483,7 +47490,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "gfBnvZ+kNZiuBUUJKNONBg==",
+            "$binary": "u9vxcv8gNIe8HRzdwcT72g==",
             "$type": "04"
           }
         },
@@ -47529,7 +47536,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "vsKA4K+HNESetEtawVcQBw==",
+            "$binary": "Oz9JwE8ANP+0Se6hvjE77A==",
             "$type": "04"
           }
         },
@@ -47575,7 +47582,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "YBla8yVQPpmJUK4uVcMP3Q==",
+            "$binary": "oMSCVCF9N8eoVWvjeB7yUA==",
             "$type": "04"
           }
         },
@@ -47621,7 +47628,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "UtPgkhzBM0GPyYSGjIgdCA==",
+            "$binary": "2T0glZFnPT2iYE6hbEcBGg==",
             "$type": "04"
           }
         },
@@ -47667,7 +47674,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "Q9qFzfl2Oq6cFxvlvbODfg==",
+            "$binary": "VAms5f8gML+5xS+ciC39eg==",
             "$type": "04"
           }
         },
@@ -47713,7 +47720,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "mNOclBb2MSm6/y8oDgFRkA==",
+            "$binary": "XCVhCzjVNPuuBTbO8Ua+rQ==",
             "$type": "04"
           }
         },
@@ -47759,7 +47766,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "gqzpCK2TNb2n4TxnubjoGA==",
+            "$binary": "lPmrt9OPMVCGtgOVgcHXww==",
             "$type": "04"
           }
         },
@@ -47849,7 +47856,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "tjGWzf0DOAGfVBR2j9Yw9w==",
+            "$binary": "MzCbvKlUPTKZXR6S5mtDEw==",
             "$type": "04"
           }
         },
@@ -47895,7 +47902,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "pVhlJOQxM1CJWk/k4Nk+uw==",
+            "$binary": "F4EI2y6JNIS7jalwJhNANg==",
             "$type": "04"
           }
         },
@@ -47941,7 +47948,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "HaVi1/NINbSc9Iy2oV8nRw==",
+            "$binary": "nO/bhP50PgiouF/sR9or4Q==",
             "$type": "04"
           }
         },
@@ -47987,7 +47994,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "NiGyRFpKO8mniClr4F52zQ==",
+            "$binary": "DXaVy51uO8y8hIzqgUBWsA==",
             "$type": "04"
           }
         },
@@ -48033,7 +48040,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "cvjDiyXyPYa/JKYEG/P7SQ==",
+            "$binary": "oku4pguiO7e4gx5nl9N1FQ==",
             "$type": "04"
           }
         },
@@ -48079,7 +48086,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "evT0AL2xMr2y59dAel/09g==",
+            "$binary": "tlo1rAxdNbepjY3NaMhKng==",
             "$type": "04"
           }
         },
@@ -48169,7 +48176,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "nzDxfcJUPPek42S5q7zJww==",
+            "$binary": "g9MwSUfKODOnToKNv4NFww==",
             "$type": "04"
           }
         },
@@ -48215,7 +48222,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "EHFwdsjMOqioICLWHUPdeA==",
+            "$binary": "KYclJ5deOKuxJ9CxGqb1BA==",
             "$type": "04"
           }
         },
@@ -48261,7 +48268,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "zMxnCT1nOe+D4JKxsytTCA==",
+            "$binary": "9cEizNcqPKiHkl4f1MsuQw==",
             "$type": "04"
           }
         },
@@ -48307,7 +48314,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "13cFCmkvOheNLSFKA77dAA==",
+            "$binary": "EJSZiNzJPGWfJ1vIHkDa0A==",
             "$type": "04"
           }
         },
@@ -48353,7 +48360,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "FY+h0nenODK+bHOApJuyXg==",
+            "$binary": "eLsAYVvXOpic+z20BRVskg==",
             "$type": "04"
           }
         },
@@ -48399,7 +48406,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "n9L5dDA1N0iJAU94gtJOOw==",
+            "$binary": "7laIHgsdPwqP7PcoXAofWw==",
             "$type": "04"
           }
         },
@@ -48577,7 +48584,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "Kysh7cR7N4u8iJ/c9b0CDA==",
+            "$binary": "g/PEtar3MDuVsYE7887nZg==",
             "$type": "04"
           }
         },
@@ -48626,7 +48633,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "laZDorKpP5CHKa6BPTku5w==",
+            "$binary": "KPCIh0qvNoahT8ENeaRzCw==",
             "$type": "04"
           }
         },
@@ -48662,7 +48669,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "dW48KXeNOkiqLyFeehKJgA==",
+            "$binary": "3gVhczl0NQaYion6iU3usw==",
             "$type": "04"
           }
         },
@@ -48711,7 +48718,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "ZRP8Zjt2MM+qPuO88wnjxw==",
+            "$binary": "3D5n/IPzMhC1zn0tWDz2tA==",
             "$type": "04"
           }
         },
@@ -48750,7 +48757,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "uD4HjykuO1ubVCPeppfHxQ==",
+            "$binary": "Rlmk3fGEPCuQNZMC3haXDA==",
             "$type": "04"
           }
         },
@@ -48789,7 +48796,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "mwbJ6BG0NlqqhgbBW1FfdA==",
+            "$binary": "zPb5AXLzMlCFQSn1qDSThA==",
             "$type": "04"
           }
         },
@@ -48828,7 +48835,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "96yBWBarP9+6Y1Tcfxl73w==",
+            "$binary": "0gu3yDX2NhO63cnSGD5KWw==",
             "$type": "04"
           }
         },
@@ -48867,7 +48874,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "dXisqozsMsC61B5b+okpfA==",
+            "$binary": "hIcsieRKOQ6vLv/h83G7Vw==",
             "$type": "04"
           }
         },
@@ -48906,7 +48913,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "VJ5weXYMO8Kw+Ithq7FYEQ==",
+            "$binary": "4G2ZoN9vPdWpEszw8AT5CA==",
             "$type": "04"
           }
         },
@@ -48945,7 +48952,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "KzXiwhboNci2BdE1vz7PTQ==",
+            "$binary": "GK80wLORPjicMnvEmxUQKQ==",
             "$type": "04"
           }
         },
@@ -48984,7 +48991,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "sGGUDZf9N1uLjqAt1YZTzA==",
+            "$binary": "uJVSNauOM+ShLX1RG3lPig==",
             "$type": "04"
           }
         },
@@ -49020,7 +49027,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "PSTDcgp9MWeYdqrEbXXwaQ==",
+            "$binary": "QtRVhPDgMIutzVLTPyrqJw==",
             "$type": "04"
           }
         },
@@ -49066,7 +49073,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "tITFiCZENaKk2Sz5cXC3kw==",
+            "$binary": "3cLQ0kv9PvmfsguHyZgZ8g==",
             "$type": "04"
           }
         },
@@ -49244,7 +49251,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "LYmyViSMPSerDr4WNk2x/Q==",
+            "$binary": "b7YYGKJCOraqEZjLYMV7Yg==",
             "$type": "04"
           }
         },
@@ -49290,7 +49297,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "vZEWQ79tMVi9/9avI82NPw==",
+            "$binary": "XGnMrnm1OHmSqE86Pu9Mmg==",
             "$type": "04"
           }
         },
@@ -49336,7 +49343,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "pcyl/f8kN/2KGavUhfiong==",
+            "$binary": "5J1cYMAFN9660P1I5bLfJA==",
             "$type": "04"
           }
         },
@@ -49382,7 +49389,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "u0/IgAykNdCLYDT/XuByHg==",
+            "$binary": "+BbuxnLCPJO5h6CPVoQuJg==",
             "$type": "04"
           }
         },
@@ -49428,7 +49435,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "NYgoJWYlNf+zXYdrqn9btQ==",
+            "$binary": "iNQUsI3UNRGGU85iR/RxFQ==",
             "$type": "04"
           }
         },
@@ -49457,50 +49464,6 @@
         "Invulnerable": {},
         "PreventItemMerging": {},
         "Prop": {},
-        "Transform": {
-          "Position": {
-            "X": 10.3033447265625,
-            "Y": 6.0,
-            "Z": 9.677757263183594
-          },
-          "Rotation": {
-            "Pitch": 0.42234712839126587,
-            "Yaw": -0.9222152829170227,
-            "Roll": -0.022802826017141342
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.5
-        },
-        "Item": {
-          "Item": {
-            "Id": "Aetherhaven_Heartberry",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {},
-        "HeadRotation": {
-          "Rotation": {
-            "Pitch": 0.422345906496048,
-            "Yaw": -0.9222131371498108,
-            "Roll": -0.022803649306297302
-          }
-        }
-      }
-    },
-    {
-      "Components": {
-        "Invulnerable": {},
-        "PreventItemMerging": {},
-        "Prop": {},
         "BlockEntity": {
           "BlockTypeKey": "Deco_Trophy_Harvest"
         },
@@ -49518,7 +49481,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "9ucsM2zTP3eF7gkUuSEa7A==",
+            "$binary": "uEn6JPqvP1mBrc3UkUm/8A==",
             "$type": "04"
           }
         },
@@ -49564,7 +49527,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "zm6fGTYHPPWD/NOPrWPV1g==",
+            "$binary": "1R2YwDg2MSijlhrj7ieQzA==",
             "$type": "04"
           }
         },
@@ -49610,7 +49573,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "VZNFc9S4P6SHzHSst2aYoQ==",
+            "$binary": "DW8Yz1QkPByY7lEET41Tvg==",
             "$type": "04"
           }
         },
@@ -49656,7 +49619,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "ytR1yQi1NtCJ0Pfab9VH5w==",
+            "$binary": "CXO6xNinMqG1rDXISGu+tQ==",
             "$type": "04"
           }
         },
@@ -49702,7 +49665,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "+XE0+9ISP1aUafEYDPUt3w==",
+            "$binary": "8wtORkCzNd2g56Z9BeN5yA==",
             "$type": "04"
           }
         },
@@ -49748,7 +49711,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "e1hgWfFpOQ659TuXkasIVg==",
+            "$binary": "Yrx79jwJOYCXsxFImRJMZQ==",
             "$type": "04"
           }
         },
@@ -49794,7 +49757,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "kiLKk6z4OgOoLOFggViTJA==",
+            "$binary": "MPy/IR2MOgCQ/gvXgQE7VQ==",
             "$type": "04"
           }
         },
@@ -49840,7 +49803,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "IBp+DOiVM76GJSTrRco6yQ==",
+            "$binary": "LF4IqognNQCkEjKSChd9fw==",
             "$type": "04"
           }
         },
@@ -49886,7 +49849,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "4fw8Zfc5N9OAS5lRuSG0aQ==",
+            "$binary": "j1GhYN9iOympIiqSSFm1Qg==",
             "$type": "04"
           }
         },
@@ -49932,7 +49895,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "DWEUzQLdNgylRGZClS6b/g==",
+            "$binary": "SZ6TsuJ3M96P7VY7mXapSA==",
             "$type": "04"
           }
         },
@@ -49978,7 +49941,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "Ws04BlraO/Cw8rSGHdG0eg==",
+            "$binary": "l02Dsk/HN1yOib0nzZTUwg==",
             "$type": "04"
           }
         },
@@ -50024,7 +49987,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "gr3WReHcMJWn82TlIl//IA==",
+            "$binary": "Db6bJMg5POWxRDvCBB3Xow==",
             "$type": "04"
           }
         },
@@ -50070,7 +50033,7 @@
         },
         "UUID": {
           "UUID": {
-            "$binary": "ICKljXezMD+bQKcUyZDVgQ==",
+            "$binary": "uDfarfuUOwmOmlIDjbnlcA==",
             "$type": "04"
           }
         },

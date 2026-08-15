@@ -27,7 +27,8 @@ import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.wall.WallCardinal;
 import com.hexvane.aetherhaven.wall.WallPieceGeometry;
-import com.hexvane.aetherhaven.wall.WallTowerPrefabResolver;
+import com.hexvane.aetherhaven.wall.WallStyle;
+import com.hexvane.aetherhaven.wall.WallStyleCatalog;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -134,6 +135,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         commandBuilder.set("#RemoveConfirmGroup.Visible", removeConfirm);
         commandBuilder.set("#PieceTypeRow.Visible", !editPrompt && !removeConfirm);
         commandBuilder.set("#BtnPieceTower.Disabled", !session.canPlaceTowerNow());
+        applyWallStyleRow(commandBuilder, !editPrompt && !removeConfirm);
         commandBuilder.set("#CameraPlotRow.Visible", !editPrompt && !removeConfirm);
         commandBuilder.set("#RowYBack.Visible", !editPrompt && !removeConfirm);
         commandBuilder.set("#RowActions.Visible", !editPrompt && !removeConfirm);
@@ -147,6 +149,8 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
             applyExpandPadButtons(commandBuilder);
         }
 
+        bind(eventBuilder, "#BtnStylePrev", "StylePrev");
+        bind(eventBuilder, "#BtnStyleNext", "StyleNext");
         bind(eventBuilder, "#BtnPieceWall", "PieceWall");
         bind(eventBuilder, "#BtnPieceGate", "PieceGate");
         bind(eventBuilder, "#BtnPieceTower", "PieceTower");
@@ -222,6 +226,13 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
             return;
         }
         switch (data.action) {
+            case "StylePrev", "StyleNext" -> {
+                if (session.cycleWallStyle(data.action.equals("StyleNext") ? 1 : -1)) {
+                    scheduleRefreshPreviewAndCamera(ref, store);
+                    rebuild();
+                }
+                return;
+            }
             case "PieceWall" -> {
                 session.setPieceKind(WallPlacementSession.PieceKind.SEGMENT);
                 scheduleRefreshPreview(ref, store);
@@ -619,6 +630,36 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         }
     }
 
+    /** Shows the style picker only once a second wall style is installed. */
+    private void applyWallStyleRow(@Nonnull UICommandBuilder commandBuilder, boolean visible) {
+        List<String> styleIds = WallStyleCatalog.get().completeStyleIds();
+        boolean show = visible && styleIds.size() > 1;
+        commandBuilder.set("#WallStyleRow.Visible", show);
+        if (!show) {
+            return;
+        }
+        commandBuilder.set("#WallStyleName.TextSpans", wallStyleLabel());
+        commandBuilder.set("#BtnStylePrev.TooltipTextSpans", Message.translation(MSG + ".stylePrev"));
+        commandBuilder.set("#BtnStyleNext.TooltipTextSpans", Message.translation(MSG + ".styleNext"));
+    }
+
+    @Nonnull
+    private Message wallStyleLabel() {
+        WallStyle style = session.resolveStyle();
+        if (style == null) {
+            return Message.translation(MSG + ".styleUnknown");
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        WallStyle.Piece segment = style.piece(com.hexvane.aetherhaven.wall.WallPieceRole.SEGMENT);
+        if (plugin != null && segment != null) {
+            ConstructionDefinition def = plugin.getConstructionCatalog().get(segment.constructionId());
+            if (def != null) {
+                return def.displayNameMessage();
+            }
+        }
+        return Message.raw(style.displayName());
+    }
+
     private void refreshPreview(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         if (session.hasEditTarget() || session.isRemoveConfirmOpen()) {
             PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
@@ -630,7 +671,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
             return;
         }
         if (session.getPieceKind() == WallPlacementSession.PieceKind.TOWER) {
-            session.ensureTowerEndCapPreviewDefaults();
+            session.prepareTowerForCommit();
         }
         String consId = session.resolveConstructionId();
         ConstructionDefinition def = plugin.getConstructionCatalog().get(consId);
@@ -751,11 +792,12 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 if (!ref.isValid()) {
                     return;
                 }
-                boolean towerUpgraded = session.previewExpandDirection(dir);
-                if (towerUpgraded) {
-                    syncLastCommittedTowerPlot(ref, store);
-                    refreshCommittedTowerSign(ref, store);
+                WallCardinal towerAttach = session.towerAttachDir();
+                if (towerAttach != null) {
+                    placeTowerAndLeaveIt(ref, store, towerAttach, dir);
+                    return;
                 }
+                applyTowerUpgrade(ref, store, session.previewExpandDirection(dir));
                 logWallDebug(
                     ref,
                     store,
@@ -771,12 +813,39 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         );
     }
 
+    /**
+     * Places the tower being previewed on the open face of the piece behind it, then leaves it toward {@code outgoing}.
+     * The tower only fits on that one face, so the arrow the player pressed says where the run goes from the tower
+     * rather than where the tower goes.
+     */
+    private void placeTowerAndLeaveIt(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull WallCardinal attach,
+        @Nonnull WallCardinal outgoing
+    ) {
+        logWallDebug(ref, store, "expandPad", "tower attach=" + attach + " outgoing=" + outgoing);
+        if (!commitCurrentPlacement(ref, store, attach, false)) {
+            rebuild();
+            return;
+        }
+        applyTowerUpgrade(ref, store, session.previewExpandDirection(outgoing));
+        logWallDebug(ref, store, "placedTower", "outgoing=" + outgoing);
+        refreshPreview(ref, store);
+        rebuild();
+    }
+
     /** Places the current preview without starting the next segment (for the last piece in a run). */
     private void schedulePlace(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         World world = store.getExternalData().getWorld();
         world.execute(
             () -> {
                 if (!ref.isValid()) {
+                    return;
+                }
+                // Nothing is lined up yet, so there is nothing to commit and this just ends the run.
+                if (!session.shouldShowNextPiecePreview()) {
+                    scheduleCancel(ref, store);
                     return;
                 }
                 WallCardinal dir = session.getPlacementExpandDir();
@@ -830,20 +899,13 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         if (dir != null) {
             session.setPlacementExpandDir(dir);
             if (placingTower) {
-                session.prepareTowerPlacementForClick(dir);
-                if (!session.isTowerReadyToCommit(dir)) {
-                    return true;
-                }
+                session.previewExpandDirection(dir);
             } else {
-                WallPlacementSession.CommittedStep lastTowerStep = session.getLastCommitted();
-                if (lastTowerStep != null
-                    && WallPieceGeometry.isTowerConstructionId(lastTowerStep.constructionId)
-                    && lastTowerStep.towerConnectionDirs != null
-                    && lastTowerStep.towerConnectionDirs.size() == 1) {
-                    if (session.upgradeLastCommittedTowerIfNeeded(dir)) {
-                        syncLastCommittedTowerPlot(ref, store);
-                        refreshCommittedTowerSign(ref, store);
-                    }
+                // The tower behind this piece opens the door the run leaves by, which can move it, so the piece is
+                // planned again against the tower's new shape.
+                WallPlacementSession.TowerUpgrade upgrade = session.upgradeLastCommittedTowerIfNeeded(dir);
+                if (upgrade != null) {
+                    applyTowerUpgrade(ref, store, upgrade);
                     session.previewExpandDirection(dir);
                 }
             }
@@ -854,17 +916,72 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
             return false;
         }
         if (chainAfter && dir != null) {
-            session.previewExpandDirection(dir);
+            // Lining the next piece up opens the far door on a tower we just placed, so the sign and plot have to
+            // follow the shape the wand is showing.
+            applyTowerUpgrade(ref, store, session.previewExpandDirection(dir));
         }
         return true;
     }
 
-    private void refreshCommittedTowerSign(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+    /**
+     * The run ends here, so a tower that opened a door for a piece the player never placed goes back to being an end
+     * cap instead of being left with a doorway to nowhere.
+     */
+    private void closeDoorOnDanglingTower(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        WallPlacementSession.TowerUpgrade reverted = session.revertLastCommittedTowerUpgrade();
+        if (reverted != null) {
+            syncTowerToWorld(ref, store, reverted);
+        }
+    }
+
+    /**
+     * After a piece is undone, closes the door its tower opened for it so a tower at the end of a run goes back to
+     * being an end cap.
+     */
+    private void revertTowerBehindUndonePiece(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull WallPlacementSession.CommittedStep undone
+    ) {
+        WallPlacementSession.TowerUpgrade reverted = session.revertLastCommittedTowerUpgrade();
+        if (reverted == null) {
+            return;
+        }
+        applyTowerUpgrade(ref, store, reverted);
+        if (undone.chainExpandDir != null) {
+            session.planPreviewFromLastCommitted(undone.chainExpandDir);
+        }
+    }
+
+    /** Applies a tower door upgrade to the world: swaps the prefab and moves the sign when the tower shifted. */
+    private void applyTowerUpgrade(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable WallPlacementSession.TowerUpgrade upgrade
+    ) {
+        if (upgrade == null) {
+            return;
+        }
+        syncTowerToWorld(ref, store, upgrade);
+        scheduleRefreshPreview(ref, store);
+    }
+
+    private void syncTowerToWorld(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull WallPlacementSession.TowerUpgrade upgrade
+    ) {
+        World world = store.getExternalData().getWorld();
+        if (upgrade.moved()) {
+            WallPlacementRemoveService.breakPlotSignAt(
+                world, upgrade.previousSignAnchor().x, upgrade.previousSignAnchor().y, upgrade.previousSignAnchor().z
+            );
+        }
+        syncLastCommittedTowerPlot(ref, store);
         WallPlacementSession.CommittedStep last = session.getLastCommitted();
         if (last == null || !WallPieceGeometry.isTowerConstructionId(last.constructionId)) {
             return;
         }
-        World world = store.getExternalData().getWorld();
         PlotPlacementCommit.replacePlotSign(
             world,
             last.signAnchor.x,
@@ -875,7 +992,6 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
             last.plotId,
             store
         );
-        scheduleRefreshPreview(ref, store);
     }
 
     private void syncLastCommittedTowerPlot(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
@@ -897,6 +1013,19 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         }
         plot.setConstructionId(last.constructionId);
         plot.setPlacementPrefabYaw(last.getPrefabYaw());
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(last.constructionId);
+        Path prefabPath = def != null ? PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath()) : null;
+        if (prefabPath != null) {
+            Vector3i anchor = last.ghostPrefabOriginWorld();
+            IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
+            plot.applySignAndFootprint(
+                last.signAnchor.x,
+                last.signAnchor.y,
+                last.signAnchor.z,
+                PlotFootprintUtil.computeFootprint(anchor, last.getPrefabYaw(), buf)
+            );
+            plot.setPrefabWorldPlacement(anchor.x, anchor.y, anchor.z, last.getPrefabYaw());
+        }
         tm.updateTown(town);
     }
 
@@ -929,17 +1058,8 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         Vector3i previewAnchor = session.getCurrentAnchor();
         int rotationSteps = session.getCurrentRotationSteps();
         Path prefabPath = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
-        PlotPlacementHeights.ResolvedPlacement resolved;
-        if (prefabPath != null) {
-            IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
-            resolved =
-                PlotPlacementHeights.resolve(
-                    world, previewAnchor, def, session.getCurrentPrefabYaw(), buf
-                );
-        } else {
-            Vector3i buildingAnchor = def.resolvePrefabAnchorWorld(previewAnchor, session.getCurrentPrefabYaw());
-            resolved = new PlotPlacementHeights.ResolvedPlacement(previewAnchor, buildingAnchor);
-        }
+        PlotPlacementHeights.ResolvedPlacement resolved =
+            PlotPlacementHeights.resolveWallPiece(previewAnchor, def, session.getCurrentPrefabYaw());
         Vector3i placedSignPos = resolved.signCell();
         Vector3i buildingAnchor = resolved.buildingPrefabAnchor();
         String err =
@@ -1054,6 +1174,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                     world, undone.signAnchor.x, undone.signAnchor.y, undone.signAnchor.z
                 );
                 session.restoreStateAfterUndo(undone);
+                revertTowerBehindUndonePiece(ref, store, undone);
                 captureBirdsEyeSnapshot(ref, store);
                 applyBirdsEyeCameraPacket(ref, store);
                 refreshPreview(ref, store);
@@ -1099,6 +1220,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 if (!ref.isValid()) {
                     return;
                 }
+                closeDoorOnDanglingTower(ref, store);
                 PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
                 PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
                 WallPlacementWireframeOverlay.clearFor(pr);

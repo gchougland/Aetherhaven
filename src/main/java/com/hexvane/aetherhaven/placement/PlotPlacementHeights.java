@@ -32,4 +32,18 @@ public final class PlotPlacementHeights {
         Vector3i signCell = PlotSignGrounding.resolveSignCell(world, previewSignAnchor, def, prefabYaw, buf);
         return new ResolvedPlacement(signCell, buildingPrefabAnchor);
     }
+
+    /**
+     * Placement for a wall piece: the sign stays exactly on the preview anchor. Wall chaining measures the next piece
+     * from the stored sign of the previous one, so re-centring the sign on the footprint (which is off by a block for
+     * any piece with an even span) would push every following piece out of line.
+     */
+    @Nonnull
+    public static ResolvedPlacement resolveWallPiece(
+        @Nonnull Vector3i previewSignAnchor, @Nonnull ConstructionDefinition def, @Nonnull Rotation prefabYaw
+    ) {
+        return new ResolvedPlacement(
+            new Vector3i(previewSignAnchor), def.resolvePrefabAnchorWorld(previewSignAnchor, prefabYaw)
+        );
+    }
 }
