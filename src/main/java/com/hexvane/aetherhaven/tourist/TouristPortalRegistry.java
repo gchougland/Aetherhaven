@@ -35,10 +35,37 @@ public final class TouristPortalRegistry {
         }
     }
 
+    /**
+     * Picks a portal id for {@code pos}. Reuses {@code preferredRaw} only when unused, or already bound to
+     * this exact block. Colliding ids (e.g. prefab-baked UUID shared by two towns) get a fresh UUID.
+     */
+    @Nonnull
+    public UUID allocatePortalId(@Nonnull Vector3i pos, @Nullable String preferredRaw) {
+        return TouristPortalIdAllocation.allocate(pos, preferredRaw, this::get);
+    }
+
     public void put(@Nonnull TouristPortalRecord record) {
-        byId.put(record.getPortalId(), record);
+        UUID portalId = record.getPortalId();
         Vector3i pos = record.getBlockPosition();
-        byBlockKey.put(blockKey(pos.x, pos.y, pos.z), record.getPortalId());
+        TouristPortalRecord priorSameId = byId.get(portalId);
+        if (priorSameId != null) {
+            Vector3i priorPos = priorSameId.getBlockPosition();
+            if (priorPos.x != pos.x || priorPos.y != pos.y || priorPos.z != pos.z) {
+                byBlockKey.remove(blockKey(priorPos.x, priorPos.y, priorPos.z));
+            }
+        }
+        UUID priorAtBlock = byBlockKey.get(blockKey(pos.x, pos.y, pos.z));
+        if (priorAtBlock != null && !priorAtBlock.equals(portalId)) {
+            TouristPortalRecord displaced = byId.get(priorAtBlock);
+            if (displaced != null) {
+                Vector3i displacedPos = displaced.getBlockPosition();
+                if (displacedPos.x == pos.x && displacedPos.y == pos.y && displacedPos.z == pos.z) {
+                    byId.remove(priorAtBlock);
+                }
+            }
+        }
+        byId.put(portalId, record);
+        byBlockKey.put(blockKey(pos.x, pos.y, pos.z), portalId);
     }
 
     public void remove(@Nonnull UUID portalId) {

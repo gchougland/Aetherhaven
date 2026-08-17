@@ -5624,10 +5624,10 @@
       "components": {
         "Components": {
           "AetherhavenTouristPortalBlock": {
-            "PortalId": "ec4f46ba-9753-45ec-b951-4ba7fb39488f",
+            "PortalId": "",
             "TownId": "",
             "PlotId": "",
-            "Configured": true
+            "Configured": false
           },
           "PlacedByInteraction": {
             "WhoPlacedUuid": {

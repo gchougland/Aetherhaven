@@ -159,15 +159,9 @@ public final class TouristPortalRegistrySync {
             registry.remove(existing.getPortalId());
         }
 
-        UUID portalId = UUID.randomUUID();
         TouristPortalBlock blockComp = TouristPortalBlockUtil.getBlockComponent(world, pos);
-        if (blockComp != null && !blockComp.getPortalId().isBlank()) {
-            try {
-                portalId = UUID.fromString(blockComp.getPortalId().trim());
-            } catch (IllegalArgumentException ignored) {
-                // fresh id
-            }
-        }
+        UUID portalId =
+            registry.allocatePortalId(pos, TouristPortalIdAllocation.preferredIdFromBlock(blockComp));
 
         TouristPortalRecord record = new TouristPortalRecord();
         record.setPortalId(portalId);

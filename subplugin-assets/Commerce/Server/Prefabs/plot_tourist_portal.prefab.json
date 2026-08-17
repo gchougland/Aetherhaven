@@ -3152,10 +3152,10 @@
       "components": {
         "Components": {
           "AetherhavenTouristPortalBlock": {
-            "PortalId": "e3db9165-f526-4def-bb89-10a74ffd8285",
-            "TownId": "d87b9d18-a6de-42a7-9697-90f4c2aa0d9f",
+            "PortalId": "",
+            "TownId": "",
             "PlotId": "",
-            "Configured": true
+            "Configured": false
           },
           "PlacedByInteraction": {
             "WhoPlacedUuid": {
