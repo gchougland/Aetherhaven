@@ -168,6 +168,34 @@
     "market"
   ],
   "greetings": {
+    "logger": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.logger.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.logger.1"
+    ],
+    "bard": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.bard.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.bard.1"
+    ],
+    "elder": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.elder.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.elder.1"
+    ],
+    "guard": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.guard.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.guard.1"
+    ],
+    "chef": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.chef.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.chef.1"
+    ],
+    "miner": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.miner.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.miner.1"
+    ],
+    "pyrotechnic": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.pyrotechnic.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.pyrotechnic.1"
+    ],
     "crystal_keeper": [
       "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.crystal_keeper.0",
       "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.crystal_keeper.1"
@@ -211,34 +239,6 @@
     "guild_master": [
       "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.guild_master.0",
       "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.guild_master.1"
-    ],
-    "logger": [
-      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.logger.0",
-      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.logger.1"
-    ],
-    "bard": [
-      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.bard.0",
-      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.bard.1"
-    ],
-    "elder": [
-      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.elder.0",
-      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.elder.1"
-    ],
-    "guard": [
-      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.guard.0",
-      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.guard.1"
-    ],
-    "chef": [
-      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.chef.0",
-      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.chef.1"
-    ],
-    "miner": [
-      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.miner.0",
-      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.miner.1"
-    ],
-    "pyrotechnic": [
-      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.pyrotechnic.0",
-      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.pyrotechnic.1"
     ]
   }
 }

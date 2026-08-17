@@ -115,7 +115,9 @@ public final class FestivalDanceSystem extends EntityTickingSystem<EntityStore> 
         }
         UUID entityUuid = uuidComp.getUuid();
         long nowMs = System.currentTimeMillis();
-        if (isMarketStallVendor(binding, entityUuid) || isJudgingElder(binding)) {
+        if (com.hexvane.aetherhaven.festival.snowball.SnowballSessionIndex.isLivingFighter(entityUuid)
+            || isMarketStallVendor(binding, entityUuid)
+            || isJudgingElder(binding)) {
             DanceHold activeVendorDance = ACTIVE_DANCE.remove(entityUuid);
             if (activeVendorDance != null) {
                 NpcAnimationPlayback.stop(ref, AnimationSlot.Emote, commandBuffer);
@@ -232,12 +234,8 @@ public final class FestivalDanceSystem extends EntityTickingSystem<EntityStore> 
         @Nonnull String emote,
         long nowMs
     ) {
-        NpcAnimationPlayback.stop(ref, AnimationSlot.Movement, commandBuffer);
+        // Do not replay or stop movement here. Restarting the emote every tick freezes it on the first frame.
         holdAutonomyStill(ref, store, commandBuffer, nowMs + 1_000L);
-        if (!isPlayingEmote(store, ref, emote)) {
-            NpcAnimationPlayback.play(ref, npc, AnimationSlot.Emote, emote, commandBuffer);
-            commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
-        }
     }
 
     /** Push the next wander / POI pick past the dance so autonomy does not cancel the emote. */
@@ -324,19 +322,6 @@ public final class FestivalDanceSystem extends EntityTickingSystem<EntityStore> 
         // Sitting or sleeping folk stay put; dancing over a sit looks wrong.
         String lower = status.toLowerCase();
         return lower.contains("sit") || lower.contains("sleep");
-    }
-
-    private static boolean isPlayingEmote(
-        @Nonnull Store<EntityStore> store,
-        @Nonnull Ref<EntityStore> ref,
-        @Nonnull String emote
-    ) {
-        ActiveAnimationComponent active = store.getComponent(ref, ActiveAnimationComponent.getComponentType());
-        if (active == null) {
-            return false;
-        }
-        String current = active.getActiveAnimations()[AnimationSlot.Emote.ordinal()];
-        return emote.equals(current);
     }
 
     private static void trimTimingMaps() {

@@ -115,6 +115,29 @@ public final class VillagerFollowPlayerSystem extends EntityTickingSystem<Entity
         clearFollowRecoveryTracking(store, npcRef);
     }
 
+    /** Same as {@link #startFollow} but safe from an entity tick (command buffer only). */
+    public static void startFollowFromTick(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull UUID playerUuid
+    ) {
+        if (!isEligibleCitizen(store, npcRef)) {
+            return;
+        }
+        VillagerFollowPlayerState follow = store.getComponent(npcRef, VillagerFollowPlayerState.getComponentType());
+        if (follow != null && follow.isFollowing(playerUuid)) {
+            return;
+        }
+        if (follow == null) {
+            follow = new VillagerFollowPlayerState();
+        } else {
+            follow = (VillagerFollowPlayerState) follow.clone();
+        }
+        follow.startFollowing(playerUuid);
+        commandBuffer.putComponent(npcRef, VillagerFollowPlayerState.getComponentType(), follow);
+    }
+
     public static void stopFollow(
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull Store<EntityStore> store,
@@ -186,6 +209,11 @@ public final class VillagerFollowPlayerSystem extends EntityTickingSystem<Entity
             archetypeChunk.getComponent(index, VillagerFollowPlayerState.getComponentType());
         NPCEntity npc = archetypeChunk.getComponent(index, NPCEntity.getComponentType());
         if (follow == null || npc == null || !follow.isActive()) {
+            return;
+        }
+        UUIDComponent followUuid = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (followUuid != null
+            && com.hexvane.aetherhaven.festival.snowball.SnowballSessionIndex.isLivingFighter(followUuid.getUuid())) {
             return;
         }
         if (NpcFaceVisuals.isInInteractionDialogue(npc)) {

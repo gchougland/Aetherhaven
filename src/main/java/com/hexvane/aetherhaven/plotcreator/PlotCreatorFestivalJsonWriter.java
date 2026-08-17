@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.plotcreator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hexvane.aetherhaven.festival.FestivalDefinition;
+import com.hexvane.aetherhaven.festival.FestivalIcons;
 import com.hexvane.aetherhaven.hud.AetherhavenCalendar;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -55,8 +56,12 @@ public final class PlotCreatorFestivalJsonWriter {
                 root.put("endMinute", existing.getEndMinute());
             }
         }
-        if (existing != null) {
-            root.put("calendarIconPath", existing.getCalendarIconPath());
+        String calendarIcon =
+            existing != null
+                ? existing.getCalendarIconPath()
+                : FestivalIcons.resolveCalendarIcon(null, draft.getFestivalMechanicId());
+        if (calendarIcon != null && !calendarIcon.isBlank()) {
+            root.put("calendarIconPath", calendarIcon);
         }
         if (draft.getFestivalMechanicId() != null) {
             root.put("mechanicId", draft.getFestivalMechanicId());
@@ -121,6 +126,24 @@ public final class PlotCreatorFestivalJsonWriter {
         }
         if (!draft.getFestivalMarketDisplaySlots().isEmpty()) {
             root.put("marketDisplaySlots", orbMaps(draft.getFestivalMarketDisplaySlots()));
+        }
+        if (!draft.getFestivalSnowballPileSpots().isEmpty()) {
+            root.put("snowballPileSpots", orbMaps(draft.getFestivalSnowballPileSpots()));
+        }
+        if (!draft.getFestivalSnowballTeamASpots().isEmpty()) {
+            root.put("snowballTeamASpots", raceStartMaps(draft.getFestivalSnowballTeamASpots()));
+        }
+        if (!draft.getFestivalSnowballTeamBSpots().isEmpty()) {
+            root.put("snowballTeamBSpots", raceStartMaps(draft.getFestivalSnowballTeamBSpots()));
+        }
+        FestivalDefinition.MazeStartLocalRow snowballOut = draft.getFestivalSnowballOutLocal();
+        if (snowballOut != null) {
+            Map<String, Object> outMap = new LinkedHashMap<>();
+            outMap.put("localX", snowballOut.getLocalX());
+            outMap.put("localY", snowballOut.getLocalY());
+            outMap.put("localZ", snowballOut.getLocalZ());
+            outMap.put("yawDegrees", snowballOut.getYawDegrees());
+            root.put("snowballOutLocal", outMap);
         }
         if (existing != null) {
             if (!existing.getBurstItemIds().isEmpty()) {

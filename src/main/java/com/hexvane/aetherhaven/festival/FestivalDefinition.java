@@ -150,6 +150,26 @@ public final class FestivalDefinition {
     @Nullable
     private List<OrbSpawnRow> marketDisplaySlots;
 
+    /** Snowball pile cells in prefab-local space. */
+    @SerializedName("snowballPileSpots")
+    @Nullable
+    private List<OrbSpawnRow> snowballPileSpots;
+
+    /** Snowball fight west team pads in prefab-local space (up to four). */
+    @SerializedName("snowballTeamASpots")
+    @Nullable
+    private List<RaceStartSpotRow> snowballTeamASpots;
+
+    /** Snowball fight east team pads in prefab-local space (up to four). */
+    @SerializedName("snowballTeamBSpots")
+    @Nullable
+    private List<RaceStartSpotRow> snowballTeamBSpots;
+
+    /** Snowball fight out pad in prefab-local space (cell plus facing). */
+    @SerializedName("snowballOutLocal")
+    @Nullable
+    private MazeStartLocalRow snowballOutLocal;
+
     /** Item ids a mechanic may hand out, e.g. the New Life seed burst pool. */
     @SerializedName("burstItemIds")
     @Nullable
@@ -226,9 +246,7 @@ public final class FestivalDefinition {
 
     @Nonnull
     public String getCalendarIconPath() {
-        return calendarIconPath != null && !calendarIconPath.isBlank()
-            ? calendarIconPath.trim()
-            : FestivalIcons.DEFAULT_CALENDAR_ICON;
+        return FestivalIcons.resolveCalendarIcon(calendarIconPath, getMechanicId());
     }
 
     @Nullable
@@ -320,6 +338,26 @@ public final class FestivalDefinition {
     @Nonnull
     public List<OrbSpawnRow> getMarketDisplaySlots() {
         return marketDisplaySlots != null ? List.copyOf(marketDisplaySlots) : List.of();
+    }
+
+    @Nonnull
+    public List<OrbSpawnRow> getSnowballPileSpots() {
+        return snowballPileSpots != null ? List.copyOf(snowballPileSpots) : List.of();
+    }
+
+    @Nonnull
+    public List<RaceStartSpotRow> getSnowballTeamASpots() {
+        return snowballTeamASpots != null ? List.copyOf(snowballTeamASpots) : List.of();
+    }
+
+    @Nonnull
+    public List<RaceStartSpotRow> getSnowballTeamBSpots() {
+        return snowballTeamBSpots != null ? List.copyOf(snowballTeamBSpots) : List.of();
+    }
+
+    @Nullable
+    public MazeStartLocalRow getSnowballOutLocal() {
+        return snowballOutLocal;
     }
 
     @Nonnull

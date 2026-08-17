@@ -6,6 +6,8 @@ import com.hexvane.aetherhaven.festival.hallowseve.HallowsEveIds;
 import com.hexvane.aetherhaven.festival.market.MarketIds;
 import com.hexvane.aetherhaven.festival.pigrace.PigRaceLanes;
 import com.hexvane.aetherhaven.festival.treeclimb.TreeClimbIds;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideIds;
+import com.hexvane.aetherhaven.festival.snowball.SnowballIds;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -27,6 +29,10 @@ public final class PlotCreatorFestivalMechanicDefaults {
     public static final int DEFAULT_MARKET_TOURIST_SPOTS = MarketIds.DEFAULT_TOURIST_SPOTS;
     public static final int DEFAULT_MARKET_STANDS = MarketIds.DEFAULT_STANDS;
     public static final int DEFAULT_MARKET_DISPLAYS = MarketIds.DEFAULT_DISPLAY_SLOTS;
+    public static final int DEFAULT_WINTERTIDE_TOURIST_SPOTS = WintertideIds.DEFAULT_TOURIST_SPOTS;
+    public static final int DEFAULT_SNOWBALL_TOURIST_SPOTS = SnowballIds.DEFAULT_TOURIST_SPOTS;
+    public static final int DEFAULT_SNOWBALL_PILES = SnowballIds.DEFAULT_PILE_SPOTS;
+    public static final int DEFAULT_SNOWBALL_TEAM_PADS = SnowballIds.TEAM_SIZE;
 
     private PlotCreatorFestivalMechanicDefaults() {}
 
@@ -68,6 +74,17 @@ public final class PlotCreatorFestivalMechanicDefaults {
         if ("market".equals(lower) || "market festival".equals(lower)) {
             return MarketIds.MECHANIC_ID;
         }
+        if ("wintertide".equals(lower)
+            || "winter tide".equals(lower)
+            || "winter_tide".equals(lower)) {
+            return WintertideIds.MECHANIC_ID;
+        }
+        if ("snowball".equals(lower)
+            || "snowball throwing".equals(lower)
+            || "snowball fight".equals(lower)
+            || "snowball_throwing".equals(lower)) {
+            return SnowballIds.MECHANIC_ID;
+        }
         return lower;
     }
 
@@ -94,6 +111,12 @@ public final class PlotCreatorFestivalMechanicDefaults {
         }
         if (MarketIds.MECHANIC_ID.equals(key)) {
             return "Market Festival";
+        }
+        if (WintertideIds.MECHANIC_ID.equals(key)) {
+            return "Wintertide";
+        }
+        if (SnowballIds.MECHANIC_ID.equals(key)) {
+            return "Snowball Throwing";
         }
         return mechanicId.trim();
     }
@@ -135,7 +158,9 @@ public final class PlotCreatorFestivalMechanicDefaults {
             || CarnivalIds.MECHANIC_ID.equals(mechanic)
             || TreeClimbIds.MECHANIC_ID.equals(mechanic)
             || HallowsEveIds.MECHANIC_ID.equals(mechanic)
-            || MarketIds.MECHANIC_ID.equals(mechanic)) {
+            || MarketIds.MECHANIC_ID.equals(mechanic)
+            || WintertideIds.MECHANIC_ID.equals(mechanic)
+            || SnowballIds.MECHANIC_ID.equals(mechanic)) {
             int defaultTourists =
                 CarnivalIds.MECHANIC_ID.equals(mechanic)
                     ? DEFAULT_CARNIVAL_TOURIST_SPOTS
@@ -145,13 +170,19 @@ public final class PlotCreatorFestivalMechanicDefaults {
                             ? DEFAULT_HALLOWS_EVE_TOURIST_SPOTS
                             : MarketIds.MECHANIC_ID.equals(mechanic)
                                 ? DEFAULT_MARKET_TOURIST_SPOTS
-                                : DEFAULT_PIG_RACE_TOURIST_SPOTS;
+                                : WintertideIds.MECHANIC_ID.equals(mechanic)
+                                    ? DEFAULT_WINTERTIDE_TOURIST_SPOTS
+                                    : SnowballIds.MECHANIC_ID.equals(mechanic)
+                                        ? DEFAULT_SNOWBALL_TOURIST_SPOTS
+                                        : DEFAULT_PIG_RACE_TOURIST_SPOTS;
             boolean forceTourists =
                 PigRaceLanes.MECHANIC_ID.equals(mechanic)
                     || CarnivalIds.MECHANIC_ID.equals(mechanic)
                     || TreeClimbIds.MECHANIC_ID.equals(mechanic)
                     || HallowsEveIds.MECHANIC_ID.equals(mechanic)
-                    || MarketIds.MECHANIC_ID.equals(mechanic);
+                    || MarketIds.MECHANIC_ID.equals(mechanic)
+                    || WintertideIds.MECHANIC_ID.equals(mechanic)
+                    || SnowballIds.MECHANIC_ID.equals(mechanic);
             int touristCount =
                 Math.max(
                     draft.getFestivalTouristSpots().isEmpty()
@@ -250,6 +281,39 @@ public final class PlotCreatorFestivalMechanicDefaults {
                     ? DEFAULT_MARKET_DISPLAYS
                     : Math.max(1, draft.getFestivalMarketDisplaySlots().size());
             out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_MARKET_DISPLAY, displayCount));
+        }
+        if (!draft.getFestivalSnowballPileSpots().isEmpty() || SnowballIds.MECHANIC_ID.equals(mechanic)) {
+            int pileCount =
+                Math.max(
+                    draft.getFestivalSnowballPileSpots().isEmpty()
+                        ? DEFAULT_SNOWBALL_PILES
+                        : draft.getFestivalSnowballPileSpots().size(),
+                    SnowballIds.MECHANIC_ID.equals(mechanic) ? DEFAULT_SNOWBALL_PILES : 1
+                );
+            out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_SNOWBALL_PILE, pileCount));
+        }
+        if (!draft.getFestivalSnowballTeamASpots().isEmpty() || SnowballIds.MECHANIC_ID.equals(mechanic)) {
+            int teamACount =
+                Math.max(
+                    draft.getFestivalSnowballTeamASpots().isEmpty()
+                        ? DEFAULT_SNOWBALL_TEAM_PADS
+                        : draft.getFestivalSnowballTeamASpots().size(),
+                    SnowballIds.MECHANIC_ID.equals(mechanic) ? DEFAULT_SNOWBALL_TEAM_PADS : 1
+                );
+            out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_SNOWBALL_TEAM_A, teamACount));
+        }
+        if (!draft.getFestivalSnowballTeamBSpots().isEmpty() || SnowballIds.MECHANIC_ID.equals(mechanic)) {
+            int teamBCount =
+                Math.max(
+                    draft.getFestivalSnowballTeamBSpots().isEmpty()
+                        ? DEFAULT_SNOWBALL_TEAM_PADS
+                        : draft.getFestivalSnowballTeamBSpots().size(),
+                    SnowballIds.MECHANIC_ID.equals(mechanic) ? DEFAULT_SNOWBALL_TEAM_PADS : 1
+                );
+            out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_SNOWBALL_TEAM_B, teamBCount));
+        }
+        if (draft.getFestivalSnowballOutLocal() != null || SnowballIds.MECHANIC_ID.equals(mechanic)) {
+            out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_SNOWBALL_OUT, 1));
         }
         return out;
     }

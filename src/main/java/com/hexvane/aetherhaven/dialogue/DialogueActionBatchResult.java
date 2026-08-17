@@ -24,6 +24,8 @@ public final class DialogueActionBatchResult {
 
     private boolean openMarketLeaderboardAfterClose;
 
+    private boolean openSnowballLeaderboardAfterClose;
+
     @Nullable
     private Runnable afterClose;
 
@@ -107,6 +109,14 @@ public final class DialogueActionBatchResult {
 
     public void setOpenMarketLeaderboardAfterClose(boolean openMarketLeaderboardAfterClose) {
         this.openMarketLeaderboardAfterClose = openMarketLeaderboardAfterClose;
+    }
+
+    public boolean isOpenSnowballLeaderboardAfterClose() {
+        return openSnowballLeaderboardAfterClose;
+    }
+
+    public void setOpenSnowballLeaderboardAfterClose(boolean openSnowballLeaderboardAfterClose) {
+        this.openSnowballLeaderboardAfterClose = openSnowballLeaderboardAfterClose;
     }
 
     /**

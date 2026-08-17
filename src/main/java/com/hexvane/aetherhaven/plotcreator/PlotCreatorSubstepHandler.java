@@ -147,6 +147,14 @@ public final class PlotCreatorSubstepHandler {
                 PlotCreatorFestivalPlacement.tryRemoveMarketStandNear(draft, targetBlock, playerRef);
             case FESTIVAL_MARKET_DISPLAY ->
                 PlotCreatorFestivalPlacement.tryRemoveMarketDisplayNear(draft, targetBlock, playerRef);
+            case FESTIVAL_SNOWBALL_PILE ->
+                PlotCreatorFestivalPlacement.tryRemoveSnowballPileNear(draft, targetBlock, playerRef);
+            case FESTIVAL_SNOWBALL_TEAM_A ->
+                PlotCreatorFestivalPlacement.tryRemoveSnowballTeamANear(draft, targetBlock, playerRef);
+            case FESTIVAL_SNOWBALL_TEAM_B ->
+                PlotCreatorFestivalPlacement.tryRemoveSnowballTeamBNear(draft, targetBlock, playerRef);
+            case FESTIVAL_SNOWBALL_OUT ->
+                PlotCreatorFestivalPlacement.tryRemoveSnowballOutNear(draft, targetBlock, playerRef);
         };
     }
 
@@ -510,6 +518,29 @@ public final class PlotCreatorSubstepHandler {
             );
             case FESTIVAL_MARKET_DISPLAY ->
                 PlotCreatorFestivalPlacement.placeMarketDisplay(session, targetBlock, playerRef);
+            case FESTIVAL_SNOWBALL_PILE ->
+                PlotCreatorFestivalPlacement.placeSnowballPile(session, targetBlock, playerRef);
+            case FESTIVAL_SNOWBALL_TEAM_A -> PlotCreatorFestivalPlacement.placeSnowballTeamA(
+                session,
+                targetBlock,
+                playerRef,
+                playerEntityRef,
+                store
+            );
+            case FESTIVAL_SNOWBALL_TEAM_B -> PlotCreatorFestivalPlacement.placeSnowballTeamB(
+                session,
+                targetBlock,
+                playerRef,
+                playerEntityRef,
+                store
+            );
+            case FESTIVAL_SNOWBALL_OUT -> PlotCreatorFestivalPlacement.placeSnowballOut(
+                session,
+                targetBlock,
+                playerRef,
+                playerEntityRef,
+                store
+            );
         };
     }
 

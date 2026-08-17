@@ -108,7 +108,9 @@ public final class VillagerCosmeticAppearanceService {
             if (def == null) {
                 continue;
             }
-            list.add(new ModelAttachment(def.model(), def.texture(), null, null, 1.0));
+            String gradientSet = def.gradientSet().isBlank() ? null : def.gradientSet();
+            String gradientId = def.gradientId().isBlank() ? null : def.gradientId();
+            list.add(new ModelAttachment(def.model(), def.texture(), gradientSet, gradientId, 1.0));
             if (VillagerCosmeticDefinition.SLOT_HEAD_ACCESSORY.equalsIgnoreCase(slot)) {
                 headDef = def;
             }

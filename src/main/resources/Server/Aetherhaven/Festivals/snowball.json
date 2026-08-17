@@ -1,0 +1,294 @@
+{
+  "id": "snowball",
+  "displayName": "Snowball Throwing Festival",
+  "displayNameLangKey": "aetherhaven_festivals.aetherhaven.festival.snowball.name",
+  "description": "Early winter brings a snowball fight at the festival square. Grab snowballs from piles, join a team at the merchant, and the winning team earns winter festival tickets.",
+  "prefabPath": "Festivals/Festival_Snowball.prefab.json",
+  "season": "WINTER",
+  "dayOfSeason": 7,
+  "startHour": 8,
+  "endHour": 20,
+  "calendarIconPath": "UI/Custom/winter.png",
+  "mechanicId": "snowball",
+  "spots": [
+    {
+      "residentKind": "innkeeper",
+      "localX": 12,
+      "localY": 6,
+      "localZ": 12,
+      "yawDegrees": 225.0
+    },
+    {
+      "residentKind": "elder",
+      "localX": -12,
+      "localY": 5,
+      "localZ": 12,
+      "yawDegrees": -56.47632
+    },
+    {
+      "residentKind": "farmer",
+      "localX": -5,
+      "localY": 5,
+      "localZ": 1,
+      "yawDegrees": 158.021
+    },
+    {
+      "residentKind": "florist",
+      "localX": 4,
+      "localY": 5,
+      "localZ": 9,
+      "yawDegrees": 157.77344
+    }
+  ],
+  "npcs": [
+    {
+      "npcRoleId": "Aetherhaven_Festival_Snowball_Merchant",
+      "localX": 9,
+      "localY": 6,
+      "localZ": 9,
+      "yawDegrees": 350.48633
+    }
+  ],
+  "touristSpots": [
+    {
+      "localX": 13,
+      "localY": 6,
+      "localZ": 8,
+      "yawDegrees": 270.0
+    },
+    {
+      "localX": 8,
+      "localY": 6,
+      "localZ": -13,
+      "yawDegrees": 0.0
+    },
+    {
+      "localX": -6,
+      "localY": 6,
+      "localZ": -13,
+      "yawDegrees": 0.0
+    },
+    {
+      "localX": -4,
+      "localY": 6,
+      "localZ": 13,
+      "yawDegrees": 180.0
+    },
+    {
+      "localX": 4,
+      "localY": 6,
+      "localZ": 13,
+      "yawDegrees": 180.0
+    },
+    {
+      "localX": 0,
+      "localY": 6,
+      "localZ": 4,
+      "yawDegrees": 180.0
+    },
+    {
+      "localX": -12,
+      "localY": 6,
+      "localZ": 3,
+      "yawDegrees": 298.09705
+    },
+    {
+      "localX": -12,
+      "localY": 7,
+      "localZ": -6,
+      "yawDegrees": 267.98132
+    }
+  ],
+  "snowballPileSpots": [
+    {
+      "localX": -12.0,
+      "localY": 6.0,
+      "localZ": 8.0
+    },
+    {
+      "localX": -13.0,
+      "localY": 6.0,
+      "localZ": 0.0
+    },
+    {
+      "localX": -10.0,
+      "localY": 6.0,
+      "localZ": -12.0
+    },
+    {
+      "localX": 13.0,
+      "localY": 6.0,
+      "localZ": 4.0
+    },
+    {
+      "localX": -8.0,
+      "localY": 6.0,
+      "localZ": 13.0
+    },
+    {
+      "localX": 5.0,
+      "localY": 6.0,
+      "localZ": 13.0
+    },
+    {
+      "localX": -2.0,
+      "localY": 6.0,
+      "localZ": -10.0
+    },
+    {
+      "localX": -3.0,
+      "localY": 6.0,
+      "localZ": -2.0
+    },
+    {
+      "localX": 11.0,
+      "localY": 6.0,
+      "localZ": -10.0
+    },
+    {
+      "localX": 12.0,
+      "localY": 6.0,
+      "localZ": -3.0
+    }
+  ],
+  "snowballTeamASpots": [
+    {
+      "localX": -1,
+      "localY": 6,
+      "localZ": -9,
+      "yawDegrees": 229.18262
+    },
+    {
+      "localX": -1,
+      "localY": 6,
+      "localZ": -10,
+      "yawDegrees": 315.74402
+    },
+    {
+      "localX": -1,
+      "localY": 6,
+      "localZ": -4,
+      "yawDegrees": 227.04749
+    },
+    {
+      "localX": -1,
+      "localY": 6,
+      "localZ": -3,
+      "yawDegrees": 232.80823
+    }
+  ],
+  "snowballTeamBSpots": [
+    {
+      "localX": 10,
+      "localY": 6,
+      "localZ": -5,
+      "yawDegrees": 95.18713
+    },
+    {
+      "localX": 10,
+      "localY": 6,
+      "localZ": -3,
+      "yawDegrees": 99.051636
+    },
+    {
+      "localX": 10,
+      "localY": 6,
+      "localZ": -6,
+      "yawDegrees": 119.800415
+    },
+    {
+      "localX": 10,
+      "localY": 6,
+      "localZ": -8,
+      "yawDegrees": 54.78784
+    }
+  ],
+  "snowballOutLocal": {
+    "localX": 6,
+    "localY": 6,
+    "localZ": 5,
+    "yawDegrees": 348.12805
+  },
+  "tags": [
+    "winter",
+    "snowball"
+  ],
+  "greetings": {
+    "elder": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.elder.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.elder.1"
+    ],
+    "guild_master": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.guild_master.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.guild_master.1"
+    ],
+    "pyrotechnic": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.pyrotechnic.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.pyrotechnic.1"
+    ],
+    "priestess": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.priestess.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.priestess.1"
+    ],
+    "innkeeper": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.innkeeper.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.innkeeper.1"
+    ],
+    "florist": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.florist.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.florist.1"
+    ],
+    "crystal_keeper": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.crystal_keeper.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.crystal_keeper.1"
+    ],
+    "guard": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.guard.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.guard.1"
+    ],
+    "chef": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.chef.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.chef.1"
+    ],
+    "miner": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.miner.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.miner.1"
+    ],
+    "logger": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.logger.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.logger.1"
+    ],
+    "clown": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.clown.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.clown.1"
+    ],
+    "blacksmith": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.blacksmith.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.blacksmith.1"
+    ],
+    "default": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.default.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.default.1"
+    ],
+    "rancher": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.rancher.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.rancher.1"
+    ],
+    "merchant": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.merchant.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.merchant.1"
+    ],
+    "builder": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.builder.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.builder.1"
+    ],
+    "farmer": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.farmer.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.farmer.1"
+    ],
+    "bard": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.bard.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.bard.1"
+    ]
+  }
+}

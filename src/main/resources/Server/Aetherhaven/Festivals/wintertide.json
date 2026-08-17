@@ -1,0 +1,275 @@
+{
+  "id": "wintertide",
+  "displayName": "Wintertide",
+  "displayNameLangKey": "aetherhaven_festivals.aetherhaven.festival.wintertide.name",
+  "description": "Late winter brings gift giving at the festival square. Town members each give a gift to a neighbor, then receive one in return, and spend winter festival tickets at the merchant.",
+  "prefabPath": "Festivals/Festival_Wintertide.prefab.json",
+  "season": "WINTER",
+  "dayOfSeason": 21,
+  "startHour": 8,
+  "endHour": 20,
+  "calendarIconPath": "UI/Custom/christmas-tree.png",
+  "mechanicId": "wintertide",
+  "spots": [
+    {
+      "residentKind": "elder",
+      "localX": -5,
+      "localY": 5,
+      "localZ": 12,
+      "yawDegrees": -37.471985
+    },
+    {
+      "residentKind": "innkeeper",
+      "localX": 6,
+      "localY": 5,
+      "localZ": -9,
+      "yawDegrees": 172.63397
+    },
+    {
+      "residentKind": "florist",
+      "localX": -9,
+      "localY": 5,
+      "localZ": -3,
+      "yawDegrees": -133.027
+    },
+    {
+      "residentKind": "bard",
+      "localX": 12,
+      "localY": 5,
+      "localZ": 8,
+      "yawDegrees": 88.22809
+    },
+    {
+      "residentKind": "chef",
+      "localX": -4,
+      "localY": 5,
+      "localZ": -9,
+      "yawDegrees": -125.45111
+    },
+    {
+      "residentKind": "miner",
+      "localX": -12,
+      "localY": 5,
+      "localZ": 0,
+      "yawDegrees": 270.0
+    },
+    {
+      "residentKind": "blacksmith",
+      "localX": 13,
+      "localY": 5,
+      "localZ": 2,
+      "yawDegrees": 90.0
+    },
+    {
+      "residentKind": "rancher",
+      "localX": -8,
+      "localY": 5,
+      "localZ": 10,
+      "yawDegrees": 0.0
+    },
+    {
+      "residentKind": "logger",
+      "localX": 8,
+      "localY": 5,
+      "localZ": 12,
+      "yawDegrees": 0.0
+    },
+    {
+      "residentKind": "farmer",
+      "localX": -12,
+      "localY": 5,
+      "localZ": 4,
+      "yawDegrees": 270.0
+    },
+    {
+      "residentKind": "merchant",
+      "localX": 10,
+      "localY": 5,
+      "localZ": -6,
+      "yawDegrees": 90.0
+    },
+    {
+      "residentKind": "priestess",
+      "localX": 4,
+      "localY": 5,
+      "localZ": 12,
+      "yawDegrees": 0.0
+    },
+    {
+      "residentKind": "crystal_keeper",
+      "localX": -2,
+      "localY": 5,
+      "localZ": 12,
+      "yawDegrees": 0.0
+    },
+    {
+      "residentKind": "builder",
+      "localX": 13,
+      "localY": 5,
+      "localZ": 6,
+      "yawDegrees": 90.0
+    },
+    {
+      "residentKind": "pyrotechnic",
+      "localX": -8,
+      "localY": 5,
+      "localZ": -10,
+      "yawDegrees": 180.0
+    },
+    {
+      "residentKind": "clown",
+      "localX": 10,
+      "localY": 5,
+      "localZ": 4,
+      "yawDegrees": 90.0
+    },
+    {
+      "residentKind": "guild_master",
+      "localX": -1,
+      "localY": 5,
+      "localZ": -10,
+      "yawDegrees": 180.0
+    }
+  ],
+  "npcs": [
+    {
+      "npcRoleId": "Aetherhaven_Festival_Wintertide_Merchant",
+      "localX": 1,
+      "localY": 6,
+      "localZ": -10,
+      "yawDegrees": 180.29338
+    }
+  ],
+  "touristSpots": [
+    {
+      "localX": -12,
+      "localY": 6,
+      "localZ": -8,
+      "yawDegrees": 270.0
+    },
+    {
+      "localX": -12,
+      "localY": 6,
+      "localZ": 8,
+      "yawDegrees": 270.0
+    },
+    {
+      "localX": 13,
+      "localY": 6,
+      "localZ": -8,
+      "yawDegrees": 90.0
+    },
+    {
+      "localX": 7,
+      "localY": 6,
+      "localZ": -13,
+      "yawDegrees": 180.0
+    },
+    {
+      "localX": -5,
+      "localY": 6,
+      "localZ": -13,
+      "yawDegrees": 180.0
+    },
+    {
+      "localX": -9,
+      "localY": 6,
+      "localZ": 13,
+      "yawDegrees": 0.0
+    },
+    {
+      "localX": 1,
+      "localY": 6,
+      "localZ": 6,
+      "yawDegrees": 180.0
+    },
+    {
+      "localX": 6,
+      "localY": 6,
+      "localZ": 0,
+      "yawDegrees": 291.26923
+    }
+  ],
+  "tags": [
+    "winter",
+    "wintertide"
+  ],
+  "greetings": {
+    "rancher": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.rancher.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.rancher.1"
+    ],
+    "merchant": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.merchant.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.merchant.1"
+    ],
+    "builder": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.builder.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.builder.1"
+    ],
+    "bard": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.bard.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.bard.1"
+    ],
+    "farmer": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.farmer.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.farmer.1"
+    ],
+    "elder": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.elder.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.elder.1"
+    ],
+    "guild_master": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.guild_master.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.guild_master.1"
+    ],
+    "pyrotechnic": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.pyrotechnic.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.pyrotechnic.1"
+    ],
+    "guard": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.guard.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.guard.1"
+    ],
+    "crystal_keeper": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.crystal_keeper.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.crystal_keeper.1"
+    ],
+    "florist": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.florist.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.florist.1"
+    ],
+    "chef": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.chef.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.chef.1"
+    ],
+    "innkeeper": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.innkeeper.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.innkeeper.1"
+    ],
+    "logger": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.logger.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.logger.1"
+    ],
+    "miner": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.miner.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.miner.1"
+    ],
+    "priestess": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.priestess.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.priestess.1"
+    ],
+    "clown": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.clown.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.clown.1"
+    ],
+    "blacksmith": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.blacksmith.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.blacksmith.1"
+    ],
+    "default": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.default.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.default.1"
+    ]
+  }
+}

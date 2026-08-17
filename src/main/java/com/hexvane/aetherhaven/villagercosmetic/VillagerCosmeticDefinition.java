@@ -10,7 +10,9 @@ public record VillagerCosmeticDefinition(
     @Nonnull String model,
     @Nonnull String texture,
     @Nonnull String unlockItemId,
-    @Nonnull VillagerCosmeticHeadAccessoryType headAccessoryType
+    @Nonnull VillagerCosmeticHeadAccessoryType headAccessoryType,
+    @Nonnull String gradientSet,
+    @Nonnull String gradientId
 ) {
     public static final String SLOT_HEAD_ACCESSORY = "HeadAccessory";
     public static final String SLOT_FACE_ACCESSORY = "FaceAccessory";
@@ -25,6 +27,18 @@ public record VillagerCosmeticDefinition(
         @Nonnull String texture,
         @Nonnull String unlockItemId
     ) {
-        this(id, slot, displayNameKey, model, texture, unlockItemId, VillagerCosmeticHeadAccessoryType.Simple);
+        this(id, slot, displayNameKey, model, texture, unlockItemId, VillagerCosmeticHeadAccessoryType.Simple, "", "");
+    }
+
+    public VillagerCosmeticDefinition(
+        @Nonnull String id,
+        @Nonnull String slot,
+        @Nonnull String displayNameKey,
+        @Nonnull String model,
+        @Nonnull String texture,
+        @Nonnull String unlockItemId,
+        @Nonnull VillagerCosmeticHeadAccessoryType headAccessoryType
+    ) {
+        this(id, slot, displayNameKey, model, texture, unlockItemId, headAccessoryType, "", "");
     }
 }

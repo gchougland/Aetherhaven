@@ -26,6 +26,7 @@ import com.hypixel.hytale.component.dependency.Dependency;
 import com.hypixel.hytale.component.dependency.RootDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -81,6 +82,11 @@ public final class BuilderConstructionAssistSystem extends EntityTickingSystem<E
         NPCEntity npc = archetypeChunk.getComponent(index, NPCEntity.getComponentType());
         TownVillagerBinding binding = archetypeChunk.getComponent(index, TownVillagerBinding.getComponentType());
         if (npc == null || binding == null) {
+            return;
+        }
+        UUIDComponent fightUuid = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (fightUuid != null
+            && com.hexvane.aetherhaven.festival.snowball.SnowballSessionIndex.isLivingFighter(fightUuid.getUuid())) {
             return;
         }
         if (!AetherhavenConstants.NPC_BUILDER.equals(npc.getRoleName())) {

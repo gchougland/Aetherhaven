@@ -1,0 +1,35 @@
+# Wintertide merchant dialogue
+
+aetherhaven.dialogue.festival_wintertide_merchant.speaker=Wintertide Merchant
+aetherhaven.dialogue.festival_wintertide_merchant.main_hub.body=Snow on the square, gifts in our hands. I can tell you who to give a gift to, and I take winter festival tickets for holiday goods.
+aetherhaven.dialogue.festival_wintertide_merchant.main_hub.c_who=Who should I give a gift to?
+aetherhaven.dialogue.festival_wintertide_merchant.main_hub.c_start=Start the gift giving
+aetherhaven.dialogue.festival_wintertide_merchant.main_hub.c_started=I already started. What now?
+aetherhaven.dialogue.festival_wintertide_merchant.main_hub.c_done=I already gave my gift.
+aetherhaven.dialogue.festival_wintertide_merchant.main_hub.c_shop=Show me your goods.
+aetherhaven.dialogue.festival_wintertide_merchant.main_hub.c_about=How does gift giving work?
+aetherhaven.dialogue.festival_wintertide_merchant.main_hub.c_goodbye=Maybe later.
+
+aetherhaven.dialogue.festival_wintertide_merchant.assigned.body=You should give a gift to {name}. Keep it a surprise for everyone else.
+aetherhaven.dialogue.festival_wintertide_merchant.assigned.c_back=Got it.
+
+aetherhaven.dialogue.festival_wintertide_merchant.about.body=Ask me who you should give a gift to. Find something they might like, then come back when you are ready. If they live in town, talk to them while holding the gift and choose the Wintertide gift. If they are a town member, press F on them while holding the gift. They will say how they feel, and you get winter festival tickets. Someone will give you a gift too. I never tell you who that is.
+aetherhaven.dialogue.festival_wintertide_merchant.about.c_back=Got it.
+
+aetherhaven.dialogue.festival_wintertide_merchant.ceremony_villager.body=Go talk to them while you are holding the gift. Choose the Wintertide gift when you speak.
+aetherhaven.dialogue.festival_wintertide_merchant.ceremony_villager.c_back=I am on my way.
+
+aetherhaven.dialogue.festival_wintertide_merchant.ceremony_player.body=Find them nearby and press F while you are holding the gift. If they are away, wait until they are here.
+aetherhaven.dialogue.festival_wintertide_merchant.ceremony_player.c_back=I will find them.
+
+aetherhaven.dialogue.festival_wintertide_merchant.already_started.body=You already started. Give the gift you are holding to the person I named.
+aetherhaven.dialogue.festival_wintertide_merchant.already_started.c_back=Back to it.
+
+aetherhaven.dialogue.festival_wintertide_merchant.already_given.body=You already gave your Wintertide gift. Enjoy the square, and spend your tickets with me if you like.
+aetherhaven.dialogue.festival_wintertide_merchant.already_given.c_back=Thanks.
+
+aetherhaven.dialogue.festival_wintertide_merchant.not_member.body=This gift day is for people who live in this town. You can still look at my shop.
+aetherhaven.dialogue.festival_wintertide_merchant.not_member.c_back=I will look around.
+
+aetherhaven.dialogue.festival_wintertide_merchant.no_assignment.body=I do not have a gift partner for you yet. Come talk to me again in a moment.
+aetherhaven.dialogue.festival_wintertide_merchant.no_assignment.c_back=I will try again.

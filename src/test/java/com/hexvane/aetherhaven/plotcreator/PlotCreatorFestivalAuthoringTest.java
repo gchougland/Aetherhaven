@@ -246,6 +246,140 @@ final class PlotCreatorFestivalAuthoringTest {
     }
 
     @Test
+    void wintertideDefaultsAddMerchantAndTourists() {
+        PlotCreatorDraft draft = new PlotCreatorDraft();
+        draft.setKinds(List.of(PlotBuildingKind.FESTIVAL));
+        draft.setFestivalMechanicId(com.hexvane.aetherhaven.festival.wintertide.WintertideIds.MECHANIC_ID);
+
+        PlotCreatorFestivalMechanicDefaults.ensureRequiredSelectedSpots(draft);
+
+        assertTrue(
+            draft.getSelectedSpots().stream()
+                .anyMatch(
+                    s ->
+                        s.type() == PlotCreatorSubstepType.FESTIVAL_NPC
+                            && PlotCreatorFestivalNpcRoles.WINTERTIDE_MERCHANT.equals(s.workResidentKind())
+                )
+        );
+        assertTrue(
+            draft.getSelectedSpots().stream()
+                .anyMatch(
+                    s ->
+                        s.type() == PlotCreatorSubstepType.FESTIVAL_TOURIST_SPOT
+                            && s.minCount() == PlotCreatorFestivalMechanicDefaults.DEFAULT_WINTERTIDE_TOURIST_SPOTS
+                )
+        );
+        assertEquals(
+            PlotCreatorFestivalNpcRoles.WINTERTIDE_MERCHANT,
+            PlotCreatorFestivalNpcRoles.defaultMerchantForMechanic(
+                com.hexvane.aetherhaven.festival.wintertide.WintertideIds.MECHANIC_ID
+            )
+        );
+    }
+
+    @Test
+    void settingsAcceptWintertideActivityLabel() {
+        PlotCreatorDraft draft = new PlotCreatorDraft();
+        draft.setKinds(List.of(PlotBuildingKind.FESTIVAL));
+        draft.setDisplayName("Wintertide");
+        draft.setFestivalSeasonInput("Winter");
+        draft.setFestivalDayInput("21");
+        draft.setFestivalStartHourInput("8");
+        draft.setFestivalEndHourInput("20");
+        draft.setFestivalMechanicInput("Wintertide");
+
+        assertNull(PlotCreatorFestivalSettings.applyInput(draft));
+        assertEquals(
+            com.hexvane.aetherhaven.festival.wintertide.WintertideIds.MECHANIC_ID,
+            draft.getFestivalMechanicId()
+        );
+    }
+
+    @Test
+    void snowballDefaultsAddMerchantTouristsPilesPadsAndOut() {
+        PlotCreatorDraft draft = new PlotCreatorDraft();
+        draft.setKinds(List.of(PlotBuildingKind.FESTIVAL));
+        draft.setFestivalMechanicId(com.hexvane.aetherhaven.festival.snowball.SnowballIds.MECHANIC_ID);
+
+        PlotCreatorFestivalMechanicDefaults.ensureRequiredSelectedSpots(draft);
+
+        assertTrue(
+            draft.getSelectedSpots().stream()
+                .anyMatch(
+                    s ->
+                        s.type() == PlotCreatorSubstepType.FESTIVAL_NPC
+                            && PlotCreatorFestivalNpcRoles.SNOWBALL_MERCHANT.equals(s.workResidentKind())
+                )
+        );
+        assertTrue(
+            draft.getSelectedSpots().stream()
+                .anyMatch(
+                    s ->
+                        s.type() == PlotCreatorSubstepType.FESTIVAL_TOURIST_SPOT
+                            && s.minCount() == PlotCreatorFestivalMechanicDefaults.DEFAULT_SNOWBALL_TOURIST_SPOTS
+                )
+        );
+        assertTrue(
+            draft.getSelectedSpots().stream()
+                .anyMatch(
+                    s ->
+                        s.type() == PlotCreatorSubstepType.FESTIVAL_SNOWBALL_PILE
+                            && s.minCount() == PlotCreatorFestivalMechanicDefaults.DEFAULT_SNOWBALL_PILES
+                )
+        );
+        assertTrue(
+            draft.getSelectedSpots().stream()
+                .anyMatch(
+                    s ->
+                        s.type() == PlotCreatorSubstepType.FESTIVAL_SNOWBALL_TEAM_A
+                            && s.minCount() == PlotCreatorFestivalMechanicDefaults.DEFAULT_SNOWBALL_TEAM_PADS
+                )
+        );
+        assertTrue(
+            draft.getSelectedSpots().stream()
+                .anyMatch(
+                    s ->
+                        s.type() == PlotCreatorSubstepType.FESTIVAL_SNOWBALL_TEAM_B
+                            && s.minCount() == PlotCreatorFestivalMechanicDefaults.DEFAULT_SNOWBALL_TEAM_PADS
+                )
+        );
+        assertTrue(
+            draft.getSelectedSpots().stream().anyMatch(s -> s.type() == PlotCreatorSubstepType.FESTIVAL_SNOWBALL_OUT)
+        );
+        assertEquals(
+            PlotCreatorFestivalNpcRoles.SNOWBALL_MERCHANT,
+            PlotCreatorFestivalNpcRoles.defaultMerchantForMechanic(
+                com.hexvane.aetherhaven.festival.snowball.SnowballIds.MECHANIC_ID
+            )
+        );
+    }
+
+    @Test
+    void settingsAcceptSnowballActivityLabels() {
+        PlotCreatorDraft draft = new PlotCreatorDraft();
+        draft.setKinds(List.of(PlotBuildingKind.FESTIVAL));
+        draft.setDisplayName("Snowball Throwing Festival");
+        draft.setFestivalSeasonInput("Winter");
+        draft.setFestivalDayInput("7");
+        draft.setFestivalStartHourInput("8");
+        draft.setFestivalEndHourInput("20");
+        draft.setFestivalMechanicInput("Snowball");
+
+        assertNull(PlotCreatorFestivalSettings.applyInput(draft));
+        assertEquals(
+            com.hexvane.aetherhaven.festival.snowball.SnowballIds.MECHANIC_ID,
+            draft.getFestivalMechanicId()
+        );
+
+        draft.setFestivalMechanicInput("Snowball Throwing");
+        assertNull(PlotCreatorFestivalSettings.applyInput(draft));
+        assertEquals(
+            com.hexvane.aetherhaven.festival.snowball.SnowballIds.MECHANIC_ID,
+            draft.getFestivalMechanicId()
+        );
+    }
+
+    @Test
     void marketDefaultsAddElderShopStandsDisplaysAndTourists() {
         PlotCreatorDraft draft = new PlotCreatorDraft();
         draft.setKinds(List.of(PlotBuildingKind.FESTIVAL));

@@ -1,0 +1,58 @@
+{
+  "Model": "Aetherhaven_Snowball_Projectile",
+  "SpawnRotationOffset": {
+    "Pitch": 0,
+    "Yaw": 0,
+    "Roll": 0
+  },
+  "Physics": {
+    "Type": "Standard",
+    "Gravity": 18,
+    "TerminalVelocityAir": 40,
+    "TerminalVelocityWater": 12,
+    "RotationMode": "VelocityDamped",
+    "Bounciness": 0,
+    "SticksVertically": false
+  },
+  "LaunchForce": 32,
+  "SpawnOffset": {
+    "X": -0.1,
+    "Y": -0.15,
+    "Z": -0.8
+  },
+  "Interactions": {
+    "ProjectileHit": {
+      "Cooldown": {
+        "Cooldown": 0
+      },
+      "Interactions": [
+        {
+          "Type": "AetherhavenFestivalSnowballHit"
+        },
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "SFX_Rubble_Hit"
+        },
+        {
+          "Type": "RemoveEntity",
+          "Entity": "User"
+        }
+      ]
+    },
+    "ProjectileMiss": {
+      "Cooldown": {
+        "Cooldown": 0
+      },
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Rubble_Miss"
+        },
+        {
+          "Type": "RemoveEntity",
+          "Entity": "User"
+        }
+      ]
+    }
+  }
+}

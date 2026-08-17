@@ -191,6 +191,10 @@ public final class PlotCreatorValidator {
             case FESTIVAL_MAZE_ORB_SPAWN -> draft.getFestivalOrbSpawns().size();
             case FESTIVAL_MARKET_STAND -> draft.getFestivalMarketStands().size();
             case FESTIVAL_MARKET_DISPLAY -> draft.getFestivalMarketDisplaySlots().size();
+            case FESTIVAL_SNOWBALL_PILE -> draft.getFestivalSnowballPileSpots().size();
+            case FESTIVAL_SNOWBALL_TEAM_A -> draft.getFestivalSnowballTeamASpots().size();
+            case FESTIVAL_SNOWBALL_TEAM_B -> draft.getFestivalSnowballTeamBSpots().size();
+            case FESTIVAL_SNOWBALL_OUT -> draft.getFestivalSnowballOutLocal() != null ? 1 : 0;
         };
     }
 

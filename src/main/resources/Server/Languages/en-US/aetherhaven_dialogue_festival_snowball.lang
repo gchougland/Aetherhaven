@@ -1,0 +1,59 @@
+# Snowball Throwing Festival villager greetings
+# Full translation keys are aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.<lineKey>
+
+aetherhaven.dialogue.festival.snowball.greeting.elder.0=A snowball fight is a fine way to start winter. Join at the merchant if you want a team.
+aetherhaven.dialogue.festival.snowball.greeting.elder.1=I used to throw snowballs from the square. My arm is wiser now. I watch.
+
+aetherhaven.dialogue.festival.snowball.greeting.innkeeper.0=I kept cocoa warm for anyone who sits out. The fight is louder than the inn tonight.
+aetherhaven.dialogue.festival.snowball.greeting.innkeeper.1=If you get packed with snow, come dry off. The beds are still made.
+
+aetherhaven.dialogue.festival.snowball.greeting.priestess.0=A snowball is a kind hit. No one is meant to be hurt. That is the point.
+aetherhaven.dialogue.festival.snowball.greeting.priestess.1=I will keep a light on until the last snowflake is gone.
+
+aetherhaven.dialogue.festival.snowball.greeting.farmer.0=I packed extra snowballs by the piles. Winter still grows fun if you let it.
+aetherhaven.dialogue.festival.snowball.greeting.farmer.1=Grab snowballs from the piles, then join the merchant. Easy as planting.
+
+aetherhaven.dialogue.festival.snowball.greeting.merchant.0=Winter festival tickets are the coin of the day. Win a fight and spend them here.
+aetherhaven.dialogue.festival.snowball.greeting.merchant.1=The trork in the hat has holiday goods. I might buy a wreath myself.
+
+aetherhaven.dialogue.festival.snowball.greeting.blacksmith.0=I hung up the hammer for snowballs. Steel can wait while people throw.
+aetherhaven.dialogue.festival.snowball.greeting.blacksmith.1=A packed snowball has weight. Not metal. Still counts.
+
+aetherhaven.dialogue.festival.snowball.greeting.florist.0=Snow is white enough. I brought a little color anyway.
+aetherhaven.dialogue.festival.snowball.greeting.florist.1=Watch from the edge. The square deserves a pretty view of the fight.
+
+aetherhaven.dialogue.festival.snowball.greeting.rancher.0=The animals are bedded down. People get the snowballs tonight.
+aetherhaven.dialogue.festival.snowball.greeting.rancher.1=I am watching from the square. If you need a warm hide after, you know where I work.
+
+aetherhaven.dialogue.festival.snowball.greeting.miner.0=Down in the dark we throw pebbles for luck. Up here it is snow. Same idea.
+aetherhaven.dialogue.festival.snowball.greeting.miner.1=Three hits and you sit out. I like a rule you can count.
+
+aetherhaven.dialogue.festival.snowball.greeting.logger.0=I like the hush of winter woods. The square is louder, and that is all right today.
+aetherhaven.dialogue.festival.snowball.greeting.logger.1=A snowball is a practical gift. So is a kind miss. Both count.
+
+aetherhaven.dialogue.festival.snowball.greeting.builder.0=Solid square. Honest snow. Whoever set this up knew a crowd would gather.
+aetherhaven.dialogue.festival.snowball.greeting.builder.1=I am not chasing every throw. I am here for the piles and the company.
+
+aetherhaven.dialogue.festival.snowball.greeting.chef.0=I packed pies for after. A snowball fight without food is just standing in the cold.
+aetherhaven.dialogue.festival.snowball.greeting.chef.1=If you sit out, come eat. Losing a snowflake is not the end of the day.
+
+aetherhaven.dialogue.festival.snowball.greeting.bard.0=I will play something bright while they throw. Snow sounds better with a tune.
+aetherhaven.dialogue.festival.snowball.greeting.bard.1=Join a team if you want the song to be about you. I take requests after.
+
+aetherhaven.dialogue.festival.snowball.greeting.guild_master.0=Teams, rules, a timer. This is a proper contest. I approve.
+aetherhaven.dialogue.festival.snowball.greeting.guild_master.1=Talk to the merchant, pick a side, and throw straight. Simple work.
+
+aetherhaven.dialogue.festival.snowball.greeting.pyrotechnic.0=No fireworks today. Snowballs are quieter. I can live with that.
+aetherhaven.dialogue.festival.snowball.greeting.pyrotechnic.1=A pile of snow is not a fuse, but it still makes a nice burst when it hits.
+
+aetherhaven.dialogue.festival.snowball.greeting.guard.0=No one is meant to get hurt. I am here if a throw gets too proud.
+aetherhaven.dialogue.festival.snowball.greeting.guard.1=Stand on your pad, throw at the other team, sit out when your snowflakes are gone.
+
+aetherhaven.dialogue.festival.snowball.greeting.crystal_keeper.0=Snow and crystal both catch the light. I like this square today.
+aetherhaven.dialogue.festival.snowball.greeting.crystal_keeper.1=Win or sit out, the tickets still shine. Talk to the merchant after.
+
+aetherhaven.dialogue.festival.snowball.greeting.clown.0=A snowball in the face is comedy. I should know.
+aetherhaven.dialogue.festival.snowball.greeting.clown.1=I am not joining. I am judging the throws. Quietly. From over here.
+
+aetherhaven.dialogue.festival.snowball.greeting.default.0=Grab snowballs, join at the merchant, and throw at the other team. That is the whole day.
+aetherhaven.dialogue.festival.snowball.greeting.default.1=The winning team gets winter festival tickets. Even a tie pays both sides.

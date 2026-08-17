@@ -20,11 +20,11 @@ public final class PlotCreatorSpotMarkerVisuals {
             case VISITOR_SPAWN, TOURIST_VISIT_POI, TOURIST_PORTAL_BLOCK, FESTIVAL_TOURIST_SPOT -> TEX_TEAL;
             case ADVENTURER_SPAWN, INNKEEPER_SPAWN, GUILD_MASTER_SPAWN, FESTIVAL_NPC -> TEX_PURPLE;
             case SLEEP_POI, EAT_POI, FUN_POI, FESTIVAL_CENTERPIECE, FESTIVAL_WHEEL, FESTIVAL_TREE_CLIMB_FINISH,
-                FESTIVAL_MAZE_START, FESTIVAL_MARKET_STAND ->
+                FESTIVAL_MAZE_START, FESTIVAL_MARKET_STAND, FESTIVAL_SNOWBALL_OUT ->
                 TEX_BLUE;
             case WORK_POI, BARD_WORK_POI, PLANNING_DESK_POI, QUEST_BOARD_POI, SHOP_POI, FESTIVAL_RACE_LANE,
                 FESTIVAL_BALLOON_SPAWN, FESTIVAL_WHACK_SPAWN, FESTIVAL_TREE_CLIMB_START, FESTIVAL_MAZE_ORB_SPAWN,
-                FESTIVAL_MARKET_DISPLAY ->
+                FESTIVAL_MARKET_DISPLAY, FESTIVAL_SNOWBALL_PILE, FESTIVAL_SNOWBALL_TEAM_A, FESTIVAL_SNOWBALL_TEAM_B ->
                 TEX_ORANGE;
             case MANAGEMENT_BLOCK,
                 PRODUCTION_STORAGE,
@@ -109,6 +109,10 @@ public final class PlotCreatorSpotMarkerVisuals {
             case FESTIVAL_MAZE_ORB_SPAWN -> "Maze orb spawn";
             case FESTIVAL_MARKET_STAND -> "Market stand";
             case FESTIVAL_MARKET_DISPLAY -> "Market display";
+            case FESTIVAL_SNOWBALL_PILE -> "Snowball pile";
+            case FESTIVAL_SNOWBALL_TEAM_A -> "Snowball west pad";
+            case FESTIVAL_SNOWBALL_TEAM_B -> "Snowball east pad";
+            case FESTIVAL_SNOWBALL_OUT -> "Snowball out pad";
         };
     }
 
@@ -140,6 +144,12 @@ public final class PlotCreatorSpotMarkerVisuals {
         }
         if (PlotCreatorFestivalNpcRoles.HALLOWS_EVE_MERCHANT.equals(npcRoleId)) {
             return "Hallow's Eve merchant";
+        }
+        if (PlotCreatorFestivalNpcRoles.WINTERTIDE_MERCHANT.equals(npcRoleId)) {
+            return "Wintertide merchant";
+        }
+        if (PlotCreatorFestivalNpcRoles.SNOWBALL_MERCHANT.equals(npcRoleId)) {
+            return "Snowball merchant";
         }
         return "Festival merchant";
     }

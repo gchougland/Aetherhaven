@@ -78,6 +78,9 @@ public final class GuardPatrolSystem extends EntityTickingSystem<EntityStore> {
         if (uc == null) {
             return;
         }
+        if (com.hexvane.aetherhaven.festival.snowball.SnowballSessionIndex.isLivingFighter(uc.getUuid())) {
+            return;
+        }
         Ref<EntityStore> ref = chunk.getReferenceTo(index);
         if (chunk.getComponent(index, GuardRtsCommandState.getComponentType()) != null) {
             return;

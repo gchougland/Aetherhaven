@@ -41,6 +41,14 @@ import com.hexvane.aetherhaven.festival.market.MarketSession;
 import com.hexvane.aetherhaven.festival.market.MarketSessionIndex;
 import com.hexvane.aetherhaven.festival.treeclimb.TreeClimbSession;
 import com.hexvane.aetherhaven.festival.treeclimb.TreeClimbSessionIndex;
+import com.hexvane.aetherhaven.festival.snowball.SnowballSession;
+import com.hexvane.aetherhaven.festival.snowball.SnowballSessionIndex;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideGiftService;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideIds;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideSession;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideSessionIndex;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideTarget;
+import com.hexvane.aetherhaven.town.TownPlayerLookup;
 import com.hexvane.aetherhaven.villager.data.VillagerGreetingPicker;
 import com.hexvane.aetherhaven.villager.data.VillagerNeedsDialoguePicker;
 import com.hexvane.aetherhaven.worldnpc.WorldNpcBinding;
@@ -75,6 +83,8 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3d;
@@ -182,6 +192,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         UUIDComponent pu = store.getComponent(ref, UUIDComponent.getComponentType());
         if (pu != null) {
             NpcDialogueSpeech.cancelForPlayer(pu.getUuid());
+            WintertideGiftService.onDialogueDismissed(treeId, pu.getUuid(), store, npcRef);
         }
         NpcDialogueCleanup.scheduleReturnToIdle(npcRef, store);
     }
@@ -296,6 +307,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         applyPortrait(commandBuilder, store);
 
         Message bodyMsg = resolveDialogueBody(ref, store, node, firstEverTalk);
+        bodyMsg = withWintertideBodies(ref, store, bodyMsg);
         bodyMsg = withGuildAdventurerHireBody(ref, store, node, bodyMsg);
         if ("main_hub".equals(nodeId) && npcRef != null && npcRef.isValid()) {
             AetherhavenPlugin openerPlugin = AetherhavenPlugin.get();
@@ -344,6 +356,12 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
 
     @Nonnull
     private Message resolveSpeakerMessage(@Nonnull Store<EntityStore> store, @Nonnull DialogueNodeDefinition node) {
+        if (WintertideIds.DIALOGUE_PLAYER_RATE.equals(treeId)) {
+            String giverName = wintertidePendingGiverName(store);
+            if (giverName != null && !giverName.isBlank()) {
+                return Message.raw(giverName);
+            }
+        }
         if (npcRef != null && npcRef.isValid()) {
             WorldNpcBinding worldBinding = store.getComponent(npcRef, WorldNpcBinding.getComponentType());
             if (worldBinding != null) {
@@ -494,10 +512,15 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             return Message.translation(GREETING_FALLBACK_LANG);
         }
         String body = node.getText() != null ? node.getText() : "";
-        return withTreeClimbCollectParams(
+        return withSnowballCollectParams(
             ref,
             store,
-            withTouristMoveInParams(ref, store, dialogueMessage(body), body),
+            withTreeClimbCollectParams(
+                ref,
+                store,
+                withTouristMoveInParams(ref, store, dialogueMessage(body), body),
+                body
+            ),
             body
         );
     }
@@ -536,6 +559,49 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             return message;
         }
         TreeClimbSession session = TreeClimbSessionIndex.get(town.getTownId());
+        if (session == null) {
+            return message;
+        }
+        int count = session.peekLastCollectedTickets(pu.getUuid());
+        if (count <= 0) {
+            return message;
+        }
+        return message.param("count", Integer.toString(count));
+    }
+
+    @Nonnull
+    private Message withSnowballCollectParams(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Message message,
+        @Nonnull String translationKey
+    ) {
+        if (translationKey.isBlank()
+            || !translationKey.contains("festival_snowball_merchant.collect_win")) {
+            return message;
+        }
+        UUIDComponent pu = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (pu == null) {
+            return message;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return message;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = resolvePlayerTown(store, ref);
+        if (town == null) {
+            TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+            if (tc != null) {
+                Vector3d pos = tc.getPosition();
+                town = tm.findTownContainingBlock(world.getName(), (int) Math.floor(pos.x), (int) Math.floor(pos.z));
+            }
+        }
+        if (town == null) {
+            return message;
+        }
+        SnowballSession session = SnowballSessionIndex.get(town.getTownId());
         if (session == null) {
             return message;
         }
@@ -987,6 +1053,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         choices.addAll(node.getChoices());
         injectFollowChoice(choices, playerRef, store);
         injectMarketChoices(choices, playerRef, store);
+        injectWintertideGiftChoice(choices, playerRef, store);
         return choices;
     }
 
@@ -1124,6 +1191,149 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                 insertMarketShopChoice(choices, shopId);
             }
         }
+    }
+
+    private void injectWintertideGiftChoice(
+        @Nonnull List<DialogueChoiceDefinition> choices,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        if (!"main_hub".equals(nodeId) || npcRef == null || !npcRef.isValid()) {
+            return;
+        }
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (pu == null || !WintertideGiftService.holdingItem(store, playerRef)) {
+            return;
+        }
+        TownRecord town = WintertideGiftService.resolveTown(playerRef, store, npcRef);
+        if (town == null || !WintertideGiftService.canGiveToVillager(town, store, pu.getUuid(), npcRef)) {
+            return;
+        }
+        DialogueChoiceDefinition choice = new DialogueChoiceDefinition();
+        choice.setId("wintertide_gift");
+        choice.setText(
+            "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.choice.give"
+        );
+        choice.setIcon(ICON_GIFT);
+        choice.setNext(null);
+        JsonObject action = new JsonObject();
+        action.addProperty("type", "wintertide_gift_villager");
+        choice.setActions(List.of(action));
+        int insertAt = insertBeforeClose(choices);
+        for (int i = 0; i < choices.size(); i++) {
+            if (choices.get(i).isGiftChoice()) {
+                insertAt = i;
+                break;
+            }
+        }
+        choices.add(insertAt, choice);
+    }
+
+    @Nonnull
+    private Message withWintertideBodies(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Message bodyMsg
+    ) {
+        if (WintertideIds.DIALOGUE_GIFT_REACTION.equals(treeId)) {
+            String kind = wintertideNpcKind(store);
+            String tier =
+                switch (nodeId) {
+                    case "gift_love" -> "love";
+                    case "gift_like" -> "like";
+                    case "gift_neutral" -> "neutral";
+                    case "gift_dislike" -> "dislike";
+                    default -> "";
+                };
+            if (!tier.isEmpty()) {
+                return dialogueMessage(wintertideGiftLineKey(kind, tier));
+            }
+        }
+        if (WintertideIds.DIALOGUE_INCOMING.equals(treeId) && "gift".equals(nodeId)) {
+            return dialogueMessage(wintertideIncomingLineKey(wintertideNpcKind(store)));
+        }
+        if (WintertideIds.DIALOGUE_MERCHANT.equals(treeId) && "assigned".equals(nodeId)) {
+            WintertideTarget target = wintertideOutgoingTarget(ref, store);
+            if (target != null) {
+                return bodyMsg.param("name", target.getDisplayName());
+            }
+        }
+        if (WintertideIds.DIALOGUE_PLAYER_RATE.equals(treeId) && "rate".equals(nodeId)) {
+            String giverName = wintertidePendingGiverName(store);
+            if (giverName != null && !giverName.isBlank()) {
+                return bodyMsg.param("name", giverName);
+            }
+        }
+        return bodyMsg;
+    }
+
+    @Nullable
+    private WintertideTarget wintertideOutgoingTarget(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        TownRecord town = WintertideGiftService.resolveTown(playerRef, store, npcRef);
+        if (pu == null || town == null) {
+            return null;
+        }
+        return WintertideGiftService.sessionFor(town, store).getOutgoing(pu.getUuid());
+    }
+
+    @Nullable
+    private String wintertidePendingGiverName(@Nonnull Store<EntityStore> store) {
+        UUID playerUuid = playerRef.getUuid();
+        TownRecord town = WintertideGiftService.resolveTownByPlayerUuid(store, playerUuid);
+        if (town == null) {
+            return null;
+        }
+        WintertideSession session = WintertideSessionIndex.get(town.getTownId());
+        if (session == null) {
+            return null;
+        }
+        WintertideSession.PendingPlayerGift pending = session.getPendingPlayerGift();
+        if (pending == null || !pending.receiverUuid().equals(playerUuid)) {
+            return null;
+        }
+        World world = store.getExternalData().getWorld();
+        if (world == null) {
+            return pending.giverUuid().toString();
+        }
+        return TownPlayerLookup.displayNameForUuid(world, pending.giverUuid());
+    }
+
+    @Nonnull
+    private String wintertideNpcKind(@Nonnull Store<EntityStore> store) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return "default";
+        }
+        TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+        String kind = binding != null ? binding.getKind() : null;
+        if (kind == null || kind.isBlank()) {
+            return "default";
+        }
+        return kind.trim().toLowerCase(Locale.ROOT);
+    }
+
+    @Nonnull
+    private static String wintertideGiftLineKey(@Nonnull String kind, @Nonnull String tier) {
+        if ("default".equals(kind)) {
+            return "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.gift."
+                + tier
+                + ".body";
+        }
+        return "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.gift."
+            + kind
+            + "."
+            + tier;
+    }
+
+    @Nonnull
+    private static String wintertideIncomingLineKey(@Nonnull String kind) {
+        if ("default".equals(kind)) {
+            return "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.incoming.body";
+        }
+        return "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.incoming." + kind;
     }
 
     private void insertMarketChoice(
@@ -1405,6 +1615,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                 || batch.isOpenTreeClimbLeaderboardAfterClose()
                 || batch.isOpenHallowsEveLeaderboardAfterClose()
                 || batch.isOpenMarketLeaderboardAfterClose()
+                || batch.isOpenSnowballLeaderboardAfterClose()
                 || batch.hasAfterClose()) {
                 finishClose(ref, store, world, batch);
                 return;
@@ -1420,6 +1631,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             || batch.isOpenTreeClimbLeaderboardAfterClose()
             || batch.isOpenHallowsEveLeaderboardAfterClose()
             || batch.isOpenMarketLeaderboardAfterClose()
+            || batch.isOpenSnowballLeaderboardAfterClose()
             || batch.hasAfterClose()) {
             finishClose(ref, store, world, batch);
             return;
@@ -1547,11 +1759,25 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                 }
                 player.getPageManager().openCustomPage(pref, st, new MarketLeaderboardPage(pr));
             });
+        } else if (world != null && batch.isOpenSnowballLeaderboardAfterClose()) {
+            world.execute(() -> {
+                Ref<EntityStore> pref = playerRef.getReference();
+                if (pref == null || !pref.isValid()) {
+                    return;
+                }
+                Store<EntityStore> st = pref.getStore();
+                Player player = st.getComponent(pref, Player.getComponentType());
+                PlayerRef pr = st.getComponent(pref, PlayerRef.getComponentType());
+                if (player == null || pr == null) {
+                    return;
+                }
+                player.getPageManager().openCustomPage(pref, st, new SnowballLeaderboardPage(pr));
+            });
         } else if (world != null && batch.hasAfterClose()) {
             Runnable after = batch.getAfterClose();
-            // Must dismiss the page so onDismiss returns the NPC to Idle. Without close(),
-            // roles that gate OpenAetherhavenDialogue on Not $Interaction stay uninteractable.
-            close();
+            // Do not call close() before the follow-up CustomUI opens. setPage(None) increments
+            // PageManager's custom-page ack counter, and openCustomPage increments again,
+            // leaving Data events (choice clicks) ignored until multiple client ACKs arrive.
             world.execute(() -> {
                 if (after != null) {
                     after.run();

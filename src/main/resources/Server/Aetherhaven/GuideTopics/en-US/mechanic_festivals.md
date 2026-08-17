@@ -74,6 +74,19 @@ Mid autumn, from morning until evening. Town members fill one shared stall at th
 * A few townsfolk open ticket stalls for the day. Talk to them to spend autumn festival tickets on goods that fit their work.
 * Visitors watch from around the square. Every villager has their own thing to say, so make the rounds before the day is over.
 
+## Wintertide
+
+Late winter, from morning until evening. Town members each give one gift to a neighbor, then receive one in return.
+
+* Talk to the **Wintertide merchant** to hear who you should give a gift to. They will not tell you who is giving to you.
+* Find a gift, then ask the merchant to start the gift giving when you are ready.
+* If you were assigned a villager, talk to them while holding the item and choose **Give this Wintertide gift**. That gift counts twice as much toward friendship. Everyday gifts still work, but they do not count for Wintertide.
+* If you were assigned a town member, press **F** on them while holding the item. They pick how they feel, and you get winter festival tickets.
+* How much they like it changes how many tickets you get. Someone will give you a gift too. If no town member was assigned to you, a villager walks up with one.
+* The merchant takes winter festival tickets for candy, lights, wreaths, a santa hat pattern, and other holiday goods.
+* Villagers who are giving or receiving a gift gather at the square until the festival is over. Visitors watch from around the square.
+* Every villager has their own thing to say, so make the rounds before the day is over.
+
 ## Making your own festival
 
 The plot creator has a **Festival** build type. Pick it, choose **New festival** or one you already made, and the square is placed for you at the fixed festival size. Build inside it, mark where villagers should stand, then name the festival and pick its season, day, and hours.

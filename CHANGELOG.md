@@ -2,6 +2,44 @@
 
 ## [3.0.0] - Unreleased
 
+### Added
+
+- **Festival square** New plot that sits as a quiet plaza most of the year and turns into a festival build on festival days. A banner announces the festival by name when it opens. Townsfolk and visitors gather there. The square is protected for everyone, including operators, so nobody can build on it or dig it up, though you can still use and harvest what is there. Operators can turn building on for themselves with a creative command.
+- **New Life Festival** Early spring holiday. Feed life essence to the Springheart Lettuce in the middle of the square until it is full, then press F to pop it into vegetable seeds and spring festival tickets. You can keep feeding it for a bigger pop, and concentrated life essence counts for much more. It only pops once a year, so gather everyone for it. The priestess, farmer, and elder come to watch, and a kweebec seed seller brings a cart of seeds for the day, paid for in gold coins.
+- **Pig Racing Festival** Late spring holiday at the festival square. Bet gold coins on one of four pigs, watch them race, and a banner names the winner so you know who to cheer. Collect spring festival tickets if yours wins, or try another race after a loss. The elder, innkeeper, blacksmith, and rancher come to watch, and a race merchant sells ranch goods for spring festival tickets.
+- **Market Festival** Mid autumn holiday at the festival square. Town members set out goods on one shared stall, Elder Lyren judges it, and you collect a place, autumn festival tickets, and a town scoreboard. Some townsfolk open ticket stalls for the day.
+- **Hallow's Eve** Late autumn holiday at the festival square. Talk to the merchant to run a timed maze for ten gold coins, collect glowing orbs, and pop the jack o lantern for autumn festival tickets and spooky candy. Only one person runs the maze at a time. Bats fly above the square for the night. The merchant keeps a scoreboard of the best maze runs.
+- **Carnival Festival** Late summer holiday that runs all day at the festival square. Pop floating balloons with darts, spin the wall carnival wheel for a chance at summer festival tickets, and visit the carnival merchant for fireworks, popcorn, a kweebec plushie, and clown wardrobe looks. The elder, bard, innkeeper, and florist come to watch.
+- **Tree Climbing Festival** Mid summer holiday at the festival square. Join a climb race at the attendant, race up the big tree to the pink crystal, earn summer festival tickets for a fast time, check the shared leaderboard, and buy rare saplings plus bush, beehive, and jungle sapling wardrobe hats from the merchant.
+- **Snowball Throwing Festival** Early winter holiday at the festival square. Grab snowballs from piles, join a fight at the merchant, and the winning team earns winter festival tickets. The merchant sells holiday decorations, snowball piles, and a santa hat pattern. The merchant keeps a scoreboard of the most hits in one fight.
+- **Wintertide** Late winter holiday at the festival square. Talk to the merchant to hear who you should give a gift to, give it in person, and earn winter festival tickets from how much they like it. Gifts to villagers count twice as much toward friendship. Someone gives you a gift too, and the merchant sells holiday goods for winter festival tickets.
+- **Spooky Candy** A sweet treat from the maze and the merchant shop. Eat it to feel better.
+- **Dismiss guards** Talk to a hired guard and let them go. They leave town, their house is free, and you can hire someone else.
+- **Bard music** Ask Elias to shuffle through his songs, or to loop one song until you tell him to stop.
+- **Miner's hut** Can produce limestone and limestone cobble.
+- **Calendar** Hang a calendar on a wall to open a season view with villager birthdays marked on their days. Craft it at the town planning desk with wood.
+- **Villager birthdays** Each story villager has a birthday on the calendar. Gifts on their birthday give double friendship. They greet you and react to gifts with special birthday lines.
+- **Set date command** Creative command to jump to a specific season day at midnight for testing.
+- **Corin's festival square quest** Once the park is finished, the innkeeper asks you to build a square where the whole town can gather.
+- **Festival chatter** Every villager has their own things to say while a festival is on, so it is worth going around the town before the day is over.
+- **Festival dancing** Villagers at their festival spots and visitors at the square will sometimes dance.
+- **Festival day markers** The calendar shows an icon on every festival day. Hover it to see which festival it is.
+- **Make your own festivals** The plot creator and building editor can create and edit festivals. Mark villager stands, festival merchants, visitor stands, the centerpiece, and pig race lanes, then pick the activity, season, day, and hours. Festivals made by other mods can bring their own villager chatter along with them.
+- **Building editor festivals** The building editor staff has a Festivals tab to load an existing festival nearby and set up every spot it needs. New festivals are still made with the plot creator.
+- **Festival tickets** Four seasonal festival tickets you can hold onto for now.
+- **Carnival fireworks** Buy a firework from the carnival merchant for one summer festival ticket. Use it on the ground to send it up and watch it burst in color.
+- **Carnival clown** Land on the blue spot on the carnival wheel to unlock Bozo Bleak, a cynical clown who can join your town.
+- **Clown Tent** Build Bozo a tent workplace. During work hours he visits townsfolk who need fun and cheers them up.
+- **Villager wardrobe** Craft a wardrobe at the town planning desk to dress up residents of your town. Pick someone, choose unlocked looks by slot, and save what they wear in that town. Head looks can leave hair alone, trim it under a hat, or hide it fully, matching how player hats work.
+- **Props** Place small decoration builds almost anywhere with a crate style prop item. Move and turn them in a placement menu before you set them down. They will not go into other blocks. Ships with Aqua Lamp, Palm Streetlight, Streetlight, Cabbage Trough, Fish Barrel, Potion Shelf, Plant Arch, Pig Pile, Balloons, and Festival Flag. Festival merchants sell some of these for festival tickets.
+- **Packaging wand** Point at a prop and use the wand to pack it back into an item. Props stay safe from breaking for everyone unless you turn breaking on for yourself with a creative command.
+- **Create and give props** Creative commands let you turn an existing prefab into a prop, give prop items, and hand out the packaging wand.
+- **Loot chest props** World loot chests can hold a random decoration prop, about as often as a plot blueprint. Festival merchant decorations stay exclusive to those shops.
+- **Path designer shovel** You can choose whether townsfolk walk a path you place.
+- **Make your own wall styles** The plot creator can build a whole wall style. Set up the straight wall, the gate, and the three towers, mark where each one joins the next, set what each one costs to build, and share the finished style on the marketplace.
+- **Wall styles in the crafting bench** The marketplace has a Walls filter. A wall style shows as one card with arrows to look through its pieces, and downloading it brings the whole set in at once.
+- **Pick a wall style** The wall wand has arrows to switch between the wall styles you have installed.
+
 ### Changed
 
 - **Faster loading** Worlds with Aetherhaven open and join more quickly.
@@ -12,50 +50,10 @@
 - **Red floating gifts** Hold two furniture pieces and a random decoration prop.
 - **Heartberry** You can set it down like food, and pick it back up.
 
-### Added
-
-- **Market Festival** Mid autumn holiday at the festival square. Town members set out goods on one shared stall, Elder Lyren judges it, and you collect a place, autumn festival tickets, and a town scoreboard. Some townsfolk open ticket stalls for the day.
-- **Hallow's Eve** Late autumn holiday at the festival square. Talk to the merchant to run a timed maze for ten gold coins, collect glowing orbs, and pop the jack o lantern for autumn festival tickets and spooky candy. Only one person runs the maze at a time. Bats fly above the square for the night. The merchant keeps a scoreboard of the best maze runs.
-- **Hallow's Eve merchant** Sells spooky candy, autumn decorations, and a jack o lantern hat pattern for autumn festival tickets.
-- **Spooky Candy** A sweet treat from the maze and the merchant shop. Eat it to feel better.
-- **Jack o lantern hat** A fully covering pumpkin hat for villagers, unlocked from the Hallow's Eve merchant.
-- **Dismiss guards** Talk to a hired guard and let them go. They leave town, their house is free, and you can hire someone else.
-- **Bard music** Ask Elias to shuffle through his songs, or to loop one song until you tell him to stop.
-- **Miner's hut** Can produce limestone and limestone cobble.
-- **Calendar** Hang a calendar on a wall to open a season view with villager birthdays marked on their days. Craft it at the town planning desk with wood.
-- **Villager birthdays** Each story villager has a birthday on the calendar. Gifts on their birthday give double friendship. They greet you and react to gifts with special birthday lines.
-- **Set date command** Creative command to jump to a specific season day at midnight for testing.
-- **Corin's festival square quest** Once the park is finished, the innkeeper asks you to build a square where the whole town can gather.
-- **Festival square** New plot that sits as a quiet plaza most of the year and turns into a festival build on festival days. A banner announces the festival by name when it opens. Townsfolk and visitors gather there. The square is protected for everyone, including operators, so nobody can build on it or dig it up, though you can still use and harvest what is there. Operators can turn building on for themselves with a creative command.
-- **New Life Festival** Early spring holiday. Feed life essence to the Springheart Lettuce in the middle of the square until it is full, then press F to pop it into vegetable seeds and spring festival tickets. You can keep feeding it for a bigger pop, and concentrated life essence counts for much more. It only pops once a year, so gather everyone for it. The priestess, farmer, and elder come to watch, and a kweebec seed seller brings a cart of seeds for the day, paid for in gold coins.
-- **Festival chatter** Every villager has their own things to say while a festival is on, so it is worth going around the town before the day is over.
-- **Festival dancing** Villagers at their festival spots and visitors at the square will sometimes dance.
-- **Festival day markers** The calendar shows an icon on every festival day. Hover it to see which festival it is.
-- **Make your own festivals** The plot creator and building editor can create and edit festivals. Mark villager stands, festival merchants, visitor stands, the centerpiece, and pig race lanes, then pick the activity, season, day, and hours. Festivals made by other mods can bring their own villager chatter along with them.
-- **Building editor festivals** The building editor staff has a Festivals tab to load an existing festival nearby and set up every spot it needs. New festivals are still made with the plot creator.
-- **Festival tickets** Four seasonal festival tickets you can hold onto for now.
-- **Pig Racing Festival** Late spring holiday at the festival square. Bet gold coins on one of four pigs, watch them race, and a banner names the winner so you know who to cheer. Collect spring festival tickets if yours wins, or try another race after a loss. The elder, innkeeper, blacksmith, and rancher come to watch, and a race merchant sells ranch goods for spring festival tickets.
-- **Carnival Festival** Late summer holiday that runs all day at the festival square. Pop floating balloons with darts, spin the wall carnival wheel for a chance at summer festival tickets, and visit the carnival merchant for fireworks, popcorn, a kweebec plushie, and clown wardrobe looks. The elder, bard, innkeeper, and florist come to watch.
-- **Carnival fireworks** Buy a firework from the carnival merchant for one summer festival ticket. Use it on the ground to send it up and watch it burst in color.
-- **Carnival clown** Land on the blue spot on the carnival wheel to unlock Bozo Bleak, a cynical clown who can join your town.
-- **Clown Tent** Build Bozo a tent workplace. During work hours he visits townsfolk who need fun and cheers them up.
-- **Villager wardrobe** Craft a wardrobe at the town planning desk to dress up residents of your town. Pick someone, choose unlocked looks by slot, and save what they wear in that town. Head looks can leave hair alone, trim it under a hat, or hide it fully, matching how player hats work.
-- **Tree Climbing Festival** Mid summer holiday at the festival square. Join a climb race at the attendant, race up the big tree to the pink crystal, earn summer festival tickets for a fast time, check the shared leaderboard, and buy rare saplings plus bush, beehive, and jungle sapling wardrobe hats from the merchant.
-- **Props** Place small decoration builds almost anywhere with a crate style prop item. Move and turn them in a placement menu before you set them down. They will not go into other blocks. Ships with Aqua Lamp, Palm Streetlight, Streetlight, Cabbage Trough, Fish Barrel, Potion Shelf, Plant Arch, Pig Pile, Balloons, and Festival Flag. Festival merchants sell some of these for festival tickets.
-- **Packaging wand** Point at a prop and use the wand to pack it back into an item. Props stay safe from breaking for everyone unless you turn breaking on for yourself with a creative command.
-- **Create and give props** Creative commands let you turn an existing prefab into a prop, give prop items, and hand out the packaging wand.
-- **Loot chest props** World loot chests can hold a random decoration prop, about as often as a plot blueprint. Festival merchant decorations stay exclusive to those shops.
-- **Path designer shovel** You can choose whether townsfolk walk a path you place.
-- **Make your own wall styles** The plot creator can build a whole wall style. Set up the straight wall, the gate, and the three towers, mark where each one joins the next, set what each one costs to build, and share the finished style on the marketplace.
-- **Wall styles in the crafting bench** The marketplace has a Walls filter. A wall style shows as one card with arrows to look through its pieces, and downloading it brings the whole set in at once.
-- **Pick a wall style** The wall wand has arrows to switch between the wall styles you have installed.
-
 ### Fixed
 
 - **Wall wand** Pieces now line up flush instead of leaving a gap or overlapping, whichever way you build.
 - **Wall wand** A tower at the end of a run only has the one doorway it needs, and gains a second one when you carry the wall on through it.
-- **Hallow's Eve maze** Glowing orbs stay in the path instead of sliding into the hedges.
-- **Hallow's Eve maze** Starting the maze faces you toward the middle, even if the festival square is turned.
 - **Community downloads** Downloading a marketplace building no longer freezes the game on very large prefabs.
 - **Community downloads** Website download counts go up once per save or server, not each time you remove and download the same building.
 - **Tourist portal** After you finish the tourist portal building, the portal now lights up in your town color and works without you having to replace the block by hand.

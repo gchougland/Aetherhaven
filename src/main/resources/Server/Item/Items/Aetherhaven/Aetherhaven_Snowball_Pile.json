@@ -1,0 +1,72 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Snowball_Pile.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Snowball_Pile.description"
+  },
+  "PlayerAnimationsId": "Block",
+  "Categories": [
+    "Furniture.Decorations",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Snowball_Pile.png",
+  "BlockType": {
+    "BlockParticleSetId": "Snow",
+    "BlockSoundSetId": "Snow",
+    "CustomModel": "Items/Aetherhaven/Snowball/Snowball_Pile.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Aetherhaven/Snowball/Snowball.png",
+        "Weight": 1
+      }
+    ],
+    "DrawType": "Model",
+    "Flags": {
+      "IsUsable": true
+    },
+    "Gathering": {
+      "Soft": {}
+    },
+    "HitboxType": "Aetherhaven_Snowball_Pile",
+    "Material": "Solid",
+    "Opacity": "Transparent",
+    "ParticleColor": "#e8f4ff",
+    "PlacementSettings": {
+      "RotationMode": "Default"
+    },
+    "Interactions": {
+      "Use": {
+        "Hint": "aetherhaven_festivals.aetherhaven.festival.interactionHints.takeSnowballs",
+        "Interactions": [
+          {
+            "Type": "AetherhavenFestivalSnowballPileUse"
+          }
+        ]
+      }
+    }
+  },
+  "Tags": {
+    "Type": [
+      "Furniture"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "IconProperties": {
+    "Scale": 0.7,
+    "Rotation": [
+      18,
+      10,
+      354
+    ],
+    "Translation": [
+      -2,
+      -9
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Soft",
+  "MaxStack": 10,
+  "Model": "Items/Aetherhaven/Snowball/Snowball_Pile.blockymodel",
+  "Texture": "Items/Aetherhaven/Snowball/Snowball.png"
+}

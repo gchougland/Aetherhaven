@@ -232,6 +232,75 @@ final class FestivalCatalogAndWindowTest {
     }
 
     @Test
+    void shippedSnowballFestivalIsWiredUp() {
+        FestivalDefinition def = parseResource("/Server/Aetherhaven/Festivals/snowball.json");
+
+        assertEquals("snowball", def.getId());
+        assertEquals(Season.WINTER, def.getSeason());
+        assertEquals(7, def.getDayOfSeason());
+        assertEquals(8, def.getStartHour());
+        assertEquals(20, def.getEndHour());
+        assertEquals("Festivals/Festival_Snowball.prefab.json", def.getPrefabPath());
+        assertEquals("snowball", def.getMechanicId());
+        assertEquals("UI/Custom/winter.png", def.getCalendarIconPath());
+        assertEquals(4, def.getSpots().size());
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("elder")));
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("innkeeper")));
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("farmer")));
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("florist")));
+        assertEquals(1, def.getNpcs().size());
+        assertEquals("Aetherhaven_Festival_Snowball_Merchant", def.getNpcs().get(0).getNpcRoleId());
+        assertEquals(8, def.getTouristSpots().size());
+        assertEquals(10, def.getSnowballPileSpots().size());
+        assertEquals(4, def.getSnowballTeamASpots().size());
+        assertEquals(4, def.getSnowballTeamBSpots().size());
+        assertNotNull(def.getSnowballOutLocal());
+        assertFalse(def.getGreetingLangKeys("default").isEmpty());
+        assertFalse(def.getGreetingLangKeys("elder").isEmpty());
+        assertFalse(def.getGreetingLangKeys("clown").isEmpty());
+        assertFalse(def.getGreetingLangKeys("guard").isEmpty());
+    }
+
+    @Test
+    void snowballCalendarUsesWinterIconEvenFromTheOldSnowflakePath() {
+        FestivalDefinition leftover =
+            parse("{\"id\":\"snowball\",\"mechanicId\":\"snowball\",\"calendarIconPath\":\"UI/Custom/snowflake.png\"}");
+        FestivalDefinition missing = parse("{\"id\":\"snowball\",\"mechanicId\":\"snowball\"}");
+
+        assertEquals("UI/Custom/winter.png", leftover.getCalendarIconPath());
+        assertEquals("UI/Custom/winter.png", missing.getCalendarIconPath());
+    }
+
+    @Test
+    void shippedWintertideFestivalIsWiredUp() {
+        FestivalDefinition def = parseResource("/Server/Aetherhaven/Festivals/wintertide.json");
+
+        assertEquals("wintertide", def.getId());
+        assertEquals(Season.WINTER, def.getSeason());
+        assertEquals(21, def.getDayOfSeason());
+        assertEquals(8, def.getStartHour());
+        assertEquals(20, def.getEndHour());
+        assertEquals("Festivals/Festival_Wintertide.prefab.json", def.getPrefabPath());
+        assertEquals("wintertide", def.getMechanicId());
+        assertEquals("UI/Custom/christmas-tree.png", def.getCalendarIconPath());
+        assertEquals(17, def.getSpots().size());
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("elder")));
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("innkeeper")));
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("florist")));
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("bard")));
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("chef")));
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("miner")));
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("blacksmith")));
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("guild_master")));
+        assertEquals(1, def.getNpcs().size());
+        assertEquals("Aetherhaven_Festival_Wintertide_Merchant", def.getNpcs().get(0).getNpcRoleId());
+        assertEquals(8, def.getTouristSpots().size());
+        assertFalse(def.getGreetingLangKeys("default").isEmpty());
+        assertFalse(def.getGreetingLangKeys("clown").isEmpty());
+        assertFalse(def.getGreetingLangKeys("guard").isEmpty());
+    }
+
+    @Test
     void shippedMarketItemCatalogHasCategoryBonusAndBaseGameGoods() throws Exception {
         try (var in = FestivalCatalogAndWindowTest.class.getResourceAsStream(
             "/Server/Aetherhaven/Market/market_items.json"

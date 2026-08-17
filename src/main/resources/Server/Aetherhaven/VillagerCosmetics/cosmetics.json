@@ -158,6 +158,17 @@
       "texture": "Items/Halloween_Props/Pumpkin_Carve_Texture_02.png",
       "unlockItemId": "Aetherhaven_Villager_Cosmetic_Jack_O_Lantern_Hat",
       "headAccessoryType": "FullyCovering"
+    },
+    {
+      "id": "SantaHat",
+      "slot": "HeadAccessory",
+      "displayNameKey": "aetherhaven_villager_cosmetics.aetherhaven.villagerCosmetic.santaHat",
+      "model": "Cosmetics/Head/SantaHat.blockymodel",
+      "texture": "Cosmetics/Head/SantaHat_Texture/SantaHat_Greyscale_Texture.png",
+      "unlockItemId": "Aetherhaven_Villager_Cosmetic_Santa_Hat",
+      "headAccessoryType": "HalfCovering",
+      "gradientSet": "Colored_Cotton",
+      "gradientId": "Red"
     }
   ]
 }

@@ -135,6 +135,11 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         }
 
         Ref<EntityStore> ref = chunk.getReferenceTo(index);
+        UUIDComponent touristUuid = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (touristUuid != null
+            && com.hexvane.aetherhaven.festival.snowball.SnowballSessionIndex.isLivingFighter(touristUuid.getUuid())) {
+            return;
+        }
         long now = resolveNowMs(store);
         World world = store.getExternalData().getWorld();
         if (!world.isAlive()) {

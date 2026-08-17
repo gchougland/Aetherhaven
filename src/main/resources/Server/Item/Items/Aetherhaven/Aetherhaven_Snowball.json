@@ -1,0 +1,82 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Snowball.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Snowball.description"
+  },
+  "Categories": [
+    "Items.Weapons",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Snowball.png",
+  "Model": "Items/Aetherhaven/Snowball/Snowball.blockymodel",
+  "Texture": "Items/Aetherhaven/Snowball/Snowball.png",
+  "PlayerAnimationsId": "Throwing_Knife",
+  "Quality": "Common",
+  "ItemLevel": 1,
+  "MaxStack": 25,
+  "Utility": {
+    "Usable": true
+  },
+  "Weapon": {},
+  "Interactions": {
+    "Secondary": {
+      "Interactions": [
+            {
+              "Type": "Serial",
+              "Interactions": [
+                {
+                  "Type": "Simple",
+              "RunTime": 0.25,
+              "Effects": {
+                "ItemAnimationId": "Throw",
+                "WorldSoundEventId": "SFX_Unarmed_Swing",
+                "LocalSoundEventId": "SFX_Unarmed_Swing"
+              }
+            },
+            {
+              "Type": "Projectile",
+              "Config": "Projectile_Config_Aetherhaven_Snowball"
+            },
+            {
+              "Type": "ModifyInventory",
+              "AdjustHeldItemQuantity": -1
+            }
+          ]
+        }
+      ],
+      "Cooldown": {
+        "Cooldown": 0.25,
+        "Charges": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "InterruptRecharge": true,
+        "ClickBypass": false
+      }
+    }
+  },
+  "Tags": {
+    "Type": [
+      "Weapon"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "IconProperties": {
+    "Scale": 1.3,
+    "Rotation": [
+      315,
+      297,
+      297
+    ],
+    "Translation": [
+      -3,
+      -2
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Soft"
+}

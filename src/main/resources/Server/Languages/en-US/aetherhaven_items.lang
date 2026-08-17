@@ -42,7 +42,12 @@ items.Aetherhaven_Prop_Spooky_Terrarium.description=A little glass case of spook
 items.Aetherhaven_Prop_Zombie_Grave.name=Prop: Zombie Grave
 items.Aetherhaven_Prop_Zombie_Grave.description=A crooked grave marker. Right click to place it.
 items.Aetherhaven_Spooky_Candy.name=Spooky Candy
-items.Aetherhaven_Spooky_Candy.description=A sweet treat from Hallow's Eve. Eat it to feel better.
+items.Aetherhaven_Spooky_Candy.description=A sweet treat from the maze and the merchant shop. Eat it to feel better.
+
+items.Aetherhaven_Snowball.name=Snowball
+items.Aetherhaven_Snowball.description=A packed snowball. Throw it for fun. It will not hurt anyone.
+items.Aetherhaven_Snowball_Pile.name=Snowball Pile
+items.Aetherhaven_Snowball_Pile.description=A pile of packed snow you can place. Use it at the snowball festival to take snowballs.
 items.Aetherhaven_Packaging_Wand.name=Packaging Wand
 items.Aetherhaven_Packaging_Wand.description=Point at a prop and use to pack it back into an item.
 
@@ -535,3 +540,5 @@ items.Aetherhaven_Villager_Cosmetic_Jungle_Sapling_Hat.name=Jungle Sapling Hat P
 items.Aetherhaven_Villager_Cosmetic_Jungle_Sapling_Hat.description=Use to unlock a jungle sapling hat for villagers in your town wardrobe. Buy it from the tree climb merchant with summer festival tickets.
 items.Aetherhaven_Villager_Cosmetic_Jack_O_Lantern_Hat.name=Jack o lantern Hat Pattern
 items.Aetherhaven_Villager_Cosmetic_Jack_O_Lantern_Hat.description=Use to unlock a jack o lantern hat for villagers in your town wardrobe. Buy it from the Hallow's Eve merchant with autumn festival tickets.
+items.Aetherhaven_Villager_Cosmetic_Santa_Hat.name=Santa Hat Pattern
+items.Aetherhaven_Villager_Cosmetic_Santa_Hat.description=Use to unlock a santa hat for villagers in your town wardrobe. Buy it from a winter festival merchant with winter festival tickets.

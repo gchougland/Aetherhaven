@@ -202,6 +202,25 @@ public final class PlotCreatorImportantSpotsPage
                     resolveMinCount(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_MARKET_DISPLAY, 1))
                 )
             );
+            out.add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_SNOWBALL_PILE,
+                    resolveMinCount(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_SNOWBALL_PILE, 1))
+                )
+            );
+            out.add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_SNOWBALL_TEAM_A,
+                    resolveMinCount(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_SNOWBALL_TEAM_A, 1))
+                )
+            );
+            out.add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_SNOWBALL_TEAM_B,
+                    resolveMinCount(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_SNOWBALL_TEAM_B, 1))
+                )
+            );
+            out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_SNOWBALL_OUT, 1));
             List<PlotCreatorSpotEntry> ranked = new ArrayList<>(out);
             for (int i = 0; i < ranked.size(); i++) {
                 PlotCreatorSpotEntry spot = ranked.get(i);

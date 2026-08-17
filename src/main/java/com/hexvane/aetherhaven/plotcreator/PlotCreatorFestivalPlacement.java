@@ -297,6 +297,114 @@ public final class PlotCreatorFestivalPlacement {
         return true;
     }
 
+    public static boolean placeSnowballPile(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef
+    ) {
+        PlotCreatorDraft draft = session.getDraft();
+        PlotCreatorSpotPlacement.ResolvedSpot spot =
+            PlotCreatorSpotPlacement.resolveStandSpawn(session.getWorld(), targetBlock);
+        int[] local = PlotCreatorLocalCoords.toLocal(draft, spot.worldBlock());
+        if (hasSnowballPileAt(draft, local)) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalSnowballPileAlreadyRecorded")
+            );
+            return true;
+        }
+        draft.getFestivalSnowballPileSpots().add(FestivalDefinition.OrbSpawnRow.of(local[0], local[1], local[2]));
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalSnowballPileRecorded")
+        );
+        return true;
+    }
+
+    public static boolean placeSnowballTeamA(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> playerEntityRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        return placeSnowballTeamPad(
+            session,
+            targetBlock,
+            playerRef,
+            playerEntityRef,
+            store,
+            session.getDraft().getFestivalSnowballTeamASpots(),
+            "festivalSnowballTeamA"
+        );
+    }
+
+    public static boolean placeSnowballTeamB(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> playerEntityRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        return placeSnowballTeamPad(
+            session,
+            targetBlock,
+            playerRef,
+            playerEntityRef,
+            store,
+            session.getDraft().getFestivalSnowballTeamBSpots(),
+            "festivalSnowballTeamB"
+        );
+    }
+
+    private static boolean placeSnowballTeamPad(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> playerEntityRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull List<FestivalDefinition.RaceStartSpotRow> pads,
+        @Nonnull String hintKey
+    ) {
+        PlotCreatorDraft draft = session.getDraft();
+        PlotCreatorSpotPlacement.ResolvedSpot spot =
+            PlotCreatorSpotPlacement.resolveStandSpawn(session.getWorld(), targetBlock);
+        int[] local = PlotCreatorLocalCoords.toLocal(draft, spot.worldBlock());
+        if (hasTeamPadAt(pads, local)) {
+            playerRef.sendMessage(
+                Message.translation(
+                    "aetherhaven_plot_creator.aetherhaven.plotcreator.hint." + hintKey + "AlreadyRecorded"
+                )
+            );
+            return true;
+        }
+        float yaw = playerYawDegrees(draft, playerEntityRef, store);
+        pads.add(FestivalDefinition.RaceStartSpotRow.of(local[0], local[1], local[2], yaw));
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint." + hintKey + "Recorded")
+        );
+        return true;
+    }
+
+    public static boolean placeSnowballOut(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> playerEntityRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        PlotCreatorDraft draft = session.getDraft();
+        PlotCreatorSpotPlacement.ResolvedSpot spot =
+            PlotCreatorSpotPlacement.resolveStandSpawn(session.getWorld(), targetBlock);
+        int[] local = PlotCreatorLocalCoords.toLocal(draft, spot.worldBlock());
+        float yaw = playerYawDegrees(draft, playerEntityRef, store);
+        draft.setFestivalSnowballOutLocal(
+            FestivalDefinition.MazeStartLocalRow.of(local[0], local[1], local[2], yaw)
+        );
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalSnowballOutRecorded")
+        );
+        return true;
+    }
+
     public static boolean placeRaceLaneClick(
         @Nonnull PlotCreatorSession session,
         @Nonnull Vector3i targetBlock,
@@ -623,6 +731,104 @@ public final class PlotCreatorFestivalPlacement {
         return false;
     }
 
+    public static boolean tryRemoveSnowballPileNear(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef
+    ) {
+        Iterator<FestivalDefinition.OrbSpawnRow> it = draft.getFestivalSnowballPileSpots().iterator();
+        while (it.hasNext()) {
+            FestivalDefinition.OrbSpawnRow spot = it.next();
+            Vector3i world = PlotCreatorLocalCoords.toWorldBlock(draft, orbLocalBlock(spot));
+            if (near(world, targetBlock)) {
+                it.remove();
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalSnowballPileRemoved")
+                );
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean tryRemoveSnowballTeamANear(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef
+    ) {
+        return tryRemoveTeamPadNear(
+            draft,
+            draft.getFestivalSnowballTeamASpots(),
+            targetBlock,
+            playerRef,
+            "festivalSnowballTeamARemoved"
+        );
+    }
+
+    public static boolean tryRemoveSnowballTeamBNear(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef
+    ) {
+        return tryRemoveTeamPadNear(
+            draft,
+            draft.getFestivalSnowballTeamBSpots(),
+            targetBlock,
+            playerRef,
+            "festivalSnowballTeamBRemoved"
+        );
+    }
+
+    private static boolean tryRemoveTeamPadNear(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull List<FestivalDefinition.RaceStartSpotRow> pads,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull String hintKey
+    ) {
+        Iterator<FestivalDefinition.RaceStartSpotRow> it = pads.iterator();
+        while (it.hasNext()) {
+            FestivalDefinition.RaceStartSpotRow spot = it.next();
+            Vector3i world =
+                PlotCreatorLocalCoords.toWorldBlock(
+                    draft,
+                    new int[] {spot.getLocalX(), spot.getLocalY(), spot.getLocalZ()}
+                );
+            if (near(world, targetBlock)) {
+                it.remove();
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint." + hintKey)
+                );
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean tryRemoveSnowballOutNear(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef
+    ) {
+        FestivalDefinition.MazeStartLocalRow start = draft.getFestivalSnowballOutLocal();
+        if (start == null) {
+            return false;
+        }
+        Vector3i world =
+            PlotCreatorLocalCoords.toWorldBlock(
+                draft,
+                new int[] {start.getLocalX(), start.getLocalY(), start.getLocalZ()}
+            );
+        if (!near(world, targetBlock)) {
+            return false;
+        }
+        draft.setFestivalSnowballOutLocal(null);
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.festivalSnowballOutRemoved")
+        );
+        return true;
+    }
+
     public static boolean tryRemoveRaceLaneNear(
         @Nonnull PlotCreatorSession session,
         @Nonnull Vector3i targetBlock,
@@ -728,6 +934,28 @@ public final class PlotCreatorFestivalPlacement {
         for (FestivalDefinition.OrbSpawnRow spot : draft.getFestivalMarketDisplaySlots()) {
             int[] block = orbLocalBlock(spot);
             if (block[0] == local[0] && block[1] == local[1] && block[2] == local[2]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean hasSnowballPileAt(@Nonnull PlotCreatorDraft draft, @Nonnull int[] local) {
+        for (FestivalDefinition.OrbSpawnRow spot : draft.getFestivalSnowballPileSpots()) {
+            int[] block = orbLocalBlock(spot);
+            if (block[0] == local[0] && block[1] == local[1] && block[2] == local[2]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean hasTeamPadAt(
+        @Nonnull List<FestivalDefinition.RaceStartSpotRow> pads,
+        @Nonnull int[] local
+    ) {
+        for (FestivalDefinition.RaceStartSpotRow spot : pads) {
+            if (spot.getLocalX() == local[0] && spot.getLocalY() == local[1] && spot.getLocalZ() == local[2]) {
                 return true;
             }
         }

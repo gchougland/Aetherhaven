@@ -20,7 +20,7 @@ The first time you speak with a villager after a new morning, you earn a small r
 **Give gifts**  
 During dialogue, choose the gift option while holding an item in your hand. The villager reacts based on whether they love, like, feel neutral about, or dislike the gift. Better reactions give more reputation. A gift they dislike can lower it.
 
-You can only give so many gifts per villager per week, so save strong gifts for people you are trying to impress.
+You can only give so many gifts per villager per week, so save strong gifts for people you are trying to impress. A **Wintertide** gift to a villager counts twice as much toward friendship.
 
 **Complete quests**  
 Story quests from the Elder, innkeeper, and other residents often grant reputation when you finish them. The **Quests** tab in your journal shows item rewards and reputation lines when a quest grants them.

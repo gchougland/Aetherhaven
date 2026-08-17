@@ -84,6 +84,11 @@ public final class ClownCheerAssistSystem extends EntityTickingSystem<EntityStor
         if (npc == null || binding == null) {
             return;
         }
+        UUIDComponent fightUuid = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (fightUuid != null
+            && com.hexvane.aetherhaven.festival.snowball.SnowballSessionIndex.isLivingFighter(fightUuid.getUuid())) {
+            return;
+        }
         if (!AetherhavenConstants.NPC_CLOWN.equals(npc.getRoleName())) {
             return;
         }

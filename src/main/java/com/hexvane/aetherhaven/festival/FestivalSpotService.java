@@ -243,6 +243,42 @@ public final class FestivalSpotService {
         return null;
     }
 
+    /** The Nth visitor stand on the square, wrapping when there are more villagers than pads. */
+    @javax.annotation.Nullable
+    public static PoiEntry findNthTouristSpot(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        int index
+    ) {
+        if (index < 0) {
+            return null;
+        }
+        List<String> ids = town.getActiveFestivalSpotPoiIds();
+        if (ids.isEmpty()) {
+            return null;
+        }
+        PoiRegistry registry = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
+        List<PoiEntry> tourists = new ArrayList<>();
+        for (String id : ids) {
+            PoiEntry entry;
+            try {
+                entry = registry.get(UUID.fromString(id.trim()));
+            } catch (IllegalArgumentException e) {
+                continue;
+            }
+            if (entry != null
+                && entry.getWorkResidentKind() == null
+                && entry.getTags().contains(AetherhavenConstants.POI_TAG_TOURIST_VISIT)) {
+                tourists.add(entry);
+            }
+        }
+        if (tourists.isEmpty()) {
+            return null;
+        }
+        return tourists.get(index % tourists.size());
+    }
+
     /**
      * True when every resident spot for {@code festival} resolves in the live POI registry. Spot markers are
      * runtime-only, so a world reload or plot POI refresh can leave the town pointing at missing ids.

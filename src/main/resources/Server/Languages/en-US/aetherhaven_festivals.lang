@@ -15,12 +15,20 @@ aetherhaven.festival.hallows_eve.description=Late autumn brings a spooky maze ni
 aetherhaven.festival.market.name=Market Festival
 aetherhaven.festival.market.description=Mid autumn brings the market contest. Townsfolk fill one shared stall, Elder Lyren judges it against three rival stands, and first place earns a Corin Plushie and a Heartberry.
 
+aetherhaven.festival.wintertide.name=Wintertide
+aetherhaven.festival.wintertide.description=Late winter brings gift giving at the festival square. Town members each give a gift to a neighbor, then receive one in return, and spend winter festival tickets at the merchant.
+
 aetherhaven.festival.tree_climbing.name=Tree Climbing Festival
 aetherhaven.festival.tree_climbing.description=Mid summer brings the big tree climb. Race to the pink crystal at the top, earn summer festival tickets for a fast climb, and spend them on rare saplings.
+
+aetherhaven.festival.snowball.name=Snowball Throwing Festival
+aetherhaven.festival.snowball.description=Early winter brings a snowball fight at the festival square. Grab snowballs from piles, join a team at the merchant, and the winning team earns winter festival tickets.
 
 aetherhaven.festival.interactionHints.burstLettuce=Press [{key}] to pop the lettuce
 aetherhaven.festival.interactionHints.burstJackLantern=Press [{key}] to pop the jack o lantern
 aetherhaven.festival.interactionHints.openMarketStall=Press [{key}] to set out goods
+aetherhaven.festival.interactionHints.wintertideGift=Press [{key}] to give a Wintertide gift
+aetherhaven.festival.interactionHints.takeSnowballs=Press [{key}] to take snowballs
 
 aetherhaven.festival.started={festival} has started at the festival square.
 aetherhaven.festival.banner.started.title={festival}
@@ -49,6 +57,11 @@ aetherhaven.festival.npc.lettuce.name=Springheart Lettuce
 aetherhaven.festival.npc.jackLantern.name=Jack o lantern
 aetherhaven.festival.npc.mazeOrb.name=Maze Orb
 aetherhaven.festival.npc.hallowsEveMerchant.name=Hallow's Eve Merchant
+aetherhaven.festival.npc.wintertideMerchant.name=Wintertide Merchant
+aetherhaven.festival.npc.snowballMerchant.name=Snowball Merchant
+aetherhaven.festival.shop.wintertide.title=Wintertide Goods
+aetherhaven.festival.shop.snowball.title=Holiday Goods
+aetherhaven.festival.wintertide.tickets=You received {count} winter festival tickets!
 aetherhaven.festival.npc.hallowsEveBat.name=Bat
 aetherhaven.festival.shop.hallowsEve.title=Hallow's Eve Goods
 aetherhaven.festival.hallows_eve.hud.timerLabel=Time left
@@ -134,3 +147,23 @@ aetherhaven.festival.tree_climbing.leaderboard.close=Close
 aetherhaven.festival.tree_climbing.leaderboard.empty=No climbs recorded yet.
 aetherhaven.festival.tree_climbing.leaderboard.your_best=Your best time: {time}
 aetherhaven.festival.tree_climbing.leaderboard.your_best_none=You have not finished a climb yet.
+
+aetherhaven.festival.snowball.hud.title=Snowball Fight
+aetherhaven.festival.snowball.leaderboard.title=Snowball Fight Scoreboard
+aetherhaven.festival.snowball.leaderboard.hint=Most hits in one fight.
+aetherhaven.festival.snowball.leaderboard.close=Close
+aetherhaven.festival.snowball.leaderboard.empty=No fights recorded yet.
+aetherhaven.festival.snowball.leaderboard.your_best=Your best: {hits}
+aetherhaven.festival.snowball.leaderboard.your_best_none=You have not landed a hit yet.
+aetherhaven.festival.snowball.team.red=Red Team
+aetherhaven.festival.snowball.team.blue=Blue Team
+aetherhaven.festival.snowball.banner.winner.title={team} wins!
+aetherhaven.festival.snowball.banner.winner.subtitle=Talk to the merchant for winter festival tickets
+aetherhaven.festival.snowball.banner.tie.title=It is a tie!
+aetherhaven.festival.snowball.banner.tie.subtitle=Both teams can collect winter festival tickets
+aetherhaven.festival.snowball.notify.hit=Hit!
+aetherhaven.festival.snowball.notify.hit.left={lives} left
+aetherhaven.festival.snowball.notify.hit.out=They are out
+aetherhaven.festival.snowball.notify.hurt=Ouch!
+aetherhaven.festival.snowball.notify.hurt.left={lives} left
+aetherhaven.festival.snowball.notify.hurt.out=You are out

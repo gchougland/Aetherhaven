@@ -1,0 +1,109 @@
+$C = "../Common.ui";
+
+@SnowBarWidth = 420;
+@SnowBarHeight = 22;
+@SnowBarInsetH = 5;
+@SnowBarInsetV = 4;
+@SnowflakeSize = 28;
+
+@SnowBarBorderPatch = (TexturePath: "../XpBarBorder.png", Border: 8, Color: #ffffff);
+@SnowBarFillPatch = #9ad8f5;
+@SnowBarTrackPatch = #121820(0.92);
+
+Group #SnowballFightHudRoot {
+  LayoutMode: Top;
+  Anchor: (Top: 46);
+
+  Group {
+    LayoutMode: Left;
+
+    Group {
+      FlexWeight: 1;
+    }
+
+    Group #SnowballHudPanel {
+      LayoutMode: Top;
+      Anchor: (Width: @SnowBarWidth);
+
+      Label #SnowballTitle {
+        Style: (...$C.@DefaultLabelStyle, FontSize: 18, TextColor: #e8f6ff, RenderBold: true, HorizontalAlignment: Center);
+        Anchor: (Bottom: 6);
+        Text: "";
+      }
+
+      Group #SnowballBarStack {
+        LayoutMode: Full;
+        Anchor: (Height: @SnowBarHeight, Left: 0, Right: 0);
+
+        Group #SnowballBarFillTrack {
+          LayoutMode: Left;
+          Anchor: (Left: @SnowBarInsetH, Right: @SnowBarInsetH, Top: @SnowBarInsetV, Bottom: @SnowBarInsetV);
+          Background: @SnowBarTrackPatch;
+
+          Group #SnowballBarFill {
+            FlexWeight: 1;
+            Anchor: (Top: 0, Bottom: 0);
+            Background: @SnowBarFillPatch;
+          }
+
+          Group #SnowballBarFillRemainder {
+            FlexWeight: 999;
+          }
+        }
+
+        Group #SnowballBarBorder {
+          LayoutMode: Full;
+          Anchor: (Full: 0);
+          Background: @SnowBarBorderPatch;
+        }
+      }
+
+      Group #SnowballLivesRow {
+        LayoutMode: Left;
+        Anchor: (Top: 8, Height: @SnowflakeSize);
+
+        Group {
+          FlexWeight: 1;
+        }
+
+        Group #SnowballLife0 {
+          LayoutMode: Full;
+          Anchor: (Width: @SnowflakeSize, Height: @SnowflakeSize, Right: 6);
+          Background: (TexturePath: "../winter.png", Border: 0, Color: #ffffff(0.28));
+          AssetImage #SnowballLife0Fg {
+            Anchor: (Full: 0);
+            AssetPath: "UI/Custom/winter.png";
+          }
+        }
+
+        Group #SnowballLife1 {
+          LayoutMode: Full;
+          Anchor: (Width: @SnowflakeSize, Height: @SnowflakeSize, Right: 6);
+          Background: (TexturePath: "../winter.png", Border: 0, Color: #ffffff(0.28));
+          AssetImage #SnowballLife1Fg {
+            Anchor: (Full: 0);
+            AssetPath: "UI/Custom/winter.png";
+          }
+        }
+
+        Group #SnowballLife2 {
+          LayoutMode: Full;
+          Anchor: (Width: @SnowflakeSize, Height: @SnowflakeSize);
+          Background: (TexturePath: "../winter.png", Border: 0, Color: #ffffff(0.28));
+          AssetImage #SnowballLife2Fg {
+            Anchor: (Full: 0);
+            AssetPath: "UI/Custom/winter.png";
+          }
+        }
+
+        Group {
+          FlexWeight: 1;
+        }
+      }
+    }
+
+    Group {
+      FlexWeight: 1;
+    }
+  }
+}

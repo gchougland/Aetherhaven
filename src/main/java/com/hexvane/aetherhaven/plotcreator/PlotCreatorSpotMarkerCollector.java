@@ -326,6 +326,60 @@ public final class PlotCreatorSpotMarkerCollector {
                 )
             );
         }
+        for (var pile : draft.getFestivalSnowballPileSpots()) {
+            if (!passesTypeFilter(filter, PlotCreatorSubstepType.FESTIVAL_SNOWBALL_PILE, null)) {
+                continue;
+            }
+            Vector3i block =
+                PlotCreatorLocalCoords.toWorldBlock(
+                    draft,
+                    new int[] {
+                        (int) Math.round(pile.getLocalX()),
+                        (int) Math.round(pile.getLocalY()),
+                        (int) Math.round(pile.getLocalZ())
+                    }
+                );
+            out.add(
+                desired(block.x, block.y, block.z, PlotCreatorSubstepType.FESTIVAL_SNOWBALL_PILE, null, null, null)
+            );
+        }
+        for (var pad : draft.getFestivalSnowballTeamASpots()) {
+            if (!passesTypeFilter(filter, PlotCreatorSubstepType.FESTIVAL_SNOWBALL_TEAM_A, null)) {
+                continue;
+            }
+            Vector3i block =
+                PlotCreatorLocalCoords.toWorldBlock(
+                    draft,
+                    new int[] {pad.getLocalX(), pad.getLocalY(), pad.getLocalZ()}
+                );
+            out.add(
+                desired(block.x, block.y, block.z, PlotCreatorSubstepType.FESTIVAL_SNOWBALL_TEAM_A, null, null, null)
+            );
+        }
+        for (var pad : draft.getFestivalSnowballTeamBSpots()) {
+            if (!passesTypeFilter(filter, PlotCreatorSubstepType.FESTIVAL_SNOWBALL_TEAM_B, null)) {
+                continue;
+            }
+            Vector3i block =
+                PlotCreatorLocalCoords.toWorldBlock(
+                    draft,
+                    new int[] {pad.getLocalX(), pad.getLocalY(), pad.getLocalZ()}
+                );
+            out.add(
+                desired(block.x, block.y, block.z, PlotCreatorSubstepType.FESTIVAL_SNOWBALL_TEAM_B, null, null, null)
+            );
+        }
+        var snowballOut = draft.getFestivalSnowballOutLocal();
+        if (snowballOut != null && passesTypeFilter(filter, PlotCreatorSubstepType.FESTIVAL_SNOWBALL_OUT, null)) {
+            Vector3i block =
+                PlotCreatorLocalCoords.toWorldBlock(
+                    draft,
+                    new int[] {snowballOut.getLocalX(), snowballOut.getLocalY(), snowballOut.getLocalZ()}
+                );
+            out.add(
+                desired(block.x, block.y, block.z, PlotCreatorSubstepType.FESTIVAL_SNOWBALL_OUT, null, null, null)
+            );
+        }
     }
 
     private static void addLocal(

@@ -5,6 +5,10 @@ import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.festival.market.MarketIds;
 import com.hexvane.aetherhaven.festival.market.MarketSession;
 import com.hexvane.aetherhaven.festival.market.MarketSessionIndex;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideGiftService;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideIds;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideSession;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideSessionIndex;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -55,6 +59,12 @@ public final class FestivalAttendanceService {
         @Nonnull PlotInstance square,
         @Nonnull FestivalDefinition festival
     ) {
+        if (WintertideIds.FESTIVAL_ID.equals(festival.getId())) {
+            WintertideSession session = WintertideSessionIndex.getOrCreate(town.getTownId());
+            WintertideGiftService.ensureAssignments(town, store, session);
+            interruptVillagerUuids(store, List.copyOf(session.assignedVillagerUuids()));
+            return;
+        }
         Set<String> kinds = attendingKinds(festival);
         if (kinds.isEmpty()) {
             return;
@@ -192,9 +202,39 @@ public final class FestivalAttendanceService {
                 }
             }
         }
+        if (villagerUuid != null && WintertideIds.FESTIVAL_ID.equals(town.getActiveFestivalId())) {
+            WintertideSession session = WintertideSessionIndex.get(town.getTownId());
+            if (session == null || !session.isAssignedVillager(villagerUuid)) {
+                return null;
+            }
+            if (residentKind != null && !residentKind.isBlank()) {
+                PoiEntry kindSpot = FestivalSpotService.findSpotForKind(world, plugin, town, residentKind);
+                if (kindSpot != null) {
+                    return kindSpot;
+                }
+            }
+            int overflow = session.overflowStandIndex(villagerUuid, attendingKindsForTown(plugin, town));
+            if (overflow >= 0) {
+                return FestivalSpotService.findNthTouristSpot(world, plugin, town, overflow);
+            }
+            return null;
+        }
         if (residentKind == null || residentKind.isBlank()) {
             return null;
         }
         return FestivalSpotService.findSpotForKind(world, plugin, town, residentKind);
+    }
+
+    @Nonnull
+    private static Set<String> attendingKindsForTown(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town
+    ) {
+        String festivalId = town.getActiveFestivalId();
+        if (festivalId == null || festivalId.isBlank()) {
+            return Set.of();
+        }
+        FestivalDefinition festival = plugin.getFestivalCatalog().get(festivalId.trim());
+        return festival != null ? attendingKinds(festival) : Set.of();
     }
 }

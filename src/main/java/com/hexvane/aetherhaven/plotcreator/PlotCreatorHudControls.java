@@ -156,7 +156,11 @@ public final class PlotCreatorHudControls {
                 || sub.type() == PlotCreatorSubstepType.FESTIVAL_MAZE_START
                 || sub.type() == PlotCreatorSubstepType.FESTIVAL_MAZE_ORB_SPAWN
                 || sub.type() == PlotCreatorSubstepType.FESTIVAL_MARKET_STAND
-                || sub.type() == PlotCreatorSubstepType.FESTIVAL_MARKET_DISPLAY)) {
+                || sub.type() == PlotCreatorSubstepType.FESTIVAL_MARKET_DISPLAY
+                || sub.type() == PlotCreatorSubstepType.FESTIVAL_SNOWBALL_PILE
+                || sub.type() == PlotCreatorSubstepType.FESTIVAL_SNOWBALL_TEAM_A
+                || sub.type() == PlotCreatorSubstepType.FESTIVAL_SNOWBALL_TEAM_B
+                || sub.type() == PlotCreatorSubstepType.FESTIVAL_SNOWBALL_OUT)) {
             rows.add(row(ToolKeybindSlot.SECONDARY, "hud.SUBSTEP.secondaryFestivalSpot"));
         }
         rows.add(row(ToolKeybindSlot.ABILITY1, "hud.SUBSTEP.q"));

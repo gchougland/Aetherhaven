@@ -219,6 +219,11 @@ public final class GuardFollowPlayerSystem extends EntityTickingSystem<EntitySto
         if (follow == null || npc == null || !follow.isActive()) {
             return;
         }
+        UUIDComponent followUuid = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (followUuid != null
+            && com.hexvane.aetherhaven.festival.snowball.SnowballSessionIndex.isLivingFighter(followUuid.getUuid())) {
+            return;
+        }
         if (NpcFaceVisuals.isInInteractionDialogue(npc)) {
             return;
         }

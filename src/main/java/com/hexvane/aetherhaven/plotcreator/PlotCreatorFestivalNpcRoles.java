@@ -5,6 +5,8 @@ import com.hexvane.aetherhaven.festival.carnival.CarnivalIds;
 import com.hexvane.aetherhaven.festival.hallowseve.HallowsEveIds;
 import com.hexvane.aetherhaven.festival.pigrace.PigRaceLanes;
 import com.hexvane.aetherhaven.festival.treeclimb.TreeClimbIds;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideIds;
+import com.hexvane.aetherhaven.festival.snowball.SnowballIds;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -23,6 +25,8 @@ public final class PlotCreatorFestivalNpcRoles {
     public static final String TREE_CLIMB_MERCHANT = TreeClimbIds.MERCHANT_NPC_ROLE;
     public static final String TREE_CLIMB_ATTENDANT = TreeClimbIds.ATTENDANT_NPC_ROLE;
     public static final String HALLOWS_EVE_MERCHANT = HallowsEveIds.MERCHANT_NPC_ROLE;
+    public static final String WINTERTIDE_MERCHANT = WintertideIds.MERCHANT_NPC_ROLE;
+    public static final String SNOWBALL_MERCHANT = SnowballIds.MERCHANT_NPC_ROLE;
 
     private PlotCreatorFestivalNpcRoles() {}
 
@@ -37,7 +41,9 @@ public final class PlotCreatorFestivalNpcRoles {
             CARNIVAL_WHACK,
             TREE_CLIMB_MERCHANT,
             TREE_CLIMB_ATTENDANT,
-            HALLOWS_EVE_MERCHANT
+            HALLOWS_EVE_MERCHANT,
+            WINTERTIDE_MERCHANT,
+            SNOWBALL_MERCHANT
         );
     }
 
@@ -61,6 +67,12 @@ public final class PlotCreatorFestivalNpcRoles {
         }
         if (HallowsEveIds.MECHANIC_ID.equals(key)) {
             return HALLOWS_EVE_MERCHANT;
+        }
+        if (WintertideIds.MECHANIC_ID.equals(key)) {
+            return WINTERTIDE_MERCHANT;
+        }
+        if (SnowballIds.MECHANIC_ID.equals(key)) {
+            return SNOWBALL_MERCHANT;
         }
         return null;
     }
@@ -103,6 +115,12 @@ public final class PlotCreatorFestivalNpcRoles {
         }
         if (HALLOWS_EVE_MERCHANT.equals(id)) {
             return "hallowsEveMerchant";
+        }
+        if (WINTERTIDE_MERCHANT.equals(id)) {
+            return "wintertideMerchant";
+        }
+        if (SNOWBALL_MERCHANT.equals(id)) {
+            return "snowballMerchant";
         }
         return "generic";
     }

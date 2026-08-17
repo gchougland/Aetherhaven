@@ -124,6 +124,17 @@ public final class PlotCreatorDraft {
     @Nonnull
     private final List<com.hexvane.aetherhaven.festival.FestivalDefinition.OrbSpawnRow> festivalMarketDisplaySlots =
         new ArrayList<>();
+    @Nonnull
+    private final List<com.hexvane.aetherhaven.festival.FestivalDefinition.OrbSpawnRow> festivalSnowballPileSpots =
+        new ArrayList<>();
+    @Nonnull
+    private final List<com.hexvane.aetherhaven.festival.FestivalDefinition.RaceStartSpotRow> festivalSnowballTeamASpots =
+        new ArrayList<>();
+    @Nonnull
+    private final List<com.hexvane.aetherhaven.festival.FestivalDefinition.RaceStartSpotRow> festivalSnowballTeamBSpots =
+        new ArrayList<>();
+    @Nullable
+    private com.hexvane.aetherhaven.festival.FestivalDefinition.MazeStartLocalRow festivalSnowballOutLocal;
 
     /** Wall style pieces in {@link com.hexvane.aetherhaven.wall.WallPieceRole#AUTHORING_ORDER}; empty until WALL is picked. */
     @Nonnull
@@ -553,6 +564,10 @@ public final class PlotCreatorDraft {
         festivalOrbSpawns.clear();
         festivalMarketStands.clear();
         festivalMarketDisplaySlots.clear();
+        festivalSnowballPileSpots.clear();
+        festivalSnowballTeamASpots.clear();
+        festivalSnowballTeamBSpots.clear();
+        festivalSnowballOutLocal = null;
     }
 
     @Nullable
@@ -664,6 +679,32 @@ public final class PlotCreatorDraft {
     @Nonnull
     public List<com.hexvane.aetherhaven.festival.FestivalDefinition.OrbSpawnRow> getFestivalMarketDisplaySlots() {
         return festivalMarketDisplaySlots;
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.festival.FestivalDefinition.OrbSpawnRow> getFestivalSnowballPileSpots() {
+        return festivalSnowballPileSpots;
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.festival.FestivalDefinition.RaceStartSpotRow> getFestivalSnowballTeamASpots() {
+        return festivalSnowballTeamASpots;
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.festival.FestivalDefinition.RaceStartSpotRow> getFestivalSnowballTeamBSpots() {
+        return festivalSnowballTeamBSpots;
+    }
+
+    @Nullable
+    public com.hexvane.aetherhaven.festival.FestivalDefinition.MazeStartLocalRow getFestivalSnowballOutLocal() {
+        return festivalSnowballOutLocal;
+    }
+
+    public void setFestivalSnowballOutLocal(
+        @Nullable com.hexvane.aetherhaven.festival.FestivalDefinition.MazeStartLocalRow festivalSnowballOutLocal
+    ) {
+        this.festivalSnowballOutLocal = festivalSnowballOutLocal;
     }
 
     /** Festival prefabs are a fixed size, so the drag box stops moving once a festival is picked. */

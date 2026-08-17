@@ -84,7 +84,15 @@ public final class VillagerCosmeticCatalog {
                             : VillagerCosmeticHeadAccessoryType.Simple;
                     VillagerCosmeticDefinition def =
                         new VillagerCosmeticDefinition(
-                            id, slot, nameKey, model, texture, unlockItemId, headType
+                            id,
+                            slot,
+                            nameKey,
+                            model,
+                            texture,
+                            unlockItemId,
+                            headType,
+                            text(o, "gradientSet"),
+                            text(o, "gradientId")
                         );
                     byId.put(id, def);
                     byItem.put(unlockItemId, def);

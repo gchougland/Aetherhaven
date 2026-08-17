@@ -1,0 +1,18 @@
+{
+  "id": "aetherhaven_festival_wintertide_incoming",
+  "entry": "gift",
+  "nodes": {
+    "gift": {
+      "text": "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.incoming.body",
+      "choices": [
+        {
+          "id": "thanks",
+          "text": "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.incoming.c_thanks",
+          "icon": "UI/Custom/gift-box.png",
+          "actions": [{ "type": "wintertide_receive_gift" }],
+          "next": null
+        }
+      ]
+    }
+  }
+}

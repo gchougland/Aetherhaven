@@ -1,0 +1,60 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Villager_Cosmetic_Santa_Hat.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Villager_Cosmetic_Santa_Hat.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Villager_Cosmetic_Santa_Hat.png",
+  "Categories": [
+    "Items.Misc",
+    "Aetherhaven.All"
+  ],
+  "PlayerAnimationsId": "Item",
+  "Model": "Items/Aetherhaven/VillagerCosmetics/SantaHat/SantaHat.blockymodel",
+  "Texture": "Items/Aetherhaven/VillagerCosmetics/SantaHat/SantaHat_Texture.png",
+  "IconProperties": {
+    "Scale": 0.55,
+    "Rotation": [
+      18,
+      35,
+      0
+    ],
+    "Translation": [
+      -1,
+      -14
+    ]
+  },
+  "Consumable": true,
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenVillagerCosmeticUnlockUse",
+          "Next": {
+            "Type": "ModifyInventory",
+            "AdjustHeldItemQuantity": -1
+          }
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenVillagerCosmeticUnlockUse",
+          "Next": {
+            "Type": "ModifyInventory",
+            "AdjustHeldItemQuantity": -1
+          }
+        }
+      ]
+    }
+  },
+  "Tags": {
+    "Type": [
+      "Misc"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "MaxStack": 10
+}

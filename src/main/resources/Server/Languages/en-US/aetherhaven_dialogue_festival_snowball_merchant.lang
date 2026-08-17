@@ -1,0 +1,35 @@
+aetherhaven.dialogue.festival_snowball_merchant.speaker=Snowball Merchant
+aetherhaven.dialogue.festival_snowball_merchant.main_hub.body=Want a snowball fight? Join a team for free, grab snowballs from the piles, and start when you are ready. Townsfolk will fill empty spots. The winning team earns winter festival tickets.
+aetherhaven.dialogue.festival_snowball_merchant.main_hub.c_join=Join the fight
+aetherhaven.dialogue.festival_snowball_merchant.main_hub.c_leave=Leave the fight
+aetherhaven.dialogue.festival_snowball_merchant.main_hub.c_start=Start the fight
+aetherhaven.dialogue.festival_snowball_merchant.main_hub.c_busy=A fight is already going
+aetherhaven.dialogue.festival_snowball_merchant.main_hub.c_collect=Collect my tickets
+aetherhaven.dialogue.festival_snowball_merchant.main_hub.c_shop=See holiday goods
+aetherhaven.dialogue.festival_snowball_merchant.main_hub.c_scoreboard=Look at the scoreboard
+aetherhaven.dialogue.festival_snowball_merchant.main_hub.c_about=How does the fight work?
+aetherhaven.dialogue.festival_snowball_merchant.main_hub.c_goodbye=Goodbye
+
+aetherhaven.dialogue.festival_snowball_merchant.about.body=Join for free, then start when everyone is ready. You move to a team pad. Each person has three snowflakes. A hit from the other team takes one. When you have none left you sit out. The fight lasts six minutes, or ends when one team is fully out. The team with more snowflakes left wins. A tie gives both teams tickets. Talk to me after to collect five winter festival tickets.
+aetherhaven.dialogue.festival_snowball_merchant.about.c_back=Back
+
+aetherhaven.dialogue.festival_snowball_merchant.joined.body=You are in! Tell me when you want to start, or wait for friends to join.
+aetherhaven.dialogue.festival_snowball_merchant.joined.c_back=Back
+
+aetherhaven.dialogue.festival_snowball_merchant.join_failed.body=I cannot add you right now. The fight may be full or already going.
+aetherhaven.dialogue.festival_snowball_merchant.join_failed.c_back=Back
+
+aetherhaven.dialogue.festival_snowball_merchant.left.body=You left the fight. Come back when you are ready.
+aetherhaven.dialogue.festival_snowball_merchant.left.c_back=Back
+
+aetherhaven.dialogue.festival_snowball_merchant.start_failed.body=I cannot start yet. Join first, and we need at least two people including townsfolk.
+aetherhaven.dialogue.festival_snowball_merchant.start_failed.c_back=Back
+
+aetherhaven.dialogue.festival_snowball_merchant.fight_busy.body=A fight is already going. Wait until it ends, then you can join the next one.
+aetherhaven.dialogue.festival_snowball_merchant.fight_busy.c_back=Back
+
+aetherhaven.dialogue.festival_snowball_merchant.collect_win.body=Nice throwing! Here are {count} winter festival tickets. Spend them on holiday goods.
+aetherhaven.dialogue.festival_snowball_merchant.collect_win.c_back=Thanks
+
+aetherhaven.dialogue.festival_snowball_merchant.collect_none.body=I do not have any tickets waiting for you.
+aetherhaven.dialogue.festival_snowball_merchant.collect_none.c_back=Back

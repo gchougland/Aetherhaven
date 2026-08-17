@@ -1,0 +1,179 @@
+# Wintertide Festival villager greetings, gift replies, and player gift talk
+# Full translation keys are aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.<lineKey>
+
+aetherhaven.dialogue.festival.wintertide.choice.give=Give this Wintertide gift
+
+aetherhaven.dialogue.festival.wintertide.greeting.elder.0=Wintertide is the quiet gift of the year. Give something from the heart, not from a list.
+aetherhaven.dialogue.festival.wintertide.greeting.elder.1=I still remember my first Wintertide in this square. The snow felt kinder that day.
+
+aetherhaven.dialogue.festival.wintertide.greeting.innkeeper.0=I kept the inn warm so everyone could come give gifts. Best night of winter.
+aetherhaven.dialogue.festival.wintertide.greeting.innkeeper.1=If you get a pie, share a slice. Wintertide is better with a full table.
+
+aetherhaven.dialogue.festival.wintertide.greeting.priestess.0=A gift given in secret still counts. Kindness does not need a crowd.
+aetherhaven.dialogue.festival.wintertide.greeting.priestess.1=I will keep a light on the square until the last gift is given.
+
+aetherhaven.dialogue.festival.wintertide.greeting.farmer.0=I packed seeds in case my gift needed a little extra. Winter still grows things if you let it.
+aetherhaven.dialogue.festival.wintertide.greeting.farmer.1=Talk to the merchant if you do not know who to give to. Then go find something kind.
+
+aetherhaven.dialogue.festival.wintertide.greeting.merchant.0=Winter festival tickets are the coin of the day. I like a clean trade even on a gift night.
+aetherhaven.dialogue.festival.wintertide.greeting.merchant.1=The kweebec in the hat has holiday goods. I might buy a wreath myself.
+
+aetherhaven.dialogue.festival.wintertide.greeting.blacksmith.0=I hung up the hammer for Wintertide. Steel can wait while people give gifts.
+aetherhaven.dialogue.festival.wintertide.greeting.blacksmith.1=A good gift has weight. Not always metal. Sometimes just thought.
+
+aetherhaven.dialogue.festival.wintertide.greeting.florist.0=Flowers in winter feel like a secret. I brought a few anyway.
+aetherhaven.dialogue.festival.wintertide.greeting.florist.1=Wrap a gift with something pretty. The square deserves a little color.
+
+aetherhaven.dialogue.festival.wintertide.greeting.rancher.0=The animals are bedded down. People get the gifts tonight.
+aetherhaven.dialogue.festival.wintertide.greeting.rancher.1=I am watching from the square. If you need a warm hide, you know where I work.
+
+aetherhaven.dialogue.festival.wintertide.greeting.miner.0=Down in the dark we share what we find. Wintertide is the same idea, just with snow.
+aetherhaven.dialogue.festival.wintertide.greeting.miner.1=Ore makes a fine gift if you know who likes it. Ask the merchant first.
+
+aetherhaven.dialogue.festival.wintertide.greeting.logger.0=I like the hush of winter woods. The square is louder, and that is all right today.
+aetherhaven.dialogue.festival.wintertide.greeting.logger.1=A hatchet is a practical gift. So is a kind word. Both count.
+
+aetherhaven.dialogue.festival.wintertide.greeting.builder.0=Solid square. Honest snow. Whoever set this up knew a crowd would gather.
+aetherhaven.dialogue.festival.wintertide.greeting.builder.1=I am not chasing every gift. I am here for the lights and the company.
+
+aetherhaven.dialogue.festival.wintertide.greeting.chef.0=I packed pies. Wintertide without food is just standing in the cold.
+aetherhaven.dialogue.festival.wintertide.greeting.chef.1=If you do not know what to give, food is rarely the wrong answer.
+
+aetherhaven.dialogue.festival.wintertide.greeting.crystal_keeper.0=Even crystals can wait while the town gives gifts for a night.
+aetherhaven.dialogue.festival.wintertide.greeting.crystal_keeper.1=Winter light on snow looks a little like crystal. I brought a sapling just in case.
+
+aetherhaven.dialogue.festival.wintertide.greeting.pyrotechnic.0=A gift night without sparks still makes me smile. Fireworks can wait until someone asks.
+aetherhaven.dialogue.festival.wintertide.greeting.pyrotechnic.1=If you get tickets, I hope you buy a boom or two. Winter likes a bright sky.
+
+aetherhaven.dialogue.festival.wintertide.greeting.bard.0=I brought a tune for Wintertide. Ask me later and I will play it.
+aetherhaven.dialogue.festival.wintertide.greeting.bard.1=Music and gifts belong together. Listen for the cheer when someone opens one.
+
+aetherhaven.dialogue.festival.wintertide.greeting.guild_master.0=Even adventurers need a night of giving. Leave the swords sheathed for an evening.
+aetherhaven.dialogue.festival.wintertide.greeting.guild_master.1=A good gift is like a good party. You pick the right person and you show up.
+
+aetherhaven.dialogue.festival.wintertide.greeting.clown.0=Wintertide, and I still do not do cute. I might give you candy anyway.
+aetherhaven.dialogue.festival.wintertide.greeting.clown.1=If your gift is terrible, laugh. That is still a gift.
+
+aetherhaven.dialogue.festival.wintertide.greeting.guard.0=I am here to keep things friendly. Also to watch people give gifts.
+aetherhaven.dialogue.festival.wintertide.greeting.guard.1=No trouble tonight. Just snow, gifts, and good moods.
+
+aetherhaven.dialogue.festival.wintertide.greeting.default.0=Wintertide is on! Talk to the merchant to hear who you should give a gift to.
+aetherhaven.dialogue.festival.wintertide.greeting.default.1=Winter festival tickets are the prize of the night. Have fun!
+
+aetherhaven.dialogue.festival.wintertide.gift.c_close=You are welcome.
+aetherhaven.dialogue.festival.wintertide.gift.love.body=This is the best Wintertide gift I could have hoped for. Thank you.
+aetherhaven.dialogue.festival.wintertide.gift.like.body=This is a lovely Wintertide gift. I will keep it close.
+aetherhaven.dialogue.festival.wintertide.gift.neutral.body=A Wintertide gift is still a gift. Thank you for thinking of me.
+aetherhaven.dialogue.festival.wintertide.gift.dislike.body=I will take this Wintertide gift. Next time, maybe something else.
+
+aetherhaven.dialogue.festival.wintertide.gift.elder.love=A gift like this belongs in the town story. You chose well.
+aetherhaven.dialogue.festival.wintertide.gift.elder.like=Thoughtful. Wintertide is kinder when people remember what I care about.
+aetherhaven.dialogue.festival.wintertide.gift.elder.neutral=I accept it. The giving matters more than the thing itself.
+aetherhaven.dialogue.festival.wintertide.gift.elder.dislike=Hmm. I will keep it, but this is not quite my sort of Wintertide gift.
+
+aetherhaven.dialogue.festival.wintertide.gift.innkeeper.love=Oh this is perfect. I will put it out where everyone can enjoy it with me.
+aetherhaven.dialogue.festival.wintertide.gift.innkeeper.like=What a warm gift. The inn will feel even cozier.
+aetherhaven.dialogue.festival.wintertide.gift.innkeeper.neutral=A gift is a gift. Come by later and I will pour you something hot.
+aetherhaven.dialogue.festival.wintertide.gift.innkeeper.dislike=I will find a shelf for it. Next Wintertide, think of the kitchen.
+
+aetherhaven.dialogue.festival.wintertide.gift.priestess.love=This is a blessing. I will keep it with the things I treasure.
+aetherhaven.dialogue.festival.wintertide.gift.priestess.like=Kind and careful. That is the spirit of Wintertide.
+aetherhaven.dialogue.festival.wintertide.gift.priestess.neutral=Thank you. I will find a place for it.
+aetherhaven.dialogue.festival.wintertide.gift.priestess.dislike=I accept it in the spirit it was given. The fit is not quite right.
+
+aetherhaven.dialogue.festival.wintertide.gift.farmer.love=Look at this! I can put this to work the moment the snow lifts.
+aetherhaven.dialogue.festival.wintertide.gift.farmer.like=A fine Wintertide gift. The fields will thank you too.
+aetherhaven.dialogue.festival.wintertide.gift.farmer.neutral=I will take it. Every gift helps a farm in some way.
+aetherhaven.dialogue.festival.wintertide.gift.farmer.dislike=Not much use in the soil, but I will not turn a gift away.
+
+aetherhaven.dialogue.festival.wintertide.gift.merchant.love=Now this is a trade I would make any day. Wonderful.
+aetherhaven.dialogue.festival.wintertide.gift.merchant.like=Good taste. I know value when I see it.
+aetherhaven.dialogue.festival.wintertide.gift.merchant.neutral=A fair gift. I will keep it with my other goods.
+aetherhaven.dialogue.festival.wintertide.gift.merchant.dislike=I will not haggle on Wintertide. Still, this is not my usual stock.
+
+aetherhaven.dialogue.festival.wintertide.gift.blacksmith.love=This has weight and meaning. I will remember this Wintertide.
+aetherhaven.dialogue.festival.wintertide.gift.blacksmith.like=Solid gift. You know what I like to hold.
+aetherhaven.dialogue.festival.wintertide.gift.blacksmith.neutral=I will take it. The forge can wait while I say thanks.
+aetherhaven.dialogue.festival.wintertide.gift.blacksmith.dislike=Not much I can do with this at the anvil. Still, thank you.
+
+aetherhaven.dialogue.festival.wintertide.gift.florist.love=This is beautiful. Winter never looked so bright.
+aetherhaven.dialogue.festival.wintertide.gift.florist.like=A lovely Wintertide gift. I will keep it where I can see it.
+aetherhaven.dialogue.festival.wintertide.gift.florist.neutral=Thank you. I will find a vase or a shelf.
+aetherhaven.dialogue.festival.wintertide.gift.florist.dislike=It is a gift, so I will keep it. Next time, think of flowers.
+
+aetherhaven.dialogue.festival.wintertide.gift.rancher.love=This is a gift I can really use. The animals would approve.
+aetherhaven.dialogue.festival.wintertide.gift.rancher.like=A good Wintertide gift. Practical and kind.
+aetherhaven.dialogue.festival.wintertide.gift.rancher.neutral=I will take it. Winter is long, and extras help.
+aetherhaven.dialogue.festival.wintertide.gift.rancher.dislike=Not much for the ranch, but I will not be rude about a gift.
+
+aetherhaven.dialogue.festival.wintertide.gift.miner.love=This is a treasure. You know what I dig for.
+aetherhaven.dialogue.festival.wintertide.gift.miner.like=A fine gift from the earth, or close enough. Thank you.
+aetherhaven.dialogue.festival.wintertide.gift.miner.neutral=I will pocket it. Every little bit helps down below.
+aetherhaven.dialogue.festival.wintertide.gift.miner.dislike=Not the ore I hoped for, but a gift is a gift.
+
+aetherhaven.dialogue.festival.wintertide.gift.logger.love=This is perfect. I can put this to work in the woods.
+aetherhaven.dialogue.festival.wintertide.gift.logger.like=A thoughtful Wintertide gift. You know my work.
+aetherhaven.dialogue.festival.wintertide.gift.logger.neutral=I will take it. Snow or sun, a gift still counts.
+aetherhaven.dialogue.festival.wintertide.gift.logger.dislike=Not much for chopping, but I appreciate the thought.
+
+aetherhaven.dialogue.festival.wintertide.gift.builder.love=This is the good stuff. I already know where it goes.
+aetherhaven.dialogue.festival.wintertide.gift.builder.like=A solid Wintertide gift. You build with the right materials.
+aetherhaven.dialogue.festival.wintertide.gift.builder.neutral=I will keep it. Every board and brick finds a home.
+aetherhaven.dialogue.festival.wintertide.gift.builder.dislike=Not what I would pick for a build, but thank you anyway.
+
+aetherhaven.dialogue.festival.wintertide.gift.chef.love=This belongs in a feast. You made my Wintertide.
+aetherhaven.dialogue.festival.wintertide.gift.chef.like=A tasty thought. I will put this to work in the kitchen.
+aetherhaven.dialogue.festival.wintertide.gift.chef.neutral=I will find a use for it. The kitchen always does.
+aetherhaven.dialogue.festival.wintertide.gift.chef.dislike=Not my usual ingredients. I will still say thank you.
+
+aetherhaven.dialogue.festival.wintertide.gift.crystal_keeper.love=This sings like crystal in winter light. Thank you.
+aetherhaven.dialogue.festival.wintertide.gift.crystal_keeper.like=A gift with a glow. I will keep it among the crystals.
+aetherhaven.dialogue.festival.wintertide.gift.crystal_keeper.neutral=I accept it. Even quiet gifts have a place.
+aetherhaven.dialogue.festival.wintertide.gift.crystal_keeper.dislike=This does not quite shine for me. The thought still matters.
+
+aetherhaven.dialogue.festival.wintertide.gift.pyrotechnic.love=This is a spark I will remember. Best Wintertide gift of the night.
+aetherhaven.dialogue.festival.wintertide.gift.pyrotechnic.like=A bright gift. I like things that make a noise, or almost.
+aetherhaven.dialogue.festival.wintertide.gift.pyrotechnic.neutral=I will take it. Not every gift has to boom.
+aetherhaven.dialogue.festival.wintertide.gift.pyrotechnic.dislike=A little quiet for my taste. Still, thank you.
+
+aetherhaven.dialogue.festival.wintertide.gift.bard.love=This is a song I can play all winter. Thank you.
+aetherhaven.dialogue.festival.wintertide.gift.bard.like=A gift with a tune in it. I will keep it close.
+aetherhaven.dialogue.festival.wintertide.gift.bard.neutral=I accept it. Every gift has a verse.
+aetherhaven.dialogue.festival.wintertide.gift.bard.dislike=Not my usual melody. I will still write a kind line for you.
+
+aetherhaven.dialogue.festival.wintertide.gift.guild_master.love=A gift worthy of a party. You chose like a leader.
+aetherhaven.dialogue.festival.wintertide.gift.guild_master.like=A fine Wintertide gift. I will put it with my best kit.
+aetherhaven.dialogue.festival.wintertide.gift.guild_master.neutral=I will take it. Adventurers say thanks too.
+aetherhaven.dialogue.festival.wintertide.gift.guild_master.dislike=Not quite my usual gear. The thought still counts.
+
+aetherhaven.dialogue.festival.wintertide.gift.clown.love=All right. This one actually got me. Do not tell anyone I smiled.
+aetherhaven.dialogue.festival.wintertide.gift.clown.like=Not bad. For Wintertide, I will allow it.
+aetherhaven.dialogue.festival.wintertide.gift.clown.neutral=A gift. Fine. I will keep it in the tent.
+aetherhaven.dialogue.festival.wintertide.gift.clown.dislike=This is a joke, and not even a good one. I will still take it.
+
+aetherhaven.dialogue.festival.wintertide.incoming.c_thanks=Thank you.
+aetherhaven.dialogue.festival.wintertide.incoming.body=Wintertide is for giving. This is for you.
+aetherhaven.dialogue.festival.wintertide.incoming.elder=I saved this for you. Wintertide is kinder when the town looks after its own.
+aetherhaven.dialogue.festival.wintertide.incoming.innkeeper=I packed this from the inn. Eat well, and stay warm.
+aetherhaven.dialogue.festival.wintertide.incoming.priestess=A small blessing for Wintertide. Keep it close.
+aetherhaven.dialogue.festival.wintertide.incoming.farmer=From my stores to you. Plant them when the snow lifts, or share them.
+aetherhaven.dialogue.festival.wintertide.incoming.merchant=I do not give stock away lightly. This necklace is already appraised. Wear it well.
+aetherhaven.dialogue.festival.wintertide.incoming.blacksmith=Forged for Wintertide, and now it is yours. Use it well.
+aetherhaven.dialogue.festival.wintertide.incoming.florist=Orchids for Wintertide. A little color for a white square.
+aetherhaven.dialogue.festival.wintertide.incoming.rancher=From the ranch. Keep warm, and do not freeze out here.
+aetherhaven.dialogue.festival.wintertide.incoming.miner=Dug up for Wintertide. Do not spend it all in one place.
+aetherhaven.dialogue.festival.wintertide.incoming.logger=Seeds that keep growing even when the snow is gone. Plant them when you can.
+aetherhaven.dialogue.festival.wintertide.incoming.builder=Metal you cannot find out in the wild. Build something that lasts.
+aetherhaven.dialogue.festival.wintertide.incoming.chef=Fresh from the kitchen. Do not let it get cold.
+aetherhaven.dialogue.festival.wintertide.incoming.crystal_keeper=A little light to keep. Crystal grows slowly, like a good friendship.
+aetherhaven.dialogue.festival.wintertide.incoming.pyrotechnic=Mining bombs. Throw them at stone and ore. You stay safe.
+aetherhaven.dialogue.festival.wintertide.incoming.bard=Crystals from me to you. Catch them in the light.
+aetherhaven.dialogue.festival.wintertide.incoming.guild_master=For the town, and for you. A party shares its best kit.
+aetherhaven.dialogue.festival.wintertide.incoming.clown=Do not make a speech. Take the plush and the candy and go be happy.
+
+aetherhaven.dialogue.festival.wintertide.player.speaker=A town member
+aetherhaven.dialogue.festival.wintertide.player.body={name} gave you a Wintertide gift. How do you feel about it?
+aetherhaven.dialogue.festival.wintertide.player.c_love=I love it!
+aetherhaven.dialogue.festival.wintertide.player.c_like=I like it.
+aetherhaven.dialogue.festival.wintertide.player.c_neutral=It is fine.
+aetherhaven.dialogue.festival.wintertide.player.c_dislike=Not for me.

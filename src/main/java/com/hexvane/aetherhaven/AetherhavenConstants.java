@@ -528,6 +528,12 @@ public final class AetherhavenConstants {
     /** Zombie ticket seller at the Hallow's Eve Festival. */
     public static final String NPC_FESTIVAL_HALLOWS_EVE_MERCHANT = "Aetherhaven_Festival_Hallows_Eve_Merchant";
 
+    /** Kweebec in a Santa hat who runs the Wintertide gift shop. */
+    public static final String NPC_FESTIVAL_WINTERTIDE_MERCHANT = "Aetherhaven_Festival_Wintertide_Merchant";
+
+    /** Trork who runs the Snowball Throwing Festival shop and fights. */
+    public static final String NPC_FESTIVAL_SNOWBALL_MERCHANT = "Aetherhaven_Festival_Snowball_Merchant";
+
     /** Feran carnival NPCs at the Carnival Festival. */
     public static final String NPC_FESTIVAL_CARNIVAL_MERCHANT = "Aetherhaven_Festival_Carnival_Merchant";
     public static final String NPC_FESTIVAL_CARNIVAL_BALLOON = "Aetherhaven_Festival_Carnival_Balloon";

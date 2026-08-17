@@ -1,0 +1,37 @@
+{
+  "id": "aetherhaven_festival_wintertide_player_gift",
+  "entry": "rate",
+  "nodes": {
+    "rate": {
+      "speaker": "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.player.speaker",
+      "text": "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.player.body",
+      "choices": [
+        {
+          "id": "love",
+          "text": "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.player.c_love",
+          "icon": "UI/Custom/gift-box.png",
+          "actions": [{ "type": "wintertide_rate_love" }],
+          "next": null
+        },
+        {
+          "id": "like",
+          "text": "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.player.c_like",
+          "actions": [{ "type": "wintertide_rate_like" }],
+          "next": null
+        },
+        {
+          "id": "neutral",
+          "text": "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.player.c_neutral",
+          "actions": [{ "type": "wintertide_rate_neutral" }],
+          "next": null
+        },
+        {
+          "id": "dislike",
+          "text": "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.player.c_dislike",
+          "actions": [{ "type": "wintertide_rate_dislike" }],
+          "next": null
+        }
+      ]
+    }
+  }
+}

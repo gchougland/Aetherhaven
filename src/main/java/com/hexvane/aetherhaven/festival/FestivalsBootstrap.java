@@ -46,9 +46,22 @@ import com.hexvane.aetherhaven.festival.market.MarketJudgeDirectorSystem;
 import com.hexvane.aetherhaven.festival.market.MarketStallComponent;
 import com.hexvane.aetherhaven.festival.market.MarketStallInteractSystem;
 import com.hexvane.aetherhaven.festival.market.MarketStallUseInteraction;
+import com.hexvane.aetherhaven.festival.snowball.SnowballDialogueHandlers;
+import com.hexvane.aetherhaven.festival.snowball.SnowballFestivalMechanic;
+import com.hexvane.aetherhaven.festival.snowball.SnowballFightSystem;
+import com.hexvane.aetherhaven.festival.snowball.SnowballHitSystem;
+import com.hexvane.aetherhaven.festival.snowball.SnowballPileUseInteraction;
+import com.hexvane.aetherhaven.festival.snowball.SnowballProjectileHitInteraction;
+import com.hexvane.aetherhaven.festival.snowball.SnowballVillagerSystem;
 import com.hexvane.aetherhaven.festival.treeclimb.TreeClimbDialogueHandlers;
 import com.hexvane.aetherhaven.festival.treeclimb.TreeClimbFestivalMechanic;
 import com.hexvane.aetherhaven.festival.treeclimb.TreeClimbRaceSystem;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideDialogueHandlers;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideFestivalMechanic;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideGiftSeekState;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideGiftSeekSystem;
+import com.hexvane.aetherhaven.festival.wintertide.WintertidePlayerGiftInteractSystem;
+import com.hexvane.aetherhaven.festival.wintertide.WintertidePlayerGiftInteraction;
 import com.hexvane.aetherhaven.plugin.GameTimeTickListener;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
@@ -93,6 +106,27 @@ public final class FestivalsBootstrap {
                 MarketStallUseInteraction.class,
                 MarketStallUseInteraction.CODEC
             );
+        core
+            .getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenFestivalWintertidePlayerGift",
+                WintertidePlayerGiftInteraction.class,
+                WintertidePlayerGiftInteraction.CODEC
+            );
+        core
+            .getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenFestivalSnowballPileUse",
+                SnowballPileUseInteraction.class,
+                SnowballPileUseInteraction.CODEC
+            );
+        core
+            .getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenFestivalSnowballHit",
+                SnowballProjectileHitInteraction.class,
+                SnowballProjectileHitInteraction.CODEC
+            );
     }
 
     public static void register(@Nonnull AetherhavenPlugin core, @Nonnull JavaPlugin plugin) {
@@ -106,6 +140,7 @@ public final class FestivalsBootstrap {
         HallowsEvePumpkinComponent.register(plugin.getEntityStoreRegistry());
         HallowsEveBatComponent.register(plugin.getEntityStoreRegistry());
         MarketStallComponent.register(plugin.getEntityStoreRegistry());
+        WintertideGiftSeekState.register(plugin.getEntityStoreRegistry());
         plugin.getEntityStoreRegistry().registerSystem(new FestivalLettuceAbsorbSystem());
         plugin.getEntityStoreRegistry().registerSystem(new FestivalLettuceGrowthSystem());
         plugin.getEntityStoreRegistry().registerSystem(new FestivalLettuceBurstSystem());
@@ -132,17 +167,26 @@ public final class FestivalsBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new HallowsEveBatDirectorSystem());
         plugin.getEntityStoreRegistry().registerSystem(new MarketStallInteractSystem());
         plugin.getEntityStoreRegistry().registerSystem(new MarketJudgeDirectorSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new WintertideGiftSeekSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new WintertidePlayerGiftInteractSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new SnowballFightSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new SnowballHitSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new SnowballVillagerSystem());
         core.getFestivalMechanicRegistry().register(NewLifeFestivalMechanic.MECHANIC_ID, new NewLifeFestivalMechanic());
         core.getFestivalMechanicRegistry().register(PigRaceFestivalMechanic.MECHANIC_ID, new PigRaceFestivalMechanic());
         core.getFestivalMechanicRegistry().register(CarnivalFestivalMechanic.MECHANIC_ID, new CarnivalFestivalMechanic());
         core.getFestivalMechanicRegistry().register(TreeClimbFestivalMechanic.MECHANIC_ID, new TreeClimbFestivalMechanic());
         core.getFestivalMechanicRegistry().register(HallowsEveFestivalMechanic.MECHANIC_ID, new HallowsEveFestivalMechanic());
         core.getFestivalMechanicRegistry().register(MarketFestivalMechanic.MECHANIC_ID, new MarketFestivalMechanic());
+        core.getFestivalMechanicRegistry().register(WintertideFestivalMechanic.MECHANIC_ID, new WintertideFestivalMechanic());
+        core.getFestivalMechanicRegistry().register(SnowballFestivalMechanic.MECHANIC_ID, new SnowballFestivalMechanic());
         PigRaceDialogueHandlers.register(core);
         CarnivalDialogueHandlers.register(core);
         TreeClimbDialogueHandlers.register(core);
         HallowsEveDialogueHandlers.register(core);
         MarketDialogueHandlers.register(core);
+        WintertideDialogueHandlers.register(core);
+        SnowballDialogueHandlers.register(core);
         core.registerAetherhavenSubcommand(new AetherhavenFestivalCommand());
     }
 

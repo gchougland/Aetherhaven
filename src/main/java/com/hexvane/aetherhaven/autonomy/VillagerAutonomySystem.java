@@ -16,6 +16,8 @@ import com.hexvane.aetherhaven.builder.BuilderConstructionAssistState;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistSystem;
 import com.hexvane.aetherhaven.clown.ClownCheerAssistState;
 import com.hexvane.aetherhaven.clown.ClownCheerAssistSystem;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideGiftSeekState;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideGiftSeekSystem;
 import com.hexvane.aetherhaven.restaurant.PlotRestaurantState;
 import com.hexvane.aetherhaven.restaurant.RestaurantBenefitService;
 import com.hexvane.aetherhaven.poi.PoiEffectTable;
@@ -170,6 +172,46 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         VillagerBlockUtil.snapNpcToStandY(ref, store, commandBuffer);
     }
 
+    /**
+     * Clears bed/chair USE and mounts when another system holds the villager still (snowball fight, etc.).
+     * Autonomy itself is skipped afterward, so this must run on the early-out path.
+     */
+    private static void forceDismountForExternalHold(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nullable World world,
+        @Nullable VillagerAutonomyState autonomy,
+        @Nullable VillagerNeeds needs,
+        @Nullable NPCEntity npc
+    ) {
+        boolean usingPoi = autonomy != null && autonomy.getPhase() == VillagerAutonomyState.PHASE_USE;
+        boolean mounted = store.getComponent(ref, MountedComponent.getComponentType()) != null
+            || commandBuffer.getComponent(ref, MountedComponent.getComponentType()) != null;
+        if (!usingPoi && !mounted) {
+            return;
+        }
+        PoiRegistry reg = null;
+        if (usingPoi && world != null) {
+            AetherhavenPlugin pluginInstance = AetherhavenPlugin.get();
+            if (pluginInstance != null) {
+                reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, pluginInstance);
+            }
+        }
+        abortActivePoiUseAndDismount(ref, store, commandBuffer, autonomy, needs, reg, false);
+        if (autonomy != null && autonomy.getPhase() == VillagerAutonomyState.PHASE_USE) {
+            autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
+            autonomy.clearTravelAndPoiState();
+            autonomy.setFillingHunger(false);
+            autonomy.setFillingEnergy(false);
+            autonomy.setFillingFun(false);
+            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+        }
+        if (npc != null) {
+            clearAutonomyRoleState(ref, npc, commandBuffer);
+        }
+    }
+
     private final AetherhavenPlugin plugin;
     @Nonnull
     private final Set<Dependency<EntityStore>> dependencies = RootDependency.firstSet();
@@ -227,9 +269,32 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (ClownCheerAssistSystem.shouldSkipAutonomy(cheer)) {
             return;
         }
+        UUIDComponent snowballUuid = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (snowballUuid != null
+            && com.hexvane.aetherhaven.festival.snowball.SnowballSessionIndex.isLivingFighter(snowballUuid.getUuid())) {
+            // Autonomy is paused for the fight, but bed/chair mounts must still be cleared.
+            VillagerAutonomyState snowballAutonomy =
+                archetypeChunk.getComponent(index, VillagerAutonomyState.getComponentType());
+            forceDismountForExternalHold(
+                ref,
+                store,
+                commandBuffer,
+                store.getExternalData().getWorld(),
+                snowballAutonomy,
+                needs,
+                npc
+            );
+            return;
+        }
         VillagerFollowPlayerState follow = store.getComponent(ref, VillagerFollowPlayerState.getComponentType());
         if (VillagerFollowPlayerSystem.shouldSkipAutonomy(follow)) {
             return;
+        }
+        if (WintertideGiftSeekState.isRegistered()) {
+            WintertideGiftSeekState seek = store.getComponent(ref, WintertideGiftSeekState.getComponentType());
+            if (WintertideGiftSeekSystem.shouldSkipAutonomy(seek)) {
+                return;
+            }
         }
 
         long now = resolveNowMs(store);

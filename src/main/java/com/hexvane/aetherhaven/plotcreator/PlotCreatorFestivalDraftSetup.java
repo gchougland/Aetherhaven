@@ -341,6 +341,67 @@ public final class PlotCreatorFestivalDraftSetup {
                 )
             );
         }
+        if (!existing.getSnowballPileSpots().isEmpty()) {
+            for (FestivalDefinition.OrbSpawnRow spot : existing.getSnowballPileSpots()) {
+                draft.getFestivalSnowballPileSpots().add(
+                    FestivalDefinition.OrbSpawnRow.of(spot.getLocalX(), spot.getLocalY(), spot.getLocalZ())
+                );
+            }
+            draft.getSelectedSpots().add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_SNOWBALL_PILE,
+                    existing.getSnowballPileSpots().size()
+                )
+            );
+        }
+        if (!existing.getSnowballTeamASpots().isEmpty()) {
+            for (FestivalDefinition.RaceStartSpotRow spot : existing.getSnowballTeamASpots()) {
+                draft.getFestivalSnowballTeamASpots().add(
+                    FestivalDefinition.RaceStartSpotRow.of(
+                        spot.getLocalX(),
+                        spot.getLocalY(),
+                        spot.getLocalZ(),
+                        spot.getYawDegrees()
+                    )
+                );
+            }
+            draft.getSelectedSpots().add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_SNOWBALL_TEAM_A,
+                    existing.getSnowballTeamASpots().size()
+                )
+            );
+        }
+        if (!existing.getSnowballTeamBSpots().isEmpty()) {
+            for (FestivalDefinition.RaceStartSpotRow spot : existing.getSnowballTeamBSpots()) {
+                draft.getFestivalSnowballTeamBSpots().add(
+                    FestivalDefinition.RaceStartSpotRow.of(
+                        spot.getLocalX(),
+                        spot.getLocalY(),
+                        spot.getLocalZ(),
+                        spot.getYawDegrees()
+                    )
+                );
+            }
+            draft.getSelectedSpots().add(
+                PlotCreatorSpotEntry.of(
+                    PlotCreatorSubstepType.FESTIVAL_SNOWBALL_TEAM_B,
+                    existing.getSnowballTeamBSpots().size()
+                )
+            );
+        }
+        if (existing.getSnowballOutLocal() != null) {
+            FestivalDefinition.MazeStartLocalRow out = existing.getSnowballOutLocal();
+            draft.setFestivalSnowballOutLocal(
+                FestivalDefinition.MazeStartLocalRow.of(
+                    out.getLocalX(),
+                    out.getLocalY(),
+                    out.getLocalZ(),
+                    out.getYawDegrees()
+                )
+            );
+            draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.FESTIVAL_SNOWBALL_OUT, 1));
+        }
         PlotCreatorFestivalMechanicDefaults.ensureRequiredSelectedSpots(draft);
     }
 }

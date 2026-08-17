@@ -48,5 +48,13 @@ public enum PlotCreatorSubstepType {
     /** Market Festival judging stand (player stall first, then rival stands). */
     FESTIVAL_MARKET_STAND,
     /** Market Festival floating item display slot on the town stall. */
-    FESTIVAL_MARKET_DISPLAY
+    FESTIVAL_MARKET_DISPLAY,
+    /** Snowball pile cell. */
+    FESTIVAL_SNOWBALL_PILE,
+    /** Snowball fight west team pad. */
+    FESTIVAL_SNOWBALL_TEAM_A,
+    /** Snowball fight east team pad. */
+    FESTIVAL_SNOWBALL_TEAM_B,
+    /** Snowball fight out pad (stores facing). */
+    FESTIVAL_SNOWBALL_OUT
 }
