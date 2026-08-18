@@ -1,6 +1,9 @@
 package com.hexvane.aetherhaven.rescue;
 
 import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.ResidentNpcRecord;
+import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
@@ -19,6 +22,7 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
@@ -31,6 +35,61 @@ public final class RescueVillagerSpawnService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     private RescueVillagerSpawnService() {}
+
+    /**
+     * Town that should receive a field rescue for this player. Prefers an owned town (then any
+     * membership) across all loaded worlds. Returns null when the player has no town, or when any
+     * affiliated town already completed this rescue / has the permanent character.
+     */
+    @Nullable
+    public static TownRecord resolveTownForFieldRescue(
+        @Nonnull UUID playerUuid,
+        @Nullable TownManager prefer,
+        @Nonnull RescueVillagerTrigger trigger
+    ) {
+        List<TownRecord> affiliated = AetherhavenWorldRegistries.listTownsForPlayerAcrossWorlds(playerUuid);
+        if (affiliated.isEmpty()) {
+            return null;
+        }
+        if (anyAffiliatedTownAlreadyHasRescue(affiliated, trigger)) {
+            return null;
+        }
+        return AetherhavenWorldRegistries.findTownForPlayerAcrossWorlds(playerUuid, prefer);
+    }
+
+    /** True when any of the player's towns already finished this rescue or keeps that villager. */
+    public static boolean anyAffiliatedTownAlreadyHasRescue(
+        @Nonnull List<TownRecord> affiliated,
+        @Nonnull RescueVillagerTrigger trigger
+    ) {
+        String permanentKind = permanentKindForRescue(trigger.rescueBindingKind());
+        for (TownRecord t : affiliated) {
+            if (t.hasQuestCompleted(trigger.rescueQuestId())) {
+                return true;
+            }
+            if (permanentKind != null && townHasResidentKind(t, permanentKind)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Nullable
+    private static String permanentKindForRescue(@Nonnull String rescueBindingKind) {
+        if (!TownVillagerBinding.isRescueKind(rescueBindingKind)) {
+            return null;
+        }
+        return rescueBindingKind.substring("rescue_".length());
+    }
+
+    private static boolean townHasResidentKind(@Nonnull TownRecord town, @Nonnull String kind) {
+        for (ResidentNpcRecord r : town.getResidentNpcRecords()) {
+            if (r != null && kind.equals(r.getKind())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static boolean townHasActiveRescueNpc(
         @Nonnull Store<EntityStore> store,

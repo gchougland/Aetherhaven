@@ -39,6 +39,8 @@ import com.hexvane.aetherhaven.worldnpc.WorldNpcRegistry;
 import com.hexvane.aetherhaven.worldnpc.WorldNpcSpawnService;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.universe.world.World;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
@@ -206,7 +208,7 @@ public final class AetherhavenWorldRegistries {
     /**
      * Finds the player's town across all loaded world managers. Tries {@code prefer} first when non-null
      * (current-world affinity), then scans the rest. Temporary-instance managers are empty and skipped
-     * naturally.
+     * naturally. Prefers an owned town, then any membership.
      */
     @Nullable
     public static TownRecord findTownForPlayerAcrossWorlds(
@@ -229,6 +231,17 @@ public final class AetherhavenWorldRegistries {
             }
         }
         return null;
+    }
+
+    /** All towns across loaded worlds where the player is owner or member. */
+    @Nonnull
+    public static List<TownRecord> listTownsForPlayerAcrossWorlds(@Nonnull UUID playerUuid) {
+        List<TownRecord> out = new ArrayList<>();
+        for (TownManager tm : TOWN_MANAGERS.values()) {
+            out.addAll(tm.findAllTownsForPlayerInWorld(playerUuid));
+        }
+        out.sort(TownPlayerResolution.affiliatedTownDisplayOrder());
+        return out;
     }
 
     /** Looks up a town id in every loaded {@link TownManager}, preferring {@code prefer} when set. */

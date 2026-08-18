@@ -89,16 +89,13 @@ public final class TouristPortalExtractor {
         TouristPortalRecord record =
             def != null ? TouristPortalPlotRelocation.takeDetached(plotId, pos, plot, def) : null;
         if (record == null) {
-            UUID portalId = UUID.randomUUID();
-            if (blockComp != null && !blockComp.getPortalId().isBlank()) {
-                try {
-                    portalId = UUID.fromString(blockComp.getPortalId().trim());
-                } catch (IllegalArgumentException ignored) {
-                    // use fresh id
-                }
-            }
             record = new TouristPortalRecord();
-            record.setPortalId(portalId);
+            record.setPortalId(
+                registry.allocatePortalId(pos, TouristPortalIdAllocation.preferredIdFromBlock(blockComp))
+            );
+        } else {
+            // Move rebind keeps the prior id when free; mint if another portal already owns it.
+            record.setPortalId(registry.allocatePortalId(pos, record.getPortalId().toString()));
         }
         record.setWorldName(world.getName());
         record.setBlockPosition(pos);

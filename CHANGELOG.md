@@ -55,6 +55,8 @@
 
 ### Fixed
 
+- **Crystal Keeper and field rescues** Breaking a Crystallized Person (or other rescue trigger) works anywhere in the world again, including caves and portal instances. The rescue counts for your own town. If any town you belong to already rescued that villager, another one will not spawn.
+- **Visitor portal network** Towns no longer share one portal id from the tourist portal prefab, so other towns show up in the travel list again.
 - **Wall wand** Pieces now line up flush instead of leaving a gap or overlapping, whichever way you build.
 - **Wall wand** A tower at the end of a run only has the one doorway it needs, and gains a second one when you carry the wall on through it.
 - **Community downloads** Downloading a marketplace building no longer freezes the game on very large prefabs.
