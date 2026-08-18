@@ -39,6 +39,9 @@ public final class CommunityBuildingJsonNormalizer {
             if (root == null) {
                 return;
             }
+            if (root.has("festivalVariant") && root.get("festivalVariant").getAsBoolean()) {
+                return;
+            }
             if (!normalizeJson(root, constructionId)) {
                 return;
             }

@@ -183,6 +183,12 @@ $C.@PageOverlay {
             }
 
             TabButton {
+              Icon: "../flags.png";
+              TooltipText: "Festivals";
+              Id: "Festivals";
+            }
+
+            TabButton {
               Icon: "../star.png";
               TooltipText: "Favorites";
               Id: "Favorites";

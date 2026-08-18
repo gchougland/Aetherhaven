@@ -404,6 +404,11 @@ public final class TownRecord {
     @SerializedName("activeFestivalNpcEntityUuids")
     private List<String> activeFestivalNpcEntityUuids;
 
+    /** Chosen festival look per base holiday id. Missing or blank means the original look. */
+    @Nullable
+    @SerializedName("selectedFestivalLookByBaseId")
+    private Map<String, String> selectedFestivalLookByBaseId;
+
     /** Cumulative XP from completed quest board quests; town rank tier is derived from this. */
     @SerializedName("questBoardRankXp")
     private int questBoardRankXp;
@@ -2174,6 +2179,45 @@ public final class TownRecord {
         this.activeFestivalEndEpochMinute = 0L;
         this.activeFestivalSpotPoiIds = null;
         this.activeFestivalNpcEntityUuids = null;
+    }
+
+    @Nullable
+    public String getSelectedFestivalLookId(@Nullable String baseFestivalId) {
+        if (baseFestivalId == null || baseFestivalId.isBlank() || selectedFestivalLookByBaseId == null) {
+            return null;
+        }
+        String raw = selectedFestivalLookByBaseId.get(baseFestivalId.trim());
+        return raw != null && !raw.isBlank() ? raw.trim() : null;
+    }
+
+    public void setSelectedFestivalLookId(@Nonnull String baseFestivalId, @Nullable String lookId) {
+        String base = baseFestivalId.trim();
+        if (base.isEmpty()) {
+            return;
+        }
+        if (selectedFestivalLookByBaseId == null) {
+            selectedFestivalLookByBaseId = new LinkedHashMap<>();
+        }
+        if (lookId == null || lookId.isBlank()) {
+            selectedFestivalLookByBaseId.remove(base);
+            if (selectedFestivalLookByBaseId.isEmpty()) {
+                selectedFestivalLookByBaseId = null;
+            }
+            return;
+        }
+        selectedFestivalLookByBaseId.put(base, lookId.trim());
+    }
+
+    /** Drops any town look selection that pointed at this look id (used when a download is removed). */
+    public void clearSelectedFestivalLookIfMatches(@Nullable String lookId) {
+        if (lookId == null || lookId.isBlank() || selectedFestivalLookByBaseId == null) {
+            return;
+        }
+        String want = lookId.trim();
+        selectedFestivalLookByBaseId.entrySet().removeIf(e -> want.equals(e.getValue()));
+        if (selectedFestivalLookByBaseId.isEmpty()) {
+            selectedFestivalLookByBaseId = null;
+        }
     }
 
     public int getQuestBoardRankXp() {

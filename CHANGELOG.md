@@ -24,8 +24,11 @@
 - **Festival chatter** Every villager has their own things to say while a festival is on, so it is worth going around the town before the day is over.
 - **Festival dancing** Villagers at their festival spots and visitors at the square will sometimes dance.
 - **Festival day markers** The calendar shows an icon on every festival day. Hover it to see which festival it is.
-- **Make your own festivals** The plot creator and building editor can create and edit festivals. Mark villager stands, festival merchants, visitor stands, the centerpiece, and pig race lanes, then pick the activity, season, day, and hours. Festivals made by other mods can bring their own villager chatter along with them.
-- **Building editor festivals** The building editor staff has a Festivals tab to load an existing festival nearby and set up every spot it needs. New festivals are still made with the plot creator.
+- **Make your own festivals** The plot creator makes new holidays, which show a flag on the calendar, and new looks for holidays that already exist. Mark villager stands, festival merchants, visitor stands, the centerpiece, and pig race lanes, then pick the activity, season, day, and hours. Festivals made by other mods can bring their own villager chatter along with them.
+- **Building editor festivals** The building editor staff has a Festivals tab to change a festival that is already saved, including looks. New holidays and new looks are still made with the plot creator.
+- **Festival looks at the crafting bench** Town members can pick Use this look or Use original look on a festival look. Local looks live on the Festivals tab. You can set a style on a look so the style filters find it.
+- **Share festival looks** Festival looks can be submitted and downloaded on the marketplace. Downloading a look does not add a plot token.
+- **Festival square in Variant of** You can make a plot that counts as the festival square. The box locks to the square size and keeps the town records shelf.
 - **Festival tickets** Four seasonal festival tickets you can hold onto for now.
 - **Carnival fireworks** Buy a firework from the carnival merchant for one summer festival ticket. Use it on the ground to send it up and watch it burst in color.
 - **Carnival clown** Land on the blue spot on the carnival wheel to unlock Bozo Bleak, a cynical clown who can join your town.
@@ -59,6 +62,7 @@
 - **Tourist portal** After you finish the tourist portal building, the portal now lights up in your town color and works without you having to replace the block by hand.
 - **Battle horn** Nearby players see you blow the horn.
 - **Item tooltips** Item names and styled text stay readable when the shop gold price is shown.
+- **Festival plot creator** Finishing or canceling a festival session now clears the pasted square.
 
 ## [2.7.1] - 8/7/2026
 

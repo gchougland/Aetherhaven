@@ -17,7 +17,7 @@ final class PlotCreatorFestivalPick {
     private PlotCreatorFestivalPick() {}
 
     /**
-     * @param festivalId existing festival to edit, or null to start a new one from the base festival square
+     * @param festivalId existing festival to make a look of, or null to start a new one from the base festival square
      * @return plot creator error lang suffix, or null on success
      */
     @Nullable
@@ -33,7 +33,7 @@ final class PlotCreatorFestivalPick {
             return "needFestival";
         }
         FestivalDefinition existing = festivalId != null ? plugin.getFestivalCatalog().get(festivalId) : null;
-        if (festivalId != null && existing == null) {
+        if (festivalId != null && (existing == null || existing.isLook())) {
             return "unknownFestival";
         }
         String startingPrefab = existing != null ? existing.getPrefabPath() : CustomFestivalPaths.BASE_PREFAB_PATH;

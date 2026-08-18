@@ -21,6 +21,8 @@ public final class PlotBuildingTypes {
     public static final String DECORATION = "decoration";
     /** Sentinel filter id for wall pieces, which are grouped into styles rather than crafted one at a time. */
     public static final String WALLS = "walls";
+    /** Sentinel filter id for festival looks, which are chosen at the bench rather than crafted as tokens. */
+    public static final String FESTIVALS = "festivals";
 
     private PlotBuildingTypes() {}
 
@@ -103,9 +105,27 @@ public final class PlotBuildingTypes {
         @Nullable Collection<String> countsAsConstructionIds,
         @Nullable String constructionId
     ) {
+        return typeIdsOf(decorationPlot, wallSegment, false, countsAsConstructionIds, constructionId);
+    }
+
+    /**
+     * @param festivalVariant true when the entry is a festival look rather than a plot token
+     */
+    @Nonnull
+    public static Set<String> typeIdsOf(
+        boolean decorationPlot,
+        boolean wallSegment,
+        boolean festivalVariant,
+        @Nullable Collection<String> countsAsConstructionIds,
+        @Nullable String constructionId
+    ) {
         LinkedHashSet<String> out = new LinkedHashSet<>();
         if (wallSegment) {
             out.add(WALLS);
+            return out;
+        }
+        if (festivalVariant) {
+            out.add(FESTIVALS);
             return out;
         }
         if (decorationPlot
@@ -189,6 +209,7 @@ public final class PlotBuildingTypes {
         if (anyWall) {
             out.add(WALLS);
         }
+        out.add(FESTIVALS);
         out.addAll(ids);
         return out;
     }
@@ -200,6 +221,9 @@ public final class PlotBuildingTypes {
         }
         if (WALLS.equalsIgnoreCase(typeId)) {
             return "Walls";
+        }
+        if (FESTIVALS.equalsIgnoreCase(typeId)) {
+            return "Festivals";
         }
         ConstructionDefinition def = catalog.get(typeId);
         if (def != null && def.getDisplayName() != null && !def.getDisplayName().isBlank()) {

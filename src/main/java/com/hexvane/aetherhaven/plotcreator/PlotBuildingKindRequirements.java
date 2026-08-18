@@ -373,10 +373,11 @@ public final class PlotBuildingKindRequirements {
         @Nonnull PlotCreatorDraft draft,
         @Nullable AetherhavenPlugin plugin
     ) {
-        if (plugin == null || draft.getEditingFestivalId() == null) {
+        String sourceId = draft.getEditingFestivalId() != null ? draft.getEditingFestivalId() : draft.getCountsAsFestivalId();
+        if (plugin == null || sourceId == null) {
             return List.of();
         }
-        FestivalDefinition def = plugin.getFestivalCatalog().get(draft.getEditingFestivalId());
+        FestivalDefinition def = plugin.getFestivalCatalog().get(sourceId);
         if (def == null) {
             return List.of();
         }

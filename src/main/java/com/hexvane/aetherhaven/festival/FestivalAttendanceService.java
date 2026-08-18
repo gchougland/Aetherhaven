@@ -234,7 +234,7 @@ public final class FestivalAttendanceService {
         if (festivalId == null || festivalId.isBlank()) {
             return Set.of();
         }
-        FestivalDefinition festival = plugin.getFestivalCatalog().get(festivalId.trim());
+        FestivalDefinition festival = FestivalLookSelection.activeLayout(plugin, town);
         return festival != null ? attendingKinds(festival) : Set.of();
     }
 }

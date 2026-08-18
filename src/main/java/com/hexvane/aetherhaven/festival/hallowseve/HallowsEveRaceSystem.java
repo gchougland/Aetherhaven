@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.festival.hallowseve;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.festival.FestivalDefinition;
+import com.hexvane.aetherhaven.festival.FestivalLookSelection;
 import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -81,7 +82,7 @@ public final class HallowsEveRaceSystem extends TickingSystem<EntityStore> {
 
             if (session.consumePendingOrbSpawn()) {
                 PlotInstance square = FestivalService.findFestivalSquare(plugin, town);
-                FestivalDefinition festival = plugin.getFestivalCatalog().get(HallowsEveIds.FESTIVAL_ID);
+                FestivalDefinition festival = FestivalLookSelection.activeLayout(plugin, town);
                 world.execute(() -> {
                     if (square != null && festival != null) {
                         HallowsEveOrbSpawnService.captureMarkers(world, square, festival, session);

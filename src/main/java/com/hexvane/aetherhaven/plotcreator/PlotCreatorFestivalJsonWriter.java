@@ -56,10 +56,21 @@ public final class PlotCreatorFestivalJsonWriter {
                 root.put("endMinute", existing.getEndMinute());
             }
         }
-        String calendarIcon =
-            existing != null
-                ? existing.getCalendarIconPath()
-                : FestivalIcons.resolveCalendarIcon(null, draft.getFestivalMechanicId());
+        if (draft.isFestivalLookMode()) {
+            root.put("festivalVariant", true);
+            root.put("countsAsFestivalId", draft.getCountsAsFestivalId());
+            if (draft.getStyleId() != null && !draft.getStyleId().isBlank()) {
+                root.put("styleId", draft.getStyleId());
+            }
+        }
+        String calendarIcon;
+        if (existing != null && !draft.isFestivalLookMode()) {
+            calendarIcon = existing.getCalendarIconPath();
+        } else if (draft.isFestivalLookMode()) {
+            calendarIcon = null;
+        } else {
+            calendarIcon = FestivalIcons.DEFAULT_CALENDAR_ICON;
+        }
         if (calendarIcon != null && !calendarIcon.isBlank()) {
             root.put("calendarIconPath", calendarIcon);
         }

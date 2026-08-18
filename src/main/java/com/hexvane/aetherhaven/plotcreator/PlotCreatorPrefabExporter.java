@@ -398,7 +398,7 @@ public final class PlotCreatorPrefabExporter {
         if (draft.isFestivalMode()) {
             return true;
         }
-        if (AetherhavenConstants.CONSTRUCTION_PLOT_FESTIVAL_SQUARE.equals(draft.getConstructionId())) {
+        if (draft.countsAsFestivalSquare()) {
             return true;
         }
         String key = festivalPrefabPathKey(draft);
@@ -419,7 +419,7 @@ public final class PlotCreatorPrefabExporter {
         if (draft.isFestivalMode()) {
             return true;
         }
-        if (AetherhavenConstants.CONSTRUCTION_PLOT_FESTIVAL_SQUARE.equals(draft.getConstructionId())) {
+        if (draft.countsAsFestivalSquare()) {
             return false;
         }
         String path = festivalPrefabPathKey(draft);

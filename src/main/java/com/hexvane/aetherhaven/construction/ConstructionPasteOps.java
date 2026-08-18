@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.construction;
 
 import com.hexvane.aetherhaven.entity.EntityRotationUtil;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyObstructionUtil;
+import com.hexvane.aetherhaven.festival.CustomFestivalPaths;
 import com.hexvane.aetherhaven.festival.FestivalPrefabSize;
 import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
 import com.hexvane.aetherhaven.prefab.EditorMarkerBlocks;
@@ -149,6 +150,18 @@ public final class ConstructionPasteOps {
      * Festival prefabs omit Empty air. Assembly clearing still needs every cell in the reserved box so trees, grass,
      * and other terrain in the gaps are removed before paste.
      */
+    @Nonnull
+    public static List<PendingBlock> withReservedFestivalAirCells(
+        @Nonnull List<PendingBlock> cells,
+        @Nonnull PrefabRotation rotation,
+        @Nullable ConstructionDefinition def
+    ) {
+        if (!FestivalPrefabSize.usesReservedFootprint(def)) {
+            return cells;
+        }
+        return withReservedFestivalAirCells(cells, rotation, CustomFestivalPaths.BASE_PREFAB_PATH);
+    }
+
     @Nonnull
     public static List<PendingBlock> withReservedFestivalAirCells(
         @Nonnull List<PendingBlock> cells,

@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.festival.pigrace;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.entity.TransformComponentUtil;
 import com.hexvane.aetherhaven.festival.FestivalDefinition;
+import com.hexvane.aetherhaven.festival.FestivalLookSelection;
 import com.hexvane.aetherhaven.festival.FestivalPrefabSwapService;
 import com.hexvane.aetherhaven.festival.FestivalRaceLanes;
 import com.hexvane.aetherhaven.town.PlotInstance;
@@ -366,7 +367,6 @@ public final class PigRaceSpawnService {
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull TownRecord town
     ) {
-        String festivalId = town.getActiveFestivalId();
-        return festivalId != null ? plugin.getFestivalCatalog().get(festivalId) : null;
+        return FestivalLookSelection.activeLayout(plugin, town);
     }
 }

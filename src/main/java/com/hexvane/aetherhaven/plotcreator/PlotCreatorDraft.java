@@ -65,9 +65,12 @@ public final class PlotCreatorDraft {
     /** Festival being authored on the FESTIVAL step; null until the player picks one. */
     @Nullable
     private String festivalId;
-    /** Festival the session opened for editing; null for a brand new festival. */
+    /** Festival the session opened for editing; null for a brand new festival or a new look. */
     @Nullable
     private String editingFestivalId;
+    /** Base holiday a new look counts as; null for a new holiday or when editing in the building editor. */
+    @Nullable
+    private String countsAsFestivalId;
     private boolean festivalPicked;
     private boolean festivalSizeLocked;
     @Nullable
@@ -535,6 +538,21 @@ public final class PlotCreatorDraft {
             : null;
     }
 
+    @Nullable
+    public String getCountsAsFestivalId() {
+        return countsAsFestivalId;
+    }
+
+    public void setCountsAsFestivalId(@Nullable String countsAsFestivalId) {
+        this.countsAsFestivalId =
+            countsAsFestivalId != null && !countsAsFestivalId.isBlank() ? countsAsFestivalId.trim() : null;
+    }
+
+    /** True when this session is authoring a look for an existing holiday rather than a new calendar festival. */
+    public boolean isFestivalLookMode() {
+        return isFestivalMode() && countsAsFestivalId != null && !countsAsFestivalId.isBlank();
+    }
+
     public boolean isFestivalPicked() {
         return festivalPicked;
     }
@@ -549,6 +567,7 @@ public final class PlotCreatorDraft {
         festivalSizeLocked = false;
         festivalId = null;
         editingFestivalId = null;
+        countsAsFestivalId = null;
         festivalMechanicId = null;
         festivalMechanicInput = null;
         festivalNpcs.clear();
@@ -869,6 +888,18 @@ public final class PlotCreatorDraft {
             }
         }
         countsAsConstructionId = countsAsConstructionIds.isEmpty() ? null : countsAsConstructionIds.get(0);
+    }
+
+    public boolean countsAsFestivalSquare() {
+        if (com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_FESTIVAL_SQUARE.equals(getConstructionId())) {
+            return true;
+        }
+        for (String id : getCountsAsConstructionIds()) {
+            if (com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_FESTIVAL_SQUARE.equals(id)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Nonnull

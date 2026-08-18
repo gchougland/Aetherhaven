@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.festival.carnival;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.festival.FestivalDefinition;
+import com.hexvane.aetherhaven.festival.FestivalLookSelection;
 import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
@@ -52,7 +53,7 @@ public final class CarnivalWhackDirectorSystem extends TickingSystem<EntityStore
                 continue;
             }
             PlotInstance square = FestivalService.findFestivalSquare(plugin, town);
-            FestivalDefinition festival = plugin.getFestivalCatalog().get(town.getActiveFestivalId());
+            FestivalDefinition festival = FestivalLookSelection.activeLayout(plugin, town);
             if (square == null || festival == null) {
                 continue;
             }

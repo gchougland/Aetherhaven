@@ -35,7 +35,7 @@ public final class PlotCreatorCleanup {
         }
         World world = session.getWorld();
         PlotCreatorDraft draft = session.getDraft();
-        if (draft.isBuildingEditorMode()) {
+        if (draft.isBuildingEditorMode() || draft.isFestivalMode()) {
             clearBuildingEditorPaste(world, draft);
         } else {
             for (Vector3i pos : draft.getPlacedSpecialBlocks()) {
@@ -46,7 +46,7 @@ public final class PlotCreatorCleanup {
         session.setMaterialsContainer(null);
     }
 
-    /** Clears the temporary building-editor paste (full footprint) on the world thread. */
+    /** Clears the temporary building-editor or festival paste (full footprint) on the world thread. */
     private static void clearBuildingEditorPaste(@Nonnull World world, @Nonnull PlotCreatorDraft draft) {
         List<PlotFootprintRecord> boxes = editorPasteBoxes(draft);
         if (boxes.isEmpty()) {

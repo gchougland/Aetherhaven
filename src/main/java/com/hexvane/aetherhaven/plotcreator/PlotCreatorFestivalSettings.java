@@ -70,6 +70,15 @@ public final class PlotCreatorFestivalSettings {
             }
         }
 
+        if (draft.isFestivalLookMode()) {
+            String copied = copyScheduleFromBase(draft, plugin);
+            if (copied != null) {
+                return copied;
+            }
+            applyMechanic(draft);
+            return null;
+        }
+
         String seasonError = applySeason(draft);
         if (seasonError != null) {
             return seasonError;
@@ -83,6 +92,29 @@ public final class PlotCreatorFestivalSettings {
             return hoursError;
         }
         applyMechanic(draft);
+        return null;
+    }
+
+    @Nullable
+    private static String copyScheduleFromBase(@Nonnull PlotCreatorDraft draft, @Nullable AetherhavenPlugin plugin) {
+        if (plugin == null) {
+            return "needFestival";
+        }
+        FestivalDefinition base = plugin.getFestivalCatalog().get(draft.getCountsAsFestivalId());
+        if (base == null || base.isLook()) {
+            return "unknownFestival";
+        }
+        draft.setFestivalSeason(base.getSeason().name());
+        draft.setFestivalSeasonInput(base.getSeason().displayName());
+        draft.setFestivalDayOfSeason(base.getDayOfSeason());
+        draft.setFestivalDayInput(String.valueOf(base.getDayOfSeason()));
+        draft.setFestivalAllDay(base.isAllDay());
+        draft.setFestivalStartHour(base.getStartHour());
+        draft.setFestivalStartHourInput(String.valueOf(base.getStartHour()));
+        draft.setFestivalEndHour(base.getEndHour());
+        draft.setFestivalEndHourInput(String.valueOf(base.getEndHour()));
+        draft.setFestivalMechanicId(base.getMechanicId());
+        draft.setFestivalMechanicInput(PlotCreatorFestivalMechanicDefaults.displayLabel(base.getMechanicId()));
         return null;
     }
 

@@ -549,12 +549,16 @@ public final class PlotCreatorInteractions {
                 playerRef.sendMessage(Message.translation(MSG + ".error.festivalIdReserved"));
                 return;
             }
-            // Keep the filename from the festival definition (e.g. Festival_Carnival) so overrides match the
-            // prefabPath key the catalog already uses.
-            String prefabKey =
-                d.getLockedPrefabPathKey() != null && !d.getLockedPrefabPathKey().isBlank()
-                    ? d.getLockedPrefabPathKey().trim().replace('\\', '/')
-                    : com.hexvane.aetherhaven.festival.CustomFestivalPaths.prefabPathKey(festivalId);
+            // Building editor keeps the filename from the festival definition. New looks must not overwrite
+            // the base holiday prefab.
+            String prefabKey;
+            if (d.isFestivalLookMode() || d.getEditingFestivalId() == null) {
+                prefabKey = com.hexvane.aetherhaven.festival.CustomFestivalPaths.prefabPathKey(festivalId);
+            } else if (d.getLockedPrefabPathKey() != null && !d.getLockedPrefabPathKey().isBlank()) {
+                prefabKey = d.getLockedPrefabPathKey().trim().replace('\\', '/');
+            } else {
+                prefabKey = com.hexvane.aetherhaven.festival.CustomFestivalPaths.prefabPathKey(festivalId);
+            }
             fileName = BuildingEditorSavePaths.prefabFileName(prefabKey);
             Path writeRoot = BuildingEditorSavePaths.resolveWriteRootForFestival(plugin, festivalId);
             out = BuildingEditorSavePaths.prefabFile(writeRoot, prefabKey);

@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.ui;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plotcreator.PlotBuildingKind;
 import com.hexvane.aetherhaven.plotcreator.PlotBuildingKindRequirements;
@@ -9,6 +10,7 @@ import com.hexvane.aetherhaven.plotcreator.PlotCreatorMaterialsActions;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorService;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorSession;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorStep;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorFestivalDraftSetup;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorInteractions;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorSessions;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorValidator;
@@ -623,8 +625,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#TouristDestinationHint.Visible", false);
         b.set("#PlotTokenLockedRow.Visible", false);
         b.set("#PlotTokenLockedHint.Visible", false);
-        b.set("#StyleIdLabel.Visible", false);
-        b.set("#StyleIdField.Visible", false);
+        boolean look = session.getDraft().isFestivalLookMode();
+        b.set("#StyleIdLabel.Visible", look);
+        b.set("#StyleIdField.Visible", look);
         b.set("#OpenMaterialsButton.Visible", false);
         b.set("#FillFromBuildShapeButton.Visible", false);
         b.set("#MaterialsPageLabel.Visible", false);
@@ -633,8 +636,11 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#MaterialsNextPageButton.Visible", false);
         b.set("#ReviewSummary.Visible", false);
         b.set("#DetailHint.Visible", false);
-        b.set("#SubmitToCommunityRow.Visible", false);
-        applyFestivalFieldVisibility(b, true, !session.getDraft().isFestivalAllDay());
+        b.set(
+            "#SubmitToCommunityRow.Visible",
+            look && isCommunityMarketplaceEnabled() && !session.getDraft().isCommunitySubmissionEdit()
+        );
+        applyFestivalFieldVisibility(b, !look, !look && !session.getDraft().isFestivalAllDay());
     }
 
     private static void applyFestivalFieldVisibility(
@@ -797,7 +803,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
     private void appendFestivalRows(@Nonnull UICommandBuilder b, @Nonnull UIEventBuilder eventBuilder) {
         PlotCreatorDraft d = session.getDraft();
         List<PlotCreatorFestivalChoices.Choice> choices = PlotCreatorFestivalChoices.list(AetherhavenPlugin.get());
-        String pickedId = d.getEditingFestivalId();
+        String pickedLookOf = d.getEditingFestivalId() == null ? d.getCountsAsFestivalId() : null;
         for (int i = 0; i < choices.size(); i++) {
             PlotCreatorFestivalChoices.Choice choice = choices.get(i);
             b.append("#VariantCheckList", "Aetherhaven/PlotCreatorToggleRow.ui");
@@ -807,7 +813,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             } else {
                 b.set(row + " #Label.TextSpans", Message.raw(choice.fallbackLabel()));
             }
-            boolean picked = d.isFestivalPicked() && java.util.Objects.equals(choice.festivalId(), pickedId);
+            boolean picked = d.isFestivalPicked() && java.util.Objects.equals(choice.festivalId(), pickedLookOf);
             b.set(row + " #Toggle.Value", picked);
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.ValueChanged,
@@ -911,7 +917,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         String festivalId = festivalIdRaw != null && !festivalIdRaw.isBlank() ? festivalIdRaw.trim() : null;
         PlotCreatorDraft d = session.getDraft();
         if (!checked) {
-            if (java.util.Objects.equals(festivalId, d.getEditingFestivalId()) && d.isFestivalPicked()) {
+            if (java.util.Objects.equals(festivalId, d.getCountsAsFestivalId())
+                && d.getEditingFestivalId() == null
+                && d.isFestivalPicked()) {
                 d.setFestivalPicked(false);
             }
             return;
@@ -922,7 +930,12 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         }
     }
 
-    private void applyToggleVariant(@Nonnull String constructionId, boolean checked) {
+    private void applyToggleVariant(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String constructionId,
+        boolean checked
+    ) {
         String id = constructionId.trim();
         if (id.isEmpty()) {
             return;
@@ -936,6 +949,16 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             ids.remove(id);
         }
         session.getDraft().setCountsAsConstructionIds(ids);
+        if (AetherhavenConstants.CONSTRUCTION_PLOT_FESTIVAL_SQUARE.equals(id)) {
+            if (checked) {
+                String err = PlotCreatorFestivalDraftSetup.applyFestivalSquareVariant(session, playerRef, ref, store);
+                if (err != null) {
+                    playerRef.sendMessage(Message.translation(MSG + ".error." + err));
+                }
+            } else if (!session.getDraft().isFestivalMode()) {
+                session.getDraft().setFestivalSizeLocked(false);
+            }
+        }
     }
 
     @Override
@@ -955,7 +978,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             return;
         }
         if ("ToggleVariant".equals(data.action) && data.variantOf != null && !data.variantOf.isBlank()) {
-            applyToggleVariant(data.variantOf, Boolean.TRUE.equals(data.checked));
+            applyToggleVariant(ref, store, data.variantOf, Boolean.TRUE.equals(data.checked));
             refreshPartial();
             return;
         }

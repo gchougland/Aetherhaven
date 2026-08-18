@@ -187,7 +187,7 @@ aetherhaven.plotcreator.hud.IDENTITY.f = Enter the display name, description, an
 aetherhaven.plotcreator.hud.TAGS.f = Edit tags (comma separated)
 aetherhaven.plotcreator.hud.VARIANT.f = Pick which main building types this counts as
 
-aetherhaven.plotcreator.hud.FESTIVAL.f = Pick a festival to make or edit
+aetherhaven.plotcreator.hud.FESTIVAL.f = Pick New festival, or pick a festival to make a new look for it
 aetherhaven.plotcreator.hud.IMPORTANT_SPOTS.f = Open important spots picker
 aetherhaven.plotcreator.hud.SUBSTEP.primary = Click the required block or spot inside the footprint
 aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer = Remove an adventurer spawn marker
@@ -255,6 +255,7 @@ aetherhaven.plotcreator.mainType.plot_builders_hut = Builder's hut
 aetherhaven.plotcreator.mainType.plot_park = Park
 aetherhaven.plotcreator.mainType.plot_town_hall = Town hall
 aetherhaven.plotcreator.mainType.plot_tourist_portal = Tourist portal
+aetherhaven.plotcreator.mainType.plot_festival_square = Festival square
 
 aetherhaven.plotcreator.cancelConfirm.title = Cancel plot creator?
 aetherhaven.plotcreator.cancelConfirm.body = Your progress in this session will be lost. Bounds, prefab export, and draft data are discarded.
@@ -363,7 +364,7 @@ aetherhaven.plotcreator.step.VARIANT.hint = Pick one or more main building types
 
 aetherhaven.plotcreator.step.FESTIVAL.title = Festival
 aetherhaven.plotcreator.step.FESTIVAL.short = Festival
-aetherhaven.plotcreator.step.FESTIVAL.hint = Press F and pick a festival to make or edit. The build area snaps to the festival square size and the starting square is placed for you.
+aetherhaven.plotcreator.step.FESTIVAL.hint = Press F and pick New festival, or pick a festival to make a new look for it. The build area snaps to the festival square size and the starting square is placed for you.
 aetherhaven.plotcreator.festival.newFestival = New festival
 aetherhaven.plotcreator.hint.festivalPrefabReady = The festival square is ready. Build inside the {size} area.
 aetherhaven.plotcreator.field.festivalActivity = Festival activity

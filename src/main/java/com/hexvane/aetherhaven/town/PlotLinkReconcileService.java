@@ -219,7 +219,7 @@ public final class PlotLinkReconcileService {
         String festivalId = town.getActiveFestivalId();
         UUID festivalPlotId = town.getActiveFestivalPlotId();
         if (festivalId != null && plot.getPlotId().equals(festivalPlotId)) {
-            FestivalDefinition festival = plugin.getFestivalCatalog().get(festivalId);
+            FestivalDefinition festival = com.hexvane.aetherhaven.festival.FestivalLookSelection.activeLayout(plugin, town);
             if (festival != null) {
                 TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
                 FestivalService.ensureActiveFestivalSpots(world, entityStore, plugin, tm, town, festival);

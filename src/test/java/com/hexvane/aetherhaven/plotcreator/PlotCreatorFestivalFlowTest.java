@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.google.gson.Gson;
 import com.hexvane.aetherhaven.festival.CustomFestivalPaths;
+import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import java.util.List;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -128,6 +130,67 @@ final class PlotCreatorFestivalFlowTest {
         draft.setPrefabPath("Festivals/Festival_Carnival.prefab.json");
 
         assertTrue(PlotCreatorPrefabExporter.shouldOmitManagementBlockFromFestivalExport(draft));
+    }
+
+    @Test
+    void pickingAListedFestivalMakesALookInsteadOfEditing() {
+        FestivalDefinition existing = new Gson().fromJson(
+            """
+            {
+              "id": "carnival",
+              "displayName": "Carnival Festival",
+              "prefabPath": "Festivals/Festival_Carnival.prefab.json",
+              "season": "Summer",
+              "dayOfSeason": 21,
+              "mechanicId": "carnival"
+            }
+            """,
+            FestivalDefinition.class
+        );
+        PlotCreatorDraft draft = festivalDraft();
+        PlotCreatorFestivalDraftSetup.applyFestivalFields(draft, existing, true);
+
+        assertNull(draft.getEditingFestivalId());
+        assertEquals("carnival", draft.getCountsAsFestivalId());
+        assertTrue(draft.isFestivalLookMode());
+        assertNull(draft.getLockedPrefabPathKey());
+        assertNull(draft.getFestivalId());
+        assertNull(draft.getStyleId());
+    }
+
+    @Test
+    void editingALookKeepsItsStyle() {
+        FestivalDefinition existing = new Gson().fromJson(
+            """
+            {
+              "id": "carnival_neon",
+              "displayName": "Neon Carnival",
+              "prefabPath": "Festivals/Festival_carnival_neon.prefab.json",
+              "season": "Summer",
+              "dayOfSeason": 21,
+              "festivalVariant": true,
+              "countsAsFestivalId": "carnival",
+              "styleId": "Neon"
+            }
+            """,
+            FestivalDefinition.class
+        );
+        PlotCreatorDraft draft = festivalDraft();
+        PlotCreatorFestivalDraftSetup.applyFestivalFields(draft, existing);
+
+        assertEquals("carnival", draft.getCountsAsFestivalId());
+        assertEquals("neon", draft.getStyleId());
+    }
+
+    @Test
+    void festivalSquareVariantExportKeepsTownRecordsShelf() {
+        PlotCreatorDraft draft = new PlotCreatorDraft();
+        draft.setConstructionId("plot_my_square");
+        draft.setCountsAsConstructionIds(List.of("plot_festival_square"));
+        draft.setPrefabPath("Festivals/Festival_plot_my_square.prefab.json");
+
+        assertTrue(draft.countsAsFestivalSquare());
+        assertFalse(PlotCreatorPrefabExporter.shouldOmitManagementBlockFromFestivalExport(draft));
     }
 
     @Test

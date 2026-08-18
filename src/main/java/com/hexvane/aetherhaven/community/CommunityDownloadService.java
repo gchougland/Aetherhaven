@@ -1,10 +1,19 @@
 package com.hexvane.aetherhaven.community;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.festival.CustomFestivalPaths;
 import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.asset.common.CommonAsset;
+import com.hypixel.hytale.server.core.universe.Universe;
+import com.hypixel.hytale.server.core.universe.world.World;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,6 +34,7 @@ import javax.annotation.Nullable;
 /** Full install of a community building (building JSON + prefab + icon). */
 public final class CommunityDownloadService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final int BATCH_PARALLELISM = 4;
 
     private CommunityDownloadService() {}
@@ -219,20 +229,35 @@ public final class CommunityDownloadService {
         boolean wrotePrefabThisAttempt = false;
         boolean wroteBuildingThisAttempt = false;
         boolean wroteIconThisAttempt = false;
+        boolean festivalLook = entry.isFestivalVariant();
         Path writtenIcon = null;
 
         try {
             Files.createDirectories(CommunityPaths.buildingsDirectory(dataDir));
             Files.createDirectories(CommunityPaths.prefabsDirectory(dataDir));
             Files.createDirectories(CommunityPaths.iconsDirectory(dataDir));
+            if (festivalLook) {
+                Files.createDirectories(CustomFestivalPaths.festivalsDirectory(dataDir));
+                Files.createDirectories(CustomFestivalPaths.prefabsDirectory(dataDir));
+            }
 
-            Path installedPrefab = CommunityPaths.installedPrefabFile(dataDir, id);
+            Path installedPrefab =
+                festivalLook
+                    ? CustomFestivalPaths.prefabFile(dataDir, id)
+                    : CommunityPaths.installedPrefabFile(dataDir, id);
             boolean havePrefab = Files.isRegularFile(installedPrefab);
             if (forceRefresh) {
                 CommunityPreviewCache.get().clearEntryPreview(plugin, id);
                 havePrefab = false;
-            } else if (!havePrefab && CommunityPreviewCache.get().promotePreviewPrefab(dataDir, id)) {
+            } else if (!havePrefab && !festivalLook && CommunityPreviewCache.get().promotePreviewPrefab(dataDir, id)) {
                 havePrefab = true;
+            } else if (!havePrefab && festivalLook) {
+                Path preview = CommunityPaths.previewPrefabFile(dataDir, id);
+                if (Files.isRegularFile(preview)) {
+                    Files.copy(preview, installedPrefab, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                    Files.deleteIfExists(preview);
+                    havePrefab = true;
+                }
             }
             if (!havePrefab) {
                 String prefabUrl = entry.getPrefabUrl();
@@ -260,22 +285,29 @@ public final class CommunityDownloadService {
                 return new FileInstallOutcome(InstallResult.UNSAFE_PREFAB, null);
             }
 
-            Path buildingFile = CommunityPaths.buildingFile(dataDir, id);
+            Path buildingFile =
+                festivalLook
+                    ? CustomFestivalPaths.festivalFile(dataDir, id)
+                    : CommunityPaths.buildingFile(dataDir, id);
             if (forceRefresh || !Files.isRegularFile(buildingFile)) {
                 String buildingUrl = entry.getBuildingUrl();
                 if (buildingUrl == null || buildingUrl.isBlank()) {
-                    rollbackFreshInstall(dataDir, id, wrotePrefabThisAttempt, false, false);
+                    rollbackFreshInstall(dataDir, id, festivalLook, wrotePrefabThisAttempt, false, false);
                     return new FileInstallOutcome(InstallResult.NOT_FOUND, null);
                 }
                 String buildingJson = CommunityHttpClient.getString(catalog.resolveUrl(buildingUrl));
                 if (buildingJson == null || buildingJson.isBlank()) {
-                    rollbackFreshInstall(dataDir, id, wrotePrefabThisAttempt, false, false);
+                    rollbackFreshInstall(dataDir, id, festivalLook, wrotePrefabThisAttempt, false, false);
                     return new FileInstallOutcome(InstallResult.DOWNLOAD_FAILED, null);
                 }
                 Files.writeString(buildingFile, buildingJson);
                 wroteBuildingThisAttempt = true;
             }
-            CommunityBuildingJsonNormalizer.normalizeInstalledBuildingFile(buildingFile, id);
+            if (festivalLook) {
+                rewriteFestivalLookJson(buildingFile, id);
+            } else {
+                CommunityBuildingJsonNormalizer.normalizeInstalledBuildingFile(buildingFile, id);
+            }
 
             boolean iconRequired = CommunityIconDownload.iconRequired(entry);
             if (iconRequired) {
@@ -296,6 +328,7 @@ public final class CommunityDownloadService {
                             rollbackFreshInstall(
                                 dataDir,
                                 id,
+                                festivalLook,
                                 wrotePrefabThisAttempt,
                                 wroteBuildingThisAttempt,
                                 wroteIconThisAttempt
@@ -311,6 +344,7 @@ public final class CommunityDownloadService {
                             rollbackFreshInstall(
                                 dataDir,
                                 id,
+                                festivalLook,
                                 wrotePrefabThisAttempt,
                                 wroteBuildingThisAttempt,
                                 false
@@ -332,6 +366,7 @@ public final class CommunityDownloadService {
             rollbackFreshInstall(
                 dataDir,
                 id,
+                festivalLook,
                 wrotePrefabThisAttempt,
                 wroteBuildingThisAttempt,
                 wroteIconThisAttempt
@@ -341,9 +376,42 @@ public final class CommunityDownloadService {
         }
     }
 
+    private static void rewriteFestivalLookJson(@Nonnull Path festivalFile, @Nonnull String festivalId) {
+        try {
+            JsonObject root = GSON.fromJson(Files.readString(festivalFile), JsonObject.class);
+            if (root == null) {
+                return;
+            }
+            boolean changed = false;
+            if (!root.has("id") || root.get("id").isJsonNull() || !festivalId.equals(root.get("id").getAsString())) {
+                root.addProperty("id", festivalId);
+                changed = true;
+            }
+            String expectedPrefab = CustomFestivalPaths.prefabPathKey(festivalId);
+            String currentPrefab =
+                root.has("prefabPath") && !root.get("prefabPath").isJsonNull()
+                    ? root.get("prefabPath").getAsString()
+                    : null;
+            if (currentPrefab == null || !expectedPrefab.equals(currentPrefab.trim())) {
+                root.addProperty("prefabPath", expectedPrefab);
+                changed = true;
+            }
+            if (!root.has("festivalVariant") || !root.get("festivalVariant").getAsBoolean()) {
+                root.addProperty("festivalVariant", true);
+                changed = true;
+            }
+            if (changed) {
+                Files.writeString(festivalFile, GSON.toJson(root));
+            }
+        } catch (IOException | RuntimeException e) {
+            LOGGER.atWarning().withCause(e).log("Failed to rewrite festival look JSON %s", festivalFile);
+        }
+    }
+
     private static void rollbackFreshInstall(
         @Nonnull Path dataDir,
         @Nonnull String constructionId,
+        boolean festivalLook,
         boolean wrotePrefab,
         boolean wroteBuilding,
         boolean wroteIcon
@@ -353,10 +421,18 @@ public final class CommunityDownloadService {
                 Files.deleteIfExists(CommunityPaths.iconFile(dataDir, constructionId));
             }
             if (wroteBuilding) {
-                Files.deleteIfExists(CommunityPaths.buildingFile(dataDir, constructionId));
+                Files.deleteIfExists(
+                    festivalLook
+                        ? CustomFestivalPaths.festivalFile(dataDir, constructionId)
+                        : CommunityPaths.buildingFile(dataDir, constructionId)
+                );
             }
             if (wrotePrefab) {
-                Files.deleteIfExists(CommunityPaths.installedPrefabFile(dataDir, constructionId));
+                Files.deleteIfExists(
+                    festivalLook
+                        ? CustomFestivalPaths.prefabFile(dataDir, constructionId)
+                        : CommunityPaths.installedPrefabFile(dataDir, constructionId)
+                );
             }
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Failed to roll back partial community install for %s", constructionId);
@@ -396,14 +472,31 @@ public final class CommunityDownloadService {
         try {
             Files.deleteIfExists(CommunityPaths.buildingFile(dataDir, constructionId));
             Files.deleteIfExists(CommunityPaths.installedPrefabFile(dataDir, constructionId));
+            Files.deleteIfExists(CustomFestivalPaths.festivalFile(dataDir, constructionId));
+            Files.deleteIfExists(CustomFestivalPaths.prefabFile(dataDir, constructionId));
             CommunityInstallVersion.deleteInstalledVersion(dataDir, constructionId);
             CommunityPreviewCache.get().clearEntryPreview(plugin, constructionId);
             plugin.getCommunityCatalogService().markIconComplete(constructionId);
+            clearTownLookSelections(plugin, constructionId);
             plugin.reloadConfigsAndAssetCatalogs();
             return InstallResult.SUCCESS;
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Failed to remove community building %s", constructionId);
             return InstallResult.IO_ERROR;
+        }
+    }
+
+    private static void clearTownLookSelections(@Nonnull AetherhavenPlugin plugin, @Nonnull String lookId) {
+        try {
+            for (World world : Universe.get().getWorlds().values()) {
+                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                for (TownRecord town : tm.allTowns()) {
+                    town.clearSelectedFestivalLookIfMatches(lookId);
+                    tm.updateTown(town);
+                }
+            }
+        } catch (RuntimeException e) {
+            LOGGER.atWarning().withCause(e).log("Failed to clear town festival look selections for %s", lookId);
         }
     }
 }

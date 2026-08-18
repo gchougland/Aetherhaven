@@ -385,6 +385,25 @@ final class FestivalCatalogAndWindowTest {
         }
     }
 
+    @Test
+    void festivalOnIgnoresLooksEvenWhenTheyShareADay() {
+        FestivalCatalog catalog = FestivalCatalog.forTests(
+            List.of(
+                parse("{\"id\":\"carnival\",\"season\":\"Summer\",\"dayOfSeason\":21}"),
+                parse(
+                    "{\"id\":\"carnival_neon\",\"displayName\":\"Neon Carnival\",\"season\":\"Summer\",\"dayOfSeason\":21,\"festivalVariant\":true,\"countsAsFestivalId\":\"carnival\"}"
+                )
+            )
+        );
+
+        FestivalDefinition today = catalog.festivalOn(Season.SUMMER, 21);
+        assertNotNull(today);
+        assertEquals("carnival", today.getId());
+        assertEquals("carnival", FestivalCalendarIndex.fromCatalog(catalog).festivalOn(Season.SUMMER, 21).getId());
+        assertEquals(1, catalog.listBases().size());
+        assertEquals(2, catalog.list().size());
+    }
+
     private static LocalDateTime dayOf(Season season, int dayOfSeason) {
         LocalDateTime start = LocalDateTime.of(2000, 1, 1, 0, 0);
         for (int i = 0; i < AetherhavenCalendar.DAYS_PER_SEASON * Season.values().length; i++) {

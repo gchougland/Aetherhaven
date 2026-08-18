@@ -3,9 +3,11 @@ package com.hexvane.aetherhaven.community;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.prefabmaterials.PrefabMaterialsWriter;
+import com.hexvane.aetherhaven.festival.CustomFestivalPaths;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorDraft;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorFestivalSettings;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorService;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.io.IOException;
@@ -62,6 +64,69 @@ public final class CommunitySubmitLocalSave {
         PlotCreatorService.syncPrefabFileNameFromConstructionId(draft);
         draft.setPrefabPath(CommunityBuildingValidator.prefabPathKeyForCommunityId(communityId));
         return null;
+    }
+
+    /**
+     * Remaps a festival look draft onto a community catalog id and moves the festival prefab/icon to match.
+     *
+     * @return {@code null} on success, or a plot creator error key such as {@code id_taken}
+     */
+    @Nullable
+    public static String prepareDraftForFestivalLookSubmit(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull UUID playerUuid
+    ) throws IOException {
+        String localId = draft.getFestivalId() != null ? draft.getFestivalId().trim() : "";
+        if (localId.isEmpty() && draft.getConstructionId() != null) {
+            localId = draft.getConstructionId().trim();
+        }
+        if (localId.isEmpty()) {
+            return "incomplete";
+        }
+        String communityId =
+            CommunityBuildingValidator.assignCatalogId(localId, draft.getDisplayName(), playerUuid);
+        if (plugin.getFestivalCatalog().get(communityId) != null && !communityId.equals(draft.getEditingFestivalId())) {
+            return "id_taken";
+        }
+        if (communityId.equals(localId)) {
+            draft.setFestivalId(communityId);
+            draft.setConstructionId(communityId);
+            PlotCreatorFestivalSettings.syncPrefabFileName(draft);
+            return null;
+        }
+
+        Path dataDir = plugin.getDataDirectory();
+        moveFestivalPrefabIfPresent(dataDir, localId, communityId);
+        moveIconIfPresent(plugin, dataDir, localId, communityId);
+        Files.deleteIfExists(CustomFestivalPaths.festivalFile(dataDir, localId));
+
+        draft.setFestivalId(communityId);
+        draft.setConstructionId(communityId);
+        PlotCreatorFestivalSettings.syncPrefabFileName(draft);
+        return null;
+    }
+
+    private static void moveFestivalPrefabIfPresent(
+        @Nonnull Path dataDir,
+        @Nonnull String oldFestivalId,
+        @Nonnull String communityId
+    ) throws IOException {
+        Path oldFile = CustomFestivalPaths.prefabFile(dataDir, oldFestivalId);
+        Path newFile = CustomFestivalPaths.prefabFile(dataDir, communityId);
+        if (!Files.isRegularFile(oldFile) || oldFile.equals(newFile)) {
+            Path byKey = CustomFestivalPaths.resolvePrefabFile(dataDir, CustomFestivalPaths.prefabPathKey(oldFestivalId));
+            if (byKey != null && Files.isRegularFile(byKey) && !byKey.equals(newFile)) {
+                oldFile = byKey;
+            } else if (!Files.isRegularFile(oldFile)) {
+                return;
+            }
+        }
+        if (!Files.isRegularFile(oldFile) || oldFile.equals(newFile)) {
+            return;
+        }
+        Files.createDirectories(newFile.getParent());
+        Files.move(oldFile, newFile, StandardCopyOption.REPLACE_EXISTING);
     }
 
     private static void movePrefabIfPresent(

@@ -106,6 +106,50 @@ final class PlotCreatorFestivalAuthoringTest {
     }
 
     @Test
+    void lookJsonWritesFestivalVariantAndOmitsCalendarIcon() throws Exception {
+        PlotCreatorDraft draft = new PlotCreatorDraft();
+        draft.setKinds(List.of(PlotBuildingKind.FESTIVAL));
+        draft.setFestivalId("carnival_neon");
+        draft.setDisplayName("Neon Carnival");
+        draft.setPrefabPath("Festivals/Festival_carnival_neon.prefab.json");
+        draft.setCountsAsFestivalId("carnival");
+        draft.setFestivalSeason("SUMMER");
+        draft.setFestivalDayOfSeason(21);
+        draft.setFestivalStartHour(8);
+        draft.setFestivalEndHour(20);
+
+        Path out = tempDir.resolve("carnival_neon.json");
+        PlotCreatorFestivalJsonWriter.writeFestival(out, draft, null);
+
+        JsonObject root = new Gson().fromJson(Files.readString(out), JsonObject.class);
+        assertTrue(root.get("festivalVariant").getAsBoolean());
+        assertEquals("carnival", root.get("countsAsFestivalId").getAsString());
+        assertFalse(root.has("calendarIconPath"));
+        assertFalse(root.has("styleId"));
+    }
+
+    @Test
+    void lookJsonWritesStyleWhenSet() throws Exception {
+        PlotCreatorDraft draft = new PlotCreatorDraft();
+        draft.setKinds(List.of(PlotBuildingKind.FESTIVAL));
+        draft.setFestivalId("carnival_neon");
+        draft.setDisplayName("Neon Carnival");
+        draft.setPrefabPath("Festivals/Festival_carnival_neon.prefab.json");
+        draft.setCountsAsFestivalId("carnival");
+        draft.setFestivalSeason("SUMMER");
+        draft.setFestivalDayOfSeason(21);
+        draft.setFestivalStartHour(8);
+        draft.setFestivalEndHour(20);
+        draft.setStyleId("Neon");
+
+        Path out = tempDir.resolve("carnival_neon_style.json");
+        PlotCreatorFestivalJsonWriter.writeFestival(out, draft, null);
+
+        JsonObject root = new Gson().fromJson(Files.readString(out), JsonObject.class);
+        assertEquals("neon", root.get("styleId").getAsString());
+    }
+
+    @Test
     void raceLaneResolverUsesFestivalJsonThenFallsBack() {
         assertEquals(4, FestivalRaceLanes.resolve(null).size());
 

@@ -75,6 +75,10 @@
     {
       "id": "plot_tourist_portal",
       "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_tourist_portal"
+    },
+    {
+      "id": "plot_festival_square",
+      "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_festival_square"
     }
   ]
 }

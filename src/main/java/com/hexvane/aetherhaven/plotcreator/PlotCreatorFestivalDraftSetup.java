@@ -44,6 +44,50 @@ public final class PlotCreatorFestivalDraftSetup {
         @Nullable FestivalDefinition existing,
         @Nonnull String startingPrefabPath
     ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return "needFestival";
+        }
+
+        String pasteErr = lockAndPasteFestivalFootprint(session, playerRef, ref, store, plugin, startingPrefabPath);
+        if (pasteErr != null) {
+            return pasteErr;
+        }
+        PlotCreatorDraft draft = session.getDraft();
+        draft.setFestivalPicked(true);
+        applyFestivalFields(draft, existing, existing != null);
+        return null;
+    }
+
+    /**
+     * Locks the box to the shared festival square size and pastes the everyday square, including the town records
+     * shelf. Used when a variant counts as the festival square.
+     */
+    @Nullable
+    public static String applyFestivalSquareVariant(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return "needFestival";
+        }
+        return lockAndPasteFestivalFootprint(
+            session, playerRef, ref, store, plugin, CustomFestivalPaths.BASE_PREFAB_PATH
+        );
+    }
+
+    @Nullable
+    private static String lockAndPasteFestivalFootprint(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull String startingPrefabPath
+    ) {
         PlotCreatorDraft draft = session.getDraft();
         if (draft.getCornerFirst() == null || draft.getCornerSecond() == null) {
             return "needBounds";
@@ -51,10 +95,6 @@ public final class PlotCreatorFestivalDraftSetup {
         IPrefabBuffer buffer = PrefabResolveUtil.resolvePrefabBuffer(startingPrefabPath);
         if (buffer == null) {
             return "prefab_missing";
-        }
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            return "needFestival";
         }
 
         Vector3i min = new Vector3i(draft.boundsMin());
@@ -65,16 +105,11 @@ public final class PlotCreatorFestivalDraftSetup {
         draft.setBoundsDragEnd(null);
         draft.setActiveBoundsFaceDrag(null);
         draft.setHoveredBoundsFace(null);
-        // Shipped festival prefabs paste from the middle of the square (same as festival square swaps). Bounds stay
-        // the min/max box; the paste origin is the center so the build lines up with the wireframe.
         Vector3i center =
             new Vector3i(min.x + FestivalPrefabSize.SPAN_X / 2, min.y, min.z + FestivalPrefabSize.SPAN_Z / 2);
         draft.setPlotAnchor(new Vector3i(center));
         draft.setPrefabOriginMin(new Vector3i(min));
         draft.setFestivalSizeLocked(true);
-        draft.setFestivalPicked(true);
-
-        applyFestivalFields(draft, existing);
 
         World world = session.getWorld();
         PlotFootprintRecord volume = new PlotFootprintRecord(min.x, min.y, min.z, max.x, max.y, max.z);
@@ -108,6 +143,17 @@ public final class PlotCreatorFestivalDraftSetup {
 
     /** Fills festival settings and important-spot selections from an existing definition or clears for a new one. */
     public static void applyFestivalFields(@Nonnull PlotCreatorDraft draft, @Nullable FestivalDefinition existing) {
+        applyFestivalFields(draft, existing, false);
+    }
+
+    /**
+     * @param asLook true when the plot creator is making a new look of {@code existing} rather than overwriting it
+     */
+    public static void applyFestivalFields(
+        @Nonnull PlotCreatorDraft draft,
+        @Nullable FestivalDefinition existing,
+        boolean asLook
+    ) {
         draft.getSelectedSpots().clear();
         draft.getPois().clear();
         draft.getFestivalNpcs().clear();
@@ -124,24 +170,42 @@ public final class PlotCreatorFestivalDraftSetup {
         draft.setImportantSpotsConfirmed(false);
         if (existing == null) {
             draft.setEditingFestivalId(null);
+            draft.setCountsAsFestivalId(null);
             draft.setFestivalId(null);
             draft.setConstructionId(null);
             draft.setConstructionIdUserEdited(false);
             draft.setDisplayName(null);
             draft.setDescription(null);
             draft.setPrefabPath(CustomFestivalPaths.BASE_PREFAB_PATH);
+            draft.setLockedPrefabPathKey(null);
             draft.setFestivalMechanicId(null);
             draft.setFestivalMechanicInput(PlotCreatorFestivalMechanicDefaults.displayLabel(null));
+            draft.setStyleId(null);
             return;
         }
-        draft.setEditingFestivalId(existing.getId());
-        draft.setFestivalId(existing.getId());
-        draft.setConstructionId(existing.getId());
-        draft.setConstructionIdUserEdited(true);
-        draft.setDisplayName(existing.getDisplayName());
-        draft.setDescription(existing.getDescription());
-        draft.setPrefabPath(existing.getPrefabPath());
-        draft.setLockedPrefabPathKey(existing.getPrefabPath());
+        if (asLook) {
+            draft.setEditingFestivalId(null);
+            draft.setCountsAsFestivalId(existing.getId());
+            draft.setFestivalId(null);
+            draft.setConstructionId(null);
+            draft.setConstructionIdUserEdited(false);
+            draft.setDisplayName(null);
+            draft.setDescription(null);
+            draft.setPrefabPath(existing.getPrefabPath());
+            draft.setLockedPrefabPathKey(null);
+            draft.setStyleId(null);
+        } else {
+            draft.setEditingFestivalId(existing.getId());
+            draft.setCountsAsFestivalId(existing.getCountsAsFestivalId());
+            draft.setFestivalId(existing.getId());
+            draft.setConstructionId(existing.getId());
+            draft.setConstructionIdUserEdited(true);
+            draft.setDisplayName(existing.getDisplayName());
+            draft.setDescription(existing.getDescription());
+            draft.setPrefabPath(existing.getPrefabPath());
+            draft.setLockedPrefabPathKey(existing.getPrefabPath());
+            draft.setStyleId(existing.getStyleId());
+        }
         draft.setFestivalSeason(existing.getSeason().name());
         draft.setFestivalSeasonInput(existing.getSeason().displayName());
         draft.setFestivalDayOfSeason(existing.getDayOfSeason());

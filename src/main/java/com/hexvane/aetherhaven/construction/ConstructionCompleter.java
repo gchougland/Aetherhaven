@@ -97,7 +97,7 @@ public final class ConstructionCompleter {
             if (prefabPath != null) {
                 IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
                 try {
-                    fp = PlotFootprintUtil.computeFootprint(prefabAnchorWorld, prefabYaw, buf, def.getPrefabPath());
+                    fp = PlotFootprintUtil.computeFootprint(prefabAnchorWorld, prefabYaw, buf, def);
                 } finally {
                 }
             }
@@ -119,7 +119,7 @@ public final class ConstructionCompleter {
 
         plot.setState(PlotInstanceState.COMPLETE);
         plot.setLastStateChangeEpochMs(now);
-        if (def != null && FestivalPrefabSize.usesReservedFootprint(def.getPrefabPath())) {
+        if (def != null && FestivalPrefabSize.usesReservedFootprint(def)) {
             plot.applySignAndFootprint(
                 plot.getSignX(),
                 plot.getSignY(),

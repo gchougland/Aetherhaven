@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.festival;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.prefab.PrefabRotation;
@@ -86,6 +88,25 @@ public final class FestivalPrefabSize {
         return key.contains("/Festivals/")
             || key.startsWith("Festivals/")
             || key.endsWith("Festival_Square.prefab.json");
+    }
+
+    /** True for festival activity prefabs and everyday festival square constructions (including variants). */
+    public static boolean usesReservedFootprint(@Nullable ConstructionDefinition def) {
+        if (def == null) {
+            return false;
+        }
+        if (usesReservedFootprint(def.getPrefabPath())) {
+            return true;
+        }
+        if (AetherhavenConstants.CONSTRUCTION_PLOT_FESTIVAL_SQUARE.equals(def.getId())) {
+            return true;
+        }
+        for (String id : def.getCountsAsConstructionIds()) {
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_FESTIVAL_SQUARE.equals(id)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

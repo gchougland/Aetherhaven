@@ -182,6 +182,9 @@ public final class FestivalCatalog {
     private static void warnOnDuplicateDays(@Nonnull Map<String, FestivalDefinition> map) {
         Map<String, String> seen = new LinkedHashMap<>();
         for (FestivalDefinition def : map.values()) {
+            if (def.isLook()) {
+                continue;
+            }
             String key = def.getSeason().name() + ":" + def.getDayOfSeason();
             String previous = seen.put(key, def.getId());
             if (previous != null) {
@@ -227,14 +230,29 @@ public final class FestivalCatalog {
         return byId.isEmpty();
     }
 
-    /** The festival scheduled on this calendar day, or null when the day has none. */
+    /** The festival scheduled on this calendar day, or null when the day has none. Looks never occupy a day. */
     @Nullable
     public FestivalDefinition festivalOn(@Nonnull AetherhavenCalendar.Season season, int dayOfSeason) {
         for (FestivalDefinition def : byId.values()) {
+            if (def.isLook()) {
+                continue;
+            }
             if (def.getSeason() == season && def.getDayOfSeason() == dayOfSeason) {
                 return def;
             }
         }
         return null;
+    }
+
+    /** Holidays only: catalog entries that are not looks. */
+    @Nonnull
+    public List<FestivalDefinition> listBases() {
+        List<FestivalDefinition> out = new ArrayList<>();
+        for (FestivalDefinition def : byId.values()) {
+            if (!def.isLook()) {
+                out.add(def);
+            }
+        }
+        return out;
     }
 }

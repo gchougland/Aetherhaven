@@ -307,7 +307,7 @@ public final class PlotAssemblyService {
             ConstructionPasteOps.withReservedFestivalAirCells(
                 seq.pendingBlocks(),
                 seq.prefabRotation(),
-                def.getPrefabPath()
+                def
             );
         List<PendingBlock> nonAirCells = ConstructionPasteOps.withoutPureAirCells(footprintCells);
         ConstructionPasteOps.AssemblyDeferredPartition split =
@@ -570,7 +570,7 @@ public final class PlotAssemblyService {
             ConstructionPasteOps.withReservedFestivalAirCells(
                 seq.pendingBlocks(),
                 seq.prefabRotation(),
-                def.getPrefabPath()
+                def
             );
         List<PendingBlock> nonAirCells = ConstructionPasteOps.withoutPureAirCells(footprintCells);
         ConstructionPasteOps.AssemblyDeferredPartition split =

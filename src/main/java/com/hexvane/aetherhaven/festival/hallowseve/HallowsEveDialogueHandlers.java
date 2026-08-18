@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
 import com.hexvane.aetherhaven.festival.FestivalDefinition;
+import com.hexvane.aetherhaven.festival.FestivalLookSelection;
 import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.plugin.DialogueActionRegistry;
 import com.hexvane.aetherhaven.plugin.DialogueConditionRegistry;
@@ -133,7 +134,7 @@ public final class HallowsEveDialogueHandlers {
         }
         if (session.getStartX() == 0.0 && session.getStartY() == 0.0 && session.getStartZ() == 0.0) {
             var square = FestivalService.findFestivalSquare(plugin, town);
-            FestivalDefinition festival = plugin.getFestivalCatalog().get(HallowsEveIds.FESTIVAL_ID);
+            FestivalDefinition festival = FestivalLookSelection.activeLayout(plugin, town);
             if (square != null && festival != null) {
                 HallowsEveTeleport.bindStartPad(plugin, square, festival, session);
             }

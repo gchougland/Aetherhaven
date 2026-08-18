@@ -444,7 +444,7 @@ public final class TouristDestinationResolver {
         if (plugin == null) {
             return null;
         }
-        FestivalDefinition festival = plugin.getFestivalCatalog().get(festivalId);
+        FestivalDefinition festival = com.hexvane.aetherhaven.festival.FestivalLookSelection.activeLayout(plugin, town);
         return firstFestivalTouristSpot(festival);
     }
 

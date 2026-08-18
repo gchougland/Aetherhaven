@@ -1,7 +1,11 @@
 package com.hexvane.aetherhaven.plot;
 
+import com.hexvane.aetherhaven.community.CommunityFestivalLookGrouping;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.festival.FestivalCatalog;
+import com.hexvane.aetherhaven.festival.FestivalDefinition;
+import com.hexvane.aetherhaven.festival.FestivalLookSelection;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.Collections;
@@ -19,6 +23,7 @@ public final class PlotCraftingCatalog {
     public enum Tab {
         CORE,
         DECORATIONS,
+        FESTIVALS,
         FAVORITES,
         COMMUNITY,
         MODERATION
@@ -78,6 +83,75 @@ public final class PlotCraftingCatalog {
             }
             if (!variants.isEmpty()) {
                 groups.add(new GroupEntry(groupKey, resolveGroupDisplayName(catalog, groupKey), variants));
+            }
+        }
+        groups.sort(Comparator.comparing(g -> g.displayName().toLowerCase(Locale.ROOT)));
+        return groups;
+    }
+
+    /**
+     * Local festival looks grouped under the holiday they count as. Looks are chosen at the bench, not crafted as
+     * tokens.
+     */
+    @Nonnull
+    public static List<GroupEntry> festivalLookGroups(
+        @Nonnull FestivalCatalog catalog,
+        @Nonnull Set<String> activeStyleFilters
+    ) {
+        return festivalLookGroups(catalog, activeStyleFilters, Collections.emptySet());
+    }
+
+    @Nonnull
+    public static List<GroupEntry> festivalLookGroups(
+        @Nonnull FestivalCatalog catalog,
+        @Nonnull Set<String> activeStyleFilters,
+        @Nonnull Set<String> activeTypeFilters
+    ) {
+        if (!PlotBuildingTypes.matchesFilter(Set.of(PlotBuildingTypes.FESTIVALS), activeTypeFilters)) {
+            return List.of();
+        }
+        Map<String, ObjectArrayList<FestivalDefinition>> byBase = new Object2ObjectOpenHashMap<>();
+        for (FestivalDefinition base : catalog.listBases()) {
+            List<FestivalDefinition> looks = FestivalLookSelection.looksOf(catalog, base.getId());
+            if (looks.isEmpty()) {
+                continue;
+            }
+            ObjectArrayList<FestivalDefinition> grouped = new ObjectArrayList<>();
+            for (FestivalDefinition look : looks) {
+                if (!PlotBuildingStyles.matchesFilter(look.getStyleId(), activeStyleFilters)) {
+                    continue;
+                }
+                grouped.add(look);
+            }
+            if (grouped.isEmpty()) {
+                continue;
+            }
+            grouped.sort(Comparator.comparing(d -> d.getDisplayName().toLowerCase(Locale.ROOT)));
+            byBase.put(base.getId(), grouped);
+        }
+        ObjectArrayList<GroupEntry> groups = new ObjectArrayList<>();
+        for (Map.Entry<String, ObjectArrayList<FestivalDefinition>> e : byBase.entrySet()) {
+            FestivalDefinition base = catalog.get(e.getKey());
+            String display =
+                base != null && base.getDisplayName() != null && !base.getDisplayName().isBlank()
+                    ? base.getDisplayName()
+                    : e.getKey();
+            ObjectArrayList<VariantEntry> variants = new ObjectArrayList<>();
+            for (FestivalDefinition look : e.getValue()) {
+                variants.add(
+                    new VariantEntry(
+                        look.getId(),
+                        look.getDisplayName() != null && !look.getDisplayName().isBlank()
+                            ? look.getDisplayName()
+                            : look.getId(),
+                        look.getPrefabPath()
+                    )
+                );
+            }
+            if (!variants.isEmpty()) {
+                groups.add(
+                    new GroupEntry(CommunityFestivalLookGrouping.groupKeyForBase(e.getKey()), display, variants)
+                );
             }
         }
         groups.sort(Comparator.comparing(g -> g.displayName().toLowerCase(Locale.ROOT)));

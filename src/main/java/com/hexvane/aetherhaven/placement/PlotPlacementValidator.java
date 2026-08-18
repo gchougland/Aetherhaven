@@ -68,7 +68,7 @@ public final class PlotPlacementValidator {
         }
         IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
         try {
-            PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(buildingPrefabAnchor, prefabYaw, buf, def.getPrefabPath());
+            PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(buildingPrefabAnchor, prefabYaw, buf, def);
             for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
                 for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
                     if (!townManager.isInsideTerritory(town, x, z)) {
@@ -127,7 +127,7 @@ public final class PlotPlacementValidator {
         Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(signPosition, prefabYaw);
         IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
         try {
-            PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, prefabYaw, buf, def.getPrefabPath());
+            PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, prefabYaw, buf, def);
             for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
                 for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
                     if (!townManager.isInsideTerritory(town, x, z)) {

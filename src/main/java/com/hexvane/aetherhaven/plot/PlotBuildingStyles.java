@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.plot;
 
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.festival.FestivalCatalog;
+import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -44,6 +46,21 @@ public final class PlotBuildingStyles {
                 continue;
             }
             String styleId = styleIdOf(def);
+            if (styleId != null) {
+                ids.add(styleId);
+            }
+        }
+        return new ArrayList<>(ids);
+    }
+
+    @Nonnull
+    public static List<String> lookStyleIds(@Nonnull FestivalCatalog catalog) {
+        TreeSet<String> ids = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        for (FestivalDefinition def : catalog.list()) {
+            if (!def.isLook()) {
+                continue;
+            }
+            String styleId = normalize(def.getStyleId());
             if (styleId != null) {
                 ids.add(styleId);
             }

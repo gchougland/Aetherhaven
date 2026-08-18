@@ -73,6 +73,23 @@ public final class FestivalDefinition {
     @Nullable
     private String mechanicId;
 
+    /**
+     * When set, this entry is a look for another festival: same holiday, own prefab and spots. Looks do not take a
+     * calendar day.
+     */
+    @SerializedName("countsAsFestivalId")
+    @Nullable
+    private String countsAsFestivalId;
+
+    /** True when this JSON is a festival look. Also implied by a non-blank {@link #countsAsFestivalId}. */
+    @SerializedName("festivalVariant")
+    private boolean festivalVariant;
+
+    /** Optional style name for festival looks, used by the plot crafting bench filter. */
+    @SerializedName("styleId")
+    @Nullable
+    private String styleId;
+
     @SerializedName("spots")
     @Nullable
     private List<SpotRow> spots;
@@ -252,6 +269,30 @@ public final class FestivalDefinition {
     @Nullable
     public String getMechanicId() {
         return mechanicId != null && !mechanicId.isBlank() ? mechanicId.trim() : null;
+    }
+
+    /** Base festival this look counts as, or null when this entry is a holiday of its own. */
+    @Nullable
+    public String getCountsAsFestivalId() {
+        return countsAsFestivalId != null && !countsAsFestivalId.isBlank() ? countsAsFestivalId.trim() : null;
+    }
+
+    /** True when this catalog entry is a look for another festival rather than its own holiday. */
+    public boolean isLook() {
+        return festivalVariant || getCountsAsFestivalId() != null;
+    }
+
+    /** Style name for bench filters, or null when unset. */
+    @Nullable
+    public String getStyleId() {
+        return styleId != null && !styleId.isBlank() ? styleId.trim() : null;
+    }
+
+    /** Base holiday id: {@link #getCountsAsFestivalId()} for a look, otherwise {@link #getId()}. */
+    @Nonnull
+    public String getGameplayFestivalId() {
+        String base = getCountsAsFestivalId();
+        return base != null ? base : getId();
     }
 
     @Nonnull

@@ -114,7 +114,7 @@ public final class PlotCreatorWorldRegistrar {
 
         PlotFootprintRecord footprint;
         try {
-            footprint = PlotFootprintUtil.computeFootprint(prefabAnchor, yaw, buf, def.getPrefabPath());
+            footprint = PlotFootprintUtil.computeFootprint(prefabAnchor, yaw, buf, def);
         } catch (Exception e) {
             LOGGER.atWarning().withCause(e).log("Plot creator footprint failed for %s", def.getId());
             Vector3i min = draft.boundsMin();

@@ -41,6 +41,14 @@ public final class CommunityManifestEntry {
     @SerializedName("wallPieceRole")
     private String wallPieceRole;
 
+    /** Marketplace festival look: own prefab and spots, no calendar day. */
+    @SerializedName("festivalVariant")
+    private boolean festivalVariant;
+
+    /** Base holiday this look counts as. */
+    @SerializedName("countsAsFestivalId")
+    private String countsAsFestivalId;
+
     /** String or array of core construction ids this variant counts as. */
     @SerializedName("countsAsConstructionId")
     private com.google.gson.JsonElement countsAsConstructionId;
@@ -151,6 +159,15 @@ public final class CommunityManifestEntry {
         return wallSegment;
     }
 
+    public boolean isFestivalVariant() {
+        return festivalVariant || (countsAsFestivalId != null && !countsAsFestivalId.isBlank());
+    }
+
+    @Nullable
+    public String getCountsAsFestivalId() {
+        return countsAsFestivalId != null && !countsAsFestivalId.isBlank() ? countsAsFestivalId.trim() : null;
+    }
+
     /** Role inside the wall style, or null on entries that are not wall pieces. */
     @Nullable
     public com.hexvane.aetherhaven.wall.WallPieceRole getWallPieceRole() {
@@ -161,7 +178,11 @@ public final class CommunityManifestEntry {
     @Nonnull
     public Set<String> getTypeIds() {
         return PlotBuildingTypes.typeIdsOf(
-            isDecorationPlot(), isWallSegment(), getCountsAsConstructionIds(), getId()
+            isDecorationPlot(),
+            isWallSegment(),
+            isFestivalVariant(),
+            getCountsAsConstructionIds(),
+            getId()
         );
     }
 
@@ -236,6 +257,9 @@ public final class CommunityManifestEntry {
 
     @Nonnull
     public String prefabPathKey() {
+        if (isFestivalVariant()) {
+            return com.hexvane.aetherhaven.festival.CustomFestivalPaths.prefabPathKey(getId());
+        }
         return getId() + ".prefab.json";
     }
 }

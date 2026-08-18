@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.community.CommunitySubmissionService;
 import com.hexvane.aetherhaven.community.CommunitySubmitLocalSave;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.festival.CustomFestivalPaths;
 import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import com.hexvane.aetherhaven.placement.PlotFootprintOverlayRefresh;
 import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
@@ -1008,6 +1009,23 @@ public final class PlotCreatorService {
             playerRef.sendMessage(Message.translation(messageKey));
             return false;
         }
+        boolean communityEnabled = plugin.getConfig().get().getCommunityMarketplace().isEnabled();
+        boolean submitLook = draft.isFestivalLookMode() && draft.isSubmitToCommunity() && communityEnabled;
+        if (submitLook) {
+            try {
+                String remapErr =
+                    CommunitySubmitLocalSave.prepareDraftForFestivalLookSubmit(plugin, draft, playerRef.getUuid());
+                if (remapErr != null) {
+                    playerRef.sendMessage(
+                        Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error." + remapErr)
+                    );
+                    return false;
+                }
+            } catch (Exception e) {
+                playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.saveFailed"));
+                return false;
+            }
+        }
         String id = draft.getFestivalId();
         if (id == null) {
             playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.incomplete"));
@@ -1027,6 +1045,12 @@ public final class PlotCreatorService {
             return false;
         }
         plugin.reloadConfigsAndAssetCatalogs();
+        if (submitLook) {
+            String playerName = playerRef.getUsername() != null ? playerRef.getUsername() : "Unknown";
+            String submitErr =
+                CommunitySubmissionService.submitSavedBuilding(plugin, playerRef.getUuid(), playerName, id);
+            CommunitySubmissionService.notifyPlayer(playerRef, submitErr);
+        }
         draft.setStep(PlotCreatorStep.DONE);
         playerRef.sendMessage(
             Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.success.festivalSaved")
@@ -1128,8 +1152,9 @@ public final class PlotCreatorService {
 
     private static void endSessionAfterSave(@Nonnull PlayerRef playerRef, @Nonnull PlotCreatorSession session) {
         PlotCreatorSessions.remove(playerRef.getUuid());
-        // Building editor pastes temporary blocks; clear them after save as well as cancel.
-        boolean removeWorldArtifacts = session.getDraft().isBuildingEditorMode();
+        // Building editor and festival authoring paste a full box; clear it after save as well as cancel.
+        PlotCreatorDraft draft = session.getDraft();
+        boolean removeWorldArtifacts = draft.isBuildingEditorMode() || draft.isFestivalMode();
         PlotCreatorCleanup.endSession(session, playerRef, removeWorldArtifacts);
     }
 
@@ -1213,6 +1238,14 @@ public final class PlotCreatorService {
     public static void syncPrefabFileNameFromConstructionId(@Nonnull PlotCreatorDraft draft) {
         if (draft.isFestivalMode()) {
             PlotCreatorFestivalSettings.syncPrefabFileName(draft);
+            return;
+        }
+        if (draft.countsAsFestivalSquare() && !draft.isBuildingEditorMode()) {
+            String id = draft.getConstructionId();
+            if (id != null && !id.isBlank()) {
+                draft.setPrefabPath(CustomFestivalPaths.prefabPathKey(id));
+                draft.setPrefabFileName(CustomFestivalPaths.prefabFileName(id));
+            }
             return;
         }
         if (draft.isBuildingEditorMode()) {

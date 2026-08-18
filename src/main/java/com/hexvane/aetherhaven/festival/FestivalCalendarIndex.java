@@ -23,6 +23,9 @@ public final class FestivalCalendarIndex {
             map.put(season, new FestivalDefinition[AetherhavenCalendar.DAYS_PER_SEASON]);
         }
         for (FestivalDefinition def : catalog.list()) {
+            if (def.isLook()) {
+                continue;
+            }
             FestivalDefinition[] days = map.get(def.getSeason());
             int slot = def.getDayOfSeason() - 1;
             if (days != null && slot >= 0 && slot < days.length && days[slot] == null) {

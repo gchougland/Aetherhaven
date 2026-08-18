@@ -30,7 +30,7 @@ public final class PlotPlacementRotationUtil {
                 new Vector3i(0, AetherhavenConstants.PLOT_SIGN_BLOCK_Y_ABOVE_LOGICAL_ANCHOR, 0),
                 yaw
             );
-        PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, yaw, buf, def.getPrefabPath());
+        PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, yaw, buf, def);
         return new Vector3d(
             (fp.getMinX() + fp.getMaxX() + 1) * 0.5,
             (fp.getMinY() + fp.getMaxY() + 1) * 0.5,

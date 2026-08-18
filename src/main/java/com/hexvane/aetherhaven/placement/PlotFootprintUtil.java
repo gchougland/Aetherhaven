@@ -23,7 +23,23 @@ public final class PlotFootprintUtil {
      */
     @Nonnull
     public static PlotFootprintRecord computeFootprint(@Nonnull Vector3i origin, @Nonnull Rotation yaw, @Nonnull IPrefabBuffer buffer) {
-        return computeFootprint(origin, yaw, buffer, null);
+        return computeFootprint(origin, yaw, buffer, (String) null);
+    }
+
+    @Nonnull
+    public static PlotFootprintRecord computeFootprint(
+        @Nonnull Vector3i origin,
+        @Nonnull Rotation yaw,
+        @Nonnull IPrefabBuffer buffer,
+        @Nullable com.hexvane.aetherhaven.construction.ConstructionDefinition def
+    ) {
+        if (def != null) {
+            if (FestivalPrefabSize.usesReservedFootprint(def)) {
+                return FestivalPrefabSize.footprintAt(origin, yaw);
+            }
+            return computeFootprint(origin, yaw, buffer, (String) null);
+        }
+        return computeFootprint(origin, yaw, buffer, (String) null);
     }
 
     /**

@@ -59,4 +59,11 @@ final class PlotBuildingTypesTest {
         assertEquals(Set.of(PlotBuildingTypes.WALLS), ids);
         assertEquals("Walls", PlotBuildingTypes.displayLabel(ConstructionCatalog.forTests(Map.of()), "walls"));
     }
+
+    @Test
+    void festivalLooksUseTheFestivalsSentinel() {
+        Set<String> ids = PlotBuildingTypes.typeIdsOf(false, false, true, List.of(), "plot_community_x_carnival");
+        assertEquals(Set.of(PlotBuildingTypes.FESTIVALS), ids);
+        assertEquals("Festivals", PlotBuildingTypes.displayLabel(ConstructionCatalog.forTests(Map.of()), "festivals"));
+    }
 }

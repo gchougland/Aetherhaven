@@ -504,8 +504,20 @@ function normalizeWallPieceRole(value) {
 }
 
 /**
+ * @param {unknown} value
+ * @returns {string|undefined}
+ */
+function normalizeCountsAsFestivalId(value) {
+  if (typeof value !== "string") {
+    return undefined;
+  }
+  const id = value.trim();
+  return id ? id : undefined;
+}
+
+/**
  * @param {string} buildingPath
- * @returns {{ decorationPlot: boolean, wallSegment: boolean, wallPieceRole: string|undefined, countsAsConstructionId: string|string[]|undefined }}
+ * @returns {{ decorationPlot: boolean, wallSegment: boolean, wallPieceRole: string|undefined, countsAsConstructionId: string|string[]|undefined, festivalVariant: boolean, countsAsFestivalId: string|undefined }}
  */
 function readBuildingTypeMeta(buildingPath) {
   const empty = {
@@ -513,6 +525,8 @@ function readBuildingTypeMeta(buildingPath) {
     wallSegment: false,
     wallPieceRole: undefined,
     countsAsConstructionId: undefined,
+    festivalVariant: false,
+    countsAsFestivalId: undefined,
   };
   try {
     if (!fs.existsSync(buildingPath)) {
@@ -525,7 +539,16 @@ function readBuildingTypeMeta(buildingPath) {
     const wallSegment = Boolean(building.wallSegment);
     const wallPieceRole = normalizeWallPieceRole(building.wallPiece?.role);
     const countsAsConstructionId = normalizeCountsAsConstructionId(building.countsAsConstructionId);
-    return { decorationPlot, wallSegment, wallPieceRole, countsAsConstructionId };
+    const countsAsFestivalId = normalizeCountsAsFestivalId(building.countsAsFestivalId);
+    const festivalVariant = Boolean(building.festivalVariant) || Boolean(countsAsFestivalId);
+    return {
+      decorationPlot,
+      wallSegment,
+      wallPieceRole,
+      countsAsConstructionId,
+      festivalVariant,
+      countsAsFestivalId,
+    };
   } catch {
     return empty;
   }
@@ -541,6 +564,7 @@ function buildManifestEntry(id, meta, prefabBytes) {
     tags: normalizeTags(meta.tags),
     decorationPlot: Boolean(meta.decorationPlot),
     wallSegment: Boolean(meta.wallSegment),
+    festivalVariant: Boolean(meta.festivalVariant),
     blockIdVersion: meta.blockIdVersion,
     prefabBytes,
     version: meta.version || "1",
@@ -553,6 +577,10 @@ function buildManifestEntry(id, meta, prefabBytes) {
   const wallPieceRole = normalizeWallPieceRole(meta.wallPieceRole);
   if (wallPieceRole) {
     entry.wallPieceRole = wallPieceRole;
+  }
+  const countsAsFestivalId = normalizeCountsAsFestivalId(meta.countsAsFestivalId);
+  if (countsAsFestivalId) {
+    entry.countsAsFestivalId = countsAsFestivalId;
   }
   const description = normalizeDescription(meta.description);
   if (description) {
@@ -729,8 +757,10 @@ function approveSubmission(submissionId, requestedId, requiredModsOverride) {
 
   const building = JSON.parse(fs.readFileSync(approved.building, "utf8"));
   building.id = id;
-  // Match client install layout: Community/.../Prefabs/{id}.prefab.json
-  building.prefabPath = `${id}.prefab.json`;
+  const pendingTypeMeta = readBuildingTypeMeta(path.join(pendingDir, "building.json"));
+  building.prefabPath = pendingTypeMeta.festivalVariant
+    ? `Festivals/Festival_${id}.prefab.json`
+    : `${id}.prefab.json`;
   if (normalizedRequiredModsOverride !== null) {
     building.requiredMods = normalizedRequiredModsOverride;
   }
@@ -747,6 +777,7 @@ function approveSubmission(submissionId, requestedId, requiredModsOverride) {
     decorationPlot: typeMeta.decorationPlot,
     wallSegment: typeMeta.wallSegment,
     wallPieceRole: typeMeta.wallPieceRole,
+    festivalVariant: typeMeta.festivalVariant,
     requiredMods: buildingRequiredMods.length
       ? buildingRequiredMods
       : normalizeRequiredMods(meta.requiredMods),
@@ -759,6 +790,11 @@ function approveSubmission(submissionId, requestedId, requiredModsOverride) {
     approvedMeta.countsAsConstructionId = typeMeta.countsAsConstructionId;
   } else {
     delete approvedMeta.countsAsConstructionId;
+  }
+  if (typeMeta.countsAsFestivalId) {
+    approvedMeta.countsAsFestivalId = typeMeta.countsAsFestivalId;
+  } else {
+    delete approvedMeta.countsAsFestivalId;
   }
   if (preservedCoverScreenshotId) {
     approvedMeta.coverScreenshotId = preservedCoverScreenshotId;
@@ -1119,15 +1155,20 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
       typeof e.decorationPlot === "boolean" ? e.decorationPlot : typeMeta.decorationPlot;
     const wallSegment =
       typeof e.wallSegment === "boolean" ? e.wallSegment : typeMeta.wallSegment;
+    const festivalVariant =
+      typeof e.festivalVariant === "boolean" ? e.festivalVariant : typeMeta.festivalVariant;
     const wallPieceRole = normalizeWallPieceRole(e.wallPieceRole) ?? typeMeta.wallPieceRole;
     const countsAsConstructionId =
       normalizeCountsAsConstructionId(e.countsAsConstructionId) ?? typeMeta.countsAsConstructionId;
+    const countsAsFestivalId =
+      normalizeCountsAsFestivalId(e.countsAsFestivalId) ?? typeMeta.countsAsFestivalId;
     const card = resolveCardImage(e.id, e.coverScreenshotId);
     const entry = {
       ...e,
       tags,
       decorationPlot,
       wallSegment,
+      festivalVariant,
       prefabBytes,
       compatible,
       upvoteCount: voteCounts[e.id] || 0,
@@ -1145,6 +1186,11 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
       entry.countsAsConstructionId = countsAsConstructionId;
     } else {
       delete entry.countsAsConstructionId;
+    }
+    if (countsAsFestivalId) {
+      entry.countsAsFestivalId = countsAsFestivalId;
+    } else {
+      delete entry.countsAsFestivalId;
     }
     if (wallPieceRole) {
       entry.wallPieceRole = wallPieceRole;

@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.community;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.CommunityMarketplaceConfig;
+import com.hexvane.aetherhaven.festival.CustomFestivalPaths;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -240,6 +241,10 @@ public final class CommunitySubmissionService {
         if (Files.isRegularFile(community)) {
             return community;
         }
+        Path festival = CustomFestivalPaths.festivalFile(dataDir, constructionId);
+        if (Files.isRegularFile(festival)) {
+            return festival;
+        }
         Path custom = CustomBuildingsPaths.buildingFile(dataDir, constructionId);
         return Files.isRegularFile(custom) ? custom : null;
     }
@@ -252,6 +257,14 @@ public final class CommunitySubmissionService {
     ) {
         Path prefab = CustomBuildingsPaths.resolvePrefabFile(dataDir, constructionId + ".prefab.json");
         if (prefab != null) {
+            return prefab;
+        }
+        prefab = CustomFestivalPaths.resolvePrefabFile(dataDir, CustomFestivalPaths.prefabPathKey(constructionId));
+        if (prefab != null && Files.isRegularFile(prefab)) {
+            return prefab;
+        }
+        prefab = CustomFestivalPaths.prefabFile(dataDir, constructionId);
+        if (Files.isRegularFile(prefab)) {
             return prefab;
         }
         prefab = CommunityPaths.installedPrefabFile(dataDir, constructionId);

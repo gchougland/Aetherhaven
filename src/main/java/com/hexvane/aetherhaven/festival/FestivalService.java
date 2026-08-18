@@ -77,9 +77,13 @@ public final class FestivalService {
         String runningId = town.getActiveFestivalId();
         if (runningId != null) {
             FestivalDefinition running = plugin.getFestivalCatalog().get(runningId);
+            FestivalDefinition base = FestivalLookSelection.gameplayBase(plugin.getFestivalCatalog(), running);
+            FestivalDefinition layout =
+                base != null ? FestivalLookSelection.layoutFor(plugin.getFestivalCatalog(), town, base) : running;
             boolean expired = running == null
+                || base == null
                 || epochMinute >= town.getActiveFestivalEndEpochMinute()
-                || !FestivalWindow.isActive(running, gameTime);
+                || !FestivalWindow.isActive(base, gameTime);
             if (expired) {
                 endFestival(world, store, plugin, tm, town);
                 return;
@@ -89,15 +93,15 @@ public final class FestivalService {
             PlotInstance activeSquare = activePlotId != null ? town.findPlotById(activePlotId) : null;
             // Square was destroyed/rebuilt while the festival was still marked active.
             if (activeSquare == null) {
-                if (square == null || running == null) {
+                if (square == null || layout == null) {
                     abandonActiveFestivalWithoutSquare(world, store, plugin, tm, town);
                 } else {
-                    rebindActiveFestivalToSquare(world, store, plugin, tm, town, square, running);
+                    rebindActiveFestivalToSquare(world, store, plugin, tm, town, square, layout);
                 }
                 return;
             }
             // Spot POIs are runtime-only. Rebuild them after reloads / plot refresh so villagers keep attending.
-            ensureActiveFestivalSpots(world, store, plugin, tm, town, running);
+            ensureActiveFestivalSpots(world, store, plugin, tm, town, layout);
             return;
         }
         AetherhavenCalendar.CalendarDate date = AetherhavenCalendar.from(gameTime);
@@ -206,26 +210,90 @@ public final class FestivalService {
         if (everyday == null) {
             return false;
         }
-        long endEpochMinute = resolveEndEpochMinute(festival, gameTime, epochMinute);
+        FestivalDefinition base = FestivalLookSelection.gameplayBase(plugin.getFestivalCatalog(), festival);
+        if (base == null) {
+            base = festival;
+        }
+        FestivalDefinition layout = FestivalLookSelection.layoutFor(plugin.getFestivalCatalog(), town, base);
+        long endEpochMinute = resolveEndEpochMinute(base, gameTime, epochMinute);
+        FestivalDefinition layoutForPaste = layout;
         boolean started = FestivalPrefabSwapService.swap(
             world,
             plugin,
             town,
             square,
             everyday,
-            festival.getPrefabPath(),
-            () -> onFestivalPasted(world, plugin, town.getTownId(), square.getPlotId(), festival)
+            layout.getPrefabPath(),
+            () -> onFestivalPasted(world, plugin, town.getTownId(), square.getPlotId(), layoutForPaste)
         );
         if (!started) {
             return false;
         }
-        town.setActiveFestivalId(festival.getId());
+        town.setActiveFestivalId(base.getId());
         town.setActiveFestivalPlotId(square.getPlotId());
         town.setActiveFestivalEndEpochMinute(endEpochMinute);
         tm.updateTown(town);
-        announce(store, town, LANG + "started", festival, FestivalPrefabSwapService.spotWorldPosition(plugin, square, 0, 0, 0));
-        LOGGER.atInfo().log("Festival %s started for town %s", festival.getId(), town.getTownId());
+        announce(store, town, LANG + "started", base, FestivalPrefabSwapService.spotWorldPosition(plugin, square, 0, 0, 0));
+        LOGGER.atInfo().log("Festival %s started for town %s", base.getId(), town.getTownId());
         return true;
+    }
+
+    /**
+     * Sets this town's look for {@code baseFestivalId}. {@code lookId} null restores the original. If that holiday is
+     * running, the square swaps to the new prefab on the world thread.
+     *
+     * @return plot crafting error lang suffix, or null on success
+     */
+    @Nullable
+    public static String applySelectedLook(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownManager tm,
+        @Nonnull TownRecord town,
+        @Nonnull String baseFestivalId,
+        @Nullable String lookId
+    ) {
+        FestivalCatalog catalog = plugin.getFestivalCatalog();
+        FestivalDefinition base = catalog.get(baseFestivalId.trim());
+        if (base == null || base.isLook()) {
+            return "unknownFestivalLook";
+        }
+        if (lookId != null && !lookId.isBlank()) {
+            FestivalDefinition look = catalog.get(lookId.trim());
+            if (look == null || !look.isLook() || !base.getId().equals(look.getGameplayFestivalId())) {
+                return "unknownFestivalLook";
+            }
+        }
+        FestivalDefinition oldLayout = FestivalLookSelection.layoutFor(catalog, town, base);
+        town.setSelectedFestivalLookId(base.getId(), lookId);
+        tm.updateTown(town);
+        if (!base.getId().equals(town.getActiveFestivalId())) {
+            return null;
+        }
+        PlotInstance square = findFestivalSquare(plugin, town);
+        if (square == null) {
+            return null;
+        }
+        FestivalDefinition newLayout = FestivalLookSelection.layoutFor(catalog, town, base);
+        if (oldLayout.getPrefabPath().equals(newLayout.getPrefabPath()) && oldLayout.getId().equals(newLayout.getId())) {
+            return null;
+        }
+        FestivalSpotService.clearSpots(world, plugin, town);
+        FestivalNpcSpawnService.despawnFestivalNpcs(world, store, plugin, town);
+        boolean started = FestivalPrefabSwapService.swap(
+            world,
+            plugin,
+            town,
+            square,
+            oldLayout.getPrefabPath(),
+            newLayout.getPrefabPath(),
+            () -> onFestivalPasted(world, plugin, town.getTownId(), square.getPlotId(), newLayout)
+        );
+        if (!started) {
+            return "festivalLookSwapFailed";
+        }
+        return null;
     }
 
     /** Swaps the square back to its everyday prefab and clears everything the festival owned. */
@@ -238,24 +306,30 @@ public final class FestivalService {
     ) {
         String runningId = town.getActiveFestivalId();
         FestivalDefinition running = runningId != null ? plugin.getFestivalCatalog().get(runningId) : null;
+        FestivalDefinition base = FestivalLookSelection.gameplayBase(plugin.getFestivalCatalog(), running);
+        FestivalDefinition layout =
+            base != null ? FestivalLookSelection.layoutFor(plugin.getFestivalCatalog(), town, base) : running;
         PlotInstance square = findFestivalSquare(plugin, town);
 
         FestivalSpotService.clearSpots(world, plugin, town);
         FestivalNpcSpawnService.despawnFestivalNpcs(world, store, plugin, town);
-        if (running != null && square != null) {
-            FestivalMechanic mechanic = plugin.getFestivalMechanicRegistry().get(running.getMechanicId());
+        FestivalDefinition mechanicSource = layout != null ? layout : running;
+        if (mechanicSource != null && square != null) {
+            String mechanicId = base != null ? base.getMechanicId() : mechanicSource.getMechanicId();
+            FestivalMechanic mechanic = plugin.getFestivalMechanicRegistry().get(mechanicId);
             if (mechanic != null) {
                 try {
-                    mechanic.onEnd(world, town, square, running);
+                    mechanic.onEnd(world, town, square, mechanicSource);
                 } catch (RuntimeException e) {
-                    LOGGER.atWarning().withCause(e).log("Festival mechanic %s failed to end", running.getMechanicId());
+                    LOGGER.atWarning().withCause(e).log("Festival mechanic %s failed to end", mechanicId);
                 }
             }
         }
 
         String everyday = square != null ? everydayPrefabPath(plugin, square) : null;
-        if (square != null && running != null && everyday != null) {
-            FestivalPrefabSwapService.swap(world, plugin, town, square, running.getPrefabPath(), everyday, null);
+        String currentPrefab = layout != null ? layout.getPrefabPath() : (running != null ? running.getPrefabPath() : null);
+        if (square != null && currentPrefab != null && everyday != null) {
+            FestivalPrefabSwapService.swap(world, plugin, town, square, currentPrefab, everyday, null);
         }
         town.clearActiveFestival();
         tm.updateTown(town);
@@ -359,12 +433,14 @@ public final class FestivalService {
         FestivalSpotService.registerSpots(world, plugin, tm, town, square, festival);
         FestivalNpcSpawnService.spawnFestivalNpcs(world, store, plugin, tm, town, square, festival);
         FestivalAttendanceService.sendAttendeesToFestival(world, store, plugin, town, square, festival);
-        FestivalMechanic mechanic = plugin.getFestivalMechanicRegistry().get(festival.getMechanicId());
+        FestivalDefinition base = FestivalLookSelection.gameplayBase(plugin.getFestivalCatalog(), festival);
+        String mechanicId = base != null ? base.getMechanicId() : festival.getMechanicId();
+        FestivalMechanic mechanic = plugin.getFestivalMechanicRegistry().get(mechanicId);
         if (mechanic != null) {
             try {
                 mechanic.onStart(world, town, square, festival);
             } catch (RuntimeException e) {
-                LOGGER.atWarning().withCause(e).log("Festival mechanic %s failed to start", festival.getMechanicId());
+                LOGGER.atWarning().withCause(e).log("Festival mechanic %s failed to start", mechanicId);
             }
         }
     }

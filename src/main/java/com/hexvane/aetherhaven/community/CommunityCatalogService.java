@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.CommunityMarketplaceConfig;
+import com.hexvane.aetherhaven.festival.CustomFestivalPaths;
+import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import com.hexvane.aetherhaven.plot.PlotBuildingStyles;
 import com.hexvane.aetherhaven.plot.PlotBuildingTypes;
 import com.hexvane.aetherhaven.plot.PlotCraftingCatalog;
@@ -120,7 +122,11 @@ public final class CommunityCatalogService {
     }
 
     public boolean isInstalled(@Nonnull String constructionId) {
-        return CommunityPaths.isInstalled(plugin.getDataDirectory(), constructionId);
+        Path dataDir = plugin.getDataDirectory();
+        if (CommunityPaths.isInstalled(dataDir, constructionId)) {
+            return true;
+        }
+        return Files.isRegularFile(CustomFestivalPaths.festivalFile(dataDir, constructionId));
     }
 
     /** True when building JSON exists and any required manifest icon is on disk and registered. */
@@ -459,6 +465,7 @@ public final class CommunityCatalogService {
         entries.sort(comparatorFor(sort));
         // Wall pieces show as one card per style, with the arrows cycling the pieces inside it.
         LinkedHashMap<String, List<CommunityManifestEntry>> wallStyles = new LinkedHashMap<>();
+        LinkedHashMap<String, List<CommunityManifestEntry>> festivalLooks = new LinkedHashMap<>();
         for (CommunityManifestEntry entry : entries) {
             if (!PlotBuildingStyles.matchesFilter(entry.getStyleId(), activeStyleFilters)) {
                 continue;
@@ -475,6 +482,12 @@ public final class CommunityCatalogService {
                     .add(entry);
                 continue;
             }
+            if (entry.isFestivalVariant()) {
+                festivalLooks
+                    .computeIfAbsent(CommunityFestivalLookGrouping.groupKeyFor(entry), k -> new ArrayList<>())
+                    .add(entry);
+                continue;
+            }
             groups.add(
                 new PlotCraftingCatalog.GroupEntry(
                     entry.getId(),
@@ -486,6 +499,19 @@ public final class CommunityCatalogService {
             );
         }
         groups.addAll(CommunityWallStyleGrouping.toGroups(wallStyles));
+        Map<String, String> baseNames = new LinkedHashMap<>();
+        for (Map.Entry<String, List<CommunityManifestEntry>> e : festivalLooks.entrySet()) {
+            String key = e.getKey();
+            String baseId =
+                CommunityFestivalLookGrouping.isFestivalLookGroupKey(key)
+                    ? key.substring(CommunityFestivalLookGrouping.GROUP_PREFIX.length())
+                    : key;
+            FestivalDefinition base = plugin.getFestivalCatalog().get(baseId);
+            if (base != null && base.getDisplayName() != null && !base.getDisplayName().isBlank()) {
+                baseNames.put(baseId, base.getDisplayName());
+            }
+        }
+        groups.addAll(CommunityFestivalLookGrouping.toGroups(festivalLooks, baseNames));
         return groups;
     }
 
@@ -516,6 +542,7 @@ public final class CommunityCatalogService {
         }
         ObjectArrayList<PlotCraftingCatalog.GroupEntry> groups = new ObjectArrayList<>();
         LinkedHashMap<String, List<CommunityManifestEntry>> favoriteWallStyles = new LinkedHashMap<>();
+        LinkedHashMap<String, List<CommunityManifestEntry>> favoriteFestivalLooks = new LinkedHashMap<>();
         for (CommunityManifestEntry entry : cachedEntries.get()) {
             String id = entry.getId().trim().toLowerCase(Locale.ROOT);
             if (!normalized.contains(id)) {
@@ -529,6 +556,17 @@ public final class CommunityCatalogService {
                 if (PlotBuildingStyles.matchesFilter(entry.getStyleId(), activeStyleFilters)
                     && PlotBuildingTypes.matchesFilter(entry.getTypeIds(), activeTypeFilters)) {
                     favoriteWallStyles.computeIfAbsent(groupKey, k -> new ArrayList<>()).add(entry);
+                }
+                continue;
+            }
+            if (entry.isFestivalVariant()) {
+                String groupKey = CommunityFestivalLookGrouping.groupKeyFor(entry);
+                if (catalogGroupKeys.contains(groupKey)) {
+                    continue;
+                }
+                if (PlotBuildingStyles.matchesFilter(entry.getStyleId(), activeStyleFilters)
+                    && PlotBuildingTypes.matchesFilter(entry.getTypeIds(), activeTypeFilters)) {
+                    favoriteFestivalLooks.computeIfAbsent(groupKey, k -> new ArrayList<>()).add(entry);
                 }
                 continue;
             }
@@ -552,6 +590,19 @@ public final class CommunityCatalogService {
             );
         }
         groups.addAll(CommunityWallStyleGrouping.toGroups(favoriteWallStyles));
+        Map<String, String> baseNames = new LinkedHashMap<>();
+        for (Map.Entry<String, List<CommunityManifestEntry>> e : favoriteFestivalLooks.entrySet()) {
+            String key = e.getKey();
+            String baseId =
+                CommunityFestivalLookGrouping.isFestivalLookGroupKey(key)
+                    ? key.substring(CommunityFestivalLookGrouping.GROUP_PREFIX.length())
+                    : key;
+            FestivalDefinition base = plugin.getFestivalCatalog().get(baseId);
+            if (base != null && base.getDisplayName() != null && !base.getDisplayName().isBlank()) {
+                baseNames.put(baseId, base.getDisplayName());
+            }
+        }
+        groups.addAll(CommunityFestivalLookGrouping.toGroups(favoriteFestivalLooks, baseNames));
         groups.sort(Comparator.comparing(g -> g.displayName().toLowerCase(Locale.ROOT)));
         return groups;
     }
@@ -592,12 +643,15 @@ public final class CommunityCatalogService {
         TreeSet<String> ids = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
         boolean anyDecoration = false;
         boolean anyWall = false;
+        boolean anyFestival = false;
         for (CommunityManifestEntry entry : cachedEntries.get()) {
             for (String typeId : entry.getTypeIds()) {
                 if (PlotBuildingTypes.DECORATION.equals(typeId)) {
                     anyDecoration = true;
                 } else if (PlotBuildingTypes.WALLS.equals(typeId)) {
                     anyWall = true;
+                } else if (PlotBuildingTypes.FESTIVALS.equals(typeId)) {
+                    anyFestival = true;
                 } else {
                     ids.add(typeId);
                 }
@@ -609,6 +663,9 @@ public final class CommunityCatalogService {
         }
         if (anyWall) {
             out.add(PlotBuildingTypes.WALLS);
+        }
+        if (anyFestival) {
+            out.add(PlotBuildingTypes.FESTIVALS);
         }
         out.addAll(ids);
         return out;

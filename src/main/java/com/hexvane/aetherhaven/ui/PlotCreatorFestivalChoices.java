@@ -9,10 +9,10 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Rows shown on the plot creator festival step: one "new festival" row plus every festival already saved. */
+/** Rows shown on the plot creator festival step: one new festival row plus every holiday (not looks). */
 public final class PlotCreatorFestivalChoices {
     /**
-     * @param festivalId existing festival to edit, or null for the new festival row
+     * @param festivalId holiday to make a look of, or null for the new festival row
      * @param labelLang optional message id; when null the raw {@code fallbackLabel} is shown
      */
     public record Choice(@Nullable String festivalId, @Nullable String labelLang, @Nonnull String fallbackLabel) {}
@@ -29,7 +29,7 @@ public final class PlotCreatorFestivalChoices {
         if (plugin == null) {
             return out;
         }
-        List<FestivalDefinition> defs = new ArrayList<>(plugin.getFestivalCatalog().list());
+        List<FestivalDefinition> defs = new ArrayList<>(plugin.getFestivalCatalog().listBases());
         defs.sort(Comparator.comparing(d -> d.getDisplayName().toLowerCase(Locale.ROOT)));
         for (FestivalDefinition def : defs) {
             out.add(new Choice(def.getId(), def.getDisplayNameLangKey(), def.getDisplayName()));
