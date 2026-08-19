@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
+import com.hexvane.aetherhaven.festival.FestivalRewardNotify;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
 import com.hexvane.aetherhaven.plugin.DialogueActionRegistry;
@@ -256,12 +257,22 @@ public final class CarnivalDialogueHandlers {
         }
         removeDarts(store, playerRef, CarnivalIds.BALLOON_DARTS);
         if (tickets > 0) {
-            player.giveItem(new ItemStack(CarnivalIds.SUMMER_TICKET_ITEM_ID, tickets), playerRef, store);
+            FestivalRewardNotify.giveAndNotify(
+                player,
+                playerRef,
+                store,
+                new ItemStack(CarnivalIds.SUMMER_TICKET_ITEM_ID, tickets)
+            );
         }
         if (perfectClear) {
             String hatItemId = pickRandomUnownedBalloonHatItem(town, store, playerRef);
             if (hatItemId != null) {
-                player.giveItem(new ItemStack(hatItemId, 1), playerRef, store);
+                FestivalRewardNotify.giveAndNotify(
+                    player,
+                    playerRef,
+                    store,
+                    new ItemStack(hatItemId, 1)
+                );
                 out.setGotoNodeId("collect_perfect");
             } else {
                 out.setGotoNodeId("collect_perfect_already");
@@ -371,7 +382,12 @@ public final class CarnivalDialogueHandlers {
         }
         int tickets = session.collectWin(playerUuid);
         if (tickets > 0) {
-            player.giveItem(new ItemStack(CarnivalIds.SUMMER_TICKET_ITEM_ID, tickets), playerRef, store);
+            FestivalRewardNotify.giveAndNotify(
+                player,
+                playerRef,
+                store,
+                new ItemStack(CarnivalIds.SUMMER_TICKET_ITEM_ID, tickets)
+            );
         }
     }
 
@@ -535,10 +551,20 @@ public final class CarnivalDialogueHandlers {
         }
         CarnivalWhackClubUtil.removeAllWhackers(store, playerRef);
         if (tickets > 0) {
-            player.giveItem(new ItemStack(CarnivalIds.SUMMER_TICKET_ITEM_ID, tickets), playerRef, store);
+            FestivalRewardNotify.giveAndNotify(
+                player,
+                playerRef,
+                store,
+                new ItemStack(CarnivalIds.SUMMER_TICKET_ITEM_ID, tickets)
+            );
         }
         if (perfectClear && !town.hasVillagerCosmeticUnlocked(CarnivalIds.WHACK_PERFECT_COSMETIC_ID)) {
-            player.giveItem(new ItemStack(CarnivalIds.WHACK_PERFECT_COSMETIC_ITEM_ID, 1), playerRef, store);
+            FestivalRewardNotify.giveAndNotify(
+                player,
+                playerRef,
+                store,
+                new ItemStack(CarnivalIds.WHACK_PERFECT_COSMETIC_ITEM_ID, 1)
+            );
             out.setGotoNodeId("collect_perfect");
         } else if (perfectClear) {
             out.setGotoNodeId("collect_perfect_already");

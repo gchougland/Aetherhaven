@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.festival.market;
 import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
+import com.hexvane.aetherhaven.festival.FestivalRewardNotify;
 import com.hexvane.aetherhaven.plugin.DialogueActionRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -127,13 +128,28 @@ public final class MarketDialogueHandlers {
             if (!session.hasClaimedTickets(playerUuid)) {
                 int tickets = MarketRewards.ticketCount(session.getScore(), session.getPlace());
                 if (tickets > 0) {
-                    player.giveItem(new ItemStack(MarketIds.AUTUMN_TICKET_ITEM_ID, tickets), playerRef, store);
+                    FestivalRewardNotify.giveAndNotify(
+                        player,
+                        playerRef,
+                        store,
+                        new ItemStack(MarketIds.AUTUMN_TICKET_ITEM_ID, tickets)
+                    );
                 }
                 session.markTicketsClaimed(playerUuid);
             }
             if (MarketRewards.grantsPlushie(session.getPlace()) && !session.isPlushieGranted()) {
-                player.giveItem(new ItemStack(MarketIds.CORIN_PLUSHIE_ITEM_ID, 1), playerRef, store);
-                player.giveItem(new ItemStack(MarketIds.HEARTBERRY_ITEM_ID, 1), playerRef, store);
+                FestivalRewardNotify.giveAndNotify(
+                    player,
+                    playerRef,
+                    store,
+                    new ItemStack(MarketIds.CORIN_PLUSHIE_ITEM_ID, 1)
+                );
+                FestivalRewardNotify.giveAndNotify(
+                    player,
+                    playerRef,
+                    store,
+                    new ItemStack(MarketIds.HEARTBERRY_ITEM_ID, 1)
+                );
                 session.markPlushieGranted();
             }
             MarketStallService.returnStallGoodsToPlayer(player, playerRef, store, session, town.getTownId());

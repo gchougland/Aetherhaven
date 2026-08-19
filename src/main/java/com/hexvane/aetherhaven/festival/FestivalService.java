@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.festival;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.plot.PlotBlockStamper;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -329,7 +330,17 @@ public final class FestivalService {
         String everyday = square != null ? everydayPrefabPath(plugin, square) : null;
         String currentPrefab = layout != null ? layout.getPrefabPath() : (running != null ? running.getPrefabPath() : null);
         if (square != null && currentPrefab != null && everyday != null) {
-            FestivalPrefabSwapService.swap(world, plugin, town, square, currentPrefab, everyday, null);
+            UUID townId = town.getTownId();
+            UUID plotId = square.getPlotId();
+            FestivalPrefabSwapService.swap(
+                world,
+                plugin,
+                town,
+                square,
+                currentPrefab,
+                everyday,
+                () -> stampEverydayLinkedBlocks(world, plugin, townId, plotId)
+            );
         }
         town.clearActiveFestival();
         tm.updateTown(town);
@@ -443,6 +454,33 @@ public final class FestivalService {
                 LOGGER.atWarning().withCause(e).log("Festival mechanic %s failed to start", mechanicId);
             }
         }
+    }
+
+    /** Relinks the town records shelf after the everyday square is pasted back (prefab stores empty plot/town ids). */
+    private static void stampEverydayLinkedBlocks(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID townId,
+        @Nonnull UUID plotId
+    ) {
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.getTown(townId);
+        PlotInstance square = town != null ? town.findPlotById(plotId) : null;
+        if (town == null || square == null) {
+            return;
+        }
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(square.getConstructionId());
+        if (def == null) {
+            return;
+        }
+        PlotBlockStamper.stampAllLinkedBlocks(
+            world,
+            town,
+            square,
+            def,
+            square.resolvePrefabAnchorWorld(def),
+            square.resolvePrefabYaw()
+        );
     }
 
     /** Everyday prefab for the square, taken from the plot's construction definition. */

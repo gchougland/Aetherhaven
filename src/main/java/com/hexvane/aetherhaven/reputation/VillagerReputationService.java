@@ -151,6 +151,24 @@ public final class VillagerReputationService {
     }
 
     /**
+     * Read-only reputation lookup. Does not create town map rows.
+     */
+    public static int peekReputation(
+        @Nonnull TownRecord town, @Nonnull UUID playerUuid, @Nonnull UUID villagerEntityUuid
+    ) {
+        java.util.Map<String, VillagerReputationEntry> inner =
+            town.getPlayerVillagerReputation().get(playerUuid.toString());
+        if (inner == null) {
+            return 0;
+        }
+        VillagerReputationEntry e = inner.get(villagerEntityUuid.toString());
+        if (e == null) {
+            return 0;
+        }
+        return e.getReputation();
+    }
+
+    /**
      * Whether the player has never completed a daily talk with this villager entity (read-only; does not create rows).
      */
     public static boolean isFirstEverTalk(

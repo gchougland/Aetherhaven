@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.festival;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.PrefabYaw;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -59,7 +60,15 @@ public final class FestivalNpcSpawnService {
             }
             Vector3d pos =
                 FestivalPrefabSwapService.spotWorldPosition(plugin, square, row.getLocalX(), row.getLocalY(), row.getLocalZ());
-            Rotation3f rotation = new Rotation3f(0f, (float) Math.toRadians(row.getYawDegrees()), 0f);
+            Rotation3f rotation =
+                new Rotation3f(
+                    0f,
+                    PrefabYaw.worldFromPrefabLocal(
+                        square.resolvePrefabYaw(),
+                        (float) Math.toRadians(row.getYawDegrees())
+                    ),
+                    0f
+                );
             var pair = npcPlugin.spawnNPC(store, roleId, null, pos, rotation);
             if (pair == null) {
                 LOGGER.atWarning().log("Festival %s could not spawn NPC role %s", festival.getId(), roleId);

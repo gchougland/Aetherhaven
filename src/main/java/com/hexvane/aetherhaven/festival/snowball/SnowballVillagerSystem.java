@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.festival.snowball;
 
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerSystem;
+import com.hexvane.aetherhaven.entity.TransformComponentUtil;
 import com.hexvane.aetherhaven.equipment.VillagerEquipmentService;
 import com.hexvane.aetherhaven.npc.NpcAnimationPlayback;
 import com.hexvane.aetherhaven.tourist.TouristAutonomySystem;
@@ -23,6 +24,8 @@ import com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.modules.entity.system.TransformSystems;
+import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
 import com.hypixel.hytale.server.core.modules.projectile.ProjectileModule;
 import com.hypixel.hytale.server.core.modules.projectile.config.ProjectileConfig;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -50,7 +53,8 @@ public final class SnowballVillagerSystem extends EntityTickingSystem<EntityStor
             new SystemDependency<>(Order.AFTER, SteeringSystem.class),
             new SystemDependency<>(Order.AFTER, VillagerAutonomySystem.class),
             new SystemDependency<>(Order.AFTER, VillagerFollowPlayerSystem.class),
-            new SystemDependency<>(Order.AFTER, TouristAutonomySystem.class)
+            new SystemDependency<>(Order.AFTER, TouristAutonomySystem.class),
+            new SystemDependency<>(Order.BEFORE, TransformSystems.EntityTrackerUpdate.class)
         );
 
     @Nonnull
@@ -92,7 +96,7 @@ public final class SnowballVillagerSystem extends EntityTickingSystem<EntityStor
         long now = System.currentTimeMillis();
         SnowballSession.VillagerAi ai = session.villagerAi(uuid);
         if (!session.isLivingFighter(uuid)) {
-            SnowballPin.unpin(ref, commandBuffer);
+            SnowballPin.unpin(ref, npc, commandBuffer);
             if (ai == null || ai.crouchChanged(false)) {
                 setCrouching(ref, store, commandBuffer, false);
             }
@@ -103,11 +107,13 @@ public final class SnowballVillagerSystem extends EntityTickingSystem<EntityStor
         SnowballSession.Fighter fighter = session.fighter(uuid);
         if (fighter != null) {
             SnowballPin.hold(ref, store, commandBuffer, npc, fighter.pad());
-            snapIfNeeded(ref, commandBuffer, transform, fighter.pad());
         }
 
         if (ai == null) {
             setCrouching(ref, store, commandBuffer, true);
+            if (fighter != null) {
+                pinToPad(ref, store, commandBuffer, transform, fighter.pad());
+            }
             return;
         }
         if (ai.consumePrepare()) {
@@ -160,6 +166,9 @@ public final class SnowballVillagerSystem extends EntityTickingSystem<EntityStor
                     ai.set(SnowballSession.VillagerAiPhase.CROUCH, now + hold);
                 }
             }
+        }
+        if (fighter != null) {
+            pinToPad(ref, store, commandBuffer, transform, fighter.pad());
         }
     }
 
@@ -382,21 +391,35 @@ public final class SnowballVillagerSystem extends EntityTickingSystem<EntityStor
         commandBuffer.putComponent(npcRef, InventoryComponent.Hotbar.getComponentType(), hb);
     }
 
-    private static void snapIfNeeded(
+    /**
+     * After steering/knockback and after throw facing writes, lock feet to the pad. Keep current yaw so they can
+     * still turn to throw. Soft BodyMotion Nothing does not skip steering the way Frozen did.
+     */
+    private static void pinToPad(
         @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull TransformComponent transform,
         @Nonnull SnowballSession.StartPad pad
     ) {
-        Vector3d pos = transform.getPosition();
-        double dx = pos.x - pad.x();
-        double dz = pos.z - pad.z();
-        if (dx * dx + dz * dz < 0.35) {
-            return;
+        TransformComponent live = commandBuffer.getComponent(ref, TransformComponent.getComponentType());
+        if (live == null) {
+            live = transform;
         }
-        transform.setPosition(new Vector3d(pad.x(), pad.y(), pad.z()));
-        transform.setRotation(new Rotation3f(0f, (float) Math.toRadians(pad.yawDegrees()), 0f));
-        commandBuffer.putComponent(ref, TransformComponent.getComponentType(), transform);
+        TransformComponentUtil.replacePreservingChunk(
+            ref,
+            commandBuffer,
+            new Vector3d(pad.x(), pad.y(), pad.z()),
+            live.getRotation()
+        );
+        Velocity velocity = commandBuffer.getComponent(ref, Velocity.getComponentType());
+        if (velocity == null) {
+            velocity = store.getComponent(ref, Velocity.getComponentType());
+        }
+        if (velocity != null && (velocity.getX() != 0d || velocity.getY() != 0d || velocity.getZ() != 0d)) {
+            velocity.setZero();
+            commandBuffer.putComponent(ref, Velocity.getComponentType(), velocity);
+        }
     }
 
     private static void setCrouching(

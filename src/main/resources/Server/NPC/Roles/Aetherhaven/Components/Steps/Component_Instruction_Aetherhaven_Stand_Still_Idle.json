@@ -2,7 +2,7 @@
   "Type": "Component",
   "Class": "Instruction",
   "Interface": "Hytale.Instruction.Intelligent.Idle.Motion",
-  "$Comment": "Stand still at leash point (guild hall display adventurers).",
+  "$Comment": "Stand still at leash point (AetherhavenStandStill and other scripted holds).",
   "Content": {
     "Sensor": { "Type": "Any" },
     "BodyMotion": { "Type": "Nothing" }

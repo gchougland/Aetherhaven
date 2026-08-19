@@ -33,8 +33,11 @@ import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import com.hexvane.aetherhaven.tourist.TouristMoveInRequirements;
 import com.hexvane.aetherhaven.villager.VillagerBefriendableResolver;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
+import com.hexvane.aetherhaven.calendar.PlayerBirthdayGiftService;
+import com.hexvane.aetherhaven.calendar.PlayerBirthdayIds;
 import com.hexvane.aetherhaven.calendar.VillagerBirthdayGreetingPicker;
 import com.hexvane.aetherhaven.calendar.VillagerBirthdayService;
+import com.hexvane.aetherhaven.festival.FestivalDialogueChoiceOrder;
 import com.hexvane.aetherhaven.festival.FestivalDialogueGreetings;
 import com.hexvane.aetherhaven.festival.market.MarketIds;
 import com.hexvane.aetherhaven.festival.market.MarketSession;
@@ -193,6 +196,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         if (pu != null) {
             NpcDialogueSpeech.cancelForPlayer(pu.getUuid());
             WintertideGiftService.onDialogueDismissed(treeId, pu.getUuid(), store, npcRef);
+            PlayerBirthdayGiftService.onDialogueDismissed(treeId, pu.getUuid(), store, npcRef);
         }
         NpcDialogueCleanup.scheduleReturnToIdle(npcRef, store);
     }
@@ -308,6 +312,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
 
         Message bodyMsg = resolveDialogueBody(ref, store, node, firstEverTalk);
         bodyMsg = withWintertideBodies(ref, store, bodyMsg);
+        bodyMsg = withPlayerBirthdayBodies(store, bodyMsg);
         bodyMsg = withGuildAdventurerHireBody(ref, store, node, bodyMsg);
         if ("main_hub".equals(nodeId) && npcRef != null && npcRef.isValid()) {
             AetherhavenPlugin openerPlugin = AetherhavenPlugin.get();
@@ -1054,6 +1059,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         injectFollowChoice(choices, playerRef, store);
         injectMarketChoices(choices, playerRef, store);
         injectWintertideGiftChoice(choices, playerRef, store);
+        FestivalDialogueChoiceOrder.promoteToTop(choices);
         return choices;
     }
 
@@ -1219,14 +1225,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         JsonObject action = new JsonObject();
         action.addProperty("type", "wintertide_gift_villager");
         choice.setActions(List.of(action));
-        int insertAt = insertBeforeClose(choices);
-        for (int i = 0; i < choices.size(); i++) {
-            if (choices.get(i).isGiftChoice()) {
-                insertAt = i;
-                break;
-            }
-        }
-        choices.add(insertAt, choice);
+        FestivalDialogueChoiceOrder.insertAtTop(choices, choice);
     }
 
     @Nonnull
@@ -1265,6 +1264,22 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             }
         }
         return bodyMsg;
+    }
+
+    @Nonnull
+    private Message withPlayerBirthdayBodies(@Nonnull Store<EntityStore> store, @Nonnull Message bodyMsg) {
+        if (PlayerBirthdayIds.DIALOGUE_INCOMING.equals(treeId) && "gift".equals(nodeId)) {
+            return dialogueMessage(playerBirthdayIncomingLineKey(wintertideNpcKind(store)));
+        }
+        return bodyMsg;
+    }
+
+    @Nonnull
+    private static String playerBirthdayIncomingLineKey(@Nonnull String kind) {
+        if ("default".equals(kind)) {
+            return "aetherhaven_dialogue_player_birthday.aetherhaven.dialogue.player.birthday.incoming.body";
+        }
+        return "aetherhaven_dialogue_player_birthday.aetherhaven.dialogue.player.birthday.incoming." + kind;
     }
 
     @Nullable
@@ -1360,7 +1375,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         close.addProperty("type", "close");
         actions.add(close);
         choice.setActions(actions);
-        choices.add(insertBeforeClose(choices), choice);
+        FestivalDialogueChoiceOrder.insertAtTop(choices, choice);
     }
 
     private void insertMarketHowChoice(@Nonnull List<DialogueChoiceDefinition> choices) {
@@ -1369,7 +1384,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         choice.setText("aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.choice.how");
         choice.setNext("market_how");
         choice.setIcon(ICON_MARKET);
-        choices.add(insertBeforeClose(choices), choice);
+        FestivalDialogueChoiceOrder.insertAtTop(choices, choice);
     }
 
     private void insertMarketShopChoice(@Nonnull List<DialogueChoiceDefinition> choices, @Nonnull String shopId) {
@@ -1382,7 +1397,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         action.addProperty("type", "open_barter_shop");
         action.addProperty("shop", shopId);
         choice.setActions(List.of(action));
-        choices.add(insertBeforeClose(choices), choice);
+        FestivalDialogueChoiceOrder.insertAtTop(choices, choice);
     }
 
     private static int insertBeforeClose(@Nonnull List<DialogueChoiceDefinition> choices) {

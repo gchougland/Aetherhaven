@@ -151,17 +151,21 @@ final class WintertideRewardsTest {
     }
 
     @Test
-    void aPlayerAssignedToYouMeansNoVillagerGiftBack() {
+    void aPlayerAssignedToYouStillGetsAVillagerGiftBack() {
         UUID p1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
         UUID p2 = UUID.fromString("00000000-0000-0000-0000-000000000002");
         UUID v1 = UUID.fromString("00000000-0000-0000-0000-000000000011");
+        UUID v2 = UUID.fromString("00000000-0000-0000-0000-000000000012");
         List<WintertideAssignmentService.PlayerMember> players =
             List.of(
                 new WintertideAssignmentService.PlayerMember(p1, "Ada"),
                 new WintertideAssignmentService.PlayerMember(p2, "Ben")
             );
         List<WintertideAssignmentService.Resident> residents =
-            List.of(new WintertideAssignmentService.Resident(v1, "miner", "Gorruk"));
+            List.of(
+                new WintertideAssignmentService.Resident(v1, "miner", "Gorruk"),
+                new WintertideAssignmentService.Resident(v2, "chef", "Pepper")
+            );
         WintertideSession session = new WintertideSession();
         session.putOutgoing(p1, WintertideTarget.player(p2, "Ben"));
         session.putOutgoing(p2, WintertideTarget.villager(v1, "miner", "Gorruk"));
@@ -169,8 +173,7 @@ final class WintertideRewardsTest {
 
         WintertideTarget incoming = session.getIncoming(p2);
         assertNotNull(incoming);
-        assertTrue(incoming.isPlayer());
-        assertEquals(p1, incoming.getUuid());
+        assertTrue(incoming.isVillager());
         WintertideTarget otherIncoming = session.getIncoming(p1);
         assertNotNull(otherIncoming);
         assertTrue(otherIncoming.isVillager());
@@ -219,6 +222,36 @@ final class WintertideRewardsTest {
         WintertideAssignmentService.assignAll(second, players, residents, seed);
         assertEquals(first.getOutgoing(p1).getUuid(), second.getOutgoing(p1).getUuid());
         assertEquals(first.getIncoming(p1).getUuid(), second.getIncoming(p1).getUuid());
+    }
+
+    @Test
+    void differentSeedsCanChangeAssignments() {
+        UUID p1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        UUID v1 = UUID.fromString("00000000-0000-0000-0000-000000000011");
+        UUID v2 = UUID.fromString("00000000-0000-0000-0000-000000000012");
+        UUID v3 = UUID.fromString("00000000-0000-0000-0000-000000000013");
+        List<WintertideAssignmentService.PlayerMember> players =
+            List.of(new WintertideAssignmentService.PlayerMember(p1, "Ada"));
+        List<WintertideAssignmentService.Resident> residents =
+            List.of(
+                new WintertideAssignmentService.Resident(v1, "miner", "Gorruk"),
+                new WintertideAssignmentService.Resident(v2, "chef", "Pepper"),
+                new WintertideAssignmentService.Resident(v3, "farmer", "Bram")
+            );
+        UUID firstOutgoing = null;
+        boolean sawDifferent = false;
+        for (long seed = 1L; seed <= 40L; seed++) {
+            WintertideSession session = new WintertideSession();
+            WintertideAssignmentService.assignAll(session, players, residents, seed);
+            UUID outgoing = session.getOutgoing(p1).getUuid();
+            if (firstOutgoing == null) {
+                firstOutgoing = outgoing;
+            } else if (!firstOutgoing.equals(outgoing)) {
+                sawDifferent = true;
+                break;
+            }
+        }
+        assertTrue(sawDifferent);
     }
 
     @Test

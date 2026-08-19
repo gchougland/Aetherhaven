@@ -2,5 +2,6 @@
 aetherhaven.ui.calendar.title=Calendar
 aetherhaven.ui.calendar.noTime=The calendar cannot read the date right now.
 aetherhaven.ui.calendar.birthdayTooltip={villager}'s Birthday
+aetherhaven.ui.calendar.playerBirthdayTooltip={player}'s Birthday
 aetherhaven.ui.calendar.festivalTooltip={festival}
 aetherhaven.ui.calendar.close=Close

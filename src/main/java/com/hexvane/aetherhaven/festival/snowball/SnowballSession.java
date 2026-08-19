@@ -715,6 +715,11 @@ public final class SnowballSession {
         fightMusicListeners.clear();
     }
 
+    @Nonnull
+    public Set<UUID> pendingTicketPlayerUuids() {
+        return Set.copyOf(pendingTickets.keySet());
+    }
+
     public boolean hasPendingTickets(@Nonnull UUID playerUuid) {
         return pendingTickets.getOrDefault(playerUuid, 0) > 0;
     }

@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.worldnpc;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.entity.EntityPresenceUtil;
+import com.hexvane.aetherhaven.npc.NpcStandStill;
 import com.hexvane.aetherhaven.npc.NpcFaceVisuals;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.villager.AetherhavenNpcTeleport;
@@ -14,7 +15,6 @@ import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.Frozen;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.Invulnerable;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentDisplayName;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
@@ -220,17 +220,7 @@ public final class WorldNpcSpawnService {
                 LOGGER.atFine().withCause(e).log("World NPC idle state set failed for %s", placement.placementIdOrEmpty());
             }
         }
-        forceIdleMovementStates(store, ref);
-    }
-
-    private static void forceIdleMovementStates(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref) {
-        MovementStatesComponent ms = store.getComponent(ref, MovementStatesComponent.getComponentType());
-        if (ms == null) {
-            return;
-        }
-        var states = ms.getMovementStates();
-        states.idle = true;
-        states.horizontalIdle = true;
+        NpcStandStill.forceIdleMovementStates(store, ref);
     }
 
     public static void despawnPlacement(

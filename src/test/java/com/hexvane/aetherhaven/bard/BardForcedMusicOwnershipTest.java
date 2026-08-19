@@ -50,6 +50,16 @@ class BardForcedMusicOwnershipTest {
     }
 
     @Test
+    void matchingContainer_notListening_appliesAgain() {
+        Decision decision = BardForcedMusicOwnership.decide(11, 11, false);
+
+        assertTrue(decision.updateTracker());
+        assertEquals(11, decision.containerIndex());
+        assertTrue(decision.markListening());
+        assertFalse(decision.clearListening());
+    }
+
+    @Test
     void alreadyCleared_butStaleListening_clearsListeningOnly() {
         Decision decision = BardForcedMusicOwnership.decide(0, 0, true);
 

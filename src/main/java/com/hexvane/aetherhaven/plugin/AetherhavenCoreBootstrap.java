@@ -44,6 +44,7 @@ import com.hexvane.aetherhaven.villager.VillagerLocatePlayerInitSystem;
 import com.hexvane.aetherhaven.territory.TerritoryProtectionBootstrap;
 import com.hexvane.aetherhaven.tourist.TouristReconcileService;
 import com.hexvane.aetherhaven.town.TownResidentReconcileService;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideGiftService;
 import com.hexvane.aetherhaven.ui.GaiaStatueRevivePage;
 import com.hexvane.aetherhaven.ui.QuestJournalPage;
 import com.hypixel.hytale.server.core.permissions.PermissionsModule;
@@ -330,6 +331,11 @@ public final class AetherhavenCoreBootstrap {
                                     TownResidentReconcileService.onTownMemberPlayerReady(
                                         player.getWorld(),
                                         AetherhavenPlugin.get(),
+                                        uc.getUuid()
+                                    );
+                                    WintertideGiftService.onTownMemberPlayerReady(
+                                        player.getWorld(),
+                                        store,
                                         uc.getUuid()
                                     );
                                 }

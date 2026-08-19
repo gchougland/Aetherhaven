@@ -20,7 +20,7 @@ Corin at the inn asks for one once the park is done. Take his token, place the f
 * Spot villagers and visitors at the square will sometimes break into a little dance.
 * Everyone in town has something to say about the festival while it runs, so it is worth doing the rounds.
 * Visitors from other worlds head to the square while the festival runs.
-* The calendar shows a marker on every festival day. Hover it to see which festival it is.
+* The calendar shows a marker on every festival day. Hover it to see which festival it is. Your birthday shows a gift box.
 
 ## Building on the square
 
@@ -74,15 +74,27 @@ Mid autumn, from morning until evening. Town members fill one shared stall at th
 * A few townsfolk open ticket stalls for the day. Talk to them to spend autumn festival tickets on goods that fit their work.
 * Visitors watch from around the square. Every villager has their own thing to say, so make the rounds before the day is over.
 
+## The Snowball Throwing Festival
+
+Early winter, from morning until evening. A snowball fight fills the square, with piles of snow to grab from.
+
+* Talk to the **snowball merchant** to join a team for free. When everyone is ready, ask them to start the fight. Townsfolk fill empty spots.
+* Snowballs you already have are taken when the fight starts so everyone starts even. Grab more from the piles on the square.
+* You move to a team pad. Each person has three snowflakes. A hit from the other team takes one. When you have none left you sit out.
+* The fight lasts four minutes, or ends when one team is fully out. The team with more snowflakes left wins. A tie pays both teams.
+* Winners get winter festival tickets when the fight ends. You do not need to talk to the merchant to collect them.
+* The merchant takes winter festival tickets for holiday decorations, snowball piles, and a santa hat pattern. Ask to see the scoreboard for the most hits in one fight.
+* Every villager has their own thing to say, so make the rounds before the day is over.
+
 ## Wintertide
 
 Late winter, from morning until evening. Town members each give one gift to a neighbor, then receive one in return.
 
 * Talk to the **Wintertide merchant** to hear who you should give a gift to. They will not tell you who is giving to you.
-* Find a gift, then ask the merchant to start the gift giving when you are ready.
+* Find a gift, then give it in person. You do not need to start anything with the merchant first.
 * If you were assigned a villager, talk to them while holding the item and choose **Give this Wintertide gift**. That gift counts twice as much toward friendship. Everyday gifts still work, but they do not count for Wintertide.
-* If you were assigned a town member, press **F** on them while holding the item. They pick how they feel, and you get winter festival tickets.
-* How much they like it changes how many tickets you get. Someone will give you a gift too. If no town member was assigned to you, a villager walks up with one.
+* If you were assigned a town member, they need to be in the world. Press **F** on them while holding the item. They pick how they feel, and you get winter festival tickets.
+* How much they like it changes how many tickets you get. After you give your gift, a villager walks up with a gift for you.
 * The merchant takes winter festival tickets for candy, lights, wreaths, a santa hat pattern, and other holiday goods.
 * Villagers who are giving or receiving a gift gather at the square until the festival is over. Visitors watch from around the square.
 * Every villager has their own thing to say, so make the rounds before the day is over.

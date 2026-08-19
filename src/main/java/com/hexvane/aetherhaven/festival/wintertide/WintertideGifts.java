@@ -156,7 +156,7 @@ public final class WintertideGifts {
     }
 
     @Nonnull
-    static List<ItemStack> toItemStacks(@Nonnull List<Stack> stacks) {
+    public static List<ItemStack> toItemStacks(@Nonnull List<Stack> stacks) {
         List<ItemStack> out = new ArrayList<>();
         for (Stack stack : stacks) {
             out.add(toItemStack(stack));

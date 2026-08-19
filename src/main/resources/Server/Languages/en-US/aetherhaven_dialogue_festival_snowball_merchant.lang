@@ -1,5 +1,5 @@
 aetherhaven.dialogue.festival_snowball_merchant.speaker=Snowball Merchant
-aetherhaven.dialogue.festival_snowball_merchant.main_hub.body=Want a snowball fight? Join a team for free, grab snowballs from the piles, and start when you are ready. Townsfolk will fill empty spots. The winning team earns winter festival tickets.
+aetherhaven.dialogue.festival_snowball_merchant.main_hub.body=Want a snowball fight? Join a team for free, then start when you are ready. Snowballs you already have are taken when the fight starts so everyone starts even. Grab more from the piles. Townsfolk fill empty spots. The winning team gets winter festival tickets when the fight ends.
 aetherhaven.dialogue.festival_snowball_merchant.main_hub.c_join=Join the fight
 aetherhaven.dialogue.festival_snowball_merchant.main_hub.c_leave=Leave the fight
 aetherhaven.dialogue.festival_snowball_merchant.main_hub.c_start=Start the fight
@@ -10,7 +10,7 @@ aetherhaven.dialogue.festival_snowball_merchant.main_hub.c_scoreboard=Look at th
 aetherhaven.dialogue.festival_snowball_merchant.main_hub.c_about=How does the fight work?
 aetherhaven.dialogue.festival_snowball_merchant.main_hub.c_goodbye=Goodbye
 
-aetherhaven.dialogue.festival_snowball_merchant.about.body=Join for free, then start when everyone is ready. You move to a team pad. Each person has three snowflakes. A hit from the other team takes one. When you have none left you sit out. The fight lasts six minutes, or ends when one team is fully out. The team with more snowflakes left wins. A tie gives both teams tickets. Talk to me after to collect five winter festival tickets.
+aetherhaven.dialogue.festival_snowball_merchant.about.body=Join for free, then start when everyone is ready. Snowballs you already have are taken when the fight starts so everyone starts even. You move to a team pad. Each person has three snowflakes. A hit from the other team takes one. When you have none left you sit out. The fight lasts four minutes, or ends when one team is fully out. The team with more snowflakes left wins. A tie gives both teams tickets. Winners get five winter festival tickets when the fight ends.
 aetherhaven.dialogue.festival_snowball_merchant.about.c_back=Back
 
 aetherhaven.dialogue.festival_snowball_merchant.joined.body=You are in! Tell me when you want to start, or wait for friends to join.

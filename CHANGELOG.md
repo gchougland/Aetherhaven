@@ -11,14 +11,15 @@
 - **Hallow's Eve** Late autumn holiday at the festival square. Talk to the merchant to run a timed maze for ten gold coins, collect glowing orbs, and pop the jack o lantern for autumn festival tickets and spooky candy. Only one person runs the maze at a time. Bats fly above the square for the night. The merchant keeps a scoreboard of the best maze runs.
 - **Carnival Festival** Late summer holiday that runs all day at the festival square. Pop floating balloons with darts, spin the wall carnival wheel for a chance at summer festival tickets, and visit the carnival merchant for fireworks, popcorn, a kweebec plushie, and clown wardrobe looks. The elder, bard, innkeeper, and florist come to watch.
 - **Tree Climbing Festival** Mid summer holiday at the festival square. Join a climb race at the attendant, race up the big tree to the pink crystal, earn summer festival tickets for a fast time, check the shared leaderboard, and buy rare saplings plus bush, beehive, and jungle sapling wardrobe hats from the merchant.
-- **Snowball Throwing Festival** Early winter holiday at the festival square. Grab snowballs from piles, join a fight at the merchant, and the winning team earns winter festival tickets. The merchant sells holiday decorations, snowball piles, and a santa hat pattern. The merchant keeps a scoreboard of the most hits in one fight.
-- **Wintertide** Late winter holiday at the festival square. Talk to the merchant to hear who you should give a gift to, give it in person, and earn winter festival tickets from how much they like it. Gifts to villagers count twice as much toward friendship. Someone gives you a gift too, and the merchant sells holiday goods for winter festival tickets.
+- **Snowball Throwing Festival** Early winter holiday at the festival square. Join a fight at the merchant, grab snowballs from piles, and the winning team gets winter festival tickets when the fight ends. The merchant sells holiday decorations, snowball piles, and a santa hat pattern. The merchant keeps a scoreboard of the most hits in one fight.
+- **Wintertide** Late winter holiday at the festival square. Talk to the merchant to hear who you should give a gift to, then give it in person. Press F on a town member who is there, or talk to a villager while holding the gift. You earn winter festival tickets from how much they like it. Gifts to villagers count twice as much toward friendship. After you give, a villager brings you a gift too, and the merchant sells holiday goods for winter festival tickets.
 - **Spooky Candy** A sweet treat from the maze and the merchant shop. Eat it to feel better.
 - **Dismiss guards** Talk to a hired guard and let them go. They leave town, their house is free, and you can hire someone else.
 - **Bard music** Ask Elias to shuffle through his songs, or to loop one song until you tell him to stop.
 - **Miner's hut** Can produce limestone and limestone cobble.
 - **Calendar** Hang a calendar on a wall to open a season view with villager birthdays marked on their days. Craft it at the town planning desk with wood.
 - **Villager birthdays** Each story villager has a birthday on the calendar. Gifts on their birthday give double friendship. They greet you and react to gifts with special birthday lines.
+- **Your birthday** When you first join, pick a season and day. It shows on the calendar with a gift box. Villagers who are close friends bring you a gift on that day.
 - **Set date command** Creative command to jump to a specific season day at midnight for testing.
 - **Corin's festival square quest** Once the park is finished, the innkeeper asks you to build a square where the whole town can gather.
 - **Festival chatter** Every villager has their own things to say while a festival is on, so it is worth going around the town before the day is over.
@@ -52,6 +53,7 @@
 - **Banquet table** Crafts with any wood instead of darkwood.
 - **Red floating gifts** Hold two furniture pieces and a random decoration prop.
 - **Heartberry** You can set it down like food, and pick it back up.
+- **Bard** You can hear Elias from farther away.
 
 ### Fixed
 
@@ -65,6 +67,8 @@
 - **Battle horn** Nearby players see you blow the horn.
 - **Item tooltips** Item names and styled text stay readable when the shop gold price is shown.
 - **Festival plot creator** Finishing or canceling a festival session now clears the pasted square.
+- **Plot creator** Stand-in villagers used to mark important spots no longer show up when that building is constructed.
+- **Gaia statue** It stays in place without a block under it.
 
 ## [2.7.1] - 8/7/2026
 

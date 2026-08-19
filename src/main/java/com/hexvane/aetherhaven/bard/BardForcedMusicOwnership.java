@@ -16,6 +16,9 @@ public final class BardForcedMusicOwnership {
      */
     @Nonnull
     public static Decision decide(int desiredContainer, int haveContainer, boolean wasListening) {
+        if (desiredContainer != 0 && !wasListening) {
+            return Decision.apply(desiredContainer);
+        }
         if (haveContainer == desiredContainer) {
             if (desiredContainer == 0 && wasListening) {
                 return Decision.clearListeningOnly();

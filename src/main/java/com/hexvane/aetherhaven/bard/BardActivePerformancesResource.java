@@ -14,9 +14,9 @@ import org.joml.Vector3d;
 /** Snapshot of active bard performances, rebuilt once per world tick for proximity music. */
 public final class BardActivePerformancesResource implements Resource<EntityStore> {
     /** Distance at which a player starts hearing a performance. */
-    public static final double MUSIC_RADIUS = 16.0;
+    public static final double MUSIC_RADIUS = 40.0;
     /** Distance at which a listener stops hearing, larger so edge standing does not flicker. */
-    public static final double MUSIC_LEAVE_RADIUS = 20.0;
+    public static final double MUSIC_LEAVE_RADIUS = 44.0;
     private static final double MUSIC_RADIUS_SQ = MUSIC_RADIUS * MUSIC_RADIUS;
     private static final double MUSIC_LEAVE_RADIUS_SQ = MUSIC_LEAVE_RADIUS * MUSIC_LEAVE_RADIUS;
 
@@ -61,7 +61,8 @@ public final class BardActivePerformancesResource implements Resource<EntityStor
                     if (perf == null || tc == null || perf.getMusicContainerIndex() == 0) {
                         continue;
                     }
-                    active.add(new Snapshot(musicPosition(perf, tc), perf.getMusicContainerIndex()));
+                    // Hearing follows the bard, not the spot where the song started.
+                    active.add(new Snapshot(tc.getPosition(), perf.getMusicContainerIndex()));
                 }
             }
         );
@@ -97,14 +98,6 @@ public final class BardActivePerformancesResource implements Resource<EntityStor
             return NearestMusic.NONE;
         }
         return new NearestMusic(bestIndex, bestX, bestY, bestZ);
-    }
-
-    @Nonnull
-    static Vector3d musicPosition(@Nonnull BardPerformanceComponent perf, @Nonnull TransformComponent tc) {
-        if (perf.hasMusicOrigin()) {
-            return new Vector3d(perf.getOriginX(), perf.getOriginY(), perf.getOriginZ());
-        }
-        return tc.getPosition();
     }
 
     @Override

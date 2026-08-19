@@ -16,6 +16,7 @@ import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.worldnpc.WorldNpcBinding;
+import com.hexvane.aetherhaven.calendar.PlayerBirthdayGiftSeekState;
 import com.hexvane.aetherhaven.festival.wintertide.WintertideGiftSeekState;
 import javax.annotation.Nonnull;
 
@@ -39,6 +40,7 @@ public final class AetherhavenSharedEntityComponents {
         VillagerFollowPlayerState.register(registry);
         GuardFollowPlayerState.register(registry);
         WintertideGiftSeekState.register(registry);
+        PlayerBirthdayGiftSeekState.register(registry);
         TouristAutonomyState.register(registry);
         // Villagers (doorway bypass) and Construction (builder assist) both need this at system register time.
         BuilderConstructionAssistState.register(registry);

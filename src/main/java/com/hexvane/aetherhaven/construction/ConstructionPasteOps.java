@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.construction.assembly.AssemblyObstructionUtil;
 import com.hexvane.aetherhaven.festival.CustomFestivalPaths;
 import com.hexvane.aetherhaven.festival.FestivalPrefabSize;
 import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorSpotViz;
 import com.hexvane.aetherhaven.prefab.EditorMarkerBlocks;
 import com.hexvane.aetherhaven.prefab.PrefabSupportUtil;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
@@ -132,7 +133,7 @@ public final class ConstructionPasteOps {
                     return;
                 }
                 for (Holder<EntityStore> h : entityWrappers) {
-                    if (h != null) {
+                    if (h != null && !PlotCreatorSpotViz.isSpotViz(h)) {
                         prefabEntitiesInOrder.add(h.clone());
                     }
                 }
@@ -1129,6 +1130,9 @@ public final class ConstructionPasteOps {
         @Nonnull ComponentAccessor<EntityStore> entityAccessor,
         @Nonnull Holder<EntityStore> entityToAdd
     ) {
+        if (PlotCreatorSpotViz.isSpotViz(entityToAdd)) {
+            return;
+        }
         Holder<EntityStore> clone = entityToAdd.clone();
         TransformComponent transformComp = clone.getComponent(TransformComponent.getComponentType());
         if (transformComp == null) {

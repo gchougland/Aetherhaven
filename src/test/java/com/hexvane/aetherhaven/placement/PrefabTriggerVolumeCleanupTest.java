@@ -5,6 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
+import com.hypixel.hytale.builtin.triggervolumes.effect.TriggerEffect;
+import com.hypixel.hytale.builtin.triggervolumes.effect.TriggerEventType;
+import com.hypixel.hytale.builtin.triggervolumes.effect.builtin.SetMusicEffect;
+import com.hypixel.hytale.builtin.triggervolumes.effect.builtin.SetWeatherEffect;
+import java.util.List;
 import org.joml.Vector3d;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -44,6 +49,34 @@ final class PrefabTriggerVolumeCleanupTest {
         assertFalse(PrefabTriggerVolumeCleanup.sameWorld("default", "other"));
         assertTrue(PrefabTriggerVolumeCleanup.sameWorld("default", ""));
         assertTrue(PrefabTriggerVolumeCleanup.sameWorld(null, "default"));
+    }
+
+    @Test
+    void exitEffectsKeepWeatherResetAndMusicClearAndSkipEnterRows() {
+        SetWeatherEffect weatherEnter = new SetWeatherEffect();
+        weatherEnter.setEventType(TriggerEventType.ENTER);
+        SetWeatherEffect weatherExit = new SetWeatherEffect();
+        weatherExit.setEventType(TriggerEventType.EXIT);
+        SetMusicEffect musicEnter = new SetMusicEffect();
+        musicEnter.setEventType(TriggerEventType.ENTER);
+        SetMusicEffect musicExit = new SetMusicEffect();
+        musicExit.setEventType(TriggerEventType.EXIT);
+
+        List<TriggerEffect> chosen =
+            PrefabTriggerVolumeCleanup.exitEffects(List.of(weatherEnter, weatherExit, musicEnter, musicExit));
+
+        assertEquals(List.of(weatherExit, musicExit), chosen);
+    }
+
+    @Test
+    void exitEffectsIgnoreNullRowsAndEmptyLists() {
+        assertTrue(PrefabTriggerVolumeCleanup.exitEffects(List.of()).isEmpty());
+        assertTrue(PrefabTriggerVolumeCleanup.exitEffects(null).isEmpty());
+
+        SetWeatherEffect untitled = new SetWeatherEffect();
+        SetWeatherEffect exit = new SetWeatherEffect();
+        exit.setEventType(TriggerEventType.EXIT);
+        assertEquals(List.of(exit), PrefabTriggerVolumeCleanup.exitEffects(List.of(untitled, exit)));
     }
 
     @Test

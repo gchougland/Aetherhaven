@@ -2,7 +2,7 @@
   "id": "snowball",
   "displayName": "Snowball Throwing Festival",
   "displayNameLangKey": "aetherhaven_festivals.aetherhaven.festival.snowball.name",
-  "description": "Early winter brings a snowball fight at the festival square. Grab snowballs from piles, join a team at the merchant, and the winning team earns winter festival tickets.",
+  "description": "Early winter brings a snowball fight at the festival square. Join a team at the merchant, grab snowballs from piles, and the winning team gets winter festival tickets when the fight ends.",
   "prefabPath": "Festivals/Festival_Snowball.prefab.json",
   "season": "WINTER",
   "dayOfSeason": 7,

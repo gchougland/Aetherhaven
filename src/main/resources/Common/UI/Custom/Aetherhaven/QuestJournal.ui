@@ -488,6 +488,52 @@ $C.@PageOverlay {
                         }
                       }
 
+                      Label #SettingsBirthdayHeading {
+                        Anchor: (Top: 4, Bottom: 6);
+                        Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2, FontSize: 16);
+                        Text: "";
+                      }
+
+                      Label #SettingsBirthdayHint {
+                        Anchor: (Bottom: 8);
+                        Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8, Wrap: true);
+                        Text: "";
+                      }
+
+                      Group #SettingsBirthdaySeasonRow {
+                        LayoutMode: Left;
+                        Anchor: (Bottom: 8);
+
+                        Label #SettingsBirthdaySeasonLabel {
+                          Anchor: (Top: 8, Right: 12, Width: 80);
+                          Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8);
+                          Text: "";
+                        }
+
+                        Group #SettingsBirthdaySeasonDropdown {
+                          LayoutMode: Left;
+                          FlexWeight: 1;
+                          $C.@DropdownBox #Input { @Anchor = (Left: 0, Right: 0); }
+                        }
+                      }
+
+                      Group #SettingsBirthdayDayRow {
+                        LayoutMode: Left;
+                        Anchor: (Bottom: 14);
+
+                        Label #SettingsBirthdayDayLabel {
+                          Anchor: (Top: 8, Right: 12, Width: 80);
+                          Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8);
+                          Text: "";
+                        }
+
+                        Group #SettingsBirthdayDayDropdown {
+                          LayoutMode: Left;
+                          FlexWeight: 1;
+                          $C.@DropdownBox #Input { @Anchor = (Left: 0, Right: 0); }
+                        }
+                      }
+
                       Label #SettingsSpeechHeading {
                         Anchor: (Top: 4, Bottom: 6);
                         Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2, FontSize: 16);

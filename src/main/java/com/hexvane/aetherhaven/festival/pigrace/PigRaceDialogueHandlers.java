@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
+import com.hexvane.aetherhaven.festival.FestivalRewardNotify;
 import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.plugin.DialogueActionRegistry;
 import com.hexvane.aetherhaven.plugin.DialogueConditionRegistry;
@@ -230,7 +231,12 @@ public final class PigRaceDialogueHandlers {
             out.setGotoNodeId("collect_none");
             return;
         }
-        player.giveItem(new ItemStack(PigRaceLanes.SPRING_TICKET_ITEM_ID, tickets), playerRef, store);
+        FestivalRewardNotify.giveAndNotify(
+            player,
+            playerRef,
+            store,
+            new ItemStack(PigRaceLanes.SPRING_TICKET_ITEM_ID, tickets)
+        );
     }
 
     private static void ackLoss(

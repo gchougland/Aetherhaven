@@ -11,6 +11,7 @@ import com.hexvane.aetherhaven.guild.VillagerDeathHandlerSystem;
 import com.hexvane.aetherhaven.tourist.TouristMoveInRequirements;
 import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.calendar.PlayerBirthdayGiftService;
 import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerSystem;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalWheelPlacementService;
 import com.hexvane.aetherhaven.patrol.GuardFollowPlayerSystem;
@@ -144,6 +145,15 @@ public final class DialogueActionExecutor {
             case "abandon_quest" -> abandonQuest(a, playerRef, store, npcRef);
             case "reputation_reward_grant" -> reputationRewardGrant(a, playerRef, store, npcRef);
             case "gift_villager" -> giftVillager(a, playerRef, store, out, npcRef);
+            case "player_birthday_receive_gift" -> {
+                try {
+                    PlayerBirthdayGiftService.giveIncomingGift(playerRef, store, npcRef);
+                } catch (RuntimeException e) {
+                    LOGGER.atWarning().withCause(e).log("Could not give birthday gift");
+                } finally {
+                    out.setCloseDialogue(true);
+                }
+            }
             case "open_world_quest_board" -> openWorldQuestBoard(a, playerRef, store, out, npcRef);
             case "gaia_draught_refill" -> gaiaDraughtRefill(playerRef, store, npcRef);
             case "gaia_draught_upgrade_shard" -> gaiaDraughtUpgradeShard(playerRef, store, npcRef);

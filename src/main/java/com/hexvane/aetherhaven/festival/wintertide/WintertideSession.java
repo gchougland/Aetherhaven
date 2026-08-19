@@ -16,12 +16,12 @@ import javax.annotation.Nullable;
 /** Per-town Wintertide state. Kept outside the entity Store so dialogue and tick systems can share it. */
 public final class WintertideSession {
     private long year;
+    private long assignmentSeed;
+    private boolean assignmentSeedSet;
     @Nonnull
     private final Map<UUID, WintertideTarget> outgoing = new LinkedHashMap<>();
     @Nonnull
     private final Map<UUID, WintertideTarget> incoming = new LinkedHashMap<>();
-    @Nonnull
-    private final Set<UUID> ceremonyStarted = new LinkedHashSet<>();
     @Nonnull
     private final Set<UUID> given = new LinkedHashSet<>();
     @Nonnull
@@ -39,6 +39,19 @@ public final class WintertideSession {
 
     public void setYear(long year) {
         this.year = year;
+    }
+
+    public boolean hasAssignmentSeed() {
+        return assignmentSeedSet;
+    }
+
+    public long getAssignmentSeed() {
+        return assignmentSeed;
+    }
+
+    public void setAssignmentSeed(long assignmentSeed) {
+        this.assignmentSeed = assignmentSeed;
+        this.assignmentSeedSet = true;
     }
 
     public boolean hasOutgoing(@Nonnull UUID playerUuid) {
@@ -63,12 +76,12 @@ public final class WintertideSession {
         incoming.put(playerUuid, target);
     }
 
-    public boolean isCeremonyStarted(@Nonnull UUID playerUuid) {
-        return ceremonyStarted.contains(playerUuid);
+    public void removeOutgoing(@Nonnull UUID playerUuid) {
+        outgoing.remove(playerUuid);
     }
 
-    public void markCeremonyStarted(@Nonnull UUID playerUuid) {
-        ceremonyStarted.add(playerUuid);
+    public void removeIncoming(@Nonnull UUID playerUuid) {
+        incoming.remove(playerUuid);
     }
 
     public boolean hasGiven(@Nonnull UUID playerUuid) {
@@ -77,6 +90,10 @@ public final class WintertideSession {
 
     public void markGiven(@Nonnull UUID playerUuid) {
         given.add(playerUuid);
+    }
+
+    public void clearGiven(@Nonnull UUID playerUuid) {
+        given.remove(playerUuid);
     }
 
     public boolean hasReceived(@Nonnull UUID playerUuid) {
@@ -120,7 +137,7 @@ public final class WintertideSession {
                 continue;
             }
             UUID giver = e.getKey();
-            if (ceremonyStarted.contains(giver) && !given.contains(giver)) {
+            if (!given.contains(giver)) {
                 return true;
             }
         }
@@ -135,7 +152,7 @@ public final class WintertideSession {
                 continue;
             }
             UUID giver = e.getKey();
-            if (ceremonyStarted.contains(giver) && !given.contains(giver)) {
+            if (!given.contains(giver)) {
                 return giver;
             }
         }
@@ -229,9 +246,10 @@ public final class WintertideSession {
 
     public void clearAll() {
         year = 0L;
+        assignmentSeed = 0L;
+        assignmentSeedSet = false;
         outgoing.clear();
         incoming.clear();
-        ceremonyStarted.clear();
         given.clear();
         received.clear();
         seekQueued.clear();
@@ -246,3 +264,4 @@ public final class WintertideSession {
         int quantity
     ) {}
 }
+

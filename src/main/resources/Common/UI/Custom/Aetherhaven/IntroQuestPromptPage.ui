@@ -4,7 +4,7 @@ $C.@PageOverlay {
   LayoutMode: Middle;
 
   $C.@DecoratedContainer {
-    Anchor: (Width: 480);
+    Anchor: (Width: 520);
 
     #Title {
       Label #IntroPromptTitle {
@@ -22,6 +22,44 @@ $C.@PageOverlay {
         Anchor: (Bottom: 16);
         Style: (...$C.@DefaultLabelStyle, Wrap: true);
         Text: "";
+      }
+
+      Label #BirthdayHeading {
+        Anchor: (Bottom: 8);
+        Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+        Text: "";
+      }
+
+      Group #BirthdaySeasonRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 8);
+
+        Label #BirthdaySeasonLabel {
+          Anchor: (Top: 8, Right: 12, Width: 80);
+          Style: $C.@DefaultLabelStyle;
+          Text: "";
+        }
+
+        $C.@DropdownBox #BirthdaySeasonDropdown {
+          FlexWeight: 1;
+          Anchor: (Left: 0, Right: 0, Height: $C.@DropdownBoxHeight);
+        }
+      }
+
+      Group #BirthdayDayRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 16);
+
+        Label #BirthdayDayLabel {
+          Anchor: (Top: 8, Right: 12, Width: 80);
+          Style: $C.@DefaultLabelStyle;
+          Text: "";
+        }
+
+        $C.@DropdownBox #BirthdayDayDropdown {
+          FlexWeight: 1;
+          Anchor: (Left: 0, Right: 0, Height: $C.@DropdownBoxHeight);
+        }
       }
 
       Group {

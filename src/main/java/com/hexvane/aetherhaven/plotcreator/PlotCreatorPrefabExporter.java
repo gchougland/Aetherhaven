@@ -185,9 +185,12 @@ public final class PlotCreatorPrefabExporter {
                         continue;
                     }
                     boolean editorEmpty = EditorMarkerBlocks.isEditorEmpty(block);
-                    // Editor_Empty is a real block id, so it would otherwise be written as prefab Empty even when
-                    // festivals omit air. Swaps already clear the reserved box.
-                    if (festivalPrefab && editorEmpty) {
+                    // Air plus water used to write a companion Empty block because fluid != 0. Festivals never persist
+                    // Empty air; swaps clear the reserved box. Real fluid in that cell is still saved.
+                    if (omitFestivalAirBlock(festivalPrefab, block, editorEmpty)) {
+                        if (fluid != 0) {
+                            selection.addFluidAtWorldPos(x, y, z, fluid, fluidLevel);
+                        }
                         continue;
                     }
                     if ((block != 0 || fluid != 0 || includeEmpty) && (!skipEditorBlock || block != editorBlock)) {
@@ -313,6 +316,12 @@ public final class PlotCreatorPrefabExporter {
             if (ShopSpotDisplayService.isRuntimeShopDisplayProp(entityStore, e)) {
                 return;
             }
+            if (PlotCreatorSpotViz.isSpotViz(entityStore, e)) {
+                return;
+            }
+            if (!entityStore.getArchetype(e).hasSerializableComponents(registryData)) {
+                return;
+            }
             if (isEditorBlockEntity(entityStore.getComponent(e, blockEntityType))) {
                 return;
             }
@@ -346,6 +355,9 @@ public final class PlotCreatorPrefabExporter {
                         continue;
                     }
                     if (ShopSpotDisplayService.isRuntimeShopDisplayProp(holder)) {
+                        continue;
+                    }
+                    if (PlotCreatorSpotViz.isSpotViz(holder)) {
                         continue;
                     }
                     if (isEditorBlockEntity(holder.getComponent(blockEntityType))) {
@@ -392,6 +404,13 @@ public final class PlotCreatorPrefabExporter {
         }
         String key = blockEntity.getBlockTypeKey();
         return EditorMarkerBlocks.isEditorMarkerTypeId(key);
+    }
+
+    /**
+     * Festival prefabs never persist Empty air. Water in an air or editor-empty cell is still saved as a fluid-only row.
+     */
+    static boolean omitFestivalAirBlock(boolean festivalPrefab, int block, boolean editorEmpty) {
+        return festivalPrefab && (block == 0 || editorEmpty);
     }
 
     static boolean isFestivalPrefabExport(@Nonnull PlotCreatorDraft draft) {

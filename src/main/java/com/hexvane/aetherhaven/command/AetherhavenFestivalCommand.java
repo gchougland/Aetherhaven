@@ -9,6 +9,8 @@ import com.hexvane.aetherhaven.festival.carnival.CarnivalIds;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalWheelPlacementService;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalWheelSession;
 import com.hexvane.aetherhaven.festival.carnival.CarnivalWheelSessionIndex;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideGiftService;
+import com.hexvane.aetherhaven.festival.wintertide.WintertideTarget;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.ResidentRegistryService;
@@ -26,6 +28,7 @@ import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredAr
 import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -51,6 +54,7 @@ public final class AetherhavenFestivalCommand extends AbstractCommandCollection 
         this.addSubCommand(new BuildCommand());
         this.addSubCommand(new ResetClownCommand());
         this.addSubCommand(new WheelForceCommand());
+        this.addSubCommand(new WintertideAssignCommand());
     }
 
     private static final class ListCommand extends AbstractPlayerCommand {
@@ -286,6 +290,67 @@ public final class AetherhavenFestivalCommand extends AbstractCommandCollection 
                     .param("octant", String.valueOf(clamped))
                     .param("clown", String.valueOf(CarnivalIds.WHEEL_CLOWN_OCTANT))
             );
+        }
+    }
+
+    private static final class WintertideAssignCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final RequiredArg<String> targetArg =
+            this.withRequiredArg(
+                "target",
+                "aetherhaven_commands_help.commands.aetherhaven.festival.wintertideassign.target.desc",
+                AetherhavenArgTypes.WINTERTIDE_ASSIGN_TARGET
+            );
+
+        WintertideAssignCommand() {
+            super(
+                "wintertideassign",
+                "aetherhaven_commands_help.commands.aetherhaven.festival.wintertideassign.desc"
+            );
+        }
+
+        @Override
+        protected void execute(
+            @Nonnull CommandContext context,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull World world
+        ) {
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin == null) {
+                return;
+            }
+            String raw = context.get(targetArg);
+            if (raw == null || raw.isBlank()) {
+                return;
+            }
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (uc == null) {
+                return;
+            }
+            UUID selfUuid = uc.getUuid();
+            Store<EntityStore> es = world.getEntityStore().getStore();
+            world.execute(() -> {
+                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                TownRecord town = resolveTown(world, es, ref, tm, playerRef);
+                if (town == null) {
+                    return;
+                }
+                if (!WintertideGiftService.isWintertideActive(town)) {
+                    playerRef.sendMessage(Message.translation(LANG + "wintertideassign.notWintertide"));
+                    return;
+                }
+                WintertideTarget target =
+                    WintertideGiftService.applyForcedOutgoing(town, es, selfUuid, raw.trim());
+                if (target == null) {
+                    playerRef.sendMessage(Message.translation(LANG + "wintertideassign.unknown"));
+                    return;
+                }
+                playerRef.sendMessage(
+                    Message.translation(LANG + "wintertideassign.done").param("name", target.getDisplayName())
+                );
+            });
         }
     }
 

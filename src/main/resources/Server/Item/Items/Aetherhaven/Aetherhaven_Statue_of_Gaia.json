@@ -41,9 +41,6 @@
     "Supporting": {
       "Up": [{ "FaceType": "Full" }]
     },
-    "Support": {
-      "Down": [{ "FaceType": "Full" }]
-    },
     "VariantRotation": "NESW",
     "Interactions": {
       "Use": {

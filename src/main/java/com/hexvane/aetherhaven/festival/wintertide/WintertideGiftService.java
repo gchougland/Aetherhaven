@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.calendar.VillagerBirthdayService;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
 import com.hexvane.aetherhaven.festival.FestivalAttendanceService;
+import com.hexvane.aetherhaven.festival.FestivalRewardNotify;
 import com.hexvane.aetherhaven.hud.AetherhavenCalendar;
 import com.hexvane.aetherhaven.reputation.VillagerReputationEntry;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
@@ -22,8 +23,6 @@ import com.hexvane.aetherhaven.villager.gift.VillagerGiftService;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
-import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
-import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
@@ -33,14 +32,17 @@ import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.core.util.NotificationUtil;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import com.hexvane.aetherhaven.command.TownVillagerTargetResolver;
+import com.hexvane.aetherhaven.town.TownOnlinePresence;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -78,11 +80,15 @@ public final class WintertideGiftService {
             session.clearAll();
             session.setYear(year);
         }
+        if (!session.hasAssignmentSeed()) {
+            session.setAssignmentSeed(ThreadLocalRandom.current().nextLong());
+        }
         List<WintertideAssignmentService.PlayerMember> players = townMembers(world, town);
+        dropStalePlayerTargets(session, world, players);
         List<WintertideAssignmentService.Resident> residents = giftableResidents(store, plugin, town.getTownId());
         Set<UUID> before = new LinkedHashSet<>(session.assignedVillagerUuids());
         WintertideAssignmentService.assignAll(
-            session, players, residents, WintertideAssignmentService.seedFor(town.getTownId(), year)
+            session, players, residents, session.getAssignmentSeed()
         );
         List<UUID> newlyAssigned = new ArrayList<>();
         for (UUID villagerUuid : session.assignedVillagerUuids()) {
@@ -105,7 +111,7 @@ public final class WintertideGiftService {
             return false;
         }
         WintertideSession session = sessionFor(town, store);
-        if (!session.isCeremonyStarted(playerUuid) || session.hasGiven(playerUuid)) {
+        if (session.hasGiven(playerUuid)) {
             return false;
         }
         WintertideTarget target = session.getOutgoing(playerUuid);
@@ -204,7 +210,6 @@ public final class WintertideGiftService {
         if (target == null
             || !target.isPlayer()
             || !receiverUuid.getUuid().equals(target.getUuid())
-            || !session.isCeremonyStarted(giverUuid.getUuid())
             || session.hasGiven(giverUuid.getUuid())) {
             return;
         }
@@ -248,7 +253,12 @@ public final class WintertideGiftService {
             : null;
         Player receiver = store.getComponent(receiverRef, Player.getComponentType());
         if (receiver != null) {
-            receiver.giveItem(new ItemStack(pending.itemId(), Math.max(1, pending.quantity())), receiverRef, store);
+            FestivalRewardNotify.giveAndNotify(
+                receiver,
+                receiverRef,
+                store,
+                new ItemStack(pending.itemId(), Math.max(1, pending.quantity()))
+            );
         }
         if (giver != null && giverRef != null) {
             awardTickets(giver, giverRef, store, WintertideIds.ticketCount(preference));
@@ -329,12 +339,12 @@ public final class WintertideGiftService {
             }
         }
         Random rnd = new Random(
-            WintertideAssignmentService.seedFor(town.getTownId(), session.getYear())
+            session.getAssignmentSeed()
                 ^ pu.getUuid().getLeastSignificantBits()
                 ^ incoming.getUuid().getMostSignificantBits()
         );
         for (ItemStack stack : WintertideGifts.toItemStacks(WintertideGifts.pick(kind, def, rnd))) {
-            player.giveItem(stack, playerRef, store);
+            FestivalRewardNotify.giveAndNotify(player, playerRef, store, stack);
         }
         session.markReceived(pu.getUuid());
         if (npcRef != null && npcRef.isValid()) {
@@ -367,14 +377,17 @@ public final class WintertideGiftService {
         @Nonnull World world,
         @Nonnull TownRecord town
     ) {
+        Set<UUID> online = TownOnlinePresence.collectOnlinePlayerUuids(world);
         List<WintertideAssignmentService.PlayerMember> out = new ArrayList<>();
-        out.add(
-            new WintertideAssignmentService.PlayerMember(
-                town.getOwnerUuid(), TownPlayerLookup.ownerDisplayName(world, town)
-            )
-        );
+        if (online.contains(town.getOwnerUuid())) {
+            out.add(
+                new WintertideAssignmentService.PlayerMember(
+                    town.getOwnerUuid(), TownPlayerLookup.ownerDisplayName(world, town)
+                )
+            );
+        }
         for (UUID member : town.getMemberPlayerUuids()) {
-            if (member.equals(town.getOwnerUuid())) {
+            if (member.equals(town.getOwnerUuid()) || !online.contains(member)) {
                 continue;
             }
             out.add(
@@ -384,6 +397,131 @@ public final class WintertideGiftService {
             );
         }
         return out;
+    }
+
+    private static void dropStalePlayerTargets(
+        @Nonnull WintertideSession session,
+        @Nonnull World world,
+        @Nonnull List<WintertideAssignmentService.PlayerMember> onlineTownMembers
+    ) {
+        Set<UUID> onlineWorld = TownOnlinePresence.collectOnlinePlayerUuids(world);
+        for (UUID giver : List.copyOf(session.assignedPlayerUuids())) {
+            if (session.hasGiven(giver)) {
+                continue;
+            }
+            WintertideTarget outgoing = session.getOutgoing(giver);
+            if (outgoing != null && outgoing.isPlayer() && !onlineWorld.contains(outgoing.getUuid())) {
+                session.removeOutgoing(giver);
+            }
+            WintertideTarget incoming = session.getIncoming(giver);
+            if (incoming != null && incoming.isPlayer()) {
+                session.removeIncoming(giver);
+            }
+        }
+    }
+
+    public static void onTownMemberPlayerReady(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID playerUuid
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.findTownForPlayerInWorld(playerUuid);
+        if (!isWintertideActive(town)) {
+            return;
+        }
+        sessionFor(town, store);
+    }
+
+    /**
+     * Sets who this player should give a Wintertide gift to. Used by the creative festival command.
+     * Clears their given flag so they can give again.
+     */
+    @Nullable
+    public static WintertideTarget applyForcedOutgoing(
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID playerUuid,
+        @Nonnull String rawTarget
+    ) {
+        if (!isWintertideActive(town)) {
+            return null;
+        }
+        WintertideSession session = sessionFor(town, store);
+        WintertideTarget target = resolveForcedOutgoing(town, store, playerUuid, rawTarget);
+        if (target == null) {
+            return null;
+        }
+        session.putOutgoing(playerUuid, target);
+        session.clearGiven(playerUuid);
+        WintertideSession.PendingPlayerGift pending = session.getPendingPlayerGift();
+        if (pending != null && playerUuid.equals(pending.giverUuid())) {
+            session.setPendingPlayerGift(null);
+        }
+        if (target.isVillager()) {
+            FestivalAttendanceService.interruptVillagerUuids(store, List.of(target.getUuid()));
+        }
+        return target;
+    }
+
+    @Nullable
+    private static WintertideTarget resolveForcedOutgoing(
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID selfUuid,
+        @Nonnull String rawTarget
+    ) {
+        World world = store.getExternalData().getWorld();
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (world == null || plugin == null) {
+            return null;
+        }
+        String trimmed = rawTarget.trim();
+        if (trimmed.isEmpty()) {
+            return null;
+        }
+        UUID playerUuid = TownPlayerLookup.resolvePlayerUuid(world, trimmed);
+        if (playerUuid != null) {
+            if (selfUuid.equals(playerUuid)) {
+                return null;
+            }
+            if (!TownOnlinePresence.collectOnlinePlayerUuids(world).contains(playerUuid)) {
+                return null;
+            }
+            return WintertideTarget.player(playerUuid, TownPlayerLookup.displayNameForUuid(world, playerUuid));
+        }
+        List<WintertideAssignmentService.Resident> residents = giftableResidents(store, plugin, town.getTownId());
+        WintertideAssignmentService.Resident byName = null;
+        int nameHits = 0;
+        for (WintertideAssignmentService.Resident resident : residents) {
+            if (trimmed.equalsIgnoreCase(resident.displayName())) {
+                byName = resident;
+                nameHits++;
+            }
+        }
+        if (nameHits == 1 && byName != null) {
+            return WintertideTarget.villager(byName.uuid(), byName.kind(), byName.displayName());
+        }
+        TownVillagerTargetResolver.Outcome resolved =
+            TownVillagerTargetResolver.resolve(town, world, store, trimmed);
+        if (resolved.isOk()) {
+            UUID villagerUuid = resolved.villagerUuidOrThrow();
+            for (WintertideAssignmentService.Resident resident : residents) {
+                if (villagerUuid.equals(resident.uuid())) {
+                    return WintertideTarget.villager(resident.uuid(), resident.kind(), resident.displayName());
+                }
+            }
+        }
+        for (WintertideAssignmentService.Resident resident : residents) {
+            if (trimmed.equalsIgnoreCase(resident.uuid().toString())) {
+                return WintertideTarget.villager(resident.uuid(), resident.kind(), resident.displayName());
+            }
+        }
+        return null;
     }
 
     @Nonnull
@@ -482,16 +620,12 @@ public final class WintertideGiftService {
         if (count <= 0) {
             return;
         }
-        player.giveItem(new ItemStack(WintertideIds.WINTER_TICKET_ITEM_ID, count), playerRef, store);
-        PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
-        if (pr != null) {
-            NotificationUtil.sendNotification(
-                pr.getPacketHandler(),
-                Message.translation("aetherhaven_festivals.aetherhaven.festival.wintertide.tickets")
-                    .param("count", Integer.toString(count)),
-                NotificationStyle.Success
-            );
-        }
+        FestivalRewardNotify.giveAndNotify(
+            player,
+            playerRef,
+            store,
+            new ItemStack(WintertideIds.WINTER_TICKET_ITEM_ID, count)
+        );
     }
 
     static void openDialogue(

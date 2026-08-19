@@ -1,0 +1,21 @@
+{
+  "id": "aetherhaven_player_birthday_incoming",
+  "entry": "gift",
+  "nodes": {
+    "gift": {
+      "text": "aetherhaven_dialogue_player_birthday.aetherhaven.dialogue.player.birthday.incoming.body",
+      "choices": [
+        {
+          "id": "thanks",
+          "text": "aetherhaven_dialogue_player_birthday.aetherhaven.dialogue.player.birthday.incoming.c_thanks",
+          "icon": "UI/Custom/gift-box.png",
+          "actions": [
+            { "type": "player_birthday_receive_gift" },
+            { "type": "close" }
+          ],
+          "next": null
+        }
+      ]
+    }
+  }
+}

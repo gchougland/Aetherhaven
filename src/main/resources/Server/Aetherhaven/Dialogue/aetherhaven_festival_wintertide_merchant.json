@@ -15,23 +15,6 @@
           "next": "assigned"
         },
         {
-          "id": "start",
-          "text": "aetherhaven_dialogue_festival_wintertide_merchant.aetherhaven.dialogue.festival_wintertide_merchant.main_hub.c_start",
-          "icon": "UI/Custom/christmas-tree.png",
-          "visibilityCondition": { "type": "wintertide_can_start" },
-          "whenFalse": "hide",
-          "actions": [{ "type": "wintertide_start_ceremony" }],
-          "next": "ceremony_villager"
-        },
-        {
-          "id": "started",
-          "text": "aetherhaven_dialogue_festival_wintertide_merchant.aetherhaven.dialogue.festival_wintertide_merchant.main_hub.c_started",
-          "icon": "UI/Custom/christmas-tree.png",
-          "visibilityCondition": { "type": "wintertide_already_started" },
-          "whenFalse": "hide",
-          "next": "already_started"
-        },
-        {
           "id": "done",
           "text": "aetherhaven_dialogue_festival_wintertide_merchant.aetherhaven.dialogue.festival_wintertide_merchant.main_hub.c_done",
           "icon": "UI/Custom/gift-box.png",
@@ -79,36 +62,6 @@
       "choices": [
         {
           "text": "aetherhaven_dialogue_festival_wintertide_merchant.aetherhaven.dialogue.festival_wintertide_merchant.about.c_back",
-          "next": "main_hub"
-        }
-      ]
-    },
-    "ceremony_villager": {
-      "speaker": "aetherhaven_dialogue_festival_wintertide_merchant.aetherhaven.dialogue.festival_wintertide_merchant.speaker",
-      "text": "aetherhaven_dialogue_festival_wintertide_merchant.aetherhaven.dialogue.festival_wintertide_merchant.ceremony_villager.body",
-      "choices": [
-        {
-          "text": "aetherhaven_dialogue_festival_wintertide_merchant.aetherhaven.dialogue.festival_wintertide_merchant.ceremony_villager.c_back",
-          "next": null
-        }
-      ]
-    },
-    "ceremony_player": {
-      "speaker": "aetherhaven_dialogue_festival_wintertide_merchant.aetherhaven.dialogue.festival_wintertide_merchant.speaker",
-      "text": "aetherhaven_dialogue_festival_wintertide_merchant.aetherhaven.dialogue.festival_wintertide_merchant.ceremony_player.body",
-      "choices": [
-        {
-          "text": "aetherhaven_dialogue_festival_wintertide_merchant.aetherhaven.dialogue.festival_wintertide_merchant.ceremony_player.c_back",
-          "next": null
-        }
-      ]
-    },
-    "already_started": {
-      "speaker": "aetherhaven_dialogue_festival_wintertide_merchant.aetherhaven.dialogue.festival_wintertide_merchant.speaker",
-      "text": "aetherhaven_dialogue_festival_wintertide_merchant.aetherhaven.dialogue.festival_wintertide_merchant.already_started.body",
-      "choices": [
-        {
-          "text": "aetherhaven_dialogue_festival_wintertide_merchant.aetherhaven.dialogue.festival_wintertide_merchant.already_started.c_back",
           "next": "main_hub"
         }
       ]

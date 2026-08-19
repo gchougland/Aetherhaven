@@ -3,8 +3,10 @@ package com.hexvane.aetherhaven.festival;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.festival.market.MarketSession;
 import com.hexvane.aetherhaven.festival.market.MarketSessionIndex;
+import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
+import com.hexvane.aetherhaven.npc.NpcStandStill;
 import com.hexvane.aetherhaven.npc.NpcAnimationPlayback;
 import com.hexvane.aetherhaven.npc.NpcFaceVisuals;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -134,6 +136,7 @@ public final class FestivalDanceSystem extends EntityTickingSystem<EntityStore> 
             ACTIVE_DANCE.remove(entityUuid);
             // Clear the emote so a finished dance does not look like a busy overlay forever.
             NpcAnimationPlayback.stop(ref, AnimationSlot.Emote, commandBuffer);
+            NpcStandStill.release(ref, npc, commandBuffer);
         }
 
         if (NpcFaceVisuals.isInInteractionDialogue(npc)) {
@@ -164,6 +167,15 @@ public final class FestivalDanceSystem extends EntityTickingSystem<EntityStore> 
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.getTown(binding.getTownId());
         if (town == null || town.getActiveFestivalId() == null) {
+            return;
+        }
+        PoiEntry stallSpot =
+            FestivalAttendanceService.findSpot(world, plugin, town, binding.getKind(), entityUuid);
+        if (FestivalSpotService.isStallPinPoi(stallSpot, town)) {
+            DanceHold activeStallDance = ACTIVE_DANCE.remove(entityUuid);
+            if (activeStallDance != null) {
+                NpcAnimationPlayback.stop(ref, AnimationSlot.Emote, commandBuffer);
+            }
             return;
         }
         PlotInstance square = FestivalService.findFestivalSquare(plugin, town);
@@ -216,9 +228,12 @@ public final class FestivalDanceSystem extends EntityTickingSystem<EntityStore> 
         @Nonnull String emote,
         long nowMs
     ) {
+        TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
         // Stop walk first so Movement does not wipe the emote the moment it starts.
         NpcAnimationPlayback.stop(ref, AnimationSlot.Movement, commandBuffer);
-        VillagerAutonomySystem.clearAutonomySeekState(ref, npc, commandBuffer);
+        if (tc != null) {
+            NpcStandStill.hold(ref, store, npc, tc.getPosition(), commandBuffer);
+        }
         holdAutonomyStill(ref, store, commandBuffer, nowMs + DANCE_HOLD_MS);
         NpcAnimationPlayback.play(ref, npc, AnimationSlot.Emote, emote, commandBuffer);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
@@ -234,6 +249,10 @@ public final class FestivalDanceSystem extends EntityTickingSystem<EntityStore> 
         @Nonnull String emote,
         long nowMs
     ) {
+        TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+        if (tc != null) {
+            NpcStandStill.hold(ref, store, npc, tc.getPosition(), commandBuffer);
+        }
         // Do not replay or stop movement here. Restarting the emote every tick freezes it on the first frame.
         holdAutonomyStill(ref, store, commandBuffer, nowMs + 1_000L);
     }

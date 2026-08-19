@@ -9,8 +9,6 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.ui.SnowballFightHud;
 import com.hexvane.aetherhaven.ui.SnowballFightHudSupport;
-import com.hexvane.aetherhaven.ui.TownVillagerDirectory;
-import com.hexvane.aetherhaven.ui.TownVillagerRow;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
@@ -20,8 +18,6 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +70,13 @@ public final class SnowballFightSystem extends TickingSystem<EntityStore> {
             if (session.consumePendingFill()) {
                 Set<UUID> hudPlayers = session.hudPlayerUuids();
                 List<UUID> players = session.shuffledJoinedPlayers(ThreadLocalRandom.current());
-                List<UUID> fillers = fillerVillagers(store, town, players, leftoverPads(session, players.size()));
+                List<UUID> fillers =
+                    SnowballFillerVillagers.pickLive(
+                        store,
+                        town,
+                        players,
+                        SnowballFillerVillagers.leftoverPads(session, players.size())
+                    );
                 if (!session.fillAndAssign(players, fillers, now)) {
                     clearFightHuds(hudPlayers, playersByUuid);
                     continue;
@@ -83,6 +85,7 @@ public final class SnowballFightSystem extends TickingSystem<EntityStore> {
 
             if (session.consumePendingStartTeleport()) {
                 SnowballTeleport.teleportFightersToPads(store, session);
+                SnowballRewards.clearPlayerSnowballs(world, session);
             }
 
             Set<UUID> outs = session.takePendingOutTeleport();
@@ -101,6 +104,7 @@ public final class SnowballFightSystem extends TickingSystem<EntityStore> {
                 Vector3d at = squareCenter(plugin, town);
                 SnowballAnnounce.announceResult(store, town, session.winningTeam(), at);
                 SnowballAudio.stopFightMusic(store, null, session);
+                SnowballRewards.grantPendingTickets(world, session);
             }
 
             if (session.getPhase() == SnowballSession.Phase.RESULTS) {
@@ -135,35 +139,6 @@ public final class SnowballFightSystem extends TickingSystem<EntityStore> {
                 session.markPilePresent(spot);
             }
         });
-    }
-
-    private static int leftoverPads(@Nonnull SnowballSession session, int playerCount) {
-        int pads = session.teamAPadsView().size() + session.teamBPadsView().size();
-        return Math.max(0, pads - playerCount);
-    }
-
-    @Nonnull
-    private static List<UUID> fillerVillagers(
-        @Nonnull Store<EntityStore> store,
-        @Nonnull TownRecord town,
-        @Nonnull List<UUID> players,
-        int need
-    ) {
-        if (need <= 0) {
-            return List.of();
-        }
-        List<UUID> pool = new ArrayList<>();
-        for (TownVillagerRow row : TownVillagerDirectory.listResidents(store, town)) {
-            UUID uuid = row.entityUuid();
-            if (!players.contains(uuid)) {
-                pool.add(uuid);
-            }
-        }
-        Collections.shuffle(pool, ThreadLocalRandom.current());
-        if (pool.size() > need) {
-            return new ArrayList<>(pool.subList(0, need));
-        }
-        return pool;
     }
 
     private static void recordFightHits(

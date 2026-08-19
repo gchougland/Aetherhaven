@@ -16,6 +16,7 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHa
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.core.util.TargetUtil;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,6 +25,7 @@ import static com.hypixel.hytale.server.core.modules.interaction.interaction.uti
 
 /** Player Use (F) on another town member to give them a Wintertide gift. */
 public final class WintertidePlayerGiftInteraction extends SimpleInstantInteraction {
+    private static final float TARGET_RANGE = 5.0F;
     @Nonnull
     public static final com.hypixel.hytale.codec.builder.BuilderCodec<WintertidePlayerGiftInteraction> CODEC =
         com.hypixel.hytale.codec.builder.BuilderCodec
@@ -99,10 +101,18 @@ public final class WintertidePlayerGiftInteraction extends SimpleInstantInteract
             return target;
         }
         var clientState = context.getClientState();
-        if (clientState == null) {
-            return null;
+        if (clientState != null) {
+            Ref<EntityStore> fromClient =
+                commandBuffer.getStore().getExternalData().getRefFromNetworkId(clientState.entityId);
+            if (fromClient != null && fromClient.isValid()) {
+                return fromClient;
+            }
         }
-        return commandBuffer.getStore().getExternalData().getRefFromNetworkId(clientState.entityId);
+        Ref<EntityStore> giverRef = context.getEntity();
+        if (giverRef != null && giverRef.isValid()) {
+            return TargetUtil.getTargetEntity(giverRef, TARGET_RANGE, commandBuffer.getStore());
+        }
+        return null;
     }
 
     @Nullable

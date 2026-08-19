@@ -155,6 +155,8 @@ commands.aetherhaven.festival.build.desc=Creative: turn festival square building
 commands.aetherhaven.festival.resetclown.desc=Creative: reset clown unlock so the wheel can award Bozo again
 commands.aetherhaven.festival.wheelforce.desc=Creative: force the next carnival wheel spin onto an octant (0-7, or negative to clear)
 commands.aetherhaven.festival.wheelforce.octant.desc=Octant index 0-7, or negative to clear
+commands.aetherhaven.festival.wintertideassign.desc=Creative: set who you give a Wintertide gift to
+commands.aetherhaven.festival.wintertideassign.target.desc=Online player or town villager
 
 commands.aetherhaven.prop.desc=Creative: give props, create props from prefabs, and toggle prop breaking
 commands.aetherhaven.prop.give.desc=Give a prop item
@@ -324,3 +326,5 @@ commands.aetherhaven.argtype.gameHour.name=hour
 commands.aetherhaven.argtype.gameHour.usage=Returns an hour from 0 to 23 on the schedule clock
 commands.aetherhaven.argtype.onlinePlayerName.name=player name
 commands.aetherhaven.argtype.onlinePlayerName.usage=Returns an online player username
+commands.aetherhaven.argtype.wintertideAssignTarget.name=gift partner
+commands.aetherhaven.argtype.wintertideAssignTarget.usage=Returns an online player username or a town villager

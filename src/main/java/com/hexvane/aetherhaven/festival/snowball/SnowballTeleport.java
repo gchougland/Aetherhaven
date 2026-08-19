@@ -65,7 +65,10 @@ public final class SnowballTeleport {
                     }
                     applyPad(chunk.getReferenceTo(i), chunk, i, commandBuffer, out, isPlayer(chunk, i));
                     if (!isPlayer(chunk, i)) {
-                        SnowballPin.unpin(chunk.getReferenceTo(i), commandBuffer);
+                        NPCEntity npc = chunk.getComponent(i, NPCEntity.getComponentType());
+                        if (npc != null) {
+                            SnowballPin.unpin(chunk.getReferenceTo(i), npc, commandBuffer);
+                        }
                     }
                 }
             }
@@ -103,7 +106,10 @@ public final class SnowballTeleport {
                     if (uc == null || !session.isVillagerFighter(uc.getUuid())) {
                         continue;
                     }
-                    SnowballPin.unpin(chunk.getReferenceTo(i), commandBuffer);
+                    NPCEntity npc = chunk.getComponent(i, NPCEntity.getComponentType());
+                    if (npc != null) {
+                        SnowballPin.unpin(chunk.getReferenceTo(i), npc, commandBuffer);
+                    }
                 }
             }
         );

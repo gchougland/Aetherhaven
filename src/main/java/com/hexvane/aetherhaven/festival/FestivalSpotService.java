@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.festival;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.PrefabYaw;
+import com.hexvane.aetherhaven.festival.market.MarketIds;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
@@ -9,6 +11,7 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.nio.charset.StandardCharsets;
@@ -74,7 +77,7 @@ public final class FestivalSpotService {
                 target.x,
                 target.y,
                 target.z,
-                (float) Math.toRadians(spot.getYawDegrees()),
+                worldYawRadians(square, spot.getYawDegrees()),
                 spot.getResidentKind()
             );
             registry.registerEphemeral(entry);
@@ -110,7 +113,7 @@ public final class FestivalSpotService {
                 target.x,
                 target.y,
                 target.z,
-                (float) Math.toRadians(spot.getYawDegrees()),
+                worldYawRadians(square, spot.getYawDegrees()),
                 null
             );
             registry.registerEphemeral(entry);
@@ -147,7 +150,7 @@ public final class FestivalSpotService {
                 target.x,
                 target.y,
                 target.z,
-                (float) Math.toRadians(stand.getYawDegrees()),
+                worldYawRadians(square, stand.getYawDegrees()),
                 com.hexvane.aetherhaven.festival.market.MarketIds.standKind(i)
             );
             registry.registerEphemeral(entry);
@@ -156,6 +159,13 @@ public final class FestivalSpotService {
         town.setActiveFestivalSpotPoiIds(poiIds);
         tm.updateTown(town);
         LOGGER.atInfo().log("Registered %s festival spot(s) for %s", poiIds.size(), festival.getId());
+    }
+
+    private static float worldYawRadians(@Nonnull PlotInstance square, float localYawDegrees) {
+        return PrefabYaw.worldFromPrefabLocal(
+            square.resolvePrefabYaw(),
+            (float) Math.toRadians(localYawDegrees)
+        );
     }
 
     /** Removes every spot POI the running festival registered. */
@@ -173,6 +183,26 @@ public final class FestivalSpotService {
             }
         }
         town.setActiveFestivalSpotPoiIds(null);
+    }
+
+    /**
+     * True for Market Festival stall pads that must snap and stay put: ticket shops, judging stands, and Elder
+     * Lyren's booth. Open watch pads at other festivals are not stalls.
+     */
+    public static boolean isStallPinPoi(
+        @javax.annotation.Nullable PoiEntry poi,
+        @javax.annotation.Nullable TownRecord town
+    ) {
+        if (poi == null) {
+            return false;
+        }
+        String kind = poi.getWorkResidentKind();
+        if (MarketIds.isStandKind(kind) || MarketIds.isMarketShopKind(kind)) {
+            return true;
+        }
+        return town != null
+            && MarketIds.FESTIVAL_ID.equals(town.getActiveFestivalId())
+            && TownVillagerBinding.KIND_ELDER.equalsIgnoreCase(kind);
     }
 
     /** The festival spot POI reserved for {@code residentKind}, or null when the festival has no spot for it. */

@@ -239,7 +239,7 @@ public final class GuildHallAdventurerChairMount {
 
 
 
-    /** Re-applies Sit while seated; {@link com.hexvane.aetherhaven.AetherhavenConstants#NPC_STATE_GUILD_HALL_DISPLAY} uses standing idle. */
+    /** Re-applies Sit while seated; {@link com.hexvane.aetherhaven.AetherhavenConstants#NPC_STATE_STAND_STILL} uses standing idle. */
     public static void ensureSitVisuals(
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull Store<EntityStore> store,

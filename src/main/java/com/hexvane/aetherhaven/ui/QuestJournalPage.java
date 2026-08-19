@@ -23,6 +23,11 @@ import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.patrol.PatrolRouteRecord;
 import com.hexvane.aetherhaven.patrol.PatrolRouteRegistry;
 import com.hexvane.aetherhaven.plugin.JournalTabVisibility;
+import com.hexvane.aetherhaven.calendar.PlayerBirthdayService;
+import com.hexvane.aetherhaven.hud.AetherhavenCalendar;
+import com.hexvane.aetherhaven.hud.AetherhavenCalendar.CalendarDate;
+import com.hexvane.aetherhaven.hud.AetherhavenCalendar.Season;
+import com.hexvane.aetherhaven.quest.IntroQuestPromptPage;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.quest.QuestRewardService;
 import com.hexvane.aetherhaven.questboard.QuestBoardCatalog;
@@ -841,7 +846,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         }
 
         if (personalActive) {
-            buildJournalSettingsPersonalTab(commandBuilder, eventBuilder, journalPrefs);
+            buildJournalSettingsPersonalTab(commandBuilder, eventBuilder, journalPrefs, store);
         } else {
             buildJournalSettingsServerTab(commandBuilder, eventBuilder, plugin, store, ref, uc, world);
         }
@@ -850,7 +855,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
     private void buildJournalSettingsPersonalTab(
         @Nonnull UICommandBuilder commandBuilder,
         @Nonnull UIEventBuilder eventBuilder,
-        @Nonnull PlayerTownJournalState journalPrefs
+        @Nonnull PlayerTownJournalState journalPrefs,
+        @Nonnull Store<EntityStore> store
     ) {
         commandBuilder.set("#SettingsPersonalStatus.TextSpans", journalSettingsPersonalStatus != null ? journalSettingsPersonalStatus : Message.raw(""));
         boolean rtsSettings = JournalTabVisibility.rtsTuningTab();
@@ -867,6 +873,20 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             );
         }
         commandBuilder.set("#SettingsShowBordersCheck #CheckBox.Value", journalPrefs.isShowTownBordersOnMap());
+        Season birthdaySeason = journalPrefs.getBirthdaySeason();
+        int birthdayDay = journalPrefs.getBirthdayDay();
+        if (birthdaySeason == null || birthdayDay < 1) {
+            CalendarDate today = settingsToday(store);
+            birthdaySeason = today.season();
+            birthdayDay = today.dayOfSeason();
+        }
+        commandBuilder.set("#SettingsBirthdaySeasonDropdown #Input.Entries", IntroQuestPromptPage.seasonEntries());
+        commandBuilder.set(
+            "#SettingsBirthdaySeasonDropdown #Input.Value",
+            PlayerBirthdayService.seasonValue(birthdaySeason)
+        );
+        commandBuilder.set("#SettingsBirthdayDayDropdown #Input.Entries", IntroQuestPromptPage.dayEntries());
+        commandBuilder.set("#SettingsBirthdayDayDropdown #Input.Value", String.valueOf(birthdayDay));
         commandBuilder.set("#SettingsSpeechEnableCheck #CheckBox.Value", journalPrefs.isDialogueSpeechEnabled());
         commandBuilder.set("#SettingsSpeechVolumeSlider.Value", journalPrefs.getDialogueSpeechVolumePercent());
         commandBuilder.set(
@@ -947,7 +967,9 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 .append("@HudStatusY", "#SettingsHudStatusYField.Value")
                 .append("@HudQuestPlacement", "#SettingsHudQuestPlacement #Input.Value")
                 .append("@HudQuestX", "#SettingsHudQuestXField.Value")
-                .append("@HudQuestY", "#SettingsHudQuestYField.Value"),
+                .append("@HudQuestY", "#SettingsHudQuestYField.Value")
+                .append("@BirthdaySeason", "#SettingsBirthdaySeasonDropdown #Input.Value")
+                .append("@BirthdayDay", "#SettingsBirthdayDayDropdown #Input.Value"),
             false
         );
         eventBuilder.addEventBinding(
@@ -956,6 +978,15 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             new EventData().append("Action", "PersonalSettingsReset"),
             false
         );
+    }
+
+    @Nonnull
+    private static CalendarDate settingsToday(@Nonnull Store<EntityStore> store) {
+        WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
+        if (wtr == null) {
+            return new CalendarDate(Season.SPRING, 1, 1L);
+        }
+        return AetherhavenCalendar.from(wtr.getGameDateTime());
     }
 
     @Nonnull
@@ -3033,6 +3064,17 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 data.speechEnabled == null || Boolean.TRUE.equals(data.speechEnabled),
                 data.speechVolumePercent != null ? data.speechVolumePercent : st.getDialogueSpeechVolumePercent()
             );
+            Season birthdaySeason = PlayerBirthdayService.parseSeason(
+                data.birthdaySeason,
+                st.getBirthdaySeason() != null ? st.getBirthdaySeason() : settingsToday(store).season()
+            );
+            int birthdayDay = PlayerBirthdayService.parseDay(
+                data.birthdayDay,
+                st.getBirthdayDay() >= 1 ? st.getBirthdayDay() : settingsToday(store).dayOfSeason()
+            );
+            if (birthdaySeason != null) {
+                st.setBirthday(birthdaySeason, birthdayDay);
+            }
             store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
             refreshActiveRtsPickTuning(ref, store);
             journalSettingsPersonalStatus =
@@ -3739,6 +3781,10 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             .add()
             .append(new KeyedCodec<>("@HudQuestY", Codec.STRING), (d, v) -> d.hudQuestY = v, d -> d.hudQuestY)
             .add()
+            .append(new KeyedCodec<>("@BirthdaySeason", Codec.STRING), (d, v) -> d.birthdaySeason = v, d -> d.birthdaySeason)
+            .add()
+            .append(new KeyedCodec<>("@BirthdayDay", Codec.STRING), (d, v) -> d.birthdayDay = v, d -> d.birthdayDay)
+            .add()
             .append(new KeyedCodec<>("@ActiveTownId", Codec.STRING), (d, v) -> d.activeTownId = v, d -> d.activeTownId)
             .add()
             .build();
@@ -3825,6 +3871,10 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         private String hudQuestX;
         @Nullable
         private String hudQuestY;
+        @Nullable
+        private String birthdaySeason;
+        @Nullable
+        private String birthdayDay;
         @Nullable
         private String activeTownId;
     }

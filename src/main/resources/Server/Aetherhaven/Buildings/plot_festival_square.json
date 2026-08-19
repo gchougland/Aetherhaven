@@ -161,66 +161,6 @@
       "interactionTargetLocalY": 6,
       "interactionTargetLocalZ": -7,
       "interactionTargetYawDegrees": 0.0
-    },
-    {
-      "localX": -9,
-      "localY": 5,
-      "localZ": -9,
-      "tags": [
-        "TOURIST_VISIT"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Rock_Stone_Cobble",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": -9,
-      "interactionTargetLocalY": 5,
-      "interactionTargetLocalZ": -10,
-      "interactionTargetYawDegrees": 152.34515
-    },
-    {
-      "localX": -7,
-      "localY": 5,
-      "localZ": 10,
-      "tags": [
-        "TOURIST_VISIT"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Rock_Stone_Cobble",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": -7,
-      "interactionTargetLocalY": 5,
-      "interactionTargetLocalZ": 9,
-      "interactionTargetYawDegrees": -155.54828
-    },
-    {
-      "localX": 9,
-      "localY": 5,
-      "localZ": 9,
-      "tags": [
-        "TOURIST_VISIT"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Rock_Stone_Cobble_Mossy",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 5,
-      "interactionTargetLocalZ": 9,
-      "interactionTargetYawDegrees": -125.013794
-    },
-    {
-      "localX": 8,
-      "localY": 5,
-      "localZ": -8,
-      "tags": [
-        "TOURIST_VISIT"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Rock_Stone_Cobble",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 9,
-      "interactionTargetLocalY": 5,
-      "interactionTargetLocalZ": -8,
-      "interactionTargetYawDegrees": 43.11499
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_festival_square.displayName",

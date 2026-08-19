@@ -2,8 +2,12 @@ package com.hexvane.aetherhaven.placement;
 
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hypixel.hytale.builtin.triggervolumes.TriggerVolumesPlugin;
+import com.hypixel.hytale.builtin.triggervolumes.effect.TriggerContext;
+import com.hypixel.hytale.builtin.triggervolumes.effect.TriggerEffect;
+import com.hypixel.hytale.builtin.triggervolumes.effect.TriggerEventType;
 import com.hypixel.hytale.builtin.triggervolumes.manager.TriggerVolumeManager;
 import com.hypixel.hytale.builtin.triggervolumes.manager.VolumeEntry;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.prefab.PrefabRotation;
@@ -13,6 +17,8 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3d;
@@ -23,8 +29,9 @@ import org.joml.Vector3i;
  * the paste hands the volume to the trigger volume manager and throws the entity away, so clearing a footprint by
  * removing entities leaves music and weather volumes standing forever.
  *
- * <p>Volumes are switched off first so anyone standing in one gets the normal exit treatment (their music and weather
- * go back to normal), then marked for removal, which the trigger volume system finishes on its next tick.
+ * <p>Anyone still inside gets the volume's EXIT effects immediately (festival weather and music go back to normal).
+ * Waiting for the next trigger-volume tick is racy: pending-destroy volumes can be unregistered in the same tick
+ * without EXIT ever running.
  */
 public final class PrefabTriggerVolumeCleanup {
     private PrefabTriggerVolumeCleanup() {}
@@ -79,7 +86,7 @@ public final class PrefabTriggerVolumeCleanup {
                 : !footprintContains(fp, entry.getPosition())) {
                 continue;
             }
-            markVolumePendingDestroy(entry);
+            markVolumePendingDestroy(store, entry);
             removed++;
         }
         if (removed > 0) {
@@ -111,7 +118,7 @@ public final class PrefabTriggerVolumeCleanup {
             if (entry == null || entry.isPendingDestroy()) {
                 continue;
             }
-            markVolumePendingDestroy(entry);
+            markVolumePendingDestroy(store, entry);
             removed++;
         }
         if (removed > 0) {
@@ -120,10 +127,53 @@ public final class PrefabTriggerVolumeCleanup {
         return removed;
     }
 
-    private static void markVolumePendingDestroy(@Nonnull VolumeEntry entry) {
-        // Disable first so the next trigger-volume tick can run EXIT (music/weather) before destroy.
+    private static void markVolumePendingDestroy(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull VolumeEntry entry
+    ) {
+        fireExitEffectsNow(store, entry);
         entry.setEnabled(false);
         entry.markPendingDestroy();
+    }
+
+    /**
+     * Runs EXIT effects (weather reset, music clear, and anything else on the volume) for whoever is still inside,
+     * then forgets them so a later trigger-volume tick does not fire EXIT twice.
+     */
+    private static void fireExitEffectsNow(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull VolumeEntry entry
+    ) {
+        List<TriggerEffect> exits = exitEffects(entry.getEffects());
+        for (Map.Entry<UUID, Ref<EntityStore>> tracked : new ArrayList<>(entry.getTrackedEntities().entrySet())) {
+            UUID uuid = tracked.getKey();
+            Ref<EntityStore> ref = tracked.getValue();
+            if (ref != null && ref.isValid() && !exits.isEmpty()) {
+                TriggerContext context = new TriggerContext(ref, store, TriggerEventType.EXIT, entry);
+                for (TriggerEffect effect : exits) {
+                    effect.execute(context);
+                }
+            }
+            if (uuid != null) {
+                entry.clearEntityRuntimeState(uuid);
+            }
+        }
+        entry.getTrackedEntities().clear();
+    }
+
+    /** Effects that would run if the player walked out of the volume. */
+    @Nonnull
+    static List<TriggerEffect> exitEffects(@Nullable List<TriggerEffect> effects) {
+        if (effects == null || effects.isEmpty()) {
+            return List.of();
+        }
+        List<TriggerEffect> out = new ArrayList<>();
+        for (TriggerEffect effect : effects) {
+            if (effect != null && effect.getEventType() == TriggerEventType.EXIT) {
+                out.add(effect);
+            }
+        }
+        return out;
     }
 
     /**

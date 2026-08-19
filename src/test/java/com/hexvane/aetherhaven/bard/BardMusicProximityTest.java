@@ -10,27 +10,27 @@ import org.junit.jupiter.api.Test;
 class BardMusicProximityTest {
 
     @Test
-    void nearestMusic_enterRadiusExcludesPlayerAt18() {
+    void nearestMusic_enterRadiusExcludesPlayerAt42() {
         BardActivePerformancesResource resource = new BardActivePerformancesResource();
         resource.putSnapshot(0.0, 0.0, 0.0, 11);
 
-        assertEquals(0, resource.nearestMusic(18.0, 0.0, 0.0, false).musicContainerIndex());
+        assertEquals(0, resource.nearestMusic(42.0, 0.0, 0.0, false).musicContainerIndex());
     }
 
     @Test
-    void nearestMusic_leaveRadiusKeepsListenerAt18() {
+    void nearestMusic_leaveRadiusKeepsListenerAt42() {
         BardActivePerformancesResource resource = new BardActivePerformancesResource();
         resource.putSnapshot(0.0, 0.0, 0.0, 11);
 
-        assertEquals(11, resource.nearestMusic(18.0, 0.0, 0.0, true).musicContainerIndex());
+        assertEquals(11, resource.nearestMusic(42.0, 0.0, 0.0, true).musicContainerIndex());
     }
 
     @Test
-    void nearestMusic_leaveRadiusDropsListenerAt21() {
+    void nearestMusic_leaveRadiusDropsListenerAt45() {
         BardActivePerformancesResource resource = new BardActivePerformancesResource();
         resource.putSnapshot(0.0, 0.0, 0.0, 11);
 
-        assertEquals(0, resource.nearestMusic(21.0, 0.0, 0.0, true).musicContainerIndex());
+        assertEquals(0, resource.nearestMusic(45.0, 0.0, 0.0, true).musicContainerIndex());
     }
 
     @Test

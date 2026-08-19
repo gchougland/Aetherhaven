@@ -301,7 +301,7 @@ public final class PlotCreatorSpotPreviewCollector {
                 draft,
                 new int[] {poi.getLocalX(), poi.getLocalY(), poi.getLocalZ()}
             );
-        Vector3i stand = resolveStandCell(draft, world, poi, poiBlock);
+        Vector3i stand = resolveStandCell(world, poiBlock);
         Float worldYaw = worldYawForPoi(draft, poi);
         String activityId =
             PlotCreatorWorkActivityTags.resolveActivityId(type, poi.getWorkResidentKind(), poi.getTags());
@@ -332,18 +332,7 @@ public final class PlotCreatorSpotPreviewCollector {
     }
 
     @Nonnull
-    private static Vector3i resolveStandCell(
-        @Nonnull PlotCreatorDraft draft,
-        @Nullable World world,
-        @Nonnull PlotCreatorPoiDraft poi,
-        @Nonnull Vector3i poiBlock
-    ) {
-        Integer tx = poi.getInteractionTargetLocalX();
-        Integer ty = poi.getInteractionTargetLocalY();
-        Integer tz = poi.getInteractionTargetLocalZ();
-        if (tx != null && ty != null && tz != null) {
-            return PlotCreatorLocalCoords.toWorldBlock(draft, new int[] {tx, ty, tz});
-        }
+    private static Vector3i resolveStandCell(@Nullable World world, @Nonnull Vector3i poiBlock) {
         if (world != null) {
             PlotCreatorSpotPlacement.ResolvedSpot stand =
                 PlotCreatorSpotPlacement.resolveStandSpawn(world, poiBlock);

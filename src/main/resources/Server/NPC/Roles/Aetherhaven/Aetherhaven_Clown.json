@@ -48,6 +48,10 @@
       "$Comment": "Clear Status-slot POI animation when Java returns NPC to Idle.",
       "States": [{ "From": ["AetherhavenAutonomy"], "To": ["Idle"] }],
       "Actions": { "Reference": "Component_ActionList_Aetherhaven_Clear_Status" }
+    },
+    {
+      "States": [{ "From": ["AetherhavenStandStill"], "To": ["Idle"] }],
+      "Actions": { "Reference": "Component_ActionList_Aetherhaven_Clear_Status" }
     }
   ],
   "Instructions": [
@@ -56,8 +60,17 @@
       "Instructions": [
         {
           "Sensor": {
-            "Type": "Not",
-            "Sensor": { "Type": "State", "State": "Flee" }
+            "Type": "And",
+            "Sensors": [
+              {
+                "Type": "Not",
+                "Sensor": { "Type": "State", "State": "Flee" }
+              },
+              {
+                "Type": "Not",
+                "Sensor": { "Type": "State", "State": "AetherhavenStandStill", "IgnoreMissingSetState": true }
+              }
+            ]
           },
           "Instructions": [
             {
@@ -109,6 +122,10 @@
           "$Comment": "Seek toward leash point set by Java; see Component_Instruction_Aetherhaven_Autonomy_Poi_Travel.",
           "Sensor": { "Type": "State", "State": "AetherhavenAutonomy", "IgnoreMissingSetState": true },
           "Instructions": [{ "Reference": "Component_Instruction_Aetherhaven_Autonomy_Poi_Travel" }]
+        },
+        {
+          "Sensor": { "Type": "State", "State": "AetherhavenStandStill", "IgnoreMissingSetState": true },
+          "Instructions": [{ "Reference": "Component_Instruction_Aetherhaven_Stand_Still_Idle" }]
         },
         {
           "Sensor": { "Type": "State", "State": "Idle" },

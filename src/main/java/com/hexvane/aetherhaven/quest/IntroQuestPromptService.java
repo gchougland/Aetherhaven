@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.quest;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.hud.AetherhavenCalendar.Season;
 import com.hexvane.aetherhaven.hud.AetherhavenHudRefreshSystem;
 import com.hexvane.aetherhaven.hud.AetherhavenHudSupport;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -15,10 +16,10 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import java.util.UUID;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-/** One time first join popup offering the intro founding quest. */
+/** One time first join popup offering the intro founding quest and a birthday date. */
 public final class IntroQuestPromptService {
     private IntroQuestPromptService() {}
 
@@ -34,34 +35,41 @@ public final class IntroQuestPromptService {
             return;
         }
         PlayerTownJournalState journalState = ensureJournalState(ref, store);
-        if (journalState.isIntroQuestPromptHandled()) {
-            return;
-        }
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         if (uc == null) {
             return;
         }
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        if (tm.findTownForOwnerInWorld(uc.getUuid()) != null) {
-            journalState.setIntroQuestPromptHandled(true);
-            store.putComponent(ref, PlayerTownJournalState.getComponentType(), journalState);
+        boolean needsIntro = false;
+        if (!journalState.isIntroQuestPromptHandled()) {
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            if (tm.findTownForOwnerInWorld(uc.getUuid()) != null) {
+                journalState.setIntroQuestPromptHandled(true);
+                store.putComponent(ref, PlayerTownJournalState.getComponentType(), journalState);
+            } else {
+                PlayerQuestProgress questProgress = ensureQuestProgress(ref, store);
+                String questId = AetherhavenConstants.QUEST_INTRO_AETHERHAVEN;
+                if (questProgress.hasQuestActive(questId) || questProgress.hasQuestCompleted(questId)) {
+                    journalState.setIntroQuestPromptHandled(true);
+                    store.putComponent(ref, PlayerTownJournalState.getComponentType(), journalState);
+                } else {
+                    needsIntro = true;
+                }
+            }
+        }
+        boolean needsBirthday = !journalState.hasBirthday();
+        if (!needsIntro && !needsBirthday) {
             return;
         }
-        PlayerQuestProgress questProgress = ensureQuestProgress(ref, store);
-        String questId = AetherhavenConstants.QUEST_INTRO_AETHERHAVEN;
-        if (questProgress.hasQuestActive(questId) || questProgress.hasQuestCompleted(questId)) {
-            journalState.setIntroQuestPromptHandled(true);
-            store.putComponent(ref, PlayerTownJournalState.getComponentType(), journalState);
-            return;
-        }
-        player.getPageManager().openCustomPage(ref, store, new IntroQuestPromptPage(playerRef));
+        player.getPageManager().openCustomPage(ref, store, new IntroQuestPromptPage(playerRef, !needsIntro));
     }
 
     public static void accept(
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
-        @Nonnull PlayerRef playerRef
+        @Nonnull PlayerRef playerRef,
+        @Nullable Season birthdaySeason,
+        int birthdayDay
     ) {
         Player player = store.getComponent(ref, Player.getComponentType());
         if (player == null) {
@@ -69,6 +77,7 @@ public final class IntroQuestPromptService {
         }
         World world = store.getExternalData().getWorld();
         PlayerTownJournalState journalState = ensureJournalState(ref, store);
+        saveBirthday(journalState, birthdaySeason, birthdayDay);
         journalState.setIntroQuestPromptHandled(true);
         PlayerQuestProgress questProgress = ensureQuestProgress(ref, store);
         String questId = AetherhavenConstants.QUEST_INTRO_AETHERHAVEN;
@@ -84,10 +93,37 @@ public final class IntroQuestPromptService {
         AetherhavenHudRefreshSystem.requestRefresh(world);
     }
 
-    public static void decline(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+    public static void decline(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Season birthdaySeason,
+        int birthdayDay
+    ) {
         PlayerTownJournalState journalState = ensureJournalState(ref, store);
+        saveBirthday(journalState, birthdaySeason, birthdayDay);
         journalState.setIntroQuestPromptHandled(true);
         store.putComponent(ref, PlayerTownJournalState.getComponentType(), journalState);
+    }
+
+    public static void saveBirthdayOnly(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Season birthdaySeason,
+        int birthdayDay
+    ) {
+        PlayerTownJournalState journalState = ensureJournalState(ref, store);
+        saveBirthday(journalState, birthdaySeason, birthdayDay);
+        store.putComponent(ref, PlayerTownJournalState.getComponentType(), journalState);
+    }
+
+    private static void saveBirthday(
+        @Nonnull PlayerTownJournalState journalState,
+        @Nullable Season birthdaySeason,
+        int birthdayDay
+    ) {
+        if (birthdaySeason != null) {
+            journalState.setBirthday(birthdaySeason, birthdayDay);
+        }
     }
 
     @Nonnull

@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.hud.AetherhavenCalendar;
+import com.hexvane.aetherhaven.hud.AetherhavenCalendar.Season;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -12,6 +14,7 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -183,6 +186,30 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
                 (c, v) -> c.introQuestPromptHandled = valueOr(v, false),
                 c -> c.introQuestPromptHandled)
             .add()
+            .append(
+                new KeyedCodec<>("BirthdaySeason", Codec.STRING),
+                (c, v) -> c.birthdaySeason = trimOrEmpty(v),
+                c -> emptyOrNull(c.birthdaySeason)
+            )
+            .add()
+            .append(
+                new KeyedCodec<>("BirthdayDay", Codec.INTEGER),
+                (c, v) -> c.birthdayDay = v != null ? v : 0,
+                c -> c.birthdayDay > 0 ? c.birthdayDay : null
+            )
+            .add()
+            .append(
+                new KeyedCodec<>("BirthdayGiftYear", Codec.LONG),
+                (c, v) -> c.birthdayGiftYear = v != null ? v : 0L,
+                c -> c.birthdayGiftYear > 0L ? c.birthdayGiftYear : null
+            )
+            .add()
+            .append(
+                new KeyedCodec<>("BirthdayGiftedVillagerUuids", Codec.STRING),
+                (c, v) -> c.decodeBirthdayGifted(v),
+                PlayerTownJournalState::encodeBirthdayGifted
+            )
+            .add()
             .build();
 
     @Nullable
@@ -264,6 +291,13 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
 
     private boolean introQuestPromptHandled;
 
+    @Nonnull
+    private String birthdaySeason = "";
+    private int birthdayDay;
+    private long birthdayGiftYear;
+    @Nonnull
+    private final LinkedHashSet<UUID> birthdayGiftedVillagerUuids = new LinkedHashSet<>();
+
     public PlayerTownJournalState() {}
 
     @Nonnull
@@ -302,6 +336,11 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         c.toolKeyCtrl = toolKeyCtrl;
         c.toolKeySpace = toolKeySpace;
         c.toolKeyMovement = toolKeyMovement;
+        c.introQuestPromptHandled = introQuestPromptHandled;
+        c.birthdaySeason = birthdaySeason;
+        c.birthdayDay = birthdayDay;
+        c.birthdayGiftYear = birthdayGiftYear;
+        c.birthdayGiftedVillagerUuids.addAll(birthdayGiftedVillagerUuids);
         return c;
     }
 
@@ -499,6 +538,81 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
 
     public void setIntroQuestPromptHandled(boolean handled) {
         introQuestPromptHandled = handled;
+    }
+
+    public boolean hasBirthday() {
+        return AetherhavenCalendar.parseSeason(birthdaySeason) != null
+            && birthdayDay >= 1
+            && birthdayDay <= AetherhavenCalendar.DAYS_PER_SEASON;
+    }
+
+    @Nullable
+    public Season getBirthdaySeason() {
+        return AetherhavenCalendar.parseSeason(birthdaySeason);
+    }
+
+    public int getBirthdayDay() {
+        return birthdayDay;
+    }
+
+    public boolean matchesBirthday(@Nonnull Season season, int dayOfSeason) {
+        Season stored = getBirthdaySeason();
+        return stored == season && birthdayDay == dayOfSeason;
+    }
+
+    public void setBirthday(@Nonnull Season season, int dayOfSeason) {
+        if (dayOfSeason < 1 || dayOfSeason > AetherhavenCalendar.DAYS_PER_SEASON) {
+            return;
+        }
+        birthdaySeason = season.name();
+        birthdayDay = dayOfSeason;
+    }
+
+    public long getBirthdayGiftYear() {
+        return birthdayGiftYear;
+    }
+
+    @Nonnull
+    public Set<UUID> getBirthdayGiftedVillagerUuids() {
+        return Collections.unmodifiableSet(birthdayGiftedVillagerUuids);
+    }
+
+    public void markBirthdayGifted(@Nonnull UUID villagerUuid, long year) {
+        if (year != birthdayGiftYear) {
+            birthdayGiftYear = year;
+            birthdayGiftedVillagerUuids.clear();
+        }
+        birthdayGiftedVillagerUuids.add(villagerUuid);
+    }
+
+    private void decodeBirthdayGifted(@Nullable String encoded) {
+        birthdayGiftedVillagerUuids.clear();
+        if (encoded == null || encoded.isBlank()) {
+            return;
+        }
+        for (String line : encoded.split("\n")) {
+            String trimmed = line.trim();
+            if (trimmed.isEmpty()) {
+                continue;
+            }
+            try {
+                birthdayGiftedVillagerUuids.add(UUID.fromString(trimmed));
+            } catch (IllegalArgumentException ignored) {
+                // Skip leftover junk from older saves.
+            }
+        }
+    }
+
+    @Nonnull
+    private String encodeBirthdayGifted() {
+        if (birthdayGiftedVillagerUuids.isEmpty()) {
+            return "";
+        }
+        List<String> lines = new ArrayList<>();
+        for (UUID id : birthdayGiftedVillagerUuids) {
+            lines.add(id.toString());
+        }
+        return String.join("\n", lines);
     }
 
     @Nonnull

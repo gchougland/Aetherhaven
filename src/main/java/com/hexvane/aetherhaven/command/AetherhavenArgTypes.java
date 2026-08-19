@@ -24,6 +24,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -492,6 +493,48 @@ public final class AetherhavenArgTypes {
                 return;
             }
             AetherhavenCommandSuggest.suggestVillagerTargets(result, textAlreadyEntered, town);
+        }
+    };
+
+    public static final SingleArgumentType<String> WINTERTIDE_ASSIGN_TARGET = new SingleArgumentType<>(
+        langName("wintertideAssignTarget"),
+        langUsage("wintertideAssignTarget"),
+        "PlayerName",
+        "Aetherhaven_Elder"
+    ) {
+        @Override
+        public String parse(@Nonnull String input, @Nonnull ParseResult parseResult) {
+            return input;
+        }
+
+        @Override
+        public void suggest(
+            @Nonnull CommandSender sender,
+            @Nonnull String textAlreadyEntered,
+            int numParametersTyped,
+            @Nonnull SuggestionResult result
+        ) {
+            World world = AetherhavenCommandSuggest.playerWorld(sender);
+            PlayerRef playerRef = AetherhavenCommandSuggest.playerRef(sender);
+            if (world == null || playerRef == null) {
+                return;
+            }
+            TownRecord town = AetherhavenCommandSuggest.primaryPlayerTown(playerRef, world);
+            UUID selfUuid = playerRef.getUuid();
+            TreeSet<String> labels = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+            for (PlayerRef online : world.getPlayerRefs()) {
+                if (online == null || (selfUuid != null && selfUuid.equals(online.getUuid()))) {
+                    continue;
+                }
+                String username = online.getUsername();
+                if (username != null && !username.isBlank()) {
+                    labels.add(username.trim());
+                }
+            }
+            AetherhavenCommandSuggest.suggestPrefix(result, textAlreadyEntered, labels);
+            if (town != null) {
+                AetherhavenCommandSuggest.suggestVillagerTargets(result, textAlreadyEntered, town);
+            }
         }
     };
 

@@ -138,6 +138,20 @@ public final class VillagerFollowPlayerSystem extends EntityTickingSystem<Entity
         commandBuffer.putComponent(npcRef, VillagerFollowPlayerState.getComponentType(), follow);
     }
 
+    public static void stopFollowFromTick(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        boolean resumeSchedule
+    ) {
+        VillagerFollowPlayerState follow = store.getComponent(npcRef, VillagerFollowPlayerState.getComponentType());
+        NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+        if (follow == null || !follow.isActive() || npc == null) {
+            return;
+        }
+        stopFollowFromTick(npcRef, store, commandBuffer, npc, follow, resumeSchedule);
+    }
+
     public static void stopFollow(
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull Store<EntityStore> store,

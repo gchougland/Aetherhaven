@@ -3,13 +3,12 @@ package com.hexvane.aetherhaven.festival.snowball;
 import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
+import com.hexvane.aetherhaven.festival.FestivalRewardNotify;
 import com.hexvane.aetherhaven.plugin.DialogueActionRegistry;
 import com.hexvane.aetherhaven.plugin.DialogueConditionRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
-import com.hexvane.aetherhaven.ui.TownVillagerDirectory;
-import com.hexvane.aetherhaven.ui.TownVillagerRow;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -90,13 +89,9 @@ public final class SnowballDialogueHandlers {
         if (session == null || !session.canStartFight() || !session.isJoined(playerUuid)) {
             return false;
         }
-        int residents = 0;
-        for (TownVillagerRow row : TownVillagerDirectory.listResidents(store, town)) {
-            if (!session.isJoined(row.entityUuid())) {
-                residents++;
-            }
-        }
-        return session.joinedPlayerCount() + residents >= 2;
+        return session.joinedPlayerCount()
+            + SnowballFillerVillagers.countAvailableFillers(store, town, session.joinedPlayersView())
+            >= 2;
     }
 
     private static boolean fightBusy(
@@ -185,6 +180,11 @@ public final class SnowballDialogueHandlers {
             out.setGotoNodeId("start_failed");
             return;
         }
+        SnowballFillerVillagers.reviveMissingForFight(store, town, session, playerRef);
+        if (session.joinedPlayerCount() + SnowballFillerVillagers.countLiveFillers(store, town, session) < 2) {
+            out.setGotoNodeId("start_failed");
+            return;
+        }
         if (!session.beginFighting(System.currentTimeMillis())) {
             out.setGotoNodeId("start_failed");
             return;
@@ -216,7 +216,12 @@ public final class SnowballDialogueHandlers {
             out.setGotoNodeId("collect_none");
             return;
         }
-        player.giveItem(new ItemStack(SnowballIds.WINTER_TICKET_ITEM_ID, tickets), playerRef, store);
+        FestivalRewardNotify.giveAndNotify(
+            player,
+            playerRef,
+            store,
+            new ItemStack(SnowballIds.WINTER_TICKET_ITEM_ID, tickets)
+        );
     }
 
     private static void openScoreboard(

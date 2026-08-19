@@ -1,13 +1,12 @@
 package com.hexvane.aetherhaven.plotcreator;
 
+import com.hexvane.aetherhaven.npc.NpcStandStill;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.AnimationSlot;
 import com.hypixel.hytale.server.core.entity.AnimationUtils;
 import com.hypixel.hytale.server.core.entity.Frozen;
-import com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent;
-import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.components.SpawnBeaconReference;
 import com.hypixel.hytale.server.npc.components.SpawnMarkerReference;
@@ -17,8 +16,7 @@ import javax.annotation.Nullable;
 
 /**
  * Keeps plot-creator preview NPCs out of ambient spawn/despawn rules and stops walk/run cycles while Frozen.
- * Frozen entities do not refresh {@link MovementStatesComponent}; without forcing idle they keep a walk cycle
- * and look like they are running in place.
+ * Frozen entities do not refresh movement states; {@link NpcStandStill#forceIdleMovementStates} clears leftover walk.
  */
 public final class PlotCreatorSpotPreviewSanitize {
     private PlotCreatorSpotPreviewSanitize() {}
@@ -27,11 +25,7 @@ public final class PlotCreatorSpotPreviewSanitize {
         store.putComponent(ref, Frozen.getComponentType(), Frozen.get());
         store.tryRemoveComponent(ref, SpawnBeaconReference.getComponentType());
         store.tryRemoveComponent(ref, SpawnMarkerReference.getComponentType());
-        Velocity velocity = store.getComponent(ref, Velocity.getComponentType());
-        if (velocity != null) {
-            velocity.setZero();
-        }
-        forceIdleMovementStates(store, ref);
+        NpcStandStill.forceIdleMovementStates(store, ref);
         NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
         if (npc == null) {
             return;
@@ -49,14 +43,10 @@ public final class PlotCreatorSpotPreviewSanitize {
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
-        commandBuffer.putComponent(ref, Frozen.getComponentType(), Frozen.get());
+        NpcStandStill.freeze(ref, commandBuffer);
         commandBuffer.tryRemoveComponent(ref, SpawnBeaconReference.getComponentType());
         commandBuffer.tryRemoveComponent(ref, SpawnMarkerReference.getComponentType());
-        Velocity velocity = store.getComponent(ref, Velocity.getComponentType());
-        if (velocity != null) {
-            velocity.setZero();
-        }
-        forceIdleMovementStates(store, ref);
+        NpcStandStill.clearResidualMotion(store, ref, commandBuffer);
         NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
         if (npc == null) {
             return;
@@ -78,13 +68,12 @@ public final class PlotCreatorSpotPreviewSanitize {
         @Nonnull Store<EntityStore> store,
         @Nullable CommandBuffer<EntityStore> commandBuffer
     ) {
-        forceIdleMovementStates(store, ref);
         if (commandBuffer != null) {
             commandBuffer.run(s -> {
                 if (!ref.isValid()) {
                     return;
                 }
-                forceIdleMovementStates(s, ref);
+                NpcStandStill.forceIdleMovementStates(s, ref);
                 NPCEntity live = s.getComponent(ref, NPCEntity.getComponentType());
                 if (live != null) {
                     live.playAnimation(ref, AnimationSlot.Movement, null, s);
@@ -93,27 +82,11 @@ public final class PlotCreatorSpotPreviewSanitize {
             });
             return;
         }
+        NpcStandStill.forceIdleMovementStates(store, ref);
         NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
         if (npc != null) {
             npc.playAnimation(ref, AnimationSlot.Movement, null, store);
         }
         AnimationUtils.stopAnimation(ref, AnimationSlot.Movement, store);
-    }
-
-    private static void forceIdleMovementStates(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref) {
-        MovementStatesComponent ms = store.getComponent(ref, MovementStatesComponent.getComponentType());
-        if (ms == null || ms.getMovementStates() == null) {
-            return;
-        }
-        var states = ms.getMovementStates();
-        states.idle = true;
-        states.horizontalIdle = true;
-        states.walking = false;
-        states.running = false;
-        states.sprinting = false;
-        states.jumping = false;
-        states.falling = false;
-        states.fallingFar = false;
-        states.onGround = true;
     }
 }

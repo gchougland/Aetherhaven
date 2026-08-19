@@ -30,7 +30,7 @@ public final class SnowballIds {
     public static final int DEFAULT_TOURIST_SPOTS = 8;
     public static final int DEFAULT_PILE_SPOTS = 8;
 
-    public static final long FIGHT_DURATION_MS = 6L * 60L * 1000L;
+    public static final long FIGHT_DURATION_MS = 4L * 60L * 1000L;
     public static final long PILE_RESPAWN_MS = 10_000L;
     public static final long RESULTS_HOLD_MS = 4_000L;
 

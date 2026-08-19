@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
+import com.hexvane.aetherhaven.festival.FestivalRewardNotify;
 import com.hexvane.aetherhaven.plugin.DialogueActionRegistry;
 import com.hexvane.aetherhaven.plugin.DialogueConditionRegistry;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBuyerPayment;
@@ -256,7 +257,12 @@ public final class TreeClimbDialogueHandlers {
             out.setGotoNodeId("collect_none");
             return;
         }
-        player.giveItem(new ItemStack(TreeClimbIds.SUMMER_TICKET_ITEM_ID, tickets), playerRef, store);
+        FestivalRewardNotify.giveAndNotify(
+            player,
+            playerRef,
+            store,
+            new ItemStack(TreeClimbIds.SUMMER_TICKET_ITEM_ID, tickets)
+        );
     }
 
     private static void openLeaderboard(

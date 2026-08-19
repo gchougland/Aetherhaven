@@ -47,7 +47,7 @@ public final class GuildHallDisplayAnchor implements Component<EntityStore> {
     private transient int chairMountAttempts;
     /** Not serialized; sit fallback applied when block mount never succeeds. */
     private transient boolean sitFallbackApplied;
-    /** Not serialized; avoid repeating GuildHallDisplay setState (resets animations). */
+    /** Not serialized; avoid repeating stand-still setState (resets animations). */
     private transient boolean displayStateApplied;
     /** Not serialized; feet aligned over chair block before first mount attempt. */
     private transient boolean chairAlignedForMount;

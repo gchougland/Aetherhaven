@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.rescue.RescueVillagerSpawnService;
 import com.hexvane.aetherhaven.rescue.RescueVillagerTrigger;
 import com.hexvane.aetherhaven.rescue.RescueVillagerTriggers;
+import com.hexvane.aetherhaven.festival.FestivalRewardNotify;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.ui.DialoguePage;
@@ -254,10 +255,20 @@ public final class CarnivalResultSettlement {
                     CarnivalDialogueHandlers.removeDarts(live, playerRef, CarnivalIds.BALLOON_DARTS);
                 }
                 if (tickets > 0) {
-                    player.giveItem(new ItemStack(CarnivalIds.SUMMER_TICKET_ITEM_ID, tickets), playerRef, live);
+                    FestivalRewardNotify.giveAndNotify(
+                        player,
+                        playerRef,
+                        live,
+                        new ItemStack(CarnivalIds.SUMMER_TICKET_ITEM_ID, tickets)
+                    );
                 }
                 if (cosmeticItemId != null && !cosmeticItemId.isBlank()) {
-                    player.giveItem(new ItemStack(cosmeticItemId, 1), playerRef, live);
+                    FestivalRewardNotify.giveAndNotify(
+                        player,
+                        playerRef,
+                        live,
+                        new ItemStack(cosmeticItemId, 1)
+                    );
                 }
                 TownRecord liveTown = town;
                 AetherhavenPlugin plugin = AetherhavenPlugin.get();

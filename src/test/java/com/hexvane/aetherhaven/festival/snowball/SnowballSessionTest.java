@@ -195,6 +195,13 @@ final class SnowballSessionTest {
     }
 
     @Test
+    void fightLastsFourMinutes() {
+        SnowballSession session = twoPlayerFight();
+        assertEquals(4L * 60L * 1000L, SnowballIds.FIGHT_DURATION_MS);
+        assertEquals(1_000L + SnowballIds.FIGHT_DURATION_MS, session.getFightEndEpochMs());
+    }
+
+    @Test
     void tieAwardsBothPlayerTeamsFiveTickets() {
         SnowballSession session = twoPlayerFight();
         SnowballSession.Fighter a = teamPlayer(session, SnowballIds.Team.A);

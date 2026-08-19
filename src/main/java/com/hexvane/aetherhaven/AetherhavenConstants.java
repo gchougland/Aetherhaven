@@ -755,8 +755,11 @@ public final class AetherhavenConstants {
      */
     public static final String NPC_STATE_AUTONOMY_POI = "AetherhavenAutonomy";
 
-    /** Guild hall display pool: stand still at spawn anchor (no rect wander). */
-    public static final String NPC_STATE_GUILD_HALL_DISPLAY = "GuildHallDisplay";
+    /**
+     * Stand still at leash point ({@code BodyMotion: Nothing}). Used for guild hall display, festival pins, dance hold,
+     * and any scripted hold that must not fall through to Idle {@code WanderInRect}.
+     */
+    public static final String NPC_STATE_STAND_STILL = "AetherhavenStandStill";
 
     /** Quest-board raid mobs: timed march toward town charter via staged leash waypoints. */
     public static final String NPC_STATE_RAID_MARCH = "AetherhavenRaidMarch";

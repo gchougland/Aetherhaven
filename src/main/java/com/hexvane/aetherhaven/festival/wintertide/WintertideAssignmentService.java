@@ -52,15 +52,12 @@ public final class WintertideAssignmentService {
         }
 
         for (PlayerMember player : sortedPlayers) {
-            if (session.getIncoming(player.uuid()) != null) {
+            WintertideTarget existingIncoming = session.getIncoming(player.uuid());
+            if (existingIncoming != null && existingIncoming.isVillager()) {
                 continue;
             }
-            UUID giverPlayer = playerGiverFor(session, player.uuid());
-            if (giverPlayer != null) {
-                PlayerMember giver = findPlayer(sortedPlayers, giverPlayer);
-                String name = giver != null ? giver.displayName() : "a town member";
-                session.putIncoming(player.uuid(), WintertideTarget.player(giverPlayer, name));
-                continue;
+            if (existingIncoming != null) {
+                session.removeIncoming(player.uuid());
             }
             WintertideTarget outgoing = session.getOutgoing(player.uuid());
             UUID avoid = outgoing != null && outgoing.isVillager() ? outgoing.getUuid() : null;
@@ -120,17 +117,6 @@ public final class WintertideAssignmentService {
     }
 
     @Nullable
-    private static UUID playerGiverFor(@Nonnull WintertideSession session, @Nonnull UUID receiverUuid) {
-        for (UUID giver : session.assignedPlayerUuids()) {
-            WintertideTarget t = session.getOutgoing(giver);
-            if (t != null && t.isPlayer() && receiverUuid.equals(t.getUuid())) {
-                return giver;
-            }
-        }
-        return null;
-    }
-
-    @Nullable
     private static Resident pickIncomingVillager(
         @Nonnull WintertideSession session,
         @Nonnull List<Resident> residents,
@@ -154,16 +140,6 @@ public final class WintertideAssignmentService {
             return null;
         }
         return pickFrom.get(rnd.nextInt(pickFrom.size()));
-    }
-
-    @Nullable
-    private static PlayerMember findPlayer(@Nonnull List<PlayerMember> players, @Nonnull UUID uuid) {
-        for (PlayerMember p : players) {
-            if (p.uuid().equals(uuid)) {
-                return p;
-            }
-        }
-        return null;
     }
 
     public static long seedFor(@Nonnull UUID townId, long year) {

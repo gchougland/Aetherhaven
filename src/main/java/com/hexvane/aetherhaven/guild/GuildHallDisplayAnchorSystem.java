@@ -160,7 +160,7 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
             return false;
         }
         StateSupport stateSupport = npc.getRole().getStateSupport();
-        int displayState = stateSupport.getStateHelper().getStateIndex(AetherhavenConstants.NPC_STATE_GUILD_HALL_DISPLAY);
+        int displayState = stateSupport.getStateHelper().getStateIndex(AetherhavenConstants.NPC_STATE_STAND_STILL);
         if (displayState >= 0 && stateSupport.inState(displayState)) {
             if (!anchor.isDisplayStateApplied()) {
                 anchor.setDisplayStateApplied(true);
@@ -171,7 +171,7 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
         if (anchor.isDisplayStateApplied()) {
             return false;
         }
-        npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_GUILD_HALL_DISPLAY, null, commandBuffer);
+        npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_STAND_STILL, null, commandBuffer);
         anchor.setDisplayStateApplied(true);
         return true;
     }
