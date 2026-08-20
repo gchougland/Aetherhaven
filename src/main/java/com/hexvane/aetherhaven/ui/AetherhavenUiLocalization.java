@@ -567,18 +567,6 @@ public final class AetherhavenUiLocalization {
         b.set("#ViewModeList.TooltipTextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.viewListTooltip"));
         b.set("#ViewModeGrid.TooltipTextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.viewGridTooltip"));
         b.set("#SearchInput.PlaceholderText", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.searchPlaceholder"));
-        b.set(
-            "#CommunitySubTabs #Buildings.TooltipTextSpans",
-            t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.tabCommunityBuildingsTooltip")
-        );
-        b.set(
-            "#CommunitySubTabs #WallStyles.TooltipTextSpans",
-            t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.tabCommunityWallStylesTooltip")
-        );
-        b.set(
-            "#CommunitySubTabs #Props.TooltipTextSpans",
-            t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.tabCommunityPropsTooltip")
-        );
     }
 
     public static void applyQuestBoardPage(@Nonnull UICommandBuilder b) {

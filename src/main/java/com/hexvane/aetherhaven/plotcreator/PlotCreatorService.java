@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.community.CommunitySubmissionService;
+import com.hexvane.aetherhaven.prop.PropIconRenderClient;
 import com.hexvane.aetherhaven.community.CommunitySubmitLocalSave;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
@@ -14,6 +15,7 @@ import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -967,6 +969,14 @@ public final class PlotCreatorService {
         if (!plugin.getPropCatalog().persist(def)) {
             playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.saveFailed"));
             return false;
+        }
+        // Always try the website greenscreen render for a local icon, even when not submitting.
+        PropIconRenderClient.Result iconResult = PropIconRenderClient.generateAndWire(plugin, propId);
+        if (iconResult != PropIconRenderClient.Result.SUCCESS
+            && iconResult != PropIconRenderClient.Result.DISABLED) {
+            HytaleLogger.forEnclosingClass()
+                .atWarning()
+                .log("Prop icon generation after save returned %s for %s", iconResult, propId);
         }
         if (submit) {
             String playerName = playerRef.getUsername() != null ? playerRef.getUsername() : "Unknown";

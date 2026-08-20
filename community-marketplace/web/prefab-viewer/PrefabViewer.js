@@ -3,8 +3,8 @@
  */
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { loadCatalogs } from "./BlockCatalog.js?v=27";
-import { buildPrefabMesh, disposeObject3D, PREFAB_VIEWER_TRANSFORM_REV } from "./PrefabMeshBuilder.js?v=27";
+import { loadCatalogs } from "./BlockCatalog.js?v=28";
+import { buildPrefabMesh, disposeObject3D, PREFAB_VIEWER_TRANSFORM_REV } from "./PrefabMeshBuilder.js?v=28";
 
 export { PREFAB_VIEWER_TRANSFORM_REV };
 
@@ -46,6 +46,9 @@ export class PrefabViewer {
       alpha: this.transparentBackground,
       preserveDrawingBuffer: true,
     });
+    if (this.transparentBackground) {
+      this.renderer.setClearColor(0x000000, 0);
+    }
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     this.renderer.setSize(width, height, false);
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -54,6 +57,9 @@ export class PrefabViewer {
     this.renderer.domElement.style.height = "100%";
     this.renderer.domElement.style.display = "block";
     this.renderer.domElement.style.touchAction = "none";
+    if (this.transparentBackground) {
+      this.renderer.domElement.style.background = "transparent";
+    }
 
     const hemi = new THREE.HemisphereLight(0xfff0e8, 0x2a2030, 0.85);
     this.scene.add(hemi);
@@ -198,9 +204,15 @@ export class PrefabViewer {
     const size = bounds.getSize(new THREE.Vector3());
     const center = bounds.getCenter(new THREE.Vector3());
     const maxDim = Math.max(size.x, size.y, size.z, 1);
-    const dist = maxDim * 1.55;
+    // Icon mode: pull back a bit more and use a flatter angle so small props fill the frame
+    // without looking like a tiny speck on a dark plate.
+    const dist = maxDim * (this.transparentBackground ? 1.9 : 1.55);
     this.controls.target.copy(center);
-    this.camera.position.set(center.x + dist * 0.85, center.y + dist * 0.65, center.z + dist * 0.85);
+    if (this.transparentBackground) {
+      this.camera.position.set(center.x + dist * 0.95, center.y + dist * 0.4, center.z + dist * 0.55);
+    } else {
+      this.camera.position.set(center.x + dist * 0.85, center.y + dist * 0.65, center.z + dist * 0.85);
+    }
     this.camera.near = Math.max(0.05, dist / 200);
     this.camera.far = Math.max(200, dist * 20);
     this.camera.updateProjectionMatrix();

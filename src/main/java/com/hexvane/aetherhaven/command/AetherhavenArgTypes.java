@@ -113,13 +113,50 @@ public final class AetherhavenArgTypes {
             if (plugin == null) {
                 return;
             }
-            AetherhavenCommandSuggest.suggestPrefix(result, textAlreadyEntered, plugin.getPropCatalog().ids());
+            // Sorted so the first MAX suggestions stay stable as props are added/removed.
+            AetherhavenCommandSuggest.suggestPrefix(
+                result, textAlreadyEntered, new TreeSet<>(plugin.getPropCatalog().ids())
+            );
         }
 
         @Override
         public int getSuggestionValueCount() {
+            // Never claim the truncated suggestion list is complete (hash order used to hide ids).
+            return -1;
+        }
+    };
+
+    /** Building or prop id for {@code /aetherhaven community submit}. */
+    public static final SingleArgumentType<String> COMMUNITY_SUBMIT_ID = new SingleArgumentType<>(
+        langName("communitySubmitId"),
+        langUsage("communitySubmitId"),
+        "plot_my_house"
+    ) {
+        @Override
+        public String parse(@Nonnull String input, @Nonnull ParseResult parseResult) {
+            return input;
+        }
+
+        @Override
+        public void suggest(
+            @Nonnull CommandSender sender,
+            @Nonnull String textAlreadyEntered,
+            int numParametersTyped,
+            @Nonnull SuggestionResult result
+        ) {
             AetherhavenPlugin plugin = AetherhavenCommandSuggest.plugin();
-            return plugin != null ? plugin.getPropCatalog().ids().size() : -1;
+            if (plugin == null) {
+                return;
+            }
+            TreeSet<String> values = new TreeSet<>(AetherhavenCommandSuggest.customBuildingIds(plugin));
+            values.addAll(plugin.getConstructionCatalog().ids());
+            values.addAll(plugin.getPropCatalog().ids());
+            AetherhavenCommandSuggest.suggestPrefix(result, textAlreadyEntered, values);
+        }
+
+        @Override
+        public int getSuggestionValueCount() {
+            return -1;
         }
     };
 

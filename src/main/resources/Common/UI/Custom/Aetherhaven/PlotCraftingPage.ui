@@ -452,19 +452,19 @@ $C.@PageOverlay {
 
             TabButton {
               Icon: "../house_icon_256.png";
-              TooltipText: "";
+              TooltipText: "Buildings";
               Id: "Buildings";
             }
 
             TabButton {
               Icon: "../walls.png";
-              TooltipText: "";
+              TooltipText: "Wall styles";
               Id: "WallStyles";
             }
 
             TabButton {
               Icon: "../decoration.png";
-              TooltipText: "";
+              TooltipText: "Props";
               Id: "Props";
             }
           }

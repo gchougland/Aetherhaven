@@ -13,9 +13,14 @@
         overflow: hidden;
         background: #1a1418;
       }
+      html.icon-mode,
+      html.icon-mode body {
+        background: transparent !important;
+      }
       #viewer {
         width: 100vw;
         height: 100vh;
+        background: transparent;
       }
       #status {
         position: absolute;
@@ -40,7 +45,7 @@
     <div id="status">Loading…</div>
     <div id="viewer"></div>
     <script type="module">
-      import { PrefabViewer, PREFAB_VIEWER_TRANSFORM_REV } from "/prefab-viewer/PrefabViewer.js?v=28";
+      import { PrefabViewer, PREFAB_VIEWER_TRANSFORM_REV } from "/prefab-viewer/PrefabViewer.js?v=29";
 
       window.__PREFAB_RENDER_READY__ = false;
       window.__PREFAB_RENDER_ERROR__ = null;
@@ -55,6 +60,7 @@
         statusEl.style.display = "none";
       }
       if (iconMode) {
+        document.documentElement.classList.add("icon-mode");
         document.body.style.background = "transparent";
       }
 
@@ -74,8 +80,12 @@
             statusEl.textContent = `Rendering ${done}/${total} (${PREFAB_VIEWER_TRANSFORM_REV})`;
           },
         });
-        // Settle textures / one more frame
+        // Settle textures / a few more frames so models finish uploading before capture.
         await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+        if (iconMode) {
+          await new Promise((r) => setTimeout(r, 120));
+          viewer.renderer.render(viewer.scene, viewer.camera);
+        }
         statusEl.textContent = interactive
           ? `${PREFAB_VIEWER_TRANSFORM_REV} · drag to orbit · scroll to zoom`
           : `Ready (${PREFAB_VIEWER_TRANSFORM_REV})`;

@@ -228,8 +228,8 @@ commands.aetherhaven.plotcreator.generateicon.outputId=Output id for the icon fi
 commands.aetherhaven.plotcreator.buildings.desc=Manage local custom buildings saved on this server
 
 commands.aetherhaven.community.desc=Community marketplace helpers
-commands.aetherhaven.community.submit.desc=Submit a locally saved custom building for community review
-commands.aetherhaven.community.submit.constructionId=Building id (e.g. plot_my_house)
+commands.aetherhaven.community.submit.desc=Submit a locally saved custom building or prop for community review
+commands.aetherhaven.community.submit.constructionId=Building or prop id (e.g. plot_my_house or fish_barrel)
 
 commands.aetherhaven.support.desc=Send mod save data to Aetherhaven for debugging help
 commands.aetherhaven.support.upload.desc=Upload town saves, villager audit logs, and recent server logs. Add words after upload to include a note.
@@ -285,6 +285,8 @@ commands.aetherhaven.argtype.constructionId.name=construction id
 commands.aetherhaven.argtype.constructionId.usage=Returns a building construction id from the catalog
 commands.aetherhaven.argtype.propId.name=prop id
 commands.aetherhaven.argtype.propId.usage=Returns a prop id from the prop catalog
+commands.aetherhaven.argtype.communitySubmitId.name=building or prop id
+commands.aetherhaven.argtype.communitySubmitId.usage=Returns a saved custom building id, construction id, or prop id
 commands.aetherhaven.argtype.customBuildingId.name=building id
 commands.aetherhaven.argtype.customBuildingId.usage=Returns a saved custom building id or catalog construction id
 commands.aetherhaven.argtype.questId.name=quest id

@@ -38,7 +38,8 @@ public final class PropIconRenderClient {
     @Nonnull
     public static Result generateAndWire(@Nonnull AetherhavenPlugin plugin, @Nonnull String propId) {
         CommunityMarketplaceConfig cfg = plugin.getConfig().get().getCommunityMarketplace();
-        if (!cfg.isEnabled() || cfg.getApiBaseUrl() == null || cfg.getApiBaseUrl().isBlank()) {
+        // Icon render only needs the website URL; submit-to-community can be off.
+        if (cfg.getApiBaseUrl() == null || cfg.getApiBaseUrl().isBlank()) {
             return Result.DISABLED;
         }
         PropDefinition def = plugin.getPropCatalog().get(propId);

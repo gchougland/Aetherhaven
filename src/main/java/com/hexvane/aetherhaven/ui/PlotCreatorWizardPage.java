@@ -414,6 +414,13 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
                 applyWallSettingsVisibility(b);
                 return;
             }
+            if (session.getDraft().isPropMode()) {
+                applyPropSettingsVisibility(
+                    b,
+                    isCommunityMarketplaceEnabled() && !session.getDraft().isCommunitySubmissionEdit()
+                );
+                return;
+            }
             applyCombinedSettingsVisibility(
                 b,
                 PlotBuildingKindRequirements.effectiveKinds(session.getDraft(), AetherhavenPlugin.get())
@@ -553,6 +560,48 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#ReviewSummary.Visible", false);
         b.set("#DetailHint.Visible", false);
         b.set("#SubmitToCommunityRow.Visible", showCommunitySubmit);
+    }
+
+    /**
+     * Props only need a name, id, empty space / water options, and optional community submit. No gold cost, style,
+     * build days, or plot token settings.
+     */
+    private void applyPropSettingsVisibility(@Nonnull UICommandBuilder b, boolean showCommunitySubmit) {
+        b.set("#DisplayNameField.Visible", true);
+        b.set("#DescriptionField.Visible", false);
+        b.set("#ConstructionIdField.Visible", true);
+        b.set("#PrefabNameField.Visible", false);
+        b.set("#KindDropdown.Visible", false);
+        b.set("#KindCheckScroll.Visible", false);
+        b.set("#TagsField.Visible", false);
+        b.set("#VariantOfDropdown.Visible", false);
+        b.set("#VariantCheckScroll.Visible", false);
+        b.set("#GoldCostLabel.Visible", false);
+        b.set("#GoldCostField.Visible", false);
+        b.set("#SelfBuildDaysLabel.Visible", false);
+        b.set("#SelfBuildDaysField.Visible", false);
+        b.set("#MaxHomeResidentsLabel.Visible", false);
+        b.set("#MaxHomeResidentsField.Visible", false);
+        b.set("#SaveEmptySpacesRow.Visible", true);
+        b.set("#SaveEmptySpacesHint.Visible", true);
+        b.set("#PreserveWaterRow.Visible", true);
+        b.set("#PreserveWaterHint.Visible", true);
+        b.set("#TouristDestinationRow.Visible", false);
+        b.set("#TouristDestinationHint.Visible", false);
+        b.set("#PlotTokenLockedRow.Visible", false);
+        b.set("#PlotTokenLockedHint.Visible", false);
+        b.set("#StyleIdLabel.Visible", false);
+        b.set("#StyleIdField.Visible", false);
+        b.set("#OpenMaterialsButton.Visible", false);
+        b.set("#FillFromBuildShapeButton.Visible", false);
+        b.set("#MaterialsPageLabel.Visible", false);
+        b.set("#MaterialsPageRow.Visible", false);
+        b.set("#MaterialsPrevPageButton.Visible", false);
+        b.set("#MaterialsNextPageButton.Visible", false);
+        b.set("#ReviewSummary.Visible", false);
+        b.set("#DetailHint.Visible", false);
+        b.set("#SubmitToCommunityRow.Visible", showCommunitySubmit);
+        applyFestivalFieldVisibility(b, false, false);
     }
 
     /**

@@ -123,8 +123,15 @@ export async function processPropIcon(buffer) {
   const sharp = await loadSharp();
 
   try {
-    const iconBuffer = await sharp(buffer, { failOn: "error" })
-      .rotate()
+    let pipeline = sharp(buffer, { failOn: "error" }).ensureAlpha().rotate();
+    try {
+      // Drop empty margins from the capture so the prop fills the 64x64 better.
+      pipeline = sharp(await pipeline.trim({ threshold: 1 }).toBuffer());
+    } catch {
+      // trim throws when the image is fully opaque or empty; keep the original pipeline.
+      pipeline = sharp(buffer, { failOn: "error" }).ensureAlpha().rotate();
+    }
+    const iconBuffer = await pipeline
       .resize(PROP_ICON_SIZE, PROP_ICON_SIZE, {
         fit: "contain",
         background: { r: 0, g: 0, b: 0, alpha: 0 },

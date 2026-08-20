@@ -7,11 +7,11 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=27";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=27";
+} from "./BlockCatalog.js?v=28";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=28";
 
 /** Bump when transform math changes — shown in the viewer so we can confirm the live build. */
-export const PREFAB_VIEWER_TRANSFORM_REV = "xform-27";
+export const PREFAB_VIEWER_TRANSFORM_REV = "xform-28";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
@@ -247,8 +247,28 @@ async function cubeMaterial(path, tintHex = null) {
 }
 
 /**
- * @param {any} def
+ * Neutral cube used when a block has no catalog entry or its models fail to load.
  */
+function makePlaceholderBlockCube() {
+  const mat = new THREE.MeshLambertMaterial({ color: 0x8a7a6a });
+  return new THREE.Mesh(sharedCubeGeometry, mat);
+}
+
+/**
+ * @param {THREE.Group} root
+ * @param {{ x?: number, y?: number, z?: number, rotation?: unknown }} b
+ * @param {THREE.Object3D} child
+ */
+function placeBlockHolder(root, b, child) {
+  const holder = new THREE.Group();
+  holder.position.set(Number(b.x) + 0.5, Number(b.y) + 0.5, Number(b.z) + 0.5);
+  if (b.rotation) {
+    holder.quaternion.copy(rotationTupleToQuaternion(b.rotation));
+  }
+  holder.add(child);
+  root.add(holder);
+}
+
 async function buildCubeMesh(def) {
   const faces = resolveCubeFaces(def);
   const tintUp = def?.tintUp || null;
@@ -303,10 +323,7 @@ export async function buildPrefabMesh(prefab, options = {}) {
     if (b.filler != null && Number(b.filler) !== 0) {
       continue;
     }
-    // Skip blocks from other mods (not in vanilla/Aetherhaven catalog).
-    if (!getBlockDef(b.name)) {
-      continue;
-    }
+    // Unknown names still get a placeholder so props show their footprint in icons.
     work.push({ kind: "block", data: b });
   }
   for (const f of fluids) {
@@ -379,27 +396,30 @@ export async function buildPrefabMesh(prefab, options = {}) {
             }
             const model = (await getModelForDef(def, def.customModelTexture || null, tint))?.model;
             if (model) {
-              const holder = new THREE.Group();
-              holder.position.set(Number(b.x) + 0.5, Number(b.y) + 0.5, Number(b.z) + 0.5);
-              if (b.rotation) {
-                holder.quaternion.copy(rotationTupleToQuaternion(b.rotation));
-              }
               model.position.y = -0.5;
-              holder.add(model);
-              root.add(holder);
+              placeBlockHolder(root, b, model);
+              placed = true;
+            }
+          }
+          // Furniture and similar blocks often expose an item model when the world model fails.
+          if (!placed && def.itemModel) {
+            const model = await getModel(def.itemModel, def.itemTexture || null);
+            if (model) {
+              model.position.y = -0.5;
+              placeBlockHolder(root, b, model);
               placed = true;
             }
           }
           if (!placed && def.textures) {
             const cube = await buildCubeMesh(def);
-            const holder = new THREE.Group();
-            holder.position.set(Number(b.x) + 0.5, Number(b.y) + 0.5, Number(b.z) + 0.5);
-            if (b.rotation) {
-              holder.quaternion.copy(rotationTupleToQuaternion(b.rotation));
-            }
-            holder.add(cube);
-            root.add(holder);
+            placeBlockHolder(root, b, cube);
+            placed = true;
           }
+          if (!placed) {
+            placeBlockHolder(root, b, makePlaceholderBlockCube());
+          }
+        } else {
+          placeBlockHolder(root, b, makePlaceholderBlockCube());
         }
       } else if (item.kind === "fluid") {
         const f = item.data;
