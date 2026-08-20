@@ -37,6 +37,7 @@ import com.hexvane.aetherhaven.community.CommunityWallStyleGrouping;
 import com.hexvane.aetherhaven.festival.FestivalCatalog;
 import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
+import com.hexvane.aetherhaven.prop.PropDefinition;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownPlayerResolution;
@@ -110,6 +111,10 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     /** Shorter still on Moderation (toolbar + two action button rows). */
     private static final int BUILDING_LIST_HEIGHT_MODERATION = 340;
     private static final int BUILDING_LIST_FOOTER_GAP = 8;
+    /** Matches {@code @PlotPanelHeight} in PlotCraftingPage.ui. */
+    private static final int PLOT_PANEL_HEIGHT = 600;
+    /** Extra stack height so bottom community tabs stay in-layout for clicks. */
+    private static final int COMMUNITY_SUBTAB_STACK_EXTRA = 56;
     /** Visible rows per page in list view (Custom UI has no list virtualization). */
     private static final int LIST_PAGE_SIZE = 12;
     /** Visible cells per page in grid view. */
@@ -234,6 +239,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         boolean festivalsTab = activeTab == Tab.FESTIVALS;
         boolean moderationTab = activeTab == Tab.MODERATION;
         boolean catalogTab = activeTab == Tab.CORE || activeTab == Tab.DECORATIONS || festivalsTab;
+        commandBuilder.set("#PlotCraftTitleText.TextSpans", titleMessageForActiveTab());
         boolean marketplaceTab = communityTab || moderationTab;
         boolean marketplaceLoading = marketplaceTab && marketplaceRefreshInFlight.get();
         CommunityCatalogService communityCatalog = plugin.getCommunityCatalogService();
@@ -294,6 +300,15 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         commandBuilder.set("#PlotCraftTabs.SelectedTab", playerTabId(activeTab == Tab.MODERATION ? lastPlayerTab : activeTab));
         commandBuilder.set("#CommunitySubTabsHost.Visible", communityTab);
         commandBuilder.set("#CommunitySubTabs.SelectedTab", communitySubTabId(communitySubTab));
+        {
+            // Extra height so bottom tabs stay inside the stack for clicks; panel still covers the tuck.
+            int stackHeight = communityTab ? PLOT_PANEL_HEIGHT + COMMUNITY_SUBTAB_STACK_EXTRA : PLOT_PANEL_HEIGHT;
+            Anchor stackAnchor = new Anchor();
+            stackAnchor.setWidth(Value.of(500));
+            stackAnchor.setHeight(Value.of(stackHeight));
+            stackAnchor.setTop(Value.of(-10));
+            commandBuilder.setObject("#CraftPanelStack.Anchor", stackAnchor);
+        }
         commandBuilder.set("#ModerationTabHost.Visible", !knownModeratorAccess || isModerator);
         commandBuilder.set("#ModerationTabSelected.Visible", moderationTab);
         commandBuilder.set(
@@ -381,15 +396,18 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         int variantCount = selectedGroup != null ? selectedGroup.variants().size() : 0;
         int variantDisplayIndex = selectedVariantIndex(selectedGroup);
         Player player = store.getComponent(ref, Player.getComponentType());
+        boolean selectedLocalProp =
+            isLocalOnlyProp(plugin, communityCatalog, variant != null ? variant.constructionId() : null);
         boolean installed = variant != null && communityCatalog.isInstalled(variant.constructionId());
         boolean installComplete =
-            variant != null && (!communityTab || communityCatalog.isInstallComplete(variant.constructionId()));
+            variant != null
+                && (!communityTab || selectedLocalProp || communityCatalog.isInstallComplete(variant.constructionId()));
         boolean updateAvailable =
             installed
                 && variant != null
                 && communityCatalog.hasUpdateAvailable(variant.constructionId());
         boolean variantLocked = false;
-        if (variant != null && !moderationTab && !wallStyleGroup && !festivalLookGroup) {
+        if (variant != null && !moderationTab && !wallStyleGroup && !festivalLookGroup && !selectedLocalProp) {
             variantLocked = !PlotTokenUnlockService.isUnlocked(ref, store, variant.constructionId());
         }
         boolean moderationPreviewReady =
@@ -400,14 +418,21 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             commandBuilder.set("#VariantName.TextSpans", Message.raw(variant.displayName()));
             if (communityTab) {
                 CommunityManifestEntry entry = communityCatalog.findEntry(variant.constructionId());
-                String creator = entry != null ? entry.getCreatorName() : "";
-                long bytes = entry != null ? entry.getPrefabBytes() : 0L;
-                commandBuilder.set(
-                    "#VariantIndex.TextSpans",
-                    Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.communityMeta")
-                        .param("creator", Message.raw(creator))
-                        .param("size", Message.raw(formatPrefabSize(bytes)))
-                );
+                if (entry != null) {
+                    commandBuilder.set(
+                        "#VariantIndex.TextSpans",
+                        Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.communityMeta")
+                            .param("creator", Message.raw(entry.getCreatorName()))
+                            .param("size", Message.raw(formatPrefabSize(entry.getPrefabBytes())))
+                    );
+                } else if (selectedLocalProp) {
+                    commandBuilder.set(
+                        "#VariantIndex.TextSpans",
+                        Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.localPropMeta")
+                    );
+                } else {
+                    commandBuilder.set("#VariantIndex.TextSpans", Message.raw(""));
+                }
             } else if (moderationTab) {
                 CommunityPendingEntry entry = moderation.findEntry(variant.constructionId());
                 String creator = entry != null ? entry.getCreatorName() : "";
@@ -446,6 +471,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             if (
                 (communityTab || favoritesCommunitySelected)
                     && !installed
+                    && !selectedLocalProp
                     && (communityPreviewConstructionId == null || !communityPreviewConstructionId.equalsIgnoreCase(variant.constructionId()))
             ) {
                 pendingPreviewPrefabKey = null;
@@ -507,7 +533,9 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             variant != null ? communityCatalog.findEntry(variant.constructionId()) : null;
         boolean selectedCommunityProp = selectedCommunityEntry != null && selectedCommunityEntry.isProp();
         boolean showCommunityActions =
-            variant != null && (communityTab || favoritesCommunitySelected);
+            variant != null
+                && selectedCommunityEntry != null
+                && (communityTab || favoritesCommunitySelected);
 
         boolean showPaginationRow = marketplaceTab || catalogTab;
         commandBuilder.set("#StyleFilterColumn.Visible", showStyleFilters);
@@ -519,10 +547,15 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         commandBuilder.set("#CostLine.Visible", false);
         commandBuilder.set("#FundsLine.Visible", false);
         // Wall styles are placed with the wand, so there is nothing to craft a token for.
+        // Props are download / view only — never craft from this bench.
+        boolean selectedProp =
+            selectedCommunityProp
+                || selectedLocalProp
+                || (variant != null && plugin.getPropCatalog().contains(variant.constructionId()));
         boolean showLookButton = festivalLookGroup && (!communityTab || installComplete);
         commandBuilder.set(
             "#CraftButton.Visible",
-            !moderationTab && !wallStyleGroup && !selectedCommunityProp && (!festivalLookGroup || showLookButton)
+            !moderationTab && !wallStyleGroup && !selectedProp && (!festivalLookGroup || showLookButton)
         );
         if (marketplaceTab) {
             if (marketplaceLoading) {
@@ -645,6 +678,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                 && !marketplaceLoading
                 && variant != null
                 && !selectedCommunityProp
+                && !selectedLocalProp
                 && (!communityTab || installComplete);
 
         if (festivalLookGroup) {
@@ -1128,6 +1162,11 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             tryApplyFestivalLook(ref, store, plugin, group, variant);
             return;
         }
+        if (plugin.getPropCatalog().contains(variant.constructionId())) {
+            // Props are never crafted from the plot bench.
+            refresh(ref, store);
+            return;
+        }
         if (!PlotTokenUnlockService.isUnlocked(ref, store, variant.constructionId())) {
             tryUnlockBuilding(ref, store, plugin, catalog, variant, pr);
             return;
@@ -1470,7 +1509,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             if (communityTab) {
                 CommunityManifestEntry listEntry = communityCatalog.findEntry(group.groupKey());
                 creator = listEntry != null ? listEntry.getCreatorName() : "";
-                showCreator = true;
+                showCreator = listEntry != null;
             } else if (moderationTab) {
                 CommunityPendingEntry listEntry = moderation.findEntry(group.groupKey());
                 creator = listEntry != null ? listEntry.getCreatorName() : "";
@@ -1664,14 +1703,90 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     }
 
     @Nonnull
-    private List<GroupEntry> buildCommunityCatalogGroups(@Nonnull CommunityCatalogService communityCatalog) {
-        return communityCatalog.buildGroupEntries(
-            activeStyleFilters,
-            effectiveCommunityTypeFilters(),
-            communitySort,
-            showCommunityBuildsWithMissingMods,
-            toBrowseKind(communitySubTab)
-        );
+    private List<GroupEntry> buildCommunityCatalogGroups(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull CommunityCatalogService communityCatalog
+    ) {
+        List<GroupEntry> groups =
+            communityCatalog.buildGroupEntries(
+                activeStyleFilters,
+                effectiveCommunityTypeFilters(),
+                communitySort,
+                showCommunityBuildsWithMissingMods,
+                toBrowseKind(communitySubTab)
+            );
+        if (communitySubTab != CommunitySubTab.PROPS) {
+            return groups;
+        }
+        return mergeLocalPropsIntoGroups(plugin, communityCatalog, groups);
+    }
+
+    @Nonnull
+    private static List<GroupEntry> mergeLocalPropsIntoGroups(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull CommunityCatalogService communityCatalog,
+        @Nonnull List<GroupEntry> communityGroups
+    ) {
+        Set<String> seen = new HashSet<>();
+        for (GroupEntry group : communityGroups) {
+            if (group.groupKey() != null && !group.groupKey().isBlank()) {
+                seen.add(group.groupKey().trim().toLowerCase(Locale.ROOT));
+            }
+        }
+        List<GroupEntry> merged = new ArrayList<>(communityGroups);
+        for (PropDefinition def : plugin.getPropCatalog().list()) {
+            String id = def.getId();
+            if (id.isBlank() || seen.contains(id.toLowerCase(Locale.ROOT))) {
+                continue;
+            }
+            if (communityCatalog.findEntry(id) != null) {
+                continue;
+            }
+            seen.add(id.toLowerCase(Locale.ROOT));
+            String name = def.getDisplayName();
+            String prefab = def.getPrefabPath();
+            merged.add(
+                new GroupEntry(
+                    id,
+                    name,
+                    List.of(new VariantEntry(id, name, prefab.isBlank() ? null : prefab))
+                )
+            );
+        }
+        merged.sort(Comparator.comparing(g -> g.displayName().toLowerCase(Locale.ROOT)));
+        return merged;
+    }
+
+    private static boolean isLocalOnlyProp(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull CommunityCatalogService communityCatalog,
+        @Nullable String propId
+    ) {
+        if (propId == null || propId.isBlank()) {
+            return false;
+        }
+        if (!plugin.getPropCatalog().contains(propId)) {
+            return false;
+        }
+        return communityCatalog.findEntry(propId) == null;
+    }
+
+    @Nonnull
+    private Message titleMessageForActiveTab() {
+        String key =
+            switch (activeTab) {
+                case CORE -> "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.titleCore";
+                case DECORATIONS -> "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.titleDecorations";
+                case FESTIVALS -> "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.titleFestivals";
+                case FAVORITES -> "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.titleFavorites";
+                case MODERATION -> "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.titleModeration";
+                case COMMUNITY -> switch (communitySubTab) {
+                    case BUILDINGS -> "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.titleCommunityBuildings";
+                    case WALL_STYLES -> "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.titleCommunityWallStyles";
+                    case PROPS -> "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.titleCommunityProps";
+                };
+            };
+        return Message.translation(key);
     }
 
     @Nonnull
@@ -1687,7 +1802,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             return moderation.buildGroupEntries();
         }
         if (activeTab == Tab.COMMUNITY) {
-            return buildCommunityCatalogGroups(communityCatalog);
+            return buildCommunityCatalogGroups(plugin, communityCatalog);
         }
         if (activeTab == Tab.FAVORITES) {
             Set<String> favIds =
@@ -1957,6 +2072,9 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             if (entry != null && entry.isProp()) {
                 return PropIconPath.forPropId(id, plugin.getDataDirectory());
             }
+            if (plugin.getPropCatalog().contains(id)) {
+                return PropIconPath.forPropId(id, plugin.getDataDirectory());
+            }
             if (ConstructionTokenIconPath.isIconAvailable(id, plugin.getDataDirectory())) {
                 return CommunityPaths.iconAssetPath(id);
             }
@@ -1990,7 +2108,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                     community,
                     plugin.getCommunityModerationService()
                 )
-                : buildCommunityCatalogGroups(community);
+                : buildCommunityCatalogGroups(plugin, community);
         GroupEntry group = findGroup(sourceGroups, selectedGroupKey);
         VariantEntry variant = selectedVariant(group);
         if (variant == null) {
@@ -2066,7 +2184,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                     community,
                     plugin.getCommunityModerationService()
                 )
-                : buildCommunityCatalogGroups(community);
+                : buildCommunityCatalogGroups(plugin, community);
         GroupEntry group = findGroup(sourceGroups, selectedGroupKey);
         if (group != null && CommunityWallStyleGrouping.isWallStyleGroupKey(group.groupKey())) {
             downloadWallStyle(ref, store, plugin, community, pr, group);
@@ -2407,7 +2525,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                     community,
                     plugin.getCommunityModerationService()
                 )
-                : buildCommunityCatalogGroups(community);
+                : buildCommunityCatalogGroups(plugin, community);
         VariantEntry variant = selectedVariant(findGroup(sourceGroups, selectedGroupKey));
         if (variant == null) {
             refresh(ref, store);

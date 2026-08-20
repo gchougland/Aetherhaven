@@ -7,11 +7,12 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=28";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=28";
+} from "./BlockCatalog.js?v=29";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=29";
+import { applyBlockyAnimationPose } from "./BlockyAnimation.js?v=29";
 
 /** Bump when transform math changes — shown in the viewer so we can confirm the live build. */
-export const PREFAB_VIEWER_TRANSFORM_REV = "xform-28";
+export const PREFAB_VIEWER_TRANSFORM_REV = "xform-29";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
@@ -174,10 +175,31 @@ export function entityWorldScale(comps, modelPath = null) {
   if (!Number.isFinite(entityScale) || entityScale <= 0) {
     entityScale = hasBlockStyle ? 2 : 1;
   }
-  // Character-density models are authored at 64 units/block; our loader uses 1/32.
-  const characterDensity = /^(NPC|Characters)\//i.test(String(modelPath || ""));
   const blockEntityScale = hasBlockStyle ? entityScale / 2 : entityScale;
-  return blockEntityScale * (characterDensity ? 0.5 : 1);
+  return blockEntityScale * (isCharacterDensityModel(modelPath) ? 0.5 : 1);
+}
+
+/**
+ * Creature / player models under Characters/ and nested NPC folders are authored at 64
+ * units per block. One-off NPC props (Balloon.blockymodel, carnival faces) are block density.
+ * @param {string|null} modelPath
+ */
+export function isCharacterDensityModel(modelPath) {
+  const p = String(modelPath || "").replace(/\\/g, "/");
+  if (!p) {
+    return false;
+  }
+  if (/^Characters\//i.test(p)) {
+    return true;
+  }
+  if (!/^NPC\//i.test(p)) {
+    return false;
+  }
+  // Flat NPC/*.blockymodel files are prop meshes, not creature skeletons.
+  if (/^NPC\/[^/]+\.blockymodel$/i.test(p)) {
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -396,6 +418,9 @@ export async function buildPrefabMesh(prefab, options = {}) {
             }
             const model = (await getModelForDef(def, def.customModelTexture || null, tint))?.model;
             if (model) {
+              if (def.customModelAnimation) {
+                await applyBlockyAnimationPose(model, def.customModelAnimation);
+              }
               model.position.y = -0.5;
               placeBlockHolder(root, b, model);
               placed = true;
@@ -405,6 +430,9 @@ export async function buildPrefabMesh(prefab, options = {}) {
           if (!placed && def.itemModel) {
             const model = await getModel(def.itemModel, def.itemTexture || null);
             if (model) {
+              if (def.customModelAnimation) {
+                await applyBlockyAnimationPose(model, def.customModelAnimation);
+              }
               model.position.y = -0.5;
               placeBlockHolder(root, b, model);
               placed = true;
@@ -463,6 +491,14 @@ export async function buildPrefabMesh(prefab, options = {}) {
             const model = await getModel(mdef.model, mdef.texture);
             if (model) {
               modelPath = mdef.model;
+              const catalogScale = Number(mdef.scale);
+              if (Number.isFinite(catalogScale) && catalogScale > 0) {
+                customModelScale = catalogScale;
+              }
+              const modelCompScale = Number(comps.Model?.Model?.Scale ?? comps.Model?.Scale);
+              if (Number.isFinite(modelCompScale) && modelCompScale > 0) {
+                customModelScale *= modelCompScale;
+              }
               addEntityModel(model);
               placed = true;
             }

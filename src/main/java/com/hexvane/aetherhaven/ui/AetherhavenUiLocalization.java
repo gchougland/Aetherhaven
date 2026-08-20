@@ -538,7 +538,6 @@ public final class AetherhavenUiLocalization {
     }
 
     public static void applyPlotCraftingPage(@Nonnull UICommandBuilder b) {
-        b.set("#PlotCraftTitleText.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.title"));
         b.set("#PreviewTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.previewTitle"));
         b.set("#BuildingInfoTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoTitle"));
         b.set("#BuildingInfoEmptyText.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoEmpty"));

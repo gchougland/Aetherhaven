@@ -401,17 +401,17 @@ public final class CommunitySubmissionService {
         mid.append("Content-Type: application/json").append(crlf).append(crlf);
         byte[] midBytes = mid.toString().getBytes(StandardCharsets.UTF_8);
 
-        StringBuilder tail = new StringBuilder();
-        tail.append(crlf).append("--").append(BOUNDARY);
+        byte[] iconHead = new byte[0];
         if (icon != null) {
-            tail.append(crlf);
-            tail.append("Content-Disposition: form-data; name=\"icon\"; filename=\"icon.png\"").append(crlf);
-            tail.append("Content-Type: image/png").append(crlf).append(crlf);
+            StringBuilder iconPart = new StringBuilder();
+            iconPart.append(crlf).append("--").append(BOUNDARY).append(crlf);
+            iconPart.append("Content-Disposition: form-data; name=\"icon\"; filename=\"icon.png\"").append(crlf);
+            iconPart.append("Content-Type: image/png").append(crlf).append(crlf);
+            iconHead = iconPart.toString().getBytes(StandardCharsets.UTF_8);
         }
-        byte[] iconHead = icon != null ? tail.toString().getBytes(StandardCharsets.UTF_8) : new byte[0];
 
-        String end = (icon != null ? crlf : "") + "--" + BOUNDARY + "--" + crlf;
-        byte[] endBytes = end.getBytes(StandardCharsets.UTF_8);
+        // Closing boundary must always be preceded by CRLF or busboy reports "Unexpected end of form".
+        byte[] endBytes = (crlf + "--" + BOUNDARY + "--" + crlf).getBytes(StandardCharsets.UTF_8);
 
         int total = headBytes.length + definition.length + midBytes.length + prefab.length + iconHead.length;
         if (icon != null) {

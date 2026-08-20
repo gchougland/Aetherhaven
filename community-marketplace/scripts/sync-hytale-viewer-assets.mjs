@@ -147,6 +147,11 @@ function extractStateOverride(stateDef) {
   if (Array.isArray(stateDef.TintUp) && stateDef.TintUp[0]) {
     out.tintUp = stateDef.TintUp[0];
   }
+  // Open trapdoors / doors keep the same model and apply a hold-last animation pose.
+  if (stateDef.CustomModelAnimation) {
+    out.customModelAnimation = normalizeAssetPath(stateDef.CustomModelAnimation);
+    trackCommonRef(out.customModelAnimation);
+  }
   // Furnaces and a few benches nest a state inside a state.
   const nested = collectStates(stateDef.State?.Definitions);
   if (nested) {
@@ -538,6 +543,16 @@ function main() {
     copyTree(path.join(root, "Common", "Blocks"), path.join(outDir, "Common", "Blocks"))
   );
   console.log(`Blocks: ${blocksCopied} files`);
+
+  // Door / trapdoor open poses live under Blocks/Animations.
+  const animCopied = sumOverRoots((root) =>
+    copyTree(
+      path.join(root, "Common", "Blocks", "Animations"),
+      path.join(outDir, "Common", "Blocks", "Animations"),
+      (f) => /\.blockyanim$/i.test(f)
+    )
+  );
+  console.log(`Block animations: ${animCopied} files`);
 
   // Item-held models/textures (rubble skins, tools, etc. referenced as Items/...)
   const itemsCopied = sumOverRoots((root) =>
