@@ -86,6 +86,7 @@ public final class AetherhavenCoreBootstrap {
         plugin.loadAndMigrateConfig();
         plugin.registerModCommonAssetDelivery();
         plugin.registerPlotTokenIconPackets();
+        plugin.registerPropIconPackets();
 
         AetherhavenSharedEntityComponents.register(plugin);
         AetherhavenSharedChunkComponents.register(plugin);
@@ -364,6 +365,9 @@ public final class AetherhavenCoreBootstrap {
                     }
                     if (plugin.getPlotTokenIconPacketAdapter() != null) {
                         plugin.getPlotTokenIconPacketAdapter().onPlayerLeave(event.getPlayerRef().getUuid());
+                    }
+                    if (plugin.getPropIconPacketAdapter() != null) {
+                        plugin.getPropIconPacketAdapter().onPlayerLeave(event.getPlayerRef().getUuid());
                     }
                     QuestBoardOnlineDawnService.clearPlayer(event.getPlayerRef().getUuid());
                     hudRefreshSystem.clearPlayer(event.getPlayerRef().getUuid());

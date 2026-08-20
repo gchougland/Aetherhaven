@@ -4,7 +4,6 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabYaw;
-import com.hexvane.aetherhaven.festival.FestivalPrefabSize;
 import com.hexvane.aetherhaven.guild.marker.AdventurerSpawnMarkerEntity;
 import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
 import com.hexvane.aetherhaven.prefab.ConstructionAnimator;
@@ -178,26 +177,12 @@ public final class BuildingEditorSessionStarter {
         Map<String, Object> snapshot = BuildingEditorJsonWriter.loadSnapshot(existing);
         draft.setOriginalBuildingJsonSnapshot(snapshot);
 
-        PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, yaw, buffer);
+        PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, yaw, buffer, def);
         draft.setCornerFirst(new Vector3i(fp.getMinX(), fp.getMinY(), fp.getMinZ()));
         draft.setCornerSecond(new Vector3i(fp.getMaxX(), fp.getMaxY(), fp.getMaxZ()));
-        // Festival square / Festivals/* prefabs keep the fixed reserved box. Empty air is not saved;
-        // swaps clear the whole reserved volume before paste.
+        // Festival square / Festivals/* prefabs omit empty air; swaps clear the reserved volume before paste.
         if (isFestivalPrefabBuilding(def)) {
-            Vector3i min = new Vector3i(fp.getMinX(), fp.getMinY(), fp.getMinZ());
-            Vector3i max = FestivalPrefabSize.maxFromMin(min);
-            draft.setCornerFirst(min);
-            draft.setCornerSecond(max);
             draft.setSaveEmptySpaces(false);
-            fp =
-                new PlotFootprintRecord(
-                    min.x,
-                    min.y,
-                    min.z,
-                    max.x,
-                    max.y,
-                    max.z
-                );
         }
         draft.setPlotAnchor(def.resolvePreviewSignAnchorWorld(prefabOrigin, yaw));
         convertPrefabLocalsToSignSpace(draft, def.getPlotAnchorOffset());

@@ -113,14 +113,19 @@ public final class PlotCreatorWorldRegistrar {
         }
 
         PlotFootprintRecord footprint;
-        try {
-            footprint = PlotFootprintUtil.computeFootprint(prefabAnchor, yaw, buf, def);
-        } catch (Exception e) {
-            LOGGER.atWarning().withCause(e).log("Plot creator footprint failed for %s", def.getId());
-            Vector3i min = draft.boundsMin();
-            Vector3i max = draft.boundsMax();
+        Vector3i min = draft.boundsMin();
+        Vector3i max = draft.boundsMax();
+        if (draft.getCornerFirst() != null && draft.getCornerSecond() != null) {
+            // Authoritative staff-drawn box for this session (do not shrink to solid prefab voxels).
             footprint = new PlotFootprintRecord(min.x, min.y, min.z, max.x, max.y, max.z);
-            groundedSign = new Vector3i(footprint.horizontalCenterX(), anchor.y, footprint.horizontalCenterZ());
+        } else {
+            try {
+                footprint = PlotFootprintUtil.computeFootprint(prefabAnchor, yaw, buf, def);
+            } catch (Exception e) {
+                LOGGER.atWarning().withCause(e).log("Plot creator footprint failed for %s", def.getId());
+                footprint = new PlotFootprintRecord(min.x, min.y, min.z, max.x, max.y, max.z);
+                groundedSign = new Vector3i(footprint.horizontalCenterX(), anchor.y, footprint.horizontalCenterZ());
+            }
         }
 
         long now = System.currentTimeMillis();

@@ -3,12 +3,15 @@ import path from "node:path";
 import {
   MAX_BUILDING_JSON_BYTES,
   MAX_PREFAB_BYTES,
+  isPropCatalogId,
   normalizeEditStyleId,
   normalizeEditTags,
   normalizeRequiredMods,
   readPrefabBlockIdVersion,
   validateBuildingDefinition,
+  validatePropDefinition,
   validateSubmissionBuilding,
+  validateSubmissionProp,
 } from "./validation.js";
 
 export class AdminRawFileError extends Error {
@@ -55,7 +58,7 @@ export function validateAdminRawFilePair({ buildingText, prefabText, publishedId
     if (building.id !== publishedId) {
       throw new AdminRawFileError(
         "published_id_immutable",
-        `Published building id must remain "${publishedId}".`,
+        `Published id must remain "${publishedId}".`,
       );
     }
     const expectedPrefabPath = `${publishedId}.prefab.json`;
@@ -67,9 +70,14 @@ export function validateAdminRawFilePair({ buildingText, prefabText, publishedId
     }
   }
 
+  const isProp = isPropCatalogId(publishedId || building.id);
   const validationError = publishedId
-    ? validateBuildingDefinition(building, blockIdVersion)
-    : validateSubmissionBuilding(building, blockIdVersion);
+    ? isProp
+      ? validatePropDefinition(building, blockIdVersion)
+      : validateBuildingDefinition(building, blockIdVersion)
+    : isProp
+      ? validateSubmissionProp(building, blockIdVersion)
+      : validateSubmissionBuilding(building, blockIdVersion);
   if (validationError) {
     throw new AdminRawFileError(validationError, `Building validation failed: ${validationError}.`);
   }

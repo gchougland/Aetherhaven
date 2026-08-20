@@ -79,15 +79,49 @@ export function createStorage(dataDir) {
     return path.join(dirs.approved, id);
   }
 
-  function approvedPaths(id) {
+  /**
+   * @param {string} id
+   * @param {{ contentType?: "building"|"wall"|"prop" }} [options]
+   */
+  function approvedPaths(id, options = {}) {
     const dir = approvedDir(id);
+    const contentType = options.contentType;
+    const useProp =
+      contentType === "prop" ||
+      (!contentType && id.startsWith("prop_community_")) ||
+      fs.existsSync(path.join(dir, "prop.json"));
     return {
       dir,
       building: path.join(dir, "building.json"),
+      prop: path.join(dir, "prop.json"),
+      definition: path.join(dir, useProp ? "prop.json" : "building.json"),
       prefab: path.join(dir, "prefab.prefab.json"),
       icon: path.join(dir, "icon.png"),
       meta: path.join(dir, "meta.json"),
     };
+  }
+
+  /**
+   * @param {string} submissionId
+   * @param {"pending"|"approved"|"rejected"} [status]
+   */
+  function pendingDefinitionFile(submissionId, status = "pending") {
+    const dir = submissionDir(submissionId, status);
+    const propPath = path.join(dir, "prop.json");
+    if (fs.existsSync(propPath)) {
+      return propPath;
+    }
+    return path.join(dir, "building.json");
+  }
+
+  /**
+   * @param {string} submissionId
+   * @param {"pending"|"approved"|"rejected"} [status]
+   * @returns {"prop"|"building"}
+   */
+  function pendingDefinitionKind(submissionId, status = "pending") {
+    const dir = submissionDir(submissionId, status);
+    return fs.existsSync(path.join(dir, "prop.json")) ? "prop" : "building";
   }
 
   function screenshotDir(screenshotId) {
@@ -237,6 +271,8 @@ export function createStorage(dataDir) {
     loadSubmissionMeta,
     approvedDir,
     approvedPaths,
+    pendingDefinitionFile,
+    pendingDefinitionKind,
     screenshotDir,
     screenshotPaths,
     loadScreenshotMeta,

@@ -19,6 +19,24 @@ $Sounds = "../Sounds.ui";
   )
 );
 
+@PlotCommunitySubTabAnchor = Anchor(Width: 82, Height: 62, Right: 5, Top: -14);
+
+@PlotCommunitySubTabsStyle = TabNavigationStyle(
+  TabStyle: (
+    Default: (...$C.@TopTabStyle, Anchor: (...@PlotCommunitySubTabAnchor, Top: -8)),
+    Hovered: (...$C.@TopTabStyle, Anchor: (...@PlotCommunitySubTabAnchor, Top: -3)),
+    Pressed: (...$C.@TopTabStyle, Anchor: (...@PlotCommunitySubTabAnchor, Top: -6))
+  ),
+  SelectedTabStyle: (
+    Default: (
+      ...$C.@TopTabStyle,
+      Anchor: (...@PlotCommunitySubTabAnchor, Top: 0),
+      IconAnchor: (Width: 44, Height: 44),
+      Overlay: "../Common/TabSelectedOverlay.png"
+    )
+  )
+);
+
 @PlotPanelHeight = 600;
 @PlotCraftContentPadding = 30;
 @PlotCraftFooterHeight = 96;
@@ -418,6 +436,36 @@ $C.@PageOverlay {
             $C.@TextButton #CraftButton {
               Anchor: (Height: 36);
               Text: "";
+            }
+          }
+        }
+
+        Group #CommunitySubTabsHost {
+          LayoutMode: Left;
+          Anchor: (Height: 66, Left: 2, Right: 0, Top: -10);
+          Visible: false;
+
+          TabNavigation #CommunitySubTabs {
+            Anchor: (Height: 66);
+            Style: @PlotCommunitySubTabsStyle;
+            SelectedTab: "Buildings";
+
+            TabButton {
+              Icon: "../house_icon_256.png";
+              TooltipText: "";
+              Id: "Buildings";
+            }
+
+            TabButton {
+              Icon: "../walls.png";
+              TooltipText: "";
+              Id: "WallStyles";
+            }
+
+            TabButton {
+              Icon: "../decoration.png";
+              TooltipText: "";
+              Id: "Props";
             }
           }
         }

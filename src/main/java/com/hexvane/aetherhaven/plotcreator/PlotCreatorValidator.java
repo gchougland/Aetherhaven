@@ -113,6 +113,58 @@ public final class PlotCreatorValidator {
         return PlotCreatorWallPieceAuthoring.validateStyle(draft);
     }
 
+    /** Props use {@code prop_} ids and write under Prefabs/Props, not the construction catalog. */
+    @Nullable
+    public static String validatePropBeforeSave(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        if (draft.getConstructionId() == null || draft.getDisplayName() == null || draft.getPrefabPath() == null) {
+            return "incomplete";
+        }
+        Vector3i anchor = draft.getPlotAnchor();
+        if (anchor == null) {
+            return "incomplete";
+        }
+        if (!draft.isInsideBounds(anchor)) {
+            return "anchorOutsideBounds";
+        }
+        String idErr = validatePropId(draft.getConstructionId(), plugin, draft.getEditingConstructionId());
+        if (idErr != null) {
+            return idErr;
+        }
+        var prefabFile = CustomBuildingsPaths.resolvePrefabFile(plugin.getDataDirectory(), draft.getPrefabPath());
+        if (prefabFile == null || !Files.isRegularFile(prefabFile)) {
+            return "prefab_missing";
+        }
+        return null;
+    }
+
+    @Nullable
+    public static String validatePropId(
+        @Nullable String raw,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nullable String editingId
+    ) {
+        if (raw == null) {
+            return "id_empty";
+        }
+        String id = raw.trim().toLowerCase(Locale.ROOT);
+        if (id.isEmpty()) {
+            return "id_empty";
+        }
+        if (!id.startsWith("prop_")) {
+            return "prop_id_prefix";
+        }
+        if (!id.matches("prop_[a-z0-9_]+")) {
+            return "id_chars";
+        }
+        if (!id.equals(editingId) && plugin.getPropCatalog().contains(id)) {
+            return "id_taken";
+        }
+        return null;
+    }
+
     @Nullable
     public static String validateBeforeSave(@Nonnull PlotCreatorDraft draft, @Nonnull AetherhavenPlugin plugin) {
         if (draft.isFestivalMode()) {
@@ -120,6 +172,9 @@ public final class PlotCreatorValidator {
         }
         if (draft.isWallMode()) {
             return validateWallStyleBeforeSave(draft, plugin);
+        }
+        if (draft.isPropMode()) {
+            return validatePropBeforeSave(draft, plugin);
         }
         if (draft.getConstructionId() == null || draft.getDisplayName() == null || draft.getPrefabPath() == null) {
             return "incomplete";

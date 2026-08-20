@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hexvane.aetherhaven.plotcreator.PlotTokenIconPng;
+import com.hexvane.aetherhaven.prop.PropPaths;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.asset.common.CommonAsset;
 import com.hypixel.hytale.server.core.asset.common.CommonAssetRegistry;
@@ -49,7 +50,7 @@ public final class CommunityIconDownload {
         if (!iconRequired(entry)) {
             return null;
         }
-        Path iconFile = CommunityPaths.iconFile(plugin.getDataDirectory(), entry.getId());
+        Path iconFile = iconFileFor(plugin, entry);
         synchronized (PlotTokenIconPng.lockFor(entry.getId())) {
             if (!forceRefresh && PlotTokenIconPng.isValidFile(iconFile)) {
                 return iconFile;
@@ -82,8 +83,8 @@ public final class CommunityIconDownload {
             return Result.NOT_REQUIRED;
         }
         Path dataDir = plugin.getDataDirectory();
-        Path iconFile = CommunityPaths.iconFile(dataDir, entry.getId());
-        String assetPath = CustomBuildingsPaths.iconAssetPath(entry.getId());
+        Path iconFile = iconFileFor(plugin, entry);
+        String assetPath = iconAssetPathFor(entry);
         synchronized (PlotTokenIconPng.lockFor(entry.getId())) {
             if (!forceRefresh && PlotTokenIconPng.isValidFile(iconFile) && isRegistered(assetPath)) {
                 return Result.SUCCESS;
@@ -126,11 +127,29 @@ public final class CommunityIconDownload {
         if (manifestEntry != null && !iconRequired(manifestEntry)) {
             return true;
         }
-        Path iconFile = CommunityPaths.iconFile(plugin.getDataDirectory(), constructionId);
+        boolean prop = manifestEntry != null && manifestEntry.isProp();
+        Path iconFile =
+            prop
+                ? CommunityPaths.iconsDirectory(plugin.getDataDirectory()).resolve(PropPaths.iconFileName(constructionId))
+                : CommunityPaths.iconFile(plugin.getDataDirectory(), constructionId);
         if (!PlotTokenIconPng.isValidFile(iconFile)) {
             return false;
         }
-        return isRegistered(CustomBuildingsPaths.iconAssetPath(constructionId));
+        String assetPath = prop ? PropPaths.iconAssetPath(constructionId) : CustomBuildingsPaths.iconAssetPath(constructionId);
+        return isRegistered(assetPath);
+    }
+
+    @Nonnull
+    private static Path iconFileFor(@Nonnull AetherhavenPlugin plugin, @Nonnull CommunityManifestEntry entry) {
+        if (entry.isProp()) {
+            return CommunityPaths.iconsDirectory(plugin.getDataDirectory()).resolve(PropPaths.iconFileName(entry.getId()));
+        }
+        return CommunityPaths.iconFile(plugin.getDataDirectory(), entry.getId());
+    }
+
+    @Nonnull
+    private static String iconAssetPathFor(@Nonnull CommunityManifestEntry entry) {
+        return entry.isProp() ? PropPaths.iconAssetPath(entry.getId()) : CustomBuildingsPaths.iconAssetPath(entry.getId());
     }
 
     /**

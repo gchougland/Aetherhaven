@@ -890,6 +890,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
                 kinds.remove(PlotBuildingKind.DECORATION);
                 kinds.remove(PlotBuildingKind.FESTIVAL);
                 kinds.remove(PlotBuildingKind.WALL);
+                kinds.remove(PlotBuildingKind.PROP);
                 if (!kinds.contains(kind)) {
                     kinds.add(kind);
                 }

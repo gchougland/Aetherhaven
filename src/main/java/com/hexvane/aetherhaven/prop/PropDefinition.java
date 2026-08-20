@@ -18,17 +18,43 @@ public final class PropDefinition {
     @Nullable
     private String prefabPath;
 
+    /** Optional common-asset icon path, e.g. {@code Icons/ItemsGenerated/Aetherhaven_Prop_Fish_Barrel.png}. */
+    @SerializedName("iconPath")
+    @Nullable
+    private String iconPath;
+
     public PropDefinition() {}
 
-    private PropDefinition(@Nonnull String id, @Nullable String displayName, @Nonnull String prefabPath) {
+    private PropDefinition(
+        @Nonnull String id,
+        @Nullable String displayName,
+        @Nonnull String prefabPath,
+        @Nullable String iconPath
+    ) {
         this.id = id;
         this.displayName = displayName;
         this.prefabPath = prefabPath;
+        this.iconPath = iconPath;
     }
 
     @Nonnull
     public static PropDefinition create(@Nonnull String id, @Nullable String displayName, @Nonnull String prefabPath) {
-        return new PropDefinition(id.trim(), displayName != null ? displayName.trim() : null, prefabPath.trim());
+        return create(id, displayName, prefabPath, null);
+    }
+
+    @Nonnull
+    public static PropDefinition create(
+        @Nonnull String id,
+        @Nullable String displayName,
+        @Nonnull String prefabPath,
+        @Nullable String iconPath
+    ) {
+        return new PropDefinition(
+            id.trim(),
+            displayName != null ? displayName.trim() : null,
+            prefabPath.trim(),
+            iconPath != null && !iconPath.isBlank() ? iconPath.trim() : null
+        );
     }
 
     @Nonnull
@@ -44,5 +70,14 @@ public final class PropDefinition {
     @Nonnull
     public String getPrefabPath() {
         return prefabPath != null ? prefabPath.trim() : "";
+    }
+
+    @Nullable
+    public String getIconPath() {
+        return iconPath != null && !iconPath.isBlank() ? iconPath.trim() : null;
+    }
+
+    public void setIconPath(@Nullable String iconPath) {
+        this.iconPath = iconPath != null && !iconPath.isBlank() ? iconPath.trim() : null;
     }
 }

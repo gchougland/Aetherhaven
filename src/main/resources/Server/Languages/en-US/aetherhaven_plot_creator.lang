@@ -297,6 +297,7 @@ aetherhaven.plotcreator.kind.GUILD_HALL = Guild hall
 aetherhaven.plotcreator.kind.TOURIST_PORTAL = Tourist portal
 aetherhaven.plotcreator.kind.FESTIVAL = Festival
 aetherhaven.plotcreator.kind.WALL = Wall style
+aetherhaven.plotcreator.kind.PROP = Prop
 
 aetherhaven.plotcreator.step.WALL_PIECES.title = Wall pieces
 aetherhaven.plotcreator.step.WALL_PIECES.short = Pieces
@@ -338,7 +339,10 @@ aetherhaven.plotcreator.error.wallPieceConnectionsMissing = One of your wall pie
 aetherhaven.plotcreator.error.wallExclusive = A wall style cannot be mixed with other building types.
 aetherhaven.plotcreator.error.wallNotEditable = Open a wall style from the walls tab of the building editor instead.
 aetherhaven.plotcreator.error.wallIdPrefix = A wall style id must start with plot_wall_.
+aetherhaven.plotcreator.error.propExclusive = A prop cannot be mixed with other building types.
+aetherhaven.plotcreator.error.prop_id_prefix = Prop ids must start with prop_
 aetherhaven.plotcreator.success.wallStyleSaved = {name} is saved. Pick it with the wall wand to start building.
+aetherhaven.plotcreator.success.propSaved = {name} is saved. You can place it with a prop item, or share it on the marketplace.
 
 aetherhaven.plotcreator.step.IDENTITY.title = Name and id
 aetherhaven.plotcreator.step.IDENTITY.short = Name

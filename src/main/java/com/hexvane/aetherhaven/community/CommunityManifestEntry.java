@@ -37,6 +37,10 @@ public final class CommunityManifestEntry {
     @SerializedName("wallSegment")
     private boolean wallSegment;
 
+    /** Marketplace content kind: building, wall, or prop. */
+    @SerializedName("contentType")
+    private String contentType;
+
     /** Which job the piece does in its style: segment, gate, tower_end, tower_straight, tower_corner. */
     @SerializedName("wallPieceRole")
     private String wallPieceRole;
@@ -70,6 +74,9 @@ public final class CommunityManifestEntry {
 
     @SerializedName("buildingUrl")
     private String buildingUrl;
+
+    @SerializedName("propUrl")
+    private String propUrl;
 
     @SerializedName("prefabUrl")
     private String prefabUrl;
@@ -159,6 +166,10 @@ public final class CommunityManifestEntry {
         return wallSegment;
     }
 
+    public boolean isProp() {
+        return "prop".equalsIgnoreCase(contentType) || getId().startsWith("prop_community_");
+    }
+
     public boolean isFestivalVariant() {
         return festivalVariant || (countsAsFestivalId != null && !countsAsFestivalId.isBlank());
     }
@@ -211,6 +222,11 @@ public final class CommunityManifestEntry {
     @Nullable
     public String getBuildingUrl() {
         return buildingUrl;
+    }
+
+    @Nullable
+    public String getPropUrl() {
+        return propUrl;
     }
 
     @Nullable

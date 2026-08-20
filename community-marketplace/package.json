@@ -13,6 +13,7 @@
     "test": "node --test",
     "sync-wiki": "node scripts/sync-wiki.mjs",
     "sync-hytale-assets": "node scripts/sync-hytale-viewer-assets.mjs",
+    "seed-local-prop": "node scripts/seed-local-fish-barrel.mjs",
     "playwright-install": "npx playwright-core install chromium"
   },
   "dependencies": {

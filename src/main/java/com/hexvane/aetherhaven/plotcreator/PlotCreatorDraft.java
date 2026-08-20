@@ -457,6 +457,12 @@ public final class PlotCreatorDraft {
         return ks.size() == 1 && ks.get(0) == PlotBuildingKind.WALL;
     }
 
+    /** True while the wizard is building a decoration prop rather than a plot. */
+    public boolean isPropMode() {
+        List<PlotBuildingKind> ks = getKinds();
+        return ks.size() == 1 && ks.get(0) == PlotBuildingKind.PROP;
+    }
+
     @Nonnull
     public List<PlotCreatorWallPieceDraft> getWallPieces() {
         return wallPieces;

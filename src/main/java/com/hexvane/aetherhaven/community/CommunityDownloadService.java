@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.festival.CustomFestivalPaths;
 import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
+import com.hexvane.aetherhaven.prop.PropPaths;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -219,6 +220,9 @@ public final class CommunityDownloadService {
         boolean forceRefresh,
         boolean registerIconImmediately
     ) {
+        if (entry.isProp()) {
+            return installPropFiles(plugin, entry, forceRefresh, registerIconImmediately);
+        }
         if (!CommunityRequiredMods.isSatisfied(entry.getRequiredMods())) {
             return new FileInstallOutcome(InstallResult.MISSING_MODS, null);
         }
@@ -372,6 +376,152 @@ public final class CommunityDownloadService {
                 wroteIconThisAttempt
             );
             LOGGER.atWarning().withCause(e).log("Failed to install community building %s", id);
+            return new FileInstallOutcome(InstallResult.IO_ERROR, null);
+        }
+    }
+
+    @Nonnull
+    private static FileInstallOutcome installPropFiles(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull CommunityManifestEntry entry,
+        boolean forceRefresh,
+        boolean registerIconImmediately
+    ) {
+        if (!CommunityRequiredMods.isSatisfied(entry.getRequiredMods())) {
+            return new FileInstallOutcome(InstallResult.MISSING_MODS, null);
+        }
+        String id = entry.getId();
+        Path dataDir = plugin.getDataDirectory();
+        CommunityCatalogService catalog = plugin.getCommunityCatalogService();
+        boolean wrotePrefab = false;
+        boolean wroteDef = false;
+        boolean wroteIcon = false;
+        Path writtenIcon = null;
+        try {
+            Files.createDirectories(PropPaths.propsDirectory(dataDir));
+            Files.createDirectories(PropPaths.propPrefabsDirectory(dataDir));
+            Files.createDirectories(CommunityPaths.iconsDirectory(dataDir));
+
+            String prefabKey = PropPaths.prefabPathKeyFromPropId(id);
+            String prefabFileName = PropPaths.prefabFileNameFromKey(prefabKey);
+            Path installedPrefab = PropPaths.propPrefabFile(dataDir, prefabFileName);
+            if (forceRefresh || !Files.isRegularFile(installedPrefab)) {
+                String prefabUrl = entry.getPrefabUrl();
+                if (prefabUrl == null || prefabUrl.isBlank()) {
+                    return new FileInstallOutcome(InstallResult.NOT_FOUND, null);
+                }
+                byte[] prefab = CommunityHttpClient.getBytes(catalog.resolveUrl(prefabUrl));
+                if (prefab == null || prefab.length == 0) {
+                    return new FileInstallOutcome(InstallResult.DOWNLOAD_FAILED, null);
+                }
+                CommunityPrefabSafety.Result safety = CommunityPrefabSafety.validate(prefab);
+                if (!safety.isSafe()) {
+                    LOGGER.atWarning().log("Refused unsafe community prop prefab %s: %s", id, safety.detail());
+                    return new FileInstallOutcome(InstallResult.UNSAFE_PREFAB, null);
+                }
+                Files.write(installedPrefab, prefab);
+                wrotePrefab = true;
+            }
+
+            Path propFile = PropPaths.propFileUnderDataDir(dataDir, id);
+            if (forceRefresh || !Files.isRegularFile(propFile)) {
+                String propUrl = entry.getPropUrl();
+                if (propUrl == null || propUrl.isBlank()) {
+                    propUrl = entry.getBuildingUrl();
+                }
+                if (propUrl == null || propUrl.isBlank()) {
+                    if (wrotePrefab) {
+                        Files.deleteIfExists(installedPrefab);
+                    }
+                    return new FileInstallOutcome(InstallResult.NOT_FOUND, null);
+                }
+                String propJson = CommunityHttpClient.getString(catalog.resolveUrl(propUrl));
+                if (propJson == null || propJson.isBlank()) {
+                    if (wrotePrefab) {
+                        Files.deleteIfExists(installedPrefab);
+                    }
+                    return new FileInstallOutcome(InstallResult.DOWNLOAD_FAILED, null);
+                }
+                JsonObject root = GSON.fromJson(propJson, JsonObject.class);
+                if (root == null) {
+                    root = new JsonObject();
+                }
+                root.addProperty("id", id);
+                root.addProperty("prefabPath", prefabKey);
+                if (!root.has("displayName") || root.get("displayName").isJsonNull()) {
+                    root.addProperty("displayName", entry.getDisplayName());
+                }
+                String iconAsset = PropPaths.iconAssetPath(id);
+                root.addProperty("iconPath", iconAsset);
+                Files.writeString(propFile, GSON.toJson(root));
+                wroteDef = true;
+            }
+
+            if (CommunityIconDownload.iconRequired(entry)) {
+                Path iconFile = CommunityPaths.iconsDirectory(dataDir).resolve(PropPaths.iconFileName(id));
+                boolean needIcon = forceRefresh || !Files.isRegularFile(iconFile);
+                if (registerIconImmediately) {
+                    CommunityIconDownload.Result iconResult =
+                        CommunityIconDownload.downloadRegisterAndValidate(plugin, entry, needIcon);
+                    wroteIcon =
+                        iconResult == CommunityIconDownload.Result.SUCCESS
+                            && Files.isRegularFile(iconFile)
+                            && needIcon;
+                    if (iconResult != CommunityIconDownload.Result.SUCCESS
+                        && iconResult != CommunityIconDownload.Result.NOT_REQUIRED) {
+                        if (!forceRefresh) {
+                            if (wroteDef) {
+                                Files.deleteIfExists(propFile);
+                            }
+                            if (wrotePrefab) {
+                                Files.deleteIfExists(installedPrefab);
+                            }
+                            return new FileInstallOutcome(InstallResult.ICON_FAILED, null);
+                        }
+                    }
+                    writtenIcon = Files.isRegularFile(iconFile) ? iconFile : null;
+                } else {
+                    Path diskIcon = CommunityIconDownload.downloadToDiskOnly(plugin, entry, needIcon);
+                    if (diskIcon == null && needIcon) {
+                        if (!forceRefresh) {
+                            if (wroteDef) {
+                                Files.deleteIfExists(propFile);
+                            }
+                            if (wrotePrefab) {
+                                Files.deleteIfExists(installedPrefab);
+                            }
+                            return new FileInstallOutcome(InstallResult.ICON_FAILED, null);
+                        }
+                    } else {
+                        wroteIcon = needIcon && diskIcon != null;
+                        writtenIcon = diskIcon;
+                    }
+                }
+            }
+
+            CommunityInstallVersion.writeInstalledVersion(dataDir, id, entry.getVersion());
+            if (registerIconImmediately) {
+                plugin.getCommunityCatalogService().markIconComplete(id);
+            }
+            LOGGER.atInfo().log("Installed community prop %s", id);
+            return new FileInstallOutcome(InstallResult.SUCCESS, writtenIcon);
+        } catch (IOException e) {
+            try {
+                if (wroteDef) {
+                    Files.deleteIfExists(PropPaths.propFileUnderDataDir(dataDir, id));
+                }
+                if (wrotePrefab) {
+                    Files.deleteIfExists(
+                        PropPaths.propPrefabFile(dataDir, PropPaths.prefabFileNameFromKey(PropPaths.prefabPathKeyFromPropId(id)))
+                    );
+                }
+                if (wroteIcon) {
+                    Files.deleteIfExists(CommunityPaths.iconsDirectory(dataDir).resolve(PropPaths.iconFileName(id)));
+                }
+            } catch (IOException ignored) {
+                // best-effort rollback
+            }
+            LOGGER.atWarning().withCause(e).log("Failed to install community prop %s", id);
             return new FileInstallOutcome(InstallResult.IO_ERROR, null);
         }
     }

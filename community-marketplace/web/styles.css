@@ -475,6 +475,39 @@ main.wrap > section + section {
   border: 0;
 }
 
+.catalog-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin: 0 0 var(--space-md);
+}
+
+.catalog-tabs[hidden] {
+  display: none;
+}
+
+.catalog-tab {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: linear-gradient(165deg, var(--panel-light) 0%, var(--panel) 100%);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.catalog-tab[aria-current="page"] {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px rgba(240, 208, 112, 0.35);
+}
+
+.catalog-tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .catalog-toolbar {
   display: flex;
   flex-wrap: wrap;

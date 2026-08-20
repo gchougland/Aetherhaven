@@ -4,6 +4,9 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.CommunityMarketplaceConfig;
 import com.hexvane.aetherhaven.festival.CustomFestivalPaths;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
+import com.hexvane.aetherhaven.prop.PropCatalog;
+import com.hexvane.aetherhaven.prop.PropDefinition;
+import com.hexvane.aetherhaven.prop.PropPaths;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -35,6 +38,16 @@ public final class CommunitySubmissionService {
         @Nonnull String constructionId
     ) {
         return uploadSavedBuilding(plugin, playerUuid, playerName, constructionId, false);
+    }
+
+    @Nullable
+    public static String submitSavedProp(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID playerUuid,
+        @Nonnull String playerName,
+        @Nonnull String propId
+    ) {
+        return uploadSavedProp(plugin, playerUuid, playerName, propId);
     }
 
     @Nullable
@@ -137,6 +150,63 @@ public final class CommunitySubmissionService {
             return null;
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Community submission failed for %s", constructionId);
+            return "io_error";
+        }
+    }
+
+    @Nullable
+    private static String uploadSavedProp(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID playerUuid,
+        @Nonnull String playerName,
+        @Nonnull String propId
+    ) {
+        CommunityMarketplaceConfig cfg = plugin.getConfig().get().getCommunityMarketplace();
+        if (!cfg.isEnabled()) {
+            return "disabled";
+        }
+        PropCatalog catalog = plugin.getPropCatalog();
+        PropDefinition def = catalog.get(propId);
+        if (def == null) {
+            return "building_missing";
+        }
+        Path dataDir = plugin.getDataDirectory();
+        Path propFile = PropPaths.propFileUnderDataDir(dataDir, propId);
+        if (!Files.isRegularFile(propFile)) {
+            // Fall back to serializing the in-memory definition.
+            try {
+                Files.createDirectories(propFile.getParent());
+                Files.writeString(propFile, GSON.toJson(def), StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                return "building_missing";
+            }
+        }
+        Path prefabFile = CustomBuildingsPaths.resolvePrefabFile(dataDir, def.getPrefabPath());
+        if (prefabFile == null || !Files.isRegularFile(prefabFile)) {
+            return "prefab_missing";
+        }
+        Path iconFile = PropPaths.iconFile(dataDir, propId);
+        if (!Files.isRegularFile(iconFile)) {
+            iconFile = CommunityPaths.iconFile(dataDir, propId);
+        }
+        try {
+            byte[] propBytes = Files.readAllBytes(propFile);
+            byte[] prefabBytes = Files.readAllBytes(prefabFile);
+            byte[] iconBytes = Files.isRegularFile(iconFile) ? Files.readAllBytes(iconFile) : null;
+            byte[] body = buildPropMultipart(propBytes, prefabBytes, iconBytes);
+            Map<String, String> headers = new LinkedHashMap<>();
+            headers.put("X-Player-Uuid", playerUuid.toString().trim().toLowerCase(java.util.Locale.ROOT));
+            headers.put("X-Player-Name", playerName);
+            headers.put("X-Content-Type", "prop");
+            String url = cfg.getApiBaseUrl() + "/api/v1/submissions";
+            CommunityHttpClient.HttpResult result = CommunityHttpClient.postMultipartResult(url, headers, BOUNDARY, body);
+            if (!result.isSuccess()) {
+                return mapUploadError(result);
+            }
+            LOGGER.atInfo().log("Community prop submission uploaded for %s by %s", propId, playerUuid);
+            return null;
+        } catch (IOException e) {
+            LOGGER.atWarning().withCause(e).log("Community prop submission failed for %s", propId);
             return "io_error";
         }
     }
@@ -296,10 +366,32 @@ public final class CommunitySubmissionService {
     @Nonnull
     private static byte[] buildMultipart(@Nonnull byte[] building, @Nonnull byte[] prefab, @Nullable byte[] icon)
         throws IOException {
+        return buildNamedMultipart("building", "building.json", building, prefab, icon);
+    }
+
+    @Nonnull
+    private static byte[] buildPropMultipart(@Nonnull byte[] prop, @Nonnull byte[] prefab, @Nullable byte[] icon)
+        throws IOException {
+        return buildNamedMultipart("prop", "prop.json", prop, prefab, icon);
+    }
+
+    @Nonnull
+    private static byte[] buildNamedMultipart(
+        @Nonnull String defFieldName,
+        @Nonnull String defFileName,
+        @Nonnull byte[] definition,
+        @Nonnull byte[] prefab,
+        @Nullable byte[] icon
+    ) throws IOException {
         String crlf = "\r\n";
         StringBuilder head = new StringBuilder();
         head.append("--").append(BOUNDARY).append(crlf);
-        head.append("Content-Disposition: form-data; name=\"building\"; filename=\"building.json\"").append(crlf);
+        head.append("Content-Disposition: form-data; name=\"")
+            .append(defFieldName)
+            .append("\"; filename=\"")
+            .append(defFileName)
+            .append("\"")
+            .append(crlf);
         head.append("Content-Type: application/json").append(crlf).append(crlf);
         byte[] headBytes = head.toString().getBytes(StandardCharsets.UTF_8);
 
@@ -321,7 +413,7 @@ public final class CommunitySubmissionService {
         String end = (icon != null ? crlf : "") + "--" + BOUNDARY + "--" + crlf;
         byte[] endBytes = end.getBytes(StandardCharsets.UTF_8);
 
-        int total = headBytes.length + building.length + midBytes.length + prefab.length + iconHead.length;
+        int total = headBytes.length + definition.length + midBytes.length + prefab.length + iconHead.length;
         if (icon != null) {
             total += icon.length;
         }
@@ -330,7 +422,7 @@ public final class CommunitySubmissionService {
         byte[] out = new byte[total];
         int pos = 0;
         pos = copy(headBytes, out, pos);
-        pos = copy(building, out, pos);
+        pos = copy(definition, out, pos);
         pos = copy(midBytes, out, pos);
         pos = copy(prefab, out, pos);
         if (icon != null) {

@@ -36,16 +36,18 @@
 - **Clown Tent** Build Bozo a tent workplace. During work hours he visits townsfolk who need fun and cheers them up.
 - **Villager wardrobe** Craft a wardrobe at the town planning desk to dress up residents of your town. Pick someone, choose unlocked looks by slot, and save what they wear in that town. Head looks can leave hair alone, trim it under a hat, or hide it fully, matching how player hats work.
 - **Props** Place small decoration builds almost anywhere with a crate style prop item. Move and turn them in a placement menu before you set them down. They will not go into other blocks. Ships with Aqua Lamp, Palm Streetlight, Streetlight, Cabbage Trough, Fish Barrel, Potion Shelf, Plant Arch, Pig Pile, Balloons, and Festival Flag. Festival merchants sell some of these for festival tickets.
+- **Share props** Make props with the plot creator and share them on the marketplace. At the crafting bench, open Community and use the Props tab to download them. Downloaded props can show up in chests and balloons.
 - **Packaging wand** Point at a prop and use the wand to pack it back into an item. Props stay safe from breaking for everyone unless you turn breaking on for yourself with a creative command.
 - **Create and give props** Creative commands let you turn an existing prefab into a prop, give prop items, and hand out the packaging wand.
 - **Loot chest props** World loot chests can hold a random decoration prop, about as often as a plot blueprint. Festival merchant decorations stay exclusive to those shops.
 - **Path designer shovel** You can choose whether townsfolk walk a path you place.
 - **Make your own wall styles** The plot creator can build a whole wall style. Set up the straight wall, the gate, and the three towers, mark where each one joins the next, set what each one costs to build, and share the finished style on the marketplace.
-- **Wall styles in the crafting bench** The marketplace has a Walls filter. A wall style shows as one card with arrows to look through its pieces, and downloading it brings the whole set in at once.
+- **Wall styles in the crafting bench** On Community, open the Wall Styles tab. A wall style shows as one card with arrows to look through its pieces, and downloading it brings the whole set in at once.
 - **Pick a wall style** The wall wand has arrows to switch between the wall styles you have installed.
 
 ### Changed
 
+- **Plot creator** You pick the building type before you mark the build box. Festivals and wall styles skip the shared box step.
 - **Faster loading** Worlds with Aetherhaven open and join more quickly.
 - **Jewelry** Tooltips say to equip with a Hand Mirror.
 - **Path designer shovel** Starts in Place mode.
@@ -54,6 +56,8 @@
 - **Red floating gifts** Hold two furniture pieces and a random decoration prop.
 - **Heartberry** You can set it down like food, and pick it back up.
 - **Bard** You can hear Elias from farther away.
+- **Plot crafting table** Remembers your tab, page, and picks when you open it again.
+- **Plot crafting table** The list jumps back to the top when you change pages.
 
 ### Fixed
 
@@ -69,6 +73,7 @@
 - **Item tooltips** Item names and styled text stay readable when the shop gold price is shown.
 - **Festival plot creator** Finishing or canceling a festival session now clears the pasted square.
 - **Plot creator** Stand-in villagers used to mark important spots no longer show up when that building is constructed.
+- **Plot creator** Custom buildings keep the full area you marked with the staff, so things in empty space inside that box are not left out.
 - **Gaia statue** It stays in place without a block under it.
 
 ## [2.7.1] - 8/7/2026

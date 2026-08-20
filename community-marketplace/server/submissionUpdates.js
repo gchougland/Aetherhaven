@@ -6,10 +6,15 @@ import {
   MAX_ICON_BYTES,
   MAX_PREFAB_BYTES,
   assignCommunityCatalogId,
-  normalizeCommunityId,
+  assignCommunityPropId,
+  detectSubmissionContentType,
+  isPropCatalogId,
+  normalizeCatalogId,
   normalizeRequiredMods,
   readPrefabBlockIdVersion,
+  resolveManifestContentType,
   validateSubmissionBuilding,
+  validateSubmissionProp,
 } from "./validation.js";
 
 /**
@@ -25,7 +30,7 @@ export function parseVersionNumber(version) {
  * @param {string} buildingId
  */
 export function nextVersionForBuilding(storage, buildingId) {
-  const id = normalizeCommunityId(buildingId);
+  const id = normalizeCatalogId(buildingId);
   if (!id) {
     return "1";
   }
@@ -73,6 +78,7 @@ export function listSlimSubmissionsForCreator(storage, webUser, isOwnedByWebUser
       kind: "pending",
       submissionId: submission.submissionId,
       proposedId: submission.proposedId,
+      contentType: submission.contentType || resolveManifestContentType(undefined, submission),
       displayName: submission.displayName,
       status: "pending",
       version: submission.version || "1",
@@ -86,6 +92,7 @@ export function listSlimSubmissionsForCreator(storage, webUser, isOwnedByWebUser
       kind: "rejected",
       submissionId: submission.submissionId,
       proposedId: submission.proposedId,
+      contentType: submission.contentType || resolveManifestContentType(undefined, submission),
       displayName: submission.displayName,
       status: "rejected",
       version: submission.version || "1",
@@ -98,6 +105,7 @@ export function listSlimSubmissionsForCreator(storage, webUser, isOwnedByWebUser
     .map((entry) => ({
       kind: "approved",
       id: entry.id,
+      contentType: resolveManifestContentType(entry.contentType, entry),
       displayName: entry.displayName,
       status: "approved",
       version: entry.version || "1",
@@ -153,7 +161,7 @@ export function resolveOwnerSubmissionFile(storage, submissionId, fileName, webU
  * @param {(metaOrEntry: object, profileUuid: string) => boolean} isOwnedByProfile
  */
 function isOwnedBuilding(storage, buildingId, creatorUuid, isOwnedByProfile) {
-  const id = normalizeCommunityId(buildingId);
+  const id = normalizeCatalogId(buildingId);
   if (!id) {
     return false;
   }
@@ -181,11 +189,12 @@ function isOwnedBuilding(storage, buildingId, creatorUuid, isOwnedByProfile) {
  * @param {string} proposedId
  * @param {string} creatorUuid
  * @param {string} creatorName
- * @param {Record<string, unknown>} building
+ * @param {Record<string, unknown>} definition
  * @param {Buffer} prefabBuffer
  * @param {Buffer | null | undefined} iconBuffer
  * @param {string} version
  * @param {number} blockIdVersion
+ * @param {"prop"|"building"} definitionKind
  * @param {(value: unknown) => string} normalizeDescription
  * @param {(value: unknown) => string[]} normalizeTags
  */
@@ -195,37 +204,47 @@ function writePendingSubmission(
   proposedId,
   creatorUuid,
   creatorName,
-  building,
+  definition,
   prefabBuffer,
   iconBuffer,
   version,
   blockIdVersion,
+  definitionKind,
   normalizeDescription,
   normalizeTags,
 ) {
   const dir = storage.submissionDir(submissionId, "pending");
   fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(path.join(dir, "building.json"), JSON.stringify(building, null, 2));
+  const definitionName = definitionKind === "prop" ? "prop.json" : "building.json";
+  fs.writeFileSync(path.join(dir, definitionName), JSON.stringify(definition, null, 2));
   fs.writeFileSync(path.join(dir, "prefab.prefab.json"), prefabBuffer);
   if (iconBuffer) {
     fs.writeFileSync(path.join(dir, "icon.png"), iconBuffer);
   }
-  const requiredMods = normalizeRequiredMods(building.requiredMods);
-  building.requiredMods = requiredMods;
+  const requiredMods = normalizeRequiredMods(definition.requiredMods);
+  definition.requiredMods = requiredMods;
+  const contentType = resolveManifestContentType(definitionKind === "prop" ? "prop" : "building", {
+    id: proposedId,
+    wallSegment: Boolean(definition.wallSegment),
+  });
   const meta = {
     submissionId,
     proposedId,
-    displayName: building.displayName,
-    description: normalizeDescription(building.description),
+    contentType,
+    displayName: definition.displayName,
+    description: normalizeDescription(definition.description),
     creatorUuid,
     creatorName,
-    styleId: building.styleId || "misc",
-    tags: normalizeTags(building.tags),
+    styleId: definition.styleId || "misc",
+    tags: normalizeTags(definition.tags),
     blockIdVersion,
     status: "pending",
     submittedAt: new Date().toISOString(),
     version,
   };
+  if (Boolean(definition.wallSegment)) {
+    meta.wallSegment = true;
+  }
   if (requiredMods.length) {
     meta.requiredMods = requiredMods;
   }
@@ -236,43 +255,54 @@ function writePendingSubmission(
 /**
  * @param {import("./storage.js").Storage} storage
  * @param {string} submissionId
- * @param {Record<string, unknown>} building
+ * @param {Record<string, unknown>} definition
  * @param {Buffer} prefabBuffer
  * @param {Buffer | null | undefined} iconBuffer
  * @param {string} version
  * @param {number} blockIdVersion
+ * @param {"prop"|"building"} definitionKind
  * @param {(value: unknown) => string} normalizeDescription
  * @param {(value: unknown) => string[]} normalizeTags
  */
 function replacePendingSubmission(
   storage,
   submissionId,
-  building,
+  definition,
   prefabBuffer,
   iconBuffer,
   version,
   blockIdVersion,
+  definitionKind,
   normalizeDescription,
   normalizeTags,
 ) {
   const dir = storage.submissionDir(submissionId, "pending");
-  fs.writeFileSync(path.join(dir, "building.json"), JSON.stringify(building, null, 2));
+  const definitionName = definitionKind === "prop" ? "prop.json" : "building.json";
+  fs.writeFileSync(path.join(dir, definitionName), JSON.stringify(definition, null, 2));
   fs.writeFileSync(path.join(dir, "prefab.prefab.json"), prefabBuffer);
-  const iconPath = path.join(dir, "icon.png");
   if (iconBuffer) {
-    fs.writeFileSync(iconPath, iconBuffer);
+    fs.writeFileSync(path.join(dir, "icon.png"), iconBuffer);
   }
   const metaPath = path.join(dir, "meta.json");
   const meta = fs.existsSync(metaPath) ? JSON.parse(fs.readFileSync(metaPath, "utf8")) : {};
-  const requiredMods = normalizeRequiredMods(building.requiredMods);
-  building.requiredMods = requiredMods;
-  meta.displayName = building.displayName;
-  meta.description = normalizeDescription(building.description);
-  meta.styleId = building.styleId || "misc";
-  meta.tags = normalizeTags(building.tags);
+  const requiredMods = normalizeRequiredMods(definition.requiredMods);
+  definition.requiredMods = requiredMods;
+  meta.displayName = definition.displayName;
+  meta.description = normalizeDescription(definition.description);
+  meta.styleId = definition.styleId || "misc";
+  meta.tags = normalizeTags(definition.tags);
   meta.blockIdVersion = blockIdVersion;
   meta.version = version;
   meta.submittedAt = new Date().toISOString();
+  meta.contentType = resolveManifestContentType(definitionKind === "prop" ? "prop" : "building", {
+    id: meta.proposedId,
+    wallSegment: Boolean(definition.wallSegment),
+  });
+  if (Boolean(definition.wallSegment)) {
+    meta.wallSegment = true;
+  } else {
+    delete meta.wallSegment;
+  }
   if (requiredMods.length) {
     meta.requiredMods = requiredMods;
   } else {
@@ -288,9 +318,11 @@ function replacePendingSubmission(
  * @param {string} params.buildingId
  * @param {string} params.creatorUuid
  * @param {string} params.creatorName
- * @param {Express.Multer.File} params.buildingFile
+ * @param {Express.Multer.File | undefined} params.buildingFile
+ * @param {Express.Multer.File | undefined} params.propFile
  * @param {Express.Multer.File} params.prefabFile
  * @param {Express.Multer.File | undefined} params.iconFile
+ * @param {unknown} [params.contentTypeField]
  * @param {(metaOrEntry: object, profileUuid: string) => boolean} params.isOwnedByProfile
  * @param {(value: unknown) => string} params.normalizeDescription
  * @param {(value: unknown) => string[]} params.normalizeTags
@@ -301,13 +333,15 @@ export function updateOwnedSubmission({
   creatorUuid,
   creatorName,
   buildingFile,
+  propFile,
   prefabFile,
   iconFile,
+  contentTypeField,
   isOwnedByProfile,
   normalizeDescription,
   normalizeTags,
 }) {
-  const id = normalizeCommunityId(buildingId);
+  const id = normalizeCatalogId(buildingId);
   if (!id) {
     return { status: 400, body: { error: "invalid_id" } };
   }
@@ -316,25 +350,44 @@ export function updateOwnedSubmission({
   }
 
   try {
-    assertSize(buildingFile.size, MAX_BUILDING_JSON_BYTES, "building");
+    const definitionFile = propFile || buildingFile;
+    if (!definitionFile) {
+      return { status: 400, body: { error: "definition_and_prefab_required" } };
+    }
+    assertSize(definitionFile.size, MAX_BUILDING_JSON_BYTES, propFile ? "prop" : "building");
     assertSize(prefabFile.size, MAX_PREFAB_BYTES, "prefab");
     if (iconFile) {
       assertSize(iconFile.size, MAX_ICON_BYTES, "icon");
     }
 
-    const building = JSON.parse(buildingFile.buffer.toString("utf8"));
+    const definition = JSON.parse(definitionFile.buffer.toString("utf8"));
     const blockIdVersion = readPrefabBlockIdVersion(prefabFile.buffer);
-    const validationError = validateSubmissionBuilding(building, blockIdVersion);
+    const submissionKind = detectSubmissionContentType({
+      propField: Boolean(propFile),
+      buildingField: Boolean(buildingFile),
+      contentTypeField,
+      definition,
+    });
+    const isProp = submissionKind === "prop";
+    if (isProp !== isPropCatalogId(id)) {
+      return { status: 400, body: { error: "content_type_mismatch" } };
+    }
+    const validationError = isProp
+      ? validateSubmissionProp(definition, blockIdVersion)
+      : validateSubmissionBuilding(definition, blockIdVersion);
     if (validationError) {
       return { status: 400, body: { error: validationError } };
     }
 
-    const assignedId = assignCommunityCatalogId(building, creatorUuid);
+    const assignedId = isProp
+      ? assignCommunityPropId(definition, creatorUuid)
+      : assignCommunityCatalogId(definition, creatorUuid);
     if (assignedId !== id) {
       return { status: 400, body: { error: "building_id_mismatch" } };
     }
-    const requiredMods = normalizeRequiredMods(building.requiredMods);
-    building.requiredMods = requiredMods;
+    const requiredMods = normalizeRequiredMods(definition.requiredMods);
+    definition.requiredMods = requiredMods;
+    const definitionKind = isProp ? "prop" : "building";
 
     const nextVersion = nextVersionForBuilding(storage, id);
     const manifest = storage.readManifest();
@@ -358,11 +411,12 @@ export function updateOwnedSubmission({
         id,
         creatorUuid,
         creatorName,
-        building,
+        definition,
         prefabFile.buffer,
         iconFile?.buffer,
         nextVersion,
         blockIdVersion,
+        definitionKind,
         normalizeDescription,
         normalizeTags,
       );
@@ -371,6 +425,7 @@ export function updateOwnedSubmission({
         body: {
           submissionId,
           proposedId: id,
+          contentType: meta.contentType,
           status: "pending",
           version: meta.version,
           action: "created_pending",
@@ -386,11 +441,12 @@ export function updateOwnedSubmission({
       const meta = replacePendingSubmission(
         storage,
         latest.submissionId,
-        building,
+        definition,
         prefabFile.buffer,
         iconFile?.buffer,
         nextVersion,
         blockIdVersion,
+        definitionKind,
         normalizeDescription,
         normalizeTags,
       );
@@ -399,6 +455,7 @@ export function updateOwnedSubmission({
         body: {
           submissionId: latest.submissionId,
           proposedId: id,
+          contentType: meta.contentType,
           status: "pending",
           version: meta.version,
           action: "replaced_pending",
@@ -414,11 +471,12 @@ export function updateOwnedSubmission({
         id,
         creatorUuid,
         creatorName,
-        building,
+        definition,
         prefabFile.buffer,
         iconFile?.buffer,
         nextVersion,
         blockIdVersion,
+        definitionKind,
         normalizeDescription,
         normalizeTags,
       );
@@ -427,6 +485,7 @@ export function updateOwnedSubmission({
         body: {
           submissionId,
           proposedId: id,
+          contentType: meta.contentType,
           status: "pending",
           version: meta.version,
           action: "created_pending",

@@ -163,6 +163,12 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nullable
     private PlotTokenIconPacketAdapter plotTokenIconPacketAdapter;
 
+    @Nullable
+    private com.hexvane.aetherhaven.prop.PropVirtualItemRegistry propVirtualItemRegistry;
+
+    @Nullable
+    private com.hexvane.aetherhaven.prop.PropIconPacketAdapter propIconPacketAdapter;
+
     private ShopPriceCatalog shopPriceCatalog = ShopPriceCatalog.empty();
 
     private final CommunityCatalogService communityCatalogService = new CommunityCatalogService(this);
@@ -615,6 +621,17 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.plotTokenIconPacketAdapter.register();
     }
 
+    public void registerPropIconPackets() {
+        this.propVirtualItemRegistry = new com.hexvane.aetherhaven.prop.PropVirtualItemRegistry();
+        this.propIconPacketAdapter = new com.hexvane.aetherhaven.prop.PropIconPacketAdapter(this.propVirtualItemRegistry);
+        this.propIconPacketAdapter.register();
+    }
+
+    @Nullable
+    public com.hexvane.aetherhaven.prop.PropIconPacketAdapter getPropIconPacketAdapter() {
+        return propIconPacketAdapter;
+    }
+
     public void registerRtsClientMovementPacketAdapter() {
         this.rtsClientMovementPacketAdapter = new RtsClientMovementPacketAdapter();
         this.rtsClientMovementPacketAdapter.register();
@@ -640,6 +657,10 @@ public final class AetherhavenPlugin extends JavaPlugin {
             this.plotTokenIconPacketAdapter.deregister();
             this.plotTokenIconPacketAdapter = null;
         }
+        if (this.propIconPacketAdapter != null) {
+            this.propIconPacketAdapter.deregister();
+            this.propIconPacketAdapter = null;
+        }
         if (this.rtsClientMovementPacketAdapter != null) {
             this.rtsClientMovementPacketAdapter.deregister();
             this.rtsClientMovementPacketAdapter = null;
@@ -650,6 +671,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         }
         this.jewelryVirtualItemRegistry = null;
         this.plotTokenVirtualItemRegistry = null;
+        this.propVirtualItemRegistry = null;
         instance = null;
         AetherhavenWorldRegistries.saveAll();
         TownSaveCoordinator.shutdown();

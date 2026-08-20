@@ -13,6 +13,8 @@ public enum PlotBuildingKind {
     FESTIVAL,
     /** A whole wall style: the straight run, the gate, and the three towers, placed later with the wall wand. */
     WALL,
+    /** A small decoration prop placed with the prop item, not a plot. */
+    PROP,
     HOME,
     WORK,
     AMENITY,
@@ -23,16 +25,16 @@ public enum PlotBuildingKind {
     GUILD_HALL,
     TOURIST_PORTAL;
 
-    private static final List<PlotBuildingKind> PLAYER_KINDS = List.of(DECORATION, VARIANT, FESTIVAL, WALL);
+    private static final List<PlotBuildingKind> PLAYER_KINDS = List.of(DECORATION, VARIANT, FESTIVAL, WALL, PROP);
 
-    /** Decoration, variant, festival, and wall — the building types intended for player-authored plots. */
+    /** Decorations, variant, festival, wall, and prop — types intended for player authoring. */
     public boolean isPlayerKind() {
-        return this == DECORATION || this == VARIANT || this == FESTIVAL || this == WALL;
+        return this == DECORATION || this == VARIANT || this == FESTIVAL || this == WALL || this == PROP;
     }
 
     /** Kinds that own the whole build and cannot be combined with another kind. */
     public boolean isExclusiveKind() {
-        return this == DECORATION || this == FESTIVAL || this == WALL;
+        return this == DECORATION || this == FESTIVAL || this == WALL || this == PROP;
     }
 
     @Nonnull

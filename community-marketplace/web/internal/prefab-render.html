@@ -49,9 +49,13 @@
       const prefabUrl = params.get("prefabUrl");
       // Default interactive for local debugging; ?interactive=0 keeps screenshot mode.
       const interactive = params.get("interactive") !== "0";
+      const iconMode = params.get("mode") === "icon";
       const statusEl = document.getElementById("status");
       if (!interactive && statusEl) {
         statusEl.style.display = "none";
+      }
+      if (iconMode) {
+        document.body.style.background = "transparent";
       }
 
       async function main() {
@@ -62,6 +66,8 @@
           interactive,
           assetBase: "/hytale-assets",
           fullscreenButton: false,
+          hideGrid: iconMode,
+          transparentBackground: iconMode,
         });
         await viewer.loadPrefabUrl(prefabUrl, {
           onProgress: (done, total) => {

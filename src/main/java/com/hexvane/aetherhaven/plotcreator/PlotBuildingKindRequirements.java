@@ -39,7 +39,7 @@ public final class PlotBuildingKindRequirements {
      */
     @Nonnull
     public static List<SubstepRequirement> forDraft(@Nonnull PlotCreatorDraft draft, @Nullable AetherhavenPlugin plugin) {
-        if (draft.isDecorationOnly() || draft.isWallMode()) {
+        if (draft.isDecorationOnly() || draft.isWallMode() || draft.isPropMode()) {
             return List.of();
         }
         if (draft.isImportantSpotsConfirmed() && !draft.getSelectedSpots().isEmpty()) {
@@ -63,7 +63,7 @@ public final class PlotBuildingKindRequirements {
         @Nonnull PlotCreatorDraft draft,
         @Nullable AetherhavenPlugin plugin
     ) {
-        if (draft.isDecorationOnly() || draft.isWallMode()) {
+        if (draft.isDecorationOnly() || draft.isWallMode() || draft.isPropMode()) {
             return List.of();
         }
         if (draft.isFestivalMode()) {
@@ -276,7 +276,7 @@ public final class PlotBuildingKindRequirements {
                     roles.add(TownVillagerBinding.KIND_GUILD_MASTER);
                     roles.add(TownVillagerBinding.KIND_BARD);
                 }
-                case WORK, SHOP, PLAYER_SHOP, HOME, AMENITY, TOURIST_PORTAL, DECORATION, VARIANT, FESTIVAL -> {}
+                case WORK, SHOP, PLAYER_SHOP, HOME, AMENITY, TOURIST_PORTAL, DECORATION, VARIANT, FESTIVAL, WALL, PROP -> {}
             }
         }
         return new ArrayList<>(roles);
@@ -301,7 +301,7 @@ public final class PlotBuildingKindRequirements {
         @Nullable AetherhavenPlugin plugin
     ) {
         return switch (kind) {
-            case DECORATION, VARIANT, WALL -> List.of();
+            case DECORATION, VARIANT, WALL, PROP -> List.of();
             case FESTIVAL -> festivalSubsteps(draft, plugin);
             case HOME -> List.of(
                 new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1),

@@ -134,6 +134,12 @@ public final class BuildingEditorJsonWriter {
         if (draft.isDecorationOnly()) {
             root.put("excludeFromTownJournal", true);
         }
+        Map<String, Object> boundsLocal = PlotCreatorJsonWriter.boundsLocalMap(draft);
+        if (boundsLocal != null) {
+            root.put("boundsLocal", boundsLocal);
+        } else {
+            root.remove("boundsLocal");
+        }
         root.remove("assemblyPrefabSectionsPerAxis");
         // Never rewrite the original token id if the snapshot had one.
         if (!originalSnapshot.containsKey("plotTokenItemId")) {

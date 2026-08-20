@@ -6,7 +6,9 @@ import com.hexvane.aetherhaven.prop.PropBreakProtection;
 import com.hexvane.aetherhaven.prop.PropCatalog;
 import com.hexvane.aetherhaven.prop.PropConstants;
 import com.hexvane.aetherhaven.prop.PropDefinition;
+import com.hexvane.aetherhaven.prop.PropIconRenderClient;
 import com.hexvane.aetherhaven.prop.PropItemMetadata;
+import com.hexvane.aetherhaven.prop.PropPaths;
 import com.hexvane.aetherhaven.town.TownPlayerLookup;
 import com.hexvane.aetherhaven.ui.PropPrefabBrowserPage;
 import com.hypixel.hytale.component.Ref;
@@ -38,6 +40,7 @@ public final class AetherhavenPropCommand extends AbstractCommandCollection {
         this.addSubCommand(new WandCommand());
         this.addSubCommand(new CreateCommand());
         this.addSubCommand(new BreakCommand());
+        this.addSubCommand(new GenerateIconCommand());
     }
 
     private static final class GiveCommand extends AbstractPlayerCommand {
@@ -190,6 +193,51 @@ public final class AetherhavenPropCommand extends AbstractCommandCollection {
             }
             boolean allowed = PropBreakProtection.toggleBreakAllowed(uuid);
             playerRef.sendMessage(Message.translation(allowed ? LANG + "break.enabled" : LANG + "break.disabled"));
+        }
+    }
+
+    private static final class GenerateIconCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final RequiredArg<String> propIdArg =
+            this.withRequiredArg(
+                "propId",
+                "aetherhaven_commands_help.commands.aetherhaven.prop.generateicon.propId.desc",
+                AetherhavenArgTypes.PROP_ID
+            );
+
+        GenerateIconCommand() {
+            super("generateicon", "aetherhaven_commands_help.commands.aetherhaven.prop.generateicon.desc");
+        }
+
+        @Override
+        protected void execute(
+            @Nonnull CommandContext context,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull World world
+        ) {
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin == null) {
+                return;
+            }
+            String propId = context.get(propIdArg).trim();
+            PropIconRenderClient.Result result = PropIconRenderClient.generateAndWire(plugin, propId);
+            switch (result) {
+                case SUCCESS ->
+                    playerRef.sendMessage(
+                        Message.translation(LANG + "generateicon.ok")
+                            .param("id", propId)
+                            .param("path", PropPaths.iconAssetPath(propId))
+                    );
+                case DISABLED -> playerRef.sendMessage(Message.translation(LANG + "generateicon.disabled"));
+                case UNKNOWN_PROP -> playerRef.sendMessage(Message.translation(LANG + "unknown").param("id", propId));
+                case PREFAB_MISSING ->
+                    playerRef.sendMessage(Message.translation(LANG + "generateicon.prefabMissing").param("id", propId));
+                case RENDER_FAILED ->
+                    playerRef.sendMessage(Message.translation(LANG + "generateicon.renderFailed").param("id", propId));
+                case IO_ERROR -> playerRef.sendMessage(Message.translation(LANG + "generateicon.ioError").param("id", propId));
+            }
         }
     }
 }

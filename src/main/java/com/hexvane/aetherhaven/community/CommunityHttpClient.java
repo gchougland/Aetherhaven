@@ -156,6 +156,44 @@ public final class CommunityHttpClient {
         return sendMultipart(url, "POST", headers, boundary, body);
     }
 
+    /**
+     * POST multipart and return raw response bytes (for binary endpoints such as prop icon render).
+     * On failure returns null.
+     */
+    @Nullable
+    public static byte[] postMultipartBytes(
+        @Nonnull String url,
+        @Nonnull Map<String, String> headers,
+        @Nonnull String boundary,
+        @Nonnull byte[] body
+    ) {
+        try {
+            HttpURLConnection http = open(url, "POST", headers);
+            http.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+            http.setFixedLengthStreamingMode(body.length);
+            try (OutputStream os = http.getOutputStream()) {
+                os.write(body);
+            }
+            int code = http.getResponseCode();
+            InputStream in = code >= 200 && code < 300 ? http.getInputStream() : http.getErrorStream();
+            byte[] response = in != null ? readAll(in) : new byte[0];
+            http.disconnect();
+            if (code < 200 || code >= 300) {
+                LOGGER.atWarning().log(
+                    "Community POST %s failed: HTTP %s %s",
+                    url,
+                    code,
+                    new String(response, StandardCharsets.UTF_8)
+                );
+                return null;
+            }
+            return response;
+        } catch (Exception e) {
+            LOGGER.atWarning().withCause(e).log("Community POST %s failed", url);
+            return null;
+        }
+    }
+
     @Nonnull
     public static HttpResult putMultipartResult(
         @Nonnull String url,

@@ -576,6 +576,38 @@ public final class PlotCreatorInteractions {
             playerRef.sendMessage(Message.translation(MSG + ".hint.prefabSaved").param("file", fileName));
             return;
         }
+        if (d.isPropMode()) {
+            String propId = d.getConstructionId();
+            if (propId == null || propId.isBlank()) {
+                playerRef.sendMessage(Message.translation(MSG + ".error.needIdentity"));
+                return;
+            }
+            String prefabKey = com.hexvane.aetherhaven.prop.PropPaths.prefabPathKeyFromPropId(propId);
+            fileName = com.hexvane.aetherhaven.prop.PropPaths.prefabFileNameFromKey(prefabKey);
+            out = com.hexvane.aetherhaven.prop.PropPaths.propPrefabFile(plugin.getDataDirectory(), fileName);
+            boolean overwrite = allowPrefabOverwrite(d, prefabKey);
+            if (!overwrite && java.nio.file.Files.isRegularFile(out)) {
+                playerRef.sendMessage(Message.translation(MSG + ".error.prefabAlreadyExists"));
+                return;
+            }
+            // Props never use the isometric icon exporter; icons come from the marketplace viewer.
+            PlotCreatorPrefabExporter.ExportResult propResult =
+                PlotCreatorPrefabExporter.export(session.getWorld(), d, out, overwrite, false);
+            if (propResult == PlotCreatorPrefabExporter.ExportResult.ALREADY_EXISTS) {
+                playerRef.sendMessage(Message.translation(MSG + ".error.prefabAlreadyExists"));
+                return;
+            }
+            if (propResult != PlotCreatorPrefabExporter.ExportResult.SUCCESS) {
+                playerRef.sendMessage(Message.translation(MSG + ".error.prefabExport"));
+                return;
+            }
+            d.setSessionExportedPrefabPath(prefabKey);
+            d.setPrefabPath(prefabKey);
+            d.setPrefabFileName(fileName);
+            com.hexvane.aetherhaven.prefab.PrefabResolveUtil.resolvePrefabBuffer(prefabKey);
+            playerRef.sendMessage(Message.translation(MSG + ".hint.prefabSaved").param("file", fileName));
+            return;
+        }
         if (d.isBuildingEditorMode()) {
             String locked = d.getLockedPrefabPathKey() != null ? d.getLockedPrefabPathKey() : d.getPrefabPath();
             fileName = BuildingEditorSavePaths.prefabFileName(locked);

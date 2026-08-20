@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.placement;
 
+import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.festival.FestivalPrefabSize;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hypixel.hytale.math.util.FastRandom;
@@ -31,11 +32,15 @@ public final class PlotFootprintUtil {
         @Nonnull Vector3i origin,
         @Nonnull Rotation yaw,
         @Nonnull IPrefabBuffer buffer,
-        @Nullable com.hexvane.aetherhaven.construction.ConstructionDefinition def
+        @Nullable ConstructionDefinition def
     ) {
         if (def != null) {
             if (FestivalPrefabSize.usesReservedFootprint(def)) {
                 return FestivalPrefabSize.footprintAt(origin, yaw);
+            }
+            PlotFootprintRecord authored = footprintFromBoundsLocal(origin, yaw, def);
+            if (authored != null) {
+                return authored;
             }
             return computeFootprint(origin, yaw, buffer, (String) null);
         }
@@ -86,6 +91,56 @@ public final class PlotFootprintUtil {
             return new PlotFootprintRecord(origin.x, origin.y, origin.z, origin.x, origin.y, origin.z);
         }
         return new PlotFootprintRecord(b[0], b[1], b[2], b[3], b[4], b[5]);
+    }
+
+    /**
+     * World AABB of an authored {@code boundsLocal} box at {@code origin} with {@code yaw}. Null when the definition
+     * has no stored bounds.
+     */
+    @Nullable
+    public static PlotFootprintRecord footprintFromBoundsLocal(
+        @Nonnull Vector3i origin,
+        @Nonnull Rotation yaw,
+        @Nonnull ConstructionDefinition def
+    ) {
+        Vector3i localMin = def.getBoundsLocalMin();
+        Vector3i localMax = def.getBoundsLocalMax();
+        if (localMin == null || localMax == null) {
+            return null;
+        }
+        return footprintFromLocalBox(origin, yaw, localMin, localMax);
+    }
+
+    /** World AABB of an inclusive prefab-local box at {@code origin} with placement {@code yaw}. */
+    @Nonnull
+    public static PlotFootprintRecord footprintFromLocalBox(
+        @Nonnull Vector3i origin,
+        @Nonnull Rotation yaw,
+        @Nonnull Vector3i localMin,
+        @Nonnull Vector3i localMax
+    ) {
+        PrefabRotation rotation = PrefabRotation.fromRotation(yaw);
+        int minX = Integer.MAX_VALUE;
+        int minY = Integer.MAX_VALUE;
+        int minZ = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE;
+        int maxY = Integer.MIN_VALUE;
+        int maxZ = Integer.MIN_VALUE;
+        for (int x : new int[] {localMin.x, localMax.x}) {
+            for (int y : new int[] {localMin.y, localMax.y}) {
+                for (int z : new int[] {localMin.z, localMax.z}) {
+                    Vector3i corner = new Vector3i(x, y, z);
+                    rotation.rotate(corner);
+                    minX = Math.min(minX, origin.x + corner.x);
+                    minY = Math.min(minY, origin.y + corner.y);
+                    minZ = Math.min(minZ, origin.z + corner.z);
+                    maxX = Math.max(maxX, origin.x + corner.x);
+                    maxY = Math.max(maxY, origin.y + corner.y);
+                    maxZ = Math.max(maxZ, origin.z + corner.z);
+                }
+            }
+        }
+        return new PlotFootprintRecord(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
     public static boolean hasSolidVoxels(@Nonnull Rotation yaw, @Nonnull IPrefabBuffer buffer) {

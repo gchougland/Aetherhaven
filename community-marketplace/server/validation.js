@@ -8,6 +8,9 @@ export const MAX_SCREENSHOT_BYTES = 5 * 1024 * 1024;
 export const MAX_SCREENSHOTS_PER_OWNER = 6;
 export const ALLOWED_SCREENSHOT_MIME = Object.freeze(["image/jpeg", "image/png", "image/webp"]);
 export const COMMUNITY_ID_PREFIX = "plot_community_";
+export const PROP_COMMUNITY_ID_PREFIX = "prop_community_";
+
+/** @typedef {"building"|"wall"|"prop"} CatalogContentType */
 
 const SCREENSHOT_EXT_BY_MIME = {
   "image/jpeg": "jpg",
@@ -36,6 +39,111 @@ export function formatScreenshotMaxSizeLabel() {
 }
 
 const ID_PATTERN = /^plot_community_[a-z0-9_]{8,80}$/;
+const PROP_ID_PATTERN = /^prop_community_[a-z0-9_]{8,80}$/;
+
+/**
+ * @param {string} raw
+ * @returns {boolean}
+ */
+export function isPropCatalogId(raw) {
+  const id = String(raw || "").trim().toLowerCase();
+  return PROP_ID_PATTERN.test(id);
+}
+
+/**
+ * Accepts plot_community_* or prop_community_* ids.
+ * @param {string} raw
+ */
+export function normalizeCatalogId(raw) {
+  const plot = normalizeCommunityId(raw);
+  if (plot) {
+    return plot;
+  }
+  const id = String(raw || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_]/g, "_")
+    .replace(/_+/g, "_");
+  if (!id.startsWith(PROP_COMMUNITY_ID_PREFIX)) {
+    return null;
+  }
+  return PROP_ID_PATTERN.test(id) ? id : null;
+}
+
+/**
+ * @param {string} creatorUuid
+ * @param {string} slug
+ */
+export function proposeCommunityPropId(creatorUuid, slug) {
+  const short = String(creatorUuid || "")
+    .replace(/-/g, "")
+    .slice(0, 8)
+    .toLowerCase();
+  const cleanSlug = String(slug || "prop")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .slice(0, 40);
+  const id = `${PROP_COMMUNITY_ID_PREFIX}${short}_${cleanSlug || "prop"}`;
+  return PROP_ID_PATTERN.test(id) ? id : `${PROP_COMMUNITY_ID_PREFIX}${short}_prop`;
+}
+
+/**
+ * @param {{
+ *   propField?: boolean,
+ *   buildingField?: boolean,
+ *   contentTypeField?: unknown,
+ *   definition?: Record<string, unknown> | null,
+ * }} hints
+ * @returns {CatalogContentType}
+ */
+export function detectSubmissionContentType(hints = {}) {
+  const contentTypeRaw = String(hints.contentTypeField || "")
+    .trim()
+    .toLowerCase();
+  if (contentTypeRaw === "prop") {
+    return "prop";
+  }
+  if (contentTypeRaw === "wall" || contentTypeRaw === "building") {
+    return contentTypeRaw;
+  }
+  if (hints.propField && !hints.buildingField) {
+    return "prop";
+  }
+  const defId = typeof hints.definition?.id === "string" ? hints.definition.id.trim().toLowerCase() : "";
+  if (defId.startsWith(PROP_COMMUNITY_ID_PREFIX)) {
+    return "prop";
+  }
+  if (Boolean(hints.definition?.wallSegment)) {
+    return "wall";
+  }
+  return "building";
+}
+
+/**
+ * @param {CatalogContentType | string | undefined} contentType
+ * @param {{ wallSegment?: boolean, id?: string }} [meta]
+ * @returns {CatalogContentType}
+ */
+export function resolveManifestContentType(contentType, meta = {}) {
+  const raw = String(contentType || "")
+    .trim()
+    .toLowerCase();
+  if (raw === "prop" || raw === "wall" || raw === "building") {
+    return raw;
+  }
+  const id = String(meta.id || "")
+    .trim()
+    .toLowerCase();
+  if (id.startsWith(PROP_COMMUNITY_ID_PREFIX)) {
+    return "prop";
+  }
+  if (Boolean(meta.wallSegment)) {
+    return "wall";
+  }
+  return "building";
+}
 
 /**
  * @param {string} raw
@@ -78,6 +186,83 @@ export function proposeCommunityId(creatorUuid, slug) {
  * @param {unknown} building
  * @param {number} prefabBlockIdVersion
  */
+/**
+ * Validates an uploaded prop before a community catalog id is assigned.
+ *
+ * @param {unknown} prop
+ * @param {number} prefabBlockIdVersion
+ */
+export function validateSubmissionProp(prop, prefabBlockIdVersion) {
+  if (!prop || typeof prop !== "object") {
+    return "prop_json_invalid";
+  }
+  const p = /** @type {Record<string, unknown>} */ (prop);
+  if (typeof p.displayName !== "string" || !p.displayName.trim()) {
+    return "display_name_missing";
+  }
+  if (typeof p.prefabPath !== "string" || !p.prefabPath.trim()) {
+    return "prefab_path_missing";
+  }
+  if (prefabBlockIdVersion < 1) {
+    return "block_id_version_missing";
+  }
+  const requiredMods = p.requiredMods === undefined ? [] : p.requiredMods;
+  if (!Array.isArray(requiredMods)) {
+    return "required_mods_invalid";
+  }
+  if (requiredMods.length > MAX_REQUIRED_MODS) {
+    return "required_mods_invalid";
+  }
+  const normalizedRequiredMods = normalizeRequiredMods(requiredMods);
+  if (normalizedRequiredMods.length !== requiredMods.length) {
+    return "required_mods_invalid";
+  }
+  return null;
+}
+
+/**
+ * Validates a prop that will be published under a community catalog id.
+ *
+ * @param {unknown} prop
+ * @param {number} prefabBlockIdVersion
+ */
+export function validatePropDefinition(prop, prefabBlockIdVersion) {
+  const submissionError = validateSubmissionProp(prop, prefabBlockIdVersion);
+  if (submissionError) {
+    return submissionError;
+  }
+  const p = /** @type {Record<string, unknown>} */ (prop);
+  const id = typeof p.id === "string" ? p.id.trim() : "";
+  if (!normalizeCatalogId(id) || !isPropCatalogId(id)) {
+    return "id_invalid";
+  }
+  return null;
+}
+
+/**
+ * @param {Record<string, unknown>} prop
+ * @param {string} creatorUuid
+ */
+export function assignCommunityPropId(prop, creatorUuid) {
+  const existing =
+    typeof prop.id === "string" && isPropCatalogId(prop.id) ? normalizeCatalogId(prop.id) : null;
+  if (existing) {
+    prop.id = existing;
+    prop.prefabPath = `${existing}.prefab.json`;
+    return existing;
+  }
+  const displayName = typeof prop.displayName === "string" ? prop.displayName.trim() : "";
+  const localId = typeof prop.id === "string" ? prop.id.trim() : "";
+  const slugSource =
+    displayName ||
+    localId.replace(/^prop_/, "").replace(/[^a-z0-9]+/gi, "_").replace(/^_+|_+$/g, "") ||
+    "prop";
+  const id = proposeCommunityPropId(creatorUuid, slugSource);
+  prop.id = id;
+  prop.prefabPath = `${id}.prefab.json`;
+  return id;
+}
+
 export function validateSubmissionBuilding(building, prefabBlockIdVersion) {
   if (!building || typeof building !== "object") {
     return "building_json_invalid";

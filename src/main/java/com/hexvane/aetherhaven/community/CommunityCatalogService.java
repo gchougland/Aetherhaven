@@ -42,6 +42,15 @@ import javax.annotation.Nullable;
 
 /** Fetches and caches the remote community manifest (metadata + icon thumbnails only). */
 public final class CommunityCatalogService {
+    /** Which community marketplace slice to show in the plot crafting bench. */
+    public enum CommunityBrowseKind {
+        /** Regular buildings and festival looks. */
+        BUILDINGS,
+        /** Wall style groups. */
+        WALL_STYLES,
+        /** Download only props. */
+        PROPS
+    }
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final Gson GSON = new GsonBuilder().create();
     private static final int ICON_DOWNLOAD_PARALLELISM = 4;
@@ -126,7 +135,12 @@ public final class CommunityCatalogService {
         if (CommunityPaths.isInstalled(dataDir, constructionId)) {
             return true;
         }
-        return Files.isRegularFile(CustomFestivalPaths.festivalFile(dataDir, constructionId));
+        if (Files.isRegularFile(CustomFestivalPaths.festivalFile(dataDir, constructionId))) {
+            return true;
+        }
+        return Files.isRegularFile(
+            com.hexvane.aetherhaven.prop.PropPaths.propFileUnderDataDir(dataDir, constructionId)
+        );
     }
 
     /** True when building JSON exists and any required manifest icon is on disk and registered. */
@@ -460,6 +474,17 @@ public final class CommunityCatalogService {
         @Nonnull CommunityCatalogSort sort,
         boolean includeMissingMods
     ) {
+        return buildGroupEntries(activeStyleFilters, activeTypeFilters, sort, includeMissingMods, CommunityBrowseKind.BUILDINGS);
+    }
+
+    @Nonnull
+    public List<PlotCraftingCatalog.GroupEntry> buildGroupEntries(
+        @Nonnull Set<String> activeStyleFilters,
+        @Nonnull Set<String> activeTypeFilters,
+        @Nonnull CommunityCatalogSort sort,
+        boolean includeMissingMods,
+        @Nonnull CommunityBrowseKind browseKind
+    ) {
         ObjectArrayList<PlotCraftingCatalog.GroupEntry> groups = new ObjectArrayList<>();
         ObjectArrayList<CommunityManifestEntry> entries = new ObjectArrayList<>(cachedEntries.get());
         entries.sort(comparatorFor(sort));
@@ -467,6 +492,9 @@ public final class CommunityCatalogService {
         LinkedHashMap<String, List<CommunityManifestEntry>> wallStyles = new LinkedHashMap<>();
         LinkedHashMap<String, List<CommunityManifestEntry>> festivalLooks = new LinkedHashMap<>();
         for (CommunityManifestEntry entry : entries) {
+            if (!matchesBrowseKind(entry, browseKind)) {
+                continue;
+            }
             if (!PlotBuildingStyles.matchesFilter(entry.getStyleId(), activeStyleFilters)) {
                 continue;
             }
@@ -513,6 +541,14 @@ public final class CommunityCatalogService {
         }
         groups.addAll(CommunityFestivalLookGrouping.toGroups(festivalLooks, baseNames));
         return groups;
+    }
+
+    public static boolean matchesBrowseKind(@Nonnull CommunityManifestEntry entry, @Nonnull CommunityBrowseKind browseKind) {
+        return switch (browseKind) {
+            case BUILDINGS -> !entry.isWallSegment() && !entry.isProp();
+            case WALL_STYLES -> entry.isWallSegment();
+            case PROPS -> entry.isProp();
+        };
     }
 
     @Nonnull

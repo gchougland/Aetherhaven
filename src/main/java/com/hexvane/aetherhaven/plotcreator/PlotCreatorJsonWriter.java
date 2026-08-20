@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector3i;
 
 public final class PlotCreatorJsonWriter {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -116,8 +117,30 @@ public final class PlotCreatorJsonWriter {
             root.put("excludeFromTownJournal", true);
             root.put("decorationPlot", true);
         }
+        Map<String, Object> boundsLocal = boundsLocalMap(draft);
+        if (boundsLocal != null) {
+            root.put("boundsLocal", boundsLocal);
+        }
         Files.createDirectories(outputFile.getParent());
         Files.writeString(outputFile, GSON.toJson(root), StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Inclusive staff-drawn box relative to the plot-sign / prefab anchor. Null when the draft has no corners or
+     * anchor yet.
+     */
+    @Nullable
+    static Map<String, Object> boundsLocalMap(@Nonnull PlotCreatorDraft draft) {
+        Vector3i anchor = draft.getPlotAnchor();
+        if (anchor == null || draft.getCornerFirst() == null || draft.getCornerSecond() == null) {
+            return null;
+        }
+        Vector3i min = draft.boundsMin();
+        Vector3i max = draft.boundsMax();
+        Map<String, Object> bounds = new LinkedHashMap<>();
+        bounds.put("min", List.of(min.x - anchor.x, min.y - anchor.y, min.z - anchor.z));
+        bounds.put("max", List.of(max.x - anchor.x, max.y - anchor.y, max.z - anchor.z));
+        return bounds;
     }
 
     @Nonnull

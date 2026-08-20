@@ -63,6 +63,9 @@ public final class PlotCreatorService {
         if (kinds.contains(PlotBuildingKind.WALL) && kinds.size() > 1) {
             return "wallExclusive";
         }
+        if (kinds.contains(PlotBuildingKind.PROP) && kinds.size() > 1) {
+            return "propExclusive";
+        }
         // A wall in the editor only works when the whole style was loaded from the walls tab, never a single piece.
         if (kinds.contains(PlotBuildingKind.WALL)
             && draft.isBuildingEditorMode()
@@ -267,14 +270,9 @@ public final class PlotCreatorService {
     public static List<PlotCreatorStep> stepOrder(@Nonnull PlotCreatorDraft draft) {
         List<PlotCreatorStep> steps = new ArrayList<>();
         steps.add(PlotCreatorStep.WELCOME);
-        if (!draft.isBuildingEditorMode()) {
-            steps.add(PlotCreatorStep.BOUNDS);
-        }
         steps.add(PlotCreatorStep.KIND);
         if (draft.isWallMode()) {
-            // Wall styles have five build boxes instead of one, so the shared bounds step is skipped and each piece
-            // marks its own box inside WALL_PIECES.
-            steps.remove(PlotCreatorStep.BOUNDS);
+            // Wall styles have five build boxes instead of one, so each piece marks its own box inside WALL_PIECES.
             steps.add(PlotCreatorStep.CONFIGURE);
             steps.add(PlotCreatorStep.WALL_PIECES);
             steps.add(PlotCreatorStep.REVIEW);
@@ -282,6 +280,7 @@ public final class PlotCreatorService {
             return steps;
         }
         if (draft.isFestivalMode()) {
+            // Festivals use a fixed square size; no player bounds step.
             steps.add(PlotCreatorStep.FESTIVAL);
             steps.add(PlotCreatorStep.IMPORTANT_SPOTS);
             List<PlotBuildingKindRequirements.SubstepRequirement> festivalSubs =
@@ -294,6 +293,19 @@ public final class PlotCreatorService {
             steps.add(PlotCreatorStep.REVIEW);
             steps.add(PlotCreatorStep.DONE);
             return steps;
+        }
+        if (draft.isPropMode()) {
+            if (!draft.isBuildingEditorMode()) {
+                steps.add(PlotCreatorStep.BOUNDS);
+            }
+            steps.add(PlotCreatorStep.CONFIGURE);
+            steps.add(PlotCreatorStep.PREFAB_SAVE);
+            steps.add(PlotCreatorStep.REVIEW);
+            steps.add(PlotCreatorStep.DONE);
+            return steps;
+        }
+        if (!draft.isBuildingEditorMode()) {
+            steps.add(PlotCreatorStep.BOUNDS);
         }
         if (draft.hasKind(PlotBuildingKind.VARIANT)) {
             steps.add(PlotCreatorStep.VARIANT);
@@ -397,7 +409,7 @@ public final class PlotCreatorService {
             }
         }
         PlotCreatorStep prev = order.get(idx - 1);
-        if (current == PlotCreatorStep.BOUNDS && prev == PlotCreatorStep.WELCOME) {
+        if (current == PlotCreatorStep.BOUNDS && prev == PlotCreatorStep.KIND) {
             session.getDraft().resetBoundsEditing();
         }
         if (current == PlotCreatorStep.WALL_PIECES) {
@@ -485,7 +497,8 @@ public final class PlotCreatorService {
             PlotCreatorMaterialsHelper.snapshotAndCloseMaterials(session, player, ref, store);
             PlotCreatorMaterialsActions.clearFillConfirm(session);
         }
-        if (current == PlotCreatorStep.BOUNDS && target == PlotCreatorStep.WELCOME) {
+        if (current == PlotCreatorStep.BOUNDS
+            && (target == PlotCreatorStep.WELCOME || target == PlotCreatorStep.KIND)) {
             draft.resetBoundsEditing();
         }
         if (current == PlotCreatorStep.WALL_PIECES) {
@@ -798,6 +811,9 @@ public final class PlotCreatorService {
         if (draft.isWallMode()) {
             return saveAndFinishWallStyle(plugin, session, playerRef, draft);
         }
+        if (draft.isPropMode()) {
+            return saveAndFinishProp(plugin, session, playerRef, draft);
+        }
         applyDefaultTagsForKind(draft);
         applyTagsInput(draft);
         applyConfigureInput(draft);
@@ -893,6 +909,75 @@ public final class PlotCreatorService {
         playerRef.sendMessage(
             Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.success.savedTokenFallback")
                 .param("id", draft.getConstructionId())
+        );
+        endSessionAfterSave(playerRef, session);
+        return true;
+    }
+
+    /**
+     * Writes a prop definition and prefab. Props are placed with the prop item, so nothing is registered in the town
+     * and no plot token is handed out.
+     */
+    private static boolean saveAndFinishProp(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull PlotCreatorSession session,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull PlotCreatorDraft draft
+    ) {
+        applyConfigureInput(draft);
+        if (draft.getPlotAnchor() == null && PlotCreatorAnchorRules.hasBounds(draft)) {
+            PlotCreatorAutoAnchor.applyCenter(draft);
+        }
+        if (draft.getPlotAnchor() != null) {
+            PlotCreatorLocalCoords.recomputeAnchorOffset(draft);
+        }
+        String err = PlotCreatorValidator.validatePropBeforeSave(draft, plugin);
+        if (err != null) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error." + err)
+            );
+            return false;
+        }
+        boolean submit =
+            draft.isSubmitToCommunity() && plugin.getConfig().get().getCommunityMarketplace().isEnabled();
+        String propId = draft.getConstructionId().trim();
+        if (submit) {
+            propId =
+                com.hexvane.aetherhaven.community.CommunityPropValidator.assignCatalogId(
+                    propId, draft.getDisplayName(), playerRef.getUuid()
+                );
+            draft.setConstructionId(propId);
+            syncPrefabFileNameFromConstructionId(draft);
+        }
+        if (plugin.getPropCatalog().contains(propId) && draft.getEditingConstructionId() == null) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.id_taken")
+            );
+            return false;
+        }
+        String prefabKey = draft.getPrefabPath();
+        if (prefabKey == null || prefabKey.isBlank()) {
+            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.incomplete"));
+            return false;
+        }
+        var def =
+            com.hexvane.aetherhaven.prop.PropDefinition.create(
+                propId, draft.getDisplayName(), prefabKey.trim()
+            );
+        if (!plugin.getPropCatalog().persist(def)) {
+            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.saveFailed"));
+            return false;
+        }
+        if (submit) {
+            String playerName = playerRef.getUsername() != null ? playerRef.getUsername() : "Unknown";
+            String submitErr =
+                CommunitySubmissionService.submitSavedProp(plugin, playerRef.getUuid(), playerName, propId);
+            CommunitySubmissionService.notifyPlayer(playerRef, submitErr);
+        }
+        draft.setStep(PlotCreatorStep.DONE);
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.success.propSaved")
+                .param("name", draft.getDisplayName() != null ? draft.getDisplayName() : propId)
         );
         endSessionAfterSave(playerRef, session);
         return true;
@@ -1226,6 +1311,11 @@ public final class PlotCreatorService {
             PlotCreatorFestivalSettings.applySuggestedId(draft, slug);
             return;
         }
+        if (draft.isPropMode()) {
+            draft.setConstructionId("prop_" + slug);
+            syncPrefabFileNameFromConstructionId(draft);
+            return;
+        }
         String prefix =
             draft.isWallMode()
                 ? PlotCreatorWallStyleIds.ID_PREFIX
@@ -1238,6 +1328,15 @@ public final class PlotCreatorService {
     public static void syncPrefabFileNameFromConstructionId(@Nonnull PlotCreatorDraft draft) {
         if (draft.isFestivalMode()) {
             PlotCreatorFestivalSettings.syncPrefabFileName(draft);
+            return;
+        }
+        if (draft.isPropMode()) {
+            String id = draft.getConstructionId();
+            if (id != null && !id.isBlank()) {
+                String key = com.hexvane.aetherhaven.prop.PropPaths.prefabPathKeyFromPropId(id);
+                draft.setPrefabPath(key);
+                draft.setPrefabFileName(com.hexvane.aetherhaven.prop.PropPaths.prefabFileNameFromKey(key));
+            }
             return;
         }
         if (draft.countsAsFestivalSquare() && !draft.isBuildingEditorMode()) {
@@ -1274,6 +1373,20 @@ public final class PlotCreatorService {
         }
         if (draft.isFestivalMode()) {
             return PlotCreatorFestivalSettings.applyInput(draft);
+        }
+        if (draft.isPropMode()) {
+            String idErr =
+                PlotCreatorValidator.validatePropId(
+                    draft.getConstructionId(), plugin, draft.getEditingConstructionId()
+                );
+            if (idErr != null) {
+                return idErr;
+            }
+            if (draft.getDisplayName() == null || draft.getDisplayName().isBlank()) {
+                return "id_empty";
+            }
+            syncPrefabFileNameFromConstructionId(draft);
+            return null;
         }
         String err =
             PlotCreatorValidator.validateId(

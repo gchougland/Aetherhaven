@@ -79,8 +79,10 @@ public final class PropPlacementCommit {
                 continue;
             }
             boolean match;
-            if (PropItemMetadata.PROP_ITEM_ID.equals(stack.getItemId())) {
-                match = PropItemMetadata.matchesProp(stack, propId);
+            if (PropItemMetadata.PROP_ITEM_ID.equals(stack.getItemId())
+                || PropVirtualItemRegistry.isVirtualId(stack.getItemId())) {
+                match = PropItemMetadata.matchesProp(stack, propId)
+                    || propId.equals(PropVirtualItemRegistry.getPropIdFromVirtualId(stack.getItemId()));
             } else if (shopItemId.equals(stack.getItemId())) {
                 match = true;
             } else {

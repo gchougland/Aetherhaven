@@ -17,6 +17,11 @@ aetherhaven.prop.command.gaveWand=Gave a packaging wand to {player}.
 aetherhaven.prop.command.break.enabled=You can break props for now.
 aetherhaven.prop.command.break.disabled=Props are protected from breaking again.
 aetherhaven.prop.command.break.noPermission=You do not have permission to turn prop breaking on.
+aetherhaven.prop.command.generateicon.ok=Prop icon saved for {id} ({path}).
+aetherhaven.prop.command.generateicon.disabled=Turn on the community marketplace and set its website address first.
+aetherhaven.prop.command.generateicon.prefabMissing=Could not find the prefab for prop {id}.
+aetherhaven.prop.command.generateicon.renderFailed=Could not render an icon for prop {id}.
+aetherhaven.prop.command.generateicon.ioError=Could not save the icon for prop {id}.
 
 aetherhaven.ui.propplacement.title=Place Prop
 aetherhaven.ui.propplacement.place=Place

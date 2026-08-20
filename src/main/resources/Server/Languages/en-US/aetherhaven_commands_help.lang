@@ -168,6 +168,8 @@ commands.aetherhaven.prop.wand.desc=Give a packaging wand
 commands.aetherhaven.prop.wand.player.desc=Player to give to
 commands.aetherhaven.prop.create.desc=Open a menu to turn a prefab into a prop
 commands.aetherhaven.prop.break.desc=Turn prop breaking on or off for yourself
+commands.aetherhaven.prop.generateicon.desc=Render a prop icon from the marketplace website viewer
+commands.aetherhaven.prop.generateicon.propId.desc=Prop id
 
 commands.aetherhaven.walldebug.desc=Creative: wall wand placement debug lines in chat
 commands.aetherhaven.walldebug.on.desc=Turn wall wand debug on

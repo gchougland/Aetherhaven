@@ -20,6 +20,8 @@ export class PrefabViewer {
     this.container = container;
     this.assetBase = options.assetBase || "/hytale-assets";
     this.interactive = options.interactive !== false;
+    this.hideGrid = options.hideGrid === true;
+    this.transparentBackground = options.transparentBackground === true;
     this.transformRev = PREFAB_VIEWER_TRANSFORM_REV;
     this._disposed = false;
     this._root = null;
@@ -30,14 +32,18 @@ export class PrefabViewer {
     const height = Math.max(100, container.clientHeight || 400);
 
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x1a1418);
+    if (this.transparentBackground) {
+      this.scene.background = null;
+    } else {
+      this.scene.background = new THREE.Color(0x1a1418);
+    }
 
     this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 500);
     this.camera.position.set(12, 10, 12);
 
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
-      alpha: false,
+      alpha: this.transparentBackground,
       preserveDrawingBuffer: true,
     });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -58,10 +64,13 @@ export class PrefabViewer {
     fill.position.set(-10, 6, -8);
     this.scene.add(fill);
 
-    const grid = new THREE.GridHelper(32, 32, 0x5a4038, 0x3a2824);
-    grid.position.y = -0.01;
-    this.scene.add(grid);
-    this._grid = grid;
+    this._grid = null;
+    if (!this.hideGrid) {
+      const grid = new THREE.GridHelper(32, 32, 0x5a4038, 0x3a2824);
+      grid.position.y = -0.01;
+      this.scene.add(grid);
+      this._grid = grid;
+    }
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
@@ -196,6 +205,10 @@ export class PrefabViewer {
     this.camera.far = Math.max(200, dist * 20);
     this.camera.updateProjectionMatrix();
     this.controls.update();
+
+    if (this.hideGrid) {
+      return;
+    }
 
     const gridSize = Math.max(8, Math.ceil(maxDim * 1.5 / 4) * 4);
     if (this._grid) {

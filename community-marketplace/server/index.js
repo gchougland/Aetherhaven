@@ -14,17 +14,22 @@ import {
   formatScreenshotMaxSizeLabel,
   isAllowedScreenshotMime,
   isBlockIdCompatible,
+  isPropCatalogId,
   MAX_BUILDING_JSON_BYTES,
   MAX_ICON_BYTES,
   MAX_PREFAB_BYTES,
   MAX_SCREENSHOT_BYTES,
   MAX_SCREENSHOTS_PER_OWNER,
-  normalizeCommunityId,
+  normalizeCatalogId,
   readPrefabBlockIdVersion,
   assignCommunityCatalogId,
+  assignCommunityPropId,
+  detectSubmissionContentType,
+  resolveManifestContentType,
   screenshotExtForMime,
   validateBuildingEditPayload,
   validateSubmissionBuilding,
+  validateSubmissionProp,
   normalizeRequiredMods,
 } from "./validation.js";
 import { createSubmissionRateLimit } from "./submissionRateLimit.js";
@@ -61,6 +66,7 @@ import {
   renderWikiTopic,
 } from "./wikiRender.js";
 import { createPreviewScreenshotService } from "./previewScreenshot.js";
+import { createPropIconRenderService } from "./propIconRender.js";
 // sharp is loaded lazily inside processScreenshot so native-lib failures
 // do not crash startup before Railway's /api/v1/health check can succeed.
 
@@ -109,6 +115,10 @@ const previewScreenshots = createPreviewScreenshotService({
   storage,
   port: PORT,
   publicBaseUrl: () => publicBaseUrl,
+});
+const propIconRender = createPropIconRenderService({
+  storage,
+  port: PORT,
 });
 const votes = createVotes(dataDir);
 const favorites = createFavorites(dataDir);
@@ -247,17 +257,25 @@ function enrichPendingSubmission(meta) {
     return meta;
   }
   const submissionId = meta.submissionId;
-  const buildingPath = path.join(storage.submissionDir(submissionId, "pending"), "building.json");
+  const definitionPath = pendingDefinitionPath(submissionId, "pending");
+  const definitionKind = resolveSubmissionDefinitionKind(meta, submissionId);
   const description =
-    normalizeDescription(meta.description) || readBuildingDescription(buildingPath);
+    normalizeDescription(meta.description) || readBuildingDescription(definitionPath);
   const iconFile = pendingSubmissionFile(submissionId, "icon.png");
   const enriched = { ...meta };
+  enriched.contentType = resolveManifestContentType(meta.contentType, {
+    id: meta.proposedId || meta.id,
+    wallSegment: meta.wallSegment,
+  });
+  if (definitionKind === "prop") {
+    enriched.contentType = "prop";
+  }
   const requiredModsFromMeta = normalizeRequiredMods(meta.requiredMods);
   enriched.requiredMods = requiredModsFromMeta.length
     ? requiredModsFromMeta
-    : readBuildingRequiredMods(buildingPath);
-  enriched.materials = readBuildingMaterials(buildingPath);
-  enriched.treasuryGoldCoinCost = readBuildingGoldCost(buildingPath);
+    : readBuildingRequiredMods(definitionPath);
+  enriched.materials = readBuildingMaterials(definitionPath);
+  enriched.treasuryGoldCoinCost = readBuildingGoldCost(definitionPath);
   if (description) {
     enriched.description = description;
   }
@@ -311,19 +329,60 @@ const downloadRateLimit = createDownloadRateLimit({
   maxPerPlayer: Number(process.env.DOWNLOAD_MAX_PER_PLAYER_PER_HOUR || 120),
 });
 
-function readBuildingJson(buildingPath) {
+function readDefinitionJson(definitionPath) {
   try {
-    if (!fs.existsSync(buildingPath)) {
+    if (!fs.existsSync(definitionPath)) {
       return null;
     }
-    return JSON.parse(fs.readFileSync(buildingPath, "utf8"));
+    return JSON.parse(fs.readFileSync(definitionPath, "utf8"));
   } catch {
     return null;
   }
 }
 
+function readBuildingJson(buildingPath) {
+  return readDefinitionJson(buildingPath);
+}
+
+/**
+ * @param {string} submissionId
+ * @param {"pending"|"approved"|"rejected"} [status]
+ */
+function pendingDefinitionPath(submissionId, status = "pending") {
+  return storage.pendingDefinitionFile(submissionId, status);
+}
+
+/**
+ * @param {object} meta
+ * @param {string} [submissionId]
+ * @returns {"prop"|"building"}
+ */
+function resolveSubmissionDefinitionKind(meta, submissionId = "") {
+  if (meta?.contentType === "prop") {
+    return "prop";
+  }
+  const id = String(meta?.proposedId || meta?.id || submissionId || "").trim();
+  if (isPropCatalogId(id)) {
+    return "prop";
+  }
+  const sid = String(submissionId || meta?.submissionId || "").trim();
+  if (sid) {
+    return storage.pendingDefinitionKind(sid, "pending");
+  }
+  return "building";
+}
+
+/**
+ * @param {object} meta
+ * @param {string} [submissionId]
+ */
+function readPendingDefinition(submissionId, meta = null) {
+  const path = pendingDefinitionPath(submissionId, "pending");
+  return readDefinitionJson(path);
+}
+
 function readBuildingDescription(buildingPath) {
-  const building = readBuildingJson(buildingPath);
+  const building = readDefinitionJson(buildingPath);
   return typeof building?.description === "string" ? building.description.trim() : "";
 }
 
@@ -555,8 +614,13 @@ function readBuildingTypeMeta(buildingPath) {
 }
 
 function buildManifestEntry(id, meta, prefabBytes) {
+  const contentType = resolveManifestContentType(meta.contentType, {
+    id,
+    wallSegment: meta.wallSegment,
+  });
   const entry = {
     id,
+    contentType,
     displayName: meta.displayName,
     creatorUuid: meta.creatorUuid,
     creatorName: meta.creatorName,
@@ -624,7 +688,10 @@ function resolvePreservedCoverScreenshotId(buildingId) {
  * @returns {{ iconUrl: string, coverImageUrl: string, coverScreenshotId: string, usesCoverImage: boolean }}
  */
 function resolveCardImage(buildingId, coverScreenshotId) {
-  const iconUrl = `/api/v1/buildings/${encodeURIComponent(buildingId)}/icon.png`;
+  const id = normalizeCatalogId(buildingId) || buildingId;
+  const iconUrl = isPropCatalogId(id)
+    ? `/api/v1/props/${encodeURIComponent(id)}/icon.png`
+    : `/api/v1/buildings/${encodeURIComponent(id)}/icon.png`;
   const coverId = String(coverScreenshotId || "").trim() || readApprovedCoverScreenshotId(storage, buildingId);
   if (!isValidCoverScreenshot(storage, buildingId, coverId)) {
     return { iconUrl, coverImageUrl: "", coverScreenshotId: "", usesCoverImage: false };
@@ -648,7 +715,7 @@ function resolveCardImage(buildingId, coverScreenshotId) {
  * @param {{ asAdmin?: boolean }} [options]
  */
 function setBuildingCoverScreenshot(buildingId, coverScreenshotId, webUser, options = {}) {
-  const id = normalizeCommunityId(buildingId);
+  const id = normalizeCatalogId(buildingId);
   if (!id) {
     return { status: 400, body: { error: "invalid_id" } };
   }
@@ -730,9 +797,30 @@ function approveSubmission(submissionId, requestedId, requiredModsOverride) {
     return { status: 404, body: { error: "not_found" } };
   }
   const pendingDir = storage.submissionDir(submissionId, "pending");
-  const id = normalizeCommunityId(requestedId || meta.proposedId);
+  const definitionKind = resolveSubmissionDefinitionKind(meta, submissionId);
+  const pendingDefinitionPath = storage.pendingDefinitionFile(submissionId, "pending");
+  const pendingDefinition = readDefinitionJson(pendingDefinitionPath);
+  const defaultId =
+    definitionKind === "prop"
+      ? typeof pendingDefinition?.id === "string"
+        ? pendingDefinition.id
+        : meta.proposedId
+      : meta.proposedId;
+  const id = normalizeCatalogId(requestedId || defaultId);
   if (!id) {
     return { status: 400, body: { error: "invalid_id" } };
+  }
+  if (definitionKind === "prop" && !isPropCatalogId(id)) {
+    return {
+      status: 400,
+      body: { error: "invalid_id", message: "Prop submissions require a prop_community_ id." },
+    };
+  }
+  if (definitionKind === "building" && isPropCatalogId(id)) {
+    return {
+      status: 400,
+      body: { error: "invalid_id", message: "Building submissions cannot use a prop_community_ id." },
+    };
   }
   let normalizedRequiredModsOverride = null;
   if (requiredModsOverride !== undefined) {
@@ -742,44 +830,63 @@ function approveSubmission(submissionId, requestedId, requiredModsOverride) {
     }
   }
 
-  const approved = storage.approvedPaths(id);
+  const approved = storage.approvedPaths(id, {
+    contentType: definitionKind === "prop" ? "prop" : "building",
+  });
   const wasAlreadyPublished =
     fs.existsSync(approved.meta) ||
     (storage.readManifest().entries || []).some((entry) => entry.id === id);
   const preservedCoverScreenshotId = resolvePreservedCoverScreenshotId(id);
   fs.mkdirSync(approved.dir, { recursive: true });
-  fs.copyFileSync(path.join(pendingDir, "building.json"), approved.building);
+  if (definitionKind === "prop") {
+    fs.copyFileSync(pendingDefinitionPath, approved.prop);
+    const legacyBuilding = path.join(pendingDir, "building.json");
+    if (fs.existsSync(legacyBuilding)) {
+      try {
+        fs.unlinkSync(legacyBuilding);
+      } catch {
+        /* ignore */
+      }
+    }
+  } else {
+    fs.copyFileSync(pendingDefinitionPath, approved.building);
+  }
   fs.copyFileSync(path.join(pendingDir, "prefab.prefab.json"), approved.prefab);
   const pendingIcon = path.join(pendingDir, "icon.png");
   if (fs.existsSync(pendingIcon)) {
     fs.copyFileSync(pendingIcon, approved.icon);
   }
 
-  const building = JSON.parse(fs.readFileSync(approved.building, "utf8"));
-  building.id = id;
-  const pendingTypeMeta = readBuildingTypeMeta(path.join(pendingDir, "building.json"));
-  building.prefabPath = pendingTypeMeta.festivalVariant
+  const definition = readDefinitionJson(approved.definition) || {};
+  definition.id = id;
+  const pendingTypeMeta = readBuildingTypeMeta(pendingDefinitionPath);
+  definition.prefabPath = pendingTypeMeta.festivalVariant
     ? `Festivals/Festival_${id}.prefab.json`
     : `${id}.prefab.json`;
   if (normalizedRequiredModsOverride !== null) {
-    building.requiredMods = normalizedRequiredModsOverride;
+    definition.requiredMods = normalizedRequiredModsOverride;
   }
-  fs.writeFileSync(approved.building, JSON.stringify(building, null, 2));
+  fs.writeFileSync(approved.definition, JSON.stringify(definition, null, 2));
 
-  const buildingTags = normalizeTags(building.tags);
-  const buildingRequiredMods = normalizeRequiredMods(building.requiredMods);
-  const typeMeta = readBuildingTypeMeta(approved.building);
+  const definitionTags = normalizeTags(definition.tags);
+  const definitionRequiredMods = normalizeRequiredMods(definition.requiredMods);
+  const typeMeta = readBuildingTypeMeta(approved.definition);
+  const contentType = resolveManifestContentType(definitionKind === "prop" ? "prop" : undefined, {
+    id,
+    wallSegment: typeMeta.wallSegment,
+  });
   const approvedMeta = {
     ...meta,
     id,
-    description: normalizeDescription(building.description) || normalizeDescription(meta.description),
-    tags: buildingTags.length ? buildingTags : normalizeTags(meta.tags),
+    contentType,
+    description: normalizeDescription(definition.description) || normalizeDescription(meta.description),
+    tags: definitionTags.length ? definitionTags : normalizeTags(meta.tags),
     decorationPlot: typeMeta.decorationPlot,
     wallSegment: typeMeta.wallSegment,
     wallPieceRole: typeMeta.wallPieceRole,
     festivalVariant: typeMeta.festivalVariant,
-    requiredMods: buildingRequiredMods.length
-      ? buildingRequiredMods
+    requiredMods: definitionRequiredMods.length
+      ? definitionRequiredMods
       : normalizeRequiredMods(meta.requiredMods),
     status: "approved",
     approvedAt: new Date().toISOString(),
@@ -814,6 +921,11 @@ function approveSubmission(submissionId, requestedId, requiredModsOverride) {
   if (storage.countScreenshotsForOwner("approved", id) === 0) {
     previewScreenshots.enqueue(id, "approved");
   }
+  if (contentType === "prop" && !fs.existsSync(approved.icon)) {
+    propIconRender
+      .renderForOwner("approved", id, { attach: true })
+      .catch((err) => logPropIconError(`auto icon for ${id}`, err));
+  }
   if (!wasAlreadyPublished) {
     notifyBuildingApproved({
       publicBaseUrl,
@@ -847,8 +959,12 @@ function rejectSubmission(submissionId, reason) {
   return { status: 200, body: { submissionId, status: "rejected" } };
 }
 
+function logPropIconError(label, err) {
+  console.warn(`[prop-icon] ${label}`, err);
+}
+
 function deleteApprovedBuilding(buildingId) {
-  const id = normalizeCommunityId(buildingId);
+  const id = normalizeCatalogId(buildingId);
   if (!id) {
     return { status: 400, body: { error: "invalid_id" } };
   }
@@ -1083,7 +1199,7 @@ function dismissRejectedSubmission(submissionId, webUser) {
 }
 
 function removeOwnApprovedBuilding(buildingId, webUser) {
-  const id = normalizeCommunityId(buildingId);
+  const id = normalizeCatalogId(buildingId);
   if (!id) {
     return { status: 400, body: { error: "invalid_id" } };
   }
@@ -1103,17 +1219,23 @@ function removeOwnApprovedBuilding(buildingId, webUser) {
 app.get("/api/v1/health", async (_req, res) => {
   try {
     const preview = await previewScreenshots.status();
+    const propIcon = await propIconRender.status();
     res.json({
       ok: true,
       previewScreenshots: {
         assetsReady: preview.assetsReady,
         chromiumFound: preview.chromiumFound,
       },
+      propIconRender: {
+        assetsReady: propIcon.assetsReady,
+        chromiumFound: propIcon.chromiumFound,
+      },
     });
   } catch {
     res.json({
       ok: true,
       previewScreenshots: { assetsReady: false, chromiumFound: false },
+      propIconRender: { assetsReady: false, chromiumFound: false },
     });
   }
 });
@@ -1145,12 +1267,16 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
       prefabBytes = fs.statSync(paths.prefab).size;
     }
     const compatible = isBlockIdCompatible(e.blockIdVersion, clientBlockIdVersion);
-    const description = normalizeDescription(e.description) || readBuildingDescription(paths.building);
-    const goldCost = readBuildingGoldCost(paths.building);
-    const materials = readBuildingMaterials(paths.building);
+    const description = normalizeDescription(e.description) || readBuildingDescription(paths.definition);
+    const goldCost = readBuildingGoldCost(paths.definition);
+    const materials = readBuildingMaterials(paths.definition);
     const entryTags = normalizeTags(e.tags);
-    const tags = entryTags.length ? entryTags : readBuildingTags(paths.building);
-    const typeMeta = readBuildingTypeMeta(paths.building);
+    const tags = entryTags.length ? entryTags : readBuildingTags(paths.definition);
+    const typeMeta = readBuildingTypeMeta(paths.definition);
+    const contentType = resolveManifestContentType(e.contentType, {
+      id: e.id,
+      wallSegment: typeMeta.wallSegment || e.wallSegment,
+    });
     const decorationPlot =
       typeof e.decorationPlot === "boolean" ? e.decorationPlot : typeMeta.decorationPlot;
     const wallSegment =
@@ -1165,6 +1291,7 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
     const card = resolveCardImage(e.id, e.coverScreenshotId);
     const entry = {
       ...e,
+      contentType,
       tags,
       decorationPlot,
       wallSegment,
@@ -1178,10 +1305,16 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
       usesCoverImage: card.usesCoverImage,
       iconUrl: card.iconUrl,
       coverImageUrl: card.coverImageUrl || undefined,
-      buildingUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/building.json`,
       prefabUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/prefab.json`,
       materials,
     };
+    if (contentType === "prop") {
+      entry.propUrl = `/api/v1/props/${encodeURIComponent(e.id)}/prop.json`;
+      delete entry.buildingUrl;
+    } else {
+      entry.buildingUrl = `/api/v1/buildings/${encodeURIComponent(e.id)}/building.json`;
+      delete entry.propUrl;
+    }
     if (countsAsConstructionId) {
       entry.countsAsConstructionId = countsAsConstructionId;
     } else {
@@ -1205,7 +1338,7 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
     const requiredModsFromEntry = normalizeRequiredMods(e.requiredMods);
     const requiredMods = requiredModsFromEntry.length
       ? requiredModsFromEntry
-      : readBuildingRequiredMods(paths.building);
+      : readBuildingRequiredMods(paths.definition);
     entry.requiredMods = requiredMods;
     if (!entry.coverScreenshotId) {
       delete entry.coverScreenshotId;
@@ -1256,7 +1389,7 @@ function sendManifest(req, res) {
 }
 
 function toggleBuildingFavorite(buildingId, profileUuid) {
-  const id = normalizeCommunityId(buildingId);
+  const id = normalizeCatalogId(buildingId);
   if (!id) {
     return { status: 400, body: { error: "invalid_id" } };
   }
@@ -1273,7 +1406,7 @@ function toggleBuildingFavorite(buildingId, profileUuid) {
 }
 
 function toggleBuildingUpvote(buildingId, webUser) {
-  const id = normalizeCommunityId(buildingId);
+  const id = normalizeCatalogId(buildingId);
   if (!id) {
     return { status: 400, body: { error: "invalid_id" } };
   }
@@ -1293,7 +1426,7 @@ function toggleBuildingUpvote(buildingId, webUser) {
 }
 
 function recordBuildingDownload(buildingId, req) {
-  const id = normalizeCommunityId(buildingId);
+  const id = normalizeCatalogId(buildingId);
   if (!id) {
     return { status: 400, body: { error: "invalid_id" } };
   }
@@ -1309,8 +1442,8 @@ function recordBuildingDownload(buildingId, req) {
 app.get("/api/v1/manifest", sendManifest);
 
 app.get("/api/v1/buildings/:id/building.json", (req, res) => {
-  const id = normalizeCommunityId(req.params.id);
-  if (!id) {
+  const id = normalizeCatalogId(req.params.id);
+  if (!id || isPropCatalogId(id)) {
     res.status(400).json({ error: "invalid_id" });
     return;
   }
@@ -1322,8 +1455,22 @@ app.get("/api/v1/buildings/:id/building.json", (req, res) => {
   res.type("application/json").sendFile(file);
 });
 
+app.get("/api/v1/props/:id/prop.json", (req, res) => {
+  const id = normalizeCatalogId(req.params.id);
+  if (!id || !isPropCatalogId(id)) {
+    res.status(400).json({ error: "invalid_id" });
+    return;
+  }
+  const file = storage.approvedPaths(id, { contentType: "prop" }).prop;
+  if (!fs.existsSync(file)) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  res.type("application/json").sendFile(file);
+});
+
 app.get("/api/v1/buildings/:id/prefab.json", (req, res) => {
-  const id = normalizeCommunityId(req.params.id);
+  const id = normalizeCatalogId(req.params.id);
   if (!id) {
     res.status(400).json({ error: "invalid_id" });
     return;
@@ -1336,8 +1483,22 @@ app.get("/api/v1/buildings/:id/prefab.json", (req, res) => {
   res.type("application/json").sendFile(file);
 });
 
+app.get("/api/v1/props/:id/prefab.json", (req, res) => {
+  const id = normalizeCatalogId(req.params.id);
+  if (!id || !isPropCatalogId(id)) {
+    res.status(400).json({ error: "invalid_id" });
+    return;
+  }
+  const file = storage.approvedPaths(id, { contentType: "prop" }).prefab;
+  if (!fs.existsSync(file)) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  res.type("application/json").sendFile(file);
+});
+
 app.get("/api/v1/buildings/:id/icon.png", (req, res) => {
-  const id = normalizeCommunityId(req.params.id);
+  const id = normalizeCatalogId(req.params.id);
   if (!id) {
     res.status(400).json({ error: "invalid_id" });
     return;
@@ -1350,11 +1511,26 @@ app.get("/api/v1/buildings/:id/icon.png", (req, res) => {
   res.type("image/png").sendFile(file);
 });
 
+app.get("/api/v1/props/:id/icon.png", (req, res) => {
+  const id = normalizeCatalogId(req.params.id);
+  if (!id || !isPropCatalogId(id)) {
+    res.status(400).json({ error: "invalid_id" });
+    return;
+  }
+  const file = storage.approvedPaths(id, { contentType: "prop" }).icon;
+  if (!fs.existsSync(file)) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  res.type("image/png").sendFile(file);
+});
+
 app.post(
   "/api/v1/submissions",
   submissionRateLimit,
   upload.fields([
     { name: "building", maxCount: 1 },
+    { name: "prop", maxCount: 1 },
     { name: "prefab", maxCount: 1 },
     { name: "icon", maxCount: 1 },
   ]),
@@ -1367,53 +1543,80 @@ app.post(
         return;
       }
       const buildingFile = req.files?.building?.[0];
+      const propFile = req.files?.prop?.[0];
       const prefabFile = req.files?.prefab?.[0];
       const iconFile = req.files?.icon?.[0];
-      if (!buildingFile || !prefabFile) {
-        res.status(400).json({ error: "building_and_prefab_required" });
+      const contentTypeField = req.get("X-Content-Type") || req.body?.contentType;
+      if ((!buildingFile && !propFile) || !prefabFile) {
+        res.status(400).json({ error: "definition_and_prefab_required" });
         return;
       }
-      assertSize(buildingFile.size, MAX_BUILDING_JSON_BYTES, "building");
+      if (buildingFile && propFile) {
+        res.status(400).json({ error: "building_and_prop_conflict" });
+        return;
+      }
+      const definitionFile = propFile || buildingFile;
+      assertSize(definitionFile.size, MAX_BUILDING_JSON_BYTES, propFile ? "prop" : "building");
       assertSize(prefabFile.size, MAX_PREFAB_BYTES, "prefab");
       if (iconFile) {
         assertSize(iconFile.size, MAX_ICON_BYTES, "icon");
       }
 
-      const building = JSON.parse(buildingFile.buffer.toString("utf8"));
+      const definition = JSON.parse(definitionFile.buffer.toString("utf8"));
       const blockIdVersion = readPrefabBlockIdVersion(prefabFile.buffer);
-      const validationError = validateSubmissionBuilding(building, blockIdVersion);
+      const submissionKind = detectSubmissionContentType({
+        propField: Boolean(propFile),
+        buildingField: Boolean(buildingFile),
+        contentTypeField,
+        definition,
+      });
+      const isProp = submissionKind === "prop";
+      const validationError = isProp
+        ? validateSubmissionProp(definition, blockIdVersion)
+        : validateSubmissionBuilding(definition, blockIdVersion);
       if (validationError) {
         res.status(400).json({ error: validationError });
         return;
       }
 
-      const id = assignCommunityCatalogId(building, creatorUuid);
-      const requiredMods = normalizeRequiredMods(building.requiredMods);
-      building.requiredMods = requiredMods;
+      const id = isProp
+        ? assignCommunityPropId(definition, creatorUuid)
+        : assignCommunityCatalogId(definition, creatorUuid);
+      const requiredMods = normalizeRequiredMods(definition.requiredMods);
+      definition.requiredMods = requiredMods;
 
       const submissionId = `${id}_${Date.now()}`;
       const dir = storage.submissionDir(submissionId, "pending");
       fs.mkdirSync(dir, { recursive: true });
-      fs.writeFileSync(path.join(dir, "building.json"), JSON.stringify(building, null, 2));
+      const definitionName = isProp ? "prop.json" : "building.json";
+      fs.writeFileSync(path.join(dir, definitionName), JSON.stringify(definition, null, 2));
       fs.writeFileSync(path.join(dir, "prefab.prefab.json"), prefabFile.buffer);
       if (iconFile) {
         fs.writeFileSync(path.join(dir, "icon.png"), iconFile.buffer);
       }
 
+      const manifestContentType = resolveManifestContentType(isProp ? "prop" : submissionKind, {
+        id,
+        wallSegment: Boolean(definition.wallSegment),
+      });
       const meta = {
         submissionId,
         proposedId: id,
-        displayName: building.displayName,
-        description: normalizeDescription(building.description),
+        contentType: manifestContentType,
+        displayName: definition.displayName,
+        description: normalizeDescription(definition.description),
         creatorUuid,
         creatorName,
-        styleId: building.styleId || "misc",
-        tags: normalizeTags(building.tags),
+        styleId: definition.styleId || "misc",
+        tags: normalizeTags(definition.tags),
         blockIdVersion,
         status: "pending",
         submittedAt: new Date().toISOString(),
         version: "1",
       };
+      if (Boolean(definition.wallSegment)) {
+        meta.wallSegment = true;
+      }
       if (requiredMods.length) {
         meta.requiredMods = requiredMods;
       }
@@ -1428,7 +1631,12 @@ app.post(
         submittedAt: meta.submittedAt,
       }).catch(() => {});
       previewScreenshots.enqueue(submissionId);
-      res.status(201).json({ submissionId, proposedId: id, status: "pending" });
+      res.status(201).json({
+        submissionId,
+        proposedId: id,
+        contentType: manifestContentType,
+        status: "pending",
+      });
     } catch (e) {
       res.status(400).json({ error: e.message || "submission_failed" });
     }
@@ -1445,6 +1653,21 @@ app.get("/api/v1/my-submissions/:submissionId/building.json", requireInGamePlaye
     storage,
     req.params.submissionId,
     "building.json",
+    inGamePlayerUser(req),
+    isOwnedByWebUser,
+  );
+  if (!file) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  res.type("application/json").send(fs.readFileSync(file));
+});
+
+app.get("/api/v1/my-submissions/:submissionId/prop.json", requireInGamePlayer, (req, res) => {
+  const file = resolveOwnerSubmissionFile(
+    storage,
+    req.params.submissionId,
+    "prop.json",
     inGamePlayerUser(req),
     isOwnedByWebUser,
   );
@@ -1491,15 +1714,21 @@ app.put(
   requireInGamePlayer,
   upload.fields([
     { name: "building", maxCount: 1 },
+    { name: "prop", maxCount: 1 },
     { name: "prefab", maxCount: 1 },
     { name: "icon", maxCount: 1 },
   ]),
   (req, res) => {
     const buildingFile = req.files?.building?.[0];
+    const propFile = req.files?.prop?.[0];
     const prefabFile = req.files?.prefab?.[0];
     const iconFile = req.files?.icon?.[0];
-    if (!buildingFile || !prefabFile) {
-      res.status(400).json({ error: "building_and_prefab_required" });
+    if ((!buildingFile && !propFile) || !prefabFile) {
+      res.status(400).json({ error: "definition_and_prefab_required" });
+      return;
+    }
+    if (buildingFile && propFile) {
+      res.status(400).json({ error: "building_and_prop_conflict" });
       return;
     }
     const player = inGamePlayerUser(req);
@@ -1509,8 +1738,10 @@ app.put(
       creatorUuid: player.profileUuid,
       creatorName: String(req.get("X-Player-Name") || "Unknown").trim(),
       buildingFile,
+      propFile,
       prefabFile,
       iconFile,
+      contentTypeField: req.get("X-Content-Type") || req.body?.contentType,
       isOwnedByProfile,
       normalizeDescription,
       normalizeTags,
@@ -1603,6 +1834,15 @@ app.get("/api/v1/moderation/submissions/:submissionId/prefab.json", requireModer
 
 app.get("/api/v1/moderation/submissions/:submissionId/building.json", requireModerator, (req, res) => {
   const file = pendingSubmissionFile(req.params.submissionId, "building.json");
+  if (!file) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  res.type("application/json").send(fs.readFileSync(file));
+});
+
+app.get("/api/v1/moderation/submissions/:submissionId/prop.json", requireModerator, (req, res) => {
+  const file = pendingSubmissionFile(req.params.submissionId, "prop.json");
   if (!file) {
     res.status(404).json({ error: "not_found" });
     return;
@@ -1714,7 +1954,7 @@ app.get("/api/me", (req, res) => {
  * @param {{ profileUuid: string, profileUsername: string } | null} [webUser]
  */
 function getPublishedBuildingEditPayload(buildingId, webUser, options = {}) {
-  const id = normalizeCommunityId(buildingId);
+  const id = normalizeCatalogId(buildingId);
   if (!id) {
     return { status: 400, body: { error: "invalid_id" } };
   }
@@ -1726,29 +1966,37 @@ function getPublishedBuildingEditPayload(buildingId, webUser, options = {}) {
   if (!options.asAdmin && (!webUser || !isOwnedByWebUser(entry, webUser))) {
     return { status: 403, body: { error: "not_owner" } };
   }
-  const paths = storage.approvedPaths(id);
-  if (!fs.existsSync(paths.building)) {
+  const paths = storage.approvedPaths(id, {
+    contentType: resolveManifestContentType(entry.contentType, entry),
+  });
+  if (!fs.existsSync(paths.definition)) {
     return { status: 404, body: { error: "not_found" } };
   }
-  const building = readBuildingJson(paths.building) || {};
+  const definition = readDefinitionJson(paths.definition) || {};
   const card = resolveCardImage(id, entry.coverScreenshotId);
+  const contentType = resolveManifestContentType(entry.contentType, entry);
   const description =
     normalizeDescription(entry.description) ||
-    normalizeDescription(building.description) ||
+    normalizeDescription(definition.description) ||
     "";
-  const materials = readBuildingMaterials(paths.building);
-  const goldCost = readBuildingGoldCost(paths.building);
+  const materials = readBuildingMaterials(paths.definition);
+  const goldCost = readBuildingGoldCost(paths.definition);
   const styleId =
-    String(entry.styleId || building.styleId || "misc").trim() || "misc";
+    String(entry.styleId || definition.styleId || "misc").trim() || "misc";
   const tags = normalizeTags(entry.tags).length
     ? normalizeTags(entry.tags)
-    : normalizeTags(building.tags);
+    : normalizeTags(definition.tags);
+  const prefabUrl =
+    contentType === "prop"
+      ? `/api/v1/props/${encodeURIComponent(id)}/prefab.json`
+      : `/api/v1/buildings/${encodeURIComponent(id)}/prefab.json`;
   return {
     status: 200,
     body: {
       kind: "approved",
       id,
-      displayName: String(entry.displayName || building.displayName || "").trim(),
+      contentType,
+      displayName: String(entry.displayName || definition.displayName || "").trim(),
       description,
       treasuryGoldCoinCost: goldCost,
       materials,
@@ -1761,7 +2009,15 @@ function getPublishedBuildingEditPayload(buildingId, webUser, options = {}) {
       usesCoverImage: card.usesCoverImage,
       iconUrl: card.iconUrl,
       coverImageUrl: card.coverImageUrl || null,
-      prefabUrl: `/api/v1/buildings/${encodeURIComponent(id)}/prefab.json`,
+      prefabUrl,
+      propUrl:
+        contentType === "prop"
+          ? `/api/v1/props/${encodeURIComponent(id)}/prop.json`
+          : undefined,
+      buildingUrl:
+        contentType === "prop"
+          ? undefined
+          : `/api/v1/buildings/${encodeURIComponent(id)}/building.json`,
       screenshots: enrichOwnerScreenshots("approved", id, true),
     },
   };
@@ -1774,7 +2030,7 @@ function getPublishedBuildingEditPayload(buildingId, webUser, options = {}) {
  * @param {{ profileUuid: string, profileUsername: string } | null} [webUser]
  */
 function patchPublishedBuilding(buildingId, body, webUser, options = {}) {
-  const id = normalizeCommunityId(buildingId);
+  const id = normalizeCatalogId(buildingId);
   if (!id) {
     return { status: 400, body: { error: "invalid_id" } };
   }
@@ -1792,16 +2048,18 @@ function patchPublishedBuilding(buildingId, body, webUser, options = {}) {
   if (!validated.ok) {
     return { status: 400, body: { error: validated.error, message: validated.message } };
   }
-  const paths = storage.approvedPaths(id);
-  if (!fs.existsSync(paths.building)) {
+  const paths = storage.approvedPaths(id, {
+    contentType: resolveManifestContentType(entry.contentType, entry),
+  });
+  if (!fs.existsSync(paths.definition)) {
     return { status: 404, body: { error: "not_found" } };
   }
-  const building = readBuildingJson(paths.building);
+  const building = readDefinitionJson(paths.definition);
   if (!building || typeof building !== "object") {
     return { status: 500, body: { error: "building_corrupt" } };
   }
   applyBuildingEditFields(building, validated.value, { allowStyleAndTags });
-  fs.writeFileSync(paths.building, JSON.stringify(building, null, 2));
+  fs.writeFileSync(paths.definition, JSON.stringify(building, null, 2));
 
   entry.displayName = validated.value.displayName;
   if (validated.value.description) {
@@ -1841,19 +2099,20 @@ function getPendingSubmissionEditPayload(submissionId) {
   if (!meta) {
     return { status: 404, body: { error: "not_found" } };
   }
-  const buildingPath = path.join(storage.submissionDir(submissionId, "pending"), "building.json");
-  const building = readBuildingJson(buildingPath) || {};
+  const definitionPath = pendingDefinitionPath(submissionId, "pending");
+  const definition = readDefinitionJson(definitionPath) || {};
+  const contentType = resolveSubmissionDefinitionKind(meta, submissionId) === "prop" ? "prop" : "building";
   const description =
     normalizeDescription(meta.description) ||
-    normalizeDescription(building.description) ||
+    normalizeDescription(definition.description) ||
     "";
-  const materials = readBuildingMaterials(buildingPath);
-  const goldCost = readBuildingGoldCost(buildingPath);
+  const materials = readBuildingMaterials(definitionPath);
+  const goldCost = readBuildingGoldCost(definitionPath);
   const styleId =
-    String(meta.styleId || building.styleId || "misc").trim() || "misc";
+    String(meta.styleId || definition.styleId || "misc").trim() || "misc";
   const tags = normalizeTags(meta.tags).length
     ? normalizeTags(meta.tags)
-    : normalizeTags(building.tags);
+    : normalizeTags(definition.tags);
   const iconFile = pendingSubmissionFile(submissionId, "icon.png");
   return {
     status: 200,
@@ -1861,7 +2120,8 @@ function getPendingSubmissionEditPayload(submissionId) {
       kind: "pending",
       submissionId,
       proposedId: meta.proposedId || null,
-      displayName: String(meta.displayName || building.displayName || "").trim(),
+      contentType,
+      displayName: String(meta.displayName || definition.displayName || "").trim(),
       description,
       treasuryGoldCoinCost: goldCost,
       materials,
@@ -1875,6 +2135,14 @@ function getPendingSubmissionEditPayload(submissionId) {
         : null,
       ...pendingCoverImage(submissionId, { asAdmin: true }),
       prefabUrl: `/api/my-submissions/${encodeURIComponent(submissionId)}/prefab.json`,
+      propUrl:
+        contentType === "prop"
+          ? `/api/v1/moderation/submissions/${encodeURIComponent(submissionId)}/prop.json`
+          : undefined,
+      buildingUrl:
+        contentType === "prop"
+          ? undefined
+          : `/api/v1/moderation/submissions/${encodeURIComponent(submissionId)}/building.json`,
       screenshots: enrichOwnerScreenshots("pending", submissionId, true),
     },
   };
@@ -1894,13 +2162,13 @@ function patchPendingSubmission(submissionId, body) {
     return { status: 400, body: { error: validated.error, message: validated.message } };
   }
   const dir = storage.submissionDir(submissionId, "pending");
-  const buildingPath = path.join(dir, "building.json");
-  const building = readBuildingJson(buildingPath);
-  if (!building || typeof building !== "object") {
+  const definitionPath = pendingDefinitionPath(submissionId, "pending");
+  const definition = readDefinitionJson(definitionPath);
+  if (!definition || typeof definition !== "object") {
     return { status: 500, body: { error: "building_corrupt" } };
   }
-  applyBuildingEditFields(building, validated.value, { allowStyleAndTags: true });
-  fs.writeFileSync(buildingPath, JSON.stringify(building, null, 2));
+  applyBuildingEditFields(definition, validated.value, { allowStyleAndTags: true });
+  fs.writeFileSync(definitionPath, JSON.stringify(definition, null, 2));
 
   meta.displayName = validated.value.displayName;
   if (validated.value.description) {
@@ -1934,13 +2202,15 @@ function parseAdminRawJson(req, res, next) {
 
 function resolveAdminRawFiles(ownerKind, rawOwnerId) {
   if (ownerKind === "approved") {
-    const id = normalizeCommunityId(rawOwnerId);
+    const id = normalizeCatalogId(rawOwnerId);
     if (!id) return null;
     const manifest = storage.readManifest();
     const entry = (manifest.entries || []).find((candidate) => candidate.id === id);
     if (!entry) return null;
-    const paths = storage.approvedPaths(id);
-    if (!fs.existsSync(paths.building) || !fs.existsSync(paths.prefab)) return null;
+    const paths = storage.approvedPaths(id, {
+      contentType: resolveManifestContentType(entry.contentType, entry),
+    });
+    if (!fs.existsSync(paths.definition) || !fs.existsSync(paths.prefab)) return null;
     return { ownerKind, ownerId: id, paths, entry, manifest };
   }
 
@@ -1948,40 +2218,66 @@ function resolveAdminRawFiles(ownerKind, rawOwnerId) {
   const meta = storage.listPending().find((candidate) => candidate.submissionId === ownerId);
   if (!meta) return null;
   const dir = storage.submissionDir(ownerId, "pending");
+  const definitionPath = storage.pendingDefinitionFile(ownerId, "pending");
   const paths = {
     dir,
     building: path.join(dir, "building.json"),
+    prop: path.join(dir, "prop.json"),
+    definition: definitionPath,
     prefab: path.join(dir, "prefab.prefab.json"),
     meta: path.join(dir, "meta.json"),
   };
-  if (!fs.existsSync(paths.building) || !fs.existsSync(paths.prefab)) return null;
+  if (!fs.existsSync(paths.definition) || !fs.existsSync(paths.prefab)) return null;
   return { ownerKind, ownerId, paths, meta };
 }
 
+function resolveAdminRawDefinitionPath(resolved, fileKind) {
+  if (fileKind === "prop") {
+    return resolved.paths.prop;
+  }
+  if (fileKind === "building") {
+    return fs.existsSync(resolved.paths.prop) ? resolved.paths.prop : resolved.paths.building;
+  }
+  return null;
+}
+
 function readAdminRawFile(ownerKind, ownerId, fileKind) {
-  if (fileKind !== "building" && fileKind !== "prefab") {
+  if (fileKind !== "building" && fileKind !== "prop" && fileKind !== "prefab") {
     return { status: 400, body: { error: "raw_file_kind_invalid" } };
   }
   const resolved = resolveAdminRawFiles(ownerKind, ownerId);
   if (!resolved) {
     return { status: 404, body: { error: "not_found" } };
   }
-  const file = fileKind === "building" ? resolved.paths.building : resolved.paths.prefab;
+  const file =
+    fileKind === "prefab"
+      ? resolved.paths.prefab
+      : resolveAdminRawDefinitionPath(resolved, fileKind === "prop" ? "prop" : "building");
+  if (!file || !fs.existsSync(file)) {
+    return { status: 404, body: { error: "not_found" } };
+  }
   return { status: 200, text: fs.readFileSync(file, "utf8") };
 }
 
 function writeAdminRawFile(ownerKind, ownerId, fileKind, replacementText) {
-  if (fileKind !== "building" && fileKind !== "prefab") {
+  if (fileKind !== "building" && fileKind !== "prop" && fileKind !== "prefab") {
     return { status: 400, body: { error: "raw_file_kind_invalid" } };
   }
   const resolved = resolveAdminRawFiles(ownerKind, ownerId);
   if (!resolved) {
     return { status: 404, body: { error: "not_found" } };
   }
+  const definitionPath =
+    fileKind === "prop" || (fileKind === "building" && fs.existsSync(resolved.paths.prop))
+      ? resolved.paths.prop
+      : resolved.paths.building;
   const buildingText =
-    fileKind === "building"
+    fileKind === "building" || fileKind === "prop"
       ? replacementText
-      : fs.readFileSync(resolved.paths.building, "utf8");
+      : fs.readFileSync(
+          fs.existsSync(resolved.paths.prop) ? resolved.paths.prop : resolved.paths.building,
+          "utf8",
+        );
   const prefabText =
     fileKind === "prefab"
       ? replacementText
@@ -1998,7 +2294,10 @@ function writeAdminRawFile(ownerKind, ownerId, fileKind, replacementText) {
       validated.blockIdVersion,
       validated.prefabBytes,
     );
-    const target = fileKind === "building" ? resolved.paths.building : resolved.paths.prefab;
+    const target =
+      fileKind === "prefab"
+        ? resolved.paths.prefab
+        : definitionPath;
     atomicWriteText(target, replacementText);
 
     if (ownerKind === "pending") {
@@ -2339,7 +2638,7 @@ async function uploadPendingSubmissionScreenshot(submissionId, file, webUser, op
 }
 
 async function uploadApprovedBuildingScreenshot(buildingId, file, webUser, options = {}) {
-  const id = normalizeCommunityId(buildingId);
+  const id = normalizeCatalogId(buildingId);
   if (!id) {
     return { status: 400, body: { error: "invalid_id" } };
   }
@@ -2572,7 +2871,7 @@ app.post("/api/admin/buildings/:buildingId/cover", requireWebUser, requireAdmin,
 });
 
 app.post("/api/admin/buildings/:buildingId/preview-screenshot", requireWebUser, requireAdmin, (req, res) => {
-  const id = normalizeCommunityId(req.params.buildingId);
+  const id = normalizeCatalogId(req.params.buildingId);
   if (!id) {
     res.status(400).json({ error: "invalid_id", message: "That build id is not valid." });
     return;
@@ -2652,7 +2951,7 @@ app.post(
 );
 
 app.get("/api/buildings/:id/screenshots", (req, res) => {
-  const id = normalizeCommunityId(req.params.id);
+  const id = normalizeCatalogId(req.params.id);
   if (!id) {
     res.status(400).json({ error: "invalid_id" });
     return;
@@ -2678,7 +2977,7 @@ app.get("/api/buildings/:id/screenshots", (req, res) => {
 });
 
 app.get("/api/buildings/:id/screenshots/:screenshotId", (req, res) => {
-  const id = normalizeCommunityId(req.params.id);
+  const id = normalizeCatalogId(req.params.id);
   if (!id) {
     res.status(400).json({ error: "invalid_id" });
     return;
@@ -2850,7 +3149,7 @@ app.get("/internal/approved-prefab/:buildingId.json", (req, res) => {
     res.status(403).json({ error: "loopback_only" });
     return;
   }
-  const id = normalizeCommunityId(req.params.buildingId);
+  const id = normalizeCatalogId(req.params.buildingId);
   if (!id) {
     res.status(400).json({ error: "invalid_id" });
     return;
@@ -2862,6 +3161,95 @@ app.get("/internal/approved-prefab/:buildingId.json", (req, res) => {
   }
   res.type("application/json").send(fs.readFileSync(file));
 });
+
+app.get("/internal/temp-prefab/:tempId.json", (req, res) => {
+  if (!isLoopbackRequest(req)) {
+    res.status(403).json({ error: "loopback_only" });
+    return;
+  }
+  const tempId = String(req.params.tempId || "").trim();
+  if (!tempId || tempId.includes("..") || tempId.includes("/") || tempId.includes("\\")) {
+    res.status(400).json({ error: "invalid_id" });
+    return;
+  }
+  const file = path.join(storage.dirs.root, "_icon_render_temp", `${tempId}.prefab.json`);
+  if (!fs.existsSync(file)) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  res.type("application/json").send(fs.readFileSync(file));
+});
+
+app.post(
+  "/api/v1/render-prop-icon",
+  upload.fields([{ name: "prefab", maxCount: 1 }]),
+  async (req, res) => {
+    try {
+      const attach = String(req.query.attach || req.body?.attach || "").trim() === "1";
+      const ownerKindRaw = String(req.query.ownerKind || req.body?.ownerKind || "").trim().toLowerCase();
+      const ownerId = String(req.query.id || req.body?.id || "").trim();
+      const prefabFile = req.files?.prefab?.[0];
+
+      if (!propIconRender.assetsReady()) {
+        res.status(503).json({
+          error: "assets_unavailable",
+          message: "The 3D icon renderer is not ready on the server yet.",
+        });
+        return;
+      }
+
+      let iconBuffer;
+      if (prefabFile) {
+        assertSize(prefabFile.size, MAX_PREFAB_BYTES, "prefab");
+        iconBuffer = await propIconRender.renderPrefabBuffer(prefabFile.buffer);
+      } else if (ownerId) {
+        const ownerKind = ownerKindRaw === "approved" ? "approved" : "pending";
+        if (ownerKind === "approved") {
+          const id = normalizeCatalogId(ownerId);
+          if (!id || !isPropCatalogId(id)) {
+            res.status(400).json({ error: "invalid_id" });
+            return;
+          }
+        }
+        if (attach) {
+          const webUser = sessionWebUser(req);
+          const inGame = inGamePlayerUser(req);
+          const actor = webUser.profileUuid ? webUser : inGame.profileUuid ? inGame : null;
+          if (!actor?.profileUuid) {
+            res.status(401).json({ error: "login_required" });
+            return;
+          }
+          if (ownerKind === "approved") {
+            const manifest = storage.readManifest();
+            const entry = (manifest.entries || []).find((e) => e.id === normalizeCatalogId(ownerId));
+            if (!entry || (!isOwnedByWebUser(entry, actor) && !ADMIN_UUIDS.has(actor.profileUuid))) {
+              res.status(403).json({ error: "not_owner" });
+              return;
+            }
+          } else {
+            const meta = storage.loadSubmissionMeta(ownerId, "pending");
+            if (!meta || (!isOwnedByWebUser(meta, actor) && !ADMIN_UUIDS.has(actor.profileUuid))) {
+              res.status(403).json({ error: "not_owner" });
+              return;
+            }
+          }
+        }
+        iconBuffer = await propIconRender.renderForOwner(ownerKind, ownerId, { attach });
+      } else {
+        res.status(400).json({ error: "prefab_or_id_required" });
+        return;
+      }
+
+      res.type("image/png").send(iconBuffer);
+    } catch (err) {
+      if (err instanceof propIconRender.ScreenshotProcessingError) {
+        res.status(400).json({ error: err.code || "icon_invalid", message: err.message });
+        return;
+      }
+      res.status(500).json({ error: "icon_render_failed", message: err.message || "Icon render failed." });
+    }
+  },
+);
 
 // The catalog is committed and served from the repo so viewer code can never be paired
 // with an older catalog uploaded to the volume, which silently drops block states such
@@ -3001,6 +3389,7 @@ const server = app.listen(PORT, () => {
 function shutdown(signal) {
   console.log(`Received ${signal}, shutting down gracefully…`);
   previewScreenshots.shutdown().catch(() => {});
+  propIconRender.shutdown().catch(() => {});
   server.close((err) => {
     if (err) {
       console.error("Error during shutdown:", err);

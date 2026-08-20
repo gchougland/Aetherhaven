@@ -16,7 +16,7 @@
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/styles.css?v=48" />
+    <link rel="stylesheet" href="/styles.css?v=49" />
     <script type="importmap">
       {
         "imports": {
@@ -103,6 +103,13 @@
           <h2>Community builds</h2>
           <div class="ornament-divider" aria-hidden="true"></div>
         </div>
+        <nav class="catalog-tabs" id="catalogTabs" aria-label="Catalog type" hidden>
+          <button type="button" class="catalog-tab" data-catalog-tab="buildings" aria-current="page">
+            Buildings
+          </button>
+          <button type="button" class="catalog-tab" data-catalog-tab="walls">Wall Styles</button>
+          <button type="button" class="catalog-tab" data-catalog-tab="props">Props</button>
+        </nav>
         <section id="newestCarouselSection" class="newest-carousel-section" hidden>
           <div class="newest-carousel-heading">
             <h3>Newest builds</h3>
@@ -194,7 +201,7 @@
       import { PrefabViewer, mountPrefabViewer, PREFAB_VIEWER_TRANSFORM_REV } from "/prefab-viewer/PrefabViewer.js?v=28";
       window.PrefabViewerAPI = { PrefabViewer, mountPrefabViewer, PREFAB_VIEWER_TRANSFORM_REV };
     </script>
-    <script src="/app.js?v=46"></script>
+    <script src="/app.js?v=47"></script>
     <script src="/ads.js?v=1"></script>
     <script>
       loadCatalog();

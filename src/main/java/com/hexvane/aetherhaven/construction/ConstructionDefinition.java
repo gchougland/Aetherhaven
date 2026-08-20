@@ -44,6 +44,15 @@ public final class ConstructionDefinition {
     @SerializedName("plotAnchorOffset")
     private int[] plotAnchorOffset = new int[] {0, 0, 0};
 
+    /**
+     * Exact staff-drawn plot box in prefab-local space (relative to prefab buffer / plot-sign anchor), inclusive
+     * min/max. When set, plot footprint uses this volume instead of shrinking to solid voxels. Omitted on older
+     * buildings that still use solid-fit.
+     */
+    @SerializedName("boundsLocal")
+    @Nullable
+    private BoundsLocalJson boundsLocal;
+
     /** If set, player must carry this item to select this construction in the placement tool UI. */
     @SerializedName("plotTokenItemId")
     @Nullable
@@ -284,6 +293,29 @@ public final class ConstructionDefinition {
 
     public int[] getPlotAnchorOffset() {
         return plotAnchorOffset != null && plotAnchorOffset.length == 3 ? plotAnchorOffset : new int[] {0, 0, 0};
+    }
+
+    /**
+     * Inclusive prefab-local min corner of the authored plot box, or null when the building has no stored bounds
+     * (legacy solid-fit footprint).
+     */
+    @Nullable
+    public Vector3i getBoundsLocalMin() {
+        return boundsLocal != null ? boundsLocal.minOrNull() : null;
+    }
+
+    /**
+     * Inclusive prefab-local max corner of the authored plot box, or null when the building has no stored bounds
+     * (legacy solid-fit footprint).
+     */
+    @Nullable
+    public Vector3i getBoundsLocalMax() {
+        return boundsLocal != null ? boundsLocal.maxOrNull() : null;
+    }
+
+    /** True when {@link #getBoundsLocalMin()} and {@link #getBoundsLocalMax()} are both present. */
+    public boolean hasBoundsLocal() {
+        return getBoundsLocalMin() != null && getBoundsLocalMax() != null;
     }
 
     /**
@@ -618,5 +650,25 @@ public final class ConstructionDefinition {
             }
         }
         return Collections.unmodifiableSet(out);
+    }
+
+    private static final class BoundsLocalJson {
+        @SerializedName("min")
+        @Nullable
+        private int[] min;
+
+        @SerializedName("max")
+        @Nullable
+        private int[] max;
+
+        @Nullable
+        Vector3i minOrNull() {
+            return min != null && min.length == 3 ? new Vector3i(min[0], min[1], min[2]) : null;
+        }
+
+        @Nullable
+        Vector3i maxOrNull() {
+            return max != null && max.length == 3 ? new Vector3i(max[0], max[1], max[2]) : null;
+        }
     }
 }

@@ -445,6 +445,7 @@ async function loadCatalog() {
     catalogCanVote = Boolean(user);
     allCatalogEntries = data.entries || [];
     catalogEntriesById = new Map(allCatalogEntries.map((e) => [e.id, e]));
+    setupCatalogTabs();
     setupCatalogFilters();
     populateCatalogFilterOptions(allCatalogEntries);
     applyCatalogFilters();
@@ -790,6 +791,69 @@ let filteredCatalogEntries = [];
 let catalogCanVote = false;
 let catalogFiltersBound = false;
 let catalogPage = 1;
+let catalogTab = "buildings";
+let catalogTabsBound = false;
+
+function isPropCatalogEntry(entry) {
+  const id = String(entry?.id || "")
+    .trim()
+    .toLowerCase();
+  return entry?.contentType === "prop" || id.startsWith("prop_community_");
+}
+
+function isWallCatalogEntry(entry) {
+  return Boolean(entry?.wallSegment);
+}
+
+function isBuildingCatalogEntry(entry) {
+  return !isWallCatalogEntry(entry) && !isPropCatalogEntry(entry);
+}
+
+function catalogEntriesForTab(entries, tab = catalogTab) {
+  if (tab === "walls") {
+    return entries.filter((entry) => isWallCatalogEntry(entry));
+  }
+  if (tab === "props") {
+    return entries.filter((entry) => isPropCatalogEntry(entry));
+  }
+  return entries.filter((entry) => isBuildingCatalogEntry(entry));
+}
+
+function setupCatalogTabs() {
+  const tabs = document.getElementById("catalogTabs");
+  if (!tabs) {
+    return;
+  }
+  tabs.hidden = false;
+  if (catalogTabsBound) {
+    updateCatalogTabUi();
+    return;
+  }
+  catalogTabsBound = true;
+  tabs.querySelectorAll("[data-catalog-tab]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const next = String(button.dataset.catalogTab || "buildings");
+      if (next === catalogTab) {
+        return;
+      }
+      catalogTab = next;
+      updateCatalogTabUi();
+      applyCatalogFilters({ resetPage: true });
+    });
+  });
+  updateCatalogTabUi();
+}
+
+function updateCatalogTabUi() {
+  document.querySelectorAll("[data-catalog-tab]").forEach((button) => {
+    const active = button.dataset.catalogTab === catalogTab;
+    if (active) {
+      button.setAttribute("aria-current", "page");
+    } else {
+      button.removeAttribute("aria-current");
+    }
+  });
+}
 
 function setupCatalogFilters() {
   const toolbar = document.getElementById("catalogToolbar");
@@ -1016,15 +1080,19 @@ function updateCatalogResultCount(rangeStart, rangeEnd, filteredTotal, allTotal)
   if (!el) {
     return;
   }
+  const label =
+    catalogTab === "walls" ? "wall styles" : catalogTab === "props" ? "props" : "builds";
+  const singular =
+    catalogTab === "walls" ? "wall style" : catalogTab === "props" ? "prop" : "build";
   if (!filteredTotal) {
-    el.textContent = allTotal ? `0 of ${allTotal} builds` : "0 builds";
+    el.textContent = allTotal ? `0 of ${allTotal} ${label}` : `0 ${label}`;
     return;
   }
   const range =
     rangeStart === rangeEnd ? `${rangeStart}` : `${rangeStart}–${rangeEnd}`;
   if (filteredTotal === allTotal) {
     el.textContent =
-      filteredTotal === 1 ? "1 build" : `Showing ${range} of ${filteredTotal} builds`;
+      filteredTotal === 1 ? `1 ${singular}` : `Showing ${range} of ${filteredTotal} ${label}`;
   } else {
     el.textContent = `Showing ${range} of ${filteredTotal} matches (${allTotal} total)`;
   }
@@ -1101,10 +1169,17 @@ function renderCatalogPage() {
   if (!el) {
     return;
   }
-  const allTotal = allCatalogEntries.length;
+  const tabEntries = catalogEntriesForTab(allCatalogEntries, catalogTab);
+  const allTotal = tabEntries.length;
   const filteredTotal = filteredCatalogEntries.length;
   if (!allTotal) {
-    el.innerHTML = emptyStateHtml("No approved buildings yet.");
+    const emptyLabel =
+      catalogTab === "walls"
+        ? "No approved wall styles yet."
+        : catalogTab === "props"
+          ? "No approved props yet."
+          : "No approved buildings yet.";
+    el.innerHTML = emptyStateHtml(emptyLabel);
     updateCatalogResultCount(0, 0, 0, 0);
     renderCatalogPagination(0);
     return;
@@ -1185,10 +1260,12 @@ function applyCatalogFilters({ resetPage = true } = {}) {
     url.searchParams.delete("favorites");
   }
   history.replaceState(null, "", url);
-  filteredCatalogEntries = sortCatalogEntries(
-    collapseWallStyles(allCatalogEntries.filter((e) => entryMatchesCatalogFilters(e, filters))),
-    getCatalogSortMode()
-  );
+  const tabEntries = catalogEntriesForTab(allCatalogEntries, catalogTab);
+  const processedEntries =
+    catalogTab === "walls"
+      ? collapseWallStyles(tabEntries.filter((e) => entryMatchesCatalogFilters(e, filters)))
+      : tabEntries.filter((e) => entryMatchesCatalogFilters(e, filters));
+  filteredCatalogEntries = sortCatalogEntries(processedEntries, getCatalogSortMode());
   if (resetPage) {
     catalogPage = 1;
   }
@@ -1498,7 +1575,9 @@ function resolveOwnerPrefabUrl(item) {
     return direct;
   }
   if (item?.kind === "approved" && item.id) {
-    return `/api/v1/buildings/${encodeURIComponent(item.id)}/prefab.json`;
+    return isPropCatalogEntry(item)
+      ? `/api/v1/props/${encodeURIComponent(item.id)}/prefab.json`
+      : `/api/v1/buildings/${encodeURIComponent(item.id)}/prefab.json`;
   }
   if (item?.kind === "pending" && item.submissionId) {
     return `/api/my-submissions/${encodeURIComponent(item.submissionId)}/prefab.json`;
@@ -1587,6 +1666,7 @@ function renderOwnerScreenshots(item, options = {}) {
             <span class="screenshot-upload-btn">${atLimit ? "Screenshot limit reached" : "Add screenshot"}</span>
           </label>
           ${captureBtn}
+          ${renderPropIconButtonHtml(item, reloadFn)}
           ${generateCoverBtn}
         </div>
         <p class="meta">JPEG, PNG, or WebP · max ${SCREENSHOT_MAX_SIZE_LABEL} · up to ${MAX_SCREENSHOTS_PER_OWNER} per build.${approvalNote}${
@@ -1657,6 +1737,45 @@ function renderMySubmissionItem(item) {
         <div class="submission-card-actions" onclick="event.stopPropagation()">${actions}</div>
       </div>
     </article>`;
+}
+
+async function renderPropIcon(ownerKind, ownerId, reloadFn = "loadEditPage") {
+  const params = new URLSearchParams({
+    id: ownerId,
+    ownerKind,
+    attach: "1",
+  });
+  const res = await fetch(`/api/v1/render-prop-icon?${params.toString()}`, {
+    method: "POST",
+    headers: { Accept: "image/png" },
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    alert(data.message || data.error || "Could not render the prop icon.");
+    return;
+  }
+  await reloadAfterScreenshotAction(reloadFn);
+}
+
+function renderPropIconButtonHtml(item, reloadFn) {
+  const isProp =
+    item?.contentType === "prop" ||
+    String(item?.id || item?.proposedId || "")
+      .toLowerCase()
+      .startsWith("prop_community_");
+  if (!isProp) {
+    return "";
+  }
+  const ownerKind = item.kind === "approved" ? "approved" : "pending";
+  const ownerId = item.kind === "approved" ? item.id : item.submissionId;
+  if (!ownerId) {
+    return "";
+  }
+  return `<button
+          type="button"
+          class="secondary screenshot-capture-btn"
+          onclick="event.stopPropagation(); renderPropIcon(${jsString(ownerKind)}, ${jsString(ownerId)}, ${jsString(reloadFn)})"
+        >Render icon</button>`;
 }
 
 async function generatePreviewCover(buildingId, reloadFn) {
@@ -3100,10 +3219,11 @@ function parseTagsInput(raw) {
     .filter(Boolean);
 }
 
-let adminRawEditorLoaded = { building: false, prefab: false };
+let adminRawEditorLoaded = { building: false, prop: false, prefab: false };
 
 function adminRawEditorIds(fileKind) {
-  const name = fileKind === "prefab" ? "Prefab" : "Building";
+  const name =
+    fileKind === "prefab" ? "Prefab" : fileKind === "prop" ? "Prop" : "Building";
   return {
     editor: `raw${name}Editor`,
     load: `raw${name}Load`,
@@ -3193,7 +3313,12 @@ async function saveAdminRawFile(fileKind) {
     setAdminRawStatus(fileKind, err.message || "Invalid JSON.", true);
     return;
   }
-  const fileName = fileKind === "prefab" ? "prefab.prefab.json" : "building.json";
+  const fileName =
+    fileKind === "prefab"
+      ? "prefab.prefab.json"
+      : fileKind === "prop"
+        ? "prop.json"
+        : "building.json";
   if (!confirm(`Replace ${fileName} with the text in this editor?`)) return;
 
   if (saveButton) saveButton.disabled = true;
@@ -3218,7 +3343,14 @@ async function saveAdminRawFile(fileKind) {
   }
 }
 
-function adminRawEditorsHtml() {
+function adminRawEditorsHtml(data = {}) {
+  const isProp =
+    data.contentType === "prop" ||
+    String(data.id || data.proposedId || "")
+      .toLowerCase()
+      .startsWith("prop_community_");
+  const definitionKind = isProp ? "prop" : "building";
+  const definitionFileName = isProp ? "prop.json" : "building.json";
   const editor = (fileKind, fileName, description) => {
     const ids = adminRawEditorIds(fileKind);
     return `
@@ -3238,7 +3370,7 @@ function adminRawEditorsHtml() {
     <section class="edit-raw-files card">
       <h3>Raw files</h3>
       <p class="meta">Admin only. Invalid files are rejected, but valid changes take effect immediately.</p>
-      ${editor("building", "building.json", "Building definition and marketplace metadata. Published id and prefabPath cannot be changed.")}
+      ${editor(definitionKind, definitionFileName, `${isProp ? "Prop" : "Building"} definition and marketplace metadata. Published id and prefabPath cannot be changed.`)}
       ${editor("prefab", "prefab.prefab.json", "Full prefab block and entity data. Large files may take a moment to load or format.")}
     </section>`;
 }
@@ -3322,7 +3454,7 @@ async function loadEditPage() {
   const hero = heroImg
     ? `<div class="edit-hero"><img src="${escapeAttr(heroImg)}" alt="" /></div>`
     : `<div class="edit-hero edit-hero--placeholder" aria-hidden="true"></div>`;
-  adminRawEditorLoaded = { building: false, prefab: false };
+  adminRawEditorLoaded = { building: false, prop: false, prefab: false };
 
   root.innerHTML = `
     <div class="edit-layout">
@@ -3369,7 +3501,7 @@ async function loadEditPage() {
           reloadFn: "loadEditPage",
         })}
       </div>
-      ${isAdmin ? adminRawEditorsHtml() : ""}
+      ${isAdmin ? adminRawEditorsHtml(data) : ""}
     </div>`;
 }
 
