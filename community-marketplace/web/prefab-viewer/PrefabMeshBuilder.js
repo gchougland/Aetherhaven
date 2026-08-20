@@ -7,12 +7,12 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=29";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=29";
-import { applyBlockyAnimationPose } from "./BlockyAnimation.js?v=29";
+} from "./BlockCatalog.js?v=31";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=31";
+import { applyBlockyAnimationPose } from "./BlockyAnimation.js?v=31";
 
 /** Bump when transform math changes — shown in the viewer so we can confirm the live build. */
-export const PREFAB_VIEWER_TRANSFORM_REV = "xform-29";
+export const PREFAB_VIEWER_TRANSFORM_REV = "xform-31";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
@@ -277,6 +277,19 @@ function makePlaceholderBlockCube() {
 }
 
 /**
+ * Open door / trapdoor poses only. Close animations end at the bind pose, so applying
+ * them is a no-op at best and can thrash fetches for every closed door in a build.
+ * @param {string|null|undefined} animPath
+ */
+function shouldApplyBlockAnimation(animPath) {
+  const p = String(animPath || "");
+  if (!p) {
+    return false;
+  }
+  return !/Close/i.test(p);
+}
+
+/**
  * @param {THREE.Group} root
  * @param {{ x?: number, y?: number, z?: number, rotation?: unknown }} b
  * @param {THREE.Object3D} child
@@ -343,6 +356,11 @@ export async function buildPrefabMesh(prefab, options = {}) {
   const work = [];
   for (const b of blocks) {
     if (b.filler != null && Number(b.filler) !== 0) {
+      continue;
+    }
+    // Prefabs store Empty for air; never draw it (placeholders here flood builds with grey cubes).
+    const blockName = String(b?.name || "").replace(/^\*/, "");
+    if (!blockName || blockName === "Empty") {
       continue;
     }
     // Unknown names still get a placeholder so props show their footprint in icons.
@@ -418,8 +436,12 @@ export async function buildPrefabMesh(prefab, options = {}) {
             }
             const model = (await getModelForDef(def, def.customModelTexture || null, tint))?.model;
             if (model) {
-              if (def.customModelAnimation) {
-                await applyBlockyAnimationPose(model, def.customModelAnimation);
+              if (shouldApplyBlockAnimation(def.customModelAnimation)) {
+                try {
+                  await applyBlockyAnimationPose(model, def.customModelAnimation);
+                } catch (err) {
+                  console.warn("Block animation pose failed", def.customModelAnimation, err);
+                }
               }
               model.position.y = -0.5;
               placeBlockHolder(root, b, model);
@@ -430,8 +452,12 @@ export async function buildPrefabMesh(prefab, options = {}) {
           if (!placed && def.itemModel) {
             const model = await getModel(def.itemModel, def.itemTexture || null);
             if (model) {
-              if (def.customModelAnimation) {
-                await applyBlockyAnimationPose(model, def.customModelAnimation);
+              if (shouldApplyBlockAnimation(def.customModelAnimation)) {
+                try {
+                  await applyBlockyAnimationPose(model, def.customModelAnimation);
+                } catch (err) {
+                  console.warn("Block animation pose failed", def.customModelAnimation, err);
+                }
               }
               model.position.y = -0.5;
               placeBlockHolder(root, b, model);

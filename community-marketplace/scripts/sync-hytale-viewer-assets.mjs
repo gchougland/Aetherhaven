@@ -531,7 +531,7 @@ function main() {
   }
 
   const sumOverRoots = (fn) => assetRoots.reduce((total, root) => total + fn(root), 0);
-  const isModelOrTexture = (f) => /\.(blockymodel|png|jpg|jpeg|webp)$/i.test(f);
+  const isModelOrTexture = (f) => /\.(blockymodel|blockyanim|png|jpg|jpeg|webp)$/i.test(f);
 
   const blockTexturesCopied = sumOverRoots((root) =>
     copyTree(path.join(root, "Common", "BlockTextures"), path.join(outDir, "Common", "BlockTextures"))

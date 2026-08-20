@@ -19,11 +19,11 @@ $Sounds = "../Sounds.ui";
   )
 );
 
-@PlotCommunitySubTabAnchor = Anchor(Width: 82, Height: 62, Right: 5, Top: -14);
+@PlotCommunitySubTabAnchor = Anchor(Width: 82, Height: 74, Right: 5, Top: -14);
 
 @PlotCommunitySubTabStyle = TabStyleState(
-  Background: "Common/ContainerPatch.png",
-  Overlay: "Common/TabOverlay.png",
+  Background: "../Common/ContainerPatch.png",
+  Overlay: "../Common/TabOverlay.png",
   IconAnchor: (Width: 44, Height: 44),
   Anchor: (...@PlotCommunitySubTabAnchor)
 );
@@ -39,7 +39,7 @@ $Sounds = "../Sounds.ui";
       ...@PlotCommunitySubTabStyle,
       Anchor: (...@PlotCommunitySubTabAnchor, Top: 0),
       IconAnchor: (Width: 44, Height: 44),
-      Overlay: "Common/TabSelectedOverlay.png"
+      Overlay: "../Common/TabSelectedOverlay.png"
     )
   )
 );
@@ -267,11 +267,11 @@ $C.@PageOverlay {
 
           Group #CommunitySubTabsHost {
             LayoutMode: Left;
-            Anchor: (Height: 66, Left: 2, Right: 0, Bottom: 0);
+            Anchor: (Height: 78, Left: 2, Right: 0, Bottom: 0);
             Visible: false;
 
             TabNavigation #CommunitySubTabs {
-              Anchor: (Height: 66);
+              Anchor: (Height: 78);
               Style: @PlotCommunitySubTabsStyle;
               SelectedTab: "Buildings";
 

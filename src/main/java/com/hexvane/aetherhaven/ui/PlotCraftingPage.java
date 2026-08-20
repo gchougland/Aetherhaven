@@ -114,7 +114,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     /** Matches {@code @PlotPanelHeight} in PlotCraftingPage.ui. */
     private static final int PLOT_PANEL_HEIGHT = 600;
     /** Extra stack height so bottom community tabs stay in-layout for clicks. */
-    private static final int COMMUNITY_SUBTAB_STACK_EXTRA = 56;
+    private static final int COMMUNITY_SUBTAB_STACK_EXTRA = 68;
     /** Visible rows per page in list view (Custom UI has no list virtualization). */
     private static final int LIST_PAGE_SIZE = 12;
     /** Visible cells per page in grid view. */
