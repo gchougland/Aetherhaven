@@ -10,7 +10,7 @@ Answers here are meant as a quick reference while you play or browse the site. F
 
 ## How do I install the mod?
 
-Download **Aetherhaven: Foundations of Industry** from [CurseForge](https://www.curseforge.com/hytale/mods/aetherhaven) and install it like any other Hytale mod for your server or world.
+Download **Aetherhaven: Festivals of Orbis** from [CurseForge](https://www.curseforge.com/hytale/mods/aetherhaven) and install it like any other Hytale mod for your server or world.
 
 ## How do I submit a community build?
 

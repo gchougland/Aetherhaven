@@ -5,40 +5,41 @@
 :root {
   color-scheme: dark;
 
-  /* Backgrounds — warm stone, not blue-grey */
-  --bg-deep: #0c0808;
-  --bg: #120d0d;
-  --bg-elevated: #1a1212;
+  /* Backgrounds — cool night teal */
+  --bg-deep: #070b0d;
+  --bg: #0b1216;
+  --bg-elevated: #10181c;
 
-  /* Stone panels — warm brown-grey castle stone */
-  --panel: #221a18;
-  --panel-light: #2e2420;
+  /* Panels — cool slate */
+  --panel: #162026;
+  --panel-light: #1c2a30;
 
-  /* Text */
-  --text: #f0e8dc;
-  --text-muted: #b0a090;
+  /* Text — cooler off-white */
+  --text: #e8f0f2;
+  --text-muted: #90a8b0;
 
-  /* Gold */
+  /* Gold (secondary accent, kept from the logo bevels) */
   --gold: #d4af37;
   --gold-bright: #f0d070;
   --gold-dim: #a08030;
 
-  /* Burgundy */
-  --burgundy: #6b1530;
-  --burgundy-bright: #b82050;
-  --burgundy-deep: #3d0a1a;
+  /* Cyan — Festivals of Orbis subtitle glow */
+  --cyan: #3dd4e0;
+  --cyan-bright: #7ef0ff;
+  --cyan-deep: #0a6e78;
 
   /* Borders & accents */
-  --border: #4a3830;
+  --border: #2a3c44;
   --border-gold: rgba(212, 175, 55, 0.45);
+  --border-cyan: rgba(61, 212, 224, 0.4);
 
   /* Semantic */
-  --accent: var(--gold);
+  --accent: var(--cyan);
   --muted: var(--text-muted);
   --danger: #8b2a2a;
   --danger-bright: #b83c3c;
   --danger-text: #f5d0d0;
-  --secondary-btn: #3d3028;
+  --secondary-btn: #243238;
 
   /* Spacing */
   --space-xs: 0.25rem;
@@ -82,10 +83,10 @@ body {
   line-height: 1.6;
   color: var(--text);
   background:
-    radial-gradient(ellipse 110% 75% at 50% -20%, rgba(184, 32, 80, 0.42), transparent 58%),
-    radial-gradient(ellipse 80% 55% at 5% 90%, rgba(107, 21, 48, 0.45), transparent 52%),
+    radial-gradient(ellipse 110% 75% at 50% -20%, rgba(61, 212, 224, 0.28), transparent 58%),
+    radial-gradient(ellipse 80% 55% at 5% 90%, rgba(10, 110, 120, 0.4), transparent 52%),
     radial-gradient(ellipse 55% 45% at 95% 65%, rgba(212, 175, 55, 0.16), transparent 48%),
-    linear-gradient(180deg, #160a0e 0%, #1a0c12 50%, #140910 100%);
+    linear-gradient(180deg, #071016 0%, #0b1216 50%, #070b0d 100%);
 }
 
 h1,
@@ -107,17 +108,17 @@ h3 {
 }
 
 a {
-  color: var(--gold);
+  color: var(--cyan);
   text-decoration: none;
   transition: color var(--transition);
 }
 
 a:hover {
-  color: var(--gold-bright);
+  color: var(--cyan-bright);
 }
 
 a:focus-visible {
-  outline: 2px solid var(--gold);
+  outline: 2px solid var(--cyan);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
@@ -160,15 +161,15 @@ main.wrap > section + section {
   background:
     linear-gradient(
       180deg,
-      #1a0c12 0%,
+      #0e1a1e 0%,
       var(--panel-light) 35%,
       var(--panel) 100%
     );
   border-bottom: 2px solid var(--gold);
   box-shadow:
     0 4px 24px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(240, 208, 112, 0.12),
-    0 0 60px rgba(107, 21, 48, 0.15);
+    inset 0 1px 0 rgba(126, 240, 255, 0.1),
+    0 0 60px rgba(61, 212, 224, 0.12);
   z-index: 40;
 }
 
@@ -182,9 +183,9 @@ main.wrap > section + section {
   background: linear-gradient(
     90deg,
     transparent,
-    var(--burgundy-bright) 20%,
+    var(--cyan) 20%,
     var(--gold-bright) 50%,
-    var(--burgundy-bright) 80%,
+    var(--cyan) 80%,
     transparent
   );
   opacity: 0.5;
@@ -235,8 +236,8 @@ main.wrap > section + section {
   display: block;
   width: auto;
   height: auto;
-  max-height: 56px;
-  max-width: min(220px, 40vw);
+  max-height: 64px;
+  max-width: min(240px, 42vw);
   object-fit: contain;
 }
 
@@ -261,16 +262,16 @@ main.wrap > section + section {
 }
 
 .site-primary-nav a:hover {
-  color: var(--gold-bright);
+  color: var(--cyan-bright);
 }
 
 .site-primary-nav a[aria-current="page"] {
-  color: var(--gold-bright);
-  border-bottom-color: var(--gold);
+  color: var(--cyan-bright);
+  border-bottom-color: var(--cyan);
 }
 
 .site-primary-nav a:focus-visible {
-  outline: 2px solid var(--gold);
+  outline: 2px solid var(--cyan);
   outline-offset: 3px;
   border-radius: var(--radius-sm);
 }
@@ -415,13 +416,13 @@ main.wrap > section + section {
 }
 
 .account-menu-dropdown a:hover {
-  background: rgba(212, 175, 55, 0.12);
-  color: var(--gold-bright);
+  background: rgba(61, 212, 224, 0.12);
+  color: var(--cyan-bright);
 }
 
 .account-menu-dropdown a[aria-current="page"] {
-  color: var(--gold-bright);
-  background: rgba(212, 175, 55, 0.1);
+  color: var(--cyan-bright);
+  background: rgba(61, 212, 224, 0.1);
 }
 
 /* ==========================================================================
@@ -693,7 +694,7 @@ main.wrap > section + section {
 .building-card-header .building-icon-wrap--placeholder,
 .newest-carousel-card-media .building-icon-wrap--placeholder {
   border: none;
-  background: linear-gradient(145deg, #1a1012, var(--panel));
+  background: linear-gradient(145deg, #10181c, var(--panel));
 }
 
 .building-card-header .building-icon-wrap--placeholder::before,
@@ -1179,7 +1180,7 @@ main.wrap > section + section {
    ========================================================================== */
 
 .status {
-  background: linear-gradient(135deg, rgba(61, 10, 26, 0.5), rgba(34, 26, 24, 0.9));
+  background: linear-gradient(135deg, rgba(10, 110, 120, 0.4), rgba(22, 32, 38, 0.9));
   border: 1px solid var(--gold);
   padding: var(--space-md) var(--space-lg);
   border-radius: var(--radius);
@@ -1189,8 +1190,8 @@ main.wrap > section + section {
 }
 
 .status--error {
-  background: linear-gradient(135deg, rgba(107, 21, 48, 0.45), rgba(34, 26, 24, 0.9));
-  border-color: var(--burgundy-bright);
+  background: linear-gradient(135deg, rgba(139, 42, 42, 0.45), rgba(22, 32, 38, 0.9));
+  border-color: var(--danger-bright);
   color: var(--danger-text);
 }
 
@@ -1929,7 +1930,7 @@ body.modal-open {
 .building-modal-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(8, 5, 5, 0.72);
+  background: rgba(7, 11, 13, 0.72);
 }
 
 .building-modal-dialog {
@@ -1942,7 +1943,7 @@ body.modal-open {
   border: 1px solid var(--border-gold);
   border-radius: var(--radius);
   background:
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(107, 21, 48, 0.18), transparent),
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(61, 212, 224, 0.16), transparent),
     var(--panel);
   box-shadow: var(--shadow-card-hover);
 }
@@ -1956,7 +1957,7 @@ body.modal-open {
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   overflow: hidden;
-  background: #1a1418;
+  background: #10181c;
 }
 
 .building-prefab-viewer-hint {
@@ -2362,8 +2363,8 @@ body.modal-open {
   }
 
   .site-logo {
-    max-height: 44px;
-    max-width: min(180px, 55vw);
+    max-height: 52px;
+    max-width: min(200px, 55vw);
   }
 
   .site-header-end {
@@ -2755,9 +2756,9 @@ a.edit-cancel {
 }
 
 .wiki-search input:focus {
-  outline: 2px solid var(--gold);
+  outline: 2px solid var(--cyan);
   outline-offset: 1px;
-  border-color: var(--gold-dim);
+  border-color: var(--cyan-deep);
 }
 
 .wiki-search-hint {
@@ -2793,7 +2794,7 @@ a.edit-cancel {
 .wiki-search-list li + li {
   margin-top: var(--space-xs);
   padding-top: var(--space-xs);
-  border-top: 1px solid rgba(74, 56, 48, 0.5);
+  border-top: 1px solid rgba(42, 60, 68, 0.5);
 }
 
 .wiki-search-list a {
@@ -2805,7 +2806,7 @@ a.edit-cancel {
 }
 
 .wiki-search-list a:hover {
-  background: rgba(212, 175, 55, 0.08);
+  background: rgba(61, 212, 224, 0.08);
 }
 
 .wiki-search-list strong {
@@ -2835,7 +2836,7 @@ a.edit-cancel {
 .wiki-dir-children {
   margin-left: 0.85rem;
   padding-left: 0.55rem;
-  border-left: 1px solid rgba(74, 56, 48, 0.65);
+  border-left: 1px solid rgba(42, 60, 68, 0.65);
 }
 
 .wiki-dir-row {
@@ -2859,7 +2860,7 @@ a.edit-cancel {
 }
 
 .wiki-dir-toggle:hover {
-  color: var(--gold-bright);
+  color: var(--cyan-bright);
 }
 
 .wiki-dir-link {
@@ -2873,13 +2874,13 @@ a.edit-cancel {
 }
 
 .wiki-dir-link:hover {
-  color: var(--gold-bright);
-  background: rgba(212, 175, 55, 0.06);
+  color: var(--cyan-bright);
+  background: rgba(61, 212, 224, 0.06);
 }
 
 .wiki-dir-link[aria-current="page"] {
-  color: var(--gold-bright);
-  background: rgba(212, 175, 55, 0.12);
+  color: var(--cyan-bright);
+  background: rgba(61, 212, 224, 0.12);
   font-weight: 600;
 }
 
@@ -2903,7 +2904,7 @@ a.edit-cancel {
 }
 
 a.wiki-crumb:hover {
-  color: var(--gold-bright);
+  color: var(--cyan-bright);
 }
 
 .wiki-crumb--current {
@@ -2972,11 +2973,11 @@ a.wiki-crumb:hover {
 }
 
 .wiki-article a {
-  color: var(--gold-bright);
+  color: var(--cyan-bright);
 }
 
 .wiki-article a:hover {
-  color: #fff0b0;
+  color: #c8fbff;
 }
 
 .wiki-article table {
@@ -3036,7 +3037,7 @@ a.wiki-crumb:hover {
   padding: 0.1em 0.35em;
   background: rgba(0, 0, 0, 0.35);
   border-radius: 3px;
-  border: 1px solid rgba(74, 56, 48, 0.6);
+  border: 1px solid rgba(42, 60, 68, 0.6);
 }
 
 .wiki-article blockquote {
@@ -3224,7 +3225,7 @@ a.wiki-crumb:hover {
 }
 
 .site-footer-meta a:hover {
-  color: var(--gold-bright);
+  color: var(--cyan-bright);
 }
 
 .privacy-page h1 {
