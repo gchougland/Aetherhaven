@@ -746,7 +746,7 @@ public final class PatrolWandInteractions {
             send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.patrolWand.notInTown"));
             return false;
         }
-        if (!town.isMemberPlayer(uc.getUuid()) && !town.getOwnerUuid().equals(uc.getUuid())) {
+        if (!town.isMemberPlayer(uc.getUuid()) && !town.isOwner(uc.getUuid())) {
             send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.patrolWand.notMember"));
             return false;
         }
@@ -772,7 +772,7 @@ public final class PatrolWandInteractions {
             send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.patrolWand.notInTown"));
             return false;
         }
-        if (!town.isMemberPlayer(uc.getUuid()) && !town.getOwnerUuid().equals(uc.getUuid())) {
+        if (!town.isMemberPlayer(uc.getUuid()) && !town.isOwner(uc.getUuid())) {
             send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.patrolWand.notMember"));
             return false;
         }

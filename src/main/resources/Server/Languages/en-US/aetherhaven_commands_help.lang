@@ -10,7 +10,7 @@ commands.aetherhaven.towns.desc=Debug: list every town in this world
 commands.aetherhaven.replace_charter.desc=Put the charter block back at your town's saved spot
 commands.aetherhaven.replace_charter.townName.desc=Optional town name (full name with spaces)
 
-commands.aetherhaven.town.desc=Town members: invite, accept, roles, leave
+commands.aetherhaven.town.desc=Town members: invite, accept, roles, leave, relinquish
 commands.aetherhaven.town.invite.desc=Invite an online player to your town
 commands.aetherhaven.town.invite.player.desc=Player username (must be online)
 commands.aetherhaven.town.accept.desc=Accept a pending town invite
@@ -21,6 +21,7 @@ commands.aetherhaven.town.role.desc=Set a member role: BUILD, QUEST, or BOTH
 commands.aetherhaven.town.role.player.desc=Member username (must be online)
 commands.aetherhaven.town.role.role.desc=BUILD, QUEST, or BOTH
 commands.aetherhaven.town.leave.desc=Leave a town you belong to (not as founder)
+commands.aetherhaven.town.relinquish.desc=Give up your town. Members leave. Owners pass it on, or it keeps going on its own.
 commands.aetherhaven.town.townName.desc=Optional town name (full name with spaces). Skip if you only have one invite.
 
 commands.aetherhaven.poi.desc=Debug: point of interest helpers

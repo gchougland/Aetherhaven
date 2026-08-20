@@ -87,7 +87,15 @@ aetherhaven.town.charterReplace.alreadyOk=This charter block is already linked t
 aetherhaven.town.charterReplace.done=Charter block restored for "{town}".
 aetherhaven.town.rolecmd.roleInvalid=Role must be BUILD, QUEST, or BOTH.
 aetherhaven.town.leave.notInTown=You are not in a town.
-aetherhaven.town.leave.ownerCannotLeave=Owners cannot leave; transfer ownership is not implemented yet.
+aetherhaven.town.leave.ownerCannotLeave=You cannot leave as owner. Use /aetherhaven town relinquish to give up the town.
+aetherhaven.town.relinquish.notInTown=You are not in a town.
+aetherhaven.town.relinquish.specifyTownName=You belong to more than one town. Use /aetherhaven town relinquish with the town name.
+aetherhaven.town.relinquish.handedOver=You handed {town} to {name}.
+aetherhaven.town.relinquish.youAreInCharge=You are now in charge of {town}.
+aetherhaven.town.relinquish.townKeepsGoing=You left {town}. The town keeps going, and anyone can claim it at the charter.
+aetherhaven.town.claim.alreadyOwned=This town already has an owner.
+aetherhaven.town.claim.alreadyHaveTown=You already have a town in this world.
+aetherhaven.town.claim.claimed={town} is yours now.
 aetherhaven.town.leave.notMember=You are not a member of this town.
 aetherhaven.town.leave.left=You left "{town}".
 

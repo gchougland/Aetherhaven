@@ -120,6 +120,26 @@ $C.@PageOverlay {
           Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #6a7a8a);
           Text: "";
         }
+
+        $C.@TextButton #ClaimTownButton {
+          Text: "";
+          Visible: false;
+          Anchor: (Top: 4);
+        }
+
+        Label #ClaimTownHint {
+          Visible: false;
+          Anchor: (Top: 8, Width: 424);
+          Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #6a7a8a);
+          Text: "";
+        }
+
+        Label #AlreadyHaveTownHint {
+          Visible: false;
+          Anchor: (Top: 8, Width: 424);
+          Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #6a7a8a);
+          Text: "";
+        }
       }
     }
     }

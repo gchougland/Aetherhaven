@@ -221,6 +221,10 @@ public final class PlotAssemblyService {
         Vector3i anchor = plot.resolvePrefabAnchorWorld(def);
         Rotation yaw = plot.resolvePrefabYaw();
         UUID owner = plot.getAssemblyOwnerUuid() != null ? plot.getAssemblyOwnerUuid() : town.getOwnerUuid();
+        if (owner == null) {
+            LOGGER.atWarning().log("Rehydrate assembly: no assembler or town owner for plot %s", plotId);
+            return null;
+        }
         if (!tryRegisterJob(world, plugin, town, plot, anchor, yaw, def, buffer, owner, entityStore)) {
             LOGGER.atWarning().log("Rehydrate assembly: could not register job for plot %s (prefab paste start cancelled?)", plotId);
             return null;
@@ -1327,13 +1331,20 @@ public final class PlotAssemblyService {
         }
         AssemblyWorldRegistry.remove(world, plotId);
         UUID finisher = plot.getAssemblyOwnerUuid() != null ? plot.getAssemblyOwnerUuid() : town.getOwnerUuid();
-        UUID notifyUuid = town.playerCanManageConstructions(finisher) ? finisher : town.getOwnerUuid();
+        UUID notifyUuid =
+            finisher != null && town.playerCanManageConstructions(finisher) ? finisher : town.getOwnerUuid();
         try {
-            AssemblyCompletionEffects.tryNotifyFinisher(world, plugin, entityStore, notifyUuid, plot);
+            if (notifyUuid != null) {
+                AssemblyCompletionEffects.tryNotifyFinisher(world, plugin, entityStore, notifyUuid, plot);
+            }
         } catch (RuntimeException e) {
             LOGGER.atWarning().withCause(e).log("Assembly completion notify failed for plot %s", plotId);
         }
-        ConstructionCompleter.finishBuild(world, plugin, finisher, plotId, job.anchor(), job.yaw());
+        if (finisher != null) {
+            ConstructionCompleter.finishBuild(world, plugin, finisher, plotId, job.anchor(), job.yaw());
+        } else {
+            LOGGER.atWarning().log("Assembly complete with no finisher or town owner for plot %s", plotId);
+        }
         verifyPlotBlockLinksAfterComplete(world, plugin, town, plot, job);
         AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
     }

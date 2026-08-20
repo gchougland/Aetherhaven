@@ -224,7 +224,11 @@ public final class ConstructionBootstrap {
                 }
                 CharterBlock ch = blockRef.getStore().getComponent(blockRef, CharterBlock.getComponentType());
                 TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-                if (ch != null && TownMemberBlockAccess.denyIfNotMember(playerRef, tm, ch.getTownId(), playerUuid)) {
+                TownRecord linked = ch != null ? TownMemberBlockAccess.townFromId(tm, ch.getTownId()) : null;
+                boolean unowned = linked != null && !linked.hasOwner();
+                if (!unowned
+                    && ch != null
+                    && TownMemberBlockAccess.denyIfNotMember(playerRef, tm, ch.getTownId(), playerUuid)) {
                     return null;
                 }
                 return new CharterTownPage(playerRef, blockRef);

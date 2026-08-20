@@ -42,7 +42,7 @@ public final class AetherhavenTownsCommand extends AbstractPlayerCommand {
                 Message.translation("aetherhaven_world_debug.aetherhaven.towns.entry")
                     .param("name", t.getDisplayName())
                     .param("id", t.getTownId().toString())
-                    .param("owner", t.getOwnerUuid().toString())
+                    .param("owner", t.hasOwner() ? t.getOwnerUuid().toString() : "unclaimed")
                     .param("cx", String.valueOf(t.getCharterX()))
                     .param("cy", String.valueOf(t.getCharterY()))
                     .param("cz", String.valueOf(t.getCharterZ()))

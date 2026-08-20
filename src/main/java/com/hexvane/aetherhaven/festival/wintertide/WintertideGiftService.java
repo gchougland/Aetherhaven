@@ -379,15 +379,16 @@ public final class WintertideGiftService {
     ) {
         Set<UUID> online = TownOnlinePresence.collectOnlinePlayerUuids(world);
         List<WintertideAssignmentService.PlayerMember> out = new ArrayList<>();
-        if (online.contains(town.getOwnerUuid())) {
+        UUID ownerUuid = town.getOwnerUuid();
+        if (ownerUuid != null && online.contains(ownerUuid)) {
             out.add(
                 new WintertideAssignmentService.PlayerMember(
-                    town.getOwnerUuid(), TownPlayerLookup.ownerDisplayName(world, town)
+                    ownerUuid, TownPlayerLookup.ownerDisplayName(world, town)
                 )
             );
         }
         for (UUID member : town.getMemberPlayerUuids()) {
-            if (member.equals(town.getOwnerUuid()) || !online.contains(member)) {
+            if (town.isOwner(member) || !online.contains(member)) {
                 continue;
             }
             out.add(

@@ -42,8 +42,8 @@ class TownPlayerResolutionTest {
 
         guest.putMember(player, TownMemberRole.BOTH);
         assert guest.hasMemberOrOwner(player);
-        assert owned.getOwnerUuid().equals(player);
-        assert !owned.hasMemberOrOwner(player) || owned.getOwnerUuid().equals(player);
+        assert owned.isOwner(player);
+        assert !owned.hasMemberOrOwner(player) || owned.isOwner(player);
     }
 
     @Test

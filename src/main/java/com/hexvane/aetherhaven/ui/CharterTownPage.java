@@ -11,6 +11,7 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownDissolutionService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownRelinquishService;
 import com.hexvane.aetherhaven.town.TownTerritoryClaims;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -71,6 +72,9 @@ public final class CharterTownPage extends AetherhavenInteractiveCustomUIPage<Ch
             commandBuilder.set("#TownInfoSeparator.Visible", false);
             commandBuilder.set("#DissolveButton.Visible", false);
             commandBuilder.set("#DissolveHint.Visible", false);
+            commandBuilder.set("#ClaimTownButton.Visible", false);
+            commandBuilder.set("#ClaimTownHint.Visible", false);
+            commandBuilder.set("#AlreadyHaveTownHint.Visible", false);
             commandBuilder.set("#CharterConfirmModal.Visible", false);
             commandBuilder.set("#CharterTopBar.Visible", false);
             commandBuilder.set("#MoveCharterButton.Visible", false);
@@ -87,6 +91,9 @@ public final class CharterTownPage extends AetherhavenInteractiveCustomUIPage<Ch
             commandBuilder.set("#TownInfoSeparator.Visible", false);
             commandBuilder.set("#DissolveButton.Visible", false);
             commandBuilder.set("#DissolveHint.Visible", false);
+            commandBuilder.set("#ClaimTownButton.Visible", false);
+            commandBuilder.set("#ClaimTownHint.Visible", false);
+            commandBuilder.set("#AlreadyHaveTownHint.Visible", false);
             commandBuilder.set("#CharterConfirmModal.Visible", false);
             commandBuilder.set("#CharterTopBar.Visible", false);
             commandBuilder.set("#MoveCharterButton.Visible", false);
@@ -102,6 +109,9 @@ public final class CharterTownPage extends AetherhavenInteractiveCustomUIPage<Ch
             commandBuilder.set("#TownInfoSeparator.Visible", false);
             commandBuilder.set("#DissolveButton.Visible", false);
             commandBuilder.set("#DissolveHint.Visible", false);
+            commandBuilder.set("#ClaimTownButton.Visible", false);
+            commandBuilder.set("#ClaimTownHint.Visible", false);
+            commandBuilder.set("#AlreadyHaveTownHint.Visible", false);
             commandBuilder.set("#CharterConfirmModal.Visible", false);
             commandBuilder.set("#CharterTopBar.Visible", false);
             commandBuilder.set("#MoveCharterButton.Visible", false);
@@ -117,6 +127,9 @@ public final class CharterTownPage extends AetherhavenInteractiveCustomUIPage<Ch
             commandBuilder.set("#TownInfoSeparator.Visible", false);
             commandBuilder.set("#DissolveButton.Visible", false);
             commandBuilder.set("#DissolveHint.Visible", false);
+            commandBuilder.set("#ClaimTownButton.Visible", false);
+            commandBuilder.set("#ClaimTownHint.Visible", false);
+            commandBuilder.set("#AlreadyHaveTownHint.Visible", false);
             commandBuilder.set("#CharterConfirmModal.Visible", false);
             commandBuilder.set("#CharterTopBar.Visible", false);
             commandBuilder.set("#MoveCharterButton.Visible", false);
@@ -124,13 +137,13 @@ public final class CharterTownPage extends AetherhavenInteractiveCustomUIPage<Ch
             return;
         }
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        boolean owner = uc != null && tr.getOwnerUuid().equals(uc.getUuid());
+        boolean owner = uc != null && tr.isOwner(uc.getUuid());
         if (!owner) {
             dissolveConfirmOpen = false;
             charterRelocateConfirmOpen = false;
         }
         commandBuilder.set("#TownNameEditor.Visible", owner);
-        commandBuilder.set("#OwnerOnlyHint.Visible", !owner);
+        commandBuilder.set("#OwnerOnlyHint.Visible", !owner && tr.hasOwner());
         commandBuilder.set("#TownInfoSeparator.Visible", true);
         commandBuilder.set("#NameInput.Value", tr.getDisplayName());
         TownTerritoryClaims.migrateIfNeeded(tr);
@@ -155,6 +168,13 @@ public final class CharterTownPage extends AetherhavenInteractiveCustomUIPage<Ch
         commandBuilder.set("#DissolveHint.Visible", owner && !modalOpen);
         commandBuilder.set("#MoveCharterButton.Visible", owner && !modalOpen);
         commandBuilder.set("#MoveCharterHint.Visible", owner && !modalOpen);
+        boolean unowned = !tr.hasOwner();
+        boolean viewerOwnsOtherTown =
+            uc != null && tm.findTownForOwnerInWorld(uc.getUuid()) != null;
+        boolean showClaim = unowned && !viewerOwnsOtherTown && !modalOpen;
+        commandBuilder.set("#ClaimTownButton.Visible", showClaim);
+        commandBuilder.set("#ClaimTownHint.Visible", showClaim);
+        commandBuilder.set("#AlreadyHaveTownHint.Visible", unowned && viewerOwnsOtherTown && !modalOpen);
         if (dissolveFlow) {
             commandBuilder.set("#CharterModalTitle.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.chartertown.modalDissolveTitle"));
             commandBuilder.set("#CharterModalText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.chartertown.dissolveConfirmText"));
@@ -199,11 +219,23 @@ public final class CharterTownPage extends AetherhavenInteractiveCustomUIPage<Ch
                 );
             }
         }
+        if (showClaim) {
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#ClaimTownButton",
+                new EventData().append("Action", "ClaimTown"),
+                false
+            );
+        }
     }
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
         if (data.action == null) {
+            return;
+        }
+        if (data.action.equalsIgnoreCase("ClaimTown")) {
+            handleClaimTown(ref, store);
             return;
         }
         if (data.action.equalsIgnoreCase("BeginDissolveConfirm")) {
@@ -263,7 +295,7 @@ public final class CharterTownPage extends AetherhavenInteractiveCustomUIPage<Ch
                 }
                 TownManager tmDissolve = AetherhavenWorldRegistries.getOrCreateTownManager(worldDissolve, pluginDissolve);
                 TownRecord trDissolve = tmDissolve.getTown(townIdDissolve);
-                if (trDissolve == null || !trDissolve.getOwnerUuid().equals(ucDissolve.getUuid())) {
+                if (trDissolve == null || !trDissolve.isOwner(ucDissolve.getUuid())) {
                     return;
                 }
                 dissolveConfirmOpen = false;
@@ -302,7 +334,7 @@ public final class CharterTownPage extends AetherhavenInteractiveCustomUIPage<Ch
                 }
                 TownManager tmMc = AetherhavenWorldRegistries.getOrCreateTownManager(worldMc, pluginMc);
                 TownRecord trMc = tmMc.getTown(townIdMc);
-                if (trMc == null || !trMc.getOwnerUuid().equals(ucMc.getUuid())) {
+                if (trMc == null || !trMc.isOwner(ucMc.getUuid())) {
                     return;
                 }
                 charterRelocateConfirmOpen = false;
@@ -352,7 +384,7 @@ public final class CharterTownPage extends AetherhavenInteractiveCustomUIPage<Ch
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord tr = tm.getTown(townId);
-        if (tr == null || !tr.getOwnerUuid().equals(uc.getUuid())) {
+        if (tr == null || !tr.isOwner(uc.getUuid())) {
             return;
         }
         String newName = data.townName != null ? data.townName.trim() : "";
@@ -408,7 +440,60 @@ public final class CharterTownPage extends AetherhavenInteractiveCustomUIPage<Ch
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord tr = tm.getTown(tid);
-        return tr != null && tr.getOwnerUuid().equals(uc.getUuid());
+        return tr != null && tr.isOwner(uc.getUuid());
+    }
+
+    private void handleClaimTown(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+        if (uc == null) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        World world = store.getExternalData().getWorld();
+        if (plugin == null) {
+            return;
+        }
+        Store<ChunkStore> cs = charterBlockRef.getStore();
+        CharterBlock ch = cs.getComponent(charterBlockRef, CharterBlock.getComponentType());
+        if (ch == null || ch.getTownId().isBlank()) {
+            return;
+        }
+        UUID tid;
+        try {
+            tid = UUID.fromString(ch.getTownId().trim());
+        } catch (IllegalArgumentException e) {
+            return;
+        }
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord tr = tm.getTown(tid);
+        if (tr == null) {
+            return;
+        }
+        String username = pr != null ? pr.getUsername() : null;
+        boolean alreadyOwns = tm.findTownForOwnerInWorld(uc.getUuid()) != null;
+        TownRelinquishService.ClaimFail fail =
+            TownRelinquishService.tryClaim(tr, uc.getUuid(), username, alreadyOwns);
+        if (fail != null) {
+            if (pr != null) {
+                if (fail == TownRelinquishService.ClaimFail.ALREADY_OWNED) {
+                    pr.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.claim.alreadyOwned"));
+                } else {
+                    pr.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.claim.alreadyHaveTown"));
+                }
+            }
+            return;
+        }
+        tm.updateTown(tr);
+        if (pr != null) {
+            pr.sendMessage(
+                Message.translation("aetherhaven_town.aetherhaven.town.claim.claimed").param("town", tr.getDisplayName())
+            );
+        }
+        UICommandBuilder cmd = new UICommandBuilder();
+        UIEventBuilder ev = new UIEventBuilder();
+        build(ref, cmd, ev, store);
+        sendUpdate(cmd, ev, false);
     }
 
     public static final class PageData {

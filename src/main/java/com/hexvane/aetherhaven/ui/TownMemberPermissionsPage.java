@@ -99,7 +99,7 @@ public final class TownMemberPermissionsPage extends AetherhavenInteractiveCusto
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.getTown(townUuid);
-        if (town == null || !town.getOwnerUuid().equals(uc.getUuid())) {
+        if (town == null || !town.isOwner(uc.getUuid())) {
             commandBuilder.set("#MemberPermErr.Visible", true);
             commandBuilder.set(
                 "#MemberPermErr.TextSpans",
@@ -107,7 +107,7 @@ public final class TownMemberPermissionsPage extends AetherhavenInteractiveCusto
             );
             return;
         }
-        if (!targetPlayerUuid.equals(town.getOwnerUuid()) && !town.isMemberPlayer(targetPlayerUuid)) {
+        if (!town.isOwner(targetPlayerUuid) && !town.isMemberPlayer(targetPlayerUuid)) {
             commandBuilder.set("#MemberPermErr.Visible", true);
             commandBuilder.set(
                 "#MemberPermErr.TextSpans",

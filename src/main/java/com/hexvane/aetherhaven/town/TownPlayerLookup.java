@@ -64,7 +64,11 @@ public final class TownPlayerLookup {
     /** Owner name for UI: online username, else persisted {@link TownRecord#getOwnerUsername()}, else UUID fallback. */
     @Nonnull
     public static String ownerDisplayName(@Nonnull World world, @Nonnull TownRecord town) {
-        String online = resolveOnlineUsername(town.getOwnerUuid(), world);
+        UUID ownerUuid = town.getOwnerUuid();
+        if (ownerUuid == null) {
+            return "Unclaimed";
+        }
+        String online = resolveOnlineUsername(ownerUuid, world);
         if (online != null) {
             return online;
         }
@@ -72,7 +76,7 @@ public final class TownPlayerLookup {
         if (cached != null && !cached.isBlank()) {
             return cached.trim();
         }
-        return displayNameForUuid(world, town.getOwnerUuid());
+        return displayNameForUuid(world, ownerUuid);
     }
 
     /** Persists {@link TownRecord#setOwnerUsername(String)} when the owner is online under a new name. */
@@ -81,7 +85,11 @@ public final class TownPlayerLookup {
         @Nonnull TownRecord town,
         @Nonnull TownManager townManager
     ) {
-        String online = resolveOnlineUsername(town.getOwnerUuid(), world);
+        UUID ownerUuid = town.getOwnerUuid();
+        if (ownerUuid == null) {
+            return;
+        }
+        String online = resolveOnlineUsername(ownerUuid, world);
         if (online == null || online.equals(town.getOwnerUsername())) {
             return;
         }

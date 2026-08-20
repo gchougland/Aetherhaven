@@ -35,7 +35,11 @@
         return `![${alt}](${remap[trimmed]})`;
       }
       if (trimmed.startsWith("wiki/")) {
-        return `![${alt}](/wiki/images/${trimmed.slice(5)})`;
+        let file = trimmed.slice(5);
+        if (file === "welcome_banner.png") {
+          file = "welcome_banner.png?v=4";
+        }
+        return `![${alt}](/wiki/images/${file})`;
       }
       if (trimmed.startsWith("/wiki/")) {
         return full;

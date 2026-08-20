@@ -487,7 +487,7 @@ public final class CharterRelocationPage extends AetherhavenInteractiveCustomUIP
         String placementErr = null;
         if (town == null) {
             placementErr = "Town not found.";
-        } else if (!town.getOwnerUuid().equals(uc.getUuid())) {
+        } else if (!town.isOwner(uc.getUuid())) {
             placementErr = "Only the town owner can move the charter.";
         } else if (!tm.allPlotFootprintsFitAfterClaimShift(
             town,

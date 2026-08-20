@@ -189,7 +189,7 @@ public final class TownManager {
     @Nullable
     public TownRecord findTownForOwnerInWorld(@Nonnull UUID ownerUuid) {
         for (TownRecord t : byTownId.values()) {
-            if (t.getOwnerUuid().equals(ownerUuid) && world.getName().equals(t.getWorldName())) {
+            if (t.isOwner(ownerUuid) && world.getName().equals(t.getWorldName())) {
                 return t;
             }
         }
@@ -214,7 +214,7 @@ public final class TownManager {
             if (!world.getName().equals(t.getWorldName())) {
                 continue;
             }
-            if (t.getOwnerUuid().equals(playerUuid) || t.isMemberPlayer(playerUuid)) {
+            if (t.isOwner(playerUuid) || t.isMemberPlayer(playerUuid)) {
                 out.add(t);
             }
         }

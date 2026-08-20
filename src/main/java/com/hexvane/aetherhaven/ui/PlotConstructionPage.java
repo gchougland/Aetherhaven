@@ -1199,7 +1199,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             return;
         }
         UUID viewer = uc.getUuid();
-        boolean viewerOwner = town.getOwnerUuid().equals(viewer);
+        boolean viewerOwner = town.isOwner(viewer);
         commandBuilder.set(
             "#PlayersHint.TextSpans",
             viewerOwner
@@ -1221,7 +1221,10 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         commandBuilder.clear(MEMBER_ROWS);
 
         List<UUID> ordered = new ArrayList<>();
-        ordered.add(town.getOwnerUuid());
+        UUID ownerUuid = town.getOwnerUuid();
+        if (ownerUuid != null) {
+            ordered.add(ownerUuid);
+        }
         List<UUID> mem = new ArrayList<>(town.getMemberPlayerUuids());
         mem.sort(Comparator.comparing(u -> TownPlayerLookup.displayNameForUuid(world, u), String.CASE_INSENSITIVE_ORDER));
         ordered.addAll(mem);
@@ -1229,7 +1232,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         int n = Math.min(ordered.size(), MAX_MEMBER_ROWS);
         for (int i = 0; i < n; i++) {
             UUID pid = ordered.get(i);
-            boolean isOwner = pid.equals(town.getOwnerUuid());
+            boolean isOwner = town.isOwner(pid);
             String rowPath = MEMBER_ROWS + "[" + i + "]";
             commandBuilder.append(MEMBER_ROWS, "Aetherhaven/TownMemberRow.ui");
             String display = TownPlayerLookup.displayNameForUuid(world, pid);
@@ -2073,7 +2076,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 return;
             }
             TownRecord town = resolveManagementTown(store);
-            if (town == null || !town.getOwnerUuid().equals(uc.getUuid())) {
+            if (town == null || !town.isOwner(uc.getUuid())) {
                 return;
             }
             UUID targetId;
@@ -2107,7 +2110,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 return;
             }
             TownRecord town = resolveManagementTown(store);
-            if (town == null || !town.getOwnerUuid().equals(uc.getUuid())) {
+            if (town == null || !town.isOwner(uc.getUuid())) {
                 return;
             }
             UUID memberId;
@@ -2141,7 +2144,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 return;
             }
             TownRecord town = resolveManagementTown(store);
-            if (town == null || !town.getOwnerUuid().equals(uc.getUuid())) {
+            if (town == null || !town.isOwner(uc.getUuid())) {
                 return;
             }
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
@@ -2535,7 +2538,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.findTownOwningPlot(plotId);
-        if (town == null || !town.getOwnerUuid().equals(uc.getUuid())) {
+        if (town == null || !town.isOwner(uc.getUuid())) {
             return "Only the town owner can pick up this plot.";
         }
         if (town.findPlotById(plotId) == null) {
@@ -2582,7 +2585,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.findTownOwningPlot(plotId);
-        if (town == null || !town.getOwnerUuid().equals(uc.getUuid())) {
+        if (town == null || !town.isOwner(uc.getUuid())) {
             return;
         }
         PlotInstance piPickup = town.findPlotById(plotId);

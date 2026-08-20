@@ -231,11 +231,12 @@ public final class PlayerBirthdayGiftSeekSystem extends EntityTickingSystem<Enti
             return preferred;
         }
         UUID chosen = null;
-        if (isEligiblePlayer(store, town, town.getOwnerUuid(), villagerUuid, today)) {
-            chosen = town.getOwnerUuid();
+        UUID ownerUuid = town.getOwnerUuid();
+        if (isEligiblePlayer(store, town, ownerUuid, villagerUuid, today)) {
+            chosen = ownerUuid;
         }
         for (UUID member : town.getMemberPlayerUuids()) {
-            if (member.equals(town.getOwnerUuid())) {
+            if (town.isOwner(member)) {
                 continue;
             }
             if (!isEligiblePlayer(store, town, member, villagerUuid, today)) {

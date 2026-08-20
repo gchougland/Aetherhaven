@@ -313,6 +313,9 @@ public final class AetherhavenUiLocalization {
         b.set("#OwnerOnlyHint.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.ownerOnlyHint"));
         b.set("#DissolveButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.dissolve"));
         b.set("#DissolveHint.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.dissolveHint"));
+        b.set("#ClaimTownButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.claimTown"));
+        b.set("#ClaimTownHint.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.claimTownHint"));
+        b.set("#AlreadyHaveTownHint.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.alreadyHaveTownHint"));
         b.set("#CharterModalConfirmButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.dissolveConfirm"));
         b.set("#CharterModalCancelButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.modalCancel"));
     }

@@ -10,7 +10,7 @@ sub-topics:
   - roadmap
 ---
 
-![Town journal welcome banner](wiki/welcome_banner.png)
+![Town journal welcome banner](wiki/welcome_banner.png?v=4)
 
 # Welcome to the guide
 

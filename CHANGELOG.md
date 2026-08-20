@@ -14,7 +14,7 @@
 - **Snowball Throwing Festival** Early winter holiday at the festival square. Join a fight at the merchant, grab snowballs from piles, and the winning team gets winter festival tickets when the fight ends. The merchant sells holiday decorations, snowball piles, and a santa hat pattern. The merchant keeps a scoreboard of the most hits in one fight.
 - **Wintertide** Late winter holiday at the festival square. Talk to the merchant to hear who you should give a gift to, then give it in person. Press F on a town member who is there, or talk to a villager while holding the gift. You earn winter festival tickets from how much they like it. Gifts to villagers count twice as much toward friendship. After you give, a villager brings you a gift too, and the merchant sells holiday goods for winter festival tickets.
 - **Spooky Candy** A sweet treat from the maze and the merchant shop. Eat it to feel better.
-- **Dismiss guards** Talk to a hired guard and let them go. They leave town, their house is free, and you can hire someone else.
+- **Give up a town** Use `/aetherhaven town relinquish` to leave. Members leave. Owners pass the town to another player, or the town keeps going on its own. Anyone can claim a town with no owner at the charter.
 - **Bard music** Ask Elias to shuffle through his songs, or to loop one song until you tell him to stop.
 - **Miner's hut** Can produce limestone and limestone cobble.
 - **Calendar** Hang a calendar on a wall to open a season view with villager birthdays marked on their days. Craft it at the town planning desk with wood.

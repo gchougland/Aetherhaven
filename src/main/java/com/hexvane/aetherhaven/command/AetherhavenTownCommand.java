@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownMemberRole;
 import com.hexvane.aetherhaven.town.TownSharedRecipeUnlockService;
 import com.hexvane.aetherhaven.town.TownMembershipActions;
+import com.hexvane.aetherhaven.town.TownRelinquishService;
 import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
 import com.hexvane.aetherhaven.town.TownPlayerLookup;
@@ -41,6 +42,7 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
         this.addSubCommand(new KickCommand());
         this.addSubCommand(new RoleCommand());
         this.addSubCommand(new LeaveCommand());
+        this.addSubCommand(new RelinquishCommand());
     }
 
     private static final class InviteCommand extends AbstractPlayerCommand {
@@ -343,7 +345,7 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             if (town == null) {
                 return;
             }
-            if (town.getOwnerUuid().equals(self)) {
+            if (town.isOwner(self)) {
                 playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.leave.ownerCannotLeave"));
                 return;
             }
@@ -381,7 +383,7 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             }
             List<TownRecord> guestTowns = new java.util.ArrayList<>();
             for (TownRecord t : tm.findAllTownsForPlayerInWorld(self)) {
-                if (!t.getOwnerUuid().equals(self) && t.isMemberPlayer(self)) {
+                if (!t.isOwner(self) && t.isMemberPlayer(self)) {
                     guestTowns.add(t);
                 }
             }
@@ -404,6 +406,142 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
                 }
             }
             playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.leave.specifyTownName"));
+            return null;
+        }
+    }
+
+    private static final class RelinquishCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final OptionalArg<String> townArg =
+            this.withOptionalArg(
+                "townName",
+                "aetherhaven_commands_help.commands.aetherhaven.town.townName.desc",
+                AetherhavenArgTypes.TOWN_NAME
+            );
+
+        RelinquishCommand() {
+            super("relinquish", "aetherhaven_commands_help.commands.aetherhaven.town.relinquish.desc");
+        }
+
+        @Override
+        protected void execute(
+            @Nonnull CommandContext context,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull World world
+        ) {
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin == null) {
+                return;
+            }
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (uc == null) {
+                return;
+            }
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            UUID self = uc.getUuid();
+            String townNameOpt =
+                context.provided(townArg) && !context.get(townArg).trim().isEmpty() ? context.get(townArg).trim() : null;
+            TownRecord town = resolveRelinquishTargetTown(store, ref, playerRef, tm, self, townNameOpt);
+            if (town == null) {
+                return;
+            }
+            TownRelinquishService.RelinquishResult result =
+                TownRelinquishService.relinquish(
+                    town,
+                    self,
+                    uuid -> tm.findTownForOwnerInWorld(uuid) != null,
+                    uuid -> TownPlayerLookup.displayNameForUuid(world, uuid)
+                );
+            if (result == null) {
+                playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.relinquish.notInTown"));
+                return;
+            }
+            tm.updateTown(town);
+            TownPlayerResolution.clearActiveTownIdIfMatches(world, self, town.getTownId());
+            String townName = town.getDisplayName();
+            switch (result.kind) {
+                case LEFT_AS_MEMBER ->
+                    playerRef.sendMessage(
+                        Message.translation("aetherhaven_town.aetherhaven.town.leave.left").param("town", townName)
+                    );
+                case TRANSFERRED -> {
+                    playerRef.sendMessage(
+                        Message.translation("aetherhaven_town.aetherhaven.town.relinquish.handedOver")
+                            .param("town", townName)
+                            .param("name", result.successorName != null ? result.successorName : "")
+                    );
+                    if (result.successorUuid != null) {
+                        notifySuccessor(world, result.successorUuid, townName);
+                    }
+                }
+                case ORPHANED ->
+                    playerRef.sendMessage(
+                        Message.translation("aetherhaven_town.aetherhaven.town.relinquish.townKeepsGoing")
+                            .param("town", townName)
+                    );
+            }
+        }
+
+        private static void notifySuccessor(@Nonnull World world, @Nonnull UUID successorUuid, @Nonnull String townName) {
+            for (PlayerRef pr : world.getPlayerRefs()) {
+                if (successorUuid.equals(pr.getUuid())) {
+                    pr.sendMessage(
+                        Message.translation("aetherhaven_town.aetherhaven.town.relinquish.youAreInCharge")
+                            .param("town", townName)
+                    );
+                    return;
+                }
+            }
+        }
+
+        @Nullable
+        private TownRecord resolveRelinquishTargetTown(
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull TownManager tm,
+            @Nonnull UUID self,
+            @Nullable String townDisplayName
+        ) {
+            if (townDisplayName != null && !townDisplayName.isEmpty()) {
+                TownRecord named = tm.findTownByDisplayName(townDisplayName);
+                if (named == null) {
+                    playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.accept.err.noSuchTown"));
+                    return null;
+                }
+                if (!named.hasMemberOrOwner(self)) {
+                    playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.relinquish.notInTown"));
+                    return null;
+                }
+                return named;
+            }
+            List<TownRecord> affiliated = new java.util.ArrayList<>();
+            for (TownRecord t : tm.findAllTownsForPlayerInWorld(self)) {
+                if (t.hasMemberOrOwner(self)) {
+                    affiliated.add(t);
+                }
+            }
+            if (affiliated.isEmpty()) {
+                playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.relinquish.notInTown"));
+                return null;
+            }
+            if (affiliated.size() == 1) {
+                return affiliated.get(0);
+            }
+            PlayerTownJournalState journal = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+            if (journal != null) {
+                UUID active = journal.getActiveTownId();
+                if (active != null) {
+                    for (TownRecord t : affiliated) {
+                        if (t.getTownId().equals(active)) {
+                            return t;
+                        }
+                    }
+                }
+            }
+            playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.relinquish.specifyTownName"));
             return null;
         }
     }

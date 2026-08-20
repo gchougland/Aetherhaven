@@ -70,7 +70,7 @@ public final class CharterRelocationService {
             sendError(store, ref, "Town is not in this world.");
             return false;
         }
-        if (!town.getOwnerUuid().equals(playerUuid)) {
+        if (!town.isOwner(playerUuid)) {
             sendError(store, ref, "Only the town owner can move the charter.");
             return false;
         }
@@ -146,7 +146,7 @@ public final class CharterRelocationService {
         boolean actorMayBypassOwnership,
         @Nullable PlayerRef feedback
     ) {
-        if (!town.getOwnerUuid().equals(actorUuid) && !actorMayBypassOwnership) {
+        if (!town.isOwner(actorUuid) && !actorMayBypassOwnership) {
             sendReplaceMsg(feedback, "aetherhaven_town.aetherhaven.town.charterReplace.notOwner");
             return false;
         }

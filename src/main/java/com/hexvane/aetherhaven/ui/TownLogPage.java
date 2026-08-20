@@ -113,7 +113,7 @@ public final class TownLogPage extends AetherhavenInteractiveCustomUIPage<TownLo
         }
 
         UUIDComponent pu = store.getComponent(ref, UUIDComponent.getComponentType());
-        boolean isOwner = pu != null && pu.getUuid().equals(town.getOwnerUuid());
+        boolean isOwner = pu != null && town.isOwner(pu.getUuid());
         commandBuilder.set("#ClearLogButton.Visible", isOwner);
 
         List<TownLogEntry> entries = new ArrayList<>(town.getTownLog());
@@ -242,7 +242,7 @@ public final class TownLogPage extends AetherhavenInteractiveCustomUIPage<TownLo
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.getTown(townId);
         UUIDComponent pu = store.getComponent(ref, UUIDComponent.getComponentType());
-        if (town == null || pu == null || !pu.getUuid().equals(town.getOwnerUuid())) {
+        if (town == null || pu == null || !town.isOwner(pu.getUuid())) {
             clearLogConfirmOpen = false;
             rebuild(ref, store);
             return;

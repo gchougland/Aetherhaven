@@ -218,7 +218,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 .getAnsiMessage();
         for (TownRecord t : affiliated) {
             String label = t.getDisplayName();
-            if (t.getOwnerUuid().equals(self)) {
+            if (t.isOwner(self)) {
                 label = label + " (" + ownedSuffix + ")";
             }
             entries.add(new DropdownEntryInfo(LocalizableString.fromString(label), t.getTownId().toString()));

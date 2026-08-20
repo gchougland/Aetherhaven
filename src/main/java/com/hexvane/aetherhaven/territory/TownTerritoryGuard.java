@@ -88,7 +88,7 @@ public final class TownTerritoryGuard {
     }
 
     public static boolean playerMayBreak(@Nonnull TownRecord town, @Nonnull UUID playerUuid, @Nonnull BlockType blockType) {
-        if (town.getOwnerUuid().equals(playerUuid)) {
+        if (town.isOwner(playerUuid)) {
             return true;
         }
         if (!town.hasMemberOrOwner(playerUuid)) {
@@ -101,7 +101,7 @@ public final class TownTerritoryGuard {
     }
 
     public static boolean playerMayPlace(@Nonnull TownRecord town, @Nonnull UUID playerUuid) {
-        if (town.getOwnerUuid().equals(playerUuid)) {
+        if (town.isOwner(playerUuid)) {
             return true;
         }
         if (!town.hasMemberOrOwner(playerUuid)) {
@@ -111,7 +111,7 @@ public final class TownTerritoryGuard {
     }
 
     public static boolean playerMayUse(@Nonnull TownRecord town, @Nonnull UUID playerUuid, @Nonnull UseKind kind) {
-        if (town.getOwnerUuid().equals(playerUuid)) {
+        if (town.isOwner(playerUuid)) {
             return true;
         }
         if (!town.hasMemberOrOwner(playerUuid)) {

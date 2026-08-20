@@ -35,7 +35,10 @@ public final class TownSharedRecipeUnlockService {
         }
         town.addTownSharedCraftRecipeItemId(rid);
         List<UUID> roster = new ArrayList<>();
-        roster.add(town.getOwnerUuid());
+        UUID ownerUuid = town.getOwnerUuid();
+        if (ownerUuid != null) {
+            roster.add(ownerUuid);
+        }
         roster.addAll(town.getMemberPlayerUuids());
         for (UUID u : roster) {
             Ref<EntityStore> pref = store.getExternalData().getRefFromUUID(u);

@@ -15,8 +15,13 @@ The charter is your town anchor. Craft it at the **town planning desk**, then pl
 * Marks your town borders in the world.
 * Starts the founding quest line (inn, town hall, and beyond).
 * Can be opened later to rename the town.
+* If a town has no owner, anyone can open the charter and claim it.
 
 After placement, talk to Lyren to accept **raise the inn** and receive your first **inn plot token**. You stake that token with the **plot placement staff** the same way as every other building.
+
+## Giving up a town
+
+Use `/aetherhaven town relinquish` to leave. If you are a member, you simply leave. If you are the owner, the town passes to another member. If you are the only person, the town keeps going with no owner, and someone else can claim it at the charter.
 
 ## Moving or removing the town
 

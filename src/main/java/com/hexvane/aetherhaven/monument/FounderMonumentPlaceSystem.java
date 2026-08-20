@@ -79,7 +79,7 @@ public final class FounderMonumentPlaceSystem extends EntityEventSystem<EntitySt
             pr.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.founder.inTerritory"));
             return;
         }
-        if (!town.getOwnerUuid().equals(uuidComp.getUuid()) && !town.playerCanManageConstructions(uuidComp.getUuid())) {
+        if (!town.isOwner(uuidComp.getUuid()) && !town.playerCanManageConstructions(uuidComp.getUuid())) {
             event.setCancelled(true);
             pr.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.founder.cannotPlace"));
             return;

@@ -75,7 +75,7 @@ public final class TownMembershipActions {
             return Message.translation("aetherhaven_town.aetherhaven.town.kick.err.mustBeOnline");
         }
         UUID tid = target.getUuid();
-        if (tid.equals(town.getOwnerUuid())) {
+        if (town.isOwner(tid)) {
             return Message.translation("aetherhaven_town.aetherhaven.town.kick.err.cannotRemoveOwner");
         }
         if (!town.removeMember(tid)) {
@@ -112,7 +112,7 @@ public final class TownMembershipActions {
                 break;
             }
         }
-        if (targetUuid.equals(town.getOwnerUuid())) {
+        if (town.isOwner(targetUuid)) {
             return Message.translation("aetherhaven_town.aetherhaven.town.role.err.ownerAlwaysFull");
         }
         if (!town.isMemberPlayer(targetUuid)) {
@@ -142,10 +142,10 @@ public final class TownMembershipActions {
         @Nonnull UUID targetUuid,
         @Nonnull TownMemberPermissions permissions
     ) {
-        if (!town.getOwnerUuid().equals(actorUuid)) {
+        if (!town.isOwner(actorUuid)) {
             return Message.translation("aetherhaven_town.aetherhaven.town.resolve.ownerOrOpOnly");
         }
-        if (!targetUuid.equals(town.getOwnerUuid()) && !town.isMemberPlayer(targetUuid)) {
+        if (!town.isOwner(targetUuid) && !town.isMemberPlayer(targetUuid)) {
             return Message.translation("aetherhaven_town.aetherhaven.town.kick.err.notMember");
         }
         town.putMemberPermissions(targetUuid, permissions);
@@ -167,7 +167,7 @@ public final class TownMembershipActions {
         @Nonnull PlayerRef actorRef,
         @Nonnull UUID memberUuid
     ) {
-        if (memberUuid.equals(town.getOwnerUuid())) {
+        if (town.isOwner(memberUuid)) {
             return Message.translation("aetherhaven_town.aetherhaven.town.kick.err.cannotRemoveOwner");
         }
         if (!town.removeMember(memberUuid)) {

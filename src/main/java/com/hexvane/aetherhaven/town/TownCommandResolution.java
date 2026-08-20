@@ -82,9 +82,9 @@ public final class TownCommandResolution {
             );
         }
         if (isAdmin) {
-            return ok(named, named.getOwnerUuid().equals(senderUuid));
+            return ok(named, named.isOwner(senderUuid));
         }
-        if (!named.getOwnerUuid().equals(senderUuid)) {
+        if (!named.isOwner(senderUuid)) {
             return error(Message.translation("aetherhaven_town.aetherhaven.town.resolve.ownerOrOpOnly"));
         }
         return ok(named, true);
@@ -103,7 +103,7 @@ public final class TownCommandResolution {
             if (t == null) {
                 return error(Message.translation("aetherhaven_town.aetherhaven.town.resolve.notInTown"));
             }
-            boolean owner = t.getOwnerUuid().equals(senderUuid);
+            boolean owner = t.isOwner(senderUuid);
             return ok(t, owner);
         }
         TownRecord named = tm.findTownByDisplayName(trimmed);
@@ -113,10 +113,10 @@ public final class TownCommandResolution {
             );
         }
         if (isOp) {
-            boolean owner = named.getOwnerUuid().equals(senderUuid);
+            boolean owner = named.isOwner(senderUuid);
             return ok(named, owner);
         }
-        if (!named.getOwnerUuid().equals(senderUuid)) {
+        if (!named.isOwner(senderUuid)) {
             return error(Message.translation("aetherhaven_town.aetherhaven.town.resolve.nameOnlyForOwner"));
         }
         return ok(named, true);
@@ -143,9 +143,9 @@ public final class TownCommandResolution {
             );
         }
         if (isOp) {
-            return ok(named, named.getOwnerUuid().equals(senderUuid));
+            return ok(named, named.isOwner(senderUuid));
         }
-        if (!named.getOwnerUuid().equals(senderUuid)) {
+        if (!named.isOwner(senderUuid)) {
             return error(Message.translation("aetherhaven_town.aetherhaven.town.resolve.adminOtherTown"));
         }
         return ok(named, true);
@@ -188,7 +188,7 @@ public final class TownCommandResolution {
                         .param("name", playerFlag.trim())
                 );
             }
-            return ok(town, town.getOwnerUuid().equals(senderUuid));
+            return ok(town, town.isOwner(senderUuid));
         }
         if (hasTown) {
             if (!canAdministerForeign) {
@@ -200,7 +200,7 @@ public final class TownCommandResolution {
                     Message.translation("aetherhaven_town.aetherhaven.town.resolve.noTownNamed").param("name", townFlag.trim())
                 );
             }
-            return ok(town, town.getOwnerUuid().equals(senderUuid));
+            return ok(town, town.isOwner(senderUuid));
         }
         TownRecord town = TownPlayerResolution.resolveFallbackAffiliatedTown(tm, senderUuid);
         if (town == null) {
@@ -209,6 +209,6 @@ public final class TownCommandResolution {
         if (requireQuestPermissionWhenImplicit && !town.playerHasQuestPermission(senderUuid)) {
             return error(Message.translation("aetherhaven_common.aetherhaven.common.noQuestPermission"));
         }
-        return ok(town, town.getOwnerUuid().equals(senderUuid));
+        return ok(town, town.isOwner(senderUuid));
     }
 }

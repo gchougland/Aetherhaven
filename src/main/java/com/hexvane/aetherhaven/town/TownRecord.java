@@ -1028,9 +1028,38 @@ public final class TownRecord {
         this.townId = id.toString();
     }
 
-    @Nonnull
+    public boolean hasOwner() {
+        return getOwnerUuid() != null;
+    }
+
+    public boolean isOwner(@Nonnull UUID playerUuid) {
+        UUID owner = getOwnerUuid();
+        return owner != null && owner.equals(playerUuid);
+    }
+
+    /**
+     * Town owner, or {@code null} when the town has been fully given up.
+     */
+    @Nullable
     public UUID getOwnerUuid() {
-        return UUID.fromString(ownerUuid);
+        if (ownerUuid == null || ownerUuid.isBlank()) {
+            return null;
+        }
+        try {
+            return UUID.fromString(ownerUuid);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    public void setOwner(@Nonnull UUID ownerUuid, @Nullable String username) {
+        this.ownerUuid = ownerUuid.toString();
+        setOwnerUsername(username);
+    }
+
+    public void clearOwner() {
+        this.ownerUuid = null;
+        this.ownerUsername = null;
     }
 
     @Nullable
@@ -2424,14 +2453,14 @@ public final class TownRecord {
     }
 
     public boolean isMemberPlayer(@Nonnull UUID playerUuid) {
-        if (getOwnerUuid().equals(playerUuid)) {
+        if (isOwner(playerUuid)) {
             return false;
         }
         return getMemberRolesRaw().containsKey(playerUuid.toString());
     }
 
     public boolean hasMemberOrOwner(@Nonnull UUID playerUuid) {
-        if (getOwnerUuid().equals(playerUuid)) {
+        if (isOwner(playerUuid)) {
             return true;
         }
         return getMemberRolesRaw().containsKey(playerUuid.toString());
@@ -2443,7 +2472,7 @@ public final class TownRecord {
      */
     @Nullable
     public TownMemberRole getMemberRoleOrNull(@Nonnull UUID playerUuid) {
-        if (getOwnerUuid().equals(playerUuid)) {
+        if (isOwner(playerUuid)) {
             return TownMemberRole.BOTH;
         }
         String s = getMemberRolesRaw().get(playerUuid.toString());
@@ -2457,7 +2486,7 @@ public final class TownRecord {
     public TownMemberPermissions getEffectiveMemberPermissions(@Nonnull UUID playerUuid) {
         migrateTownSocialFieldsIfNeeded();
         String key = playerUuid.toString();
-        if (getOwnerUuid().equals(playerUuid)) {
+        if (isOwner(playerUuid)) {
             TownMemberPermissions o = getMemberPermissionsMap().get(key);
             return o != null ? o.copy() : TownMemberPermissions.fullMember();
         }
@@ -2505,7 +2534,7 @@ public final class TownRecord {
 
     /** Town owner always may remove plots from the town journal; members need the explicit permission. */
     public boolean playerCanRemovePlots(@Nonnull UUID playerUuid) {
-        if (getOwnerUuid().equals(playerUuid)) {
+        if (isOwner(playerUuid)) {
             return true;
         }
         return getEffectiveMemberPermissions(playerUuid).removePlots();
@@ -2513,7 +2542,7 @@ public final class TownRecord {
 
     /** Town owner always may list on player shop spots; members need the explicit permission. */
     public boolean playerCanUseShopSpots(@Nonnull UUID playerUuid) {
-        if (getOwnerUuid().equals(playerUuid)) {
+        if (isOwner(playerUuid)) {
             return true;
         }
         if (!isMemberPlayer(playerUuid)) {
@@ -2523,7 +2552,7 @@ public final class TownRecord {
     }
 
     public boolean playerCanBreakBlocks(@Nonnull UUID playerUuid) {
-        if (getOwnerUuid().equals(playerUuid)) {
+        if (isOwner(playerUuid)) {
             return true;
         }
         if (!hasMemberOrOwner(playerUuid)) {
@@ -2533,7 +2562,7 @@ public final class TownRecord {
     }
 
     public boolean playerCanPlaceBlocks(@Nonnull UUID playerUuid) {
-        if (getOwnerUuid().equals(playerUuid)) {
+        if (isOwner(playerUuid)) {
             return true;
         }
         if (!hasMemberOrOwner(playerUuid)) {
@@ -2543,7 +2572,7 @@ public final class TownRecord {
     }
 
     public boolean playerCanHarvestBlocks(@Nonnull UUID playerUuid) {
-        if (getOwnerUuid().equals(playerUuid)) {
+        if (isOwner(playerUuid)) {
             return true;
         }
         if (!hasMemberOrOwner(playerUuid)) {
@@ -2553,7 +2582,7 @@ public final class TownRecord {
     }
 
     public boolean playerCanOpenContainers(@Nonnull UUID playerUuid) {
-        if (getOwnerUuid().equals(playerUuid)) {
+        if (isOwner(playerUuid)) {
             return true;
         }
         if (!hasMemberOrOwner(playerUuid)) {
@@ -2563,7 +2592,7 @@ public final class TownRecord {
     }
 
     public boolean playerCanUseDoors(@Nonnull UUID playerUuid) {
-        if (getOwnerUuid().equals(playerUuid)) {
+        if (isOwner(playerUuid)) {
             return true;
         }
         if (!hasMemberOrOwner(playerUuid)) {
@@ -2573,7 +2602,7 @@ public final class TownRecord {
     }
 
     public boolean playerCanClaimTerritoryExpansion(@Nonnull UUID playerUuid) {
-        if (getOwnerUuid().equals(playerUuid)) {
+        if (isOwner(playerUuid)) {
             return true;
         }
         return playerCanSpendTreasuryGold(playerUuid);
@@ -2592,7 +2621,7 @@ public final class TownRecord {
     }
 
     public void putMember(@Nonnull UUID playerUuid, @Nonnull TownMemberRole role) {
-        if (getOwnerUuid().equals(playerUuid)) {
+        if (isOwner(playerUuid)) {
             return;
         }
         boolean newlyJoined = !getMemberRolesRaw().containsKey(playerUuid.toString());
@@ -2745,7 +2774,7 @@ public final class TownRecord {
      */
     public void putMemberPermissions(@Nonnull UUID playerUuid, @Nonnull TownMemberPermissions permissions) {
         getMemberPermissionsMap().put(playerUuid.toString(), permissions.copy());
-        if (!getOwnerUuid().equals(playerUuid)) {
+        if (!isOwner(playerUuid)) {
             getMemberRolesRaw().put(playerUuid.toString(), permissions.toCoarseRole().name());
         }
     }

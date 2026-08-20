@@ -47,6 +47,11 @@ author: Hexvane
   - Permission: `hexvane.aetherhaven.command.aetherhaven.town.leave`
   - Access: Adventure
 
+- **`/ah town relinquish [townName]`** — Give up your town. Members leave. Owners pass it on to another member, or the town keeps going on its own if nobody else is left.
+  - `[townName]` — Full town name with spaces. Omit if you only belong to one town.
+  - Permission: `hexvane.aetherhaven.command.aetherhaven.town.relinquish`
+  - Access: Adventure
+
 ### Floating gifts
 
 - **`/ah floatinggift next`** — See when your next floating gift balloon can appear.
