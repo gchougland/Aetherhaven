@@ -33,6 +33,13 @@
       "yawDegrees": -133.027
     },
     {
+      "residentKind": "furniture_merchant",
+      "localX": -8,
+      "localY": 5,
+      "localZ": -4,
+      "yawDegrees": -133.027
+    },
+    {
       "residentKind": "bard",
       "localX": 12,
       "localY": 5,
@@ -238,6 +245,10 @@
     "florist": [
       "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.florist.0",
       "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.florist.1"
+    ],
+    "furniture_merchant": [
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.furniture_merchant.0",
+      "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.furniture_merchant.1"
     ],
     "chef": [
       "aetherhaven_dialogue_festival_wintertide.aetherhaven.dialogue.festival.wintertide.greeting.chef.0",

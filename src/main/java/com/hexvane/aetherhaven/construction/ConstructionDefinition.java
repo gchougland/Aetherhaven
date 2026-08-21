@@ -111,6 +111,14 @@ public final class ConstructionDefinition {
     private String styleId;
 
     /**
+     * External asset packs required to place/use this build (from marketplace building JSON). Empty or omitted means
+     * no extra mods.
+     */
+    @SerializedName("requiredMods")
+    @Nullable
+    private List<com.hexvane.aetherhaven.community.CommunityRequiredMods.RequiredMod> requiredMods;
+
+    /**
      * When set, this variant counts as one or more canonical constructions for quests, production keys, workplace
      * matching, and schedule resolution ({@code plotInstance.constructionId} stays this definition's {@link #id}).
      * JSON may be a string or an array of strings.
@@ -441,6 +449,11 @@ public final class ConstructionDefinition {
     @Nullable
     public String getStyleId() {
         return styleId;
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.community.CommunityRequiredMods.RequiredMod> getRequiredMods() {
+        return requiredMods != null ? requiredMods : List.of();
     }
 
     /**

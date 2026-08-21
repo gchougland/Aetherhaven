@@ -2,5 +2,6 @@
   "id": "figurine_shelf_void",
   "displayName": "Figurine Shelf Void",
   "prefabPath": "Props/Figurine_Shelf_Void.prefab.json",
-  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Figurine_Shelf_Void.png"
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Figurine_Shelf_Void.png",
+  "goldPrice": 45
 }

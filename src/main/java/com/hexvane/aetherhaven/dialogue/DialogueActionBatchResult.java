@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.dialogue;
 
+import java.util.UUID;
 import javax.annotation.Nullable;
 
 /** Aggregated outcome from running a list of dialogue actions in order. */
@@ -17,6 +18,11 @@ public final class DialogueActionBatchResult {
     private boolean openJewelryAppraisalAfterClose;
 
     private boolean jewelryAppraisalChargeGold = true;
+
+    private boolean openPropShopAfterClose;
+
+    @Nullable
+    private UUID openPropShopTownId;
 
     private boolean openTreeClimbLeaderboardAfterClose;
 
@@ -85,6 +91,23 @@ public final class DialogueActionBatchResult {
 
     public void setJewelryAppraisalChargeGold(boolean jewelryAppraisalChargeGold) {
         this.jewelryAppraisalChargeGold = jewelryAppraisalChargeGold;
+    }
+
+    public boolean isOpenPropShopAfterClose() {
+        return openPropShopAfterClose;
+    }
+
+    public void setOpenPropShopAfterClose(boolean openPropShopAfterClose) {
+        this.openPropShopAfterClose = openPropShopAfterClose;
+    }
+
+    @Nullable
+    public UUID getOpenPropShopTownId() {
+        return openPropShopTownId;
+    }
+
+    public void setOpenPropShopTownId(@Nullable UUID openPropShopTownId) {
+        this.openPropShopTownId = openPropShopTownId;
     }
 
     public boolean isOpenTreeClimbLeaderboardAfterClose() {

@@ -157,6 +157,8 @@ aetherhaven.plotcreator.field.prefabName = Prefab file name
 aetherhaven.plotcreator.field.tags = Tags (comma separated)
 aetherhaven.plotcreator.field.variantOf = Counts as building id
 aetherhaven.plotcreator.field.goldCost = Gold cost from treasury
+aetherhaven.plotcreator.field.propGoldPrice = Shop gold price
+aetherhaven.plotcreator.field.propGoldPrice.hint = How many gold coins Cap'n Clive asks for this prop.
 
 aetherhaven.plotcreator.session.started = Plot creator started. Use the HUD and staff keys while you work in the world.
 

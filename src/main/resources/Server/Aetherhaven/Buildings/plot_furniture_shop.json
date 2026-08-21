@@ -1,0 +1,112 @@
+{
+  "id": "plot_furniture_shop",
+  "displayName": "Furniture Shop",
+  "description": "A shop for selling decoration props.",
+  "prefabPath": "Furniture_Shop.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Furniture_Shop",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 45,
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 430
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 160
+    }
+  ],
+  "pois": [
+    {
+      "localX": -5,
+      "localY": 1,
+      "localZ": -3,
+      "tags": [
+        "WORK",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": -4,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -3,
+      "workResidentKind": "furniture_merchant",
+      "interactionTargetYawDegrees": 90.0
+    },
+    {
+      "localX": 1,
+      "localY": 1,
+      "localZ": -4,
+      "tags": [
+        "SHOP"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 1,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -3,
+      "interactionTargetYawDegrees": 0.0
+    },
+    {
+      "localX": 2,
+      "localY": 1,
+      "localZ": -4,
+      "tags": [
+        "SHOP"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 2,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -3,
+      "interactionTargetYawDegrees": 0.0
+    },
+    {
+      "localX": 3,
+      "localY": 1,
+      "localZ": -4,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 3,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -3,
+      "interactionTargetYawDegrees": 0.0
+    },
+    {
+      "localX": 4,
+      "localY": 1,
+      "localZ": -4,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 4,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -3,
+      "interactionTargetYawDegrees": 0.0
+    }
+  ],
+  "managementBlockLocalPos": [
+    -6,
+    2,
+    -3
+  ],
+  "touristDestination": true,
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_furniture_shop.displayName",
+  "styleId": "core"
+}

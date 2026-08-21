@@ -27,6 +27,7 @@ public final class AetherhavenRoleLabels {
         Map.entry(AetherhavenConstants.NPC_PYROTECHNIC, "Grubble Sparkmatch"),
         Map.entry(AetherhavenConstants.NPC_CLOWN, "Bozo Bleak"),
         Map.entry(AetherhavenConstants.NPC_FLORIST, "Ivy Bloomwell"),
+        Map.entry(AetherhavenConstants.NPC_FURNITURE_MERCHANT, "Cap'n Clive"),
         Map.entry(AetherhavenConstants.NPC_CHEF, "Pepper Ashford"),
         Map.entry(AetherhavenConstants.NPC_BUILDER, "Rowan Ridgecraft"),
         Map.entry(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID, "Lyra Fairhollow")
@@ -47,6 +48,7 @@ public final class AetherhavenRoleLabels {
         Map.entry(TownVillagerBinding.KIND_PYROTECHNIC, "Pyrotechnic"),
         Map.entry(TownVillagerBinding.KIND_CLOWN, "Clown"),
         Map.entry(TownVillagerBinding.KIND_FLORIST, "Florist"),
+        Map.entry(TownVillagerBinding.KIND_FURNITURE_MERCHANT, "Furniture Merchant"),
         Map.entry(TownVillagerBinding.KIND_BUILDER, "Builder"),
         Map.entry(TownVillagerBinding.KIND_GUILD_MASTER, "Guild Master"),
         Map.entry(TownVillagerBinding.KIND_TOWNSFOLK, "Townsfolk")
@@ -238,6 +240,9 @@ public final class AetherhavenRoleLabels {
         }
         if (AetherhavenConstants.NPC_FLORIST.equals(roleId)) {
             return TownVillagerBinding.KIND_FLORIST;
+        }
+        if (AetherhavenConstants.NPC_FURNITURE_MERCHANT.equals(roleId)) {
+            return TownVillagerBinding.KIND_FURNITURE_MERCHANT;
         }
         if (AetherhavenConstants.NPC_CHEF.equals(roleId)) {
             return TownVillagerBinding.KIND_CHEF;

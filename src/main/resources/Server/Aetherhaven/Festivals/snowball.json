@@ -38,6 +38,13 @@
       "localY": 5,
       "localZ": 9,
       "yawDegrees": 157.77344
+    },
+    {
+      "residentKind": "furniture_merchant",
+      "localX": 5,
+      "localY": 5,
+      "localZ": 8,
+      "yawDegrees": 157.77344
     }
   ],
   "npcs": [
@@ -237,6 +244,10 @@
     "florist": [
       "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.florist.0",
       "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.florist.1"
+    ],
+    "furniture_merchant": [
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.furniture_merchant.0",
+      "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.furniture_merchant.1"
     ],
     "crystal_keeper": [
       "aetherhaven_dialogue_festival_snowball.aetherhaven.dialogue.festival.snowball.greeting.crystal_keeper.0",

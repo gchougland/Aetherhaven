@@ -97,6 +97,7 @@ aetherhaven.ui.plotconstruction.workplaceRole.blacksmith=Blacksmith
 aetherhaven.ui.plotconstruction.workplaceRole.merchant=Merchant
 aetherhaven.ui.plotconstruction.workplaceRole.builder=Builder
 aetherhaven.ui.plotconstruction.workplaceRole.florist=Florist
+aetherhaven.ui.plotconstruction.workplaceRole.furniture_merchant=Furniture merchant
 aetherhaven.ui.plotconstruction.workplaceRole.pyrotechnic=Pyrotechnic
 aetherhaven.ui.plotconstruction.workplaceRole.crystal_keeper=Crystal keeper
 aetherhaven.ui.plotconstruction.workplaceRole.priestess=Priestess

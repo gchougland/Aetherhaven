@@ -2,5 +2,6 @@
   "id": "figurine_shelf_scarak",
   "displayName": "Figurine Shelf Scarak",
   "prefabPath": "Props/Figurine_Shelf_Scarak.prefab.json",
-  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Figurine_Shelf_Scarak.png"
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Figurine_Shelf_Scarak.png",
+  "goldPrice": 40
 }

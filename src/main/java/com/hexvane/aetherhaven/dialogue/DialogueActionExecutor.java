@@ -130,6 +130,7 @@ public final class DialogueActionExecutor {
             }
             case "open_blacksmith_repair" -> out.setOpenBlacksmithRepairAfterClose(true);
             case "open_geode_ui" -> out.setOpenGeodePageAfterClose(true);
+            case "open_prop_shop" -> openPropShop(playerRef, store, out, npcRef);
             case "open_jewelry_appraisal" -> {
                 out.setOpenJewelryAppraisalAfterClose(true);
                 out.setJewelryAppraisalChargeGold(boolField(a, "chargeGold", true));
@@ -545,6 +546,7 @@ public final class DialogueActionExecutor {
             || q.equals(AetherhavenConstants.QUEST_CRYSTAL_KEEPERS_SHOP)
             || q.equals(AetherhavenConstants.QUEST_PYROTECHNIC_SHOP)
             || q.equals(AetherhavenConstants.QUEST_FLORIST_SHOP)
+            || q.equals(AetherhavenConstants.QUEST_FURNITURE_SHOP)
             || q.equals(AetherhavenConstants.QUEST_CHEF_RESTAURANT)
             || q.equals(AetherhavenConstants.QUEST_BUILDERS_HUT)
             || q.equals(AetherhavenConstants.QUEST_BUILD_GUILD_HALL);
@@ -944,6 +946,39 @@ public final class DialogueActionExecutor {
     private static TownManager owningTownManager(@Nonnull TownRecord town, @Nonnull TownManager fallback) {
         TownManager owning = AetherhavenWorldRegistries.townManagerForTown(town);
         return owning != null ? owning : fallback;
+    }
+
+    private static void openPropShop(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull DialogueActionBatchResult out,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        if (world == null) {
+            return;
+        }
+        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = null;
+        if (npcRef != null && npcRef.isValid()) {
+            TownVillagerBinding b = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+            if (b != null) {
+                town = AetherhavenWorldRegistries.getTownAcrossWorlds(b.getTownId(), localTm);
+            }
+        }
+        if (town == null) {
+            town = townForDialogue(playerRef, store, localTm, npcRef);
+        }
+        if (town == null) {
+            return;
+        }
+        out.setOpenPropShopAfterClose(true);
+        out.setOpenPropShopTownId(town.getTownId());
+        out.setCloseDialogue(true);
     }
 
     private static void gaiaDraughtRefill(

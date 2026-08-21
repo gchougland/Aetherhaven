@@ -49,6 +49,7 @@ import com.hexvane.aetherhaven.tourist.TownPortalTravelColor;
 import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hexvane.aetherhaven.tourist.TouristPortalVisualService;
 import com.hexvane.aetherhaven.guild.GuardHireManifest;
+import com.hexvane.aetherhaven.guild.GuardHireService;
 import com.hexvane.aetherhaven.questboard.TownRankCapacity;
 import com.hexvane.aetherhaven.tourist.TouristVisitManifest;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -926,6 +927,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             commandBuilder.set("#GuardManifestScroll.Visible", false);
             return;
         }
+        Store<EntityStore> entityStore = world.getEntityStore().getStore();
+        GuardHireService.pruneDeadHiredGuards(world, plugin, town, tm, entityStore);
         int current = town.getHiredGuardRecords().size();
         int max = TownRankCapacity.maxHiredGuards(town, plugin.getQuestBoardCatalog());
         commandBuilder.set(
@@ -934,7 +937,6 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 .param("current", String.valueOf(current))
                 .param("max", String.valueOf(max))
         );
-        Store<EntityStore> entityStore = world.getEntityStore().getStore();
         List<GuardHireManifest.Row> rows = GuardHireManifest.listRows(town, entityStore, plugin);
         if (rows.isEmpty()) {
             commandBuilder.set("#GuardManifestEmpty.Visible", true);

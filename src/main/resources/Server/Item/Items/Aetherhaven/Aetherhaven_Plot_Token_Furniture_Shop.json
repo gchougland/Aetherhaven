@@ -1,0 +1,26 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Plot_Token_Furniture_Shop.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Plot_Token_Furniture_Shop.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Token_Furniture_Shop.png",
+  "Model": "Blocks/Decorative_Sets/Lumberjack/Sign.blockymodel",
+  "Texture": "Items/Aetherhaven/Plot_Token_Sign_Texture.png",
+  "MaxStack": 100,
+  "PlayerAnimationsId": "Item",
+  "Categories": [
+    "Items.Utility",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "Quality": "Common",
+  "Tags": {
+    "Type": [
+      "Tool"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

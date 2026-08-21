@@ -2,5 +2,6 @@
   "id": "figurine_shelf_trork",
   "displayName": "Figurine Shelf Trork",
   "prefabPath": "Props/Figurine_Shelf_Trork.prefab.json",
-  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Figurine_Shelf_Trork.png"
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Figurine_Shelf_Trork.png",
+  "goldPrice": 40
 }

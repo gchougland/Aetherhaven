@@ -2,5 +2,6 @@
   "id": "plant_arch",
   "displayName": "Plant Arch",
   "prefabPath": "Props/Plant_Arch.prefab.json",
-  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Plant_Arch.png"
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Plant_Arch.png",
+  "goldPrice": 55
 }

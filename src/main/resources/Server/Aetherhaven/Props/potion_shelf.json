@@ -3,5 +3,6 @@
   "displayName": "Potion Shelf",
   "prefabPath": "Props/Potion_Shelf.prefab.json",
   "frontFacing": "North",
-  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Potion_Shelf.png"
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Potion_Shelf.png",
+  "goldPrice": 38
 }

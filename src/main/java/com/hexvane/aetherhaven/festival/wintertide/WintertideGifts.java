@@ -133,6 +133,10 @@ public final class WintertideGifts {
             case "bard" -> mixed(CRYSTALS, 20, rnd);
             case "crystal_keeper" -> List.of(new Stack("Plant_Sapling_Crystal", 3));
             case "florist" -> mixed(ORCHIDS, 16, rnd);
+            case "furniture_merchant" -> List.of(
+                new Stack("Deco_Treasure_Pile_Small", 1),
+                new Stack("Food_Fish_Grilled", 8)
+            );
             case "builder" -> List.of(
                 new Stack("Metal_Iron", 16),
                 new Stack("Metal_Copper", 16),

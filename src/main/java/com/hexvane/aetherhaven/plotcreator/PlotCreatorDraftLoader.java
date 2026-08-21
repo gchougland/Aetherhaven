@@ -209,6 +209,7 @@ public final class PlotCreatorDraftLoader {
             || AetherhavenConstants.CONSTRUCTION_PLOT_BOMB_SHOP.equals(id)
             || AetherhavenConstants.CONSTRUCTION_PLOT_CRYSTAL_KEEPERS_SHOP.equals(id)
             || AetherhavenConstants.CONSTRUCTION_PLOT_FLOWER_SHOP.equals(id)
+            || AetherhavenConstants.CONSTRUCTION_PLOT_FURNITURE_SHOP.equals(id)
             || AetherhavenConstants.CONSTRUCTION_PLOT_RESTAURANT.equals(id)) {
             return PlotBuildingKind.SHOP;
         }

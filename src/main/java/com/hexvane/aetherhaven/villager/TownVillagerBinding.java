@@ -83,6 +83,11 @@ public final class TownVillagerBinding implements Component<EntityStore> {
     /** Permanent florist at the flower shop (after build). */
     public static final String KIND_FLORIST = "florist";
 
+    public static final String KIND_VISITOR_FURNITURE_MERCHANT = "visitor_furniture_merchant";
+
+    /** Permanent furniture merchant at the furniture shop (after build). */
+    public static final String KIND_FURNITURE_MERCHANT = "furniture_merchant";
+
     public static final String KIND_VISITOR_BUILDER = "visitor_builder";
 
     /** Permanent builder at the builder's hut (after build). */

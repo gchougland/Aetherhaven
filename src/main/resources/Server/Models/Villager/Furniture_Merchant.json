@@ -81,5 +81,18 @@
       "GradientSet": "Faded_Leather",
       "GradientId": "Brown"
     }
-  ]
+  ],
+  "Icon": "Icons/ModelsGenerated/Furniture_Merchant.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      19,
+      0
+    ],
+    "Translation": [
+      0,
+      -110
+    ]
+  }
 }

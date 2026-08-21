@@ -979,7 +979,12 @@ public final class PlotCreatorService {
         draft.setPrefabFileName(com.hexvane.aetherhaven.prop.PropPaths.prefabFileNameFromKey(prefabKey));
         var def =
             com.hexvane.aetherhaven.prop.PropDefinition.create(
-                propId, draft.getDisplayName(), prefabKey.trim(), null, draft.getFrontFacing()
+                propId,
+                draft.getDisplayName(),
+                prefabKey.trim(),
+                null,
+                draft.getFrontFacing(),
+                draft.getPropGoldPrice()
             );
         if (!plugin.getPropCatalog().persist(def)) {
             playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.saveFailed"));

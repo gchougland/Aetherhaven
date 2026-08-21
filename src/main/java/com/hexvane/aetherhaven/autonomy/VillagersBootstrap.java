@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.clown.ClownCheerAssistSystem;
 import com.hexvane.aetherhaven.command.AetherhavenNeedsCommand;
 import com.hexvane.aetherhaven.command.AetherhavenTownsfolkCommand;
 import com.hexvane.aetherhaven.command.AetherhavenVillagerCommand;
+import com.hexvane.aetherhaven.guild.HiredGuardDeathRemoveSystem;
 import com.hexvane.aetherhaven.guild.VillagerDeathHandlerSystem;
 import com.hexvane.aetherhaven.npc.NpcFaceVisualState;
 import com.hexvane.aetherhaven.poi.marker.PoiMarkerDataComponent;
@@ -142,6 +143,7 @@ public final class VillagersBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new PendingEntityRemovalSystem());
         plugin.getEntityStoreRegistry().registerSystem(new TownsfolkAssignmentSystem());
         plugin.getEntityStoreRegistry().registerSystem(new VillagerDeathHandlerSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new HiredGuardDeathRemoveSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new TownVillagerEnvironmentalDamageFilterSystem());
         plugin.getEntityStoreRegistry().registerSystem(new RescueVillagerBreakBlockSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new PoiMarkerSystems.EnsurePrefabCopyable());

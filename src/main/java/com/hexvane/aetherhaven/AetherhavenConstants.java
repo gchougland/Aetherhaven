@@ -471,6 +471,10 @@ public final class AetherhavenConstants {
 
     public static final String QUEST_HOUSE_FLORIST = "q_house_florist";
 
+    public static final String QUEST_FURNITURE_SHOP = "q_furniture_shop";
+
+    public static final String QUEST_HOUSE_FURNITURE_MERCHANT = "q_house_furniture_merchant";
+
     public static final String QUEST_BUILDERS_HUT = "q_builders_hut";
 
     public static final String QUEST_HOUSE_BUILDER = "q_house_builder";
@@ -482,6 +486,8 @@ public final class AetherhavenConstants {
     public static final String CONSTRUCTION_PLOT_CLOWN_TENT = "plot_clown_tent";
 
     public static final String CONSTRUCTION_PLOT_FLOWER_SHOP = "plot_flower_shop";
+
+    public static final String CONSTRUCTION_PLOT_FURNITURE_SHOP = "plot_furniture_shop";
 
     public static final String CRYSTALLIZED_PERSON_BLOCK_TYPE_ID = "Aetherhaven_Crystallized_Person";
 
@@ -501,6 +507,8 @@ public final class AetherhavenConstants {
     public static final String NPC_CLOWN_RESCUE = "Aetherhaven_Clown_Rescue";
 
     public static final String NPC_FLORIST = "Aetherhaven_Florist";
+
+    public static final String NPC_FURNITURE_MERCHANT = "Aetherhaven_Furniture_Merchant";
 
     public static final String NPC_BUILDER = "Aetherhaven_Builder";
 

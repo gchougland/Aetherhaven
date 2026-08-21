@@ -2,5 +2,6 @@
   "id": "flower_basket",
   "displayName": "Flower Basket",
   "prefabPath": "Props/Flower_Basket.prefab.json",
-  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Flower_Basket.png"
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Flower_Basket.png",
+  "goldPrice": 18
 }

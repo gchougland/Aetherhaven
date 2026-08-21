@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.guild;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.entity.EntityPresenceUtil;
 import com.hexvane.aetherhaven.entity.EntityRotationUtil;
 import com.hexvane.aetherhaven.equipment.VillagerEquipmentService;
 import com.hexvane.aetherhaven.equipment.data.EquipmentProfileDefinition;
@@ -39,6 +40,7 @@ import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentDisplayName;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.modules.entity.damage.DeathComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
@@ -147,6 +149,7 @@ public final class GuardHireService {
             return false;
         }
 
+        pruneDeadHiredGuards(world, plugin, town, tm, store);
         if (!TownRankCapacity.canHireGuard(town, plugin.getQuestBoardCatalog())) {
             return false;
         }
@@ -476,6 +479,52 @@ public final class GuardHireService {
             }
         }
         return false;
+    }
+
+    /**
+     * Drops hire slots for guards that are dead (have {@link DeathComponent}) or confirmed gone while loaded.
+     * Keeps rows whose entity is merely unloaded in another chunk.
+     *
+     * @return number of hire slots freed
+     */
+    public static int pruneDeadHiredGuards(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store
+    ) {
+        List<HiredGuardRecord> snapshot = List.copyOf(town.getHiredGuardRecords());
+        int removed = 0;
+        for (HiredGuardRecord rec : snapshot) {
+            UUID entityUuid = rec.getEntityUuid();
+            if (entityUuid == null) {
+                removeHiredGuardFromTown(town, null, rec.getCharacterId());
+                removed++;
+                continue;
+            }
+            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityUuid);
+            boolean deadOrGone = false;
+            if (ref != null && ref.isValid()) {
+                deadOrGone = store.getComponent(ref, DeathComponent.getComponentType()) != null;
+            } else {
+                deadOrGone = EntityPresenceUtil.isConfirmedAbsent(EntityPresenceUtil.resolve(store, entityUuid));
+            }
+            if (!deadOrGone) {
+                continue;
+            }
+            String characterId = removeHiredGuardFromTown(town, entityUuid, rec.getCharacterId());
+            removed++;
+            if (characterId != null && !characterId.isBlank()) {
+                TownsfolkExistenceService.releaseByEntity(world, plugin, entityUuid);
+            }
+            GuardPatrolSystem.clearAssignmentsForGuard(world, plugin, entityUuid);
+        }
+        if (removed > 0) {
+            tm.updateTown(town);
+            LOGGER.atInfo().log("Pruned %s dead hired guard(s) from town %s", removed, town.getTownId());
+        }
+        return removed;
     }
 
     /**

@@ -1849,6 +1849,9 @@ public final class InnPoolService {
         if (AetherhavenConstants.NPC_FLORIST.equals(roleId)) {
             return town.hasQuestActive(AetherhavenConstants.QUEST_FLORIST_SHOP);
         }
+        if (AetherhavenConstants.NPC_FURNITURE_MERCHANT.equals(roleId)) {
+            return town.hasQuestActive(AetherhavenConstants.QUEST_FURNITURE_SHOP);
+        }
         if (AetherhavenConstants.NPC_CHEF.equals(roleId)) {
             return town.hasQuestActive(AetherhavenConstants.QUEST_CHEF_RESTAURANT);
         }
@@ -1870,6 +1873,7 @@ public final class InnPoolService {
             || town.hasQuestActive(AetherhavenConstants.QUEST_PYROTECHNIC_SHOP)
             || town.hasQuestActive(AetherhavenConstants.QUEST_CLOWN_TENT)
             || town.hasQuestActive(AetherhavenConstants.QUEST_FLORIST_SHOP)
+            || town.hasQuestActive(AetherhavenConstants.QUEST_FURNITURE_SHOP)
             || town.hasQuestActive(AetherhavenConstants.QUEST_CHEF_RESTAURANT)
             || town.hasQuestActive(AetherhavenConstants.QUEST_BUILDERS_HUT)
             || town.hasQuestActive(AetherhavenConstants.QUEST_BUILD_GUILD_HALL);
@@ -1948,6 +1952,9 @@ public final class InnPoolService {
         }
         if (town.hasQuestActive(AetherhavenConstants.QUEST_FLORIST_SHOP)) {
             out.add(AetherhavenConstants.NPC_FLORIST);
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_FURNITURE_SHOP)) {
+            out.add(AetherhavenConstants.NPC_FURNITURE_MERCHANT);
         }
         if (town.hasQuestActive(AetherhavenConstants.QUEST_CHEF_RESTAURANT)) {
             out.add(AetherhavenConstants.NPC_CHEF);
@@ -2331,6 +2338,9 @@ public final class InnPoolService {
             } else if (AetherhavenConstants.NPC_FLORIST.equals(roleId)) {
                 constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_FLOWER_SHOP;
                 residentKind = TownVillagerBinding.KIND_FLORIST;
+            } else if (AetherhavenConstants.NPC_FURNITURE_MERCHANT.equals(roleId)) {
+                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_FURNITURE_SHOP;
+                residentKind = TownVillagerBinding.KIND_FURNITURE_MERCHANT;
             } else if (AetherhavenConstants.NPC_CHEF.equals(roleId)) {
                 constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_RESTAURANT;
                 residentKind = TownVillagerBinding.KIND_CHEF;

@@ -599,9 +599,12 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         }
         String profileId = GuardHireService.equipmentProfileForNpc(plugin, npcRef, store);
         CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
-        return profileId != null
-            && inv != null
-            && GuardHireService.canAfford(plugin, town, inv, pu.getUuid(), profileId)
+        if (profileId == null || inv == null) {
+            return false;
+        }
+        var tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        GuardHireService.pruneDeadHiredGuards(world, plugin, town, tm, store);
+        return GuardHireService.canAfford(plugin, town, inv, pu.getUuid(), profileId)
             && TownRankCapacity.canHireGuard(town, plugin.getQuestBoardCatalog());
     }
 
@@ -619,7 +622,12 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
     @Override
     public int hiredGuardCount(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
         TownRecord town = townFor(playerRef, store);
-        return town != null ? town.getHiredGuardRecords().size() : 0;
+        if (town == null) {
+            return 0;
+        }
+        var tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        GuardHireService.pruneDeadHiredGuards(world, plugin, town, tm, store);
+        return town.getHiredGuardRecords().size();
     }
 
     @Override
@@ -634,7 +642,12 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
     @Override
     public boolean guardHireAtLimit(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
         TownRecord town = townFor(playerRef, store);
-        return town != null && !TownRankCapacity.canHireGuard(town, plugin.getQuestBoardCatalog());
+        if (town == null) {
+            return false;
+        }
+        var tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        GuardHireService.pruneDeadHiredGuards(world, plugin, town, tm, store);
+        return !TownRankCapacity.canHireGuard(town, plugin.getQuestBoardCatalog());
     }
 
     @Override

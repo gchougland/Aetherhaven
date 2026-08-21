@@ -2,5 +2,6 @@
   "id": "hytiny_japanese_lantern",
   "displayName": "Hytiny Japanese Lantern",
   "prefabPath": "Props/Hytiny_Japanese_Lantern.prefab.json",
-  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Hytiny_Japanese_Lantern.png"
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Hytiny_Japanese_Lantern.png",
+  "goldPrice": 28
 }

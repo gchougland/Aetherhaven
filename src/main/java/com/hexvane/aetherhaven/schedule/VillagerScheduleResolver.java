@@ -507,6 +507,7 @@ public final class VillagerScheduleResolver {
                 AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL;
             case TownVillagerBinding.KIND_BUILDER -> AetherhavenConstants.CONSTRUCTION_PLOT_BUILDERS_HUT;
             case TownVillagerBinding.KIND_FLORIST -> AetherhavenConstants.CONSTRUCTION_PLOT_FLOWER_SHOP;
+            case TownVillagerBinding.KIND_FURNITURE_MERCHANT -> AetherhavenConstants.CONSTRUCTION_PLOT_FURNITURE_SHOP;
             case TownVillagerBinding.KIND_PYROTECHNIC -> AetherhavenConstants.CONSTRUCTION_PLOT_BOMB_SHOP;
             case TownVillagerBinding.KIND_CLOWN -> AetherhavenConstants.CONSTRUCTION_PLOT_CLOWN_TENT;
             case TownVillagerBinding.KIND_CRYSTAL_KEEPER -> AetherhavenConstants.CONSTRUCTION_PLOT_CRYSTAL_KEEPERS_SHOP;

@@ -76,6 +76,15 @@
         "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Summer", "Quantity": 16 }],
         "Stock": 3
       }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Aetherhaven_Villager_Cosmetic_Rafflesia_Hat", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Summer", "Quantity": 18 }],
+        "Stock": 2
+      }
     }
   ]
 }
+

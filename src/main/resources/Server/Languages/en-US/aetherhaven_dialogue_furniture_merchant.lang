@@ -1,0 +1,74 @@
+# Furniture Merchant dialogue (Cap'n Clive)
+
+aetherhaven.dialogue.aetherhaven_furniture_merchant.root.speaker=Cap'n Clive
+aetherhaven.dialogue.aetherhaven_furniture_merchant.main_hub.fallback=If you need a shop built, a quiet berth, or a look at today's props, say the word.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.main_hub.greeting.0=Fair winds. The shelves are stocked with what the tide brought in.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.main_hub.greeting.1=I kept the best pieces for folk who know how to place them.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.main_hub.greeting.2=Your town has room for a little more color on the streets.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.main_hub.greeting.3=Mind the crates. Some of them still smell like the hold.
+
+aetherhaven.dialogue.aetherhaven_furniture_merchant.main_hub.hint.love.0=Shells, star fish, or a bit of treasure would warm this old sailor's heart.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.main_hub.hint.love.1=Bring me something from the sea or a chest worth opening.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.main_hub.hint.dislike.0=Keep the trash and bones off my counter.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.main_hub.hint.dislike.1=I have no use for void muck or coffin lids.
+
+aetherhaven.dialogue.aetherhaven_furniture_merchant.root.c_browse=Show me today's props.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.root.c_house=You wanted to talk about a house.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.root.c_house_done=Your name is on the house shelf. I wanted you to hear it from me.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.root.c_house_remind=The house is still in progress.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.root.c_shop_done=I wanted to check in now that the furniture shop is standing.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.root.c_shop_complete=The furniture shop is finished. I am here to close things out with you.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.root.c_shop_building=The shop is still coming together. I wanted to ask where things stand.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.root.c_shop_offer=I want to open a furniture shop in your town.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.root.c_goodbye=That is all for now. Fair winds.
+
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_quest_shop.speaker=Cap'n Clive
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_quest_shop.body=I have hauled props from one harbor to the next long enough. I need a proper furniture shop with room to show what is worth placing. Take this token, stake the plot with your staff, and pay the materials on the sign. When the walls are up, meet me at the counter and we will call it settled.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_quest_shop.c0=We will get your shop built.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_quest_shop.c1=Not right now. I need a bit more time.
+
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_shop_accepted.speaker=Cap'n Clive
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_shop_accepted.body=Good. I will wait at the inn with my crates until the door is real. Stake the shop where folk can find it, then meet me at the counter when the shelves are up.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_shop_accepted.c0=See you when the shelves are up.
+
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_building.speaker=Cap'n Clive
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_building.body=The crates are getting restless in the hold. Have you staked the plot and started the build yet, or should I stop counting on a shop that might not happen?
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_building.c0=I need to drop the quest for now.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_building.c1=I am still working on it and I will keep going.
+
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_abandoned.speaker=Cap'n Clive
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_abandoned.body=That is all right. The sea taught me patience. If you change your mind, come find me and we will try again.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_abandoned.c0=Fair enough. I will see you around.
+
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_done.speaker=Cap'n Clive
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_done.body=Look at that. Solid floor, honest shelves, and room for every crate I dragged ashore. My props finally have a proper berth in your town. Thank you for helping me put down an anchor.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_done.c0=Happy to help. Come find me if the town needs more décor.
+
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_house_offer.speaker=Cap'n Clive
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_house_offer.body=The shop is for trade. I would still like a quiet house with a dry bed and a window that does not rock. Same house plot as everyone else, if you are willing.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_house_offer.c0=I will stake a house for you.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_house_offer.c1=Another time.
+
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_house_accepted.speaker=Cap'n Clive
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_house_accepted.body=When the walls are up, put my name on the block inside like the charter asks, then come tell me in person. I want to hear you say it before I move my sea chest.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_house_accepted.c0=You will hear it from me.
+
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_house_remind.speaker=Cap'n Clive
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_house_remind.body=Take your time with the frame. When it is standing, register me on the shelf inside, then come back. I am not rushing you. I just want it written down.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_house_remind.c0=Understood.
+
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_house_finish.speaker=Cap'n Clive
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_house_finish.body=Ah. Dry walls, a quiet bed, and no waves under the floorboards. I can finally call some corner of your town home.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_house_finish.c0=Glad you have a proper door.
+
+aetherhaven.dialogue.aetherhaven_furniture_merchant.gift.confirm=Would you like to give me something?
+aetherhaven.dialogue.aetherhaven_furniture_merchant.gift.love=Now that is a find. You know what a sailor keeps close.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.gift.like=Kind of you. I will make room for it.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.gift.neutral=Hmm. Not quite my taste, but thank you anyway.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.gift.dislike=I would rather leave that one at sea.
+
+aetherhaven.dialogue.aetherhaven_furniture_merchant.birthday.greeting=You came on my birthday. The old charts say that means fair weather.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.gift.love.birthday=It is my birthday and this gift is a rare haul. You made the whole day.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.gift.like.birthday=A birthday gift like this. You have a good eye.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.gift.neutral.birthday=Thanks. A simple gift on my birthday still means a lot.
+aetherhaven.dialogue.aetherhaven_furniture_merchant.gift.dislike.birthday=It is my birthday and you brought that. Well. I still appreciate the thought.

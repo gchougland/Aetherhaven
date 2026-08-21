@@ -2,5 +2,6 @@
   "id": "zombie_grave",
   "displayName": "Zombie Grave",
   "prefabPath": "Props/Zombie_Grave.prefab.json",
-  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Zombie_Grave.png"
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Zombie_Grave.png",
+  "goldPrice": 55
 }

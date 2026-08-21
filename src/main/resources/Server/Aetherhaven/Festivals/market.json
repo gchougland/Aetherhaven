@@ -196,6 +196,10 @@
       "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.florist.0",
       "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.florist.1"
     ],
+    "furniture_merchant": [
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.furniture_merchant.0",
+      "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.furniture_merchant.1"
+    ],
     "merchant": [
       "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.merchant.0",
       "aetherhaven_dialogue_festival_market.aetherhaven.dialogue.festival.market.greeting.merchant.1"

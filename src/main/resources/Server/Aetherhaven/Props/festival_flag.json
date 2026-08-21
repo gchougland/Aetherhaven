@@ -2,5 +2,6 @@
   "id": "festival_flag",
   "displayName": "Festival Flag",
   "prefabPath": "Props/Festival_Flag.prefab.json",
-  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Festival_Flag.png"
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Festival_Flag.png",
+  "goldPrice": 28
 }

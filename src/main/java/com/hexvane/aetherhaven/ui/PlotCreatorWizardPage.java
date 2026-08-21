@@ -552,6 +552,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#VariantCheckScroll.Visible", false);
         b.set("#GoldCostLabel.Visible", true);
         b.set("#GoldCostField.Visible", true);
+        b.set("#GoldCostLabel.TextSpans", Message.translation(MSG + ".field.goldCost"));
+        b.set("#GoldCostField.PlaceholderText", Message.translation(MSG + ".field.goldCost"));
         b.set("#SelfBuildDaysLabel.Visible", true);
         b.set("#SelfBuildDaysField.Visible", true);
         b.set("#MaxHomeResidentsLabel.Visible", homeKind);
@@ -579,8 +581,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
     }
 
     /**
-     * Props only need a name, id, empty space / water options, and optional community submit. No gold cost, style,
-     * build days, or plot token settings.
+     * Props need a name, id, shop gold price, empty space / water options, front direction, and optional community
+     * submit. No treasury plot cost, style, build days, or plot token settings.
      */
     private void applyPropSettingsVisibility(@Nonnull UICommandBuilder b, boolean showCommunitySubmit) {
         b.set("#DisplayNameField.Visible", true);
@@ -592,8 +594,10 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#TagsField.Visible", false);
         b.set("#VariantOfDropdown.Visible", false);
         b.set("#VariantCheckScroll.Visible", false);
-        b.set("#GoldCostLabel.Visible", false);
-        b.set("#GoldCostField.Visible", false);
+        b.set("#GoldCostLabel.Visible", true);
+        b.set("#GoldCostField.Visible", true);
+        b.set("#GoldCostLabel.TextSpans", Message.translation(MSG + ".field.propGoldPrice"));
+        b.set("#GoldCostField.PlaceholderText", Message.translation(MSG + ".field.propGoldPrice"));
         b.set("#SelfBuildDaysLabel.Visible", false);
         b.set("#SelfBuildDaysField.Visible", false);
         b.set("#MaxHomeResidentsLabel.Visible", false);
@@ -774,7 +778,10 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         } else if (!d.getBuildingTags().isEmpty()) {
             b.set("#TagsField.Value", String.join(", ", d.getBuildingTags()));
         }
-        b.set("#GoldCostField.Value", String.valueOf(d.getTreasuryGoldCoinCost()));
+        b.set(
+            "#GoldCostField.Value",
+            String.valueOf(d.isPropMode() ? d.getPropGoldPrice() : d.getTreasuryGoldCoinCost())
+        );
         if (d.getSelfBuildDaysInput() != null) {
             b.set("#SelfBuildDaysField.Value", d.getSelfBuildDaysInput());
         } else {
@@ -1254,7 +1261,12 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         }
         if (data.goldCost != null) {
             try {
-                d.setTreasuryGoldCoinCost(Long.parseLong(data.goldCost.trim()));
+                long gold = Long.parseLong(data.goldCost.trim());
+                if (d.isPropMode()) {
+                    d.setPropGoldPrice(gold);
+                } else {
+                    d.setTreasuryGoldCoinCost(gold);
+                }
             } catch (NumberFormatException ignored) {
             }
         }

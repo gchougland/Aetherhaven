@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "id": "q_house_furniture_merchant",
+  "category": "housing",
+  "grantPlotTokenConstructionId": "plot_house",
+  "title": "Clive's home",
+  "description": "Even a traveling prop seller deserves a quiet berth on dry land.",
+  "assignNpcRoleId": "Aetherhaven_Furniture_Merchant",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "plot_token_received",
+      "text": "Take the house plot token from Clive.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_furniture_merchant.objective.token"
+    },
+    {
+      "id": "build",
+      "kind": "construction_built",
+      "constructionId": "plot_house",
+      "text": "Stake and build the house prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_furniture_merchant.objective.build"
+    },
+    {
+      "id": "assign",
+      "kind": "assign_house_resident",
+      "npcRoleId": "Aetherhaven_Furniture_Merchant",
+      "text": "Assign Clive as resident on the house management block.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_furniture_merchant.objective.assign"
+    },
+    {
+      "id": "talk",
+      "kind": "dialogue_turn_in",
+      "text": "Talk to Clive.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_furniture_merchant.objective.talk"
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Furniture_Merchant",
+      "amount": 10,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 16,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [],
+    "onComplete": [],
+    "onAbandon": []
+  },
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_furniture_merchant.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_furniture_merchant.description"
+}

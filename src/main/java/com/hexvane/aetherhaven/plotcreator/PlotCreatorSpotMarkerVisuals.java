@@ -170,6 +170,7 @@ public final class PlotCreatorSpotMarkerVisuals {
             case "merchant" -> "Merchant work spot";
             case "builder" -> "Builder work spot";
             case "florist" -> "Florist work spot";
+            case "furniture_merchant" -> "Furniture merchant work spot";
             case "pyrotechnic" -> "Pyrotechnic work spot";
             case "crystal_keeper" -> "Crystal keeper work spot";
             case "chef" -> "Chef work spot";

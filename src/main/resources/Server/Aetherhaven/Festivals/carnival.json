@@ -37,6 +37,13 @@
       "localY": 5,
       "localZ": 2,
       "yawDegrees": -75.895325
+    },
+    {
+      "residentKind": "furniture_merchant",
+      "localX": 4,
+      "localY": 5,
+      "localZ": 3,
+      "yawDegrees": -75.895325
     }
   ],
   "npcs": [
@@ -239,6 +246,10 @@
     "florist": [
       "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.florist.0",
       "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.florist.1"
+    ],
+    "furniture_merchant": [
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.furniture_merchant.0",
+      "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.furniture_merchant.1"
     ],
     "merchant": [
       "aetherhaven_dialogue_festival_carnival.aetherhaven.dialogue.festival.carnival.greeting.merchant.0",

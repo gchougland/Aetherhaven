@@ -1,0 +1,158 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@ViewModeListStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../list.png", Border: 0, Color: #ffffff), LabelStyle: (FontSize: 1, TextColor: #ffffff(0.01))),
+  Hovered: (Background: PatchStyle(TexturePath: "../list.png", Border: 0, Color: #c5d0dc), LabelStyle: (FontSize: 1, TextColor: #ffffff(0.01))),
+  Pressed: (Background: PatchStyle(TexturePath: "../list.png", Border: 0, Color: #8fa0b0), LabelStyle: (FontSize: 1, TextColor: #ffffff(0.01))),
+  Disabled: (Background: PatchStyle(TexturePath: "../list.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (FontSize: 1, TextColor: #ffffff(0.01))),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+@ViewModeGridStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../grid.png", Border: 0, Color: #ffffff), LabelStyle: (FontSize: 1, TextColor: #ffffff(0.01))),
+  Hovered: (Background: PatchStyle(TexturePath: "../grid.png", Border: 0, Color: #c5d0dc), LabelStyle: (FontSize: 1, TextColor: #ffffff(0.01))),
+  Pressed: (Background: PatchStyle(TexturePath: "../grid.png", Border: 0, Color: #8fa0b0), LabelStyle: (FontSize: 1, TextColor: #ffffff(0.01))),
+  Disabled: (Background: PatchStyle(TexturePath: "../grid.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (FontSize: 1, TextColor: #ffffff(0.01))),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+Group #PropShopRoot {
+  LayoutMode: Left;
+  Anchor: (Width: 920, Height: 520);
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 420, Height: 520);
+
+    #Title {
+      Group {
+        Label #PropShopTitle {
+          Style: (...$C.@TitleStyle, HorizontalAlignment: Start);
+          Padding: (Left: 19, Right: 200);
+          Text: "";
+        }
+        $C.@HeaderSearch {}
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Full: 12);
+
+      Group #ViewModeRow {
+        LayoutMode: Left;
+        Anchor: (Height: 32, Bottom: 8);
+
+        Group { FlexWeight: 1; }
+
+        TextButton #ViewModeList {
+          Style: @ViewModeListStyle;
+          Anchor: (Width: 28, Height: 28, Right: 6);
+          Text: " ";
+        }
+
+        TextButton #ViewModeGrid {
+          Style: @ViewModeGridStyle;
+          Anchor: (Width: 28, Height: 28);
+          Text: " ";
+        }
+      }
+
+      Group #PropListScroll {
+        FlexWeight: 1;
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+        Anchor: (Bottom: 14);
+
+        Group #PropRows {
+          LayoutMode: Top;
+        }
+
+        Group #PropGridRows {
+          LayoutMode: LeftCenterWrap;
+          Visible: false;
+        }
+      }
+
+      Group #SelectionInfo {
+        LayoutMode: Top;
+        Anchor: (Top: 4);
+
+        Label #EmptyHint {
+          Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, FontSize: 14, Wrap: true);
+          Anchor: (Bottom: 8);
+          Visible: false;
+          Text: "";
+        }
+
+        Label #SelectedName {
+          Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, FontSize: 16, RenderBold: true, Wrap: true);
+          Anchor: (Bottom: 4);
+          Text: "";
+        }
+
+        Label #PriceLine {
+          Style: (...$C.@DefaultLabelStyle, TextColor: #c8a060, FontSize: 15, Wrap: true);
+          Anchor: (Bottom: 2);
+          Text: "";
+        }
+
+        Label #StockLine {
+          Style: (...$C.@DefaultLabelStyle, TextColor: #96a9be, FontSize: 14, Wrap: true);
+          Anchor: (Bottom: 6);
+          Text: "";
+        }
+
+        Label #FundsLine {
+          Style: (...$C.@DefaultLabelStyle, TextColor: #8a8070, FontSize: 13, Wrap: true);
+          Anchor: (Bottom: 8);
+          Text: "";
+        }
+
+        $C.@TextButton #BuyButton {
+          Anchor: (Height: 36);
+          Text: "";
+        }
+      }
+    }
+  }
+
+  $C.@Container #PreviewBackdrop {
+    Anchor: (Width: 480, Height: 520, Left: 12);
+
+    #Title {
+      Label #PreviewTitle {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+
+      Group #PreviewFrame {
+        LayoutMode: Full;
+        FlexWeight: 1;
+        Anchor: (Bottom: 4);
+        Background: #0e141c;
+
+        PrefabPreviewComponent #PrefabPreview {
+          Anchor: (Full: 0);
+          AllowDragYaw: true;
+          AllowDragPitch: true;
+          AllowZoom: true;
+          AllowPan: true;
+          ShowAnchor: true;
+        }
+
+        Label #PreviewPlaceholder {
+          Style: (...$C.@DefaultLabelStyle, TextColor: #96a9be, FontSize: 15, HorizontalAlignment: Center, VerticalAlignment: Center, Wrap: true);
+          Anchor: (Full: 0);
+          Text: "";
+          HitTestVisible: false;
+        }
+      }
+    }
+  }
+}

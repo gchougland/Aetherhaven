@@ -65,6 +65,7 @@ public final class PlotCreatorWorkActivityTags {
                 TownVillagerBinding.KIND_MERCHANT,
                 TownVillagerBinding.KIND_CHEF,
                 TownVillagerBinding.KIND_FLORIST,
+                TownVillagerBinding.KIND_FURNITURE_MERCHANT,
                 TownVillagerBinding.KIND_PYROTECHNIC,
                 TownVillagerBinding.KIND_CRYSTAL_KEEPER,
                 TownVillagerBinding.KIND_ELDER,

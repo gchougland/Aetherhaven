@@ -405,6 +405,7 @@ public final class PlotBuildingKindRequirements {
             TownVillagerBinding.KIND_LOGGER,
             TownVillagerBinding.KIND_RANCHER,
             TownVillagerBinding.KIND_FLORIST,
+            TownVillagerBinding.KIND_FURNITURE_MERCHANT,
             TownVillagerBinding.KIND_BUILDER,
             TownVillagerBinding.KIND_GUILD_MASTER,
             TownVillagerBinding.KIND_BARD,
@@ -597,6 +598,7 @@ public final class PlotBuildingKindRequirements {
             || AetherhavenConstants.CONSTRUCTION_PLOT_BOMB_SHOP.equals(id)
             || AetherhavenConstants.CONSTRUCTION_PLOT_CRYSTAL_KEEPERS_SHOP.equals(id)
             || AetherhavenConstants.CONSTRUCTION_PLOT_FLOWER_SHOP.equals(id)
+            || AetherhavenConstants.CONSTRUCTION_PLOT_FURNITURE_SHOP.equals(id)
             || AetherhavenConstants.CONSTRUCTION_PLOT_RESTAURANT.equals(id)) {
             return PlotBuildingKind.SHOP;
         }

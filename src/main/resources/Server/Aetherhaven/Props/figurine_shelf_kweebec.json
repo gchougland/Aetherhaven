@@ -2,5 +2,6 @@
   "id": "figurine_shelf_kweebec",
   "displayName": "Figurine Shelf Kweebec",
   "prefabPath": "Props/Figurine_Shelf_Kweebec.prefab.json",
-  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Figurine_Shelf_Kweebec.png"
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Figurine_Shelf_Kweebec.png",
+  "goldPrice": 40
 }

@@ -2,5 +2,6 @@
   "id": "mertie_statue",
   "displayName": "Mertie Statue",
   "prefabPath": "Props/Mertie_Statue.prefab.json",
-  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Mertie_Statue.png"
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Mertie_Statue.png",
+  "goldPrice": 80
 }

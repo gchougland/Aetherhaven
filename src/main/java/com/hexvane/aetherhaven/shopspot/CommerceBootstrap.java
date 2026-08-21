@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.plugin.AetherhavenFeatures;
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.GameTimeTickListener;
+import com.hexvane.aetherhaven.propshop.FurnitureMerchantShopService;
 import com.hexvane.aetherhaven.tourist.TouristAutonomyState;
 import com.hexvane.aetherhaven.tourist.TouristAutonomySystem;
 import com.hexvane.aetherhaven.tourist.TouristPortalBlock;
@@ -132,6 +133,7 @@ public final class CommerceBootstrap {
                 FeastService.pruneExpiredForWorld(world, core, store);
                 FeastService.checkGatherTimeoutsForWorld(world, core);
                 ShopSpotDailyRerollService.scheduleTickFromHub(world, core, wtr);
+                FurnitureMerchantShopService.scheduleTickFromHub(world, core, wtr);
                 ShopSpotRefreshSystem.onGameMinute(world, store, core, wtr);
             }
 
@@ -149,12 +151,14 @@ public final class CommerceBootstrap {
                 if (!backward) {
                     InnPoolService.catchUpAfterTimeJump(world, core, store, wtr, from, to);
                     ShopSpotDailyRerollService.catchUpAfterTimeJump(world, core, store, wtr, from, to);
+                    FurnitureMerchantShopService.catchUpAfterTimeJump(world, core, store, wtr, from, to);
                 }
                 InnPoolService.scheduleTickFromHub(world, core, wtr);
                 TouristPortalTickService.scheduleTickFromHub(world, core, wtr);
                 FeastService.pruneExpiredForWorld(world, core, store);
                 FeastService.checkGatherTimeoutsForWorld(world, core);
                 ShopSpotDailyRerollService.scheduleTickFromHub(world, core, wtr);
+                FurnitureMerchantShopService.scheduleTickFromHub(world, core, wtr);
                 ShopSpotRefreshSystem.onGameMinute(world, store, core, wtr);
             }
         };

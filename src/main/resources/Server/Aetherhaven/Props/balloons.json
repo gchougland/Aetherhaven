@@ -2,5 +2,6 @@
   "id": "balloons",
   "displayName": "Balloons",
   "prefabPath": "Props/Balloons.prefab.json",
-  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Balloons.png"
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Balloons.png",
+  "goldPrice": 35
 }

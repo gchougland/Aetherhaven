@@ -21,6 +21,8 @@ import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkExistenceService;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkSpawnService;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
+import com.hexvane.aetherhaven.tourist.TouristAutonomyState;
+import com.hexvane.aetherhaven.tourist.TouristAutonomySystem;
 import com.hexvane.aetherhaven.tourist.TouristRecord;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
@@ -57,6 +59,7 @@ import javax.annotation.Nullable;
  * Aetherhaven villager NPCs for this town (same-town binding not in town data, or mod-marked with no binding / lost
  * binding when the debug handle matches this town). NPCs bound to another town that still exists in this world's save
  * are left alone; NPCs whose binding town id is missing from save data are treated as invalid and removed.
+ * Includes hired guards and tourist portal settlers (citizens and invited-to-stay visitors).
  */
 public final class VillagerTownResetService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -76,7 +79,8 @@ public final class VillagerTownResetService {
         @Nullable String poolCharacterId,
         @Nullable TownsfolkCharacterBinding poolCharacterBinding,
         @Nullable String poolAssignmentKind,
-        boolean poolTownsfolkCitizen
+        /** Citizen or invited-to-stay tourist from {@link TouristRecord}. */
+        boolean poolTouristSettler
     ) {}
 
     private VillagerTownResetService() {}
@@ -100,7 +104,7 @@ public final class VillagerTownResetService {
         InnPoolService.reconcileInnVisitorEntities(world, town, tm, store, true);
         purgeLoadedTouristCitizenDuplicates(world, store, town, captured);
         int genericDupesPurged = 0;
-        if (townHasPromotedTouristCitizen(town)) {
+        if (townHasTouristSettler(town)) {
             genericDupesPurged = purgeDuplicateGenericTownsfolkResidents(store, town, captured.keySet());
         }
         if (genericDupesPurged > 0) {
@@ -191,7 +195,7 @@ public final class VillagerTownResetService {
                     ResidentRegistryService.upsert(town, tm, c.npcRoleId(), c.bindingKind(), c.jobPlotId(), newUuid);
                 }
             } else if (
-                c.poolTownsfolkCitizen()
+                c.poolTouristSettler()
                     && c.poolCharacterId() != null
                     && !c.poolCharacterId().isBlank()
                     && c.poolCharacterBinding() != null
@@ -219,7 +223,7 @@ public final class VillagerTownResetService {
                 if (spawned == null) {
                     LOGGER.atWarning()
                         .log(
-                            "Reset: failed to spawn tourist citizen %s for town %s",
+                            "Reset: failed to spawn tourist settler %s for town %s",
                             c.poolCharacterId(),
                             town.getTownId()
                         );
@@ -227,12 +231,16 @@ public final class VillagerTownResetService {
                 }
                 newUuid = spawned;
                 for (TouristRecord rec : town.getTouristRecords()) {
-                    if (rec.isCitizen() && c.poolCharacterId().equalsIgnoreCase(rec.getCharacterId())) {
+                    if (!isTouristSettler(rec)) {
+                        continue;
+                    }
+                    if (c.poolCharacterId().equalsIgnoreCase(rec.getCharacterId())) {
                         rec.setEntityUuid(newUuid);
+                        ensureTouristAutonomyAfterReset(world, plugin, store, town, rec, newUuid);
                         break;
                     }
                 }
-                if (townHasPromotedTouristCitizen(town)) {
+                if (townHasTouristSettler(town)) {
                     town.getResidentNpcRecords().removeIf(VillagerTownResetService::isGenericTownsfolkResidentRecord);
                 }
             } else {
@@ -402,7 +410,7 @@ public final class VillagerTownResetService {
         if (TownVillagerBinding.KIND_GUARD.equals(c.bindingKind)) {
             return 2;
         }
-        if (c.poolTownsfolkCitizen()) {
+        if (c.poolTouristSettler()) {
             return 5;
         }
         return 10;
@@ -424,8 +432,8 @@ public final class VillagerTownResetService {
             if (old.equals(NIL_UUID)) {
                 continue;
             }
-            if (isTrackedTouristCitizenUuid(town, old)
-                || (townHasPromotedTouristCitizen(town) && isGenericTownsfolkResidentRecord(r))) {
+            if (isTrackedTouristSettlerUuid(town, old)
+                || (townHasTouristSettler(town) && isGenericTownsfolkResidentRecord(r))) {
                 continue;
             }
             putNonVisitorFromTownData(map, town, store, old);
@@ -510,43 +518,49 @@ public final class VillagerTownResetService {
         }
 
         captureHiredGuards(map, town, store, plugin);
-        captureTouristCitizens(map, town, store, plugin);
+        captureTouristSettlers(map, town, store, plugin);
 
         return map;
     }
 
-    /** Promoted tourist citizens are tracked in {@link TouristRecord}, not generic {@link ResidentNpcRecord} rows. */
-    private static void captureTouristCitizens(
+    /**
+     * Portal tourists who stay in town: promoted citizens and invited-to-stay visitors. Tracked in
+     * {@link TouristRecord}, not only {@link ResidentNpcRecord} rows.
+     */
+    private static void captureTouristSettlers(
         @Nonnull LinkedHashMap<UUID, CapturedNpc> map,
         @Nonnull TownRecord town,
         @Nonnull Store<EntityStore> store,
         @Nonnull AetherhavenPlugin plugin
     ) {
         for (TouristRecord rec : town.getTouristRecords()) {
-            if (!rec.isCitizen()) {
+            if (!isTouristSettler(rec)) {
                 continue;
             }
             String characterId = rec.getCharacterId().trim();
             if (characterId.isEmpty()) {
                 continue;
             }
-            UUID resolved = resolveTouristCitizenEntityUuid(store, town, rec);
+            UUID resolved = resolveTouristSettlerEntityUuid(store, town, rec);
+            boolean loaded = false;
             if (resolved == null || NIL_UUID.equals(resolved)) {
-                continue;
-            }
-            UUID recorded = rec.getEntityUuid();
-            if (recorded != null && !recorded.equals(resolved)) {
-                rec.setEntityUuid(resolved);
-                if (map.containsKey(recorded)) {
-                    CapturedNpc stale = map.get(recorded);
-                    if (stale != null && isGenericTownsfolkResidentCapture(stale)) {
-                        map.remove(recorded);
+                // Row still on the portal list but entity uuid was lost — mint a key so reset can respawn them.
+                resolved = UUID.randomUUID();
+            } else {
+                UUID recorded = rec.getEntityUuid();
+                if (recorded != null && !recorded.equals(resolved)) {
+                    rec.setEntityUuid(resolved);
+                    if (map.containsKey(recorded)) {
+                        CapturedNpc stale = map.get(recorded);
+                        if (stale != null && isGenericTownsfolkResidentCapture(stale)) {
+                            map.remove(recorded);
+                        }
                     }
                 }
+                Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(resolved);
+                loaded = ref != null && ref.isValid();
             }
-            TownsfolkCharacterBinding binding = resolveTouristCitizenCharacterBinding(store, resolved, plugin, characterId);
-            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(resolved);
-            boolean loaded = ref != null && ref.isValid();
+            TownsfolkCharacterBinding binding = resolveTouristSettlerCharacterBinding(store, resolved, plugin, characterId);
             map.put(
                 resolved,
                 new CapturedNpc(
@@ -569,8 +583,12 @@ public final class VillagerTownResetService {
         }
     }
 
+    private static boolean isTouristSettler(@Nonnull TouristRecord rec) {
+        return rec.isCitizen() || rec.isInvitedToStay();
+    }
+
     @Nullable
-    private static UUID resolveTouristCitizenEntityUuid(
+    private static UUID resolveTouristSettlerEntityUuid(
         @Nonnull Store<EntityStore> store,
         @Nonnull TownRecord town,
         @Nonnull TouristRecord rec
@@ -626,7 +644,7 @@ public final class VillagerTownResetService {
     }
 
     @Nonnull
-    private static TownsfolkCharacterBinding resolveTouristCitizenCharacterBinding(
+    private static TownsfolkCharacterBinding resolveTouristSettlerCharacterBinding(
         @Nonnull Store<EntityStore> store,
         @Nonnull UUID entityUuid,
         @Nonnull AetherhavenPlugin plugin,
@@ -658,6 +676,35 @@ public final class VillagerTownResetService {
         );
     }
 
+    private static void ensureTouristAutonomyAfterReset(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull TouristRecord rec,
+        @Nonnull UUID entityUuid
+    ) {
+        Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityUuid);
+        if (ref == null || !ref.isValid()) {
+            return;
+        }
+        TouristAutonomyState autonomy = store.getComponent(ref, TouristAutonomyState.getComponentType());
+        if (autonomy == null) {
+            autonomy = TouristAutonomyState.fresh(System.currentTimeMillis());
+        }
+        UUID portalId = rec.getPortalId();
+        if (portalId != null && autonomy.getHomePortalId() == null) {
+            autonomy.setHomePortalId(portalId);
+        }
+        store.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+        NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
+        if (npc != null) {
+            TouristAutonomySystem.kickInitialVisitOnSpawn(ref, store, plugin, autonomy, town, world);
+            store.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+            store.putComponent(ref, NPCEntity.getComponentType(), npc);
+        }
+    }
+
     private static void purgeLoadedTouristCitizenDuplicates(
         @Nonnull World world,
         @Nonnull Store<EntityStore> store,
@@ -665,7 +712,7 @@ public final class VillagerTownResetService {
         @Nonnull Map<UUID, CapturedNpc> captured
     ) {
         for (CapturedNpc c : captured.values()) {
-            if (!c.poolTownsfolkCitizen() || c.poolCharacterId() == null || c.poolCharacterId().isBlank()) {
+            if (!c.poolTouristSettler() || c.poolCharacterId() == null || c.poolCharacterId().isBlank()) {
                 continue;
             }
             TownsfolkExistenceService.purgeDuplicateEntities(
@@ -750,18 +797,23 @@ public final class VillagerTownResetService {
             && AetherhavenConstants.NPC_TOWNSFOLK.equalsIgnoreCase(record.getNpcRoleId().trim());
     }
 
+    /** Package-visible for unit tests. */
+    static boolean isTouristSettlerForTest(@Nonnull TouristRecord rec) {
+        return isTouristSettler(rec);
+    }
+
     private static boolean isGenericTownsfolkResidentCapture(@Nonnull CapturedNpc capture) {
         return !capture.visitor()
-            && !capture.poolTownsfolkCitizen()
+            && !capture.poolTouristSettler()
             && !capture.guardCitizen()
             && (capture.guardCharacterId() == null || capture.guardCharacterId().isBlank())
             && TownVillagerBinding.KIND_TOWNSFOLK.equals(capture.bindingKind())
             && AetherhavenConstants.NPC_TOWNSFOLK.equalsIgnoreCase(capture.npcRoleId().trim());
     }
 
-    private static boolean isTrackedTouristCitizenUuid(@Nonnull TownRecord town, @Nonnull UUID entityUuid) {
+    private static boolean isTrackedTouristSettlerUuid(@Nonnull TownRecord town, @Nonnull UUID entityUuid) {
         for (TouristRecord rec : town.getTouristRecords()) {
-            if (!rec.isCitizen()) {
+            if (!isTouristSettler(rec)) {
                 continue;
             }
             UUID recorded = rec.getEntityUuid();
@@ -772,9 +824,9 @@ public final class VillagerTownResetService {
         return false;
     }
 
-    private static boolean townHasPromotedTouristCitizen(@Nonnull TownRecord town) {
+    private static boolean townHasTouristSettler(@Nonnull TownRecord town) {
         for (TouristRecord rec : town.getTouristRecords()) {
-            if (rec.isCitizen()) {
+            if (isTouristSettler(rec)) {
                 return true;
             }
         }

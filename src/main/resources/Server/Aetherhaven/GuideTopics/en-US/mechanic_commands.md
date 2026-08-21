@@ -253,7 +253,7 @@ Examples:
   - Permission: `hexvane.aetherhaven.command.aetherhaven.villager.locate`
   - Access: Creative
 
-- **`/ah villager reset`** — Respawn all town villagers near you.
+- **`/ah villager reset`** — Respawn all town villagers near you, including invited visitors who went missing.
   - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.villager.reset`
   - Access: Creative

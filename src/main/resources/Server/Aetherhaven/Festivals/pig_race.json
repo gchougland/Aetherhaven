@@ -138,6 +138,10 @@
       "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.florist.0",
       "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.florist.1"
     ],
+    "furniture_merchant": [
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.furniture_merchant.0",
+      "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.furniture_merchant.1"
+    ],
     "rancher": [
       "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.rancher.0",
       "aetherhaven_dialogue_festival_pig_race.aetherhaven.dialogue.festival.pig_race.greeting.rancher.1"

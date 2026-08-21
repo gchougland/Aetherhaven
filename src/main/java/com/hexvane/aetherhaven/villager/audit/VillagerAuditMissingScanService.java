@@ -3,8 +3,11 @@ package com.hexvane.aetherhaven.villager.audit;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.entity.EntityPresenceUtil;
+import com.hexvane.aetherhaven.guild.GuardHireService;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.HiredGuardRecord;
 import com.hexvane.aetherhaven.town.ResidentNpcRecord;
+import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownTerritoryChunkUtil;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -83,6 +86,8 @@ public final class VillagerAuditMissingScanService {
                 null
             );
         }
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        GuardHireService.pruneDeadHiredGuards(world, plugin, town, tm, store);
     }
 
     private static void checkTracked(

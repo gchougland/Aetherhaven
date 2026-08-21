@@ -456,6 +456,8 @@ items.Aetherhaven_Building_Editor_Staff.description=Creative only. Pick an exist
 
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Blacksmith Shop Plot Token
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Required to place the blacksmith shop footprint from the plot placement staff.
+items.Aetherhaven_Plot_Token_Furniture_Shop.name=Furniture Shop Plot Token
+items.Aetherhaven_Plot_Token_Furniture_Shop.description=Required to place the furniture shop footprint from the plot placement staff.
 
 items.Aetherhaven_Plot_Token_Park.name=Park Plot Token
 items.Aetherhaven_Plot_Token_Park.description=Required to place the park footprint from the plot placement staff.
@@ -538,6 +540,8 @@ items.Aetherhaven_Villager_Cosmetic_Beehive_Hat.name=Beehive Hat Pattern
 items.Aetherhaven_Villager_Cosmetic_Beehive_Hat.description=Use to unlock a beehive hat for villagers in your town wardrobe. Buy it from the tree climb merchant with summer festival tickets.
 items.Aetherhaven_Villager_Cosmetic_Jungle_Sapling_Hat.name=Jungle Sapling Hat Pattern
 items.Aetherhaven_Villager_Cosmetic_Jungle_Sapling_Hat.description=Use to unlock a jungle sapling hat for villagers in your town wardrobe. Buy it from the tree climb merchant with summer festival tickets.
+items.Aetherhaven_Villager_Cosmetic_Rafflesia_Hat.name=Rafflesia Hat Pattern
+items.Aetherhaven_Villager_Cosmetic_Rafflesia_Hat.description=Use to unlock a rafflesia flower hat for villagers in your town wardrobe. Buy it from the tree climb merchant with summer festival tickets.
 items.Aetherhaven_Villager_Cosmetic_Jack_O_Lantern_Hat.name=Jack o lantern Hat Pattern
 items.Aetherhaven_Villager_Cosmetic_Jack_O_Lantern_Hat.description=Use to unlock a jack o lantern hat for villagers in your town wardrobe. Buy it from the Hallow's Eve merchant with autumn festival tickets.
 items.Aetherhaven_Villager_Cosmetic_Santa_Hat.name=Santa Hat Pattern

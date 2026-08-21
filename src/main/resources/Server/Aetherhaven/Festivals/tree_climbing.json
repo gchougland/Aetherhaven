@@ -33,6 +33,13 @@
       "yawDegrees": 105.80444
     },
     {
+      "residentKind": "furniture_merchant",
+      "localX": 8,
+      "localY": 5,
+      "localZ": 11,
+      "yawDegrees": 105.80444
+    },
+    {
       "residentKind": "farmer",
       "localX": 3,
       "localY": 5,
@@ -205,6 +212,10 @@
     "florist": [
       "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.florist.0",
       "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.florist.1"
+    ],
+    "furniture_merchant": [
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.furniture_merchant.0",
+      "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.furniture_merchant.1"
     ],
     "guild_master": [
       "aetherhaven_dialogue_festival_tree_climbing.aetherhaven.dialogue.festival.tree_climbing.greeting.guild_master.0",

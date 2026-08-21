@@ -31,6 +31,7 @@ public enum StarterTownPreset {
         "plot_blacksmith_shop",
         "plot_market_stall",
         "plot_flower_shop",
+        "plot_furniture_shop",
         "plot_crystal_keepers_shop",
         "plot_bomb_shop",
         "plot_restaurant",

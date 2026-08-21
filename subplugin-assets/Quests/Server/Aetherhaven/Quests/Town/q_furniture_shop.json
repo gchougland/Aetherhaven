@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "id": "q_furniture_shop",
+  "category": "town",
+  "grantPlotTokenConstructionId": "plot_furniture_shop",
+  "title": "Clive's Furniture Shop",
+  "description": "Cap'n Clive wants a proper shop where folk can browse his decoration props.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "plot_token_received",
+      "text": "Take the furniture shop plot token from Clive.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_furniture_shop.objective.token"
+    },
+    {
+      "id": "build",
+      "kind": "construction_built",
+      "constructionId": "plot_furniture_shop",
+      "text": "Stake and build the furniture shop prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_furniture_shop.objective.build"
+    },
+    {
+      "id": "talk",
+      "kind": "dialogue_turn_in",
+      "text": "Talk to Clive.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_furniture_shop.objective.talk"
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Furniture_Merchant",
+      "amount": 14,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 14,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
+    ],
+    "onComplete": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ],
+    "onAbandon": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ]
+  },
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_furniture_shop.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_furniture_shop.description"
+}

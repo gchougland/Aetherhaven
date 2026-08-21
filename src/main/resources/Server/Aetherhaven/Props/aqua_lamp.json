@@ -2,5 +2,6 @@
   "id": "aqua_lamp",
   "displayName": "Aqua Lamp",
   "prefabPath": "Props/Aqua_Lamp.prefab.json",
-  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Aqua_Lamp.png"
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Aqua_Lamp.png",
+  "goldPrice": 22
 }

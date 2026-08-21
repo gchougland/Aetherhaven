@@ -24,6 +24,7 @@ import com.hexvane.aetherhaven.map.TownSharedMapMarkerService;
 import com.hexvane.aetherhaven.poi.PoiPersistence;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.prop.PropWorldRegistries;
+import com.hexvane.aetherhaven.propshop.FurnitureMerchantShopService;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBootstrap;
 import com.hexvane.aetherhaven.shopspot.ShopSpotDailyRerollService;
 import com.hexvane.aetherhaven.shopspot.ShopSpotPersistence;
@@ -287,6 +288,7 @@ public final class AetherhavenWorldRegistries {
         AssemblyWorldRegistry.unloadWorld(world.getName());
         SprinklerWateringService.clearWorldState(world.getName());
         ShopSpotDailyRerollService.clearWorldState(world.getName());
+        FurnitureMerchantShopService.clearWorldState(world.getName());
         CitizenDawnRevivalService.clearWorldState(world.getName());
         if (PersistentWorldSupport.isTemporaryInstance(world)) {
             TOWN_MANAGERS.remove(world.getName());

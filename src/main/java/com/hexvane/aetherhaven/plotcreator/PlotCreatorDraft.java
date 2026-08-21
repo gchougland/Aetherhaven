@@ -187,6 +187,8 @@ public final class PlotCreatorDraft {
     @Nonnull
     private final List<MaterialRequirement> materials = new ArrayList<>();
     private long treasuryGoldCoinCost;
+    /** Shop gold price for decoration props (Cap'n Clive and similar). Default 20. */
+    private long propGoldPrice = com.hexvane.aetherhaven.prop.PropDefinition.DEFAULT_GOLD_PRICE;
     private double selfBuildGameDays = 3.0;
     @Nullable
     private String selfBuildDaysInput;
@@ -1040,6 +1042,19 @@ public final class PlotCreatorDraft {
 
     public void setTreasuryGoldCoinCost(long treasuryGoldCoinCost) {
         this.treasuryGoldCoinCost = Math.max(0L, treasuryGoldCoinCost);
+    }
+
+    public long getPropGoldPrice() {
+        return propGoldPrice > 0L
+            ? propGoldPrice
+            : com.hexvane.aetherhaven.prop.PropDefinition.DEFAULT_GOLD_PRICE;
+    }
+
+    public void setPropGoldPrice(long propGoldPrice) {
+        this.propGoldPrice =
+            propGoldPrice > 0L
+                ? propGoldPrice
+                : com.hexvane.aetherhaven.prop.PropDefinition.DEFAULT_GOLD_PRICE;
     }
 
     public double getSelfBuildGameDays() {

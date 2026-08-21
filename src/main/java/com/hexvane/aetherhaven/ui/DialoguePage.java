@@ -1461,6 +1461,9 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         if (ch.hasAction("open_geode_ui")) {
             return ICON_GEODE_OPEN;
         }
+        if (ch.hasAction("open_prop_shop") || ch.hasAction("open_barter_shop")) {
+            return ICON_MARKET;
+        }
         if (ch.hasAction("play_bard_song")
             || ch.hasAction("stop_bard_song")
             || ch.hasAction("start_bard_shuffle")
@@ -1713,6 +1716,21 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                     return;
                 }
                 player.getPageManager().openCustomPage(pref, st, new GeodeOpenPage(pr));
+            });
+        } else if (world != null && batch.isOpenPropShopAfterClose() && batch.getOpenPropShopTownId() != null) {
+            UUID townId = batch.getOpenPropShopTownId();
+            world.execute(() -> {
+                Ref<EntityStore> pref = playerRef.getReference();
+                if (pref == null || !pref.isValid()) {
+                    return;
+                }
+                Store<EntityStore> st = pref.getStore();
+                Player player = st.getComponent(pref, Player.getComponentType());
+                PlayerRef pr = st.getComponent(pref, PlayerRef.getComponentType());
+                if (player == null || pr == null) {
+                    return;
+                }
+                player.getPageManager().openCustomPage(pref, st, new PropShopPage(pr, townId));
             });
         } else if (world != null && batch.isOpenJewelryAppraisalAfterClose()) {
             boolean chargeGold = batch.isJewelryAppraisalChargeGold();

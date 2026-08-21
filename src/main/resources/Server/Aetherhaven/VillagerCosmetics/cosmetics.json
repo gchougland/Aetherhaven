@@ -169,6 +169,16 @@
       "headAccessoryType": "HalfCovering",
       "gradientSet": "Colored_Cotton",
       "gradientId": "Red"
+    },
+    {
+      "id": "RafflesiaHat",
+      "slot": "HeadAccessory",
+      "displayNameKey": "aetherhaven_villager_cosmetics.aetherhaven.villagerCosmetic.rafflesiaHat",
+      "model": "Cosmetics/Head/Rafflesia_Hat.blockymodel",
+      "texture": "Cosmetics/Head/Rafflesia_Hat.png",
+      "unlockItemId": "Aetherhaven_Villager_Cosmetic_Rafflesia_Hat",
+      "headAccessoryType": "FullyCovering"
     }
   ]
 }
+

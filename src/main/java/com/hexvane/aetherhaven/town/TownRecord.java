@@ -451,6 +451,16 @@ public final class TownRecord {
     @SerializedName("playerQuestBoardLastFailDawnDayByUuid")
     private Map<String, Long> playerQuestBoardLastFailDawnDayByUuid;
 
+    /** Last dawn epoch day when Cap'n Clive's prop shop inventory was rerolled for this town. */
+    @Nullable
+    @SerializedName("furnitureMerchantShopLastRerollEpochDay")
+    private Long furnitureMerchantShopLastRerollEpochDay;
+
+    /** Daily prop shop stock (up to six lines). */
+    @SerializedName("furnitureMerchantShopSlots")
+    @Nullable
+    private List<com.hexvane.aetherhaven.propshop.FurnitureMerchantShopSlotRecord> furnitureMerchantShopSlots;
+
     /**
      * Workplace plot production storage: key plot UUID string, value slot cursors + item amounts
      * (see {@link com.hexvane.aetherhaven.production.ProductionTickSystem}).
@@ -2296,6 +2306,39 @@ public final class TownRecord {
         }
         while (questBoardSlots.size() > count) {
             questBoardSlots.remove(questBoardSlots.size() - 1);
+        }
+    }
+
+    private void migrateFurnitureMerchantShopFieldsIfNeeded() {
+        if (furnitureMerchantShopSlots == null) {
+            furnitureMerchantShopSlots = new ArrayList<>();
+        }
+    }
+
+    @Nullable
+    public Long getFurnitureMerchantShopLastRerollEpochDay() {
+        return furnitureMerchantShopLastRerollEpochDay;
+    }
+
+    public void setFurnitureMerchantShopLastRerollEpochDay(long epochDay) {
+        this.furnitureMerchantShopLastRerollEpochDay = epochDay;
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.propshop.FurnitureMerchantShopSlotRecord> getFurnitureMerchantShopSlots() {
+        migrateFurnitureMerchantShopFieldsIfNeeded();
+        return furnitureMerchantShopSlots;
+    }
+
+    public void ensureFurnitureMerchantShopSlotCount(int count) {
+        migrateFurnitureMerchantShopFieldsIfNeeded();
+        while (furnitureMerchantShopSlots.size() < count) {
+            furnitureMerchantShopSlots.add(
+                com.hexvane.aetherhaven.propshop.FurnitureMerchantShopSlotRecord.empty()
+            );
+        }
+        while (furnitureMerchantShopSlots.size() > count) {
+            furnitureMerchantShopSlots.remove(furnitureMerchantShopSlots.size() - 1);
         }
     }
 

@@ -70,9 +70,12 @@ public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem
         String roleId = npc != null && npc.getRoleName() != null ? npc.getRoleName().trim() : "";
         String kind = binding.getKind();
 
-        if (TownVillagerBinding.KIND_GUARD.equals(kind)) {
+        boolean hiredGuard =
+            TownVillagerBinding.KIND_GUARD.equals(kind)
+                || (entityUuid != null && GuardHireService.isHiredGuard(town, entityUuid));
+        if (hiredGuard) {
             boolean citizen = wasGuardCitizen(town, entityUuid, victimRef, store);
-            handleGuardDeath(world, town, tm, victimRef, store, entityUuid);
+            handleGuardDeath(world, plugin, town, tm, victimRef, store, entityUuid);
             TownVillagerDeathNotifier.notifyTownMembers(
                 store,
                 victimRef,
@@ -292,6 +295,7 @@ public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem
 
     private static void handleGuardDeath(
         @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
         @Nonnull TownRecord town,
         @Nonnull TownManager tm,
         @Nonnull Ref<EntityStore> victimRef,
@@ -300,26 +304,34 @@ public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem
     ) {
         TownsfolkCharacterBinding tb = store.getComponent(victimRef, TownsfolkCharacterBinding.getComponentType());
         String characterId = tb != null ? tb.getCharacterId() : null;
+        int before = town.getHiredGuardRecords().size();
         characterId = GuardHireService.removeHiredGuardFromTown(town, entityUuid, characterId);
+        boolean removed = town.getHiredGuardRecords().size() < before;
+        // Persist the hire-slot free immediately so a later failure cannot leave a dead guard in the count after reload.
+        if (removed) {
+            tm.updateTown(town);
+        }
 
-        if (characterId != null && !characterId.isBlank()) {
-            if (entityUuid != null) {
-                TownsfolkExistenceService.releaseByEntity(world, AetherhavenPlugin.get(), entityUuid);
-            } else {
-                TownsfolkExistenceService.releaseCharacter(
-                    world,
-                    AetherhavenPlugin.get(),
-                    town.getTownId(),
-                    characterId,
-                    TownsfolkExistenceService.ReleaseReason.DEATH
-                );
+        try {
+            if (characterId != null && !characterId.isBlank()) {
+                if (entityUuid != null) {
+                    TownsfolkExistenceService.releaseByEntity(world, plugin, entityUuid);
+                } else {
+                    TownsfolkExistenceService.releaseCharacter(
+                        world,
+                        plugin,
+                        town.getTownId(),
+                        characterId,
+                        TownsfolkExistenceService.ReleaseReason.DEATH
+                    );
+                }
             }
+            if (entityUuid != null) {
+                GuardPatrolSystem.clearAssignmentsForGuard(world, plugin, entityUuid);
+            }
+        } catch (RuntimeException e) {
+            // Hire count already updated; ledger/patrol cleanup can recover on the next reconcile.
         }
-
-        if (entityUuid != null) {
-            GuardPatrolSystem.clearAssignmentsForGuard(world, AetherhavenPlugin.get(), entityUuid);
-        }
-        tm.updateTown(town);
     }
 
     /** Promote a housed guard to a tax paying citizen. */
