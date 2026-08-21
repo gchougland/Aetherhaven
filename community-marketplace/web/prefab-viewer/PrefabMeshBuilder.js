@@ -7,11 +7,11 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=35";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=35";
+} from "./BlockCatalog.js?v=36";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=36";
 
 /** Bump when transform math changes — shown in the viewer so we can confirm the live build. */
-export const PREFAB_VIEWER_TRANSFORM_REV = "xform-35";
+export const PREFAB_VIEWER_TRANSFORM_REV = "xform-36";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
@@ -161,52 +161,26 @@ export function rotationTupleToEuler(index) {
 }
 
 /**
- * World scale for prefab entities.
+ * World scale for prefab entities (EntityScale / BlockEntity only).
+ * Mesh unit density is applied in {@link loadBlockyModel} so every block, item, and
+ * entity path shares the same 32 vs 64 units-per-block rule.
  * Block entity EntityScale is identity-at-2 (EntitySpawnPage multiplies the UI value by
  * BLOCK_ENTITY_BASE_SCALE = 2, and BlockEntitySystems defaults to 2), so render scale
  * is the stored value halved. Item entities store the UI value as-is.
  * @param {any} comps
- * @param {string|null} modelPath
+ * @param {string|null} [_modelPath] unused; density is baked into the loaded mesh
  */
-export function entityWorldScale(comps, modelPath = null) {
+export function entityWorldScale(comps, _modelPath = null) {
   const hasBlockStyle = isBlockEntity(comps);
   let entityScale = Number(comps?.EntityScale?.Scale ?? comps?.entityScale?.Scale);
   if (!Number.isFinite(entityScale) || entityScale <= 0) {
     entityScale = hasBlockStyle ? 2 : 1;
   }
-  const blockEntityScale = hasBlockStyle ? entityScale / 2 : entityScale;
-  return blockEntityScale * (isCharacterDensityModel(modelPath) ? 0.5 : 1);
+  return hasBlockStyle ? entityScale / 2 : entityScale;
 }
 
-/**
- * Creature / player models under Characters/ and nested NPC folders are authored at 64
- * units per block. Held item models under Items/Weapons (and similar attachment kits) use
- * that same density — Potion_Onion sits next to NPC bomb meshes, not block-prop potions.
- * One-off NPC props (Balloon.blockymodel, carnival faces) and placeable item blocks
- * (Items/Consumables, Resources/, Blocks/) are block density (32 units per block).
- * @param {string|null} modelPath
- */
-export function isCharacterDensityModel(modelPath) {
-  const p = String(modelPath || "").replace(/\\/g, "/");
-  if (!p) {
-    return false;
-  }
-  if (/^Characters\//i.test(p)) {
-    return true;
-  }
-  // Held / thrown gear authored for hand attachments (64 units/block), same as NPC weapons.
-  if (/^Items\/(Weapons|Projectiles|Armors|Tools)\//i.test(p)) {
-    return true;
-  }
-  if (!/^NPC\//i.test(p)) {
-    return false;
-  }
-  // Flat NPC/*.blockymodel files are prop meshes, not creature skeletons.
-  if (/^NPC\/[^/]+\.blockymodel$/i.test(p)) {
-    return false;
-  }
-  return true;
-}
+/** @deprecated Use the loader's unit scale; kept as a re-export for older callers. */
+export { isCharacterDensityModel } from "./BlockyModelLoader.js?v=36";
 
 /**
  * @param {any} pos
@@ -535,13 +509,17 @@ export async function buildPrefabMesh(prefab, options = {}) {
             const model = await getModel(mdef.model, mdef.texture);
             if (model) {
               modelPath = mdef.model;
-              const catalogScale = Number(mdef.scale);
-              if (Number.isFinite(catalogScale) && catalogScale > 0) {
-                customModelScale = catalogScale;
-              }
-              const modelCompScale = Number(comps.Model?.Model?.Scale ?? comps.Model?.Scale);
-              if (Number.isFinite(modelCompScale) && modelCompScale > 0) {
-                customModelScale *= modelCompScale;
+              // ModelUpdate sends model.scale and entityScale separately. When EntityScale
+              // is present it is the live size (scale tool / tracker); Model.Scale alone is
+              // used for static spawns that never got an EntityScale component.
+              // Do not multiply by catalog MinScale — that is NPC spawn variance already
+              // baked into Model.Scale when the game creates the model.
+              const hasEntityScale = Boolean(comps.EntityScale || comps.entityScale);
+              if (!hasEntityScale) {
+                const modelCompScale = Number(comps.Model?.Model?.Scale ?? comps.Model?.Scale);
+                if (Number.isFinite(modelCompScale) && modelCompScale > 0) {
+                  customModelScale = modelCompScale;
+                }
               }
               addEntityModel(model);
               placed = true;

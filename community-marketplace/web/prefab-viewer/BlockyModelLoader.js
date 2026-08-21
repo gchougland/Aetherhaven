@@ -1,19 +1,57 @@
 /**
  * Load .blockymodel JSON into a Three.js Object3D.
- * Geometry rules follow Hytale's BlockyModelBoundsParser (scale 1/32, node quats, box/quad shapes).
+ * Geometry rules follow Hytale's BlockyModelBoundsParser for block-density meshes (1/32).
+ * Creature / held-item meshes are authored at 64 units per block (see ModelAsset EyeHeight).
  * UV layout matches the official Blockbench codec (pixel offset + face size from settings.size, not stretch).
  */
 import * as THREE from "three";
-import { assetUrl } from "./BlockCatalog.js?v=35";
+import { assetUrl } from "./BlockCatalog.js?v=36";
 
-const BLOCK_SCALE = 1 / 32;
+/** Block / furniture / placeable prop density (BlockyModelBoundsParser). */
+export const BLOCK_MODEL_UNITS = 32;
+/** Creature / player / held-gear density (matches Trork EyeHeight ≈ model height at 1/64). */
+export const CHARACTER_MODEL_UNITS = 64;
 
+/**
+ * Whether this blockymodel is authored at 64 units per block.
+ * Flat NPC/*.blockymodel props (Balloon, carnival faces) stay on block density.
+ * @param {string|null|undefined} modelPath
+ */
+export function isCharacterDensityModel(modelPath) {
+  const p = String(modelPath || "").replace(/\\/g, "/");
+  if (!p) {
+    return false;
+  }
+  if (/^Characters\//i.test(p)) {
+    return true;
+  }
+  // Held / thrown gear for hand attachments (same kits as NPC weapons).
+  if (/^Items\/(Weapons|Projectiles|Armors|Tools)\//i.test(p)) {
+    return true;
+  }
+  if (!/^NPC\//i.test(p)) {
+    return false;
+  }
+  // Flat NPC/*.blockymodel files are prop meshes, not creature skeletons.
+  if (/^NPC\/[^/]+\.blockymodel$/i.test(p)) {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Root scale applied when loading a blockymodel into world space.
+ * @param {string|null|undefined} modelPath
+ */
+export function modelRootScale(modelPath) {
+  return 1 / (isCharacterDensityModel(modelPath) ? CHARACTER_MODEL_UNITS : BLOCK_MODEL_UNITS);
+}
+
+const textureLoader = new THREE.TextureLoader();
 /** @type {Map<string, THREE.Texture>} */
 const textureCache = new Map();
 /** @type {Map<string, Promise<THREE.Group|null>>} */
 const modelCache = new Map();
-
-const textureLoader = new THREE.TextureLoader();
 
 /**
  * @param {string} url
@@ -511,7 +549,7 @@ export async function loadBlockyModel(modelPath, texturePath = null, tintHex = n
     for (const node of nodes) {
       accumulateNode(node, root, texture, texW, texH, resolvedTint);
     }
-    root.scale.setScalar(BLOCK_SCALE);
+    root.scale.setScalar(modelRootScale(modelPath));
     return root;
   })();
 
