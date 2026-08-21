@@ -9,8 +9,26 @@ const DEFAULT_ASSET_BASE = "/hytale-assets";
  */
 const CACHE_BUST = new URL(import.meta.url).search;
 
-/** @type {{ blocks: Record<string, any>, models: Record<string, any>, assetBase: string } | null} */
+/** @type {{ blocks: Record<string, any>, models: Record<string, any>, blocksLower: Map<string, any>, modelsLower: Map<string, any>, assetBase: string } | null} */
 let cached = null;
+
+/**
+ * Ids drift in case over a mod's life (Aetherhaven_Statue_of_Gaia became
+ * Aetherhaven_Statue_Of_Gaia), and prefabs submitted before a rename keep the old
+ * spelling forever. A lowercase index keeps those builds drawing.
+ * @param {Record<string, any>} entries
+ */
+function lowercaseIndex(entries) {
+  const index = new Map();
+  for (const [id, entry] of Object.entries(entries)) {
+    const key = id.toLowerCase();
+    // First writer wins so an exact-case id is never shadowed by a later collision.
+    if (!index.has(key)) {
+      index.set(key, entry);
+    }
+  }
+  return index;
+}
 
 /**
  * @param {string} [assetBase]
@@ -30,9 +48,13 @@ export async function loadCatalogs(assetBase = DEFAULT_ASSET_BASE) {
   if (!modelsRes.ok) {
     throw new Error(`Model catalog unavailable (${modelsRes.status})`);
   }
+  const blocks = await blocksRes.json();
+  const models = await modelsRes.json();
   cached = {
-    blocks: await blocksRes.json(),
-    models: await modelsRes.json(),
+    blocks,
+    models,
+    blocksLower: lowercaseIndex(blocks),
+    modelsLower: lowercaseIndex(models),
     assetBase: base,
   };
   return cached;
@@ -121,7 +143,7 @@ export function getBlockDef(name) {
   if (!id) {
     return null;
   }
-  const direct = cached.blocks[id];
+  const direct = cached.blocks[id] || cached.blocksLower.get(id.toLowerCase());
   if (direct) {
     return direct;
   }
@@ -135,7 +157,8 @@ export function getBlockDef(name) {
   }
 
   if (id.startsWith("*")) {
-    return cached.blocks[id.slice(1)] || null;
+    const bare = id.slice(1);
+    return cached.blocks[bare] || cached.blocksLower.get(bare.toLowerCase()) || null;
   }
   return null;
 }
@@ -147,7 +170,11 @@ export function getModelDef(modelId) {
   if (!cached) {
     return null;
   }
-  return cached.models[modelId] || null;
+  const id = String(modelId || "");
+  if (!id) {
+    return null;
+  }
+  return cached.models[id] || cached.modelsLower.get(id.toLowerCase()) || null;
 }
 
 export function getAssetBase() {

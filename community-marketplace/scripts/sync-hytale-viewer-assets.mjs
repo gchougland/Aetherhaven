@@ -398,23 +398,40 @@ function ingestFluids(fluidsRoot, catalog) {
   }
 }
 
-function ingestModels(modelsRoot, modelCatalog) {
-  if (!fs.existsSync(modelsRoot)) {
-    return;
-  }
+/**
+ * Collect every model definition across all asset roots into one lookup. Mod models
+ * inherit from Hytale ones (Aetherhaven_Human → Player, the festival merchants →
+ * Kweebec_Rootling), so resolving each root on its own drops the whole villager cast.
+ * @param {string[]} roots
+ * @returns {Map<string, object>}
+ */
+function collectModelDefinitions(roots) {
   /** @type {Map<string, object>} */
   const byId = new Map();
-  for (const file of walkFiles(modelsRoot, (f) => f.endsWith(".json"))) {
-    let raw;
-    try {
-      raw = readJson(file);
-    } catch {
+  for (const root of roots) {
+    const modelsRoot = path.join(root, "Server", "Models");
+    if (!fs.existsSync(modelsRoot)) {
       continue;
     }
-    const id = path.basename(file, ".json");
-    byId.set(id, raw);
+    for (const file of walkFiles(modelsRoot, (f) => f.endsWith(".json"))) {
+      let raw;
+      try {
+        raw = readJson(file);
+      } catch {
+        continue;
+      }
+      // Later roots are mod packs layered over Hytale, so they win on id collisions.
+      byId.set(path.basename(file, ".json"), raw);
+    }
   }
+  return byId;
+}
 
+/**
+ * @param {Map<string, object>} byId every model definition, all roots
+ * @param {Record<string, any>} modelCatalog
+ */
+function ingestModels(byId, modelCatalog) {
   /** @type {Map<string, object|null>} */
   const resolved = new Map();
 
@@ -617,9 +634,7 @@ function main() {
 
   /** @type {Record<string, any>} */
   const modelCatalog = {};
-  for (const root of assetRoots) {
-    ingestModels(path.join(root, "Server", "Models"), modelCatalog);
-  }
+  ingestModels(collectModelDefinitions(assetRoots), modelCatalog);
 
   // Track model paths from catalogs already done; also pull NPC/Characters used by models.
   const refCopy = copyReferencedCommon();

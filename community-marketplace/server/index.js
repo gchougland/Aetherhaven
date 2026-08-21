@@ -1219,11 +1219,31 @@ function removeOwnApprovedBuilding(buildingId, webUser) {
 // --- Public API (mod + downloads) ---
 
 app.get("/api/v1/health", async (_req, res) => {
+  const sampleRelPaths = [
+    "Common/Items/Aetherhaven/Shop_Spot.blockymodel",
+    "Common/Items/Aetherhaven/Floating_Gift/Floating_Gift_Green.png",
+    "Common/Blocks/Decorative_Sets/Temple_Light/Gaia_Statue_01.blockymodel",
+    "Common/NPC/Balloon.blockymodel",
+  ];
+  const overlayRoots = [];
+  const aetherhavenCommonHealth = path.join(__dirname, "..", "..", "src", "main", "resources", "Common");
+  if (fs.existsSync(aetherhavenCommonHealth)) {
+    overlayRoots.push(aetherhavenCommonHealth);
+  }
+  const sampleAssets = {};
+  for (const rel of sampleRelPaths) {
+    const underCommon = rel.replace(/^Common[\\/]/, "");
+    const primary = path.join(hytaleAssetsDir, rel);
+    const overlayHit = overlayRoots.some((root) => fs.existsSync(path.join(root, underCommon)));
+    sampleAssets[rel] = fs.existsSync(primary) || overlayHit;
+  }
   try {
     const preview = await previewScreenshots.status();
     const propIcon = await propIconRender.status();
     res.json({
       ok: true,
+      hytaleAssetsDir,
+      sampleAssets,
       previewScreenshots: {
         assetsReady: preview.assetsReady,
         chromiumFound: preview.chromiumFound,
@@ -1236,6 +1256,8 @@ app.get("/api/v1/health", async (_req, res) => {
   } catch {
     res.json({
       ok: true,
+      hytaleAssetsDir,
+      sampleAssets,
       previewScreenshots: { assetsReady: false, chromiumFound: false },
       propIconRender: { assetsReady: false, chromiumFound: false },
     });

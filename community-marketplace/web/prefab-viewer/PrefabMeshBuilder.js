@@ -7,11 +7,11 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=40";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=40";
+} from "./BlockCatalog.js?v=42";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=42";
 
 /** Bump when transform math changes — shown in the viewer so we can confirm the live build. */
-export const PREFAB_VIEWER_TRANSFORM_REV = "xform-40";
+export const PREFAB_VIEWER_TRANSFORM_REV = "xform-42";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
@@ -181,7 +181,7 @@ export function entityWorldScale(comps, _modelPath = null) {
 }
 
 /** @deprecated Use the loader's unit scale; kept as a re-export for older callers. */
-export { isCharacterDensityModel } from "./BlockyModelLoader.js?v=40";
+export { isCharacterDensityModel } from "./BlockyModelLoader.js?v=42";
 
 /**
  * @param {any} pos
@@ -384,6 +384,12 @@ export async function buildPrefabMesh(prefab, options = {}) {
   const total = work.length || 1;
   let done = 0;
 
+  // Counted rather than logged per cell: a build can place hundreds of the same block.
+  /** @type {Map<string, number>} */
+  const undrawn = new Map();
+  /** @param {string} reason */
+  const noteUndrawn = (reason) => undrawn.set(reason, (undrawn.get(reason) || 0) + 1);
+
   // Unique model keys for reuse within this prefab build
   /** @type {Map<string, THREE.Group|null>} */
   const localModelCache = new Map();
@@ -463,9 +469,11 @@ export async function buildPrefabMesh(prefab, options = {}) {
             placed = true;
           }
           if (!placed) {
+            noteUndrawn(`${b.name}: models failed to load, grey cube`);
             placeBlockHolder(root, b, makePlaceholderBlockCube());
           }
         } else {
+          noteUndrawn(`${b.name}: no catalog entry, grey cube`);
           placeBlockHolder(root, b, makePlaceholderBlockCube());
         }
       } else if (item.kind === "fluid") {
@@ -574,6 +582,8 @@ export async function buildPrefabMesh(prefab, options = {}) {
         // Skip entities we cannot resolve from vanilla/Aetherhaven catalogs (no placeholders).
         if (placed) {
           root.add(holder);
+        } else {
+          noteUndrawn(`${modelId || itemId || "unknown entity"}: not in catalog, skipped`);
         }
       }
     } catch (err) {
@@ -588,6 +598,13 @@ export async function buildPrefabMesh(prefab, options = {}) {
     if (done % 100 === 0) {
       await new Promise((r) => setTimeout(r, 0));
     }
+  }
+
+  if (undrawn.size) {
+    console.warn(
+      "Prefab cells the catalog could not draw:",
+      [...undrawn].map(([reason, count]) => `${reason} (x${count})`)
+    );
   }
 
   let bounds;

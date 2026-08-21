@@ -5,7 +5,7 @@
  * UV layout matches the official Blockbench codec (pixel offset + face size from settings.size, not stretch).
  */
 import * as THREE from "three";
-import { assetUrl } from "./BlockCatalog.js?v=40";
+import { assetUrl } from "./BlockCatalog.js?v=42";
 
 /** Block / furniture / placeable prop density (BlockyModelBoundsParser). */
 export const BLOCK_MODEL_UNITS = 32;
@@ -74,6 +74,29 @@ function texturePixelSize(tex) {
 }
 
 /**
+ * Read PNG width/height from the IHDR chunk (works even when ImageBitmap reports 0).
+ * @param {ArrayBuffer} buf
+ * @returns {{ w: number, h: number }|null}
+ */
+function pngSizeFromBuffer(buf) {
+  const bytes = new Uint8Array(buf);
+  if (bytes.length < 24) {
+    return null;
+  }
+  // 89 50 4E 47 0D 0A 1A 0A
+  if (bytes[0] !== 0x89 || bytes[1] !== 0x50 || bytes[2] !== 0x4e || bytes[3] !== 0x47) {
+    return null;
+  }
+  const view = new DataView(buf);
+  const w = view.getUint32(16);
+  const h = view.getUint32(20);
+  if (w > 0 && h > 0 && w < 65536 && h < 65536) {
+    return { w, h };
+  }
+  return null;
+}
+
+/**
  * Fetch-based loader so headless Chromium gets real pixel dimensions (TextureLoader
  * often leaves width/height at 0 there, which made 96px atlases UV as if they were 64
  * and balloons sampled the grey gift-wrap instead of the balloon strip).
@@ -93,18 +116,61 @@ async function loadTexture(url) {
   if (!res.ok) {
     throw new Error(`texture ${res.status} ${url}`);
   }
-  const blob = await res.blob();
-  const bitmap = await createImageBitmap(blob);
+  const buffer = await res.arrayBuffer();
+  const headerSize = pngSizeFromBuffer(buffer);
+  const blob = new Blob([buffer]);
+  let width = 0;
+  let height = 0;
+  let sourceImage = null;
+
+  try {
+    const bitmap = await createImageBitmap(blob);
+    width = bitmap.width || 0;
+    height = bitmap.height || 0;
+    sourceImage = bitmap;
+  } catch {
+    /* fall through to HTMLImageElement */
+  }
+
+  if ((!width || !height) && headerSize) {
+    width = headerSize.w;
+    height = headerSize.h;
+  }
+
+  if (!width || !height || !sourceImage) {
+    // HTMLImageElement path (some headless builds give ImageBitmap size 0).
+    const objectUrl = URL.createObjectURL(blob);
+    try {
+      const img = await new Promise((resolve, reject) => {
+        const el = new Image();
+        el.onload = () => resolve(el);
+        el.onerror = () => reject(new Error(`image decode failed ${url}`));
+        el.src = objectUrl;
+      });
+      width = img.naturalWidth || img.width || headerSize?.w || 0;
+      height = img.naturalHeight || img.height || headerSize?.h || 0;
+      sourceImage = img;
+    } finally {
+      URL.revokeObjectURL(objectUrl);
+    }
+  }
+
+  if (!width || !height) {
+    sourceImage?.close?.();
+    throw new Error(`texture has no dimensions ${url}`);
+  }
+
   const canvas = document.createElement("canvas");
-  canvas.width = bitmap.width;
-  canvas.height = bitmap.height;
+  canvas.width = width;
+  canvas.height = height;
   const ctx = canvas.getContext("2d");
   if (!ctx) {
-    bitmap.close?.();
+    sourceImage?.close?.();
     throw new Error("texture canvas unavailable");
   }
-  ctx.drawImage(bitmap, 0, 0);
-  bitmap.close?.();
+  ctx.drawImage(sourceImage, 0, 0);
+  sourceImage?.close?.();
+
   const tex = new THREE.CanvasTexture(canvas);
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.flipY = true;
@@ -114,8 +180,8 @@ async function loadTexture(url) {
   tex.wrapS = THREE.ClampToEdgeWrapping;
   tex.wrapT = THREE.ClampToEdgeWrapping;
   tex.needsUpdate = true;
-  tex.userData.pixelWidth = canvas.width;
-  tex.userData.pixelHeight = canvas.height;
+  tex.userData.pixelWidth = width;
+  tex.userData.pixelHeight = height;
   textureCache.set(url, tex);
   return tex;
 }
@@ -150,9 +216,13 @@ function switchIndices(arr, i1, i2) {
 }
 
 /**
- * Compute Blockbench-style face UV rectangle in pixel space: [x0, y0, x1, y1]
- * (texture origin top-left, +Y down), then map to Three.js UVs for verts
- * ordered TL, TR, BL, BR → (matches BoxGeometry / PlaneGeometry).
+ * Compute Blockbench-style face UV rectangle in pixel space, then map to Three.js
+ * UVs for verts ordered TL, TR, BL, BR (matches BoxGeometry / PlaneGeometry).
+ *
+ * Angle 90/270 pack a swapped AABB on the atlas. Mapping that AABB axis-aligned
+ * onto the face (old behavior) squashes non-square faces — e.g. Long_Simple_UV
+ * cobble beams look compressed horizontally. Those angles must assign corners so
+ * face-U follows atlas-V and face-V follows atlas-U (rotated quad, 1:1 texels).
  *
  * @param {any} layout
  * @param {number} faceW settings.size component for face width (not stretch)
@@ -170,6 +240,8 @@ function faceUvsThree(layout, faceW, faceH, denomW, denomH) {
 
   /** @type {[number, number, number, number]} */
   let result;
+  /** When true, face U follows atlas V (rotated 90/270 packing). */
+  let transposeCorners = false;
   switch (angle) {
     case 90: {
       switchIndices(uvSize, 0, 1);
@@ -181,6 +253,7 @@ function faceUvsThree(layout, faceW, faceH, denomW, denomH) {
         ox + uvSize[0] * uvMirror[0],
         oy,
       ];
+      transposeCorners = true;
       break;
     }
     case 270: {
@@ -193,6 +266,7 @@ function faceUvsThree(layout, faceW, faceH, denomW, denomH) {
         ox,
         oy + uvSize[1] * uvMirror[1],
       ];
+      transposeCorners = true;
       break;
     }
     case 180: {
@@ -219,6 +293,10 @@ function faceUvsThree(layout, faceW, faceH, denomW, denomH) {
 
   const [x0, y0, x1, y1] = result;
   const toUv = (x, y) => [x / denomW, 1 - y / denomH];
+  if (transposeCorners) {
+    // Rotated quad: top edge of the face runs along atlas V, not atlas U.
+    return [toUv(x0, y0), toUv(x0, y1), toUv(x1, y0), toUv(x1, y1)];
+  }
   return [toUv(x0, y0), toUv(x1, y0), toUv(x0, y1), toUv(x1, y1)];
 }
 
@@ -513,10 +591,12 @@ export async function loadBlockyModel(modelPath, texturePath = null, tintHex = n
     try {
       const res = await fetch(modelUrl);
       if (!res.ok) {
+        console.warn(`Blocky model ${res.status}`, modelUrl);
         return null;
       }
       json = await res.json();
-    } catch {
+    } catch (err) {
+      console.warn("Blocky model unreadable", modelUrl, err);
       return null;
     }
 
@@ -562,6 +642,8 @@ export async function loadBlockyModel(modelPath, texturePath = null, tintHex = n
       }
     }
     if (!texture) {
+      // Name the paths we tried: a grey model in the viewer is almost always a 404 here.
+      console.warn("Blocky model texture missing, drawing grey", modelPath, tryPaths);
       // Visible fallback so missing skins are obvious, not silent black.
       const data = new Uint8Array([180, 180, 180, 255]);
       texture = new THREE.DataTexture(data, 1, 1, THREE.RGBAFormat);
