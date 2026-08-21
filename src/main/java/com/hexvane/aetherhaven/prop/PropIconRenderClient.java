@@ -70,7 +70,14 @@ public final class PropIconRenderClient {
 
             String assetPath = PropPaths.iconAssetPath(propId);
             def.setIconPath(assetPath);
-            plugin.getPropCatalog().persist(def);
+            // Keep memory up to date. Only write a data-dir Props/*.json overlay when the prop was
+            // already authored there — otherwise generateicon pollutes run/mods and fights runServer sync.
+            Path dataPropFile = PropPaths.propFileUnderDataDir(plugin.getDataDirectory(), propId);
+            if (Files.isRegularFile(dataPropFile)) {
+                plugin.getPropCatalog().persist(def);
+            } else {
+                plugin.getPropCatalog().register(def);
+            }
 
             Path resourcesRoot = resolveResourcesRoot();
             if (resourcesRoot != null) {

@@ -7,7 +7,10 @@ import com.hypixel.hytale.protocol.ItemWithAllMetadata;
 import com.hypixel.hytale.protocol.Packet;
 import com.hypixel.hytale.protocol.UpdateType;
 import com.hypixel.hytale.protocol.packets.assets.UpdateItems;
+import com.hypixel.hytale.protocol.packets.interaction.SyncInteractionChain;
+import com.hypixel.hytale.protocol.packets.interaction.SyncInteractionChains;
 import com.hypixel.hytale.protocol.packets.inventory.UpdatePlayerInventory;
+import com.hypixel.hytale.protocol.packets.player.MouseInteraction;
 import com.hypixel.hytale.server.core.io.adapter.PacketAdapters;
 import com.hypixel.hytale.server.core.io.adapter.PacketFilter;
 import com.hypixel.hytale.server.core.io.adapter.PlayerPacketFilter;
@@ -23,8 +26,9 @@ import org.bson.BsonDocument;
 import org.bson.BsonValue;
 
 /**
- * Outbound packet filter that swaps generic prop item stacks for per-prop virtual ids and sends
- * {@link UpdateItems} with prop-specific icons.
+ * Outbound: swaps generic {@link PropItemMetadata#PROP_ITEM_ID} stacks for per-prop virtual ids + icons.
+ * Inbound: maps those virtual ids back to the real item id so use / hotbar / placement keep working
+ * (same pattern as plot-token icons).
  */
 public final class PropIconPacketAdapter {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -35,6 +39,8 @@ public final class PropIconPacketAdapter {
 
     @Nullable
     private PacketFilter outboundFilter;
+    @Nullable
+    private PacketFilter inboundFilter;
 
     public PropIconPacketAdapter(@Nonnull PropVirtualItemRegistry virtualItems) {
         this.virtualItems = virtualItems;
@@ -42,7 +48,8 @@ public final class PropIconPacketAdapter {
 
     public void register() {
         outboundFilter = PacketAdapters.registerOutbound((PlayerPacketFilter) this::onOutboundPacket);
-        LOGGER.atInfo().log("Prop icons: packet adapter registered");
+        inboundFilter = PacketAdapters.registerInbound((PlayerPacketFilter) this::onInboundPacket);
+        LOGGER.atInfo().log("Prop icons: packet adapter registered (outbound icons + inbound id remap)");
     }
 
     public void deregister() {
@@ -53,6 +60,14 @@ public final class PropIconPacketAdapter {
                 LOGGER.atWarning().log("Failed to deregister prop icon outbound filter: %s", e.getMessage());
             }
             outboundFilter = null;
+        }
+        if (inboundFilter != null) {
+            try {
+                PacketAdapters.deregisterInbound(inboundFilter);
+            } catch (Exception e) {
+                LOGGER.atWarning().log("Failed to deregister prop icon inbound filter: %s", e.getMessage());
+            }
+            inboundFilter = null;
         }
     }
 
@@ -65,6 +80,44 @@ public final class PropIconPacketAdapter {
         String virtualId = PropVirtualItemRegistry.generateVirtualId(propId.trim());
         virtualItems.invalidateProp(propId);
         virtualItems.clearSentVirtualIdForAllPlayers(virtualId);
+    }
+
+    private boolean onInboundPacket(@Nonnull PlayerRef playerRef, @Nonnull Packet packet) {
+        try {
+            if (packet instanceof MouseInteraction mouse) {
+                mouse.itemInHandId = translateVirtualToBase(mouse.itemInHandId);
+            } else if (packet instanceof SyncInteractionChains sync) {
+                if (sync.updates != null) {
+                    for (SyncInteractionChain chain : sync.updates) {
+                        translateChain(chain);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.atWarning().log("Prop icon inbound packet filter error for %s: %s", playerRef.getUuid(), e.getMessage());
+        }
+        return false;
+    }
+
+    private static void translateChain(@Nonnull SyncInteractionChain chain) {
+        chain.itemInHandId = translateVirtualToBase(chain.itemInHandId);
+        chain.utilityItemId = translateVirtualToBase(chain.utilityItemId);
+        chain.toolsItemId = translateVirtualToBase(chain.toolsItemId);
+        if (chain.newForks != null) {
+            for (SyncInteractionChain fork : chain.newForks) {
+                if (fork != null) {
+                    translateChain(fork);
+                }
+            }
+        }
+    }
+
+    @Nullable
+    private static String translateVirtualToBase(@Nullable String itemId) {
+        if (itemId == null || !PropVirtualItemRegistry.isVirtualId(itemId)) {
+            return itemId;
+        }
+        return PropVirtualItemRegistry.getBaseItemId(itemId);
     }
 
     private boolean onOutboundPacket(@Nonnull PlayerRef playerRef, @Nonnull Packet packet) {

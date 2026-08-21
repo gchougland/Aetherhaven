@@ -7,7 +7,6 @@ import com.hypixel.hytale.server.core.asset.type.item.config.metadata.ItemDispla
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.i18n.I18nModule;
 import com.hypixel.hytale.server.core.modules.item.ItemModule;
-import java.nio.file.Path;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.bson.BsonDocument;
@@ -43,16 +42,11 @@ public final class PropItemMetadata {
     public static ItemStack createStack(@Nonnull PropDefinition def, int amount) {
         int qty = Math.max(1, amount);
         String shopItemId = PropShopItemIds.forPropId(def.getId());
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        Path dataDir = plugin != null ? plugin.getDataDirectory() : null;
-        ItemStack base;
-        if (ItemModule.exists(shopItemId)) {
-            base = new ItemStack(shopItemId, qty);
-        } else if (com.hexvane.aetherhaven.ui.PropIconPath.isIconAvailable(def.getId(), dataDir)) {
-            base = new ItemStack(PropVirtualItemRegistry.generateVirtualId(def.getId()), qty);
-        } else {
-            base = new ItemStack(PROP_ITEM_ID, qty);
-        }
+        // Prefer a real shop SKU when it exists. Otherwise keep the generic crate item on the server;
+        // {@link PropIconPacketAdapter} swaps in a per-prop virtual id + icon for the client only.
+        // Using a virtual id as the live stack itemId breaks placement (no Item asset, bad id parsing).
+        ItemStack base =
+            ItemModule.exists(shopItemId) ? new ItemStack(shopItemId, qty) : new ItemStack(PROP_ITEM_ID, qty);
         return withProp(base, def.getId(), def.getDisplayName());
     }
 

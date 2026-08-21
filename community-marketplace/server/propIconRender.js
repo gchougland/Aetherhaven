@@ -97,8 +97,20 @@ export function createPropIconRenderService(options) {
       if (error) {
         throw new Error(String(error));
       }
-      const png = await page.screenshot({ type: "png", fullPage: false, omitBackground: true });
-      const processed = await processPropIcon(Buffer.from(png));
+      // Capture the WebGL canvas (same pixels the website viewer draws), not the page chrome.
+      const dataUrl = await page.evaluate(() => {
+        const viewer = window.__PREFAB_VIEWER__;
+        if (!viewer?.renderer?.domElement) {
+          throw new Error("prefab viewer canvas missing");
+        }
+        viewer.renderer.render(viewer.scene, viewer.camera);
+        return viewer.renderer.domElement.toDataURL("image/png");
+      });
+      const base64 = String(dataUrl || "").replace(/^data:image\/png;base64,/, "");
+      if (!base64 || base64 === dataUrl) {
+        throw new Error("prefab viewer canvas capture failed");
+      }
+      const processed = await processPropIcon(Buffer.from(base64, "base64"));
       return processed.iconBuffer;
     } finally {
       try {

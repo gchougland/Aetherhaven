@@ -123,13 +123,14 @@ export async function processPropIcon(buffer) {
   const sharp = await loadSharp();
 
   try {
-    let pipeline = sharp(buffer, { failOn: "error" }).ensureAlpha().rotate();
+    // Do not auto-rotate from EXIF — that can twist entity orientation relative to the viewer.
+    let pipeline = sharp(buffer, { failOn: "error" }).ensureAlpha();
     try {
       // Drop empty margins from the capture so the prop fills the 64x64 better.
-      pipeline = sharp(await pipeline.trim({ threshold: 1 }).toBuffer());
+      pipeline = sharp(await pipeline.trim({ threshold: 1 }).toBuffer()).ensureAlpha();
     } catch {
       // trim throws when the image is fully opaque or empty; keep the original pipeline.
-      pipeline = sharp(buffer, { failOn: "error" }).ensureAlpha().rotate();
+      pipeline = sharp(buffer, { failOn: "error" }).ensureAlpha();
     }
     const iconBuffer = await pipeline
       .resize(PROP_ICON_SIZE, PROP_ICON_SIZE, {

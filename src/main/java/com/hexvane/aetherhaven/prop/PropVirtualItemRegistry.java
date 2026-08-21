@@ -55,6 +55,15 @@ public final class PropVirtualItemRegistry {
         return virtualId.substring(prefix.length()).trim();
     }
 
+    /** Real item id used on the server for a virtual prop stack ({@link PropItemMetadata#PROP_ITEM_ID}). */
+    @Nonnull
+    public static String getBaseItemId(@Nonnull String virtualOrRealId) {
+        if (isVirtualId(virtualOrRealId)) {
+            return PropItemMetadata.PROP_ITEM_ID;
+        }
+        return virtualOrRealId;
+    }
+
     @Nullable
     public ItemBase getOrCreateVirtualItemBase(@Nonnull String virtualId, @Nonnull String propId) {
         ItemBase cached = virtualItemCache.get(virtualId);

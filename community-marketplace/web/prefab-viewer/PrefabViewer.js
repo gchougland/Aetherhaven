@@ -3,8 +3,8 @@
  */
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { loadCatalogs } from "./BlockCatalog.js?v=32";
-import { buildPrefabMesh, disposeObject3D, PREFAB_VIEWER_TRANSFORM_REV } from "./PrefabMeshBuilder.js?v=32";
+import { loadCatalogs } from "./BlockCatalog.js?v=33";
+import { buildPrefabMesh, disposeObject3D, PREFAB_VIEWER_TRANSFORM_REV } from "./PrefabMeshBuilder.js?v=33";
 
 export { PREFAB_VIEWER_TRANSFORM_REV };
 
@@ -204,15 +204,11 @@ export class PrefabViewer {
     const size = bounds.getSize(new THREE.Vector3());
     const center = bounds.getCenter(new THREE.Vector3());
     const maxDim = Math.max(size.x, size.y, size.z, 1);
-    // Icon mode: pull back a bit more and use a flatter angle so small props fill the frame
-    // without looking like a tiny speck on a dark plate.
-    const dist = maxDim * (this.transparentBackground ? 1.9 : 1.55);
+    // Same framing for the website viewer, building screenshots, and prop icons.
+    // Icons only differ by a transparent clear color (and no grid).
+    const dist = maxDim * 1.55;
     this.controls.target.copy(center);
-    if (this.transparentBackground) {
-      this.camera.position.set(center.x + dist * 0.95, center.y + dist * 0.4, center.z + dist * 0.55);
-    } else {
-      this.camera.position.set(center.x + dist * 0.85, center.y + dist * 0.65, center.z + dist * 0.85);
-    }
+    this.camera.position.set(center.x + dist * 0.85, center.y + dist * 0.65, center.z + dist * 0.85);
     this.camera.near = Math.max(0.05, dist / 200);
     this.camera.far = Math.max(200, dist * 20);
     this.camera.updateProjectionMatrix();

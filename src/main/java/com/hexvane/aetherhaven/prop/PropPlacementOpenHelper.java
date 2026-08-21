@@ -50,7 +50,12 @@ public final class PropPlacementOpenHelper {
         ItemStack held = context.getHeldItem();
         String propId = ItemStack.isEmpty(held) ? null : PropItemMetadata.readPropId(held);
         if (propId == null && !ItemStack.isEmpty(held)) {
-            propId = PropShopItemIds.propIdFromItemId(held.getItemId());
+            String itemId = held.getItemId();
+            if (itemId != null && PropVirtualItemRegistry.isVirtualId(itemId)) {
+                propId = PropVirtualItemRegistry.getPropIdFromVirtualId(itemId);
+            } else {
+                propId = PropShopItemIds.propIdFromItemId(itemId);
+            }
         }
         if (propId == null || propId.isBlank()) {
             playerRef.sendMessage(Message.translation("aetherhaven_props.aetherhaven.prop.placement.error.notHoldingProp"));

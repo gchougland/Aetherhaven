@@ -37,14 +37,14 @@ public final class PropShopItemIds {
 
     /**
      * Inverse of {@link #forPropId}: {@code Aetherhaven_Prop_Cabbage_Trough} → {@code cabbage_trough}. Returns null for
-     * the generic crate item (needs metadata) or unrelated ids.
+     * the generic crate item (needs metadata), virtual icon ids, or unrelated ids.
      */
     @Nullable
     public static String propIdFromItemId(@Nullable String itemId) {
         if (itemId == null || itemId.isBlank()) {
             return null;
         }
-        if (PropItemMetadata.PROP_ITEM_ID.equals(itemId)) {
+        if (PropItemMetadata.PROP_ITEM_ID.equals(itemId) || PropVirtualItemRegistry.isVirtualId(itemId)) {
             return null;
         }
         if (!itemId.startsWith(PREFIX)) {

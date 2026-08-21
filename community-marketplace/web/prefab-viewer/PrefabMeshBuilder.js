@@ -7,11 +7,11 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=32";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=32";
+} from "./BlockCatalog.js?v=33";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=33";
 
 /** Bump when transform math changes — shown in the viewer so we can confirm the live build. */
-export const PREFAB_VIEWER_TRANSFORM_REV = "xform-32";
+export const PREFAB_VIEWER_TRANSFORM_REV = "xform-33";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
