@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { normalizeCommunityId } from "./validation.js";
+import { normalizeCatalogId } from "./validation.js";
 
 /**
  * @param {ReturnType<import("./storage.js").createStorage>} storage
@@ -37,7 +37,8 @@ export function isValidCoverScreenshot(storage, buildingId, coverScreenshotId) {
 }
 
 /**
- * Sets the marketplace card cover when the building does not already have a valid one.
+ * Sets the marketplace card cover when the building/prop does not already have a valid one.
+ * Accepts plot_community_* and prop_community_* ids.
  *
  * @param {ReturnType<import("./storage.js").createStorage>} storage
  * @param {string} buildingId
@@ -45,7 +46,7 @@ export function isValidCoverScreenshot(storage, buildingId, coverScreenshotId) {
  * @returns {boolean} true when cover was applied
  */
 export function applyCoverScreenshotIfUnset(storage, buildingId, screenshotId) {
-  const id = normalizeCommunityId(buildingId);
+  const id = normalizeCatalogId(buildingId);
   const coverId = String(screenshotId || "").trim();
   if (!id || !coverId || !isValidCoverScreenshot(storage, id, coverId)) {
     return false;
@@ -83,7 +84,7 @@ export function applyCoverScreenshotIfUnset(storage, buildingId, screenshotId) {
  * @returns {boolean}
  */
 export function autoSetCoverFromExistingApprovedScreenshots(storage, buildingId) {
-  const id = normalizeCommunityId(buildingId);
+  const id = normalizeCatalogId(buildingId);
   if (!id) {
     return false;
   }

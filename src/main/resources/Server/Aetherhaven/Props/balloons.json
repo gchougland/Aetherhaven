@@ -1,5 +1,6 @@
 {
   "id": "balloons",
   "displayName": "Balloons",
-  "prefabPath": "Props/Balloons.prefab.json"
+  "prefabPath": "Props/Balloons.prefab.json",
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Balloons.png"
 }

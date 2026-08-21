@@ -52,7 +52,7 @@ public final class PrefabIsometricIconRenderer {
         }
 
         List<BlockCell> cells = collected;
-        int alignSteps = FrontFacing.iconAlignStepsToNorth(frontFacing);
+        int alignSteps = FrontFacing.iconAlignStepsForPreview(frontFacing);
         if (alignSteps != 0) {
             List<BlockCell> rotated = new ArrayList<>(collected.size());
             for (BlockCell cell : collected) {
@@ -118,8 +118,9 @@ public final class PrefabIsometricIconRenderer {
     }
 
     /**
-     * Prefab-local axes are read as-is from the relativized buffer. {@code (z - x, x + z)} places the building front
-     * toward the bottom-right of the icon (door down-right), matching in-game plot facing.
+     * Prefab-local axes are read as-is from the relativized buffer. {@code (z - x, x + z)} places the south / east
+     * sides toward the camera (door bottom-right when {@code frontFacing} is South). Cells are rotated first so the
+     * authored front lands on that camera-facing side.
      */
     private static int projectScreenX(int x, int z, int tileHalfW, int originX) {
         return originX + (z - x) * tileHalfW;

@@ -1,5 +1,6 @@
 {
   "id": "figurine_shelf_slothian",
   "displayName": "Figurine Shelf Slothian",
-  "prefabPath": "Props/Figurine_Shelf_Slothian.prefab.json"
+  "prefabPath": "Props/Figurine_Shelf_Slothian.prefab.json",
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Figurine_Shelf_Slothian.png"
 }

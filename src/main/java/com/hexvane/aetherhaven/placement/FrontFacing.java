@@ -76,8 +76,11 @@ public final class FrontFacing {
         };
     }
 
-    /** CW steps that map authored front onto North for isometric icon projection. */
-    public static int iconAlignStepsToNorth(@Nullable String frontFacing) {
-        return WallCardinal.stepsAligning(toCardinal(frontFacing), WallCardinal.NORTH);
+    /**
+     * CW steps that map authored front onto South for isometric icon projection. The {@code (z - x, x + z)}
+     * projection shows the south / east sides toward the camera (entrance bottom-right when front is South).
+     */
+    public static int iconAlignStepsForPreview(@Nullable String frontFacing) {
+        return WallCardinal.stepsAligning(toCardinal(frontFacing), WallCardinal.SOUTH);
     }
 }

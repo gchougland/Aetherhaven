@@ -1,5 +1,6 @@
-﻿{
+{
   "id": "fish_barrel",
   "displayName": "Fish Barrel",
-  "prefabPath": "Props/Fish_Barrel.prefab.json"
+  "prefabPath": "Props/Fish_Barrel.prefab.json",
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Fish_Barrel.png"
 }

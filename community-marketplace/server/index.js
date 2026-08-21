@@ -3287,6 +3287,37 @@ if (fs.existsSync(hytaleAssetsDir)) {
   );
 }
 
+// Aetherhaven / subplugin Common trees (shop spots, festival balloons, etc.) are often
+// missing from a Hytale-only volume sync. Fall through to the mod pack so those paths
+// still resolve instead of greying out as placeholders / blank skins.
+const repoCommonOverlays = [];
+const aetherhavenCommon = path.join(__dirname, "..", "..", "src", "main", "resources", "Common");
+if (fs.existsSync(aetherhavenCommon)) {
+  repoCommonOverlays.push(aetherhavenCommon);
+}
+const subpluginPacks = path.join(__dirname, "..", "..", "subplugin-assets");
+if (fs.existsSync(subpluginPacks)) {
+  for (const name of fs.readdirSync(subpluginPacks)) {
+    const commonDir = path.join(subpluginPacks, name, "Common");
+    if (fs.existsSync(commonDir)) {
+      repoCommonOverlays.push(commonDir);
+    }
+  }
+}
+for (const commonDir of repoCommonOverlays) {
+  app.use(
+    "/hytale-assets/Common",
+    express.static(commonDir, {
+      maxAge: IS_PRODUCTION ? "1d" : 0,
+      fallthrough: true,
+      index: false,
+    })
+  );
+}
+if (repoCommonOverlays.length) {
+  console.log(`Serving Aetherhaven Common overlays (${repoCommonOverlays.length}) under /hytale-assets/Common`);
+}
+
 /** Inject AdSense site-verification script into HTML head when publisher ID is configured. */
 function sendHtmlWithAdSense(relativePath) {
   return (_req, res) => {

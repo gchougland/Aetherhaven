@@ -3,14 +3,22 @@
     "Name": "aetherhaven_items.items.Aetherhaven_Prop_Palm_Streetlight.name",
     "Description": "aetherhaven_items.items.Aetherhaven_Prop_Palm_Streetlight.description"
   },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Prop_Palm_Streetlight.png",
   "Parent": "Aetherhaven_Prop_Item",
-  "Categories": ["Items.Tools", "Aetherhaven.All"],
+  "Categories": [
+    "Items.Tools",
+    "Aetherhaven.All"
+  ],
   "Quality": "Common",
   "Recipe": null,
   "MaxStack": 16,
   "Set": "Aetherhaven",
   "Tags": {
-    "Family": ["Aetherhaven"],
-    "Type": ["Tool"]
+    "Family": [
+      "Aetherhaven"
+    ],
+    "Type": [
+      "Tool"
+    ]
   }
 }

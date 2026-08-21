@@ -1,5 +1,6 @@
-﻿{
+{
   "id": "palm_streetlight",
   "displayName": "Palm Streetlight",
-  "prefabPath": "Props/Palm_Streetlight.prefab.json"
+  "prefabPath": "Props/Palm_Streetlight.prefab.json",
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Palm_Streetlight.png"
 }

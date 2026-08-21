@@ -1,5 +1,6 @@
 {
   "id": "weapon_rack",
   "displayName": "Weapon Rack",
-  "prefabPath": "Props/Weapon_Rack.prefab.json"
+  "prefabPath": "Props/Weapon_Rack.prefab.json",
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Weapon_Rack.png"
 }

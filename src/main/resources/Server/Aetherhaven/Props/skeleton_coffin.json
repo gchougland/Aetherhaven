@@ -1,5 +1,6 @@
 {
   "id": "skeleton_coffin",
   "displayName": "Skeleton Coffin",
-  "prefabPath": "Props/Skeleton_Coffin.prefab.json"
+  "prefabPath": "Props/Skeleton_Coffin.prefab.json",
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Skeleton_Coffin.png"
 }

@@ -1,5 +1,6 @@
 {
   "id": "candle_stump",
   "displayName": "Candle Stump",
-  "prefabPath": "Props/Candle_Stump.prefab.json"
+  "prefabPath": "Props/Candle_Stump.prefab.json",
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Candle_Stump.png"
 }

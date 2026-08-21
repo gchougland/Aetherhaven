@@ -5,7 +5,7 @@
  * UV layout matches the official Blockbench codec (pixel offset + face size from settings.size, not stretch).
  */
 import * as THREE from "three";
-import { assetUrl } from "./BlockCatalog.js?v=39";
+import { assetUrl } from "./BlockCatalog.js?v=40";
 
 /** Block / furniture / placeable prop density (BlockyModelBoundsParser). */
 export const BLOCK_MODEL_UNITS = 32;
@@ -57,6 +57,10 @@ const modelCache = new Map();
  * @returns {{ w: number, h: number }|null}
  */
 function texturePixelSize(tex) {
+  const fromUser = tex?.userData;
+  if (fromUser?.pixelWidth > 0 && fromUser?.pixelHeight > 0) {
+    return { w: Number(fromUser.pixelWidth), h: Number(fromUser.pixelHeight) };
+  }
   const img = tex?.image ?? tex?.source?.data ?? null;
   if (!img) {
     return null;
@@ -87,7 +91,7 @@ async function loadTexture(url) {
   }
   const res = await fetch(url);
   if (!res.ok) {
-    throw new Error(`texture ${res.status}`);
+    throw new Error(`texture ${res.status} ${url}`);
   }
   const blob = await res.blob();
   const bitmap = await createImageBitmap(blob);
@@ -110,6 +114,8 @@ async function loadTexture(url) {
   tex.wrapS = THREE.ClampToEdgeWrapping;
   tex.wrapT = THREE.ClampToEdgeWrapping;
   tex.needsUpdate = true;
+  tex.userData.pixelWidth = canvas.width;
+  tex.userData.pixelHeight = canvas.height;
   textureCache.set(url, tex);
   return tex;
 }
@@ -521,8 +527,8 @@ export async function loadBlockyModel(modelPath, texturePath = null, tintHex = n
     }
 
     let texture = null;
-    let texW = 64;
-    let texH = 64;
+    /** @type {{ w: number, h: number }|null} */
+    let bitmapSize = null;
     const tryPaths = [
       texPath,
       modelPath.replace(/\.blockymodel$/i, ".png"),
@@ -542,13 +548,14 @@ export async function loadBlockyModel(modelPath, texturePath = null, tintHex = n
         texture = baseTex.clone();
         texture.colorSpace = THREE.SRGBColorSpace;
         texture.needsUpdate = true;
+        texture.userData.pixelWidth = size.w;
+        texture.userData.pixelHeight = size.h;
         if (baseTex.image) {
           texture.image = baseTex.image;
         } else if (baseTex.source) {
           texture.source = baseTex.source;
         }
-        texW = size.w;
-        texH = size.h;
+        bitmapSize = size;
         break;
       } catch {
         /* try next */
@@ -565,9 +572,23 @@ export async function loadBlockyModel(modelPath, texturePath = null, tintHex = n
 
     const nodes = Array.isArray(json.nodes) ? json.nodes : [];
     const { maxX, maxY } = measureUvLayout(nodes);
+    // Prefer the real bitmap size. If it is unknown, size UV space from the layout
+    // (festival balloons use a 96px atlas with offsets past 64 — defaulting to 64 +
+    // RepeatWrapping sampled the grey gift-wrap instead of the balloon strip).
+    let texW = bitmapSize?.w || 0;
+    let texH = bitmapSize?.h || 0;
+    if (texW <= 0) {
+      texW = Math.max(64, Math.ceil(maxX) || 64);
+    }
+    if (texH <= 0) {
+      texH = Math.max(64, Math.ceil(maxY) || 64);
+    }
     // Stairs_SimpleUV etc. pack UVs in a larger virtual atlas than the BlockTexture.
-    // Repeat so those tiles sample the block skin instead of clamping to a flat edge.
-    if (maxX > texW + 1 || maxY > texH + 1) {
+    // Only repeat when we know the real bitmap is smaller than the layout.
+    if (
+      bitmapSize &&
+      (maxX > bitmapSize.w + 1 || maxY > bitmapSize.h + 1)
+    ) {
       texture.wrapS = THREE.RepeatWrapping;
       texture.wrapT = THREE.RepeatWrapping;
     }

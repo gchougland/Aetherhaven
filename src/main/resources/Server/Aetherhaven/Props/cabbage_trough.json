@@ -1,5 +1,6 @@
-﻿{
+{
   "id": "cabbage_trough",
   "displayName": "Cabbage Trough",
-  "prefabPath": "Props/Cabbage_Trough.prefab.json"
+  "prefabPath": "Props/Cabbage_Trough.prefab.json",
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Cabbage_Trough.png"
 }

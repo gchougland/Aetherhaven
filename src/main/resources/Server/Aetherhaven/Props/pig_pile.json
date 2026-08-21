@@ -1,5 +1,6 @@
-﻿{
+{
   "id": "pig_pile",
   "displayName": "Pig Pile",
-  "prefabPath": "Props/Pig_Pile.prefab.json"
+  "prefabPath": "Props/Pig_Pile.prefab.json",
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Pig_Pile.png"
 }

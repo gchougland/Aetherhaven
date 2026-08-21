@@ -1,5 +1,6 @@
 {
   "id": "figurine_shelf_outlander",
   "displayName": "Figurine Shelf Outlander",
-  "prefabPath": "Props/Figurine_Shelf_Outlander.prefab.json"
+  "prefabPath": "Props/Figurine_Shelf_Outlander.prefab.json",
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Figurine_Shelf_Outlander.png"
 }

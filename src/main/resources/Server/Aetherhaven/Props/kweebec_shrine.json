@@ -1,5 +1,6 @@
 {
   "id": "kweebec_shrine",
   "displayName": "Kweebec Shrine",
-  "prefabPath": "Props/Kweebec_Shrine.prefab.json"
+  "prefabPath": "Props/Kweebec_Shrine.prefab.json",
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Kweebec_Shrine.png"
 }

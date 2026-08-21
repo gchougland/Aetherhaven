@@ -1,5 +1,6 @@
 {
   "id": "spooky_terrarium",
   "displayName": "Spooky Terrarium",
-  "prefabPath": "Props/Spooky_Terrarium.prefab.json"
+  "prefabPath": "Props/Spooky_Terrarium.prefab.json",
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Spooky_Terrarium.png"
 }

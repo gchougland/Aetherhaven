@@ -1,5 +1,7 @@
-﻿{
+{
   "id": "potion_shelf",
   "displayName": "Potion Shelf",
-  "prefabPath": "Props/Potion_Shelf.prefab.json"
+  "prefabPath": "Props/Potion_Shelf.prefab.json",
+  "frontFacing": "South",
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Potion_Shelf.png"
 }

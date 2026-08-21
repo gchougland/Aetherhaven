@@ -1,5 +1,6 @@
 {
   "id": "hytiny_shrine",
   "displayName": "Hytiny Shrine",
-  "prefabPath": "Props/Hytiny_Shrine.prefab.json"
+  "prefabPath": "Props/Hytiny_Shrine.prefab.json",
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Hytiny_Shrine.png"
 }

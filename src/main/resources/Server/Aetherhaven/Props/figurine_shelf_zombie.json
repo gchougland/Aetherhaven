@@ -1,5 +1,6 @@
 {
   "id": "figurine_shelf_zombie",
   "displayName": "Figurine Shelf Zombie",
-  "prefabPath": "Props/Figurine_Shelf_Zombie.prefab.json"
+  "prefabPath": "Props/Figurine_Shelf_Zombie.prefab.json",
+  "iconPath": "Icons/ItemsGenerated/Aetherhaven_Prop_Figurine_Shelf_Zombie.png"
 }
