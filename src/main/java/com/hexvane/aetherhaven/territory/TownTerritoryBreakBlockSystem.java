@@ -56,6 +56,9 @@ public final class TownTerritoryBreakBlockSystem extends EntityEventSystem<Entit
         if (town == null) {
             return;
         }
+        if (!TownTerritoryGuard.isBreakProtectionActive(plugin.getConfig().get(), town)) {
+            return;
+        }
         if (TownTerritoryGuard.shouldBypassPlayer(player, playerUuid, pos, store, ref)) {
             return;
         }

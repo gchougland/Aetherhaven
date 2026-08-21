@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.pathtool;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.PathToolStyleDefinition;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hexvane.aetherhaven.ui.AetherhavenUiLocalization;
 import com.hypixel.hytale.codec.Codec;
@@ -18,8 +19,10 @@ import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.util.NotificationUtil;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.List;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -137,6 +140,13 @@ public final class PathToolStylePickPage extends AetherhavenInteractiveCustomUIP
                     st.setPathStyleIndex(selectedIndex);
                 }
                 String name = plugin.getConfig().get().getPathToolStyleName(selectedIndex);
+                if (st != null
+                    && st.getGizmoMode() == PathToolGizmoMode.Restyle
+                    && st.getSelectedRemovePathId() != null) {
+                    applyRestyle(store, plugin, st, selectedIndex, name);
+                    close();
+                    return;
+                }
                 NotificationUtil.sendNotification(
                     playerRef.getPacketHandler(),
                     Message.translation("aetherhaven_items.aetherhaven.pathTool.toastStyleCycled"),
@@ -154,6 +164,58 @@ public final class PathToolStylePickPage extends AetherhavenInteractiveCustomUIP
         UIEventBuilder ev = new UIEventBuilder();
         build(ref, cmd, ev, store);
         sendUpdate(cmd, ev, false);
+    }
+
+    private void applyRestyle(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull PathToolPlayerComponent st,
+        int styleIndex,
+        @Nonnull String styleName
+    ) {
+        UUID targetId = st.getSelectedRemovePathId();
+        if (targetId == null) {
+            playerRef.sendMessage(Message.translation("aetherhaven_items.aetherhaven.pathTool.restyleNeedSelection"));
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        PathToolRegistry reg = AetherhavenWorldRegistries.getOrCreatePathToolRegistry(world, plugin);
+        @Nullable
+        PathCommitRecord rec = reg.get(targetId);
+        if (rec == null) {
+            st.setSelectedRemovePathId(null);
+            playerRef.sendMessage(Message.translation("aetherhaven_items.aetherhaven.pathTool.restyleUnknown"));
+            NotificationUtil.sendNotification(
+                playerRef.getPacketHandler(),
+                Message.translation("aetherhaven_items.aetherhaven.pathTool.toastRestyleFailed"),
+                Message.translation("aetherhaven_items.aetherhaven.pathTool.restyleUnknown"),
+                NotificationStyle.Warning
+            );
+            return;
+        }
+        int cells =
+            PathRestyleService.restyle(
+                world,
+                plugin.getConfig().get(),
+                rec,
+                styleIndex,
+                st.getPathWidthBlocks()
+            );
+        playerRef.sendMessage(
+            Message
+                .translation("aetherhaven_items.aetherhaven.pathTool.restyledPath")
+                .param("cells", String.valueOf(cells))
+                .param("style", styleName)
+        );
+        NotificationUtil.sendNotification(
+            playerRef.getPacketHandler(),
+            Message.translation("aetherhaven_items.aetherhaven.pathTool.toastRestyledPath"),
+            Message
+                .translation("aetherhaven_items.aetherhaven.pathTool.restyledPath")
+                .param("cells", String.valueOf(cells))
+                .param("style", styleName),
+            NotificationStyle.Default
+        );
     }
 
     public static void open(

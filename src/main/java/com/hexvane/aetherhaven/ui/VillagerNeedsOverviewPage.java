@@ -174,6 +174,7 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
             commandBuilder.set("#TabPlayersButton.Disabled", false);
             commandBuilder.set("#TabNeedsButton.Disabled", true);
             commandBuilder.set("#TabLogButton.Disabled", !needsOk);
+            commandBuilder.set("#TabPaintButton.Disabled", !needsOk);
             commandBuilder.set("#TabMoveButton.Disabled", !needsOk);
             bindManagementReturnNav(eventBuilder, needsOk);
         }
@@ -277,6 +278,10 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
                 openTownLog(ref, store);
                 return;
             }
+            if (data.action.equalsIgnoreCase("OpenBlockPalette")) {
+                openBlockPalette(ref, store);
+                return;
+            }
             if (data.action.equalsIgnoreCase("RescueTeleport")) {
                 if (viewOnly) {
                     return;
@@ -330,6 +335,12 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
                 new EventData().append("Action", "OpenTownLog"),
                 false
             );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#TabPaintButton",
+                new EventData().append("Action", "OpenBlockPalette"),
+                false
+            );
         }
     }
 
@@ -343,6 +354,18 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
         }
         player.getPageManager()
             .openCustomPage(ref, store, new TownLogPage(playerRef, townId, managementBlockRef, managementBlockPos));
+    }
+
+    private void openBlockPalette(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        if (managementBlockRef == null || managementBlockPos == null) {
+            return;
+        }
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player == null) {
+            return;
+        }
+        player.getPageManager()
+            .openCustomPage(ref, store, new BlockPalettePage(playerRef, townId, managementBlockRef, managementBlockPos));
     }
 
     private void handleRescueTeleport(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {

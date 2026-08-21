@@ -141,7 +141,7 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
         UUID hoveredNodeId = null;
         @Nullable
         UUID hoveredRemovePathId = null;
-        if (st.getGizmoMode() == PathToolGizmoMode.Remove) {
+        if (st.getGizmoMode() == PathToolGizmoMode.Remove || st.getGizmoMode() == PathToolGizmoMode.Restyle) {
             hoveredRemovePathId = pickHoveredRemovePath(ref, store, pathReg);
         } else {
             hoveredNodeId = pickHoveredControlNode(st, ref, store);
@@ -166,7 +166,7 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
         LAST_DEBUG_SIGNATURE.put(playerUuid, debugSig);
         LAST_DEBUG_SENT_MS.put(playerUuid, nowMs);
         PathDebugPreviewUtil.clear(pr);
-        if (st.getGizmoMode() == PathToolGizmoMode.Remove) {
+        if (st.getGizmoMode() == PathToolGizmoMode.Remove || st.getGizmoMode() == PathToolGizmoMode.Restyle) {
             drawCommittedPaths(pr, pathReg, st.getSelectedRemovePathId(), hoveredRemovePathId);
             return;
         }

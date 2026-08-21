@@ -45,7 +45,7 @@ public final class PlotImportantBlockRestorer {
         if (FestivalService.isLiveFestivalSquare(town, plot.getPlotId())) {
             return 0;
         }
-        return restoreImportantCellsFromPrefab(world, def, anchor, yaw);
+        return restoreImportantCellsFromPrefab(world, plot, def, anchor, yaw);
     }
 
     private static boolean isPlotCreatorEditorMarkerBlock(@Nullable String blockTypeId) {
@@ -60,6 +60,7 @@ public final class PlotImportantBlockRestorer {
 
     private static int restoreImportantCellsFromPrefab(
         @Nonnull World world,
+        @Nonnull PlotInstance plot,
         @Nonnull ConstructionDefinition def,
         @Nonnull Vector3i anchor,
         @Nonnull Rotation yaw
@@ -74,7 +75,8 @@ public final class PlotImportantBlockRestorer {
         }
         Set<String> importantIds = importantBlockTypeIds(def);
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
-        ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
+        ConstructionPrefabSequence seq =
+            ConstructionPasteOps.buildSequence(buffer, yaw, plot.getBlockPaletteSelections());
         List<ConstructionPasteOps.PendingBlock> cells =
             ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
         LocalCachedChunkAccessor accessor = ConstructionPasteOps.createAccessor(world, anchor, buffer);

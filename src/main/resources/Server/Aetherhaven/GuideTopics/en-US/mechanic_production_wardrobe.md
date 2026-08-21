@@ -15,6 +15,7 @@ Production buildings (farm, lumber mill, miner's hut, barn, and similar workplac
 * Use the **arrows** to cycle which resource type the building generates.
 * Each resource type is stored separately in the wardrobe inventory.
 * Selecting multiple slots of the **same** resource increases how fast that resource is produced.
+* Ores and woods finish at full speed when the building sits in the region those materials come from. Outside that region they take longer.
 
 ## Unlocks tab
 

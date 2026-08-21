@@ -82,7 +82,7 @@
     "Pick": {
       "Interactions": [
         {
-          "Type": "AetherhavenPathToolTownsfolkToggle"
+          "Type": "AetherhavenPathToolModeJump"
         }
       ]
     }

@@ -1,0 +1,78 @@
+$C = "../Common.ui";
+
+@HintStyle = (
+  FontSize: 12,
+  TextColor: #8a8070,
+  Wrap: true
+);
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 980);
+
+    #Title {
+      Label #ModeJumpTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Top: 14, Left: 18, Right: 18, Bottom: 18);
+
+      Label #ModeHint {
+        Style: (...@HintStyle, HorizontalAlignment: Center);
+        Text: "";
+        Anchor: (Bottom: 14);
+      }
+
+      Group #ModeJumpScroll {
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+        Anchor: (Height: 120, Bottom: 14);
+
+        Group #ModeJumpCenterRow {
+          LayoutMode: Left;
+
+          Label #ModeJumpSpacerL {
+            FlexWeight: 1;
+            HitTestVisible: false;
+          }
+
+          Group #ModeJumpRow {
+            LayoutMode: Left;
+          }
+
+          Label #ModeJumpSpacerR {
+            FlexWeight: 1;
+            HitTestVisible: false;
+          }
+        }
+      }
+
+      Group #ExtraRow {
+        LayoutMode: Center;
+        Anchor: (Bottom: 12);
+
+        $C.@TextButton #TownsfolkButton {
+          Anchor: (Height: 36, Width: 280);
+          Text: "";
+        }
+      }
+
+      Group #ButtonRow {
+        LayoutMode: Center;
+        Anchor: (Top: 4);
+
+        $C.@CancelTextButton #CancelButton {
+          Anchor: (Height: 40, Width: 110);
+          Text: "";
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Block_Palette.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Block_Palette.description"
+  },
+  "Parent": "Furniture_Village_Crate",
+  "Categories": ["Items.Misc", "Aetherhaven.All"],
+  "Quality": "Uncommon",
+  "MaxStack": 16,
+  "Set": "Aetherhaven",
+  "Consumable": true,
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenBlockPaletteUnlockUse",
+          "Next": {
+            "Type": "ModifyInventory",
+            "AdjustHeldItemQuantity": -1
+          }
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenBlockPaletteUnlockUse",
+          "Next": {
+            "Type": "ModifyInventory",
+            "AdjustHeldItemQuantity": -1
+          }
+        }
+      ]
+    }
+  },
+  "Tags": {
+    "Family": ["Aetherhaven"],
+    "Type": ["Misc"]
+  }
+}

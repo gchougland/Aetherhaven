@@ -176,6 +176,27 @@ public final class PlotBuildingKindRequirements {
         return effectiveKinds(draft, plugin).contains(PlotBuildingKind.PLAYER_SHOP);
     }
 
+    /**
+     * Most shops need a player stall block. Cap'n Clive's furniture shop sells via dialogue instead, so it does
+     * not use {@link PlotCreatorSubstepType#SHOP_SPOT}.
+     */
+    public static boolean requiresNpcShopSpots(@Nonnull PlotCreatorDraft draft, @Nullable AetherhavenPlugin plugin) {
+        for (String id : candidateConstructionIds(draft)) {
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_FURNITURE_SHOP.equals(id.trim())) {
+                return false;
+            }
+        }
+        if (plugin != null) {
+            for (String gameplayId : gameplayIdsForWorkplaceLookup(draft, plugin)) {
+                if (AetherhavenConstants.CONSTRUCTION_PLOT_FURNITURE_SHOP.equals(gameplayId)) {
+                    return false;
+                }
+            }
+        }
+        List<PlotBuildingKind> kinds = effectiveKinds(draft, plugin);
+        return kinds.contains(PlotBuildingKind.SHOP) || kinds.contains(PlotBuildingKind.PLAYER_SHOP);
+    }
+
     /** Gaia altar buildings need a placed Gaia statue block. */
     public static boolean requiresGaiaStatue(@Nonnull PlotCreatorDraft draft, @Nullable AetherhavenPlugin plugin) {
         for (String id : candidateConstructionIds(draft)) {
@@ -454,7 +475,9 @@ public final class PlotBuildingKindRequirements {
             }
         }
         out.add(new SubstepRequirement(PlotCreatorSubstepType.WORK_POI, 1, role));
-        out.add(new SubstepRequirement(PlotCreatorSubstepType.SHOP_SPOT, 1));
+        if (requiresNpcShopSpots(draft, plugin)) {
+            out.add(new SubstepRequirement(PlotCreatorSubstepType.SHOP_SPOT, 1));
+        }
         out.add(new SubstepRequirement(PlotCreatorSubstepType.SHOP_POI, 1));
         out.add(new SubstepRequirement(PlotCreatorSubstepType.TOURIST_VISIT_POI, 1));
         if (requiresEatPoi(draft, plugin)) {

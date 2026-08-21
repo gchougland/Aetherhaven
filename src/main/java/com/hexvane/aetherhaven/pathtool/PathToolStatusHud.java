@@ -42,6 +42,7 @@ public final class PathToolStatusHud extends CustomUIHud {
                     case Rotate -> LANG_PREFIX + "aetherhaven.pathTool.hudNameRotate";
                     case Commit -> LANG_PREFIX + "aetherhaven.pathTool.hudNameCommit";
                     case Remove -> LANG_PREFIX + "aetherhaven.pathTool.hudNameRemove";
+                    case Restyle -> LANG_PREFIX + "aetherhaven.pathTool.hudNameRestyle";
                     case StyleDesigner -> LANG_PREFIX + "aetherhaven.pathTool.hudNameStyleDesigner";
                     case ReplaceFilter -> LANG_PREFIX + "aetherhaven.pathTool.hudNameReplaceFilter";
                 }
@@ -55,6 +56,7 @@ public final class PathToolStatusHud extends CustomUIHud {
                     case Rotate -> LANG_PREFIX + "aetherhaven.pathTool.hudDescRotate";
                     case Commit -> LANG_PREFIX + "aetherhaven.pathTool.hudDescCommit";
                     case Remove -> LANG_PREFIX + "aetherhaven.pathTool.hudDescRemove";
+                    case Restyle -> LANG_PREFIX + "aetherhaven.pathTool.hudDescRestyle";
                     case StyleDesigner -> LANG_PREFIX + "aetherhaven.pathTool.hudDescStyleDesigner";
                     case ReplaceFilter -> LANG_PREFIX + "aetherhaven.pathTool.hudDescReplaceFilter";
                 }
@@ -62,6 +64,7 @@ public final class PathToolStatusHud extends CustomUIHud {
         );
         boolean showEditStats =
             mode != PathToolGizmoMode.Remove
+                && mode != PathToolGizmoMode.Restyle
                 && mode != PathToolGizmoMode.StyleDesigner
                 && mode != PathToolGizmoMode.ReplaceFilter;
         b.set("#StyleLine.Visible", showEditStats);

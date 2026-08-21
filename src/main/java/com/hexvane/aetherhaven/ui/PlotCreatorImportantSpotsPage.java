@@ -372,8 +372,9 @@ public final class PlotCreatorImportantSpotsPage
             || isRequiredShopWork
             || (isShop
                 && (spot.type() == PlotCreatorSubstepType.SHOP_POI
-                    || spot.type() == PlotCreatorSubstepType.SHOP_SPOT
-                    || spot.type() == PlotCreatorSubstepType.TOURIST_VISIT_POI))
+                    || spot.type() == PlotCreatorSubstepType.TOURIST_VISIT_POI
+                    || (spot.type() == PlotCreatorSubstepType.SHOP_SPOT
+                        && PlotBuildingKindRequirements.requiresNpcShopSpots(session.getDraft(), plugin))))
             || (isPlayerShop && spot.type() == PlotCreatorSubstepType.SHOP_SAFE_BLOCK);
     }
 

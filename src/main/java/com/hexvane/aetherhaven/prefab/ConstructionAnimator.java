@@ -17,6 +17,7 @@ import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAc
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.PrefabUtil;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -44,6 +45,8 @@ public final class ConstructionAnimator {
     private final long batchDelayMs;
     @Nullable
     private final Runnable onComplete;
+    @Nullable
+    private final Map<String, String> blockPaletteSelections;
     private int index;
     private final AtomicBoolean finished = new AtomicBoolean(false);
 
@@ -61,7 +64,8 @@ public final class ConstructionAnimator {
         int prefabId,
         int blocksPerBatch,
         long batchDelayMs,
-        @Nullable Runnable onComplete
+        @Nullable Runnable onComplete,
+        @Nullable Map<String, String> blockPaletteSelections
     ) {
         this.plugin = plugin;
         this.world = world;
@@ -77,6 +81,7 @@ public final class ConstructionAnimator {
         this.blocksPerBatch = Math.max(1, blocksPerBatch);
         this.batchDelayMs = Math.max(1L, batchDelayMs);
         this.onComplete = onComplete;
+        this.blockPaletteSelections = blockPaletteSelections;
     }
 
     public static void start(
@@ -92,6 +97,36 @@ public final class ConstructionAnimator {
         long batchDelayMs,
         @Nullable Runnable onComplete
     ) {
+        start(
+            plugin,
+            world,
+            origin,
+            yaw,
+            force,
+            preserveWater,
+            bufferAccess,
+            entityAccessor,
+            blocksPerBatch,
+            batchDelayMs,
+            onComplete,
+            null
+        );
+    }
+
+    public static void start(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        @Nonnull Rotation yaw,
+        boolean force,
+        boolean preserveWater,
+        @Nonnull IPrefabBuffer bufferAccess,
+        @Nonnull ComponentAccessor<EntityStore> entityAccessor,
+        int blocksPerBatch,
+        long batchDelayMs,
+        @Nullable Runnable onComplete,
+        @Nullable Map<String, String> blockPaletteSelections
+    ) {
         world.execute(
             () ->
                 startOnWorldThread(
@@ -105,7 +140,8 @@ public final class ConstructionAnimator {
                     entityAccessor,
                     blocksPerBatch,
                     batchDelayMs,
-                    onComplete
+                    onComplete,
+                    blockPaletteSelections
                 )
         );
     }
@@ -121,9 +157,10 @@ public final class ConstructionAnimator {
         ComponentAccessor<EntityStore> entityAccessor,
         int blocksPerBatch,
         long batchDelayMs,
-        @Nullable Runnable onComplete
+        @Nullable Runnable onComplete,
+        @Nullable Map<String, String> blockPaletteSelections
     ) {
-        ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(bufferAccess, yaw);
+        ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(bufferAccess, yaw, blockPaletteSelections);
         int prefabId = PrefabUtil.getNextPrefabId();
         PrefabPasteEvent start = new PrefabPasteEvent(prefabId, true);
         entityAccessor.invoke(start);
@@ -164,7 +201,8 @@ public final class ConstructionAnimator {
             prefabId,
             blocksPerBatch,
             batchDelayMs,
-            onComplete
+            onComplete,
+            blockPaletteSelections
         );
         job.runBatch();
     }
@@ -195,13 +233,15 @@ public final class ConstructionAnimator {
             origin,
             prefabRotation.getRotation(),
             preserveWater,
-            bufferAccess
+            bufferAccess,
+            blockPaletteSelections
         );
         ConstructionPasteOps.placeInteractiveBlockEntitiesFromPrefab(
             world,
             origin,
             prefabRotation.getRotation(),
-            bufferAccess
+            bufferAccess,
+            blockPaletteSelections
         );
         ConstructionPasteOps.finishFluidsAndEntities(
             world,

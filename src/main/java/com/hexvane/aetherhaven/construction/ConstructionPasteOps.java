@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.construction;
 
 import com.hexvane.aetherhaven.entity.EntityRotationUtil;
+import com.hexvane.aetherhaven.blockpalette.BlockPaletteRemapper;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyObstructionUtil;
 import com.hexvane.aetherhaven.festival.CustomFestivalPaths;
 import com.hexvane.aetherhaven.festival.FestivalPrefabSize;
@@ -47,9 +48,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -105,14 +104,17 @@ public final class ConstructionPasteOps {
         int fluidLevel
     ) {}
 
-    /** Split of non-air assembly cells: incremental frontier uses {@code main}; {@code deferred} is placed in one batch at completion. */
-    public record AssemblyDeferredPartition(
-        @Nonnull List<PendingBlock> main,
-        @Nonnull List<PendingBlock> deferred
-    ) {}
-
     @Nonnull
     public static ConstructionPrefabSequence buildSequence(@Nonnull IPrefabBuffer bufferAccess, @Nonnull Rotation yaw) {
+        return buildSequence(bufferAccess, yaw, null);
+    }
+
+    @Nonnull
+    public static ConstructionPrefabSequence buildSequence(
+        @Nonnull IPrefabBuffer bufferAccess,
+        @Nonnull Rotation yaw,
+        @Nullable Map<String, String> blockPaletteSelections
+    ) {
         Random bufferIterationRandom = new Random(PREFAB_BUFFER_ITERATION_SEED);
         PrefabRotation prefabRotation = PrefabRotation.fromRotation(yaw);
         PrefabBufferCall call = new PrefabBufferCall(bufferIterationRandom, prefabRotation);
@@ -122,6 +124,7 @@ public final class ConstructionPasteOps {
             IPrefabBuffer.iterateAllColumns(),
             (x, y, z, blockId, holder, supportValue, blockRotation, filler, t, fluidId, fluidLevel) -> {
                 blockId = EditorMarkerBlocks.normalizePrefabBlockId(blockId);
+                blockId = BlockPaletteRemapper.remapBlockId(blockId, blockPaletteSelections);
                 if (blockId == 0 && filler == 0) {
                     pending.add(new PendingBlock(x, y, z, 0, null, 0, 0, 0, fluidId, fluidLevel));
                     return;
@@ -339,43 +342,6 @@ public final class ConstructionPasteOps {
     }
 
     /**
-     * Partitions {@code nonAirPlacementOrder} so block types listed in the construction JSON’s
-     * {@code assemblyDeferredBlockIds} and blocks that {@link PrefabSupportUtil#requiresNeighborSupport} are not
-     * indexed for the assembly frontier — they are written in {@code deferred} order after the frontier completes.
-     */
-    @Nonnull
-    public static AssemblyDeferredPartition partitionAssemblyDeferredBlocks(
-        @Nonnull List<PendingBlock> nonAirPlacementOrder,
-        @Nonnull BlockTypeAssetMap<String, BlockType> blockTypeMap,
-        @Nonnull Collection<String> deferBlockTypeIds
-    ) {
-        HashSet<String> want = new HashSet<>();
-        for (String id : deferBlockTypeIds) {
-            if (id != null && !id.isBlank()) {
-                want.add(id.trim());
-            }
-        }
-        List<PendingBlock> main = new ArrayList<>();
-        List<PendingBlock> deferred = new ArrayList<>();
-        for (PendingBlock pb : nonAirPlacementOrder) {
-            BlockType bt = pb.blockId() != 0 ? blockTypeMap.getAsset(pb.blockId()) : null;
-            String typeId = bt != null ? bt.getId() : null;
-            boolean defer =
-                (typeId != null && want.contains(typeId))
-                    || PrefabSupportUtil.requiresNeighborSupport(bt, pb.blockRotation());
-            if (defer) {
-                deferred.add(pb);
-            } else {
-                main.add(pb);
-            }
-        }
-        if (main.isEmpty() && !deferred.isEmpty()) {
-            return new AssemblyDeferredPartition(nonAirPlacementOrder, List.of());
-        }
-        return new AssemblyDeferredPartition(List.copyOf(main), List.copyOf(deferred));
-    }
-
-    /**
      * Origin voxels for chests, workbenches, aquariums, and other blocks with live block-entity state. These are
      * deferred from {@link #placeOne} / {@link #forcePasteAllSolids} and written once at build completion via
      * {@link #placeInteractiveBlockEntitiesFromPrefab}.
@@ -440,7 +406,17 @@ public final class ConstructionPasteOps {
         @Nonnull Rotation yaw,
         @Nonnull IPrefabBuffer bufferAccess
     ) {
-        ConstructionPrefabSequence seq = buildSequence(bufferAccess, yaw);
+        placeInteractiveBlockEntitiesFromPrefab(world, origin, yaw, bufferAccess, null);
+    }
+
+    public static void placeInteractiveBlockEntitiesFromPrefab(
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        @Nonnull Rotation yaw,
+        @Nonnull IPrefabBuffer bufferAccess,
+        @Nullable Map<String, String> blockPaletteSelections
+    ) {
+        ConstructionPrefabSequence seq = buildSequence(bufferAccess, yaw, blockPaletteSelections);
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         int failed = 0;
         int placed = 0;
@@ -856,7 +832,7 @@ public final class ConstructionPasteOps {
                 return false;
             }
         }
-        if (pb.supportValue != 0 || PrefabSupportUtil.requiresNeighborSupport(block, pb.blockRotation)) {
+        if (PrefabSupportUtil.needsSupportPhysics(block, pb.blockRotation) || pb.supportValue != 0) {
             Ref<ChunkStore> ref = chunk.getReference();
             if (!ref.isValid()) {
                 return false;
@@ -864,16 +840,22 @@ public final class ConstructionPasteOps {
             Store<ChunkStore> store = ref.getStore();
             Ref<ChunkStore> section = sectionRefForBlockY(chunk, by);
             if (section != null) {
-                PrefabSupportUtil.applyEffectiveSupport(
-                    store,
-                    section,
-                    bx,
-                    by,
-                    bz,
-                    pb.supportValue,
-                    block,
-                    pb.blockRotation
-                );
+                if (PrefabSupportUtil.needsSupportPhysics(block, pb.blockRotation)) {
+                    PrefabSupportUtil.markDecoForAssemblyPaste(
+                        store, section, bx, by, bz, block, pb.blockRotation
+                    );
+                } else {
+                    PrefabSupportUtil.applyEffectiveSupport(
+                        store,
+                        section,
+                        bx,
+                        by,
+                        bz,
+                        pb.supportValue,
+                        block,
+                        pb.blockRotation
+                    );
+                }
             }
         }
         if (pb.holder != null) {
@@ -894,7 +876,18 @@ public final class ConstructionPasteOps {
         boolean preserveWater,
         @Nonnull IPrefabBuffer bufferAccess
     ) {
-        ConstructionPrefabSequence seq = buildSequence(bufferAccess, yaw);
+        forcePasteAllSolids(world, origin, yaw, preserveWater, bufferAccess, null);
+    }
+
+    public static void forcePasteAllSolids(
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        @Nonnull Rotation yaw,
+        boolean preserveWater,
+        @Nonnull IPrefabBuffer bufferAccess,
+        @Nullable Map<String, String> blockPaletteSelections
+    ) {
+        ConstructionPrefabSequence seq = buildSequence(bufferAccess, yaw, blockPaletteSelections);
         List<PendingBlock> cells = withoutPureAirCells(seq.pendingBlocks());
         LocalCachedChunkAccessor chunkAccessor = createAccessor(world, origin, bufferAccess);
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();

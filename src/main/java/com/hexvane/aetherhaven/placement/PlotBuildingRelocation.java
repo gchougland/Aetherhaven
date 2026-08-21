@@ -162,7 +162,8 @@ public final class PlotBuildingRelocation {
             store,
             INSTANT_BLOCKS_PER_BATCH,
             INSTANT_BATCH_DELAY_MS,
-            onComplete
+            onComplete,
+            plot.getBlockPaletteSelections()
         );
 
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());

@@ -114,6 +114,7 @@ public final class FestivalPrefabSwapService {
             livePlot.setPrefabWorldPlacement(anchor.x, anchor.y, anchor.z, yaw);
             tm.updateTown(live);
 
+            // Everyday square (and festival layouts) keep the plot's saved block palette selections.
             ConstructionAnimator.start(
                 plugin,
                 world,
@@ -125,7 +126,8 @@ public final class FestivalPrefabSwapService {
                 store,
                 INSTANT_BLOCKS_PER_BATCH,
                 INSTANT_BATCH_DELAY_MS,
-                onPasted
+                onPasted,
+                livePlot.getBlockPaletteSelections()
             );
         });
         return true;

@@ -21,6 +21,14 @@ public final class PrefabSupportUtil {
         return required != null && !required.isEmpty();
     }
 
+    /** True when the block type participates in support physics (face support and/or max distance). */
+    public static boolean needsSupportPhysics(@Nullable BlockType blockType, int rotation) {
+        if (blockType == null || blockType.isUnknown()) {
+            return false;
+        }
+        return blockType.hasSupport() || requiresNeighborSupport(blockType, rotation);
+    }
+
     public static int effectiveSupportForExport(@Nullable BlockType blockType, int rotation, int worldSupport) {
         if (worldSupport != BlockPhysics.NULL_SUPPORT) {
             return worldSupport;
@@ -55,5 +63,24 @@ public final class PrefabSupportUtil {
         if (support != BlockPhysics.NULL_SUPPORT) {
             BlockPhysics.setSupportValue(store, section, bx, by, bz, support);
         }
+    }
+
+    /**
+     * Creative-style no-physics for incremental assembly: mark deco so floating trunks/leaves do not break
+     * before neighbors exist. Completion force-paste should use {@link #applyEffectiveSupport} instead.
+     */
+    public static void markDecoForAssemblyPaste(
+        @Nonnull Store<ChunkStore> store,
+        @Nonnull Ref<ChunkStore> section,
+        int bx,
+        int by,
+        int bz,
+        @Nullable BlockType blockType,
+        int rotation
+    ) {
+        if (!needsSupportPhysics(blockType, rotation)) {
+            return;
+        }
+        BlockPhysics.markDeco(store, section, bx, by, bz);
     }
 }

@@ -11,6 +11,7 @@ sub-topics:
   - mechanic_villager_needs
   - mechanic_reputation
   - mechanic_town_records_shelf
+  - mechanic_block_palettes_modding
   - mechanic_production_wardrobe
   - mechanic_floating_gifts
   - mechanic_geodes

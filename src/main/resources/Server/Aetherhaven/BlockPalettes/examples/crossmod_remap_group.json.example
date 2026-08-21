@@ -1,0 +1,22 @@
+{
+  "remapGroups": [
+    {
+      "id": "example_mod_walls",
+      "category": "walls",
+      "variants": [
+        {
+          "id": "walls_example_oak",
+          "displayName": "Example Oak",
+          "iconBlockId": "ExampleMod_Oak_Wall",
+          "blockPrefix": "ExampleMod_Oak_Wall"
+        },
+        {
+          "id": "walls_example_birch",
+          "displayName": "Example Birch",
+          "iconBlockId": "ExampleMod_Birch_Wall",
+          "blockPrefix": "ExampleMod_Birch_Wall"
+        }
+      ]
+    }
+  ]
+}

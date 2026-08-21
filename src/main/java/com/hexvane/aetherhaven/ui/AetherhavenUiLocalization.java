@@ -20,11 +20,20 @@ public final class AetherhavenUiLocalization {
 
     /** Tab icon strip shared by plot construction and villager needs when opened from the management block. */
     public static void applyManagementTabTooltips(@Nonnull UICommandBuilder b) {
-        b.set("#TabPlotButton.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.tabPlotTooltip"));
-        b.set("#TabNeedsButton.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.tabNeedsTooltip"));
-        b.set("#TabPlayersButton.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.tabPlayersTooltip"));
-        b.set("#TabLogButton.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.tabLogTooltip"));
-        b.set("#TabMoveButton.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.tabMoveTooltip"));
+        // TooltipText (not TooltipTextSpans): icon TextButtons reliably accept Message on TooltipText.
+        b.set("#TabPlotButton.TooltipText", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.tabPlotTooltip"));
+        b.set("#TabNeedsButton.TooltipText", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.tabNeedsTooltip"));
+        b.set("#TabPlayersButton.TooltipText", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.tabPlayersTooltip"));
+        b.set("#TabLogButton.TooltipText", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.tabLogTooltip"));
+        b.set("#TabPaintButton.TooltipText", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.tabPaintTooltip"));
+        b.set("#TabMoveButton.TooltipText", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.tabMoveTooltip"));
+    }
+
+    public static void applyBlockPalettePage(@Nonnull UICommandBuilder b) {
+        applyManagementTabTooltips(b);
+        b.set("#BlockPaletteTitleText.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.blockPalette.title"));
+        b.set("#Hint.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.blockPalette.hint"));
+        b.set("#SaveButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.blockPalette.saveButton"));
     }
 
     public static void applyTownLogPage(@Nonnull UICommandBuilder b) {
@@ -77,6 +86,11 @@ public final class AetherhavenUiLocalization {
         b.set("#VisitorPortalTravelLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalTravelAllowTooltip"));
         b.set("#VisitorPortalMembersOnlyLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalMembersOnly"));
         b.set("#VisitorPortalMembersOnlyLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalMembersOnlyTooltip"));
+        b.set("#TerritoryProtectionHeader.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.territoryProtectionHeader"));
+        b.set("#TerritoryBreakProtectionLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.territoryBreakProtection"));
+        b.set("#TerritoryBreakProtectionLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.territoryBreakProtectionTooltip"));
+        b.set("#TerritoryUseProtectionLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.territoryUseProtection"));
+        b.set("#TerritoryUseProtectionLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.territoryUseProtectionTooltip"));
         b.set("#PlayerShopNpcBuyLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.playerShopNpcBuyAllow"));
         b.set("#PlayerShopNpcBuyLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.playerShopNpcBuyAllowTooltip"));
         b.set("#VisitorPortalColorLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalColor"));

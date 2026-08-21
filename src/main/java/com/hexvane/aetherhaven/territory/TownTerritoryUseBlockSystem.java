@@ -56,6 +56,9 @@ public final class TownTerritoryUseBlockSystem extends EntityEventSystem<EntityS
         if (town == null) {
             return;
         }
+        if (!TownTerritoryGuard.isUseProtectionActive(plugin.getConfig().get(), town)) {
+            return;
+        }
         if (TownTerritoryGuard.shouldBypassPlayer(player, playerUuid, pos, store, ref)) {
             return;
         }

@@ -36,6 +36,7 @@
 - **Clown Tent** Build Bozo a tent workplace. During work hours he visits townsfolk who need fun and cheers them up.
 - **Villager wardrobe** Craft a wardrobe at the town planning desk to dress up residents of your town. Pick someone, choose unlocked looks by slot, and save what they wear in that town. Head looks can leave hair alone, trim it under a hat, or hide it fully, matching how player hats work.
 - **Props** Place small decoration builds almost anywhere with a crate style prop item. Move and turn them in a placement menu before you set them down. They will not go into other blocks. Ships with Aqua Lamp, Palm Streetlight, Streetlight, Cabbage Trough, Fish Barrel, Potion Shelf, Plant Arch, Pig Pile, Balloons, and Festival Flag. Festival merchants sell some of these for festival tickets. When you make a prop, you can set its shop gold price.
+- **Block Palettes** Unlock building looks for your town with a crate style Block Palette item. On a finished building, open the paintbrush tab on the town records shelf, pick walls, roofs, wood, stone, cloth, and more, then save to swap matching blocks right away. Looks stay when you repair, rebuild, move, or when the festival square returns to its everyday look. Choose Default to restore the original look. Sometimes found in loot chests and red floating gifts. Other mods can add looks for their own blocks. Creative: `/ah palette unlockall` unlocks every look for your town.
 - **Cap'n Clive** Furniture merchant who can visit after Vex's market stall. Build his furniture shop, then talk to him to browse a daily mix of decoration props with a preview. He asks for a house later like other shopkeeps.
 - **Front direction** When making a building or prop, pick which side is the front. Placing it starts with that side facing you, and marketplace previews show that front.
 - **Share props** Make props with the plot creator and share them on the marketplace. At the crafting bench, open Community and use the Props tab to download them. Downloaded props can show up in chests and balloons.
@@ -47,9 +48,13 @@
 - **Make your own wall styles** The plot creator can build a whole wall style. Set up the straight wall, the gate, and the three towers, mark where each one joins the next, set what each one costs to build, and share the finished style on the marketplace.
 - **Wall styles in the crafting bench** On Community, open the Wall Styles tab. A wall style shows as one card with arrows to look through its pieces, and downloading it brings the whole set in at once.
 - **Pick a wall style** The wall wand has arrows to switch between the wall styles you have installed.
+- **Path restyle** On the path designer shovel, press **Q** to **Restyle**, select a placed path like Remove, then press **F** and pick a style. The path's blocks swap to that style right away without removing the path.
+- **Path mode jump** Middle click on the path designer shovel opens a mode menu with the same icons as the status tabs, so you can jump straight to Place, Move, Rotate, Remove, Restyle, Replace filter, or Style designer. Townsfolk walking for new paths is toggled from that menu.
 
 ### Changed
 
+- **Plot creator** Saving a building as a plot costs 100 gold coins outside Creative mode, taken from town treasury or your coins.
+- **Miners hut and lumbermill** Ores and woods take longer when the building is outside the region those materials come from.
 - **Faster loading** Worlds with Aetherhaven open and join more quickly.
 - **Jewelry** Tooltips say to equip with a Hand Mirror.
 - **Path designer shovel** Starts in Place mode.
@@ -63,6 +68,7 @@
 
 ### Fixed
 
+- **Building construction** Trunks, logs, and other wood place during the build instead of waiting until the end.
 - **Hired guards** Guards who die free their hire slot right away, so the town guard count no longer stays full after they fall.
 - **Villager reset** Invited visitors who disappeared are brought back with the rest of the town when you run the villager reset command.
 - **Morning tax chat** The message names the town, so you can tell which treasury collected when you belong to more than one.
@@ -227,7 +233,7 @@
 - **Plot assembly sections** — Large buildings split into assembly sections automatically from prefab size (about 15 blocks per section on each axis by default). Tune with `AssemblySectionChunkSizeBlocks` in server config. Per-building section counts in plot JSON and the plot creator are removed.
 - **Floating gift boxes** — Balloon rewards use special gift boxes that disappear after you take everything out and close them. If you break one open, only the loot inside drops, not the box itself.
 - **Loot chest jewelry by adventure zone** — Randomized gem jewelry injected into world chests respects procedural zone tier: zone 1 only common and uncommon; zones 2–3 through epic (mythic); zone 4 has no common rolls and slightly higher rare, epic, and legendary weight. Glow rings (fixed mythic/legendary artifacts) are unchanged and can appear in any zone.
-- **Path designer on-screen help** — While you hold the path designer shovel, mode tabs at the top show Place, Move, Rotate, Remove, Replace filter, and Style designer. **Q** cycles modes in that same order.
+- **Path designer on-screen help** — While you hold the path designer shovel, mode tabs at the top show Place, Move, Rotate, Remove, Restyle, Replace filter, and Style designer. **Q** cycles modes in that same order.
 - **Path designer remove preview** — In Remove mode, saved paths show as orange waypoint markers and connecting lines (not a solid block outline), so you can see routes more clearly.
 - **Path width up to nine blocks** — Path width can now go up to nine blocks wide, matching the style designer chest grid.
 - **Patrol wand on screen help** — While you hold the patrol wand, the panel now matches the path designer shovel: **Build** and **Assign** tabs at the top, a short summary of what each mode does, and a clear list of which keys do what (add points, save a route, pick a guard, switch modes, and so on).

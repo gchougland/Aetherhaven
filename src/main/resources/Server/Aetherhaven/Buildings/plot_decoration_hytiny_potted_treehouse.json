@@ -16,13 +16,6 @@
     0,
     6
   ],
-  "assemblyDeferredBlockIds": [
-    "Plant_Leaves_Windwillow",
-    "Wood_Ash_Trunk_Full",
-    "Wood_Ash_Branch_Corner",
-    "Wood_Ash_Branch_Long",
-    "Wood_Ash_Trunk"
-  ],
   "rotationYaw": "None",
   "autonomyNavFloorYAboveMinY": 1,
   "autonomyNavMaxStandYSpanAboveMinY": 3,

@@ -73,6 +73,9 @@ final class StarterTownPathService {
             }
             record.townId = town.getTownId().toString();
             record.navNodes = PathNavPolylineUtil.resampleCenterline(samples, config.getPathNavNodeSpacing());
+            if (record.pathWidthBlocks <= 0) {
+                record.pathWidthBlocks = PATH_WIDTH;
+            }
             registry.addRecord(record);
             built++;
         }

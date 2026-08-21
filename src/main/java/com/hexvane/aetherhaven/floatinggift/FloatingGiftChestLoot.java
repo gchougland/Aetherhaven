@@ -95,6 +95,13 @@ public final class FloatingGiftChestLoot {
                 rnd
             )
         );
+        if (rnd.nextDouble() < 0.35) {
+            ItemStack palette =
+                com.hexvane.aetherhaven.blockpalette.BlockPaletteLoot.roll(plugin.getBlockPaletteCatalog(), rnd);
+            if (palette != null && !ItemStack.isEmpty(palette)) {
+                out.add(palette);
+            }
+        }
     }
 
     private static void addZoneFillerLoot(

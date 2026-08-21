@@ -102,23 +102,38 @@ public final class PathCementService {
             u.z = z;
             u.blockId = oldT.getId();
             u.rotationIndex = oldRot;
+            u.lateralIndex = p.lateralIndex;
             undos.add(u);
         }
-        return newShellRecord(undos);
+        return newShellRecord(undos, pathWidthBlocks);
     }
 
     @Nonnull
     public static PathCommitRecord newShellRecord() {
-        return newShellRecord(new ArrayList<>());
+        return newShellRecord(new ArrayList<>(), 0);
     }
 
     @Nonnull
-    private static PathCommitRecord newShellRecord(@Nonnull List<PathToolUndoCell> undos) {
+    private static PathCommitRecord newShellRecord(@Nonnull List<PathToolUndoCell> undos, int pathWidthBlocks) {
         PathCommitRecord rec = new PathCommitRecord();
         rec.id = UUID.randomUUID().toString();
         rec.createdMs = System.currentTimeMillis();
         rec.undo = undos;
+        rec.pathWidthBlocks =
+            Math.max(0, Math.min(PathToolStyleDefinition.MAX_PATH_WIDTH_BLOCKS, pathWidthBlocks));
         return rec;
+    }
+
+    /** Public style block picker shared with restyle. */
+    @Nonnull
+    public static String pickPlaceId(
+        int lateralIndex,
+        @Nonnull Random r,
+        int pathStyleIndex,
+        int pathWidthBlocks,
+        @Nonnull AetherhavenPluginConfig cfg
+    ) {
+        return pickPlaceIdInternal(lateralIndex, r, pathStyleIndex, pathWidthBlocks, cfg);
     }
 
     @SuppressWarnings({ "deprecation", "removal" })
@@ -130,7 +145,7 @@ public final class PathCementService {
     }
 
     @Nonnull
-    private static String pickPlaceId(
+    private static String pickPlaceIdInternal(
         int lateralIndex,
         @Nonnull Random r,
         int pathStyleIndex,

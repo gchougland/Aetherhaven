@@ -99,7 +99,7 @@ public final class PathToolInteractions {
             context.getState().state = InteractionState.Failed;
             return;
         }
-        if (st.getGizmoMode() == PathToolGizmoMode.Remove) {
+        if (st.getGizmoMode() == PathToolGizmoMode.Remove || st.getGizmoMode() == PathToolGizmoMode.Restyle) {
             handleRemoveModeSelect(playerRef, commandBuffer, world, store, st);
             return;
         }
@@ -189,7 +189,7 @@ public final class PathToolInteractions {
         Transform look = TargetUtil.getLook(playerRef, store);
         Vector3d origin = look.getPosition();
         Vector3d dir = look.getDirection();
-        if (st.getGizmoMode() == PathToolGizmoMode.Remove) {
+        if (st.getGizmoMode() == PathToolGizmoMode.Remove || st.getGizmoMode() == PathToolGizmoMode.Restyle) {
             handleRemoveModeSelect(playerRef, commandBuffer, world, store, st);
             return;
         }
@@ -272,27 +272,55 @@ public final class PathToolInteractions {
     }
 
     @Nonnull
-    private static String modeToastId(@Nonnull PathToolGizmoMode m) {
+    public static String modeToastId(@Nonnull PathToolGizmoMode m) {
         return switch (m) {
             case Translate -> "aetherhaven_items.aetherhaven.pathTool.toastModeTranslate";
             case Rotate -> "aetherhaven_items.aetherhaven.pathTool.toastModeRotate";
             case Commit -> "aetherhaven_items.aetherhaven.pathTool.toastModeCommit";
             case Remove -> "aetherhaven_items.aetherhaven.pathTool.toastModeRemove";
+            case Restyle -> "aetherhaven_items.aetherhaven.pathTool.toastModeRestyle";
             case StyleDesigner -> "aetherhaven_items.aetherhaven.pathTool.toastModeStyleDesigner";
             case ReplaceFilter -> "aetherhaven_items.aetherhaven.pathTool.toastModeReplaceFilter";
         };
     }
 
     @Nonnull
-    private static String modeCycleMessageId(@Nonnull PathToolGizmoMode m) {
+    public static String modeCycleMessageId(@Nonnull PathToolGizmoMode m) {
         return switch (m) {
             case Translate -> "aetherhaven_items.aetherhaven.pathTool.modeCycledToTranslate";
             case Rotate -> "aetherhaven_items.aetherhaven.pathTool.modeCycledToRotate";
             case Commit -> "aetherhaven_items.aetherhaven.pathTool.modeCycledToCommit";
             case Remove -> "aetherhaven_items.aetherhaven.pathTool.modeCycledToRemove";
+            case Restyle -> "aetherhaven_items.aetherhaven.pathTool.modeCycledToRestyle";
             case StyleDesigner -> "aetherhaven_items.aetherhaven.pathTool.modeCycledToStyleDesigner";
             case ReplaceFilter -> "aetherhaven_items.aetherhaven.pathTool.modeCycledToReplaceFilter";
         };
+    }
+
+    public static void handleModeJump(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull InteractionContext context
+    ) {
+        if (!hasPathToolPermission(playerRef, commandBuffer) || !isPathToolItem(getHand(commandBuffer, playerRef))) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        ensureState(playerRef, commandBuffer);
+        PathToolPlayerComponent st = commandBuffer.getComponent(playerRef, PathToolPlayerComponent.getComponentType());
+        if (st == null) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        Store<EntityStore> store = commandBuffer.getStore();
+        @Nullable
+        PlayerRef pr = commandBuffer.getComponent(playerRef, PlayerRef.getComponentType());
+        if (pr == null) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        PathToolModeJumpPage.open(playerRef, store, pr);
+        context.getState().state = InteractionState.Finished;
     }
 
     public static void handleCycleGizmoMode(
@@ -511,6 +539,10 @@ public final class PathToolInteractions {
             handleRemovePath(playerRef, commandBuffer, world, plugin, st, context);
             return;
         }
+        if (st.getGizmoMode() == PathToolGizmoMode.Restyle) {
+            handleRestyleOpenStylePick(playerRef, commandBuffer, store, st, context);
+            return;
+        }
         if (st.getGizmoMode() == PathToolGizmoMode.Translate) {
             send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.useInTranslateMode"));
             context.getState().state = InteractionState.Failed;
@@ -608,6 +640,9 @@ public final class PathToolInteractions {
         rec.navNodes = PathNavPolylineUtil.resampleCenterline(samples, plugin.getConfig().get().getPathNavNodeSpacing());
         rec.villagerNav = st.isVillagerNav();
         rec.townId = resolveTownIdForPath(world, plugin, st, samples);
+        if (rec.pathWidthBlocks <= 0) {
+            rec.pathWidthBlocks = st.getPathWidthBlocks();
+        }
         PathToolRegistry reg = AetherhavenWorldRegistries.getOrCreatePathToolRegistry(world, plugin);
         reg.addRecord(rec);
         AetherhavenWorldRegistries.getOrCreatePathNavGraphService(world).rebuildAll(reg, plugin.getConfig().get());
@@ -692,6 +727,27 @@ public final class PathToolInteractions {
                 .param("cells", String.valueOf(cells))
         );
         pathToast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.pathTool.toastRemovedPath");
+    }
+
+    private static void handleRestyleOpenStylePick(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PathToolPlayerComponent st,
+        @Nonnull InteractionContext context
+    ) {
+        if (st.getSelectedRemovePathId() == null) {
+            send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.restyleNeedSelection"));
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        @Nullable
+        PlayerRef pr = commandBuffer.getComponent(playerRef, PlayerRef.getComponentType());
+        if (pr == null) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        PathToolStylePickPage.open(playerRef, store, pr);
     }
 
     private static void wrongModeToast(

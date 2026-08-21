@@ -116,6 +116,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private ScheduleLocationCatalog scheduleLocationCatalog = ScheduleLocationCatalog.empty();
     private FestivalCatalog festivalCatalog = FestivalCatalog.empty();
     private PropCatalog propCatalog = PropCatalog.empty();
+    private com.hexvane.aetherhaven.blockpalette.BlockPaletteCatalog blockPaletteCatalog =
+        com.hexvane.aetherhaven.blockpalette.BlockPaletteCatalog.empty();
     private VillagerCosmeticCatalog villagerCosmeticCatalog = VillagerCosmeticCatalog.empty();
     private final FestivalMechanicRegistry festivalMechanicRegistry = new FestivalMechanicRegistry();
     private VillagerDefinitionCatalog villagerDefinitionCatalog = VillagerDefinitionCatalog.empty();
@@ -168,6 +170,12 @@ public final class AetherhavenPlugin extends JavaPlugin {
 
     @Nullable
     private com.hexvane.aetherhaven.prop.PropIconPacketAdapter propIconPacketAdapter;
+
+    @Nullable
+    private com.hexvane.aetherhaven.blockpalette.BlockPaletteVirtualItemRegistry blockPaletteVirtualItemRegistry;
+
+    @Nullable
+    private com.hexvane.aetherhaven.blockpalette.BlockPaletteIconPacketAdapter blockPaletteIconPacketAdapter;
 
     private ShopPriceCatalog shopPriceCatalog = ShopPriceCatalog.empty();
 
@@ -331,6 +339,17 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public PropCatalog getPropCatalog() {
         return propCatalog;
+    }
+
+    /**
+     * Block palette unlocks and remapping. Other mods may ship JSON under
+     * {@code Server/Aetherhaven/BlockPalettes/} or call {@link
+     * com.hexvane.aetherhaven.blockpalette.BlockPaletteCatalog#registerRemapGroup} /
+     * {@link com.hexvane.aetherhaven.blockpalette.BlockPaletteCatalog#register} after setup.
+     */
+    @Nonnull
+    public com.hexvane.aetherhaven.blockpalette.BlockPaletteCatalog getBlockPaletteCatalog() {
+        return blockPaletteCatalog;
     }
 
     @Nonnull
@@ -550,6 +569,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.scheduleLocationCatalog = ScheduleLocationCatalog.loadFromAssetPacks();
         this.festivalCatalog = FestivalCatalog.loadFromAssetPacksOrClasspath(cl, customData);
         this.propCatalog = PropCatalog.loadFromAssetPacksOrClasspath(cl, customData);
+        this.blockPaletteCatalog =
+            com.hexvane.aetherhaven.blockpalette.BlockPaletteCatalog.loadFromAssetPacksOrClasspath(cl);
         this.villagerCosmeticCatalog = VillagerCosmeticCatalog.loadFromClasspath(cl);
         this.villagerScheduleRegistry =
             VillagerScheduleRegistry.loadFromAssetPacksOrClasspath(cl, this.villagerDefinitionCatalog, this.scheduleLocationCatalog);
@@ -627,9 +648,22 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.propIconPacketAdapter.register();
     }
 
+    public void registerBlockPaletteIconPackets() {
+        this.blockPaletteVirtualItemRegistry =
+            new com.hexvane.aetherhaven.blockpalette.BlockPaletteVirtualItemRegistry();
+        this.blockPaletteIconPacketAdapter =
+            new com.hexvane.aetherhaven.blockpalette.BlockPaletteIconPacketAdapter(this.blockPaletteVirtualItemRegistry);
+        this.blockPaletteIconPacketAdapter.register();
+    }
+
     @Nullable
     public com.hexvane.aetherhaven.prop.PropIconPacketAdapter getPropIconPacketAdapter() {
         return propIconPacketAdapter;
+    }
+
+    @Nullable
+    public com.hexvane.aetherhaven.blockpalette.BlockPaletteIconPacketAdapter getBlockPaletteIconPacketAdapter() {
+        return blockPaletteIconPacketAdapter;
     }
 
     public void registerRtsClientMovementPacketAdapter() {

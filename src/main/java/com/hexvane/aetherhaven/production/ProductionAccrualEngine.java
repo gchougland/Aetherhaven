@@ -4,7 +4,9 @@ import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.town.CharterSpecializationModifiers;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hypixel.hytale.server.core.universe.world.World;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /** Shared per-slot production tick accrual for live entity ticks and offline catch-up. */
 public final class ProductionAccrualEngine {
@@ -13,6 +15,9 @@ public final class ProductionAccrualEngine {
     /**
      * Applies {@code entityTicksToApply} entity ticks to every active output slot (parallel slot timers).
      *
+     * @param world workplace world for adventure-zone speed; may be null to skip zone penalties
+     * @param plotBlockX workplace plot X (typically sign X)
+     * @param plotBlockZ workplace plot Z (typically sign Z)
      * @return true if slot accumulators or stored amounts changed
      */
     public static boolean applyEntityTicks(
@@ -22,6 +27,9 @@ public final class ProductionAccrualEngine {
         @Nonnull String gameplayPlotId,
         @Nonnull ConstructionCatalog ccat,
         @Nonnull AetherhavenPluginConfig cfg,
+        @Nullable World world,
+        int plotBlockX,
+        int plotBlockZ,
         int entityTicksToApply
     ) {
         if (entityTicksToApply <= 0 || entry.catalogSize() <= 0) {
@@ -30,6 +38,9 @@ public final class ProductionAccrualEngine {
         state.migrateIfNeeded();
         double timeMul = cfg.getProductionTimeMultiplier();
         double speedMul = WorkplaceProductionUpgrades.speedMultiplier(state);
+        double mismatchMul = cfg.getProductionZoneMismatchTimeMultiplier();
+        Integer adventureZone =
+            ProductionResourceZoneAffinity.resolveAdventureZoneOrSkip(world, plotBlockX, plotBlockZ);
         int slotCount = WorkplaceProductionUpgrades.slotCount(state);
 
         boolean amountsChanged = false;
@@ -46,7 +57,14 @@ public final class ProductionAccrualEngine {
                     }
                     continue;
                 }
-                int ticksNeeded = ProductionTimeScaling.effectiveTicks(entry.ticksAtCursor(cursor), timeMul / speedMul);
+                double zoneMul =
+                    ProductionResourceZoneAffinity.timeMultiplierForResolvedZone(
+                        adventureZone,
+                        selected,
+                        mismatchMul
+                    );
+                int ticksNeeded =
+                    ProductionTimeScaling.effectiveTicks(entry.ticksAtCursor(cursor), timeMul / speedMul * zoneMul);
                 int acc = state.getSlotTickAccum(slot) + 1;
                 if (acc < ticksNeeded) {
                     state.setSlotTickAccum(slot, acc);

@@ -9,6 +9,8 @@ public enum PathToolGizmoMode {
     Commit,
     /** View and remove committed paths. */
     Remove,
+    /** Select a committed path and swap its style. */
+    Restyle,
     /** Open the in game path style manager. */
     StyleDesigner,
     /** Chest grid: block ids the path may replace (per player). */

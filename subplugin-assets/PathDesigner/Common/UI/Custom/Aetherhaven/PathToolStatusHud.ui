@@ -52,6 +52,12 @@ Group #PathToolStatusRoot {
     }
 
     TabButton {
+      Icon: "../paintbrush.png";
+      TooltipText: "Restyle";
+      Id: "Restyle";
+    }
+
+    TabButton {
       Icon: "../filter.png";
       TooltipText: "Replace filter";
       Id: "ReplaceFilter";

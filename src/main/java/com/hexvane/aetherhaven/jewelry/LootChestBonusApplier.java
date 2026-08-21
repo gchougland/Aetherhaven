@@ -293,6 +293,54 @@ public final class LootChestBonusApplier {
         return tx.succeeded();
     }
 
+    public static void tryInjectBlockPalette(
+        @Nonnull Store<ChunkStore> s,
+        @Nonnull BlockModule.BlockStateInfo state,
+        @Nonnull ItemContainerBlock c,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ThreadLocalRandom rnd,
+        boolean force
+    ) {
+        SimpleItemContainer inv = c.getItemContainer();
+        if (inv == null) {
+            return;
+        }
+        if (tryInjectBlockPaletteToContainer(inv, cfg, rnd, force)) {
+            state.markNeedsSaving(s);
+        }
+    }
+
+    public static boolean tryInjectBlockPaletteToContainer(
+        @Nonnull SimpleItemContainer inv,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ThreadLocalRandom rnd,
+        boolean force
+    ) {
+        if (!force) {
+            if (cfg.getLootChestBlockPaletteChance() <= 0.0) {
+                return false;
+            }
+            if (rnd.nextDouble() >= cfg.getLootChestBlockPaletteChance()) {
+                return false;
+            }
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return false;
+        }
+        ItemStack stack = com.hexvane.aetherhaven.blockpalette.BlockPaletteLoot.roll(
+            plugin.getBlockPaletteCatalog(), rnd);
+        if (stack == null || ItemStack.isEmpty(stack)) {
+            return false;
+        }
+        short slot = randomEmptySlot(inv, rnd);
+        if (slot < 0) {
+            return false;
+        }
+        ItemStackSlotTransaction tx = inv.addItemStackToSlot(slot, stack);
+        return tx.succeeded();
+    }
+
     public static void applyAll(
         @Nonnull Store<ChunkStore> s,
         @Nonnull BlockModule.BlockStateInfo state,
@@ -311,6 +359,7 @@ public final class LootChestBonusApplier {
         tryInjectGoldCoins(s, state, c, cfg, rnd, forceGold);
         tryInjectPlotBlueprint(s, state, c, cfg, catalog, rnd, forcePlotBlueprint);
         tryInjectProp(s, state, c, cfg, rnd, forcePlotBlueprint);
+        tryInjectBlockPalette(s, state, c, cfg, rnd, false);
         tryInjectGaiaDraughtBonuses(s, state, c, cfg, rnd, false);
     }
 

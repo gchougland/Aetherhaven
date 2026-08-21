@@ -1,0 +1,199 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@TabIconLbl = (
+  FontSize: 6,
+  TextColor: #ffffff(0.01),
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+@MgmtTabIconStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../house_icon_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@TabIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../house_icon_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@TabIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../house_icon_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@TabIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../house_icon_256.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@MgmtTabFoodStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../food_icon_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@TabIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../food_icon_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@TabIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../food_icon_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@TabIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../food_icon_256.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@MgmtTabGroupStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../group_icon_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@TabIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../group_icon_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@TabIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../group_icon_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@TabIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../group_icon_256.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@MgmtTabDialogueStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../dialogue.png", Border: 0, Color: #ffffff), LabelStyle: (...@TabIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../dialogue.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@TabIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../dialogue.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@TabIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../dialogue.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@MgmtTabPaintStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../paintbrush.png", Border: 0, Color: #ffffff), LabelStyle: (...@TabIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../paintbrush.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@TabIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../paintbrush.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@TabIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../paintbrush.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@MgmtTabMoveStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../move_icon_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@TabIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../move_icon_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@TabIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../move_icon_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@TabIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../move_icon_256.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+$C.@PageOverlay {
+  LayoutMode: Top;
+
+  Group {
+    FlexWeight: 1;
+    Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
+
+    Group {
+      LayoutMode: Middle;
+      Anchor: (Full: 0);
+
+      $C.@DecoratedContainer {
+        Anchor: (Width: 560);
+
+        #Title {
+          Label #BlockPaletteTitleText {
+            Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+            Padding: (Horizontal: 19);
+            Text: "";
+          }
+        }
+
+        #Content {
+          LayoutMode: Top;
+          Padding: (Full: 16);
+
+          Group #ManagementTabStrip {
+            LayoutMode: Left;
+            Visible: false;
+            Anchor: (Bottom: 14, Left: 0, Right: 0);
+            Padding: (Horizontal: 6, Vertical: 8);
+            Background: #1e2430(0.92);
+
+            Group { FlexWeight: 1; }
+
+            TextButton #TabPlotButton {
+              Style: @MgmtTabIconStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              Anchor: (Height: 40, Width: 44);
+              Padding: (Full: 0);
+              Text: ".";
+              TooltipText: "";
+            }
+
+            Group { FlexWeight: 1; }
+
+            TextButton #TabNeedsButton {
+              Style: @MgmtTabFoodStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              Anchor: (Height: 40, Width: 44);
+              Padding: (Full: 0);
+              Text: ".";
+              TooltipText: "";
+            }
+
+            Group { FlexWeight: 1; }
+
+            TextButton #TabPlayersButton {
+              Style: @MgmtTabGroupStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              Anchor: (Height: 40, Width: 44);
+              Padding: (Full: 0);
+              Text: ".";
+              TooltipText: "";
+            }
+
+            Group { FlexWeight: 1; }
+
+            TextButton #TabLogButton {
+              Style: @MgmtTabDialogueStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              Anchor: (Height: 40, Width: 44);
+              Padding: (Full: 0);
+              Text: ".";
+              TooltipText: "";
+            }
+
+            Group { FlexWeight: 1; }
+
+            TextButton #TabPaintButton {
+              Style: @MgmtTabPaintStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              Anchor: (Height: 40, Width: 44);
+              Padding: (Full: 0);
+              Text: ".";
+              TooltipText: "";
+              Disabled: true;
+            }
+
+            Group { FlexWeight: 1; }
+
+            TextButton #TabMoveButton {
+              Style: @MgmtTabMoveStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              Anchor: (Height: 40, Width: 44);
+              Padding: (Full: 0);
+              Text: ".";
+              TooltipText: "";
+            }
+
+            Group { FlexWeight: 1; }
+          }
+
+          Label #Hint {
+            Anchor: (Bottom: 12);
+            Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #a89878);
+            Text: "";
+          }
+
+          Group #CategoryListPanel {
+            LayoutMode: Top;
+            Anchor: (Height: 420, Bottom: 12);
+
+            Label #StatusHint {
+              Visible: false;
+              Anchor: (Top: 0, Left: 0, Right: 0, Height: 420);
+              Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #8a7a60, VerticalAlignment: Center, HorizontalAlignment: Center);
+              Text: "";
+            }
+
+            Group #CategoryScroll {
+              LayoutMode: TopScrolling;
+              ScrollbarStyle: $C.@DefaultScrollbarStyle;
+              Anchor: (Top: 0, Left: 0, Right: 0, Height: 420);
+
+              Group #CategoryRows {
+                LayoutMode: Top;
+              }
+            }
+          }
+
+          Group #SaveRow {
+            LayoutMode: Middle;
+            Anchor: (Top: 4, Left: 0, Right: 0);
+
+            $C.@TextButton #SaveButton {
+              Text: "";
+              Anchor: (Width: 160, Height: 42);
+              Padding: (Horizontal: 10);
+            }
+          }
+        }
+      }
+    }
+  }
+}

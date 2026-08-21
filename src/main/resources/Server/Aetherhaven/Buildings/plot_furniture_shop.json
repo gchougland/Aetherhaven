@@ -15,17 +15,17 @@
   "materials": [
     {
       "resourceTypeId": "Wood_All",
-      "count": 430
+      "count": 500
     },
     {
       "resourceTypeId": "Rock",
-      "count": 160
+      "count": 150
     }
   ],
   "pois": [
     {
       "localX": -5,
-      "localY": 1,
+      "localY": 0,
       "localZ": -3,
       "tags": [
         "WORK",
@@ -34,71 +34,131 @@
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": -4,
-      "interactionTargetLocalY": 1,
+      "interactionTargetLocalX": -6,
+      "interactionTargetLocalY": 0,
       "interactionTargetLocalZ": -3,
       "workResidentKind": "furniture_merchant",
-      "interactionTargetYawDegrees": 90.0
-    },
-    {
-      "localX": 1,
-      "localY": 1,
-      "localZ": -4,
-      "tags": [
-        "SHOP"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Wood_Softwood_Planks",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 1,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -3,
-      "interactionTargetYawDegrees": 0.0
-    },
-    {
-      "localX": 2,
-      "localY": 1,
-      "localZ": -4,
-      "tags": [
-        "SHOP"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Wood_Softwood_Planks",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 2,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -3,
-      "interactionTargetYawDegrees": 0.0
+      "interactionTargetYawDegrees": -125.08958
     },
     {
       "localX": 3,
-      "localY": 1,
-      "localZ": -4,
+      "localY": 0,
+      "localZ": -3,
       "tags": [
-        "TOURIST_VISIT"
+        "SHOP"
       ],
       "capacity": 1,
-      "blockTypeId": "Wood_Softwood_Planks",
+      "blockTypeId": "Cloth_Block_Wool_Green",
       "interactionKind": "SIT",
       "interactionTargetLocalX": 3,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -3,
-      "interactionTargetYawDegrees": 0.0
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -2,
+      "interactionTargetYawDegrees": 13.340096
+    },
+    {
+      "localX": 6,
+      "localY": 0,
+      "localZ": -2,
+      "tags": [
+        "SHOP"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Cloth_Block_Wool_Green",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 5,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -2,
+      "interactionTargetYawDegrees": -103.56948
     },
     {
       "localX": 4,
-      "localY": 1,
-      "localZ": -4,
+      "localY": 0,
+      "localZ": 0,
+      "tags": [
+        "SHOP"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Cloth_Block_Wool_Green",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 4,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -1,
+      "interactionTargetYawDegrees": -152.09903
+    },
+    {
+      "localX": -2,
+      "localY": 0,
+      "localZ": -1,
+      "tags": [
+        "SHOP"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Cloth_Block_Wool_Green",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": -1,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -1,
+      "interactionTargetYawDegrees": 120.267105
+    },
+    {
+      "localX": 2,
+      "localY": 0,
+      "localZ": -3,
       "tags": [
         "TOURIST_VISIT"
       ],
       "capacity": 1,
-      "blockTypeId": "Wood_Softwood_Planks",
+      "blockTypeId": "Cloth_Block_Wool_Green",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 2,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -2,
+      "interactionTargetYawDegrees": -7.7671356
+    },
+    {
+      "localX": 5,
+      "localY": 0,
+      "localZ": -1,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Cloth_Block_Wool_Green",
       "interactionKind": "SIT",
       "interactionTargetLocalX": 4,
-      "interactionTargetLocalY": 1,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -1,
+      "interactionTargetYawDegrees": -110.2873
+    },
+    {
+      "localX": 2,
+      "localY": 0,
+      "localZ": 0,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Cloth_Block_Wool_Green",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 2,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -1,
+      "interactionTargetYawDegrees": 165.18715
+    },
+    {
+      "localX": -2,
+      "localY": 0,
+      "localZ": -3,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Cloth_Block_Wool_Green",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": -1,
+      "interactionTargetLocalY": 0,
       "interactionTargetLocalZ": -3,
-      "interactionTargetYawDegrees": 0.0
+      "interactionTargetYawDegrees": 140.61378
     }
   ],
   "managementBlockLocalPos": [
@@ -108,5 +168,22 @@
   ],
   "touristDestination": true,
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_furniture_shop.displayName",
-  "styleId": "core"
+  "styleId": "core",
+  "frontFacing": "South",
+  "tags": [
+    "shop",
+    "work"
+  ],
+  "boundsLocal": {
+    "min": [
+      -8,
+      0,
+      -6
+    ],
+    "max": [
+      9,
+      10,
+      7
+    ]
+  }
 }

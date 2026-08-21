@@ -27,6 +27,7 @@ public final class PathToolHudControls {
                 row(ToolKeybindSlot.USE, "aetherhaven.pathTool.hud.styleDesigner.fContinue"),
                 row(ToolKeybindSlot.ABILITY2, "aetherhaven.pathTool.hud.styleDesigner.eSave"),
                 row(ToolKeybindSlot.ABILITY1, "aetherhaven.pathTool.hud.styleDesigner.q"),
+                row(ToolKeybindSlot.PICK, "aetherhaven.pathTool.hud.modeJump"),
                 info("aetherhaven.pathTool.hud.styleDesigner.infoColumns"),
                 info("aetherhaven.pathTool.hud.styleDesigner.infoRows"),
                 info("aetherhaven.pathTool.hud.styleDesigner.infoWeight")
@@ -39,6 +40,7 @@ public final class PathToolHudControls {
                 row(ToolKeybindSlot.USE, "aetherhaven.pathTool.hud.replaceFilter.fContinue"),
                 row(ToolKeybindSlot.ABILITY2, "aetherhaven.pathTool.hud.replaceFilter.eSave"),
                 row(ToolKeybindSlot.ABILITY1, "aetherhaven.pathTool.hud.replaceFilter.q"),
+                row(ToolKeybindSlot.PICK, "aetherhaven.pathTool.hud.modeJump"),
                 info("aetherhaven.pathTool.hud.replaceFilter.info")
             );
         }
@@ -54,7 +56,7 @@ public final class PathToolHudControls {
                 row(ToolKeybindSlot.ABILITY1, "aetherhaven.pathTool.hud.move.q"),
                 row(ToolKeybindSlot.ABILITY2, "aetherhaven.pathTool.hud.move.e"),
                 row(ToolKeybindSlot.ABILITY3, "aetherhaven.pathTool.hud.move.r"),
-                row(ToolKeybindSlot.PICK, "aetherhaven.pathTool.hud.townsfolkToggle")
+                row(ToolKeybindSlot.PICK, "aetherhaven.pathTool.hud.modeJump")
             );
             case Rotate -> List.of(
                 row(ToolKeybindSlot.PRIMARY, "aetherhaven.pathTool.hud.rotate.primary"),
@@ -63,7 +65,7 @@ public final class PathToolHudControls {
                 row(ToolKeybindSlot.ABILITY1, "aetherhaven.pathTool.hud.rotate.q"),
                 row(ToolKeybindSlot.ABILITY2, "aetherhaven.pathTool.hud.rotate.e"),
                 row(ToolKeybindSlot.ABILITY3, "aetherhaven.pathTool.hud.rotate.r"),
-                row(ToolKeybindSlot.PICK, "aetherhaven.pathTool.hud.townsfolkToggle")
+                row(ToolKeybindSlot.PICK, "aetherhaven.pathTool.hud.modeJump")
             );
             case Commit -> List.of(
                 row(ToolKeybindSlot.PRIMARY, "aetherhaven.pathTool.hud.place.primary"),
@@ -72,17 +74,25 @@ public final class PathToolHudControls {
                 row(ToolKeybindSlot.ABILITY1, "aetherhaven.pathTool.hud.place.q"),
                 row(ToolKeybindSlot.ABILITY2, "aetherhaven.pathTool.hud.place.e"),
                 row(ToolKeybindSlot.ABILITY3, "aetherhaven.pathTool.hud.place.r"),
-                row(ToolKeybindSlot.PICK, "aetherhaven.pathTool.hud.townsfolkToggle")
+                row(ToolKeybindSlot.PICK, "aetherhaven.pathTool.hud.modeJump")
             );
             case Remove -> List.of(
                 row(ToolKeybindSlot.PRIMARY, "aetherhaven.pathTool.hud.remove.primary"),
                 row(ToolKeybindSlot.USE, "aetherhaven.pathTool.hud.remove.f"),
-                row(ToolKeybindSlot.ABILITY1, "aetherhaven.pathTool.hud.remove.q")
+                row(ToolKeybindSlot.ABILITY1, "aetherhaven.pathTool.hud.remove.q"),
+                row(ToolKeybindSlot.PICK, "aetherhaven.pathTool.hud.modeJump")
+            );
+            case Restyle -> List.of(
+                row(ToolKeybindSlot.PRIMARY, "aetherhaven.pathTool.hud.restyle.primary"),
+                row(ToolKeybindSlot.USE, "aetherhaven.pathTool.hud.restyle.f"),
+                row(ToolKeybindSlot.ABILITY1, "aetherhaven.pathTool.hud.restyle.q"),
+                row(ToolKeybindSlot.PICK, "aetherhaven.pathTool.hud.modeJump")
             );
             case StyleDesigner -> List.of(
                 row(ToolKeybindSlot.USE, "aetherhaven.pathTool.hud.styleDesigner.f"),
                 row(ToolKeybindSlot.ABILITY2, "aetherhaven.pathTool.hud.styleDesigner.e"),
                 row(ToolKeybindSlot.ABILITY1, "aetherhaven.pathTool.hud.styleDesigner.q"),
+                row(ToolKeybindSlot.PICK, "aetherhaven.pathTool.hud.modeJump"),
                 info("aetherhaven.pathTool.hud.styleDesigner.infoColumns"),
                 info("aetherhaven.pathTool.hud.styleDesigner.infoRows"),
                 info("aetherhaven.pathTool.hud.styleDesigner.infoWeight")
@@ -93,6 +103,7 @@ public final class PathToolHudControls {
                 row(ToolKeybindSlot.USE, "aetherhaven.pathTool.hud.replaceFilter.f"),
                 row(ToolKeybindSlot.ABILITY2, "aetherhaven.pathTool.hud.replaceFilter.e"),
                 row(ToolKeybindSlot.ABILITY1, "aetherhaven.pathTool.hud.replaceFilter.q"),
+                row(ToolKeybindSlot.PICK, "aetherhaven.pathTool.hud.modeJump"),
                 info("aetherhaven.pathTool.hud.replaceFilter.info")
             );
         };

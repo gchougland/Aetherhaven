@@ -6,18 +6,28 @@ import com.hexvane.aetherhaven.prop.PropIconRenderClient;
 import com.hexvane.aetherhaven.community.CommunitySubmitLocalSave;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
 import com.hexvane.aetherhaven.festival.CustomFestivalPaths;
 import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import com.hexvane.aetherhaven.placement.PlotFootprintOverlayRefresh;
 import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
 import com.hexvane.aetherhaven.plot.PlotTokenInventory;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.protocol.GameMode;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -34,6 +44,8 @@ import org.joml.Vector3i;
 
 public final class PlotCreatorService {
     private static final ConcurrentHashMap<UUID, Boolean> PLOT_CREATOR_WIREFRAME_ACTIVE = new ConcurrentHashMap<>();
+    /** Gold coins charged in non-Creative mode when saving a building as a plot. */
+    private static final long SURVIVAL_SAVE_GOLD_COST = 100L;
     private PlotCreatorService() {}
 
     public static boolean hasPermission(@Nonnull PlayerRef playerRef) {
@@ -707,7 +719,10 @@ public final class PlotCreatorService {
                     draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.WORK_POI, 1));
                 }
             }
-            if (!hasShopSpot) {
+            boolean needsNpcShopSpots = PlotBuildingKindRequirements.requiresNpcShopSpots(draft, plugin);
+            if (!needsNpcShopSpots) {
+                draft.getSelectedSpots().removeIf(e -> e.type() == PlotCreatorSubstepType.SHOP_SPOT);
+            } else if (!hasShopSpot) {
                 draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.SHOP_SPOT, 1));
             }
             if (!hasShopPoi) {
@@ -839,17 +854,48 @@ public final class PlotCreatorService {
         if (draft.isBuildingEditorMode()) {
             return saveAndFinishBuildingEditor(plugin, session, playerRef, draft);
         }
+        Player player = store.getComponent(ref, Player.getComponentType());
+        SpendBreakdown saveFeePaid = null;
+        TownRecord feeTown = null;
+        TownManager feeTm = null;
+        if (player == null || player.getGameMode() != GameMode.Creative) {
+            CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
+            if (inv == null) {
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.insufficientGold")
+                );
+                return false;
+            }
+            World feeWorld = store.getExternalData().getWorld();
+            feeTm = AetherhavenWorldRegistries.getOrCreateTownManager(feeWorld, plugin);
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            feeTown = uc != null ? TownPlayerResolution.resolveActiveTown(feeWorld, store, ref, feeTm) : null;
+            boolean allowTreasury = uc != null && feeTown != null && feeTown.playerCanSpendTreasuryGold(uc.getUuid());
+            saveFeePaid =
+                GoldCoinPayment.trySpendReturningBreakdown(feeTown, inv, SURVIVAL_SAVE_GOLD_COST, allowTreasury);
+            if (saveFeePaid == null) {
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.insufficientGold")
+                );
+                return false;
+            }
+            if (saveFeePaid.fromTreasury() > 0L && feeTown != null) {
+                feeTm.updateTown(feeTown);
+            }
+        }
         if (draft.isSubmitToCommunity() && plugin.getConfig().get().getCommunityMarketplace().isEnabled()) {
             try {
                 String remapErr =
                     CommunitySubmitLocalSave.prepareDraftForCommunitySubmit(plugin, draft, playerRef.getUuid());
                 if (remapErr != null) {
+                    refundSaveFeeIfNeeded(feeTown, feeTm, player, ref, store, saveFeePaid);
                     playerRef.sendMessage(
                         Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error." + remapErr)
                     );
                     return false;
                 }
             } catch (Exception e) {
+                refundSaveFeeIfNeeded(feeTown, feeTm, player, ref, store, saveFeePaid);
                 playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.saveFailed"));
                 return false;
             }
@@ -858,6 +904,7 @@ public final class PlotCreatorService {
         try {
             PlotCreatorJsonWriter.writeBuilding(buildingFile, draft);
         } catch (Exception e) {
+            refundSaveFeeIfNeeded(feeTown, feeTm, player, ref, store, saveFeePaid);
             playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.saveFailed"));
             return false;
         }
@@ -882,7 +929,6 @@ public final class PlotCreatorService {
         }
         World world = session.getWorld();
         String registerErr = PlotCreatorWorldRegistrar.registerInTown(world, plugin, playerRef.getUuid(), draft, store);
-        Player player = store.getComponent(ref, Player.getComponentType());
         if (registerErr == null) {
             draft.setStep(PlotCreatorStep.DONE);
             playerRef.sendMessage(
@@ -914,6 +960,23 @@ public final class PlotCreatorService {
         );
         endSessionAfterSave(playerRef, session);
         return true;
+    }
+
+    private static void refundSaveFeeIfNeeded(
+        @Nullable TownRecord town,
+        @Nullable TownManager tm,
+        @Nullable Player player,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable SpendBreakdown saveFeePaid
+    ) {
+        if (saveFeePaid == null || player == null) {
+            return;
+        }
+        GoldCoinPayment.refund(town, player, ref, store, saveFeePaid);
+        if (saveFeePaid.fromTreasury() > 0L && town != null && tm != null) {
+            tm.updateTown(town);
+        }
     }
 
     /**

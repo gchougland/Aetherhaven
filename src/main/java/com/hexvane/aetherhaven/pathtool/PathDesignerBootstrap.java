@@ -36,6 +36,13 @@ public final class PathDesignerBootstrap {
                 PathToolTownsfolkToggleInteraction.class,
                 PathToolTownsfolkToggleInteraction.CODEC
             );
+        core
+            .getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPathToolModeJump",
+                PathToolModeJumpInteraction.class,
+                PathToolModeJumpInteraction.CODEC
+            );
     }
 
     public static void register(@Nonnull AetherhavenPlugin core, @Nonnull JavaPlugin plugin) {

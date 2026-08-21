@@ -43,6 +43,13 @@ $Sounds = "../Sounds.ui";
   Disabled: (Background: PatchStyle(TexturePath: "../dialogue.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
   Sounds: $Sounds.@ButtonsLight
 );
+@MgmtTabPaintStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../paintbrush.png", Border: 0, Color: #ffffff), LabelStyle: (...@TabIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../paintbrush.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@TabIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../paintbrush.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@TabIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../paintbrush.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
 @RescueTeleportButtonStyle = TextButtonStyle(
   Default: (Background: PatchStyle(TexturePath: "../teleport.png", Border: 0, Color: #ffffff), LabelStyle: (...@TabIconLbl)),
   Hovered: (Background: PatchStyle(TexturePath: "../teleport.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@TabIconLbl)),
@@ -128,6 +135,17 @@ $C.@PageOverlay {
 
             TextButton #TabLogButton {
               Style: @MgmtTabDialogueStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              Anchor: (Height: 40, Width: 44);
+              Padding: (Full: 0);
+              Text: ".";
+              TooltipText: "";
+            }
+
+            Group { FlexWeight: 1; }
+
+            TextButton #TabPaintButton {
+              Style: @MgmtTabPaintStyle;
               TextTooltipStyle: $C.@DefaultTextTooltipStyle;
               Anchor: (Height: 40, Width: 44);
               Padding: (Full: 0);

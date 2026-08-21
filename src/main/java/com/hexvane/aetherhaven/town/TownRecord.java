@@ -210,6 +210,22 @@ public final class TownRecord {
     @SerializedName("visitorPortalNetworkColor")
     private String visitorPortalNetworkColor;
 
+    /**
+     * When false, town claim block-break protection is off for this town. Null or true keeps protection on (subject to
+     * the server config toggle).
+     */
+    @Nullable
+    @SerializedName("territoryBreakProtection")
+    private Boolean territoryBreakProtection;
+
+    /**
+     * When false, town claim block-use protection is off for this town (containers, doors, other uses). Null or true
+     * keeps protection on (subject to the server config toggle).
+     */
+    @Nullable
+    @SerializedName("territoryUseProtection")
+    private Boolean territoryUseProtection;
+
     @Nullable
     @SerializedName("guardHouseQuestTargetEntityUuid")
     private String guardHouseQuestTargetEntityUuid;
@@ -324,6 +340,11 @@ public final class TownRecord {
     @Nullable
     @SerializedName("unlockedVillagerCosmeticIds")
     private LinkedHashSet<String> unlockedVillagerCosmeticIds;
+
+    /** Town-wide unlocked block palette ids (e.g. {@code walls_blue}). */
+    @Nullable
+    @SerializedName("unlockedBlockPaletteIds")
+    private LinkedHashSet<String> unlockedBlockPaletteIds;
 
     /**
      * Per-resident cosmetic overrides: resident key ({@code role:...} / {@code character:...}) → slot id → cosmetic id.
@@ -573,6 +594,7 @@ public final class TownRecord {
         migratePlotProductionIfNeeded();
         migrateSharedRecipeUnlockFieldsIfNeeded();
         migrateVillagerCosmeticFieldsIfNeeded();
+        migrateBlockPaletteFieldsIfNeeded();
         migrateQuestBoardFieldsIfNeeded();
     }
 
@@ -582,6 +604,12 @@ public final class TownRecord {
         }
         if (villagerCosmeticOverrides == null) {
             villagerCosmeticOverrides = new LinkedHashMap<>();
+        }
+    }
+
+    private void migrateBlockPaletteFieldsIfNeeded() {
+        if (unlockedBlockPaletteIds == null) {
+            unlockedBlockPaletteIds = new LinkedHashSet<>();
         }
     }
 
@@ -1356,6 +1384,24 @@ public final class TownRecord {
 
     public void setVisitorPortalMembersOnly(boolean visitorPortalMembersOnly) {
         this.visitorPortalMembersOnly = visitorPortalMembersOnly;
+    }
+
+    /** True when this town's claim blocks break attempts for players without permission. */
+    public boolean isTerritoryBreakProtectionEnabled() {
+        return territoryBreakProtection == null || territoryBreakProtection;
+    }
+
+    public void setTerritoryBreakProtectionEnabled(boolean territoryBreakProtection) {
+        this.territoryBreakProtection = territoryBreakProtection;
+    }
+
+    /** True when this town's claim blocks using containers, doors, and other interactive blocks. */
+    public boolean isTerritoryUseProtectionEnabled() {
+        return territoryUseProtection == null || territoryUseProtection;
+    }
+
+    public void setTerritoryUseProtectionEnabled(boolean territoryUseProtection) {
+        this.territoryUseProtection = territoryUseProtection;
     }
 
     @Nullable
@@ -2741,6 +2787,26 @@ public final class TownRecord {
     public Set<String> getUnlockedVillagerCosmeticIds() {
         migrateVillagerCosmeticFieldsIfNeeded();
         return Collections.unmodifiableSet(unlockedVillagerCosmeticIds);
+    }
+
+    public boolean unlockBlockPalette(@Nonnull String paletteId) {
+        migrateBlockPaletteFieldsIfNeeded();
+        String id = paletteId.trim();
+        if (id.isEmpty()) {
+            return false;
+        }
+        return unlockedBlockPaletteIds.add(id);
+    }
+
+    public boolean hasBlockPaletteUnlocked(@Nonnull String paletteId) {
+        migrateBlockPaletteFieldsIfNeeded();
+        return unlockedBlockPaletteIds.contains(paletteId.trim());
+    }
+
+    @Nonnull
+    public Set<String> getUnlockedBlockPaletteIds() {
+        migrateBlockPaletteFieldsIfNeeded();
+        return Collections.unmodifiableSet(unlockedBlockPaletteIds);
     }
 
     @Nonnull

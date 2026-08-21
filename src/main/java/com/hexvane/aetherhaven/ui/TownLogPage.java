@@ -82,6 +82,7 @@ public final class TownLogPage extends AetherhavenInteractiveCustomUIPage<TownLo
             commandBuilder.set("#TabPlayersButton.Disabled", false);
             commandBuilder.set("#TabNeedsButton.Disabled", !needsOk);
             commandBuilder.set("#TabLogButton.Disabled", true);
+            commandBuilder.set("#TabPaintButton.Disabled", !needsOk);
             commandBuilder.set("#TabMoveButton.Disabled", !needsOk);
             bindManagementReturnNav(eventBuilder, needsOk);
         }
@@ -162,6 +163,10 @@ public final class TownLogPage extends AetherhavenInteractiveCustomUIPage<TownLo
                 openTownNeeds(ref, store);
                 return;
             }
+            if (data.action.equalsIgnoreCase("OpenBlockPalette")) {
+                openBlockPalette(ref, store);
+                return;
+            }
             if (data.action.equalsIgnoreCase("BeginMoveBuilding")) {
                 openPlotManagement(ref, store, 0, true);
                 return;
@@ -226,6 +231,12 @@ public final class TownLogPage extends AetherhavenInteractiveCustomUIPage<TownLo
             );
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
+                "#TabPaintButton",
+                new EventData().append("Action", "OpenBlockPalette"),
+                false
+            );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
                 "#TabMoveButton",
                 new EventData().append("Action", "BeginMoveBuilding"),
                 false
@@ -263,6 +274,18 @@ public final class TownLogPage extends AetherhavenInteractiveCustomUIPage<TownLo
         }
         player.getPageManager()
             .openCustomPage(ref, store, new VillagerNeedsOverviewPage(playerRef, townId, managementBlockRef, managementBlockPos));
+    }
+
+    private void openBlockPalette(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        if (managementBlockRef == null || managementBlockPos == null) {
+            return;
+        }
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player == null) {
+            return;
+        }
+        player.getPageManager()
+            .openCustomPage(ref, store, new BlockPalettePage(playerRef, townId, managementBlockRef, managementBlockPos));
     }
 
     private void openPlotManagement(

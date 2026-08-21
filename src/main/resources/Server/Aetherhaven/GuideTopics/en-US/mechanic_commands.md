@@ -106,6 +106,14 @@ These are for creative mode or people running the server. Not needed for normal 
   - Permission: `hexvane.aetherhaven.command.aetherhaven.time.dawn`
   - Access: Creative
 
+- **`/ah palette give <paletteId> [player] [amount]`** — Give a Block Palette unlock item (example `walls_blue` or `roofs_softwood`).
+  - Permission: World Editor
+  - Access: Creative
+
+- **`/ah palette unlockall`** — Unlock every Block Palette for your town.
+  - Permission: World Editor
+  - Access: Creative
+
 - **`/ah plots finishassembly`** — Instantly finish every building still assembling in your town.
   - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.plots.finishassembly`

@@ -12,6 +12,7 @@ aetherhaven.plotcreator.error.prefabName = Enter a name for the prefab file.
 aetherhaven.plotcreator.error.prefabExport = Could not save the prefab. Check the bounds and try again.
 aetherhaven.plotcreator.error.prefabAlreadyExists = This building id already has a prefab from an existing plot. Choose a different building id.
 aetherhaven.plotcreator.error.saveFailed = Could not save the building file.
+aetherhaven.plotcreator.error.insufficientGold = You need 100 gold coins to turn a building into a plot. Use town treasury gold or coins you are holding.
 aetherhaven.plotcreator.error.anchorOutsideBounds = The plot sign must be inside the build bounds.
 aetherhaven.plotcreator.error.outsideBounds = Click inside the marked bounds.
 aetherhaven.plotcreator.error.wrongBlock = That is not the block needed for this step.
@@ -112,7 +113,7 @@ aetherhaven.plotcreator.poiActivity.option.craft = Craft at bench
 aetherhaven.plotcreator.poiActivity.option.read = Read
 aetherhaven.plotcreator.poiActivity.option.leisure = Leisure
 
-aetherhaven.plotcreator.button.save = Save building
+aetherhaven.plotcreator.button.save = Save building (100 gold)
 aetherhaven.plotcreator.button.addFromInventory = Add from inventory
 aetherhaven.plotcreator.button.addResourceType = Add resource type
 aetherhaven.plotcreator.button.useBuildShape = Use prefab materials
@@ -160,7 +161,7 @@ aetherhaven.plotcreator.field.goldCost = Gold cost from treasury
 aetherhaven.plotcreator.field.propGoldPrice = Shop gold price
 aetherhaven.plotcreator.field.propGoldPrice.hint = How many gold coins Cap'n Clive asks for this prop.
 
-aetherhaven.plotcreator.session.started = Plot creator started. Use the HUD and staff keys while you work in the world.
+aetherhaven.plotcreator.session.started = Plot creator started. Saving a building as a plot costs 100 gold coins. Use the HUD and staff keys while you work in the world.
 
 aetherhaven.plotcreator.hud.title = Plot creator
 
@@ -198,7 +199,7 @@ aetherhaven.plotcreator.hud.SUBSTEP.secondaryFestivalSpot = Remove a festival sp
 aetherhaven.plotcreator.hud.SUBSTEP.q = Go back (extra placement blocks from the step you leave are removed)
 aetherhaven.plotcreator.hud.MATERIALS.f = Open build materials menu
 aetherhaven.plotcreator.hud.CONFIGURE.f = Open building settings (name, tags, and options)
-aetherhaven.plotcreator.hud.REVIEW.f = Save the building
+aetherhaven.plotcreator.hud.REVIEW.f = Save the building (costs 100 gold coins)
 
 aetherhaven.plotcreator.hud.kindSelected = Type: {kind}
 
@@ -272,7 +273,7 @@ aetherhaven.plotcreator.button.next = Continue
 
 aetherhaven.plotcreator.step.WELCOME.title = Welcome
 aetherhaven.plotcreator.step.WELCOME.short = Welcome
-aetherhaven.plotcreator.step.WELCOME.hint = Turn something you built into a town building.
+aetherhaven.plotcreator.step.WELCOME.hint = Turn something you built into a town building. Saving it as a plot costs 100 gold coins from your town treasury or your coins. Creative mode does not pay.
 
 aetherhaven.plotcreator.step.BOUNDS.title = Mark build area
 aetherhaven.plotcreator.step.BOUNDS.short = Bounds
@@ -427,7 +428,8 @@ aetherhaven.plotcreator.frontFacing.West = West
 
 aetherhaven.plotcreator.step.REVIEW.title = Review
 aetherhaven.plotcreator.step.REVIEW.short = Review
-aetherhaven.plotcreator.step.REVIEW.hint = Save the building. You will get a plot token to place it in town.
+aetherhaven.plotcreator.step.REVIEW.hint = Saving costs 100 gold coins from your town treasury or your coins. You will get a plot token to place it in town. Creative mode does not pay.
+aetherhaven.plotcreator.step.REVIEW.costNotice = Saving this building as a plot costs 100 gold coins.\n\n{details}
 
 aetherhaven.plotcreator.step.DONE.title = Done
 aetherhaven.plotcreator.step.DONE.hint = Your building was saved. Use the plot token from your inventory to place it in a town.
@@ -454,6 +456,7 @@ aetherhaven.plotcreator.substep.workRole.florist = Click where the florist shoul
 aetherhaven.plotcreator.substep.workRole.pyrotechnic = Click where the pyrotechnic should work. Face the way they should look.
 aetherhaven.plotcreator.substep.workRole.crystal_keeper = Click where the crystal keeper should work. Face the way they should look.
 aetherhaven.plotcreator.substep.workRole.chef = Click where the chef should work. Face the way they should look.
+aetherhaven.plotcreator.substep.workRole.furniture_merchant = Click where the furniture merchant should work. Face the way they should look.
 aetherhaven.plotcreator.substep.workRole.clown = Click where the clown should work. Face the way they should look.
 aetherhaven.plotcreator.substep.workRole.guard = Click where the guard should stand. Face the way they should look.
 aetherhaven.plotcreator.substep.workRole.priestess = Click where the priestess should stand at the altar. Face the way she should look.
@@ -561,6 +564,7 @@ aetherhaven.plotcreator.spot.workRole.florist = Florist work spot
 aetherhaven.plotcreator.spot.workRole.pyrotechnic = Pyrotechnic work spot
 aetherhaven.plotcreator.spot.workRole.crystal_keeper = Crystal keeper work spot
 aetherhaven.plotcreator.spot.workRole.chef = Chef work spot
+aetherhaven.plotcreator.spot.workRole.furniture_merchant = Furniture merchant work spot
 aetherhaven.plotcreator.spot.workRole.clown = Clown work spot
 aetherhaven.plotcreator.spot.workRole.guard = Guard stand
 aetherhaven.plotcreator.spot.workRole.priestess = Priestess work spot
@@ -628,6 +632,7 @@ aetherhaven.plotcreator.spot.desc.workRole.florist = The florist works here duri
 aetherhaven.plotcreator.spot.desc.workRole.pyrotechnic = The pyrotechnic works here during the day.
 aetherhaven.plotcreator.spot.desc.workRole.crystal_keeper = The crystal keeper works here during the day.
 aetherhaven.plotcreator.spot.desc.workRole.chef = The chef works here during the day.
+aetherhaven.plotcreator.spot.desc.workRole.furniture_merchant = The furniture merchant works here during the day.
 aetherhaven.plotcreator.spot.desc.workRole.clown = The clown works here during the day.
 aetherhaven.plotcreator.spot.desc.workRole.guard = Guards stand here during the festival.
 aetherhaven.plotcreator.spot.desc.workRole.priestess = The priestess stands here at the altar.

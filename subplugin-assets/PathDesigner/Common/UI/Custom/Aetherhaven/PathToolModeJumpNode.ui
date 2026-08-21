@@ -1,0 +1,40 @@
+$C = "../Common.ui";
+
+@ModeJumpTabStyle = (
+  Default: (Background: (TexturePath: "../Common/Tab.png", Border: 8)),
+  Hovered: (Background: (TexturePath: "../Common/Tab.png", Border: 8, Color: #c5d0dc)),
+  Pressed: (Background: (TexturePath: "../Common/Tab.png", Border: 8, Color: #8fa0b0)),
+  Disabled: (Background: (TexturePath: "../Common/Tab.png", Border: 8, Color: #5c6a78(0.45)))
+);
+
+Group #ModeJumpNode {
+  LayoutMode: Top;
+  Anchor: (Width: 92, Right: 4);
+
+  Button #ModeButton {
+    LayoutMode: Center;
+    Anchor: (Width: 92, Height: 58, Bottom: 4);
+    Style: @ModeJumpTabStyle;
+    Padding: (Full: 0);
+
+    Group #IconStack {
+      LayoutMode: Center;
+      Anchor: (Full: 0);
+      HitTestVisible: false;
+
+      AssetImage #ModeIcon {
+        Anchor: (Width: 24, Height: 24);
+        AssetPath: "UI/Custom/location.png";
+        FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+        HitTestVisible: false;
+      }
+    }
+  }
+
+  Label #ModeLabel {
+    Style: (...$C.@DefaultLabelStyle, TextColor: #c8d0d8, FontSize: 11, HorizontalAlignment: Center, Wrap: true);
+    Text: "";
+    Anchor: (Horizontal: 2);
+    HitTestVisible: false;
+  }
+}

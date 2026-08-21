@@ -74,9 +74,8 @@ public final class ConstructionDefinition {
     private String requiredVillagerId;
 
     /**
-     * Prefab block type ids (same namespace as {@link BlockType#getId()}) excluded from the incremental assembly frontier:
-     * placed in one batch immediately before {@link ConstructionPasteOps#finishFluidsAndEntities} (still after the main
-     * shell/tree so structure assembles first). Empty = default (all non-air cells follow the normal frontier).
+     * Unused. Kept so older construction JSON with {@code assemblyDeferredBlockIds} still loads.
+     * Support blocks (trunks, leaves, etc.) place during assembly with deco support instead.
      */
     @SerializedName("assemblyDeferredBlockIds")
     private List<String> assemblyDeferredBlockIds = Collections.emptyList();
@@ -404,7 +403,7 @@ public final class ConstructionDefinition {
         return materials != null ? materials : Collections.emptyList();
     }
 
-    /** Block type ids deferred to the post-frontier batch assembly step; see {@link #assemblyDeferredBlockIds}. */
+    /** Unused; see {@link #assemblyDeferredBlockIds}. */
     @Nonnull
     public Set<String> getAssemblyDeferredBlockIds() {
         List<String> raw = assemblyDeferredBlockIds;

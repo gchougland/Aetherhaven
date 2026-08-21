@@ -156,13 +156,14 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
         this.gizmoMode = gizmoMode;
     }
 
-    /** Cycles: Place -> Move -> Rotate -> Remove -> Replace filter -> Style designer -> Place. */
+    /** Cycles: Place -> Move -> Rotate -> Remove -> Restyle -> Replace filter -> Style designer -> Place. */
     public void cycleGizmoMode() {
         this.gizmoMode = switch (gizmoMode) {
             case Commit -> PathToolGizmoMode.Translate;
             case Translate -> PathToolGizmoMode.Rotate;
             case Rotate -> PathToolGizmoMode.Remove;
-            case Remove -> PathToolGizmoMode.ReplaceFilter;
+            case Remove -> PathToolGizmoMode.Restyle;
+            case Restyle -> PathToolGizmoMode.ReplaceFilter;
             case ReplaceFilter -> PathToolGizmoMode.StyleDesigner;
             case StyleDesigner -> PathToolGizmoMode.Commit;
         };
@@ -176,6 +177,7 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
             case Translate -> "Move";
             case Rotate -> "Rotate";
             case Remove -> "Remove";
+            case Restyle -> "Restyle";
             case ReplaceFilter -> "ReplaceFilter";
             case StyleDesigner -> "StyleDesigner";
         };

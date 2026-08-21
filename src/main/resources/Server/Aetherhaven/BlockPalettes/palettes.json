@@ -1,0 +1,161 @@
+{
+  "categories": [
+    {
+      "id": "walls",
+      "palettes": [
+        { "id": "walls_natural", "displayName": "Natural", "familyKey": "", "iconBlockId": "Wood_Village_Wall_Full" },
+        { "id": "walls_black", "displayName": "Black", "familyKey": "Black", "iconBlockId": "Wood_Village_Wall_Black_Full" },
+        { "id": "walls_blue", "displayName": "Blue", "familyKey": "Blue", "iconBlockId": "Wood_Village_Wall_Blue_Full" },
+        { "id": "walls_cyan", "displayName": "Cyan", "familyKey": "Cyan", "iconBlockId": "Wood_Village_Wall_Cyan_Full" },
+        { "id": "walls_green", "displayName": "Green", "familyKey": "Green", "iconBlockId": "Wood_Village_Wall_Green_Full" },
+        { "id": "walls_grey", "displayName": "Grey", "familyKey": "Grey", "iconBlockId": "Wood_Village_Wall_Grey_Full" },
+        { "id": "walls_grey_dark", "displayName": "Dark Grey", "familyKey": "GreyDark", "iconBlockId": "Wood_Village_Wall_GreyDark_Full" },
+        { "id": "walls_lime", "displayName": "Lime", "familyKey": "Lime", "iconBlockId": "Wood_Village_Wall_Lime_Full" },
+        { "id": "walls_ocean", "displayName": "Ocean", "familyKey": "Ocean", "iconBlockId": "Wood_Village_Wall_Ocean_Full" },
+        { "id": "walls_orange", "displayName": "Orange", "familyKey": "Orange", "iconBlockId": "Wood_Village_Wall_Orange_Full" },
+        { "id": "walls_pink", "displayName": "Pink", "familyKey": "Pink", "iconBlockId": "Wood_Village_Wall_Pink_Full" },
+        { "id": "walls_purple", "displayName": "Purple", "familyKey": "Purple", "iconBlockId": "Wood_Village_Wall_Purple_Full" },
+        { "id": "walls_red", "displayName": "Red", "familyKey": "Red", "iconBlockId": "Wood_Village_Wall_Red_Full" },
+        { "id": "walls_red_dark", "displayName": "Dark Red", "familyKey": "RedDark", "iconBlockId": "Wood_Village_Wall_RedDark_Full" },
+        { "id": "walls_white", "displayName": "White", "familyKey": "White", "iconBlockId": "Wood_Village_Wall_White_Full" },
+        { "id": "walls_yellow", "displayName": "Yellow", "familyKey": "Yellow", "iconBlockId": "Wood_Village_Wall_Yellow_Full" }
+      ]
+    },
+    {
+      "id": "trunks",
+      "palettes": [
+        { "id": "trunks_amber", "displayName": "Amber", "familyKey": "Amber", "iconBlockId": "Wood_Amber_Trunk" },
+        { "id": "trunks_apple", "displayName": "Apple", "familyKey": "Apple", "iconBlockId": "Wood_Apple_Trunk" },
+        { "id": "trunks_ash", "displayName": "Ash", "familyKey": "Ash", "iconBlockId": "Wood_Ash_Trunk" },
+        { "id": "trunks_aspen", "displayName": "Aspen", "familyKey": "Aspen", "iconBlockId": "Wood_Aspen_Trunk" },
+        { "id": "trunks_azure", "displayName": "Azure", "familyKey": "Azure", "iconBlockId": "Wood_Azure_Trunk" },
+        { "id": "trunks_bamboo", "displayName": "Bamboo", "familyKey": "Bamboo", "iconBlockId": "Wood_Bamboo_Trunk" },
+        { "id": "trunks_banyan", "displayName": "Banyan", "familyKey": "Banyan", "iconBlockId": "Wood_Banyan_Trunk" },
+        { "id": "trunks_beech", "displayName": "Beech", "familyKey": "Beech", "iconBlockId": "Wood_Beech_Trunk" },
+        { "id": "trunks_birch", "displayName": "Birch", "familyKey": "Birch", "iconBlockId": "Wood_Birch_Trunk" },
+        { "id": "trunks_blackwood", "displayName": "Blackwood", "familyKey": "Blackwood", "iconBlockId": "Wood_Blackwood_Trunk" },
+        { "id": "trunks_bottletree", "displayName": "Bottletree", "familyKey": "Bottletree", "iconBlockId": "Wood_Bottletree_Trunk" },
+        { "id": "trunks_burnt", "displayName": "Burnt", "familyKey": "Burnt", "iconBlockId": "Wood_Burnt_Trunk" },
+        { "id": "trunks_camphor", "displayName": "Camphor", "familyKey": "Camphor", "iconBlockId": "Wood_Camphor_Trunk" },
+        { "id": "trunks_cedar", "displayName": "Cedar", "familyKey": "Cedar", "iconBlockId": "Wood_Cedar_Trunk" },
+        { "id": "trunks_crystal", "displayName": "Crystal", "familyKey": "Crystal", "iconBlockId": "Wood_Crystal_Trunk" },
+        { "id": "trunks_darkwood", "displayName": "Darkwood", "familyKey": "Darkwood", "iconBlockId": "Wood_Darkwood_Trunk" },
+        { "id": "trunks_deadwood", "displayName": "Deadwood", "familyKey": "Deadwood", "iconBlockId": "Wood_Deadwood_Trunk" },
+        { "id": "trunks_dry", "displayName": "Dry", "familyKey": "Dry", "iconBlockId": "Wood_Dry_Trunk" },
+        { "id": "trunks_drywood", "displayName": "Drywood", "familyKey": "Drywood", "iconBlockId": "Wood_Drywood_Trunk" },
+        { "id": "trunks_fig_blue", "displayName": "Blue Fig", "familyKey": "Fig_Blue", "iconBlockId": "Wood_Fig_Blue_Trunk" },
+        { "id": "trunks_fir", "displayName": "Fir", "familyKey": "Fir", "iconBlockId": "Wood_Fir_Trunk" },
+        { "id": "trunks_fire", "displayName": "Fire", "familyKey": "Fire", "iconBlockId": "Wood_Fire_Trunk" },
+        { "id": "trunks_goldenwood", "displayName": "Goldenwood", "familyKey": "Goldenwood", "iconBlockId": "Wood_Goldenwood_Trunk" },
+        { "id": "trunks_greenwood", "displayName": "Greenwood", "familyKey": "Greenwood", "iconBlockId": "Wood_Greenwood_Trunk" },
+        { "id": "trunks_gumboab", "displayName": "Gumboab", "familyKey": "Gumboab", "iconBlockId": "Wood_Gumboab_Trunk" },
+        { "id": "trunks_hardwood", "displayName": "Hardwood", "familyKey": "Hardwood", "iconBlockId": "Wood_Hardwood_Trunk" },
+        { "id": "trunks_ice", "displayName": "Ice", "familyKey": "Ice", "iconBlockId": "Wood_Ice_Trunk" },
+        { "id": "trunks_jungle", "displayName": "Jungle", "familyKey": "Jungle", "iconBlockId": "Wood_Jungle_Trunk" },
+        { "id": "trunks_lightwood", "displayName": "Lightwood", "familyKey": "Lightwood", "iconBlockId": "Wood_Lightwood_Trunk" },
+        { "id": "trunks_maple", "displayName": "Maple", "familyKey": "Maple", "iconBlockId": "Wood_Maple_Trunk" },
+        { "id": "trunks_oak", "displayName": "Oak", "familyKey": "Oak", "iconBlockId": "Wood_Oak_Trunk" },
+        { "id": "trunks_palm", "displayName": "Palm", "familyKey": "Palm", "iconBlockId": "Wood_Palm_Trunk" },
+        { "id": "trunks_palo", "displayName": "Palo", "familyKey": "Palo", "iconBlockId": "Wood_Palo_Trunk" },
+        { "id": "trunks_petrified", "displayName": "Petrified", "familyKey": "Petrified", "iconBlockId": "Wood_Petrified_Trunk" },
+        { "id": "trunks_poisoned", "displayName": "Poisoned", "familyKey": "Poisoned", "iconBlockId": "Wood_Poisoned_Trunk" },
+        { "id": "trunks_redwood", "displayName": "Redwood", "familyKey": "Redwood", "iconBlockId": "Wood_Redwood_Trunk" },
+        { "id": "trunks_sallow", "displayName": "Sallow", "familyKey": "Sallow", "iconBlockId": "Wood_Sallow_Trunk" },
+        { "id": "trunks_softwood", "displayName": "Softwood", "familyKey": "Softwood", "iconBlockId": "Wood_Softwood_Trunk" },
+        { "id": "trunks_spiral", "displayName": "Spiral", "familyKey": "Spiral", "iconBlockId": "Wood_Spiral_Trunk" },
+        { "id": "trunks_stormbark", "displayName": "Stormbark", "familyKey": "Stormbark", "iconBlockId": "Wood_Stormbark_Trunk" },
+        { "id": "trunks_tropicalwood", "displayName": "Tropicalwood", "familyKey": "Tropicalwood", "iconBlockId": "Wood_Tropicalwood_Trunk" },
+        { "id": "trunks_willow", "displayName": "Willow", "familyKey": "Willow", "iconBlockId": "Wood_Willow_Trunk" },
+        { "id": "trunks_windwillow", "displayName": "Windwillow", "familyKey": "Windwillow", "iconBlockId": "Wood_Windwillow_Trunk" },
+        { "id": "trunks_wisteria_wild", "displayName": "Wild Wisteria", "familyKey": "Wisteria_Wild", "iconBlockId": "Wood_Wisteria_Wild_Trunk" }
+      ]
+    },
+    {
+      "id": "planks",
+      "palettes": [
+        { "id": "planks_softwood", "displayName": "Softwood", "familyKey": "Softwood", "iconBlockId": "Wood_Softwood_Planks" },
+        { "id": "planks_hardwood", "displayName": "Hardwood", "familyKey": "Hardwood", "iconBlockId": "Wood_Hardwood_Planks" },
+        { "id": "planks_darkwood", "displayName": "Darkwood", "familyKey": "Darkwood", "iconBlockId": "Wood_Darkwood_Planks" },
+        { "id": "planks_lightwood", "displayName": "Lightwood", "familyKey": "Lightwood", "iconBlockId": "Wood_Lightwood_Planks" },
+        { "id": "planks_redwood", "displayName": "Redwood", "familyKey": "Redwood", "iconBlockId": "Wood_Redwood_Planks" },
+        { "id": "planks_tropicalwood", "displayName": "Tropicalwood", "familyKey": "Tropicalwood", "iconBlockId": "Wood_Tropicalwood_Planks" },
+        { "id": "planks_greenwood", "displayName": "Greenwood", "familyKey": "Greenwood", "iconBlockId": "Wood_Greenwood_Planks" },
+        { "id": "planks_goldenwood", "displayName": "Goldenwood", "familyKey": "Goldenwood", "iconBlockId": "Wood_Goldenwood_Planks" },
+        { "id": "planks_drywood", "displayName": "Drywood", "familyKey": "Drywood", "iconBlockId": "Wood_Drywood_Planks" }
+      ]
+    },
+    {
+      "id": "cobble",
+      "palettes": [
+        { "id": "cobble_stone", "displayName": "Stone", "familyKey": "Stone", "iconBlockId": "Rock_Stone_Cobble" },
+        { "id": "cobble_ledge", "displayName": "Ledge", "familyKey": "Ledge", "iconBlockId": "Rock_Ledge_Cobble" },
+        { "id": "cobble_sandstone", "displayName": "Sandstone", "familyKey": "Sandstone", "iconBlockId": "Rock_Sandstone_Cobble" },
+        { "id": "cobble_sandstone_red", "displayName": "Red Sandstone", "familyKey": "Sandstone_Red", "iconBlockId": "Rock_Sandstone_Red_Cobble" },
+        { "id": "cobble_lime", "displayName": "Limestone", "familyKey": "Lime", "iconBlockId": "Rock_Lime_Cobble" },
+        { "id": "cobble_basalt", "displayName": "Basalt", "familyKey": "Basalt", "iconBlockId": "Rock_Basalt_Cobble" },
+        { "id": "cobble_marble", "displayName": "Marble", "familyKey": "Marble", "iconBlockId": "Rock_Marble_Cobble" },
+        { "id": "cobble_slate", "displayName": "Slate", "familyKey": "Slate", "iconBlockId": "Rock_Slate_Cobble" },
+        { "id": "cobble_chalk", "displayName": "Chalk", "familyKey": "Chalk", "iconBlockId": "Rock_Chalk_Cobble" },
+        { "id": "cobble_shale", "displayName": "Shale", "familyKey": "Shale", "iconBlockId": "Rock_Shale_Cobble" }
+      ]
+    },
+    {
+      "id": "bricks",
+      "palettes": [
+        { "id": "bricks_stone", "displayName": "Stone", "familyKey": "Stone", "iconBlockId": "Rock_Stone_Brick" },
+        { "id": "bricks_ledge", "displayName": "Ledge", "familyKey": "Ledge", "iconBlockId": "Rock_Ledge_Brick" },
+        { "id": "bricks_sandstone", "displayName": "Sandstone", "familyKey": "Sandstone", "iconBlockId": "Rock_Sandstone_Brick" },
+        { "id": "bricks_sandstone_red", "displayName": "Red Sandstone", "familyKey": "Sandstone_Red", "iconBlockId": "Rock_Sandstone_Red_Brick" },
+        { "id": "bricks_lime", "displayName": "Limestone", "familyKey": "Lime", "iconBlockId": "Rock_Lime_Brick" },
+        { "id": "bricks_basalt", "displayName": "Basalt", "familyKey": "Basalt", "iconBlockId": "Rock_Basalt_Brick" },
+        { "id": "bricks_marble", "displayName": "Marble", "familyKey": "Marble", "iconBlockId": "Rock_Marble_Brick" },
+        { "id": "bricks_slate", "displayName": "Slate", "familyKey": "Slate", "iconBlockId": "Rock_Slate_Brick" },
+        { "id": "bricks_gold", "displayName": "Gold", "familyKey": "Gold", "iconBlockId": "Rock_Gold_Brick" }
+      ]
+    },
+    {
+      "id": "cloth",
+      "palettes": [
+        { "id": "cloth_white", "displayName": "White", "familyKey": "White", "iconBlockId": "Cloth_Block_Wool_White" },
+        { "id": "cloth_black", "displayName": "Black", "familyKey": "Black", "iconBlockId": "Cloth_Block_Wool_Black" },
+        { "id": "cloth_gray", "displayName": "Gray", "familyKey": "Gray", "iconBlockId": "Cloth_Block_Wool_Gray" },
+        { "id": "cloth_gray_light", "displayName": "Light Gray", "familyKey": "Gray_Light", "iconBlockId": "Cloth_Block_Wool_Gray_Light" },
+        { "id": "cloth_red", "displayName": "Red", "familyKey": "Red", "iconBlockId": "Cloth_Block_Wool_Red" },
+        { "id": "cloth_red_light", "displayName": "Light Red", "familyKey": "Red_Light", "iconBlockId": "Cloth_Block_Wool_Red_Light" },
+        { "id": "cloth_blue", "displayName": "Blue", "familyKey": "Blue", "iconBlockId": "Cloth_Block_Wool_Blue" },
+        { "id": "cloth_blue_light", "displayName": "Light Blue", "familyKey": "Blue_Light", "iconBlockId": "Cloth_Block_Wool_Blue_Light" },
+        { "id": "cloth_green", "displayName": "Green", "familyKey": "Green", "iconBlockId": "Cloth_Block_Wool_Green" },
+        { "id": "cloth_green_light", "displayName": "Light Green", "familyKey": "Green_Light", "iconBlockId": "Cloth_Block_Wool_Green_Light" },
+        { "id": "cloth_yellow", "displayName": "Yellow", "familyKey": "Yellow", "iconBlockId": "Cloth_Block_Wool_Yellow" },
+        { "id": "cloth_yellow_light", "displayName": "Light Yellow", "familyKey": "Yellow_Light", "iconBlockId": "Cloth_Block_Wool_Yellow_Light" },
+        { "id": "cloth_orange", "displayName": "Orange", "familyKey": "Orange", "iconBlockId": "Cloth_Block_Wool_Orange" },
+        { "id": "cloth_pink", "displayName": "Pink", "familyKey": "Pink", "iconBlockId": "Cloth_Block_Wool_Pink" },
+        { "id": "cloth_purple", "displayName": "Purple", "familyKey": "Purple", "iconBlockId": "Cloth_Block_Wool_Purple" },
+        { "id": "cloth_cyan", "displayName": "Cyan", "familyKey": "Cyan", "iconBlockId": "Cloth_Block_Wool_Cyan" }
+      ]
+    },
+    {
+      "id": "roofs",
+      "palettes": [
+        { "id": "roofs_softwood", "displayName": "Softwood", "familyKey": "wood:Softwood", "iconBlockId": "Wood_Softwood_Roof" },
+        { "id": "roofs_hardwood", "displayName": "Hardwood", "familyKey": "wood:Hardwood", "iconBlockId": "Wood_Hardwood_Roof" },
+        { "id": "roofs_darkwood", "displayName": "Darkwood", "familyKey": "wood:Darkwood", "iconBlockId": "Wood_Darkwood_Roof" },
+        { "id": "roofs_lightwood", "displayName": "Lightwood", "familyKey": "wood:Lightwood", "iconBlockId": "Wood_Lightwood_Roof" },
+        { "id": "roofs_redwood", "displayName": "Redwood", "familyKey": "wood:Redwood", "iconBlockId": "Wood_Redwood_Roof" },
+        { "id": "roofs_tropicalwood", "displayName": "Tropicalwood", "familyKey": "wood:Tropicalwood", "iconBlockId": "Wood_Tropicalwood_Roof" },
+        { "id": "roofs_greenwood", "displayName": "Greenwood", "familyKey": "wood:Greenwood", "iconBlockId": "Wood_Greenwood_Roof" },
+        { "id": "roofs_goldenwood", "displayName": "Goldenwood", "familyKey": "wood:Goldenwood", "iconBlockId": "Wood_Goldenwood_Roof" },
+        { "id": "roofs_drywood", "displayName": "Drywood", "familyKey": "wood:Drywood", "iconBlockId": "Wood_Drywood_Roof" },
+        { "id": "roofs_cloth_green", "displayName": "Green Cloth", "familyKey": "cloth:Green", "iconBlockId": "Cloth_Roof_Green" },
+        { "id": "roofs_cloth_blue", "displayName": "Blue Cloth", "familyKey": "cloth:Blue", "iconBlockId": "Cloth_Roof_Blue" },
+        { "id": "roofs_cloth_red", "displayName": "Red Cloth", "familyKey": "cloth:Red", "iconBlockId": "Cloth_Roof_Red" },
+        { "id": "roofs_cloth_yellow", "displayName": "Yellow Cloth", "familyKey": "cloth:Yellow", "iconBlockId": "Cloth_Roof_Yellow" },
+        { "id": "roofs_cloth_orange", "displayName": "Orange Cloth", "familyKey": "cloth:Orange", "iconBlockId": "Cloth_Roof_Orange" },
+        { "id": "roofs_cloth_white", "displayName": "White Cloth", "familyKey": "cloth:White", "iconBlockId": "Cloth_Roof_White" },
+        { "id": "roofs_cloth_hide", "displayName": "Hide", "familyKey": "cloth:Hide", "iconBlockId": "Cloth_Roof_Hide" },
+        { "id": "roofs_stone_cobble", "displayName": "Stone Cobble", "familyKey": "cobble_roof:Stone", "iconBlockId": "Rock_Stone_Cobble_Roof" },
+        { "id": "roofs_stone_brick", "displayName": "Stone Brick", "familyKey": "brick_roof:Stone", "iconBlockId": "Rock_Stone_Brick_Roof" }
+      ]
+    }
+  ]
+}

@@ -24,6 +24,11 @@ public final class PathCommitRecord {
     /** When false, townsfolk ignore this path. Missing JSON field stays true. */
     @SerializedName("villagerNav")
     public boolean villagerNav = true;
+    /**
+     * Path width in blocks at cement time. 0 or missing means unknown (legacy commits); restyle may infer it.
+     */
+    @SerializedName("pathWidthBlocks")
+    public int pathWidthBlocks;
 
     @Nonnull
     public UUID getIdUuid() {

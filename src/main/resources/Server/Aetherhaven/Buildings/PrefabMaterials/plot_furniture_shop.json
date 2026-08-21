@@ -1,0 +1,130 @@
+{
+  "constructionId": "plot_furniture_shop",
+  "prefabPath": "Furniture_Shop.prefab.json",
+  "materials": [
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 159
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 99
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 93
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 89
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 86
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 81
+    },
+    {
+      "itemId": "Cloth_Block_Wool_Green",
+      "count": 65
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Flat",
+      "count": 63
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 45
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 42
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 34
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 30
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 24
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 14
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Mossy",
+      "count": 13
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 7
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Softwood_Ornate",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Crude_Candle",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Human_Ruins_Bed",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Human_Ruins_Chair",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Kweebec_Wardrobe",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Lumberjack_Chair",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Bed",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Chair",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Chair",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Sign",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Stool",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Table",
+      "count": 1
+    },
+    {
+      "itemId": "Wood_Softwood_Fence_Gate",
+      "count": 1
+    }
+  ]
+}

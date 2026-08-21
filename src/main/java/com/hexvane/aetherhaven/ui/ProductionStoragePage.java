@@ -195,7 +195,16 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
                 commandBuilder.set(base + " #Name.TextSpans", nameMsg);
                 long have = state.getAmount(itemId);
                 commandBuilder.set(base + " #Qty.TextSpans", Message.raw(have + "/" + lineCap));
-                int ticks = ProductionTimeScaling.effectiveTicksWithWorkplaceSpeed(cfg, entry.ticksAtCursor(cursor), speedMul);
+                int ticks =
+                    ProductionTimeScaling.effectiveTicksForItemAtPlot(
+                        cfg,
+                        entry.ticksAtCursor(cursor),
+                        speedMul,
+                        world,
+                        plot.getSignX(),
+                        plot.getSignZ(),
+                        itemId
+                    );
                 float progress = ticks > 0 ? Math.min(1f, state.getSlotTickAccum(col) / (float) ticks) : 0f;
                 commandBuilder.set(base + " #Prog.Value", progress);
                 commandBuilder.set(

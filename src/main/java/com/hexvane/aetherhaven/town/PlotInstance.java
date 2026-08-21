@@ -9,7 +9,9 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -160,6 +162,14 @@ public final class PlotInstance {
     @Nullable
     @SerializedName("allowNpcShopPurchases")
     private Boolean allowNpcShopPurchases;
+
+    /**
+     * Per-category active block palette id for this plot ({@code walls} → {@code walls_blue}). Missing category means
+     * prefab default.
+     */
+    @Nullable
+    @SerializedName("blockPaletteSelections")
+    private LinkedHashMap<String, String> blockPaletteSelections;
 
     public PlotInstance() {}
 
@@ -694,5 +704,46 @@ public final class PlotInstance {
 
     public void setAllowNpcShopPurchases(boolean allowNpcShopPurchases) {
         this.allowNpcShopPurchases = allowNpcShopPurchases;
+    }
+
+    @Nonnull
+    public Map<String, String> getBlockPaletteSelections() {
+        if (blockPaletteSelections == null || blockPaletteSelections.isEmpty()) {
+            return Map.of();
+        }
+        return Collections.unmodifiableMap(new LinkedHashMap<>(blockPaletteSelections));
+    }
+
+    @Nullable
+    public String getBlockPaletteSelection(@Nonnull String category) {
+        if (blockPaletteSelections == null) {
+            return null;
+        }
+        String v = blockPaletteSelections.get(category.trim());
+        return v != null && !v.isBlank() ? v.trim() : null;
+    }
+
+    public void setBlockPaletteSelection(@Nonnull String category, @Nullable String paletteId) {
+        String cat = category.trim();
+        if (cat.isEmpty()) {
+            return;
+        }
+        if (paletteId == null || paletteId.isBlank()) {
+            if (blockPaletteSelections != null) {
+                blockPaletteSelections.remove(cat);
+                if (blockPaletteSelections.isEmpty()) {
+                    blockPaletteSelections = null;
+                }
+            }
+            return;
+        }
+        if (blockPaletteSelections == null) {
+            blockPaletteSelections = new LinkedHashMap<>();
+        }
+        blockPaletteSelections.put(cat, paletteId.trim());
+    }
+
+    public void clearBlockPaletteSelections() {
+        blockPaletteSelections = null;
     }
 }

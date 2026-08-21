@@ -1,0 +1,77 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@IconLbl = (
+  FontSize: 6,
+  TextColor: #ffffff(0.01),
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+@PaletteArrowBackStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #5c6a78(0.55)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+@PaletteArrowForwardStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #5c6a78(0.55)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+Group #CategoryRow {
+  LayoutMode: Left;
+  Anchor: (Bottom: 8, Left: 0, Right: 0);
+  Padding: (Horizontal: 8, Vertical: 6);
+  Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+  Label #CategoryName {
+    Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #e8dcc8, VerticalAlignment: Center);
+    Anchor: (Width: 110, Height: 48, Right: 8);
+    Text: "";
+  }
+
+  TextButton #PalettePrevButton {
+    Style: @PaletteArrowBackStyle;
+    Anchor: (Width: 36, Height: 36, Right: 8);
+    Padding: (Full: 0);
+    Text: ".";
+  }
+
+  Group #PalettePreview {
+    LayoutMode: Middle;
+    Anchor: (Width: 56, Height: 48, Right: 8);
+
+    Group #IconBox {
+      LayoutMode: Full;
+      Visible: false;
+      Anchor: (Width: 48, Height: 48);
+      Background: #1a2530;
+      Padding: 2;
+
+      AssetImage #Icon {
+        Anchor: (Full: 0);
+        FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+      }
+    }
+
+    Label #DefaultLabel {
+      Style: (...$C.@DefaultLabelStyle, HorizontalAlignment: Center, VerticalAlignment: Center, TextColor: #a89878);
+      Visible: true;
+      Anchor: (Width: 56, Height: 48);
+      Text: "";
+    }
+  }
+
+  TextButton #PaletteNextButton {
+    Style: @PaletteArrowForwardStyle;
+    Anchor: (Width: 36, Height: 36);
+    Padding: (Full: 0);
+    Text: ".";
+  }
+}

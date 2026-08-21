@@ -87,6 +87,7 @@ public final class AetherhavenCoreBootstrap {
         plugin.registerModCommonAssetDelivery();
         plugin.registerPlotTokenIconPackets();
         plugin.registerPropIconPackets();
+        plugin.registerBlockPaletteIconPackets();
 
         AetherhavenSharedEntityComponents.register(plugin);
         AetherhavenSharedChunkComponents.register(plugin);
@@ -101,6 +102,7 @@ public final class AetherhavenCoreBootstrap {
         registerGaiaStatueOpenUi(plugin);
         AetherhavenSubpluginAssetCodecs.registerAll(plugin);
         PropsBootstrap.registerAssetCodecs(plugin);
+        com.hexvane.aetherhaven.blockpalette.BlockPalettesBootstrap.registerAssetCodecs(plugin);
         DialogueBootstrap.registerLoadHooks(plugin);
         AetherhavenNpcRoleLoader.register(plugin);
         registerTownsfolkRoleValidation(plugin);
@@ -179,6 +181,7 @@ public final class AetherhavenCoreBootstrap {
         plugin.registerAetherhavenSubcommand(new AetherhavenSupportCommand());
         // After /ah command tree — props register systems and the prop subcommand.
         PropsBootstrap.register(plugin, plugin);
+        com.hexvane.aetherhaven.blockpalette.BlockPalettesBootstrap.register(plugin, plugin);
         // After shared components and the /ah command tree — feature packs register systems and subcommands.
         AetherhavenFeatureBootstrap.registerEnabled(plugin);
         LOGGER.atInfo().log("Aetherhaven core v%s setup complete", plugin.getManifest().getVersion().toString());
@@ -368,6 +371,9 @@ public final class AetherhavenCoreBootstrap {
                     }
                     if (plugin.getPropIconPacketAdapter() != null) {
                         plugin.getPropIconPacketAdapter().onPlayerLeave(event.getPlayerRef().getUuid());
+                    }
+                    if (plugin.getBlockPaletteIconPacketAdapter() != null) {
+                        plugin.getBlockPaletteIconPacketAdapter().onPlayerLeave(event.getPlayerRef().getUuid());
                     }
                     QuestBoardOnlineDawnService.clearPlayer(event.getPlayerRef().getUuid());
                     hudRefreshSystem.clearPlayer(event.getPlayerRef().getUuid());

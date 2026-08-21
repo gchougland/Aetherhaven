@@ -302,6 +302,12 @@ public final class ProductionTickSystem extends EntityTickingSystem<EntityStore>
 
             plugin.getConfig().get(),
 
+            world,
+
+            plot.getSignX(),
+
+            plot.getSignZ(),
+
             1
 
         )) {

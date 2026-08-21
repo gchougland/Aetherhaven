@@ -113,6 +113,26 @@ public final class AetherhavenPluginConfig {
         )
         .add()
         .append(
+            new KeyedCodec<>("TownTerritoryBreakProtectionEnabled", Codec.BOOLEAN),
+            (o, v) -> o.townTerritoryBreakProtectionEnabled = v != null ? v : true,
+            o -> o.townTerritoryBreakProtectionEnabled
+        )
+        .documentation(
+            "When true (default), town claim block-break protection can apply. Each town can also turn break protection off. "
+                + "When false, town territory never blocks breaking blocks."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("TownTerritoryUseProtectionEnabled", Codec.BOOLEAN),
+            (o, v) -> o.townTerritoryUseProtectionEnabled = v != null ? v : true,
+            o -> o.townTerritoryUseProtectionEnabled
+        )
+        .documentation(
+            "When true (default), town claim block-use protection can apply (containers, doors, and other uses). "
+                + "Each town can also turn use protection off. When false, town territory never blocks using blocks."
+        )
+        .add()
+        .append(
             new KeyedCodec<>("VillagerNeedsDecayPerSecond", Codec.FLOAT),
             (o, v) -> o.villagerNeedsDecayPerSecond = v,
             o -> o.villagerNeedsDecayPerSecond
@@ -359,6 +379,16 @@ public final class AetherhavenPluginConfig {
         .documentation(
             "Multiplies every workplace production interval (catalog ticks): 1.0 = default, 0.5 = half the time, 2.0 = double. "
                 + "Clamped to a safe positive range."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("ProductionZoneMismatchTimeMultiplier", Codec.DOUBLE),
+            (o, v) -> o.productionZoneMismatchTimeMultiplier = v != null ? v : 2.0,
+            o -> o.productionZoneMismatchTimeMultiplier
+        )
+        .documentation(
+            "When a miners hut or lumbermill produces an ore or wood outside that material's preferred adventure zone, "
+                + "multiply the production interval by this value (default 2.0 = twice as long). Preferred zone is unchanged."
         )
         .add()
         .append(
@@ -653,6 +683,10 @@ public final class AetherhavenPluginConfig {
     private long territoryExpansionClaimCostIncrementGold = 20L;
     private boolean territoryExpansionClaimLimitEnabled = false;
     private int maxTerritoryExpansionClaimBlocks = 0;
+    /** When false, town territory never cancels BreakBlockEvent. Default true. */
+    private boolean townTerritoryBreakProtectionEnabled = true;
+    /** When false, town territory never cancels UseBlockEvent. Default true. */
+    private boolean townTerritoryUseProtectionEnabled = true;
     /** Hunger points (0..100 scale) drained per second of game time; energy/fun use lower multipliers in code. */
     private float villagerNeedsDecayPerSecond = DEFAULT_VILLAGER_NEEDS_DECAY_PER_SECOND;
 
@@ -711,6 +745,8 @@ public final class AetherhavenPluginConfig {
 
     /** Multiplier on catalog production ticks (workplace outputs). Default 1.0. */
     private double productionTimeMultiplier = 1.0;
+    /** Wrong-zone ore/wood production interval multiplier. Default 2.0. */
+    private double productionZoneMismatchTimeMultiplier = 2.0;
     /** Offline catch-up rate vs a full work-minute at live entity tick rate. Default 0.8. */
     private double productionOfflineMultiplier = 0.8;
     /** Max in-game minutes per offline catch-up pass. Default 7 days. */
@@ -800,6 +836,14 @@ public final class AetherhavenPluginConfig {
 
     public boolean isTerritoryExpansionClaimLimitEnabled() {
         return territoryExpansionClaimLimitEnabled;
+    }
+
+    public boolean isTownTerritoryBreakProtectionEnabled() {
+        return townTerritoryBreakProtectionEnabled;
+    }
+
+    public boolean isTownTerritoryUseProtectionEnabled() {
+        return townTerritoryUseProtectionEnabled;
     }
 
     public int getMaxTerritoryExpansionClaimBlocks() {
@@ -1130,6 +1174,14 @@ public final class AetherhavenPluginConfig {
         return Math.max(0.05, Math.min(100.0, v));
     }
 
+    public double getProductionZoneMismatchTimeMultiplier() {
+        double v = productionZoneMismatchTimeMultiplier;
+        if (Double.isNaN(v) || v <= 0.0) {
+            return 2.0;
+        }
+        return Math.max(1.0, Math.min(100.0, v));
+    }
+
     public double getProductionOfflineMultiplier() {
         double v = productionOfflineMultiplier;
         if (Double.isNaN(v)) {
@@ -1331,6 +1383,14 @@ public final class AetherhavenPluginConfig {
 
     public double getLootChestPropChance() {
         double v = getLootChest().getProp().getChance();
+        if (v < 0.0) {
+            return 0.0;
+        }
+        return Math.min(v, 1.0);
+    }
+
+    public double getLootChestBlockPaletteChance() {
+        double v = getLootChest().getBlockPalette().getChance();
         if (v < 0.0) {
             return 0.0;
         }
@@ -1635,6 +1695,8 @@ public final class AetherhavenPluginConfig {
         this.territoryExpansionClaimCostIncrementGold = o.territoryExpansionClaimCostIncrementGold;
         this.territoryExpansionClaimLimitEnabled = o.territoryExpansionClaimLimitEnabled;
         this.maxTerritoryExpansionClaimBlocks = o.maxTerritoryExpansionClaimBlocks;
+        this.townTerritoryBreakProtectionEnabled = o.townTerritoryBreakProtectionEnabled;
+        this.townTerritoryUseProtectionEnabled = o.townTerritoryUseProtectionEnabled;
         this.villagerNeedsDecayPerSecond = o.villagerNeedsDecayPerSecond;
         this.innPoolMorningStartHour = o.innPoolMorningStartHour;
         this.innPoolMorningEndHour = o.innPoolMorningEndHour;
@@ -1667,6 +1729,7 @@ public final class AetherhavenPluginConfig {
         this.feastNeedsDecayScalePermille = o.feastNeedsDecayScalePermille;
         this.feastGatherTimeoutSeconds = o.feastGatherTimeoutSeconds;
         this.productionTimeMultiplier = o.productionTimeMultiplier;
+        this.productionZoneMismatchTimeMultiplier = o.productionZoneMismatchTimeMultiplier;
         this.productionOfflineMultiplier = o.productionOfflineMultiplier;
         this.productionOfflineCatchUpMaxMinutes = o.productionOfflineCatchUpMaxMinutes;
         this.shopSpotPlayerListingPricePercent = o.shopSpotPlayerListingPricePercent;

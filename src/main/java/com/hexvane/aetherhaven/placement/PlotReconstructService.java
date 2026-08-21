@@ -134,7 +134,8 @@ public final class PlotReconstructService {
             entityStore,
             INSTANT_BLOCKS_PER_BATCH,
             INSTANT_BATCH_DELAY_MS,
-            onComplete
+            onComplete,
+            plot.getBlockPaletteSelections()
         );
         return ReconstructResult.OK;
     }

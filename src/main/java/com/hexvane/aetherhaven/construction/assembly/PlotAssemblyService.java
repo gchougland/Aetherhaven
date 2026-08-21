@@ -306,7 +306,7 @@ public final class PlotAssemblyService {
         TownManager tmPay = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         tmPay.updateTown(town);
 
-        ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
+        ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw, plot.getBlockPaletteSelections());
         List<PendingBlock> footprintCells =
             ConstructionPasteOps.withReservedFestivalAirCells(
                 seq.pendingBlocks(),
@@ -314,14 +314,7 @@ public final class PlotAssemblyService {
                 def
             );
         List<PendingBlock> nonAirCells = ConstructionPasteOps.withoutPureAirCells(footprintCells);
-        ConstructionPasteOps.AssemblyDeferredPartition split =
-            ConstructionPasteOps.partitionAssemblyDeferredBlocks(
-                nonAirCells,
-                BlockType.getAssetMap(),
-                def.getAssemblyDeferredBlockIds()
-            );
-        List<PendingBlock> placementOrder = split.main();
-        List<PendingBlock> assemblyDeferredBlocks = split.deferred();
+        List<PendingBlock> placementOrder = nonAirCells;
 
         world.breakBlock(physicalSignWorld.x, physicalSignWorld.y, physicalSignWorld.z, BREAK_SIGN_SETTINGS);
 
@@ -362,7 +355,6 @@ public final class PlotAssemblyService {
                 footprintCells,
                 footprintIndex,
                 placementOrder,
-                assemblyDeferredBlocks,
                 seq.prefabEntitiesInOrder(),
                 buffer,
                 seq.prefabRotation(),
@@ -569,7 +561,7 @@ public final class PlotAssemblyService {
             return false;
         }
         int prefabId = start.getPrefabId();
-        ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
+        ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw, plot.getBlockPaletteSelections());
         List<PendingBlock> footprintCells =
             ConstructionPasteOps.withReservedFestivalAirCells(
                 seq.pendingBlocks(),
@@ -577,14 +569,7 @@ public final class PlotAssemblyService {
                 def
             );
         List<PendingBlock> nonAirCells = ConstructionPasteOps.withoutPureAirCells(footprintCells);
-        ConstructionPasteOps.AssemblyDeferredPartition split =
-            ConstructionPasteOps.partitionAssemblyDeferredBlocks(
-                nonAirCells,
-                BlockType.getAssetMap(),
-                def.getAssemblyDeferredBlockIds()
-            );
-        List<PendingBlock> placementOrder = split.main();
-        List<PendingBlock> assemblyDeferredBlocks = split.deferred();
+        List<PendingBlock> placementOrder = nonAirCells;
         long slot = computeSlotWallMs(world, plugin, def, placementOrder.size());
         plot.setAssemblyPrefabId(prefabId);
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
@@ -599,7 +584,6 @@ public final class PlotAssemblyService {
                 footprintCells,
                 footprintIndex,
                 placementOrder,
-                assemblyDeferredBlocks,
                 seq.prefabEntitiesInOrder(),
                 buffer,
                 seq.prefabRotation(),
@@ -1156,7 +1140,8 @@ public final class PlotAssemblyService {
                 case SOLIDS -> {
                     if (progress.solidCells == null) {
                         ConstructionPrefabSequence seq =
-                            ConstructionPasteOps.buildSequence(progress.completionBuffer, job.yaw());
+                            ConstructionPasteOps.buildSequence(
+                                progress.completionBuffer, job.yaw(), plot.getBlockPaletteSelections());
                         progress.solidCells =
                             ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
                     }
@@ -1179,7 +1164,8 @@ public final class PlotAssemblyService {
                 case INTERACTIVE -> {
                     if (progress.interactiveCells == null) {
                         ConstructionPrefabSequence seq =
-                            ConstructionPasteOps.buildSequence(progress.completionBuffer, job.yaw());
+                            ConstructionPasteOps.buildSequence(
+                                progress.completionBuffer, job.yaw(), plot.getBlockPaletteSelections());
                         progress.interactiveCells =
                             ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
                     }

@@ -241,6 +241,9 @@ public final class ProductionCatchUpService {
                             gameplayPlotId,
                             ccat,
                             cfg,
+                            world,
+                            plot.getSignX(),
+                            plot.getSignZ(),
                             creditTicks
                         )) {
                         townChanged = true;

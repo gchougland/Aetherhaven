@@ -58,8 +58,10 @@ public final class PathToolSelectInteraction extends SimpleInstantInteraction {
         }
         PathToolPlayerComponent st = commandBuffer.getComponent(playerRef, PathToolPlayerComponent.getComponentType());
         boolean replaceFilter = st != null && st.getGizmoMode() == PathToolGizmoMode.ReplaceFilter;
-        boolean removeMode = st != null && st.getGizmoMode() == PathToolGizmoMode.Remove;
-        if (type != InteractionType.Primary && !replaceFilter && !removeMode) {
+        boolean removeOrRestyle =
+            st != null
+                && (st.getGizmoMode() == PathToolGizmoMode.Remove || st.getGizmoMode() == PathToolGizmoMode.Restyle);
+        if (type != InteractionType.Primary && !replaceFilter && !removeOrRestyle) {
             context.getState().state = InteractionState.Failed;
             return;
         }

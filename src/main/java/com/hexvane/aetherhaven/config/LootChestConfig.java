@@ -81,6 +81,12 @@ public final class LootChestConfig {
             )
             .add()
             .append(
+                new KeyedCodec<>("BlockPalette", LootChestBlockPaletteConfig.CODEC),
+                (o, v) -> o.blockPalette = v != null ? v : new LootChestBlockPaletteConfig(),
+                o -> o.blockPalette
+            )
+            .add()
+            .append(
                 new KeyedCodec<>("GaiaDraughtBonuses", LootChestGaiaDraughtBonusConfig.CODEC),
                 (o, v) -> o.gaiaDraughtBonuses = v != null ? v : new LootChestGaiaDraughtBonusConfig(),
                 o -> o.gaiaDraughtBonuses
@@ -111,6 +117,8 @@ public final class LootChestConfig {
     private LootChestPlotBlueprintConfig plotBlueprint = new LootChestPlotBlueprintConfig();
     @Nonnull
     private LootChestPropConfig prop = new LootChestPropConfig();
+    @Nonnull
+    private LootChestBlockPaletteConfig blockPalette = new LootChestBlockPaletteConfig();
     @Nonnull
     private LootChestGaiaDraughtBonusConfig gaiaDraughtBonuses = new LootChestGaiaDraughtBonusConfig();
     @Nonnull
@@ -172,6 +180,11 @@ public final class LootChestConfig {
     @Nonnull
     public LootChestPropConfig getProp() {
         return prop != null ? prop : new LootChestPropConfig();
+    }
+
+    @Nonnull
+    public LootChestBlockPaletteConfig getBlockPalette() {
+        return blockPalette != null ? blockPalette : new LootChestBlockPaletteConfig();
     }
 
     @Nonnull

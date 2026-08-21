@@ -59,6 +59,16 @@ public final class PathToolRegistry {
     }
 
     @Nullable
+    public PathCommitRecord get(@Nonnull UUID id) {
+        for (PathCommitRecord e : records) {
+            if (e != null && id.toString().equals(e.id)) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
     public PathCommitRecord remove(@Nonnull UUID id) {
         for (int i = 0; i < records.size(); i++) {
             PathCommitRecord e = records.get(i);

@@ -126,6 +126,38 @@ public final class AetherhavenArgTypes {
         }
     };
 
+    public static final SingleArgumentType<String> BLOCK_PALETTE_ID = new SingleArgumentType<>(
+        langName("paletteId"),
+        langUsage("paletteId"),
+        "walls_blue"
+    ) {
+        @Override
+        public String parse(@Nonnull String input, @Nonnull ParseResult parseResult) {
+            return input;
+        }
+
+        @Override
+        public void suggest(
+            @Nonnull CommandSender sender,
+            @Nonnull String textAlreadyEntered,
+            int numParametersTyped,
+            @Nonnull SuggestionResult result
+        ) {
+            AetherhavenPlugin plugin = AetherhavenCommandSuggest.plugin();
+            if (plugin == null) {
+                return;
+            }
+            AetherhavenCommandSuggest.suggestPrefix(
+                result, textAlreadyEntered, new TreeSet<>(plugin.getBlockPaletteCatalog().ids())
+            );
+        }
+
+        @Override
+        public int getSuggestionValueCount() {
+            return -1;
+        }
+    };
+
     /** Building or prop id for {@code /aetherhaven community submit}. */
     public static final SingleArgumentType<String> COMMUNITY_SUBMIT_ID = new SingleArgumentType<>(
         langName("communitySubmitId"),

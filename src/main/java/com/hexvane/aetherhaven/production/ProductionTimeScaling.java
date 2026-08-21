@@ -1,7 +1,9 @@
 package com.hexvane.aetherhaven.production;
 
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
+import com.hypixel.hytale.server.core.universe.world.World;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /** Applies {@link AetherhavenPluginConfig#getProductionTimeMultiplier()} to catalog tick intervals. */
 public final class ProductionTimeScaling {
@@ -37,6 +39,19 @@ public final class ProductionTimeScaling {
         int catalogTicks,
         double workplaceSpeedMul
     ) {
+        return effectiveTicksWithWorkplaceSpeedAndZone(config, catalogTicks, workplaceSpeedMul, 1.0);
+    }
+
+    /**
+     * Effective entity ticks after config multiplier, workplace speed, and adventure-zone mismatch ({@code zoneTimeMul}
+     * multiplies ticks when the resource is outside its preferred zone).
+     */
+    public static int effectiveTicksWithWorkplaceSpeedAndZone(
+        @Nonnull AetherhavenPluginConfig config,
+        int catalogTicks,
+        double workplaceSpeedMul,
+        double zoneTimeMul
+    ) {
         double configMul = config.getProductionTimeMultiplier();
         if (Double.isNaN(configMul) || configMul <= 0.0) {
             configMul = 1.0;
@@ -45,6 +60,33 @@ public final class ProductionTimeScaling {
         if (Double.isNaN(speed) || speed <= 0.0) {
             speed = 1.0;
         }
-        return effectiveTicks(catalogTicks, configMul / speed);
+        double zone = zoneTimeMul;
+        if (Double.isNaN(zone) || zone <= 0.0) {
+            zone = 1.0;
+        }
+        return effectiveTicks(catalogTicks, configMul / speed * zone);
+    }
+
+    /**
+     * Effective ticks for a selected item at a workplace plot, including zone mismatch when zone gen is available.
+     */
+    public static int effectiveTicksForItemAtPlot(
+        @Nonnull AetherhavenPluginConfig config,
+        int catalogTicks,
+        double workplaceSpeedMul,
+        @Nullable World world,
+        int plotBlockX,
+        int plotBlockZ,
+        @Nonnull String itemId
+    ) {
+        double zoneMul =
+            ProductionResourceZoneAffinity.timeMultiplierForPlot(
+                world,
+                plotBlockX,
+                plotBlockZ,
+                itemId,
+                config.getProductionZoneMismatchTimeMultiplier()
+            );
+        return effectiveTicksWithWorkplaceSpeedAndZone(config, catalogTicks, workplaceSpeedMul, zoneMul);
     }
 }

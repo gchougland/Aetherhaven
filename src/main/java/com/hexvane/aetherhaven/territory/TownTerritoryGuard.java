@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.territory;
 
+import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorSession;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorSessions;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -52,6 +53,26 @@ public final class TownTerritoryGuard {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Break protection applies only when the server config and this town both have it enabled.
+     */
+    public static boolean isBreakProtectionActive(
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull TownRecord town
+    ) {
+        return cfg.isTownTerritoryBreakProtectionEnabled() && town.isTerritoryBreakProtectionEnabled();
+    }
+
+    /**
+     * Use/interact protection applies only when the server config and this town both have it enabled.
+     */
+    public static boolean isUseProtectionActive(
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull TownRecord town
+    ) {
+        return cfg.isTownTerritoryUseProtectionEnabled() && town.isTerritoryUseProtectionEnabled();
     }
 
     public static boolean isHarvestStyleBreak(@Nonnull BlockType blockType) {

@@ -531,7 +531,10 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#FillFromBuildShapeButton.TextSpans", Message.translation(MSG + ".button.useBuildShape"));
         }
         if (step == PlotCreatorStep.REVIEW || step == PlotCreatorStep.DONE) {
-            b.set("#ReviewSummary.TextSpans", Message.raw(buildReviewText()));
+            b.set(
+                "#ReviewSummary.TextSpans",
+                Message.translation(MSG + ".step.REVIEW.costNotice").param("details", buildReviewText())
+            );
         }
         b.set("#SubmitToCommunityRow.Visible", false);
     }
