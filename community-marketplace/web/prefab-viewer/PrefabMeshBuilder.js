@@ -7,11 +7,11 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=34";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=34";
+} from "./BlockCatalog.js?v=35";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=35";
 
 /** Bump when transform math changes — shown in the viewer so we can confirm the live build. */
-export const PREFAB_VIEWER_TRANSFORM_REV = "xform-34";
+export const PREFAB_VIEWER_TRANSFORM_REV = "xform-35";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
@@ -180,7 +180,10 @@ export function entityWorldScale(comps, modelPath = null) {
 
 /**
  * Creature / player models under Characters/ and nested NPC folders are authored at 64
- * units per block. One-off NPC props (Balloon.blockymodel, carnival faces) are block density.
+ * units per block. Held item models under Items/Weapons (and similar attachment kits) use
+ * that same density — Potion_Onion sits next to NPC bomb meshes, not block-prop potions.
+ * One-off NPC props (Balloon.blockymodel, carnival faces) and placeable item blocks
+ * (Items/Consumables, Resources/, Blocks/) are block density (32 units per block).
  * @param {string|null} modelPath
  */
 export function isCharacterDensityModel(modelPath) {
@@ -189,6 +192,10 @@ export function isCharacterDensityModel(modelPath) {
     return false;
   }
   if (/^Characters\//i.test(p)) {
+    return true;
+  }
+  // Held / thrown gear authored for hand attachments (64 units/block), same as NPC weapons.
+  if (/^Items\/(Weapons|Projectiles|Armors|Tools)\//i.test(p)) {
     return true;
   }
   if (!/^NPC\//i.test(p)) {
