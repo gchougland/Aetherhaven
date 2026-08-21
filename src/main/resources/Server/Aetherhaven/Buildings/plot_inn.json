@@ -151,5 +151,21 @@
     12,
     1,
     8
-  ]
+  ],
+  "frontFacing": "North",
+  "tags": [
+    "civic"
+  ],
+  "boundsLocal": {
+    "min": [
+      1,
+      -1,
+      1
+    ],
+    "max": [
+      17,
+      8,
+      12
+    ]
+  }
 }

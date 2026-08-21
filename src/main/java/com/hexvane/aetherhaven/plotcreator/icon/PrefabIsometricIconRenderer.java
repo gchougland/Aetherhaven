@@ -26,14 +26,14 @@ public final class PrefabIsometricIconRenderer {
 
     @Nullable
     public static BufferedImage render(@Nonnull BlockSelection prefab, @Nullable String frontFacing) {
-        List<BlockCell> cells = new ArrayList<>();
+        List<BlockCell> collected = new ArrayList<>();
         prefab.forEachBlock((x, y, z, holder) -> {
             int blockId = holder.blockId();
             if (!BlockColorResolver.isRenderable(blockId)) {
                 return;
             }
             BlockColorResolver.FaceColors faces = BlockColorResolver.resolveFaceColors(blockId);
-            cells.add(new BlockCell(x, y, z, faces));
+            collected.add(new BlockCell(x, y, z, faces));
         });
         prefab.forEachFluid((x, y, z, fluidId, level) -> {
             if (!BlockColorResolver.isRenderableFluid(fluidId)) {
@@ -45,16 +45,17 @@ public final class PrefabIsometricIconRenderer {
                     return;
                 }
             }
-            cells.add(new BlockCell(x, y, z, BlockColorResolver.resolveFluidFaceColors(fluidId)));
+            collected.add(new BlockCell(x, y, z, BlockColorResolver.resolveFluidFaceColors(fluidId)));
         });
-        if (cells.isEmpty()) {
+        if (collected.isEmpty()) {
             return null;
         }
 
+        List<BlockCell> cells = collected;
         int alignSteps = FrontFacing.iconAlignStepsToNorth(frontFacing);
         if (alignSteps != 0) {
-            List<BlockCell> rotated = new ArrayList<>(cells.size());
-            for (BlockCell cell : cells) {
+            List<BlockCell> rotated = new ArrayList<>(collected.size());
+            for (BlockCell cell : collected) {
                 Vector3i v = WallCardinal.rotateOffset(new Vector3i(cell.x, cell.y, cell.z), alignSteps);
                 rotated.add(new BlockCell(v.x, v.y, v.z, cell.faces()));
             }

@@ -6,13 +6,14 @@ $Sounds = "../Sounds.ui";
 @CardAuthorStyle = (...$C.@DefaultLabelStyle, FontSize: 10, HorizontalAlignment: Center, TextColor: #8a8070);
 
 Group #TownStyleCard {
-  Anchor: (Width: 320, Height: 268, Right: 12, Bottom: 12);
+  Anchor: (Width: 320, Height: 322, Right: 12, Bottom: 12);
   LayoutMode: Top;
   Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #1e2430(0.92));
   Padding: (Full: 10);
 
+  /** Showcase screenshots are 2560x1494 (~16:9.3). Box width is 300 after padding; height keeps that ratio. */
   Group #ImageBox {
-    Anchor: (Height: 120, Bottom: 8);
+    Anchor: (Height: 175, Bottom: 8);
     LayoutMode: Full;
     Background: #1a2530;
     Padding: 2;

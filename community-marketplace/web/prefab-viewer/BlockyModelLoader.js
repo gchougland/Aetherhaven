@@ -5,7 +5,7 @@
  * UV layout matches the official Blockbench codec (pixel offset + face size from settings.size, not stretch).
  */
 import * as THREE from "three";
-import { assetUrl } from "./BlockCatalog.js?v=38";
+import { assetUrl } from "./BlockCatalog.js?v=39";
 
 /** Block / furniture / placeable prop density (BlockyModelBoundsParser). */
 export const BLOCK_MODEL_UNITS = 32;
@@ -73,6 +73,10 @@ function texturePixelSize(tex) {
  * Fetch-based loader so headless Chromium gets real pixel dimensions (TextureLoader
  * often leaves width/height at 0 there, which made 96px atlases UV as if they were 64
  * and balloons sampled the grey gift-wrap instead of the balloon strip).
+ *
+ * ImageBitmap must not be wrapped in a Texture with the default flipY=true — that
+ * path scrambles Blockbench UVs (plushies, trophies, etc.). Draw into a canvas and use
+ * CanvasTexture with flipY=true so existing `1 - y/h` UV math stays correct.
  * @param {string} url
  * @returns {Promise<THREE.Texture>}
  */
@@ -87,8 +91,19 @@ async function loadTexture(url) {
   }
   const blob = await res.blob();
   const bitmap = await createImageBitmap(blob);
-  const tex = new THREE.Texture(bitmap);
+  const canvas = document.createElement("canvas");
+  canvas.width = bitmap.width;
+  canvas.height = bitmap.height;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    bitmap.close?.();
+    throw new Error("texture canvas unavailable");
+  }
+  ctx.drawImage(bitmap, 0, 0);
+  bitmap.close?.();
+  const tex = new THREE.CanvasTexture(canvas);
   tex.colorSpace = THREE.SRGBColorSpace;
+  tex.flipY = true;
   tex.magFilter = THREE.NearestFilter;
   tex.minFilter = THREE.NearestFilter;
   tex.generateMipmaps = false;

@@ -147,10 +147,12 @@ public final class AetherhavenPlotCreatorCommand extends AbstractCommandCollecti
 
             String prefabKey = input;
             String outputId = outputIdArg.provided(context) ? outputIdArg.get(context).trim() : null;
+            String frontFacing = null;
 
             ConstructionDefinition def = plugin.getConstructionCatalog().get(input);
             if (def != null) {
                 prefabKey = def.getPrefabPath();
+                frontFacing = def.getFrontFacing();
                 if (outputId == null || outputId.isEmpty()) {
                     outputId = def.getId();
                 }
@@ -158,6 +160,12 @@ public final class AetherhavenPlotCreatorCommand extends AbstractCommandCollecti
                 outputId = findConstructionIdForPrefab(plugin, input);
                 if (outputId == null) {
                     outputId = outputIdFromPrefabKey(input);
+                }
+            }
+            if (frontFacing == null && outputId != null && !outputId.isBlank()) {
+                ConstructionDefinition byOutput = plugin.getConstructionCatalog().get(outputId);
+                if (byOutput != null) {
+                    frontFacing = byOutput.getFrontFacing();
                 }
             }
 
@@ -192,7 +200,8 @@ public final class AetherhavenPlotCreatorCommand extends AbstractCommandCollecti
                 return;
             }
 
-            boolean ok = PlotCreatorIconExporter.tryExportIcon(prefab, outputId, plugin.getDataDirectory());
+            boolean ok =
+                PlotCreatorIconExporter.tryExportIcon(prefab, outputId, plugin.getDataDirectory(), frontFacing);
             if (!ok) {
                 playerRef.sendMessage(
                     Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.generateicon.error.renderFailed")

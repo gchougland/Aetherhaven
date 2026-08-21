@@ -7,11 +7,11 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=38";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=38";
+} from "./BlockCatalog.js?v=39";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=39";
 
 /** Bump when transform math changes — shown in the viewer so we can confirm the live build. */
-export const PREFAB_VIEWER_TRANSFORM_REV = "xform-38";
+export const PREFAB_VIEWER_TRANSFORM_REV = "xform-39";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
@@ -181,7 +181,7 @@ export function entityWorldScale(comps, _modelPath = null) {
 }
 
 /** @deprecated Use the loader's unit scale; kept as a re-export for older callers. */
-export { isCharacterDensityModel } from "./BlockyModelLoader.js?v=38";
+export { isCharacterDensityModel } from "./BlockyModelLoader.js?v=39";
 
 /**
  * @param {any} pos

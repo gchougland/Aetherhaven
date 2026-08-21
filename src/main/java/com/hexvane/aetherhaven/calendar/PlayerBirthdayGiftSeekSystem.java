@@ -24,6 +24,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3d;
@@ -179,11 +180,11 @@ public final class PlayerBirthdayGiftSeekSystem extends EntityTickingSystem<Enti
         if (!PlayerBirthdayGiftSeekState.isRegistered()) {
             return null;
         }
-        Ref<EntityStore>[] found = new Ref[1];
+        AtomicReference<Ref<EntityStore>> found = new AtomicReference<>();
         store.forEachChunk(
             Query.and(PlayerBirthdayGiftSeekState.getComponentType(), UUIDComponent.getComponentType()),
             (chunk, commandBuffer) -> {
-                if (found[0] != null) {
+                if (found.get() != null) {
                     return;
                 }
                 for (int i = 0; i < chunk.size(); i++) {
@@ -194,13 +195,13 @@ public final class PlayerBirthdayGiftSeekSystem extends EntityTickingSystem<Enti
                     }
                     Ref<EntityStore> seekRef = chunk.getReferenceTo(i);
                     if (seekRef != null && seekRef.isValid()) {
-                        found[0] = seekRef;
+                        found.set(seekRef);
                         return;
                     }
                 }
             }
         );
-        return found[0];
+        return found.get();
     }
 
     private static void clearSeekFromTick(
