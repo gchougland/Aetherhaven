@@ -3,8 +3,8 @@
  */
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { loadCatalogs } from "./BlockCatalog.js?v=33";
-import { buildPrefabMesh, disposeObject3D, PREFAB_VIEWER_TRANSFORM_REV } from "./PrefabMeshBuilder.js?v=33";
+import { loadCatalogs } from "./BlockCatalog.js?v=34";
+import { buildPrefabMesh, disposeObject3D, PREFAB_VIEWER_TRANSFORM_REV } from "./PrefabMeshBuilder.js?v=34";
 
 export { PREFAB_VIEWER_TRANSFORM_REV };
 
@@ -192,6 +192,8 @@ export class PrefabViewer {
     }
     this._root = root;
     this.scene.add(root);
+    // Match the website building modal: measure the container after the mesh exists, then frame.
+    this.resize();
     this.fitToBounds(bounds);
     // One extra frame so textures settle before screenshot consumers read the canvas.
     this.renderer.render(this.scene, this.camera);

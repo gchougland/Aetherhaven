@@ -7,11 +7,11 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=33";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=33";
+} from "./BlockCatalog.js?v=34";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=34";
 
 /** Bump when transform math changes — shown in the viewer so we can confirm the live build. */
-export const PREFAB_VIEWER_TRANSFORM_REV = "xform-33";
+export const PREFAB_VIEWER_TRANSFORM_REV = "xform-34";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
@@ -545,10 +545,10 @@ export async function buildPrefabMesh(prefab, options = {}) {
         const itemId = comps.Item?.Item?.Id || comps.Item?.Id;
         if (!placed && itemId) {
           const idef = getBlockDef(itemId);
-          customModelScale = Number(idef?.customModelScale);
-          if (!Number.isFinite(customModelScale) || customModelScale <= 0) {
-            customModelScale = 1;
-          }
+          // Do not multiply BlockType.CustomModelScale here. Grid blocks in this viewer are
+          // drawn at native model size, and EntityScale (with BlockEntity identity-at-2)
+          // already carries the size the prop was given. Applying CMS on top was shrinking
+          // potion entities to half again while item-model props (bomb bottles) stayed large.
           if (idef?.itemModel) {
             const model = await getModel(idef.itemModel, idef.itemTexture || null);
             if (model) {
