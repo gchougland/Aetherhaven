@@ -7,12 +7,11 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=31";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=31";
-import { applyBlockyAnimationPose } from "./BlockyAnimation.js?v=31";
+} from "./BlockCatalog.js?v=32";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=32";
 
 /** Bump when transform math changes — shown in the viewer so we can confirm the live build. */
-export const PREFAB_VIEWER_TRANSFORM_REV = "xform-31";
+export const PREFAB_VIEWER_TRANSFORM_REV = "xform-32";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
@@ -277,16 +276,36 @@ function makePlaceholderBlockCube() {
 }
 
 /**
- * Open door / trapdoor poses only. Close animations end at the bind pose, so applying
- * them is a no-op at best and can thrash fetches for every closed door in a build.
- * @param {string|null|undefined} animPath
+ * Trapdoor bind pose is closed; OpenDoor* holds the open Door-node rotation from Trapdoor_Open.
+ * @param {string} blockName
  */
-function shouldApplyBlockAnimation(animPath) {
-  const p = String(animPath || "");
-  if (!p) {
-    return false;
-  }
-  return !/Close/i.test(p);
+function isTrapdoorBlockName(blockName) {
+  return /Trapdoor/i.test(String(blockName || ""));
+}
+
+/**
+ * @param {string} blockName
+ */
+function isOpenTrapdoorState(blockName) {
+  const n = String(blockName || "");
+  return /_State_Definitions_Open/i.test(n) || /_State_Open/i.test(n);
+}
+
+/**
+ * Force trapdoor Door node into open or closed pose (ignore other block animations).
+ * @param {THREE.Object3D} root
+ * @param {boolean} open
+ */
+function applyTrapdoorPose(root, open) {
+  // Last frame of Blocks/Animations/Trapdoor/Trapdoor_Open.blockyanim (Door track).
+  const openQ = new THREE.Quaternion(0.707107, 0, 0, 0.707107);
+  const closedQ = new THREE.Quaternion(0, 0, 0, 1);
+  const q = open ? openQ : closedQ;
+  root.traverse((obj) => {
+    if (obj?.name === "Door") {
+      obj.quaternion.copy(q);
+    }
+  });
 }
 
 /**
@@ -436,12 +455,8 @@ export async function buildPrefabMesh(prefab, options = {}) {
             }
             const model = (await getModelForDef(def, def.customModelTexture || null, tint))?.model;
             if (model) {
-              if (shouldApplyBlockAnimation(def.customModelAnimation)) {
-                try {
-                  await applyBlockyAnimationPose(model, def.customModelAnimation);
-                } catch (err) {
-                  console.warn("Block animation pose failed", def.customModelAnimation, err);
-                }
+              if (isTrapdoorBlockName(b.name)) {
+                applyTrapdoorPose(model, isOpenTrapdoorState(b.name));
               }
               model.position.y = -0.5;
               placeBlockHolder(root, b, model);
@@ -452,12 +467,8 @@ export async function buildPrefabMesh(prefab, options = {}) {
           if (!placed && def.itemModel) {
             const model = await getModel(def.itemModel, def.itemTexture || null);
             if (model) {
-              if (shouldApplyBlockAnimation(def.customModelAnimation)) {
-                try {
-                  await applyBlockyAnimationPose(model, def.customModelAnimation);
-                } catch (err) {
-                  console.warn("Block animation pose failed", def.customModelAnimation, err);
-                }
+              if (isTrapdoorBlockName(b.name)) {
+                applyTrapdoorPose(model, isOpenTrapdoorState(b.name));
               }
               model.position.y = -0.5;
               placeBlockHolder(root, b, model);

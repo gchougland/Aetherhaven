@@ -183,6 +183,10 @@ public final class CommunitySubmissionService {
         }
         Path prefabFile = CustomBuildingsPaths.resolvePrefabFile(dataDir, def.getPrefabPath());
         if (prefabFile == null || !Files.isRegularFile(prefabFile)) {
+            prefabFile =
+                PropPaths.propPrefabFile(dataDir, PropPaths.prefabFileNameFromKey(def.getPrefabPath()));
+        }
+        if (!Files.isRegularFile(prefabFile)) {
             return "prefab_missing";
         }
         Path iconFile = PropPaths.iconFile(dataDir, propId);

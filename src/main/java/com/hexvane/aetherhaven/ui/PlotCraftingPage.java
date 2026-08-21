@@ -228,16 +228,15 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         UUIDComponent playerUuidComponent = store.getComponent(ref, UUIDComponent.getComponentType());
         UUID playerUuid = playerUuidComponent != null ? playerUuidComponent.getUuid() : null;
         CommunityModerationService moderation = plugin.getCommunityModerationService();
-        boolean knownModeratorAccess = playerUuid != null && moderation.hasModeratorAccessResult(playerUuid);
-        boolean isModerator = playerUuid != null && moderation.isModerator(playerUuid);
-        // Only kick when we know they are denied; unknown access stays on Moderation while probing async.
-        if (activeTab == Tab.MODERATION && knownModeratorAccess && !isModerator) {
+        // Moderation tab removed from the crafting bench UI.
+        if (activeTab == Tab.MODERATION) {
             activeTab = Tab.CORE;
+            lastPlayerTab = Tab.CORE;
         }
         boolean communityTab = activeTab == Tab.COMMUNITY;
         boolean favoritesTab = activeTab == Tab.FAVORITES;
         boolean festivalsTab = activeTab == Tab.FESTIVALS;
-        boolean moderationTab = activeTab == Tab.MODERATION;
+        boolean moderationTab = false;
         boolean catalogTab = activeTab == Tab.CORE || activeTab == Tab.DECORATIONS || festivalsTab;
         commandBuilder.set("#PlotCraftTitleText.TextSpans", titleMessageForActiveTab());
         boolean marketplaceTab = communityTab || moderationTab;
@@ -297,7 +296,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             festivalsTab
         );
 
-        commandBuilder.set("#PlotCraftTabs.SelectedTab", playerTabId(activeTab == Tab.MODERATION ? lastPlayerTab : activeTab));
+        commandBuilder.set("#PlotCraftTabs.SelectedTab", playerTabId(activeTab));
         commandBuilder.set("#CommunitySubTabsHost.Visible", communityTab);
         commandBuilder.set("#CommunitySubTabs.SelectedTab", communitySubTabId(communitySubTab));
         {
@@ -309,12 +308,6 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             stackAnchor.setTop(Value.of(-10));
             commandBuilder.setObject("#CraftPanelStack.Anchor", stackAnchor);
         }
-        commandBuilder.set("#ModerationTabHost.Visible", !knownModeratorAccess || isModerator);
-        commandBuilder.set("#ModerationTabSelected.Visible", moderationTab);
-        commandBuilder.set(
-            "#ModerationTabButton.TooltipText",
-            Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.tabModerationTooltip")
-        );
 
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.SelectedTabChanged,
@@ -332,22 +325,12 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                 .append("@SelectedTab", "#CommunitySubTabs.SelectedTab"),
             false
         );
-        eventBuilder.addEventBinding(
-            CustomUIEventBindingType.Activating,
-            "#ModerationTabButton",
-            new EventData().append("Action", "TabChange").append("TabId", TAB_MODERATION),
-            false
-        );
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#VariantPrev", EventData.of("Action", "VariantPrev"), false);
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#VariantNext", EventData.of("Action", "VariantNext"), false);
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CraftButton", EventData.of("Action", "Craft"), false);
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#LoadPreviewButton", EventData.of("Action", "LoadPreview"), false);
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#DownloadButton", EventData.of("Action", "Download"), false);
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#RemoveButton", EventData.of("Action", "Remove"), false);
-        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ModerationLoadPreviewButton", EventData.of("Action", "LoadModerationPreview"), false);
-        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ModerationCraftButton", EventData.of("Action", "CraftModerationTest"), false);
-        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ApproveButton", EventData.of("Action", "Approve"), false);
-        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#DenyButton", EventData.of("Action", "Deny"), false);
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#MarketplaceRefreshButton", EventData.of("Action", "RefreshMarketplace"), false);
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#MarketplacePagePrev", EventData.of("Action", "MarketplacePagePrev"), false);
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#MarketplacePageNext", EventData.of("Action", "MarketplacePageNext"), false);
@@ -916,7 +899,8 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             case "TabChange" -> {
                 String tabId = data.tabId != null && !data.tabId.isBlank() ? data.tabId.trim() : data.selectedTab;
                 if (TAB_MODERATION.equals(tabId)) {
-                    activeTab = Tab.MODERATION;
+                    activeTab = Tab.CORE;
+                    lastPlayerTab = Tab.CORE;
                 } else if (TAB_COMMUNITY.equals(tabId)) {
                     activeTab = Tab.COMMUNITY;
                     lastPlayerTab = Tab.COMMUNITY;
@@ -943,17 +927,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                 if (activeTab == Tab.CORE || activeTab == Tab.DECORATIONS || activeTab == Tab.FESTIVALS) {
                     pendingPreviewPrefabKey = null;
                 }
-                if (activeTab == Tab.MODERATION) {
-                    AetherhavenPlugin modPlugin = AetherhavenPlugin.get();
-                    UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-                    PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
-                    if (modPlugin != null && uc != null && pr != null) {
-                        startModerationTabLoad(ref, store, pr, uc.getUuid());
-                        return;
-                    }
-                    activeTab = Tab.CORE;
-                    lastPlayerTab = Tab.CORE;
-                } else if (activeTab == Tab.COMMUNITY) {
+                if (activeTab == Tab.COMMUNITY) {
                     if (maybeAutoRefreshCommunityCatalog(ref, store)) {
                         return;
                     }

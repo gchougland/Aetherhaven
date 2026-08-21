@@ -1,18 +1,26 @@
 $C = "../Common.ui";
 $Sounds = "../Sounds.ui";
 
-@PlotTabAnchor = Anchor(Width: 82, Height: 62, Right: 5, Bottom: -14);
+// Top tabs use a 180-rotated ContainerPatch so the open edge faces the window (same look as bottom).
+@PlotTabAnchor = Anchor(Width: 82, Height: 74, Right: 5, Bottom: -14);
+
+@PlotTopTabStyle = TabStyleState(
+  Background: "ContainerPatchTop.png",
+  Overlay: "../Common/TabOverlay.png",
+  IconAnchor: (Width: 44, Height: 44),
+  Anchor: (...@PlotTabAnchor)
+);
 
 @PlotCraftTabsStyle = TabNavigationStyle(
   TabStyle: (
-    Default: (...$C.@TopTabStyle, Anchor: (...@PlotTabAnchor, Bottom: -8)),
-    Hovered: (...$C.@TopTabStyle, Anchor: (...@PlotTabAnchor, Bottom: -3)),
-    Pressed: (...$C.@TopTabStyle, Anchor: (...@PlotTabAnchor, Bottom: -6))
+    Default: (...@PlotTopTabStyle, Anchor: (...@PlotTabAnchor, Bottom: 2)),
+    Hovered: (...@PlotTopTabStyle, Anchor: (...@PlotTabAnchor, Bottom: 6)),
+    Pressed: (...@PlotTopTabStyle, Anchor: (...@PlotTabAnchor, Bottom: 4))
   ),
   SelectedTabStyle: (
     Default: (
-      ...$C.@TopTabStyle,
-      Anchor: (...@PlotTabAnchor, Bottom: 0),
+      ...@PlotTopTabStyle,
+      Anchor: (...@PlotTabAnchor, Bottom: 10),
       IconAnchor: (Width: 44, Height: 44),
       Overlay: "../Common/TabSelectedOverlay.png"
     )
@@ -91,22 +99,6 @@ $Sounds = "../Sounds.ui";
   Disabled: (Background: PatchStyle(TexturePath: "../grid.png", Border: 0, Color: #5c6a78(0.55)), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
   Sounds: $Sounds.@ButtonsLight
 );
-
-@ModerationTabIconLbl = (
-  FontSize: 6,
-  TextColor: #ffffff(0.01),
-  HorizontalAlignment: Center,
-  VerticalAlignment: Center
-);
-
-@ModerationTabButtonStyle = (
-  Default: (Background: (TexturePath: "../Common/Tab.png", Border: 0)),
-  Hovered: (Background: (TexturePath: "../Common/Tab.png", Border: 0, Color: #c5d0dc)),
-  Pressed: (Background: (TexturePath: "../Common/Tab.png", Border: 0, Color: #8fa0b0)),
-  Disabled: (Background: (TexturePath: "../Common/Tab.png", Border: 0, Color: #5c6a78(0.45)))
-);
-
-@ModerationTabAnchor = Anchor(Width: 82, Height: 62, Bottom: -8);
 
 $C.@PageOverlay {
   LayoutMode: Middle;
@@ -188,10 +180,10 @@ $C.@PageOverlay {
 
         Group #PlotCraftTabRow {
           LayoutMode: Left;
-          Anchor: (Height: 66, Left: 2, Right: 0);
+          Anchor: (Height: 78, Left: 2, Right: 0);
 
           TabNavigation #PlotCraftTabs {
-            Anchor: (Height: 66);
+            Anchor: (Height: 78);
             Style: @PlotCraftTabsStyle;
             SelectedTab: "Core";
 
@@ -223,38 +215,6 @@ $C.@PageOverlay {
               Icon: "../group_icon_256.png";
               TooltipText: "Community";
               Id: "Community";
-            }
-          }
-
-          Group {
-            FlexWeight: 1;
-          }
-
-          Group #ModerationTabHost {
-            LayoutMode: Full;
-            Anchor: (...@ModerationTabAnchor, Vertical: 0);
-
-            Group #ModerationTabSelected {
-              Anchor: (Full: 0);
-              LayoutMode: Full;
-              Background: (TexturePath: "../Common/TabSelectedOverlay.png", Border: 0);
-              Visible: false;
-              HitTestVisible: false;
-            }
-
-            Button #ModerationTabButton {
-              LayoutMode: Middle;
-              Anchor: (Full: 0);
-              Style: @ModerationTabButtonStyle;
-              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
-              TooltipText: "Moderate";
-
-              AssetImage #ModerationTabIcon {
-                Anchor: (Width: 44, Height: 44);
-                AssetPath: "UI/Custom/cog.png";
-                FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
-                HitTestVisible: false;
-              }
             }
           }
         }

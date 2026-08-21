@@ -402,6 +402,8 @@ function ingestModels(modelsRoot, modelCatalog) {
   if (!fs.existsSync(modelsRoot)) {
     return;
   }
+  /** @type {Map<string, object>} */
+  const byId = new Map();
   for (const file of walkFiles(modelsRoot, (f) => f.endsWith(".json"))) {
     let raw;
     try {
@@ -410,20 +412,65 @@ function ingestModels(modelsRoot, modelCatalog) {
       continue;
     }
     const id = path.basename(file, ".json");
-    const model = normalizeAssetPath(raw.Model);
-    const texture = normalizeAssetPath(raw.Texture);
+    byId.set(id, raw);
+  }
+
+  /** @type {Map<string, object|null>} */
+  const resolved = new Map();
+
+  /**
+   * Inherit Model / Texture / MinScale through Parent chains (Trork_Chieftain → Trork → …).
+   * @param {string} id
+   * @param {Set<string>} [stack]
+   */
+  function resolveModelEntry(id, stack = new Set()) {
+    if (resolved.has(id)) {
+      return resolved.get(id);
+    }
+    if (stack.has(id)) {
+      resolved.set(id, null);
+      return null;
+    }
+    const raw = byId.get(id);
+    if (!raw) {
+      resolved.set(id, null);
+      return null;
+    }
+    stack.add(id);
+    let parentEntry = null;
+    if (raw.Parent) {
+      parentEntry = resolveModelEntry(String(raw.Parent), stack);
+    }
+    stack.delete(id);
+
+    const model = normalizeAssetPath(raw.Model) || parentEntry?.model || null;
+    const texture = normalizeAssetPath(raw.Texture) || parentEntry?.texture || null;
+    const scale =
+      Number(raw.MinScale) ||
+      (parentEntry && Number(parentEntry.scale)) ||
+      1;
     if (!model) {
-      continue;
+      resolved.set(id, null);
+      return null;
     }
     trackCommonRef(model);
     if (texture) {
       trackCommonRef(texture);
     }
-    modelCatalog[id] = {
+    const entry = {
       model,
       texture: texture || null,
-      scale: Number(raw.MinScale) || 1,
+      scale: Number.isFinite(scale) && scale > 0 ? scale : 1,
     };
+    resolved.set(id, entry);
+    return entry;
+  }
+
+  for (const id of byId.keys()) {
+    const entry = resolveModelEntry(id);
+    if (entry) {
+      modelCatalog[id] = entry;
+    }
   }
 }
 

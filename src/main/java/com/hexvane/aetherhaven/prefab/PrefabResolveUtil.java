@@ -108,6 +108,12 @@ public final class PrefabResolveUtil {
         if (file != null) {
             return safeCommunityPath(file);
         }
+        // Player-authored props live under Server/Prefabs/Props/.
+        String propFileName = com.hexvane.aetherhaven.prop.PropPaths.prefabFileNameFromKey(key);
+        file = com.hexvane.aetherhaven.prop.PropPaths.propPrefabFile(dataDir, propFileName);
+        if (Files.isRegularFile(file)) {
+            return file.toAbsolutePath().normalize();
+        }
         String constructionId = constructionIdFromPrefabKey(key);
         if (constructionId != null) {
             file = CommunityPaths.resolvePreviewPrefab(dataDir, constructionId);

@@ -962,6 +962,21 @@ public final class PlotCreatorService {
             playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.incomplete"));
             return false;
         }
+        // Always write the prefab under the final id/path before icon render or community submit.
+        // Community remap changes the key; an earlier export under the local id would miss.
+        Path prefabOut =
+            com.hexvane.aetherhaven.prop.PropPaths.propPrefabFile(
+                plugin.getDataDirectory(),
+                com.hexvane.aetherhaven.prop.PropPaths.prefabFileNameFromKey(prefabKey)
+            );
+        PlotCreatorPrefabExporter.ExportResult exported =
+            PlotCreatorPrefabExporter.export(session.getWorld(), draft, prefabOut, true, false);
+        if (exported != PlotCreatorPrefabExporter.ExportResult.SUCCESS) {
+            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.prefabExport"));
+            return false;
+        }
+        draft.setPrefabPath(prefabKey);
+        draft.setPrefabFileName(com.hexvane.aetherhaven.prop.PropPaths.prefabFileNameFromKey(prefabKey));
         var def =
             com.hexvane.aetherhaven.prop.PropDefinition.create(
                 propId, draft.getDisplayName(), prefabKey.trim()
