@@ -23,6 +23,7 @@ public final class PlotCreatorDraftLoader {
         draft.setPrefabFileName(def.getPrefabPath());
         draft.setPlotAnchorOffset(def.getPlotAnchorOffset());
         draft.setRotationYaw(def.getRotationYaw());
+        draft.setFrontFacing(def.getFrontFacing());
         draft.setTreasuryGoldCoinCost(def.getTreasuryGoldCoinCost());
         draft.setSelfBuildGameDays(def.getSelfBuildGameDays());
         draft.setSelfBuildDaysInput(PlotCreatorService.formatSelfBuildDaysForField(def.getSelfBuildGameDays()));

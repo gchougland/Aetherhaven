@@ -3,10 +3,37 @@
  */
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { loadCatalogs } from "./BlockCatalog.js?v=36";
-import { buildPrefabMesh, disposeObject3D, PREFAB_VIEWER_TRANSFORM_REV } from "./PrefabMeshBuilder.js?v=36";
+import { loadCatalogs } from "./BlockCatalog.js?v=38";
+import { buildPrefabMesh, disposeObject3D, PREFAB_VIEWER_TRANSFORM_REV } from "./PrefabMeshBuilder.js?v=38";
 
 export { PREFAB_VIEWER_TRANSFORM_REV };
+
+/** @param {string|null|undefined} raw */
+export function normalizeFrontFacing(raw) {
+  const t = String(raw || "").trim();
+  if (/^east$/i.test(t)) return "East";
+  if (/^south$/i.test(t)) return "South";
+  if (/^west$/i.test(t)) return "West";
+  return "North";
+}
+
+/**
+ * Yaw orbit (degrees) so authored front faces the camera. South keeps the default +X/+Z offset;
+ * North is 180° so the -Z front is shown.
+ * @param {string|null|undefined} frontFacing
+ */
+export function yawOrbitDegreesForPreview(frontFacing) {
+  switch (normalizeFrontFacing(frontFacing)) {
+    case "East":
+      return 90;
+    case "South":
+      return 0;
+    case "West":
+      return 270;
+    default:
+      return 180;
+  }
+}
 
 const ICON_ENTER_FULLSCREEN = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6" /></svg>`;
 const ICON_EXIT_FULLSCREEN = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h6V3M21 9h-6V3M3 15h6v6M21 15h-6v6" /></svg>`;
@@ -163,7 +190,7 @@ export class PrefabViewer {
 
   /**
    * @param {string} prefabUrl
-   * @param {{ onProgress?: (done:number, total:number) => void }} [options]
+   * @param {{ onProgress?: (done:number, total:number) => void, frontFacing?: string }} [options]
    */
   async loadPrefabUrl(prefabUrl, options = {}) {
     const res = await fetch(prefabUrl);
@@ -176,7 +203,7 @@ export class PrefabViewer {
 
   /**
    * @param {object} prefab
-   * @param {{ onProgress?: (done:number, total:number) => void }} [options]
+   * @param {{ onProgress?: (done:number, total:number) => void, frontFacing?: string }} [options]
    */
   async loadPrefab(prefab, options = {}) {
     await loadCatalogs(this.assetBase);
@@ -194,15 +221,16 @@ export class PrefabViewer {
     this.scene.add(root);
     // Match the website building modal: measure the container after the mesh exists, then frame.
     this.resize();
-    this.fitToBounds(bounds);
+    this.fitToBounds(bounds, { frontFacing: options.frontFacing });
     // One extra frame so textures settle before screenshot consumers read the canvas.
     this.renderer.render(this.scene, this.camera);
   }
 
   /**
    * @param {THREE.Box3} bounds
+   * @param {{ frontFacing?: string }} [options]
    */
-  fitToBounds(bounds) {
+  fitToBounds(bounds, options = {}) {
     const size = bounds.getSize(new THREE.Vector3());
     const center = bounds.getCenter(new THREE.Vector3());
     const maxDim = Math.max(size.x, size.y, size.z, 1);
@@ -210,7 +238,16 @@ export class PrefabViewer {
     // Icons only differ by a transparent clear color (and no grid).
     const dist = maxDim * 1.55;
     this.controls.target.copy(center);
-    this.camera.position.set(center.x + dist * 0.85, center.y + dist * 0.65, center.z + dist * 0.85);
+    const ox = dist * 0.85;
+    const oy = dist * 0.65;
+    const oz = dist * 0.85;
+    const yawDeg = yawOrbitDegreesForPreview(options.frontFacing);
+    const yaw = (yawDeg * Math.PI) / 180;
+    const cos = Math.cos(yaw);
+    const sin = Math.sin(yaw);
+    const rx = ox * cos - oz * sin;
+    const rz = ox * sin + oz * cos;
+    this.camera.position.set(center.x + rx, center.y + oy, center.z + rz);
     this.camera.near = Math.max(0.05, dist / 200);
     this.camera.far = Math.max(200, dist * 20);
     this.camera.updateProjectionMatrix();
@@ -279,10 +316,13 @@ export class PrefabViewer {
  * Mount helper used by the building modal and the headless render page.
  * @param {HTMLElement} container
  * @param {string} prefabUrl
- * @param {{ assetBase?: string, interactive?: boolean, onProgress?: Function }} [options]
+ * @param {{ assetBase?: string, interactive?: boolean, onProgress?: Function, frontFacing?: string }} [options]
  */
 export async function mountPrefabViewer(container, prefabUrl, options = {}) {
   const viewer = new PrefabViewer(container, options);
-  await viewer.loadPrefabUrl(prefabUrl, { onProgress: options.onProgress });
+  await viewer.loadPrefabUrl(prefabUrl, {
+    onProgress: options.onProgress,
+    frontFacing: options.frontFacing,
+  });
   return viewer;
 }

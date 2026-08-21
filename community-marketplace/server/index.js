@@ -67,6 +67,7 @@ import {
 } from "./wikiRender.js";
 import { createPreviewScreenshotService } from "./previewScreenshot.js";
 import { createPropIconRenderService } from "./propIconRender.js";
+import { readFrontFacingFromDefinition } from "./frontFacing.js";
 // sharp is loaded lazily inside processScreenshot so native-lib failures
 // do not crash startup before Railway's /api/v1/health check can succeed.
 
@@ -276,6 +277,7 @@ function enrichPendingSubmission(meta) {
     : readBuildingRequiredMods(definitionPath);
   enriched.materials = readBuildingMaterials(definitionPath);
   enriched.treasuryGoldCoinCost = readBuildingGoldCost(definitionPath);
+  enriched.frontFacing = readFrontFacingFromDefinition(definitionPath);
   if (description) {
     enriched.description = description;
   }
@@ -1335,6 +1337,7 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
     } else {
       delete entry.treasuryGoldCoinCost;
     }
+    entry.frontFacing = readFrontFacingFromDefinition(paths.definition);
     const requiredModsFromEntry = normalizeRequiredMods(e.requiredMods);
     const requiredMods = requiredModsFromEntry.length
       ? requiredModsFromEntry
@@ -3188,6 +3191,7 @@ app.post(
       const attach = String(req.query.attach || req.body?.attach || "").trim() === "1";
       const ownerKindRaw = String(req.query.ownerKind || req.body?.ownerKind || "").trim().toLowerCase();
       const ownerId = String(req.query.id || req.body?.id || "").trim();
+      const frontFacing = String(req.query.frontFacing || req.body?.frontFacing || "").trim();
       const prefabFile = req.files?.prefab?.[0];
 
       if (!propIconRender.assetsReady()) {
@@ -3201,7 +3205,7 @@ app.post(
       let iconBuffer;
       if (prefabFile) {
         assertSize(prefabFile.size, MAX_PREFAB_BYTES, "prefab");
-        iconBuffer = await propIconRender.renderPrefabBuffer(prefabFile.buffer);
+        iconBuffer = await propIconRender.renderPrefabBuffer(prefabFile.buffer, frontFacing);
       } else if (ownerId) {
         const ownerKind = ownerKindRaw === "approved" ? "approved" : "pending";
         if (ownerKind === "approved") {

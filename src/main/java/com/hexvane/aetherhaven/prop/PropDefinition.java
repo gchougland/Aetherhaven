@@ -23,23 +23,33 @@ public final class PropDefinition {
     @Nullable
     private String iconPath;
 
+    /**
+     * Prefab-local cardinal that is the front ({@code North}/{@code East}/{@code South}/{@code West}).
+     * Default North ({@code -Z}).
+     */
+    @SerializedName("frontFacing")
+    @Nullable
+    private String frontFacing;
+
     public PropDefinition() {}
 
     private PropDefinition(
         @Nonnull String id,
         @Nullable String displayName,
         @Nonnull String prefabPath,
-        @Nullable String iconPath
+        @Nullable String iconPath,
+        @Nullable String frontFacing
     ) {
         this.id = id;
         this.displayName = displayName;
         this.prefabPath = prefabPath;
         this.iconPath = iconPath;
+        this.frontFacing = com.hexvane.aetherhaven.placement.FrontFacing.normalize(frontFacing);
     }
 
     @Nonnull
     public static PropDefinition create(@Nonnull String id, @Nullable String displayName, @Nonnull String prefabPath) {
-        return create(id, displayName, prefabPath, null);
+        return create(id, displayName, prefabPath, null, null);
     }
 
     @Nonnull
@@ -49,11 +59,23 @@ public final class PropDefinition {
         @Nonnull String prefabPath,
         @Nullable String iconPath
     ) {
+        return create(id, displayName, prefabPath, iconPath, null);
+    }
+
+    @Nonnull
+    public static PropDefinition create(
+        @Nonnull String id,
+        @Nullable String displayName,
+        @Nonnull String prefabPath,
+        @Nullable String iconPath,
+        @Nullable String frontFacing
+    ) {
         return new PropDefinition(
             id.trim(),
             displayName != null ? displayName.trim() : null,
             prefabPath.trim(),
-            iconPath != null && !iconPath.isBlank() ? iconPath.trim() : null
+            iconPath != null && !iconPath.isBlank() ? iconPath.trim() : null,
+            frontFacing
         );
     }
 
@@ -79,5 +101,14 @@ public final class PropDefinition {
 
     public void setIconPath(@Nullable String iconPath) {
         this.iconPath = iconPath != null && !iconPath.isBlank() ? iconPath.trim() : null;
+    }
+
+    @Nonnull
+    public String getFrontFacing() {
+        return com.hexvane.aetherhaven.placement.FrontFacing.normalize(frontFacing);
+    }
+
+    public void setFrontFacing(@Nullable String frontFacing) {
+        this.frontFacing = com.hexvane.aetherhaven.placement.FrontFacing.normalize(frontFacing);
     }
 }

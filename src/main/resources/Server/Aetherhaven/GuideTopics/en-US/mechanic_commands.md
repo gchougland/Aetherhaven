@@ -52,6 +52,11 @@ author: Hexvane
   - Permission: `hexvane.aetherhaven.command.aetherhaven.town.relinquish`
   - Access: Adventure
 
+- **`/ah town style [townName]`** — Open the town look picker for building quests.
+  - `[townName]` — Full town name with spaces. Omit for your own town.
+  - Permission: `hexvane.aetherhaven.command.aetherhaven.town.style`
+  - Access: Adventure
+
 ### Floating gifts
 
 - **`/ah floatinggift next`** — See when your next floating gift balloon can appear.

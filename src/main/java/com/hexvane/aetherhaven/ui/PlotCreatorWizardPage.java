@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.placement.FrontFacing;
 import com.hexvane.aetherhaven.plotcreator.PlotBuildingKind;
 import com.hexvane.aetherhaven.plotcreator.PlotBuildingKindRequirements;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorDraft;
@@ -26,11 +27,14 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.CustomUIPage;
+import com.hypixel.hytale.server.core.ui.DropdownEntryInfo;
+import com.hypixel.hytale.server.core.ui.LocalizableString;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -214,6 +218,12 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             EventData.of("@StyleId", "#StyleIdField.Value"),
             false
         );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
+            "#FrontFacingDropdown",
+            EventData.of("@FrontFacing", "#FrontFacingDropdown.Value"),
+            false
+        );
         wireConfigureToggle(eventBuilder, "#FestivalAllDayToggle", "@FestivalAllDay");
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.ValueChanged,
@@ -297,6 +307,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#SubmitToCommunityLabel.TextSpans", Message.translation(MSG + ".field.submitToCommunity"));
         b.set("#StyleIdLabel.TextSpans", Message.translation(MSG + ".field.styleId"));
         b.set("#StyleIdField.PlaceholderText", Message.translation(MSG + ".field.styleId.hint"));
+        b.set("#FrontFacingLabel.TextSpans", Message.translation(MSG + ".field.frontFacing"));
+        b.set("#FrontFacingHint.TextSpans", Message.translation(MSG + ".field.frontFacing.hint"));
         b.set("#FestivalActivityLabel.TextSpans", Message.translation(MSG + ".field.festivalActivity"));
         b.set("#FestivalActivityField.PlaceholderText", Message.translation(MSG + ".field.festivalActivity.hint"));
         b.set("#FestivalSeasonLabel.TextSpans", Message.translation(MSG + ".field.festivalSeason"));
@@ -357,6 +369,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#PlotTokenLockedHint.Visible", false);
             b.set("#StyleIdLabel.Visible", false);
             b.set("#StyleIdField.Visible", false);
+            setFrontFacingVisible(b, false);
             b.set("#OpenMaterialsButton.Visible", false);
             b.set("#FillFromBuildShapeButton.Visible", false);
             b.set("#MaterialsPageLabel.Visible", false);
@@ -393,6 +406,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#PlotTokenLockedHint.Visible", false);
             b.set("#StyleIdLabel.Visible", false);
             b.set("#StyleIdField.Visible", false);
+            setFrontFacingVisible(b, false);
             b.set("#OpenMaterialsButton.Visible", false);
             b.set("#FillFromBuildShapeButton.Visible", false);
             b.set("#MaterialsPageLabel.Visible", false);
@@ -457,6 +471,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#PlotTokenLockedHint.Visible", false);
         b.set("#StyleIdLabel.Visible", false);
         b.set("#StyleIdField.Visible", false);
+        setFrontFacingVisible(b, false);
         boolean wallPieceCost =
             step == PlotCreatorStep.WALL_PIECES
                 && PlotCreatorWallPieceAuthoring.isMaterialsSubstep(session.getDraft());
@@ -551,6 +566,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#PlotTokenLockedHint.Visible", true);
         b.set("#StyleIdLabel.Visible", true);
         b.set("#StyleIdField.Visible", true);
+        setFrontFacingVisible(b, true);
         b.set("#OpenMaterialsButton.Visible", false);
         b.set("#FillFromBuildShapeButton.Visible", false);
         b.set("#MaterialsPageLabel.Visible", false);
@@ -592,6 +608,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#PlotTokenLockedHint.Visible", false);
         b.set("#StyleIdLabel.Visible", false);
         b.set("#StyleIdField.Visible", false);
+        setFrontFacingVisible(b, true);
         b.set("#OpenMaterialsButton.Visible", false);
         b.set("#FillFromBuildShapeButton.Visible", false);
         b.set("#MaterialsPageLabel.Visible", false);
@@ -634,6 +651,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#PlotTokenLockedHint.Visible", false);
         b.set("#StyleIdLabel.Visible", false);
         b.set("#StyleIdField.Visible", false);
+        setFrontFacingVisible(b, false);
         b.set("#OpenMaterialsButton.Visible", false);
         b.set("#FillFromBuildShapeButton.Visible", false);
         b.set("#MaterialsPageLabel.Visible", false);
@@ -677,6 +695,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         boolean look = session.getDraft().isFestivalLookMode();
         b.set("#StyleIdLabel.Visible", look);
         b.set("#StyleIdField.Visible", look);
+        setFrontFacingVisible(b, look);
         b.set("#OpenMaterialsButton.Visible", false);
         b.set("#FillFromBuildShapeButton.Visible", false);
         b.set("#MaterialsPageLabel.Visible", false);
@@ -690,6 +709,26 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             look && isCommunityMarketplaceEnabled() && !session.getDraft().isCommunitySubmissionEdit()
         );
         applyFestivalFieldVisibility(b, !look, !look && !session.getDraft().isFestivalAllDay());
+    }
+
+    private static void setFrontFacingVisible(@Nonnull UICommandBuilder b, boolean visible) {
+        b.set("#FrontFacingLabel.Visible", visible);
+        b.set("#FrontFacingDropdown.Visible", visible);
+        b.set("#FrontFacingHint.Visible", visible);
+    }
+
+    private static void applyFrontFacingDropdown(@Nonnull UICommandBuilder b, @Nonnull String selected) {
+        ObjectArrayList<DropdownEntryInfo> entries = new ObjectArrayList<>();
+        for (String dir : new String[] {FrontFacing.NORTH, FrontFacing.EAST, FrontFacing.SOUTH, FrontFacing.WEST}) {
+            entries.add(
+                new DropdownEntryInfo(
+                    LocalizableString.fromMessageId(MSG + ".frontFacing." + dir),
+                    dir
+                )
+            );
+        }
+        b.set("#FrontFacingDropdown.Entries", entries);
+        b.set("#FrontFacingDropdown.Value", FrontFacing.normalize(selected));
     }
 
     private static void applyFestivalFieldVisibility(
@@ -756,6 +795,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         } else {
             b.set("#StyleIdField.Value", "");
         }
+        applyFrontFacingDropdown(b, d.getFrontFacing());
         b.set(
             "#FestivalActivityField.Value",
             d.getFestivalMechanicInput() != null
@@ -1228,6 +1268,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         if (data.styleId != null) {
             d.setStyleId(data.styleId);
         }
+        if (data.frontFacing != null) {
+            d.setFrontFacing(data.frontFacing);
+        }
         if (data.festivalActivity != null) {
             d.setFestivalMechanicInput(data.festivalActivity);
         }
@@ -1398,6 +1441,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             .add()
             .append(new KeyedCodec<>("@StyleId", Codec.STRING), (d, v) -> d.styleId = v, d -> d.styleId)
             .add()
+            .append(new KeyedCodec<>("@FrontFacing", Codec.STRING), (d, v) -> d.frontFacing = v, d -> d.frontFacing)
+            .add()
             .append(new KeyedCodec<>("FestivalId", Codec.STRING), (d, v) -> d.festivalId = v, d -> d.festivalId)
             .add()
             .append(
@@ -1470,6 +1515,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         private Boolean submitToCommunity;
         @Nullable
         private String styleId;
+        @Nullable
+        private String frontFacing;
         @Nullable
         private String festivalId;
         @Nullable

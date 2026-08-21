@@ -62,6 +62,7 @@ public final class PlotCreatorFestivalJsonWriter {
             if (draft.getStyleId() != null && !draft.getStyleId().isBlank()) {
                 root.put("styleId", draft.getStyleId());
             }
+            root.put("frontFacing", draft.getFrontFacing());
         }
         String calendarIcon;
         if (existing != null && !draft.isFestivalLookMode()) {

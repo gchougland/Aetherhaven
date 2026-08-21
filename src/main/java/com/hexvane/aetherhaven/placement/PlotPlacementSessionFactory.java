@@ -8,7 +8,6 @@ import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -24,7 +23,8 @@ public final class PlotPlacementSessionFactory {
         @Nonnull World world,
         @Nonnull Vector3i anchor,
         @Nonnull PlotTokenPlacementOption option,
-        @Nonnull AetherhavenPlugin plugin
+        @Nonnull AetherhavenPlugin plugin,
+        float playerYawRadians
     ) {
         if (option.isMovePlot()) {
             UUID plotId = option.getMovePlotId();
@@ -50,6 +50,21 @@ public final class PlotPlacementSessionFactory {
             session.setMoveViaToken(true);
             return session;
         }
-        return new PlotPlacementSession(world, anchor, 0, option.getConstructionId());
+        int steps = initialRotationSteps(plugin, option.getConstructionId(), playerYawRadians);
+        return new PlotPlacementSession(world, anchor, steps, option.getConstructionId());
+    }
+
+    /** Initial CW rotation steps so the construction front faces the player. */
+    public static int initialRotationSteps(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nullable String constructionId,
+        float playerYawRadians
+    ) {
+        if (constructionId == null || constructionId.isBlank()) {
+            return FrontFacing.rotationStepsFacingPlayer(FrontFacing.NORTH, playerYawRadians);
+        }
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(constructionId.trim());
+        String front = def != null ? def.getFrontFacing() : FrontFacing.NORTH;
+        return FrontFacing.rotationStepsFacingPlayer(front, playerYawRadians);
     }
 }

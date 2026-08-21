@@ -45,7 +45,7 @@
     <div id="status">Loading…</div>
     <div id="viewer"></div>
     <script type="module">
-      import { PrefabViewer, PREFAB_VIEWER_TRANSFORM_REV } from "/prefab-viewer/PrefabViewer.js?v=36";
+      import { PrefabViewer, PREFAB_VIEWER_TRANSFORM_REV } from "/prefab-viewer/PrefabViewer.js?v=38";
 
       window.__PREFAB_RENDER_READY__ = false;
       window.__PREFAB_RENDER_ERROR__ = null;
@@ -55,6 +55,7 @@
       // Default interactive for local debugging; ?interactive=0 keeps screenshot mode.
       const interactive = params.get("interactive") !== "0";
       const iconMode = params.get("mode") === "icon";
+      const frontFacing = params.get("frontFacing") || "North";
       const statusEl = document.getElementById("status");
       if (!interactive && statusEl) {
         statusEl.style.display = "none";
@@ -76,6 +77,7 @@
           transparentBackground: iconMode,
         });
         await viewer.loadPrefabUrl(prefabUrl, {
+          frontFacing,
           onProgress: (done, total) => {
             statusEl.textContent = `Rendering ${done}/${total} (${PREFAB_VIEWER_TRANSFORM_REV})`;
           },

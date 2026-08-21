@@ -328,9 +328,10 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 return;
             }
             World world = store.getExternalData().getWorld();
+            float yaw = PlotPlacementNudgeUtil.getPlayerYawRadians(ref, store);
             if (chosen.isMovePlot()) {
                 PlotPlacementSession moveSession =
-                    PlotPlacementSessionFactory.createFromOption(world, session.getAnchor(), chosen, plugin);
+                    PlotPlacementSessionFactory.createFromOption(world, session.getAnchor(), chosen, plugin, yaw);
                 if (moveSession == null) {
                     sendError(store, ref, "That building can no longer be moved.");
                     scheduleRebuild(ref, store);
@@ -344,6 +345,9 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 session.setConstructionId(chosen.getConstructionId());
                 session.setMovePlotId(null);
                 session.setMoveViaToken(false);
+                session.setRotationSteps(
+                    PlotPlacementSessionFactory.initialRotationSteps(plugin, chosen.getConstructionId(), yaw)
+                );
             }
             scheduleRebuild(ref, store);
             return;

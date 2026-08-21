@@ -23,12 +23,21 @@ public final class PlotCreatorIconExporter {
         @Nullable String constructionId,
         @Nonnull Path dataDirectory
     ) {
+        return tryExportIcon(prefab, constructionId, dataDirectory, null);
+    }
+
+    public static boolean tryExportIcon(
+        @Nonnull BlockSelection prefab,
+        @Nullable String constructionId,
+        @Nonnull Path dataDirectory,
+        @Nullable String frontFacing
+    ) {
         if (constructionId == null || constructionId.isBlank()) {
             LOGGER.atWarning().log("Plot creator icon export: missing construction id");
             return false;
         }
         try {
-            BufferedImage image = PrefabIsometricIconRenderer.render(prefab);
+            BufferedImage image = PrefabIsometricIconRenderer.render(prefab, frontFacing);
             if (image == null) {
                 LOGGER.atWarning().log("Plot creator icon export: no renderable blocks for %s", constructionId);
                 return false;

@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { processScreenshot, ScreenshotProcessingError } from "./imageProcessing.js";
 import { autoSetCoverFromExistingApprovedScreenshots } from "./coverScreenshots.js";
 import { resolveChromiumExecutable } from "./chromiumExecutable.js";
+import { readFrontFacingFromDefinition } from "./frontFacing.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -28,6 +29,7 @@ let sharedBrowser = null;
  *   meta: object,
  *   prefabPath: string,
  *   prefabUrl: string,
+ *   frontFacing: string,
  * } | null}
  */
 export function resolvePreviewScreenshotTarget(storage, port, ownerKind, ownerId) {
@@ -44,12 +46,14 @@ export function resolvePreviewScreenshotTarget(storage, port, ownerKind, ownerId
       if (!fs.existsSync(prefabPath)) {
         return null;
       }
+      const definitionPath = storage.pendingDefinitionFile(id, "pending");
       return {
         ownerKind: "pending",
         ownerId: id,
         meta,
         prefabPath,
         prefabUrl: `http://127.0.0.1:${port}/internal/pending-prefab/${encodeURIComponent(id)}.json`,
+        frontFacing: readFrontFacingFromDefinition(definitionPath),
       };
     }
     const approved = storage.findApprovedBySubmissionId(id);
@@ -76,6 +80,7 @@ export function resolvePreviewScreenshotTarget(storage, port, ownerKind, ownerId
     meta,
     prefabPath: paths.prefab,
     prefabUrl: `http://127.0.0.1:${port}/internal/approved-prefab/${encodeURIComponent(id)}.json`,
+    frontFacing: readFrontFacingFromDefinition(paths.definition),
   };
 }
 
@@ -208,7 +213,8 @@ export function createPreviewScreenshotService(options) {
 
     const pageUrl =
       `http://127.0.0.1:${port}/internal/prefab-render.html` +
-      `?prefabUrl=${encodeURIComponent(target.prefabUrl)}&interactive=0`;
+      `?prefabUrl=${encodeURIComponent(target.prefabUrl)}&interactive=0` +
+      `&frontFacing=${encodeURIComponent(target.frontFacing || "North")}`;
 
     let context;
     try {

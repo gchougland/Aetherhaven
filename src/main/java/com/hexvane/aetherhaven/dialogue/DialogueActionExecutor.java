@@ -287,7 +287,7 @@ public final class DialogueActionExecutor {
             QuestProgressionService.initialize(plugin, town, qid);
             QuestLifecycleEffects.runOnStart(world, plugin, town, tm, qdef, npcUuid);
             if (!QuestProgressionService.deferPlotTokenOnQuestStart(qdef)
-                && QuestPlotTokenOnStart.grantIfConfigured(plugin, qdef, playerRef, store)) {
+                && QuestPlotTokenOnStart.grantIfConfigured(plugin, qdef, town, playerRef, store)) {
                 QuestProgressionService.markStartGrant(
                     plugin,
                     town,
@@ -1321,7 +1321,7 @@ public final class DialogueActionExecutor {
             return;
         }
         QuestDefinition qdef = plugin.getQuestCatalog().get(qid);
-        if (qdef != null && QuestPlotTokenOnStart.grantIfConfigured(plugin, qdef, playerRef, store)) {
+        if (qdef != null && QuestPlotTokenOnStart.grantIfConfigured(plugin, qdef, town, playerRef, store)) {
             QuestProgressionService.markStartGrant(plugin, town, qid, QuestProgressionService.PLOT_TOKEN_RECEIVED);
         }
         TownManager tm = owningTownManager(town, localTm);

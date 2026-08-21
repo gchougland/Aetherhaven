@@ -63,6 +63,7 @@ public final class BuildingEditorJsonWriter {
             List.of(draft.getPlotAnchorOffset()[0], draft.getPlotAnchorOffset()[1], draft.getPlotAnchorOffset()[2])
         );
         root.put("rotationYaw", draft.getRotationYaw() != null ? draft.getRotationYaw() : "None");
+        root.put("frontFacing", draft.getFrontFacing());
         root.put("selfBuildGameDays", draft.getSelfBuildGameDays());
         if (draft.getTreasuryGoldCoinCost() > 0L) {
             root.put("treasuryGoldCoinCost", draft.getTreasuryGoldCoinCost());

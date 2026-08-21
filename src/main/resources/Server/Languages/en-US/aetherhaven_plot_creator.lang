@@ -416,6 +416,12 @@ aetherhaven.plotcreator.field.plotTokenLocked = Plot token locked by default
 aetherhaven.plotcreator.field.plotTokenLocked.hint = When on, players must spend an unlock point at the plot crafting bench before they can craft plot tokens for this building.
 aetherhaven.plotcreator.field.styleId = Style
 aetherhaven.plotcreator.field.styleId.hint = Any name you like
+aetherhaven.plotcreator.field.frontFacing = Front direction
+aetherhaven.plotcreator.field.frontFacing.hint = Pick the side that should face you when you place this, and that previews show.
+aetherhaven.plotcreator.frontFacing.North = North
+aetherhaven.plotcreator.frontFacing.East = East
+aetherhaven.plotcreator.frontFacing.South = South
+aetherhaven.plotcreator.frontFacing.West = West
 
 aetherhaven.plotcreator.step.REVIEW.title = Review
 aetherhaven.plotcreator.step.REVIEW.short = Review

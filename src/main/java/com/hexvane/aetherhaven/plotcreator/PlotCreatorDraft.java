@@ -178,6 +178,9 @@ public final class PlotCreatorDraft {
     private int[] guildMasterSpawnLocal;
     @Nullable
     private String rotationYaw = "None";
+    /** Prefab-local front cardinal (North/East/South/West); default North. */
+    @Nonnull
+    private String frontFacing = "North";
     @Nonnull
     private final List<PlotCreatorAdventurerSpawnEntry> adventurerSpawns = new ArrayList<>();
 
@@ -1010,6 +1013,15 @@ public final class PlotCreatorDraft {
 
     public void setRotationYaw(@Nullable String rotationYaw) {
         this.rotationYaw = rotationYaw != null && !rotationYaw.isBlank() ? rotationYaw.trim() : "None";
+    }
+
+    @Nonnull
+    public String getFrontFacing() {
+        return com.hexvane.aetherhaven.placement.FrontFacing.normalize(frontFacing);
+    }
+
+    public void setFrontFacing(@Nullable String frontFacing) {
+        this.frontFacing = com.hexvane.aetherhaven.placement.FrontFacing.normalize(frontFacing);
     }
 
     @Nonnull

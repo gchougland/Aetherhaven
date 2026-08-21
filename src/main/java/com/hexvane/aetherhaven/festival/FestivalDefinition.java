@@ -90,6 +90,14 @@ public final class FestivalDefinition {
     @Nullable
     private String styleId;
 
+    /**
+     * Prefab-local front cardinal for festival looks ({@code North}/{@code East}/{@code South}/{@code West}).
+     * Used for marketplace preview framing.
+     */
+    @SerializedName("frontFacing")
+    @Nullable
+    private String frontFacing;
+
     @SerializedName("spots")
     @Nullable
     private List<SpotRow> spots;
@@ -286,6 +294,12 @@ public final class FestivalDefinition {
     @Nullable
     public String getStyleId() {
         return styleId != null && !styleId.isBlank() ? styleId.trim() : null;
+    }
+
+    /** Prefab-local front cardinal; missing values default to North. */
+    @Nonnull
+    public String getFrontFacing() {
+        return com.hexvane.aetherhaven.placement.FrontFacing.normalize(frontFacing);
     }
 
     /** Base holiday id: {@link #getCountsAsFestivalId()} for a look, otherwise {@link #getId()}. */

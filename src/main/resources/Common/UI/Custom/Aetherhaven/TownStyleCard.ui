@@ -1,0 +1,50 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@CardNameStyle = (...$C.@DefaultLabelStyle, RenderBold: true, FontSize: 13, HorizontalAlignment: Center);
+@CardDescStyle = (...$C.@DefaultLabelStyle, Wrap: true, FontSize: 11, HorizontalAlignment: Center, TextColor: #c8c2b0);
+@CardAuthorStyle = (...$C.@DefaultLabelStyle, FontSize: 10, HorizontalAlignment: Center, TextColor: #8a8070);
+
+Group #TownStyleCard {
+  Anchor: (Width: 320, Height: 268, Right: 12, Bottom: 12);
+  LayoutMode: Top;
+  Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #1e2430(0.92));
+  Padding: (Full: 10);
+
+  Group #ImageBox {
+    Anchor: (Height: 120, Bottom: 8);
+    LayoutMode: Full;
+    Background: #1a2530;
+    Padding: 2;
+
+    AssetImage #ShowcaseImage {
+      Anchor: (Full: 0);
+      FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+      HitTestVisible: false;
+    }
+  }
+
+  Label #StyleName {
+    Style: @CardNameStyle;
+    Text: "";
+    Anchor: (Bottom: 4);
+  }
+
+  Label #StyleAuthor {
+    Style: @CardAuthorStyle;
+    Text: "";
+    Anchor: (Bottom: 4);
+  }
+
+  Label #StyleDesc {
+    Style: @CardDescStyle;
+    Text: "";
+    FlexWeight: 1;
+    Anchor: (Bottom: 8);
+  }
+
+  $C.@TextButton #ActionButton {
+    Anchor: (Height: 34);
+    Text: "";
+  }
+}

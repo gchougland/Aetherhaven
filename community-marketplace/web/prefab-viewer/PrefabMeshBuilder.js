@@ -7,11 +7,11 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=36";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=36";
+} from "./BlockCatalog.js?v=38";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=38";
 
 /** Bump when transform math changes — shown in the viewer so we can confirm the live build. */
-export const PREFAB_VIEWER_TRANSFORM_REV = "xform-36";
+export const PREFAB_VIEWER_TRANSFORM_REV = "xform-38";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
@@ -66,10 +66,11 @@ export function parseEntityEuler(rot) {
   }
   const vals = [pitch, yaw, roll];
   const maxAbs = Math.max(...vals.map((v) => Math.abs(v)));
-  // Legacy degrees: any |angle| past a full turn, or near-integer angles beyond π.
+  // Legacy degrees are near-whole numbers past π (90, 180, …). Do NOT treat |angle| > 2π
+  // alone as degrees — live prefabs often store unwrapped radians (kweebec shrine roofs
+  // use yaw ≈ -9.4 rad), and converting those to degrees flattens the slope.
   const looksLikeDegrees =
-    maxAbs > Math.PI * 2 + 0.05 ||
-    (maxAbs > Math.PI + 0.01 && vals.every((v) => Math.abs(v - Math.round(v)) < 1e-3));
+    maxAbs > Math.PI + 0.01 && vals.every((v) => Math.abs(v - Math.round(v)) < 1e-3);
   if (looksLikeDegrees) {
     const toRad = Math.PI / 180;
     pitch *= toRad;
@@ -180,7 +181,7 @@ export function entityWorldScale(comps, _modelPath = null) {
 }
 
 /** @deprecated Use the loader's unit scale; kept as a re-export for older callers. */
-export { isCharacterDensityModel } from "./BlockyModelLoader.js?v=36";
+export { isCharacterDensityModel } from "./BlockyModelLoader.js?v=38";
 
 /**
  * @param {any} pos

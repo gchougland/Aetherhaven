@@ -1,0 +1,68 @@
+$C = "../Common.ui";
+
+@HintStyle = (
+  FontSize: 12,
+  TextColor: #8a8070,
+  Wrap: true
+);
+
+@CardNameStyle = (...$C.@DefaultLabelStyle, RenderBold: true, FontSize: 14, HorizontalAlignment: Center);
+@CardDescStyle = (...$C.@DefaultLabelStyle, Wrap: true, FontSize: 11, HorizontalAlignment: Center, TextColor: #c8c2b0);
+@CardAuthorStyle = (...$C.@DefaultLabelStyle, FontSize: 10, HorizontalAlignment: Center, TextColor: #8a8070);
+
+$C.@PageOverlay {
+  LayoutMode: Top;
+
+  Group {
+    FlexWeight: 1;
+    Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
+
+    Group {
+      LayoutMode: Middle;
+      Anchor: (Full: 0);
+
+      $C.@DecoratedContainer {
+        Anchor: (Width: 720, Height: 640);
+
+        #Title {
+          Label #PageTitleText {
+            Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+            Padding: (Horizontal: 19);
+            Text: "";
+          }
+        }
+
+        #Content {
+          LayoutMode: Top;
+          Padding: (Top: 12, Left: 16, Right: 16, Bottom: 16);
+
+          Label #StepHint {
+            Style: (...@HintStyle);
+            Text: "";
+            Anchor: (Bottom: 10);
+          }
+
+          Group #StyleListScroll {
+            LayoutMode: TopScrolling;
+            ScrollbarStyle: $C.@DefaultScrollbarStyle;
+            FlexWeight: 1;
+            Anchor: (Bottom: 12);
+
+            Group #StyleCards {
+              LayoutMode: LeftCenterWrap;
+            }
+          }
+
+          Group #ButtonRow {
+            LayoutMode: Left;
+
+            $C.@CancelTextButton #CloseButton {
+              Anchor: (Height: 40, Width: 110);
+              Text: "";
+            }
+          }
+        }
+      }
+    }
+  }
+}

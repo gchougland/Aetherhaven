@@ -61,6 +61,14 @@ public final class ConstructionDefinition {
     @SerializedName("rotationYaw")
     private String rotationYaw = "None";
 
+    /**
+     * Prefab-local cardinal that is the front of this build ({@code North}/{@code East}/{@code South}/{@code West}).
+     * Used for default placement facing the player and for icon / screenshot framing. Default North ({@code -Z}).
+     */
+    @SerializedName("frontFacing")
+    @Nullable
+    private String frontFacing;
+
     @SerializedName("requiredVillagerId")
     @Nullable
     private String requiredVillagerId;
@@ -367,6 +375,16 @@ public final class ConstructionDefinition {
 
     public String getRotationYaw() {
         return rotationYaw != null ? rotationYaw : "None";
+    }
+
+    /** Prefab-local front cardinal; missing or blank values default to North. */
+    @Nonnull
+    public String getFrontFacing() {
+        return com.hexvane.aetherhaven.placement.FrontFacing.normalize(frontFacing);
+    }
+
+    public void setFrontFacing(@Nullable String frontFacing) {
+        this.frontFacing = com.hexvane.aetherhaven.placement.FrontFacing.normalize(frontFacing);
     }
 
     @Nullable

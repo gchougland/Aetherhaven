@@ -1640,7 +1640,7 @@ function renderOwnerScreenshots(item, options = {}) {
           type="button"
           class="secondary screenshot-capture-btn"
           ${captureDisabled}
-          onclick="event.stopPropagation(); openPrefabCaptureModal(${jsString(ownerKind)}, ${jsString(ownerId)}, ${jsString(prefabUrl)}, ${asAdmin}, ${jsString(reloadFn)})"
+          onclick="event.stopPropagation(); openPrefabCaptureModal(${jsString(ownerKind)}, ${jsString(ownerId)}, ${jsString(prefabUrl)}, ${asAdmin}, ${jsString(reloadFn)}, ${jsString(item.frontFacing || "North")})"
         >Capture from 3D</button>`
     : "";
   const generateCoverBtn =
@@ -1944,7 +1944,7 @@ function ensurePrefabCaptureModal() {
   return modal;
 }
 
-async function openPrefabCaptureModal(ownerKind, ownerId, prefabUrl, asAdmin = false, reloadFn = "loadSubmissions") {
+async function openPrefabCaptureModal(ownerKind, ownerId, prefabUrl, asAdmin = false, reloadFn = "loadSubmissions", frontFacing = "North") {
   if (!prefabUrl) {
     alert("3D preview is not available for this build.");
     return;
@@ -2000,6 +2000,7 @@ async function openPrefabCaptureModal(ownerKind, ownerId, prefabUrl, asAdmin = f
     const viewer = new api.PrefabViewer(viewerEl, { interactive: true });
     prefabCaptureState.viewer = viewer;
     await viewer.loadPrefabUrl(prefabUrl, {
+      frontFacing,
       onProgress: (done, total) => {
         if (statusEl) {
           statusEl.hidden = false;
@@ -2938,8 +2939,9 @@ async function getPrefabViewerApi() {
  * @param {HTMLElement} container
  * @param {string} prefabUrl
  * @param {number} token
+ * @param {string} [frontFacing]
  */
-async function mountBuildingPrefabViewer(container, prefabUrl, token) {
+async function mountBuildingPrefabViewer(container, prefabUrl, token, frontFacing = "North") {
   const statusEl = container.querySelector(".building-prefab-viewer-status");
   const api = await getPrefabViewerApi();
   if (token !== prefabViewerLoadToken) {
@@ -2959,6 +2961,7 @@ async function mountBuildingPrefabViewer(container, prefabUrl, token) {
     }
     activePrefabViewer = viewer;
     await viewer.loadPrefabUrl(prefabUrl, {
+      frontFacing,
       onProgress: (done, total) => {
         if (statusEl && token === prefabViewerLoadToken) {
           statusEl.hidden = false;
@@ -3094,7 +3097,7 @@ async function openBuildingDetail(buildingId) {
     const token = prefabViewerLoadToken;
     const viewerEl = document.getElementById("buildingPrefabViewer");
     if (viewerEl) {
-      mountBuildingPrefabViewer(viewerEl, prefabUrl, token);
+      mountBuildingPrefabViewer(viewerEl, prefabUrl, token, entry.frontFacing || "North");
     }
   }
 

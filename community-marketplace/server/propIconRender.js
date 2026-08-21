@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { processPropIcon, ScreenshotProcessingError } from "./imageProcessing.js";
 import { resolvePreviewScreenshotTarget } from "./previewScreenshot.js";
 import { resolveChromiumExecutable } from "./chromiumExecutable.js";
+import { normalizeFrontFacing } from "./frontFacing.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -72,12 +73,15 @@ export function createPropIconRenderService(options) {
 
   /**
    * @param {string} prefabUrl
+   * @param {string} [frontFacing]
    * @returns {Promise<Buffer>}
    */
-  async function captureIconPng(prefabUrl) {
+  async function captureIconPng(prefabUrl, frontFacing = "North") {
+    const facing = normalizeFrontFacing(frontFacing);
     const pageUrl =
       `http://127.0.0.1:${port}/internal/prefab-render.html` +
-      `?prefabUrl=${encodeURIComponent(prefabUrl)}&interactive=0&mode=icon`;
+      `?prefabUrl=${encodeURIComponent(prefabUrl)}&interactive=0&mode=icon` +
+      `&frontFacing=${encodeURIComponent(facing)}`;
 
     let context;
     try {
@@ -123,9 +127,10 @@ export function createPropIconRenderService(options) {
 
   /**
    * @param {Buffer} prefabBuffer
+   * @param {string} [frontFacing]
    * @returns {Promise<Buffer>}
    */
-  async function renderPrefabBuffer(prefabBuffer) {
+  async function renderPrefabBuffer(prefabBuffer, frontFacing = "North") {
     if (!assetsReady()) {
       throw new Error("hytale-assets not synced");
     }
@@ -137,7 +142,7 @@ export function createPropIconRenderService(options) {
     fs.writeFileSync(tempFile, prefabBuffer);
     try {
       const prefabUrl = `http://127.0.0.1:${port}/internal/temp-prefab/${encodeURIComponent(tempId)}.json`;
-      return await captureIconPng(prefabUrl);
+      return await captureIconPng(prefabUrl, frontFacing);
     } finally {
       try {
         fs.unlinkSync(tempFile);
@@ -157,7 +162,7 @@ export function createPropIconRenderService(options) {
     if (!target) {
       throw new Error("prefab_not_found");
     }
-    const iconBuffer = await captureIconPng(target.prefabUrl);
+    const iconBuffer = await captureIconPng(target.prefabUrl, target.frontFacing);
     if (options.attach) {
       const iconPath =
         target.ownerKind === "approved"

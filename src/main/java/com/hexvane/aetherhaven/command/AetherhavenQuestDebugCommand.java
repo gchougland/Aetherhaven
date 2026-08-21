@@ -132,7 +132,7 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
             QuestDefinition def = plugin.getQuestCatalog().get(qid);
             if (def != null) {
                 town.initQuestObjectiveProgress(qid, def.trackableObjectiveIds());
-                QuestPlotTokenOnStart.grantIfConfigured(plugin, def, ref, store);
+                QuestPlotTokenOnStart.grantIfConfigured(plugin, def, town, ref, store);
                 QuestPlotBlueprintOnStart.grantIfConfigured(plugin, def, ref, store);
             }
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);

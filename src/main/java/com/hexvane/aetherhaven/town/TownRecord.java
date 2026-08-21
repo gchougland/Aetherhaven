@@ -290,6 +290,14 @@ public final class TownRecord {
     @SerializedName("displayName")
     private String displayName;
 
+    /**
+     * Preferred building style for quest plot tokens (normalized marketplace/builtin style id). Null means not chosen
+     * yet; grants fall back to core until set.
+     */
+    @Nullable
+    @SerializedName("preferredBuildingStyleId")
+    private String preferredBuildingStyleId;
+
     /** Non-owner members: player UUID string -> {@link TownMemberRole} name. */
     @Nullable
     @SerializedName("memberRoles")
@@ -2444,6 +2452,23 @@ public final class TownRecord {
 
     public void setDisplayName(@Nonnull String name) {
         this.displayName = name.trim();
+    }
+
+    @Nullable
+    public String getPreferredBuildingStyleId() {
+        return preferredBuildingStyleId;
+    }
+
+    public void setPreferredBuildingStyleId(@Nullable String styleId) {
+        if (styleId == null || styleId.isBlank()) {
+            this.preferredBuildingStyleId = null;
+            return;
+        }
+        this.preferredBuildingStyleId = styleId.trim().toLowerCase(java.util.Locale.ROOT);
+    }
+
+    public boolean hasPreferredBuildingStyle() {
+        return preferredBuildingStyleId != null && !preferredBuildingStyleId.isBlank();
     }
 
     @Nonnull

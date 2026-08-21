@@ -53,7 +53,11 @@ public final class PropIconRenderClient {
         try {
             byte[] prefabBytes = Files.readAllBytes(prefabPath);
             byte[] multipart = buildPrefabMultipart(prefabBytes);
-            String url = cfg.getApiBaseUrl().replaceAll("/+$", "") + "/api/v1/render-prop-icon";
+            String facing = def.getFrontFacing();
+            String url =
+                cfg.getApiBaseUrl().replaceAll("/+$", "")
+                    + "/api/v1/render-prop-icon?frontFacing="
+                    + java.net.URLEncoder.encode(facing, StandardCharsets.UTF_8);
             Map<String, String> headers = new LinkedHashMap<>();
             byte[] png = CommunityHttpClient.postMultipartBytes(url, headers, BOUNDARY, multipart);
             if (png == null || !PlotTokenIconPng.isValid(png)) {

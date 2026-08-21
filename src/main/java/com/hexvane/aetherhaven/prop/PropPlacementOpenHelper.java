@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.prop;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.placement.FrontFacing;
+import com.hexvane.aetherhaven.placement.PlotPlacementNudgeUtil;
 import com.hexvane.aetherhaven.ui.PropPlacementPage;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
@@ -66,7 +68,11 @@ public final class PropPlacementOpenHelper {
             return null;
         }
         Vector3i anchor = pickAnchor(store, ref, context);
-        PropPlacementSession session = new PropPlacementSession(uc.getUuid(), world, propId, anchor, 0);
+        float yaw = PlotPlacementNudgeUtil.getPlayerYawRadians(ref, store);
+        PropDefinition def = plugin.getPropCatalog().get(propId);
+        String front = def != null ? def.getFrontFacing() : FrontFacing.NORTH;
+        int steps = FrontFacing.rotationStepsFacingPlayer(front, yaw);
+        PropPlacementSession session = new PropPlacementSession(uc.getUuid(), world, propId, anchor, steps);
         PropPlacementSessions.put(uc.getUuid(), session);
         return new PropPlacementPage(playerRef, session);
     }

@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.plotcreator.icon;
 
+import com.hexvane.aetherhaven.placement.FrontFacing;
+import com.hexvane.aetherhaven.wall.WallCardinal;
 import com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -9,6 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector3i;
 
 /** Renders a low-fidelity isometric thumbnail from a relativized {@link BlockSelection}. */
 public final class PrefabIsometricIconRenderer {
@@ -18,6 +21,11 @@ public final class PrefabIsometricIconRenderer {
 
     @Nullable
     public static BufferedImage render(@Nonnull BlockSelection prefab) {
+        return render(prefab, FrontFacing.NORTH);
+    }
+
+    @Nullable
+    public static BufferedImage render(@Nonnull BlockSelection prefab, @Nullable String frontFacing) {
         List<BlockCell> cells = new ArrayList<>();
         prefab.forEachBlock((x, y, z, holder) -> {
             int blockId = holder.blockId();
@@ -41,6 +49,16 @@ public final class PrefabIsometricIconRenderer {
         });
         if (cells.isEmpty()) {
             return null;
+        }
+
+        int alignSteps = FrontFacing.iconAlignStepsToNorth(frontFacing);
+        if (alignSteps != 0) {
+            List<BlockCell> rotated = new ArrayList<>(cells.size());
+            for (BlockCell cell : cells) {
+                Vector3i v = WallCardinal.rotateOffset(new Vector3i(cell.x, cell.y, cell.z), alignSteps);
+                rotated.add(new BlockCell(v.x, v.y, v.z, cell.faces()));
+            }
+            cells = rotated;
         }
 
         int maxCanvas = Math.round(ICON_SIZE * CANVAS_FILL);

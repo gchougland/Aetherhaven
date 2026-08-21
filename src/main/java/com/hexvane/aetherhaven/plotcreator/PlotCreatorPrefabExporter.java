@@ -276,7 +276,9 @@ public final class PlotCreatorPrefabExporter {
             }
             AetherhavenPlugin plugin = AetherhavenPlugin.get();
             if (writeIcon && plugin != null) {
-                PlotCreatorIconExporter.tryExportIcon(prefab, draft.getConstructionId(), plugin.getDataDirectory());
+                PlotCreatorIconExporter.tryExportIcon(
+                    prefab, draft.getConstructionId(), plugin.getDataDirectory(), draft.getFrontFacing()
+                );
             }
             PrefabStore.get().savePrefab(outputFile, prefab, overwrite);
             return ExportResult.SUCCESS;

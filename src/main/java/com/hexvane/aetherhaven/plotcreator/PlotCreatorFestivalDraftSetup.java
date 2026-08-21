@@ -205,6 +205,7 @@ public final class PlotCreatorFestivalDraftSetup {
             draft.setPrefabPath(existing.getPrefabPath());
             draft.setLockedPrefabPathKey(existing.getPrefabPath());
             draft.setStyleId(existing.getStyleId());
+            draft.setFrontFacing(existing.getFrontFacing());
         }
         draft.setFestivalSeason(existing.getSeason().name());
         draft.setFestivalSeasonInput(existing.getSeason().displayName());

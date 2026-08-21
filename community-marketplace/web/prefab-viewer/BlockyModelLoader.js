@@ -5,7 +5,7 @@
  * UV layout matches the official Blockbench codec (pixel offset + face size from settings.size, not stretch).
  */
 import * as THREE from "three";
-import { assetUrl } from "./BlockCatalog.js?v=36";
+import { assetUrl } from "./BlockCatalog.js?v=38";
 
 /** Block / furniture / placeable prop density (BlockyModelBoundsParser). */
 export const BLOCK_MODEL_UNITS = 32;
@@ -47,38 +47,56 @@ export function modelRootScale(modelPath) {
   return 1 / (isCharacterDensityModel(modelPath) ? CHARACTER_MODEL_UNITS : BLOCK_MODEL_UNITS);
 }
 
-const textureLoader = new THREE.TextureLoader();
 /** @type {Map<string, THREE.Texture>} */
 const textureCache = new Map();
 /** @type {Map<string, Promise<THREE.Group|null>>} */
 const modelCache = new Map();
 
 /**
+ * @param {THREE.Texture} tex
+ * @returns {{ w: number, h: number }|null}
+ */
+function texturePixelSize(tex) {
+  const img = tex?.image ?? tex?.source?.data ?? null;
+  if (!img) {
+    return null;
+  }
+  const w = Number(img.width || img.naturalWidth || img.videoWidth || 0);
+  const h = Number(img.height || img.naturalHeight || img.videoHeight || 0);
+  if (w > 0 && h > 0) {
+    return { w, h };
+  }
+  return null;
+}
+
+/**
+ * Fetch-based loader so headless Chromium gets real pixel dimensions (TextureLoader
+ * often leaves width/height at 0 there, which made 96px atlases UV as if they were 64
+ * and balloons sampled the grey gift-wrap instead of the balloon strip).
  * @param {string} url
  * @returns {Promise<THREE.Texture>}
  */
-function loadTexture(url) {
+async function loadTexture(url) {
   const hit = textureCache.get(url);
   if (hit) {
-    return Promise.resolve(hit);
+    return hit;
   }
-  return new Promise((resolve, reject) => {
-    textureLoader.load(
-      url,
-      (tex) => {
-        tex.colorSpace = THREE.SRGBColorSpace;
-        tex.magFilter = THREE.NearestFilter;
-        tex.minFilter = THREE.NearestFilter;
-        tex.generateMipmaps = false;
-        tex.wrapS = THREE.ClampToEdgeWrapping;
-        tex.wrapT = THREE.ClampToEdgeWrapping;
-        textureCache.set(url, tex);
-        resolve(tex);
-      },
-      undefined,
-      reject
-    );
-  });
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`texture ${res.status}`);
+  }
+  const blob = await res.blob();
+  const bitmap = await createImageBitmap(blob);
+  const tex = new THREE.Texture(bitmap);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.magFilter = THREE.NearestFilter;
+  tex.minFilter = THREE.NearestFilter;
+  tex.generateMipmaps = false;
+  tex.wrapS = THREE.ClampToEdgeWrapping;
+  tex.wrapT = THREE.ClampToEdgeWrapping;
+  tex.needsUpdate = true;
+  textureCache.set(url, tex);
+  return tex;
 }
 
 function vec3(obj, dx = 0, dy = 0, dz = 0) {
@@ -502,14 +520,20 @@ export async function loadBlockyModel(modelPath, texturePath = null, tintHex = n
       try {
         // Clone per model+tint path so wrap mode can differ (SimpleUV vs atlas).
         const baseTex = await loadTexture(assetUrl(candidate));
+        const size = texturePixelSize(baseTex);
+        if (!size) {
+          continue;
+        }
         texture = baseTex.clone();
         texture.colorSpace = THREE.SRGBColorSpace;
         texture.needsUpdate = true;
         if (baseTex.image) {
           texture.image = baseTex.image;
-          texW = baseTex.image.width || texW;
-          texH = baseTex.image.height || texH;
+        } else if (baseTex.source) {
+          texture.source = baseTex.source;
         }
+        texW = size.w;
+        texH = size.h;
         break;
       } catch {
         /* try next */

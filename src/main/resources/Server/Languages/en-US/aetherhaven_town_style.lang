@@ -1,0 +1,33 @@
+# Town building style picker (after founding / /aetherhaven town style)
+
+aetherhaven.townStyle.title=Town Look
+aetherhaven.townStyle.hint=Pick a look for building quests. Marketplace looks need a download first. Missing buildings still use the core look.
+aetherhaven.townStyle.button.close=Close
+aetherhaven.townStyle.button.choose=Choose
+aetherhaven.townStyle.button.download=Download
+aetherhaven.townStyle.byAuthor=by {name}
+aetherhaven.townStyle.needDownload=Download this look first.
+aetherhaven.townStyle.townMissing=That town could not be found.
+aetherhaven.townStyle.chosen=Town look set to {name}.
+aetherhaven.townStyle.downloadNothing=Nothing new to download for this look.
+aetherhaven.townStyle.downloadProgress=Downloading look {done} of {total}...
+aetherhaven.townStyle.downloadDone=Downloaded {count} buildings for this look.
+aetherhaven.townStyle.downloadPartial=Downloaded {ok}, but {failed} failed.
+
+aetherhaven.townStyle.style.core.name=Core
+aetherhaven.townStyle.style.core.desc=The classic Aetherhaven town look.
+
+aetherhaven.townStyle.style.stormwind.name=Stormwind
+aetherhaven.townStyle.style.stormwind.desc=A grand stone and timber town look.
+
+aetherhaven.townStyle.style.jimmysVillage.name=Jimmy's Village
+aetherhaven.townStyle.style.jimmysVillage.desc=A cozy handmade village by Jimmy G.
+
+aetherhaven.townStyle.style.fairyTale.name=Fairy Tale
+aetherhaven.townStyle.style.fairyTale.desc=A whimsical storybook town by ppm.
+
+aetherhaven.townStyle.style.coastalRuins.name=Coastal Ruins
+aetherhaven.townStyle.style.coastalRuins.desc=Weathered seaside builds by Mertie.
+
+aetherhaven.townStyle.style.slateFjord.name=Slate Fjord
+aetherhaven.townStyle.style.slateFjord.desc=Cool stone fjord builds by Quinny.

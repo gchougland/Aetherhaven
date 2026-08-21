@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.quest.PlayerQuestProgress;
 import com.hexvane.aetherhaven.quest.PlayerQuestProgressionService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.ui.DifficultyPage;
+import com.hexvane.aetherhaven.ui.TownStylePickerPage;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.world.PersistentWorldSupport;
@@ -152,11 +153,18 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         }
 
         WorldDifficultyState difficulty = AetherhavenWorldRegistries.getOrLoadWorldDifficulty(world, plugin);
+        Player player = entityStore.getComponent(entityRef, Player.getComponentType());
+        if (player == null || player.getPageManager().getCustomPage() != null) {
+            return;
+        }
         if (!difficulty.isDifficultyChosen()) {
-            Player player = entityStore.getComponent(entityRef, Player.getComponentType());
-            if (player != null && player.getPageManager().getCustomPage() == null) {
-                player.getPageManager().openCustomPage(entityRef, entityStore, new DifficultyPage(playerRef));
-            }
+            player
+                .getPageManager()
+                .openCustomPage(entityRef, entityStore, new DifficultyPage(playerRef, record.getTownId()));
+        } else {
+            player
+                .getPageManager()
+                .openCustomPage(entityRef, entityStore, new TownStylePickerPage(playerRef, record.getTownId()));
         }
     }
 

@@ -108,6 +108,25 @@ $C.@PageOverlay {
         PlaceholderText: "";
       }
 
+      Label #FrontFacingLabel {
+        Style: $C.@DefaultLabelStyle;
+        Text: "";
+        Anchor: (Bottom: 4);
+        Visible: false;
+      }
+
+      $C.@DropdownBox #FrontFacingDropdown {
+        Anchor: (Bottom: 4, Height: $C.@DropdownBoxHeight);
+        Visible: false;
+      }
+
+      Label #FrontFacingHint {
+        Style: (...@HintStyle);
+        Text: "";
+        Anchor: (Bottom: 10);
+        Visible: false;
+      }
+
       Label #GoldCostLabel {
         Style: $C.@DefaultLabelStyle;
         Text: "";

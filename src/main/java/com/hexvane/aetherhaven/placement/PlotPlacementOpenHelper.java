@@ -143,7 +143,8 @@ public final class PlotPlacementOpenHelper {
             PlotPlacementWireframeOverlay.clearFor(playerRef);
         }
         PlotPlacementClientPrefabPreview.hide(playerRef);
-        existing = PlotPlacementSessionFactory.createFromOption(world, anchor, option, plugin);
+        float yaw = PlotPlacementNudgeUtil.getPlayerYawRadians(ref, store);
+        existing = PlotPlacementSessionFactory.createFromOption(world, anchor, option, plugin, yaw);
         if (existing == null) {
             playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.buildingCannotMove"));
             return null;

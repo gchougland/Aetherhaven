@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.plot.PlotTokenInventory;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -26,19 +27,31 @@ public final class QuestPlotTokenOnStart {
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store
     ) {
+        return grantIfConfigured(plugin, def, null, playerRef, store);
+    }
+
+    public static boolean grantIfConfigured(
+        @Nullable AetherhavenPlugin plugin,
+        @Nullable QuestDefinition def,
+        @Nullable TownRecord town,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store
+    ) {
         if (plugin == null || def == null) {
             return false;
         }
-        String cid = def.grantPlotTokenConstructionId();
-        if (cid == null || cid.isBlank()) {
+        String baseCid = def.grantPlotTokenConstructionId();
+        if (baseCid == null || baseCid.isBlank()) {
             return false;
         }
+        String cid = QuestPlotTokenStyleResolver.resolveConstructionId(plugin.getConstructionCatalog(), baseCid, town);
         ConstructionDefinition cdef = plugin.getConstructionCatalog().get(cid.trim());
         if (cdef == null) {
             LOGGER.atWarning().log(
-                "Unknown construction id for grantPlotTokenConstructionId: %s (quest %s)",
-                cid,
-                def.idOrEmpty()
+                "Unknown construction id for grantPlotTokenConstructionId: %s (quest %s, resolved %s)",
+                baseCid,
+                def.idOrEmpty(),
+                cid
             );
             return false;
         }

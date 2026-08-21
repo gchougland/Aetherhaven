@@ -14,6 +14,7 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.ui.Anchor;
 import com.hypixel.hytale.server.core.ui.Value;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
@@ -23,7 +24,9 @@ import com.hypixel.hytale.server.core.util.NotificationUtil;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.UUID;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<DifficultyPage.PageData> {
     private static final String MSG = "aetherhaven_difficulty.aetherhaven.difficulty";
@@ -41,9 +44,16 @@ public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<Dif
     private double resourceMult = 1.0;
     private double goldMult = 1.0;
     private boolean requireAllBlocks;
+    @Nullable
+    private final UUID openStylePickerTownIdAfterSave;
 
     public DifficultyPage(@Nonnull PlayerRef playerRef) {
+        this(playerRef, null);
+    }
+
+    public DifficultyPage(@Nonnull PlayerRef playerRef, @Nullable UUID openStylePickerTownIdAfterSave) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
+        this.openStylePickerTownIdAfterSave = openStylePickerTownIdAfterSave;
     }
 
     @Override
@@ -266,6 +276,16 @@ public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<Dif
             Message.translation(MSG + ".saved"),
             NotificationStyle.Success
         );
+        if (openStylePickerTownIdAfterSave != null) {
+            Player player = store.getComponent(ref, Player.getComponentType());
+            if (player != null) {
+                // openCustomPage replaces this UI; do not call close() or Page.None clears the new page.
+                player
+                    .getPageManager()
+                    .openCustomPage(ref, store, new TownStylePickerPage(pr, openStylePickerTownIdAfterSave));
+                return;
+            }
+        }
         close();
     }
 

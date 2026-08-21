@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.town.TownMembershipActions;
 import com.hexvane.aetherhaven.town.TownRelinquishService;
 import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
+import com.hexvane.aetherhaven.ui.TownStylePickerPage;
 import com.hexvane.aetherhaven.town.TownPlayerLookup;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
@@ -43,6 +44,7 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
         this.addSubCommand(new RoleCommand());
         this.addSubCommand(new LeaveCommand());
         this.addSubCommand(new RelinquishCommand());
+        this.addSubCommand(new StyleCommand());
     }
 
     private static final class InviteCommand extends AbstractPlayerCommand {
@@ -543,6 +545,52 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             }
             playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.relinquish.specifyTownName"));
             return null;
+        }
+    }
+
+    private static final class StyleCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final OptionalArg<String> townArg =
+            this.withOptionalArg(
+                "townName",
+                "aetherhaven_commands_help.commands.aetherhaven.town.townName.desc",
+                AetherhavenArgTypes.TOWN_NAME
+            );
+
+        StyleCommand() {
+            super("style", "aetherhaven_commands_help.commands.aetherhaven.town.style.desc");
+        }
+
+        @Override
+        protected void execute(
+            @Nonnull CommandContext context,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull World world
+        ) {
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin == null) {
+                return;
+            }
+            Player player = store.getComponent(ref, Player.getComponentType());
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (player == null || uc == null) {
+                return;
+            }
+            if (player.getPageManager().getCustomPage() != null) {
+                return;
+            }
+            boolean admin = TownPermissionUtil.canAdministerForeignTowns(player, playerRef);
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            String townOpt = context.provided(townArg) ? context.get(townArg) : null;
+            TownCommandResolution res = TownCommandResolution.resolveForOwnerAction(tm, uc.getUuid(), townOpt, admin);
+            if (!res.isOk()) {
+                playerRef.sendMessage(res.error());
+                return;
+            }
+            TownRecord town = res.townOrThrow();
+            player.getPageManager().openCustomPage(ref, store, new TownStylePickerPage(playerRef, town.getTownId()));
         }
     }
 }
