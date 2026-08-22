@@ -182,15 +182,44 @@ $C.@PageOverlay {
             }
           }
 
+          Group #ClipboardRow {
+            LayoutMode: Left;
+            Anchor: (Top: 4, Left: 0, Right: 0, Bottom: 8);
+
+            Group { FlexWeight: 1; }
+
+            Group #ClipboardButtons {
+              LayoutMode: Left;
+
+              $C.@TextButton #CopyButton {
+                Text: "";
+                Anchor: (Width: 120, Height: 42, Right: 8);
+                Padding: (Horizontal: 10);
+              }
+
+              $C.@TextButton #PasteButton {
+                Text: "";
+                Anchor: (Width: 120, Height: 42);
+                Padding: (Horizontal: 10);
+              }
+            }
+
+            Group { FlexWeight: 1; }
+          }
+
           Group #SaveRow {
-            LayoutMode: Middle;
-            Anchor: (Top: 4, Left: 0, Right: 0);
+            LayoutMode: Left;
+            Anchor: (Top: 0, Left: 0, Right: 0);
+
+            Group { FlexWeight: 1; }
 
             $C.@TextButton #SaveButton {
               Text: "";
               Anchor: (Width: 160, Height: 42);
               Padding: (Horizontal: 10);
             }
+
+            Group { FlexWeight: 1; }
           }
         }
       }

@@ -14,7 +14,11 @@ public final class BlockPaletteConstants {
     public static final String CATEGORY_CLOTH = "cloth";
     public static final String CATEGORY_ROOFS = "roofs";
     public static final String CATEGORY_CLOTH_ROOFS = "cloth_roofs";
+    public static final String CATEGORY_MODERN_CLOTH_ROOFS = "modern_cloth_roofs";
     public static final String CATEGORY_WINDOWS = "windows";
+
+    /** Gold coins returned when using a block palette your town already unlocked. */
+    public static final int DUPLICATE_UNLOCK_REFUND_GOLD = 10;
 
     private BlockPaletteConstants() {}
 }

@@ -190,6 +190,38 @@ public final class PlotCreatorService {
         PlotCreatorCleanup.endSession(session, playerRef, true);
     }
 
+    /**
+     * Copies builder tool selection bounds into the active session draft.
+     *
+     * @return plot creator error lang suffix ({@code aetherhaven.plotcreator.error.<suffix>}), or null on success
+     */
+    @Nullable
+    public static String applyBoundsFromBuilderSelection(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull Vector3i min,
+        @Nonnull Vector3i max
+    ) {
+        PlotCreatorDraft draft = session.getDraft();
+        if (draft.isFestivalSizeLocked()) {
+            return "boundsLockedFestival";
+        }
+        String err = PlotCreatorBoundsValidation.validateMinMax(min, max);
+        if (err != null) {
+            return err;
+        }
+        PlotCreatorBoundsValidation.commitCorners(draft, min, max);
+        draft.setBoundsDragStart(null);
+        draft.setBoundsDragEnd(null);
+        draft.setActiveBoundsFaceDrag(null);
+        draft.setBoundsPrimaryHeld(false);
+        draft.setHoveredBoundsFace(null);
+        draft.setBoundsPhase(PlotCreatorBoundsPhase.FACE_ADJUST);
+        if (PlotCreatorWallPieceAuthoring.isBoundsSubstep(draft)) {
+            PlotCreatorWallPieceAuthoring.commitBoundsToCurrentPiece(draft);
+        }
+        return null;
+    }
+
     /** Opens a short form for the current text step (identity, tags, variant). */
     public static void openConfigPanel(
         @Nonnull PlayerRef playerRef,

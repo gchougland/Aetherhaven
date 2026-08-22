@@ -482,6 +482,12 @@ public final class TownRecord {
     @Nullable
     private List<com.hexvane.aetherhaven.propshop.FurnitureMerchantShopSlotRecord> furnitureMerchantShopSlots;
 
+    /** Daily block palette shop stock (up to six lines). */
+    @SerializedName("furnitureMerchantPaletteShopSlots")
+    @Nullable
+    private List<com.hexvane.aetherhaven.propshop.FurnitureMerchantPaletteShopSlotRecord>
+        furnitureMerchantPaletteShopSlots;
+
     /**
      * Workplace plot production storage: key plot UUID string, value slot cursors + item amounts
      * (see {@link com.hexvane.aetherhaven.production.ProductionTickSystem}).
@@ -2359,6 +2365,9 @@ public final class TownRecord {
         if (furnitureMerchantShopSlots == null) {
             furnitureMerchantShopSlots = new ArrayList<>();
         }
+        if (furnitureMerchantPaletteShopSlots == null) {
+            furnitureMerchantPaletteShopSlots = new ArrayList<>();
+        }
     }
 
     @Nullable
@@ -2385,6 +2394,25 @@ public final class TownRecord {
         }
         while (furnitureMerchantShopSlots.size() > count) {
             furnitureMerchantShopSlots.remove(furnitureMerchantShopSlots.size() - 1);
+        }
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.propshop.FurnitureMerchantPaletteShopSlotRecord>
+        getFurnitureMerchantPaletteShopSlots() {
+        migrateFurnitureMerchantShopFieldsIfNeeded();
+        return furnitureMerchantPaletteShopSlots;
+    }
+
+    public void ensureFurnitureMerchantPaletteShopSlotCount(int count) {
+        migrateFurnitureMerchantShopFieldsIfNeeded();
+        while (furnitureMerchantPaletteShopSlots.size() < count) {
+            furnitureMerchantPaletteShopSlots.add(
+                com.hexvane.aetherhaven.propshop.FurnitureMerchantPaletteShopSlotRecord.empty()
+            );
+        }
+        while (furnitureMerchantPaletteShopSlots.size() > count) {
+            furnitureMerchantPaletteShopSlots.remove(furnitureMerchantPaletteShopSlots.size() - 1);
         }
     }
 

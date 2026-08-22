@@ -34,6 +34,8 @@ public final class AetherhavenUiLocalization {
         b.set("#BlockPaletteTitleText.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.blockPalette.title"));
         b.set("#Hint.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.blockPalette.hint"));
         b.set("#SaveButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.blockPalette.saveButton"));
+        b.set("#CopyButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.blockPalette.copyButton"));
+        b.set("#PasteButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.blockPalette.pasteButton"));
     }
 
     public static void applyTownLogPage(@Nonnull UICommandBuilder b) {

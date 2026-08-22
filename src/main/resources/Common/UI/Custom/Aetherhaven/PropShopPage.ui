@@ -39,6 +39,23 @@ Group #PropShopRoot {
       LayoutMode: Top;
       Padding: (Full: 12);
 
+      Group #ShopTabRow {
+        LayoutMode: Left;
+        Anchor: (Height: 32, Bottom: 8);
+
+        $C.@TextButton #TabProps {
+          Anchor: (Height: 28, Right: 8);
+          FlexWeight: 1;
+          Text: "";
+        }
+
+        $C.@TextButton #TabPalettes {
+          Anchor: (Height: 28);
+          FlexWeight: 1;
+          Text: "";
+        }
+      }
+
       Group #ViewModeRow {
         LayoutMode: Left;
         Anchor: (Height: 32, Bottom: 8);

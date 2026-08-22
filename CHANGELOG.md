@@ -51,6 +51,7 @@
 - **Path restyle** On the path designer shovel, press **Q** to **Restyle**, select a placed path like Remove, then press **F** and pick a style. The path's blocks swap to that style right away without removing the path.
 - **Path mode jump** Middle click on the path designer shovel opens a mode menu with the same icons as the status tabs, so you can jump straight to Place, Move, Rotate, Remove, Restyle, Replace filter, or Style designer. Townsfolk walking for new paths is toggled from that menu.
 - **Blacksmith Fix all** Garren's repair menu has a Fix all row at the top that shows the total gold cost for every damaged item, then restores them all at once.
+- **Set build bounds from selection** Use a creative command during plot creator or building editor to match your selection tool box. /ah plotcreator setbounds
 
 ### Changed
 

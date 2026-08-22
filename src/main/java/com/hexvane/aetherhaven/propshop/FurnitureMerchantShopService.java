@@ -1,6 +1,10 @@
 package com.hexvane.aetherhaven.propshop;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.blockpalette.BlockPaletteCatalog;
+import com.hexvane.aetherhaven.blockpalette.BlockPaletteDefinition;
+import com.hexvane.aetherhaven.blockpalette.BlockPaletteItemMetadata;
+import com.hexvane.aetherhaven.blockpalette.BlockPaletteShopPricing;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.prop.PropCatalog;
 import com.hexvane.aetherhaven.prop.PropDefinition;
@@ -36,7 +40,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Cap'n Clive's dialogue prop shop: six daily unique props, stock 5–10, rerolled at dawn per town.
+ * Cap'n Clive's dialogue shop: six daily unique props and six block palettes, stock 5–10, rerolled at dawn per town.
  * Mutates {@link TownRecord} only (never Store from tick systems).
  */
 public final class FurnitureMerchantShopService {
@@ -131,9 +135,14 @@ public final class FurnitureMerchantShopService {
     ) {
         Long last = town.getFurnitureMerchantShopLastRerollEpochDay();
         List<FurnitureMerchantShopSlotRecord> slots = town.getFurnitureMerchantShopSlots();
+        List<FurnitureMerchantPaletteShopSlotRecord> paletteSlots = town.getFurnitureMerchantPaletteShopSlots();
         boolean empty = slots.isEmpty() || slots.stream().noneMatch(FurnitureMerchantShopSlotRecord::hasStock);
-        if (last != null && last == epochDay && !empty) {
+        boolean paletteEmpty =
+            paletteSlots.isEmpty()
+                || paletteSlots.stream().noneMatch(FurnitureMerchantPaletteShopSlotRecord::hasStock);
+        if (last != null && last == epochDay && !empty && !paletteEmpty) {
             town.ensureFurnitureMerchantShopSlotCount(SLOT_COUNT);
+            town.ensureFurnitureMerchantPaletteShopSlotCount(SLOT_COUNT);
             return;
         }
         rerollTownInventory(plugin, town);
@@ -161,6 +170,30 @@ public final class FurnitureMerchantShopService {
             int stock = STOCK_MIN >= STOCK_MAX ? STOCK_MIN : rnd.nextInt(STOCK_MIN, STOCK_MAX + 1);
             FurnitureMerchantShopSlotRecord slot = slots.get(i);
             slot.setPropId(def.getId());
+            slot.setStock(stock);
+        }
+        rerollPaletteInventory(plugin, town);
+    }
+
+    private static void rerollPaletteInventory(@Nonnull AetherhavenPlugin plugin, @Nonnull TownRecord town) {
+        town.ensureFurnitureMerchantPaletteShopSlotCount(SLOT_COUNT);
+        List<FurnitureMerchantPaletteShopSlotRecord> slots = town.getFurnitureMerchantPaletteShopSlots();
+        for (FurnitureMerchantPaletteShopSlotRecord slot : slots) {
+            slot.clear();
+        }
+        BlockPaletteCatalog catalog = plugin.getBlockPaletteCatalog();
+        List<BlockPaletteDefinition> pool = new ArrayList<>(catalog.allById().values());
+        if (pool.isEmpty()) {
+            return;
+        }
+        Collections.shuffle(pool, ThreadLocalRandom.current());
+        int n = Math.min(SLOT_COUNT, pool.size());
+        ThreadLocalRandom rnd = ThreadLocalRandom.current();
+        for (int i = 0; i < n; i++) {
+            BlockPaletteDefinition def = pool.get(i);
+            int stock = STOCK_MIN >= STOCK_MAX ? STOCK_MIN : rnd.nextInt(STOCK_MIN, STOCK_MAX + 1);
+            FurnitureMerchantPaletteShopSlotRecord slot = slots.get(i);
+            slot.setPaletteId(def.getId());
             slot.setStock(stock);
         }
     }
@@ -216,6 +249,61 @@ public final class FurnitureMerchantShopService {
             return BuyResult.fail("aetherhaven_prop_shop.aetherhaven.propShop.error.cannotAfford");
         }
         ItemStack grant = PropItemMetadata.createStack(def);
+        ItemStackTransaction giveTx = player.giveItem(grant, ref, store);
+        if (!giveTx.succeeded()) {
+            GoldCoinPayment.refund(payerTown, player, ref, store, breakdown);
+            return BuyResult.fail("aetherhaven_prop_shop.aetherhaven.propShop.error.inventoryFull");
+        }
+        slot.setStock(slot.getStock() - 1);
+        if (slot.getStock() <= 0) {
+            slot.clear();
+        }
+        tm.updateTown(shopTown);
+        if (payerTown != null && payerTown != shopTown) {
+            tm.updateTown(payerTown);
+        }
+        return BuyResult.success();
+    }
+
+    @Nonnull
+    public static BuyResult tryBuyPalette(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord shopTown,
+        @Nonnull TownManager tm,
+        @Nonnull Player player,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        int slotIndex
+    ) {
+        shopTown.ensureFurnitureMerchantPaletteShopSlotCount(SLOT_COUNT);
+        List<FurnitureMerchantPaletteShopSlotRecord> slots = shopTown.getFurnitureMerchantPaletteShopSlots();
+        if (slotIndex < 0 || slotIndex >= slots.size()) {
+            return BuyResult.fail("aetherhaven_prop_shop.aetherhaven.propShop.error.soldOut");
+        }
+        FurnitureMerchantPaletteShopSlotRecord slot = slots.get(slotIndex);
+        if (!slot.hasStock()) {
+            return BuyResult.fail("aetherhaven_prop_shop.aetherhaven.propShop.error.soldOut");
+        }
+        BlockPaletteDefinition def = plugin.getBlockPaletteCatalog().get(slot.getPaletteId());
+        if (def == null) {
+            return BuyResult.fail("aetherhaven_prop_shop.aetherhaven.propShop.error.soldOut");
+        }
+        long price = BlockPaletteShopPricing.goldPriceFor(def);
+        UUID buyer = playerRef.getUuid();
+        TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, buyer);
+        boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, buyer);
+        CombinedItemContainer inv =
+            InventoryComponent.getCombined(store, ref, InventoryComponent.HOTBAR_FIRST);
+        if (!GoldCoinPayment.canAfford(payerTown, inv, price, allowTreasury)) {
+            return BuyResult.fail("aetherhaven_prop_shop.aetherhaven.propShop.error.cannotAfford");
+        }
+        GoldCoinPayment.SpendBreakdown breakdown =
+            GoldCoinPayment.trySpendReturningBreakdown(payerTown, inv, price, allowTreasury);
+        if (breakdown == null) {
+            return BuyResult.fail("aetherhaven_prop_shop.aetherhaven.propShop.error.cannotAfford");
+        }
+        ItemStack grant = BlockPaletteItemMetadata.createStack(def);
         ItemStackTransaction giveTx = player.giveItem(grant, ref, store);
         if (!giveTx.succeeded()) {
             GoldCoinPayment.refund(payerTown, player, ref, store, breakdown);

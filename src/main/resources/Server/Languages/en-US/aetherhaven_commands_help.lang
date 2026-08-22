@@ -233,6 +233,7 @@ commands.aetherhaven.plotcreator.generateicon.desc=Generate a plot token icon PN
 commands.aetherhaven.plotcreator.generateicon.idOrPrefab=Building id (plot_my_house) or prefab key (Guild_Hall.prefab.json)
 commands.aetherhaven.plotcreator.generateicon.outputId=Output id for the icon file (defaults to building id or prefab name)
 commands.aetherhaven.plotcreator.buildings.desc=Manage local custom buildings saved on this server
+commands.aetherhaven.plotcreator.setbounds.desc=Set build bounds from the selection tool box
 
 commands.aetherhaven.community.desc=Community marketplace helpers
 commands.aetherhaven.community.submit.desc=Submit a locally saved custom building or prop for community review

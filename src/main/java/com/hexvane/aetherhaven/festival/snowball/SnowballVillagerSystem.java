@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerSystem;
 import com.hexvane.aetherhaven.entity.TransformComponentUtil;
 import com.hexvane.aetherhaven.equipment.VillagerEquipmentService;
+import com.hexvane.aetherhaven.festival.pigrace.PigRaceLanes;
 import com.hexvane.aetherhaven.npc.NpcAnimationPlayback;
 import com.hexvane.aetherhaven.tourist.TouristAutonomySystem;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -15,14 +16,17 @@ import com.hypixel.hytale.component.dependency.Order;
 import com.hypixel.hytale.component.dependency.SystemDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
+import com.hypixel.hytale.server.npc.systems.SteppableTickingSystem;
 import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.protocol.AnimationSlot;
+import com.hypixel.hytale.protocol.MovementStates;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.asset.type.itemanimation.config.ItemPlayerAnimations;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.system.TransformSystems;
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
@@ -30,7 +34,7 @@ import com.hypixel.hytale.server.core.modules.projectile.ProjectileModule;
 import com.hypixel.hytale.server.core.modules.projectile.config.ProjectileConfig;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
-import com.hypixel.hytale.server.npc.systems.SteeringSystem;
+import com.hypixel.hytale.server.npc.systems.MovementStatesSystem;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -42,18 +46,20 @@ import org.joml.Vector3d;
 /**
  * Crouch-in-place fight AI for villager snowball fighters. Autonomy is skipped separately for living fighters.
  */
-public final class SnowballVillagerSystem extends EntityTickingSystem<EntityStore> {
+public final class SnowballVillagerSystem extends SteppableTickingSystem {
     /** Head height above feet for aim, and hand height for the throw origin. */
     private static final double AIM_HEAD_OFFSET = 1.7;
     private static final double THROW_HAND_OFFSET = 1.45;
+    /** Model animation set id for stationary crouch (not CrouchWalk). */
+    private static final String CROUCH_IDLE_ANIM = "Crouch";
 
     @Nonnull
     private final Set<Dependency<EntityStore>> dependencies =
         Set.of(
-            new SystemDependency<>(Order.AFTER, SteeringSystem.class),
             new SystemDependency<>(Order.AFTER, VillagerAutonomySystem.class),
             new SystemDependency<>(Order.AFTER, VillagerFollowPlayerSystem.class),
             new SystemDependency<>(Order.AFTER, TouristAutonomySystem.class),
+            new SystemDependency<>(Order.AFTER, MovementStatesSystem.class),
             new SystemDependency<>(Order.BEFORE, TransformSystems.EntityTrackerUpdate.class)
         );
 
@@ -69,12 +75,18 @@ public final class SnowballVillagerSystem extends EntityTickingSystem<EntityStor
         return Query.and(
             NPCEntity.getComponentType(),
             UUIDComponent.getComponentType(),
-            TransformComponent.getComponentType()
+            TransformComponent.getComponentType(),
+            MovementStatesComponent.getComponentType()
         );
     }
 
     @Override
-    public void tick(
+    public boolean isParallel(int archetypeChunkSize, int taskCount) {
+        return EntityTickingSystem.maybeUseParallel(archetypeChunkSize, taskCount);
+    }
+
+    @Override
+    public void steppedTick(
         float dt,
         int index,
         @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
@@ -97,10 +109,8 @@ public final class SnowballVillagerSystem extends EntityTickingSystem<EntityStor
         SnowballSession.VillagerAi ai = session.villagerAi(uuid);
         if (!session.isLivingFighter(uuid)) {
             SnowballPin.unpin(ref, npc, commandBuffer);
-            if (ai == null || ai.crouchChanged(false)) {
-                setCrouching(ref, store, commandBuffer, false);
-            }
             clearHeldSnowball(ref, store, commandBuffer);
+            applyFightMovementState(archetypeChunk, index, ref, commandBuffer, false);
             return;
         }
 
@@ -109,46 +119,46 @@ public final class SnowballVillagerSystem extends EntityTickingSystem<EntityStor
             SnowballPin.hold(ref, store, commandBuffer, npc, fighter.pad());
         }
 
+        boolean wantCrouch = ai == null || ai.phase() == SnowballSession.VillagerAiPhase.CROUCH;
         if (ai == null) {
-            setCrouching(ref, store, commandBuffer, true);
             if (fighter != null) {
                 pinToPad(ref, store, commandBuffer, transform, fighter.pad());
             }
+            syncCrouchAnimation(ref, npc, commandBuffer, null, wantCrouch);
+            applyFightMovementState(archetypeChunk, index, ref, commandBuffer, wantCrouch);
             return;
         }
         if (ai.consumePrepare()) {
             if (fighter != null) {
                 SnowballPin.start(ref, store, npc, commandBuffer, fighter.pad());
             }
-            applyCrouch(ref, store, commandBuffer, ai, true);
         }
-        faceThrowTarget(ref, store, commandBuffer, session, uuid, transform, ai);
         equipSnowball(ref, store, commandBuffer);
 
         switch (ai.phase()) {
             case CROUCH -> {
-                applyCrouch(ref, store, commandBuffer, ai, true);
                 if (now >= ai.nextEpochMs()) {
                     pickThrowTarget(ai, session, uuid);
-                    applyCrouch(ref, store, commandBuffer, ai, false);
                     ai.set(
                         SnowballSession.VillagerAiPhase.STAND_BEFORE,
                         now + SnowballIds.VILLAGER_STAND_BEFORE_THROW_MS
                     );
+                    wantCrouch = false;
+                } else if (ai.throwTargetUuid() == null) {
+                    pickThrowTarget(ai, session, uuid);
                 }
             }
             case STAND_BEFORE -> {
-                applyCrouch(ref, store, commandBuffer, ai, false);
                 if (now >= ai.nextEpochMs()) {
                     ai.set(SnowballSession.VillagerAiPhase.THROW, now);
                 }
             }
             case THROW -> {
-                applyCrouch(ref, store, commandBuffer, ai, false);
                 ai.set(
                     SnowballSession.VillagerAiPhase.STAND_AFTER,
                     now + SnowballIds.VILLAGER_STAND_AFTER_THROW_MS
                 );
+                wantCrouch = false;
                 try {
                     throwAtOpponent(ref, store, commandBuffer, session, uuid, transform, ai);
                 } catch (RuntimeException ignored) {
@@ -156,33 +166,42 @@ public final class SnowballVillagerSystem extends EntityTickingSystem<EntityStor
                 }
             }
             case STAND_AFTER -> {
-                applyCrouch(ref, store, commandBuffer, ai, false);
                 if (now >= ai.nextEpochMs()) {
                     long span = SnowballIds.VILLAGER_CROUCH_MAX_MS - SnowballIds.VILLAGER_CROUCH_MIN_MS;
                     long hold = SnowballIds.VILLAGER_CROUCH_MIN_MS
                         + ThreadLocalRandom.current().nextLong(Math.max(1L, span + 1L));
                     ai.setThrowTargetUuid(null);
-                    applyCrouch(ref, store, commandBuffer, ai, true);
                     ai.set(SnowballSession.VillagerAiPhase.CROUCH, now + hold);
+                    wantCrouch = true;
                 }
             }
         }
         if (fighter != null) {
             pinToPad(ref, store, commandBuffer, transform, fighter.pad());
         }
+        syncCrouchAnimation(ref, npc, commandBuffer, ai, wantCrouch);
+        applyFightMovementState(archetypeChunk, index, ref, commandBuffer, wantCrouch);
+        faceThrowTarget(ref, store, commandBuffer, session, uuid, transform, ai);
     }
 
-    private static void applyCrouch(
+    /** Plays stationary crouch once per crouch phase; Movement slot walk blending uses idle=true. */
+    private static void syncCrouchAnimation(
         @Nonnull Ref<EntityStore> ref,
-        @Nonnull Store<EntityStore> store,
+        @Nonnull NPCEntity npc,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
-        @Nonnull SnowballSession.VillagerAi ai,
-        boolean crouching
+        @Nullable SnowballSession.VillagerAi ai,
+        boolean wantCrouch
     ) {
-        if (!ai.crouchChanged(crouching)) {
-            return;
+        if (ai != null) {
+            if (!ai.crouchChanged(wantCrouch)) {
+                return;
+            }
         }
-        setCrouching(ref, store, commandBuffer, crouching);
+        if (wantCrouch) {
+            NpcAnimationPlayback.play(ref, npc, AnimationSlot.Movement, CROUCH_IDLE_ANIM, commandBuffer);
+        } else {
+            NpcAnimationPlayback.stop(ref, AnimationSlot.Movement, commandBuffer);
+        }
     }
 
     private static void pickThrowTarget(
@@ -215,16 +234,31 @@ public final class SnowballVillagerSystem extends EntityTickingSystem<EntityStor
         if (to == null) {
             return;
         }
-        Vector3d from = transform.getPosition();
-        double dx = to.x - from.x;
-        double dz = to.z - from.z;
-        if (dx * dx + dz * dz < 0.01) {
+        TransformComponent live = commandBuffer.getComponent(self, TransformComponent.getComponentType());
+        if (live == null) {
+            live = transform;
+        }
+        Vector3d from = new Vector3d(live.getPosition());
+        from.y += AIM_HEAD_OFFSET;
+        Vector3d look = new Vector3d(to).sub(from);
+        if (look.lengthSquared() < 0.01) {
             return;
         }
-        // Hytale body forward is opposite raw atan2(dx, dz).
-        float yaw = (float) (Math.atan2(dx, dz) + Math.PI);
-        transform.setRotation(new Rotation3f(0f, yaw, 0f));
-        commandBuffer.putComponent(self, TransformComponent.getComponentType(), transform);
+        Rotation3f lookRotation = Rotation3f.lookAt(look);
+        HeadRotation head = commandBuffer.getComponent(self, HeadRotation.getComponentType());
+        if (head == null) {
+            head = store.getComponent(self, HeadRotation.getComponentType());
+        }
+        if (head != null) {
+            head.setRotation(lookRotation);
+            commandBuffer.putComponent(self, HeadRotation.getComponentType(), head);
+        }
+        // While crouched on the pad, turn the head only. Stand up to throw with the body facing the target.
+        if (ai.phase() != SnowballSession.VillagerAiPhase.CROUCH) {
+            float yaw = PigRaceLanes.facingYawRadians(look.x, look.z);
+            live.setRotation(new Rotation3f(0f, yaw, 0f));
+            commandBuffer.putComponent(self, TransformComponent.getComponentType(), live);
+        }
     }
 
     @Nullable
@@ -280,6 +314,14 @@ public final class SnowballVillagerSystem extends EntityTickingSystem<EntityStor
         float yaw = (float) (Math.atan2(dir.x, dir.z) + Math.PI);
         transform.setRotation(new Rotation3f(0f, yaw, 0f));
         commandBuffer.putComponent(self, TransformComponent.getComponentType(), transform);
+        HeadRotation head = commandBuffer.getComponent(self, HeadRotation.getComponentType());
+        if (head == null) {
+            head = store.getComponent(self, HeadRotation.getComponentType());
+        }
+        if (head != null) {
+            head.setRotation(Rotation3f.lookAt(dir));
+            commandBuffer.putComponent(self, HeadRotation.getComponentType(), head);
+        }
         playThrowAnimation(self, commandBuffer);
         ProjectileModule.get().spawnProjectile(self, commandBuffer, config, from, dir);
     }
@@ -422,18 +464,38 @@ public final class SnowballVillagerSystem extends EntityTickingSystem<EntityStor
         }
     }
 
-    private static void setCrouching(
+    /**
+     * Writes on the live archetype chunk (same object NPC {@link MovementStatesSystem} updates) and re-queues the
+     * component so client sync sees the corrected pose after this system runs.
+     */
+    private static void applyFightMovementState(
+        @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+        int index,
         @Nonnull Ref<EntityStore> ref,
-        @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         boolean crouching
     ) {
-        MovementStatesComponent states = store.getComponent(ref, MovementStatesComponent.getComponentType());
-        if (states == null || states.getMovementStates() == null) {
+        MovementStatesComponent component =
+            archetypeChunk.getComponent(index, MovementStatesComponent.getComponentType());
+        if (component == null || component.getMovementStates() == null) {
             return;
         }
-        states.getMovementStates().crouching = crouching;
-        states.getMovementStates().forcedCrouching = crouching;
-        commandBuffer.putComponent(ref, MovementStatesComponent.getComponentType(), states);
+        applySnowballFightMovementStates(component.getMovementStates(), crouching);
+        commandBuffer.putComponent(ref, MovementStatesComponent.getComponentType(), component);
+    }
+
+    /** Stand/crouch snapshot for pad fighters. Re-applied every tick after NPC movement-state updates. */
+    static void applySnowballFightMovementStates(@Nonnull MovementStates states, boolean crouching) {
+        states.crouching = crouching;
+        states.forcedCrouching = crouching;
+        states.walking = false;
+        states.running = false;
+        states.sprinting = false;
+        states.jumping = false;
+        states.falling = false;
+        states.fallingFar = false;
+        states.idle = true;
+        states.horizontalIdle = true;
+        states.onGround = true;
     }
 }

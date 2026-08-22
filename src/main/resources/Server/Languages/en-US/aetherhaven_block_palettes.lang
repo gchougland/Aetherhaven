@@ -1,5 +1,6 @@
 aetherhaven.blockPalette.unlock.noTown=Join a town before using a block palette.
 aetherhaven.blockPalette.unlock.already=Your town already has {name}.
+aetherhaven.blockPalette.unlock.refunded=Your town already has {name}. You received {gold} gold coins.
 aetherhaven.blockPalette.unlock.success=Unlocked {name} for your town!
 aetherhaven.blockPalette.command.unknown=Unknown block palette: {id}
 aetherhaven.blockPalette.command.playerNotFound=Player not found: {name}

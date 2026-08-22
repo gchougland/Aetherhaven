@@ -60,7 +60,6 @@ public final class CommunityCatalogService {
     private final AtomicReference<List<CommunityManifestEntry>> cachedEntries = new AtomicReference<>(List.of());
     private volatile long lastFetchEpochMs;
     private volatile long lastFetchAttemptMs;
-    private volatile boolean lastFetchIncludedPlayerContext;
     private final AtomicInteger iconFetchSerial = new AtomicInteger();
     /** Installed community buildings whose manifest icon is missing or not client-registered. */
     private final Set<String> incompleteIconInstalls = ConcurrentHashMap.newKeySet();
@@ -102,21 +101,6 @@ public final class CommunityCatalogService {
         }
         long refreshMs = plugin.getConfig().get().getCommunityMarketplace().getManifestRefreshMinutes() * 60_000L;
         return now - lastFetchEpochMs >= refreshMs;
-    }
-
-    public boolean lastFetchIncludedPlayerContext() {
-        return lastFetchIncludedPlayerContext;
-    }
-
-    @Nonnull
-    public List<String> favoritedIdsFromCachedManifest() {
-        ObjectArrayList<String> ids = new ObjectArrayList<>();
-        for (CommunityManifestEntry entry : cachedEntries.get()) {
-            if (entry.isUserHasFavorited()) {
-                ids.add(entry.getId().trim().toLowerCase(Locale.ROOT));
-            }
-        }
-        return ids;
     }
 
     @Nullable
@@ -263,7 +247,6 @@ public final class CommunityCatalogService {
         lastFetchAttemptMs = System.currentTimeMillis();
         if (!isEnabled()) {
             cachedEntries.set(List.of());
-            lastFetchIncludedPlayerContext = false;
             return false;
         }
         String base = plugin.getConfig().get().getCommunityMarketplace().getApiBaseUrl();
@@ -278,9 +261,11 @@ public final class CommunityCatalogService {
         try {
             ManifestResponse response = GSON.fromJson(json, ManifestResponse.class);
             List<CommunityManifestEntry> entries = response != null && response.entries != null ? response.entries : List.of();
+            for (CommunityManifestEntry entry : entries) {
+                entry.clearUserHasFavorited();
+            }
             cachedEntries.set(List.copyOf(entries));
             lastFetchEpochMs = System.currentTimeMillis();
-            lastFetchIncludedPlayerContext = playerUuid != null;
             LOGGER.atInfo().log("Community manifest loaded: %s entries", entries.size());
             return true;
         } catch (Exception e) {

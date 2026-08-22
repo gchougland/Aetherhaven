@@ -3,7 +3,9 @@ package com.hexvane.aetherhaven.ui;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.blockpalette.BlockPaletteApplyService;
 import com.hexvane.aetherhaven.blockpalette.BlockPaletteCatalog;
+import com.hexvane.aetherhaven.blockpalette.BlockPaletteClipboard;
 import com.hexvane.aetherhaven.blockpalette.BlockPaletteDefinition;
+import com.hexvane.aetherhaven.blockpalette.BlockPaletteIconResolver;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.pathtool.PathToolWidthPreviewHelper;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
@@ -19,8 +21,11 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
+import com.hypixel.hytale.server.core.ui.Value;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -41,6 +46,7 @@ import org.joml.Vector3i;
 /** Town records shelf paint tab: pick unlocked block palettes for this plot. */
 public final class BlockPalettePage extends AetherhavenInteractiveCustomUIPage<BlockPalettePage.PageData> {
     private static final String CATEGORY_ROWS = "#CategoryRows";
+    private static final Value<String> DEFAULT_TEXT_TOOLTIP_STYLE = Value.ref("Common.ui", "DefaultTextTooltipStyle");
 
     private final UUID townId;
     @Nullable
@@ -92,6 +98,10 @@ public final class BlockPalettePage extends AetherhavenInteractiveCustomUIPage<B
 
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating, "#SaveButton", new EventData().append("Action", "Save"), false);
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating, "#CopyButton", new EventData().append("Action", "Copy"), false);
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating, "#PasteButton", new EventData().append("Action", "Paste"), false);
 
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         World world = store.getExternalData().getWorld();
@@ -155,10 +165,13 @@ public final class BlockPalettePage extends AetherhavenInteractiveCustomUIPage<B
                 BlockPaletteDefinition def = cycle.get(paletteIndex);
                 commandBuilder.set(row + " #DefaultLabel.Visible", false);
                 commandBuilder.set(row + " #IconBox.Visible", true);
-                String iconPath = PathToolWidthPreviewHelper.assetPathForBlockId(def.getIconBlockId());
+                String iconBlockId = BlockPaletteIconResolver.resolveIconBlockId(def);
+                String iconPath = iconBlockId != null ? PathToolWidthPreviewHelper.assetPathForBlockId(iconBlockId) : null;
                 if (iconPath != null && !iconPath.isBlank()) {
                     commandBuilder.set(row + " #IconBox #Icon.AssetPath", iconPath);
                 }
+                commandBuilder.set(row + " #IconBox #IconHit.TextTooltipStyle", DEFAULT_TEXT_TOOLTIP_STYLE);
+                commandBuilder.set(row + " #IconBox #IconHit.TooltipTextSpans", blockTooltipMessage(iconBlockId, def));
             }
 
             if (canCycle) {
@@ -226,6 +239,23 @@ public final class BlockPalettePage extends AetherhavenInteractiveCustomUIPage<B
         }
         if (data.action.equalsIgnoreCase("PaletteNext")) {
             shiftPalette(store, data.category, 1);
+            refresh(ref, store);
+            return;
+        }
+        if (data.action.equalsIgnoreCase("Copy")) {
+            BlockPaletteClipboard.copy(playerRef.getUuid(), draftSelections);
+            playerRef.sendMessage(Message.translation("aetherhaven_ui_town.aetherhaven.ui.blockPalette.copied"));
+            return;
+        }
+        if (data.action.equalsIgnoreCase("Paste")) {
+            Map<String, String> clip = BlockPaletteClipboard.peek(playerRef.getUuid());
+            if (clip == null || clip.isEmpty()) {
+                playerRef.sendMessage(Message.translation("aetherhaven_ui_town.aetherhaven.ui.blockPalette.pasteEmpty"));
+                return;
+            }
+            draftSelections.clear();
+            draftSelections.putAll(clip);
+            playerRef.sendMessage(Message.translation("aetherhaven_ui_town.aetherhaven.ui.blockPalette.pasted"));
             refresh(ref, store);
             return;
         }
@@ -349,6 +379,21 @@ public final class BlockPalettePage extends AetherhavenInteractiveCustomUIPage<B
     }
 
     @Nonnull
+    private static Message blockTooltipMessage(@Nullable String iconBlockId, @Nonnull BlockPaletteDefinition def) {
+        if (iconBlockId != null && !iconBlockId.isBlank()) {
+            BlockType blockType = BlockType.getAssetMap().getAsset(iconBlockId);
+            if (blockType != null) {
+                Item item = blockType.getItem();
+                if (item != null && item.getTranslationKey() != null && !item.getTranslationKey().isBlank()) {
+                    return Message.translation(item.getTranslationKey());
+                }
+            }
+            return Message.raw(iconBlockId);
+        }
+        return Message.raw(def.getDisplayName());
+    }
+
+    @Nonnull
     private static String categoryDisplayName(@Nonnull String category) {
         return switch (category) {
             case "walls" -> "Walls";
@@ -359,6 +404,7 @@ public final class BlockPalettePage extends AetherhavenInteractiveCustomUIPage<B
             case "cloth" -> "Cloth";
             case "roofs" -> "Roofs";
             case "cloth_roofs" -> "Cloth roofs";
+            case "modern_cloth_roofs" -> "Modern roofs";
             case "windows" -> "Windows";
             default -> category;
         };

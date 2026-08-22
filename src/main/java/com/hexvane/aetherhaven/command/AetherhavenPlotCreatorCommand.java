@@ -4,8 +4,12 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorInteractions;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorService;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorSessions;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorSession;
 import com.hexvane.aetherhaven.plotcreator.icon.PlotCreatorIconExporter;
+import com.hypixel.hytale.builtin.buildertools.BuilderToolsPlugin;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.ui.LocalBuildingsPage;
 import com.hypixel.hytale.component.Ref;
@@ -26,6 +30,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.nio.file.Path;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector3i;
 
 public final class AetherhavenPlotCreatorCommand extends AbstractCommandCollection {
     public AetherhavenPlotCreatorCommand() {
@@ -35,7 +40,10 @@ public final class AetherhavenPlotCreatorCommand extends AbstractCommandCollecti
         this.addSubCommand(new EditCommand());
         this.addSubCommand(new GenerateIconCommand());
         this.addSubCommand(new BuildingsCommand());
+        this.addSubCommand(new SetBoundsCommand());
     }
+
+    private static final String MSG = "aetherhaven_plot_creator.aetherhaven.plotcreator";
 
     private static boolean requirePlotCreatorPermission(@Nonnull PlayerRef playerRef) {
         if (playerRef.hasPermission(AetherhavenConstants.PERMISSION_PLOT_CREATOR)) {
@@ -217,6 +225,56 @@ public final class AetherhavenPlotCreatorCommand extends AbstractCommandCollecti
                     .param("path", iconFile.toString())
                     .param("asset", CustomBuildingsPaths.iconAssetPath(outputId))
             );
+        }
+    }
+
+    private static final class SetBoundsCommand extends AbstractPlayerCommand {
+        SetBoundsCommand() {
+            super("setbounds", "aetherhaven_commands_help.commands.aetherhaven.plotcreator.setbounds.desc");
+        }
+
+        @Override
+        protected void execute(
+            @Nonnull CommandContext context,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull World world
+        ) {
+            if (!requirePlotCreatorPermission(playerRef)) {
+                return;
+            }
+            PlotCreatorSession session = PlotCreatorSessions.get(playerRef.getUuid());
+            if (session == null) {
+                playerRef.sendMessage(Message.translation(MSG + ".error.noSession"));
+                return;
+            }
+            Player player = store.getComponent(ref, Player.getComponentType());
+            if (player == null) {
+                return;
+            }
+            BlockSelection selection = BuilderToolsPlugin.getState(player, playerRef).getSelection();
+            if (selection == null || !selection.hasSelectionBounds()) {
+                playerRef.sendMessage(Message.translation(MSG + ".error.noSelection"));
+                return;
+            }
+            Vector3i min = selection.getSelectionMin();
+            Vector3i max = selection.getSelectionMax();
+            String err = PlotCreatorService.applyBoundsFromBuilderSelection(session, min, max);
+            if (err != null) {
+                playerRef.sendMessage(Message.translation(MSG + ".error." + err));
+                return;
+            }
+            int width = max.x - min.x + 1;
+            int depth = max.z - min.z + 1;
+            int height = max.y - min.y + 1;
+            playerRef.sendMessage(
+                Message.translation(MSG + ".hint.boundsSet")
+                    .param("width", width)
+                    .param("depth", depth)
+                    .param("height", height)
+            );
+            PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
         }
     }
 

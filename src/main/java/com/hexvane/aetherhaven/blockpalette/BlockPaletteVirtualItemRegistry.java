@@ -72,7 +72,8 @@ public final class BlockPaletteVirtualItemRegistry {
     @Nullable
     private static ItemBase buildVirtualItemBase(@Nonnull String virtualId, @Nonnull String paletteId) {
         try {
-            Item originalItem = Item.getAssetMap().getAsset(BlockPaletteConstants.ITEM_ID);
+            String baseItemId = resolveCloneItemId(virtualId);
+            Item originalItem = Item.getAssetMap().getAsset(baseItemId);
             if (originalItem == null) {
                 LOGGER.atWarning().log("Cannot create block palette virtual item: base item not found");
                 return null;
@@ -81,7 +82,7 @@ public final class BlockPaletteVirtualItemRegistry {
             if (originalPacket == null) {
                 return null;
             }
-            String iconPath = "Icons/ItemsGenerated/" + resolveIconBlockId(paletteId) + ".png";
+            String iconPath = resolveIconAssetPath(paletteId);
             ItemBase clone = originalPacket.clone();
             clone.id = virtualId;
             clone.icon = iconPath;
@@ -94,15 +95,23 @@ public final class BlockPaletteVirtualItemRegistry {
     }
 
     @Nonnull
-    private static String resolveIconBlockId(@Nonnull String paletteId) {
+    private static String resolveCloneItemId(@Nonnull String itemId) {
+        if (BlockPaletteShopItemIds.paletteIdFromItemId(itemId) != null) {
+            return itemId;
+        }
+        return BlockPaletteConstants.ITEM_ID;
+    }
+
+    @Nonnull
+    private static String resolveIconAssetPath(@Nonnull String paletteId) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin != null) {
             BlockPaletteDefinition def = plugin.getBlockPaletteCatalog().get(paletteId.trim());
-            if (def != null && !def.getIconBlockId().isBlank()) {
-                return def.getIconBlockId();
+            if (def != null) {
+                return BlockPaletteIconResolver.resolveIconAssetPath(def);
             }
         }
-        return "Furniture_Village_Crate";
+        return "Icons/ItemsGenerated/Furniture_Village_Crate.png";
     }
 
     @Nonnull
@@ -122,5 +131,6 @@ public final class BlockPaletteVirtualItemRegistry {
 
     public void onPlayerLeave(@Nonnull UUID playerUuid) {
         sentToPlayer.remove(playerUuid);
+        BlockPaletteClipboard.clear(playerUuid);
     }
 }

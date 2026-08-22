@@ -29,6 +29,21 @@ items.Aetherhaven_Block_Palette.description=Use this to unlock a building look f
 items.Aetherhaven_Block_Palette.instance.name=Block Palette: {palette}
 items.Aetherhaven_Block_Palette.instance.description=Use this to unlock {palette} for your town. Open the paintbrush tab on a town records shelf to apply it.
 
+items.Aetherhaven_Block_Palette_Modern_Cloth_Roofs_Red.name=Block Palette: Red Modern Cloth Roof
+items.Aetherhaven_Block_Palette_Modern_Cloth_Roofs_Red.description=Use this to unlock red modern cloth roofs for your town.
+items.Aetherhaven_Block_Palette_Trunks_Jungle.name=Block Palette: Jungle Logs
+items.Aetherhaven_Block_Palette_Trunks_Jungle.description=Use this to unlock jungle log looks for your town.
+items.Aetherhaven_Block_Palette_Windows_Jungle.name=Block Palette: Jungle Windows
+items.Aetherhaven_Block_Palette_Windows_Jungle.description=Use this to unlock jungle window looks for your town.
+items.Aetherhaven_Block_Palette_Walls_White.name=Block Palette: White Walls
+items.Aetherhaven_Block_Palette_Walls_White.description=Use this to unlock white wall looks for your town.
+items.Aetherhaven_Block_Palette_Cloth_White.name=Block Palette: White Cloth
+items.Aetherhaven_Block_Palette_Cloth_White.description=Use this to unlock white cloth looks for your town.
+items.Aetherhaven_Block_Palette_Cloth_Roofs_White.name=Block Palette: White Cloth Roof
+items.Aetherhaven_Block_Palette_Cloth_Roofs_White.description=Use this to unlock white cloth roof looks for your town.
+items.Aetherhaven_Block_Palette_Trunks_Ice.name=Block Palette: Ice Logs
+items.Aetherhaven_Block_Palette_Trunks_Ice.description=Use this to unlock ice log looks for your town.
+
 items.Aetherhaven_Prop_Cabbage_Trough.name=Prop: Cabbage Trough
 items.Aetherhaven_Prop_Cabbage_Trough.description=A trough packed with cabbages. Right click to place it.
 items.Aetherhaven_Prop_Palm_Streetlight.name=Prop: Palm Streetlight

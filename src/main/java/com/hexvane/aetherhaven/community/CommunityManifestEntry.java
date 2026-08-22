@@ -271,6 +271,11 @@ public final class CommunityManifestEntry {
         return userHasFavorited;
     }
 
+    /** Clears per-player favorite state before storing entries in the shared manifest cache. */
+    public void clearUserHasFavorited() {
+        userHasFavorited = false;
+    }
+
     @Nonnull
     public String prefabPathKey() {
         if (isFestivalVariant()) {

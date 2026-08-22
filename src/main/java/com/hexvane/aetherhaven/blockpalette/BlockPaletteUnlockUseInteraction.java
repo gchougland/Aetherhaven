@@ -63,7 +63,8 @@ public final class BlockPaletteUnlockUseInteraction extends SimpleInstantInterac
         }
         BlockPaletteUnlockService.Result result =
             BlockPaletteUnlockService.tryUnlock(ref, commandBuffer.getStore(), pr, paletteId);
-        if (result != BlockPaletteUnlockService.Result.UNLOCKED) {
+        if (result != BlockPaletteUnlockService.Result.UNLOCKED
+            && result != BlockPaletteUnlockService.Result.REFUNDED) {
             context.getState().state = InteractionState.Failed;
             return;
         }

@@ -100,6 +100,16 @@ public final class ConstructionFavoritesService {
         store.putComponent(ref, PlayerConstructionFavoritesState.getComponentType(), state);
     }
 
+    public static void syncCommunityFavorites(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull List<String> communityIds
+    ) {
+        PlayerConstructionFavoritesState state = ensureState(ref, store);
+        state.syncCommunityFavorites(communityIds);
+        store.putComponent(ref, PlayerConstructionFavoritesState.getComponentType(), state);
+    }
+
     public static void retainKnown(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull Set<String> knownIds) {
         PlayerConstructionFavoritesState state = store.getComponent(ref, PlayerConstructionFavoritesState.getComponentType());
         if (state == null) {

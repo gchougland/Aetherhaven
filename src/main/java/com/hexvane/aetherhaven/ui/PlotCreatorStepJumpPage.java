@@ -123,7 +123,10 @@ public final class PlotCreatorStepJumpPage extends AetherhavenInteractiveCustomU
         if (!PlotCreatorService.jumpToStep(session, target, ref, store)) {
             return;
         }
-        player.getPageManager().setPage(ref, store, Page.None);
+        // Let onStepEntered replace this page when the target opens a wizard panel.
+        if (!PlotCreatorService.stepAutoOpensPanel(target)) {
+            player.getPageManager().setPage(ref, store, Page.None);
+        }
         PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
     }
 

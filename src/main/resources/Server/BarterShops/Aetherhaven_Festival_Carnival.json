@@ -68,6 +68,14 @@
         "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Summer", "Quantity": 5 }],
         "Stock": 6
       }
+    },
+    {
+      "Type": "Fixed",
+      "Trade": {
+        "Output": { "ItemId": "Aetherhaven_Block_Palette_Modern_Cloth_Roofs_Red", "Quantity": 1 },
+        "Input": [{ "ItemId": "Aetherhaven_Festival_Ticket_Summer", "Quantity": 5 }],
+        "Stock": 6
+      }
     }
   ]
 }

@@ -37,6 +37,7 @@ import { createVoteRateLimit } from "./voteRateLimit.js";
 import { createDownloadRateLimit } from "./downloadRateLimit.js";
 import { createVotes } from "./votes.js";
 import { createFavorites } from "./favorites.js";
+import { requestFavoriteIdentityUuids } from "./playerIdentity.js";
 import { createDownloads } from "./downloads.js";
 import {
   applyCoverScreenshotIfUnset,
@@ -1388,14 +1389,8 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
 }
 
 function profileUuidForManifest(req) {
-  const session = sessionProfileUuid(req);
-  if (session) {
-    return session;
-  }
-  const inGame = String(req.get("X-Player-Uuid") || "")
-    .trim()
-    .toLowerCase();
-  return UUID_RE.test(inGame) ? inGame : "";
+  const uuids = requestFavoriteIdentityUuids(req);
+  return uuids.length > 0 ? uuids[0] : "";
 }
 
 function sendManifest(req, res) {
@@ -1403,8 +1398,8 @@ function sendManifest(req, res) {
   const manifest = storage.readManifest();
   const voterUuid = sessionProfileUuid(req);
   const userVotes = voterUuid ? votes.getUserVotes(voterUuid) : null;
-  const profileUuid = profileUuidForManifest(req);
-  const userFavorites = profileUuid ? favorites.getUserFavorites(profileUuid) : null;
+  const favoriteUuids = requestFavoriteIdentityUuids(req);
+  const userFavorites = favoriteUuids.length ? favorites.getMergedUserFavorites(favoriteUuids) : null;
   const entries = sortCatalogEntries(
     enrichManifestEntries(manifest, clientBlockIdVersion, userVotes, userFavorites)
   );
@@ -1414,7 +1409,7 @@ function sendManifest(req, res) {
   });
 }
 
-function toggleBuildingFavorite(buildingId, profileUuid) {
+function toggleBuildingFavorite(buildingId, userUuids) {
   const id = normalizeCatalogId(buildingId);
   if (!id) {
     return { status: 400, body: { error: "invalid_id" } };
@@ -1424,10 +1419,11 @@ function toggleBuildingFavorite(buildingId, profileUuid) {
   if (!entry) {
     return { status: 404, body: { error: "not_found" } };
   }
-  if (!profileUuid) {
+  const ids = Array.isArray(userUuids) ? userUuids : userUuids ? [userUuids] : [];
+  if (!ids.length) {
     return { status: 400, body: { error: "profile_missing" } };
   }
-  const result = favorites.toggleFavorite(id, profileUuid);
+  const result = favorites.toggleFavoriteForUserUuids(id, ids);
   return { status: 200, body: result };
 }
 
@@ -3123,22 +3119,22 @@ app.post("/api/buildings/:id/upvote", requireWebUser, voteRateLimit, (req, res) 
 });
 
 app.get("/api/me/favorites", (req, res) => {
-  const profileUuid = profileUuidForManifest(req);
-  if (!profileUuid) {
+  const userUuids = requestFavoriteIdentityUuids(req);
+  if (!userUuids.length) {
     res.status(401).json({ error: "auth_required" });
     return;
   }
-  const buildingIds = [...favorites.getUserFavorites(profileUuid)];
+  const buildingIds = [...favorites.getMergedUserFavorites(userUuids)];
   res.json({ buildingIds });
 });
 
 app.post("/api/buildings/:id/favorite", requireWebUser, (req, res) => {
-  const result = toggleBuildingFavorite(req.params.id, sessionProfileUuid(req));
+  const result = toggleBuildingFavorite(req.params.id, requestFavoriteIdentityUuids(req));
   res.status(result.status).json(result.body);
 });
 
 app.post("/api/v1/buildings/:id/favorite", requireInGamePlayer, (req, res) => {
-  const result = toggleBuildingFavorite(req.params.id, inGamePlayerUser(req).profileUuid);
+  const result = toggleBuildingFavorite(req.params.id, requestFavoriteIdentityUuids(req));
   res.status(result.status).json(result.body);
 });
 

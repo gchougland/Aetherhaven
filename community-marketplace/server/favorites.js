@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { canonicalFavoriteUuid } from "./playerIdentity.js";
 
 /** @param {string} dataDir */
 export function createFavorites(dataDir) {
@@ -41,8 +42,49 @@ export function createFavorites(dataDir) {
     fs.writeFileSync(file, JSON.stringify({ buildingIds: [...buildingIds] }, null, 2));
   }
 
+  /**
+   * Merges alias favorite files into the canonical id and removes stale alias files.
+   *
+   * @param {string[]} userUuids
+   * @returns {Set<string>}
+   */
+  function consolidateUserFavorites(userUuids) {
+    const canonical = canonicalFavoriteUuid(userUuids);
+    if (!canonical) {
+      return new Set();
+    }
+    const merged = new Set();
+    for (const id of userUuids) {
+      for (const favoriteId of readUserFavorites(id)) {
+        merged.add(favoriteId);
+      }
+    }
+    writeUserFavorites(canonical, merged);
+    for (const alias of userUuids) {
+      if (alias === canonical) {
+        continue;
+      }
+      const aliasFile = userPath(alias);
+      if (aliasFile && fs.existsSync(aliasFile)) {
+        fs.unlinkSync(aliasFile);
+      }
+    }
+    return merged;
+  }
+
   function getUserFavorites(userUuid) {
     return readUserFavorites(userUuid);
+  }
+
+  /**
+   * @param {string[]} userUuids
+   * @returns {Set<string>}
+   */
+  function getMergedUserFavorites(userUuids) {
+    if (!userUuids.length) {
+      return new Set();
+    }
+    return consolidateUserFavorites(userUuids);
   }
 
   function userHasFavorited(buildingId, userUuid) {
@@ -51,18 +93,40 @@ export function createFavorites(dataDir) {
 
   /**
    * @param {string} buildingId
+   * @param {string[]} userUuids
+   * @returns {boolean}
+   */
+  function userHasFavoritedAny(buildingId, userUuids) {
+    return getMergedUserFavorites(userUuids).has(buildingId);
+  }
+
+  /**
+   * @param {string} buildingId
    * @param {string} userUuid
    * @returns {{ userHasFavorited: boolean, buildingIds: string[] }}
    */
   function toggleFavorite(buildingId, userUuid) {
-    const favorites = readUserFavorites(userUuid);
+    return toggleFavoriteForUserUuids(buildingId, userUuid ? [userUuid] : []);
+  }
+
+  /**
+   * @param {string} buildingId
+   * @param {string[]} userUuids
+   * @returns {{ userHasFavorited: boolean, buildingIds: string[] }}
+   */
+  function toggleFavoriteForUserUuids(buildingId, userUuids) {
+    const canonical = canonicalFavoriteUuid(userUuids);
+    if (!canonical) {
+      return { userHasFavorited: false, buildingIds: [] };
+    }
+    const favorites = consolidateUserFavorites(userUuids);
     const hadFavorite = favorites.has(buildingId);
     if (hadFavorite) {
       favorites.delete(buildingId);
     } else {
       favorites.add(buildingId);
     }
-    writeUserFavorites(userUuid, favorites);
+    writeUserFavorites(canonical, favorites);
     return { userHasFavorited: !hadFavorite, buildingIds: [...favorites] };
   }
 
@@ -91,8 +155,11 @@ export function createFavorites(dataDir) {
 
   return {
     getUserFavorites,
+    getMergedUserFavorites,
     userHasFavorited,
+    userHasFavoritedAny,
     toggleFavorite,
+    toggleFavoriteForUserUuids,
     removeBuilding,
   };
 }

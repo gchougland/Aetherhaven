@@ -174,21 +174,29 @@ public final class BlockPaletteIconPacketAdapter {
             }
             return false;
         }
-        if (!BlockPaletteConstants.ITEM_ID.equals(itemId)) {
-            return false;
+        String paletteId = BlockPaletteShopItemIds.paletteIdFromItemId(itemId);
+        if (paletteId == null) {
+            if (!BlockPaletteConstants.ITEM_ID.equals(itemId)) {
+                return false;
+            }
+            paletteId = readPaletteIdFromMetadata(item.metadata);
+            if (paletteId == null || paletteId.isBlank()) {
+                return false;
+            }
+            String virtualId = BlockPaletteVirtualItemRegistry.generateVirtualId(paletteId);
+            ItemBase base = virtualItems.getOrCreateVirtualItemBase(virtualId, paletteId);
+            if (base == null) {
+                return false;
+            }
+            item.itemId = virtualId;
+            newVirtual.put(virtualId, base);
+            return true;
         }
-        String paletteId = readPaletteIdFromMetadata(item.metadata);
-        if (paletteId == null || paletteId.isBlank()) {
-            return false;
+        ItemBase base = virtualItems.getOrCreateVirtualItemBase(itemId, paletteId);
+        if (base != null) {
+            newVirtual.put(itemId, base);
         }
-        String virtualId = BlockPaletteVirtualItemRegistry.generateVirtualId(paletteId);
-        ItemBase base = virtualItems.getOrCreateVirtualItemBase(virtualId, paletteId);
-        if (base == null) {
-            return false;
-        }
-        item.itemId = virtualId;
-        newVirtual.put(virtualId, base);
-        return true;
+        return false;
     }
 
     @Nullable

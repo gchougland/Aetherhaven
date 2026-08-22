@@ -33,6 +33,37 @@ class ConstructionFavoritesServiceTest {
     }
 
     @Test
+    void syncCommunityFavoritesReplacesCommunityIdsButKeepsCore() {
+        PlayerConstructionFavoritesState state = new PlayerConstructionFavoritesState();
+        state.add("plot_town_hall");
+        state.add("plot_community_old");
+        state.add("plot_community_keep");
+
+        state.syncCommunityFavorites(List.of("plot_community_keep", "plot_community_new"));
+
+        assertTrue(state.isFavorite("plot_town_hall"));
+        assertFalse(state.isFavorite("plot_community_old"));
+        assertTrue(state.isFavorite("plot_community_keep"));
+        assertTrue(state.isFavorite("plot_community_new"));
+        assertEquals(
+            List.of("plot_town_hall", "plot_community_keep", "plot_community_new"),
+            state.favoritesOrdered()
+        );
+    }
+
+    @Test
+    void syncCommunityFavoritesClearsAllCommunityIdsWhenRemoteEmpty() {
+        PlayerConstructionFavoritesState state = new PlayerConstructionFavoritesState();
+        state.add("plot_house");
+        state.add("plot_community_a");
+
+        state.syncCommunityFavorites(List.of());
+
+        assertTrue(state.isFavorite("plot_house"));
+        assertFalse(state.isFavorite("plot_community_a"));
+    }
+
+    @Test
     void retainKnownRemovesUnknownIds() {
         PlayerConstructionFavoritesState state = new PlayerConstructionFavoritesState();
         state.add("plot_a");

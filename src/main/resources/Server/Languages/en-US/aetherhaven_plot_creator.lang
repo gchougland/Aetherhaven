@@ -210,6 +210,8 @@ aetherhaven.plotcreator.hint.kindCycled = Building type: {kind}
 aetherhaven.plotcreator.hint.prefabSaved = Prefab saved as {file}. Press E when ready for the next step.
 
 aetherhaven.plotcreator.error.needBounds = Mark the build area before continuing.
+aetherhaven.plotcreator.error.noSession = Start plot creator or building editor first.
+aetherhaven.plotcreator.error.noSelection = Mark a box with the selection tool first.
 aetherhaven.plotcreator.error.boundsDragTooShort = Hold primary and drag to mark a box. A single click is not enough.
 aetherhaven.plotcreator.error.boundsTooFlat = That box is only one block tall. Drag a taller box or pull the top side up.
 aetherhaven.plotcreator.error.boundsTooSmall = That box is too small. Drag a larger box.

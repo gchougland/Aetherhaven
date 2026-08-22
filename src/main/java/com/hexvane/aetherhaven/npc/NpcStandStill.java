@@ -55,6 +55,28 @@ public final class NpcStandStill {
         NpcAnimationPlayback.stop(ref, AnimationSlot.Movement, commandBuffer);
     }
 
+    /**
+     * Keeps cooperative stand-still without clearing movement flags or stopping the Movement animation slot.
+     * Use for per-tick snowball fight holds where crouch pose must persist.
+     */
+    public static void maintainHold(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull NPCEntity npc,
+        @Nonnull Vector3d leashPoint,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        if (npc.getRole() == null || NpcFaceVisuals.isInInteractionDialogue(npc)) {
+            return;
+        }
+        npc.setLeashPoint(new Vector3d(leashPoint));
+        if (supportsStandStillState(npc)) {
+            applyStandStillStateIfNeeded(ref, npc, commandBuffer);
+        } else if (VillagerAutonomySystem.supportsAutonomyPoiRoleState(npc)) {
+            VillagerAutonomySystem.applyAutonomyRoleState(ref, npc, commandBuffer);
+        }
+        commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+    }
+
     /** Returns from stand-still or autonomy seek back to Idle wander. Never touches {@link Frozen}. */
     public static void release(
         @Nonnull Ref<EntityStore> ref,

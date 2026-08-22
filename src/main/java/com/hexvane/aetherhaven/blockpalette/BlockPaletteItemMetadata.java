@@ -6,6 +6,7 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.item.config.metadata.ItemDisplayMetadata;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.i18n.I18nModule;
+import com.hypixel.hytale.server.core.modules.item.ItemModule;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.bson.BsonDocument;
@@ -30,7 +31,12 @@ public final class BlockPaletteItemMetadata {
 
     @Nonnull
     public static ItemStack createStack(@Nonnull BlockPaletteDefinition def, int amount) {
-        ItemStack base = new ItemStack(BlockPaletteConstants.ITEM_ID, Math.max(1, amount));
+        int qty = Math.max(1, amount);
+        String shopItemId = BlockPaletteShopItemIds.forPaletteId(def.getId());
+        ItemStack base =
+            ItemModule.exists(shopItemId)
+                ? new ItemStack(shopItemId, qty)
+                : new ItemStack(BlockPaletteConstants.ITEM_ID, qty);
         return withPalette(base, def.getId(), def.getDisplayName());
     }
 
@@ -59,6 +65,13 @@ public final class BlockPaletteItemMetadata {
 
     @Nullable
     public static String readPaletteId(@Nullable ItemStack stack) {
+        if (ItemStack.isEmpty(stack)) {
+            return null;
+        }
+        String fromShop = BlockPaletteShopItemIds.paletteIdFromItemId(stack.getItemId());
+        if (fromShop != null && !fromShop.isBlank()) {
+            return fromShop.trim();
+        }
         BsonDocument root = readRoot(stack);
         if (root == null) {
             return null;

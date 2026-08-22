@@ -3,9 +3,15 @@ package com.hexvane.aetherhaven.villagercosmetic;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hypixel.hytale.component.ArchetypeChunk;
+import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
 import com.hypixel.hytale.server.core.asset.type.model.config.ModelAttachment;
@@ -21,6 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -54,6 +61,17 @@ public final class VillagerCosmeticAppearanceService {
         @Nonnull Map<String, String> slotOverrides,
         @Nonnull VillagerCosmeticCatalog catalog
     ) {
+        return buildModelWithOverrides(modelAssetId, modelScale, slotOverrides, catalog, null);
+    }
+
+    @Nullable
+    public static Model buildModelWithOverrides(
+        @Nonnull String modelAssetId,
+        @Nullable Float modelScale,
+        @Nonnull Map<String, String> slotOverrides,
+        @Nonnull VillagerCosmeticCatalog catalog,
+        @Nullable Model currentModel
+    ) {
         ModelAsset asset = ModelAsset.getAssetMap().getAsset(modelAssetId);
         if (asset == null) {
             return null;
@@ -63,11 +81,48 @@ public final class VillagerCosmeticAppearanceService {
         if (base == null) {
             return null;
         }
+        ModelAttachment[] sourceAttachments = attachmentSource(base, currentModel);
         if (slotOverrides == null || slotOverrides.isEmpty()) {
-            return base;
+            return copyWithAttachments(base, stripWardrobeCosmetics(sourceAttachments, catalog));
         }
-        ModelAttachment[] merged = mergeAttachments(base.getAttachments(), slotOverrides, catalog);
+        ModelAttachment[] merged = mergeAttachments(sourceAttachments, slotOverrides, catalog);
         return copyWithAttachments(base, merged);
+    }
+
+    @Nonnull
+    private static ModelAttachment[] attachmentSource(@Nonnull Model base, @Nullable Model currentModel) {
+        if (currentModel != null && currentModel.getAttachments() != null && currentModel.getAttachments().length > 0) {
+            return currentModel.getAttachments();
+        }
+        ModelAttachment[] fromBase = base.getAttachments();
+        return fromBase != null ? fromBase : new ModelAttachment[0];
+    }
+
+    @Nonnull
+    private static ModelAttachment[] stripWardrobeCosmetics(
+        @Nullable ModelAttachment[] source,
+        @Nonnull VillagerCosmeticCatalog catalog
+    ) {
+        if (source == null || source.length == 0) {
+            return new ModelAttachment[0];
+        }
+        List<ModelAttachment> kept = new ArrayList<>();
+        for (ModelAttachment attachment : source) {
+            if (attachment == null || isWardrobeCosmeticModel(attachment.getModel(), catalog)) {
+                continue;
+            }
+            kept.add(attachment);
+        }
+        return kept.toArray(ModelAttachment[]::new);
+    }
+
+    private static boolean isWardrobeCosmeticModel(
+        @Nullable String modelPath,
+        @Nonnull VillagerCosmeticCatalog catalog
+    ) {
+        return catalog.isHeadAccessoryModel(modelPath)
+            || catalog.isFaceAccessoryModel(modelPath)
+            || catalog.isBackAccessoryModel(modelPath);
     }
 
     @Nonnull
@@ -285,19 +340,70 @@ public final class VillagerCosmeticAppearanceService {
         if (modelAssetId == null || modelAssetId.isBlank()) {
             return;
         }
-        Float scale = null;
         ModelComponent existing = store.getComponent(npcRef, ModelComponent.getComponentType());
-        if (existing != null && existing.getModel() != null) {
-            scale = existing.getModel().getScale();
-        }
+        Model currentModel = existing != null ? existing.getModel() : null;
+        Float scale = currentModel != null ? currentModel.getScale() : null;
         Model merged =
-            buildModelWithOverrides(modelAssetId, scale, overrides, plugin.getVillagerCosmeticCatalog());
+            buildModelWithOverrides(
+                modelAssetId,
+                scale,
+                overrides,
+                plugin.getVillagerCosmeticCatalog(),
+                currentModel
+            );
         if (merged == null) {
             LOGGER.atWarning().log("Failed to build cosmetic model for %s on %s", residentKey, modelAssetId);
             return;
         }
-        // Always write when overrides exist, or when clearing back to catalog defaults after a wardrobe save.
         applyModel(npcRef, store, merged);
+    }
+
+    /**
+     * Re-applies saved cosmetics to every live town NPC. Defers one frame so model packets flush after town data is saved.
+     */
+    public static void refreshAllTownBoundNpcs(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town
+    ) {
+        UUID townId = town.getTownId();
+        List<Ref<EntityStore>> npcRefs = collectTownBoundNpcRefs(store, townId);
+        world.execute(
+            () -> {
+                for (Ref<EntityStore> npcRef : npcRefs) {
+                    if (npcRef != null && npcRef.isValid()) {
+                        applySavedCosmetics(npcRef, store, town);
+                    }
+                }
+            }
+        );
+    }
+
+    @Nonnull
+    private static List<Ref<EntityStore>> collectTownBoundNpcRefs(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID townId
+    ) {
+        List<Ref<EntityStore>> refs = new ArrayList<>();
+        Query<EntityStore> q =
+            Query.and(TownVillagerBinding.getComponentType(), UUIDComponent.getComponentType());
+        store.forEachChunk(
+            q,
+            (ArchetypeChunk<EntityStore> archetypeChunk, CommandBuffer<EntityStore> commandBuffer) -> {
+                for (int i = 0; i < archetypeChunk.size(); i++) {
+                    TownVillagerBinding binding =
+                        archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
+                    if (binding == null || !townId.equals(binding.getTownId())) {
+                        continue;
+                    }
+                    Ref<EntityStore> npcRef = archetypeChunk.getReferenceTo(i);
+                    if (npcRef != null && npcRef.isValid()) {
+                        refs.add(npcRef);
+                    }
+                }
+            }
+        );
+        return refs;
     }
 
     public static void applyModel(
@@ -305,10 +411,34 @@ public final class VillagerCosmeticAppearanceService {
         @Nonnull Store<EntityStore> store,
         @Nonnull Model model
     ) {
-        // Merged attachments live on ModelComponent. Model.toReference() / PersistentModel cannot store
-        // custom attachments, so never resyncFromPersistentModel after this or the look is wiped.
-        store.putComponent(npcRef, ModelComponent.getComponentType(), new ModelComponent(model));
-        store.putComponent(npcRef, PersistentModel.getComponentType(), new PersistentModel(model.toReference()));
+        runStoreWrite(
+            store,
+            () -> {
+                if (!npcRef.isValid()) {
+                    return;
+                }
+                // Merged attachments live on ModelComponent. Model.toReference() / PersistentModel cannot store
+                // custom attachments, so never resyncFromPersistentModel after this or the look is wiped.
+                store.putComponent(npcRef, ModelComponent.getComponentType(), new ModelComponent(model));
+                store.putComponent(npcRef, PersistentModel.getComponentType(), new PersistentModel(model.toReference()));
+                NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+                if (npc != null && npc.getRole() != null) {
+                    npc.getRole().updateMotionControllers(npcRef, model, model.getBoundingBox(), store);
+                }
+            }
+        );
+    }
+
+    @SuppressWarnings("deprecation") // Store.isProcessing() is the only way to detect mid-tick writes
+    private static void runStoreWrite(@Nonnull Store<EntityStore> store, @Nonnull Runnable write) {
+        if (store.isProcessing()) {
+            World world = store.getExternalData().getWorld();
+            if (world != null) {
+                world.execute(write);
+            }
+        } else {
+            write.run();
+        }
     }
 
     @Nullable

@@ -9,8 +9,12 @@ import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
 import com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticAppearanceService;
 import com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticCatalog;
 import com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticDefinition;
+import com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticKeys;
 import com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticPreviewSession;
+import com.hexvane.aetherhaven.villagercosmetic.WardrobeResidentDirectory;
+import com.hexvane.aetherhaven.villagercosmetic.WardrobeResidentDirectory.WardrobeResidentRow;
 import com.hexvane.aetherhaven.villager.NpcModelSpawnUtil;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -35,6 +39,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -94,6 +99,12 @@ public final class VillagerWardrobeCustomizePage extends AetherhavenInteractiveC
         commandBuilder.append("Aetherhaven/VillagerWardrobeCustomize.ui");
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
+            "#ApplyToAllButton",
+            EventData.of("Action", "ApplyToAll"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
             "#SaveButton",
             EventData.of("Action", "Save"),
             false
@@ -107,6 +118,7 @@ public final class VillagerWardrobeCustomizePage extends AetherhavenInteractiveC
         commandBuilder.set("#WardrobeTitleText.TextSpans", Message.translation(LANG + ".customizeTitle"));
         commandBuilder.set("#ResidentName.TextSpans", Message.raw(displayName));
         commandBuilder.set("#Hint.TextSpans", Message.translation(LANG + ".customizeHint"));
+        commandBuilder.set("#ApplyToAllButton.TextSpans", Message.translation(LANG + ".applyToAll"));
         commandBuilder.set("#SaveButton.TextSpans", Message.translation(LANG + ".save"));
         commandBuilder.set("#WardrobeBackButton.TextSpans", Message.translation(LANG + ".back"));
 
@@ -178,9 +190,10 @@ public final class VillagerWardrobeCustomizePage extends AetherhavenInteractiveC
         if (data.action == null) {
             return;
         }
+        String action = data.action.trim();
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         World world = store.getExternalData().getWorld();
-        if (plugin == null) {
+        if (plugin == null || world == null) {
             return;
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
@@ -188,13 +201,13 @@ public final class VillagerWardrobeCustomizePage extends AetherhavenInteractiveC
         if (town == null) {
             return;
         }
-        switch (data.action) {
+        switch (action) {
             case "CyclePrev", "CycleNext" -> {
                 if (data.slot == null) {
                     return;
                 }
                 String slot = data.slot.trim();
-                int delta = "CycleNext".equals(data.action) ? 1 : -1;
+                int delta = "CycleNext".equals(action) ? 1 : -1;
                 if (!cycleSlot(plugin, town, slot, delta)) {
                     return;
                 }
@@ -218,6 +231,30 @@ public final class VillagerWardrobeCustomizePage extends AetherhavenInteractiveC
                 );
                 UiSoundEffects.play2dUi(ref, store, AetherhavenConstants.SFX_WORKBENCH_CRAFT);
                 goBack(ref, store);
+            }
+            case "ApplyToAll" -> {
+                Map<String, String> overrides =
+                    new LinkedHashMap<>(VillagerCosmeticAppearanceService.normalizeOverrides(draftOverrides));
+                world.execute(
+                    () -> {
+                        if (!ref.isValid()) {
+                            return;
+                        }
+                        TownRecord liveTown = tm.getTown(townId);
+                        if (liveTown == null) {
+                            return;
+                        }
+                        applyToAllResidents(store, liveTown, plugin, overrides);
+                        tm.updateTown(liveTown);
+                        VillagerCosmeticAppearanceService.refreshAllTownBoundNpcs(world, store, liveTown);
+                        NotificationUtil.sendNotification(
+                            playerRef.getPacketHandler(),
+                            Message.translation(LANG + ".applyToAllSuccess"),
+                            NotificationStyle.Success
+                        );
+                        UiSoundEffects.play2dUi(ref, store, AetherhavenConstants.SFX_WORKBENCH_CRAFT);
+                    }
+                );
             }
             case "Back" -> goBack(ref, store);
             default -> {}
@@ -315,6 +352,45 @@ public final class VillagerWardrobeCustomizePage extends AetherhavenInteractiveC
                 store,
                 new VillagerWardrobeResidentPage(playerRef, townId, blockX, blockY, blockZ)
             );
+    }
+
+    private void applyToAllResidents(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Map<String, String> overrides
+    ) {
+        LinkedHashSet<String> keys = new LinkedHashSet<>();
+        keys.add(residentKey);
+        for (WardrobeResidentRow row : WardrobeResidentDirectory.list(store, town, plugin)) {
+            keys.add(row.residentKey());
+        }
+        UUID tid = town.getTownId();
+        Query<EntityStore> q =
+            Query.and(TownVillagerBinding.getComponentType(), UUIDComponent.getComponentType());
+        store.forEachChunk(
+            q,
+            (ArchetypeChunk<EntityStore> archetypeChunk, CommandBuffer<EntityStore> commandBuffer) -> {
+                for (int i = 0; i < archetypeChunk.size(); i++) {
+                    TownVillagerBinding binding =
+                        archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
+                    if (binding == null || !tid.equals(binding.getTownId())) {
+                        continue;
+                    }
+                    Ref<EntityStore> npcRef = archetypeChunk.getReferenceTo(i);
+                    if (npcRef == null) {
+                        continue;
+                    }
+                    String key = VillagerCosmeticKeys.resolve(npcRef, store);
+                    if (key != null) {
+                        keys.add(key);
+                    }
+                }
+            }
+        );
+        for (String key : keys) {
+            town.replaceVillagerCosmeticOverrides(key, overrides);
+        }
     }
 
     private void applyToLiveNpc(@Nonnull Store<EntityStore> store, @Nonnull TownRecord town) {

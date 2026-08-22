@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
+import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
@@ -18,6 +19,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
@@ -46,7 +48,8 @@ public final class BlockPaletteApplyService {
         Vector3i anchor = plot.resolvePrefabAnchorWorld(def);
         Rotation yaw = plot.resolvePrefabYaw();
         Map<String, String> selections = plot.getBlockPaletteSelections();
-        world.execute(() -> applyOnWorldThread(world, buffer, anchor, yaw, selections));
+        PlotFootprintRecord footprint = plot.toFootprint();
+        world.execute(() -> applyOnWorldThread(world, buffer, anchor, yaw, selections, footprint));
     }
 
     private static void applyOnWorldThread(
@@ -54,19 +57,14 @@ public final class BlockPaletteApplyService {
         @Nonnull IPrefabBuffer buffer,
         @Nonnull Vector3i origin,
         @Nonnull Rotation yaw,
-        @Nonnull Map<String, String> selections
+        @Nonnull Map<String, String> selections,
+        @Nonnull PlotFootprintRecord footprint
     ) {
-        // Unremapped prefab footprint: default restores these ids; non-default remaps the world block when possible
-        // so connected wall / stair / roof state variants keep their shape.
         ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw, null);
         List<PendingBlock> cells = ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
         LocalCachedChunkAccessor accessor = ConstructionPasteOps.createAccessor(world, origin, buffer);
         BlockTypeAssetMap<String, BlockType> typeMap = BlockType.getAssetMap();
-        // Allow the game to refresh connection states after we place base twins for missing state variants.
-        int settings =
-            SetBlockSettings.NO_SEND_PARTICLES
-                | SetBlockSettings.NO_BREAK_FILLER
-                | SetBlockSettings.NO_SET_FILLER;
+        Map<Long, String> prefabBlockIdByCell = new HashMap<>();
         for (PendingBlock pb : cells) {
             if (pb.filler() != FillerBlockUtil.NO_FILLER || pb.blockId() == 0) {
                 continue;
@@ -75,43 +73,61 @@ public final class BlockPaletteApplyService {
             if (prefabType == null || prefabType.getId() == null || prefabType.getId().isBlank()) {
                 continue;
             }
-            int bx = origin.x + pb.x();
-            int by = origin.y + pb.y();
-            int bz = origin.z + pb.z();
-            WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(bx, bz));
-            if (chunk == null) {
-                chunk = accessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
-            }
-            if (chunk == null) {
-                continue;
-            }
-            BlockType current = chunk.getBlockType(bx, by, bz);
-            String targetId = resolveTargetBlockTypeId(prefabType.getId(), current, selections);
-            if (targetId == null || targetId.isBlank()) {
-                continue;
-            }
-            if (current != null && targetId.equals(current.getId())) {
-                continue;
-            }
-            int newBlockId = typeMap.getIndex(targetId);
-            if (newBlockId < 0) {
-                // State variants are registered with a leading *; try the other form.
-                String alt =
-                    targetId.startsWith("*") ? targetId.substring(1) : ("*" + targetId);
-                newBlockId = typeMap.getIndex(alt);
-                if (newBlockId < 0) {
-                    continue;
-                }
-                targetId = alt;
-            }
-            BlockType target = typeMap.getAsset(newBlockId);
-            if (target == null) {
-                continue;
-            }
-            int rotationIndex = current != null ? chunk.getRotationIndex(bx, by, bz) : pb.blockRotation();
-            int filler = current != null ? chunk.getFiller(bx, by, bz) : pb.filler();
-            chunk.setBlock(bx, by, bz, newBlockId, target, rotationIndex, filler, settings);
+            int wx = origin.x + pb.x();
+            int wy = origin.y + pb.y();
+            int wz = origin.z + pb.z();
+            prefabBlockIdByCell.put(cellKey(wx, wy, wz), prefabType.getId());
         }
+        int settings =
+            SetBlockSettings.NO_SEND_PARTICLES
+                | SetBlockSettings.NO_BREAK_FILLER
+                | SetBlockSettings.NO_SET_FILLER;
+        for (int bx = footprint.getMinX(); bx <= footprint.getMaxX(); bx++) {
+            for (int by = footprint.getMinY(); by <= footprint.getMaxY(); by++) {
+                for (int bz = footprint.getMinZ(); bz <= footprint.getMaxZ(); bz++) {
+                    String prefabBlockTypeId = prefabBlockIdByCell.get(cellKey(bx, by, bz));
+                    WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(bx, bz));
+                    if (chunk == null) {
+                        chunk = accessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
+                    }
+                    if (chunk == null) {
+                        continue;
+                    }
+                    BlockType current = chunk.getBlockType(bx, by, bz);
+                    if (current == null || current.getId() == null || current.getId().isBlank()) {
+                        continue;
+                    }
+                    String targetId = resolveTargetBlockTypeId(prefabBlockTypeId, current, selections);
+                    if (targetId == null || targetId.isBlank()) {
+                        continue;
+                    }
+                    if (targetId.equals(current.getId())) {
+                        continue;
+                    }
+                    int newBlockId = typeMap.getIndex(targetId);
+                    if (newBlockId < 0) {
+                        String alt =
+                            targetId.startsWith("*") ? targetId.substring(1) : ("*" + targetId);
+                        newBlockId = typeMap.getIndex(alt);
+                        if (newBlockId < 0) {
+                            continue;
+                        }
+                        targetId = alt;
+                    }
+                    BlockType target = typeMap.getAsset(newBlockId);
+                    if (target == null) {
+                        continue;
+                    }
+                    int rotationIndex = chunk.getRotationIndex(bx, by, bz);
+                    int filler = chunk.getFiller(bx, by, bz);
+                    chunk.setBlock(bx, by, bz, newBlockId, target, rotationIndex, filler, settings);
+                }
+            }
+        }
+    }
+
+    private static long cellKey(int x, int y, int z) {
+        return ((long) x << 42) ^ ((long) y << 21) ^ (long) z;
     }
 
     /**
@@ -120,13 +136,15 @@ public final class BlockPaletteApplyService {
      */
     @Nullable
     private static String resolveTargetBlockTypeId(
-        @Nonnull String prefabBlockTypeId,
-        @Nullable BlockType current,
+        @Nullable String prefabBlockTypeId,
+        @Nonnull BlockType current,
         @Nonnull Map<String, String> selections
     ) {
-        BlockPaletteRemapper.ParsedBlock prefabParsed = BlockPaletteRemapper.parse(prefabBlockTypeId);
+        boolean hasPrefab = prefabBlockTypeId != null && !prefabBlockTypeId.isBlank();
+        BlockPaletteRemapper.ParsedBlock prefabParsed =
+            hasPrefab ? BlockPaletteRemapper.parse(prefabBlockTypeId) : null;
         BlockPaletteRemapper.ParsedBlock currentParsed =
-            current != null && current.getId() != null ? BlockPaletteRemapper.parse(current.getId()) : null;
+            current.getId() != null ? BlockPaletteRemapper.parse(current.getId()) : null;
         if (prefabParsed == null && currentParsed == null) {
             return null;
         }
@@ -134,13 +152,15 @@ public final class BlockPaletteApplyService {
         String selected = selections.get(category);
         boolean isDefault = selected == null || selected.isBlank();
         if (isDefault) {
-            // Always restore from the prefab so Default undoes a prior palette.
-            return isRemappableCategoryBlock(prefabBlockTypeId) ? prefabBlockTypeId : null;
+            if (hasPrefab && isRemappableCategoryBlock(prefabBlockTypeId)) {
+                return prefabBlockTypeId;
+            }
+            return null;
         }
         String sourceId;
         if (currentParsed != null && currentParsed.category().equals(category)) {
             sourceId = current.getId();
-        } else if (prefabParsed != null) {
+        } else if (hasPrefab && prefabParsed != null) {
             sourceId = prefabBlockTypeId;
         } else {
             return null;

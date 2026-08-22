@@ -188,6 +188,16 @@ public final class BlockPaletteCatalog {
                 if (id.isEmpty() || iconBlockId.isEmpty()) {
                     continue;
                 }
+                if (BlockPaletteConstants.CATEGORY_TRUNKS.equals(categoryId)
+                    && !iconBlockId.endsWith("_Trunk")) {
+                    LOGGER.atWarning().log(
+                        "Skipping trunk palette %s in %s: iconBlockId %s is not a trunk block",
+                        id,
+                        label,
+                        iconBlockId
+                    );
+                    continue;
+                }
                 if (familyKey.isEmpty()) {
                     familyKey = id;
                 }

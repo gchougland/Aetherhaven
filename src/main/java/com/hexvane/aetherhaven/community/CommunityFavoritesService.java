@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -102,17 +103,30 @@ public final class CommunityFavoritesService {
         @Nonnull Store<EntityStore> store,
         @Nonnull UUID playerUuid
     ) {
-        List<String> remote = fetchFavorites(plugin, playerUuid);
-        if (remote.isEmpty()) {
-            return;
-        }
+        syncToPlayerState(plugin, ref, store, playerUuid, null);
+    }
+
+    public static void syncToPlayerState(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID playerUuid,
+        @Nullable Runnable onComplete
+    ) {
         World world = store.getExternalData().getWorld();
-        world.execute(
+        CompletableFuture.runAsync(
             () -> {
-                if (!ref.isValid()) {
-                    return;
-                }
-                ConstructionFavoritesService.mergeCommunityFavorites(ref, store, remote);
+                List<String> remote = fetchFavorites(plugin, playerUuid);
+                world.execute(
+                    () -> {
+                        if (ref.isValid()) {
+                            ConstructionFavoritesService.syncCommunityFavorites(ref, store, remote);
+                        }
+                        if (onComplete != null) {
+                            onComplete.run();
+                        }
+                    }
+                );
             }
         );
     }

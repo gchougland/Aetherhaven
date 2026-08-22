@@ -6,6 +6,7 @@ import test from "node:test";
 import { createFavorites } from "../server/favorites.js";
 
 const USER_UUID = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
+const PROFILE_UUID = "11111111-2222-3333-4444-555555555555";
 const BUILDING_A = "plot_community_aaaabbbb_cozy_cottage";
 const BUILDING_B = "plot_community_ccccdddd_tall_tower";
 
@@ -49,5 +50,33 @@ test("removeBuilding clears id from all users", () => {
   favorites.removeBuilding(BUILDING_A);
 
   assert.equal(favorites.userHasFavorited(BUILDING_A, USER_UUID), false);
+  assert.deepEqual([...favorites.getUserFavorites(USER_UUID)], []);
+});
+
+test("merged favorites combine profile uuid and in game sub uuid", () => {
+  const dataDir = tempDataDir();
+  const favorites = createFavorites(dataDir);
+
+  favorites.toggleFavorite(BUILDING_A, USER_UUID);
+  favorites.toggleFavorite(BUILDING_B, PROFILE_UUID);
+
+  const merged = favorites.getMergedUserFavorites([PROFILE_UUID, USER_UUID]);
+  assert.equal(merged.size, 2);
+  assert.equal(merged.has(BUILDING_A), true);
+  assert.equal(merged.has(BUILDING_B), true);
+  assert.deepEqual([...favorites.getUserFavorites(PROFILE_UUID)].sort(), [BUILDING_A, BUILDING_B].sort());
+  assert.deepEqual([...favorites.getUserFavorites(USER_UUID)], []);
+});
+
+test("toggleFavoriteForUserUuids writes to canonical profile uuid", () => {
+  const dataDir = tempDataDir();
+  const favorites = createFavorites(dataDir);
+
+  favorites.toggleFavorite(BUILDING_A, USER_UUID);
+  const result = favorites.toggleFavoriteForUserUuids(BUILDING_B, [PROFILE_UUID, USER_UUID]);
+
+  assert.equal(result.userHasFavorited, true);
+  assert.deepEqual(result.buildingIds.sort(), [BUILDING_A, BUILDING_B].sort());
+  assert.deepEqual([...favorites.getUserFavorites(PROFILE_UUID)].sort(), [BUILDING_A, BUILDING_B].sort());
   assert.deepEqual([...favorites.getUserFavorites(USER_UUID)], []);
 });

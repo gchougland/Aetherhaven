@@ -35,18 +35,27 @@ $C.@PageOverlay {
         FlexWeight: 1;
       }
 
-      Group #BottomRow {
-        LayoutMode: Left;
+      Group #ActionButtons {
+        LayoutMode: Top;
         Anchor: (Top: 12);
 
-        $C.@TextButton #SaveButton {
-          Anchor: (Width: 140, Height: 36, Right: 10);
+        $C.@TextButton #ApplyToAllButton {
+          Anchor: (Height: 36, Bottom: 8);
           Text: "";
         }
 
-        $C.@TextButton #WardrobeBackButton {
-          Anchor: (Width: 140, Height: 36);
-          Text: "";
+        Group #BottomRow {
+          LayoutMode: Center;
+
+          $C.@TextButton #SaveButton {
+            Anchor: (Width: 140, Height: 36, Right: 10);
+            Text: "";
+          }
+
+          $C.@TextButton #WardrobeBackButton {
+            Anchor: (Width: 140, Height: 36);
+            Text: "";
+          }
         }
       }
     }

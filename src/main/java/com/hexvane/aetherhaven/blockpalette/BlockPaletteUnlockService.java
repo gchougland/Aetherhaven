@@ -13,6 +13,9 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.util.NotificationUtil;
 import javax.annotation.Nonnull;
 
@@ -20,6 +23,7 @@ import javax.annotation.Nonnull;
 public final class BlockPaletteUnlockService {
     public enum Result {
         UNLOCKED,
+        REFUNDED,
         ALREADY_UNLOCKED,
         NO_TOWN,
         UNKNOWN_ITEM
@@ -54,13 +58,20 @@ public final class BlockPaletteUnlockService {
             return Result.NO_TOWN;
         }
         if (town.hasBlockPaletteUnlocked(def.getId())) {
+            Player player = store.getComponent(playerEntityRef, Player.getComponentType());
+            if (player != null) {
+                ItemStack coins =
+                    new ItemStack(GoldCoinPayment.coinItemId(), BlockPaletteConstants.DUPLICATE_UNLOCK_REFUND_GOLD);
+                player.giveItem(coins, playerEntityRef, store);
+            }
             NotificationUtil.sendNotification(
                 playerRef.getPacketHandler(),
-                Message.translation("aetherhaven_block_palettes.aetherhaven.blockPalette.unlock.already")
-                    .param("name", def.getDisplayName()),
-                NotificationStyle.Warning
+                Message.translation("aetherhaven_block_palettes.aetherhaven.blockPalette.unlock.refunded")
+                    .param("name", def.getDisplayName())
+                    .param("gold", String.valueOf(BlockPaletteConstants.DUPLICATE_UNLOCK_REFUND_GOLD)),
+                NotificationStyle.Success
             );
-            return Result.ALREADY_UNLOCKED;
+            return Result.REFUNDED;
         }
         town.unlockBlockPalette(def.getId());
         tm.updateTown(town);

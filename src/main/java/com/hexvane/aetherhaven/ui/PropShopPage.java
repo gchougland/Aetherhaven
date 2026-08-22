@@ -1,10 +1,15 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.blockpalette.BlockPaletteDefinition;
+import com.hexvane.aetherhaven.blockpalette.BlockPaletteIconResolver;
+import com.hexvane.aetherhaven.blockpalette.BlockPaletteShopPricing;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.pathtool.PathToolWidthPreviewHelper;
 import com.hexvane.aetherhaven.plot.PlotCraftingPrefabPreview;
 import com.hexvane.aetherhaven.plot.PlotCraftingPrefabPreviewClientMode;
 import com.hexvane.aetherhaven.prop.PropDefinition;
+import com.hexvane.aetherhaven.propshop.FurnitureMerchantPaletteShopSlotRecord;
 import com.hexvane.aetherhaven.propshop.FurnitureMerchantShopService;
 import com.hexvane.aetherhaven.propshop.FurnitureMerchantShopSlotRecord;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBuyerPayment;
@@ -49,10 +54,17 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         GRID
     }
 
+    private enum ShopTab {
+        PROPS,
+        PALETTES
+    }
+
     @Nonnull
     private final UUID townId;
     private boolean templateAppended;
     private boolean clientCreativeSpoofed;
+    @Nonnull
+    private ShopTab shopTab = ShopTab.PROPS;
     @Nonnull
     private ViewMode viewMode = ViewMode.LIST;
     @Nonnull
@@ -80,8 +92,20 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         }
         commandBuilder.set("#PropShopTitle.TextSpans", Message.translation(MSG + ".title"));
         commandBuilder.set("#PreviewTitle.TextSpans", Message.translation(MSG + ".previewTitle"));
-        commandBuilder.set("#EmptyHint.TextSpans", Message.translation(MSG + ".empty"));
-        commandBuilder.set("#PreviewPlaceholder.TextSpans", Message.translation(MSG + ".previewHint"));
+        commandBuilder.set(
+            "#EmptyHint.TextSpans",
+            Message.translation(MSG + ".empty")
+        );
+        commandBuilder.set(
+            "#PreviewPlaceholder.TextSpans",
+            Message.translation(
+                shopTab == ShopTab.PROPS ? MSG + ".previewHint" : MSG + ".previewPaletteHint"
+            )
+        );
+        commandBuilder.set("#TabProps.TextSpans", Message.translation(MSG + ".tab.props"));
+        commandBuilder.set("#TabPalettes.TextSpans", Message.translation(MSG + ".tab.palettes"));
+        commandBuilder.set("#TabProps.Disabled", shopTab == ShopTab.PROPS);
+        commandBuilder.set("#TabPalettes.Disabled", shopTab == ShopTab.PALETTES);
         commandBuilder.set("#SearchInput.Value", searchQuery);
         commandBuilder.set("#BuyButton.TextSpans", Message.translation(MSG + ".buy"));
         bindBrowser(commandBuilder, eventBuilder, store, ref);
@@ -93,6 +117,18 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
             CustomUIEventBindingType.ValueChanged,
             "#SearchInput",
             EventData.of("@SearchQuery", "#SearchInput.Value"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#TabProps",
+            EventData.of("Action", "TabProps"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#TabPalettes",
+            EventData.of("Action", "TabPalettes"),
             false
         );
         eventBuilder.addEventBinding(
@@ -147,6 +183,21 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         }
         long epochDay = epochDay(store);
         FurnitureMerchantShopService.ensureInventory(plugin, town, tm, epochDay);
+        if (shopTab == ShopTab.PROPS) {
+            bindPropBrowser(commandBuilder, eventBuilder, plugin, town);
+        } else {
+            bindPaletteBrowser(commandBuilder, eventBuilder, plugin, town);
+        }
+
+        applySelectionLabels(commandBuilder, plugin, town, store, ref);
+    }
+
+    private void bindPropBrowser(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town
+    ) {
         town.ensureFurnitureMerchantShopSlotCount(FurnitureMerchantShopService.SLOT_COUNT);
         List<FurnitureMerchantShopSlotRecord> slots = town.getFurnitureMerchantShopSlots();
         List<Integer> visible = new ArrayList<>();
@@ -159,11 +210,47 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
             if (def == null) {
                 continue;
             }
-            if (!matchesSearch(def)) {
+            if (!matchesPropSearch(def)) {
                 continue;
             }
             visible.add(i);
         }
+        renderPropBrowserSlots(commandBuilder, eventBuilder, plugin, visible, slots);
+    }
+
+    private void bindPaletteBrowser(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town
+    ) {
+        town.ensureFurnitureMerchantPaletteShopSlotCount(FurnitureMerchantShopService.SLOT_COUNT);
+        List<FurnitureMerchantPaletteShopSlotRecord> slots = town.getFurnitureMerchantPaletteShopSlots();
+        List<Integer> visible = new ArrayList<>();
+        for (int i = 0; i < slots.size(); i++) {
+            FurnitureMerchantPaletteShopSlotRecord slot = slots.get(i);
+            if (!slot.hasStock()) {
+                continue;
+            }
+            BlockPaletteDefinition def = plugin.getBlockPaletteCatalog().get(slot.getPaletteId());
+            if (def == null) {
+                continue;
+            }
+            if (!matchesPaletteSearch(def)) {
+                continue;
+            }
+            visible.add(i);
+        }
+        renderPaletteBrowserSlots(commandBuilder, eventBuilder, plugin, visible, slots);
+    }
+
+    private void renderPropBrowserSlots(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull List<Integer> visible,
+        @Nonnull List<FurnitureMerchantShopSlotRecord> slots
+    ) {
         visibleSlotIndices = List.copyOf(visible);
         if (selectedSlot >= 0 && !visibleSlotIndices.contains(selectedSlot)) {
             selectedSlot = visibleSlotIndices.isEmpty() ? -1 : visibleSlotIndices.get(0);
@@ -210,8 +297,63 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
                 false
             );
         }
+    }
 
-        applySelectionLabels(commandBuilder, plugin, town, store, ref);
+    private void renderPaletteBrowserSlots(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull List<Integer> visible,
+        @Nonnull List<FurnitureMerchantPaletteShopSlotRecord> slots
+    ) {
+        visibleSlotIndices = List.copyOf(visible);
+        if (selectedSlot >= 0 && !visibleSlotIndices.contains(selectedSlot)) {
+            selectedSlot = visibleSlotIndices.isEmpty() ? -1 : visibleSlotIndices.get(0);
+        } else if (selectedSlot < 0 && !visibleSlotIndices.isEmpty()) {
+            selectedSlot = visibleSlotIndices.get(0);
+        }
+
+        boolean grid = viewMode == ViewMode.GRID;
+        commandBuilder.set("#PropRows.Visible", !grid);
+        commandBuilder.set("#PropGridRows.Visible", grid);
+        commandBuilder.set("#ViewModeList.Disabled", !grid);
+        commandBuilder.set("#ViewModeGrid.Disabled", grid);
+        commandBuilder.set("#EmptyHint.Visible", visibleSlotIndices.isEmpty());
+
+        String rowSelector = grid ? GRID : ROWS;
+        String rowDoc = grid ? "Aetherhaven/PlotCraftingBuildingGridCell.ui" : "Aetherhaven/PlotCraftingBuildingRow.ui";
+        for (int vi = 0; vi < visibleSlotIndices.size(); vi++) {
+            int slotIndex = visibleSlotIndices.get(vi);
+            FurnitureMerchantPaletteShopSlotRecord slot = slots.get(slotIndex);
+            BlockPaletteDefinition def = plugin.getBlockPaletteCatalog().get(slot.getPaletteId());
+            if (def == null) {
+                continue;
+            }
+            commandBuilder.append(rowSelector, rowDoc);
+            String row = rowSelector + "[" + vi + "]";
+            String iconBlockId = BlockPaletteIconResolver.resolveIconBlockId(def);
+            String iconPath =
+                iconBlockId != null ? PathToolWidthPreviewHelper.assetPathForBlockId(iconBlockId) : "";
+            commandBuilder.set(row + " #BuildingIcon.AssetPath", iconPath != null ? iconPath : "");
+            if (!grid) {
+                commandBuilder.set(row + " #BuildingName.TextSpans", Message.raw(def.getDisplayName()));
+                commandBuilder.set(row + " #BuildingCreator.Visible", false);
+                commandBuilder.set(row + " #FavoriteButtonOn.Visible", false);
+                commandBuilder.set(row + " #FavoriteButtonOff.Visible", false);
+            } else {
+                commandBuilder.set(row + " #Select.TooltipText", def.getDisplayName());
+                commandBuilder.set(row + " #FavoriteButtonOn.Visible", false);
+                commandBuilder.set(row + " #FavoriteButtonOff.Visible", false);
+            }
+            boolean selected = slotIndex == selectedSlot;
+            commandBuilder.set(row + " #SelectHilite.Visible", selected);
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                row + " #Select",
+                new EventData().append("Action", "Select").append("Slot", String.valueOf(slotIndex)),
+                false
+            );
+        }
     }
 
     private void applySelectionLabels(
@@ -223,11 +365,18 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
     ) {
         bindFundsLine(commandBuilder, store, ref, plugin);
         if (selectedSlot < 0) {
-            commandBuilder.set("#SelectedName.TextSpans", Message.translation(MSG + ".pickOne"));
+            commandBuilder.set(
+                "#SelectedName.TextSpans",
+                Message.translation(shopTab == ShopTab.PROPS ? MSG + ".pickOne" : MSG + ".pickPalette")
+            );
             commandBuilder.set("#PriceLine.TextSpans", Message.raw(""));
             commandBuilder.set("#StockLine.TextSpans", Message.raw(""));
             commandBuilder.set("#BuyButton.Disabled", true);
             commandBuilder.set("#PreviewPlaceholder.Visible", true);
+            return;
+        }
+        if (shopTab == ShopTab.PALETTES) {
+            applyPaletteSelectionLabels(commandBuilder, plugin, town, store, ref);
             return;
         }
         List<FurnitureMerchantShopSlotRecord> slots = town.getFurnitureMerchantShopSlots();
@@ -259,6 +408,44 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         commandBuilder.set("#BuyButton.Disabled", !canAfford);
         commandBuilder.set("#BuyButton.TextSpans", Message.translation(MSG + ".buy"));
         commandBuilder.set("#PreviewPlaceholder.Visible", false);
+    }
+
+    private void applyPaletteSelectionLabels(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> ref
+    ) {
+        List<FurnitureMerchantPaletteShopSlotRecord> slots = town.getFurnitureMerchantPaletteShopSlots();
+        if (selectedSlot >= slots.size()) {
+            commandBuilder.set("#BuyButton.Disabled", true);
+            return;
+        }
+        FurnitureMerchantPaletteShopSlotRecord slot = slots.get(selectedSlot);
+        BlockPaletteDefinition def = plugin.getBlockPaletteCatalog().get(slot.getPaletteId());
+        if (def == null || !slot.hasStock()) {
+            commandBuilder.set("#SelectedName.TextSpans", Message.translation(MSG + ".soldOutPalette"));
+            commandBuilder.set("#PriceLine.TextSpans", Message.raw(""));
+            commandBuilder.set("#StockLine.TextSpans", Message.raw(""));
+            commandBuilder.set("#BuyButton.Disabled", true);
+            commandBuilder.set("#PreviewPlaceholder.Visible", true);
+            return;
+        }
+        long price = BlockPaletteShopPricing.goldPriceFor(def);
+        commandBuilder.set("#SelectedName.TextSpans", Message.raw(def.getDisplayName()));
+        commandBuilder.set(
+            "#PriceLine.TextSpans",
+            Message.translation(MSG + ".price").param("gold", String.valueOf(price))
+        );
+        commandBuilder.set(
+            "#StockLine.TextSpans",
+            Message.translation(MSG + ".stock").param("n", String.valueOf(slot.getStock()))
+        );
+        boolean canAfford = playerCanAfford(store, ref, plugin, price);
+        commandBuilder.set("#BuyButton.Disabled", !canAfford);
+        commandBuilder.set("#BuyButton.TextSpans", Message.translation(MSG + ".buyPalette"));
+        commandBuilder.set("#PreviewPlaceholder.Visible", true);
     }
 
     private void bindFundsLine(
@@ -311,13 +498,23 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         return GoldCoinPayment.canAfford(payerTown, inv, price, allowTreasury);
     }
 
-    private boolean matchesSearch(@Nonnull PropDefinition def) {
+    private boolean matchesPropSearch(@Nonnull PropDefinition def) {
         String q = searchQuery.trim().toLowerCase(Locale.ROOT);
         if (q.isEmpty()) {
             return true;
         }
         return def.getDisplayName().toLowerCase(Locale.ROOT).contains(q)
             || def.getId().toLowerCase(Locale.ROOT).contains(q);
+    }
+
+    private boolean matchesPaletteSearch(@Nonnull BlockPaletteDefinition def) {
+        String q = searchQuery.trim().toLowerCase(Locale.ROOT);
+        if (q.isEmpty()) {
+            return true;
+        }
+        return def.getDisplayName().toLowerCase(Locale.ROOT).contains(q)
+            || def.getId().toLowerCase(Locale.ROOT).contains(q)
+            || def.getCategory().toLowerCase(Locale.ROOT).contains(q);
     }
 
     private static long epochDay(@Nonnull Store<EntityStore> store) {
@@ -329,6 +526,10 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
     }
 
     private void schedulePrefabPreviewWithRetries(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        if (shopTab != ShopTab.PROPS) {
+            PlotCraftingPrefabPreview.clear(playerRef);
+            return;
+        }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         World world = store.getExternalData().getWorld();
         if (plugin == null || world == null || selectedSlot < 0) {
@@ -392,6 +593,22 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
             return;
         }
         String action = data.action != null ? data.action.trim() : "";
+        if ("TabProps".equalsIgnoreCase(action)) {
+            if (shopTab != ShopTab.PROPS) {
+                shopTab = ShopTab.PROPS;
+                selectedSlot = -1;
+            }
+            refresh(ref, store);
+            return;
+        }
+        if ("TabPalettes".equalsIgnoreCase(action)) {
+            if (shopTab != ShopTab.PALETTES) {
+                shopTab = ShopTab.PALETTES;
+                selectedSlot = -1;
+            }
+            refresh(ref, store);
+            return;
+        }
         if ("ViewModeList".equalsIgnoreCase(action)) {
             viewMode = ViewMode.LIST;
             refresh(ref, store);
@@ -430,7 +647,11 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
             return;
         }
         FurnitureMerchantShopService.BuyResult result =
-            FurnitureMerchantShopService.tryBuy(plugin, town, tm, player, pr, ref, store, selectedSlot);
+            shopTab == ShopTab.PROPS
+                ? FurnitureMerchantShopService.tryBuy(
+                    plugin, town, tm, player, pr, ref, store, selectedSlot)
+                : FurnitureMerchantShopService.tryBuyPalette(
+                    plugin, town, tm, player, pr, ref, store, selectedSlot);
         if (!result.ok()) {
             if (result.failLangKey() != null) {
                 NotificationUtil.sendNotification(
@@ -444,7 +665,7 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         }
         NotificationUtil.sendNotification(
             pr.getPacketHandler(),
-            Message.translation(MSG + ".bought"),
+            Message.translation(shopTab == ShopTab.PROPS ? MSG + ".bought" : MSG + ".boughtPalette"),
             NotificationStyle.Success
         );
         refresh(ref, store);

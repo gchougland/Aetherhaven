@@ -1,0 +1,11 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Block_Palette_Modern_Cloth_Roofs_Red.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Block_Palette_Modern_Cloth_Roofs_Red.description"
+  },
+  "Parent": "Aetherhaven_Block_Palette_Shop_Item",
+  "Categories": [],
+  "Quality": "Uncommon",
+  "MaxStack": 16,
+  "Set": "Aetherhaven"
+}

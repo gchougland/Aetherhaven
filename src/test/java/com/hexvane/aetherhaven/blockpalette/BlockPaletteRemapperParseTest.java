@@ -220,6 +220,106 @@ public final class BlockPaletteRemapperParseTest {
         assertNull(BlockPaletteRemapper.parse("Wood_Village_Wall_02_Top"));
     }
 
+    @Test
+    void quartziteCobbleBrickAndRoofsParseAndRebuild() {
+        var cobble = BlockPaletteRemapper.parse("Rock_Quartzite_Cobble");
+        assertNotNull(cobble);
+        assertEquals(BlockPaletteConstants.CATEGORY_COBBLE, cobble.category());
+        assertEquals("Quartzite", cobble.familyKey());
+        assertEquals("Rock_Marble_Cobble", BlockPaletteRemapper.rebuild(cobble, "Marble"));
+
+        var brick = BlockPaletteRemapper.parse("Rock_Quartzite_Brick_Stairs");
+        assertNotNull(brick);
+        assertEquals(BlockPaletteConstants.CATEGORY_BRICKS, brick.category());
+        assertEquals("Quartzite", brick.familyKey());
+        assertEquals("Rock_Stone_Brick_Stairs", BlockPaletteRemapper.rebuild(brick, "Stone"));
+
+        var cobbleRoof = BlockPaletteRemapper.parse("Rock_Quartzite_Cobble_Roof_Flat");
+        assertNotNull(cobbleRoof);
+        assertEquals(BlockPaletteConstants.CATEGORY_ROOFS, cobbleRoof.category());
+        assertEquals("cobble_roof:Quartzite", cobbleRoof.familyKey());
+        assertEquals(
+            "Rock_Stone_Brick_Roof_Flat",
+            BlockPaletteRemapper.rebuild(cobbleRoof, "brick_roof:Stone")
+        );
+
+        var brickRoof = BlockPaletteRemapper.parse("Rock_Quartzite_Brick_Roof");
+        assertNotNull(brickRoof);
+        assertEquals("brick_roof:Quartzite", brickRoof.familyKey());
+        assertEquals("Rock_Stone_Cobble_Roof", BlockPaletteRemapper.rebuild(brickRoof, "cobble_roof:Stone"));
+    }
+
+    @Test
+    void modernClothRoofsAreSeparateCategory() {
+        var modern = BlockPaletteRemapper.parse("Cloth_Modern_Blue_Roof_Flat");
+        assertNotNull(modern);
+        assertEquals(BlockPaletteConstants.CATEGORY_MODERN_CLOTH_ROOFS, modern.category());
+        assertEquals("Blue", modern.familyKey());
+        assertEquals("Flat", modern.suffix());
+        assertEquals(
+            "Cloth_Modern_Yellow_Roof_Flat",
+            BlockPaletteRemapper.rebuild(modern, "Yellow")
+        );
+        assertEquals(
+            "Cloth_Modern_DarkGreen_Roof",
+            BlockPaletteRemapper.rebuild(BlockPaletteRemapper.parse("Cloth_Modern_Blue_Roof"), "DarkGreen")
+        );
+
+        var classic = BlockPaletteRemapper.parse("Cloth_Roof_Blue_Flat");
+        assertNotNull(classic);
+        assertEquals(BlockPaletteConstants.CATEGORY_CLOTH_ROOFS, classic.category());
+    }
+
+    @Test
+    void metalRoofsParseAndRebuildWithinRoofsCategory() {
+        var bronze = BlockPaletteRemapper.parse("Metal_Bronze_Roof");
+        assertNotNull(bronze);
+        assertEquals(BlockPaletteConstants.CATEGORY_ROOFS, bronze.category());
+        assertEquals("metal_roof:Bronze", bronze.familyKey());
+        assertEquals("Metal_Copper_Roof", BlockPaletteRemapper.rebuild(bronze, "metal_roof:Copper"));
+        assertEquals(
+            "Metal_Iron_Roof_Flat",
+            BlockPaletteRemapper.rebuild(BlockPaletteRemapper.parse("Metal_Bronze_Roof_Flat"), "metal_roof:Iron")
+        );
+        assertEquals(
+            "Metal_Bronze_Roof",
+            BlockPaletteRemapper.rebuild(BlockPaletteRemapper.parse("Wood_Softwood_Roof"), "metal_roof:Bronze")
+        );
+    }
+
+    @Test
+    void hollowRoofsMapToRegularWhenTargetHasNoHollow() {
+        var hollow = BlockPaletteRemapper.parse("Wood_Softwood_Roof_Hollow");
+        assertNotNull(hollow);
+        assertEquals(
+            "Metal_Bronze_Roof",
+            BlockPaletteRemapper.rebuild(hollow, "metal_roof:Bronze")
+        );
+        var hollowCorner =
+            BlockPaletteRemapper.parse("Wood_Softwood_Roof_Hollow_State_Definitions_Corner_Left");
+        assertNotNull(hollowCorner);
+        assertEquals(
+            "Metal_Bronze_Roof_State_Definitions_Corner_Left",
+            BlockPaletteRemapper.rebuild(hollowCorner, "metal_roof:Bronze")
+        );
+        assertEquals("State_Definitions_Corner_Left", BlockPaletteRemapper.stripHollowRoofShape("Hollow_State_Definitions_Corner_Left"));
+    }
+
+    @Test
+    void legacyHollowRoofCornersNormalizeAndRemap() {
+        var legacy = BlockPaletteRemapper.parse("Wood_Softwood_Roof_Hollow_Corner");
+        assertNotNull(legacy);
+        assertEquals("Hollow_State_Definitions_Corner_Right", legacy.suffix());
+        assertEquals(
+            "Wood_Hardwood_Roof_Hollow_State_Definitions_Corner_Right",
+            BlockPaletteRemapper.rebuild(legacy, "wood:Hardwood")
+        );
+        assertEquals(
+            "Wood_Hardwood_Roof_Hollow",
+            BlockPaletteRemapper.rebuild(BlockPaletteRemapper.parse("Wood_Softwood_Roof_Hollow"), "wood:Hardwood")
+        );
+    }
+
     private static void assertWall(String id, String family, String suffix) {
         var parsed = BlockPaletteRemapper.parse(id);
         assertNotNull(parsed, id);

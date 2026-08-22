@@ -35,9 +35,11 @@ public final class PathSplineUtil {
             double handle = Math.max(0.5, dist * HANDLE_FRAC);
             Vector3d p1 = new Vector3d(p0.x() + tanA.x() * handle, p0.y() + tanA.y() * handle, p0.z() + tanA.z() * handle);
             Vector3d p2 = new Vector3d(p3.x() - tanB.x() * handle, p3.y() - tanB.y() * handle, p3.z() - tanB.z() * handle);
-            int steps = (int) Math.ceil(dist * sps);
+            double yawDelta = Math.abs(shortestYawDelta(a.getYawDeg(), b.getYawDeg()));
+            double curveFactor = 1.0 + Math.min(1.5, yawDelta / 90.0);
+            int steps = (int) Math.ceil(dist * sps * curveFactor);
             steps = Math.max(4, Math.min(256, steps));
-            for (int k = 0; k < steps; k++) {
+            for (int k = 0; k <= steps; k++) {
                 double t = k / (double) steps;
                 // skip duplicate join points except first segment's t=0
                 if (i > 0 && k == 0) {
@@ -66,19 +68,6 @@ public final class PathSplineUtil {
                 out.add(new PathSample(pos, d, right));
             }
         }
-        // last endpoint
-        PathToolNode last = nodes.get(nodes.size() - 1);
-        Vector3d tan = forwardHorizontal(last.getYawDeg());
-        Vector3d r = new Vector3d();
-        UP.cross(tan, r);
-        if (len2(r) < 1.0e-6) {
-            r.x = 1.0;
-            r.y = 0.0;
-            r.z = 0.0;
-        } else {
-            r.normalize();
-        }
-        out.add(new PathSample(last.getPosition(), tan, r));
         return out;
     }
 
@@ -111,6 +100,18 @@ public final class PathSplineUtil {
 
     private static double len2(@Nonnull Vector3d v) {
         return v.x() * v.x() + v.y() * v.y() + v.z() * v.z();
+    }
+
+    /** Smallest signed yaw difference in degrees, in [-180, 180]. */
+    private static double shortestYawDelta(double yawA, double yawB) {
+        double d = yawB - yawA;
+        while (d > 180.0) {
+            d -= 360.0;
+        }
+        while (d < -180.0) {
+            d += 360.0;
+        }
+        return d;
     }
 
     @Nonnull

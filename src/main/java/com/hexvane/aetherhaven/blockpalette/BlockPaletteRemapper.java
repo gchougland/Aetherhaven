@@ -90,6 +90,19 @@ public final class BlockPaletteRemapper {
             return blockTypeId;
         }
         String resolved = resolveExisting(rebuilt);
+        if (resolved == null && isHollowRoofShape(parsed.suffix)) {
+            ParsedBlock withoutHollow =
+                new ParsedBlock(
+                    parsed.category,
+                    parsed.familyKey,
+                    stripHollowRoofShape(parsed.suffix),
+                    parsed.roofKind,
+                    parsed.wallForm);
+            String fallbackRebuilt = rebuild(withoutHollow, def.getFamilyKey());
+            if (fallbackRebuilt != null && !fallbackRebuilt.equals(id)) {
+                resolved = resolveExisting(fallbackRebuilt);
+            }
+        }
         return resolved != null ? resolved : blockTypeId;
     }
 
@@ -176,9 +189,79 @@ public final class BlockPaletteRemapper {
         }
         String withoutBoth = stripStateDefinitionSegments(stripMossySegments(bare));
         if (!withoutBoth.equals(bare)) {
-            return firstExistingForm(withoutBoth);
+            found = firstExistingForm(withoutBoth);
+            if (found != null) {
+                return found;
+            }
+        }
+        String legacyNormalized = normalizeLegacyRoofBlockId(bare);
+        if (!legacyNormalized.equals(bare)) {
+            found = firstExistingForm(legacyNormalized);
+            if (found != null) {
+                return found;
+            }
+            String legacyWithoutState = stripStateDefinitionSegments(legacyNormalized);
+            if (!legacyWithoutState.equals(legacyNormalized)) {
+                found = firstExistingForm(legacyWithoutState);
+                if (found != null) {
+                    return found;
+                }
+            }
         }
         return null;
+    }
+
+    /**
+     * Pre-migration roof ids used shape tails like {@code _Hollow_Corner} instead of
+     * {@code _Hollow_State_Definitions_Corner_Right}.
+     */
+    @Nonnull
+    static String normalizeLegacyRoofBlockId(@Nonnull String blockTypeId) {
+        String id = stripPrefabStar(blockTypeId);
+        if (id.contains("_State_Definitions")) {
+            return id;
+        }
+        String normalized = normalizeLegacyRoofShapeSuffix(id);
+        return normalized.equals(id) ? id : normalized;
+    }
+
+    /**
+     * Maps legacy roof shape tails (after {@code _Roof}) to current state-definition ids.
+     * Accepts either a full block id or a shape-only suffix.
+     */
+    @Nonnull
+    static String normalizeLegacyRoofShapeSuffix(@Nonnull String shapeOrId) {
+        String s = shapeOrId;
+        int roofIdx = s.indexOf("_Roof_");
+        if (roofIdx >= 0) {
+            s = s.substring(roofIdx + "_Roof_".length());
+        }
+        if (s.isEmpty() || s.contains("State_Definitions")) {
+            return shapeOrId;
+        }
+        String normalized = switch (s) {
+            case "Corner" -> "State_Definitions_Corner_Right";
+            case "Corner_Inverted", "Inverted_Corner" -> "State_Definitions_Inverted_Corner_Right";
+            case "Topper" -> "State_Definitions_Topper";
+            case "Hollow_Corner" -> "Hollow_State_Definitions_Corner_Right";
+            case "Hollow_Corner_Inverted", "Hollow_Inverted_Corner" ->
+                "Hollow_State_Definitions_Inverted_Corner_Right";
+            case "Shallow_Corner" -> "Shallow_State_Definitions_Corner_Right";
+            case "Shallow_Corner_Inverted", "Shallow_Inverted_Corner" ->
+                "Shallow_State_Definitions_Inverted_Corner_Right";
+            case "Shallow_Topper" -> "Shallow_State_Definitions_Topper";
+            case "Steep_Corner" -> "Steep_State_Definitions_Corner_Right";
+            case "Steep_Corner_Inverted", "Steep_Inverted_Corner" ->
+                "Steep_State_Definitions_Inverted_Corner_Right";
+            default -> s;
+        };
+        if (normalized.equals(s)) {
+            return shapeOrId;
+        }
+        if (roofIdx >= 0) {
+            return shapeOrId.substring(0, roofIdx + "_Roof_".length()) + normalized;
+        }
+        return normalized;
     }
 
     /**
@@ -259,6 +342,10 @@ public final class BlockPaletteRemapper {
         if (walls != null) {
             return walls;
         }
+        ParsedBlock modernClothRoofs = parseModernClothRoofs(id);
+        if (modernClothRoofs != null) {
+            return modernClothRoofs;
+        }
         ParsedBlock roofs = parseRoofs(id);
         if (roofs != null) {
             return roofs;
@@ -284,6 +371,27 @@ public final class BlockPaletteRemapper {
             return windows;
         }
         return parsePlanks(id);
+    }
+
+    @Nullable
+    private static ParsedBlock parseModernClothRoofs(@Nonnull String id) {
+        String prefix = "Cloth_Modern_";
+        String marker = "_Roof";
+        if (!id.startsWith(prefix)) {
+            return null;
+        }
+        int roofIdx = id.indexOf(marker);
+        if (roofIdx <= prefix.length()) {
+            return null;
+        }
+        String color = id.substring(prefix.length(), roofIdx);
+        if (color.isEmpty()) {
+            return null;
+        }
+        String after = id.substring(roofIdx + marker.length());
+        String suffix = after.startsWith("_") ? after.substring(1) : after;
+        return new ParsedBlock(
+            BlockPaletteConstants.CATEGORY_MODERN_CLOTH_ROOFS, color, suffix, RoofKind.MODERN_CLOTH, WallForm.NONE);
     }
 
     /**
@@ -498,6 +606,7 @@ public final class BlockPaletteRemapper {
             String species = id.substring("Wood_".length(), roofIdx);
             String after = id.substring(roofIdx + "_Roof".length());
             String shape = after.startsWith("_") ? after.substring(1) : after;
+            shape = normalizeLegacyRoofShapeSuffix(shape);
             if (species.isEmpty()) {
                 return null;
             }
@@ -545,6 +654,7 @@ public final class BlockPaletteRemapper {
             String type = id.substring("Rock_".length(), idx);
             String after = id.substring(idx + "_Cobble_Roof".length());
             String shape = after.startsWith("_") ? after.substring(1) : after;
+            shape = normalizeLegacyRoofShapeSuffix(shape);
             return new ParsedBlock(
                 BlockPaletteConstants.CATEGORY_ROOFS, "cobble_roof:" + type, shape, RoofKind.COBBLE, WallForm.NONE);
         }
@@ -553,8 +663,21 @@ public final class BlockPaletteRemapper {
             String type = id.substring("Rock_".length(), idx);
             String after = id.substring(idx + "_Brick_Roof".length());
             String shape = after.startsWith("_") ? after.substring(1) : after;
+            shape = normalizeLegacyRoofShapeSuffix(shape);
             return new ParsedBlock(
                 BlockPaletteConstants.CATEGORY_ROOFS, "brick_roof:" + type, shape, RoofKind.BRICK, WallForm.NONE);
+        }
+        if (id.startsWith("Metal_") && id.contains("_Roof")) {
+            int roofIdx = id.indexOf("_Roof");
+            String metal = id.substring("Metal_".length(), roofIdx);
+            String after = id.substring(roofIdx + "_Roof".length());
+            String shape = after.startsWith("_") ? after.substring(1) : after;
+            shape = normalizeLegacyRoofShapeSuffix(shape);
+            if (metal.isEmpty()) {
+                return null;
+            }
+            return new ParsedBlock(
+                BlockPaletteConstants.CATEGORY_ROOFS, "metal_roof:" + metal, shape, RoofKind.METAL, WallForm.NONE);
         }
         return null;
     }
@@ -570,6 +693,8 @@ public final class BlockPaletteRemapper {
             case BlockPaletteConstants.CATEGORY_PLANKS -> "Wood_" + newFamilyKey + "_" + parsed.suffix;
             case BlockPaletteConstants.CATEGORY_ROOFS -> rebuildSolidRoof(parsed, newFamilyKey);
             case BlockPaletteConstants.CATEGORY_CLOTH_ROOFS -> rebuildClothRoof(newFamilyKey, parsed.suffix);
+            case BlockPaletteConstants.CATEGORY_MODERN_CLOTH_ROOFS ->
+                rebuildModernClothRoof(newFamilyKey, parsed.suffix);
             case BlockPaletteConstants.CATEGORY_WINDOWS -> rebuildWindow(newFamilyKey, parsed.suffix);
             default -> null;
         };
@@ -615,20 +740,47 @@ public final class BlockPaletteRemapper {
     @Nullable
     private static String rebuildSolidRoof(@Nonnull ParsedBlock parsed, @Nonnull String newFamilyKey) {
         RoofKind targetKind = roofKindFromFamily(newFamilyKey);
-        // Cloth roofs are a separate category; solid roofs only swap wood / cobble / brick.
-        if (targetKind != RoofKind.WOOD && targetKind != RoofKind.COBBLE && targetKind != RoofKind.BRICK) {
+        // Cloth roofs are a separate category; solid roofs swap wood / cobble / brick / metal.
+        if (targetKind != RoofKind.WOOD
+            && targetKind != RoofKind.COBBLE
+            && targetKind != RoofKind.BRICK
+            && targetKind != RoofKind.METAL) {
             return null;
         }
         String key = stripRoofFamilyPrefix(newFamilyKey);
         String shape = parsed.suffix;
+        if (!roofFamilySupportsHollow(targetKind)) {
+            shape = stripHollowRoofShape(shape);
+        }
         return switch (targetKind) {
             case WOOD -> shape.isEmpty() ? "Wood_" + key + "_Roof" : "Wood_" + key + "_Roof_" + shape;
             case COBBLE ->
                 shape.isEmpty() ? "Rock_" + key + "_Cobble_Roof" : "Rock_" + key + "_Cobble_Roof_" + shape;
             case BRICK ->
                 shape.isEmpty() ? "Rock_" + key + "_Brick_Roof" : "Rock_" + key + "_Brick_Roof_" + shape;
+            case METAL -> shape.isEmpty() ? "Metal_" + key + "_Roof" : "Metal_" + key + "_Roof_" + shape;
             default -> null;
         };
+    }
+
+    /** Wood, cobble, and brick roofs have hollow twins; metal and cloth roofs do not. */
+    private static boolean roofFamilySupportsHollow(@Nonnull RoofKind kind) {
+        return kind == RoofKind.WOOD || kind == RoofKind.COBBLE || kind == RoofKind.BRICK;
+    }
+
+    private static boolean isHollowRoofShape(@Nonnull String shape) {
+        return shape.equals("Hollow") || shape.startsWith("Hollow_");
+    }
+
+    @Nonnull
+    static String stripHollowRoofShape(@Nonnull String shape) {
+        if (shape.equals("Hollow")) {
+            return "";
+        }
+        if (shape.startsWith("Hollow_")) {
+            return shape.substring("Hollow_".length());
+        }
+        return shape;
     }
 
     @Nonnull
@@ -638,6 +790,15 @@ public final class BlockPaletteRemapper {
             return "Cloth_Roof_" + key;
         }
         return "Cloth_Roof_" + key + "_" + suffix;
+    }
+
+    @Nonnull
+    private static String rebuildModernClothRoof(@Nonnull String familyKey, @Nonnull String suffix) {
+        String key = stripRoofFamilyPrefix(familyKey);
+        if (suffix.isEmpty()) {
+            return "Cloth_Modern_" + key + "_Roof";
+        }
+        return "Cloth_Modern_" + key + "_Roof_" + suffix;
     }
 
     @Nullable
@@ -666,6 +827,9 @@ public final class BlockPaletteRemapper {
         if (k.startsWith("brick_roof:")) {
             return RoofKind.BRICK;
         }
+        if (k.startsWith("metal_roof:")) {
+            return RoofKind.METAL;
+        }
         return RoofKind.NONE;
     }
 
@@ -679,8 +843,10 @@ public final class BlockPaletteRemapper {
         NONE,
         WOOD,
         CLOTH,
+        MODERN_CLOTH,
         COBBLE,
-        BRICK
+        BRICK,
+        METAL
     }
 
     private enum WallForm {

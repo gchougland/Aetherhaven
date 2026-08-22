@@ -99,9 +99,25 @@ public final class PlayerConstructionFavoritesState implements Component<EntityS
         }
     }
 
+    /** Replaces community building favorites while keeping non-community favorites. */
+    public void syncCommunityFavorites(@Nonnull Iterable<String> communityIds) {
+        Set<String> remote = new LinkedHashSet<>();
+        for (String id : communityIds) {
+            if (id != null && !id.isBlank()) {
+                remote.add(normalize(id));
+            }
+        }
+        favoriteConstructionIds.removeIf(id -> isCommunityBuildingId(id) && !remote.contains(id));
+        favoriteConstructionIds.addAll(remote);
+    }
+
     @Nonnull
     private static String normalize(@Nonnull String constructionId) {
         return constructionId.trim().toLowerCase(Locale.ROOT);
+    }
+
+    private static boolean isCommunityBuildingId(@Nonnull String constructionId) {
+        return normalize(constructionId).startsWith("plot_community_");
     }
 
     @Nonnull
