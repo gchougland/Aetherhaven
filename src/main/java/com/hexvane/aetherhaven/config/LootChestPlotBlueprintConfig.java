@@ -29,7 +29,7 @@ public final class LootChestPlotBlueprintConfig {
             .add()
             .build();
 
-    private double chance = 0.15;
+    private double chance = 0.30;
 
     @Nullable
     private String note;

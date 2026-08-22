@@ -157,7 +157,7 @@ public final class AetherhavenConfigJsonMigration {
         if (d.containsKey("LootChestJewelryChance")) {
             loot.put("JewelryChance", d.get("LootChestJewelryChance"));
         } else {
-            loot.put("JewelryChance", new BsonDouble(0.2));
+            loot.put("JewelryChance", new BsonDouble(0.12));
         }
         if (d.containsKey("LootChestJewelryBlockIdSubstrings")) {
             loot.put("BlockIdSubstrings", d.get("LootChestJewelryBlockIdSubstrings"));

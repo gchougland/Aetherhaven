@@ -12,10 +12,10 @@ public final class LootChestBlockPaletteConfig {
         BuilderCodec.builder(LootChestBlockPaletteConfig.class, LootChestBlockPaletteConfig::new)
             .append(
                 new KeyedCodec<>("Chance", Codec.DOUBLE),
-                (o, v) -> o.chance = v != null ? v : 0.15,
+                (o, v) -> o.chance = v != null ? v : 0.30,
                 o -> o.chance
             )
-            .documentation("0..1: roll once per eligible chest to add one random block palette. Default 0.15.")
+            .documentation("0..1: roll once per eligible chest to add one random block palette. Default 0.30 (same as plot blueprints).")
             .add()
             .append(
                 new KeyedCodec<>("Note", Codec.STRING),
@@ -26,7 +26,7 @@ public final class LootChestBlockPaletteConfig {
             .add()
             .build();
 
-    private double chance = 0.15;
+    private double chance = 0.30;
 
     @Nullable
     private String note;

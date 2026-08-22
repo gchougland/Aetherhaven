@@ -11,6 +11,8 @@ import com.hypixel.hytale.protocol.packets.interaction.SyncInteractionChain;
 import com.hypixel.hytale.protocol.packets.interaction.SyncInteractionChains;
 import com.hypixel.hytale.protocol.packets.inventory.UpdatePlayerInventory;
 import com.hypixel.hytale.protocol.packets.player.MouseInteraction;
+import com.hypixel.hytale.protocol.packets.window.OpenWindow;
+import com.hypixel.hytale.protocol.packets.window.UpdateWindow;
 import com.hypixel.hytale.server.core.io.adapter.PacketAdapters;
 import com.hypixel.hytale.server.core.io.adapter.PacketFilter;
 import com.hypixel.hytale.server.core.io.adapter.PlayerPacketFilter;
@@ -112,23 +114,35 @@ public final class BlockPaletteIconPacketAdapter {
             return false;
         }
         knownPlayerRefs.put(playerRef.getUuid(), playerRef);
-        if (!(packet instanceof UpdatePlayerInventory inventory)) {
-            return false;
-        }
         isProcessing.set(true);
         try {
-            Map<String, ItemBase> newVirtual = new LinkedHashMap<>();
-            processSection(inventory.hotbar, newVirtual);
-            processSection(inventory.utility, newVirtual);
-            processSection(inventory.tools, newVirtual);
-            processSection(inventory.armor, newVirtual);
-            processSection(inventory.storage, newVirtual);
-            processSection(inventory.backpack, newVirtual);
-            sendVirtualItemDefinitions(playerRef, newVirtual);
+            if (packet instanceof UpdatePlayerInventory inventory) {
+                Map<String, ItemBase> newVirtual = new LinkedHashMap<>();
+                processSection(inventory.hotbar, newVirtual);
+                processSection(inventory.utility, newVirtual);
+                processSection(inventory.tools, newVirtual);
+                processSection(inventory.armor, newVirtual);
+                processSection(inventory.storage, newVirtual);
+                processSection(inventory.backpack, newVirtual);
+                sendVirtualItemDefinitions(playerRef, newVirtual);
+            } else if (packet instanceof OpenWindow open) {
+                processWindowInventory(playerRef, open.inventory);
+            } else if (packet instanceof UpdateWindow update) {
+                processWindowInventory(playerRef, update.inventory);
+            }
             return false;
         } finally {
             isProcessing.set(false);
         }
+    }
+
+    private void processWindowInventory(@Nonnull PlayerRef playerRef, @Nullable InventorySection section) {
+        if (section == null) {
+            return;
+        }
+        Map<String, ItemBase> newVirtual = new LinkedHashMap<>();
+        processSection(section, newVirtual);
+        sendVirtualItemDefinitions(playerRef, newVirtual);
     }
 
     private void processSection(@Nullable InventorySection section, @Nonnull Map<String, ItemBase> newVirtual) {

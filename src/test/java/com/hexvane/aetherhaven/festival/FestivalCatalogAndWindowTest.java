@@ -243,11 +243,12 @@ final class FestivalCatalogAndWindowTest {
         assertEquals("Festivals/Festival_Snowball.prefab.json", def.getPrefabPath());
         assertEquals("snowball", def.getMechanicId());
         assertEquals("UI/Custom/winter.png", def.getCalendarIconPath());
-        assertEquals(4, def.getSpots().size());
+        assertEquals(5, def.getSpots().size());
         assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("elder")));
         assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("innkeeper")));
         assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("farmer")));
         assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("florist")));
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("furniture_merchant")));
         assertEquals(1, def.getNpcs().size());
         assertEquals("Aetherhaven_Festival_Snowball_Merchant", def.getNpcs().get(0).getNpcRoleId());
         assertEquals(8, def.getTouristSpots().size());
@@ -283,10 +284,11 @@ final class FestivalCatalogAndWindowTest {
         assertEquals("Festivals/Festival_Wintertide.prefab.json", def.getPrefabPath());
         assertEquals("wintertide", def.getMechanicId());
         assertEquals("UI/Custom/christmas-tree.png", def.getCalendarIconPath());
-        assertEquals(17, def.getSpots().size());
+        assertEquals(18, def.getSpots().size());
         assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("elder")));
         assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("innkeeper")));
         assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("florist")));
+        assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("furniture_merchant")));
         assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("bard")));
         assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("chef")));
         assertTrue(def.getSpots().stream().anyMatch(s -> s.getResidentKind().equals("miner")));

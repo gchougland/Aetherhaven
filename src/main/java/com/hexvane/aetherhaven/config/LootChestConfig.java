@@ -21,10 +21,13 @@ public final class LootChestConfig {
             .add()
             .append(
                 new KeyedCodec<>("JewelryChance", Codec.DOUBLE),
-                (o, v) -> o.jewelryChance = v != null ? v : 0.2,
+                (o, v) -> o.jewelryChance = v != null ? v : 0.12,
                 o -> o.jewelryChance
             )
-            .documentation("0..1: add one unidentified jewelry item to a free slot (does not edit droplist JSON). Default 0.2.")
+            .documentation(
+                "0..1: chance to add one unidentified procedural jewelry piece to a free slot (does not include glow rings)."
+                    + " Default 0.12. Glow rings use a separate fixed rate."
+            )
             .add()
             .append(
                 new KeyedCodec<>("BlockIdSubstrings", Codec.STRING),
@@ -102,7 +105,7 @@ public final class LootChestConfig {
 
     @Nullable
     private String note;
-    private double jewelryChance = 0.2;
+    private double jewelryChance = 0.12;
     @Nonnull
     private String blockIdSubstrings = "";
     @Nonnull
@@ -131,7 +134,7 @@ public final class LootChestConfig {
         return
             "Bonus rolls apply only to dungeon/world chests (block entities that spawn with a Droplist). Player-placed storage is ignored."
                 + " BlockIdSubstrings optionally narrows by block type id. Gold defaults to chance 1.0 when there is room."
-                + " JewelryChance default 0.2. Use ExcludeBlockIdSubstrings to skip specific block ids. ApplyInCreative for testing."
+                + " JewelryChance default 0.12 for procedural jewelry (glow rings are separate). Use ExcludeBlockIdSubstrings to skip specific block ids. ApplyInCreative for testing."
                 + " (Built-in /droplist only simulates ItemDropList assets, not this injection.)";
     }
 

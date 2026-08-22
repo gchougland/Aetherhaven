@@ -56,20 +56,12 @@ public final class LootChestBonusApplier {
         int adventureZoneIndex,
         boolean force
     ) {
-        if (!force) {
-            if (cfg.getLootChestJewelryChance() <= 0.0) {
-                return false;
-            }
-            if (rnd.nextDouble() >= cfg.getLootChestJewelryChance()) {
-                return false;
-            }
-        }
         short slot = randomEmptySlot(inv, rnd);
         if (slot < 0) {
             return false;
         }
-        ItemStack bonus = JewelryChestLoot.rollForChest(rnd, cfg, adventureZoneIndex);
-        if (ItemStack.isEmpty(bonus)) {
+        ItemStack bonus = JewelryChestLoot.rollForWorldChest(rnd, cfg, adventureZoneIndex, force);
+        if (bonus == null || ItemStack.isEmpty(bonus)) {
             return false;
         }
         ItemStackSlotTransaction tx = inv.addItemStackToSlot(slot, bonus);
@@ -387,6 +379,7 @@ public final class LootChestBonusApplier {
         boolean changed = false;
         changed |= tryInjectPlotBlueprintToContainer(inv, cfg, catalog, rnd, force);
         changed |= tryInjectPropToContainer(inv, cfg, rnd, force);
+        changed |= tryInjectBlockPaletteToContainer(inv, cfg, rnd, force);
         changed |= tryInjectGaiaDraughtBonusesToContainer(inv, cfg, rnd, force);
         return changed;
     }
@@ -508,7 +501,8 @@ public final class LootChestBonusApplier {
     }
 
     /**
-     * Plot blueprints and Gaia materials for world loot chests. Sets {@link LootChestSupplementalBonusApplied} after rolls are attempted.
+     * Plot blueprints, props, block palettes, and Gaia materials for world loot chests. Sets
+     * {@link LootChestSupplementalBonusApplied} after rolls are attempted.
      */
     public static boolean applyWorldChestSupplementalBonusesOnce(
         @Nonnull Store<ChunkStore> s,

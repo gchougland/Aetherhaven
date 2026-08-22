@@ -48,7 +48,7 @@ public final class JewelryRarityWeightConfig {
                 (o, v) -> o.legendary = v != null ? v : 1.0,
                 o -> o.legendary
             )
-            .documentation("Relative weights, normalized in code. All zeros falls back to a 50/30/15/4/1% table.")
+            .documentation("Relative weights, normalized in code. All zeros falls back to a 50/30/12/4/1 table.")
             .add()
             .build();
 

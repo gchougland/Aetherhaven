@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.plotcreator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Tag;
@@ -41,15 +42,15 @@ class PlotCreatorSpotPlacementTest {
     }
 
     @Test
-    void applyFacingFromSeatFacing_setsOppositeStandOffset() {
+    void applyFacingFromSeatFacing_setsYawWithoutTargetCell() {
         PlotCreatorDraft draft = new PlotCreatorDraft();
         draft.setRotationYaw("None");
         PlotCreatorPoiDraft poi = new PlotCreatorPoiDraft();
         int[] poiLocal = new int[] {5, 64, 8};
         PlotCreatorPoiInteractionTarget.applyFromSeatFacing(draft, 0f, poiLocal, poi);
-        assertEquals(5, poi.getInteractionTargetLocalX());
-        assertEquals(64, poi.getInteractionTargetLocalY());
-        assertEquals(9, poi.getInteractionTargetLocalZ());
+        assertNull(poi.getInteractionTargetLocalX());
+        assertNull(poi.getInteractionTargetLocalY());
+        assertNull(poi.getInteractionTargetLocalZ());
         assertEquals(0f, poi.getInteractionTargetYawDegrees(), 0.001f);
     }
 }
