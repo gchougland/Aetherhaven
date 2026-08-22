@@ -24,7 +24,7 @@
   ],
   "pois": [
     {
-      "localX": -1,
+      "localX": 0,
       "localY": 0,
       "localZ": 0,
       "tags": [
@@ -34,9 +34,6 @@
       "capacity": 1,
       "blockTypeId": "Soil_Pathway",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 0,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 0,
       "interactionTargetYawDegrees": 104.29804,
       "equipmentProfileId": "work_bard",
       "workResidentKind": "clown"

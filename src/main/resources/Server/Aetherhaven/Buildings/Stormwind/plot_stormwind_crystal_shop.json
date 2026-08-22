@@ -32,10 +32,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 4,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -6
+      "interactionKind": "SIT"
     },
     {
       "localX": 8,
@@ -46,10 +43,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -5
+      "interactionKind": "SIT"
     },
     {
       "localX": 7,
@@ -60,15 +54,12 @@
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -5
+      "interactionKind": "SIT"
     },
     {
       "localX": 6,
       "localY": 1,
-      "localZ": -8,
+      "localZ": -9,
       "tags": [
         "workActivity:read",
         "WORK"
@@ -76,15 +67,12 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 6,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -9,
       "workResidentKind": "crystal_keeper"
     },
     {
       "localX": 7,
       "localY": 1,
-      "localZ": -8,
+      "localZ": -9,
       "tags": [
         "workActivity:craft",
         "WORK"
@@ -92,9 +80,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -9,
       "workResidentKind": "crystal_keeper"
     },
     {
@@ -106,10 +91,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -8
+      "interactionKind": "SIT"
     },
     {
       "localX": 6,
@@ -122,9 +104,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bed",
       "interactionKind": "SLEEP",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 6,
-      "interactionTargetLocalZ": -4,
       "interactionTargetYawDegrees": 78.97168
     }
   ],

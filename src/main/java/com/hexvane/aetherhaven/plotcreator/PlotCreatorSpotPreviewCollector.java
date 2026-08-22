@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hexvane.aetherhaven.construction.PrefabYaw;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
@@ -334,6 +335,11 @@ public final class PlotCreatorSpotPreviewCollector {
     @Nonnull
     private static Vector3i resolveStandCell(@Nullable World world, @Nonnull Vector3i poiBlock) {
         if (world != null) {
+            int feetY =
+                VillagerBlockUtil.resolveClearStandFeetY(world, poiBlock.x, poiBlock.y, poiBlock.z);
+            if (feetY != Integer.MIN_VALUE) {
+                return new Vector3i(poiBlock.x, feetY, poiBlock.z);
+            }
             PlotCreatorSpotPlacement.ResolvedSpot stand =
                 PlotCreatorSpotPlacement.resolveStandSpawn(world, poiBlock);
             return stand.worldBlock();

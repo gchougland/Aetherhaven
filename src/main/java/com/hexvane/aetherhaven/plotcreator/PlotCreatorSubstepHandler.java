@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.poi.PoiDualCellNormalize;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBlock;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBlockUtil;
 import com.hexvane.aetherhaven.tourist.TouristPortalBlock;
@@ -635,7 +636,7 @@ public final class PlotCreatorSubstepHandler {
             playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.wrongBlock"));
             return true;
         }
-        PlotCreatorSpotPlacement.ResolvedSpot spot = PlotCreatorSpotPlacement.resolvePoiAnchor(world, targetBlock);
+        PlotCreatorSpotPlacement.ResolvedSpot spot = resolvePoiSpot(world, targetBlock, type, blockId);
         int[] poiLocal = PlotCreatorLocalCoords.toLocal(draft, spot.worldBlock());
         for (PlotCreatorPoiDraft existing : draft.getPois()) {
             if (existing.getLocalX() == poiLocal[0]
@@ -651,6 +652,8 @@ public final class PlotCreatorSubstepHandler {
         String resolvedBlockTypeId;
         if (blockId != null && spot.role() == PlotCreatorSpotPlacement.SpotRole.POI_ANCHOR) {
             resolvedBlockTypeId = PlotCreatorLocalCoords.blockTypeAt(world, spot.worldBlock());
+        } else if (spot.role() == PlotCreatorSpotPlacement.SpotRole.STAND_SPAWN) {
+            resolvedBlockTypeId = PlotCreatorLocalCoords.blockTypeAt(world, spot.supportBlock());
         } else {
             resolvedBlockTypeId = blockId;
         }
@@ -757,5 +760,34 @@ public final class PlotCreatorSubstepHandler {
             }
             default -> {}
         }
+    }
+
+    /** Work / planning desk: click is the stand cell, unless the click is a mount seat (elder chair, etc.). */
+    private static boolean usesStandCellAsPoiLocal(@Nonnull PlotCreatorSubstepType type) {
+        return type == PlotCreatorSubstepType.WORK_POI
+            || type == PlotCreatorSubstepType.BARD_WORK_POI
+            || type == PlotCreatorSubstepType.PLANNING_DESK_POI;
+    }
+
+    @Nonnull
+    private static PlotCreatorSpotPlacement.ResolvedSpot resolvePoiSpot(
+        @Nonnull com.hypixel.hytale.server.core.universe.world.World world,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlotCreatorSubstepType type,
+        @Nullable String blockId
+    ) {
+        if (!usesStandCellAsPoiLocal(type)) {
+            return PlotCreatorSpotPlacement.resolvePoiAnchor(world, targetBlock);
+        }
+        // Desk work on a chair/stool keeps the furniture as the POI so they can sit while working.
+        PlotCreatorSpotPlacement.ResolvedSpot anchor = PlotCreatorSpotPlacement.resolvePoiAnchor(world, targetBlock);
+        if (anchor.worldYawRadians() != null
+            || PoiDualCellNormalize.looksLikeMountFurnitureBlock(blockId)
+            || PoiDualCellNormalize.looksLikeMountFurnitureBlock(
+                PlotCreatorLocalCoords.blockTypeAt(world, anchor.worldBlock())
+            )) {
+            return anchor;
+        }
+        return PlotCreatorSpotPlacement.resolveStandSpawn(world, targetBlock);
     }
 }

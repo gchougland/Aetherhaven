@@ -50,9 +50,9 @@
   ],
   "pois": [
     {
-      "localX": -5,
-      "localY": 2,
-      "localZ": 8,
+      "localX": -6,
+      "localY": 3,
+      "localZ": 10,
       "blockTypeId": "Bench_Farming",
       "interactionKind": "WORK_SURFACE",
       "tags": [
@@ -60,28 +60,22 @@
         "workActivity:craft"
       ],
       "capacity": 1,
-      "interactionTargetLocalX": -6,
-      "interactionTargetLocalY": 3,
-      "interactionTargetLocalZ": 10,
       "interactionTargetYawDegrees": -45
     },
     {
       "localX": -2,
       "localY": 2,
-      "localZ": 5,
+      "localZ": 6,
       "interactionKind": "WORK_SURFACE",
       "tags": [
         "WORK",
         "workActivity:craft"
       ],
       "capacity": 1,
-      "interactionTargetLocalX": -2,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": 6,
       "interactionTargetYawDegrees": 0
     },
     {
-      "localX": 1,
+      "localX": 0,
       "localY": 2,
       "localZ": 8,
       "interactionKind": "WORK_SURFACE",
@@ -90,9 +84,6 @@
         "workActivity:craft"
       ],
       "capacity": 1,
-      "interactionTargetLocalX": 0,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": 8,
       "interactionTargetYawDegrees": 90
     }
   ],

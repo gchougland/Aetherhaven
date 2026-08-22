@@ -11,7 +11,7 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Marks a plot-creator important-spot villager preview NPC (owner-only, non-autonomous). */
+/** Marks a plot-creator or POI-tool important-spot villager preview NPC (owner-only, non-autonomous). */
 public final class PlotCreatorSpotPreview implements Component<EntityStore> {
     @Nonnull
     public static final BuilderCodec<PlotCreatorSpotPreview> CODEC =
@@ -19,6 +19,12 @@ public final class PlotCreatorSpotPreview implements Component<EntityStore> {
             .append(new KeyedCodec<>("OwnerPlayerUuid", Codec.UUID_BINARY), (c, v) -> c.ownerPlayerUuid = v, c -> c.ownerPlayerUuid)
             .add()
             .append(new KeyedCodec<>("PreviewKey", Codec.LONG), (c, v) -> c.previewKey = v, c -> c.previewKey)
+            .add()
+            .append(
+                new KeyedCodec<>("PoiToolChannel", Codec.BOOLEAN),
+                (c, v) -> c.poiToolChannel = Boolean.TRUE.equals(v),
+                c -> c.poiToolChannel
+            )
             .add()
             .build();
 
@@ -28,6 +34,8 @@ public final class PlotCreatorSpotPreview implements Component<EntityStore> {
     @Nullable
     private UUID ownerPlayerUuid;
     private long previewKey;
+    /** True when owned by the POI debug staff overlay; false for plot creator / building editor. */
+    private boolean poiToolChannel;
     /** Not serialized; pose applied once after spawn. */
     private transient boolean poseApplied;
     /** Not serialized; last work/leisure beat epoch ms. */
@@ -48,9 +56,10 @@ public final class PlotCreatorSpotPreview implements Component<EntityStore> {
 
     public PlotCreatorSpotPreview() {}
 
-    public PlotCreatorSpotPreview(@Nonnull UUID ownerPlayerUuid, long previewKey) {
+    public PlotCreatorSpotPreview(@Nonnull UUID ownerPlayerUuid, long previewKey, boolean poiToolChannel) {
         this.ownerPlayerUuid = ownerPlayerUuid;
         this.previewKey = previewKey;
+        this.poiToolChannel = poiToolChannel;
     }
 
     @Nullable
@@ -60,6 +69,10 @@ public final class PlotCreatorSpotPreview implements Component<EntityStore> {
 
     public long getPreviewKey() {
         return previewKey;
+    }
+
+    public boolean isPoiToolChannel() {
+        return poiToolChannel;
     }
 
     public boolean isPoseApplied() {
@@ -84,6 +97,7 @@ public final class PlotCreatorSpotPreview implements Component<EntityStore> {
         PlotCreatorSpotPreview copy = new PlotCreatorSpotPreview();
         copy.ownerPlayerUuid = ownerPlayerUuid;
         copy.previewKey = previewKey;
+        copy.poiToolChannel = poiToolChannel;
         copy.poseApplied = poseApplied;
         copy.lastWorkBeatEpochMs = lastWorkBeatEpochMs;
         return copy;

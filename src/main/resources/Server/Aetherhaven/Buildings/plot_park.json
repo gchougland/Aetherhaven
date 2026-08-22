@@ -44,10 +44,7 @@
         "SIT",
         "workActivity:read"
       ],
-      "capacity": 2,
-      "interactionTargetLocalX": -5,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -1
+      "capacity": 2
     },
     {
       "localX": 6,
@@ -60,10 +57,7 @@
         "SIT",
         "workActivity:read"
       ],
-      "capacity": 2,
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 3
+      "capacity": 2
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_park.displayName",

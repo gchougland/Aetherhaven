@@ -26,13 +26,6 @@
         }
       ]
     },
-    "Use": {
-      "Interactions": [
-        {
-          "Type": "AetherhavenPoiToolSetTarget"
-        }
-      ]
-    },
     "Ability1": {
       "Interactions": [
         {

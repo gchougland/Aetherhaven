@@ -32,7 +32,7 @@
   ],
   "pois": [
     {
-      "localX": 7,
+      "localX": 8,
       "localY": 1,
       "localZ": -6,
       "tags": [
@@ -42,14 +42,11 @@
       "capacity": 1,
       "blockTypeId": "Rock_Sandstone_Red_Cobble",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -6,
       "workResidentKind": "logger",
       "interactionTargetYawDegrees": 56.960205
     },
     {
-      "localX": 6,
+      "localX": 7,
       "localY": 1,
       "localZ": -11,
       "tags": [
@@ -59,14 +56,11 @@
       "capacity": 1,
       "blockTypeId": "Rock_Sandstone_Red_Cobble",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -11,
       "workResidentKind": "logger",
       "interactionTargetYawDegrees": 67.55444
     },
     {
-      "localX": 10,
+      "localX": 11,
       "localY": 1,
       "localZ": -7,
       "tags": [
@@ -76,9 +70,6 @@
       "capacity": 1,
       "blockTypeId": "Rock_Sandstone_Red_Cobble",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 11,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -7,
       "workResidentKind": "logger",
       "interactionTargetYawDegrees": 98.73193
     }

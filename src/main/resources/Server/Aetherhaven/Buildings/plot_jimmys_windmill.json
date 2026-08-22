@@ -1,6 +1,6 @@
 {
   "id": "plot_jimmys_windmill",
-  "displayName": "Jimmy\u0027s Windmill",
+  "displayName": "Jimmy's Windmill",
   "description": "By Jimmy G",
   "prefabPath": "Jimmys/plot_jimmys_windmill.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -29,7 +29,7 @@
   ],
   "pois": [
     {
-      "localX": 12,
+      "localX": 11,
       "localY": 1,
       "localZ": -8,
       "tags": [
@@ -39,9 +39,6 @@
       "capacity": 1,
       "blockTypeId": "Rock_Stone",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 11,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -8,
       "workResidentKind": "farmer",
       "interactionTargetYawDegrees": -128.18402,
       "equipmentProfileId": "work_builder"

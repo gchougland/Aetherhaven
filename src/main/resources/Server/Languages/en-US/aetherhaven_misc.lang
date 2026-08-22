@@ -3,11 +3,14 @@
 
 # === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
 aetherhaven.blacksmith.repair.page.title=Repair gear
-aetherhaven.blacksmith.repair.page.hint=Price depends on wear. Up to {maxCost} gold coins per item. Click a row to repair it.
+aetherhaven.blacksmith.repair.page.hint=Price depends on wear. Up to {maxCost} gold coins per item. Click a row to repair it, or use Fix all at the top.
 aetherhaven.blacksmith.repair.page.item=Item
 aetherhaven.blacksmith.repair.page.cost=Cost
 aetherhaven.blacksmith.repair.page.durability=Durability
 aetherhaven.blacksmith.repair.rowCost={cost} gold
+aetherhaven.blacksmith.repair.fixAll=Fix all
+aetherhaven.blacksmith.repair.fixAll.count={count} items
+aetherhaven.blacksmith.repair.fixAll.success=Fixed {count} items for {cost} gold. Good as new.
 aetherhaven.blacksmith.repair.insufficientGold=Your purse is too light for this repair.
 aetherhaven.blacksmith.repair.success={itemName} is whole again. Good as new.
 commands.aetherhaven.dialogue.desc=Debug: open a dialogue tree by id

@@ -9,6 +9,8 @@ import com.hexvane.aetherhaven.poi.marker.PoiMarkerDataComponent;
 import com.hexvane.aetherhaven.poi.marker.PoiMarkerEntity;
 import com.hexvane.aetherhaven.poi.PoiPrefabCoords;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorSpotPreviewCollector;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorSpotPreviewSync;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -31,7 +33,6 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.server.core.modules.debug.DebugUtils;
 import com.hypixel.hytale.server.core.modules.entity.EntityModule;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -176,6 +177,15 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
                 world.execute(() -> refreshVisualizationDeferred(world, ownerComp.getUuid(), nearbyCopy, modeCopy, pposCopy));
             }
         }
+        if (PoiToolMarkerVisibility.showsRegistryAndPrefabPoiLabels(state.getMode())) {
+            UUIDComponent ownerComp = store.getComponent(playerRef, UUIDComponent.getComponentType());
+            if (ownerComp != null) {
+                PlotCreatorSpotPreviewSync.respawnMissing(world, ownerComp.getUuid(), true);
+                PlotCreatorSpotPreviewSync.tickPosesForOwner(
+                    world, store, commandBuffer, ownerComp.getUuid(), true
+                );
+            }
+        }
     }
 
     /** Schedules an immediate overlay refresh after mode cycle (tick may miss the change via {@link #noteHudMode}). */
@@ -270,6 +280,7 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
             return;
         }
         removeLabelEntities(world, state);
+        PlotCreatorSpotPreviewSync.clearAll(world, playerUuid, null, true);
     }
 
     static void removeLabelEntities(@Nonnull World world, @Nonnull PoiToolPlayerComponent state) {
@@ -361,8 +372,15 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
         Rotation3f defaultRot = new Rotation3f(0.0F, 0.0F, 0.0F);
 
         if (PoiToolMarkerVisibility.showsRegistryAndPrefabPoiLabels(mode)) {
+            List<PlotCreatorSpotPreviewCollector.DesiredSpotPreview> villagerPreviews =
+                PoiToolSpotPreviewCollector.collect(world, nearbyRegistry, plugin);
+            PlotCreatorSpotPreviewSync.sync(world, ownerUuid, villagerPreviews, null, true);
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             for (PoiEntry poi : nearbyRegistry) {
+                // Villager-previewable POIs use NPC models; keep spawn markers for the rest (e.g. quest board).
+                if (PoiToolSpotPreviewCollector.usesVillagerPreview(poi)) {
+                    continue;
+                }
                 Vector3d markerPos = new Vector3d(
                     poi.getX() + POI_BLOCK_CENTER,
                     poi.getY() + POI_BLOCK_CENTER + MARKER_MODEL_Y_OFFSET,
@@ -379,71 +397,14 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
                     markerModel,
                     anchorModel
                 );
-                if (poi.hasInteractionTarget()) {
-                    Double tx = poi.getInteractionTargetX();
-                    Double ty = poi.getInteractionTargetY();
-                    Double tz = poi.getInteractionTargetZ();
-                    if (tx != null && ty != null && tz != null) {
-                        Vector3d targetMarkerPos = new Vector3d(
-                            tx,
-                            ty + POI_BLOCK_CENTER + MARKER_MODEL_Y_OFFSET,
-                            tz
-                        );
-                        float targetYaw = poi.getInteractionTargetYawRadians() != null ? poi.getInteractionTargetYawRadians() : 0f;
-                        Rotation3f targetRot = new Rotation3f(0.0F, targetYaw, 0.0F);
-                        spawnDebugMarkerPair(
-                            world,
-                            ownerUuid,
-                            store,
-                            state,
-                            targetMarkerPos,
-                            targetRot,
-                            buildInteractionTargetLabelText(poi, tm, tx, ty, tz),
-                            markerModel,
-                            anchorModel
-                        );
-                    }
-                }
             }
             spawnPrefabPoiMarkerOverlays(world, store, state, ownerUuid, playerPos, markerModel, anchorModel);
+        } else {
+            PlotCreatorSpotPreviewSync.sync(world, ownerUuid, List.of(), null, true);
         }
 
         if (PoiToolMarkerVisibility.showsAdventurerSpawnLabels(mode)) {
             spawnAdventurerMarkerOverlays(world, store, state, ownerUuid, playerPos, markerModel, anchorModel);
-        }
-
-        PlayerRef playerRefComp = store.getComponent(playerRef, PlayerRef.getComponentType());
-        if (playerRefComp != null && PoiToolMarkerVisibility.showsRegistryAndPrefabPoiLabels(mode)) {
-            for (PoiEntry poi : nearbyRegistry) {
-                if (!poi.hasInteractionTarget()) {
-                    continue;
-                }
-                Double tx = poi.getInteractionTargetX();
-                Double ty = poi.getInteractionTargetY();
-                Double tz = poi.getInteractionTargetZ();
-                if (tx == null || ty == null || tz == null) {
-                    continue;
-                }
-                double sx = tx;
-                double sy = ty + 1.0;
-                double sz = tz;
-                double ex = poi.getX() + POI_BLOCK_CENTER;
-                double ey = poi.getY() + POI_BLOCK_CENTER;
-                double ez = poi.getZ() + POI_BLOCK_CENTER;
-                PoiDebugLineHelper.addLineToPlayer(
-                    playerRefComp,
-                    sx,
-                    sy,
-                    sz,
-                    ex,
-                    ey,
-                    ez,
-                    DebugUtils.COLOR_CYAN,
-                    0.06,
-                    2.5F,
-                    0
-                );
-            }
         }
     }
 
@@ -640,39 +601,6 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
         }
         if (town != null && def != null) {
             Vector3i local = PoiPrefabCoords.tryLocalFromWorld(poi, town, def);
-            if (local != null) {
-                sb.append(" | L ").append(local.x).append(",").append(local.y).append(",").append(local.z);
-            }
-        }
-        return sb.toString();
-    }
-
-    @Nonnull
-    private String buildInteractionTargetLabelText(
-        @Nonnull PoiEntry poi,
-        @Nonnull TownManager tm,
-        double wx,
-        double wy,
-        double wz
-    ) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Target ")
-            .append(String.format("%.2f", wx))
-            .append(",")
-            .append(String.format("%.2f", wy))
-            .append(",")
-            .append(String.format("%.2f", wz));
-        TownRecord town = tm.getTown(poi.getTownId());
-        ConstructionDefinition def = null;
-        UUID plotUuid = poi.getPlotId();
-        if (town != null && plotUuid != null) {
-            PlotInstance plot = town.findPlotById(plotUuid);
-            if (plot != null) {
-                def = plugin.getConstructionCatalog().get(plot.getConstructionId());
-            }
-        }
-        if (town != null && def != null) {
-            Vector3i local = PoiPrefabCoords.tryLocalFromWorldPoint(wx, wy, wz, poi, town, def);
             if (local != null) {
                 sb.append(" | L ").append(local.x).append(",").append(local.y).append(",").append(local.z);
             }

@@ -1135,7 +1135,9 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             }
             tx = tpx;
             tz = tpz;
-            leashY = tpy;
+            int hintY = (int) Math.floor(tpy);
+            int clearY = VillagerBlockUtil.resolveClearStandFeetY(world, (int) Math.floor(tpx), hintY, (int) Math.floor(tpz));
+            leashY = clearY != Integer.MIN_VALUE ? clearY + 0.02 : tpy;
         } else {
             int bx = pick.getX();
             int bz = pick.getZ();
@@ -1900,7 +1902,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 autonomy.setLastWorkHitEpochMs(now);
                 commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             }
-            stopSeekDuringPoiUse(ref, npc, commandBuffer);
+            holdStandingPoiUse(ref, store, commandBuffer, npc);
             return;
         }
         VillagerScheduleTickState schedTick = store.getComponent(ref, VillagerScheduleTickState.getComponentType());
@@ -1919,7 +1921,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             autonomy.setLastWorkHitEpochMs(0L);
             commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             if (!isNpcBlockMounted(store, commandBuffer, ref)) {
-                stopSeekDuringPoiUse(ref, npc, commandBuffer);
+                holdStandingPoiUse(ref, store, commandBuffer, npc);
             }
             return;
         }
@@ -2099,9 +2101,9 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull PoiEntry poi,
         boolean daytime
     ) {
-        // Work surfaces finish each USE so the villager can travel to another work spot on the same plot.
-        // (Production still accrues for every USE window.)
-        if (PoiScoring.isWorkPoi(poi)) {
+        // Field producers finish each USE so they can travel to another work spot on the same plot.
+        // Desk roles stay planted for the whole work segment. (Production still accrues for every USE window.)
+        if (PoiScoring.isWorkPoi(poi) && VillagerWorkActivity.rotatesWorkStations(binding.getKind())) {
             return false;
         }
         if (schedTick == null || !PoiScoring.isWorkScheduleSegment(schedTick.getLastAppliedScheduleSegment())) {
@@ -2219,7 +2221,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             stopSeekThenRestoreMountedPose(ref, store, commandBuffer, npc);
             return;
         }
-        stopSeekDuringPoiUse(ref, npc, commandBuffer);
+        holdStandingPoiUse(ref, store, commandBuffer, npc);
     }
 
     private static boolean isActiveNeedFillAtPoi(
@@ -2524,6 +2526,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
     /**
      * After {@link PoiAutonomyVisuals#beginPoiUse}: while block-mounted, stop Seek (role Idle) so they stay in the seat,
      * then re-apply Sit/Sleep — Idle StateTransitions clear Status, so overlays must be restored.
+     * Standing desks use {@link NpcStandStill} so Idle rect-wander does not pull them off the station.
      */
     public static void afterBeginPoiUseMotion(
         @Nonnull Ref<EntityStore> ref,
@@ -2535,7 +2538,22 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             stopSeekThenRestoreMountedPose(ref, store, commandBuffer, npc);
             return;
         }
-        stopSeekDuringPoiUse(ref, npc, commandBuffer);
+        holdStandingPoiUse(ref, store, commandBuffer, npc);
+    }
+
+    /** Plant at current feet during standing (non-mounted) POI USE — avoids Idle 4x4 rect wander. */
+    private static void holdStandingPoiUse(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull NPCEntity npc
+    ) {
+        TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+        if (tc == null) {
+            stopSeekDuringPoiUse(ref, npc, commandBuffer);
+            return;
+        }
+        NpcStandStill.hold(ref, store, npc, tc.getPosition(), commandBuffer);
     }
 
     public static boolean isNpcBlockMounted(

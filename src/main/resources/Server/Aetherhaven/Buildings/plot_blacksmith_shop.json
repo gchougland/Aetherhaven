@@ -43,7 +43,7 @@
     {
       "localX": 8,
       "localY": 0,
-      "localZ": 8,
+      "localZ": 7,
       "tags": [
         "WORK",
         "workActivity:smith"
@@ -51,9 +51,6 @@
       "capacity": 1,
       "blockTypeId": "Bench_Weapon",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 7,
       "workResidentKind": "blacksmith",
       "interactionTargetYawDegrees": -162.99109
     }

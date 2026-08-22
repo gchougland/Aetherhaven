@@ -1,6 +1,6 @@
 {
   "id": "plot_jimmys_tavern",
-  "displayName": "Jimmy\u0027s Tavern",
+  "displayName": "Jimmy's Tavern",
   "description": "Made by Jimmy G",
   "prefabPath": "Jimmys/plot_jimmys_tavern.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -40,10 +40,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Stool",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": -13,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 9
+      "interactionKind": "USE_BENCH"
     },
     {
       "localX": -15,
@@ -54,10 +51,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Stool",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": -14,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 12
+      "interactionKind": "USE_BENCH"
     },
     {
       "localX": -15,
@@ -68,10 +62,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Stool",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": -14,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 14
+      "interactionKind": "USE_BENCH"
     },
     {
       "localX": -17,
@@ -82,10 +73,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": -17,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 12
+      "interactionKind": "USE_BENCH"
     },
     {
       "localX": -17,
@@ -96,10 +84,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": -17,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 17
+      "interactionKind": "USE_BENCH"
     },
     {
       "localX": -19,
@@ -110,10 +95,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": -18,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 14
+      "interactionKind": "USE_BENCH"
     },
     {
       "localX": -19,
@@ -124,10 +106,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": -18,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 11
+      "interactionKind": "USE_BENCH"
     },
     {
       "localX": -18,
@@ -138,13 +117,10 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": -18,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 8
+      "interactionKind": "USE_BENCH"
     },
     {
-      "localX": -13,
+      "localX": -12,
       "localY": 0,
       "localZ": 13,
       "tags": [
@@ -154,9 +130,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": -12,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 13,
       "workResidentKind": "innkeeper"
     },
     {
@@ -169,10 +142,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Bed",
-      "interactionKind": "SLEEP",
-      "interactionTargetLocalX": -27,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": 12
+      "interactionKind": "SLEEP"
     },
     {
       "localX": -23,
@@ -184,13 +154,10 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Bed",
-      "interactionKind": "SLEEP",
-      "interactionTargetLocalX": -24,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": 13
+      "interactionKind": "SLEEP"
     },
     {
-      "localX": -16,
+      "localX": -15,
       "localY": 2,
       "localZ": 6,
       "tags": [
@@ -198,15 +165,12 @@
       ],
       "capacity": 1,
       "blockTypeId": "Aetherhaven_Quest_Board",
-      "interactionKind": "NONE",
-      "interactionTargetLocalX": -15,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": 6
+      "interactionKind": "NONE"
     },
     {
       "localX": -13,
       "localY": 1,
-      "localZ": 6,
+      "localZ": 7,
       "tags": [
         "workActivity:read",
         "WORK"
@@ -214,13 +178,10 @@
       "capacity": 1,
       "blockTypeId": "Cloth_Roof_Leather_Flat",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": -13,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 7,
       "workResidentKind": "guild_master"
     },
     {
-      "localX": -16,
+      "localX": -17,
       "localY": 0,
       "localZ": 8,
       "tags": [
@@ -231,9 +192,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": -17,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 8,
       "workResidentKind": "bard"
     }
   ],

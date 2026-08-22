@@ -615,14 +615,14 @@ public final class PoiAutonomyVisuals {
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull PoiEntry poi
     ) {
+        // Authored yaw alone is enough after single-cell POIs (no interaction-target XYZ).
+        Float storedYaw = poi.getInteractionTargetYawRadians();
+        if (storedYaw != null) {
+            applyBodyYaw(npcRef, store, commandBuffer, storedYaw);
+            return;
+        }
         if (poi.hasInteractionTarget()) {
-            Float storedYaw = poi.getInteractionTargetYawRadians();
-            if (storedYaw != null) {
-                applyBodyYaw(npcRef, store, commandBuffer, storedYaw);
-                return;
-            }
             Double tx = poi.getInteractionTargetX();
-            Double ty = poi.getInteractionTargetY();
             Double tz = poi.getInteractionTargetZ();
             if (tx != null && tz != null) {
                 TransformComponent tc = store.getComponent(npcRef, TransformComponent.getComponentType());
@@ -656,9 +656,6 @@ public final class PoiAutonomyVisuals {
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull PoiEntry poi
     ) {
-        if (!poi.hasInteractionTarget()) {
-            return;
-        }
         Float yaw = poi.getInteractionTargetYawRadians();
         if (yaw != null) {
             applyBodyYaw(npcRef, store, commandBuffer, yaw);

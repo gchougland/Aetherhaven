@@ -358,6 +358,8 @@ public final class BlockPalettePage extends AetherhavenInteractiveCustomUIPage<B
             case "bricks" -> "Bricks";
             case "cloth" -> "Cloth";
             case "roofs" -> "Roofs";
+            case "cloth_roofs" -> "Cloth roofs";
+            case "windows" -> "Windows";
             default -> category;
         };
     }

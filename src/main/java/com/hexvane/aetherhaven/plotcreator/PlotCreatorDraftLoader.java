@@ -47,13 +47,6 @@ public final class PlotCreatorDraftLoader {
             p.setCapacity(row.getCapacity());
             p.setBlockTypeId(row.getBlockTypeId());
             p.setInteractionKind(row.getInteractionKind().name());
-            if (row.hasInteractionTargetLocal()) {
-                p.setInteractionTargetLocal(
-                    row.getInteractionTargetLocalX(),
-                    row.getInteractionTargetLocalY(),
-                    row.getInteractionTargetLocalZ()
-                );
-            }
             p.setWorkResidentKind(row.getWorkResidentKind());
             p.setInteractionTargetYawDegrees(row.getInteractionTargetYawDegrees());
             p.setEquipmentProfileId(row.getEquipmentProfileId());

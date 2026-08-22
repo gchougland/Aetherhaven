@@ -32,7 +32,8 @@ public final class PlotCreatorSpotPreviewSpawner {
     public static UUID spawnPreview(
         @Nonnull World world,
         @Nonnull UUID ownerPlayerEntityUuid,
-        @Nonnull PlotCreatorSpotPreviewCollector.DesiredSpotPreview desired
+        @Nonnull PlotCreatorSpotPreviewCollector.DesiredSpotPreview desired,
+        boolean poiToolChannel
     ) {
         NPCPlugin npcPlugin = NPCPlugin.get();
         if (npcPlugin == null) {
@@ -73,13 +74,29 @@ public final class PlotCreatorSpotPreviewSpawner {
         store.putComponent(
             ref,
             PlotCreatorSpotPreview.getComponentType(),
-            new PlotCreatorSpotPreview(ownerPlayerEntityUuid, desired.key())
+            new PlotCreatorSpotPreview(ownerPlayerEntityUuid, desired.key(), poiToolChannel)
         );
-        NpcSpawnOriginUtil.attach(store, ref, "PLOT_CREATOR_SPOT_PREVIEW", "spot=" + desired.type().name(), world, feet);
+        NpcSpawnOriginUtil.attach(
+            store,
+            ref,
+            poiToolChannel ? "POI_TOOL_SPOT_PREVIEW" : "PLOT_CREATOR_SPOT_PREVIEW",
+            "spot=" + desired.type().name(),
+            world,
+            feet
+        );
         // Detach from ambient spawn-marker despawn and freeze motion before the first pose tick.
         PlotCreatorSpotPreviewSanitize.applyOnSpawn(ref, store);
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         return uc != null ? uc.getUuid() : null;
+    }
+
+    @Nullable
+    public static UUID spawnPreview(
+        @Nonnull World world,
+        @Nonnull UUID ownerPlayerEntityUuid,
+        @Nonnull PlotCreatorSpotPreviewCollector.DesiredSpotPreview desired
+    ) {
+        return spawnPreview(world, ownerPlayerEntityUuid, desired, false);
     }
 
     public static void removePreviewByUuid(
@@ -106,6 +123,18 @@ public final class PlotCreatorSpotPreviewSpawner {
         @Nonnull UUID ownerPlayerEntityUuid,
         @Nullable CommandBuffer<EntityStore> commandBuffer
     ) {
+        removeAllForOwner(world, ownerPlayerEntityUuid, commandBuffer, null);
+    }
+
+    /**
+     * @param poiToolChannel {@code null} removes both channels; otherwise only that channel.
+     */
+    public static void removeAllForOwner(
+        @Nonnull World world,
+        @Nonnull UUID ownerPlayerEntityUuid,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
+        @Nullable Boolean poiToolChannel
+    ) {
         Store<EntityStore> store = world.getEntityStore().getStore();
         ArrayList<Ref<EntityStore>> toRemove = new ArrayList<>();
         store.forEachChunk(
@@ -114,6 +143,9 @@ public final class PlotCreatorSpotPreviewSpawner {
                 for (int i = 0; i < chunk.size(); i++) {
                     PlotCreatorSpotPreview preview = chunk.getComponent(i, PlotCreatorSpotPreview.getComponentType());
                     if (preview == null || !ownerPlayerEntityUuid.equals(preview.getOwnerPlayerUuid())) {
+                        continue;
+                    }
+                    if (poiToolChannel != null && preview.isPoiToolChannel() != poiToolChannel) {
                         continue;
                     }
                     Ref<EntityStore> previewRef = chunk.getReferenceTo(i);

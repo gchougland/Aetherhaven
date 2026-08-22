@@ -146,15 +146,44 @@
         { "id": "roofs_greenwood", "displayName": "Greenwood", "familyKey": "wood:Greenwood", "iconBlockId": "Wood_Greenwood_Roof" },
         { "id": "roofs_goldenwood", "displayName": "Goldenwood", "familyKey": "wood:Goldenwood", "iconBlockId": "Wood_Goldenwood_Roof" },
         { "id": "roofs_drywood", "displayName": "Drywood", "familyKey": "wood:Drywood", "iconBlockId": "Wood_Drywood_Roof" },
-        { "id": "roofs_cloth_green", "displayName": "Green Cloth", "familyKey": "cloth:Green", "iconBlockId": "Cloth_Roof_Green" },
-        { "id": "roofs_cloth_blue", "displayName": "Blue Cloth", "familyKey": "cloth:Blue", "iconBlockId": "Cloth_Roof_Blue" },
-        { "id": "roofs_cloth_red", "displayName": "Red Cloth", "familyKey": "cloth:Red", "iconBlockId": "Cloth_Roof_Red" },
-        { "id": "roofs_cloth_yellow", "displayName": "Yellow Cloth", "familyKey": "cloth:Yellow", "iconBlockId": "Cloth_Roof_Yellow" },
-        { "id": "roofs_cloth_orange", "displayName": "Orange Cloth", "familyKey": "cloth:Orange", "iconBlockId": "Cloth_Roof_Orange" },
-        { "id": "roofs_cloth_white", "displayName": "White Cloth", "familyKey": "cloth:White", "iconBlockId": "Cloth_Roof_White" },
-        { "id": "roofs_cloth_hide", "displayName": "Hide", "familyKey": "cloth:Hide", "iconBlockId": "Cloth_Roof_Hide" },
         { "id": "roofs_stone_cobble", "displayName": "Stone Cobble", "familyKey": "cobble_roof:Stone", "iconBlockId": "Rock_Stone_Cobble_Roof" },
         { "id": "roofs_stone_brick", "displayName": "Stone Brick", "familyKey": "brick_roof:Stone", "iconBlockId": "Rock_Stone_Brick_Roof" }
+      ]
+    },
+    {
+      "id": "cloth_roofs",
+      "palettes": [
+        { "id": "cloth_roofs_green", "displayName": "Green", "familyKey": "Green", "iconBlockId": "Cloth_Roof_Green" },
+        { "id": "cloth_roofs_blue", "displayName": "Blue", "familyKey": "Blue", "iconBlockId": "Cloth_Roof_Blue" },
+        { "id": "cloth_roofs_red", "displayName": "Red", "familyKey": "Red", "iconBlockId": "Cloth_Roof_Red" },
+        { "id": "cloth_roofs_yellow", "displayName": "Yellow", "familyKey": "Yellow", "iconBlockId": "Cloth_Roof_Yellow" },
+        { "id": "cloth_roofs_orange", "displayName": "Orange", "familyKey": "Orange", "iconBlockId": "Cloth_Roof_Orange" },
+        { "id": "cloth_roofs_white", "displayName": "White", "familyKey": "White", "iconBlockId": "Cloth_Roof_White" },
+        { "id": "cloth_roofs_hide", "displayName": "Hide", "familyKey": "Hide", "iconBlockId": "Cloth_Roof_Hide" },
+        { "id": "cloth_roofs_leather", "displayName": "Leather", "familyKey": "Leather", "iconBlockId": "Cloth_Roof_Leather" }
+      ]
+    },
+    {
+      "id": "windows",
+      "palettes": [
+        { "id": "windows_village", "displayName": "Village", "familyKey": "Village", "iconBlockId": "Furniture_Village_Window" },
+        { "id": "windows_tavern", "displayName": "Tavern", "familyKey": "Tavern", "iconBlockId": "Furniture_Tavern_Window" },
+        { "id": "windows_crude", "displayName": "Crude", "familyKey": "Crude", "iconBlockId": "Furniture_Crude_Window" },
+        { "id": "windows_lumberjack", "displayName": "Lumberjack", "familyKey": "Lumberjack", "iconBlockId": "Furniture_Lumberjack_Window" },
+        { "id": "windows_desert", "displayName": "Desert", "familyKey": "Desert", "iconBlockId": "Furniture_Desert_Window" },
+        { "id": "windows_jungle", "displayName": "Jungle", "familyKey": "Jungle", "iconBlockId": "Furniture_Jungle_Window" },
+        { "id": "windows_ancient", "displayName": "Ancient", "familyKey": "Ancient", "iconBlockId": "Furniture_Ancient_Window" },
+        { "id": "windows_feran", "displayName": "Feran", "familyKey": "Feran", "iconBlockId": "Furniture_Feran_Window" },
+        { "id": "windows_kweebec", "displayName": "Kweebec", "familyKey": "Kweebec", "iconBlockId": "Furniture_Kweebec_Window" },
+        { "id": "windows_human_ruins", "displayName": "Human Ruins", "familyKey": "Human_Ruins", "iconBlockId": "Furniture_Human_Ruins_Window" },
+        { "id": "windows_frozen_castle", "displayName": "Frozen Castle", "familyKey": "Frozen_Castle", "iconBlockId": "Furniture_Frozen_Castle_Window" },
+        { "id": "windows_royal_magic", "displayName": "Royal Magic", "familyKey": "Royal_Magic", "iconBlockId": "Furniture_Royal_Magic_Window" },
+        { "id": "windows_temple_dark", "displayName": "Temple Dark", "familyKey": "Temple_Dark", "iconBlockId": "Furniture_Temple_Dark_Window" },
+        { "id": "windows_temple_light", "displayName": "Temple Light", "familyKey": "Temple_Light", "iconBlockId": "Furniture_Temple_Light_Window" },
+        { "id": "windows_temple_wind", "displayName": "Temple Wind", "familyKey": "Temple_Wind", "iconBlockId": "Furniture_Temple_Wind_Window" },
+        { "id": "windows_temple_emerald", "displayName": "Temple Emerald", "familyKey": "Temple_Emerald", "iconBlockId": "Furniture_Temple_Emerald_Window" },
+        { "id": "windows_temple_scarak", "displayName": "Temple Scarak", "familyKey": "Temple_Scarak", "iconBlockId": "Furniture_Temple_Scarak_Window" },
+        { "id": "windows_scarak_hive", "displayName": "Scarak Hive", "familyKey": "Scarak_Hive", "iconBlockId": "Furniture_Scarak_Hive_Window" }
       ]
     }
   ]

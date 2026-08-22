@@ -1,6 +1,6 @@
 {
   "id": "plot_jimmys_town_hall",
-  "displayName": "Jimmy\u0027s Town Hall",
+  "displayName": "Jimmy's Town Hall",
   "description": "Made by Jimmy G",
   "prefabPath": "Jimmys/plot_jimmys_town_hall.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -38,9 +38,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": -16,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 11,
       "workResidentKind": "elder",
       "interactionTargetYawDegrees": 180.0
     },
@@ -54,9 +51,6 @@
       "capacity": 1,
       "blockTypeId": "Cloth_Roof_Leather_Flat",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": -10,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 6,
       "interactionTargetYawDegrees": 162.93207
     },
     {
@@ -69,9 +63,6 @@
       "capacity": 1,
       "blockTypeId": "Cloth_Roof_Leather_Flat",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": -11,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 11,
       "interactionTargetYawDegrees": -91.3858
     }
   ],

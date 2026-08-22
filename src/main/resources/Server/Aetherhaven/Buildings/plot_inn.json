@@ -64,10 +64,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bed",
-      "interactionKind": "SLEEP",
-      "interactionTargetLocalX": 4,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 8
+      "interactionKind": "SLEEP"
     },
     {
       "localX": 7,
@@ -79,15 +76,12 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bed",
-      "interactionKind": "SLEEP",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 8
+      "interactionKind": "SLEEP"
     },
     {
       "localX": 13,
       "localY": 0,
-      "localZ": 9,
+      "localZ": 10,
       "tags": [
         "workActivity:read",
         "WORK"
@@ -95,13 +89,10 @@
       "capacity": 1,
       "blockTypeId": "Editor_Empty",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 13,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 10,
       "workResidentKind": "innkeeper"
     },
     {
-      "localX": 14,
+      "localX": 13,
       "localY": 0,
       "localZ": 5,
       "tags": [
@@ -109,13 +100,10 @@
       ],
       "capacity": 1,
       "blockTypeId": "Editor_Empty",
-      "interactionKind": "NONE",
-      "interactionTargetLocalX": 13,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 5
+      "interactionKind": "NONE"
     },
     {
-      "localX": 13,
+      "localX": 14,
       "localY": 0,
       "localZ": 5,
       "tags": [
@@ -124,13 +112,10 @@
       "capacity": 1,
       "blockTypeId": "Cloth_Roof_Leather_Flat",
       "interactionKind": "NONE",
-      "interactionTargetLocalX": 14,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 5,
       "interactionTargetYawDegrees": 146.4642
     },
     {
-      "localX": 11,
+      "localX": 10,
       "localY": -1,
       "localZ": 6,
       "tags": [
@@ -139,9 +124,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Drywood_Planks",
       "interactionKind": "NONE",
-      "interactionTargetLocalX": 10,
-      "interactionTargetLocalY": -1,
-      "interactionTargetLocalZ": 6,
       "interactionTargetYawDegrees": -147.97057
     }
   ],

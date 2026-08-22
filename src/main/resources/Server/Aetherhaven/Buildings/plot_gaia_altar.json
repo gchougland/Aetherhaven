@@ -43,10 +43,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Temple_Emerald_Stool",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": -3,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": -1
+      "interactionKind": "SIT"
     },
     {
       "localX": 3,
@@ -58,15 +55,12 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Temple_Emerald_Stool",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 3,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 1
+      "interactionKind": "SIT"
     },
     {
       "localX": 0,
       "localY": -1,
-      "localZ": 1,
+      "localZ": 2,
       "tags": [
         "WORK",
         "workActivity:read"
@@ -74,9 +68,6 @@
       "capacity": 1,
       "blockTypeId": "Soil_Pathway",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 0,
-      "interactionTargetLocalY": -1,
-      "interactionTargetLocalZ": 2,
       "workResidentKind": "priestess",
       "interactionTargetYawDegrees": 1.5697932
     },
@@ -90,9 +81,6 @@
       "capacity": 1,
       "blockTypeId": "Soil_Pathway",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": -2,
-      "interactionTargetLocalY": -1,
-      "interactionTargetLocalZ": -2,
       "interactionTargetYawDegrees": -117.23249
     },
     {
@@ -105,9 +93,6 @@
       "capacity": 1,
       "blockTypeId": "Soil_Pathway",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": -3,
-      "interactionTargetLocalY": -1,
-      "interactionTargetLocalZ": 2,
       "interactionTargetYawDegrees": -65.61196
     },
     {
@@ -120,9 +105,6 @@
       "capacity": 1,
       "blockTypeId": "Soil_Pathway",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 3,
-      "interactionTargetLocalY": -1,
-      "interactionTargetLocalZ": 0,
       "interactionTargetYawDegrees": 124.2118
     },
     {

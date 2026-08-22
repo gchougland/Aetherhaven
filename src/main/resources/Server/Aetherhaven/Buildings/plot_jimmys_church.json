@@ -1,6 +1,6 @@
 {
   "id": "plot_jimmys_church",
-  "displayName": "Jimmy\u0027s Church",
+  "displayName": "Jimmy's Church",
   "description": "Made by Jimmy",
   "prefabPath": "Jimmys/plot_jimmys_church.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -38,10 +38,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bench",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 20,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -3
+      "interactionKind": "SIT"
     },
     {
       "localX": 22,
@@ -54,10 +51,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bench",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 22,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -3
+      "interactionKind": "SIT"
     },
     {
       "localX": 12,
@@ -71,9 +65,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 13,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -4,
       "interactionTargetYawDegrees": 90.00001
     },
     {
@@ -88,9 +79,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 16,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -4,
       "interactionTargetYawDegrees": 90.00001
     },
     {
@@ -105,9 +93,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 16,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -9,
       "interactionTargetYawDegrees": 90.00001
     },
     {
@@ -122,9 +107,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 13,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -9,
       "interactionTargetYawDegrees": 90.00001
     }
   ],

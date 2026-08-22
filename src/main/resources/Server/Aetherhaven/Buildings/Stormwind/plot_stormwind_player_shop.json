@@ -26,17 +26,14 @@
     {
       "localX": 7,
       "localY": 1,
-      "localZ": -8,
+      "localZ": -9,
       "tags": [
         "WORK",
         "workActivity:read"
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
-      "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -9
+      "interactionKind": "WORK_SURFACE"
     },
     {
       "localX": 6,
@@ -47,10 +44,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 6,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -7
+      "interactionKind": "SIT"
     },
     {
       "localX": 5,
@@ -62,9 +56,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 5,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -5,
       "interactionTargetYawDegrees": 6.255371
     },
     {
@@ -77,9 +68,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -5,
       "interactionTargetYawDegrees": -13.224121
     },
     {
@@ -92,9 +80,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -6,
       "interactionTargetYawDegrees": -158.12793
     }
   ],

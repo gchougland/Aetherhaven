@@ -71,6 +71,30 @@ public final class VillagerBlockUtil {
         return Integer.MIN_VALUE;
     }
 
+    /**
+     * Walkable feet Y for a POI stand/leash hint. Never returns a Y where the villager would occupy a solid block:
+     * if {@code hintY} is inside furniture/ground, climbs until feet+head are clear with ground underfoot.
+     */
+    public static int resolveClearStandFeetY(@Nonnull World world, int bx, int hintY, int bz) {
+        int hint = Math.max(0, Math.min(319, hintY));
+        BlockType atHint = blockTypeNoLoad(world, bx, hint, bz);
+        int start = hint;
+        if (atHint != null && !isPassable(world, bx, hint, bz, atHint)) {
+            // Hint cell is solid (e.g. floor or bookcase) — stand on top of it, then climb further if needed.
+            start = Math.min(319, hint + 1);
+        }
+        for (int y = start; y <= Math.min(319, start + 10); y++) {
+            if (walkableColumn(world, bx, y, bz)) {
+                return y;
+            }
+        }
+        int near = findStandYNearPoiBlockY(world, bx, bz, hint, hint);
+        if (near != Integer.MIN_VALUE && walkableColumn(world, bx, near, bz)) {
+            return near;
+        }
+        return findStandY(world, bx, bz, Math.min(319, Math.max(start, hint) + 4));
+    }
+
     /** After block-mount release, snap feet to standable ground at the current X/Z (e.g. off a bed or chair). */
     public static void snapNpcToStandY(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store) {
         snapNpcToStandY(npcRef, store, null);

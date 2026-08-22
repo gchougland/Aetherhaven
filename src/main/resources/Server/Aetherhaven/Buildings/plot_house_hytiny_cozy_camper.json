@@ -59,10 +59,7 @@
         "SLEEP",
         "ENERGY"
       ],
-      "capacity": 1,
-      "interactionTargetLocalX": 1,
-      "interactionTargetLocalY": 3,
-      "interactionTargetLocalZ": -2
+      "capacity": 1
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_house_hytiny_cozy_camper.displayName",

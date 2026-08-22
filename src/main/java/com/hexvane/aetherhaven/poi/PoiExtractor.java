@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.poi;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
+import com.hexvane.aetherhaven.blockpalette.BlockPaletteRemapper;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
 import com.hexvane.aetherhaven.poi.marker.PoiMarkerDataComponent;
@@ -21,6 +22,7 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -52,10 +54,10 @@ public final class PoiExtractor {
         }
 
         PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
-        reg.unregisterByPlotId(plotId);
 
         List<PoiMarkerLocator.LocalMarkerRow> markers = PoiMarkerLocator.collectInPlot(store, plot, cdef);
         Set<String> markerLocalKeys = PoiMarkerLocator.markerLocalKeys(markers);
+        Map<String, String> palette = plot.getBlockPaletteSelections();
 
         List<PoiEntry> batch = new ArrayList<>();
         for (BuildingPoisDefinition.PoiRow row : cdef.getPois()) {
@@ -63,7 +65,7 @@ public final class PoiExtractor {
             if (markerLocalKeys.contains(localKey)) {
                 continue;
             }
-            PoiEntry fromJson = buildFromJsonRow(world, town, plotId, row, prefabAnchorWorld, prefabYaw);
+            PoiEntry fromJson = buildFromJsonRow(world, town, plotId, row, prefabAnchorWorld, prefabYaw, palette);
             if (fromJson != null) {
                 batch.add(fromJson);
             }
@@ -77,9 +79,18 @@ public final class PoiExtractor {
             UUID poiId = data.getPoiRegistryId() != null ? data.getPoiRegistryId() : UUID.randomUUID();
             batch.add(PoiMarkerLocator.toRegistryEntry(poiId, town, plotId, wx, wy, wz, data));
         }
-        if (!batch.isEmpty()) {
-            reg.registerAll(ShopBrowsePoiMigration.migrate(batch));
+        // Only replace existing POIs when extract found something — empty batch after a failed palette match
+        // used to wipe the plot and leave desk workers Idle at the footprint center.
+        if (batch.isEmpty()) {
+            LOGGER.atWarning().log(
+                "POI extract yielded 0 for construction %s plot %s; leaving existing POIs in place",
+                constructionId,
+                plotId
+            );
+            return;
         }
+        reg.unregisterByPlotId(plotId);
+        reg.registerAll(ShopBrowsePoiMigration.migrate(batch));
         LOGGER.atInfo().log(
             "Registered %s POIs for construction %s plot %s (%s from JSON, %s from markers)",
             batch.size(),
@@ -97,8 +108,10 @@ public final class PoiExtractor {
         @Nonnull UUID plotId,
         @Nonnull BuildingPoisDefinition.PoiRow row,
         @Nonnull Vector3i prefabAnchorWorld,
-        @Nonnull Rotation prefabYaw
+        @Nonnull Rotation prefabYaw,
+        @Nullable Map<String, String> blockPaletteSelections
     ) {
+        PoiDualCellNormalize.normalize(row);
         Vector3i d = PrefabLocalOffset.rotate(prefabYaw, row.getLocalX(), row.getLocalY(), row.getLocalZ());
         int baseWx = prefabAnchorWorld.x + d.x;
         int baseWy = prefabAnchorWorld.y + d.y;
@@ -110,12 +123,21 @@ public final class PoiExtractor {
         if (expectedType != null && isPlotCreatorEditorMarkerBlock(expectedType)) {
             expectedType = null;
         }
-        if (expectedType != null) {
-            Vector3i anchor = resolveAnchorForExpectedBlock(world, wx, wy, wz, expectedType);
+        String resolvedExpectedType = expectedType;
+        boolean furnitureMount =
+            PoiDualCellNormalize.keepsFurnitureLocal(row.getInteractionKind(), row.getBlockTypeId());
+        if (furnitureMount && expectedType != null) {
+            String remapped =
+                BlockPaletteRemapper.remapBlockTypeId(expectedType, blockPaletteSelections);
+            Vector3i anchor = resolveAnchorForExpectedBlock(world, wx, wy, wz, remapped);
+            String matchedType = remapped;
+            if (anchor == null && !remapped.equals(expectedType)) {
+                anchor = resolveAnchorForExpectedBlock(world, wx, wy, wz, expectedType);
+                matchedType = expectedType;
+            }
             if (anchor == null) {
                 BlockType at = world.getBlockType(wx, wy, wz);
                 String actual = at != null ? at.getId() : null;
-                // Community guild halls may list a quest board POI without placing the block — skip quietly.
                 boolean optionalQuestBoard =
                     AetherhavenConstants.QUEST_BOARD_ITEM_ID.equals(expectedType)
                         || row.getTags().contains(AetherhavenConstants.POI_TAG_QUEST_BOARD);
@@ -129,75 +151,70 @@ public final class PoiExtractor {
                     );
                 } else {
                     LOGGER.atWarning().log(
-                        "Skipping POI near %s,%s,%s: no blockTypeId %s in search volume (center was %s)",
+                        "Skipping POI near %s,%s,%s: no blockTypeId %s (palette tried %s; center was %s)",
                         wx,
                         wy,
                         wz,
                         expectedType,
+                        remapped,
                         actual
                     );
                 }
                 return null;
             }
+            resolvedExpectedType = matchedType;
             wx = anchor.x;
             wy = anchor.y;
             wz = anchor.z;
-        }
-        int deltaX = wx - baseWx;
-        int deltaY = wy - baseWy;
-        int deltaZ = wz - baseWz;
-
-        Double itx = null;
-        Double ity = null;
-        Double itz = null;
-        if (row.hasInteractionTargetLocal()) {
-            Vector3i td =
-                PrefabLocalOffset.rotate(
-                    prefabYaw,
-                    row.getInteractionTargetLocalX(),
-                    row.getInteractionTargetLocalY(),
-                    row.getInteractionTargetLocalZ()
-                );
-            int twx = prefabAnchorWorld.x + td.x + deltaX;
-            int twy = prefabAnchorWorld.y + td.y + deltaY;
-            int twz = prefabAnchorWorld.z + td.z + deltaZ;
-            int standY = VillagerBlockUtil.findStandY(world, twx, twz, twy + 3);
-            itx = twx + 0.5;
-            itz = twz + 0.5;
-            ity = standY != Integer.MIN_VALUE ? standY + 0.02 : twy + 0.5;
+        } else if (!furnitureMount) {
+            if (expectedType != null) {
+                String remapped =
+                    BlockPaletteRemapper.remapBlockTypeId(expectedType, blockPaletteSelections);
+                BlockType atCell = world.getBlockType(wx, wy, wz);
+                String actual = atCell != null ? atCell.getId() : null;
+                boolean optionalQuestBoard =
+                    AetherhavenConstants.QUEST_BOARD_ITEM_ID.equals(expectedType)
+                        || row.getTags().contains(AetherhavenConstants.POI_TAG_QUEST_BOARD);
+                boolean matches =
+                    actual != null
+                        && (blockTypeIdMatches(remapped, actual) || blockTypeIdMatches(expectedType, actual));
+                if (optionalQuestBoard && !matches) {
+                    LOGGER.atFine().log(
+                        "Skipping optional quest board POI near %s,%s,%s (no board block; center was %s)",
+                        wx,
+                        wy,
+                        wz,
+                        actual
+                    );
+                    return null;
+                }
+            }
+            int standY = VillagerBlockUtil.resolveClearStandFeetY(world, wx, wy, wz);
+            if (standY != Integer.MIN_VALUE) {
+                wy = standY;
+            }
+            BlockType at = world.getBlockType(wx, wy, wz);
+            if (at == null || at.getId() == null || "Empty".equalsIgnoreCase(at.getId())) {
+                Vector3i support = VillagerBlockUtil.resolveSupportBlockFromClick(world, new Vector3i(wx, wy, wz));
+                BlockType supportType = world.getBlockType(support.x, support.y, support.z);
+                if (supportType != null && supportType.getId() != null) {
+                    resolvedExpectedType = supportType.getId();
+                }
+            } else {
+                resolvedExpectedType = at.getId();
+            }
+        } else if (expectedType != null) {
+            resolvedExpectedType = expectedType;
         }
 
         Float yawRadians = null;
         Float localYawDeg = row.getInteractionTargetYawDegrees();
         if (localYawDeg != null) {
             double worldDeg = localYawDeg + prefabYaw.getDegrees();
-            // Normalize to [-180, 180) then convert; matches Transform body yaw units.
             worldDeg = ((worldDeg + 180.0) % 360.0 + 360.0) % 360.0 - 180.0;
             yawRadians = (float) Math.toRadians(worldDeg);
         }
 
-        if (itx != null && ity != null && itz != null) {
-            return new PoiEntry(
-                UUID.randomUUID(),
-                town.getTownId(),
-                wx,
-                wy,
-                wz,
-                row.getTags(),
-                row.getCapacity(),
-                plotId,
-                expectedType,
-                row.getInteractionKind(),
-                row.getInteractionKind() == PoiInteractionKind.SIT
-                    || row.getInteractionKind() == PoiInteractionKind.SLEEP,
-                row.getEquipmentProfileId(),
-                itx,
-                ity,
-                itz,
-                yawRadians,
-                row.getWorkResidentKind()
-            );
-        }
         return new PoiEntry(
             UUID.randomUUID(),
             town.getTownId(),
@@ -207,7 +224,7 @@ public final class PoiExtractor {
             row.getTags(),
             row.getCapacity(),
             plotId,
-            expectedType,
+            resolvedExpectedType,
             row.getInteractionKind(),
             row.getInteractionKind() == PoiInteractionKind.SIT
                 || row.getInteractionKind() == PoiInteractionKind.SLEEP,
@@ -230,7 +247,6 @@ public final class PoiExtractor {
     ) {
         BlockType center = world.getBlockType(cx, cy, cz);
         if (center != null && blockTypeIdMatches(expectedType, center.getId())) {
-            // Prefer furniture origin: seats/beds are relative to the non-filler base cell.
             return VillagerBlockUtil.resolveMountBaseBlock(world, cx, cy, cz);
         }
         int bestX = 0;

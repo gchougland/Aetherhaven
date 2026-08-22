@@ -1,6 +1,6 @@
 {
   "id": "plot_hytinys_cozy_tavern",
-  "displayName": "Hytiny\u0027s Cozy Tavern",
+  "displayName": "Hytiny's Cozy Tavern",
   "description": "By HytinyBuilds",
   "prefabPath": "plot_hytinys_cozy_tavern.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -54,7 +54,7 @@
     {
       "localX": 14,
       "localY": 4,
-      "localZ": -19,
+      "localZ": -18,
       "tags": [
         "workActivity:read",
         "WORK"
@@ -62,15 +62,12 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Counter",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 14,
-      "interactionTargetLocalY": 4,
-      "interactionTargetLocalZ": -18,
       "workResidentKind": "guild_master"
     },
     {
       "localX": 8,
       "localY": 5,
-      "localZ": -18,
+      "localZ": -17,
       "tags": [
         "workActivity:leisure",
         "WORK",
@@ -79,13 +76,10 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Counter",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 5,
-      "interactionTargetLocalZ": -17,
       "workResidentKind": "bard"
     },
     {
-      "localX": 20,
+      "localX": 19,
       "localY": 5,
       "localZ": -15,
       "tags": [
@@ -94,9 +88,6 @@
       "capacity": 1,
       "blockTypeId": "Aetherhaven_Quest_Board",
       "interactionKind": "NONE",
-      "interactionTargetLocalX": 19,
-      "interactionTargetLocalY": 5,
-      "interactionTargetLocalZ": -15,
       "interactionTargetYawDegrees": -125.835266
     },
     {
@@ -110,9 +101,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Bed",
       "interactionKind": "SLEEP",
-      "interactionTargetLocalX": 11,
-      "interactionTargetLocalY": 10,
-      "interactionTargetLocalZ": -21,
       "interactionTargetYawDegrees": 66.29901
     },
     {
@@ -125,9 +113,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Chair",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 18,
-      "interactionTargetLocalY": 4,
-      "interactionTargetLocalZ": -19,
       "interactionTargetYawDegrees": -12.352417
     },
     {
@@ -140,9 +125,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Stool",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 15,
-      "interactionTargetLocalY": 4,
-      "interactionTargetLocalZ": -20,
       "interactionTargetYawDegrees": 90.37021
     },
     {
@@ -155,9 +137,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Stool",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 10,
-      "interactionTargetLocalY": 4,
-      "interactionTargetLocalZ": -18,
       "interactionTargetYawDegrees": 41.400696
     },
     {
@@ -170,9 +149,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Stool",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 15,
-      "interactionTargetLocalY": 4,
-      "interactionTargetLocalZ": -23,
       "interactionTargetYawDegrees": 43.23459
     },
     {
@@ -186,14 +162,11 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Stool",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 23,
-      "interactionTargetLocalY": 4,
-      "interactionTargetLocalZ": -21,
       "workResidentKind": "guild_master",
       "interactionTargetYawDegrees": 87.08627
     },
     {
-      "localX": 14,
+      "localX": 13,
       "localY": 3,
       "localZ": -16,
       "tags": [
@@ -204,16 +177,13 @@
       "capacity": 1,
       "blockTypeId": "Rock_Stone_Cobble",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 13,
-      "interactionTargetLocalY": 3,
-      "interactionTargetLocalZ": -16,
       "workResidentKind": "bard",
       "interactionTargetYawDegrees": -68.51364
     },
     {
       "localX": 11,
       "localY": 4,
-      "localZ": -20,
+      "localZ": -21,
       "tags": [
         "WORK",
         "workActivity:read"
@@ -221,9 +191,6 @@
       "capacity": 1,
       "blockTypeId": "Cloth_Roof_Red_Flat",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 11,
-      "interactionTargetLocalY": 4,
-      "interactionTargetLocalZ": -21,
       "workResidentKind": "innkeeper",
       "interactionTargetYawDegrees": -179.85136
     },
@@ -238,9 +205,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Chair",
       "interactionKind": "SLEEP",
-      "interactionTargetLocalX": 11,
-      "interactionTargetLocalY": 4,
-      "interactionTargetLocalZ": -15,
       "interactionTargetYawDegrees": 135.48077
     }
   ],

@@ -13,6 +13,8 @@ public final class BlockPaletteConstants {
     public static final String CATEGORY_BRICKS = "bricks";
     public static final String CATEGORY_CLOTH = "cloth";
     public static final String CATEGORY_ROOFS = "roofs";
+    public static final String CATEGORY_CLOTH_ROOFS = "cloth_roofs";
+    public static final String CATEGORY_WINDOWS = "windows";
 
     private BlockPaletteConstants() {}
 }

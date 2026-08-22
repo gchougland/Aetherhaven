@@ -1273,8 +1273,17 @@ function applyCatalogFilters({ resetPage = true } = {}) {
 }
 
 let mySubmissionsCache = [];
-let mySubmissionsFilters = { query: "", status: "all", sort: "newest" };
+let mySubmissionsFilters = { query: "", status: "all", style: "", sort: "newest" };
 let mySubmissionsFiltersBound = false;
+
+function submissionStyleId(item) {
+  return String(item?.styleId || "misc").trim() || "misc";
+}
+
+function populateMySubmissionsStyleOptions() {
+  const styles = uniqueSortedValues(mySubmissionsCache.map((item) => submissionStyleId(item)));
+  fillSelectOptions(document.getElementById("submissionsStyleFilter"), styles, "All styles");
+}
 
 function submissionKind(item) {
   if (item.kind === "approved" || item.status === "approved") return "approved";
@@ -1346,8 +1355,10 @@ function getFilteredMySubmissions() {
     .trim()
     .toLowerCase();
   const status = mySubmissionsFilters.status || "all";
+  const style = String(mySubmissionsFilters.style || "");
   const filtered = mySubmissionsCache.filter((item) => {
     if (status !== "all" && submissionKind(item) !== status) return false;
+    if (style && submissionStyleId(item) !== style) return false;
     return submissionMatchesQuery(item, query);
   });
   return sortMySubmissions(filtered, mySubmissionsFilters.sort || "newest");
@@ -1383,7 +1394,11 @@ function updateSubmissionsResultCount(visibleCount) {
     el.textContent = "";
     return;
   }
-  if (visibleCount === total && mySubmissionsFilters.status === "all" && !mySubmissionsFilters.query.trim()) {
+  const noExtraFilters =
+    mySubmissionsFilters.status === "all" &&
+    !mySubmissionsFilters.style &&
+    !String(mySubmissionsFilters.query || "").trim();
+  if (visibleCount === total && noExtraFilters) {
     el.textContent = `${total} submission${total === 1 ? "" : "s"}`;
     return;
   }
@@ -1440,6 +1455,7 @@ function setupMySubmissionsFilters() {
   if (mySubmissionsFiltersBound) return;
   const toolbar = document.getElementById("submissionsToolbar");
   const search = document.getElementById("submissionsSearch");
+  const style = document.getElementById("submissionsStyleFilter");
   const sort = document.getElementById("submissionsSort");
   const clear = document.getElementById("submissionsClearFilters");
   const chips = document.getElementById("submissionsStatusChips");
@@ -1450,6 +1466,10 @@ function setupMySubmissionsFilters() {
 
   search.addEventListener("input", () => {
     mySubmissionsFilters.query = search.value || "";
+    renderFilteredMySubmissions();
+  });
+  style?.addEventListener("change", () => {
+    mySubmissionsFilters.style = style.value || "";
     renderFilteredMySubmissions();
   });
   sort.addEventListener("change", () => {
@@ -1463,8 +1483,9 @@ function setupMySubmissionsFilters() {
     renderFilteredMySubmissions();
   });
   clear?.addEventListener("click", () => {
-    mySubmissionsFilters = { query: "", status: "all", sort: "newest" };
+    mySubmissionsFilters = { query: "", status: "all", style: "", sort: "newest" };
     search.value = "";
+    if (style) style.value = "";
     sort.value = "newest";
     renderFilteredMySubmissions();
   });
@@ -1493,6 +1514,7 @@ async function loadSubmissions() {
     const data = await res.json();
     mySubmissionsCache = data.submissions || [];
     setupMySubmissionsFilters();
+    populateMySubmissionsStyleOptions();
     const toolbar = document.getElementById("submissionsToolbar");
     if (toolbar) {
       toolbar.hidden = mySubmissionsCache.length === 0;

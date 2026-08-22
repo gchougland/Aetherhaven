@@ -2,10 +2,7 @@ package com.hexvane.aetherhaven.poi.tool;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
-import com.hexvane.aetherhaven.marker.MarkerFacingYaw;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import org.joml.Vector3d;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiMoveValidation;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
@@ -25,7 +22,6 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.NotificationUtil;
-import java.util.Locale;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -185,8 +181,7 @@ public final class PoiToolInteractions {
     }
 
     /**
-     * Sets the autonomy leash / Seek goal for the selected POI (any block). Use on the POI anchor block again to
-     * clear and fall back to the furniture cell center.
+     * Legacy no-op: interaction targets are no longer edited. Clears any leftover leash coords on the selected POI.
      */
     public static void handleSetInteractionTarget(
         @Nonnull Ref<EntityStore> playerRef,
@@ -207,7 +202,6 @@ public final class PoiToolInteractions {
         }
         UUID id = state.getSelectedPoiId();
         if (id == null) {
-            send(playerRef, commandBuffer, Message.translation("aetherhaven_world_debug.aetherhaven.poi.noPoiBlock"));
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -220,38 +214,13 @@ public final class PoiToolInteractions {
         PoiEntry current = reg.get(id);
         if (current == null) {
             state.setSelectedPoiId(null);
-            send(playerRef, commandBuffer, Message.translation("aetherhaven_world_debug.aetherhaven.poi.selectedPoiGone"));
             context.getState().state = InteractionState.Failed;
             return;
         }
-        int nx = targetBlock.x;
-        int ny = targetBlock.y;
-        int nz = targetBlock.z;
-        if (nx == current.getX() && ny == current.getY() && nz == current.getZ()) {
-            PoiEntry cleared = current.copyWithInteractionTarget(null, null, null, null);
-            reg.replace(cleared);
-            send(playerRef, commandBuffer, Message.translation("aetherhaven_world_debug.aetherhaven.poi.clearedInteractionTarget"));
-            return;
+        if (current.hasInteractionTarget()) {
+            reg.replace(current.copyWithInteractionTarget(null, null, null, current.getInteractionTargetYawRadians()));
         }
-        int standY = VillagerBlockUtil.findStandY(world, nx, nz, ny + 2);
-        double wx = nx + 0.5;
-        double wz = nz + 0.5;
-        double wy = standY != Integer.MIN_VALUE ? standY + 0.02 : ny + 0.5;
-        float facingYaw = 0f;
-        TransformComponent playerTc = commandBuffer.getComponent(playerRef, TransformComponent.getComponentType());
-        if (playerTc != null) {
-            facingYaw = MarkerFacingYaw.yawFacingToward(new Vector3d(wx, wy, wz), playerTc.getPosition());
-        }
-        PoiEntry updated = current.copyWithInteractionTarget(wx, wy, wz, facingYaw);
-        reg.replace(updated);
-        send(
-            playerRef,
-            commandBuffer,
-            Message.translation("aetherhaven_world_debug.aetherhaven.poi.setInteractionTarget")
-                .param("x", String.format(Locale.US, "%.2f", wx))
-                .param("y", String.format(Locale.US, "%.2f", wy))
-                .param("z", String.format(Locale.US, "%.2f", wz))
-        );
+        context.getState().state = InteractionState.Finished;
     }
 
     public static void handleCycleMode(

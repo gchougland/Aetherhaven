@@ -32,7 +32,7 @@
   ],
   "pois": [
     {
-      "localX": 15,
+      "localX": 14,
       "localY": 1,
       "localZ": -8,
       "tags": [
@@ -42,9 +42,6 @@
       "capacity": 1,
       "blockTypeId": "Rock_Stone_Brick",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 14,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -8,
       "workResidentKind": "blacksmith",
       "interactionTargetYawDegrees": -95.14563
     }

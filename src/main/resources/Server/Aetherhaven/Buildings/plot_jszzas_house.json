@@ -1,6 +1,6 @@
 {
   "id": "plot_jszzas_house",
-  "displayName": "Jszza\u0027s House",
+  "displayName": "Jszza's House",
   "description": "Made by Jszza",
   "prefabPath": "Jszza/plot_jszzas_house.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -38,9 +38,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Bed",
       "interactionKind": "SLEEP",
-      "interactionTargetLocalX": 15,
-      "interactionTargetLocalY": 9,
-      "interactionTargetLocalZ": -8,
       "interactionTargetYawDegrees": -90.00001
     },
     {
@@ -53,9 +50,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Chair",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 15,
-      "interactionTargetLocalY": 3,
-      "interactionTargetLocalZ": -17,
       "interactionTargetYawDegrees": 90.00001
     },
     {
@@ -68,9 +62,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Chair",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 10,
-      "interactionTargetLocalY": 3,
-      "interactionTargetLocalZ": -16,
       "interactionTargetYawDegrees": -90.00001
     }
   ],

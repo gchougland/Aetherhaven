@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 /** POI debug staff operating mode (Q cycles between values). */
 public enum PoiToolMode {
-    /** Select, move, and set interaction target on existing POIs. */
+    /** Select and move existing POIs. */
     PoiEdit,
     /** Place new POI markers via configuration GUI. */
     PoiPlacement,

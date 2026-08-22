@@ -2,10 +2,10 @@ package com.hexvane.aetherhaven.questboard;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
 import com.hexvane.aetherhaven.poi.BuildingPoisDefinition;
+import com.hexvane.aetherhaven.poi.PoiDualCellNormalize;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
@@ -125,9 +125,7 @@ public final class QuestBoardPoiEnsure {
         @Nonnull Vector3i prefabAnchorWorld,
         @Nonnull Rotation prefabYaw
     ) {
-        Integer tx = row.hasInteractionTargetLocal() ? row.getInteractionTargetLocalX() : null;
-        Integer ty = row.hasInteractionTargetLocal() ? row.getInteractionTargetLocalY() : null;
-        Integer tz = row.hasInteractionTargetLocal() ? row.getInteractionTargetLocalZ() : null;
+        PoiDualCellNormalize.normalize(row);
         return buildFromLocal(
             world,
             town,
@@ -136,10 +134,7 @@ public final class QuestBoardPoiEnsure {
             prefabYaw,
             row.getLocalX(),
             row.getLocalY(),
-            row.getLocalZ(),
-            tx,
-            ty,
-            tz
+            row.getLocalZ()
         );
     }
 
@@ -152,10 +147,7 @@ public final class QuestBoardPoiEnsure {
         @Nonnull Rotation prefabYaw,
         int localX,
         int localY,
-        int localZ,
-        @Nullable Integer targetLocalX,
-        @Nullable Integer targetLocalY,
-        @Nullable Integer targetLocalZ
+        int localZ
     ) {
         Vector3i d = PrefabLocalOffset.rotate(prefabYaw, localX, localY, localZ);
         int wx = prefabAnchorWorld.x + d.x;
@@ -164,36 +156,6 @@ public final class QuestBoardPoiEnsure {
         Vector3i resolved = resolveQuestBoardBlock(world, wx, wy, wz);
         if (resolved == null) {
             return null;
-        }
-        Double itx = null;
-        Double ity = null;
-        Double itz = null;
-        if (targetLocalX != null && targetLocalY != null && targetLocalZ != null) {
-            Vector3i td = PrefabLocalOffset.rotate(prefabYaw, targetLocalX, targetLocalY, targetLocalZ);
-            int twx = prefabAnchorWorld.x + td.x + (resolved.x - wx);
-            int twy = prefabAnchorWorld.y + td.y + (resolved.y - wy);
-            int twz = prefabAnchorWorld.z + td.z + (resolved.z - wz);
-            int standY = VillagerBlockUtil.findStandY(world, twx, twz, twy + 3);
-            itx = twx + 0.5;
-            itz = twz + 0.5;
-            ity = standY != Integer.MIN_VALUE ? standY + 0.02 : twy + 0.5;
-        }
-        if (itx != null && ity != null && itz != null) {
-            return new PoiEntry(
-                UUID.randomUUID(),
-                town.getTownId(),
-                resolved.x,
-                resolved.y,
-                resolved.z,
-                Set.of(AetherhavenConstants.POI_TAG_QUEST_BOARD),
-                1,
-                plotId,
-                AetherhavenConstants.QUEST_BOARD_ITEM_ID,
-                PoiInteractionKind.NONE,
-                itx,
-                ity,
-                itz
-            );
         }
         return new PoiEntry(
             UUID.randomUUID(),

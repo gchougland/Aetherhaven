@@ -179,6 +179,9 @@ public final class BlockPaletteApplyService {
         if (id.contains("_Roof") || id.startsWith("Cloth_Roof_")) {
             return true;
         }
+        if (id.startsWith("Furniture_") && id.contains("_Window") && !id.contains("_Windows")) {
+            return true;
+        }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         return plugin != null && plugin.getBlockPaletteCatalog().isRemapGroupBlock(id);
     }

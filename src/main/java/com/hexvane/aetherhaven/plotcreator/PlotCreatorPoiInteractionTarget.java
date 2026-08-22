@@ -13,8 +13,8 @@ import javax.annotation.Nullable;
 import org.joml.Vector3i;
 
 /**
- * Prefab-local stand cell and facing for a placed POI. Prefer the placing player's body yaw; fall back to block
- * yaw when player transform is unavailable.
+ * Prefab-local facing for a placed POI. Stand cell is {@code localX/Y/Z} (the click); yaw alone encodes look
+ * direction — no separate interaction-target cell.
  */
 public final class PlotCreatorPoiInteractionTarget {
     private PlotCreatorPoiInteractionTarget() {}
@@ -30,13 +30,13 @@ public final class PlotCreatorPoiInteractionTarget {
     ) {
         TransformComponent playerTc = store.getComponent(playerRef, TransformComponent.getComponentType());
         if (playerTc == null) {
-            applyFromBlockFacing(world, blockWorldPos, poiLocal, poi);
+            applyFromBlockFacing(world, blockWorldPos, poi);
             return;
         }
         Rotation placement = PlotCreatorPrefabCoords.placementYaw(draft);
         float worldYaw = playerTc.getRotation().yaw();
         float prefabYaw = PrefabYaw.prefabFromWorld(placement, worldYaw);
-        applyFacingFromPrefabYaw(prefabYaw, poiLocal, poi);
+        applyFacingFromPrefabYaw(prefabYaw, poi);
     }
 
     /**
@@ -50,31 +50,22 @@ public final class PlotCreatorPoiInteractionTarget {
     ) {
         Rotation placement = PlotCreatorPrefabCoords.placementYaw(draft);
         float prefabYaw = PrefabYaw.prefabFromWorld(placement, worldSeatYawRadians);
-        applyFacingFromPrefabYaw(prefabYaw, poiLocal, poi);
+        applyFacingFromPrefabYaw(prefabYaw, poi);
     }
 
-    private static void applyFacingFromPrefabYaw(
-        float prefabYaw,
-        @Nonnull int[] poiLocal,
-        @Nonnull PlotCreatorPoiDraft poi
-    ) {
+    private static void applyFacingFromPrefabYaw(float prefabYaw, @Nonnull PlotCreatorPoiDraft poi) {
+        poi.setInteractionTargetLocal(null, null, null);
         poi.setInteractionTargetYawDegrees(normalizeDegrees((float) Math.toDegrees(prefabYaw)));
-        int[] forward = horizontalForwardLocal(prefabYaw);
-        // Stand one cell behind the facing direction so the villager looks toward the POI block.
-        poi.setInteractionTargetLocal(poiLocal[0] - forward[0], poiLocal[1], poiLocal[2] - forward[2]);
     }
 
     public static void applyFromBlockFacing(
         @Nonnull World world,
         @Nonnull Vector3i blockWorldPos,
-        @Nonnull int[] poiLocal,
         @Nonnull PlotCreatorPoiDraft poi
     ) {
+        poi.setInteractionTargetLocal(null, null, null);
         Rotation yaw = PlotBlockRotationUtil.readBlockYaw(world, blockWorldPos);
-        int[] forward = horizontalForwardLocal(yaw);
-        poi.setInteractionTargetLocal(poiLocal[0] + forward[0], poiLocal[1], poiLocal[2] + forward[2]);
-        // Best-effort facing toward the POI from that stand cell (look back at the block).
-        Float deg = degreesLookingBackAtPoi(forward);
+        Float deg = degreesFromBlockYaw(yaw);
         if (deg != null) {
             poi.setInteractionTargetYawDegrees(deg);
         }
@@ -97,29 +88,15 @@ public final class PlotCreatorPoiInteractionTarget {
         return new int[] {fx, 0, fz};
     }
 
-    /**
-     * Prefab-local horizontal step from POI cell toward the stand (older plot creator / block-yaw path).
-     */
-    @Nonnull
-    private static int[] horizontalForwardLocal(@Nonnull Rotation yaw) {
-        return switch (yaw) {
-            case None -> new int[] {0, 0, -1};
-            case Ninety -> new int[] {1, 0, 0};
-            case OneEighty -> new int[] {0, 0, 1};
-            case TwoSeventy -> new int[] {-1, 0, 0};
-            default -> new int[] {0, 0, -1};
-        };
-    }
-
-    /** Degrees for looking from stand cell back toward the POI (opposite the stand offset). */
     @Nullable
-    private static Float degreesLookingBackAtPoi(@Nonnull int[] standOffsetFromPoi) {
-        int dx = -standOffsetFromPoi[0];
-        int dz = -standOffsetFromPoi[2];
-        if (dx == 0 && dz == 0) {
-            return null;
-        }
-        return normalizeDegrees((float) Math.toDegrees(Math.atan2(dx, dz) + Math.PI));
+    private static Float degreesFromBlockYaw(@Nonnull Rotation yaw) {
+        return switch (yaw) {
+            case None -> 0f;
+            case Ninety -> 90f;
+            case OneEighty -> 180f;
+            case TwoSeventy -> -90f;
+            default -> null;
+        };
     }
 
     private static float normalizeDegrees(float degrees) {

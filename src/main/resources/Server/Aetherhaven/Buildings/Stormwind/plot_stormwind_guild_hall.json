@@ -26,20 +26,17 @@
     {
       "localX": 10,
       "localY": 8,
-      "localZ": -11,
+      "localZ": -10,
       "tags": [
         "QUEST_BOARD"
       ],
       "capacity": 1,
       "blockTypeId": "Aetherhaven_Quest_Board",
       "interactionKind": "NONE",
-      "interactionTargetLocalX": 10,
-      "interactionTargetLocalY": 8,
-      "interactionTargetLocalZ": -10,
       "interactionTargetYawDegrees": -5.2333984
     },
     {
-      "localX": 5,
+      "localX": 4,
       "localY": 1,
       "localZ": -9,
       "tags": [
@@ -49,14 +46,11 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 4,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -9,
       "workResidentKind": "guild_master",
       "interactionTargetYawDegrees": -88.18677
     },
     {
-      "localX": 13,
+      "localX": 14,
       "localY": 1,
       "localZ": -11,
       "tags": [
@@ -67,9 +61,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 14,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -11,
       "workResidentKind": "bard",
       "interactionTargetYawDegrees": 140.57886
     },
@@ -83,9 +74,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 9,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -7,
       "interactionTargetYawDegrees": 73.28369
     },
     {
@@ -98,9 +86,6 @@
       "capacity": 1,
       "blockTypeId": "Cloth_Roof_Red_Flat",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 9,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -10,
       "interactionTargetYawDegrees": 99.48877
     },
     {
@@ -113,9 +98,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 8,
-      "interactionTargetLocalZ": -7,
       "interactionTargetYawDegrees": 65.71643
     },
     {
@@ -128,9 +110,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 5,
-      "interactionTargetLocalY": 8,
-      "interactionTargetLocalZ": -9,
       "interactionTargetYawDegrees": 156.93396
     },
     {
@@ -143,9 +122,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 3,
-      "interactionTargetLocalY": 8,
-      "interactionTargetLocalZ": -6,
       "interactionTargetYawDegrees": -88.85608
     },
     {
@@ -158,9 +134,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 5,
-      "interactionTargetLocalY": 8,
-      "interactionTargetLocalZ": -10,
       "interactionTargetYawDegrees": -35.939087
     },
     {
@@ -173,9 +146,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 8,
-      "interactionTargetLocalZ": -12,
       "interactionTargetYawDegrees": 64.42865
     },
     {
@@ -188,9 +158,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 3,
-      "interactionTargetLocalY": 8,
-      "interactionTargetLocalZ": -11,
       "interactionTargetYawDegrees": -54.02771
     }
   ],

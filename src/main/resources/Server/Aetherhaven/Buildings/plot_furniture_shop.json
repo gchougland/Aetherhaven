@@ -24,7 +24,7 @@
   ],
   "pois": [
     {
-      "localX": -5,
+      "localX": -6,
       "localY": 0,
       "localZ": -3,
       "tags": [
@@ -34,9 +34,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": -6,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": -3,
       "workResidentKind": "furniture_merchant",
       "interactionTargetYawDegrees": -125.08958
     },
@@ -50,9 +47,6 @@
       "capacity": 1,
       "blockTypeId": "Cloth_Block_Wool_Green",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 3,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": -2,
       "interactionTargetYawDegrees": 13.340096
     },
     {
@@ -65,9 +59,6 @@
       "capacity": 1,
       "blockTypeId": "Cloth_Block_Wool_Green",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 5,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": -2,
       "interactionTargetYawDegrees": -103.56948
     },
     {
@@ -80,9 +71,6 @@
       "capacity": 1,
       "blockTypeId": "Cloth_Block_Wool_Green",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 4,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": -1,
       "interactionTargetYawDegrees": -152.09903
     },
     {
@@ -95,9 +83,6 @@
       "capacity": 1,
       "blockTypeId": "Cloth_Block_Wool_Green",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": -1,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": -1,
       "interactionTargetYawDegrees": 120.267105
     },
     {
@@ -110,9 +95,6 @@
       "capacity": 1,
       "blockTypeId": "Cloth_Block_Wool_Green",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 2,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": -2,
       "interactionTargetYawDegrees": -7.7671356
     },
     {
@@ -125,9 +107,6 @@
       "capacity": 1,
       "blockTypeId": "Cloth_Block_Wool_Green",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 4,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": -1,
       "interactionTargetYawDegrees": -110.2873
     },
     {
@@ -140,9 +119,6 @@
       "capacity": 1,
       "blockTypeId": "Cloth_Block_Wool_Green",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 2,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": -1,
       "interactionTargetYawDegrees": 165.18715
     },
     {
@@ -155,9 +131,6 @@
       "capacity": 1,
       "blockTypeId": "Cloth_Block_Wool_Green",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": -1,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": -3,
       "interactionTargetYawDegrees": 140.61378
     }
   ],

@@ -26,16 +26,13 @@
     {
       "localX": 16,
       "localY": 2,
-      "localZ": -8,
+      "localZ": -7,
       "blockTypeId": "Aetherhaven_Statue_Of_Gaia",
       "interactionKind": "WORK_SURFACE",
       "tags": [
         "WORK"
       ],
-      "capacity": 1,
-      "interactionTargetLocalX": 16,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -7
+      "capacity": 1
     },
     {
       "localX": 8,
@@ -47,10 +44,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Bench",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 9,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -15
+      "interactionKind": "SIT"
     },
     {
       "localX": 24,
@@ -62,10 +56,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Bench",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 23,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -15
+      "interactionKind": "SIT"
     }
   ],
   "managementBlockLocalPos": [

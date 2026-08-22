@@ -32,7 +32,7 @@
   ],
   "pois": [
     {
-      "localX": 12,
+      "localX": 11,
       "localY": 1,
       "localZ": -6,
       "tags": [
@@ -42,14 +42,11 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 11,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -6,
       "workResidentKind": "rancher",
       "interactionTargetYawDegrees": -35.804443
     },
     {
-      "localX": 9,
+      "localX": 8,
       "localY": 1,
       "localZ": -15,
       "tags": [
@@ -59,14 +56,11 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -15,
       "workResidentKind": "rancher",
       "interactionTargetYawDegrees": -59.324738
     },
     {
-      "localX": 8,
+      "localX": 9,
       "localY": 1,
       "localZ": -14,
       "tags": [
@@ -76,14 +70,11 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 9,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -14,
       "workResidentKind": "rancher",
       "interactionTargetYawDegrees": 84.07123
     },
     {
-      "localX": 8,
+      "localX": 9,
       "localY": 1,
       "localZ": -10,
       "tags": [
@@ -93,14 +84,11 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 9,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -10,
       "workResidentKind": "rancher",
       "interactionTargetYawDegrees": 118.19403
     },
     {
-      "localX": 9,
+      "localX": 8,
       "localY": 1,
       "localZ": -9,
       "tags": [
@@ -110,9 +98,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -9,
       "workResidentKind": "rancher",
       "interactionTargetYawDegrees": -54.192505
     }

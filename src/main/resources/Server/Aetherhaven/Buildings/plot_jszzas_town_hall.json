@@ -1,6 +1,6 @@
 {
   "id": "plot_jszzas_town_hall",
-  "displayName": "Jszza\u0027s Town Hall",
+  "displayName": "Jszza's Town Hall",
   "description": "Made by Jszza",
   "prefabPath": "Jszza/plot_jszzas_town_hall.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -38,9 +38,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Stool",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 22,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -12,
       "workResidentKind": "elder",
       "interactionTargetYawDegrees": 90.00001
     },
@@ -54,9 +51,6 @@
       "capacity": 1,
       "blockTypeId": "Cloth_Roof_Blue_Flat",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 14,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -13,
       "interactionTargetYawDegrees": -26.531097
     },
     {
@@ -69,9 +63,6 @@
       "capacity": 1,
       "blockTypeId": "Cloth_Roof_Green_Flat",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 17,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -12,
       "interactionTargetYawDegrees": -53.89737
     },
     {
@@ -84,9 +75,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Decorative",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 16,
-      "interactionTargetLocalY": 6,
-      "interactionTargetLocalZ": -14,
       "interactionTargetYawDegrees": -129.73273
     },
     {
@@ -99,9 +87,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Decorative",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 23,
-      "interactionTargetLocalY": 6,
-      "interactionTargetLocalZ": -10,
       "interactionTargetYawDegrees": -2.2626953
     }
   ],

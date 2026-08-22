@@ -47,7 +47,7 @@ Examples:
 
 Use the longest shared prefix you can so related pieces stay grouped. Missing target blocks are left alone.
 
-Categories can be existing ones (`walls`, `trunks`, `planks`, `cobble`, `bricks`, `cloth`, `roofs`) or a new id of your own.
+Categories can be existing ones (`walls`, `trunks`, `planks`, `cobble`, `bricks`, `cloth`, `roofs`, `cloth_roofs`, `windows`) or a new id of your own.
 
 ## Adding looks that follow vanilla naming
 

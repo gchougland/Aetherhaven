@@ -279,7 +279,40 @@ public final class BlockPaletteRemapper {
         if (trunks != null) {
             return trunks;
         }
+        ParsedBlock windows = parseWindows(id);
+        if (windows != null) {
+            return windows;
+        }
         return parsePlanks(id);
+    }
+
+    /**
+     * Standalone furniture windows: {@code Furniture_<Style>_Window} (not cybercity connected
+     * {@code Furniture_*_Windows*} or prototypes).
+     */
+    @Nullable
+    private static ParsedBlock parseWindows(@Nonnull String id) {
+        String prefix = "Furniture_";
+        String marker = "_Window";
+        if (!id.startsWith(prefix) || id.contains("_Windows")) {
+            return null;
+        }
+        int markerIdx = id.indexOf(marker);
+        if (markerIdx <= prefix.length()) {
+            return null;
+        }
+        // Require marker at end or followed by state / variant suffix.
+        String afterMarker = id.substring(markerIdx + marker.length());
+        if (!afterMarker.isEmpty() && !afterMarker.startsWith("_")) {
+            return null;
+        }
+        String style = id.substring(prefix.length(), markerIdx);
+        if (style.isEmpty() || style.startsWith("Prototype")) {
+            return null;
+        }
+        String suffix = afterMarker.startsWith("_") ? afterMarker.substring(1) : afterMarker;
+        return new ParsedBlock(
+            BlockPaletteConstants.CATEGORY_WINDOWS, style, suffix, RoofKind.NONE, WallForm.NONE);
     }
 
     @Nullable
@@ -475,25 +508,37 @@ public final class BlockPaletteRemapper {
             String rest = id.substring("Cloth_Roof_".length());
             // Known solid colors / hide first (longest), remainder is shape / state text.
             String[] clothColors = {
-                "Yellow", "Orange", "White", "Green", "Blue", "Red", "Hide", "Black", "Cyan", "Pink", "Purple", "Gray"
+                "Yellow",
+                "Orange",
+                "White",
+                "Green",
+                "Blue",
+                "Red",
+                "Hide",
+                "Leather",
+                "Black",
+                "Cyan",
+                "Pink",
+                "Purple",
+                "Gray"
             };
             Arrays.sort(clothColors, Comparator.comparingInt(String::length).reversed());
             for (String color : clothColors) {
                 if (rest.equals(color)) {
                     return new ParsedBlock(
-                        BlockPaletteConstants.CATEGORY_ROOFS, "cloth:" + color, "", RoofKind.CLOTH, WallForm.NONE);
+                        BlockPaletteConstants.CATEGORY_CLOTH_ROOFS, color, "", RoofKind.CLOTH, WallForm.NONE);
                 }
                 if (rest.startsWith(color + "_")) {
                     return new ParsedBlock(
-                        BlockPaletteConstants.CATEGORY_ROOFS,
-                        "cloth:" + color,
+                        BlockPaletteConstants.CATEGORY_CLOTH_ROOFS,
+                        color,
                         rest.substring(color.length() + 1),
                         RoofKind.CLOTH,
                         WallForm.NONE);
                 }
             }
             return new ParsedBlock(
-                BlockPaletteConstants.CATEGORY_ROOFS, "cloth:" + rest, "", RoofKind.CLOTH, WallForm.NONE);
+                BlockPaletteConstants.CATEGORY_CLOTH_ROOFS, rest, "", RoofKind.CLOTH, WallForm.NONE);
         }
         if (id.startsWith("Rock_") && id.contains("_Cobble_Roof")) {
             int idx = id.indexOf("_Cobble_Roof");
@@ -523,7 +568,9 @@ public final class BlockPaletteRemapper {
             case BlockPaletteConstants.CATEGORY_BRICKS -> rebuildRock("Brick", newFamilyKey, parsed.suffix);
             case BlockPaletteConstants.CATEGORY_TRUNKS -> "Wood_" + newFamilyKey + "_" + parsed.suffix;
             case BlockPaletteConstants.CATEGORY_PLANKS -> "Wood_" + newFamilyKey + "_" + parsed.suffix;
-            case BlockPaletteConstants.CATEGORY_ROOFS -> rebuildRoof(parsed, newFamilyKey);
+            case BlockPaletteConstants.CATEGORY_ROOFS -> rebuildSolidRoof(parsed, newFamilyKey);
+            case BlockPaletteConstants.CATEGORY_CLOTH_ROOFS -> rebuildClothRoof(newFamilyKey, parsed.suffix);
+            case BlockPaletteConstants.CATEGORY_WINDOWS -> rebuildWindow(newFamilyKey, parsed.suffix);
             default -> null;
         };
     }
@@ -566,28 +613,42 @@ public final class BlockPaletteRemapper {
     }
 
     @Nullable
-    private static String rebuildRoof(@Nonnull ParsedBlock parsed, @Nonnull String newFamilyKey) {
+    private static String rebuildSolidRoof(@Nonnull ParsedBlock parsed, @Nonnull String newFamilyKey) {
         RoofKind targetKind = roofKindFromFamily(newFamilyKey);
-        if (targetKind == RoofKind.NONE) {
+        // Cloth roofs are a separate category; solid roofs only swap wood / cobble / brick.
+        if (targetKind != RoofKind.WOOD && targetKind != RoofKind.COBBLE && targetKind != RoofKind.BRICK) {
             return null;
-        }
-        // Cloth roofs stay on their own look; everything else (wood, cobble, brick) can swap freely.
-        if (parsed.roofKind == RoofKind.CLOTH || targetKind == RoofKind.CLOTH) {
-            if (parsed.roofKind != targetKind) {
-                return null;
-            }
         }
         String key = stripRoofFamilyPrefix(newFamilyKey);
         String shape = parsed.suffix;
         return switch (targetKind) {
             case WOOD -> shape.isEmpty() ? "Wood_" + key + "_Roof" : "Wood_" + key + "_Roof_" + shape;
-            case CLOTH -> shape.isEmpty() ? "Cloth_Roof_" + key : "Cloth_Roof_" + key + "_" + shape;
             case COBBLE ->
                 shape.isEmpty() ? "Rock_" + key + "_Cobble_Roof" : "Rock_" + key + "_Cobble_Roof_" + shape;
             case BRICK ->
                 shape.isEmpty() ? "Rock_" + key + "_Brick_Roof" : "Rock_" + key + "_Brick_Roof_" + shape;
             default -> null;
         };
+    }
+
+    @Nonnull
+    private static String rebuildClothRoof(@Nonnull String familyKey, @Nonnull String suffix) {
+        String key = stripRoofFamilyPrefix(familyKey);
+        if (suffix.isEmpty()) {
+            return "Cloth_Roof_" + key;
+        }
+        return "Cloth_Roof_" + key + "_" + suffix;
+    }
+
+    @Nullable
+    private static String rebuildWindow(@Nonnull String familyKey, @Nonnull String suffix) {
+        if (familyKey.isBlank()) {
+            return null;
+        }
+        if (suffix.isEmpty()) {
+            return "Furniture_" + familyKey + "_Window";
+        }
+        return "Furniture_" + familyKey + "_Window_" + suffix;
     }
 
     @Nonnull

@@ -165,6 +165,22 @@ public enum VillagerWorkActivity {
         };
     }
 
+    /**
+     * Field producers rotate among several work spots on the same plot each USE window. Desk roles stay put.
+     */
+    public static boolean rotatesWorkStations(@Nullable String bindingKind) {
+        if (bindingKind == null || TownVillagerBinding.isVisitorKind(bindingKind)) {
+            return false;
+        }
+        return switch (bindingKind.trim().toLowerCase(Locale.ROOT)) {
+            case TownVillagerBinding.KIND_FARMER,
+                TownVillagerBinding.KIND_MINER,
+                TownVillagerBinding.KIND_LOGGER,
+                TownVillagerBinding.KIND_RANCHER -> true;
+            default -> false;
+        };
+    }
+
     @Nullable
     private static VillagerWorkActivity fromTags(@Nonnull Set<String> tags) {
         for (String raw : tags) {

@@ -1,6 +1,6 @@
 {
   "id": "plot_crystal_keepers_shop",
-  "displayName": "Crystal Keeper\u0027s Shop",
+  "displayName": "Crystal Keeper's Shop",
   "description": "A shop for selling gems and crystals.",
   "prefabPath": "plot_crystal_keepers_shop.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -38,7 +38,7 @@
     {
       "localX": 5,
       "localY": 0,
-      "localZ": -4,
+      "localZ": -5,
       "tags": [
         "workActivity:craft",
         "WORK"
@@ -46,9 +46,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Lightwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 5,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": -5,
       "workResidentKind": "crystal_keeper",
       "interactionTargetYawDegrees": 151.09961
     },
@@ -62,9 +59,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 5,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": -1,
       "interactionTargetYawDegrees": 20.262207
     },
     {
@@ -77,9 +71,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 6,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": -1,
       "interactionTargetYawDegrees": 7.4386077
     },
     {
@@ -92,9 +83,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 1,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": -5,
       "interactionTargetYawDegrees": -70.87809
     },
     {
@@ -107,9 +95,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 4,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": -1,
       "interactionTargetYawDegrees": 22.40036
     },
     {
@@ -122,9 +107,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 1,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": -5,
       "interactionTargetYawDegrees": -92.04797
     }
   ],

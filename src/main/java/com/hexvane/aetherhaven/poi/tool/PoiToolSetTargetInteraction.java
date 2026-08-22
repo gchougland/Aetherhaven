@@ -15,7 +15,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Places or clears the per-POI autonomy interaction target (leash goal) for the selected POI. */
+/** Places or clears legacy interaction-target leash coords (no longer used for new POIs). */
 public final class PoiToolSetTargetInteraction extends SimpleBlockInteraction {
     @Nonnull
     public static final com.hypixel.hytale.codec.builder.BuilderCodec<PoiToolSetTargetInteraction> CODEC =

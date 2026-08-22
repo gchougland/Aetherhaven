@@ -1,6 +1,6 @@
 {
   "id": "plot_jszzas_windmill",
-  "displayName": "Jszza\u0027s Windmill",
+  "displayName": "Jszza's Windmill",
   "description": "Made by Jszza",
   "prefabPath": "Jszza/plot_jszzas_windmill.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -24,7 +24,7 @@
   ],
   "pois": [
     {
-      "localX": 17,
+      "localX": 18,
       "localY": 1,
       "localZ": -11,
       "tags": [
@@ -34,9 +34,6 @@
       "capacity": 1,
       "blockTypeId": "Rock_Calcite_Brick_Smooth",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 18,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -11,
       "workResidentKind": "farmer",
       "interactionTargetYawDegrees": 77.05487
     }

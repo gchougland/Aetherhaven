@@ -8,6 +8,8 @@ import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner.PackJsonFile;
 import com.hexvane.aetherhaven.asset.ClasspathResourceScanner;
 import com.hexvane.aetherhaven.community.CommunityBuildingsLoader;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsLoader;
+import com.hexvane.aetherhaven.poi.BuildingPoisDefinition;
+import com.hexvane.aetherhaven.poi.PoiDualCellNormalize;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.io.InputStream;
@@ -203,6 +205,9 @@ public final class ConstructionCatalog {
         }
         if (map.containsKey(id)) {
             LOGGER.atInfo().log("Construction id %s overridden by later asset (%s)", id, label);
+        }
+        for (BuildingPoisDefinition.PoiRow row : def.getPois()) {
+            PoiDualCellNormalize.normalize(row);
         }
         map.put(id, def);
     }

@@ -35,7 +35,7 @@
     {
       "localX": 1,
       "localY": 0,
-      "localZ": -1,
+      "localZ": -2,
       "tags": [
         "WORK",
         "workActivity:read"
@@ -43,9 +43,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 1,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": -2,
       "workResidentKind": "merchant",
       "interactionTargetYawDegrees": -150.06201
     },
@@ -59,9 +56,6 @@
       "capacity": 1,
       "blockTypeId": "Rock_Stone_Brick",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": -2,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 3,
       "interactionTargetYawDegrees": -18.357239
     },
     {
@@ -74,9 +68,6 @@
       "capacity": 1,
       "blockTypeId": "Rock_Stone_Brick",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 2,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 3,
       "interactionTargetYawDegrees": 13.639343
     },
     {
@@ -89,9 +80,6 @@
       "capacity": 1,
       "blockTypeId": "Rock_Stone_Brick",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": -1,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 3,
       "interactionTargetYawDegrees": 12.216614
     },
     {
@@ -104,9 +92,6 @@
       "capacity": 1,
       "blockTypeId": "Rock_Stone_Brick",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 2,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 3,
       "interactionTargetYawDegrees": 3.7924194
     }
   ],

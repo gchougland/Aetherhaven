@@ -41,7 +41,7 @@
   ],
   "pois": [
     {
-      "localX": 6,
+      "localX": 5,
       "localY": 0,
       "localZ": 13,
       "tags": [
@@ -51,14 +51,11 @@
       "capacity": 1,
       "blockTypeId": "Rock_Stone",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 5,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 13,
       "workResidentKind": "miner",
       "interactionTargetYawDegrees": -93.03183
     },
     {
-      "localX": 4,
+      "localX": 3,
       "localY": 0,
       "localZ": 11,
       "tags": [
@@ -68,14 +65,11 @@
       "capacity": 1,
       "blockTypeId": "Rock_Stone",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 3,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 11,
       "workResidentKind": "miner",
       "interactionTargetYawDegrees": -30.638794
     },
     {
-      "localX": 2,
+      "localX": 3,
       "localY": 0,
       "localZ": 12,
       "tags": [
@@ -85,9 +79,6 @@
       "capacity": 1,
       "blockTypeId": "Rock_Stone",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 3,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 12,
       "workResidentKind": "miner",
       "interactionTargetYawDegrees": 58.434814
     }

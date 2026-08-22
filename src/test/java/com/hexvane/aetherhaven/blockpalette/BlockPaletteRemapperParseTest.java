@@ -112,20 +112,38 @@ public final class BlockPaletteRemapperParseTest {
     }
 
     @Test
-    void clothRoofsDoNotSwapWithSolidRoofs() {
+    void windowsParseAndRebuild() {
+        var village = BlockPaletteRemapper.parse("Furniture_Village_Window");
+        assertNotNull(village);
+        assertEquals(BlockPaletteConstants.CATEGORY_WINDOWS, village.category());
+        assertEquals("Village", village.familyKey());
+        assertEquals("", village.suffix());
+        assertEquals("Furniture_Tavern_Window", BlockPaletteRemapper.rebuild(village, "Tavern"));
+        assertEquals(
+            "Furniture_Temple_Wind_Window",
+            BlockPaletteRemapper.rebuild(BlockPaletteRemapper.parse("Furniture_Human_Ruins_Window"), "Temple_Wind")
+        );
+        assertNull(BlockPaletteRemapper.parse("Furniture_Cybercity_Windows_Full"));
+        assertNull(BlockPaletteRemapper.parse("Prototype_Window_Single"));
+    }
+
+    @Test
+    void clothRoofsAreSeparateCategory() {
         var cloth = BlockPaletteRemapper.parse("Cloth_Roof_Green");
         assertNotNull(cloth);
-        assertNull(BlockPaletteRemapper.rebuild(cloth, "wood:Softwood"));
-        assertNull(BlockPaletteRemapper.rebuild(cloth, "cobble_roof:Stone"));
-        assertEquals("Cloth_Roof_Blue", BlockPaletteRemapper.rebuild(cloth, "cloth:Blue"));
+        assertEquals(BlockPaletteConstants.CATEGORY_CLOTH_ROOFS, cloth.category());
+        assertEquals("Green", cloth.familyKey());
+        assertEquals("Cloth_Roof_Blue", BlockPaletteRemapper.rebuild(cloth, "Blue"));
+        assertEquals(
+            "Cloth_Roof_Hide_Flat",
+            BlockPaletteRemapper.rebuild(BlockPaletteRemapper.parse("Cloth_Roof_Green_Flat"), "Hide")
+        );
 
         var wood = BlockPaletteRemapper.parse("Wood_Softwood_Roof");
         assertNotNull(wood);
-        assertNull(BlockPaletteRemapper.rebuild(wood, "cloth:Green"));
-
-        var cobble = BlockPaletteRemapper.parse("Rock_Basalt_Cobble_Roof");
-        assertNotNull(cobble);
-        assertNull(BlockPaletteRemapper.rebuild(cobble, "cloth:Hide"));
+        assertEquals(BlockPaletteConstants.CATEGORY_ROOFS, wood.category());
+        // Solid roof palettes use wood:/cobble_roof:/brick_roof: keys; a bare cloth color is not a solid roof.
+        assertNull(BlockPaletteRemapper.rebuild(wood, "Green"));
     }
 
     @Test

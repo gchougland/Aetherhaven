@@ -69,6 +69,15 @@ public final class BlacksmithRepairPage extends ChoiceBasePage {
             ItemContext ctx = new ItemContext(itemContainer, slot, stack);
             elements.add(new BlacksmithRepairRowElement(stack, new BlacksmithRepairInteraction(ctx)));
         }
+        if (elements.isEmpty()) {
+            return elements.toArray(ChoiceElement[]::new);
+        }
+        int totalCost = BlacksmithRepairInteraction.totalGoldCost(itemContainer);
+        int count = BlacksmithRepairInteraction.countNeedingRepair(itemContainer);
+        elements.add(
+            0,
+            new BlacksmithRepairAllRowElement(totalCost, count, new BlacksmithRepairAllInteraction(itemContainer))
+        );
         return elements.toArray(ChoiceElement[]::new);
     }
 }

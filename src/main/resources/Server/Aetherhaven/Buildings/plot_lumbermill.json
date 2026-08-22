@@ -41,7 +41,7 @@
   ],
   "pois": [
     {
-      "localX": 10,
+      "localX": 9,
       "localY": 0,
       "localZ": 13,
       "tags": [
@@ -51,14 +51,11 @@
       "capacity": 1,
       "blockTypeId": "Wood_Beech_Trunk",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 9,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 13,
       "workResidentKind": "logger",
       "interactionTargetYawDegrees": -135.48157
     },
     {
-      "localX": 12,
+      "localX": 13,
       "localY": 0,
       "localZ": 13,
       "tags": [
@@ -68,16 +65,13 @@
       "capacity": 1,
       "blockTypeId": "Wood_Beech_Trunk",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 13,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 13,
       "workResidentKind": "logger",
       "interactionTargetYawDegrees": 104.5206
     },
     {
       "localX": 11,
       "localY": 0,
-      "localZ": 5,
+      "localZ": 6,
       "tags": [
         "WORK",
         "workActivity:chop"
@@ -85,9 +79,6 @@
       "capacity": 1,
       "blockTypeId": "Bench_Lumbermill",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 11,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 6,
       "workResidentKind": "logger",
       "interactionTargetYawDegrees": -18.847551
     }

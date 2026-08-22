@@ -47,7 +47,7 @@
     {
       "localX": -2,
       "localY": 1,
-      "localZ": -4,
+      "localZ": -3,
       "blockTypeId": "Bench_Farming",
       "interactionKind": "WORK_SURFACE",
       "tags": [
@@ -55,15 +55,12 @@
         "workActivity:craft"
       ],
       "capacity": 1,
-      "interactionTargetLocalX": -2,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -3,
       "interactionTargetYawDegrees": 0
     },
     {
       "localX": -2,
-      "localY": 0,
-      "localZ": 3,
+      "localY": 1,
+      "localZ": 1,
       "blockTypeId": "Soil_Dirt_Tilled",
       "interactionKind": "WORK_SURFACE",
       "tags": [
@@ -71,15 +68,12 @@
         "workActivity:water"
       ],
       "capacity": 1,
-      "interactionTargetLocalX": -2,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 1,
       "interactionTargetYawDegrees": 180
     },
     {
       "localX": 3,
-      "localY": 0,
-      "localZ": 3,
+      "localY": 1,
+      "localZ": 1,
       "blockTypeId": "Soil_Dirt_Tilled",
       "interactionKind": "WORK_SURFACE",
       "tags": [
@@ -87,14 +81,11 @@
         "workActivity:water"
       ],
       "capacity": 1,
-      "interactionTargetLocalX": 3,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 1,
       "interactionTargetYawDegrees": 180
     },
     {
-      "localX": 4,
-      "localY": 0,
+      "localX": 2,
+      "localY": 1,
       "localZ": -2,
       "blockTypeId": "Soil_Dirt_Tilled",
       "interactionKind": "WORK_SURFACE",
@@ -104,9 +95,6 @@
       ],
       "capacity": 1,
       "equipmentProfileId": "work_farmer_hoe",
-      "interactionTargetLocalX": 2,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -2,
       "interactionTargetYawDegrees": -90
     }
   ],

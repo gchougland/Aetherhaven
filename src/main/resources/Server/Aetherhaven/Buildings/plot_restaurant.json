@@ -29,16 +29,15 @@
     {
       "localX": 4,
       "localY": 1,
-      "localZ": -7,
+      "localZ": -8,
       "tags": [
         "WORK"
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 4,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -8
+      "workResidentKind": "chef",
+      "interactionTargetYawDegrees": 180.0
     },
     {
       "localX": 4,
@@ -49,10 +48,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 4,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -7
+      "interactionKind": "SIT"
     },
     {
       "localX": 7,
@@ -63,10 +59,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -7
+      "interactionKind": "SIT"
     },
     {
       "localX": 8,
@@ -78,10 +71,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Chair",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -10
+      "interactionKind": "USE_BENCH"
     },
     {
       "localX": 9,
@@ -93,10 +83,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Chair",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 9,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -5
+      "interactionKind": "USE_BENCH"
     },
     {
       "localX": 10,
@@ -108,10 +95,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Chair",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 9,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -8
+      "interactionKind": "USE_BENCH"
     },
     {
       "localX": 12,
@@ -123,10 +107,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Chair",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 12,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -4
+      "interactionKind": "USE_BENCH"
     },
     {
       "localX": 13,
@@ -138,10 +119,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Chair",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 13,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -9
+      "interactionKind": "USE_BENCH"
     }
   ],
   "managementBlockLocalPos": [

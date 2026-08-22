@@ -69,7 +69,7 @@ public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntitySt
             LAST_GUIDE_SIG.remove(uuid);
             LAST_WIREFRAME_SIG.remove(uuid);
             PlotCreatorService.clearPlotCreatorWireframe(pr, world);
-            clearSpotMarkers(world, store, ref, commandBuffer);
+            clearSpotMarkersIfOwned(world, store, ref, commandBuffer);
             return;
         }
         PlotCreatorStep step = session.getDraft().getStep();
@@ -78,7 +78,7 @@ public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntitySt
             LAST_GUIDE_SIG.remove(uuid);
             LAST_WIREFRAME_SIG.remove(uuid);
             PlotCreatorService.clearPlotCreatorWireframe(pr, world);
-            clearSpotMarkers(world, store, ref, commandBuffer);
+            clearSpotMarkersIfOwned(world, store, ref, commandBuffer);
             return;
         }
         long guideSig = PlotCreatorProgressModel.guideSignature(session.getDraft());
@@ -165,57 +165,7 @@ public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntitySt
         } catch (IllegalStateException ignored) {
             return;
         }
-        long nowMs = System.currentTimeMillis();
-        store.forEachChunk(
-            Query.and(PlotCreatorSpotPreview.getComponentType()),
-            (chunk, chunkCommandBuffer) -> {
-                for (int i = 0; i < chunk.size(); i++) {
-                    PlotCreatorSpotPreview preview = chunk.getComponent(i, PlotCreatorSpotPreview.getComponentType());
-                    if (preview == null || !ownerUuid.equals(preview.getOwnerPlayerUuid())) {
-                        continue;
-                    }
-                    Ref<EntityStore> npcRef = chunk.getReferenceTo(i);
-                    if (!npcRef.isValid()) {
-                        continue;
-                    }
-                    UUIDComponent previewUuidComp = store.getComponent(npcRef, UUIDComponent.getComponentType());
-                    UUID previewUuid = previewUuidComp != null ? previewUuidComp.getUuid() : null;
-                    PlotCreatorSpotPreviewCollector.DesiredSpotPreview desired =
-                        PlotCreatorSpotPreviewSync.desiredForKey(ownerUuid, preview.getPreviewKey());
-                    if (desired == null) {
-                        continue;
-                    }
-                    // Pose writes must go through the player-tick CommandBuffer, not the forEach chunk buffer.
-                    // Track pose-applied outside the component so put/clone cannot re-apply the initial pose each tick.
-                    if (!PlotCreatorSpotPreviewSync.isPoseApplied(ownerUuid, previewUuid)) {
-                        PlotCreatorSpotPreviewPose.applyInitialPose(npcRef, store, commandBuffer, desired);
-                        PlotCreatorSpotPreviewSync.markPoseApplied(ownerUuid, previewUuid);
-                        preview.setPoseApplied(true);
-                        preview.setLastWorkBeatEpochMs(nowMs);
-                        commandBuffer.putComponent(npcRef, PlotCreatorSpotPreview.getComponentType(), preview);
-                        continue;
-                    }
-                    // Snap back if they drifted; do not re-enter NPC states (that clears Sit / work anims).
-                    PlotCreatorSpotPreviewPose.holdPosition(npcRef, store, commandBuffer, desired);
-                    if (desired.poiBlockX() == null) {
-                        continue;
-                    }
-                    long last = preview.getLastWorkBeatEpochMs();
-                    if (PlotCreatorSpotPreviewPose.tickWorkBeat(
-                        npcRef,
-                        store,
-                        commandBuffer,
-                        desired,
-                        null,
-                        nowMs,
-                        last
-                    )) {
-                        preview.setLastWorkBeatEpochMs(nowMs);
-                        commandBuffer.putComponent(npcRef, PlotCreatorSpotPreview.getComponentType(), preview);
-                    }
-                }
-            }
-        );
+        PlotCreatorSpotPreviewSync.tickPosesForOwner(world, store, commandBuffer, ownerUuid);
     }
 
     private static void drawFacingHintLines(
@@ -269,6 +219,24 @@ public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntitySt
             1.25F,
             0
         );
+    }
+
+    /** Clears plot-creator markers/previews only if this player had them from a plot creator session. */
+    private static void clearSpotMarkersIfOwned(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        try {
+            UUID ownerUuid = PlotCreatorSpotMarkerSync.requireOwnerEntityUuid(store, playerRef);
+            if (!LAST_SPOT_MARKER_SIG.containsKey(ownerUuid)) {
+                return;
+            }
+            clearSpotMarkers(world, store, playerRef, commandBuffer);
+        } catch (IllegalStateException ignored) {
+            // Player missing UUID — nothing to clear.
+        }
     }
 
     private static void clearSpotMarkers(

@@ -35,9 +35,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Castle_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -9,
       "interactionTargetYawDegrees": 179.70332
     },
     {
@@ -52,9 +49,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Castle_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -8,
       "interactionTargetYawDegrees": 140.84639
     },
     {
@@ -69,9 +63,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Castle_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 14,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -8,
       "interactionTargetYawDegrees": -99.993164
     },
     {
@@ -86,9 +77,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Castle_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 15,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -8,
       "interactionTargetYawDegrees": -122.14815
     },
     {
@@ -103,9 +91,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Castle_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 13,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -19,
       "interactionTargetYawDegrees": 49.014526
     },
     {
@@ -120,9 +105,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Castle_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 12,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -19,
       "interactionTargetYawDegrees": 42.982788
     },
     {
@@ -135,9 +117,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Lightwood_Decorative",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 13,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -7,
       "interactionTargetYawDegrees": -17.549805
     },
     {
@@ -150,9 +129,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Lightwood_Decorative",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -12,
       "interactionTargetYawDegrees": 77.16608
     },
     {
@@ -165,9 +141,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Lightwood_Decorative",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -17,
       "interactionTargetYawDegrees": -144.09082
     },
     {
@@ -180,9 +153,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Lightwood_Decorative",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 16,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -15,
       "interactionTargetYawDegrees": -153.36621
     }
   ],

@@ -35,9 +35,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Bed",
       "interactionKind": "SLEEP",
-      "interactionTargetLocalX": 4,
-      "interactionTargetLocalY": 6,
-      "interactionTargetLocalZ": -5,
       "interactionTargetYawDegrees": 127.35773
     },
     {
@@ -51,9 +48,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Bed",
       "interactionKind": "SLEEP",
-      "interactionTargetLocalX": 4,
-      "interactionTargetLocalY": 6,
-      "interactionTargetLocalZ": -8,
       "interactionTargetYawDegrees": 55.124756
     },
     {
@@ -66,9 +60,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Stool",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 6,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -6,
       "interactionTargetYawDegrees": -24.64801
     },
     {
@@ -81,9 +72,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Stool",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 3,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -8,
       "interactionTargetYawDegrees": -35.11609
     }
   ],

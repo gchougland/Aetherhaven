@@ -45,8 +45,8 @@ public final class BuildingPoisDefinition {
         private String interactionKind = "NONE";
 
         /**
-         * Optional prefab-local cell for autonomy leash / Seek (same space as {@code localX/Y/Z}). When all three are
-         * set, world position is computed at build time (with the same anchor shift delta as the POI furniture).
+         * Legacy dual-cell stand offset. Cleared by {@link PoiDualCellNormalize}; kept for deserializing older
+         * building JSON until normalize runs.
          */
         @Nullable
         @SerializedName("interactionTargetLocalX")
@@ -69,8 +69,7 @@ public final class BuildingPoisDefinition {
         private String workResidentKind;
 
         /**
-         * Optional facing in prefab-local degrees (yaw around Y). Added to the building's paste yaw at registration so
-         * the villager faces the work surface correctly when {@link #interactionTarget} alone is ambiguous.
+         * Optional facing in prefab-local degrees (yaw around Y). Added to the building's paste yaw at registration.
          */
         @Nullable
         @SerializedName("interactionTargetYawDegrees")
@@ -91,6 +90,22 @@ public final class BuildingPoisDefinition {
 
         public int getLocalZ() {
             return localZ;
+        }
+
+        public void setLocal(int x, int y, int z) {
+            this.localX = x;
+            this.localY = y;
+            this.localZ = z;
+        }
+
+        public void clearInteractionTargetLocal() {
+            this.interactionTargetLocalX = null;
+            this.interactionTargetLocalY = null;
+            this.interactionTargetLocalZ = null;
+        }
+
+        public void setBlockTypeId(@Nullable String blockTypeId) {
+            this.blockTypeId = blockTypeId;
         }
 
         @Nonnull

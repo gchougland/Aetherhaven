@@ -59,11 +59,9 @@ public final class PlotCraftingCatalog {
             if (!matchesStyleFilter(def, activeStyleFilters)) {
                 continue;
             }
-            String groupKey = catalog.resolveGameplayConstructionId(def.getId());
-            if (groupKey.isBlank()) {
-                groupKey = def.getId();
+            for (String groupKey : groupKeysFor(catalog, def)) {
+                byGroup.computeIfAbsent(groupKey, k -> new ObjectArrayList<>()).add(def);
             }
-            byGroup.computeIfAbsent(groupKey, k -> new ObjectArrayList<>()).add(def);
         }
 
         ObjectArrayList<GroupEntry> groups = new ObjectArrayList<>();
@@ -200,16 +198,21 @@ public final class PlotCraftingCatalog {
             if (!matchesTypeFilter(def, activeTypeFilters)) {
                 continue;
             }
-            String groupKey = catalog.resolveGameplayConstructionId(def.getId());
-            if (groupKey.isBlank()) {
-                groupKey = def.getId();
-            }
+            List<String> groupKeys = groupKeysFor(catalog, def);
             String defId = def.getId().trim().toLowerCase(Locale.ROOT);
-            String normalizedGroupKey = groupKey.trim().toLowerCase(Locale.ROOT);
-            if (!normalized.contains(normalizedGroupKey) && !normalized.contains(defId)) {
+            boolean favoritedDirectly = normalized.contains(defId);
+            ObjectArrayList<String> matchingKeys = new ObjectArrayList<>();
+            for (String groupKey : groupKeys) {
+                if (favoritedDirectly || normalized.contains(groupKey.trim().toLowerCase(Locale.ROOT))) {
+                    matchingKeys.add(groupKey);
+                }
+            }
+            if (matchingKeys.isEmpty()) {
                 continue;
             }
-            byGroup.computeIfAbsent(groupKey, k -> new ObjectArrayList<>()).add(def);
+            for (String groupKey : matchingKeys) {
+                byGroup.computeIfAbsent(groupKey, k -> new ObjectArrayList<>()).add(def);
+            }
         }
         ObjectArrayList<GroupEntry> groups = new ObjectArrayList<>();
         for (Map.Entry<String, ObjectArrayList<ConstructionDefinition>> e : byGroup.entrySet()) {
@@ -243,6 +246,19 @@ public final class PlotCraftingCatalog {
         }
         String prefab = def.getPrefabPath();
         return prefab != null && !prefab.isBlank();
+    }
+
+    /**
+     * Every core building group this definition should appear under. Multi {@code countsAsConstructionId} variants
+     * list under each alias; canonical builds use their own id.
+     */
+    @Nonnull
+    static List<String> groupKeysFor(@Nonnull ConstructionCatalog catalog, @Nonnull ConstructionDefinition def) {
+        List<String> keys = catalog.resolveGameplayConstructionIds(def.getId());
+        if (keys.isEmpty()) {
+            return List.of(def.getId());
+        }
+        return keys;
     }
 
     private static boolean matchesStyleFilter(@Nonnull ConstructionDefinition def, @Nonnull Set<String> activeStyleFilters) {

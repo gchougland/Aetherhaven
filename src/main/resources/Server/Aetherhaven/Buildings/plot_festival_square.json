@@ -50,10 +50,7 @@
       ],
       "capacity": 2,
       "blockTypeId": "Furniture_Castle_Bench",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 22,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 16
+      "interactionKind": "SIT"
     },
     {
       "localX": 15,
@@ -65,10 +62,7 @@
       ],
       "capacity": 2,
       "blockTypeId": "Furniture_Castle_Bench",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 15,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 9
+      "interactionKind": "SIT"
     },
     {
       "localX": 16,
@@ -80,10 +74,7 @@
       ],
       "capacity": 2,
       "blockTypeId": "Furniture_Castle_Bench",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 16,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 22
+      "interactionKind": "SIT"
     },
     {
       "localX": 7,
@@ -97,9 +88,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Castle_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 16,
       "interactionTargetYawDegrees": 90.00001
     },
     {
@@ -112,9 +100,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Castle_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 6,
-      "interactionTargetLocalZ": 0,
       "interactionTargetYawDegrees": -90.00001
     },
     {
@@ -127,9 +112,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Castle_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 1,
-      "interactionTargetLocalY": 6,
-      "interactionTargetLocalZ": 8,
       "interactionTargetYawDegrees": 180.0
     },
     {
@@ -142,9 +124,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Castle_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": -7,
-      "interactionTargetLocalY": 6,
-      "interactionTargetLocalZ": 1,
       "interactionTargetYawDegrees": 90.00001
     },
     {
@@ -157,9 +136,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Castle_Bench",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 0,
-      "interactionTargetLocalY": 6,
-      "interactionTargetLocalZ": -7,
       "interactionTargetYawDegrees": 0.0
     }
   ],

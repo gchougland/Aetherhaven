@@ -1,6 +1,6 @@
 {
   "id": "plot_jszzas_mine",
-  "displayName": "Jszza\u0027s Mine",
+  "displayName": "Jszza's Mine",
   "description": "Made by Jszza",
   "prefabPath": "Jszza/plot_jszzas_mine.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -30,20 +30,17 @@
     {
       "localX": 12,
       "localY": 5,
-      "localZ": -18,
+      "localZ": -19,
       "tags": [
         "workActivity:mine",
         "WORK"
       ],
       "capacity": 1,
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 12,
-      "interactionTargetLocalY": 5,
-      "interactionTargetLocalZ": -19,
       "workResidentKind": "miner"
     },
     {
-      "localX": 18,
+      "localX": 17,
       "localY": 5,
       "localZ": -18,
       "tags": [
@@ -52,13 +49,10 @@
       ],
       "capacity": 1,
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 17,
-      "interactionTargetLocalY": 5,
-      "interactionTargetLocalZ": -18,
       "workResidentKind": "miner"
     },
     {
-      "localX": 13,
+      "localX": 14,
       "localY": 2,
       "localZ": -15,
       "tags": [
@@ -68,9 +62,6 @@
       "capacity": 1,
       "blockTypeId": "Rock_Stone",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 14,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -15,
       "workResidentKind": "miner",
       "interactionTargetYawDegrees": 77.56177,
       "equipmentProfileId": "work_miner"
@@ -78,7 +69,7 @@
     {
       "localX": 15,
       "localY": 2,
-      "localZ": -13,
+      "localZ": -14,
       "tags": [
         "WORK",
         "workActivity:mine"
@@ -86,15 +77,12 @@
       "capacity": 1,
       "blockTypeId": "Rock_Basalt",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 15,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -14,
       "workResidentKind": "miner",
       "interactionTargetYawDegrees": 150.94464,
       "equipmentProfileId": "work_miner"
     },
     {
-      "localX": 16,
+      "localX": 15,
       "localY": 1,
       "localZ": -15,
       "tags": [
@@ -104,9 +92,6 @@
       "capacity": 1,
       "blockTypeId": "Rock_Stone",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 15,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -15,
       "workResidentKind": "miner",
       "interactionTargetYawDegrees": -124.59546,
       "equipmentProfileId": "work_miner"
@@ -114,7 +99,7 @@
     {
       "localX": 15,
       "localY": 1,
-      "localZ": -16,
+      "localZ": -15,
       "tags": [
         "WORK",
         "workActivity:mine"
@@ -122,15 +107,12 @@
       "capacity": 1,
       "blockTypeId": "Rock_Stone",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 15,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -15,
       "workResidentKind": "miner",
       "interactionTargetYawDegrees": -27.985168,
       "equipmentProfileId": "work_miner"
     },
     {
-      "localX": 10,
+      "localX": 11,
       "localY": 4,
       "localZ": -15,
       "tags": [
@@ -140,9 +122,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 11,
-      "interactionTargetLocalY": 4,
-      "interactionTargetLocalZ": -15,
       "workResidentKind": "miner",
       "interactionTargetYawDegrees": 113.80652,
       "equipmentProfileId": "work_builder"

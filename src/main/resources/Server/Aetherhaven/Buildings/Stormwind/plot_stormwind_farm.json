@@ -34,7 +34,7 @@
     {
       "localX": 6,
       "localY": 1,
-      "localZ": -11,
+      "localZ": -12,
       "tags": [
         "WORK",
         "workActivity:water"
@@ -42,14 +42,11 @@
       "capacity": 1,
       "blockTypeId": "Soil_Mud_Dry",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 6,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -12,
       "workResidentKind": "farmer",
       "interactionTargetYawDegrees": 163.64061
     },
     {
-      "localX": 9,
+      "localX": 8,
       "localY": 1,
       "localZ": -6,
       "tags": [
@@ -59,14 +56,11 @@
       "capacity": 1,
       "blockTypeId": "Soil_Mud_Dry",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -6,
       "workResidentKind": "farmer",
       "interactionTargetYawDegrees": -60.165955
     },
     {
-      "localX": 9,
+      "localX": 8,
       "localY": 1,
       "localZ": -11,
       "tags": [
@@ -76,9 +70,6 @@
       "capacity": 1,
       "blockTypeId": "Soil_Mud_Dry",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -11,
       "workResidentKind": "farmer",
       "interactionTargetYawDegrees": -37.661076
     }

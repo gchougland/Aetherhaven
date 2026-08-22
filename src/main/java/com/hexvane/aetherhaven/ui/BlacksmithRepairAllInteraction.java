@@ -10,7 +10,6 @@ import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.util.MathUtil;
 import com.hypixel.hytale.protocol.packets.interface_.Page;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -18,7 +17,6 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.PageManager;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.choices.ChoiceInteraction;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
-import com.hypixel.hytale.server.core.inventory.ItemContext;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
@@ -26,68 +24,15 @@ import com.hypixel.hytale.server.core.inventory.transaction.ItemStackSlotTransac
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import it.unimi.dsi.fastutil.shorts.ShortArrayList;
 import javax.annotation.Nonnull;
 
-/** Pays gold for a full durability restore to the item definition max (clears repair-kit max-durability loss). */
-public final class BlacksmithRepairInteraction extends ChoiceInteraction {
-    private static final double EPS = 1e-6;
-    private final ItemContext itemContext;
+/** Pays gold once to fully restore every damaged item in the repair list. */
+public final class BlacksmithRepairAllInteraction extends ChoiceInteraction {
+    private final ItemContainer itemContainer;
 
-    public BlacksmithRepairInteraction(@Nonnull ItemContext itemContext) {
-        this.itemContext = itemContext;
-    }
-
-    static boolean needsBlacksmithRepair(@Nonnull ItemStack stack) {
-        if (ItemStack.isEmpty(stack) || stack.isUnbreakable()) {
-            return false;
-        }
-        // Gaia's Draught mirrors charge count in durability; refills are handled at the priestess altar.
-        if (AetherhavenConstants.ITEM_GAIAS_DRAUGHT.equals(stack.getItemId())) {
-            return false;
-        }
-        double baseMax = stack.getItem().getMaxDurability();
-        if (baseMax <= EPS) {
-            return false;
-        }
-        double cur = stack.getDurability();
-        double stackMax = stack.getMaxDurability();
-        return cur < baseMax - EPS || stackMax < baseMax - EPS;
-    }
-
-    static int goldCost(@Nonnull ItemStack stack, int fullCost) {
-        double baseMax = stack.getItem().getMaxDurability();
-        if (baseMax <= EPS) {
-            return Math.max(1, fullCost);
-        }
-        double cur = stack.getDurability();
-        double missing = (baseMax - cur) / baseMax;
-        missing = MathUtil.clamp(missing, 0.0, 1.0);
-        int cost = (int) Math.ceil(fullCost * missing);
-        return Math.max(1, cost);
-    }
-
-    /** Sum of {@link #goldCost} for every stack in {@code container} that still needs repair. */
-    static int totalGoldCost(@Nonnull ItemContainer itemContainer) {
-        int total = 0;
-        int fullCost = AetherhavenConstants.BLACKSMITH_REPAIR_COST_FULL;
-        for (short slot = 0; slot < itemContainer.getCapacity(); slot++) {
-            ItemStack stack = itemContainer.getItemStack(slot);
-            if (!needsBlacksmithRepair(stack)) {
-                continue;
-            }
-            total += goldCost(stack, fullCost);
-        }
-        return total;
-    }
-
-    static int countNeedingRepair(@Nonnull ItemContainer itemContainer) {
-        int count = 0;
-        for (short slot = 0; slot < itemContainer.getCapacity(); slot++) {
-            if (needsBlacksmithRepair(itemContainer.getItemStack(slot))) {
-                count++;
-            }
-        }
-        return count;
+    public BlacksmithRepairAllInteraction(@Nonnull ItemContainer itemContainer) {
+        this.itemContainer = itemContainer;
     }
 
     @Override
@@ -97,13 +42,21 @@ public final class BlacksmithRepairInteraction extends ChoiceInteraction {
             return;
         }
         PageManager pageManager = player.getPageManager();
-        ItemStack itemStack = this.itemContext.getItemStack();
-        if (!needsBlacksmithRepair(itemStack)) {
+        ShortArrayList slots = new ShortArrayList();
+        int cost = 0;
+        int fullCost = AetherhavenConstants.BLACKSMITH_REPAIR_COST_FULL;
+        for (short slot = 0; slot < this.itemContainer.getCapacity(); slot++) {
+            ItemStack stack = this.itemContainer.getItemStack(slot);
+            if (!BlacksmithRepairInteraction.needsBlacksmithRepair(stack)) {
+                continue;
+            }
+            slots.add(slot);
+            cost += BlacksmithRepairInteraction.goldCost(stack, fullCost);
+        }
+        if (slots.isEmpty() || cost <= 0) {
             pageManager.setPage(ref, store, Page.None);
             return;
         }
-        double baseMax = itemStack.getItem().getMaxDurability();
-        int cost = goldCost(itemStack, AetherhavenConstants.BLACKSMITH_REPAIR_COST_FULL);
         CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
         if (inv == null) {
             pageManager.setPage(ref, store, Page.None);
@@ -120,7 +73,9 @@ public final class BlacksmithRepairInteraction extends ChoiceInteraction {
         TownRecord town = uc != null ? TownPlayerResolution.resolveActiveTown(world, store, ref, tm) : null;
         boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
         if (!GoldCoinPayment.canAfford(town, inv, cost, allowTreasury)) {
-            playerRef.sendMessage(Message.translation("aetherhaven_misc.aetherhaven.blacksmith.repair.insufficientGold").color("#ff5555"));
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_misc.aetherhaven.blacksmith.repair.insufficientGold").color("#ff5555")
+            );
             pageManager.setPage(ref, store, Page.None);
             return;
         }
@@ -129,10 +84,21 @@ public final class BlacksmithRepairInteraction extends ChoiceInteraction {
             pageManager.setPage(ref, store, Page.None);
             return;
         }
-        ItemStack restored = itemStack.withRestoredDurability(baseMax);
-        ItemStackSlotTransaction replace =
-            this.itemContext.getContainer().replaceItemStackInSlot(this.itemContext.getSlot(), itemStack, restored);
-        if (!replace.succeeded()) {
+        int repaired = 0;
+        for (int i = 0; i < slots.size(); i++) {
+            short slot = slots.getShort(i);
+            ItemStack stack = this.itemContainer.getItemStack(slot);
+            if (!BlacksmithRepairInteraction.needsBlacksmithRepair(stack)) {
+                continue;
+            }
+            double baseMax = stack.getItem().getMaxDurability();
+            ItemStack restored = stack.withRestoredDurability(baseMax);
+            ItemStackSlotTransaction replace = this.itemContainer.replaceItemStackInSlot(slot, stack, restored);
+            if (replace.succeeded()) {
+                repaired++;
+            }
+        }
+        if (repaired == 0) {
             GoldCoinPayment.refund(town, player, ref, store, paid);
             if (town != null) {
                 tm.updateTown(town);
@@ -143,8 +109,11 @@ public final class BlacksmithRepairInteraction extends ChoiceInteraction {
         if (town != null && paid.fromTreasury() > 0L) {
             tm.updateTown(town);
         }
-        Message nameMsg = Message.translation(restored.getItem().getTranslationKey());
-        playerRef.sendMessage(Message.translation("aetherhaven_misc.aetherhaven.blacksmith.repair.success").param("itemName", nameMsg));
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_misc.aetherhaven.blacksmith.repair.fixAll.success")
+                .param("count", repaired)
+                .param("cost", cost)
+        );
         pageManager.setPage(ref, store, Page.None);
         UiSoundEffects.play2dUi(ref, store, AetherhavenConstants.SFX_WEAPON_BENCH_CRAFT);
     }

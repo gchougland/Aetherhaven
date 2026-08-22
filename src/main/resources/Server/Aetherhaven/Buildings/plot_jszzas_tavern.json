@@ -1,6 +1,6 @@
 {
   "id": "plot_jszzas_tavern",
-  "displayName": "Jszza\u0027s Tavern",
+  "displayName": "Jszza's Tavern",
   "description": "Made by Jszza",
   "prefabPath": "Jszza/plot_jszzas_tavern.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -48,10 +48,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Bench",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 15,
-      "interactionTargetLocalY": 10,
-      "interactionTargetLocalZ": -9
+      "interactionKind": "USE_BENCH"
     },
     {
       "localX": 16,
@@ -62,10 +59,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Bench",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 16,
-      "interactionTargetLocalY": 10,
-      "interactionTargetLocalZ": -9
+      "interactionKind": "USE_BENCH"
     },
     {
       "localX": 13,
@@ -76,10 +70,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Stool",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 14,
-      "interactionTargetLocalY": 3,
-      "interactionTargetLocalZ": -10
+      "interactionKind": "USE_BENCH"
     },
     {
       "localX": 11,
@@ -90,10 +81,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Stool",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 12,
-      "interactionTargetLocalY": 3,
-      "interactionTargetLocalZ": -9
+      "interactionKind": "USE_BENCH"
     },
     {
       "localX": 21,
@@ -104,10 +92,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Stool",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 22,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -7
+      "interactionKind": "USE_BENCH"
     },
     {
       "localX": 23,
@@ -118,13 +103,10 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Stool",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 23,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -4
+      "interactionKind": "USE_BENCH"
     },
     {
-      "localX": 25,
+      "localX": 24,
       "localY": 1,
       "localZ": -10,
       "tags": [
@@ -134,9 +116,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Banyan_Trunk",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 24,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -10,
       "workResidentKind": "innkeeper",
       "interactionTargetYawDegrees": -143.50745
     },
@@ -151,9 +130,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bed",
       "interactionKind": "SLEEP",
-      "interactionTargetLocalX": 29,
-      "interactionTargetLocalY": 11,
-      "interactionTargetLocalZ": -12,
       "interactionTargetYawDegrees": 90.00001
     },
     {
@@ -167,9 +143,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Bed",
       "interactionKind": "SLEEP",
-      "interactionTargetLocalX": 19,
-      "interactionTargetLocalY": 11,
-      "interactionTargetLocalZ": -4,
       "interactionTargetYawDegrees": -90.00001
     },
     {
@@ -182,9 +155,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Banyan_Trunk",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 16,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -10,
       "interactionTargetYawDegrees": 49.866455
     },
     {
@@ -197,9 +167,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Banyan_Trunk",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 18,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -12,
       "interactionTargetYawDegrees": 173.6958
     },
     {
@@ -212,9 +179,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Banyan_Trunk",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 26,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -6,
       "interactionTargetYawDegrees": 31.999512
     }
   ],

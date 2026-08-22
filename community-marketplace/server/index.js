@@ -1085,6 +1085,7 @@ function listSubmissionsForCreator(webUser) {
         status: "approved",
         approvedAt: e.approvedAt,
         version: e.version || "1",
+        styleId: e.styleId || "misc",
         prefabBytes: e.prefabBytes || 0,
         upvoteCount: votes.getCount(e.id),
         downloadCount: downloads.getCount(e.id),

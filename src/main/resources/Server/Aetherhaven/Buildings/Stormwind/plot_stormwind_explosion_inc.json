@@ -24,7 +24,7 @@
   ],
   "pois": [
     {
-      "localX": 7,
+      "localX": 8,
       "localY": 1,
       "localZ": -8,
       "tags": [
@@ -34,9 +34,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -8,
       "workResidentKind": "pyrotechnic"
     },
     {
@@ -48,10 +45,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -8
+      "interactionKind": "SIT"
     },
     {
       "localX": 5,
@@ -62,10 +56,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 5,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -5
+      "interactionKind": "SIT"
     },
     {
       "localX": 7,
@@ -76,10 +67,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -5
+      "interactionKind": "SIT"
     },
     {
       "localX": 8,
@@ -90,10 +78,7 @@
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -5
+      "interactionKind": "SIT"
     },
     {
       "localX": 6,
@@ -106,9 +91,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bed",
       "interactionKind": "SLEEP",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 6,
-      "interactionTargetLocalZ": -4,
       "interactionTargetYawDegrees": 141.41602
     }
   ],

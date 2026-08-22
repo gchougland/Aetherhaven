@@ -30,7 +30,7 @@
     {
       "localX": 7,
       "localY": 1,
-      "localZ": -7,
+      "localZ": -8,
       "tags": [
         "WORK",
         "workActivity:craft"
@@ -38,9 +38,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -8,
       "interactionTargetYawDegrees": 171.76123
     },
     {
@@ -53,9 +50,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -7,
       "interactionTargetYawDegrees": -8.238769999999988
     },
     {
@@ -68,9 +62,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 5,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -4,
       "interactionTargetYawDegrees": -26.578125
     },
     {
@@ -83,9 +74,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -4,
       "interactionTargetYawDegrees": 5.057129
     },
     {
@@ -98,9 +86,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 6,
-      "interactionTargetLocalY": 7,
-      "interactionTargetLocalZ": -10,
       "interactionTargetYawDegrees": -63.285156
     },
     {
@@ -113,9 +98,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 7,
-      "interactionTargetLocalZ": -6,
       "interactionTargetYawDegrees": 49.37549
     },
     {
@@ -128,9 +110,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 6,
-      "interactionTargetLocalY": 7,
-      "interactionTargetLocalZ": -3,
       "interactionTargetYawDegrees": -105.89307
     },
     {
@@ -144,9 +123,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 6,
-      "interactionTargetLocalY": 7,
-      "interactionTargetLocalZ": -10,
       "interactionTargetYawDegrees": -71.3501
     },
     {
@@ -160,9 +136,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 5,
-      "interactionTargetLocalY": 7,
-      "interactionTargetLocalZ": -9,
       "interactionTargetYawDegrees": 163.05225
     },
     {
@@ -176,9 +149,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 9,
-      "interactionTargetLocalY": 7,
-      "interactionTargetLocalZ": -7,
       "interactionTargetYawDegrees": 7.3222656
     },
     {
@@ -192,9 +162,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 8,
-      "interactionTargetLocalY": 7,
-      "interactionTargetLocalZ": -6,
       "interactionTargetYawDegrees": 68.10205
     },
     {
@@ -208,9 +175,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 5,
-      "interactionTargetLocalY": 7,
-      "interactionTargetLocalZ": -4,
       "interactionTargetYawDegrees": 13.961426
     },
     {
@@ -224,9 +188,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 6,
-      "interactionTargetLocalY": 7,
-      "interactionTargetLocalZ": -3,
       "interactionTargetYawDegrees": -111.14746
     },
     {
@@ -240,15 +201,12 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Chair",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 9,
-      "interactionTargetLocalY": 7,
-      "interactionTargetLocalZ": -6,
       "interactionTargetYawDegrees": 155.32764
     },
     {
       "localX": 6,
       "localY": 1,
-      "localZ": -7,
+      "localZ": -8,
       "tags": [
         "WORK",
         "workActivity:read"
@@ -256,9 +214,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Planks",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 6,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -8,
       "workResidentKind": "chef",
       "interactionTargetYawDegrees": -174.89551
     }

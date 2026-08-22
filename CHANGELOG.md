@@ -36,7 +36,7 @@
 - **Clown Tent** Build Bozo a tent workplace. During work hours he visits townsfolk who need fun and cheers them up.
 - **Villager wardrobe** Craft a wardrobe at the town planning desk to dress up residents of your town. Pick someone, choose unlocked looks by slot, and save what they wear in that town. Head looks can leave hair alone, trim it under a hat, or hide it fully, matching how player hats work.
 - **Props** Place small decoration builds almost anywhere with a crate style prop item. Move and turn them in a placement menu before you set them down. They will not go into other blocks. Ships with Aqua Lamp, Palm Streetlight, Streetlight, Cabbage Trough, Fish Barrel, Potion Shelf, Plant Arch, Pig Pile, Balloons, and Festival Flag. Festival merchants sell some of these for festival tickets. When you make a prop, you can set its shop gold price.
-- **Block Palettes** Unlock building looks for your town with a crate style Block Palette item. On a finished building, open the paintbrush tab on the town records shelf, pick walls, roofs, wood, stone, cloth, and more, then save to swap matching blocks right away. Looks stay when you repair, rebuild, move, or when the festival square returns to its everyday look. Choose Default to restore the original look. Sometimes found in loot chests and red floating gifts. Other mods can add looks for their own blocks. Creative: `/ah palette unlockall` unlocks every look for your town.
+- **Block Palettes** Unlock building looks with Block Palette items, then use the paintbrush tab on a town records shelf to restyle walls, roofs, windows, and more.
 - **Cap'n Clive** Furniture merchant who can visit after Vex's market stall. Build his furniture shop, then talk to him to browse a daily mix of decoration props with a preview. He asks for a house later like other shopkeeps.
 - **Front direction** When making a building or prop, pick which side is the front. Placing it starts with that side facing you, and marketplace previews show that front.
 - **Share props** Make props with the plot creator and share them on the marketplace. At the crafting bench, open Community and use the Props tab to download them. Downloaded props can show up in chests and balloons.
@@ -50,6 +50,7 @@
 - **Pick a wall style** The wall wand has arrows to switch between the wall styles you have installed.
 - **Path restyle** On the path designer shovel, press **Q** to **Restyle**, select a placed path like Remove, then press **F** and pick a style. The path's blocks swap to that style right away without removing the path.
 - **Path mode jump** Middle click on the path designer shovel opens a mode menu with the same icons as the status tabs, so you can jump straight to Place, Move, Rotate, Remove, Restyle, Replace filter, or Style designer. Townsfolk walking for new paths is toggled from that menu.
+- **Blacksmith Fix all** Garren's repair menu has a Fix all row at the top that shows the total gold cost for every damaged item, then restores them all at once.
 
 ### Changed
 
@@ -68,6 +69,10 @@
 
 ### Fixed
 
+- **Plot crafting multi building variants** Buildings that count as more than one type (for example inn and guild hall) now show under every matching group on the plot crafting bench, not only the first one.
+- **Workplace standing** Villagers stay at their workplace during work hours instead of wandering the plot. They also stand on top of a block instead of inside it when a work spot is marked too low.
+- **Building editor work spots** Work spots match where you click. Villagers use that spot and face the way you were looking.
+- **Workplace facing** Villagers face the direction set on their work spot while they work there.
 - **Building construction** Trunks, logs, and other wood place during the build instead of waiting until the end.
 - **Hired guards** Guards who die free their hire slot right away, so the town guard count no longer stays full after they fall.
 - **Villager reset** Invited visitors who disappeared are brought back with the rest of the town when you run the villager reset command.

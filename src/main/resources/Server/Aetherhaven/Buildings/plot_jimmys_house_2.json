@@ -1,6 +1,6 @@
 {
   "id": "plot_jimmys_house_2",
-  "displayName": "Jimmy\u0027s House 2",
+  "displayName": "Jimmy's House 2",
   "description": "Made by Jimmy G",
   "prefabPath": "Jimmys/plot_jimmys_house_2.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -42,9 +42,6 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Bed",
       "interactionKind": "SLEEP",
-      "interactionTargetLocalX": -5,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -3,
       "interactionTargetYawDegrees": 0.0
     },
     {
@@ -57,9 +54,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": -11,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": -7,
       "interactionTargetYawDegrees": 93.27014
     }
   ],

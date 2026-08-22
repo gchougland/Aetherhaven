@@ -1,6 +1,6 @@
 {
   "id": "plot_jimmys_lumbermill",
-  "displayName": "Jimmy\u0027s Lumbermill",
+  "displayName": "Jimmy's Lumbermill",
   "description": "Made by Jimmy G",
   "prefabPath": "Jimmys/plot_jimmys_lumbermill.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -34,22 +34,19 @@
     {
       "localX": -3,
       "localY": 2,
-      "localZ": 13,
+      "localZ": 12,
       "tags": [
         "WORK",
         "workActivity:chop"
       ],
       "capacity": 1,
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": -3,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": 12,
       "workResidentKind": "logger"
     },
     {
       "localX": -24,
       "localY": 2,
-      "localZ": 22,
+      "localZ": 23,
       "tags": [
         "WORK",
         "workActivity:chop"
@@ -57,13 +54,10 @@
       "capacity": 1,
       "blockTypeId": "Rock_Stone_Cobble",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": -24,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": 23,
       "workResidentKind": "logger"
     },
     {
-      "localX": -13,
+      "localX": -12,
       "localY": 3,
       "localZ": 18,
       "tags": [
@@ -73,15 +67,12 @@
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks_Half",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": -12,
-      "interactionTargetLocalY": 3,
-      "interactionTargetLocalZ": 18,
       "workResidentKind": "logger",
       "interactionTargetYawDegrees": 100.770836,
       "equipmentProfileId": "work_logger"
     },
     {
-      "localX": -24,
+      "localX": -23,
       "localY": 2,
       "localZ": 15,
       "tags": [
@@ -91,15 +82,12 @@
       "capacity": 1,
       "blockTypeId": "Rock_Stone_Cobble",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": -23,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": 15,
       "workResidentKind": "logger",
       "interactionTargetYawDegrees": 72.58296,
       "equipmentProfileId": "work_logger"
     },
     {
-      "localX": -18,
+      "localX": -19,
       "localY": 3,
       "localZ": 18,
       "tags": [
@@ -109,9 +97,6 @@
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks_Half",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": -19,
-      "interactionTargetLocalY": 3,
-      "interactionTargetLocalZ": 18,
       "workResidentKind": "logger",
       "interactionTargetYawDegrees": -125.81697,
       "equipmentProfileId": "work_logger"
