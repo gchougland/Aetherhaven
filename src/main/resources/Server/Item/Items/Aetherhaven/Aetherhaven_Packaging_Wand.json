@@ -11,7 +11,28 @@
   "PlayerAnimationsId": "Wand",
   "MaxStack": 1,
   "Set": "Aetherhaven",
-  "Recipe": null,
+  "Recipe": {
+    "TimeSeconds": 0,
+    "Input": [
+      {
+        "ResourceTypeId": "Wood_All",
+        "Quantity": 4
+      },
+      {
+        "ItemId": "Ingredient_Leather_Light",
+        "Quantity": 2
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": [
+          "Aetherhaven_TownPlanning_Tools"
+        ]
+      }
+    ]
+  },
   "Interactions": {
     "Primary": {
       "Interactions": [

@@ -158,7 +158,7 @@ public final class TownTaxService {
                     new TownLogEntry(
                         titheDay,
                         TownLogService.KEY_TAX,
-                        TownLogMessage.taxParams(Long.toString(added))
+                        TownLogMessage.taxParams(Long.toString(added), town.getDisplayName())
                     )
                 );
             }

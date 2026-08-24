@@ -113,9 +113,10 @@ public final class TownLogMessage {
     }
 
     @Nonnull
-    public static Map<String, String> taxParams(@Nonnull String amount) {
+    public static Map<String, String> taxParams(@Nonnull String amount, @Nonnull String townName) {
         Map<String, String> p = new LinkedHashMap<>();
         p.put("amount", amount);
+        p.put("town", townName);
         return p;
     }
 

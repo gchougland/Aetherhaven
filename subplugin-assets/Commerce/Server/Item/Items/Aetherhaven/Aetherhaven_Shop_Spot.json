@@ -20,7 +20,7 @@
     "CustomModel": "Items/Aetherhaven/Shop_Spot.blockymodel",
     "CustomModelTexture": [
       {
-        "Texture": "BlockTextures/Wood_Softwood_Planks_Side.png",
+        "Texture": "Blocks/shop_spot.png",
         "Weight": 1
       }
     ],

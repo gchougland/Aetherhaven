@@ -36,7 +36,7 @@
     { "workplace": "plot_lumbermill", "itemId": "Wood_Ice_Trunk", "rarityTier": 4, "defaultUnlocked": false, "resourceCost": 25, "ticks": 200, "maxStorage": 100 },
     { "workplace": "plot_lumbermill", "itemId": "Wood_Jungle_Trunk", "rarityTier": 4, "defaultUnlocked": false, "resourceCost": 25, "ticks": 200, "maxStorage": 100 },
     { "workplace": "plot_lumbermill", "itemId": "Wood_Maple_Trunk", "rarityTier": 3, "defaultUnlocked": false, "resourceCost": 25, "ticks": 200, "maxStorage": 100 },
-    { "workplace": "plot_lumbermill", "itemId": "Wood_Oak_Trunk", "rarityTier": 3, "defaultUnlocked": false, "resourceCost": 25, "ticks": 200, "maxStorage": 100 },
+    { "workplace": "plot_lumbermill", "itemId": "Wood_Oak_Trunk", "rarityTier": 0, "defaultUnlocked": true, "resourceCost": 25, "ticks": 200, "maxStorage": 100 },
     { "workplace": "plot_lumbermill", "itemId": "Wood_Palm_Trunk", "rarityTier": 4, "defaultUnlocked": false, "resourceCost": 25, "ticks": 200, "maxStorage": 100 },
     { "workplace": "plot_lumbermill", "itemId": "Wood_Palo_Trunk", "rarityTier": 4, "defaultUnlocked": false, "resourceCost": 25, "ticks": 200, "maxStorage": 100 },
     { "workplace": "plot_lumbermill", "itemId": "Wood_Petrified_Trunk", "rarityTier": 4, "defaultUnlocked": false, "resourceCost": 25, "ticks": 200, "maxStorage": 100 },

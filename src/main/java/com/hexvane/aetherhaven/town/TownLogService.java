@@ -46,7 +46,7 @@ public final class TownLogService {
         if (goldAdded <= 0L) {
             return;
         }
-        Map<String, String> params = TownLogMessage.taxParams(Long.toString(goldAdded));
+        Map<String, String> params = TownLogMessage.taxParams(Long.toString(goldAdded), town.getDisplayName());
         appendAndSave(town, tm, new TownLogEntry(gameEpochDay, KEY_TAX, params));
     }
 
