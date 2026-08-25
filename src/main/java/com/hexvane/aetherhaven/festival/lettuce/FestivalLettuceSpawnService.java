@@ -30,6 +30,7 @@ import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3d;
@@ -70,7 +71,7 @@ public final class FestivalLettuceSpawnService {
             return;
         }
         Store<EntityStore> store = entityStore.getStore();
-        despawnCenterpiece(world, festivalPlot);
+        despawnCenterpiece(world, festivalPlot, town.getTownId());
 
         Vector3d pos = resolveSpawnPosition(festivalPlot, festival, store);
         Rotation3f rotation = new Rotation3f();
@@ -127,6 +128,7 @@ public final class FestivalLettuceSpawnService {
         store.putComponent(centerpiece, PersistentModel.getComponentType(), new PersistentModel(spawnModel.toReference()));
 
         FestivalLettuceComponent lettuce = new FestivalLettuceComponent();
+        lettuce.setTownId(town.getTownId());
         lettuce.setRequiredEssence(REQUIRED_ESSENCE);
         lettuce.setMinScale(MIN_SCALE);
         lettuce.setMaxScale(MAX_SCALE);
@@ -198,17 +200,38 @@ public final class FestivalLettuceSpawnService {
         return Model.createScaledModel(asset, safeScale, null, interactBox, false);
     }
 
-    public static void despawnCenterpiece(@Nonnull World world, @Nonnull PlotInstance festivalPlot) {
+    /**
+     * Only clears this town's lettuce; several towns can run New Life in the same tick and a world wide sweep would
+     * delete the centerpiece another town just spawned. Lettuce saved before town ids existed is matched by footprint.
+     */
+    public static void despawnCenterpiece(
+        @Nonnull World world,
+        @Nonnull PlotInstance festivalPlot,
+        @Nonnull UUID townId
+    ) {
         var entityStore = world.getEntityStore();
         if (entityStore == null || !FestivalLettuceComponent.isRegistered()) {
             return;
         }
         Store<EntityStore> store = entityStore.getStore();
+        PlotFootprintRecord footprint = festivalPlot.toFootprint();
         List<Ref<EntityStore>> refs = new ArrayList<>();
         store.forEachChunk(
-            Query.and(FestivalLettuceComponent.getComponentType()),
+            Query.and(FestivalLettuceComponent.getComponentType(), TransformComponent.getComponentType()),
             (chunk, commandBuffer) -> {
                 for (int i = 0; i < chunk.size(); i++) {
+                    FestivalLettuceComponent lettuce =
+                        chunk.getComponent(i, FestivalLettuceComponent.getComponentType());
+                    TransformComponent tc = chunk.getComponent(i, TransformComponent.getComponentType());
+                    if (lettuce == null || tc == null) {
+                        continue;
+                    }
+                    UUID owner = lettuce.getTownId();
+                    boolean mine =
+                        owner != null ? townId.equals(owner) : containsBlock(footprint, tc.getPosition());
+                    if (!mine) {
+                        continue;
+                    }
                     Ref<EntityStore> r = chunk.getReferenceTo(i);
                     if (r != null && r.isValid()) {
                         refs.add(r);

@@ -23,7 +23,7 @@
   "IsMemory": false,
   "MemoriesNameOverride": { "Compute": "MemoriesNameOverride" },
   "DisableDamageGroups": ["Self", "Player", "Aetherhaven_Townsfolk", "Friendly"],
-  "BusyStates": ["Combat", "$Interaction"],
+  "BusyStates": ["Combat"],
   "Invulnerable": { "Compute": "Invulnerable" },
   "KnockbackScale": 0.5,
   "ApplySeparation": true,
@@ -53,7 +53,7 @@
   "StateTransitions": [
     {
       "States": [{ "From": ["Patrol"], "To": ["Idle"] }],
-      "Actions": { "Reference": "Component_ActionList_Aetherhaven_Clear_Status" }
+      "Actions": [{ "Type": "PlayAnimation", "Slot": "Status" }]
     }
   ],
   "Instructions": [
@@ -217,7 +217,7 @@
         "Sensor": { "Type": "HasInteracted" },
         "Instructions": [
           {
-            "Sensor": { "Type": "Not", "Sensor": { "Type": "State", "State": "$Interaction" } },
+            "Sensor": { "Type": "Any" },
             "Actions": [
               { "Type": "LockOnInteractionTarget" },
               { "Type": "OpenAetherhavenDialogue", "VillagerKind": "guard" }

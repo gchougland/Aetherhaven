@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Supplier;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -150,13 +151,17 @@ public final class VillagerTownResetService {
             slot++;
             UUID newUuid;
             if (c.visitor) {
-                UUID spawned = InnPoolService.spawnVisitorAtWorldPosition(
-                    store,
-                    town,
+                UUID spawned = spawnOrSkip(
                     c.npcRoleId.trim(),
-                    c.bindingKind,
-                    pos,
-                    innPlot
+                    town,
+                    () -> InnPoolService.spawnVisitorAtWorldPosition(
+                        store,
+                        town,
+                        c.npcRoleId.trim(),
+                        c.bindingKind,
+                        pos,
+                        innPlot
+                    )
                 );
                 if (spawned == null) {
                     LOGGER.atWarning().log("Reset: failed to spawn visitor %s for town %s", c.npcRoleId, town.getTownId());
@@ -173,18 +178,22 @@ public final class VillagerTownResetService {
                     && !c.guardCharacterId().isBlank()
                     && c.guardCharacterBinding() != null
             ) {
-                UUID spawned = GuardHireService.respawnHiredGuardAtPosition(
-                    world,
-                    plugin,
-                    town,
-                    store,
+                UUID spawned = spawnOrSkip(
                     c.guardCharacterId(),
-                    c.guardEquipmentProfileId() != null && !c.guardEquipmentProfileId().isBlank()
-                        ? c.guardEquipmentProfileId()
-                        : "guard_knight",
-                    c.guardCharacterBinding(),
-                    pos,
-                    c.jobPlotId()
+                    town,
+                    () -> GuardHireService.respawnHiredGuardAtPosition(
+                        world,
+                        plugin,
+                        town,
+                        store,
+                        c.guardCharacterId(),
+                        c.guardEquipmentProfileId() != null && !c.guardEquipmentProfileId().isBlank()
+                            ? c.guardEquipmentProfileId()
+                            : "guard_knight",
+                        c.guardCharacterBinding(),
+                        pos,
+                        c.jobPlotId()
+                    )
                 );
                 if (spawned == null) {
                     LOGGER.atWarning().log("Reset: failed to spawn guard %s for town %s", c.guardCharacterId(), town.getTownId());
@@ -202,8 +211,10 @@ public final class VillagerTownResetService {
                     && c.poolAssignmentKind() != null
                     && !c.poolAssignmentKind().isBlank()
             ) {
-                UUID spawned =
-                    TownsfolkSpawnService.respawnPoolCharacterAtPosition(
+                UUID spawned = spawnOrSkip(
+                    c.poolCharacterId(),
+                    town,
+                    () -> TownsfolkSpawnService.respawnPoolCharacterAtPosition(
                         world,
                         plugin,
                         town,
@@ -219,7 +230,8 @@ public final class VillagerTownResetService {
                             + c.poolCharacterId()
                             + ",previousUuid="
                             + c.previousEntityUuid
-                    );
+                    )
+                );
                 if (spawned == null) {
                     LOGGER.atWarning()
                         .log(
@@ -1163,6 +1175,27 @@ public final class VillagerTownResetService {
         );
     }
 
+    /**
+     * Runs a spawn that leans on an NPC role template. A role belonging to another mod can fail the game's own
+     * validation, and letting that escape abandons the reset partway through, leaving the rest of the town missing.
+     * The villager is skipped and named in the log instead.
+     */
+    @Nullable
+    private static <T> T spawnOrSkip(
+        @Nonnull String what,
+        @Nonnull TownRecord town,
+        @Nonnull Supplier<T> spawn
+    ) {
+        try {
+            return spawn.get();
+        } catch (RuntimeException e) {
+            LOGGER.atWarning()
+                .withCause(e)
+                .log("Reset: skipping %s for town %s, the game refused to spawn it", what, town.getTownId());
+            return null;
+        }
+    }
+
     @Nullable
     private static UUID spawnResidentLikeNpc(
         @Nonnull Store<EntityStore> store,
@@ -1180,7 +1213,7 @@ public final class VillagerTownResetService {
         if (role.isEmpty()) {
             return null;
         }
-        var pair = npc.spawnNPC(store, role, null, pos, Rotation3f.ZERO);
+        var pair = spawnOrSkip(role, town, () -> npc.spawnNPC(store, role, null, pos, Rotation3f.ZERO));
         if (pair == null) {
             return null;
         }

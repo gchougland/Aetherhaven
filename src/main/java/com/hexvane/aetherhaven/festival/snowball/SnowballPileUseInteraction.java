@@ -24,7 +24,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3i;
 
-/** Use (F) on a snowball pile: give three snowballs and clear the pile for a short respawn. */
+/**
+ * Use (F) on a snowball pile: give three snowballs and clear the pile for a short respawn. Open to anybody for the
+ * whole festival day, whether or not they joined a fight.
+ */
 public final class SnowballPileUseInteraction extends SimpleBlockInteraction {
     @Nonnull
     public static final com.hypixel.hytale.codec.builder.BuilderCodec<SnowballPileUseInteraction> CODEC =
@@ -72,11 +75,11 @@ public final class SnowballPileUseInteraction extends SimpleBlockInteraction {
             context.getState().state = InteractionState.Failed;
             return;
         }
-        SnowballSession session = SnowballSessionIndex.get(town.getTownId());
-        if (session == null) {
-            context.getState().state = InteractionState.Failed;
-            return;
-        }
+        // Build the session here rather than waiting for one. The piles stand all festival day and are meant to be
+        // taken from at any point, but the session that knows where they are is only in memory, so a server that
+        // restarted mid festival would otherwise leave every pile stuck until somebody talked to the merchant.
+        SnowballSession session = SnowballSessionIndex.getOrCreate(town.getTownId());
+        SnowballCourse.ensureCourse(plugin, town, session);
         SnowballSession.PileSpot spot = session.pileAt(targetBlock.x, targetBlock.y, targetBlock.z);
         if (spot == null || !session.isPilePresent(spot)) {
             context.getState().state = InteractionState.Failed;

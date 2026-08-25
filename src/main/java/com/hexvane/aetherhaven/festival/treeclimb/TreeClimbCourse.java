@@ -62,7 +62,13 @@ public final class TreeClimbCourse {
                     finish.getLocalZ()
                 )
                 : FestivalPrefabSwapService.spotWorldPosition(plugin, square, -4, 44, 3);
-        session.setCourse(pads, finishPos.x, finishPos.y, finishPos.z);
+        session.setCourse(
+            pads,
+            finishPos.x,
+            finishPos.y,
+            finishPos.z,
+            TreeClimbIds.maxRacers(festival.getMaxRacers())
+        );
     }
 
     @Nullable

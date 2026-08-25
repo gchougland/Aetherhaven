@@ -47,6 +47,11 @@ public final class WintertideDialogueHandlers {
         return WintertideGiftService.sessionFor(town, store).hasGiven(playerUuid);
     }
 
+    /**
+     * Visitors draw a gift partner just like residents do, so the only thing that decides whether the merchant will
+     * name yours is whether the draw actually gave you one — asking for town membership on top of that hid the choice
+     * from everybody who came in for the festival.
+     */
     private static boolean hasAssignment(
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store,
@@ -54,7 +59,7 @@ public final class WintertideDialogueHandlers {
     ) {
         TownRecord town = WintertideGiftService.resolveTown(playerRef, store, npcRef);
         UUID playerUuid = playerUuid(playerRef, store);
-        if (town == null || playerUuid == null || !town.hasMemberOrOwner(playerUuid)) {
+        if (town == null || playerUuid == null) {
             return false;
         }
         return WintertideGiftService.sessionFor(town, store).hasOutgoing(playerUuid);

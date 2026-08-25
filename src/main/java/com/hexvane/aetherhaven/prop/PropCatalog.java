@@ -19,6 +19,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
@@ -34,8 +35,14 @@ public final class PropCatalog {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
+    private static final String COMMON_PREFIX = "Common/";
+
     @Nonnull
     private final ConcurrentHashMap<String, PropDefinition> byId = new ConcurrentHashMap<>();
+
+    /** Retired duplicate ids pointing at the shipped prop that replaced them. */
+    @Nonnull
+    private final ConcurrentHashMap<String, String> aliasToId = new ConcurrentHashMap<>();
 
     @Nullable
     private Path dataDirectory;
@@ -81,13 +88,61 @@ public final class PropCatalog {
                 }
             }
         }
+        List<String> shippedIds = new ArrayList<>(catalog.byId.keySet());
         if (dataDirectory != null) {
             catalog.overlayFromDataDirectory(dataDirectory);
         }
+        catalog.dropStaleDuplicates(shippedIds);
+        catalog.fillMissingIconPaths(classLoader);
         if (!catalog.byId.isEmpty()) {
             LOGGER.atInfo().log("Loaded %s prop(s): %s", catalog.byId.size(), catalog.byId.keySet());
         }
         return catalog;
+    }
+
+    /**
+     * Older runtime copies of a shipped prop dropped the underscores from the id ({@code weaponrack} beside
+     * {@code weapon_rack}), which registered the same prop twice and let the copy without a rendered icon win in
+     * menus. Keep only the shipped prop and remember the old id so props already placed in the world still resolve.
+     */
+    private void dropStaleDuplicates(@Nonnull List<String> shippedIds) {
+        Map<String, String> shippedByCollapsedId = new java.util.HashMap<>();
+        for (String id : shippedIds) {
+            shippedByCollapsedId.put(collapseId(id), id);
+        }
+        for (String id : new ArrayList<>(byId.keySet())) {
+            if (shippedIds.contains(id)) {
+                continue;
+            }
+            String shippedId = shippedByCollapsedId.get(collapseId(id));
+            if (shippedId == null || shippedId.equals(id)) {
+                continue;
+            }
+            byId.remove(id);
+            aliasToId.put(id, shippedId);
+            LOGGER.atInfo().log("Prop %s is an older copy of %s; keeping the shipped one", id, shippedId);
+        }
+    }
+
+    /**
+     * A prop authored at runtime does not always record where its rendered icon ended up. The icon file name is
+     * derived from the prop id, so adopt it whenever that file actually ships with the mod.
+     */
+    private void fillMissingIconPaths(@Nonnull ClassLoader classLoader) {
+        for (PropDefinition def : byId.values()) {
+            if (def.getIconPath() != null) {
+                continue;
+            }
+            String assetPath = PropPaths.iconAssetPath(def.getId());
+            if (classLoader.getResource(COMMON_PREFIX + assetPath) != null) {
+                def.setIconPath(assetPath);
+            }
+        }
+    }
+
+    @Nonnull
+    private static String collapseId(@Nonnull String id) {
+        return id.trim().toLowerCase(Locale.ROOT).replace("_", "").replace("-", "");
     }
 
     private void overlayFromDataDirectory(@Nonnull Path dataDirectory) {
@@ -144,7 +199,13 @@ public final class PropCatalog {
         if (id == null || id.isBlank()) {
             return null;
         }
-        return byId.get(id.trim());
+        String key = id.trim();
+        PropDefinition def = byId.get(key);
+        if (def != null) {
+            return def;
+        }
+        String shippedId = aliasToId.get(key);
+        return shippedId != null ? byId.get(shippedId) : null;
     }
 
     public boolean contains(@Nullable String id) {

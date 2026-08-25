@@ -34,9 +34,7 @@
   "CombatConfig": {
     "EntityEffect": "Immunity_Environmental"
   },
-  "BusyStates": [
-    "$Interaction"
-  ],
+  "BusyStates": [],
   "Invulnerable": {
     "Compute": "Invulnerable"
   },
@@ -147,13 +145,7 @@
         },
         "Instructions": [
           {
-            "Sensor": {
-              "Type": "Not",
-              "Sensor": {
-                "Type": "State",
-                "State": "$Interaction"
-              }
-            },
+            "Sensor": { "Type": "Any" },
             "Actions": [
               {
                 "Type": "LockOnInteractionTarget"

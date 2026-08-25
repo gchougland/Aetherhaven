@@ -23,7 +23,7 @@ public final class PlotCreatorFestivalMechanicDefaults {
     public static final int DEFAULT_CARNIVAL_WHACK_SPAWNS = 6;
     public static final int DEFAULT_CARNIVAL_TOURIST_SPOTS = 8;
     public static final int DEFAULT_TREE_CLIMB_TOURIST_SPOTS = TreeClimbIds.DEFAULT_TOURIST_SPOTS;
-    public static final int DEFAULT_TREE_CLIMB_STARTS = TreeClimbIds.MAX_RACERS;
+    public static final int DEFAULT_TREE_CLIMB_STARTS = TreeClimbIds.DEFAULT_START_PADS;
     public static final int DEFAULT_HALLOWS_EVE_TOURIST_SPOTS = HallowsEveIds.DEFAULT_TOURIST_SPOTS;
     public static final int DEFAULT_HALLOWS_EVE_ORB_SPAWNS = HallowsEveIds.DEFAULT_ORB_SPAWNS;
     public static final int DEFAULT_MARKET_TOURIST_SPOTS = MarketIds.DEFAULT_TOURIST_SPOTS;

@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
@@ -18,6 +19,8 @@ import com.hypixel.hytale.server.core.universe.world.SetBlockSettings;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import java.util.HashMap;
 import java.util.List;
@@ -118,8 +121,12 @@ public final class BlockPaletteApplyService {
                     if (target == null) {
                         continue;
                     }
-                    int rotationIndex = chunk.getRotationIndex(bx, by, bz);
-                    int filler = chunk.getFiller(bx, by, bz);
+                    BlockSection section = blockSectionAt(world, bx, by, bz);
+                    if (section == null) {
+                        continue;
+                    }
+                    int rotationIndex = section.getRotationIndex(bx, by, bz);
+                    int filler = section.getFiller(bx, by, bz);
                     chunk.setBlock(bx, by, bz, newBlockId, target, rotationIndex, filler, settings);
                 }
             }
@@ -128,6 +135,23 @@ public final class BlockPaletteApplyService {
 
     private static long cellKey(int x, int y, int z) {
         return ((long) x << 42) ^ ((long) y << 21) ^ (long) z;
+    }
+
+    /**
+     * Rotation and filler come off the chunk section entity's {@link BlockSection}, matching the section-based reads
+     * elsewhere in the mod rather than the {@code BlockAccessor} helpers on {@link WorldChunk}.
+     */
+    @Nullable
+    private static BlockSection blockSectionAt(@Nonnull World world, int bx, int by, int bz) {
+        if (by < ChunkUtil.MIN_Y || by > ChunkUtil.HEIGHT_MINUS_1) {
+            return null;
+        }
+        ChunkStore chunkStore = world.getChunkStore();
+        Ref<ChunkStore> sectionRef = chunkStore.getChunkSectionReferenceAtBlock(bx, by, bz);
+        if (sectionRef == null || !sectionRef.isValid()) {
+            return null;
+        }
+        return chunkStore.getStore().getComponent(sectionRef, BlockSection.getComponentType());
     }
 
     /**

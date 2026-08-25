@@ -5,7 +5,6 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
-import com.hexvane.aetherhaven.festival.FestivalRewardNotify;
 import com.hexvane.aetherhaven.plugin.DialogueActionRegistry;
 import com.hexvane.aetherhaven.plugin.DialogueConditionRegistry;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBuyerPayment;
@@ -17,7 +16,6 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
-import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -33,21 +31,103 @@ public final class TreeClimbDialogueHandlers {
 
     public static void register(@Nonnull AetherhavenPlugin plugin) {
         DialogueConditionRegistry conditions = plugin.getDialogueConditionRegistry();
+        conditions.register(
+            "tree_climb_available",
+            (c, playerRef, store, npcRef) -> isAvailable(playerRef, store, npcRef)
+        );
         conditions.register("tree_climb_can_join", (c, playerRef, store, npcRef) -> canJoin(playerRef, store, npcRef));
         conditions.register("tree_climb_can_leave", (c, playerRef, store, npcRef) -> canLeave(playerRef, store, npcRef));
         conditions.register("tree_climb_can_start", (c, playerRef, store, npcRef) -> canStart(playerRef, store, npcRef));
         conditions.register("tree_climb_race_busy", (c, playerRef, store, npcRef) -> raceBusy(playerRef, store, npcRef));
-        conditions.register(
-            "tree_climb_has_tickets",
-            (c, playerRef, store, npcRef) -> hasTickets(playerRef, store, npcRef)
-        );
 
         DialogueActionRegistry actions = plugin.getDialogueActionRegistry();
         actions.register("tree_climb_join", TreeClimbDialogueHandlers::join);
         actions.register("tree_climb_leave", TreeClimbDialogueHandlers::leave);
         actions.register("tree_climb_start", TreeClimbDialogueHandlers::startRace);
-        actions.register("tree_climb_collect", TreeClimbDialogueHandlers::collect);
         actions.register("tree_climb_open_leaderboard", TreeClimbDialogueHandlers::openLeaderboard);
+    }
+
+    /**
+     * How many racers are waiting in this town's lobby, or -1 when the tree climb is not the active festival here.
+     * Used by the dialogue UI to show a waiting count next to the join option.
+     */
+    public static int joinedCount(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store, npcRef);
+        if (town == null || !isTreeClimbActive(town)) {
+            return -1;
+        }
+        TreeClimbSession session = TreeClimbSessionIndex.get(town.getTownId());
+        return session == null ? 0 : session.joinedCount();
+    }
+
+    /** True when the tree climb is the running festival here, whatever the race is currently doing. */
+    private static boolean isAvailable(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store, npcRef);
+        return town != null && isTreeClimbActive(town) && sessionReady(store, town) != null;
+    }
+
+    /** Lang key suffix explaining why the join option is greyed out, or null when it is pickable. */
+    @Nullable
+    public static String joinBlockedReason(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store, npcRef);
+        UUID playerUuid = playerUuid(playerRef, store);
+        if (town == null || playerUuid == null || !isTreeClimbActive(town)) {
+            return null;
+        }
+        TreeClimbSession session = TreeClimbSessionIndex.get(town.getTownId());
+        if (session == null) {
+            return null;
+        }
+        if (session.isRaceBusy()) {
+            return "raceRunning";
+        }
+        if (session.isJoined(playerUuid)) {
+            return "alreadyJoined";
+        }
+        if (session.joinedCount() >= session.getMaxRacers()) {
+            return "lobbyFull";
+        }
+        if (!canAffordEntry(playerRef, store, playerUuid)) {
+            return "needGold";
+        }
+        return null;
+    }
+
+    /** Lang key suffix explaining why the start option is greyed out, or null when it is pickable. */
+    @Nullable
+    public static String startBlockedReason(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store, npcRef);
+        UUID playerUuid = playerUuid(playerRef, store);
+        if (town == null || playerUuid == null || !isTreeClimbActive(town)) {
+            return null;
+        }
+        TreeClimbSession session = TreeClimbSessionIndex.get(town.getTownId());
+        if (session == null) {
+            return null;
+        }
+        if (session.isRaceBusy()) {
+            return "raceRunning";
+        }
+        if (!session.isJoined(playerUuid)) {
+            return "joinFirst";
+        }
+        return null;
     }
 
     private static boolean canJoin(
@@ -108,20 +188,6 @@ public final class TreeClimbDialogueHandlers {
         }
         TreeClimbSession session = TreeClimbSessionIndex.get(town.getTownId());
         return session != null && session.isRaceBusy();
-    }
-
-    private static boolean hasTickets(
-        @Nonnull Ref<EntityStore> playerRef,
-        @Nonnull Store<EntityStore> store,
-        @Nullable Ref<EntityStore> npcRef
-    ) {
-        TownRecord town = resolveTown(playerRef, store, npcRef);
-        UUID playerUuid = playerUuid(playerRef, store);
-        if (town == null || playerUuid == null) {
-            return false;
-        }
-        TreeClimbSession session = TreeClimbSessionIndex.get(town.getTownId());
-        return session != null && session.hasPendingTickets(playerUuid);
     }
 
     private static void join(
@@ -231,38 +297,6 @@ public final class TreeClimbDialogueHandlers {
         }
         // Close dialogue; teleports run on the next race-system tick via CommandBuffer.
         out.setCloseDialogue(true);
-    }
-
-    private static void collect(
-        @Nonnull JsonObject action,
-        @Nonnull Ref<EntityStore> playerRef,
-        @Nonnull Store<EntityStore> store,
-        @Nonnull DialogueActionBatchResult out,
-        @Nullable Ref<EntityStore> npcRef
-    ) {
-        TownRecord town = resolveTown(playerRef, store, npcRef);
-        UUID playerUuid = playerUuid(playerRef, store);
-        Player player = store.getComponent(playerRef, Player.getComponentType());
-        if (town == null || playerUuid == null || player == null) {
-            out.setGotoNodeId("collect_none");
-            return;
-        }
-        TreeClimbSession session = TreeClimbSessionIndex.get(town.getTownId());
-        if (session == null) {
-            out.setGotoNodeId("collect_none");
-            return;
-        }
-        int tickets = session.collectTickets(playerUuid);
-        if (tickets <= 0) {
-            out.setGotoNodeId("collect_none");
-            return;
-        }
-        FestivalRewardNotify.giveAndNotify(
-            player,
-            playerRef,
-            store,
-            new ItemStack(TreeClimbIds.SUMMER_TICKET_ITEM_ID, tickets)
-        );
     }
 
     private static void openLeaderboard(

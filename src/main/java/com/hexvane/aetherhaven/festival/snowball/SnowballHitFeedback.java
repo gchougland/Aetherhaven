@@ -26,6 +26,12 @@ final class SnowballHitFeedback {
 
     private SnowballHitFeedback() {}
 
+    /** Snow puff and thud with no scoring attached, for a snowball that lands on somebody outside a fight. */
+    static void burst(@Nonnull CommandBuffer<EntityStore> commandBuffer, @Nonnull Vector3d at) {
+        ParticleUtil.spawnParticleEffect(SnowballIds.HIT_PARTICLE, at, commandBuffer);
+        playHitSound(commandBuffer, at);
+    }
+
     static void play(
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,

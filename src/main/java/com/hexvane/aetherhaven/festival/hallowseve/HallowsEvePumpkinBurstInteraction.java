@@ -83,7 +83,7 @@ public final class HallowsEvePumpkinBurstInteraction extends SimpleInstantIntera
         }
         UUID townId = pumpkin.getTownId();
         HallowsEveSession session = townId != null ? HallowsEveSessionIndex.get(townId) : null;
-        if (session == null || !session.isReadyToBurst(playerUuid)) {
+        if (session == null || !session.isReadyToBurst()) {
             context.getState().state = InteractionState.Failed;
             return;
         }

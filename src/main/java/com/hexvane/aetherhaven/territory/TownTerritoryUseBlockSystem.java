@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.territory;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.festival.FestivalOpenAccess;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -63,6 +64,10 @@ public final class TownTerritoryUseBlockSystem extends EntityEventSystem<EntityS
             return;
         }
         TownTerritoryGuard.UseKind kind = TownTerritoryGuard.classifyUseBlock(event.getBlockType());
+        if (kind == TownTerritoryGuard.UseKind.OTHER
+            && FestivalOpenAccess.isInsideRunningFestivalSquare(plugin, town, pos.x, pos.y, pos.z)) {
+            return;
+        }
         if (!TownTerritoryGuard.playerMayUse(town, playerUuid, kind)) {
             event.setCancelled(true);
         }

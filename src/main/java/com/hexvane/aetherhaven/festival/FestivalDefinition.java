@@ -145,7 +145,7 @@ public final class FestivalDefinition {
     @Nullable
     private WheelLocalRow wheelLocal;
 
-    /** Tree climb race start pads in prefab-local space (up to four players). */
+    /** Tree climb race start pads in prefab-local space. Racers past the last pad share it. */
     @SerializedName("raceStartSpots")
     @Nullable
     private List<RaceStartSpotRow> raceStartSpots;
@@ -154,6 +154,10 @@ public final class FestivalDefinition {
     @SerializedName("raceFinishLocal")
     @Nullable
     private RaceFinishLocalRow raceFinishLocal;
+
+    /** How many racers may join one tree climb race. Zero or absent falls back to the mechanic default. */
+    @SerializedName("maxRacers")
+    private int maxRacers;
 
     /** Hallow's Eve maze start pad in prefab-local space (cell plus facing). */
     @SerializedName("mazeStartLocal")
@@ -373,6 +377,11 @@ public final class FestivalDefinition {
     @Nullable
     public RaceFinishLocalRow getRaceFinishLocal() {
         return raceFinishLocal;
+    }
+
+    /** Zero when the festival JSON leaves the racer limit to the mechanic default. */
+    public int getMaxRacers() {
+        return maxRacers;
     }
 
     @Nullable

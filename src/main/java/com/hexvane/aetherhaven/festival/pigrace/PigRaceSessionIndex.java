@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.festival.pigrace;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
@@ -11,6 +12,11 @@ public final class PigRaceSessionIndex {
     private static final Map<UUID, PigRaceSession> BY_TOWN = new ConcurrentHashMap<>();
 
     private PigRaceSessionIndex() {}
+
+    @Nonnull
+    public static Set<Map.Entry<UUID, PigRaceSession>> entries() {
+        return BY_TOWN.entrySet();
+    }
 
     @Nonnull
     public static PigRaceSession getOrCreate(@Nonnull UUID townId) {

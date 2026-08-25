@@ -252,8 +252,8 @@ public final class PigRaceDialogueHandlers {
             return;
         }
         PigRaceSession session = PigRaceSessionIndex.get(town.getTownId());
-        if (session != null) {
-            session.acknowledgeLoss(playerUuid);
+        if (session != null && session.acknowledgeLoss(playerUuid)) {
+            FestivalRewardNotify.notifyLoss(store, playerRef);
         }
     }
 

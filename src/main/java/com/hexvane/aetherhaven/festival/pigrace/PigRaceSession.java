@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.festival.pigrace;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -59,6 +60,8 @@ public final class PigRaceSession {
 
     private Phase phase = Phase.LOBBY;
     private final Map<UUID, Bet> bets = new LinkedHashMap<>();
+    /** Bets from the race that just ran, kept so the roster can show who backed what during RESULTS. */
+    private final Map<UUID, Bet> settledBets = new LinkedHashMap<>();
     private final Map<UUID, Integer> pendingTickets = new LinkedHashMap<>();
     private final Set<UUID> pendingLosses = new HashSet<>();
     private final Map<UUID, Integer> pendingStakes = new LinkedHashMap<>();
@@ -147,6 +150,12 @@ public final class PigRaceSession {
         return Map.copyOf(bets);
     }
 
+    /** Bets from the last finished race; empty while a new lobby is filling up. */
+    @Nonnull
+    public Map<UUID, Bet> settledBetsView() {
+        return Map.copyOf(settledBets);
+    }
+
     /** Stores the pigs that stay for the whole festival. */
     public void setRacers(@Nonnull List<Racer> spawnedRacers) {
         racers.clear();
@@ -165,6 +174,7 @@ public final class PigRaceSession {
         racers.clear();
         racers.addAll(rolled);
         winningLane = -1;
+        settledBets.clear();
         needsReturnToStart = false;
         raceStartMusicPending = true;
         raceGoCuePending = true;
@@ -306,6 +316,8 @@ public final class PigRaceSession {
             return false;
         }
         winningLane = laneIndex;
+        settledBets.clear();
+        settledBets.putAll(bets);
         for (Map.Entry<UUID, Bet> entry : bets.entrySet()) {
             Bet bet = entry.getValue();
             if (bet.laneIndex() == laneIndex) {
@@ -374,6 +386,14 @@ public final class PigRaceSession {
         return true;
     }
 
+    /** Bettors whose tickets or losing slip from the last race have not been handed over yet. */
+    @Nonnull
+    public Set<UUID> unsettledBettors() {
+        Set<UUID> out = new LinkedHashSet<>(pendingTickets.keySet());
+        out.addAll(pendingLosses);
+        return out;
+    }
+
     public int collectWinnings(@Nonnull UUID playerUuid) {
         Integer tickets = pendingTickets.remove(playerUuid);
         return tickets != null ? tickets : 0;
@@ -384,6 +404,7 @@ public final class PigRaceSession {
         if (phase == Phase.RACING) {
             phase = Phase.LOBBY;
             bets.clear();
+            settledBets.clear();
             winningLane = -1;
         } else if (phase == Phase.RESULTS) {
             phase = Phase.LOBBY;
@@ -393,6 +414,7 @@ public final class PigRaceSession {
     public void clearAll() {
         phase = Phase.LOBBY;
         bets.clear();
+        settledBets.clear();
         pendingTickets.clear();
         pendingLosses.clear();
         pendingStakes.clear();

@@ -38,6 +38,8 @@ import com.hexvane.aetherhaven.calendar.PlayerBirthdayIds;
 import com.hexvane.aetherhaven.calendar.VillagerBirthdayGreetingPicker;
 import com.hexvane.aetherhaven.calendar.VillagerBirthdayService;
 import com.hexvane.aetherhaven.festival.FestivalDialogueChoiceOrder;
+import com.hexvane.aetherhaven.festival.FestivalRewardNotify;
+import com.hexvane.aetherhaven.festival.FestivalDialogueJoinHints;
 import com.hexvane.aetherhaven.festival.FestivalDialogueGreetings;
 import com.hexvane.aetherhaven.festival.market.MarketIds;
 import com.hexvane.aetherhaven.festival.market.MarketSession;
@@ -198,7 +200,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             WintertideGiftService.onDialogueDismissed(treeId, pu.getUuid(), store, npcRef);
             PlayerBirthdayGiftService.onDialogueDismissed(treeId, pu.getUuid(), store, npcRef);
         }
-        NpcDialogueCleanup.scheduleReturnToIdle(npcRef, store);
+        NpcDialogueCleanup.scheduleReturnToIdle(npcRef, ref, store);
     }
 
     @Override
@@ -880,12 +882,19 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             if (reasonMsg == null && isGuildAdventurerHireChoice(text) && dialogueWorldView.guardHireAtLimit(ref, store)) {
                 reasonMsg = Message.translation(LANG_GUILD_ADVENTURER_LIMIT);
             }
+            if (reasonMsg == null) {
+                reasonMsg = FestivalDialogueJoinHints.blockedReason(ch, ref, store, npcRef);
+            }
             choiceLine =
                 reasonMsg != null
                     ? choiceTranslationMessage(ref, store, text).insert(Message.raw("  ")).insert(reasonMsg)
                     : choiceTranslationMessage(ref, store, text);
         } else {
             choiceLine = choiceTranslationMessage(ref, store, text);
+        }
+        Message joinCount = FestivalDialogueJoinHints.waitingSuffix(ch, ref, store, npcRef);
+        if (joinCount != null) {
+            choiceLine = choiceLine.insert(joinCount);
         }
         commandBuilder.append(CHOICES_ROOT, DialogueChoiceRequirementsUi.rowDocument(itemRequirements));
         String sel = choiceRowSelector(uiSlot);
@@ -1611,7 +1620,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         if (com.hexvane.aetherhaven.questboard.QuestBoardService.completeBoardQuest(
             town, tm, ref, store, nu.getUuid(), npcRoleId(store, npcRef), plugin.getQuestBoardCatalog(), rng
         )) {
-            close();
+            closeOrShowPrizes(world);
         }
     }
 
@@ -1656,7 +1665,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         }
         String next = choiceNext;
         if (next == null || next.isBlank()) {
-            close();
+            closeOrShowPrizes(world);
             return;
         }
         nodeId = next.trim();
@@ -1817,8 +1826,28 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                 }
             });
         } else {
-            close();
+            closeOrShowPrizes(world);
         }
+    }
+
+    /**
+     * Hands the screen straight to the prize window when this conversation handed something over, for the same
+     * acknowledgement reason as the shops above: closing first and opening later loses the window's button presses.
+     */
+    private void closeOrShowPrizes(@Nullable World world) {
+        if (world == null) {
+            close();
+            return;
+        }
+        world.execute(() -> {
+            Ref<EntityStore> pref = playerRef.getReference();
+            if (pref == null || !pref.isValid()) {
+                return;
+            }
+            if (!FestivalRewardNotify.openWindowNow(pref, pref.getStore())) {
+                close();
+            }
+        });
     }
 
     public static final class DialogueEventData {

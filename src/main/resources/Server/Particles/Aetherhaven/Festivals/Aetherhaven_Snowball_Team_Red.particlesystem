@@ -1,0 +1,6 @@
+{
+  "CullDistance": 128,
+  "BoundingRadius": 4,
+  "LifeSpan": 0.35,
+  "Spawners": [{ "SpawnerId": "Aetherhaven_Snowball_Team_Red_Spawner" }]
+}

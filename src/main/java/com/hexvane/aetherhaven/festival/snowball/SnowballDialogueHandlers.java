@@ -28,6 +28,10 @@ public final class SnowballDialogueHandlers {
 
     public static void register(@Nonnull AetherhavenPlugin plugin) {
         DialogueConditionRegistry conditions = plugin.getDialogueConditionRegistry();
+        conditions.register(
+            "snowball_available",
+            (c, playerRef, store, npcRef) -> isAvailable(playerRef, store, npcRef)
+        );
         conditions.register("snowball_can_join", (c, playerRef, store, npcRef) -> canJoin(playerRef, store, npcRef));
         conditions.register("snowball_can_leave", (c, playerRef, store, npcRef) -> canLeave(playerRef, store, npcRef));
         conditions.register("snowball_can_start", (c, playerRef, store, npcRef) -> canStart(playerRef, store, npcRef));
@@ -43,6 +47,91 @@ public final class SnowballDialogueHandlers {
         actions.register("snowball_start", SnowballDialogueHandlers::startFight);
         actions.register("snowball_collect", SnowballDialogueHandlers::collect);
         actions.register("snowball_open_scoreboard", SnowballDialogueHandlers::openScoreboard);
+    }
+
+    /** True when the snowball fight is the running festival here, whatever the fight is currently doing. */
+    private static boolean isAvailable(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store, npcRef);
+        return town != null && isSnowballActive(town) && sessionReady(store, town) != null;
+    }
+
+    /** Lang key suffix explaining why the join option is greyed out, or null when it is pickable. */
+    @Nullable
+    public static String joinBlockedReason(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store, npcRef);
+        UUID playerUuid = playerUuid(playerRef, store);
+        if (town == null || playerUuid == null || !isSnowballActive(town)) {
+            return null;
+        }
+        SnowballSession session = SnowballSessionIndex.get(town.getTownId());
+        if (session == null) {
+            return null;
+        }
+        if (session.isFightBusy()) {
+            return "fightRunning";
+        }
+        if (session.isJoined(playerUuid)) {
+            return "alreadyJoined";
+        }
+        if (session.joinedPlayerCount() >= SnowballIds.MAX_PLAYERS) {
+            return "lobbyFull";
+        }
+        return null;
+    }
+
+    /** Lang key suffix explaining why the start option is greyed out, or null when it is pickable. */
+    @Nullable
+    public static String startBlockedReason(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store, npcRef);
+        UUID playerUuid = playerUuid(playerRef, store);
+        if (town == null || playerUuid == null || !isSnowballActive(town)) {
+            return null;
+        }
+        SnowballSession session = SnowballSessionIndex.get(town.getTownId());
+        if (session == null) {
+            return null;
+        }
+        if (session.isFightBusy()) {
+            return "fightRunning";
+        }
+        if (!session.isJoined(playerUuid)) {
+            return "joinFirst";
+        }
+        if (session.joinedPlayerCount()
+            + SnowballFillerVillagers.countAvailableFillers(store, town, session.joinedPlayersView())
+            < 2) {
+            return "needMoreFighters";
+        }
+        return null;
+    }
+
+    /**
+     * How many players are waiting in this town's lobby, or -1 when the snowball fight is not the active festival
+     * here. Used by the dialogue UI to show a waiting count next to the join option.
+     */
+    public static int joinedCount(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = resolveTown(playerRef, store, npcRef);
+        if (town == null || !isSnowballActive(town)) {
+            return -1;
+        }
+        SnowballSession session = SnowballSessionIndex.get(town.getTownId());
+        return session == null ? 0 : session.joinedPlayerCount();
     }
 
     private static boolean canJoin(

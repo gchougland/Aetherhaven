@@ -49,5 +49,10 @@ public final class WintertideFestivalMechanic implements FestivalMechanic {
     ) {
         UUID townId = town.getTownId();
         WintertideSessionIndex.remove(townId);
+        var entityStore = world.getEntityStore();
+        Store<EntityStore> store = entityStore != null ? entityStore.getStore() : null;
+        if (store != null) {
+            WintertidePlayerGiftInteractSync.clearForAllPlayers(store);
+        }
     }
 }

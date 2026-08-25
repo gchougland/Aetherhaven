@@ -12,8 +12,16 @@ public final class TreeClimbIds {
     public static final String MERCHANT_NPC_ROLE = "Aetherhaven_Festival_Tree_Climb_Merchant";
     public static final String ATTENDANT_NPC_ROLE = "Aetherhaven_Festival_Tree_Climb_Attendant";
 
-    public static final int MAX_RACERS = 4;
+    /** Racer limit when the festival JSON does not set {@code maxRacers}. */
+    public static final int DEFAULT_MAX_RACERS = 12;
+    /** Start pads a freshly authored tree climb square gets; extra racers share the last pad. */
+    public static final int DEFAULT_START_PADS = 4;
     public static final int DEFAULT_TOURIST_SPOTS = 8;
+
+    /** Resolves the racer limit for a square, preferring the festival JSON value. */
+    public static int maxRacers(int fromFestivalJson) {
+        return fromFestivalJson > 0 ? fromFestivalJson : DEFAULT_MAX_RACERS;
+    }
 
     /** Gold coins charged when a player joins the race. */
     public static final int RACE_COST_GOLD = 10;

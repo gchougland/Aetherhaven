@@ -1,0 +1,68 @@
+$C = "../Common.ui";
+
+@RosterPanelWidth = 300;
+@RosterPanelTop = 150;
+@RosterPanelLeft = 24;
+@RosterPanelOuter = (TexturePath: "../Common/ContainerFullPatch.png", Border: 20);
+
+Group #FestivalRosterRoot {
+  LayoutMode: Top;
+  Anchor: (Full: 0);
+  HitTestVisible: false;
+
+  Group {
+    Anchor: (Height: @RosterPanelTop);
+    HitTestVisible: false;
+  }
+
+  Group {
+    LayoutMode: Left;
+    HitTestVisible: false;
+
+    Group #FestivalRosterShell {
+      LayoutMode: Top;
+      Anchor: (Left: @RosterPanelLeft, Width: @RosterPanelWidth);
+      HitTestVisible: false;
+
+      Group #FestivalRosterPanel {
+        LayoutMode: Top;
+        HitTestVisible: false;
+        Background: @RosterPanelOuter;
+        Padding: (Left: 14, Right: 14, Top: 12, Bottom: 14);
+
+        Label #FestivalRosterTitle {
+          Style: (...$C.@DefaultLabelStyle, FontSize: 16, TextColor: #f4e8c8, RenderBold: true, HorizontalAlignment: Center);
+          Anchor: (Bottom: 6);
+          Text: "";
+        }
+
+        Group #FestivalRosterTitleRule {
+          Anchor: (Height: 1, Bottom: 8);
+          HitTestVisible: false;
+          Background: #6a5f4c(0.55);
+        }
+
+        Group #FestivalRosterRows {
+          LayoutMode: Top;
+          HitTestVisible: false;
+        }
+
+        Label #FestivalRosterEmpty {
+          Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #9a8c78, HorizontalAlignment: Center);
+          Visible: false;
+          Text: "";
+        }
+      }
+    }
+
+    Group {
+      FlexWeight: 1;
+      HitTestVisible: false;
+    }
+  }
+
+  Group {
+    FlexWeight: 1;
+    HitTestVisible: false;
+  }
+}

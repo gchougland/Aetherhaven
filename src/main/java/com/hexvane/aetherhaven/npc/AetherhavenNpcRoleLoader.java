@@ -51,8 +51,14 @@ public final class AetherhavenNpcRoleLoader {
         if (module == null) {
             return;
         }
+        // Every pack's models before any pack's roles. A role is validated the moment it loads, the check needs its
+        // spawn model to already exist, and a role marked invalid stays that way for the life of the server. Going
+        // pack by pack would fail any role naming a model that a later pack ships.
         for (AssetPack pack : module.getAssetPacks()) {
-            loadPack(pack);
+            loadModels(pack);
+        }
+        for (AssetPack pack : module.getAssetPacks()) {
+            loadRoles(pack);
         }
     }
 

@@ -19,7 +19,6 @@
   "IsMemory": false,
   "DisableDamageGroups": ["Self", "Player", "Aetherhaven_Townsfolk", "Friendly"],
   "CombatConfig": { "EntityEffect": "Immunity_Fire" },
-  "BusyStates": ["$Interaction"],
   "Invulnerable": { "Compute": "Invulnerable" },
   "KnockbackScale": 0.5,
   "ApplySeparation": true,
@@ -45,11 +44,11 @@
   "StateTransitions": [
     {
       "States": [{ "From": ["AetherhavenAutonomy"], "To": ["Idle"] }],
-      "Actions": { "Reference": "Component_ActionList_Aetherhaven_Clear_Status" }
+      "Actions": [{ "Type": "PlayAnimation", "Slot": "Status" }]
     },
     {
       "States": [{ "From": ["AetherhavenStandStill"], "To": ["Idle"] }],
-      "Actions": { "Reference": "Component_ActionList_Aetherhaven_Clear_Status" }
+      "Actions": [{ "Type": "PlayAnimation", "Slot": "Status" }]
     }
   ],
   "Instructions": [
@@ -187,7 +186,7 @@
         "Sensor": { "Type": "HasInteracted" },
         "Instructions": [
           {
-            "Sensor": { "Type": "Not", "Sensor": { "Type": "State", "State": "$Interaction" } },
+            "Sensor": { "Type": "Any" },
             "Actions": [
               { "Type": "LockOnInteractionTarget" },
               { "Type": "OpenAetherhavenDialogue", "VillagerKind": "townsfolk" }

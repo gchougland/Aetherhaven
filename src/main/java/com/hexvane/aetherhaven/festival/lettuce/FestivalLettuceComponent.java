@@ -11,6 +11,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -48,6 +49,8 @@ public final class FestivalLettuceComponent implements Component<EntityStore> {
             .builder(FestivalLettuceComponent.class, FestivalLettuceComponent::new)
             .append(new KeyedCodec<>("State", Codec.STRING), (o, v) -> o.state = v, o -> o.state)
             .add()
+            .append(new KeyedCodec<>("TownId", Codec.STRING), (o, v) -> o.townId = v, o -> o.townId)
+            .add()
             .append(new KeyedCodec<>("Essence", Codec.INTEGER), (o, v) -> o.essence = v, o -> o.essence)
             .add()
             .append(new KeyedCodec<>("RequiredEssence", Codec.INTEGER), (o, v) -> o.requiredEssence = v, o -> o.requiredEssence)
@@ -66,6 +69,8 @@ public final class FestivalLettuceComponent implements Component<EntityStore> {
     private static volatile ComponentType<EntityStore, FestivalLettuceComponent> componentType;
 
     private String state = STATE_GROWING;
+    @Nullable
+    private String townId;
     private int essence;
     private int requiredEssence = DEFAULT_REQUIRED_ESSENCE;
     private float minScale = 4.0f;
@@ -130,6 +135,23 @@ public final class FestivalLettuceComponent implements Component<EntityStore> {
 
     public boolean isSpent() {
         return STATE_SPENT.equals(state);
+    }
+
+    /** Which town's festival square this lettuce belongs to, so one town's festival never clears another's. */
+    @Nullable
+    public UUID getTownId() {
+        if (townId == null || townId.isBlank()) {
+            return null;
+        }
+        try {
+            return UUID.fromString(townId.trim());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    public void setTownId(@Nullable UUID townId) {
+        this.townId = townId != null ? townId.toString() : null;
     }
 
     public int getEssence() {
@@ -323,6 +345,7 @@ public final class FestivalLettuceComponent implements Component<EntityStore> {
     public Component<EntityStore> clone() {
         FestivalLettuceComponent c = new FestivalLettuceComponent();
         c.state = this.state;
+        c.townId = this.townId;
         c.essence = this.essence;
         c.requiredEssence = this.requiredEssence;
         c.minScale = this.minScale;

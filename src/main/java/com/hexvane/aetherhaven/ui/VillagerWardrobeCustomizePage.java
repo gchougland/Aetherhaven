@@ -14,22 +14,18 @@ import com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticPreviewSession;
 import com.hexvane.aetherhaven.villagercosmetic.WardrobeResidentDirectory;
 import com.hexvane.aetherhaven.villagercosmetic.WardrobeResidentDirectory.WardrobeResidentRow;
 import com.hexvane.aetherhaven.villager.NpcModelSpawnUtil;
-import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.component.ArchetypeChunk;
-import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
-import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -365,29 +361,12 @@ public final class VillagerWardrobeCustomizePage extends AetherhavenInteractiveC
         for (WardrobeResidentRow row : WardrobeResidentDirectory.list(store, town, plugin)) {
             keys.add(row.residentKey());
         }
-        UUID tid = town.getTownId();
-        Query<EntityStore> q =
-            Query.and(TownVillagerBinding.getComponentType(), UUIDComponent.getComponentType());
-        store.forEachChunk(
-            q,
-            (ArchetypeChunk<EntityStore> archetypeChunk, CommandBuffer<EntityStore> commandBuffer) -> {
-                for (int i = 0; i < archetypeChunk.size(); i++) {
-                    TownVillagerBinding binding =
-                        archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
-                    if (binding == null || !tid.equals(binding.getTownId())) {
-                        continue;
-                    }
-                    Ref<EntityStore> npcRef = archetypeChunk.getReferenceTo(i);
-                    if (npcRef == null) {
-                        continue;
-                    }
-                    String key = VillagerCosmeticKeys.resolve(npcRef, store);
-                    if (key != null) {
-                        keys.add(key);
-                    }
-                }
+        for (Ref<EntityStore> npcRef : VillagerCosmeticAppearanceService.collectTownNpcRefs(store, town)) {
+            String key = VillagerCosmeticKeys.resolve(npcRef, store);
+            if (key != null) {
+                keys.add(key);
             }
-        );
+        }
         for (String key : keys) {
             town.replaceVillagerCosmeticOverrides(key, overrides);
         }
@@ -425,46 +404,42 @@ public final class VillagerWardrobeCustomizePage extends AetherhavenInteractiveC
         return null;
     }
 
-    /** Prefer live entity model when picker did not carry a model id (story villagers). */
+    /**
+     * Builds the preview the same way the world does: from the villager's live model, so the menu shows the villager
+     * the player is standing in front of rather than a freshly rolled one.
+     */
     @Nullable
     private Model buildPreviewModel(@Nonnull AetherhavenPlugin plugin, @Nonnull TownRecord town, @Nonnull Store<EntityStore> store) {
+        Ref<EntityStore> liveRef = store.getExternalData().getRefFromUUID(entityUuid);
+        if (liveRef != null && !liveRef.isValid()) {
+            liveRef = null;
+        }
+        Model currentModel = null;
+        if (liveRef != null) {
+            ModelComponent mc = store.getComponent(liveRef, ModelComponent.getComponentType());
+            currentModel = mc != null ? mc.getModel() : null;
+        }
         String assetId = resolveModelAssetId(plugin);
-        if (assetId == null || assetId.isBlank()) {
-            final String[] found = {null};
-            Query<EntityStore> q = Query.and(UUIDComponent.getComponentType());
-            store.forEachChunk(
-                q,
-                (ArchetypeChunk<EntityStore> archetypeChunk, CommandBuffer<EntityStore> commandBuffer) -> {
-                    for (int i = 0; i < archetypeChunk.size(); i++) {
-                        UUIDComponent uc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
-                        if (uc == null || !entityUuid.equals(uc.getUuid())) {
-                            continue;
-                        }
-                        Ref<EntityStore> npcRef = archetypeChunk.getReferenceTo(i);
-                        if (npcRef != null) {
-                            found[0] = VillagerCosmeticAppearanceService.resolveBaseModelAssetId(npcRef, store);
-                        }
-                        return;
-                    }
-                }
-            );
-            assetId = found[0];
+        if ((assetId == null || assetId.isBlank()) && liveRef != null) {
+            assetId = VillagerCosmeticAppearanceService.resolveBaseModelAssetId(liveRef, store);
         }
         if (assetId == null || assetId.isBlank()) {
             return null;
         }
+        Float scale = currentModel != null && currentModel.getScale() > 0f ? currentModel.getScale() : null;
         Map<String, String> overrides = VillagerCosmeticAppearanceService.normalizeOverrides(draftOverrides);
         Model merged =
             VillagerCosmeticAppearanceService.buildModelWithOverrides(
                 assetId,
-                null,
+                scale,
                 overrides,
-                plugin.getVillagerCosmeticCatalog()
+                plugin.getVillagerCosmeticCatalog(),
+                currentModel
             );
         if (merged != null) {
             return merged;
         }
-        return NpcModelSpawnUtil.buildScaledModel(assetId, null);
+        return NpcModelSpawnUtil.buildScaledModel(assetId, scale);
     }
 
     @Nonnull

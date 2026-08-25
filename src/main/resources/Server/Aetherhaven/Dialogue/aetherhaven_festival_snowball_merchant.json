@@ -10,8 +10,8 @@
           "id": "join",
           "text": "aetherhaven_dialogue_festival_snowball_merchant.aetherhaven.dialogue.festival_snowball_merchant.main_hub.c_join",
           "icon": "UI/Custom/winter.png",
-          "visibilityCondition": { "type": "snowball_can_join" },
-          "whenFalse": "hide",
+          "visibilityCondition": { "type": "snowball_available" },
+          "condition": { "type": "snowball_can_join" },
           "actions": [{ "type": "snowball_join" }],
           "next": "joined"
         },
@@ -28,18 +28,10 @@
           "id": "start",
           "text": "aetherhaven_dialogue_festival_snowball_merchant.aetherhaven.dialogue.festival_snowball_merchant.main_hub.c_start",
           "icon": "UI/Custom/winter.png",
-          "visibilityCondition": { "type": "snowball_can_start" },
-          "whenFalse": "hide",
+          "visibilityCondition": { "type": "snowball_available" },
+          "condition": { "type": "snowball_can_start" },
           "actions": [{ "type": "snowball_start" }],
           "next": null
-        },
-        {
-          "id": "busy",
-          "text": "aetherhaven_dialogue_festival_snowball_merchant.aetherhaven.dialogue.festival_snowball_merchant.main_hub.c_busy",
-          "icon": "UI/Custom/winter.png",
-          "visibilityCondition": { "type": "snowball_fight_busy" },
-          "whenFalse": "hide",
-          "next": "fight_busy"
         },
         {
           "id": "collect",

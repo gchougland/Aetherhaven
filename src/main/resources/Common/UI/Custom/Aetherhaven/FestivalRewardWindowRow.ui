@@ -1,0 +1,46 @@
+$C = "../Common.ui";
+
+@RewardSlotSize = 48;
+
+Group #FestivalRewardRow {
+  LayoutMode: Left;
+  Anchor: (Height: 56, Bottom: 6);
+  Padding: (Horizontal: 6);
+  Background: #1a1712(0.45);
+
+  Group #RewardIconHolder {
+    LayoutMode: Middle;
+    Anchor: (Width: @RewardSlotSize, Height: @RewardSlotSize, Right: 12);
+
+    ItemGrid #RewardIcon {
+      Anchor: (Width: @RewardSlotSize, Height: @RewardSlotSize);
+      SlotsPerRow: 1;
+      Style: (
+        SlotSize: @RewardSlotSize,
+        SlotIconSize: @RewardSlotSize,
+        SlotSpacing: 0,
+        SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+      );
+    }
+  }
+
+  Group #RewardTextHolder {
+    LayoutMode: Middle;
+    FlexWeight: 1;
+
+    Label #RewardName {
+      Style: (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #f0e6d2, Wrap: true);
+      Text: "";
+    }
+  }
+
+  Group #RewardAmountHolder {
+    LayoutMode: Middle;
+    Anchor: (Width: 72, Left: 8);
+
+    Label #RewardAmount {
+      Style: (...$C.@DefaultLabelStyle, FontSize: 17, RenderBold: true, TextColor: #c8d4a8, HorizontalAlignment: End);
+      Text: "";
+    }
+  }
+}

@@ -19,7 +19,6 @@
   "MemoriesNameOverride": { "Compute": "MemoriesNameOverride" },
   "DisableDamageGroups": ["Self", "Player", "Aetherhaven_Townsfolk", "Friendly"],
   "CombatConfig": { "EntityEffect": "Immunity_Environmental" },
-  "BusyStates": ["$Interaction"],
   "Invulnerable": { "Compute": "Invulnerable" },
   "KnockbackScale": 0.0,
   "ApplySeparation": false,
@@ -85,7 +84,7 @@
         "Sensor": { "Type": "HasInteracted" },
         "Instructions": [
           {
-            "Sensor": { "Type": "Not", "Sensor": { "Type": "State", "State": "$Interaction" } },
+            "Sensor": { "Type": "Any" },
             "Actions": [
               { "Type": "LockOnInteractionTarget" },
               { "Type": "OpenAetherhavenDialogue", "VillagerKind": "clown" }

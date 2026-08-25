@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.villager;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.festival.hallowseve.HallowsEvePumpkinComponent;
+import com.hexvane.aetherhaven.festival.lettuce.FestivalLettuceComponent;
 import com.hexvane.aetherhaven.monument.FounderMonumentStatueSkin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -56,6 +58,9 @@ public final class NpcPersistentModelResyncSystem extends HolderSystem<EntitySto
         if (reason != AddReason.SPAWN && reason != AddReason.LOAD) {
             return;
         }
+        if (hasCustomInteractBox(holder)) {
+            return;
+        }
         UUIDComponent uuidComponent = holder.getComponent(UUIDComponent.getComponentType());
         if (uuidComponent == null) {
             return;
@@ -73,6 +78,19 @@ public final class NpcPersistentModelResyncSystem extends HolderSystem<EntitySto
             NpcModelSpawnUtil.resyncFromPersistentModel(ref, store);
             applyTownCosmeticsIfPresent(ref, store, world);
         });
+    }
+
+    /**
+     * {@code ModelReference.toModel()} drops the override bounding box, so resyncing a festival centerpiece would
+     * replace its hand tuned F aim box with the asset box scaled by the current growth and make F miss.
+     */
+    private static boolean hasCustomInteractBox(@Nonnull Holder<EntityStore> holder) {
+        if (FestivalLettuceComponent.isRegistered()
+            && holder.getComponent(FestivalLettuceComponent.getComponentType()) != null) {
+            return true;
+        }
+        return HallowsEvePumpkinComponent.isRegistered()
+            && holder.getComponent(HallowsEvePumpkinComponent.getComponentType()) != null;
     }
 
     private static void applyTownCosmeticsIfPresent(

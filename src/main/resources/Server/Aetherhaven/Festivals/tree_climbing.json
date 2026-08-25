@@ -144,6 +144,7 @@
     "localY": 44,
     "localZ": 3
   },
+  "maxRacers": 12,
   "tags": [
     "summer",
     "racing"

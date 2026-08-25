@@ -75,21 +75,25 @@ public final class ActionOpenAetherhavenDialogue extends ActionBase {
         world.execute(
             () -> {
                 if (!playerEntityRef.isValid() || !npcRef.isValid()) {
-                    NpcDialogueCleanup.scheduleReturnToIdle(npcRef, store);
+                    NpcDialogueCleanup.scheduleReturnToIdle(npcRef, playerEntityRef, store);
                     return;
                 }
                 Player player = store.getComponent(playerEntityRef, Player.getComponentType());
                 if (player == null) {
-                    NpcDialogueCleanup.scheduleReturnToIdle(npcRef, store);
+                    NpcDialogueCleanup.scheduleReturnToIdle(npcRef, playerEntityRef, store);
                     return;
                 }
                 PlayerRef pr = store.getComponent(playerEntityRef, PlayerRef.getComponentType());
                 if (pr == null) {
-                    NpcDialogueCleanup.scheduleReturnToIdle(npcRef, store);
+                    NpcDialogueCleanup.scheduleReturnToIdle(npcRef, playerEntityRef, store);
                     return;
                 }
-                if (player.getPageManager().getCustomPage() != null) {
-                    NpcDialogueCleanup.scheduleReturnToIdle(npcRef, store);
+                // A conversation already on screen must not restart while the player holds the interact key. Any
+                // other page still standing here was never dismissed on our side — the client cannot fire an
+                // interaction while its own window has focus — so replacing it is the only way the player gets to
+                // talk to anybody again. openCustomPage dismisses the old page for us.
+                if (player.getPageManager().getCustomPage() instanceof DialoguePage) {
+                    NpcDialogueCleanup.scheduleReturnToIdle(npcRef, playerEntityRef, store);
                     return;
                 }
                 player.getPageManager()
@@ -99,7 +103,7 @@ public final class ActionOpenAetherhavenDialogue extends ActionBase {
                         new DialoguePage(pr, catalog, worldView, resolved.treeId(), resolved.entryNodeId(), npcRef)
                     );
                 NpcFaceVisuals.onDialogueOpened(npcRef, playerEntityRef, store);
-                NpcDialogueCleanup.scheduleEnterInteraction(npcRef, store);
+                NpcDialogueCleanup.scheduleEnterInteraction(npcRef, playerEntityRef, store);
             }
         );
         return true;

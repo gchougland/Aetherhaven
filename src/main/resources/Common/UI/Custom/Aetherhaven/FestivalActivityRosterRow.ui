@@ -1,0 +1,82 @@
+$C = "../Common.ui";
+
+@RosterRowHeight = 20;
+@RosterDotSize = 8;
+@RosterRightWidth = 132;
+@RosterLifeSize = 16;
+@RosterLifeGap = 3;
+
+Group #FestivalRosterRow {
+  LayoutMode: Left;
+  Anchor: (Height: @RosterRowHeight, Bottom: 4);
+  HitTestVisible: false;
+
+  Group #RosterRowDot {
+    LayoutMode: Full;
+    Anchor: (Width: @RosterDotSize, Height: @RosterDotSize, Top: 6, Right: 8);
+    Background: #f0e6d2;
+  }
+
+  Label #RosterRowName {
+    Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #f0e6d2);
+    FlexWeight: 1;
+    Text: "";
+  }
+
+  // Status text and snowflakes share the same box; only one of them is ever visible on a row.
+  Group #RosterRowRight {
+    LayoutMode: Full;
+    Anchor: (Width: @RosterRightWidth, Left: 8);
+    HitTestVisible: false;
+
+    Label #RosterRowStatus {
+      Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #c8d4a8, HorizontalAlignment: End);
+      Anchor: (Full: 0);
+      Text: "";
+    }
+
+    Group #RosterRowLives {
+      LayoutMode: Left;
+      Anchor: (Full: 0);
+      Visible: false;
+      HitTestVisible: false;
+
+      Group {
+        FlexWeight: 1;
+      }
+
+      Group #RosterLife0 {
+        LayoutMode: Full;
+        Anchor: (Width: @RosterLifeSize, Height: @RosterLifeSize, Top: 2, Right: @RosterLifeGap);
+        Background: (TexturePath: "../winter.png", Border: 0, Color: #ffffff(0.25));
+
+        AssetImage #RosterLife0Fg {
+          Anchor: (Full: 0);
+          AssetPath: "UI/Custom/winter.png";
+        }
+      }
+
+      Group #RosterLife1 {
+        LayoutMode: Full;
+        Anchor: (Width: @RosterLifeSize, Height: @RosterLifeSize, Top: 2, Right: @RosterLifeGap);
+        Background: (TexturePath: "../winter.png", Border: 0, Color: #ffffff(0.25));
+
+        AssetImage #RosterLife1Fg {
+          Anchor: (Full: 0);
+          AssetPath: "UI/Custom/winter.png";
+        }
+      }
+
+      Group #RosterLife2 {
+        LayoutMode: Full;
+        Anchor: (Width: @RosterLifeSize, Height: @RosterLifeSize, Top: 2);
+        Background: (TexturePath: "../winter.png", Border: 0, Color: #ffffff(0.25));
+
+        AssetImage #RosterLife2Fg {
+          Anchor: (Full: 0);
+          AssetPath: "UI/Custom/winter.png";
+        }
+      }
+    }
+  }
+}

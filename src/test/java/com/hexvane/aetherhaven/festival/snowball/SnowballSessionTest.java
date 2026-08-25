@@ -251,6 +251,18 @@ final class SnowballSessionTest {
         assertFalse(session.hasPendingTickets(player));
     }
 
+    @Test
+    void aSnowballOnlyEverCountsForOneHit() {
+        SnowballSession session = twoPlayerFight();
+        UUID attacker = session.fightersView().get(0).uuid();
+        UUID victim = session.fightersView().get(1).uuid();
+        assertTrue(session.consumeHitProjectile(41));
+        assertTrue(session.tryHit(victim, attacker));
+        // The same snowball brushing the victim again on a later tick must not take a second life.
+        assertFalse(session.consumeHitProjectile(41));
+        assertTrue(session.consumeHitProjectile(42));
+    }
+
     @Nonnull
     private static SnowballSession readySession() {
         SnowballSession session = new SnowballSession();

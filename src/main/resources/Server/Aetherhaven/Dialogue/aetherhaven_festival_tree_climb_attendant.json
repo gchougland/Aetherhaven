@@ -10,8 +10,8 @@
           "id": "join",
           "text": "aetherhaven_dialogue_festival_tree_climb_attendant.aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_join",
           "icon": "UI/Custom/jungle.png",
-          "visibilityCondition": { "type": "tree_climb_can_join" },
-          "whenFalse": "hide",
+          "visibilityCondition": { "type": "tree_climb_available" },
+          "condition": { "type": "tree_climb_can_join" },
           "actions": [{ "type": "tree_climb_join" }],
           "next": "joined"
         },
@@ -28,27 +28,10 @@
           "id": "start",
           "text": "aetherhaven_dialogue_festival_tree_climb_attendant.aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_start",
           "icon": "UI/Custom/jungle.png",
-          "visibilityCondition": { "type": "tree_climb_can_start" },
-          "whenFalse": "hide",
+          "visibilityCondition": { "type": "tree_climb_available" },
+          "condition": { "type": "tree_climb_can_start" },
           "actions": [{ "type": "tree_climb_start" }],
           "next": null
-        },
-        {
-          "id": "busy",
-          "text": "aetherhaven_dialogue_festival_tree_climb_attendant.aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_busy",
-          "icon": "UI/Custom/jungle.png",
-          "visibilityCondition": { "type": "tree_climb_race_busy" },
-          "whenFalse": "hide",
-          "next": "race_busy"
-        },
-        {
-          "id": "collect",
-          "text": "aetherhaven_dialogue_festival_tree_climb_attendant.aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_collect",
-          "icon": "UI/Custom/jungle.png",
-          "visibilityCondition": { "type": "tree_climb_has_tickets" },
-          "whenFalse": "hide",
-          "actions": [{ "type": "tree_climb_collect" }],
-          "next": "collect_win"
         },
         {
           "id": "leaderboard",
@@ -145,26 +128,6 @@
       "choices": [
         {
           "text": "aetherhaven_dialogue_festival_tree_climb_attendant.aetherhaven.dialogue.festival_tree_climb_attendant.race_busy.c_back",
-          "next": "main_hub"
-        }
-      ]
-    },
-    "collect_win": {
-      "speaker": "aetherhaven_dialogue_festival_tree_climb_attendant.aetherhaven.dialogue.festival_tree_climb_attendant.speaker",
-      "text": "aetherhaven_dialogue_festival_tree_climb_attendant.aetherhaven.dialogue.festival_tree_climb_attendant.collect_win.body",
-      "choices": [
-        {
-          "text": "aetherhaven_dialogue_festival_tree_climb_attendant.aetherhaven.dialogue.festival_tree_climb_attendant.collect_win.c_back",
-          "next": "main_hub"
-        }
-      ]
-    },
-    "collect_none": {
-      "speaker": "aetherhaven_dialogue_festival_tree_climb_attendant.aetherhaven.dialogue.festival_tree_climb_attendant.speaker",
-      "text": "aetherhaven_dialogue_festival_tree_climb_attendant.aetherhaven.dialogue.festival_tree_climb_attendant.collect_none.body",
-      "choices": [
-        {
-          "text": "aetherhaven_dialogue_festival_tree_climb_attendant.aetherhaven.dialogue.festival_tree_climb_attendant.collect_none.c_back",
           "next": "main_hub"
         }
       ]

@@ -27,6 +27,6 @@ public final class NewLifeFestivalMechanic implements FestivalMechanic {
         @Nonnull PlotInstance festivalPlot,
         @Nonnull FestivalDefinition festival
     ) {
-        FestivalLettuceSpawnService.despawnCenterpiece(world, festivalPlot);
+        FestivalLettuceSpawnService.despawnCenterpiece(world, festivalPlot, town.getTownId());
     }
 }

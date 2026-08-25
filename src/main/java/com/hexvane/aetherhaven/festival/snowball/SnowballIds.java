@@ -43,6 +43,8 @@ public final class SnowballIds {
     public static final double HIT_PAD_BLOCKS = 0.85;
     /** Used when a snowball has no bounding box, and as the swept-path half size. */
     public static final double HIT_PROJECTILE_RADIUS = 0.3;
+    /** Slack on the spatial lookup around a snowball, so nobody standing at the edge is missed. */
+    public static final double HIT_TARGET_SEARCH_BLOCKS = 4.0;
     public static final int PLACE_SETTINGS = 10;
 
     public static final String HUD_KEY = "AetherhavenSnowballFight";
@@ -58,6 +60,12 @@ public final class SnowballIds {
         @Nonnull
         public String langKey() {
             return this == A ? "red" : "blue";
+        }
+
+        /** Swatch colour used by the roster overlay so teams read at a glance. */
+        @Nonnull
+        public String rosterColor() {
+            return this == A ? "#e06a6a" : "#6aa8f0";
         }
     }
 

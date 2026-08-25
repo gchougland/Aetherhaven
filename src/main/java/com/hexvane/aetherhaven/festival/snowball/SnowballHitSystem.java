@@ -11,6 +11,7 @@ import com.hypixel.hytale.component.spatial.SpatialResource;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.math.shape.Box;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.ProjectileComponent;
 import com.hypixel.hytale.server.core.modules.collision.CollisionModule;
 import com.hypixel.hytale.server.core.modules.entity.EntityModule;
@@ -23,26 +24,31 @@ import com.hypixel.hytale.server.core.modules.projectile.ProjectileModule;
 import com.hypixel.hytale.server.core.modules.projectile.component.Projectile;
 import com.hypixel.hytale.server.core.modules.projectile.config.StandardPhysicsProvider;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import java.util.HashSet;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3d;
 
 /**
- * Counts opposing snowball hits on living fighters. Session state lives outside Store; entity writes use CommandBuffer.
+ * Bursts a thrown snowball on whoever it lands on and, when both of them are in a fight, counts the hit. Driven by the
+ * snowball rather than by the people it might land on, so a snowball never ends up half deleted by two fighters at once
+ * and one that lands on a bystander still bursts instead of hanging in the air.
+ *
+ * <p>Fight hits are judged against a padded hit box, because a fast projectile and a coarse tick otherwise let clean
+ * throws slip past. Everyone else uses the real hit box, so a bystander only swallows a snowball that actually reaches
+ * them, and your own side is not in the way at all. Session state lives outside the Store; entity writes go through
+ * the CommandBuffer.
  */
 public final class SnowballHitSystem extends EntityTickingSystem<EntityStore> {
     @Nonnull
     @Override
     public Query<EntityStore> getQuery() {
         return Query.and(
-            UUIDComponent.getComponentType(),
             TransformComponent.getComponentType(),
-            BoundingBox.getComponentType()
+            Query.or(Projectile.getComponentType(), ProjectileComponent.getComponentType())
         );
     }
 
@@ -54,69 +60,111 @@ public final class SnowballHitSystem extends EntityTickingSystem<EntityStore> {
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
-        UUIDComponent uuidComponent = archetypeChunk.getComponent(index, UUIDComponent.getComponentType());
+        Ref<EntityStore> projectileRef = archetypeChunk.getReferenceTo(index);
         TransformComponent transform = archetypeChunk.getComponent(index, TransformComponent.getComponentType());
-        BoundingBox boundingBox = archetypeChunk.getComponent(index, BoundingBox.getComponentType());
-        Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
-        if (uuidComponent == null || transform == null || boundingBox == null || ref == null) {
+        if (projectileRef == null || !projectileRef.isValid() || transform == null) {
             return;
         }
-        UUID victimUuid = uuidComponent.getUuid();
-        SnowballSession session = SnowballSessionIndex.sessionForFighter(victimUuid);
-        if (session == null || !session.isLivingFighter(victimUuid)) {
+        if (!isSnowballProjectile(store, projectileRef)) {
             return;
         }
+        UUID thrower = snowballCreator(store, projectileRef);
+        Box swept = projectileVolume(store, projectileRef, transform, dt);
+        Box padded = expandUniform(swept, SnowballIds.HIT_PAD_BLOCKS);
 
-        Box hitVolume = expandUniform(worldBounds(transform.getPosition(), boundingBox), SnowballIds.HIT_PAD_BLOCKS);
-        double mx = (hitVolume.min.x + hitVolume.max.x) * 0.5;
-        double my = (hitVolume.min.y + hitVolume.max.y) * 0.5;
-        double mz = (hitVolume.min.z + hitVolume.max.z) * 0.5;
-        double dx = hitVolume.max.x - hitVolume.min.x;
-        double dy = hitVolume.max.y - hitVolume.min.y;
-        double dz = hitVolume.max.z - hitVolume.min.z;
-        double collectRadius = 0.5 * Math.sqrt(dx * dx + dy * dy + dz * dz) + 8.0;
-
-        SpatialResource<Ref<EntityStore>, EntityStore> tangible =
-            store.getResource(CollisionModule.get().getTangibleEntitySpatialResourceType());
-        SpatialResource<Ref<EntityStore>, EntityStore> networkSendable =
-            store.getResource(EntityModule.get().getNetworkSendableSpatialResourceType());
-        List<Ref<EntityStore>> nearby = SpatialResource.getThreadLocalReferenceList();
-        Set<Ref<EntityStore>> candidates = new HashSet<>();
-        nearby.clear();
-        tangible.getSpatialStructure().collect(new Vector3d(mx, my, mz), collectRadius, nearby);
-        addProjectileCandidates(store, candidates, nearby);
-        nearby.clear();
-        networkSendable.getSpatialStructure().collect(new Vector3d(mx, my, mz), collectRadius, nearby);
-        addProjectileCandidates(store, candidates, nearby);
-
-        for (Ref<EntityStore> projectileRef : candidates) {
-            if (projectileRef == null || !projectileRef.isValid() || projectileRef.equals(ref)) {
+        for (Ref<EntityStore> victimRef : nearbyTargets(store, projectileRef, padded)) {
+            UUIDComponent victimUuid = store.getComponent(victimRef, UUIDComponent.getComponentType());
+            if (victimUuid == null || victimUuid.getUuid() == null || victimUuid.getUuid().equals(thrower)) {
                 continue;
             }
-            UUID creator = snowballCreator(store, projectileRef);
-            if (creator == null || !session.isLivingFighter(creator)) {
+            Box victimBounds = targetBounds(store, victimRef);
+            if (victimBounds == null || !aabbOverlap(padded, victimBounds)) {
                 continue;
             }
-            TransformComponent pTransform = store.getComponent(projectileRef, TransformComponent.getComponentType());
-            if (pTransform == null) {
+            if (isLivingTeamMate(victimUuid.getUuid(), thrower)) {
                 continue;
             }
-            if (!aabbOverlap(hitVolume, projectileVolume(store, projectileRef, pTransform, dt))) {
-                continue;
+            if (thrower != null
+                && SnowballFightHits.tryScore(
+                    store, commandBuffer, victimRef, victimUuid.getUuid(), thrower, projectileToken(store, projectileRef)
+                )) {
+                // tryScore already plays the puff and the sound on the fighter it landed on.
+                commandBuffer.removeEntity(projectileRef, RemoveReason.REMOVE);
+                return;
             }
-            boolean scored = SnowballFightHits.tryScore(
-                store,
-                commandBuffer,
-                ref,
-                victimUuid,
-                creator,
-                SnowballFightHits.projectileToken(store, projectileRef)
-            );
-            if (scored && projectileRef.isValid()) {
+            if (aabbOverlap(swept, victimBounds)) {
+                SnowballHitFeedback.burst(commandBuffer, centre(swept));
                 commandBuffer.removeEntity(projectileRef, RemoveReason.REMOVE);
                 return;
             }
         }
+    }
+
+    private static int projectileToken(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> projectileRef) {
+        return SnowballFightHits.projectileToken(store, projectileRef);
+    }
+
+    /**
+     * True while both are still standing on the same side of one fight, in which case the snowball carries on past. A
+     * team mate already knocked out is fair game and soaks it up like anybody else.
+     */
+    private static boolean isLivingTeamMate(@Nonnull UUID victimUuid, @Nullable UUID throwerUuid) {
+        if (throwerUuid == null) {
+            return false;
+        }
+        SnowballSession session = SnowballSessionIndex.sessionForFighter(throwerUuid);
+        if (session == null || !session.isLivingFighter(throwerUuid) || !session.isLivingFighter(victimUuid)) {
+            return false;
+        }
+        SnowballSession.Fighter victim = session.fighter(victimUuid);
+        SnowballSession.Fighter thrower = session.fighter(throwerUuid);
+        return victim != null && thrower != null && victim.team() == thrower.team();
+    }
+
+    /** Players and villagers close enough to be worth an overlap test. */
+    @Nonnull
+    private static List<Ref<EntityStore>> nearbyTargets(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> projectileRef,
+        @Nonnull Box around
+    ) {
+        Vector3d centre = centre(around);
+        double radius = 0.5 * diagonal(around) + SnowballIds.HIT_TARGET_SEARCH_BLOCKS;
+        List<Ref<EntityStore>> nearby = SpatialResource.getThreadLocalReferenceList();
+        nearby.clear();
+        SpatialResource<Ref<EntityStore>, EntityStore> tangible =
+            store.getResource(CollisionModule.get().getTangibleEntitySpatialResourceType());
+        tangible.getSpatialStructure().collect(centre, radius, nearby);
+        SpatialResource<Ref<EntityStore>, EntityStore> networkSendable =
+            store.getResource(EntityModule.get().getNetworkSendableSpatialResourceType());
+        networkSendable.getSpatialStructure().collect(centre, radius, nearby);
+        nearby.removeIf(candidate -> !isTarget(store, projectileRef, candidate));
+        return nearby;
+    }
+
+    private static boolean isTarget(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> projectileRef,
+        @Nullable Ref<EntityStore> candidate
+    ) {
+        if (candidate == null || !candidate.isValid() || candidate.equals(projectileRef)) {
+            return false;
+        }
+        Archetype<EntityStore> archetype = store.getArchetype(candidate);
+        if (isProjectileEntity(archetype)) {
+            return false;
+        }
+        return archetype.contains(Player.getComponentType()) || archetype.contains(NPCEntity.getComponentType());
+    }
+
+    @Nullable
+    private static Box targetBounds(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref) {
+        TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
+        BoundingBox boundingBox = store.getComponent(ref, BoundingBox.getComponentType());
+        if (transform == null || boundingBox == null) {
+            return null;
+        }
+        return worldBounds(transform.getPosition(), boundingBox);
     }
 
     @Nullable
@@ -124,9 +172,6 @@ public final class SnowballHitSystem extends EntityTickingSystem<EntityStore> {
         @Nonnull Store<EntityStore> store,
         @Nonnull Ref<EntityStore> projectileRef
     ) {
-        if (!isSnowballProjectile(store, projectileRef)) {
-            return null;
-        }
         ProjectileComponent pc = store.getComponent(projectileRef, ProjectileComponent.getComponentType());
         if (pc != null && pc.getCreatorUuid() != null) {
             return pc.getCreatorUuid();
@@ -143,10 +188,6 @@ public final class SnowballHitSystem extends EntityTickingSystem<EntityStore> {
         @Nonnull Store<EntityStore> store,
         @Nonnull Ref<EntityStore> projectileRef
     ) {
-        Archetype<EntityStore> arch = store.getArchetype(projectileRef);
-        if (!isProjectileEntity(arch)) {
-            return false;
-        }
         ModelComponent model = store.getComponent(projectileRef, ModelComponent.getComponentType());
         if (model != null && model.getModel() != null) {
             String id = model.getModel().getModelAssetId();
@@ -169,27 +210,12 @@ public final class SnowballHitSystem extends EntityTickingSystem<EntityStore> {
         return lower.contains("snowball") || lower.contains(SnowballIds.PROJECTILE_MODEL_ID.toLowerCase(Locale.ROOT));
     }
 
-    private static void addProjectileCandidates(
-        @Nonnull Store<EntityStore> store,
-        @Nonnull Set<Ref<EntityStore>> out,
-        @Nonnull List<Ref<EntityStore>> spatialHits
-    ) {
-        for (int i = 0; i < spatialHits.size(); i++) {
-            Ref<EntityStore> r = spatialHits.get(i);
-            if (r == null || !r.isValid()) {
-                continue;
-            }
-            if (isProjectileEntity(store.getArchetype(r))) {
-                out.add(r);
-            }
-        }
-    }
-
     private static boolean isProjectileEntity(@Nonnull Archetype<EntityStore> archetype) {
         return archetype.contains(Projectile.getComponentType())
             || archetype.contains(ProjectileComponent.getComponentType());
     }
 
+    /** The snowball's box grown backwards along this frame's travel, so a fast throw cannot skip past somebody. */
     @Nonnull
     private static Box projectileVolume(
         @Nonnull Store<EntityStore> store,
@@ -256,6 +282,22 @@ public final class SnowballHitSystem extends EntityTickingSystem<EntityStore> {
             b.max.y + pad,
             b.max.z + pad
         );
+    }
+
+    @Nonnull
+    private static Vector3d centre(@Nonnull Box b) {
+        return new Vector3d(
+            (b.min.x + b.max.x) * 0.5,
+            (b.min.y + b.max.y) * 0.5,
+            (b.min.z + b.max.z) * 0.5
+        );
+    }
+
+    private static double diagonal(@Nonnull Box b) {
+        double dx = b.max.x - b.min.x;
+        double dy = b.max.y - b.min.y;
+        double dz = b.max.z - b.min.z;
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
     private static boolean aabbOverlap(@Nonnull Box a, @Nonnull Box b) {

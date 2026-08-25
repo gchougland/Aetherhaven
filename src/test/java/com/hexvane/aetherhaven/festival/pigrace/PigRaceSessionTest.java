@@ -148,6 +148,34 @@ final class PigRaceSessionTest {
         assertTrue(session.tryReturnToLobby(1_450L));
     }
 
+    @Test
+    void settledBetsKeepTheRosterReadableUntilTheNextRaceStarts() {
+        PigRaceSession session = new PigRaceSession();
+        UUID winner = UUID.randomUUID();
+        UUID loser = UUID.randomUUID();
+        session.setRacers(List.of(racer(0), racer(1), racer(2), racer(3)));
+        assertTrue(session.placeBet(winner, 3, 25));
+        assertTrue(session.placeBet(loser, 1, 10));
+        assertTrue(session.settledBetsView().isEmpty());
+        assertTrue(session.beginRacing());
+        assertTrue(session.finishRace(3, 1_000L, 50L));
+
+        assertTrue(session.betsView().isEmpty());
+        assertEquals(2, session.settledBetsView().size());
+        assertEquals(3, session.settledBetsView().get(winner).laneIndex());
+        assertEquals(1, session.settledBetsView().get(loser).laneIndex());
+        assertEquals(3, session.getWinningLane());
+
+        session.markLaneFinished(0, 1_100L);
+        session.markLaneFinished(1, 1_100L);
+        session.markLaneFinished(2, 1_100L);
+        assertTrue(session.tryReturnToLobby(1_200L));
+        assertEquals(2, session.settledBetsView().size());
+        assertTrue(session.placeBet(loser, 0, 10));
+        assertTrue(session.beginRacing());
+        assertTrue(session.settledBetsView().isEmpty());
+    }
+
     @Nonnull
     private static PigRaceSession.Racer racer(int lane) {
         return new PigRaceSession.Racer(lane, UUID.randomUUID(), 1.0, 0, 0, 0, 0, 0, 16);

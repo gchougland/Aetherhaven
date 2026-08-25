@@ -1,23 +1,31 @@
 package com.hexvane.aetherhaven.festival.snowball;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.festival.FestivalParticipantNames;
 import com.hexvane.aetherhaven.festival.FestivalPrefabSwapService;
 import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.ui.FestivalActivityRosterBroadcast;
+import com.hexvane.aetherhaven.ui.FestivalActivityRosterHud;
 import com.hexvane.aetherhaven.ui.SnowballFightHud;
 import com.hexvane.aetherhaven.ui.SnowballFightHudSupport;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.TickingSystem;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +41,10 @@ import org.joml.Vector3d;
  * CommandBuffer; block place/clear uses {@code world.execute}.
  */
 public final class SnowballFightSystem extends TickingSystem<EntityStore> {
+    private static final String ROSTER_LANG = "aetherhaven_festivals.aetherhaven.festival.roster";
+    /** How far from the square a player can be and still be sent the fighters' team orbs. */
+    private static final double MARKER_VIEW_BLOCKS = 96.0;
+
     @Override
     public void tick(float dt, int systemIndex, @Nonnull Store<EntityStore> store) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
@@ -55,15 +67,20 @@ public final class SnowballFightSystem extends TickingSystem<EntityStore> {
                 continue;
             }
             TownRecord town = tm.getTown(townId);
+            String activityKey = FestivalActivityRosterBroadcast.activityKey(townId, SnowballIds.FESTIVAL_ID);
             if (town == null
                 || !SnowballIds.FESTIVAL_ID.equals(town.getActiveFestivalId())
                 || !worldName.equals(town.getWorldName())) {
+                FestivalActivityRosterBroadcast.clear(activityKey, uuid -> target(playersByUuid, uuid));
+                SnowballTeamMarkers.clear(store, townId, everyone(playersByUuid));
                 continue;
             }
 
             tickPileRespawns(world, session, now);
+            publishRoster(store, activityKey, session, playersByUuid);
 
             if (session.getPhase() == SnowballSession.Phase.LOBBY) {
+                SnowballTeamMarkers.clear(store, townId, everyone(playersByUuid));
                 continue;
             }
 
@@ -108,6 +125,7 @@ public final class SnowballFightSystem extends TickingSystem<EntityStore> {
             }
 
             if (session.getPhase() == SnowballSession.Phase.RESULTS) {
+                SnowballTeamMarkers.clear(store, townId, everyone(playersByUuid));
                 SnowballTeleport.thawVillagerFighters(store, session);
                 Set<UUID> hudPlayers = session.hudPlayerUuids();
                 refreshFightHuds(session, playersByUuid, now);
@@ -121,7 +139,45 @@ public final class SnowballFightSystem extends TickingSystem<EntityStore> {
                 continue;
             }
             refreshFightHuds(session, playersByUuid, now);
+            SnowballTeamMarkers.refresh(
+                store,
+                townId,
+                session,
+                nearbyViewers(store, playersByUuid, squareCenter(plugin, town)),
+                now
+            );
         }
+    }
+
+    /** Players close enough to the square to make out a fighter, so team orbs are not broadcast across the world. */
+    @Nonnull
+    private static List<Ref<EntityStore>> nearbyViewers(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Map<UUID, PlayerBundle> playersByUuid,
+        @Nullable Vector3d squareCenter
+    ) {
+        if (squareCenter == null) {
+            return everyone(playersByUuid);
+        }
+        List<Ref<EntityStore>> out = new ArrayList<>();
+        for (PlayerBundle bundle : playersByUuid.values()) {
+            TransformComponent transform = store.getComponent(bundle.ref(), TransformComponent.getComponentType());
+            if (transform == null
+                || transform.getPosition().distanceSquared(squareCenter) > MARKER_VIEW_BLOCKS * MARKER_VIEW_BLOCKS) {
+                continue;
+            }
+            out.add(bundle.ref());
+        }
+        return out;
+    }
+
+    @Nonnull
+    private static List<Ref<EntityStore>> everyone(@Nonnull Map<UUID, PlayerBundle> playersByUuid) {
+        List<Ref<EntityStore>> out = new ArrayList<>(playersByUuid.size());
+        for (PlayerBundle bundle : playersByUuid.values()) {
+            out.add(bundle.ref());
+        }
+        return out;
     }
 
     private static void tickPileRespawns(
@@ -188,6 +244,101 @@ public final class SnowballFightSystem extends TickingSystem<EntityStore> {
             SnowballFightHud hud = SnowballFightHudSupport.obtainHud(bundle.player(), bundle.playerRef());
             hud.refresh(fraction, fighter.lives());
         }
+    }
+
+    private static void publishRoster(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String activityKey,
+        @Nonnull SnowballSession session,
+        @Nonnull Map<UUID, PlayerBundle> playersByUuid
+    ) {
+        List<FestivalActivityRosterHud.Row> rows = new ArrayList<>();
+        Collection<UUID> audience;
+        if (session.getPhase() == SnowballSession.Phase.LOBBY) {
+            audience = session.joinedPlayersView();
+            for (UUID playerUuid : audience) {
+                rows.add(
+                    new FestivalActivityRosterHud.Row(
+                        playerName(playersByUuid.get(playerUuid)),
+                        Message.translation(ROSTER_LANG + ".status.waiting"),
+                        null,
+                        false
+                    )
+                );
+            }
+        } else {
+            audience = session.hudPlayerUuids();
+            for (SnowballSession.Fighter fighter : sortedByTeam(session.fightersView())) {
+                rows.add(fighterRow(store, fighter, playersByUuid));
+            }
+        }
+        FestivalActivityRosterBroadcast.publish(
+            activityKey,
+            Message.translation(ROSTER_LANG + ".title.snowball"),
+            rows,
+            audience,
+            uuid -> target(playersByUuid, uuid)
+        );
+    }
+
+    /** Both teams stay grouped, with the fighters still standing listed above the ones already out. */
+    @Nonnull
+    private static List<SnowballSession.Fighter> sortedByTeam(@Nonnull List<SnowballSession.Fighter> fighters) {
+        List<SnowballSession.Fighter> sorted = new ArrayList<>(fighters);
+        sorted.sort(
+            Comparator.comparingInt((SnowballSession.Fighter f) -> f.team().ordinal())
+                .thenComparingInt(f -> f.isOut() ? 1 : 0)
+                .thenComparingInt(f -> f.isPlayer() ? 0 : 1)
+        );
+        return sorted;
+    }
+
+    @Nonnull
+    private static FestivalActivityRosterHud.Row fighterRow(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull SnowballSession.Fighter fighter,
+        @Nonnull Map<UUID, PlayerBundle> playersByUuid
+    ) {
+        Message name =
+            fighter.isPlayer()
+                ? playerName(playersByUuid.get(fighter.uuid()))
+                : FestivalParticipantNames.villagerName(
+                    store,
+                    fighter.uuid(),
+                    Message.translation(ROSTER_LANG + ".villager")
+                );
+        String teamColor = fighter.team().rosterColor();
+        if (fighter.isOut()) {
+            return new FestivalActivityRosterHud.Row(
+                name,
+                Message.translation(ROSTER_LANG + ".status.out"),
+                teamColor,
+                true
+            );
+        }
+        return FestivalActivityRosterHud.Row.withLives(
+            name,
+            teamColor,
+            false,
+            Math.max(0, fighter.lives()),
+            SnowballIds.LIVES
+        );
+    }
+
+    @Nonnull
+    private static Message playerName(@Nullable PlayerBundle bundle) {
+        return bundle != null
+            ? Message.raw(bundle.playerRef().getUsername())
+            : Message.translation(ROSTER_LANG + ".villager");
+    }
+
+    @Nullable
+    private static FestivalActivityRosterBroadcast.Target target(
+        @Nonnull Map<UUID, PlayerBundle> playersByUuid,
+        @Nonnull UUID playerUuid
+    ) {
+        PlayerBundle bundle = playersByUuid.get(playerUuid);
+        return bundle == null ? null : new FestivalActivityRosterBroadcast.Target(bundle.player(), bundle.playerRef());
     }
 
     private static void clearFightHuds(

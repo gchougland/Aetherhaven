@@ -26,6 +26,7 @@ import com.hexvane.aetherhaven.festival.lettuce.FestivalLettuceInteractSystem;
 import com.hexvane.aetherhaven.festival.pigrace.PigRaceDialogueHandlers;
 import com.hexvane.aetherhaven.festival.pigrace.PigRaceFestivalMechanic;
 import com.hexvane.aetherhaven.festival.pigrace.PigRaceRacerComponent;
+import com.hexvane.aetherhaven.festival.pigrace.PigRaceRosterSystem;
 import com.hexvane.aetherhaven.festival.pigrace.PigRaceSystem;
 import com.hexvane.aetherhaven.festival.hallowseve.HallowsEveBatComponent;
 import com.hexvane.aetherhaven.festival.hallowseve.HallowsEveBatDirectorSystem;
@@ -148,7 +149,9 @@ public final class FestivalsBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new FestivalSquareBreakBlockSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new FestivalSquarePlaceBlockSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new FestivalDanceSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new FestivalRewardWindowSystem());
         plugin.getEntityStoreRegistry().registerSystem(new PigRaceSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new PigRaceRosterSystem());
         plugin.getEntityStoreRegistry().registerSystem(new CarnivalBalloonSystem());
         plugin.getEntityStoreRegistry().registerSystem(new CarnivalBalloonDirectorSystem());
         plugin.getEntityStoreRegistry().registerSystem(new CarnivalWhackSystem());

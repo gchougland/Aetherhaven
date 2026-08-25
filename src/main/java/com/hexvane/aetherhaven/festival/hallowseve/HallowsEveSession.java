@@ -67,8 +67,12 @@ public final class HallowsEveSession {
         return phase == Phase.RACING && isRacer(player);
     }
 
-    public boolean isReadyToBurst(@Nonnull UUID player) {
-        return phase == Phase.READY_TO_BURST && isRacer(player);
+    /**
+     * Anyone standing at the festival may pop the pumpkin once the run has filled it, not just the racer. The
+     * racer is often still walking back when the crowd wants to see it burst.
+     */
+    public boolean isReadyToBurst() {
+        return phase == Phase.READY_TO_BURST;
     }
 
     public boolean tryBegin(@Nonnull UUID player, long nowMs) {

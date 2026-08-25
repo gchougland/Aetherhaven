@@ -1,10 +1,8 @@
 aetherhaven.dialogue.festival_tree_climb_attendant.speaker=Race Attendant
-aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.body=Ready to climb? Joining costs ten gold coins. Wait for friends, then start when everyone is set. Up to four climbers at a time.
+aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.body=Ready to climb? Joining costs ten gold coins. Wait for friends, then start when everyone is set.
 aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_join=Join the race (10 gold)
 aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_leave=Leave the race
 aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_start=Start the race
-aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_busy=A race is already going
-aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_collect=Collect my tickets
 aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_leaderboard=Look at the leaderboard
 aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_about=How does the climb work?
 aetherhaven.dialogue.festival_tree_climb_attendant.main_hub.c_goodbye=Goodbye
@@ -32,9 +30,3 @@ aetherhaven.dialogue.festival_tree_climb_attendant.start_failed.c_back=Back
 
 aetherhaven.dialogue.festival_tree_climb_attendant.race_busy.body=A race is already going. Wait until everyone finishes, then you can join the next one.
 aetherhaven.dialogue.festival_tree_climb_attendant.race_busy.c_back=Back
-
-aetherhaven.dialogue.festival_tree_climb_attendant.collect_win.body=Nice climb! Here are {count} summer festival tickets. Spend them at the sapling merchant.
-aetherhaven.dialogue.festival_tree_climb_attendant.collect_win.c_back=Thanks
-
-aetherhaven.dialogue.festival_tree_climb_attendant.collect_none.body=I do not have any tickets waiting for you.
-aetherhaven.dialogue.festival_tree_climb_attendant.collect_none.c_back=Back

@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.calendar.VillagerBirthdayService;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
 import com.hexvane.aetherhaven.festival.FestivalAttendanceService;
+import com.hexvane.aetherhaven.festival.FestivalOpenAccess;
 import com.hexvane.aetherhaven.festival.FestivalRewardNotify;
 import com.hexvane.aetherhaven.hud.AetherhavenCalendar;
 import com.hexvane.aetherhaven.reputation.VillagerReputationEntry;
@@ -28,6 +29,7 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -83,7 +85,7 @@ public final class WintertideGiftService {
         if (!session.hasAssignmentSeed()) {
             session.setAssignmentSeed(ThreadLocalRandom.current().nextLong());
         }
-        List<WintertideAssignmentService.PlayerMember> players = townMembers(world, town);
+        List<WintertideAssignmentService.PlayerMember> players = festivalPlayers(world, town, store);
         dropStalePlayerTargets(session, world, players);
         List<WintertideAssignmentService.Resident> residents = giftableResidents(store, plugin, town.getTownId());
         Set<UUID> before = new LinkedHashSet<>(session.assignedVillagerUuids());
@@ -143,7 +145,7 @@ public final class WintertideGiftService {
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = resolveTown(playerRef, store, npcRef);
-        if (town == null || !town.hasMemberOrOwner(pu.getUuid()) || !canGiveToVillager(town, store, pu.getUuid(), npcRef)) {
+        if (town == null || !canGiveToVillager(town, store, pu.getUuid(), npcRef)) {
             return;
         }
         InventoryComponent.Hotbar hotbar = store.getComponent(playerRef, InventoryComponent.Hotbar.getComponentType());
@@ -202,7 +204,7 @@ public final class WintertideGiftService {
         }
         World world = store.getExternalData().getWorld();
         TownRecord town = resolveTown(giverRef, store, null);
-        if (town == null || !isWintertideActive(town) || !town.hasMemberOrOwner(giverUuid.getUuid())) {
+        if (town == null || !isWintertideActive(town)) {
             return;
         }
         WintertideSession session = sessionFor(town, store);
@@ -253,7 +255,7 @@ public final class WintertideGiftService {
             : null;
         Player receiver = store.getComponent(receiverRef, Player.getComponentType());
         if (receiver != null) {
-            FestivalRewardNotify.giveAndNotify(
+            FestivalRewardNotify.giveGift(
                 receiver,
                 receiverRef,
                 store,
@@ -269,6 +271,7 @@ public final class WintertideGiftService {
         if (giverRef != null && giverRef.isValid()) {
             queueIncomingSeek(store, session, pending.giverUuid());
         }
+        WintertidePlayerGiftInteractSync.clear(receiverRef, store);
         out.setCloseDialogue(true);
     }
 
@@ -344,7 +347,7 @@ public final class WintertideGiftService {
                 ^ incoming.getUuid().getMostSignificantBits()
         );
         for (ItemStack stack : WintertideGifts.toItemStacks(WintertideGifts.pick(kind, def, rnd))) {
-            FestivalRewardNotify.giveAndNotify(player, playerRef, store, stack);
+            FestivalRewardNotify.giveGift(player, playerRef, store, stack);
         }
         session.markReceived(pu.getUuid());
         if (npcRef != null && npcRef.isValid()) {
@@ -372,30 +375,38 @@ public final class WintertideGiftService {
         session.markSeekQueued(playerUuid);
     }
 
+    /**
+     * Everyone who takes part in this town's Wintertide: online members plus any visitor standing in the town, so
+     * a guest at the festival is given somebody to hand a present to.
+     */
     @Nonnull
-    static List<WintertideAssignmentService.PlayerMember> townMembers(
+    static List<WintertideAssignmentService.PlayerMember> festivalPlayers(
         @Nonnull World world,
-        @Nonnull TownRecord town
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store
     ) {
         Set<UUID> online = TownOnlinePresence.collectOnlinePlayerUuids(world);
-        List<WintertideAssignmentService.PlayerMember> out = new ArrayList<>();
+        Set<UUID> taking = new LinkedHashSet<>();
         UUID ownerUuid = town.getOwnerUuid();
         if (ownerUuid != null && online.contains(ownerUuid)) {
-            out.add(
-                new WintertideAssignmentService.PlayerMember(
-                    ownerUuid, TownPlayerLookup.ownerDisplayName(world, town)
-                )
-            );
+            taking.add(ownerUuid);
         }
         for (UUID member : town.getMemberPlayerUuids()) {
-            if (town.isOwner(member) || !online.contains(member)) {
-                continue;
+            if (online.contains(member)) {
+                taking.add(member);
             }
-            out.add(
-                new WintertideAssignmentService.PlayerMember(
-                    member, TownPlayerLookup.displayNameForUuid(world, member)
-                )
-            );
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null) {
+            taking.addAll(FestivalOpenAccess.playersAttending(plugin, town, store));
+        }
+        List<WintertideAssignmentService.PlayerMember> out = new ArrayList<>();
+        for (UUID playerUuid : taking) {
+            String name =
+                town.isOwner(playerUuid)
+                    ? TownPlayerLookup.ownerDisplayName(world, town)
+                    : TownPlayerLookup.displayNameForUuid(world, playerUuid);
+            out.add(new WintertideAssignmentService.PlayerMember(playerUuid, name));
         }
         return out;
     }
@@ -725,6 +736,19 @@ public final class WintertideGiftService {
             TownRecord home = tm.findTownForPlayerInWorld(pu.getUuid());
             if (isWintertideActive(home)) {
                 return home;
+            }
+        }
+        // A visitor has no home town here, so fall back to the town they are standing in.
+        TransformComponent tc = store.getComponent(playerRef, TransformComponent.getComponentType());
+        if (tc != null && world != null) {
+            TownRecord standingIn =
+                tm.findTownContainingBlock(
+                    world.getName(),
+                    (int) Math.floor(tc.getPosition().x),
+                    (int) Math.floor(tc.getPosition().z)
+                );
+            if (isWintertideActive(standingIn)) {
+                return standingIn;
             }
         }
         return null;

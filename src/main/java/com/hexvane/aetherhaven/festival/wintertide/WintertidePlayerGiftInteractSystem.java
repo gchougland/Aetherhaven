@@ -1,8 +1,6 @@
 package com.hexvane.aetherhaven.festival.wintertide;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
-import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -42,9 +40,9 @@ public final class WintertidePlayerGiftInteractSystem extends EntityTickingSyste
         if (plugin == null || world == null) {
             return;
         }
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
-        if (!WintertideGiftService.isWintertideActive(town)) {
+        // Visitors have no home town, so fall back to the festival they are standing in.
+        TownRecord town = WintertideGiftService.resolveTown(ref, store, null);
+        if (town == null || !WintertideGiftService.isWintertideActive(town)) {
             WintertidePlayerGiftInteractSync.clear(ref, commandBuffer);
             return;
         }

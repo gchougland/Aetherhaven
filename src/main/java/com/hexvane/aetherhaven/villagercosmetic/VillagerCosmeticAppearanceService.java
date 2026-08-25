@@ -23,10 +23,12 @@ import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -76,53 +78,52 @@ public final class VillagerCosmeticAppearanceService {
         if (asset == null) {
             return null;
         }
-        float scale = modelScale != null && modelScale > 0f ? modelScale : asset.generateRandomScale();
-        Model base = Model.createScaledModel(asset, scale);
+        float scale = resolveScale(asset, modelScale, currentModel);
+        Map<String, String> randomAttachmentIds = baseLookIds(modelAssetId, currentModel);
+        Model base =
+            randomAttachmentIds != null
+                ? Model.createScaledModel(asset, scale, randomAttachmentIds)
+                : Model.createScaledModel(asset, scale);
         if (base == null) {
             return null;
         }
-        ModelAttachment[] sourceAttachments = attachmentSource(base, currentModel);
+        // The base look always comes from the model asset, never from the live entity: the asset carries the hats and
+        // accessories authored in the model JSON, while the live attachments carry whatever cosmetic was applied last.
+        // Merging onto the asset is what makes "Default" in every slot put the villager back the way they spawned.
+        ModelAttachment[] baseLook = orEmpty(base.getAttachments());
         if (slotOverrides == null || slotOverrides.isEmpty()) {
-            return copyWithAttachments(base, stripWardrobeCosmetics(sourceAttachments, catalog));
+            return copyWithAttachments(base, baseLook);
         }
-        ModelAttachment[] merged = mergeAttachments(sourceAttachments, slotOverrides, catalog);
-        return copyWithAttachments(base, merged);
+        return copyWithAttachments(base, mergeAttachments(baseLook, slotOverrides, catalog));
+    }
+
+    private static float resolveScale(
+        @Nonnull ModelAsset asset,
+        @Nullable Float modelScale,
+        @Nullable Model currentModel
+    ) {
+        if (modelScale != null && modelScale > 0f) {
+            return modelScale;
+        }
+        if (currentModel != null && currentModel.getScale() > 0f) {
+            return currentModel.getScale();
+        }
+        return asset.generateRandomScale();
+    }
+
+    /** Random attachment ids of the live model, but only when it was built from the same asset. */
+    @Nullable
+    private static Map<String, String> baseLookIds(@Nonnull String modelAssetId, @Nullable Model currentModel) {
+        if (currentModel == null || !modelAssetId.equalsIgnoreCase(currentModel.getModelAssetId())) {
+            return null;
+        }
+        Map<String, String> ids = currentModel.getRandomAttachmentIds();
+        return ids != null && !ids.isEmpty() ? ids : null;
     }
 
     @Nonnull
-    private static ModelAttachment[] attachmentSource(@Nonnull Model base, @Nullable Model currentModel) {
-        if (currentModel != null && currentModel.getAttachments() != null && currentModel.getAttachments().length > 0) {
-            return currentModel.getAttachments();
-        }
-        ModelAttachment[] fromBase = base.getAttachments();
-        return fromBase != null ? fromBase : new ModelAttachment[0];
-    }
-
-    @Nonnull
-    private static ModelAttachment[] stripWardrobeCosmetics(
-        @Nullable ModelAttachment[] source,
-        @Nonnull VillagerCosmeticCatalog catalog
-    ) {
-        if (source == null || source.length == 0) {
-            return new ModelAttachment[0];
-        }
-        List<ModelAttachment> kept = new ArrayList<>();
-        for (ModelAttachment attachment : source) {
-            if (attachment == null || isWardrobeCosmeticModel(attachment.getModel(), catalog)) {
-                continue;
-            }
-            kept.add(attachment);
-        }
-        return kept.toArray(ModelAttachment[]::new);
-    }
-
-    private static boolean isWardrobeCosmeticModel(
-        @Nullable String modelPath,
-        @Nonnull VillagerCosmeticCatalog catalog
-    ) {
-        return catalog.isHeadAccessoryModel(modelPath)
-            || catalog.isFaceAccessoryModel(modelPath)
-            || catalog.isBackAccessoryModel(modelPath);
+    private static ModelAttachment[] orEmpty(@Nullable ModelAttachment[] attachments) {
+        return attachments != null ? attachments : new ModelAttachment[0];
     }
 
     @Nonnull
@@ -366,8 +367,7 @@ public final class VillagerCosmeticAppearanceService {
         @Nonnull Store<EntityStore> store,
         @Nonnull TownRecord town
     ) {
-        UUID townId = town.getTownId();
-        List<Ref<EntityStore>> npcRefs = collectTownBoundNpcRefs(store, townId);
+        List<Ref<EntityStore>> npcRefs = collectTownNpcRefs(store, town);
         world.execute(
             () -> {
                 for (Ref<EntityStore> npcRef : npcRefs) {
@@ -379,21 +379,37 @@ public final class VillagerCosmeticAppearanceService {
         );
     }
 
+    /**
+     * Every NPC the wardrobe covers: townsfolk, guards and tourists bound to the town, plus the festival NPCs standing
+     * on the square, which carry no town binding of their own.
+     */
     @Nonnull
-    private static List<Ref<EntityStore>> collectTownBoundNpcRefs(
+    public static List<Ref<EntityStore>> collectTownNpcRefs(
         @Nonnull Store<EntityStore> store,
-        @Nonnull UUID townId
+        @Nonnull TownRecord town
     ) {
+        UUID townId = town.getTownId();
+        Set<String> festivalNpcUuids = new HashSet<>();
+        for (String raw : town.getActiveFestivalNpcEntityUuids()) {
+            if (raw != null && !raw.isBlank()) {
+                festivalNpcUuids.add(raw.trim().toLowerCase(Locale.ROOT));
+            }
+        }
         List<Ref<EntityStore>> refs = new ArrayList<>();
-        Query<EntityStore> q =
-            Query.and(TownVillagerBinding.getComponentType(), UUIDComponent.getComponentType());
+        Query<EntityStore> q = Query.and(NPCEntity.getComponentType(), UUIDComponent.getComponentType());
         store.forEachChunk(
             q,
             (ArchetypeChunk<EntityStore> archetypeChunk, CommandBuffer<EntityStore> commandBuffer) -> {
                 for (int i = 0; i < archetypeChunk.size(); i++) {
                     TownVillagerBinding binding =
                         archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
-                    if (binding == null || !townId.equals(binding.getTownId())) {
+                    UUIDComponent uc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
+                    boolean bound = binding != null && townId.equals(binding.getTownId());
+                    boolean festival =
+                        binding == null
+                            && uc != null
+                            && festivalNpcUuids.contains(uc.getUuid().toString().toLowerCase(Locale.ROOT));
+                    if (!bound && !festival) {
                         continue;
                     }
                     Ref<EntityStore> npcRef = archetypeChunk.getReferenceTo(i);

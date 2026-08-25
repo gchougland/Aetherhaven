@@ -40,6 +40,7 @@ public final class TreeClimbSession {
     private double finishWorldY;
     private double finishWorldZ;
     private final List<StartPad> startPads = new ArrayList<>();
+    private int maxRacers = TreeClimbIds.DEFAULT_MAX_RACERS;
 
     public record StartPad(double x, double y, double z, float yawDegrees) {}
 
@@ -67,14 +68,26 @@ public final class TreeClimbSession {
         finishWorldY = 0;
         finishWorldZ = 0;
         startPads.clear();
+        maxRacers = TreeClimbIds.DEFAULT_MAX_RACERS;
     }
 
-    public void setCourse(@Nonnull List<StartPad> pads, double finishX, double finishY, double finishZ) {
+    public void setCourse(
+        @Nonnull List<StartPad> pads,
+        double finishX,
+        double finishY,
+        double finishZ,
+        int maxRacers
+    ) {
         startPads.clear();
         startPads.addAll(pads);
         finishWorldX = finishX;
         finishWorldY = finishY;
         finishWorldZ = finishZ;
+        this.maxRacers = Math.max(1, maxRacers);
+    }
+
+    public int getMaxRacers() {
+        return maxRacers;
     }
 
     @Nonnull
@@ -97,7 +110,7 @@ public final class TreeClimbSession {
     public boolean canJoin(@Nonnull UUID playerUuid) {
         return phase == Phase.LOBBY
             && !joined.contains(playerUuid)
-            && joined.size() < TreeClimbIds.MAX_RACERS
+            && joined.size() < maxRacers
             && !startPads.isEmpty();
     }
 
@@ -190,6 +203,10 @@ public final class TreeClimbSession {
 
     public boolean hasFinished(@Nonnull UUID playerUuid) {
         return finishSeconds.containsKey(playerUuid) || dnfPlayers.contains(playerUuid);
+    }
+
+    public boolean isDnf(@Nonnull UUID playerUuid) {
+        return dnfPlayers.contains(playerUuid);
     }
 
     @Nullable
@@ -289,6 +306,11 @@ public final class TreeClimbSession {
 
     public boolean hasPendingTickets(@Nonnull UUID playerUuid) {
         return pendingTickets.getOrDefault(playerUuid, 0) > 0;
+    }
+
+    @Nonnull
+    public Set<UUID> pendingTicketPlayerUuids() {
+        return Set.copyOf(pendingTickets.keySet());
     }
 
     public int collectTickets(@Nonnull UUID playerUuid) {

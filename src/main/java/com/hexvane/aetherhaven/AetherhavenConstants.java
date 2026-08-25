@@ -872,6 +872,9 @@ public final class AetherhavenConstants {
 
     /** Key for the raid quest health bar overlay on {@link com.hypixel.hytale.server.core.entity.entities.player.hud.HudManager}. */
     public static final String RAID_HEALTH_BAR_HUD_KEY = "AetherhavenRaidHealthBar";
+
+    /** Shared roster overlay listing everyone taking part in the current festival activity. */
+    public static final String FESTIVAL_ACTIVITY_ROSTER_HUD_KEY = "AetherhavenFestivalActivityRoster";
     /** NPC role state while under RTS command (Java-driven seek/aggro). */
     public static final String NPC_STATE_GUARD_RTS_COMMAND = "RtsCommand";
 

@@ -93,6 +93,18 @@ public final class PigRaceLanes {
         };
     }
 
+    /** Short pig name ("Pink Pig") for lists, where {@link #displayNameLangKey} reads as a sentence fragment. */
+    @Nonnull
+    public static String shortNameLangKey(int laneIndex) {
+        return switch (laneIndex) {
+            case 0 -> "aetherhaven_festivals.aetherhaven.festival.pig_race.npc.pink.name";
+            case 1 -> "aetherhaven_festivals.aetherhaven.festival.pig_race.npc.boar.name";
+            case 2 -> "aetherhaven_festivals.aetherhaven.festival.pig_race.npc.undead.name";
+            case 3 -> "aetherhaven_festivals.aetherhaven.festival.pig_race.npc.wild.name";
+            default -> "aetherhaven_festivals.aetherhaven.festival.pig_race.npc.pink.name";
+        };
+    }
+
     /** Yaw so the pig model faces along the race direction (Hytale forward is opposite atan2). */
     public static float facingYawRadians(double dx, double dz) {
         return (float) (Math.atan2(dx, dz) + Math.PI);
