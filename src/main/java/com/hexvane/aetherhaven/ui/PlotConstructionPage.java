@@ -848,7 +848,6 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             commandBuilder.set("#TouristManifestScroll.Visible", false);
             commandBuilder.set("#ClearVisitingTouristsButton.Visible", false);
             commandBuilder.set("#VisitorPortalTravelRow.Visible", false);
-            commandBuilder.set("#TerritoryProtectionRow.Visible", false);
             return;
         }
         Store<EntityStore> entityStore = world.getEntityStore().getStore();
@@ -874,16 +873,11 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         commandBuilder.set("#ClearVisitingTouristsButton.Visible", canClear);
         commandBuilder.set("#ClearVisitingTouristsButton.Disabled", !canClear);
         commandBuilder.set("#VisitorPortalTravelRow.Visible", canClear);
-        commandBuilder.set("#TerritoryProtectionRow.Visible", canClear);
         if (canClear) {
             commandBuilder.set("#VisitorPortalTravelToggle.Value", town.isAllowVisitorPortalTravel());
             commandBuilder.set("#VisitorPortalTravelToggle.Disabled", false);
             commandBuilder.set("#VisitorPortalMembersOnlyToggle.Value", town.isVisitorPortalMembersOnly());
             commandBuilder.set("#VisitorPortalMembersOnlyToggle.Disabled", false);
-            commandBuilder.set("#TerritoryBreakProtectionToggle.Value", town.isTerritoryBreakProtectionEnabled());
-            commandBuilder.set("#TerritoryBreakProtectionToggle.Disabled", false);
-            commandBuilder.set("#TerritoryUseProtectionToggle.Value", town.isTerritoryUseProtectionEnabled());
-            commandBuilder.set("#TerritoryUseProtectionToggle.Disabled", false);
             String portalColor = TownPortalTravelColor.resolveHex(town);
             TownPortalTravelColor.applyTeleportIconTint(commandBuilder, "#VisitorPortalColorPreviewIcon", portalColor);
             commandBuilder.set("#ChooseVisitorPortalColorButton.Disabled", false);
@@ -911,22 +905,6 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 new EventData()
                     .append("Action", "SetVisitorPortalMembersOnly")
                     .append("@VisitorPortalMembersOnly", "#VisitorPortalMembersOnlyToggle.Value"),
-                false
-            );
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.ValueChanged,
-                "#TerritoryBreakProtectionToggle",
-                new EventData()
-                    .append("Action", "SetTerritoryBreakProtection")
-                    .append("@TerritoryBreakProtection", "#TerritoryBreakProtectionToggle.Value"),
-                false
-            );
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.ValueChanged,
-                "#TerritoryUseProtectionToggle",
-                new EventData()
-                    .append("Action", "SetTerritoryUseProtection")
-                    .append("@TerritoryUseProtection", "#TerritoryUseProtectionToggle.Value"),
                 false
             );
         }
@@ -1016,80 +994,6 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         }
         World world = store.getExternalData().getWorld();
         town.setAllowVisitorPortalTravel(allow);
-        AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
-        UICommandBuilder cmd = new UICommandBuilder();
-        UIEventBuilder ev = new UIEventBuilder();
-        build(ref, cmd, ev, store);
-        sendUpdate(cmd, ev, false);
-    }
-
-    private void handleSetTerritoryBreakProtection(
-        @Nonnull Ref<EntityStore> ref,
-        @Nonnull Store<EntityStore> store,
-        @Nullable Boolean enabled
-    ) {
-        if (!managementUi || enabled == null) {
-            return;
-        }
-        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        if (uc == null) {
-            return;
-        }
-        TownRecord town = resolveManagementTown(store);
-        if (town == null) {
-            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.townNotFound"));
-            return;
-        }
-        if (!town.playerCanPlacePlots(uc.getUuid())) {
-            playerRef.sendMessage(
-                Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.territoryProtectionNoPermission")
-            );
-            return;
-        }
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
-            return;
-        }
-        World world = store.getExternalData().getWorld();
-        town.setTerritoryBreakProtectionEnabled(enabled);
-        AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
-        UICommandBuilder cmd = new UICommandBuilder();
-        UIEventBuilder ev = new UIEventBuilder();
-        build(ref, cmd, ev, store);
-        sendUpdate(cmd, ev, false);
-    }
-
-    private void handleSetTerritoryUseProtection(
-        @Nonnull Ref<EntityStore> ref,
-        @Nonnull Store<EntityStore> store,
-        @Nullable Boolean enabled
-    ) {
-        if (!managementUi || enabled == null) {
-            return;
-        }
-        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        if (uc == null) {
-            return;
-        }
-        TownRecord town = resolveManagementTown(store);
-        if (town == null) {
-            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.townNotFound"));
-            return;
-        }
-        if (!town.playerCanPlacePlots(uc.getUuid())) {
-            playerRef.sendMessage(
-                Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.territoryProtectionNoPermission")
-            );
-            return;
-        }
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
-            return;
-        }
-        World world = store.getExternalData().getWorld();
-        town.setTerritoryUseProtectionEnabled(enabled);
         AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
         UICommandBuilder cmd = new UICommandBuilder();
         UIEventBuilder ev = new UIEventBuilder();
@@ -1725,14 +1629,6 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         }
         if (data.action != null && data.action.equalsIgnoreCase("SetVisitorPortalMembersOnly")) {
             handleSetVisitorPortalMembersOnly(ref, store, data.visitorPortalMembersOnly);
-            return;
-        }
-        if (data.action != null && data.action.equalsIgnoreCase("SetTerritoryBreakProtection")) {
-            handleSetTerritoryBreakProtection(ref, store, data.territoryBreakProtection);
-            return;
-        }
-        if (data.action != null && data.action.equalsIgnoreCase("SetTerritoryUseProtection")) {
-            handleSetTerritoryUseProtection(ref, store, data.territoryUseProtection);
             return;
         }
         if (data.action != null && data.action.equalsIgnoreCase("SetPlayerShopNpcBuy")) {
@@ -3733,18 +3629,6 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             )
             .add()
             .append(
-                new KeyedCodec<>("@TerritoryBreakProtection", Codec.BOOLEAN),
-                (d, v) -> d.territoryBreakProtection = v,
-                d -> d.territoryBreakProtection
-            )
-            .add()
-            .append(
-                new KeyedCodec<>("@TerritoryUseProtection", Codec.BOOLEAN),
-                (d, v) -> d.territoryUseProtection = v,
-                d -> d.territoryUseProtection
-            )
-            .add()
-            .append(
                 new KeyedCodec<>("@AllowNpcShopPurchases", Codec.BOOLEAN),
                 (d, v) -> d.allowNpcShopPurchases = v,
                 d -> d.allowNpcShopPurchases
@@ -3778,10 +3662,6 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         private Boolean allowVisitorPortalTravel;
         @Nullable
         private Boolean visitorPortalMembersOnly;
-        @Nullable
-        private Boolean territoryBreakProtection;
-        @Nullable
-        private Boolean territoryUseProtection;
         @Nullable
         private Boolean allowNpcShopPurchases;
         @Nullable

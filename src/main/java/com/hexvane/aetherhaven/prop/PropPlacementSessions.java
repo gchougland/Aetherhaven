@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.prop;
 
+import com.hexvane.aetherhaven.placement.PlotPlacementClientPrefabPreview;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
@@ -22,7 +23,13 @@ public final class PropPlacementSessions {
     }
 
     public static void remove(@Nonnull UUID playerUuid) {
-        BY_PLAYER.remove(playerUuid);
+        PropPlacementSession session = BY_PLAYER.remove(playerUuid);
+        if (session != null && session.getWorld().getEntityStore() != null) {
+            PlotPlacementClientPrefabPreview.clearWorldPreview(
+                session.getWorld().getEntityStore().getStore(),
+                session.getPreviewEntityRefs()
+            );
+        }
     }
 
     public static void forEachActive(@Nonnull BiConsumer<UUID, PropPlacementSession> consumer) {

@@ -5,6 +5,7 @@
 ### Changed
 
 - **Hytale Update 6** Aetherhaven runs on Hytale Update 6.
+- **Town protection** Change who may break blocks and use things in your town from Town Journal Settings instead of the tourist portal.
 
 ### Fixed
 

@@ -1011,13 +1011,23 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
             return;
         }
         if (payload != null) {
-            PlotPlacementClientPrefabPreview.sendPositionOnly(pr, prefabOriginWorld, payload, session.getPrefabYaw());
+            PlotPlacementClientPrefabPreview.sendPositionOnly(
+                pr,
+                prefabOriginWorld,
+                payload,
+                session.getPrefabYaw(),
+                session
+            );
         }
         lastPreviewOriginFloored = floored;
     }
 
     private void clearClientPrefabPreview(@Nonnull PlayerRef pr) {
         PlotPlacementPreviewSync.hideSpectators(session.getWorld(), pr.getUuid(), session);
+        Ref<EntityStore> entityRef = pr.getReference();
+        if (entityRef != null) {
+            PlotPlacementClientPrefabPreview.clearWorldPreview(entityRef.getStore(), session);
+        }
         if (clientPrefabPreviewActive) {
             PlotPlacementClientPrefabPreview.hide(pr);
         }

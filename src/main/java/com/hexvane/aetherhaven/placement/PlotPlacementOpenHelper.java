@@ -171,6 +171,7 @@ public final class PlotPlacementOpenHelper {
         world.execute(
             () -> {
                 PlotPlacementPreviewSync.hideSpectators(world, uc.getUuid(), s);
+                PlotPlacementClientPrefabPreview.clearWorldPreview(store, s);
                 PlotPlacementClientPrefabPreview.hide(pr);
                 PlotPlacementWireframeOverlay.clearFor(pr);
             }

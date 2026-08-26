@@ -298,47 +298,6 @@ $C.@PageOverlay {
                 }
               }
             }
-
-            Group #TerritoryProtectionRow {
-              LayoutMode: Top;
-              Visible: false;
-              Anchor: (Top: 10, Bottom: 8);
-              Padding: (Horizontal: 8, Vertical: 8);
-              Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
-
-              Label #TerritoryProtectionHeader {
-                Text: "";
-                Style: (...$C.@DefaultLabelStyle, RenderBold: true);
-                Anchor: (Bottom: 8);
-              }
-
-              Group #TerritoryBreakProtectionRow {
-                LayoutMode: Left;
-                Anchor: (Bottom: 8);
-
-                $C.@CheckBox #TerritoryBreakProtectionToggle {}
-
-                Label #TerritoryBreakProtectionLabel {
-                  Text: "";
-                  Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8, Wrap: true);
-                  Anchor: (Left: 11);
-                  FlexWeight: 1;
-                }
-              }
-
-              Group #TerritoryUseProtectionRow {
-                LayoutMode: Left;
-
-                $C.@CheckBox #TerritoryUseProtectionToggle {}
-
-                Label #TerritoryUseProtectionLabel {
-                  Text: "";
-                  Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8, Wrap: true);
-                  Anchor: (Left: 11);
-                  FlexWeight: 1;
-                }
-              }
-            }
           }
 
           Group #GuardManifestRow {

@@ -8,10 +8,11 @@ import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementCameraUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementRotationUtil;
 import com.hexvane.aetherhaven.placement.WallPlacementCameraUtil;
+import com.hexvane.aetherhaven.placement.PlotPlacementClientPrefabPreview;
 import com.hexvane.aetherhaven.placement.PlotPlacementCommit;
 import com.hexvane.aetherhaven.placement.PlotPlacementHeights;
 import com.hexvane.aetherhaven.placement.PlotPlacementValidator;
-import com.hexvane.aetherhaven.placement.PlotPreviewSpawner;
+import com.hexvane.aetherhaven.prefab.AetherhavenWorldPrefabPreview;
 import com.hexvane.aetherhaven.placement.WallPlacementDebug;
 import com.hexvane.aetherhaven.placement.WallPlacementRemoveService;
 import com.hexvane.aetherhaven.placement.WallPlacementSession;
@@ -662,7 +663,11 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
 
     private void refreshPreview(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         if (session.hasEditTarget() || session.isRemoveConfirmOpen()) {
-            PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+            AetherhavenWorldPrefabPreview.clearAll(store, session.getPreviewEntityRefs());
+            PlayerRef clearTarget = store.getComponent(ref, PlayerRef.getComponentType());
+            if (clearTarget != null) {
+                PlotPlacementClientPrefabPreview.hide(clearTarget);
+            }
             return;
         }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
@@ -676,12 +681,18 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         String consId = session.resolveConstructionId();
         ConstructionDefinition def = plugin.getConstructionCatalog().get(consId);
         if (def == null) {
-            PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+            AetherhavenWorldPrefabPreview.clearAll(store, session.getPreviewEntityRefs());
+            if (pr != null) {
+                PlotPlacementClientPrefabPreview.hide(pr);
+            }
             return;
         }
         Path prefabPath = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
         if (prefabPath == null) {
-            PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+            AetherhavenWorldPrefabPreview.clearAll(store, session.getPreviewEntityRefs());
+            if (pr != null) {
+                PlotPlacementClientPrefabPreview.hide(pr);
+            }
             return;
         }
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -723,7 +734,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 } finally {
                 }
             }
-            PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+            AetherhavenWorldPrefabPreview.clearAll(store, session.getPreviewEntityRefs());
             boolean skipInWorldSeedGhost =
                 session.isSeededContinueFromEdit() && session.getCommitted().size() == 1;
             for (WallPlacementSession.CommittedStep step : session.getCommitted()) {
@@ -737,8 +748,31 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
             if (session.shouldShowNextPiecePreview()) {
                 Vector3i currentOrigin =
                     def.resolvePrefabAnchorWorld(session.getCurrentAnchor(), session.getCurrentPrefabYaw());
-                PlotPreviewSpawner.append(store, currentOrigin, session.getCurrentPrefabYaw(), buf, session.getPreviewEntityRefs());
+                Ref<EntityStore> activeRef =
+                    AetherhavenWorldPrefabPreview.spawnAtBlockCorner(
+                        store,
+                        currentOrigin,
+                        AetherhavenWorldPrefabPreview.rotationFromYaw(session.getCurrentPrefabYaw()),
+                        def.getPrefabPath(),
+                        session.getCurrentRotationSteps(),
+                        AetherhavenWorldPrefabPreview.ALL_LAYERS
+                    );
+                if (activeRef != null) {
+                    session.getPreviewEntityRefs().add(activeRef);
+                }
+                PlotPlacementClientPrefabPreview.Payload activePayload =
+                    PlotPlacementClientPrefabPreview.loadPayload(def.getPrefabPath(), session.getCurrentRotationSteps());
+                if (activePayload != null) {
+                    PlotPlacementClientPrefabPreview.sendEntityOverlayFull(
+                        pr,
+                        currentOrigin,
+                        activePayload,
+                        session.getCurrentPrefabYaw()
+                    );
+                }
                 currentFp = PlotFootprintUtil.computeFootprint(currentOrigin, session.getCurrentPrefabYaw(), buf);
+            } else if (pr != null) {
+                PlotPlacementClientPrefabPreview.hide(pr);
             }
             PlotFootprintRecord previousFp = null;
             if (last != null) {
@@ -777,10 +811,17 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         if (path == null) {
             return;
         }
-        IPrefabBuffer buf = PrefabBufferUtil.getCached(path);
-        try {
-            PlotPreviewSpawner.append(store, step.ghostPrefabOriginWorld(), step.getPrefabYaw(), buf, refs);
-        } finally {
+        Ref<EntityStore> ref =
+            AetherhavenWorldPrefabPreview.spawnAtBlockCorner(
+                store,
+                step.ghostPrefabOriginWorld(),
+                AetherhavenWorldPrefabPreview.rotationFromYaw(step.getPrefabYaw()),
+                def.getPrefabPath(),
+                step.rotationSteps,
+                AetherhavenWorldPrefabPreview.ALL_LAYERS
+            );
+        if (ref != null) {
+            refs.add(ref);
         }
     }
 
@@ -1221,7 +1262,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                     return;
                 }
                 closeDoorOnDanglingTower(ref, store);
-                PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+                AetherhavenWorldPrefabPreview.clearAll(store, session.getPreviewEntityRefs());
                 PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
                 WallPlacementWireframeOverlay.clearFor(pr);
                 UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());

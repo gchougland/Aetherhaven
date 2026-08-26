@@ -488,6 +488,56 @@ $C.@PageOverlay {
                         }
                       }
 
+                      Group #SettingsTownProtectionSection {
+                        LayoutMode: Top;
+                        Visible: false;
+                        Anchor: (Bottom: 14);
+
+                        Label #SettingsTownProtectionHeading {
+                          Anchor: (Top: 4, Bottom: 6);
+                          Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2, FontSize: 16);
+                          Text: "";
+                        }
+
+                        Label #SettingsTownProtectionHint {
+                          Anchor: (Bottom: 8);
+                          Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8, Wrap: true);
+                          Text: "";
+                        }
+
+                        Group #SettingsTerritoryBreakRow {
+                          LayoutMode: Left;
+                          Anchor: (Bottom: 8);
+
+                          Group #SettingsTerritoryBreakCheck {
+                            LayoutMode: Left;
+                            $C.@CheckBox #CheckBox {}
+                          }
+
+                          Label #SettingsTerritoryBreakLabel {
+                            Anchor: (Left: 10, Top: 4);
+                            Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8, Wrap: true);
+                            Text: "";
+                          }
+                        }
+
+                        Group #SettingsTerritoryUseRow {
+                          LayoutMode: Left;
+                          Anchor: (Bottom: 8);
+
+                          Group #SettingsTerritoryUseCheck {
+                            LayoutMode: Left;
+                            $C.@CheckBox #CheckBox {}
+                          }
+
+                          Label #SettingsTerritoryUseLabel {
+                            Anchor: (Left: 10, Top: 4);
+                            Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8, Wrap: true);
+                            Text: "";
+                          }
+                        }
+                      }
+
                       Label #SettingsBirthdayHeading {
                         Anchor: (Top: 4, Bottom: 6);
                         Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2, FontSize: 16);

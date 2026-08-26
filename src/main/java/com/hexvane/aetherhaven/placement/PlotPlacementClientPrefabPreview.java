@@ -1,15 +1,13 @@
 package com.hexvane.aetherhaven.placement;
 
-import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
-
 import com.hexvane.aetherhaven.community.CommunityPrefabSafety;
 import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
+import com.hexvane.aetherhaven.prefab.AetherhavenWorldPrefabPreview;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.Axis;
-import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.util.MathUtil;
 import com.hypixel.hytale.protocol.packets.buildertools.ClipboardEntityChange;
 import com.hypixel.hytale.protocol.packets.interface_.BlockChange;
@@ -17,6 +15,7 @@ import com.hypixel.hytale.protocol.packets.interface_.EditorBlocksChange;
 import com.hypixel.hytale.protocol.packets.interface_.FluidChange;
 import com.hypixel.hytale.protocol.packets.player.HideTriggerVolumePastePrefabPreview;
 import com.hypixel.hytale.protocol.packets.player.ShowTriggerVolumePastePrefabPreview;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.environment.config.Environment;
 import com.hypixel.hytale.server.core.asset.util.ColorParseUtil;
 import com.hypixel.hytale.server.core.prefab.PrefabStore;
@@ -27,6 +26,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.nio.file.Path;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3d;
@@ -34,8 +34,9 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 /**
- * Client-side world prefab ghost for plot placement ({@link ShowTriggerVolumePastePrefabPreview}), matching Trigger
- * Volumes paste preview: full clipboard once per construction/rotation, position-only updates when nudging.
+ * Hybrid prefab ghosts: block/fluid holograms via {@link com.hypixel.hytale.server.core.modules.entity.component.PersistentPrefabPreview}
+ * (world entity, visible to nearby players). Prefab entity markers use per-player {@link ShowTriggerVolumePastePrefabPreview}
+ * overlays because the hologram API does not include clipboard entities.
  */
 public final class PlotPlacementClientPrefabPreview {
     private static final int DEFAULT_BIOME_TINT =
@@ -43,10 +44,12 @@ public final class PlotPlacementClientPrefabPreview {
             & 16777215;
     private static final int DEFAULT_WATER_TINT =
         ColorParseUtil.colorToARGBInt(Environment.getUnknownFor("").getWaterTint()) & 16777215;
+    private static final BlockChange[] NO_BLOCKS = new BlockChange[0];
+    private static final FluidChange[] NO_FLUIDS = new FluidChange[0];
 
     private PlotPlacementClientPrefabPreview() {}
 
-    /** Cached block/fluid/entity arrays for one construction + rotation (session lifetime). */
+    /** Cached anchor metadata for one construction + rotation (session lifetime). */
     public record Payload(
         @Nullable BlockChange[] blocksChange,
         @Nullable FluidChange[] fluidsChange,
@@ -56,15 +59,84 @@ public final class PlotPlacementClientPrefabPreview {
         int anchorZ
     ) {}
 
+    /** Clears per-player entity overlay and any legacy full paste preview on the client. */
     public static void hide(@Nonnull PlayerRef playerRef) {
         playerRef.getPacketHandler().write(new HideTriggerVolumePastePrefabPreview());
     }
 
+    public static boolean hasEntityOverlay(@Nonnull Payload payload) {
+        ClipboardEntityChange[] changes = payload.entityChanges();
+        return changes != null && changes.length > 0;
+    }
+
+    public static void clearWorldPreview(@Nonnull Store<EntityStore> store, @Nonnull List<Ref<EntityStore>> previewRefs) {
+        AetherhavenWorldPrefabPreview.clearAll(store, previewRefs);
+    }
+
+    public static void clearWorldPreview(@Nonnull Store<EntityStore> store, @Nonnull PlotPlacementSession session) {
+        clearWorldPreview(store, session.getPreviewEntityRefs());
+    }
+
     /**
-     * Sends full prefab data at {@code prefabOriginWorld} (floored). Updates {@link PlotPlacementSession} payload cache.
+     * Spawns or moves the world hologram for plot placement.
      *
-     * @return {@code false} when prefab could not be loaded (caller should {@link #hide})
+     * @return {@code false} when prefab could not be loaded
      */
+    public static boolean showWorldPreview(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotPlacementSession session,
+        @Nonnull String prefabPathKey,
+        int rotationSteps,
+        @Nonnull Vector3i prefabOriginWorld,
+        @Nonnull Rotation placementYaw,
+        boolean respawn
+    ) {
+        Payload payload = resolvePayload(prefabPathKey, rotationSteps, session);
+        if (payload == null) {
+            clearWorldPreview(store, session);
+            return false;
+        }
+        Vector3i spawnCorner = flooredOrigin(resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw));
+        var rotation = AetherhavenWorldPrefabPreview.rotationFromYaw(placementYaw);
+        List<Ref<EntityStore>> refs = session.getPreviewEntityRefs();
+        if (respawn || refs.isEmpty()) {
+            clearWorldPreview(store, session);
+            Ref<EntityStore> ref =
+                AetherhavenWorldPrefabPreview.spawnAtBlockCorner(
+                    store,
+                    spawnCorner,
+                    rotation,
+                    prefabPathKey,
+                    rotationSteps,
+                    AetherhavenWorldPrefabPreview.ALL_LAYERS
+                );
+            if (ref == null) {
+                return false;
+            }
+            refs.add(ref);
+            return true;
+        }
+        Ref<EntityStore> existing = refs.getFirst();
+        if (existing != null && existing.isValid()) {
+            AetherhavenWorldPrefabPreview.updatePositionAtBlockCorner(store, existing, spawnCorner, rotation);
+            return true;
+        }
+        clearWorldPreview(store, session);
+        Ref<EntityStore> ref =
+            AetherhavenWorldPrefabPreview.spawnAtBlockCorner(
+                store,
+                spawnCorner,
+                rotation,
+                prefabPathKey,
+                rotationSteps,
+                AetherhavenWorldPrefabPreview.ALL_LAYERS
+            );
+        if (ref != null) {
+            refs.add(ref);
+        }
+        return ref != null;
+    }
+
     public static boolean sendFull(
         @Nonnull PlayerRef playerRef,
         @Nonnull String prefabPathKey,
@@ -73,36 +145,63 @@ public final class PlotPlacementClientPrefabPreview {
         @Nonnull Rotation placementYaw,
         @Nonnull PlotPlacementSession session
     ) {
-        Payload payload = resolvePayload(prefabPathKey, rotationSteps, session);
-        if (payload == null) {
+        Ref<EntityStore> ref = playerRef.getReference();
+        if (ref == null) {
             return false;
         }
-        writeShow(playerRef, flooredPosition(resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw)), payload);
+        boolean ok =
+            showWorldPreview(
+                ref.getStore(),
+                session,
+                prefabPathKey,
+                rotationSteps,
+                prefabOriginWorld,
+                placementYaw,
+                true
+            );
+        if (!ok) {
+            return false;
+        }
+        Payload payload = session.getClientPrefabPreviewPayload();
+        if (payload != null) {
+            sendEntityOverlayFull(playerRef, prefabOriginWorld, payload, placementYaw);
+        }
         return true;
     }
 
-    /**
-     * Moves an active client ghost without resending block data.
-     *
-     * @return {@code true} when a packet was sent
-     */
     public static boolean sendPositionOnly(
         @Nonnull PlayerRef playerRef,
         @Nonnull Vector3i prefabOriginWorld,
         @Nonnull Payload payload,
-        @Nonnull Rotation placementYaw
+        @Nonnull Rotation placementYaw,
+        @Nonnull PlotPlacementSession session
     ) {
-        Vector3f pos = flooredPosition(resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw));
-        ShowTriggerVolumePastePrefabPreview packet = new ShowTriggerVolumePastePrefabPreview();
-        packet.position = pos;
-        applyTintFromPlayerPosition(playerRef, packet);
-        playerRef.getPacketHandler().write(packet);
+        Ref<EntityStore> entityRef = playerRef.getReference();
+        if (entityRef == null) {
+            return false;
+        }
+        Store<EntityStore> store = entityRef.getStore();
+        Vector3i spawnCorner = flooredOrigin(resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw));
+        List<Ref<EntityStore>> refs = session.getPreviewEntityRefs();
+        if (refs.isEmpty()) {
+            return false;
+        }
+        Ref<EntityStore> previewRef = refs.getFirst();
+        if (previewRef == null || !previewRef.isValid()) {
+            return false;
+        }
+        AetherhavenWorldPrefabPreview.updatePositionAtBlockCorner(
+            store,
+            previewRef,
+            spawnCorner,
+            AetherhavenWorldPrefabPreview.rotationFromYaw(placementYaw)
+        );
+        if (hasEntityOverlay(payload)) {
+            sendEntityOverlayPositionOnly(playerRef, prefabOriginWorld, payload, placementYaw);
+        }
         return true;
     }
 
-    /**
-     * Full prefab ghost for a nearby viewer using cached payload and tint at the preview origin.
-     */
     public static void sendFullToViewer(
         @Nonnull PlayerRef viewer,
         @Nonnull World world,
@@ -110,17 +209,13 @@ public final class PlotPlacementClientPrefabPreview {
         @Nonnull Payload payload,
         @Nonnull Rotation placementYaw
     ) {
-        writeShowToViewer(
-            viewer,
-            world,
-            flooredPosition(resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw)),
-            payload
-        );
+        if (!hasEntityOverlay(payload)) {
+            return;
+        }
+        Vector3i clientPos = resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw);
+        writeEntityOverlayToViewer(viewer, world, flooredPosition(clientPos), payload);
     }
 
-    /**
-     * Position-only update for a nearby viewer; tint sampled at the preview origin.
-     */
     public static void sendPositionOnlyToViewer(
         @Nonnull PlayerRef viewer,
         @Nonnull World world,
@@ -128,18 +223,44 @@ public final class PlotPlacementClientPrefabPreview {
         @Nonnull Payload payload,
         @Nonnull Rotation placementYaw
     ) {
+        if (!hasEntityOverlay(payload)) {
+            return;
+        }
         Vector3i clientPos = resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw);
         Vector3f pos = flooredPosition(clientPos);
-        ShowTriggerVolumePastePrefabPreview packet = new ShowTriggerVolumePastePrefabPreview();
-        packet.position = pos;
+        ShowTriggerVolumePastePrefabPreview packet = buildEntityOverlayPositionPacket(pos);
         applyTintFromWorldPosition(world, MathUtil.floor(clientPos.x), MathUtil.floor(clientPos.y), MathUtil.floor(clientPos.z), packet);
         viewer.getPacketHandler().write(packet);
     }
 
-    /**
-     * {@link ShowTriggerVolumePastePrefabPreview} pastes at the prefab anchor; plot wireframes use prefab buffer
-     * (0,0,0) at {@code prefabBufferOriginWorld}.
-     */
+    public static void sendEntityOverlayFull(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Vector3i prefabOriginWorld,
+        @Nonnull Payload payload,
+        @Nonnull Rotation placementYaw
+    ) {
+        if (!hasEntityOverlay(payload)) {
+            return;
+        }
+        Vector3i clientPos = resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw);
+        writeEntityOverlay(playerRef, flooredPosition(clientPos), payload);
+    }
+
+    public static void sendEntityOverlayPositionOnly(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Vector3i prefabOriginWorld,
+        @Nonnull Payload payload,
+        @Nonnull Rotation placementYaw
+    ) {
+        if (!hasEntityOverlay(payload)) {
+            return;
+        }
+        Vector3i clientPos = resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw);
+        ShowTriggerVolumePastePrefabPreview packet = buildEntityOverlayPositionPacket(flooredPosition(clientPos));
+        applyTintFromPlayerPosition(playerRef, packet);
+        playerRef.getPacketHandler().write(packet);
+    }
+
     @Nonnull
     public static Vector3i resolveClientPreviewPosition(
         @Nonnull Vector3i prefabBufferOriginWorld,
@@ -186,13 +307,10 @@ public final class PlotPlacementClientPrefabPreview {
         return flooredOrigin(resolveClientPreviewPosition(prefabBufferOriginWorld, payload, placementYaw));
     }
 
-    /**
-     * Full prefab ghost without a {@link PlotPlacementSession} cache (props placement UI).
-     *
-     * @return {@code false} when prefab could not be loaded (caller should {@link #hide})
-     */
     public static boolean sendFullStandalone(
         @Nonnull PlayerRef playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull List<Ref<EntityStore>> previewRefs,
         @Nonnull String prefabPathKey,
         int rotationSteps,
         @Nonnull Vector3i prefabOriginWorld,
@@ -200,9 +318,25 @@ public final class PlotPlacementClientPrefabPreview {
     ) {
         Payload payload = loadPayload(prefabPathKey, rotationSteps);
         if (payload == null) {
+            clearWorldPreview(store, previewRefs);
             return false;
         }
-        writeShow(playerRef, flooredPosition(resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw)), payload);
+        clearWorldPreview(store, previewRefs);
+        Vector3i spawnCorner = flooredOrigin(resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw));
+        Ref<EntityStore> ref =
+            AetherhavenWorldPrefabPreview.spawnAtBlockCorner(
+                store,
+                spawnCorner,
+                AetherhavenWorldPrefabPreview.rotationFromYaw(placementYaw),
+                prefabPathKey,
+                rotationSteps,
+                AetherhavenWorldPrefabPreview.ALL_LAYERS
+            );
+        if (ref == null) {
+            return false;
+        }
+        previewRefs.add(ref);
+        sendEntityOverlayFull(playerRef, prefabOriginWorld, payload, placementYaw);
         return true;
     }
 
@@ -264,30 +398,44 @@ public final class PlotPlacementClientPrefabPreview {
         return payload;
     }
 
-    private static void writeShow(@Nonnull PlayerRef playerRef, @Nonnull Vector3f position, @Nonnull Payload payload) {
-        ShowTriggerVolumePastePrefabPreview packet = buildShowPacket(position, payload);
+    private static void writeEntityOverlay(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Vector3f position,
+        @Nonnull Payload payload
+    ) {
+        ShowTriggerVolumePastePrefabPreview packet = buildEntityOverlayPacket(position, payload);
         applyTintFromPlayerPosition(playerRef, packet);
         playerRef.getPacketHandler().write(packet);
     }
 
-    private static void writeShowToViewer(
+    private static void writeEntityOverlayToViewer(
         @Nonnull PlayerRef viewer,
         @Nonnull World world,
         @Nonnull Vector3f position,
         @Nonnull Payload payload
     ) {
-        ShowTriggerVolumePastePrefabPreview packet = buildShowPacket(position, payload);
+        ShowTriggerVolumePastePrefabPreview packet = buildEntityOverlayPacket(position, payload);
         applyTintFromWorldPosition(world, MathUtil.floor(position.x), MathUtil.floor(position.y), MathUtil.floor(position.z), packet);
         viewer.getPacketHandler().write(packet);
     }
 
     @Nonnull
-    private static ShowTriggerVolumePastePrefabPreview buildShowPacket(@Nonnull Vector3f position, @Nonnull Payload payload) {
+    private static ShowTriggerVolumePastePrefabPreview buildEntityOverlayPacket(
+        @Nonnull Vector3f position,
+        @Nonnull Payload payload
+    ) {
         ShowTriggerVolumePastePrefabPreview packet = new ShowTriggerVolumePastePrefabPreview();
         packet.position = position;
-        packet.blocksChange = payload.blocksChange();
-        packet.fluidsChange = payload.fluidsChange();
+        packet.blocksChange = NO_BLOCKS;
+        packet.fluidsChange = NO_FLUIDS;
         packet.entityChanges = payload.entityChanges();
+        return packet;
+    }
+
+    @Nonnull
+    private static ShowTriggerVolumePastePrefabPreview buildEntityOverlayPositionPacket(@Nonnull Vector3f position) {
+        ShowTriggerVolumePastePrefabPreview packet = new ShowTriggerVolumePastePrefabPreview();
+        packet.position = position;
         return packet;
     }
 
@@ -329,7 +477,6 @@ public final class PlotPlacementClientPrefabPreview {
         int z,
         @Nonnull ShowTriggerVolumePastePrefabPreview packet
     ) {
-        long chunkIndex = ChunkUtil.indexChunkFromBlock(x, z);
         BlockChunk blockChunk = ChunkSectionBlockUtil.blockChunkAt(world, x, z);
         if (blockChunk != null) {
             packet.biomeTint = blockChunk.getTint(x, z);

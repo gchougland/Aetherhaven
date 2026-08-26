@@ -216,6 +216,7 @@ public final class PropPlacementPage extends AetherhavenInteractiveCustomUIPage<
             PropPlacementValidator.resolveValidatedBuffer(world, catalog, session.getPropId(), session.getAnchor(), session.getYaw());
         if (buffer == null) {
             PropPlacementWireframeOverlay.clearFor(pr);
+            PlotPlacementClientPrefabPreview.clearWorldPreview(store, session.getPreviewEntityRefs());
             PlotPlacementClientPrefabPreview.hide(pr);
             return;
         }
@@ -227,12 +228,15 @@ public final class PropPlacementPage extends AetherhavenInteractiveCustomUIPage<
             boolean ghostOk =
                 PlotPlacementClientPrefabPreview.sendFullStandalone(
                     pr,
+                    store,
+                    session.getPreviewEntityRefs(),
                     def.getPrefabPath(),
                     session.getRotationSteps(),
                     session.getAnchor(),
                     session.getYaw()
                 );
             if (!ghostOk) {
+                PlotPlacementClientPrefabPreview.clearWorldPreview(store, session.getPreviewEntityRefs());
                 PlotPlacementClientPrefabPreview.hide(pr);
             }
         }

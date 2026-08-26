@@ -88,11 +88,6 @@ public final class AetherhavenUiLocalization {
         b.set("#VisitorPortalTravelLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalTravelAllowTooltip"));
         b.set("#VisitorPortalMembersOnlyLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalMembersOnly"));
         b.set("#VisitorPortalMembersOnlyLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalMembersOnlyTooltip"));
-        b.set("#TerritoryProtectionHeader.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.territoryProtectionHeader"));
-        b.set("#TerritoryBreakProtectionLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.territoryBreakProtection"));
-        b.set("#TerritoryBreakProtectionLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.territoryBreakProtectionTooltip"));
-        b.set("#TerritoryUseProtectionLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.territoryUseProtection"));
-        b.set("#TerritoryUseProtectionLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.territoryUseProtectionTooltip"));
         b.set("#PlayerShopNpcBuyLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.playerShopNpcBuyAllow"));
         b.set("#PlayerShopNpcBuyLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.playerShopNpcBuyAllowTooltip"));
         b.set("#VisitorPortalColorLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalColor"));
@@ -385,6 +380,30 @@ public final class AetherhavenUiLocalization {
         b.set(
             "#SettingsShowBordersLabel.TooltipTextSpans",
             t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.showTownBordersTooltip")
+        );
+        b.set(
+            "#SettingsTownProtectionHeading.TextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.townProtection.heading")
+        );
+        b.set(
+            "#SettingsTownProtectionHint.TextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.townProtection.hint")
+        );
+        b.set(
+            "#SettingsTerritoryBreakLabel.TextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.townProtection.breakBlocks")
+        );
+        b.set(
+            "#SettingsTerritoryBreakLabel.TooltipTextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.townProtection.breakBlocksTooltip")
+        );
+        b.set(
+            "#SettingsTerritoryUseLabel.TextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.townProtection.useBlocks")
+        );
+        b.set(
+            "#SettingsTerritoryUseLabel.TooltipTextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.townProtection.useBlocksTooltip")
         );
         b.set(
             "#SettingsDifficultyHeading.TextSpans",

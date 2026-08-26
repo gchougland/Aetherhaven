@@ -1,7 +1,11 @@
 package com.hexvane.aetherhaven.prop;
 
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import org.joml.Vector3i;
@@ -21,6 +25,8 @@ public final class PropPlacementSession {
     private Vector3i anchor;
 
     private int rotationSteps;
+
+    private final List<Ref<EntityStore>> previewEntityRefs = new ArrayList<>();
 
     public PropPlacementSession(
         @Nonnull UUID playerUuid,
@@ -74,6 +80,11 @@ public final class PropPlacementSession {
 
     public void rotateClockwise90() {
         setRotationSteps(rotationSteps + 1);
+    }
+
+    @Nonnull
+    public List<Ref<EntityStore>> getPreviewEntityRefs() {
+        return previewEntityRefs;
     }
 
     @Nonnull

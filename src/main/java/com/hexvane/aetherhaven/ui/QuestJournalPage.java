@@ -846,7 +846,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         }
 
         if (personalActive) {
-            buildJournalSettingsPersonalTab(commandBuilder, eventBuilder, journalPrefs, store);
+            buildJournalSettingsPersonalTab(commandBuilder, eventBuilder, plugin, store, ref, uc, world, journalPrefs);
         } else {
             buildJournalSettingsServerTab(commandBuilder, eventBuilder, plugin, store, ref, uc, world);
         }
@@ -855,8 +855,12 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
     private void buildJournalSettingsPersonalTab(
         @Nonnull UICommandBuilder commandBuilder,
         @Nonnull UIEventBuilder eventBuilder,
-        @Nonnull PlayerTownJournalState journalPrefs,
-        @Nonnull Store<EntityStore> store
+        @Nullable AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> ref,
+        @Nullable UUIDComponent uc,
+        @Nonnull World world,
+        @Nonnull PlayerTownJournalState journalPrefs
     ) {
         commandBuilder.set("#SettingsPersonalStatus.TextSpans", journalSettingsPersonalStatus != null ? journalSettingsPersonalStatus : Message.raw(""));
         boolean rtsSettings = JournalTabVisibility.rtsTuningTab();
@@ -873,6 +877,37 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             );
         }
         commandBuilder.set("#SettingsShowBordersCheck #CheckBox.Value", journalPrefs.isShowTownBordersOnMap());
+        TownRecord townProtectionTown =
+            plugin != null && uc != null ? journalTown(world, store, ref, plugin, uc.getUuid()) : null;
+        boolean townProtectionVisible =
+            townProtectionTown != null && uc != null && townProtectionTown.playerCanPlacePlots(uc.getUuid());
+        commandBuilder.set("#SettingsTownProtectionSection.Visible", townProtectionVisible);
+        if (townProtectionVisible && townProtectionTown != null) {
+            commandBuilder.set(
+                "#SettingsTerritoryBreakCheck #CheckBox.Value",
+                townProtectionTown.isTerritoryBreakProtectionEnabled()
+            );
+            commandBuilder.set(
+                "#SettingsTerritoryUseCheck #CheckBox.Value",
+                townProtectionTown.isTerritoryUseProtectionEnabled()
+            );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.ValueChanged,
+                "#SettingsTerritoryBreakCheck #CheckBox",
+                new EventData()
+                    .append("Action", "JournalTerritoryBreakProtection")
+                    .append("@TerritoryBreakProtection", "#SettingsTerritoryBreakCheck #CheckBox.Value"),
+                false
+            );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.ValueChanged,
+                "#SettingsTerritoryUseCheck #CheckBox",
+                new EventData()
+                    .append("Action", "JournalTerritoryUseProtection")
+                    .append("@TerritoryUseProtection", "#SettingsTerritoryUseCheck #CheckBox.Value"),
+                false
+            );
+        }
         Season birthdaySeason = journalPrefs.getBirthdaySeason();
         int birthdayDay = journalPrefs.getBirthdayDay();
         if (birthdaySeason == null || birthdayDay < 1) {
@@ -978,6 +1013,80 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             new EventData().append("Action", "PersonalSettingsReset"),
             false
         );
+    }
+
+    private void handleJournalTerritoryBreakProtection(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Boolean enabled
+    ) {
+        if (enabled == null) {
+            return;
+        }
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc == null) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
+        if (town == null) {
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.townNotFound"));
+            return;
+        }
+        if (!town.playerCanPlacePlots(uc.getUuid())) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.territoryProtectionNoPermission")
+            );
+            return;
+        }
+        town.setTerritoryBreakProtectionEnabled(enabled);
+        AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
+        UICommandBuilder cmd = new UICommandBuilder();
+        UIEventBuilder ev = new UIEventBuilder();
+        build(ref, cmd, ev, store);
+        sendUpdate(cmd, ev, false);
+    }
+
+    private void handleJournalTerritoryUseProtection(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Boolean enabled
+    ) {
+        if (enabled == null) {
+            return;
+        }
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc == null) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
+        if (town == null) {
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.townNotFound"));
+            return;
+        }
+        if (!town.playerCanPlacePlots(uc.getUuid())) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.territoryProtectionNoPermission")
+            );
+            return;
+        }
+        town.setTerritoryUseProtectionEnabled(enabled);
+        AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
+        UICommandBuilder cmd = new UICommandBuilder();
+        UIEventBuilder ev = new UIEventBuilder();
+        build(ref, cmd, ev, store);
+        sendUpdate(cmd, ev, false);
     }
 
     @Nonnull
@@ -2363,6 +2472,14 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             UIEventBuilder ev = new UIEventBuilder();
             build(ref, cmd, ev, store);
             sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (action.equalsIgnoreCase("JournalTerritoryBreakProtection")) {
+            handleJournalTerritoryBreakProtection(ref, store, data.territoryBreakProtection);
+            return;
+        }
+        if (action.equalsIgnoreCase("JournalTerritoryUseProtection")) {
+            handleJournalTerritoryUseProtection(ref, store, data.territoryUseProtection);
             return;
         }
         if (action.equalsIgnoreCase("TownShowBordersToggle")) {
@@ -3787,6 +3904,18 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             .add()
             .append(new KeyedCodec<>("@ActiveTownId", Codec.STRING), (d, v) -> d.activeTownId = v, d -> d.activeTownId)
             .add()
+            .append(
+                new KeyedCodec<>("@TerritoryBreakProtection", Codec.BOOLEAN),
+                (d, v) -> d.territoryBreakProtection = v,
+                d -> d.territoryBreakProtection
+            )
+            .add()
+            .append(
+                new KeyedCodec<>("@TerritoryUseProtection", Codec.BOOLEAN),
+                (d, v) -> d.territoryUseProtection = v,
+                d -> d.territoryUseProtection
+            )
+            .add()
             .build();
 
         @Nullable
@@ -3877,5 +4006,9 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         private String birthdayDay;
         @Nullable
         private String activeTownId;
+        @Nullable
+        private Boolean territoryBreakProtection;
+        @Nullable
+        private Boolean territoryUseProtection;
     }
 }
