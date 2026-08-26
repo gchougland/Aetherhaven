@@ -1,5 +1,8 @@
 package com.hexvane.aetherhaven.placement;
 
+import com.hexvane.aetherhaven.pathtool.PathCementService;
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.map.TownMapMarkerCache;
@@ -23,7 +26,7 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.modules.block.BlockEntity;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockComponentChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockComponentSection;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -107,7 +110,7 @@ public final class CharterRelocationService {
             sendError(store, ref, "That spot is blocked. Choose an empty or replaceable block for the charter.");
             return false;
         }
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(a.x, a.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(a.x, a.z));
         if (chunk == null) {
             sendError(store, ref, "Chunk not loaded for that position.");
             return false;
@@ -135,7 +138,7 @@ public final class CharterRelocationService {
     /**
      * Restore a missing or unlinked charter block at the {@link TownRecord}'s saved charter coordinates only (owner or
      * {@link com.hexvane.aetherhaven.AetherhavenConstants#PERMISSION_TOWN_ADMIN} / creative). Does not change charter
-     * position or territory — use the charter UI relocation flow to move the anchor.
+     * position or territory ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â use the charter UI relocation flow to move the anchor.
      */
     public static boolean tryReplaceCharter(
         @Nonnull World world,
@@ -211,7 +214,7 @@ public final class CharterRelocationService {
         int cy = town.getCharterY();
         int cz = town.getCharterZ();
 
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(cx, cz));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(cx, cz));
         if (chunk == null) {
             return LinkRepairResult.SKIPPED_CHUNK_UNLOADED;
         }
@@ -263,7 +266,7 @@ public final class CharterRelocationService {
             return false;
         }
         RotationTuple rt = RotationTuple.of(horizontalYaw, Rotation.None, Rotation.None);
-        boolean placed = chunk.placeBlock(x, y, z, AetherhavenConstants.CHARTER_ITEM_ID, rt, PLACE_SETTINGS, false);
+        boolean placed = PathCementService.placePathBlock(world, x, y, z, AetherhavenConstants.CHARTER_ITEM_ID, rt.index(), PLACE_SETTINGS);
         if (!placed) {
             LOGGER.atWarning().log("Charter placeBlock failed at %s,%s,%s", x, y, z);
             return false;
@@ -306,12 +309,12 @@ public final class CharterRelocationService {
         int z,
         @Nonnull String townIdStr
     ) {
-        BlockType blockType = world.getBlockType(x, y, z);
+        BlockType blockType = ChunkSectionBlockUtil.blockType(world, x, y, z);
         if (blockType == null || !AetherhavenConstants.CHARTER_BLOCK_TYPE_ID.equals(blockType.getId())) {
             return false;
         }
-        BlockComponentChunk blockComponentChunk = chunk.getBlockComponentChunk();
-        if (blockComponentChunk == null) {
+        BlockComponentSection blockComponentSection = ChunkSectionBlockUtil.blockComponentSectionAt(world, x, y, z);
+        if (blockComponentSection == null) {
             return false;
         }
         chunk.setTicking(x, y, z, true);
@@ -323,14 +326,14 @@ public final class CharterRelocationService {
             }
             Holder<ChunkStore> holder = template.clone();
             holder.putComponent(CharterBlock.getComponentType(), new CharterBlock(townIdStr));
-            Ref<ChunkStore> chunkRef = chunk.getReference();
-            if (chunkRef == null || world.getChunkStore() == null) {
+            Ref<ChunkStore> sectionRef = ChunkSectionBlockUtil.sectionRefAt(world, x, y, z);
+            if (sectionRef == null || !sectionRef.isValid() || world.getChunkStore() == null) {
                 return false;
             }
             BlockEntity.setBlockEntity(
                 world.getChunkStore().getStore(),
-                chunkRef,
-                blockComponentChunk,
+                sectionRef,
+                blockComponentSection,
                 x,
                 y,
                 z,
@@ -363,7 +366,7 @@ public final class CharterRelocationService {
     }
 
     private static boolean isReplaceableForCharter(@Nonnull World world, int x, int y, int z) {
-        BlockType t = world.getBlockType(x, y, z);
+        BlockType t = ChunkSectionBlockUtil.blockType(world, x, y, z);
         return t == null || t.getMaterial() == BlockMaterial.Empty;
     }
 

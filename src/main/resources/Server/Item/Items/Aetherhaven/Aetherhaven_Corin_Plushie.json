@@ -44,7 +44,7 @@
           {
             "Type": "Simple",
             "Effects": {
-              "WorldSoundEventId": "SFX_Plushie_Build"
+              "WorldSoundEventId": "SFX_Plushie_Interact"
             }
           }
         ]

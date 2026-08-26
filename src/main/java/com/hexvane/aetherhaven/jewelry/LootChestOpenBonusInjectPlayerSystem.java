@@ -17,8 +17,8 @@ import com.hypixel.hytale.server.core.entity.entities.player.windows.Window;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockComponentChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockComponentSection;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
@@ -71,16 +71,16 @@ public final class LootChestOpenBonusInjectPlayerSystem extends EntityTickingSys
             int x = containerWindow.getX();
             int y = containerWindow.getY();
             int z = containerWindow.getZ();
-            Ref<ChunkStore> chunkRef = chunkStore.getChunkReference(ChunkUtil.indexChunkFromBlock(x, z));
-            if (chunkRef == null || !chunkRef.isValid()) {
+            Ref<ChunkStore> sectionRef = chunkStore.getChunkSectionReferenceAtBlock(x, y, z);
+            if (sectionRef == null || !sectionRef.isValid()) {
                 continue;
             }
-            BlockComponentChunk blockComponentChunk =
-                chunkComponentStore.getComponent(chunkRef, BlockComponentChunk.getComponentType());
-            if (blockComponentChunk == null) {
+            BlockComponentSection blockComponentSection =
+                chunkComponentStore.getComponent(sectionRef, BlockComponentSection.getComponentType());
+            if (blockComponentSection == null) {
                 continue;
             }
-            Ref<ChunkStore> blockEntityRef = blockComponentChunk.getEntityReference(ChunkUtil.indexBlockInColumn(x, y, z));
+            Ref<ChunkStore> blockEntityRef = blockComponentSection.getBlockReference(ChunkUtil.indexBlock(x, y, z));
             if (blockEntityRef == null || !blockEntityRef.isValid()) {
                 continue;
             }

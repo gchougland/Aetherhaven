@@ -47,9 +47,6 @@
       }
     ],
     "HitboxType": "Bench_Workbench",
-    "Flags": {
-      "IsUsable": true
-    },
     "Interactions": {
       "Use": {
         "Interactions": [

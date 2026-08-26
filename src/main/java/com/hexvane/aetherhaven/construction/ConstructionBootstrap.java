@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.construction;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistSystem;
@@ -206,7 +208,7 @@ public final class ConstructionBootstrap {
                 }
                 Store<EntityStore> store = ref.getStore();
                 World world = store.getExternalData().getWorld();
-                WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(targetBlock.x, targetBlock.z));
+                WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(targetBlock.x, targetBlock.z));
                 if (chunk == null) {
                     return null;
                 }

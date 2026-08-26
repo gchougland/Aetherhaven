@@ -39,9 +39,6 @@
       }
     ],
     "DrawType": "Model",
-    "Flags": {
-      "IsUsable": true
-    },
     "Gathering": {
       "Breaking": {
         "GatherType": "Unbreakable"

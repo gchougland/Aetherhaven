@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.placement;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
@@ -35,7 +37,7 @@ public final class PlotConstructionBlockResolver {
         if (position.y < 0 || position.y >= 320) {
             return position;
         }
-        WorldChunk chunk = world.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(position.x, position.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfNonTicking(world, ChunkUtil.indexChunkFromBlock(position.x, position.z));
         if (chunk == null) {
             return position;
         }
@@ -83,7 +85,7 @@ public final class PlotConstructionBlockResolver {
         int baseY,
         @Nonnull ComponentType<ChunkStore, C> requiredComponent
     ) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(blockX, blockZ));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(blockX, blockZ));
         if (chunk == null) {
             return null;
         }

@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.worldnpc;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.entity.EntityPresenceUtil;
 import com.hexvane.aetherhaven.npc.NpcStandStill;
@@ -215,7 +217,7 @@ public final class WorldNpcSpawnService {
         }
         if (npc != null && npc.getRole() != null) {
             try {
-                npc.getRole().getStateSupport().setState(ref, "Idle", null, store);
+                NpcSupportUtil.setState(ref, "Idle", null, store);
             } catch (RuntimeException e) {
                 LOGGER.atFine().withCause(e).log("World NPC idle state set failed for %s", placement.placementIdOrEmpty());
             }

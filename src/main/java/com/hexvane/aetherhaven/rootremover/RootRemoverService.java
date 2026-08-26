@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.rootremover;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -110,7 +112,7 @@ public final class RootRemoverService {
                 continue;
             }
             allDrops.addAll(resolveDrops(blockType));
-            WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x(), pos.z()));
+            WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x(), pos.z()));
             if (chunk == null) {
                 continue;
             }

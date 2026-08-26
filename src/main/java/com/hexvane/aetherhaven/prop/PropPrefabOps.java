@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.prop;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
 import com.hexvane.aetherhaven.construction.ConstructionPrefabSequence;
@@ -260,7 +262,7 @@ public final class PropPrefabOps {
         if (y < 0 || y >= 320) {
             return null;
         }
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (chunk == null) {
             return null;
         }
@@ -269,7 +271,7 @@ public final class PropPrefabOps {
 
     /** Mirrors {@code PrefabFootprintClearUtil#forceClearBlockCell} (private there). */
     private static void clearBlockCell(@Nonnull World world, int x, int y, int z) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (chunk == null) {
             return;
         }

@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 
 /** Plugin-data list of prop ids that must not appear in floating gifts or world loot chests. */
@@ -21,6 +22,7 @@ public final class PropLootExclusions {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     public static final String FILE_NAME = "prop_loot_exclusions.json";
     private static final String DEFAULT_RESOURCE = "/defaults/prop_loot_exclusions.json";
+    private static final AtomicReference<Set<String>> CACHED = new AtomicReference<>();
 
     private PropLootExclusions() {}
 
@@ -53,8 +55,25 @@ public final class PropLootExclusions {
         }
     }
 
+    /** Clears the in-memory cache (e.g. after an admin edits the exclusions file). */
+    public static void invalidateCache() {
+        CACHED.set(null);
+    }
+
     @Nonnull
     public static Set<String> load(@Nonnull AetherhavenPlugin plugin) {
+        Set<String> cached = CACHED.get();
+        if (cached != null) {
+            return cached;
+        }
+        Set<String> loaded = loadUncached(plugin);
+        CACHED.compareAndSet(null, loaded);
+        Set<String> after = CACHED.get();
+        return after != null ? after : loaded;
+    }
+
+    @Nonnull
+    private static Set<String> loadUncached(@Nonnull AetherhavenPlugin plugin) {
         ensureDefaultFile(plugin);
         try {
             Path file = path(plugin);

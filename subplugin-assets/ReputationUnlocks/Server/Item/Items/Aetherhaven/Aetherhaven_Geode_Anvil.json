@@ -49,9 +49,6 @@
     ],
     "HitboxType": "Full",
     "VariantRotation": "NESW",
-    "Flags": {
-      "IsUsable": true
-    },
     "Gathering": {
       "Breaking": {
         "GatherType": "Benches"

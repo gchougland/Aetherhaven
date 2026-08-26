@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.prop;
 
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.ui.PropIconPath;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.InventorySection;
 import com.hypixel.hytale.protocol.ItemBase;
@@ -79,9 +81,47 @@ public final class PropIconPacketAdapter {
     }
 
     public void onPropIconRegistered(@Nonnull String propId) {
-        String virtualId = PropVirtualItemRegistry.generateVirtualId(propId.trim());
-        virtualItems.invalidateProp(propId);
+        String id = propId.trim();
+        String virtualId = PropVirtualItemRegistry.generateVirtualId(id);
+        virtualItems.invalidateProp(id);
         virtualItems.clearSentVirtualIdForAllPlayers(virtualId);
+        ItemBase base = virtualItems.getOrCreateVirtualItemBase(virtualId, id);
+        if (base == null) {
+            return;
+        }
+        Map<String, ItemBase> one = Map.of(virtualId, base);
+        for (PlayerRef playerRef : knownPlayerRefs.values()) {
+            if (playerRef != null && playerRef.isValid()) {
+                sendVirtualItemDefinitions(playerRef, one, true);
+            }
+        }
+    }
+
+    /**
+     * Sends every catalog prop virtual item once on join (with icon atlas rebuild). Chest / inventory updates then
+     * only remap ids and skip {@code updateIcons} so opening loot no longer spikes.
+     */
+    public void preloadCatalogIcons(@Nonnull PlayerRef playerRef, @Nonnull PropCatalog catalog) {
+        knownPlayerRefs.put(playerRef.getUuid(), playerRef);
+        // Drop any earlier opportunistic sends (updateIcons=false) so this join batch rebuilds the atlas once.
+        virtualItems.clearSent(playerRef.getUuid());
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        Map<String, ItemBase> all = new LinkedHashMap<>();
+        for (PropDefinition def : catalog.list()) {
+            String propId = def.getId();
+            if (propId == null || propId.isBlank()) {
+                continue;
+            }
+            if (plugin != null) {
+                PropIconPath.registerRuntimeIconIfPresent(plugin, propId);
+            }
+            String virtualId = PropVirtualItemRegistry.generateVirtualId(propId);
+            ItemBase base = virtualItems.getOrCreateVirtualItemBase(virtualId, propId);
+            if (base != null) {
+                all.put(virtualId, base);
+            }
+        }
+        sendVirtualItemDefinitions(playerRef, all, true);
     }
 
     private boolean onInboundPacket(@Nonnull PlayerRef playerRef, @Nonnull Packet packet) {
@@ -137,7 +177,7 @@ public final class PropIconPacketAdapter {
                 processSection(inventory.armor, newVirtual);
                 processSection(inventory.storage, newVirtual);
                 processSection(inventory.backpack, newVirtual);
-                sendVirtualItemDefinitions(playerRef, newVirtual);
+                sendVirtualItemDefinitions(playerRef, newVirtual, false);
             } else if (packet instanceof OpenWindow open) {
                 processWindowInventory(playerRef, open.inventory);
             } else if (packet instanceof UpdateWindow update) {
@@ -155,7 +195,8 @@ public final class PropIconPacketAdapter {
         }
         Map<String, ItemBase> newVirtual = new LinkedHashMap<>();
         processSection(section, newVirtual);
-        sendVirtualItemDefinitions(playerRef, newVirtual);
+        // Defs were preloaded on PlayerReady; never rebuild the icon atlas on chest/window open.
+        sendVirtualItemDefinitions(playerRef, newVirtual, false);
     }
 
     private void processSection(@Nullable InventorySection section, @Nonnull Map<String, ItemBase> newVirtual) {
@@ -226,7 +267,11 @@ public final class PropIconPacketAdapter {
         }
     }
 
-    private void sendVirtualItemDefinitions(@Nonnull PlayerRef playerRef, @Nonnull Map<String, ItemBase> newVirtual) {
+    private void sendVirtualItemDefinitions(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Map<String, ItemBase> newVirtual,
+        boolean updateIcons
+    ) {
         if (newVirtual.isEmpty()) {
             return;
         }
@@ -250,7 +295,7 @@ public final class PropIconPacketAdapter {
             packet.items = toSend;
             packet.removedItems = new String[0];
             packet.updateModels = false;
-            packet.updateIcons = true;
+            packet.updateIcons = updateIcons;
             playerRef.getPacketHandler().writeNoCache(packet);
         } catch (Exception e) {
             LOGGER.atWarning().log("Failed to send prop UpdateItems for %s: %s", playerRef.getUuid(), e.getMessage());

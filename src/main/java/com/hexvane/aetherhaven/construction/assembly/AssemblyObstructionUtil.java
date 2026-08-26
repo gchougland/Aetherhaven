@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.construction.assembly;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -27,7 +29,7 @@ public final class AssemblyObstructionUtil {
         int wz,
         @Nonnull LocalCachedChunkAccessor chunkAccessor
     ) {
-        WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(wx, wz));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(wx, wz));
         if (chunk == null || !chunk.getReference().isValid()) {
             return null;
         }
@@ -110,7 +112,7 @@ public final class AssemblyObstructionUtil {
             int wx = anchor.x + pb.x();
             int wy = anchor.y + pb.y();
             int wz = anchor.z + pb.z();
-            WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(wx, wz));
+            WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(wx, wz));
             if (chunk == null || !chunk.getReference().isValid()) {
                 continue;
             }
@@ -177,7 +179,7 @@ public final class AssemblyObstructionUtil {
             int wx = anchor.x + pb.x();
             int wy = anchor.y + pb.y();
             int wz = anchor.z + pb.z();
-            WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(wx, wz));
+            WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(wx, wz));
             if (chunk == null || !chunk.getReference().isValid()) {
                 continue;
             }
@@ -219,7 +221,7 @@ public final class AssemblyObstructionUtil {
                 int wx = anchor.x + pb.x();
                 int wy = anchor.y + pb.y();
                 int wz = anchor.z + pb.z();
-                WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(wx, wz));
+                WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(wx, wz));
                 if (chunk == null || !chunk.getReference().isValid()) {
                     continue;
                 }

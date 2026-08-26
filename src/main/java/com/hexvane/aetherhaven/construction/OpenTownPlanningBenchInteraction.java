@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.construction;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hypixel.hytale.builtin.crafting.component.BenchBlock;
 import com.hypixel.hytale.builtin.crafting.component.CraftingManager;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -14,7 +16,6 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.client.SimpleBlockInteraction;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockComponentChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
@@ -63,12 +64,11 @@ public final class OpenTownPlanningBenchInteraction extends SimpleBlockInteracti
         if (chunkRef == null || !chunkRef.isValid()) {
             return;
         }
-        var blockComponentChunk = chunkStore.getStore().getComponent(chunkRef, BlockComponentChunk.getComponentType());
-        if (blockComponentChunk == null) {
-            return;
-        }
-        var blockEntityRef = blockComponentChunk.getEntityReference(
-            ChunkUtil.indexBlockInColumn(targetBlock.x, targetBlock.y, targetBlock.z)
+        var blockEntityRef = ChunkSectionBlockUtil.blockEntityRefAt(
+            world,
+            targetBlock.x,
+            targetBlock.y,
+            targetBlock.z
         );
         if (blockEntityRef == null || !blockEntityRef.isValid()) {
             return;
@@ -78,7 +78,7 @@ public final class OpenTownPlanningBenchInteraction extends SimpleBlockInteracti
             return;
         }
 
-        var blockType = world.getBlockType(targetBlock.x, targetBlock.y, targetBlock.z);
+        var blockType = ChunkSectionBlockUtil.blockType(world, targetBlock.x, targetBlock.y, targetBlock.z);
         if (blockType == null) {
             return;
         }

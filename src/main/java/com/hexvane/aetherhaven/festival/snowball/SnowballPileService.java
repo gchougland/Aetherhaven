@@ -1,5 +1,8 @@
 package com.hexvane.aetherhaven.festival.snowball;
 
+import com.hexvane.aetherhaven.pathtool.PathCementService;
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
@@ -15,34 +18,31 @@ public final class SnowballPileService {
     private SnowballPileService() {}
 
     public static void placePile(@Nonnull World world, @Nonnull SnowballSession.PileSpot spot) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(spot.worldX(), spot.worldZ()));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(spot.worldX(), spot.worldZ()));
         if (chunk == null) {
             return;
         }
-        chunk.placeBlock(
+        PathCementService.placePathBlock(
+            world,
             spot.worldX(),
             spot.worldY(),
             spot.worldZ(),
             SnowballIds.PILE_BLOCK_ID,
-            FLAT,
-            SnowballIds.PLACE_SETTINGS,
-            false
+            RotationTuple.NONE_INDEX,
+            SnowballIds.PLACE_SETTINGS
         );
     }
 
     public static void clearPile(@Nonnull World world, @Nonnull SnowballSession.PileSpot spot) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(spot.worldX(), spot.worldZ()));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(spot.worldX(), spot.worldZ()));
         if (chunk == null) {
             return;
         }
-        chunk.setBlock(
+        ChunkSectionBlockUtil.setBlockEmpty(
+            world,
             spot.worldX(),
             spot.worldY(),
             spot.worldZ(),
-            BlockType.EMPTY_ID,
-            BlockType.EMPTY,
-            0,
-            0,
             SnowballIds.PLACE_SETTINGS
         );
     }

@@ -170,7 +170,7 @@ hytale {
 
     // uncomment if you want to develop your mod against the pre-release version of the game.
     //
-    //updateChannel = "pre-release"
+    updateChannel = "pre-release"
 }
 
 java {
@@ -341,6 +341,9 @@ val generateSubpluginManifestStubs =
 
 tasks.named<ProcessResources>("processResources") {
     dependsOn(generateSubpluginManifestStubs)
+
+    // Never ship Hytale's sidecar LPF cache — equal mtime with JSON makes the engine prefer a stale LPF.
+    exclude("**/*.prefab.json.lpf")
 
     var replaceProperties = mapOf(
         "plugin_group" to findProperty("plugin_group"),

@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.rescue;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.ResidentNpcRecord;
@@ -299,7 +301,7 @@ public final class RescueVillagerSpawnService {
         if (y < 0 || y >= 320) {
             return false;
         }
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (chunk == null) {
             return false;
         }

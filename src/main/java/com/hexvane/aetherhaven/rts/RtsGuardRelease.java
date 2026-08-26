@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.rts;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
@@ -8,6 +9,7 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.role.support.StateSupport;
 import com.hypixel.hytale.server.npc.role.support.MarkedEntitySupport;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,7 +37,7 @@ public final class RtsGuardRelease {
         }
         Role role = npc.getRole();
         RtsGuardCombatSupport.clearCombatTarget(npc, accessor);
-        MarkedEntitySupport marked = role.getMarkedEntitySupport();
+        MarkedEntitySupport marked = NpcSupportUtil.markedEntitySupport(guardRef, accessor);
         for (int i = 0; i < marked.getMarkedEntitySlotCount(); i++) {
             marked.clearMarkedEntity(i);
         }
@@ -44,13 +46,16 @@ public final class RtsGuardRelease {
             Vector3d pos = tc.getPosition();
             npc.setLeashPoint(new Vector3d(pos.x, pos.y, pos.z));
         }
-        String state = role.getStateSupport().getStateName();
+        String state = NpcSupportUtil.stateName(guardRef.getStore(), guardRef);
         if (needsReleaseReset(state)) {
             if (commandBuffer != null) {
-                role.getStateSupport().setState(guardRef, "Idle", null, commandBuffer);
+                NpcSupportUtil.setState(guardRef, "Idle", null, commandBuffer);
                 commandBuffer.putComponent(guardRef, NPCEntity.getComponentType(), npc);
             } else {
-                role.getStateSupport().setState(guardRef, "Idle", null, accessor);
+                StateSupport stateSupport = NpcSupportUtil.stateSupport(guardRef.getStore(), guardRef);
+                if (stateSupport != null) {
+                    stateSupport.setState(guardRef, "Idle", null, accessor);
+                }
                 accessor.putComponent(guardRef, NPCEntity.getComponentType(), npc);
             }
         } else if (commandBuffer != null) {

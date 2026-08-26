@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.questboard;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.BlockMaterial;
@@ -150,7 +151,7 @@ final class RaidSpawnGroundUtil {
     /** Loads chunks if needed. Must not run from entity tick systems. */
     @Nullable
     private static WorldChunk loadChunkForSpawn(@Nonnull World world, int x, int z) {
-        return world.getChunk(ChunkUtil.indexChunkFromBlock(x, z));
+        return ChunkSectionBlockUtil.resolveTickingChunk(world, x, z);
     }
 
     private static boolean isWalkableStand(@Nonnull WorldChunk chunk, int bx, int feetY, int bz) {

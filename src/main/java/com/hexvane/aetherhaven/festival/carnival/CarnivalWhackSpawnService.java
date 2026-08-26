@@ -21,6 +21,7 @@ import com.hypixel.hytale.server.core.modules.entity.component.BoundingBox;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
+import com.hypixel.hytale.server.core.modules.entity.component.RespondToHit;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
@@ -121,6 +122,8 @@ public final class CarnivalWhackSpawnService {
             new PersistentModel(new Model.ModelReference(modelId, model.getScale(), model.getRandomAttachmentIds(), false))
         );
         holder.addComponent(BoundingBox.getComponentType(), new BoundingBox(GOBLIN_BOX));
+        // U6 melee selectors skip entities without Health or RespondToHit.
+        holder.ensureComponent(RespondToHit.getComponentType());
         holder.addComponent(NetworkId.getComponentType(), new NetworkId(store.getExternalData().takeNextNetworkId()));
         holder.addComponent(Velocity.getComponentType(), new Velocity());
         holder.addComponent(UUIDComponent.getComponentType(), new UUIDComponent(entityUuid));

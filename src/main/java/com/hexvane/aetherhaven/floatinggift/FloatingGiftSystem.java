@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.floatinggift;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.entity.EntityChunkUtil;
@@ -17,8 +19,6 @@ import com.hypixel.hytale.math.util.ChunkUtil;
 import org.joml.Vector3d;
 import com.hypixel.hytale.protocol.AnimationSlot;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
 import com.hypixel.hytale.server.core.modules.collision.CollisionModule;
@@ -29,9 +29,9 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
 import com.hypixel.hytale.server.core.entity.entities.ProjectileComponent;
 import com.hypixel.hytale.server.core.modules.projectile.component.Projectile;
+import com.hypixel.hytale.server.core.universe.world.SetBlockSettings;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
-import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.HashSet;
 import java.util.List;
@@ -47,7 +47,7 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
     /** Same semantics as PathCementService silent clears: replace block without drops/particles when removing tall grass etc. */
     private static final int SET_BLOCK_SILENT = 10;
 
-    /** Decorative plant grasses only — does not touch {@code Soil_Grass*} terrain blocks. */
+    /** Decorative plant grasses only â€” does not touch {@code Soil_Grass*} terrain blocks. */
     private static final int CLEAR_PLANT_GRASS_COLUMN_MAX_UP = 8;
 
     @Nonnull
@@ -113,7 +113,7 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
      * against the gift AABB (plus {@link FloatingGiftComponent#getProjectileHitRadius()}).
      * <p>
      * Combat staff orbs use {@link com.hypixel.hytale.server.core.modules.entity.component.Intangible}
-     * ({@code LaunchProjectileInteraction}) and are omitted from the tangible KD-tree — those are collected via
+     * ({@code LaunchProjectileInteraction}) and are omitted from the tangible KD-tree â€” those are collected via
      * {@link EntityModule#getNetworkSendableSpatialResourceType()} instead.
      */
     private static void tickFloating(
@@ -152,7 +152,7 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
             return;
         }
         transform.setPosition(new Vector3d(nx, ny, nz));
-        // Do not refresh head rotation every tick — client animation drivers can glitch procedural clips.
+        // Do not refresh head rotation every tick â€” client animation drivers can glitch procedural clips.
         tryProjectileProximityPop(commandBuffer, store, ref, gift, transform, velocity, giftBoundingBox);
     }
 
@@ -309,29 +309,23 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
         int y,
         int z
     ) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (chunk == null) {
             return;
         }
         // Decorative plants in the footprint make placeBlock fail or drop loot as items — silent-clear scatter plants only.
         clearPlantGrassDecorationColumn(world, chunk, x, y, z);
-        // Use placeBlock + settings 10 (same as player placement): direct setBlock(settings=3) sets bit 2 and skips
-        // cloning BlockEntity components, so containers never get ItemContainerBlock and cannot open.
-        RotationTuple rot = RotationTuple.of(Rotation.None, Rotation.None, Rotation.None);
+        // Must allow BlockEntity cloning so ItemContainerBlock exists (F Use). Settings 10 includes
+        // NO_UPDATE_STATE and skips the container, so F silently no-ops.
         String chestBlockId = type.chestBlockId();
-        if (!chunk.placeBlock(x, y, z, chestBlockId, rot, 10, false)) {
+        if (!ChunkSectionBlockUtil.setBlockByKey(world, x, y, z, chestBlockId, SetBlockSettings.NONE)) {
             return;
         }
         FloatingGiftChestUtil.markDecoPlaced(world, x, y, z);
-        if (world.getBlockType(x, y, z) == BlockType.EMPTY) {
+        if (ChunkSectionBlockUtil.blockType(world, x, y, z) == BlockType.EMPTY) {
             return;
         }
-        Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(x, y, z);
-        if (blockRef == null || !blockRef.isValid()) {
-            return;
-        }
-        Store<ChunkStore> cs = blockRef.getStore();
-        ItemContainerBlock chest = cs.getComponent(blockRef, ItemContainerBlock.getComponentType());
+        ItemContainerBlock chest = FloatingGiftChestUtil.ensureItemContainer(world, x, y, z);
         if (chest == null || chest.getItemContainer() == null) {
             return;
         }
@@ -365,7 +359,7 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
     ) {
         for (int py = startY; py < startY + CLEAR_PLANT_GRASS_COLUMN_MAX_UP && py < 320; py++) {
             WorldChunk ch =
-                py == startY ? initialChunk : world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+                py == startY ? initialChunk : ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
             if (ch == null) {
                 break;
             }

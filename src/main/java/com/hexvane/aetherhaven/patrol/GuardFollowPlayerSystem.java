@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.patrol;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.FollowPlayerTeleportRecovery;
@@ -96,7 +98,7 @@ public final class GuardFollowPlayerSystem extends EntityTickingSystem<EntitySto
 
         clearFollowRecoveryTracking(store, guardRef);
 
-        String stateName = npc.getRole().getStateSupport().getStateName();
+        String stateName = NpcSupportUtil.stateName(store, guardRef);
         if (!stateName.contains("Combat")) {
             ensurePatrolMotionStore(guardRef, npc, store);
         }
@@ -136,7 +138,7 @@ public final class GuardFollowPlayerSystem extends EntityTickingSystem<EntitySto
 
         clearFollowRecoveryTracking(store, guardRef);
 
-        String stateName = npc.getRole().getStateSupport().getStateName();
+        String stateName = NpcSupportUtil.stateName(store, guardRef);
         if (!stateName.contains("Combat")) {
             ensurePatrolMotion(guardRef, npc, commandBuffer);
         }
@@ -157,9 +159,9 @@ public final class GuardFollowPlayerSystem extends EntityTickingSystem<EntitySto
         }
         NPCEntity npc = store.getComponent(guardRef, NPCEntity.getComponentType());
         if (npc != null && npc.getRole() != null && resumePatrol) {
-            String stateName = npc.getRole().getStateSupport().getStateName();
+            String stateName = NpcSupportUtil.stateName(store, guardRef);
             if (stateName.contains("Patrol") || stateName.contains("Idle")) {
-                npc.getRole().getStateSupport().setState(guardRef, "Idle", null, store);
+                NpcSupportUtil.setState(guardRef, "Idle", null, store);
                 store.putComponent(guardRef, NPCEntity.getComponentType(), npc);
             }
         }
@@ -180,9 +182,9 @@ public final class GuardFollowPlayerSystem extends EntityTickingSystem<EntitySto
         }
         NPCEntity npc = store.getComponent(guardRef, NPCEntity.getComponentType());
         if (npc != null && npc.getRole() != null && resumePatrol) {
-            String stateName = npc.getRole().getStateSupport().getStateName();
+            String stateName = NpcSupportUtil.stateName(store, guardRef);
             if (stateName.contains("Patrol") || stateName.contains("Idle")) {
-                npc.getRole().getStateSupport().setState(guardRef, "Idle", null, commandBuffer);
+                NpcSupportUtil.setState(guardRef, "Idle", null, commandBuffer);
                 commandBuffer.putComponent(guardRef, NPCEntity.getComponentType(), npc);
             }
         }
@@ -228,7 +230,7 @@ public final class GuardFollowPlayerSystem extends EntityTickingSystem<EntitySto
             return;
         }
 
-        String stateName = npc.getRole() != null ? npc.getRole().getStateSupport().getStateName() : "";
+        String stateName = npc.getRole() != null ? NpcSupportUtil.stateName(store, ref) : "";
         if (stateName.contains("Combat")) {
             return;
         }
@@ -295,9 +297,9 @@ public final class GuardFollowPlayerSystem extends EntityTickingSystem<EntitySto
         if (npc.getRole() == null) {
             return;
         }
-        String stateName = npc.getRole().getStateSupport().getStateName();
+        String stateName = NpcSupportUtil.stateName(store, ref);
         if (!stateName.contains(AetherhavenConstants.NPC_STATE_GUARD_PATROL)) {
-            npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_GUARD_PATROL, null, store);
+            NpcSupportUtil.setState(ref, AetherhavenConstants.NPC_STATE_GUARD_PATROL, null, store);
         }
     }
 
@@ -309,9 +311,9 @@ public final class GuardFollowPlayerSystem extends EntityTickingSystem<EntitySto
         if (npc.getRole() == null) {
             return;
         }
-        String stateName = npc.getRole().getStateSupport().getStateName();
+        String stateName = NpcSupportUtil.stateName(commandBuffer.getStore(), ref);
         if (!stateName.contains(AetherhavenConstants.NPC_STATE_GUARD_PATROL)) {
-            npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_GUARD_PATROL, null, commandBuffer);
+            NpcSupportUtil.setState(ref, AetherhavenConstants.NPC_STATE_GUARD_PATROL, null, commandBuffer);
         }
     }
 

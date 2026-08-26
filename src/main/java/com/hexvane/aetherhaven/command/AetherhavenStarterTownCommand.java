@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.command;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.charter.TownFoundingService;
 import com.hexvane.aetherhaven.startertown.StarterTownBuildService;
@@ -37,6 +39,7 @@ import org.joml.Vector3i;
 public final class AetherhavenStarterTownCommand extends AbstractPlayerCommand {
     public AetherhavenStarterTownCommand() {
         super("startertown", "aetherhaven_commands_help.commands.aetherhaven.startertown.desc");
+        requireNoPermission();
         this.setPermissionGroups("hytale:WorldEditor");
         this.addUsageVariant(new WithPreset());
         this.addUsageVariant(new WithPresetAndLayout());
@@ -101,7 +104,7 @@ public final class AetherhavenStarterTownCommand extends AbstractPlayerCommand {
         Vector3d playerPosition = transform.getPosition();
         int x = (int) Math.floor(playerPosition.x);
         int z = (int) Math.floor(playerPosition.z);
-        WorldChunk surfaceChunk = world.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(x, z));
+        WorldChunk surfaceChunk = ChunkSectionBlockUtil.worldChunkIfNonTicking(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (surfaceChunk == null) {
             context.sendMessage(Message.translation("aetherhaven_commands_help.commands.aetherhaven.startertown.chunkMissing"));
             return;

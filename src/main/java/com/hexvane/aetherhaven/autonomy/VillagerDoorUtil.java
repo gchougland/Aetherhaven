@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.autonomy;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector3dUtil;
 import com.hypixel.hytale.math.util.TrigMathUtil;
@@ -11,7 +12,9 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.DoorInteraction;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.chunk.BlockOperations;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -48,7 +51,7 @@ public final class VillagerDoorUtil {
     @Nonnull
     @SuppressWarnings({ "deprecation", "removal" })
     private static Vector3i doorPrimaryBlock(@Nonnull World world, int x, int y, int z) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (chunk == null) {
             return new Vector3i(x, y, z);
         }
@@ -164,7 +167,7 @@ public final class VillagerDoorUtil {
         @Nonnull Vector3i blockPos
     ) {
         Vector3i primary = doorPrimaryBlock(world, blockPos.x, blockPos.y, blockPos.z);
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(primary.x, primary.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(primary.x, primary.z));
         if (chunk == null) {
             return false;
         }
@@ -260,7 +263,7 @@ public final class VillagerDoorUtil {
      */
     public static boolean tryOpenDoorAt(@Nonnull World world, @Nonnull Vector3d entityPos, @Nonnull Vector3i blockPos) {
         Vector3i primary = doorPrimaryBlock(world, blockPos.x, blockPos.y, blockPos.z);
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(primary.x, primary.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(primary.x, primary.z));
         if (chunk == null) {
             return false;
         }
@@ -286,7 +289,7 @@ public final class VillagerDoorUtil {
         if (tryOpenClosedDoor(world, primary, primarySwing)) {
             return true;
         }
-        chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(primary.x, primary.z));
+        chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(primary.x, primary.z));
         if (chunk == null) {
             return false;
         }
@@ -305,7 +308,7 @@ public final class VillagerDoorUtil {
     }
 
     private static boolean tryOpenClosedDoor(@Nonnull World world, @Nonnull Vector3i blockPos, @Nonnull DoorState targetOpen) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(blockPos.x, blockPos.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(blockPos.x, blockPos.z));
         if (chunk == null) {
             return false;
         }
@@ -340,7 +343,7 @@ public final class VillagerDoorUtil {
     public static boolean tryCloseDoorAt(@Nonnull World world, int x, int y, int z) {
         Vector3i pos = doorPrimaryBlock(world, x, y, z);
         for (int attempt = 0; attempt < 2; attempt++) {
-            WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
+            WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
             if (chunk == null) {
                 return false;
             }
@@ -379,7 +382,7 @@ public final class VillagerDoorUtil {
     }
 
     private static boolean canOpenDoor(@Nonnull World world, @Nonnull Vector3i blockPosition, @Nonnull String state) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(blockPosition.x, blockPosition.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(blockPosition.x, blockPosition.z));
         if (chunk == null) {
             return false;
         }
@@ -392,7 +395,20 @@ public final class VillagerDoorUtil {
             return false;
         }
         int rotation = VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, blockPosition.x, blockPosition.y, blockPosition.z);
-        return world.testPlaceBlock(blockPosition.x, blockPosition.y, blockPosition.z, variantBlockType, rotation, (blockX, blockY, blockZ, _blockType, _rotation, filler) -> {
+        BlockSection section =
+            ChunkSectionBlockUtil.blockSectionAt(world, blockPosition.x, blockPosition.y, blockPosition.z);
+        if (section == null) {
+            return false;
+        }
+        return BlockOperations.testPlaceBlock(
+            world.getChunkStore().getStore(),
+            section,
+            blockPosition.x,
+            blockPosition.y,
+            blockPosition.z,
+            variantBlockType,
+            rotation,
+            (blockX, blockY, blockZ, _blockType, _rotation, filler) -> {
             if (filler != 0) {
                 blockX -= FillerBlockUtil.unpackX(filler);
                 blockY -= FillerBlockUtil.unpackY(filler);
@@ -527,7 +543,7 @@ public final class VillagerDoorUtil {
     }
 
     private static boolean isDoorPrimaryBlock(@Nonnull World world, @Nonnull Vector3i primary) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(primary.x, primary.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(primary.x, primary.z));
         if (chunk == null) {
             return false;
         }
@@ -704,7 +720,7 @@ public final class VillagerDoorUtil {
         @Nonnull DoorState doorState,
         @Nonnull String interactionStateToSend
     ) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(blockPosition.x, blockPosition.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(blockPosition.x, blockPosition.z));
         if (chunk == null) {
             return false;
         }

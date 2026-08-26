@@ -115,6 +115,9 @@ public final class PropEntityOps {
         int prefabId
     ) {
         Holder<EntityStore> clone = entityToAdd.clone();
+        if (!isSpawnablePropEntity(clone)) {
+            return null;
+        }
         TransformComponent transformComp = clone.getComponent(TransformComponent.getComponentType());
         if (transformComp == null) {
             return null;
@@ -134,6 +137,9 @@ public final class PropEntityOps {
         int prefabId
     ) {
         Holder<EntityStore> clone = entityToAdd.clone();
+        if (!isSpawnablePropEntity(clone)) {
+            return null;
+        }
         TransformComponent transformComp = clone.getComponent(TransformComponent.getComponentType());
         if (transformComp == null) {
             return null;
@@ -190,6 +196,17 @@ public final class PropEntityOps {
         );
         entityAccessor.addEntity(clone, AddReason.LOAD);
         return entityUuid;
+    }
+
+    /**
+     * Prefabs sometimes keep empty Transform-only leftovers from editor / trigger-volume cleanup. Those markers sit
+     * far from the real decoration and must not be spawned (they stretch the prefab buffer AABB used by packaging).
+     */
+    private static boolean isSpawnablePropEntity(@Nonnull Holder<EntityStore> holder) {
+        return holder.getComponent(ItemComponent.getComponentType()) != null
+            || holder.getComponent(BlockEntity.getComponentType()) != null
+            || holder.getComponent(PropComponent.getComponentType()) != null
+            || holder.getComponent(NPCEntity.getComponentType()) != null;
     }
 
     /**

@@ -156,10 +156,11 @@ public final class VillagerCosmeticAppearanceService {
         for (Map.Entry<String, String> e : effective.entrySet()) {
             String slot = e.getKey();
             String cosmeticId = e.getValue();
-            list.removeIf(a -> catalog.belongsToSlot(slot, a.getModel()));
+            // "default" means keep the model asset DefaultAttachments for this slot (do not strip hats/etc.).
             if (VillagerCosmeticDefinition.DEFAULT_ID.equalsIgnoreCase(cosmeticId)) {
                 continue;
             }
+            list.removeIf(a -> catalog.belongsToSlot(slot, a.getModel()));
             VillagerCosmeticDefinition def = catalog.byId(cosmeticId);
             if (def == null) {
                 continue;

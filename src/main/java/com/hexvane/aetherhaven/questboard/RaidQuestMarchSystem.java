@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.questboard;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.map.RaidQuestCompassCache;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -115,7 +117,7 @@ public final class RaidQuestMarchSystem extends EntityTickingSystem<EntityStore>
             RaidQuestMarchDebugLog.logBootstrap(plugin, mobUuid.getUuid(), pos, charterPos, binding.getMarchLeash(), npc);
         }
 
-        String stateName = npc.getRole().getStateSupport().getStateName();
+        String stateName = NpcSupportUtil.stateName(store, ref);
         boolean inCombat = RaidQuestMarchUtil.isEngagedInCombat(npc);
         RaidQuestMarchDebugLog.logMarchStatus(
             plugin,
@@ -147,7 +149,7 @@ public final class RaidQuestMarchSystem extends EntityTickingSystem<EntityStore>
             commandBuffer.putComponent(ref, RaidQuestMobBinding.getComponentType(), binding);
         }
 
-        RaidQuestMarchUtil.ensureMarchMotion(ref, npc, binding, pos, commandBuffer);
+        RaidQuestMarchUtil.ensureMarchMotion(ref, npc, binding, pos, store, commandBuffer);
 
         RaidQuestMarchAggro.tryEngageNearbyPlayers(ref, npc, pos, store, commandBuffer);
 

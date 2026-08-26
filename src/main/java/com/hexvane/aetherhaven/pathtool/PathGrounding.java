@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.pathtool;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
@@ -57,7 +59,7 @@ public final class PathGrounding {
     }
 
     private static boolean isColumnLoaded(@Nonnull World world, int x, int y, int z) {
-        return world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z)) != null;
+        return ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z)) != null;
     }
 
     @Nullable
@@ -65,7 +67,7 @@ public final class PathGrounding {
         if (y < 0 || y > 320) {
             return null;
         }
-        WorldChunk c = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        WorldChunk c = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (c == null) {
             return null;
         }

@@ -17,11 +17,7 @@ import javax.annotation.Nonnull;
 public final class AetherhavenHudCommand extends AbstractPlayerCommand {
     public AetherhavenHudCommand() {
         super("hud", "aetherhaven_commands_help.commands.aetherhaven.hud.desc");
-    }
-
-    @Override
-    protected boolean canGeneratePermission() {
-        return false;
+        requireNoPermission();
     }
 
     @Override

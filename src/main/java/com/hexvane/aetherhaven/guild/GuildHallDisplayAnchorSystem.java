@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.guild;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
+
 import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hexvane.aetherhaven.entity.TransformComponentUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
@@ -140,7 +142,14 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
         if (npc.getRole() == null) {
             return false;
         }
-        StateSupport stateSupport = npc.getRole().getStateSupport();
+        Ref<EntityStore> npcRef = npc.getReference();
+        if (npcRef == null) {
+            return false;
+        }
+        StateSupport stateSupport = NpcSupportUtil.stateSupport(npcRef.getStore(), npcRef);
+        if (stateSupport == null) {
+            return false;
+        }
         int interactionState = stateSupport.getStateHelper().getStateIndex("$Interaction");
         return interactionState >= 0 && stateSupport.inState(interactionState);
     }
@@ -159,7 +168,10 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
             }
             return false;
         }
-        StateSupport stateSupport = npc.getRole().getStateSupport();
+        StateSupport stateSupport = NpcSupportUtil.stateSupport(ref.getStore(), ref);
+        if (stateSupport == null) {
+            return false;
+        }
         int displayState = stateSupport.getStateHelper().getStateIndex(AetherhavenConstants.NPC_STATE_STAND_STILL);
         if (displayState >= 0 && stateSupport.inState(displayState)) {
             if (!anchor.isDisplayStateApplied()) {
@@ -171,7 +183,7 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
         if (anchor.isDisplayStateApplied()) {
             return false;
         }
-        npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_STAND_STILL, null, commandBuffer);
+        NpcSupportUtil.setState(ref, AetherhavenConstants.NPC_STATE_STAND_STILL, null, commandBuffer);
         anchor.setDisplayStateApplied(true);
         return true;
     }

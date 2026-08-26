@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.inn;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
@@ -146,7 +148,7 @@ public final class InnBellUseInteraction extends SimpleBlockInteraction {
     }
 
     private static boolean isInnBellBlock(@Nonnull World world, @Nonnull Vector3i pos) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
         if (chunk == null) {
             return false;
         }

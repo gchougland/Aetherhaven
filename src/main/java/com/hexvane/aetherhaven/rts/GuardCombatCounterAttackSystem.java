@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.rts;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.builtin.npccombatactionevaluator.memory.TargetMemory;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -32,16 +33,15 @@ public final class GuardCombatCounterAttackSystem extends EntityTickingSystem<En
         if (binding == null || !TownVillagerBinding.KIND_GUARD.equals(binding.getKind())) {
             return;
         }
+        Ref<EntityStore> guardRef = chunk.getReferenceTo(index);
         NPCEntity npc = chunk.getComponent(index, NPCEntity.getComponentType());
         if (npc == null || npc.getRole() == null) {
             return;
         }
-        if (!npc.getRole().getStateSupport().getStateName().contains("Combat")) {
+        if (!NpcSupportUtil.stateName(store, guardRef).contains("Combat")) {
             return;
         }
-        Ref<EntityStore> guardRef = chunk.getReferenceTo(index);
-        Ref<EntityStore> targetRef = npc.getRole()
-            .getMarkedEntitySupport()
+        Ref<EntityStore> targetRef = NpcSupportUtil.markedEntitySupport(guardRef, store)
             .getMarkedEntityRef(RtsGuardCombatSupport.LOCKED_TARGET_SLOT);
         if (targetRef == null || !targetRef.isValid()) {
             return;
@@ -68,8 +68,7 @@ public final class GuardCombatCounterAttackSystem extends EntityTickingSystem<En
         if (hostile == null || hostile.getRole() == null) {
             return false;
         }
-        Ref<EntityStore> locked = hostile.getRole()
-            .getMarkedEntitySupport()
+        Ref<EntityStore> locked = NpcSupportUtil.markedEntitySupport(targetRef, store)
             .getMarkedEntityRef(RtsGuardCombatSupport.LOCKED_TARGET_SLOT);
         return guardRef.equals(locked);
     }

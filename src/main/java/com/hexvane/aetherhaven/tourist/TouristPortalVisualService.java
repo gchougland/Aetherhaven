@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.tourist;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -64,7 +66,7 @@ public final class TouristPortalVisualService {
                 | SetBlockSettings.NO_SET_FILLER;
 
         TouristPortalBlockUtil.forEachPlatformCell(world, base, cell -> {
-            WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(cell.x, cell.z));
+            WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(cell.x, cell.z));
             if (chunk == null) {
                 return;
             }

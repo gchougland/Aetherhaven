@@ -19,7 +19,6 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.CameraManager;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.server.core.modules.entity.teleport.PendingTeleport;
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -257,8 +256,8 @@ public final class RtsCommandService {
             if (!playerRef.isValid()) {
                 return;
             }
-            PendingTeleport pending = store.getComponent(playerRef, PendingTeleport.getComponentType());
-            if (pending != null && !pending.isEmpty() && attempt < TELEPORT_SETTLE_MAX_ATTEMPTS) {
+            PlayerRef player = store.getComponent(playerRef, PlayerRef.getComponentType());
+            if (player != null && !player.getTeleportAckTracker().isEmpty() && attempt < TELEPORT_SETTLE_MAX_ATTEMPTS) {
                 runWhenTeleportSettled(world, playerRef, store, attempt + 1, action);
                 return;
             }

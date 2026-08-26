@@ -16,7 +16,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,17 +36,30 @@ public final class ActionOpenAetherhavenDialogue extends ActionBase {
     }
 
     @Override
-    public boolean canExecute(@Nonnull Ref<EntityStore> ref, @Nonnull Role role, InfoProvider sensorInfo, double dt, @Nonnull Store<EntityStore> store) {
-        return super.canExecute(ref, role, sensorInfo, dt, store) && role.getStateSupport().getInteractionIterationTarget() != null;
+    public boolean canExecute(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull ExecutionSupport executionSupport,
+        InfoProvider sensorInfo,
+        double dt,
+        @Nonnull Store<EntityStore> store
+    ) {
+        return super.canExecute(ref, executionSupport, sensorInfo, dt, store)
+            && executionSupport.getStateSupport().getInteractionIterationTarget() != null;
     }
 
     @Override
-    public boolean execute(@Nonnull Ref<EntityStore> ref, @Nonnull Role role, InfoProvider sensorInfo, double dt, @Nonnull Store<EntityStore> store) {
+    public boolean execute(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull ExecutionSupport executionSupport,
+        InfoProvider sensorInfo,
+        double dt,
+        @Nonnull Store<EntityStore> store
+    ) {
         if (!AetherhavenFeatures.isLoaded(AetherhavenPluginIds.DIALOGUE)) {
             return false;
         }
-        super.execute(ref, role, sensorInfo, dt, store);
-        Ref<EntityStore> playerRef = role.getStateSupport().getInteractionIterationTarget();
+        super.execute(ref, executionSupport, sensorInfo, dt, store);
+        Ref<EntityStore> playerRef = executionSupport.getStateSupport().getInteractionIterationTarget();
         if (playerRef == null) {
             return false;
         }
@@ -88,10 +101,6 @@ public final class ActionOpenAetherhavenDialogue extends ActionBase {
                     NpcDialogueCleanup.scheduleReturnToIdle(npcRef, playerEntityRef, store);
                     return;
                 }
-                // A conversation already on screen must not restart while the player holds the interact key. Any
-                // other page still standing here was never dismissed on our side — the client cannot fire an
-                // interaction while its own window has focus — so replacing it is the only way the player gets to
-                // talk to anybody again. openCustomPage dismisses the old page for us.
                 if (player.getPageManager().getCustomPage() instanceof DialoguePage) {
                     NpcDialogueCleanup.scheduleReturnToIdle(npcRef, playerEntityRef, store);
                     return;

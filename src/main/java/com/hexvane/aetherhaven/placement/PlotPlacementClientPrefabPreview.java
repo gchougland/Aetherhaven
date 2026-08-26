@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.placement;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.community.CommunityPrefabSafety;
 import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
@@ -23,7 +25,6 @@ import com.hypixel.hytale.server.core.prefab.selection.standard.RotateBlockMode;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.nio.file.Path;
 import javax.annotation.Nonnull;
@@ -329,9 +330,8 @@ public final class PlotPlacementClientPrefabPreview {
         @Nonnull ShowTriggerVolumePastePrefabPreview packet
     ) {
         long chunkIndex = ChunkUtil.indexChunkFromBlock(x, z);
-        WorldChunk chunk = world.getNonTickingChunk(chunkIndex);
-        if (chunk != null && chunk.getBlockChunk() != null) {
-            BlockChunk blockChunk = chunk.getBlockChunk();
+        BlockChunk blockChunk = ChunkSectionBlockUtil.blockChunkAt(world, x, z);
+        if (blockChunk != null) {
             packet.biomeTint = blockChunk.getTint(x, z);
             int envId = blockChunk.getEnvironment(x, y, z);
             Environment environment = Environment.getAssetMap().getAsset(envId);

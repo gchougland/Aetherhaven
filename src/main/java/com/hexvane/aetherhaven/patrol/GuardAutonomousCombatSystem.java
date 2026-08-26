@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.patrol;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.npc.NpcFaceVisuals;
@@ -63,6 +64,7 @@ public final class GuardAutonomousCombatSystem extends EntityTickingSystem<Entit
         if (binding == null || !TownVillagerBinding.KIND_GUARD.equals(binding.getKind())) {
             return;
         }
+        Ref<EntityStore> guardRef = chunk.getReferenceTo(index);
         NPCEntity npc = chunk.getComponent(index, NPCEntity.getComponentType());
         if (npc == null || npc.getRole() == null) {
             return;
@@ -70,12 +72,11 @@ public final class GuardAutonomousCombatSystem extends EntityTickingSystem<Entit
         if (NpcFaceVisuals.isInInteractionDialogue(npc)) {
             return;
         }
-        String stateName = npc.getRole().getStateSupport().getStateName();
+        String stateName = NpcSupportUtil.stateName(store, guardRef);
         if (stateName.contains("Interaction")) {
             return;
         }
 
-        Ref<EntityStore> guardRef = chunk.getReferenceTo(index);
         if (chunk.getComponent(index, GuardRtsCommandState.getComponentType()) != null) {
             return;
         }
@@ -106,8 +107,7 @@ public final class GuardAutonomousCombatSystem extends EntityTickingSystem<Entit
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nullable Ref<EntityStore> playerRef
     ) {
-        Ref<EntityStore> locked = npc.getRole()
-            .getMarkedEntitySupport()
+        Ref<EntityStore> locked = NpcSupportUtil.markedEntitySupport(guardRef, store)
             .getMarkedEntityRef(RtsGuardCombatSupport.LOCKED_TARGET_SLOT);
         if (locked != null && locked.isValid() && RtsHostileQuery.isGuardThreatTarget(guardRef, locked, store, playerRef)) {
             return;
@@ -158,11 +158,10 @@ public final class GuardAutonomousCombatSystem extends EntityTickingSystem<Entit
             if (allyNpc == null || allyNpc.getRole() == null) {
                 continue;
             }
-            if (!allyNpc.getRole().getStateSupport().getStateName().contains("Combat")) {
+            if (!NpcSupportUtil.stateName(store, allyRef).contains("Combat")) {
                 continue;
             }
-            Ref<EntityStore> locked = allyNpc.getRole()
-                .getMarkedEntitySupport()
+            Ref<EntityStore> locked = NpcSupportUtil.markedEntitySupport(allyRef, store)
                 .getMarkedEntityRef(RtsGuardCombatSupport.LOCKED_TARGET_SLOT);
             if (locked == null || !locked.isValid()) {
                 continue;

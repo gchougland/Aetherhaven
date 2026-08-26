@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.construction;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.entity.EntityRotationUtil;
 import com.hexvane.aetherhaven.blockpalette.BlockPaletteRemapper;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyObstructionUtil;
@@ -40,9 +42,11 @@ import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockComponentChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.BlockOperations;
 import com.hypixel.hytale.server.core.universe.world.chunk.ChunkColumn;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockComponentSection;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.FluidSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -235,7 +239,7 @@ public final class ConstructionPasteOps {
         int bz,
         @Nonnull LocalCachedChunkAccessor chunkAccessor
     ) {
-        WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(bx, bz));
         if (chunk == null || !chunk.getReference().isValid()) {
             return false;
         }
@@ -313,16 +317,22 @@ public final class ConstructionPasteOps {
             if (chunk == null || !chunk.getReference().isValid()) {
                 return false;
             }
-            BlockComponentChunk blockComponents = chunk.getBlockComponentChunk();
+            World blockWorld = chunk.getWorld();
+            BlockComponentSection blockComponents =
+                ChunkSectionBlockUtil.blockComponentSectionAt(blockWorld, wx, wy, wz);
             if (blockComponents == null) {
                 return false;
             }
-            int index = ChunkUtil.indexBlockInColumn(wx, wy, wz);
+            int index = ChunkUtil.indexBlock(wx, wy, wz);
             if (target.getBench() != null) {
-                return chunk.getBlockComponentEntity(wx, wy, wz) != null;
+                return ChunkSectionBlockUtil.blockEntityRefAt(blockWorld, wx, wy, wz) != null;
             }
-            return blockComponents.getComponent(index, ItemContainerBlock.getComponentType()) != null
-                || chunk.getBlockComponentEntity(wx, wy, wz) != null;
+            Ref<ChunkStore> blockRef = blockComponents.getBlockReference(index);
+            ItemContainerBlock container =
+                blockRef != null
+                    ? blockWorld.getChunkStore().getStore().getComponent(blockRef, ItemContainerBlock.getComponentType())
+                    : null;
+            return container != null || ChunkSectionBlockUtil.blockEntityRefAt(blockWorld, wx, wy, wz) != null;
         }
         return true;
     }
@@ -572,7 +582,7 @@ public final class ConstructionPasteOps {
                 || !blockKey.equals(worldBlock.getId());
         if (needsVoxel) {
             RotationTuple rot = RotationTuple.get(pb.blockRotation());
-            if (!chunk.placeBlock(bx, by, bz, blockKey, rot, INTERACTIVE_BLOCK_PLACE_SETTINGS, false)) {
+            if (!tryPlaceBlockAt(world, bx, by, bz, block, rot.index(), INTERACTIVE_BLOCK_PLACE_SETTINGS)) {
                 LOGGER.at(Level.WARNING).log(
                     "Interactive block placement: placeBlock failed at %d,%d,%d (%s)",
                     bx,
@@ -602,9 +612,13 @@ public final class ConstructionPasteOps {
                 }
             }
         }
-        chunk.setTicking(bx, by, bz, true);
-        BlockComponentChunk blockComponents = chunk.getBlockComponentChunk();
-        if (blockComponents == null) {
+        BlockSection blockSection = ChunkSectionBlockUtil.blockSectionAt(world, bx, by, bz);
+        if (blockSection != null) {
+            blockSection.setTicking(bx, by, bz, true);
+        }
+        Ref<ChunkStore> sectionRef = ChunkSectionBlockUtil.sectionRefAt(world, bx, by, bz);
+        BlockComponentSection blockComponents = ChunkSectionBlockUtil.blockComponentSectionAt(world, bx, by, bz);
+        if (sectionRef == null || blockComponents == null) {
             return false;
         }
         Holder<ChunkStore> entityHolder = null;
@@ -614,15 +628,12 @@ public final class ConstructionPasteOps {
             entityHolder = block.getBlockEntity().clone();
         }
         if (entityHolder == null) {
-            // No prefab/template state to attach; keep whatever placeBlock already created.
-            Ref<ChunkStore> existing = chunk.getBlockComponentEntity(bx, by, bz);
+            Ref<ChunkStore> existing = ChunkSectionBlockUtil.blockEntityRefAt(world, bx, by, bz);
             return existing != null && existing.isValid();
         }
-        // Always apply the prefab holder. placeBlock may have already spawned an empty template
-        // entity (e.g. aquariums); returning early left stocked prefab contents unapplied.
         com.hypixel.hytale.server.core.modules.block.BlockEntity.setBlockEntity(
             world.getChunkStore().getStore(),
-            chunk.getReference(),
+            sectionRef,
             blockComponents,
             bx,
             by,
@@ -631,7 +642,7 @@ public final class ConstructionPasteOps {
             pb.blockRotation(),
             entityHolder
         );
-        Ref<ChunkStore> attached = chunk.getBlockComponentEntity(bx, by, bz);
+        Ref<ChunkStore> attached = ChunkSectionBlockUtil.blockEntityRefAt(world, bx, by, bz);
         if (attached == null || !attached.isValid()) {
             LOGGER.at(Level.WARNING).log(
                 "Interactive block placement: block entity missing after attach at %d,%d,%d (%s)",
@@ -647,20 +658,14 @@ public final class ConstructionPasteOps {
 
     @Nullable
     private static WorldChunk resolveTickingChunk(@Nonnull World world, int bx, int bz) {
-        long chunkIndex = ChunkUtil.indexChunkFromBlock(bx, bz);
-        WorldChunk chunk = world.getChunk(chunkIndex);
-        if (chunk != null) {
-            return chunk;
+        WorldChunk chunk = ChunkSectionBlockUtil.resolveTickingChunk(world, bx, bz);
+        if (chunk == null) {
+            LOGGER.at(Level.WARNING).log(
+                "Failed to load ticking chunk %d for interactive block",
+                ChunkUtil.indexChunkFromBlock(bx, bz)
+            );
         }
-        if (!world.isInThread()) {
-            return CompletableFuture.supplyAsync(() -> resolveTickingChunk(world, bx, bz), world).join();
-        }
-        try {
-            return world.getChunkAsync(chunkIndex).join();
-        } catch (RuntimeException e) {
-            LOGGER.at(Level.WARNING).withCause(e).log("Failed to load ticking chunk %d for interactive block", chunkIndex);
-            return null;
-        }
+        return chunk;
     }
 
     @Nonnull
@@ -672,7 +677,7 @@ public final class ConstructionPasteOps {
         double xLength = bufferAccess.getMaxX() - bufferAccess.getMinX();
         double zLength = bufferAccess.getMaxZ() - bufferAccess.getMinZ();
         int prefabRadius = (int) Math.floor(0.5 * Math.sqrt(xLength * xLength + zLength * zLength));
-        return LocalCachedChunkAccessor.atWorldCoords(world, origin.x(), origin.z(), prefabRadius);
+        return LocalCachedChunkAccessor.atWorldCoords(ChunkSectionBlockUtil.chunkAccessor(world), origin.x(), origin.z(), prefabRadius);
     }
 
     /**
@@ -745,7 +750,7 @@ public final class ConstructionPasteOps {
             int bx = origin.x + pb.x;
             int by = origin.y + pb.y;
             int bz = origin.z + pb.z;
-            WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
+            WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(bx, bz));
             if (chunk == null || !chunk.getReference().isValid()) {
                 continue;
             }
@@ -754,12 +759,12 @@ public final class ConstructionPasteOps {
                     continue;
                 }
                 if (force) {
-                    chunk.setBlock(bx, by, bz, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, SET_BLOCK_SETTINGS_CLEAR);
+                    ChunkSectionBlockUtil.setBlockEmpty(world, bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
                 } else {
-                    chunk.breakBlock(bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
+                    world.breakBlock(bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
                 }
             } else {
-                chunk.setBlock(bx, by, bz, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, SET_BLOCK_SETTINGS_CLEAR);
+                ChunkSectionBlockUtil.setBlockEmpty(world, bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
             }
         }
     }
@@ -780,7 +785,7 @@ public final class ConstructionPasteOps {
         int bx = origin.x + pb.x;
         int by = origin.y + pb.y;
         int bz = origin.z + pb.z;
-        WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(bx, bz));
         if (chunk == null || !chunk.getReference().isValid()) {
             return false;
         }
@@ -804,19 +809,18 @@ public final class ConstructionPasteOps {
                 return true;
             }
             if (force) {
-                chunk.setBlock(bx, by, bz, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, SET_BLOCK_SETTINGS_CLEAR);
+                ChunkSectionBlockUtil.setBlockEmpty(world, bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
             } else {
-                chunk.breakBlock(bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
+                world.breakBlock(bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
             }
             return true;
         }
         if (PrefabFootprintClearUtil.isProductionStorageBlockTypeId(blockKey)) {
             PrefabFootprintClearUtil.forceClearProductionStorageAt(world, bx, by, bz);
         }
-        // Match PrefabUtil force-paste: setBlock writes attachables (wall torches) reliably; placeBlock can no-op
-        // them when support/validation disagrees even with validatePlacement=false.
         if (force) {
-            chunk.setBlock(
+            ChunkSectionBlockUtil.setBlock(
+                world,
                 bx,
                 by,
                 bz,
@@ -826,11 +830,8 @@ public final class ConstructionPasteOps {
                 FillerBlockUtil.NO_FILLER,
                 SET_BLOCK_SETTINGS_PLACE
             );
-        } else {
-            RotationTuple rot = RotationTuple.get(pb.blockRotation);
-            if (!chunk.placeBlock(bx, by, bz, blockKey, rot, SET_BLOCK_SETTINGS_PLACE, true)) {
-                return false;
-            }
+        } else if (!tryPlaceBlockAt(world, bx, by, bz, block, pb.blockRotation, SET_BLOCK_SETTINGS_PLACE)) {
+            return false;
         }
         if (PrefabSupportUtil.needsSupportPhysics(block, pb.blockRotation) || pb.supportValue != 0) {
             Ref<ChunkStore> ref = chunk.getReference();
@@ -937,7 +938,7 @@ public final class ConstructionPasteOps {
         int bx = origin.x + pb.x();
         int by = origin.y + pb.y();
         int bz = origin.z + pb.z();
-        WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(bx, bz));
         if (chunk == null || !chunk.getReference().isValid()) {
             return false;
         }
@@ -945,7 +946,7 @@ public final class ConstructionPasteOps {
             if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz, chunkAccessor)) {
                 return true;
             }
-            chunk.setBlock(bx, by, bz, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, SET_BLOCK_SETTINGS_CLEAR);
+            ChunkSectionBlockUtil.setBlockEmpty(world, bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
             return true;
         }
         BlockType block = blockTypeMap.getAsset(pb.blockId());
@@ -955,7 +956,6 @@ public final class ConstructionPasteOps {
         if (pb.filler() == FillerBlockUtil.NO_FILLER && isInteractiveBlockEntityOrigin(pb, blockTypeMap)) {
             return true;
         }
-        // PrefabUtil: filler cells never place a block voxel — only component state on the multi-block volume.
         if (pb.filler() != FillerBlockUtil.NO_FILLER) {
             if (pb.holder() != null) {
                 setBlockEntityHolder(world, chunk, bx, by, bz, block, pb.blockRotation(), pb.holder().clone());
@@ -966,7 +966,8 @@ public final class ConstructionPasteOps {
         if (PrefabFootprintClearUtil.isProductionStorageBlockTypeId(blockKey)) {
             PrefabFootprintClearUtil.forceClearProductionStorageAt(world, bx, by, bz);
         }
-        chunk.setBlock(
+        ChunkSectionBlockUtil.setBlock(
+            world,
             bx,
             by,
             bz,
@@ -1061,20 +1062,59 @@ public final class ConstructionPasteOps {
         int rotation,
         @Nonnull Holder<ChunkStore> holder
     ) {
-        Ref<ChunkStore> chunkRef = chunk.getReference();
-        if (!chunkRef.isValid()) {
+        Ref<ChunkStore> sectionRef = ChunkSectionBlockUtil.sectionRefAt(world, bx, by, bz);
+        BlockComponentSection blockComponents = ChunkSectionBlockUtil.blockComponentSectionAt(world, bx, by, bz);
+        if (sectionRef == null || blockComponents == null) {
             return;
         }
         com.hypixel.hytale.server.core.modules.block.BlockEntity.setBlockEntity(
             world.getChunkStore().getStore(),
-            chunkRef,
-            chunk.getBlockComponentChunk(),
+            sectionRef,
+            blockComponents,
             bx,
             by,
             bz,
             blockType,
             rotation,
             holder
+        );
+    }
+
+    private static boolean tryPlaceBlockAt(
+        @Nonnull World world,
+        int bx,
+        int by,
+        int bz,
+        @Nonnull BlockType block,
+        int rotationIndex,
+        int settings
+    ) {
+        BlockSection section = ChunkSectionBlockUtil.blockSectionAt(world, bx, by, bz);
+        if (section == null) {
+            return false;
+        }
+        Store<ChunkStore> store = world.getChunkStore().getStore();
+        if (!BlockOperations.testPlaceBlock(store, section, bx, by, bz, block, rotationIndex)) {
+            return false;
+        }
+        String key = block.getId();
+        if (key == null) {
+            return false;
+        }
+        int blockId = BlockType.getAssetMap().getIndex(key);
+        if (blockId < 0) {
+            return false;
+        }
+        return ChunkSectionBlockUtil.setBlock(
+            world,
+            bx,
+            by,
+            bz,
+            blockId,
+            block,
+            rotationIndex,
+            FillerBlockUtil.NO_FILLER,
+            settings
         );
     }
 
@@ -1102,7 +1142,7 @@ public final class ConstructionPasteOps {
         int fluidLevel,
         @Nonnull LocalCachedChunkAccessor chunkAccessor
     ) {
-        WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(bx, bz));
         if (chunk == null || !chunk.getReference().isValid()) {
             return;
         }

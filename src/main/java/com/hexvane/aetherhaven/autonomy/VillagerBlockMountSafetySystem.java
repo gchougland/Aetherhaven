@@ -87,7 +87,8 @@ public final class VillagerBlockMountSafetySystem extends EntityTickingSystem<En
                 return;
             }
             long entityChunk = entityChunkIndex(tc);
-            ChunkTracker.ChunkVisibility entityVis = ChunkUnloadingSystem.getChunkVisibility(trackers, entityChunk);
+            ChunkTracker.ChunkVisibility entityVis =
+                ChunkUnloadingSystem.getChunkVisibility(world.getChunkStore(), trackers, entityChunk);
             if (shouldDismountForChunkUnload(trackers, entityVis, ChunkTracker.ChunkVisibility.HOT)) {
                 dismountForUnload(ref, archetypeChunk, index, store, commandBuffer, world, plugin);
             }
@@ -106,7 +107,8 @@ public final class VillagerBlockMountSafetySystem extends EntityTickingSystem<En
             return;
         }
         long entityChunk = entityChunkIndex(tc);
-        ChunkTracker.ChunkVisibility entityVis = ChunkUnloadingSystem.getChunkVisibility(trackers, entityChunk);
+        ChunkTracker.ChunkVisibility entityVis =
+            ChunkUnloadingSystem.getChunkVisibility(world.getChunkStore(), trackers, entityChunk);
 
         ChunkTracker.ChunkVisibility seatVis = ChunkTracker.ChunkVisibility.HOT;
         Store<ChunkStore> cs = blockRef.getStore();
@@ -114,7 +116,7 @@ public final class VillagerBlockMountSafetySystem extends EntityTickingSystem<En
         if (seat != null) {
             Vector3i bp = seat.getBlockPos();
             long seatChunk = ChunkUtil.indexChunkFromBlock(bp.x(), bp.z());
-            seatVis = ChunkUnloadingSystem.getChunkVisibility(trackers, seatChunk);
+            seatVis = ChunkUnloadingSystem.getChunkVisibility(world.getChunkStore(), trackers, seatChunk);
         }
 
         if (shouldDismountForChunkUnload(trackers, entityVis, seatVis)) {

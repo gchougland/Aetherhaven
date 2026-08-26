@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.questboard;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
@@ -63,7 +65,7 @@ public final class QuestBoardPoiEnsure {
             PoiEntry first = existing.get(0);
             long chunkIndex =
                 com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(first.getX(), first.getZ());
-            if (world.getChunkIfInMemory(chunkIndex) == null) {
+            if (ChunkSectionBlockUtil.worldChunkIfInMemory(world, chunkIndex) == null) {
                 // Trust the registered POI while the board chunk is unloaded (do not delete staff placements).
                 return first;
             }

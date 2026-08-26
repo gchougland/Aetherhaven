@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.npc.movement;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
@@ -10,7 +12,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.corecomponents.movement.BodyMotionWanderInRect;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import java.util.Locale;
 import java.util.Map;
 import javax.annotation.Nonnull;
@@ -39,10 +41,10 @@ public final class BodyMotionWanderInRectGroundPreference extends BodyMotionWand
     protected boolean probeDirection(
         @Nonnull Ref<EntityStore> ref,
         int dirIndex,
-        @Nonnull Role role,
+        @Nonnull ExecutionSupport executionSupport,
         @Nonnull ComponentAccessor<EntityStore> componentAccessor
     ) {
-        boolean ok = super.probeDirection(ref, dirIndex, role, componentAccessor);
+        boolean ok = super.probeDirection(ref, dirIndex, executionSupport, componentAccessor);
         if (ok) {
             double w = resolveGroundWeight(ref);
             this.walkDistances[dirIndex] *= w;
@@ -65,7 +67,7 @@ public final class BodyMotionWanderInRectGroundPreference extends BodyMotionWand
         if (standY == Integer.MIN_VALUE) {
             return clampWeight(1.0);
         }
-        BlockType feet = world.getBlockType(bx, standY, bz);
+        BlockType feet = com.hexvane.aetherhaven.world.ChunkSectionBlockUtil.blockType(world, bx, standY, bz);
         if (feet == null || feet == BlockType.EMPTY) {
             return clampWeight(1.0);
         }

@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.floatinggift;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -8,11 +10,13 @@ import com.hypixel.hytale.server.core.blocktype.component.BlockPhysics;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.entity.entities.player.windows.WindowManager;
+import com.hypixel.hytale.server.core.modules.block.BlockEntity;
+import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
 import com.hypixel.hytale.server.core.universe.world.SetBlockSettings;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockComponentChunk;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockComponentSection;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -51,6 +55,68 @@ public final class FloatingGiftChestUtil {
     }
 
     /**
+     * Ensures the gift chest has a live {@link ItemContainerBlock}. Chests placed with
+     * {@code NO_UPDATE_STATE} (or in a non-ticking section) can exist as a block with no entity.
+     */
+    @Nullable
+    public static ItemContainerBlock ensureItemContainer(@Nonnull World world, int x, int y, int z) {
+        Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, x, y, z);
+        Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
+        if (blockRef != null && blockRef.isValid()) {
+            ItemContainerBlock existing = chunkStore.getComponent(blockRef, ItemContainerBlock.getComponentType());
+            if (existing != null) {
+                return existing;
+            }
+        }
+
+        BlockType blockType = ChunkSectionBlockUtil.blockType(world, x, y, z);
+        if (blockType == null || !isGiftChestBlockType(blockType)) {
+            return null;
+        }
+        Holder<ChunkStore> template = blockType.getBlockEntity();
+        if (template == null) {
+            return null;
+        }
+
+        Ref<ChunkStore> sectionRef = world.getChunkStore().getChunkSectionReferenceAtBlock(x, y, z);
+        if (sectionRef == null || !sectionRef.isValid()) {
+            return null;
+        }
+        BlockComponentSection components = chunkStore.getComponent(sectionRef, BlockComponentSection.getComponentType());
+        BlockSection section = chunkStore.getComponent(sectionRef, BlockSection.getComponentType());
+        if (components == null || section == null) {
+            return null;
+        }
+        int rotation = section.getRotationIndex(ChunkUtil.indexBlock(x, y, z));
+        BlockEntity.setBlockEntity(
+            chunkStore,
+            sectionRef,
+            components,
+            x,
+            y,
+            z,
+            blockType,
+            rotation,
+            template.clone()
+        );
+
+        blockRef = BlockModule.getBlockEntity(chunkStore, sectionRef, x, y, z);
+        if (blockRef == null || !blockRef.isValid()) {
+            // Non-ticking sections keep holders only — force a normal place so the entity is live.
+            String id = blockType.getId();
+            if (id == null || !ChunkSectionBlockUtil.setBlockByKey(world, x, y, z, id, SetBlockSettings.NONE)) {
+                return null;
+            }
+            markDecoPlaced(world, x, y, z);
+            blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, x, y, z);
+        }
+        if (blockRef == null || !blockRef.isValid()) {
+            return null;
+        }
+        return chunkStore.getComponent(blockRef, ItemContainerBlock.getComponentType());
+    }
+
+    /**
      * Removes a floating gift chest when its inventory is empty. Does not drop the chest block item.
      */
     public static void removeEmptyChest(@Nonnull World world, @Nonnull Vector3i pos) {
@@ -63,7 +129,7 @@ public final class FloatingGiftChestUtil {
     }
 
     private static void removeEmptyChestOnWorldThread(@Nonnull World world, @Nonnull Vector3i pos) {
-        BlockType blockType = world.getBlockType(pos.x, pos.y, pos.z);
+        BlockType blockType = ChunkSectionBlockUtil.blockType(world, pos.x, pos.y, pos.z);
         if (blockType == null || blockType == BlockType.EMPTY) {
             return;
         }
@@ -71,25 +137,11 @@ public final class FloatingGiftChestUtil {
             return;
         }
 
-        long chunkIndex = ChunkUtil.indexChunkFromBlock(pos.x, pos.z);
-        WorldChunk chunk = world.getChunkIfInMemory(chunkIndex);
-        if (chunk == null) {
-            return;
-        }
-        var chunkRef = world.getChunkStore().getChunkReference(chunkIndex);
-        if (chunkRef == null || !chunkRef.isValid()) {
-            return;
-        }
-        var chunkStore = world.getChunkStore().getStore();
-        var blockComponentChunk = chunkStore.getComponent(chunkRef, BlockComponentChunk.getComponentType());
-        if (blockComponentChunk == null) {
-            return;
-        }
-        int columnIndex = ChunkUtil.indexBlockInColumn(pos.x, pos.y, pos.z);
-        var blockRef = blockComponentChunk.getEntityReference(columnIndex);
+        Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, pos.x, pos.y, pos.z);
         if (blockRef == null || !blockRef.isValid()) {
             return;
         }
+        Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
         ItemContainerBlock chest = chunkStore.getComponent(blockRef, ItemContainerBlock.getComponentType());
         if (chest == null || chest.getItemContainer() == null) {
             return;
@@ -99,14 +151,14 @@ public final class FloatingGiftChestUtil {
         }
         WindowManager.closeAndRemoveAll(chest.getWindows());
 
-        chunk.breakBlock(pos.x, pos.y, pos.z, SetBlockSettings.NO_DROP_ITEMS);
+        world.breakBlock(pos.x, pos.y, pos.z, SetBlockSettings.NO_DROP_ITEMS);
     }
 
     /**
      * Marks a placed gift chest as decorative so block physics skips support checks (same as player placing a plot sign).
      */
     public static void markDecoPlaced(@Nonnull World world, int x, int y, int z) {
-        BlockType blockType = world.getBlockType(x, y, z);
+        BlockType blockType = ChunkSectionBlockUtil.blockType(world, x, y, z);
         if (blockType == null || !isGiftChestBlockType(blockType)) {
             return;
         }

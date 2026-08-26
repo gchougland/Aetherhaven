@@ -694,7 +694,6 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
 
         p.removeItemInHand = this.removeItemInHand;
 
-        p.allowDragPlacement = this.allowDragPlacement;
 
     }
 

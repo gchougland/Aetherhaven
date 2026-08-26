@@ -30,7 +30,8 @@ import com.hypixel.hytale.server.core.prefab.PrefabStore;
 import com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
-import com.hypixel.hytale.server.core.universe.world.chunk.EntityChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.ChunkColumn;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.EntitySection;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.FluidSection;
@@ -348,11 +349,23 @@ public final class PlotCreatorPrefabExporter {
                 if (chunkRef == null || !chunkRef.isValid()) {
                     continue;
                 }
-                EntityChunk entityChunk = chunkComponentStore.getComponent(chunkRef, EntityChunk.getComponentType());
-                if (entityChunk == null) {
+                ChunkColumn chunkColumn = chunkComponentStore.getComponent(chunkRef, ChunkColumn.getComponentType());
+                if (chunkColumn == null) {
                     continue;
                 }
-                for (Holder<EntityStore> holder : entityChunk.getEntityHolders()) {
+                var sectionRefs = chunkColumn.getSections();
+                if (sectionRefs == null) {
+                    continue;
+                }
+                for (var sectionRef : sectionRefs) {
+                    if (sectionRef == null || !sectionRef.isValid()) {
+                        continue;
+                    }
+                    EntitySection entitySection = chunkComponentStore.getComponent(sectionRef, EntitySection.getComponentType());
+                    if (entitySection == null) {
+                        continue;
+                    }
+                    for (Holder<EntityStore> holder : entitySection.getEntityHolders()) {
                     if (!holder.getArchetype().contains(prefabCopyableType) || !holder.hasSerializableComponents(registryData)) {
                         continue;
                     }
@@ -386,6 +399,7 @@ public final class PlotCreatorPrefabExporter {
                         clonedTransform.getPosition().sub(selection.getX(), selection.getY(), selection.getZ());
                     }
                     selection.addEntityHolderRaw(clonedHolder);
+                }
                 }
             }
         }

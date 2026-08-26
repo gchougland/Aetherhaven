@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.autonomy;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hypixel.hytale.builtin.mounts.BlockMountComponent;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.protocol.BlockMaterial;
@@ -15,7 +16,6 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockComponentChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -56,7 +56,7 @@ public final class VillagerBlockUtil {
         if (y < 0 || y >= 320) {
             return 0;
         }
-        WorldChunk wc = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        WorldChunk wc = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         return wc != null ? rotationIndexForLoadedChunk(wc, x, y, z) : 0;
     }
 
@@ -198,7 +198,7 @@ public final class VillagerBlockUtil {
         if (y < 0 || y >= 320) {
             return null;
         }
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (chunk == null) {
             return null;
         }
@@ -472,7 +472,7 @@ public final class VillagerBlockUtil {
         if (t.getMaterial() == BlockMaterial.Empty) {
             return true;
         }
-        WorldChunk wc = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        WorldChunk wc = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (wc != null) {
             RotationTuple rt = RotationTuple.get(rotationIndexForLoadedChunk(wc, x, y, z));
             return DoorInteraction.getDoorAtPosition(world.getChunkStore(), x, y, z, rt.yaw()) != null;
@@ -559,7 +559,7 @@ public final class VillagerBlockUtil {
     public static boolean isGuildHallSpawnColumnLoaded(@Nonnull World world, @Nonnull Vector3d spawnAnchor) {
         int bx = (int) Math.floor(spawnAnchor.x);
         int bz = (int) Math.floor(spawnAnchor.z);
-        return world.getChunkIfInMemory(com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(bx, bz)) != null;
+        return ChunkSectionBlockUtil.worldChunkIfInMemory(world, com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(bx, bz)) != null;
     }
 
     /**
@@ -605,7 +605,7 @@ public final class VillagerBlockUtil {
     @Nonnull
     @SuppressWarnings({ "deprecation", "removal" })
     public static Vector3i resolveMountBaseBlock(@Nonnull World world, int x, int y, int z) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (chunk == null) {
             return new Vector3i(x, y, z);
         }
@@ -672,22 +672,16 @@ public final class VillagerBlockUtil {
     @Nullable
     private static BlockMountComponent blockMountComponentNoLoad(@Nonnull World world, @Nonnull Vector3i mountBlock) {
         try {
-            WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(mountBlock.x, mountBlock.z));
-            if (chunk == null || chunk.getReference() == null) {
-                return null;
-            }
-            Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
-            BlockComponentChunk blockComponentChunk =
-                chunkStore.getComponent(chunk.getReference(), BlockComponentChunk.getComponentType());
-            if (blockComponentChunk == null) {
-                return null;
-            }
-            int blockIndex = ChunkUtil.indexBlockInColumn(mountBlock.x, mountBlock.y, mountBlock.z);
-            Ref<ChunkStore> blockRef = blockComponentChunk.getEntityReference(blockIndex);
+            Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(
+                world,
+                mountBlock.x,
+                mountBlock.y,
+                mountBlock.z
+            );
             if (blockRef == null || !blockRef.isValid()) {
                 return null;
             }
-            return chunkStore.getComponent(blockRef, BlockMountComponent.getComponentType());
+            return world.getChunkStore().getStore().getComponent(blockRef, BlockMountComponent.getComponentType());
         } catch (RuntimeException ignored) {
             return null;
         }

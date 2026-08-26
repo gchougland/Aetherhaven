@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.builder;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyPassiveBoostRegistry;
@@ -209,7 +211,7 @@ public final class BuilderConstructionAssistSystem extends EntityTickingSystem<E
         if (npc.getRole() == null || !VillagerAutonomySystemSupports.supportsAutonomyPoiRoleState(npc)) {
             return;
         }
-        npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_AUTONOMY_POI, null, commandBuffer);
+        NpcSupportUtil.setState(ref, AetherhavenConstants.NPC_STATE_AUTONOMY_POI, null, commandBuffer);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
     }
 

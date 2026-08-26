@@ -17,18 +17,10 @@ public final class LootChestBlockPosition {
 
     @Nullable
     public static Coords resolve(@Nonnull Store<ChunkStore> store, @Nonnull BlockModule.BlockStateInfo bsi) {
-        Ref<ChunkStore> chunkRef = bsi.getChunkRef();
-        if (!chunkRef.isValid()) {
+        org.joml.Vector3i pos = new org.joml.Vector3i();
+        if (!bsi.fillWorldPos(store, pos)) {
             return null;
         }
-        WorldChunk worldChunk = store.getComponent(chunkRef, WorldChunk.getComponentType());
-        if (worldChunk == null) {
-            return null;
-        }
-        int localX = ChunkUtil.xFromBlockInColumn(bsi.getIndex());
-        int localZ = ChunkUtil.zFromBlockInColumn(bsi.getIndex());
-        int wx = ChunkUtil.worldCoordFromLocalCoord(worldChunk.getX(), localX);
-        int wz = ChunkUtil.worldCoordFromLocalCoord(worldChunk.getZ(), localZ);
-        return new Coords(wx, wz);
+        return new Coords(pos.x, pos.z);
     }
 }

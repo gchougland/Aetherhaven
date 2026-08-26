@@ -1,10 +1,11 @@
 package com.hexvane.aetherhaven.plot;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.community.CommunityPrefabSafety;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.util.MathUtil;
 import com.hypixel.hytale.protocol.packets.buildertools.BuilderToolPrefabPreview;
 import com.hypixel.hytale.protocol.packets.interface_.EditorBlocksChange;
@@ -15,7 +16,6 @@ import com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.nio.file.Path;
 import javax.annotation.Nonnull;
@@ -93,10 +93,8 @@ public final class PlotCraftingPrefabPreview {
         int x = MathUtil.floor(pos.x);
         int y = MathUtil.floor(pos.y);
         int z = MathUtil.floor(pos.z);
-        long chunkIndex = ChunkUtil.indexChunkFromBlock(x, z);
-        WorldChunk chunk = world.getNonTickingChunk(chunkIndex);
-        if (chunk != null && chunk.getBlockChunk() != null) {
-            BlockChunk blockChunk = chunk.getBlockChunk();
+        BlockChunk blockChunk = ChunkSectionBlockUtil.blockChunkAt(world, x, z);
+        if (blockChunk != null) {
             packet.biomeTint = blockChunk.getTint(x, z);
             int envId = blockChunk.getEnvironment(x, y, z);
             Environment environment = Environment.getAssetMap().getAsset(envId);

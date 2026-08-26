@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.blockpalette;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
@@ -89,9 +91,9 @@ public final class BlockPaletteApplyService {
             for (int by = footprint.getMinY(); by <= footprint.getMaxY(); by++) {
                 for (int bz = footprint.getMinZ(); bz <= footprint.getMaxZ(); bz++) {
                     String prefabBlockTypeId = prefabBlockIdByCell.get(cellKey(bx, by, bz));
-                    WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(bx, bz));
+                    WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(bx, bz));
                     if (chunk == null) {
-                        chunk = accessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
+                        chunk = ChunkSectionBlockUtil.worldChunkIfNonTicking(world, ChunkUtil.indexChunkFromBlock(bx, bz));
                     }
                     if (chunk == null) {
                         continue;

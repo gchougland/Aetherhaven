@@ -100,11 +100,7 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
 
         AcceptCommand() {
             super("accept", "aetherhaven_commands_help.commands.aetherhaven.town.accept.desc");
-        }
-
-        @Override
-        protected boolean canGeneratePermission() {
-            return false;
+            requireNoPermission();
         }
 
         @Override

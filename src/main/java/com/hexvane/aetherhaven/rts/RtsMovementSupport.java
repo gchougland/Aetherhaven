@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.rts;
 
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.protocol.FlyMode;
 import com.hypixel.hytale.protocol.GameMode;
 import com.hypixel.hytale.protocol.MovementSettings;
 import com.hypixel.hytale.protocol.SavedMovementStates;
@@ -81,9 +82,9 @@ public final class RtsMovementSupport {
         if (movementManager == null) {
             return;
         }
-        movementManager.getDefaultSettings().canFly = true;
+        movementManager.getDefaultSettings().fly = FlyMode.Allowed;
         MovementSettings settings = movementManager.getSettings();
-        settings.canFly = true;
+        settings.fly = FlyMode.Allowed;
         settings.horizontalFlySpeed = HORIZONTAL_FLY_SPEED;
         settings.verticalFlySpeed = VERTICAL_FLY_SPEED;
         movementManager.update(playerRef.getPacketHandler());
@@ -141,6 +142,6 @@ public final class RtsMovementSupport {
         if (movementManager == null || movementManager.getSettings() == null) {
             return false;
         }
-        return movementManager.getSettings().canFly;
+        return movementManager.getSettings().fly != FlyMode.Disabled;
     }
 }

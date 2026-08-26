@@ -51,6 +51,7 @@ public final class EntityHeadMarker {
             1.0f,
             new Vector3f(0.0f, heightBlocks, 0.0f),
             null,
+            false,
             false
         );
         return send(

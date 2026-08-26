@@ -70,10 +70,6 @@
     {
       "Model": "Cosmetics/Head/FlowerCrown.blockymodel",
       "Texture": "Cosmetics/Head/FlowerCrown_Textures/White.png"
-    },
-    {
-      "Model": "Cosmetics/Head/SilverHoopsBead.blockymodel",
-      "Texture": "Cosmetics/Head/SilverHoopsBead_Textures/Green+Brown+Yellow.png"
     }
   ],
   "Icon": "Icons/ModelsGenerated/Aetherhaven_Priestess.png",

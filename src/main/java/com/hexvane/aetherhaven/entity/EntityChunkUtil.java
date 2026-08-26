@@ -1,6 +1,6 @@
 package com.hexvane.aetherhaven.entity;
 
-import com.hypixel.hytale.math.util.ChunkUtil;
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import javax.annotation.Nonnull;
 import org.joml.Vector3dc;
@@ -10,7 +10,7 @@ public final class EntityChunkUtil {
     private EntityChunkUtil() {}
 
     public static boolean isBlockChunkInMemory(@Nonnull World world, int blockX, int blockZ) {
-        return world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(blockX, blockZ)) != null;
+        return ChunkSectionBlockUtil.isChunkInMemory(world, blockX, blockZ);
     }
 
     public static boolean isPositionChunkInMemory(@Nonnull World world, @Nonnull Vector3dc position) {

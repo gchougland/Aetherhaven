@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.plot;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
@@ -20,8 +22,11 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.chunk.BlockOperations;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -277,9 +282,21 @@ public final class PlotBlockStamper {
 
     /** Gaia statue prefab cells include filler voxels; link data must live on the unpacked base block. */
     @Nonnull
-    @SuppressWarnings({ "deprecation", "removal" })
     private static BlockPosition gaiaStatueBaseBlock(@Nonnull World world, int wx, int y, int wz) {
-        return world.getBaseBlock(new BlockPosition(wx, y, wz));
+        BlockPosition position = new BlockPosition(wx, y, wz);
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(wx, wz));
+        if (chunk == null) {
+            return position;
+        }
+        int filler = chunk.getFiller(wx, y, wz);
+        if (filler == FillerBlockUtil.NO_FILLER) {
+            return position;
+        }
+        return new BlockPosition(
+            wx - FillerBlockUtil.unpackX(filler),
+            y - FillerBlockUtil.unpackY(filler),
+            wz - FillerBlockUtil.unpackZ(filler)
+        );
     }
 
     @Nullable
@@ -333,7 +350,7 @@ public final class PlotBlockStamper {
         int baseX = baseCell.x;
         int baseY = baseCell.y;
         int baseZ = baseCell.z;
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(baseX, baseZ));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(baseX, baseZ));
         if (chunk == null) {
             LOGGER.atWarning().log("Gaia statue chunk not loaded at %s,%s,%s", baseX, baseY, baseZ);
             return StampOutcome.CHUNK_UNLOADED;
@@ -407,7 +424,7 @@ public final class PlotBlockStamper {
         int wx = anchor.x + d.x;
         int wy = anchor.y + d.y;
         int wz = anchor.z + d.z;
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(wx, wz));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(wx, wz));
         if (chunk == null) {
             LOGGER.atWarning().log("Management block chunk not loaded at %s,%s,%s", wx, wy, wz);
             return StampOutcome.CHUNK_UNLOADED;
@@ -509,7 +526,7 @@ public final class PlotBlockStamper {
         int wx = anchor.x + d.x;
         int wy = anchor.y + d.y;
         int wz = anchor.z + d.z;
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(wx, wz));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(wx, wz));
         if (chunk == null) {
             LOGGER.atWarning().log("Treasury block chunk not loaded at %s,%s,%s", wx, wy, wz);
             return StampOutcome.CHUNK_UNLOADED;
@@ -604,7 +621,7 @@ public final class PlotBlockStamper {
         int wx = anchor.x + d.x;
         int wy = anchor.y + d.y;
         int wz = anchor.z + d.z;
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(wx, wz));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(wx, wz));
         if (chunk == null) {
             LOGGER.atWarning().log("Shop safe block chunk not loaded at %s,%s,%s", wx, wy, wz);
             return StampOutcome.CHUNK_UNLOADED;
@@ -717,7 +734,7 @@ public final class PlotBlockStamper {
             wz = baseCell.z;
         }
 
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(wx, wz));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(wx, wz));
         if (chunk == null) {
             LOGGER.atWarning().log("Production storage chunk not loaded at %s,%s,%s", wx, wy, wz);
             return StampOutcome.CHUNK_UNLOADED;
@@ -809,18 +826,67 @@ public final class PlotBlockStamper {
         @Nonnull RotationTuple rt,
         int rotationIndex
     ) {
-        boolean placed =
-            chunk.placeBlock(wx, y, wz, blockTypeId, rt.yaw(), rt.pitch(), rt.roll(), PLACE_SETTINGS);
+        BlockTypeAssetMap<String, BlockType> typeMap = BlockType.getAssetMap();
+        int indexKey = typeMap.getIndex(blockTypeId);
+        BlockType blockType = typeMap.getAsset(indexKey);
+        if (blockType == null) {
+            return;
+        }
+        boolean placed = tryPlaceBlock(world, wx, y, wz, blockType, rotationIndex, PLACE_SETTINGS);
         if (!placed) {
             world.breakBlock(wx, y, wz, PLACE_SETTINGS);
-            placed =
-                chunk.placeBlock(wx, y, wz, blockTypeId, rt.yaw(), rt.pitch(), rt.roll(), PLACE_SETTINGS);
+            placed = tryPlaceBlock(world, wx, y, wz, blockType, rotationIndex, PLACE_SETTINGS);
         }
         if (!placed) {
-            BlockTypeAssetMap<String, BlockType> typeMap = BlockType.getAssetMap();
-            int indexKey = typeMap.getIndex(blockTypeId);
-            BlockType blockType = typeMap.getAsset(indexKey);
-            chunk.setBlock(wx, y, wz, indexKey, blockType, rotationIndex, 0, PLACE_SETTINGS);
+            ChunkSectionBlockUtil.setBlock(
+                world,
+                wx,
+                y,
+                wz,
+                indexKey,
+                blockType,
+                rotationIndex,
+                FillerBlockUtil.NO_FILLER,
+                PLACE_SETTINGS
+            );
         }
+    }
+
+    private static boolean tryPlaceBlock(
+        @Nonnull World world,
+        int wx,
+        int y,
+        int wz,
+        @Nonnull BlockType blockType,
+        int rotationIndex,
+        int settings
+    ) {
+        BlockSection section = ChunkSectionBlockUtil.blockSectionAt(world, wx, y, wz);
+        if (section == null) {
+            return false;
+        }
+        Store<ChunkStore> store = world.getChunkStore().getStore();
+        if (!BlockOperations.testPlaceBlock(store, section, wx, y, wz, blockType, rotationIndex)) {
+            return false;
+        }
+        String key = blockType.getId();
+        if (key == null) {
+            return false;
+        }
+        int indexKey = BlockType.getAssetMap().getIndex(key);
+        if (indexKey < 0) {
+            return false;
+        }
+        return ChunkSectionBlockUtil.setBlock(
+            world,
+            wx,
+            y,
+            wz,
+            indexKey,
+            blockType,
+            rotationIndex,
+            FillerBlockUtil.NO_FILLER,
+            settings
+        );
     }
 }

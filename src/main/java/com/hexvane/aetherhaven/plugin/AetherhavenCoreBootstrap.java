@@ -351,6 +351,16 @@ public final class AetherhavenCoreBootstrap {
                                     readyPlayerRef,
                                     player.getWorld()
                                 );
+                                if (readyPlayerRef != null) {
+                                    if (plugin.getPropIconPacketAdapter() != null) {
+                                        plugin.getPropIconPacketAdapter()
+                                            .preloadCatalogIcons(readyPlayerRef, plugin.getPropCatalog());
+                                    }
+                                    if (plugin.getBlockPaletteIconPacketAdapter() != null) {
+                                        plugin.getBlockPaletteIconPacketAdapter()
+                                            .preloadCatalogIcons(readyPlayerRef, plugin.getBlockPaletteCatalog());
+                                    }
+                                }
                             });
                 });
         plugin

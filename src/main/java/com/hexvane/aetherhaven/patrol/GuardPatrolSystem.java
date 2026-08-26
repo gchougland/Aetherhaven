@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.patrol;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.rts.GuardRtsCommandState;
@@ -91,7 +93,7 @@ public final class GuardPatrolSystem extends EntityTickingSystem<EntityStore> {
         World world = store.getExternalData().getWorld();
         PatrolRouteRegistry reg = AetherhavenWorldRegistries.getOrCreatePatrolRouteRegistry(world, plugin);
         List<PatrolRouteRecord> assigned = reg.routesForGuard(uc.getUuid());
-        String stateName = npc.getRole().getStateSupport().getStateName();
+        String stateName = NpcSupportUtil.stateName(store, ref);
         if (stateName.contains("Combat") && !assigned.isEmpty()) {
             GuardPatrolState combatPatrol = chunk.getComponent(index, GuardPatrolState.getComponentType());
             TransformComponent tcCombat = store.getComponent(ref, TransformComponent.getComponentType());
@@ -110,7 +112,7 @@ public final class GuardPatrolSystem extends EntityTickingSystem<EntityStore> {
         }
         if (assigned.isEmpty()) {
             if (stateName.contains("Patrol")) {
-                npc.getRole().getStateSupport().setState(ref, "Idle", null, commandBuffer);
+                NpcSupportUtil.setState(ref, "Idle", null, commandBuffer);
                 commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
             }
             return;
@@ -215,7 +217,7 @@ public final class GuardPatrolSystem extends EntityTickingSystem<EntityStore> {
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
         RtsGuardCombatSupport.clearCombatTarget(npc, commandBuffer);
-        npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_GUARD_PATROL, null, commandBuffer);
+        NpcSupportUtil.setState(ref, AetherhavenConstants.NPC_STATE_GUARD_PATROL, null, commandBuffer);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
     }
 
@@ -224,9 +226,9 @@ public final class GuardPatrolSystem extends EntityTickingSystem<EntityStore> {
         @Nonnull NPCEntity npc,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
-        String stateName = npc.getRole().getStateSupport().getStateName();
+        String stateName = NpcSupportUtil.stateName(commandBuffer.getStore(), ref);
         if (!stateName.contains("Patrol")) {
-            npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_GUARD_PATROL, null, commandBuffer);
+            NpcSupportUtil.setState(ref, AetherhavenConstants.NPC_STATE_GUARD_PATROL, null, commandBuffer);
             commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
         }
     }

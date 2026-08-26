@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.jewelry;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hypixel.hytale.component.AddReason;
@@ -154,39 +156,17 @@ public final class LootChestBonusInjectSystem extends RefSystem<ChunkStore> {
 
     @Nullable
     public static String resolveBlockTypeIdForState(@Nonnull CommandBuffer<ChunkStore> commandBuffer, @Nonnull BlockModule.BlockStateInfo bsi) {
-        Ref<ChunkStore> chunkRef = bsi.getChunkRef();
-        if (!chunkRef.isValid()) {
-            return null;
-        }
-        int index = bsi.getIndex();
-        int x = ChunkUtil.xFromBlockInColumn(index);
-        int y = ChunkUtil.yFromBlockInColumn(index);
-        int z = ChunkUtil.zFromBlockInColumn(index);
-        BlockChunk blockChunk = commandBuffer.getComponent(chunkRef, BlockChunk.getComponentType());
-        if (blockChunk == null) {
-            return null;
-        }
-        int blockId = blockChunk.getBlock(x, y, z);
-        BlockType bt = BlockType.getAssetMap().getAsset(blockId);
-        return bt != null ? bt.getId() : null;
+        return resolveBlockTypeIdForState(commandBuffer.getStore(), bsi);
     }
 
     @Nullable
     public static String resolveBlockTypeIdForState(@Nonnull Store<ChunkStore> store, @Nonnull BlockModule.BlockStateInfo bsi) {
-        Ref<ChunkStore> chunkRef = bsi.getChunkRef();
-        if (!chunkRef.isValid()) {
+        org.joml.Vector3i pos = new org.joml.Vector3i();
+        if (!bsi.fillWorldPos(store, pos)) {
             return null;
         }
-        int index = bsi.getIndex();
-        int x = ChunkUtil.xFromBlockInColumn(index);
-        int y = ChunkUtil.yFromBlockInColumn(index);
-        int z = ChunkUtil.zFromBlockInColumn(index);
-        BlockChunk blockChunk = store.getComponent(chunkRef, BlockChunk.getComponentType());
-        if (blockChunk == null) {
-            return null;
-        }
-        int blockId = blockChunk.getBlock(x, y, z);
-        BlockType bt = BlockType.getAssetMap().getAsset(blockId);
+        var world = store.getExternalData().getWorld();
+        BlockType bt = ChunkSectionBlockUtil.blockType(world, pos.x, pos.y, pos.z);
         return bt != null ? bt.getId() : null;
     }
 

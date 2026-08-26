@@ -80,10 +80,6 @@
       "Texture": "Cosmetics/Head/Bandana_Textures/Bandana_Skulls_Greyscale_Texture.png",
       "GradientSet": "Colored_Cotton",
       "GradientId": "Green"
-    },
-    {
-      "Model": "Cosmetics/Head/SilverHoopsBead.blockymodel",
-      "Texture": "Cosmetics/Head/SilverHoopsBead_Textures/Black+Grey.png"
     }
   ],
   "Model": "Characters/Player.blockymodel",

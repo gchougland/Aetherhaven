@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.tourist;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.AutonomyStuckTeleportRecovery;
@@ -549,10 +551,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
     }
 
     private static boolean supportsAutonomyPoiRoleState(@Nonnull NPCEntity npc) {
-        if (npc.getRole() == null) {
-            return false;
-        }
-        return npc.getRole().getStateSupport().getStateHelper().getStateIndex(AetherhavenConstants.NPC_STATE_AUTONOMY_POI) >= 0;
+        return VillagerAutonomySystem.supportsAutonomyPoiRoleState(npc);
     }
 
     private void beginReturnToPortal(
@@ -1502,10 +1501,10 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         if (npc.getRole() == null) {
             return;
         }
-        if (npc.getRole().getStateSupport().getStateHelper().getStateIndex(AetherhavenConstants.NPC_STATE_AUTONOMY_POI) < 0) {
+        if (!supportsAutonomyPoiRoleState(npc)) {
             return;
         }
-        npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_AUTONOMY_POI, null, commandBuffer);
+        NpcSupportUtil.setState(ref, AetherhavenConstants.NPC_STATE_AUTONOMY_POI, null, commandBuffer);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
     }
 
@@ -1517,7 +1516,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         if (!supportsAutonomyPoiRoleState(npc)) {
             return;
         }
-        npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_AUTONOMY_POI, null, store);
+        NpcSupportUtil.setState(ref, AetherhavenConstants.NPC_STATE_AUTONOMY_POI, null, store);
         store.putComponent(ref, NPCEntity.getComponentType(), npc);
     }
 
@@ -1529,11 +1528,11 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         if (npc.getRole() == null) {
             return;
         }
-        String state = npc.getRole().getStateSupport().getStateName();
+        String state = NpcSupportUtil.stateName(store, ref);
         if (state == null || !state.startsWith(AetherhavenConstants.NPC_STATE_AUTONOMY_POI)) {
             return;
         }
-        npc.getRole().getStateSupport().setState(ref, "Idle", null, store);
+        NpcSupportUtil.setState(ref, "Idle", null, store);
         npc.playAnimation(ref, AnimationSlot.Action, null, store);
         npc.playAnimation(ref, AnimationSlot.Emote, null, store);
         npc.playAnimation(ref, AnimationSlot.Status, null, store);
@@ -1548,11 +1547,11 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         if (npc.getRole() == null) {
             return;
         }
-        String state = npc.getRole().getStateSupport().getStateName();
+        String state = NpcSupportUtil.stateName(commandBuffer.getStore(), ref);
         if (state == null || !state.startsWith(AetherhavenConstants.NPC_STATE_AUTONOMY_POI)) {
             return;
         }
-        npc.getRole().getStateSupport().setState(ref, "Idle", null, commandBuffer);
+        NpcSupportUtil.setState(ref, "Idle", null, commandBuffer);
         NpcAnimationPlayback.clearOverlaySlots(ref, npc, commandBuffer);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
     }

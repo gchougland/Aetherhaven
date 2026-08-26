@@ -61,9 +61,6 @@
     "Opacity": "Transparent",
     "ParticleColor": "#797668",
     "VariantRotation": "NESW",
-    "Flags": {
-      "IsUsable": true
-    },
     "BlockEntity": {
       "Components": {
         "AetherhavenCharter": {

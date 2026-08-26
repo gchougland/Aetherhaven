@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.clown;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
@@ -279,7 +281,7 @@ public final class ClownCheerAssistSystem extends EntityTickingSystem<EntityStor
         if (npc.getRole() == null || !VillagerAutonomySystem.supportsAutonomyPoiRoleState(npc)) {
             return;
         }
-        npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_AUTONOMY_POI, null, commandBuffer);
+        NpcSupportUtil.setState(ref, AetherhavenConstants.NPC_STATE_AUTONOMY_POI, null, commandBuffer);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
     }
 

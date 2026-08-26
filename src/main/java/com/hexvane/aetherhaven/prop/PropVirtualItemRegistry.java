@@ -127,4 +127,9 @@ public final class PropVirtualItemRegistry {
     public void onPlayerLeave(@Nonnull UUID playerUuid) {
         sentToPlayer.remove(playerUuid);
     }
+
+    /** Clears the sent-id set so the next {@code UpdateItems} can rebuild icons for this player. */
+    public void clearSent(@Nonnull UUID playerUuid) {
+        sentToPlayer.remove(playerUuid);
+    }
 }

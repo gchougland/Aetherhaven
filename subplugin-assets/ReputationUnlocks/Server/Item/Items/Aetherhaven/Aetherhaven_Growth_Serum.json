@@ -91,9 +91,6 @@
       "Color": "#414"
     },
     "DrawType": "Model",
-    "Flags": {
-      "IsUsable": true
-    },
     "Gathering": {
       "Harvest": {},
       "Soft": {}

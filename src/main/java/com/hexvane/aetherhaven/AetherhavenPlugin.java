@@ -19,6 +19,7 @@ import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.equipment.data.EquipmentProfileCatalog;
 import com.hexvane.aetherhaven.festival.FestivalCatalog;
 import com.hexvane.aetherhaven.prop.PropCatalog;
+import com.hexvane.aetherhaven.prop.PropPrefabCache;
 import com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticCatalog;
 import com.hexvane.aetherhaven.festival.FestivalMechanicRegistry;
 import com.hexvane.aetherhaven.guide.GuideTopicRepository;
@@ -589,6 +590,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
         CustomBuildingIconAssetRegistry.syncFromDataDirectory(this);
         CommunityIconRegistry.syncFromCommunityDirectory(this);
         this.communityCatalogService.repairMissingIconsForInstalledBuildings();
+        if (this.propCatalog != null) {
+            PropPrefabCache.invalidateCatalog(this.propCatalog);
+        }
     }
 
     public void registerJewelryNativeTooltipHooks() {

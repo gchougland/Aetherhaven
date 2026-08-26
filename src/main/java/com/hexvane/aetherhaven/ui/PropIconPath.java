@@ -6,17 +6,28 @@ import com.hexvane.aetherhaven.prop.PropDefinition;
 import com.hexvane.aetherhaven.prop.PropPaths;
 import com.hexvane.aetherhaven.prop.PropShopItemIds;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
-import com.hexvane.aetherhaven.plotcreator.PlotTokenIconPng;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /** Resolves prop item / crafting-bench thumbnail paths (greenscreen PNGs, not isometric). */
 public final class PropIconPath {
+    /** Avoid re-stat / PNG validation on every OpenWindow for the same prop. */
+    private static final ConcurrentHashMap<String, Boolean> RUNTIME_ICON_EXISTS = new ConcurrentHashMap<>();
+
     private PropIconPath() {}
 
+    /** Clears existence cache after icons are written or deleted. */
+    public static void invalidateRuntimeIconCache() {
+        RUNTIME_ICON_EXISTS.clear();
+    }
+
+    public static void invalidateRuntimeIconCache(@Nonnull String propId) {
+        RUNTIME_ICON_EXISTS.keySet().removeIf(k -> k.endsWith("|" + propId.trim()));
+    }
     @Nonnull
     public static String forPropId(@Nonnull String propId, @Nullable Path dataDirectory) {
         String id = propId.trim();
@@ -87,14 +98,23 @@ public final class PropIconPath {
         if (dataDirectory == null || propId.isBlank()) {
             return null;
         }
+        String cacheKey = dataDirectory.toAbsolutePath().normalize() + "|" + propId;
+        Boolean cached = RUNTIME_ICON_EXISTS.get(cacheKey);
+        if (Boolean.FALSE.equals(cached)) {
+            return null;
+        }
         Path custom = PropPaths.iconFile(dataDirectory, propId);
-        if (Files.isRegularFile(custom) && PlotTokenIconPng.isValidFile(custom)) {
+        if (Files.isRegularFile(custom)) {
+            // Existence only on the hot OpenWindow path — full PNG validation happens at icon register time.
+            RUNTIME_ICON_EXISTS.put(cacheKey, Boolean.TRUE);
             return custom;
         }
         Path community = CommunityPaths.iconsDirectory(dataDirectory).resolve(PropPaths.iconFileName(propId));
-        if (Files.isRegularFile(community) && PlotTokenIconPng.isValidFile(community)) {
+        if (Files.isRegularFile(community)) {
+            RUNTIME_ICON_EXISTS.put(cacheKey, Boolean.TRUE);
             return community;
         }
+        RUNTIME_ICON_EXISTS.put(cacheKey, Boolean.FALSE);
         return null;
     }
 

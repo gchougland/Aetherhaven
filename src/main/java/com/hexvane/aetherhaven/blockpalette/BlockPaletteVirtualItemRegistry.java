@@ -133,4 +133,9 @@ public final class BlockPaletteVirtualItemRegistry {
         sentToPlayer.remove(playerUuid);
         BlockPaletteClipboard.clear(playerUuid);
     }
+
+    /** Clears the sent-id set so the next {@code UpdateItems} can rebuild icons for this player. */
+    public void clearSent(@Nonnull UUID playerUuid) {
+        sentToPlayer.remove(playerUuid);
+    }
 }

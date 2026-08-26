@@ -13,29 +13,27 @@ import com.hypixel.hytale.component.dependency.SystemDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.RefChangeSystem;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.EntityChunk;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.ChunkSection;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.EntitySection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.Set;
 import javax.annotation.Nonnull;
 
 /**
- * When a chunk stops ticking, vanilla {@link EntityChunk.EntityChunkLoadingSystem} unloads live entities while the
- * chunk store is still processing. If those entities still have {@link com.hypixel.hytale.builtin.mounts.MountedComponent},
+ * When a section stops ticking, vanilla {@link EntitySection.EntitySectionLoadingSystem} unloads live
+ * entities while the chunk store is still processing. If those entities still have
+ * {@link com.hypixel.hytale.builtin.mounts.MountedComponent},
  * {@code MountSystems.RemoveMounted} calls {@code ChunkStore.removeComponent} and throws.
- *
- * <p>Runs before entity unload: disconnect mounts via {@link BlockMountRelease#disconnectForUnload} and queue empty seat
- * cleanup on the chunk command buffer.
  */
 public final class ChunkUnloadMountDisconnectSystem extends RefChangeSystem<ChunkStore, NonTicking<ChunkStore>> {
     @Nonnull
     private final Archetype<ChunkStore> archetype =
-        Archetype.of(WorldChunk.getComponentType(), EntityChunk.getComponentType());
+        Archetype.of(ChunkSection.getComponentType(), EntitySection.getComponentType());
 
     @Nonnull
     private final Set<Dependency<ChunkStore>> dependencies =
-        Set.of(new SystemDependency<>(Order.BEFORE, EntityChunk.EntityChunkLoadingSystem.class));
+        Set.of(new SystemDependency<>(Order.BEFORE, EntitySection.EntitySectionLoadingSystem.class));
 
     @Nonnull
     @Override
@@ -62,13 +60,13 @@ public final class ChunkUnloadMountDisconnectSystem extends RefChangeSystem<Chun
         @Nonnull Store<ChunkStore> store,
         @Nonnull CommandBuffer<ChunkStore> commandBuffer
     ) {
-        EntityChunk entityChunk = store.getComponent(ref, EntityChunk.getComponentType());
-        if (entityChunk == null) {
+        EntitySection entitySection = store.getComponent(ref, EntitySection.getComponentType());
+        if (entitySection == null) {
             return;
         }
         World world = store.getExternalData().getWorld();
         Store<EntityStore> entityStore = world.getEntityStore().getStore();
-        for (Ref<EntityStore> entityRef : entityChunk.getEntityReferences()) {
+        for (Ref<EntityStore> entityRef : entitySection.getEntityReferences()) {
             if (!entityRef.isValid()) {
                 continue;
             }

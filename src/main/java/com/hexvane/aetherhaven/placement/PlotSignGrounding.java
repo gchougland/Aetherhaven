@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.placement;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.pathtool.PathGrounding;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
@@ -123,6 +125,6 @@ public final class PlotSignGrounding {
     }
 
     private static boolean isColumnLoaded(@Nonnull World world, int x, int y, int z) {
-        return world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z)) != null;
+        return ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z)) != null;
     }
 }

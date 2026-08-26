@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.plotcreator;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -112,7 +114,7 @@ public final class PlotCreatorCleanup {
     }
 
     private static void breakBlock(@Nonnull World world, @Nonnull Vector3i pos) {
-        WorldChunk ch = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
+        WorldChunk ch = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
         if (ch == null) {
             return;
         }

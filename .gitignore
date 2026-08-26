@@ -1,4 +1,5 @@
 .gradle/
+.gradle-user-home/
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
@@ -40,3 +41,5 @@ build/
 /scripts/__pycache__/
 # Local 1Password op:// env for translation script (see translate.secrets.env.example)
 /scripts/translate.secrets.env
+# Hytale regenerates these beside .prefab.json; stale copies freeze wrong bounds (e.g. 16x16 overlays).
+*.prefab.json.lpf

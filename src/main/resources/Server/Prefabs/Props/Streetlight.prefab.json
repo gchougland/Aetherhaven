@@ -60,22 +60,5 @@
       "level": 0
     }
   ],
-  "entities": [
-    {
-      "Components": {
-        "Transform": {
-          "Position": {
-            "X": -6.0,
-            "Y": 7.5,
-            "Z": -13.0
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 0.0,
-            "Roll": 0.0
-          }
-        }
-      }
-    }
-  ]
+  "entities": []
 }

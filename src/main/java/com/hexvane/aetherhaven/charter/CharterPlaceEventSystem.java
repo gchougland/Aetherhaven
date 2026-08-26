@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.charter;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plot.CharterBlock;
@@ -102,7 +104,7 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         @Nonnull PlayerRef playerRef,
         @Nonnull Ref<EntityStore> entityRef
     ) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
         if (chunk == null) {
             return;
         }

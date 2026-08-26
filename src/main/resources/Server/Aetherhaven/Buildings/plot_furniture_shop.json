@@ -28,8 +28,8 @@
       "localY": 0,
       "localZ": -3,
       "tags": [
-        "WORK",
-        "workActivity:read"
+        "workActivity:read",
+        "WORK"
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",

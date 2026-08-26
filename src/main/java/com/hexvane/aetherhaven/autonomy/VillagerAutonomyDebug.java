@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.autonomy;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hypixel.hytale.server.npc.role.support.DebugSupport;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -40,7 +42,7 @@ public final class VillagerAutonomyDebug {
         @Nonnull NPCEntity npc
     ) {
         store.tryRemoveComponent(ref, Nameplate.getComponentType());
-        stripAutonomyDebugFlagsAndBuffers(npc);
+        stripAutonomyDebugFlagsAndBuffers(ref, store, npc);
     }
 
     /** Tick path: remove nameplate via command buffer, then strip flags and custom/path buffers. */
@@ -50,10 +52,15 @@ public final class VillagerAutonomyDebug {
         @Nonnull NPCEntity npc
     ) {
         commandBuffer.tryRemoveComponent(ref, Nameplate.getComponentType());
-        stripAutonomyDebugFlagsAndBuffers(npc);
+        Store<EntityStore> store = commandBuffer.getStore();
+        stripAutonomyDebugFlagsAndBuffers(ref, store, npc);
     }
 
-    private static void stripAutonomyDebugFlagsAndBuffers(@Nonnull NPCEntity npc) {
+    private static void stripAutonomyDebugFlagsAndBuffers(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull NPCEntity npc
+    ) {
         if (npc.getRole() == null) {
             return;
         }
@@ -68,8 +75,11 @@ public final class VillagerAutonomyDebug {
         if (changed) {
             npc.setRoleDebugFlags(flags);
         }
-        npc.getRole().getDebugSupport().setDisplayCustomString(null);
-        npc.getRole().getDebugSupport().clearPathVisualization();
+        DebugSupport debug = NpcSupportUtil.debugSupport(store, ref);
+        if (debug != null) {
+            debug.setDisplayCustomString(null);
+            debug.clearPathVisualization();
+        }
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.poi;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
@@ -292,7 +294,7 @@ public final class PoiExtractor {
 
     @SuppressWarnings({ "deprecation", "removal" })
     private static boolean isFillerVoxel(@Nonnull World world, int x, int y, int z) {
-        WorldChunk chunk = world.getChunkIfInMemory(
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, 
             com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(x, z)
         );
         if (chunk == null) {

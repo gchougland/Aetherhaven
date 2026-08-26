@@ -15,6 +15,9 @@ import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.EntitySection;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.modules.entity.system.ModelSystems;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.Set;
@@ -100,7 +103,14 @@ public final class EntityRotationRepairSystem {
             }
             TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
             if (transform != null) {
-                transform.markChunkDirty(store);
+                Ref<ChunkStore> sectionRef = transform.getSectionRef();
+            if (sectionRef != null && sectionRef.isValid()) {
+                EntitySection entitySection = store.getExternalData().getWorld().getChunkStore().getStore()
+                    .getComponent(sectionRef, EntitySection.getComponentType());
+                if (entitySection != null) {
+                    entitySection.markNeedsSaving();
+                }
+            }
             }
         }
 

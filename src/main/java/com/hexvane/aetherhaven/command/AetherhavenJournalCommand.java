@@ -15,11 +15,7 @@ import javax.annotation.Nonnull;
 public final class AetherhavenJournalCommand extends AbstractPlayerCommand {
     public AetherhavenJournalCommand() {
         super("journal", "aetherhaven_commands_root.commands.aetherhaven.journal.desc");
-    }
-
-    @Override
-    protected boolean canGeneratePermission() {
-        return false;
+        requireNoPermission();
     }
 
     @Override

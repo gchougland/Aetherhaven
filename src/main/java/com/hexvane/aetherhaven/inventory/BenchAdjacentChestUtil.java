@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.inventory;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -65,7 +67,7 @@ public final class BenchAdjacentChestUtil {
         @Nonnull ComponentType<EntityStore, ? extends InventoryComponent>[] playerInventoryScope
     ) {
         CombinedItemContainer player = InventoryComponent.getCombined(store, ref, playerInventoryScope);
-        BlockType blockType = world.getBlockType(bx, by, bz);
+        BlockType blockType = ChunkSectionBlockUtil.blockType(world, bx, by, bz);
         if (blockType == null) {
             return player;
         }
@@ -164,13 +166,13 @@ public final class BenchAdjacentChestUtil {
             if (blockStateInfo == null) {
                 continue;
             }
-            WorldChunk wchunk = store.getComponent(blockStateInfo.getChunkRef(), WorldChunk.getComponentType());
+            WorldChunk wchunk = store.getComponent(blockStateInfo.getSectionRef(), WorldChunk.getComponentType());
             if (wchunk == null) {
                 continue;
             }
-            int cx = ChunkUtil.worldCoordFromLocalCoord(wchunk.getX(), ChunkUtil.xFromBlockInColumn(blockStateInfo.getIndex()));
-            int cy = ChunkUtil.yFromBlockInColumn(blockStateInfo.getIndex());
-            int cz = ChunkUtil.worldCoordFromLocalCoord(wchunk.getZ(), ChunkUtil.zFromBlockInColumn(blockStateInfo.getIndex()));
+            int cx = ChunkUtil.worldCoordFromLocalCoord(wchunk.getX(), ChunkUtil.xFromIndex(blockStateInfo.getIndex()));
+            int cy = ChunkUtil.yFromIndex(blockStateInfo.getIndex());
+            int cz = ChunkUtil.worldCoordFromLocalCoord(wchunk.getZ(), ChunkUtil.zFromIndex(blockStateInfo.getIndex()));
             if (cx >= minX && cx <= maxX && cy >= minY && cy <= maxY && cz >= minZ && cz <= maxZ) {
                 containers.add(chest.getItemContainer());
                 if (containers.size() >= limit) {

@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.placement;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
 import com.hexvane.aetherhaven.town.PlotFootprintChunkUtil;
 import com.hexvane.aetherhaven.town.PlotInstance;
@@ -98,7 +100,7 @@ public final class PlotConstructionOpenHelper {
         int z = plot.getSignZ();
         String constructionId = plot.getConstructionId() != null ? plot.getConstructionId() : "";
         String plotIdStr = plot.getPlotId().toString();
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (chunk == null) {
             return null;
         }

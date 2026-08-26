@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.map;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.protocol.NetworkChannel;
@@ -49,7 +51,7 @@ public final class TownMapMarkerProvider implements WorldMapManager.MarkerProvid
     static double standingY(@Nonnull World world, @Nonnull TownRecord town) {
         int bx = town.getCharterX();
         int bz = town.getCharterZ();
-        WorldChunk chunk = world.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfNonTicking(world, ChunkUtil.indexChunkFromBlock(bx, bz));
         if (chunk != null) {
             return chunk.getHeight(bx, bz) + 1.0;
         }

@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.floatinggift;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hypixel.hytale.component.AddReason;
@@ -20,6 +22,7 @@ import com.hypixel.hytale.server.core.modules.entity.component.BoundingBox;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
+import com.hypixel.hytale.server.core.modules.entity.component.RespondToHit;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
@@ -167,7 +170,7 @@ public final class FloatingGiftSpawnService {
         int bz = MathUtil.floor(sz);
         double sy;
         World world = store.getExternalData().getWorld();
-        WorldChunk surfaceChunk = world.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
+        WorldChunk surfaceChunk = ChunkSectionBlockUtil.worldChunkIfNonTicking(world, ChunkUtil.indexChunkFromBlock(bx, bz));
         if (surfaceChunk != null) {
             // Same surface convention as FitToHeightMapSpawnProvider: air block above heightmap (+ optional vertical offset).
             sy = surfaceChunk.getHeight(bx, bz) + 1.0 + heightOffset;
@@ -214,6 +217,8 @@ public final class FloatingGiftSpawnService {
             new PersistentModel(new Model.ModelReference(modelAssetId, model.getScale(), model.getRandomAttachmentIds(), false))
         );
         holder.addComponent(BoundingBox.getComponentType(), new BoundingBox(Box.horizontallyCentered(1.0, 1.5, 1.0)));
+        // U6 melee selectors skip entities without Health or RespondToHit.
+        holder.ensureComponent(RespondToHit.getComponentType());
         holder.addComponent(NetworkId.getComponentType(), new NetworkId(store.getExternalData().takeNextNetworkId()));
         holder.addComponent(ActiveAnimationComponent.getComponentType(), new ActiveAnimationComponent());
         holder.addComponent(Velocity.getComponentType(), new Velocity());

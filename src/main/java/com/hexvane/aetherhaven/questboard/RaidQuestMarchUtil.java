@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.questboard;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -7,6 +9,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.modules.time.TimeModule;
 import com.hypixel.hytale.server.core.modules.time.TimeResource;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.role.support.StateSupport;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.movement.controllers.MotionControllerFly;
 import com.hypixel.hytale.server.npc.role.support.MarkedEntitySupport;
@@ -125,7 +128,15 @@ public final class RaidQuestMarchUtil {
         if (npc.getRole() == null) {
             return null;
         }
-        var helper = npc.getRole().getStateSupport().getStateHelper();
+        Ref<EntityStore> npcRef = npc.getReference();
+        if (npcRef == null) {
+            return null;
+        }
+        StateSupport stateSupport = NpcSupportUtil.stateSupport(npcRef.getStore(), npcRef);
+        if (stateSupport == null) {
+            return null;
+        }
+        var helper = stateSupport.getStateHelper();
         if (helper.getStateIndex(AetherhavenConstants.NPC_STATE_RAID_MARCH) >= 0) {
             return AetherhavenConstants.NPC_STATE_RAID_MARCH;
         }
@@ -149,6 +160,7 @@ public final class RaidQuestMarchUtil {
         @Nonnull NPCEntity npc,
         @Nonnull RaidQuestMobBinding binding,
         @Nonnull Vector3d mobPos,
+        @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
         if (isEngagedInCombat(npc)) {
@@ -162,9 +174,9 @@ public final class RaidQuestMarchUtil {
         applyFlyingCruiseAltitude(npc);
         String marchState = resolveMarchState(npc);
         if (marchState != null && npc.getRole() != null) {
-            String stateName = npc.getRole().getStateSupport().getStateName();
+            String stateName = NpcSupportUtil.stateName(store, ref);
             if (!isInMarchState(stateName)) {
-                npc.getRole().getStateSupport().setState(ref, marchState, null, commandBuffer);
+                NpcSupportUtil.setState(ref, marchState, null, commandBuffer);
             }
         }
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
@@ -177,7 +189,7 @@ public final class RaidQuestMarchUtil {
     ) {
         String marchState = resolveMarchState(npc);
         if (marchState != null && npc.getRole() != null) {
-            npc.getRole().getStateSupport().setState(ref, marchState, null, commandBuffer);
+            NpcSupportUtil.setState(ref, marchState, null, commandBuffer);
         }
     }
 
@@ -188,7 +200,7 @@ public final class RaidQuestMarchUtil {
     ) {
         String marchState = resolveMarchState(npc);
         if (marchState != null && npc.getRole() != null) {
-            npc.getRole().getStateSupport().setState(ref, marchState, null, store);
+            NpcSupportUtil.setState(ref, marchState, null, store);
         }
     }
 
@@ -225,7 +237,11 @@ public final class RaidQuestMarchUtil {
         if (npc.getRole() == null) {
             return false;
         }
-        String stateName = npc.getRole().getStateSupport().getStateName();
+        Ref<EntityStore> ref = npc.getReference();
+        if (ref == null || !ref.isValid()) {
+            return false;
+        }
+        String stateName = NpcSupportUtil.stateName(ref.getStore(), ref);
         if (isInMarchState(stateName) && !isCombatStateName(stateName)) {
             return false;
         }
@@ -256,7 +272,11 @@ public final class RaidQuestMarchUtil {
         if (npc.getRole() == null) {
             return false;
         }
-        MarkedEntitySupport marked = npc.getRole().getMarkedEntitySupport();
+        Ref<EntityStore> ref = npc.getReference();
+        if (ref == null || !ref.isValid()) {
+            return false;
+        }
+        MarkedEntitySupport marked = NpcSupportUtil.markedEntitySupport(ref, ref.getStore());
         Ref<EntityStore> target = marked.getMarkedEntityRef(MarkedEntitySupport.DEFAULT_TARGET_SLOT);
         return target != null && target.isValid();
     }

@@ -106,7 +106,14 @@ public final class NpcFaceVisuals {
         if (npc.getRole() == null) {
             return false;
         }
-        StateSupport stateSupport = npc.getRole().getStateSupport();
+        Ref<EntityStore> npcRef = npc.getReference();
+        if (npcRef == null) {
+            return false;
+        }
+        StateSupport stateSupport = NpcSupportUtil.stateSupport(npcRef.getStore(), npcRef);
+        if (stateSupport == null) {
+            return false;
+        }
         int interactionState = stateSupport.getStateHelper().getStateIndex("$Interaction");
         return interactionState >= 0 && stateSupport.inState(interactionState);
     }

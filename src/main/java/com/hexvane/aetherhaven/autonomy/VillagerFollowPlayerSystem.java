@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.autonomy;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistState;
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
 import com.hexvane.aetherhaven.npc.NpcFaceVisuals;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
@@ -295,8 +296,12 @@ public final class VillagerFollowPlayerSystem extends EntityTickingSystem<Entity
         if (npc.getRole() == null) {
             return false;
         }
-        String state = npc.getRole().getStateSupport().getStateName();
-        return state != null && state.startsWith(com.hexvane.aetherhaven.AetherhavenConstants.NPC_STATE_AUTONOMY_POI);
+        Ref<EntityStore> ref = npc.getReference();
+        if (ref == null) {
+            return false;
+        }
+        String state = NpcSupportUtil.stateName(ref.getStore(), ref);
+        return state.startsWith(com.hexvane.aetherhaven.AetherhavenConstants.NPC_STATE_AUTONOMY_POI);
     }
 
     /**

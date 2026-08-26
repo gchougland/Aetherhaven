@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.shopspot;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -22,7 +24,7 @@ public final class ShopSpotBlockUtil {
 
     @Nullable
     public static ShopSpotBlock getBlockComponent(@Nonnull World world, @Nonnull Vector3i pos) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
         if (chunk == null) {
             return null;
         }
@@ -59,7 +61,7 @@ public final class ShopSpotBlockUtil {
 
     /** @return false if the chunk or block entity is not ready yet (caller may retry on the world thread). */
     public static boolean writeBlockComponent(@Nonnull World world, @Nonnull Vector3i pos, @Nonnull ShopSpotBlock block) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
         if (chunk == null) {
             return false;
         }

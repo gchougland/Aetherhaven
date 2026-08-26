@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.placement;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
@@ -265,7 +267,7 @@ public final class PrefabFootprintClearUtil {
                     // Prefer setBlock over breakBlock so multi-block furniture (aquariums, etc.) always loses its
                     // block-entity. Orphan block entities keep ticking and can restore fluids/props after teardown.
                     forceClearBlockCell(world, x, y, z, discardContainerContents);
-                    WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+                    WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
                     if (chunk != null) {
                         clearFluidAtColumn(fluidStore, chunk, x, y, z);
                     }
@@ -320,7 +322,7 @@ public final class PrefabFootprintClearUtil {
         if (y < 0 || y >= 320) {
             return null;
         }
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (chunk == null) {
             return null;
         }
@@ -379,7 +381,7 @@ public final class PrefabFootprintClearUtil {
         int z,
         boolean discardContainerContents
     ) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (chunk == null) {
             return;
         }

@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.tourist;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -70,7 +72,7 @@ public final class TouristPortalBlockUtil {
      */
     @SuppressWarnings({ "deprecation", "removal" })
     public static boolean isPortalBaseBlock(@Nonnull World world, int x, int y, int z) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (chunk == null) {
             return false;
         }
@@ -86,7 +88,7 @@ public final class TouristPortalBlockUtil {
     @Nonnull
     @SuppressWarnings({ "deprecation", "removal" })
     public static Vector3i resolvePortalBaseBlock(@Nonnull World world, @Nonnull Vector3i pos) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
         if (chunk == null) {
             return new Vector3i(pos);
         }
@@ -103,7 +105,7 @@ public final class TouristPortalBlockUtil {
 
     @Nullable
     public static TouristPortalBlock getBlockComponent(@Nonnull World world, @Nonnull Vector3i pos) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
         if (chunk == null) {
             return null;
         }
@@ -115,7 +117,7 @@ public final class TouristPortalBlockUtil {
     }
 
     public static boolean writeBlockComponent(@Nonnull World world, @Nonnull Vector3i pos, @Nonnull TouristPortalBlock block) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
         if (chunk == null) {
             return false;
         }
@@ -280,7 +282,7 @@ public final class TouristPortalBlockUtil {
         if (y < 0 || y >= 320) {
             return null;
         }
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (chunk == null) {
             return null;
         }

@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.festival.snowball;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
@@ -85,7 +87,7 @@ public final class SnowballPileUseInteraction extends SimpleBlockInteraction {
             context.getState().state = InteractionState.Failed;
             return;
         }
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(targetBlock.x, targetBlock.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(targetBlock.x, targetBlock.z));
         if (chunk == null) {
             context.getState().state = InteractionState.Failed;
             return;

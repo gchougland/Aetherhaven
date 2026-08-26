@@ -71,6 +71,33 @@ public final class BlockPaletteIconPacketAdapter {
         virtualItems.onPlayerLeave(playerUuid);
     }
 
+    /**
+     * Sends every catalog palette virtual item once on join (with icon atlas rebuild). Window opens then skip
+     * {@code updateIcons}.
+     */
+    public void preloadCatalogIcons(@Nonnull PlayerRef playerRef, @Nonnull BlockPaletteCatalog catalog) {
+        knownPlayerRefs.put(playerRef.getUuid(), playerRef);
+        virtualItems.clearSent(playerRef.getUuid());
+        Map<String, ItemBase> all = new LinkedHashMap<>();
+        for (BlockPaletteDefinition def : catalog.allById().values()) {
+            String paletteId = def.getId();
+            if (paletteId == null || paletteId.isBlank()) {
+                continue;
+            }
+            String virtualId = BlockPaletteVirtualItemRegistry.generateVirtualId(paletteId);
+            ItemBase virtualBase = virtualItems.getOrCreateVirtualItemBase(virtualId, paletteId);
+            if (virtualBase != null) {
+                all.put(virtualId, virtualBase);
+            }
+            String shopId = BlockPaletteShopItemIds.forPaletteId(paletteId);
+            ItemBase shopBase = virtualItems.getOrCreateVirtualItemBase(shopId, paletteId);
+            if (shopBase != null) {
+                all.put(shopId, shopBase);
+            }
+        }
+        sendVirtualItemDefinitions(playerRef, all, true);
+    }
+
     private boolean onInboundPacket(@Nonnull PlayerRef playerRef, @Nonnull Packet packet) {
         try {
             if (packet instanceof MouseInteraction mouse) {
@@ -124,7 +151,7 @@ public final class BlockPaletteIconPacketAdapter {
                 processSection(inventory.armor, newVirtual);
                 processSection(inventory.storage, newVirtual);
                 processSection(inventory.backpack, newVirtual);
-                sendVirtualItemDefinitions(playerRef, newVirtual);
+                sendVirtualItemDefinitions(playerRef, newVirtual, false);
             } else if (packet instanceof OpenWindow open) {
                 processWindowInventory(playerRef, open.inventory);
             } else if (packet instanceof UpdateWindow update) {
@@ -142,7 +169,7 @@ public final class BlockPaletteIconPacketAdapter {
         }
         Map<String, ItemBase> newVirtual = new LinkedHashMap<>();
         processSection(section, newVirtual);
-        sendVirtualItemDefinitions(playerRef, newVirtual);
+        sendVirtualItemDefinitions(playerRef, newVirtual, false);
     }
 
     private void processSection(@Nullable InventorySection section, @Nonnull Map<String, ItemBase> newVirtual) {
@@ -221,7 +248,11 @@ public final class BlockPaletteIconPacketAdapter {
         }
     }
 
-    private void sendVirtualItemDefinitions(@Nonnull PlayerRef playerRef, @Nonnull Map<String, ItemBase> newVirtual) {
+    private void sendVirtualItemDefinitions(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Map<String, ItemBase> newVirtual,
+        boolean updateIcons
+    ) {
         if (newVirtual.isEmpty()) {
             return;
         }
@@ -245,7 +276,7 @@ public final class BlockPaletteIconPacketAdapter {
             packet.items = toSend;
             packet.removedItems = new String[0];
             packet.updateModels = false;
-            packet.updateIcons = true;
+            packet.updateIcons = updateIcons;
             playerRef.getPacketHandler().writeNoCache(packet);
         } catch (Exception e) {
             LOGGER.atWarning().log("Failed to send block palette UpdateItems for %s: %s", playerRef.getUuid(), e.getMessage());

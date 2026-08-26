@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.townsfolk;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -50,10 +52,10 @@ public final class TownsfolkAssignmentSystem extends EntityTickingSystem<EntityS
         if (!TownsfolkAssignmentKinds.usesIdleStandAround(binding.getAssignmentKind())) {
             return;
         }
-        String state = npc.getRole().getStateSupport().getStateName();
-        if (state != null && state.startsWith(AetherhavenConstants.NPC_STATE_AUTONOMY_POI)) {
-            Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
-            npc.getRole().getStateSupport().setState(ref, "Idle", null, commandBuffer);
+        Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
+        String state = NpcSupportUtil.stateName(store, ref);
+        if (state.startsWith(AetherhavenConstants.NPC_STATE_AUTONOMY_POI)) {
+            NpcSupportUtil.setState(ref, "Idle", null, commandBuffer);
         }
     }
 }

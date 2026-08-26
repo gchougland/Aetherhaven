@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.pathtool;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -18,7 +20,7 @@ public final class PathToolRestoreService {
     public static int restoreAndRemove(@Nonnull World world, @Nonnull PathCommitRecord rec) {
         int ok = 0;
         for (PathToolUndoCell c : rec.undo) {
-            WorldChunk ch = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(c.x, c.z));
+            WorldChunk ch = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(c.x, c.z));
             if (ch == null) {
                 continue;
             }

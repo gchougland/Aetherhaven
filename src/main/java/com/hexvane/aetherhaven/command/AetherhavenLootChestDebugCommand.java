@@ -16,7 +16,7 @@ import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockComponentChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockComponentSection;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -33,6 +33,7 @@ import javax.annotation.Nullable;
 public final class AetherhavenLootChestDebugCommand extends AbstractCommandCollection {
     public AetherhavenLootChestDebugCommand() {
         super("debug-lootchest", "aetherhaven_commands_help.commands.aetherhaven.debug_lootchest.desc");
+        requireNoPermission();
         this.setPermissionGroups("hytale:WorldEditor");
         this.addSubCommand(new FillSubCommand());
     }
@@ -117,16 +118,16 @@ public final class AetherhavenLootChestDebugCommand extends AbstractCommandColle
             block.y = block.y - FillerBlockUtil.unpackY(filler);
             block.z = block.z - FillerBlockUtil.unpackZ(filler);
         }
-        long chunkIndex = ChunkUtil.indexChunkFromBlock(block.x, block.z);
-        Ref<ChunkStore> chunkRef = chunkStore.getChunkReference(chunkIndex);
-        if (chunkRef == null || !chunkRef.isValid()) {
+        sectionRef = chunkStore.getChunkSectionReferenceAtBlock(block.x, block.y, block.z);
+        if (sectionRef == null || !sectionRef.isValid()) {
             return null;
         }
-        BlockComponentChunk worldChunkComponent = chunkStoreStore.getComponent(chunkRef, BlockComponentChunk.getComponentType());
-        if (worldChunkComponent == null) {
+        BlockComponentSection blockComponentSection =
+            chunkStoreStore.getComponent(sectionRef, BlockComponentSection.getComponentType());
+        if (blockComponentSection == null) {
             return null;
         }
-        Ref<ChunkStore> state = worldChunkComponent.getEntityReference(ChunkUtil.indexBlockInColumn(block.x, block.y, block.z));
+        Ref<ChunkStore> state = blockComponentSection.getBlockReference(ChunkUtil.indexBlock(block.x, block.y, block.z));
         if (state == null) {
             return null;
         }

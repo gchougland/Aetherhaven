@@ -1,13 +1,12 @@
 package com.hexvane.aetherhaven.floatinggift;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.protocol.packets.interface_.Page;
-import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
@@ -15,6 +14,7 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.windows.ContainerBlockWindow;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.client.SimpleBlockInteraction;
@@ -22,9 +22,7 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.ser
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockComponentChunk;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.BlockOperations;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -36,6 +34,10 @@ import javax.annotation.Nullable;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 
+/**
+ * Opens a floating gift reward chest. Uses section-based block-entity lookup (U6); column
+ * {@code BlockComponentSection} lookups return null and silently no-op.
+ */
 public final class OpenFloatingGiftChestInteraction extends SimpleBlockInteraction {
     public static final BuilderCodec<OpenFloatingGiftChestInteraction> CODEC =
         BuilderCodec
@@ -69,56 +71,40 @@ public final class OpenFloatingGiftChestInteraction extends SimpleBlockInteracti
             return;
         }
 
-        BlockType atPos = world.getBlockType(pos.x, pos.y, pos.z);
+        BlockType atPos = ChunkSectionBlockUtil.blockType(world, pos.x, pos.y, pos.z);
         if (!FloatingGiftChestUtil.isGiftChestBlockType(atPos)) {
             return;
         }
 
+        ItemContainerBlock itemContainerBlock = FloatingGiftChestUtil.ensureItemContainer(world, pos.x, pos.y, pos.z);
+        if (itemContainerBlock == null) {
+            return;
+        }
+
         var chunkStore = world.getChunkStore();
-        long chunkIndex = ChunkUtil.indexChunkFromBlock(pos.x, pos.z);
-        Ref<ChunkStore> chunkRef = chunkStore.getChunkReference(chunkIndex);
-        if (chunkRef == null || !chunkRef.isValid()) {
+        Ref<ChunkStore> sectionRef = chunkStore.getChunkSectionReferenceAtBlock(pos.x, pos.y, pos.z);
+        if (sectionRef == null || !sectionRef.isValid()) {
             return;
         }
 
         var chunkComponentStore = chunkStore.getStore();
-        var blockComponentChunk = chunkComponentStore.getComponent(chunkRef, BlockComponentChunk.getComponentType());
-        if (blockComponentChunk == null) {
-            return;
-        }
-
-        int columnBlockIndex = ChunkUtil.indexBlockInColumn(pos.x, pos.y, pos.z);
-        Ref<ChunkStore> blockRef = blockComponentChunk.getEntityReference(columnBlockIndex);
+        Ref<ChunkStore> blockRef = BlockModule.getBlockEntity(chunkComponentStore, sectionRef, pos.x, pos.y, pos.z);
         if (blockRef == null) {
             return;
         }
 
-        ItemContainerBlock itemContainerBlock = chunkComponentStore.getComponent(blockRef, ItemContainerBlock.getComponentType());
-        if (itemContainerBlock == null) {
-            playerRefComponent.sendMessage(
-                Message
-                    .translation("server.interactions.invalidBlockState")
-                    .param("interaction", getClass().getSimpleName())
-                    .param("blockState", chunkComponentStore.getArchetype(blockRef).toString())
-            );
+        BlockSection section = chunkComponentStore.getComponent(sectionRef, BlockSection.getComponentType());
+        if (section == null) {
             return;
         }
 
-        BlockChunk blockChunkComponent = chunkComponentStore.getComponent(chunkRef, BlockChunk.getComponentType());
-        if (blockChunkComponent == null) {
-            return;
-        }
-
-        int blockId = blockChunkComponent.getBlock(pos.x, pos.y, pos.z);
+        int blockId = section.get(pos.x, pos.y, pos.z);
         BlockType blockType = BlockType.getAssetMap().getAsset(blockId);
         if (blockType == null) {
             return;
         }
 
-        int rotationIndex = getBlockRotationIndex(chunkStore, chunkComponentStore, pos);
-        if (rotationIndex < 0) {
-            return;
-        }
+        int rotationIndex = section.getRotationIndex(pos.x, pos.y, pos.z);
 
         ContainerBlockWindow window =
             new ContainerBlockWindow(pos.x, pos.y, pos.z, rotationIndex, blockType, itemContainerBlock.getItemContainer());
@@ -146,7 +132,9 @@ public final class OpenFloatingGiftChestInteraction extends SimpleBlockInteracti
                 );
 
                 if (windows.size() == 1) {
-                    world.setBlockInteractionState(pos, blockType, OPEN_WINDOW);
+                    BlockOperations.setBlockInteractionState(
+                        chunkStore, sectionRef, pos.x, pos.y, pos.z, blockType, OPEN_WINDOW, false
+                    );
                 }
 
                 BlockType interactionState = blockType.getBlockForState(OPEN_WINDOW);
@@ -183,20 +171,18 @@ public final class OpenFloatingGiftChestInteraction extends SimpleBlockInteracti
         windows.remove(uuid, window);
 
         var chunkStore = world.getChunkStore();
-        long chunkIndex = ChunkUtil.indexChunkFromBlock(pos.x, pos.z);
-        var chunkRef = chunkStore.getChunkReference(chunkIndex);
-        if (chunkRef == null || !chunkRef.isValid()) {
+        Ref<ChunkStore> sectionRef = chunkStore.getChunkSectionReferenceAtBlock(pos.x, pos.y, pos.z);
+        if (sectionRef == null || !sectionRef.isValid()) {
             return;
         }
 
         var chunkComponentStore = chunkStore.getStore();
-
-        WorldChunk worldChunkComponent = chunkComponentStore.getComponent(chunkRef, WorldChunk.getComponentType());
-        if (worldChunkComponent == null) {
+        BlockSection section = chunkComponentStore.getComponent(sectionRef, BlockSection.getComponentType());
+        if (section == null) {
             return;
         }
 
-        BlockType currentBlockType = worldChunkComponent.getBlockType(pos);
+        BlockType currentBlockType = BlockType.getAssetMap().getAsset(section.get(pos.x, pos.y, pos.z));
         if (currentBlockType == null) {
             return;
         }
@@ -214,7 +200,9 @@ public final class OpenFloatingGiftChestInteraction extends SimpleBlockInteracti
             String defBase = Objects.requireNonNullElse(blockType.getDefaultStateKey(), blockType.getId());
             String currentBase = Objects.requireNonNullElse(currentBlockType.getDefaultStateKey(), currentBlockType.getId());
             if (Objects.equals(currentBase, defBase)) {
-                world.setBlockInteractionState(pos, currentBlockType, CLOSE_WINDOW);
+                BlockOperations.setBlockInteractionState(
+                    chunkStore, sectionRef, pos.x, pos.y, pos.z, currentBlockType, CLOSE_WINDOW, false
+                );
             }
         }
 
@@ -222,34 +210,13 @@ public final class OpenFloatingGiftChestInteraction extends SimpleBlockInteracti
         if (interactionState != null) {
             int soundEventIndex = interactionState.getInteractionSoundEventIndex();
             if (soundEventIndex != SoundEvent.EMPTY_ID) {
-                int rotationIndex = getBlockRotationIndex(chunkStore, chunkComponentStore, pos);
-                if (rotationIndex < 0) {
-                    return;
-                }
-
+                int rotationIndex = section.getRotationIndex(pos.x, pos.y, pos.z);
                 Vector3d soundPos = new Vector3d();
                 blockType.getBlockCenter(rotationIndex, soundPos);
                 soundPos.add(pos.x, pos.y, pos.z);
                 SoundUtil.playSoundEvent3d(ref, soundEventIndex, soundPos, commandBuffer);
             }
         }
-    }
-
-    /** Returns block rotation index, or -1 when the section is unavailable. */
-    private static int getBlockRotationIndex(
-        @Nonnull ChunkStore chunkStore,
-        @Nonnull Store<ChunkStore> chunkComponentStore,
-        @Nonnull Vector3i pos
-    ) {
-        Ref<ChunkStore> sectionRef = chunkStore.getChunkSectionReferenceAtBlock(pos.x, pos.y, pos.z);
-        if (sectionRef == null || !sectionRef.isValid()) {
-            return -1;
-        }
-        BlockSection section = chunkComponentStore.getComponent(sectionRef, BlockSection.getComponentType());
-        if (section == null) {
-            return -1;
-        }
-        return section.getRotationIndex(pos.x, pos.y, pos.z);
     }
 
     @Override

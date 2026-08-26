@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.inn;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hypixel.hytale.math.vector.Rotation3f;
 
 import com.hypixel.hytale.math.vector.Vector3fUtil;
@@ -732,7 +734,7 @@ public final class InnPoolService {
             pos = new Vector3i(innPlot.getSignX(), innPlot.getSignY(), innPlot.getSignZ());
         }
         long chunkIndex = ChunkUtil.indexChunkFromBlock(pos.x, pos.z);
-        return world.getChunkIfInMemory(chunkIndex) != null;
+        return ChunkSectionBlockUtil.worldChunkIfInMemory(world, chunkIndex) != null;
     }
 
     @Nullable
@@ -1981,6 +1983,7 @@ public final class InnPoolService {
         long seed
     ) {
         List<String> priority = prioritizedInnRoleOrder(town);
+
         Set<String> exclude = new LinkedHashSet<>(priority);
         List<String> weightedOrder = weightedInnRoleOrderWithoutReplacementForTest(pool, exclude, new Random(seed));
         Set<String> seen = new LinkedHashSet<>();

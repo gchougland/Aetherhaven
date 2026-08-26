@@ -112,9 +112,11 @@ public final class NpcPersistentModelResyncSystem extends HolderSystem<EntitySto
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.getTown(binding.getTownId());
-        if (town == null || !VillagerCosmeticAppearanceService.hasAnyOverride(town, residentKey)) {
+        if (town == null) {
             return;
         }
+        // Always rebuild from the model asset (plus any wardrobe overrides). Skipping when overrides are empty
+        // left NPCs stuck on a saved PersistentModel that had already lost DefaultAttachments (e.g. Mertie's hat).
         VillagerCosmeticAppearanceService.applySavedCosmetics(ref, store, town);
     }
 

@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.rts;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -16,7 +18,7 @@ public final class CommandPostBlockUtil {
     private CommandPostBlockUtil() {}
 
     public static boolean isCommandPostBlock(@Nonnull World world, @Nonnull Vector3i pos) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
         if (chunk == null) {
             return false;
         }
@@ -26,7 +28,7 @@ public final class CommandPostBlockUtil {
 
     @Nullable
     public static CommandPostBlock getBlockComponent(@Nonnull World world, @Nonnull Vector3i pos) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
         if (chunk == null) {
             return null;
         }
@@ -38,7 +40,7 @@ public final class CommandPostBlockUtil {
     }
 
     public static boolean writeTownId(@Nonnull World world, @Nonnull Vector3i pos, @Nonnull String townId) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
         if (chunk == null) {
             return false;
         }

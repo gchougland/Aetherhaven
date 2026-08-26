@@ -49,12 +49,10 @@ public final class TransformComponentUtil {
         if (current == null) {
             return;
         }
-        Ref<ChunkStore> chunkRef = current.getChunkRef();
-        @SuppressWarnings({ "deprecation", "removal" })
-        WorldChunk chunk = current.getChunk();
+        Ref<ChunkStore> sectionRef = current.getSectionRef();
         TransformComponent updated = new TransformComponent(position, rotation);
-        if (chunkRef != null) {
-            updated.setChunkLocation(chunkRef, chunk);
+        if (sectionRef != null) {
+            updated.setSectionLocation(sectionRef);
         }
         commandBuffer.putComponent(ref, TransformComponent.getComponentType(), updated);
     }

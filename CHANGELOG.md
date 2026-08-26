@@ -1,5 +1,25 @@
 # Changelog
 
+## [3.1.0] - Unreleased (Hytale Update 6)
+
+### Changed
+
+- **Hytale Update 6** Aetherhaven runs on Hytale Update 6.
+
+### Fixed
+
+- **Building staff** Buildings place and clear again instead of the green preview resetting without placing a block.
+- **Floating gifts** Gift chests open with F again after you pop a balloon.
+- **Floating gifts** You can pop gift balloons with a sword again, not only with arrows.
+- **Whack a goblin** You can hit the goblins again.
+- **Bard** Elias walks and plays without the glide and walk animation flash.
+- **Props** Packaging wand overlays match prop size again (stale prefab caches were keeping huge boxes like 16x1x16).
+- **Villager hats** Default hats on townsfolk like Mertie and the guards show again when wardrobe is set to Default.
+- **Loot chests** Opening a chest that holds a decoration prop or block palette no longer freezes the game for a moment.
+- **Villagers** Chef, priestess, and similar looks load correctly after Update 6 asset changes.
+- **Corin plushie** Interact sounds play again.
+- **Snowball festival** Battle music plays again.
+
 ## [3.0.0] - 8/24/2026
 
 ### Added

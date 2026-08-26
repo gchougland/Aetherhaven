@@ -2,12 +2,15 @@ package com.hexvane.aetherhaven.bard;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.bard.data.BardSongDefinition;
+import com.hexvane.aetherhaven.npc.NpcAnimationPlayback;
+import com.hexvane.aetherhaven.npc.NpcStandStill;
 import com.hypixel.hytale.builtin.audio.components.ForcedMusicTracker;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.protocol.AnimationSlot;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -16,7 +19,6 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.RoleUtils;
-import com.hypixel.hytale.protocol.AnimationSlot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -333,10 +335,15 @@ public final class BardPerformanceService {
       @Nullable CommandBuffer<EntityStore> commandBuffer
   ) {
     NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
-    if (npc != null) {
-      npc.playAnimation(npcRef, AnimationSlot.Status, PERFORMANCE_ANIMATION_ID, store);
-      equipLuteInHand(npcRef, npc, store, commandBuffer);
+    if (npc == null) {
+      return;
     }
+    TransformComponent tc = store.getComponent(npcRef, TransformComponent.getComponentType());
+    if (commandBuffer != null && tc != null) {
+      // Keep Idle wander paused; do not stop Movement every tick (that freezes overlays).
+      NpcStandStill.maintainHold(npcRef, npc, tc.getPosition(), commandBuffer);
+    }
+    equipLuteInHand(npcRef, npc, store, commandBuffer);
   }
 
   private static void spawnNoteParticles(
@@ -399,8 +406,20 @@ public final class BardPerformanceService {
       @Nullable CommandBuffer<EntityStore> commandBuffer
   ) {
     NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
-    if (npc != null) {
+    if (npc == null) {
+      return;
+    }
+    TransformComponent tc = store.getComponent(npcRef, TransformComponent.getComponentType());
+    if (commandBuffer != null) {
+      // Same pattern as FestivalDanceSystem: stop walk, stand still, then Status overlay.
+      NpcAnimationPlayback.stop(npcRef, AnimationSlot.Movement, commandBuffer);
+      if (tc != null) {
+        NpcStandStill.hold(npcRef, store, npc, tc.getPosition(), commandBuffer);
+      }
       equipLuteInHand(npcRef, npc, store, commandBuffer);
+      NpcAnimationPlayback.play(npcRef, npc, AnimationSlot.Status, PERFORMANCE_ANIMATION_ID, commandBuffer);
+    } else {
+      equipLuteInHand(npcRef, npc, store, null);
       npc.playAnimation(npcRef, AnimationSlot.Status, PERFORMANCE_ANIMATION_ID, store);
     }
   }
@@ -424,13 +443,19 @@ public final class BardPerformanceService {
       @Nullable CommandBuffer<EntityStore> commandBuffer
   ) {
     NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
-    if (npc != null) {
+    if (npc == null) {
+      return;
+    }
+    if (commandBuffer != null) {
+      NpcAnimationPlayback.play(npcRef, npc, AnimationSlot.Status, null, commandBuffer);
+      NpcStandStill.release(npcRef, npc, commandBuffer);
+    } else {
       npc.playAnimation(npcRef, AnimationSlot.Status, null, store);
-      try {
-        RoleUtils.setItemInHand(npcRef, npc, null, commandBuffer != null ? commandBuffer : store);
-      } catch (RuntimeException ex) {
-        LOGGER.atWarning().withCause(ex).log("Could not clear lute from bard");
-      }
+    }
+    try {
+      RoleUtils.setItemInHand(npcRef, npc, null, commandBuffer != null ? commandBuffer : store);
+    } catch (RuntimeException ex) {
+      LOGGER.atWarning().withCause(ex).log("Could not clear lute from bard");
     }
   }
 }

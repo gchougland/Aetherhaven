@@ -44,9 +44,6 @@
     "Opacity": "Transparent",
     "ParticleColor": "#793e21",
     "VariantRotation": "NESW",
-    "Flags": {
-      "IsUsable": true
-    },
     "BlockEntity": {
       "Components": {
         "AetherhavenPlotSign": {

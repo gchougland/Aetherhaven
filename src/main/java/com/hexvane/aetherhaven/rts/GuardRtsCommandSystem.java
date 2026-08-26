@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.rts;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -173,7 +175,7 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
         UUID targetId = cmd.getTargetEntityUuid();
         Ref<EntityStore> target = targetId != null ? RtsGuardDirectory.findByUuid(store, targetId) : null;
         Role role = npc.getRole();
-        String state = role.getStateSupport().getStateName();
+        String state = NpcSupportUtil.stateName(store, ref);
 
         if (target == null || !target.isValid() || !RtsHostileQuery.isGuardAttackableTarget(target, store)) {
             endEngagement(ref, npc, cmd, pos, store, commandBuffer);
@@ -217,7 +219,7 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
 
         RtsGuardCombatSupport.lockCombatTarget(npc, target, store);
         if (!state.contains("Combat")) {
-            role.getStateSupport().setState(ref, "Combat", null, commandBuffer);
+            NpcSupportUtil.setState(ref, "Combat", null, commandBuffer);
         }
     }
 
@@ -257,7 +259,7 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
         cmd.setTargetEntityUuid(tu);
         RtsGuardCombatSupport.lockCombatTarget(npc, target, store);
         RtsGuardCombatSupport.promptCounterAttack(ref, target, store, commandBuffer);
-        npc.getRole().getStateSupport().setState(ref, "Combat", null, commandBuffer);
+        NpcSupportUtil.setState(ref, "Combat", null, commandBuffer);
     }
 
     private void endEngagement(
@@ -273,9 +275,9 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
         cmd.setPhase(atOrderDestination(pos, cmd) ? RtsCommandPhase.HOLDING : RtsCommandPhase.TRAVELING);
         Role role = npc.getRole();
         RtsGuardCombatSupport.clearCombatTarget(npc, store);
-        String state = role.getStateSupport().getStateName();
+        String state = NpcSupportUtil.stateName(commandBuffer.getStore(), ref);
         if (state.contains("Combat")) {
-            role.getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_GUARD_RTS_COMMAND, null, commandBuffer);
+            NpcSupportUtil.setState(ref, AetherhavenConstants.NPC_STATE_GUARD_RTS_COMMAND, null, commandBuffer);
         }
     }
 
@@ -324,11 +326,11 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
         Role role = npc.getRole();
-        if (role == null || !role.getStateSupport().getStateName().contains("Combat")) {
+        if (role == null || !NpcSupportUtil.stateName(store, ref).contains("Combat")) {
             return;
         }
         RtsGuardCombatSupport.clearCombatTarget(npc, store);
-        role.getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_GUARD_RTS_COMMAND, null, commandBuffer);
+        NpcSupportUtil.setState(ref, AetherhavenConstants.NPC_STATE_GUARD_RTS_COMMAND, null, commandBuffer);
     }
 
     /** Keep traveling to the order point until a hostile is actually in weapon range. */
@@ -341,7 +343,7 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
         Role role = npc.getRole();
-        String state = role.getStateSupport().getStateName();
+        String state = NpcSupportUtil.stateName(store, ref);
         if (!state.contains("Combat")) {
             return;
         }
@@ -364,8 +366,8 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
         if (engageTarget != null && isWithinHorizontalRange(store, pos, engageTarget, engageRange)) {
             return;
         }
-        role.getMarkedEntitySupport().setMarkedEntity(RtsGuardCombatSupport.LOCKED_TARGET_SLOT, null);
-        role.getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_GUARD_RTS_COMMAND, null, commandBuffer);
+        NpcSupportUtil.markedEntitySupport(ref, commandBuffer).setMarkedEntity(RtsGuardCombatSupport.LOCKED_TARGET_SLOT, null);
+        NpcSupportUtil.setState(ref, AetherhavenConstants.NPC_STATE_GUARD_RTS_COMMAND, null, commandBuffer);
     }
 
     @Nullable
@@ -545,14 +547,12 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
         @Nonnull NPCEntity npc,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
-        String state = npc.getRole().getStateSupport().getStateName();
+        String state = NpcSupportUtil.stateName(commandBuffer.getStore(), ref);
         if (state.contains("Combat")) {
             return;
         }
         if (!state.contains(AetherhavenConstants.NPC_STATE_GUARD_RTS_COMMAND)) {
-            npc.getRole()
-                .getStateSupport()
-                .setState(ref, AetherhavenConstants.NPC_STATE_GUARD_RTS_COMMAND, null, commandBuffer);
+            NpcSupportUtil.setState(ref, AetherhavenConstants.NPC_STATE_GUARD_RTS_COMMAND, null, commandBuffer);
         }
     }
 
@@ -583,7 +583,7 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
 
     /**
      * Path toward a focus-fire target using RTS {@code Seek} (pathfinder + leash). Stay out of {@code Combat}
-     * until {@link #beginEngage} — combat steering only aims/strafes and does not close from long range.
+     * until {@link #beginEngage} â€” combat steering only aims/strafes and does not close from long range.
      */
     private static void resumeFocusFireApproach(
         @Nonnull Ref<EntityStore> ref,
@@ -597,11 +597,11 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
         RtsGuardCombatSupport.lockCombatTarget(npc, target, commandBuffer);
         cmd.setPhase(RtsCommandPhase.TRAVELING);
         Role role = npc.getRole();
-        if (role != null && role.getStateSupport().getStateName().contains("Combat")) {
-            role.getMarkedEntitySupport().setMarkedEntity(RtsGuardCombatSupport.LOCKED_TARGET_SLOT, target);
+        if (role != null && NpcSupportUtil.stateName(ref.getStore(), ref).contains("Combat")) {
+            NpcSupportUtil.markedEntitySupport(ref, commandBuffer).setMarkedEntity(RtsGuardCombatSupport.LOCKED_TARGET_SLOT, target);
         }
         if (role != null) {
-            role.getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_GUARD_RTS_COMMAND, null, commandBuffer);
+            NpcSupportUtil.setState(ref, AetherhavenConstants.NPC_STATE_GUARD_RTS_COMMAND, null, commandBuffer);
         }
     }
 

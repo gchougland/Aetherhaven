@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.guild;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
@@ -451,7 +453,7 @@ public final class GuardHireService {
                 npc.setLeashPoint(GuardHireCleanup.patrolLeashPoint(store, guildPlot));
             }
             if (npc.getRole() != null) {
-                npc.getRole().getStateSupport().setState(guardRef, "Idle", null, store);
+                NpcSupportUtil.setState(guardRef, "Idle", null, store);
             }
         }
 

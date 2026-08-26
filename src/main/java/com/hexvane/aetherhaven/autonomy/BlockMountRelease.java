@@ -57,7 +57,8 @@ public final class BlockMountRelease {
             return null;
         }
         Ref<ChunkStore> deadSeatRef = clearBlockSeatSync(entityRef, mounted);
-        MountedComponent stub = new MountedComponent(null, mounted.getAttachmentOffset(), MountController.Minecart);
+        MountedComponent stub =
+            new MountedComponent(null, new org.joml.Vector3f(mounted.getAttachmentOffset()), MountController.Minecart);
         store.replaceComponent(entityRef, MountedComponent.getComponentType(), stub);
         return deadSeatRef;
     }

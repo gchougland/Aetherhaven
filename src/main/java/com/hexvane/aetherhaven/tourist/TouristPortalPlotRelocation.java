@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.tourist;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
@@ -88,7 +90,7 @@ public final class TouristPortalPlotRelocation {
             }
             Vector3i pos = record.getBlockPosition();
             // Only touch loaded chunks so we do not mis-classify unloaded portals.
-            if (world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z)) == null) {
+            if (ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z)) == null) {
                 continue;
             }
             // Portal type present but not the base cell => filler voxel from the 2-block portal.

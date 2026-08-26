@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.construction.assembly;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.construction.ConstructionCompleter;
@@ -1628,7 +1630,7 @@ public final class PlotAssemblyService {
     }
 
     private static boolean isChunkLoadedForWorldCell(@Nonnull World world, int wx, int wz) {
-        return world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(wx, wz)) != null;
+        return ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(wx, wz)) != null;
     }
 
     /** Appends world-space integer cells for every frontier placement (for previews / ray tests). */

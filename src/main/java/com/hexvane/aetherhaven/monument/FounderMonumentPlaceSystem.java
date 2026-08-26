@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.monument;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plot.FounderMonumentBlock;
@@ -115,7 +117,7 @@ public final class FounderMonumentPlaceSystem extends EntityEventSystem<EntitySt
         @Nonnull Vector3i pos,
         @Nonnull Rotation3f statueRotation
     ) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x(), pos.z()));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x(), pos.z()));
         if (chunk == null) {
             return;
         }

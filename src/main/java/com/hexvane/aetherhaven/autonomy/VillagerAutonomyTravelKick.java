@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.autonomy;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.poi.PoiEntry;
@@ -223,7 +225,7 @@ public final class VillagerAutonomyTravelKick {
                     autonomy.setNextDecisionEpochMs(now + 120_000L);
                     commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
                     commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
-                    npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_AUTONOMY_POI, null, commandBuffer);
+                    NpcSupportUtil.setState(ref, AetherhavenConstants.NPC_STATE_AUTONOMY_POI, null, commandBuffer);
                     commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
                     return true;
                 }

@@ -105,10 +105,8 @@ public final class VillagerCosmeticCatalog {
                     }
                 }
             }
-            // Folder prefixes count as their slot for strip/replace on base outfits.
-            headModels.add("Cosmetics/Head/");
-            faceModels.add("Cosmetics/Face_Accessories/");
-            backModels.add("Cosmetics/Back/");
+            // Do not treat every Cosmetics/Head|Face|Back path as a wardrobe slot. That strips authored
+            // DefaultAttachments (e.g. Mertie CowboyHat) whenever HeadAccessory is overridden or set to default.
             LOGGER.atInfo().log("Loaded %s villager cosmetic(s)", byId.size());
             return new VillagerCosmeticCatalog(
                 Collections.unmodifiableMap(byId),
@@ -179,15 +177,15 @@ public final class VillagerCosmeticCatalog {
     }
 
     public boolean isHeadAccessoryModel(@Nullable String modelPath) {
-        return matchesFolderOrKnown(modelPath, "Cosmetics/Head/", headAccessoryModelPaths);
+        return matchesKnownModel(modelPath, headAccessoryModelPaths);
     }
 
     public boolean isFaceAccessoryModel(@Nullable String modelPath) {
-        return matchesFolderOrKnown(modelPath, "Cosmetics/Face_Accessories/", faceAccessoryModelPaths);
+        return matchesKnownModel(modelPath, faceAccessoryModelPaths);
     }
 
     public boolean isBackAccessoryModel(@Nullable String modelPath) {
-        return matchesFolderOrKnown(modelPath, "Cosmetics/Back/", backAccessoryModelPaths);
+        return matchesKnownModel(modelPath, backAccessoryModelPaths);
     }
 
     public boolean belongsToSlot(@Nonnull String slot, @Nullable String modelPath) {
@@ -209,18 +207,12 @@ public final class VillagerCosmeticCatalog {
         return false;
     }
 
-    private static boolean matchesFolderOrKnown(
-        @Nullable String modelPath,
-        @Nonnull String folderPrefix,
-        @Nonnull Set<String> knownPaths
-    ) {
+    /** Only catalog-listed models — not whole Cosmetics/Head folders (those include default outfit hats). */
+    private static boolean matchesKnownModel(@Nullable String modelPath, @Nonnull Set<String> knownPaths) {
         if (modelPath == null || modelPath.isBlank()) {
             return false;
         }
         String path = modelPath.trim();
-        if (path.regionMatches(true, 0, folderPrefix, 0, folderPrefix.length())) {
-            return true;
-        }
         for (String known : knownPaths) {
             if (known.endsWith("/")) {
                 continue;

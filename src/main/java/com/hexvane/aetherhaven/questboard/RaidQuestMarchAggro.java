@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.questboard;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.rts.RtsGuardCombatSupport;
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
+import com.hypixel.hytale.server.npc.role.support.StateSupport;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -51,7 +53,13 @@ final class RaidQuestMarchAggro {
         if (role == null) {
             return false;
         }
-        return role.getStateSupport().getStateHelper().getStateIndex(AetherhavenConstants.NPC_STATE_RAID_MARCH) >= 0;
+        Ref<EntityStore> mobRef = npc.getReference();
+        if (mobRef == null) {
+            return false;
+        }
+        StateSupport stateSupport = NpcSupportUtil.stateSupport(mobRef.getStore(), mobRef);
+        return stateSupport != null
+            && stateSupport.getStateHelper().getStateIndex(AetherhavenConstants.NPC_STATE_RAID_MARCH) >= 0;
     }
 
     @Nullable
@@ -99,13 +107,17 @@ final class RaidQuestMarchAggro {
         if (role == null) {
             return;
         }
-        var helper = role.getStateSupport().getStateHelper();
+        StateSupport stateSupport = NpcSupportUtil.stateSupport(mobRef.getStore(), mobRef);
+        if (stateSupport == null) {
+            return;
+        }
+        var helper = stateSupport.getStateHelper();
         if (helper.getStateIndex("Combat") >= 0) {
-            role.getStateSupport().setState(mobRef, "Combat", null, commandBuffer);
+            NpcSupportUtil.setState(mobRef, "Combat", null, commandBuffer);
         } else if (helper.getStateIndex("Attack") >= 0) {
-            role.getStateSupport().setState(mobRef, "Attack", null, commandBuffer);
+            NpcSupportUtil.setState(mobRef, "Attack", null, commandBuffer);
         } else if (helper.getStateIndex("Alerted") >= 0) {
-            role.getStateSupport().setState(mobRef, "Alerted", null, commandBuffer);
+            NpcSupportUtil.setState(mobRef, "Alerted", null, commandBuffer);
         }
         commandBuffer.putComponent(mobRef, NPCEntity.getComponentType(), npc);
     }

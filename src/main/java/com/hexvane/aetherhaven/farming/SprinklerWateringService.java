@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.farming;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.plot.SprinklerBlock;
 import com.hexvane.aetherhaven.time.AetherhavenMorningWindow;
 import com.hexvane.aetherhaven.plot.SprinklerBlock;
 import com.hypixel.hytale.builtin.adventure.farming.states.TilledSoilBlock;
@@ -9,14 +11,19 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.modules.block.BlockEntity;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockComponentSection;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.ChunkSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.core.util.FillerBlockUtil;
+import org.joml.Vector3i;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashSet;
@@ -177,12 +184,10 @@ public final class SprinklerWateringService {
             return -1;
         }
         Instant wateredUntil = wtr.getGameTime().plus(WATER_DURATION_SECONDS, ChronoUnit.SECONDS);
-        long chunkIndex = ChunkUtil.indexChunkFromBlock(x, z);
-        WorldChunk chunk = world.getChunk(chunkIndex);
-        if (chunk == null) {
+        if (ChunkSectionBlockUtil.resolveTickingChunk(world, x, z) == null) {
             return -1;
         }
-        Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(x, y, z);
+        Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, x, y, z);
         Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
         SprinklerBlock sb = blockRef != null && blockRef.isValid()
             ? chunkStore.getComponent(blockRef, SprinklerBlock.getComponentType())
@@ -211,14 +216,23 @@ public final class SprinklerWateringService {
                 if (sb == null || bsi == null) {
                     continue;
                 }
-                WorldChunk columnChunk = commandBuffer.getComponent(bsi.getChunkRef(), WorldChunk.getComponentType());
+                Ref<ChunkStore> sectionRef = bsi.getSectionRef();
+                ChunkSection chunkSection = commandBuffer.getComponent(sectionRef, ChunkSection.getComponentType());
+                if (chunkSection == null) {
+                    continue;
+                }
+                Ref<ChunkStore> columnRef = chunkSection.getChunkColumnReference();
+                WorldChunk columnChunk =
+                    columnRef != null && columnRef.isValid()
+                        ? commandBuffer.getComponent(columnRef, WorldChunk.getComponentType())
+                        : null;
                 if (columnChunk == null) {
                     continue;
                 }
                 int index = bsi.getIndex();
-                int lx = ChunkUtil.xFromBlockInColumn(index);
-                int ly = ChunkUtil.yFromBlockInColumn(index);
-                int lz = ChunkUtil.zFromBlockInColumn(index);
+                int lx = ChunkUtil.xFromIndex(index);
+                int ly = ChunkUtil.yFromIndex(index);
+                int lz = ChunkUtil.zFromIndex(index);
                 int sx = lx + columnChunk.getX() * CHUNK_HORIZONTAL_BLOCK_SIZE;
                 int sy = ly;
                 int sz = lz + columnChunk.getZ() * CHUNK_HORIZONTAL_BLOCK_SIZE;
@@ -252,63 +266,85 @@ public final class SprinklerWateringService {
 
     /**
      * Ported from {@code UseWateringCanInteraction#waterBlockAt}, with the same extras as
-     * {@code com.hexvane.dragonlings.behaviors.BlueDragonlingWaterBehavior}: {@link BlockModule#ensureBlockEntity} when
+     * {@code com.hexvane.dragonlings.behaviors.BlueDragonlingWaterBehavior}: {@link BlockEntity#ensureBlockEntity} when
      * the block ECS entity is missing, and a default {@link TilledSoilBlock} when the block exists but the component was
      * never attached (dry farmland).
      */
-    @SuppressWarnings("deprecation")
     private static boolean waterBlockAt(@Nonnull World world, int x, int y, int z, @Nonnull Instant wateredUntil) {
-        long chunkIndex = ChunkUtil.indexChunkFromBlock(x, z);
-        WorldChunk worldChunk = world.getChunk(chunkIndex);
-        if (worldChunk == null) {
+        if (waterSoilCell(world, x, y, z, wateredUntil)) {
+            return true;
+        }
+        return waterSoilCell(world, x, y - 1, z, wateredUntil);
+    }
+
+    private static boolean waterSoilCell(
+        @Nonnull World world,
+        int x,
+        int y,
+        int z,
+        @Nonnull Instant wateredUntil
+    ) {
+        ChunkStore chunkStore = world.getChunkStore();
+        Store<ChunkStore> store = chunkStore.getStore();
+        Ref<ChunkStore> section = chunkStore.getChunkSectionReferenceAtBlock(x, y, z);
+        if (section == null || !section.isValid()) {
             return false;
         }
-        Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
-        Ref<ChunkStore> blockRef = worldChunk.getBlockComponentEntity(x, y, z);
-        if (blockRef == null) {
-            blockRef = BlockModule.ensureBlockEntity(worldChunk, x, y, z);
+        BlockSection blockSection = store.getComponent(section, BlockSection.getComponentType());
+        BlockComponentSection blockComponentSection =
+            store.getComponent(section, BlockComponentSection.getComponentType());
+        if (blockSection == null || blockComponentSection == null) {
+            return false;
         }
-
-        if (blockRef != null && blockRef.isValid()) {
-            TilledSoilBlock soil = chunkStore.getComponent(blockRef, TilledSoilBlock.getComponentType());
-            if (soil == null) {
-                BlockType bt = worldChunk.getBlockType(x, y, z);
-                if (bt != null && isFarmlandOrSoilBlock(bt)) {
-                    soil = new TilledSoilBlock(false, false, false, null, null);
-                    chunkStore.addComponent(blockRef, TilledSoilBlock.getComponentType(), soil);
-                }
-            }
-            if (soil != null) {
-                soil.setWateredUntil(wateredUntil);
-                worldChunk.setTicking(x, y, z, true);
-                scheduleBlockSectionTick(worldChunk, x, y, z, wateredUntil);
-                worldChunk.setTicking(x, y + 1, z, true);
-                return true;
+        int blockIndex = ChunkUtil.indexBlock(x, y, z);
+        if (blockSection.getFiller(blockIndex) != FillerBlockUtil.NO_FILLER) {
+            return false;
+        }
+        BlockType blockType = BlockType.getAssetMap().getAsset(blockSection.get(blockIndex));
+        if (blockType == null) {
+            return false;
+        }
+        Ref<ChunkStore> blockRef = blockComponentSection.getBlockReference(blockIndex);
+        if (blockRef == null || !blockRef.isValid()) {
+            blockRef =
+                BlockEntity.ensureBlockEntity(
+                    store,
+                    section,
+                    blockComponentSection,
+                    x,
+                    y,
+                    z,
+                    blockType,
+                    blockSection.getFiller(blockIndex)
+                );
+        }
+        if (blockRef == null || !blockRef.isValid()) {
+            return false;
+        }
+        TilledSoilBlock soil = store.getComponent(blockRef, TilledSoilBlock.getComponentType());
+        if (soil == null && isFarmlandOrSoilBlock(blockType)) {
+            soil = new TilledSoilBlock(false, false, false, null, null);
+            store.addComponent(blockRef, TilledSoilBlock.getComponentType(), soil);
+        }
+        if (soil == null) {
+            return false;
+        }
+        soil.setWateredUntil(wateredUntil);
+        blockComponentSection.markBlockNeedsSaving(blockIndex);
+        blockSection.setTicking(x, y, z, true);
+        blockSection.scheduleTick(blockIndex, wateredUntil);
+        if (ChunkUtil.chunkCoordinate(y) == ChunkUtil.chunkCoordinate(y + 1)) {
+            blockSection.setTicking(x, y + 1, z, true);
+            return true;
+        }
+        Ref<ChunkStore> aboveSection = chunkStore.getChunkSectionReferenceAtBlock(x, y + 1, z);
+        if (aboveSection != null && aboveSection.isValid()) {
+            BlockSection aboveBlockSection = store.getComponent(aboveSection, BlockSection.getComponentType());
+            if (aboveBlockSection != null) {
+                aboveBlockSection.setTicking(x, y + 1, z, true);
             }
         }
-
-        Ref<ChunkStore> soilBlockRef = worldChunk.getBlockComponentEntity(x, y - 1, z);
-        if (soilBlockRef == null) {
-            soilBlockRef = BlockModule.ensureBlockEntity(worldChunk, x, y - 1, z);
-        }
-        if (soilBlockRef != null && soilBlockRef.isValid()) {
-            TilledSoilBlock soil = chunkStore.getComponent(soilBlockRef, TilledSoilBlock.getComponentType());
-            if (soil == null) {
-                BlockType bt = worldChunk.getBlockType(x, y - 1, z);
-                if (bt != null && isFarmlandOrSoilBlock(bt)) {
-                    soil = new TilledSoilBlock(false, false, false, null, null);
-                    chunkStore.addComponent(soilBlockRef, TilledSoilBlock.getComponentType(), soil);
-                }
-            }
-            if (soil != null) {
-                soil.setWateredUntil(wateredUntil);
-                scheduleBlockSectionTick(worldChunk, x, y - 1, z, wateredUntil);
-                worldChunk.setTicking(x, y - 1, z, true);
-                worldChunk.setTicking(x, y, z, true);
-                return true;
-            }
-        }
-        return false;
+        return true;
     }
 
     /** Matches dragonlings farmland scan: tilled/farm soil or any block with {@link BlockType#getFarming()}. */
@@ -323,20 +359,4 @@ public final class SprinklerWateringService {
         return id.contains("Tilled") || id.contains("Farmland") || id.contains("Soil");
     }
 
-    /**
-     * Same as {@code UseWateringCanInteraction#waterBlockAt}: ticks are scheduled on the section's {@link
-     * com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection}. {@link
-     * com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk#getSectionAtBlockY(int)} is still the accessor
-     * vanilla uses until a non-deprecated entry point exists.
-     */
-    @SuppressWarnings("deprecation")
-    private static void scheduleBlockSectionTick(
-        @Nonnull WorldChunk worldChunk,
-        int x,
-        int y,
-        int z,
-        @Nonnull Instant when
-    ) {
-        worldChunk.getBlockChunk().getSectionAtBlockY(y).scheduleTick(ChunkUtil.indexBlock(x, y, z), when);
-    }
 }

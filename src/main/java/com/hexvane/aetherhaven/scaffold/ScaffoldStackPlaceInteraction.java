@@ -295,7 +295,6 @@ public final class ScaffoldStackPlaceInteraction extends SimpleInteraction {
         com.hypixel.hytale.protocol.PlaceBlockInteraction p = (com.hypixel.hytale.protocol.PlaceBlockInteraction) packet;
         p.blockId = this.blockTypeKey == null ? -1 : BlockType.getAssetMap().getIndex(this.blockTypeKey);
         p.removeItemInHand = this.removeItemInHand;
-        p.allowDragPlacement = this.allowDragPlacement;
     }
 
     @Override

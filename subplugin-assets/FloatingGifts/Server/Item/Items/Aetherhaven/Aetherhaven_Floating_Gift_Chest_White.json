@@ -33,9 +33,6 @@
       }
     ],
     "DrawType": "Model",
-    "Flags": {
-      "IsUsable": true
-    },
     "IgnoreSupportWhenPlaced": true,
     "Gathering": {
       "Breaking": {

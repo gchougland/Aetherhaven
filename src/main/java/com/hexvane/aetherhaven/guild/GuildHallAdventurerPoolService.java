@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.guild;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
@@ -659,7 +661,7 @@ public final class GuildHallAdventurerPoolService {
         if (pos == null) {
             pos = new Vector3i(plot.getSignX(), plot.getSignY(), plot.getSignZ());
         }
-        return world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z)) != null;
+        return ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z)) != null;
     }
 
     @Nullable

@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.construction.assembly;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -34,7 +36,7 @@ final class AssemblyStaffClearBreak {
     ) {
         // Must not use World.getBlockType: it can loadChunkIfInMemory while the entity store is ticking
         // (PlotAssemblyTickSystem), causing "Store is currently processing!".
-        WorldChunk worldChunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(cellWorld.x, cellWorld.z));
+        WorldChunk worldChunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(cellWorld.x, cellWorld.z));
         if (worldChunk == null) {
             return false;
         }
@@ -43,17 +45,11 @@ final class AssemblyStaffClearBreak {
             return false;
         }
         Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
-        long chunkIndex = ChunkUtil.indexChunkFromBlock(cellWorld.x, cellWorld.z);
-        Ref<ChunkStore> chunkRef = chunkStore.getExternalData().getChunkReference(chunkIndex);
-        if (chunkRef == null || !chunkRef.isValid()) {
-            return false;
-        }
         if (cellWorld.y < ChunkUtil.MIN_Y || cellWorld.y > ChunkUtil.HEIGHT_MINUS_1) {
             return false;
         }
-        Ref<ChunkStore> sectionRef = world.getChunkStore().getChunkSectionReferenceAtBlock(
-            cellWorld.x, cellWorld.y, cellWorld.z
-        );
+        Ref<ChunkStore> sectionRef =
+            world.getChunkStore().getChunkSectionReferenceAtBlock(cellWorld.x, cellWorld.y, cellWorld.z);
         if (sectionRef == null || !sectionRef.isValid()) {
             return false;
         }
@@ -63,6 +59,7 @@ final class AssemblyStaffClearBreak {
         }
         int filler = section.getFiller(cellWorld.x, cellWorld.y, cellWorld.z);
         DropInfo drops = resolveDrops(blockType);
+        // Must pass the section entity ref — column refs have no BlockSection component.
         BlockHarvestUtils.naturallyRemoveBlock(
             cellWorld,
             blockType,
@@ -71,7 +68,7 @@ final class AssemblyStaffClearBreak {
             drops.itemId,
             drops.dropListId,
             NATURAL_BREAK_SETTINGS,
-            chunkRef,
+            sectionRef,
             entityAccessor,
             chunkStore
         );

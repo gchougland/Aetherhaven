@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.pathtool;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.debug.DebugLineCylinderUtil;
 import com.hypixel.hytale.math.matrix.Matrix4dUtil;
 import org.joml.Vector3d;
@@ -18,8 +20,8 @@ import org.joml.Matrix4d;
  * Path nodes: solid spheres and spline in white; yaw handle is a light segment.
  */
 public final class PathDebugPreviewUtil {
-    public static final int FLAG_FADE = 1 << DebugFlags.Fade.getValue();
-    private static final int FLAG_NO_WIREFRAME = 1 << DebugFlags.NoWireframe.getValue();
+    public static final int FLAG_FADE = DebugFlags.Fade;
+    private static final int FLAG_NO_WIREFRAME = DebugFlags.NoWireframe;
     public static final int FLAG_MACHINIMA = FLAG_FADE | FLAG_NO_WIREFRAME;
     /** Solid overlay without fade (less “pulsing” when shapes are refreshed). */
     public static final int FLAG_SOLID_OVERLAY = FLAG_NO_WIREFRAME;
@@ -222,7 +224,7 @@ public final class PathDebugPreviewUtil {
     }
 
     public static void drawPlannedBlock(@Nonnull PlayerRef pr, int x, int y, int z, @Nonnull Vector3f color, @Nonnull com.hypixel.hytale.server.core.universe.world.World w) {
-        if (w.getChunkIfInMemory(com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(x, z)) == null) {
+        if (ChunkSectionBlockUtil.worldChunkIfInMemory(w, com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(x, z)) == null) {
             return;
         }
         double cx = x + 0.5;
@@ -252,7 +254,7 @@ public final class PathDebugPreviewUtil {
         @Nonnull com.hypixel.hytale.server.core.universe.world.World w,
         double grow01
     ) {
-        if (w.getChunkIfInMemory(com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(x, z)) == null) {
+        if (ChunkSectionBlockUtil.worldChunkIfInMemory(w, com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(x, z)) == null) {
             return;
         }
         double g = Math.min(1.0, Math.max(0.0, grow01));
@@ -289,7 +291,7 @@ public final class PathDebugPreviewUtil {
         @Nonnull com.hypixel.hytale.server.core.universe.world.World w,
         double grow01
     ) {
-        if (w.getChunkIfInMemory(com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(x, z)) == null) {
+        if (ChunkSectionBlockUtil.worldChunkIfInMemory(w, com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(x, z)) == null) {
             return;
         }
         double g = Math.min(1.0, Math.max(0.0, grow01));

@@ -4,6 +4,10 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.entity.EntityPresenceUtil.EntityPresence;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.role.support.StateSupport;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.Locale;
 import java.util.UUID;
@@ -198,15 +202,21 @@ public final class RaidQuestMarchDebugLog {
         if (npc.getRole() == null) {
             return "marchState=none hasRaidMarchState=false";
         }
+        Ref<EntityStore> npcRef = npc.getReference();
+        if (npcRef == null) {
+            return "marchState=none hasRaidMarchState=false";
+        }
         String marchState = RaidQuestMarchUtil.resolveMarchState(npc);
-        int raidMarchIdx =
-            npc.getRole().getStateSupport().getStateHelper().getStateIndex(AetherhavenConstants.NPC_STATE_RAID_MARCH);
+        StateSupport stateSupport = NpcSupportUtil.stateSupport(npcRef.getStore(), npcRef);
+        int raidMarchIdx = stateSupport != null
+            ? stateSupport.getStateHelper().getStateIndex(AetherhavenConstants.NPC_STATE_RAID_MARCH)
+            : -1;
         return String.format(
             Locale.ROOT,
             "marchState=%s hasRaidMarchState=%s activeState=%s",
             marchState != null ? marchState : "none",
             raidMarchIdx >= 0,
-            npc.getRole().getStateSupport().getStateName()
+            NpcSupportUtil.stateName(npcRef.getStore(), npcRef)
         );
     }
 

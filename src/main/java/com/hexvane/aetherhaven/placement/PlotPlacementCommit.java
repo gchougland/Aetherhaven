@@ -1,5 +1,8 @@
 package com.hexvane.aetherhaven.placement;
 
+import com.hexvane.aetherhaven.pathtool.PathCementService;
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
@@ -16,7 +19,7 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.modules.block.BlockEntity;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockComponentChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockComponentSection;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -74,7 +77,7 @@ public final class PlotPlacementCommit {
         @Nonnull String constructionId,
         @Nonnull UUID plotId
     ) {
-        WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(x, z));
+        WorldChunk chunk = ChunkSectionBlockUtil.resolveTickingChunk(world, x, z);
         if (chunk == null) {
             return false;
         }
@@ -86,21 +89,21 @@ public final class PlotPlacementCommit {
         int rotationIndex = rt.index();
         // validatePlacement=false: replace existing blocks/fluids at the anchor (same idea as paste replacing voxels).
         boolean ok =
-            chunk.placeBlock(x, y, z, AetherhavenConstants.PLOT_SIGN_ITEM_ID, rt, PLACE_SETTINGS, false);
+            PathCementService.placePathBlock(world, x, y, z, AetherhavenConstants.PLOT_SIGN_ITEM_ID, rotationIndex, PLACE_SETTINGS);
         if (!ok) {
             return false;
         }
         chunk.setTicking(x, y, z, true);
 
-        BlockComponentChunk blockComponentChunk = chunk.getBlockComponentChunk();
-        if (blockComponentChunk == null) {
+        BlockComponentSection blockComponentSection = ChunkSectionBlockUtil.blockComponentSectionAt(world, x, y, z);
+        if (blockComponentSection == null) {
             world.breakBlock(x, y, z, PLACE_SETTINGS);
             return false;
         }
 
         String plotIdStr = plotId.toString();
         if (!attachPlotSignBlockEntity(
-            world, chunk, blockComponentChunk, x, y, z, blockType, rotationIndex, constructionId, plotIdStr
+            world, chunk, blockComponentSection, x, y, z, blockType, rotationIndex, constructionId, plotIdStr
         )) {
             world.breakBlock(x, y, z, PLACE_SETTINGS);
             return false;
@@ -115,7 +118,7 @@ public final class PlotPlacementCommit {
     private static boolean attachPlotSignBlockEntity(
         @Nonnull World world,
         @Nonnull WorldChunk chunk,
-        @Nonnull BlockComponentChunk blockComponentChunk,
+        @Nonnull BlockComponentSection blockComponentSection,
         int x,
         int y,
         int z,
@@ -135,14 +138,14 @@ public final class PlotPlacementCommit {
             holder.putComponent(
                 PlotSignBlock.getComponentType(), new PlotSignBlock(constructionId, plotIdStr)
             );
-            Ref<ChunkStore> chunkRef = chunk.getReference();
-            if (chunkRef == null || world.getChunkStore() == null) {
+            Ref<ChunkStore> sectionRef = ChunkSectionBlockUtil.sectionRefAt(world, x, y, z);
+            if (sectionRef == null || !sectionRef.isValid() || world.getChunkStore() == null) {
                 return false;
             }
             BlockEntity.setBlockEntity(
                 world.getChunkStore().getStore(),
-                chunkRef,
-                blockComponentChunk,
+                sectionRef,
+                blockComponentSection,
                 x,
                 y,
                 z,
@@ -186,12 +189,12 @@ public final class PlotPlacementCommit {
         String plotIdStr = plot.getPlotId().toString();
         Rotation yaw = plot.resolvePrefabYaw();
 
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (chunk == null) {
             return LinkRepairResult.SKIPPED_CHUNK_UNLOADED;
         }
 
-        BlockType atType = world.getBlockType(x, y, z);
+        BlockType atType = ChunkSectionBlockUtil.blockType(world, x, y, z);
         boolean blockIsSign =
             atType != null && AetherhavenConstants.PLOT_SIGN_ITEM_ID.equals(atType.getId());
 
@@ -200,8 +203,8 @@ public final class PlotPlacementCommit {
                 return LinkRepairResult.ALREADY_OK;
             }
             BlockType blockType = atType;
-            BlockComponentChunk blockComponentChunk = chunk.getBlockComponentChunk();
-            if (blockComponentChunk == null) {
+            BlockComponentSection blockComponentSection = ChunkSectionBlockUtil.blockComponentSectionAt(world, x, y, z);
+            if (blockComponentSection == null) {
                 LOGGER.atWarning().log(
                     "Plot sign link repair failed at %s,%s,%s plot=%s (no block component chunk)",
                     x,
@@ -214,7 +217,7 @@ public final class PlotPlacementCommit {
             if (!attachPlotSignBlockEntity(
                 world,
                 chunk,
-                blockComponentChunk,
+                blockComponentSection,
                 x,
                 y,
                 z,

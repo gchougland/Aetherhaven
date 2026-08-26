@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.rts;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
 import com.hexvane.aetherhaven.patrol.GuardCombatClock;
 import com.hexvane.aetherhaven.patrol.GuardNpcAttackerMemory;
 import com.hexvane.aetherhaven.patrol.GuardPlayerProvokedTargets;
@@ -397,9 +398,7 @@ public final class RtsHostileQuery {
         if (npc == null || npc.getRole() == null) {
             return false;
         }
-        Ref<EntityStore> locked = npc.getRole()
-            .getMarkedEntitySupport()
-            .getMarkedEntityRef(RtsGuardCombatSupport.LOCKED_TARGET_SLOT);
+        Ref<EntityStore> locked = NpcSupportUtil.markedEntitySupport(npcRef, store).getMarkedEntityRef(RtsGuardCombatSupport.LOCKED_TARGET_SLOT);
         return targetRef.equals(locked);
     }
 
@@ -567,7 +566,7 @@ public final class RtsHostileQuery {
         if (observer == null || observer.getRole() == null) {
             return false;
         }
-        return observer.getRole().getPositionCache().hasLineOfSight(observerRef, targetRef, store);
+        return NpcSupportUtil.positionCache(observerRef, store).hasLineOfSight(observerRef, targetRef, store);
     }
 
     @Nullable

@@ -1,11 +1,14 @@
 package com.hexvane.aetherhaven.rts;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.role.support.StateSupport;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.ArrayList;
 import java.util.List;
@@ -131,14 +134,23 @@ public final class RtsOrderService {
             if (guardTc != null && withinHorizontalRange(guardTc.getPosition(), targetPos, engageRange * 1.25)) {
                 cmd.setPhase(RtsCommandPhase.ENGAGING);
                 RtsGuardCombatSupport.lockCombatTarget(guardNpc, targetRef, accessor);
-                guardNpc.getRole().getStateSupport().setState(guardRef, "Combat", null, accessor);
+                StateSupport stateSupport = NpcSupportUtil.stateSupport(store, guardRef);
+                if (stateSupport != null) {
+                    stateSupport.setState(guardRef, "Combat", null, accessor);
+                }
             } else {
                 cmd.setPhase(RtsCommandPhase.TRAVELING);
                 RtsGuardCombatSupport.lockCombatTarget(guardNpc, targetRef, accessor);
                 guardNpc.setLeashPoint(new Vector3d(cmd.getHoldX(), cmd.getHoldY(), cmd.getHoldZ()));
-                guardNpc.getRole()
-                    .getStateSupport()
-                    .setState(guardRef, AetherhavenConstants.NPC_STATE_GUARD_RTS_COMMAND, null, accessor);
+                StateSupport rtsStateSupport = NpcSupportUtil.stateSupport(store, guardRef);
+                if (rtsStateSupport != null) {
+                    rtsStateSupport.setState(
+                        guardRef,
+                        AetherhavenConstants.NPC_STATE_GUARD_RTS_COMMAND,
+                        null,
+                        accessor
+                    );
+                }
             }
             accessor.putComponent(guardRef, GuardRtsCommandState.getComponentType(), cmd);
             accessor.putComponent(guardRef, NPCEntity.getComponentType(), guardNpc);

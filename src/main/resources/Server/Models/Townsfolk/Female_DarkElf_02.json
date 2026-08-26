@@ -74,10 +74,6 @@
     {
       "Model": "Cosmetics/Shoes/BootsBasic.blockymodel",
       "Texture": "Cosmetics/Shoes/BootsBasic_Textures/Scavenger_Leather.png"
-    },
-    {
-      "Model": "Cosmetics/Head/SilverHoopsBead.blockymodel",
-      "Texture": "Cosmetics/Head/SilverHoopsBead_Textures/Purple+Violet+Lime.png"
     }
   ],
   "Icon": "Icons/ModelsGenerated/Female_DarkElf_02.png",

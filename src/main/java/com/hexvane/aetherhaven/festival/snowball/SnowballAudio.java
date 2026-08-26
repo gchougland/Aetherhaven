@@ -26,7 +26,7 @@ import org.joml.Vector3d;
 
 /** Battle of Glory forced music for players near an active snowball fight. */
 public final class SnowballAudio {
-    public static final String MUSIC_BATTLE = "Track_Aetherhaven_Snowball_Battle_of_Glory";
+    public static final String MUSIC_BATTLE = "Track_Aetherhaven_Snowball_Battle_Of_Glory";
 
     private static final double AUDIO_RADIUS = 56.0;
 

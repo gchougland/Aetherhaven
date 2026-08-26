@@ -1,7 +1,11 @@
 package com.hexvane.aetherhaven.town;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.chunk.ChunkFlag;
+import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import javax.annotation.Nonnull;
 
 /** True when every chunk column overlapping a plot footprint is loaded in memory. */
@@ -21,7 +25,7 @@ public final class PlotFootprintChunkUtil {
             for (int cz = minChunkZ; cz <= maxChunkZ; cz++) {
                 int bx = cx * 16 + 8;
                 int bz = cz * 16 + 8;
-                world.getChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
+                ChunkSectionBlockUtil.resolveTickingChunk(world, bx, bz);
             }
         }
     }
@@ -39,7 +43,7 @@ public final class PlotFootprintChunkUtil {
             for (int cz = minChunkZ; cz <= maxChunkZ; cz++) {
                 int bx = cx * 16 + 8;
                 int bz = cz * 16 + 8;
-                if (world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(bx, bz)) == null) {
+                if (ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(bx, bz)) == null) {
                     return false;
                 }
             }
@@ -62,7 +66,7 @@ public final class PlotFootprintChunkUtil {
             for (int cz = minChunkZ; cz <= maxChunkZ; cz++) {
                 int bx = cx * 16 + 8;
                 int bz = cz * 16 + 8;
-                if (world.getChunkIfLoaded(ChunkUtil.indexChunkFromBlock(bx, bz)) == null) {
+                if (ChunkSectionBlockUtil.worldChunkIfTicking(world, bx, bz) == null) {
                     return false;
                 }
             }
@@ -74,7 +78,7 @@ public final class PlotFootprintChunkUtil {
     public static boolean isPlotSignChunkLoaded(@Nonnull World world, @Nonnull PlotInstance plot) {
         int x = plot.getSignX();
         int z = plot.getSignZ();
-        return world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z)) != null;
+        return ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z)) != null;
     }
 
     /** Full footprint for completed builds; plot sign chunk only while still blueprinting. */

@@ -1,5 +1,10 @@
 package com.hexvane.aetherhaven.festival.carnival;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+import com.hypixel.hytale.server.core.universe.world.chunk.BlockOperations;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
+import com.hypixel.hytale.server.core.util.FillerBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.festival.FestivalDefinition;
@@ -59,6 +64,23 @@ public final class CarnivalWheelPlacementService {
     private static final double FACE_FORWARD = -0.38 - (1.0 / 32.0);
 
     private CarnivalWheelPlacementService() {}
+    private static boolean placeWheelBlock(@Nonnull World world, int bx, int by, int bz, @Nonnull RotationTuple rt) {
+        BlockType wheelType = BlockType.getAssetMap().getAsset(CarnivalIds.WHEEL_BLOCK_ID);
+        if (wheelType == null) {
+            return false;
+        }
+        BlockSection section = ChunkSectionBlockUtil.blockSectionAt(world, bx, by, bz);
+        if (section == null) {
+            return false;
+        }
+        int rot = rt.index();
+        var chunkStore = world.getChunkStore().getStore();
+        if (!BlockOperations.testPlaceBlock(chunkStore, section, bx, by, bz, wheelType, rot)) {
+            return false;
+        }
+        int index = BlockType.getAssetMap().getIndex(CarnivalIds.WHEEL_BLOCK_ID);
+        return ChunkSectionBlockUtil.setBlock(world, bx, by, bz, index, wheelType, rot, FillerBlockUtil.NO_FILLER, PLACE_SETTINGS);
+    }
 
     public static void place(
         @Nonnull World world,
@@ -92,12 +114,11 @@ public final class CarnivalWheelPlacementService {
         // Prefab spots rotate with the plot; facing must use the same world yaw as the pasted wall.
         Rotation yaw = worldWheelRotation(festivalPlot, wheel.getYawDegrees());
         RotationTuple rt = RotationTuple.of(yaw, Rotation.None, Rotation.None);
-        WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
-        if (chunk == null) {
+        if (ChunkSectionBlockUtil.resolveTickingChunk(world, bx, bz) == null) {
             LOGGER.atWarning().log("Carnival wheel chunk not loaded at %s %s %s", bx, by, bz);
             return;
         }
-        if (!chunk.placeBlock(bx, by, bz, CarnivalIds.WHEEL_BLOCK_ID, rt, PLACE_SETTINGS, false)) {
+        if (!placeWheelBlock(world, bx, by, bz, rt)) {
             LOGGER.atWarning().log("Carnival wheel placeBlock failed at %s %s %s", bx, by, bz);
         }
 
@@ -158,7 +179,7 @@ public final class CarnivalWheelPlacementService {
 
     /**
      * Rebinds the in-memory session to a live wheel-face entity after restart (session UUIDs are not saved). Does not
-     * spawn, delete, or mutate Store components — PropComponent / NetworkId repair happens in
+     * spawn, delete, or mutate Store components Ã¢â‚¬â€ PropComponent / NetworkId repair happens in
      * {@link CarnivalWheelSystem} via CommandBuffer.
      */
     public static void bindSessionToLiveFace(@Nonnull World world, @Nonnull UUID townId) {
@@ -264,13 +285,8 @@ public final class CarnivalWheelPlacementService {
         }
         face.setRoll(roll);
         Rotation3f rot = new Rotation3f(0f, face.getBaseYaw(), roll);
-        Ref<com.hypixel.hytale.server.core.universe.world.storage.ChunkStore> chunkRef = transform.getChunkRef();
-        @SuppressWarnings({ "deprecation", "removal" })
-        WorldChunk chunk = transform.getChunk();
         TransformComponent updated = new TransformComponent(transform.getPosition(), rot);
-        if (chunkRef != null) {
-            updated.setChunkLocation(chunkRef, chunk);
-        }
+        updated.setSectionLocation(transform.getSectionRef());
         store.putComponent(ref, TransformComponent.getComponentType(), updated);
         if (head != null) {
             head.teleportRotation(rot);
@@ -396,7 +412,7 @@ public final class CarnivalWheelPlacementService {
         );
         holder.addComponent(BoundingBox.getComponentType(), new BoundingBox(FACE_BOX));
         holder.addComponent(NetworkId.getComponentType(), new NetworkId(store.getExternalData().takeNextNetworkId()));
-        // Required so NetworkId is reassigned after chunk load — without this the face saves but looks gone.
+        // Required so NetworkId is reassigned after chunk load Ã¢â‚¬â€ without this the face saves but looks gone.
         holder.addComponent(PropComponent.getComponentType(), PropComponent.get());
         holder.addComponent(Velocity.getComponentType(), new Velocity());
         holder.addComponent(UUIDComponent.getComponentType(), new UUIDComponent(entityUuid));
@@ -424,9 +440,9 @@ public final class CarnivalWheelPlacementService {
                     int x = bx + dx;
                     int y = by + dy;
                     int z = bz + dz;
-                    BlockType type = world.getBlockType(x, y, z);
+                    BlockType type = ChunkSectionBlockUtil.blockType(world, x, y, z);
                     if (type != null && CarnivalIds.WHEEL_BLOCK_ID.equals(type.getId())) {
-                        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+                        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
                         if (chunk != null) {
                             chunk.setBlock(x, y, z, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, PLACE_SETTINGS);
                         }

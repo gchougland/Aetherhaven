@@ -331,22 +331,5 @@
       "level": 0
     }
   ],
-  "entities": [
-    {
-      "Components": {
-        "Transform": {
-          "Position": {
-            "X": -9.0,
-            "Y": 6.5,
-            "Z": 10.0
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 0.0,
-            "Roll": 0.0
-          }
-        }
-      }
-    }
-  ]
+  "entities": []
 }

@@ -26,8 +26,15 @@ public final class NpcStandStill {
         if (npc.getRole() == null) {
             return false;
         }
-        return npc.getRole().getStateSupport().getStateHelper().getStateIndex(AetherhavenConstants.NPC_STATE_STAND_STILL)
-            >= 0;
+        Ref<EntityStore> ref = npc.getReference();
+        if (ref == null) {
+            return false;
+        }
+        StateSupport stateSupport = NpcSupportUtil.stateSupport(ref.getStore(), ref);
+        if (stateSupport == null) {
+            return false;
+        }
+        return stateSupport.getStateHelper().getStateIndex(AetherhavenConstants.NPC_STATE_STAND_STILL) >= 0;
     }
 
     /**
@@ -86,7 +93,10 @@ public final class NpcStandStill {
         if (npc.getRole() == null) {
             return;
         }
-        StateSupport stateSupport = npc.getRole().getStateSupport();
+        StateSupport stateSupport = NpcSupportUtil.stateSupport(ref.getStore(), ref);
+        if (stateSupport == null) {
+            return;
+        }
         int standStill = stateSupport.getStateHelper().getStateIndex(AetherhavenConstants.NPC_STATE_STAND_STILL);
         if (standStill >= 0 && stateSupport.inState(standStill)) {
             stateSupport.setState(ref, "Idle", null, commandBuffer);
@@ -182,7 +192,10 @@ public final class NpcStandStill {
         @Nonnull NPCEntity npc,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
-        StateSupport stateSupport = npc.getRole().getStateSupport();
+        StateSupport stateSupport = NpcSupportUtil.stateSupport(ref.getStore(), ref);
+        if (stateSupport == null) {
+            return;
+        }
         int standStill = stateSupport.getStateHelper().getStateIndex(AetherhavenConstants.NPC_STATE_STAND_STILL);
         if (standStill >= 0 && stateSupport.inState(standStill)) {
             return;

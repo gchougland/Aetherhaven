@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.npc;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -54,7 +56,7 @@ public final class NpcDialogueCleanup {
                     return;
                 }
                 try {
-                    npc.getRole().getStateSupport().setState(npcRef, INTERACTION_STATE, null, store);
+                    NpcSupportUtil.setState(npcRef, INTERACTION_STATE, null, store);
                 } catch (Exception e) {
                     LOGGER.atWarning().withCause(e).log("Failed to set NPC to $Interaction for dialogue");
                 }
@@ -89,7 +91,7 @@ public final class NpcDialogueCleanup {
                 }
                 try {
                     NpcFaceVisuals.clearDialogueFace(npcRef, store);
-                    npc.getRole().getStateSupport().setState(npcRef, "Idle", null, store);
+                    NpcSupportUtil.setState(npcRef, "Idle", null, store);
                 } catch (Exception e) {
                     LOGGER.atWarning().withCause(e).log("Failed to reset NPC to Idle after dialogue");
                 }

@@ -1,5 +1,10 @@
 package com.hexvane.aetherhaven.pathtool;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+import com.hypixel.hytale.server.core.universe.world.chunk.BlockOperations;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
+import com.hypixel.hytale.server.core.util.FillerBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.config.PathToolStyleDefinition;
@@ -31,6 +36,30 @@ public final class PathCementService {
     private static final RotationTuple FLAT = RotationTuple.NONE;
 
     private PathCementService() {}
+    public static boolean placePathBlock(
+        @Nonnull World world,
+        int x,
+        int y,
+        int z,
+        @Nonnull String blockTypeKey,
+        int rotationIndex,
+        int settings
+    ) {
+        BlockType blockType = BlockType.getAssetMap().getAsset(blockTypeKey);
+        if (blockType == null) {
+            return false;
+        }
+        BlockSection section = ChunkSectionBlockUtil.blockSectionAt(world, x, y, z);
+        if (section == null) {
+            return false;
+        }
+        var chunkStore = world.getChunkStore().getStore();
+        if (!BlockOperations.testPlaceBlock(chunkStore, section, x, y, z, blockType, rotationIndex)) {
+            return false;
+        }
+        return ChunkSectionBlockUtil.setBlockByKey(world, x, y, z, blockTypeKey, settings);
+    }
+
 
     @Nullable
     public static PathCommitRecord tryCement(
@@ -78,7 +107,7 @@ public final class PathCementService {
             int x = p.pos.x();
             int y = p.pos.y();
             int z = p.pos.z();
-            WorldChunk ch = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+            WorldChunk ch = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
             if (ch == null) {
                 continue;
             }
@@ -93,7 +122,7 @@ public final class PathCementService {
             }
             int oldRot = chunkRotationIndex(ch, x, y, z);
             String placeId = pickPlaceId(p.lateralIndex, random, pathStyleIndex, pathWidthBlocks, cfg);
-            if (!ch.placeBlock(x, y, z, placeId, FLAT, PLACE, false)) {
+            if (!placePathBlock(world, x, y, z, placeId, RotationTuple.NONE_INDEX, PLACE)) {
                 continue;
             }
             PathToolUndoCell u = new PathToolUndoCell();
@@ -220,7 +249,7 @@ public final class PathCementService {
             if (alreadyCleared.contains(k)) {
                 continue;
             }
-            WorldChunk ch = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+            WorldChunk ch = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
             if (ch == null) {
                 break;
             }

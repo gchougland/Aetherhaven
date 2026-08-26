@@ -1,5 +1,10 @@
 package com.hexvane.aetherhaven.pathtool;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+import com.hypixel.hytale.server.core.universe.world.chunk.BlockOperations;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
+import com.hypixel.hytale.server.core.util.FillerBlockUtil;
+
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.config.PathToolStyleDefinition;
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -66,11 +71,11 @@ public final class PathRestyleService {
                 ? cell.lateralIndex
                 : inferLateral(cell.x, cell.z, rec.navNodes, width);
             String placeId = PathCementService.pickPlaceId(lateral, random, pathStyleIndex, width, cfg);
-            WorldChunk ch = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(cell.x, cell.z));
+            WorldChunk ch = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(cell.x, cell.z));
             if (ch == null) {
                 continue;
             }
-            if (!ch.placeBlock(cell.x, cell.y, cell.z, placeId, FLAT, PLACE, false)) {
+            if (!PathCementService.placePathBlock(world, cell.x, cell.y, cell.z, placeId, RotationTuple.NONE_INDEX, PLACE)) {
                 continue;
             }
             ok++;
@@ -99,7 +104,7 @@ public final class PathRestyleService {
             if (u == null) {
                 continue;
             }
-            WorldChunk ch = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(u.x, u.z));
+            WorldChunk ch = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(u.x, u.z));
             if (ch == null) {
                 continue;
             }

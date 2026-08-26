@@ -7,7 +7,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.EntityChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.EntitySection;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import java.util.ArrayList;
@@ -100,40 +100,40 @@ public final class PendingEntityRemovalService {
         boolean removed = false;
         TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
         if (transform != null) {
-            Ref<ChunkStore> chunkRef = transform.getChunkRef();
-            if (chunkRef != null && chunkRef.isValid()) {
-                removed = removeEntityReferenceFromChunk(world, chunkRef, ref);
+            Ref<ChunkStore> sectionRef = transform.getSectionRef();
+            if (sectionRef != null && sectionRef.isValid()) {
+                removed = removeEntityReferenceFromSection(world, sectionRef, ref);
             }
         }
         if (!removed) {
-            removeEntityReferenceFromLoadedChunks(world, ref);
+            removeEntityReferenceFromLoadedSections(world, ref);
         }
     }
 
-    private static boolean removeEntityReferenceFromChunk(
-        @Nonnull World world, @Nonnull Ref<ChunkStore> chunkRef, @Nonnull Ref<EntityStore> ref
+    private static boolean removeEntityReferenceFromSection(
+        @Nonnull World world, @Nonnull Ref<ChunkStore> sectionRef, @Nonnull Ref<EntityStore> ref
     ) {
         Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
-        EntityChunk entityChunk = chunkStore.getComponent(chunkRef, EntityChunk.getComponentType());
-        if (entityChunk == null || !entityChunk.getEntityReferences().contains(ref)) {
+        EntitySection entitySection = chunkStore.getComponent(sectionRef, EntitySection.getComponentType());
+        if (entitySection == null || !entitySection.getEntityReferences().contains(ref)) {
             return false;
         }
-        entityChunk.removeEntityReference(ref);
+        entitySection.removeEntityReference(ref);
         return true;
     }
 
-    /** Fallback when {@link TransformComponent#getChunkRef()} was cleared (e.g. transform replaced without chunk linkage). */
-    private static void removeEntityReferenceFromLoadedChunks(@Nonnull World world, @Nonnull Ref<EntityStore> ref) {
+    /** Fallback when {@link TransformComponent#getSectionRef()} was cleared (e.g. transform replaced without chunk linkage). */
+    private static void removeEntityReferenceFromLoadedSections(@Nonnull World world, @Nonnull Ref<EntityStore> ref) {
         Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
         chunkStore.forEachChunk(
-            EntityChunk.getComponentType(),
+            EntitySection.getComponentType(),
             (archetypeChunk, commandBuffer) -> {
                 for (int i = 0; i < archetypeChunk.size(); i++) {
-                    Ref<ChunkStore> chunkRef = archetypeChunk.getReferenceTo(i);
-                    if (chunkRef == null || !chunkRef.isValid()) {
+                    Ref<ChunkStore> sectionRef = archetypeChunk.getReferenceTo(i);
+                    if (sectionRef == null || !sectionRef.isValid()) {
                         continue;
                     }
-                    removeEntityReferenceFromChunk(world, chunkRef, ref);
+                    removeEntityReferenceFromSection(world, sectionRef, ref);
                 }
             }
         );
@@ -142,18 +142,18 @@ public final class PendingEntityRemovalService {
     /** Drops invalidated entity refs so chunk serialization never sees them. */
     static void pruneInvalidEntityReferences(@Nonnull Store<ChunkStore> chunkStore) {
         chunkStore.forEachChunk(
-            EntityChunk.getComponentType(),
+            EntitySection.getComponentType(),
             (archetypeChunk, commandBuffer) -> {
                 for (int i = 0; i < archetypeChunk.size(); i++) {
-                    Ref<ChunkStore> chunkRef = archetypeChunk.getReferenceTo(i);
-                    if (chunkRef == null || !chunkRef.isValid()) {
+                    Ref<ChunkStore> sectionRef = archetypeChunk.getReferenceTo(i);
+                    if (sectionRef == null || !sectionRef.isValid()) {
                         continue;
                     }
-                    EntityChunk entityChunk = chunkStore.getComponent(chunkRef, EntityChunk.getComponentType());
-                    if (entityChunk == null) {
+                    EntitySection entitySection = chunkStore.getComponent(sectionRef, EntitySection.getComponentType());
+                    if (entitySection == null) {
                         continue;
                     }
-                    Set<Ref<EntityStore>> entityReferences = entityChunk.getEntityReferences();
+                    Set<Ref<EntityStore>> entityReferences = entitySection.getEntityReferences();
                     if (entityReferences.isEmpty()) {
                         continue;
                     }
@@ -168,7 +168,7 @@ public final class PendingEntityRemovalService {
                     }
                     if (stale != null) {
                         for (Ref<EntityStore> entityRef : stale) {
-                            entityChunk.removeEntityReference(entityRef);
+                            entitySection.removeEntityReference(entityRef);
                         }
                     }
                 }

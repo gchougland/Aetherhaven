@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.tourist;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
@@ -1013,7 +1015,7 @@ public final class TouristPortalTickService {
 
     private static boolean isPortalChunkLoaded(@Nonnull World world, @Nonnull TouristPortalRecord portal) {
         Vector3i pos = portal.getBlockPosition();
-        return world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z)) != null;
+        return ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z)) != null;
     }
 
     private static void releaseStaleTouristPoolCheckouts(

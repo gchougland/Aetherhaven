@@ -37,8 +37,8 @@
       "localY": 0,
       "localZ": -2,
       "tags": [
-        "WORK",
-        "workActivity:read"
+        "workActivity:read",
+        "WORK"
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
@@ -96,5 +96,22 @@
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_market_stall.displayName",
-  "styleId": "core"
+  "styleId": "core",
+  "frontFacing": "North",
+  "tags": [
+    "shop",
+    "work"
+  ],
+  "boundsLocal": {
+    "min": [
+      -5,
+      0,
+      -7
+    ],
+    "max": [
+      6,
+      9,
+      6
+    ]
+  }
 }

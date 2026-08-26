@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.shop;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
@@ -59,7 +61,7 @@ public final class ShopSafeUseInteraction extends SimpleBlockInteraction {
             return;
         }
         Store<EntityStore> store = commandBuffer.getStore();
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(targetBlock.x, targetBlock.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(targetBlock.x, targetBlock.z));
         if (chunk == null) {
             context.getState().state = InteractionState.Failed;
             return;

@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.shopspot;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -297,7 +299,7 @@ public final class ShopSpotDisplayService {
 
     /** Avoids spawning floating item props before the stall column is in memory (see vanilla {@code UpdateLocationSystems}). */
     static boolean isSpotChunkLoaded(@Nonnull World world, @Nonnull ShopSpotRecord record) {
-        return world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(record.getBlockX(), record.getBlockZ())) != null;
+        return ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(record.getBlockX(), record.getBlockZ())) != null;
     }
 
     @Nonnull

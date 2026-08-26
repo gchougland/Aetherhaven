@@ -45,13 +45,6 @@ public final class UiMaterialLabels {
             if (resolved != null) {
                 return resolved;
             }
-            ResourceType asset = ResourceType.getAssetMap().getAsset(id);
-            if (asset != null) {
-                String n = asset.getName();
-                if (n != null && !n.isBlank()) {
-                    return n;
-                }
-            }
             return id;
         }
         String itemId = m.getItemId();

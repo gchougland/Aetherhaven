@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.rts;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
 import com.hypixel.hytale.builtin.npccombatactionevaluator.memory.TargetMemory;
 import com.hypixel.hytale.server.core.asset.type.attitude.Attitude;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -37,8 +38,11 @@ public final class RtsGuardCombatSupport {
         clearCombatTarget(npc, accessor);
         npc.setLeashPoint(new Vector3d(holdX, holdY, holdZ));
         Role role = npc.getRole();
-        if (role != null && role.getStateSupport().getStateName().contains("Combat")) {
-            role.getStateSupport().setState(guardRef, AetherhavenConstants.NPC_STATE_GUARD_RTS_COMMAND, null, accessor);
+        if (role != null && NpcSupportUtil.stateName(guardRef.getStore(), guardRef).contains("Combat")) {
+            StateSupport stateSupport = NpcSupportUtil.stateSupport(guardRef.getStore(), guardRef);
+            if (stateSupport != null) {
+                stateSupport.setState(guardRef, AetherhavenConstants.NPC_STATE_GUARD_RTS_COMMAND, null, accessor);
+            }
         }
         accessor.putComponent(guardRef, NPCEntity.getComponentType(), npc);
     }
@@ -58,8 +62,15 @@ public final class RtsGuardCombatSupport {
             return;
         }
         ComponentAccessor<EntityStore> stateAccessor = commandBuffer != null ? commandBuffer : accessor;
-        if (!role.getStateSupport().getStateName().contains("Combat")) {
-            role.getStateSupport().setState(guardRef, "Combat", null, stateAccessor);
+        if (!NpcSupportUtil.stateName(guardRef.getStore(), guardRef).contains("Combat")) {
+            if (commandBuffer != null) {
+                NpcSupportUtil.setState(guardRef, "Combat", null, commandBuffer);
+            } else {
+                StateSupport stateSupport = NpcSupportUtil.stateSupport(guardRef.getStore(), guardRef);
+                if (stateSupport != null) {
+                    stateSupport.setState(guardRef, "Combat", null, accessor);
+                }
+            }
         }
         if (commandBuffer != null) {
             commandBuffer.putComponent(guardRef, NPCEntity.getComponentType(), npc);
@@ -77,13 +88,19 @@ public final class RtsGuardCombatSupport {
         if (role == null) {
             return;
         }
-        role.getMarkedEntitySupport().setMarkedEntity(LOCKED_TARGET_SLOT, targetRef);
-        rememberHostile(npc.getReference(), targetRef, accessor);
         Ref<EntityStore> guardRef = npc.getReference();
-        Store<EntityStore> store = guardRef != null ? guardRef.getStore() : null;
-        if (store != null && !RtsHostileQuery.isAggressiveNpc(targetRef, store)) {
+        if (guardRef == null || !guardRef.isValid()) {
+            return;
+        }
+        NpcSupportUtil.markedEntitySupport(guardRef, accessor).setMarkedEntity(LOCKED_TARGET_SLOT, targetRef);
+        rememberHostile(guardRef, targetRef, accessor);
+        Store<EntityStore> store = guardRef.getStore();
+        if (!RtsHostileQuery.isAggressiveNpc(targetRef, store)) {
             try {
-                role.getWorldSupport().overrideAttitude(targetRef, Attitude.HOSTILE, 300.0);
+                var worldSupport = NpcSupportUtil.worldSupport(guardRef, accessor);
+                if (worldSupport != null) {
+                    worldSupport.overrideAttitude(targetRef, Attitude.HOSTILE, 300.0);
+                }
             } catch (NullPointerException ignored) {
                 // Role build did not allocate attitude override memory.
             }
@@ -95,13 +112,14 @@ public final class RtsGuardCombatSupport {
         if (role == null) {
             return;
         }
-        MarkedEntitySupport marked = role.getMarkedEntitySupport();
+        Ref<EntityStore> guardRef = npc.getReference();
+        if (guardRef == null || !guardRef.isValid()) {
+            return;
+        }
+        MarkedEntitySupport marked = NpcSupportUtil.markedEntitySupport(guardRef, accessor);
         marked.setMarkedEntity(LOCKED_TARGET_SLOT, null);
         marked.setMarkedEntity("CombatTargets", null);
-        Ref<EntityStore> guardRef = npc.getReference();
-        if (guardRef != null && guardRef.isValid()) {
-            clearHostileMemory(guardRef, accessor);
-        }
+        clearHostileMemory(guardRef, accessor);
     }
 
     public static void rememberHostile(
@@ -155,16 +173,17 @@ public final class RtsGuardCombatSupport {
             return;
         }
         Role role = hostile.getRole();
-        Ref<EntityStore> lockedTarget = role.getMarkedEntitySupport().getMarkedEntityRef(LOCKED_TARGET_SLOT);
+        ComponentAccessor<EntityStore> markedAccessor = commandBuffer != null ? commandBuffer : accessor;
+        Ref<EntityStore> lockedTarget = NpcSupportUtil.markedEntitySupport(hostileRef, markedAccessor).getMarkedEntityRef(LOCKED_TARGET_SLOT);
         if (guardRef.equals(lockedTarget)) {
             return;
         }
-        String state = role.getStateSupport().getStateName();
+        String state = NpcSupportUtil.stateName(hostileRef.getStore(), hostileRef);
         if (isEngagedInExternalCombat(state)) {
             return;
         }
         rememberHostile(hostileRef, guardRef, accessor);
-        role.getMarkedEntitySupport().setMarkedEntity(LOCKED_TARGET_SLOT, guardRef);
+        NpcSupportUtil.markedEntitySupport(hostileRef, markedAccessor).setMarkedEntity(LOCKED_TARGET_SLOT, guardRef);
         ComponentAccessor<EntityStore> stateAccessor = commandBuffer != null ? commandBuffer : accessor;
         if (tryEnterExternalCombat(hostileRef, guardRef, role, stateAccessor)) {
             if (commandBuffer != null) {
@@ -192,7 +211,10 @@ public final class RtsGuardCombatSupport {
         @Nonnull Role role,
         @Nonnull ComponentAccessor<EntityStore> accessor
     ) {
-        StateSupport stateSupport = role.getStateSupport();
+        StateSupport stateSupport = NpcSupportUtil.stateSupport(hostileRef.getStore(), hostileRef);
+        if (stateSupport == null) {
+            return false;
+        }
         if (stateSupport.getStateHelper().getStateIndex("Combat") >= 0) {
             stateSupport.setState(hostileRef, "Combat", null, accessor);
             return true;

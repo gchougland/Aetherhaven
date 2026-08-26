@@ -49,9 +49,6 @@
     ],
     "Group": "Wood",
     "HitboxType": "Table",
-    "Flags": {
-      "IsUsable": true
-    },
     "Gathering": {
       "Breaking": {
         "GatherType": "Woods"

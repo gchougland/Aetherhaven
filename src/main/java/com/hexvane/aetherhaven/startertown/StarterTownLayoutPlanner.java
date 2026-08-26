@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.startertown;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
@@ -150,7 +152,7 @@ public final class StarterTownLayoutPlanner {
         int maxHeight = Integer.MIN_VALUE;
         for (int x = relative.getMinX(); x <= relative.getMaxX(); x++) {
             for (int z = relative.getMinZ(); z <= relative.getMaxZ(); z++) {
-                WorldChunk chunk = world.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(x, z));
+                WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfNonTicking(world, ChunkUtil.indexChunkFromBlock(x, z));
                 if (chunk == null || !chunk.getReference().isValid()) {
                     return null;
                 }

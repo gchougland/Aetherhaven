@@ -48,9 +48,6 @@
       }
     ],
     "HitboxType": "Furniture_Stool",
-    "Flags": {
-      "IsUsable": true
-    },
     "Gathering": {
       "Breaking": {
         "GatherType": "Benches"

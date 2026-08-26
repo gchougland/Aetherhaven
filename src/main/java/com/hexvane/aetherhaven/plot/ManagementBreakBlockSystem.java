@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.plot;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -50,7 +52,7 @@ public final class ManagementBreakBlockSystem extends EntityEventSystem<EntitySt
         }
         Vector3i pos = event.getTargetBlock();
         World world = store.getExternalData().getWorld();
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
+        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
         if (chunk == null) {
             return;
         }

@@ -1,5 +1,9 @@
 package com.hexvane.aetherhaven.autonomy;
 
+import com.hexvane.aetherhaven.npc.NpcSupportUtil;
+import com.hypixel.hytale.server.npc.role.support.DebugSupport;
+import com.hypixel.hytale.server.npc.role.support.StateSupport;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.pathnav.PathNavGraphService;
@@ -327,7 +331,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             }
         }
 
-        String stateName = npc.getRole().getStateSupport().getStateName();
+        String stateName = NpcSupportUtil.stateName(store, ref);
         if (stateName.contains("Interaction")) {
             return;
         }
@@ -2285,9 +2289,9 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (npc.getRole() == null) {
             return;
         }
-        String state = npc.getRole().getStateSupport().getStateName();
+        String state = NpcSupportUtil.stateName(commandBuffer.getStore(), ref);
         if (state.startsWith(AetherhavenConstants.NPC_STATE_AUTONOMY_POI)) {
-            npc.getRole().getStateSupport().setState(ref, "Idle", null, commandBuffer);
+            NpcSupportUtil.setState(ref, "Idle", null, commandBuffer);
             NpcAnimationPlayback.play(ref, npc, AnimationSlot.Movement, null, commandBuffer);
             commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
         }
@@ -2406,7 +2410,10 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             nav = mc.getNavState();
         }
         sb.append(" NAV:").append(nav);
-        npc.getRole().getDebugSupport().setDisplayCustomString(sb.toString());
+        DebugSupport debugSupport = NpcSupportUtil.debugSupport(store, ref);
+        if (debugSupport != null) {
+            debugSupport.setDisplayCustomString(sb.toString());
+        }
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
     }
 
@@ -2520,7 +2527,13 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (npc.getRole() == null) {
             return false;
         }
-        return npc.getRole().getStateSupport().getStateHelper().getStateIndex(AetherhavenConstants.NPC_STATE_AUTONOMY_POI) >= 0;
+        Ref<EntityStore> npcRef = npc.getReference();
+        if (npcRef == null) {
+            return false;
+        }
+        StateSupport stateSupport = NpcSupportUtil.stateSupport(npcRef.getStore(), npcRef);
+        return stateSupport != null
+            && stateSupport.getStateHelper().getStateIndex(AetherhavenConstants.NPC_STATE_AUTONOMY_POI) >= 0;
     }
 
     /**
@@ -2582,9 +2595,9 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull NPCEntity npc
     ) {
         if (npc.getRole() != null) {
-            String state = npc.getRole().getStateSupport().getStateName();
+            String state = NpcSupportUtil.stateName(commandBuffer.getStore(), ref);
             if (state.startsWith(AetherhavenConstants.NPC_STATE_AUTONOMY_POI)) {
-                npc.getRole().getStateSupport().setState(ref, "Idle", null, commandBuffer);
+                NpcSupportUtil.setState(ref, "Idle", null, commandBuffer);
             }
         }
         NpcAnimationPlayback.play(ref, npc, AnimationSlot.Movement, null, commandBuffer);
@@ -2624,7 +2637,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (!supportsAutonomyPoiRoleState(npc)) {
             return;
         }
-        npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_AUTONOMY_POI, null, commandBuffer);
+        NpcSupportUtil.setState(ref, AetherhavenConstants.NPC_STATE_AUTONOMY_POI, null, commandBuffer);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
     }
 
@@ -2636,11 +2649,11 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (npc.getRole() == null) {
             return;
         }
-        String state = npc.getRole().getStateSupport().getStateName();
+        String state = NpcSupportUtil.stateName(commandBuffer.getStore(), ref);
         if (!state.startsWith(AetherhavenConstants.NPC_STATE_AUTONOMY_POI)) {
             return;
         }
-        npc.getRole().getStateSupport().setState(ref, "Idle", null, commandBuffer);
+        NpcSupportUtil.setState(ref, "Idle", null, commandBuffer);
         NpcAnimationPlayback.clearOverlaySlots(ref, npc, commandBuffer);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
     }
@@ -2653,11 +2666,11 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (npc.getRole() == null) {
             return;
         }
-        String state = npc.getRole().getStateSupport().getStateName();
+        String state = NpcSupportUtil.stateName(store, ref);
         if (!state.startsWith(AetherhavenConstants.NPC_STATE_AUTONOMY_POI)) {
             return;
         }
-        npc.getRole().getStateSupport().setState(ref, "Idle", null, store);
+        NpcSupportUtil.setState(ref, "Idle", null, store);
         npc.playAnimation(ref, AnimationSlot.Action, null, store);
         npc.playAnimation(ref, AnimationSlot.Emote, null, store);
         npc.playAnimation(ref, AnimationSlot.Status, null, store);
