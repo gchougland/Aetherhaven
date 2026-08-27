@@ -1,0 +1,11 @@
+{
+  "id": "plot_jimmys_tavern",
+  "displayName": "Jimmy's Tavern",
+  "legacyPlotSupport": true,
+  "countsAsConstructionId": [
+    "plot_inn",
+    "plot_guild_hall"
+  ],
+  "treasuryGoldCoinCost": 45,
+  "touristDestination": true
+}

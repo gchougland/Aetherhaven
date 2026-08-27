@@ -121,7 +121,7 @@ public final class CharterRelocationService {
             return false;
         }
 
-        world.breakBlock(ox, oy, oz, BREAK_SETTINGS);
+        ChunkSectionBlockUtil.breakBlock(world, ox, oy, oz, BREAK_SETTINGS);
 
         TownTerritoryClaims.shiftAllClaims(town, deltaCx, deltaCz);
         town.setCharterPosition(a.x, a.y, a.z);
@@ -219,12 +219,12 @@ public final class CharterRelocationService {
             return LinkRepairResult.SKIPPED_CHUNK_UNLOADED;
         }
 
-        BlockType atType = world.getBlockType(cx, cy, cz);
+        BlockType atType = ChunkSectionBlockUtil.blockType(world, cx, cy, cz);
         boolean blockIsCharter =
             atType != null && AetherhavenConstants.CHARTER_BLOCK_TYPE_ID.equals(atType.getId());
 
         if (blockIsCharter) {
-            if (isCharterLinked(chunk, cx, cy, cz, townIdStr)) {
+            if (isCharterLinked(world, cx, cy, cz, townIdStr)) {
                 return LinkRepairResult.ALREADY_OK;
             }
             if (!ensureCharterBlockEntity(world, chunk, cx, cy, cz, townIdStr)) {
@@ -271,9 +271,9 @@ public final class CharterRelocationService {
             LOGGER.atWarning().log("Charter placeBlock failed at %s,%s,%s", x, y, z);
             return false;
         }
-        chunk.setTicking(x, y, z, true);
+        ChunkSectionBlockUtil.setTicking(world, x, y, z, true);
         if (!ensureCharterBlockEntity(world, chunk, x, y, z, townIdStr)) {
-            world.breakBlock(x, y, z, BREAK_SETTINGS);
+            ChunkSectionBlockUtil.breakBlock(world, x, y, z, BREAK_SETTINGS);
             LOGGER.atWarning().log(
                 "Charter placed at %s,%s,%s but block entity attach failed town=%s",
                 x,
@@ -287,9 +287,9 @@ public final class CharterRelocationService {
     }
 
     private static boolean isCharterLinked(
-        @Nonnull WorldChunk chunk, int x, int y, int z, @Nonnull String townIdStr
+        @Nonnull World world, int x, int y, int z, @Nonnull String townIdStr
     ) {
-        Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(x, y, z);
+        Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, x, y, z);
         if (blockRef == null || !blockRef.isValid()) {
             return false;
         }
@@ -317,8 +317,8 @@ public final class CharterRelocationService {
         if (blockComponentSection == null) {
             return false;
         }
-        chunk.setTicking(x, y, z, true);
-        Ref<ChunkStore> liveRef = chunk.getBlockComponentEntity(x, y, z);
+        ChunkSectionBlockUtil.setTicking(world, x, y, z, true);
+        Ref<ChunkStore> liveRef = ChunkSectionBlockUtil.blockEntityRefAt(world, x, y, z);
         if (liveRef == null || !liveRef.isValid()) {
             Holder<ChunkStore> template = blockType.getBlockEntity();
             if (template == null) {
@@ -342,7 +342,7 @@ public final class CharterRelocationService {
                 holder
             );
         }
-        liveRef = chunk.getBlockComponentEntity(x, y, z);
+        liveRef = ChunkSectionBlockUtil.blockEntityRefAt(world, x, y, z);
         if (liveRef == null || !liveRef.isValid()) {
             return false;
         }

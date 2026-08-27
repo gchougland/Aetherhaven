@@ -39,6 +39,28 @@ public final class TransformComponentUtil {
         putPreservingChunk(ref, commandBuffer, transform, position, rotation);
     }
 
+    /** World-thread Store write. Do not call from a ticking system. */
+    public static void replacePreservingChunk(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Vector3dc position,
+        @Nonnull Rotation3fc rotation
+    ) {
+        if (!ref.isValid()) {
+            return;
+        }
+        TransformComponent current = store.getComponent(ref, TransformComponent.getComponentType());
+        if (current == null) {
+            return;
+        }
+        Ref<ChunkStore> sectionRef = current.getSectionRef();
+        TransformComponent updated = new TransformComponent(position, rotation);
+        if (sectionRef != null) {
+            updated.setSectionLocation(sectionRef);
+        }
+        store.putComponent(ref, TransformComponent.getComponentType(), updated);
+    }
+
     private static void putPreservingChunk(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,

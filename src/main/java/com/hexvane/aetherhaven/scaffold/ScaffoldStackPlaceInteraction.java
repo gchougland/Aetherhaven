@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.scaffold;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
@@ -228,7 +229,7 @@ public final class ScaffoldStackPlaceInteraction extends SimpleInteraction {
                 );
 
                 if (AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(interactionBlockTypeKey)) {
-                    world.performBlockUpdate(targetBlockPosition.x, targetBlockPosition.y, targetBlockPosition.z, false);
+                    ChunkSectionBlockUtil.performBlockUpdate(world, targetBlockPosition.x, targetBlockPosition.y, targetBlockPosition.z, false);
                 }
                 boolean isAdventure = playerComponent == null || playerComponent.getGameMode() == GameMode.Adventure;
                 if (isAdventure && heldItemStack.getQuantity() == 1 && this.removeItemInHand) {

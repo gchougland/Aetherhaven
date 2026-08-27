@@ -12,17 +12,11 @@ import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
-import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.world.SetBlockSettings;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
-import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
-import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import java.util.HashMap;
 import java.util.List;
@@ -67,7 +61,6 @@ public final class BlockPaletteApplyService {
     ) {
         ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw, null);
         List<PendingBlock> cells = ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
-        LocalCachedChunkAccessor accessor = ConstructionPasteOps.createAccessor(world, origin, buffer);
         BlockTypeAssetMap<String, BlockType> typeMap = BlockType.getAssetMap();
         Map<Long, String> prefabBlockIdByCell = new HashMap<>();
         for (PendingBlock pb : cells) {
@@ -91,14 +84,10 @@ public final class BlockPaletteApplyService {
             for (int by = footprint.getMinY(); by <= footprint.getMaxY(); by++) {
                 for (int bz = footprint.getMinZ(); bz <= footprint.getMaxZ(); bz++) {
                     String prefabBlockTypeId = prefabBlockIdByCell.get(cellKey(bx, by, bz));
-                    WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(bx, bz));
-                    if (chunk == null) {
-                        chunk = ChunkSectionBlockUtil.worldChunkIfNonTicking(world, ChunkUtil.indexChunkFromBlock(bx, bz));
-                    }
-                    if (chunk == null) {
+                    if (ChunkSectionBlockUtil.sectionRefAt(world, bx, by, bz) == null) {
                         continue;
                     }
-                    BlockType current = chunk.getBlockType(bx, by, bz);
+                    BlockType current = ChunkSectionBlockUtil.blockType(world, bx, by, bz);
                     if (current == null || current.getId() == null || current.getId().isBlank()) {
                         continue;
                     }
@@ -123,13 +112,11 @@ public final class BlockPaletteApplyService {
                     if (target == null) {
                         continue;
                     }
-                    BlockSection section = blockSectionAt(world, bx, by, bz);
-                    if (section == null) {
-                        continue;
-                    }
-                    int rotationIndex = section.getRotationIndex(bx, by, bz);
-                    int filler = section.getFiller(bx, by, bz);
-                    chunk.setBlock(bx, by, bz, newBlockId, target, rotationIndex, filler, settings);
+                    int rotationIndex = ChunkSectionBlockUtil.rotationIndex(world, bx, by, bz);
+                    int filler = ChunkSectionBlockUtil.filler(world, bx, by, bz);
+                    ChunkSectionBlockUtil.setBlock(
+                        world, bx, by, bz, newBlockId, target, rotationIndex, filler, settings
+                    );
                 }
             }
         }
@@ -137,23 +124,6 @@ public final class BlockPaletteApplyService {
 
     private static long cellKey(int x, int y, int z) {
         return ((long) x << 42) ^ ((long) y << 21) ^ (long) z;
-    }
-
-    /**
-     * Rotation and filler come off the chunk section entity's {@link BlockSection}, matching the section-based reads
-     * elsewhere in the mod rather than the {@code BlockAccessor} helpers on {@link WorldChunk}.
-     */
-    @Nullable
-    private static BlockSection blockSectionAt(@Nonnull World world, int bx, int by, int bz) {
-        if (by < ChunkUtil.MIN_Y || by > ChunkUtil.HEIGHT_MINUS_1) {
-            return null;
-        }
-        ChunkStore chunkStore = world.getChunkStore();
-        Ref<ChunkStore> sectionRef = chunkStore.getChunkSectionReferenceAtBlock(bx, by, bz);
-        if (sectionRef == null || !sectionRef.isValid()) {
-            return null;
-        }
-        return chunkStore.getStore().getComponent(sectionRef, BlockSection.getComponentType());
     }
 
     /**

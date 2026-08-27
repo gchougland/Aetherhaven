@@ -1,0 +1,8 @@
+{
+  "id": "plot_jszzas_tavern",
+  "displayName": "Jszza's Tavern",
+  "legacyPlotSupport": true,
+  "countsAsConstructionId": "plot_inn",
+  "treasuryGoldCoinCost": 50,
+  "touristDestination": true
+}

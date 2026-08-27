@@ -50,7 +50,7 @@ public final class PathToolReplacePredicate {
         if (chunk == null) {
             return false;
         }
-        return isReplaceable(cfg, BlockType.getAssetMap().getAsset(chunk.getBlock(x, y, z)), playerBlockIds);
+        return isReplaceable(cfg, ChunkSectionBlockUtil.blockType(world, x, y, z), playerBlockIds);
     }
 
     public static boolean isReplaceable(@Nonnull AetherhavenPluginConfig cfg, @Nullable BlockType blockType) {

@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.jewelry.JewelryItemIds;
 import com.hexvane.aetherhaven.jewelry.JewelryMetadata;
 import com.hexvane.aetherhaven.jewelry.JewelryRarity;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
+import com.hexvane.aetherhaven.villager.data.WintertideGiftJson;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.asset.type.item.config.ItemQuality;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -96,6 +97,12 @@ public final class WintertideGifts {
         @Nullable VillagerDefinition def,
         @Nonnull Random rnd
     ) {
+        if (def != null) {
+            List<Stack> fromDef = stacksFromDefinition(def, rnd);
+            if (!fromDef.isEmpty()) {
+                return fromDef;
+            }
+        }
         String kind = villagerKind != null ? villagerKind.trim().toLowerCase(Locale.ROOT) : "";
         List<Stack> configured = configuredFor(kind, rnd);
         if (!configured.isEmpty()) {
@@ -115,6 +122,32 @@ public final class WintertideGifts {
             return List.of(new Stack(epic, 1));
         }
         return List.of(new Stack("Food_Candy_Cane", 10));
+    }
+
+    @Nonnull
+    static List<Stack> stacksFromDefinition(@Nonnull VillagerDefinition def, @Nonnull Random rnd) {
+        List<Stack> out = new ArrayList<>();
+        for (WintertideGiftJson row : def.getWintertideGifts()) {
+            if (row == null) {
+                continue;
+            }
+            List<String> pool = new ArrayList<>();
+            String fixed = row.getItemId();
+            if (fixed != null) {
+                pool.add(fixed);
+            }
+            pool.addAll(row.getPickOne());
+            if (pool.isEmpty()) {
+                continue;
+            }
+            int count = row.getCount();
+            int repeats = row.getRepeats();
+            for (int i = 0; i < repeats; i++) {
+                String id = pool.size() == 1 ? pool.get(0) : pool.get(rnd.nextInt(pool.size()));
+                out.add(new Stack(id, count));
+            }
+        }
+        return List.copyOf(out);
     }
 
     @Nonnull

@@ -58,7 +58,7 @@ public final class PlotTokenInventory {
     ) {
         ObjectArrayList<String> ids = new ObjectArrayList<>();
         for (ConstructionDefinition d : plugin.getConstructionCatalog().list()) {
-            if (d.isWallSegment()) {
+            if (d.isWallSegment() || d.isLegacyPlotSupport()) {
                 continue;
             }
             if (hasPlotToken(inv, d)) {
@@ -76,7 +76,7 @@ public final class PlotTokenInventory {
         ObjectArrayList<PlotTokenPlacementOption> options = new ObjectArrayList<>();
         Set<String> seenValues = new LinkedHashSet<>();
         for (ConstructionDefinition d : plugin.getConstructionCatalog().list()) {
-            if (d.isWallSegment()) {
+            if (d.isWallSegment() || d.isLegacyPlotSupport()) {
                 continue;
             }
             if (hasPlotToken(inv, d)) {
@@ -97,6 +97,10 @@ public final class PlotTokenInventory {
             String constructionId = PlotTokenMetadata.readConstructionId(stack);
             String plotIdStr = PlotTokenMetadata.readPlotId(stack);
             if (constructionId == null || plotIdStr == null) {
+                continue;
+            }
+            ConstructionDefinition moved = plugin.getConstructionCatalog().get(constructionId);
+            if (moved != null && moved.isLegacyPlotSupport()) {
                 continue;
             }
             UUID plotId;

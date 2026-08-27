@@ -28,6 +28,8 @@ import com.hypixel.hytale.server.npc.components.FailedSpawnComponent;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.systems.RoleBuilderSystem;
 import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 
 /**
@@ -36,6 +38,8 @@ import javax.annotation.Nonnull;
  * what a full world reload does and clears those glitches.
  */
 public final class NpcPersistentModelResyncSystem extends HolderSystem<EntityStore> {
+    private static final long RESYNC_RETRY_DELAY_MS = 50L;
+
     private final ComponentType<EntityStore, PersistentModel> persistentModelType = PersistentModel.getComponentType();
     private final ComponentType<EntityStore, NPCEntity> npcType = NPCEntity.getComponentType();
 
@@ -74,14 +78,30 @@ public final class NpcPersistentModelResyncSystem extends HolderSystem<EntitySto
             return;
         }
         var entityId = uuidComponent.getUuid();
-        world.execute(() -> {
-            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityId);
-            if (ref == null || !ref.isValid()) {
-                return;
-            }
-            NpcModelSpawnUtil.resyncFromPersistentModel(ref, store);
-            applyTownCosmeticsIfPresent(ref, store, world);
-        });
+        world.execute(() -> resyncWhenIdle(world, store, entityId));
+    }
+
+    /**
+     * {@code world.execute} can run inside {@code consumeTaskQueue} while a tick is waiting on a chunk load.
+     * {@link Store#putComponent} is illegal then, so delay with {@link World#scheduleAfter} instead of re-queuing
+     * on the drain loop.
+     */
+    @SuppressWarnings("deprecation") // Store.isProcessing() is the only way to detect mid-tick writes
+    private static void resyncWhenIdle(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID entityId
+    ) {
+        if (store.isProcessing()) {
+            world.scheduleAfter(() -> resyncWhenIdle(world, store, entityId), RESYNC_RETRY_DELAY_MS, TimeUnit.MILLISECONDS);
+            return;
+        }
+        Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityId);
+        if (ref == null || !ref.isValid()) {
+            return;
+        }
+        NpcModelSpawnUtil.resyncFromPersistentModel(ref, store);
+        applyTownCosmeticsIfPresent(ref, store, world);
     }
 
     /**

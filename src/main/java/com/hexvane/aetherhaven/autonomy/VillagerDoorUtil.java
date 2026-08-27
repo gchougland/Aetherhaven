@@ -49,13 +49,12 @@ public final class VillagerDoorUtil {
      * applies hitbox offsets from {@code blockPosition}; using a filler segment as origin shifts or misplaces the door.
      */
     @Nonnull
-    @SuppressWarnings({ "deprecation", "removal" })
     private static Vector3i doorPrimaryBlock(@Nonnull World world, int x, int y, int z) {
         WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (chunk == null) {
             return new Vector3i(x, y, z);
         }
-        int filler = chunk.getFiller(x, y, z);
+        int filler = ChunkSectionBlockUtil.filler(world, x, y, z);
         if (filler == 0) {
             return new Vector3i(x, y, z);
         }
@@ -172,7 +171,7 @@ public final class VillagerDoorUtil {
             return false;
         }
         RotationTuple rotationTuple = RotationTuple.get(
-            VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, primary.x, primary.y, primary.z)
+            VillagerBlockUtil.rotationIndexForLoadedChunk(world, primary.x, primary.y, primary.z)
         );
         DoorInteraction.DoorInfo doorInfo = DoorInteraction.getDoorAtPosition(
             world.getChunkStore(),
@@ -268,7 +267,7 @@ public final class VillagerDoorUtil {
             return false;
         }
         RotationTuple rotationTuple = RotationTuple.get(
-            VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, primary.x, primary.y, primary.z)
+            VillagerBlockUtil.rotationIndexForLoadedChunk(world, primary.x, primary.y, primary.z)
         );
         DoorInteraction.DoorInfo doorInfo = DoorInteraction.getDoorAtPosition(
             world.getChunkStore(),
@@ -294,7 +293,7 @@ public final class VillagerDoorUtil {
             return false;
         }
         rotationTuple = RotationTuple.get(
-            VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, primary.x, primary.y, primary.z)
+            VillagerBlockUtil.rotationIndexForLoadedChunk(world, primary.x, primary.y, primary.z)
         );
         doorInfo = DoorInteraction.getDoorAtPosition(world.getChunkStore(), primary.x, primary.y, primary.z, rotationTuple.yaw());
         if (doorInfo == null) {
@@ -313,7 +312,7 @@ public final class VillagerDoorUtil {
             return false;
         }
         RotationTuple rotationTuple = RotationTuple.get(
-            VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, blockPos.x, blockPos.y, blockPos.z)
+            VillagerBlockUtil.rotationIndexForLoadedChunk(world, blockPos.x, blockPos.y, blockPos.z)
         );
         DoorInteraction.DoorInfo doorInfo = DoorInteraction.getDoorAtPosition(
             world.getChunkStore(),
@@ -348,7 +347,7 @@ public final class VillagerDoorUtil {
                 return false;
             }
             RotationTuple rotationTuple = RotationTuple.get(
-                VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, pos.x, pos.y, pos.z)
+                VillagerBlockUtil.rotationIndexForLoadedChunk(world, pos.x, pos.y, pos.z)
             );
             DoorInteraction.DoorInfo doorInfo = DoorInteraction.getDoorAtPosition(
                 world.getChunkStore(), pos.x, pos.y, pos.z, rotationTuple.yaw()
@@ -368,7 +367,7 @@ public final class VillagerDoorUtil {
                 continue;
             }
             activateDoor(world, blockType, pos, doorState, DoorState.CLOSED, interactionState);
-            BlockType afterType = chunk.getBlockType(pos.x, pos.y, pos.z);
+            BlockType afterType = ChunkSectionBlockUtil.blockType(world, pos.x, pos.y, pos.z);
             if (afterType != null && DoorState.fromBlockState(afterType.getStateForBlock(afterType)) == DoorState.CLOSED) {
                 return true;
             }
@@ -386,7 +385,7 @@ public final class VillagerDoorUtil {
         if (chunk == null) {
             return false;
         }
-        BlockType originalBlockType = chunk.getBlockType(blockPosition.x, blockPosition.y, blockPosition.z);
+        BlockType originalBlockType = ChunkSectionBlockUtil.blockType(world, blockPosition.x, blockPosition.y, blockPosition.z);
         if (originalBlockType == null) {
             return false;
         }
@@ -394,7 +393,7 @@ public final class VillagerDoorUtil {
         if (variantBlockType == null) {
             return false;
         }
-        int rotation = VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, blockPosition.x, blockPosition.y, blockPosition.z);
+        int rotation = VillagerBlockUtil.rotationIndexForLoadedChunk(world, blockPosition.x, blockPosition.y, blockPosition.z);
         BlockSection section =
             ChunkSectionBlockUtil.blockSectionAt(world, blockPosition.x, blockPosition.y, blockPosition.z);
         if (section == null) {
@@ -548,7 +547,7 @@ public final class VillagerDoorUtil {
             return false;
         }
         RotationTuple rotationTuple = RotationTuple.get(
-            VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, primary.x, primary.y, primary.z)
+            VillagerBlockUtil.rotationIndexForLoadedChunk(world, primary.x, primary.y, primary.z)
         );
         return DoorInteraction.getDoorAtPosition(
             world.getChunkStore(),
@@ -724,10 +723,10 @@ public final class VillagerDoorUtil {
         if (chunk == null) {
             return false;
         }
-        int rotationIndex = VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, blockPosition.x, blockPosition.y, blockPosition.z);
+        int rotationIndex = VillagerBlockUtil.rotationIndexForLoadedChunk(world, blockPosition.x, blockPosition.y, blockPosition.z);
         BlockBoundingBoxes oldHitbox = BlockBoundingBoxes.getAssetMap().getAsset(blockType.getHitboxTypeIndex());
         world.setBlockInteractionState(blockPosition, blockType, interactionStateToSend);
-        BlockType currentBlockType = chunk.getBlockType(blockPosition.x, blockPosition.y, blockPosition.z);
+        BlockType currentBlockType = ChunkSectionBlockUtil.blockType(world, blockPosition.x, blockPosition.y, blockPosition.z);
         if (currentBlockType == null) {
             return false;
         }
@@ -735,7 +734,7 @@ public final class VillagerDoorUtil {
         if (oldHitbox != null) {
             FillerBlockUtil.forEachFillerBlock(
                 oldHitbox.get(rotationIndex),
-                (x, y, z) -> world.performBlockUpdate(blockPosition.x + x, blockPosition.y + y, blockPosition.z + z)
+                (x, y, z) -> ChunkSectionBlockUtil.performBlockUpdate(world, blockPosition.x + x, blockPosition.y + y, blockPosition.z + z)
             );
         }
 
@@ -744,7 +743,7 @@ public final class VillagerDoorUtil {
             if (newHitbox != null && newHitbox != oldHitbox) {
                 FillerBlockUtil.forEachFillerBlock(
                     newHitbox.get(rotationIndex),
-                    (x, y, z) -> world.performBlockUpdate(blockPosition.x + x, blockPosition.y + y, blockPosition.z + z)
+                    (x, y, z) -> ChunkSectionBlockUtil.performBlockUpdate(world, blockPosition.x + x, blockPosition.y + y, blockPosition.z + z)
                 );
             }
         }

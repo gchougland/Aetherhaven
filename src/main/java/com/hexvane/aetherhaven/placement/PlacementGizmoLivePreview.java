@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.placement;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.entity.TransformComponentUtil;
 import com.hexvane.aetherhaven.prefab.AetherhavenWorldPrefabPreview;
 import com.hexvane.aetherhaven.prop.PropCatalog;
 import com.hexvane.aetherhaven.prop.PropDefinition;
@@ -12,8 +13,8 @@ import com.hexvane.aetherhaven.prop.PropPrefabOps;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.math.util.MathUtil;
 import com.hypixel.hytale.math.vector.Rotation3f;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -57,32 +58,31 @@ final class PlacementGizmoLivePreview {
         Vector3d hologramBase = PlacementGizmoPivot.dragHologramBase(playerUuid);
         if (hologramBase != null) {
             Vector3d visualPos = new Vector3d(hologramBase).add(offset);
-            movePreviewTo(store, playerUuid, visualPos);
+            movePreviewTo(playerRef, ref, store, playerUuid, visualPos);
             PlotPlacementSession plot = PlotPlacementSessions.get(playerUuid);
             if (plot != null && plot.isGizmoMoveActive()) {
-                PlotPlacementClientPrefabPreview.Payload payload = plot.getClientPrefabPreviewPayload();
-                if (payload != null && PlotPlacementClientPrefabPreview.hasEntityOverlay(payload)) {
-                    PlotPlacementClientPrefabPreview.sendEntityOverlayAt(
-                        playerRef,
-                        new Vector3f((float) visualPos.x, (float) visualPos.y, (float) visualPos.z)
-                    );
-                }
+                moveEntityOverlay(playerRef, playerUuid, plot.getClientPrefabPreviewPayload(), visualPos);
+                return;
+            }
+            PropPlacementSession prop = PropPlacementSessions.get(playerUuid);
+            if (prop != null && prop.isGizmoMoveActive()) {
+                movePropEntityOverlay(playerRef, playerUuid, prop, offset);
             }
             return;
         }
         PlotPlacementSession plot = PlotPlacementSessions.get(playerUuid);
         if (plot != null && plot.isGizmoMoveActive()) {
-            applyPlotOffset(playerRef, store, plot, offset);
+            applyPlotOffset(playerRef, ref, store, plot, offset);
             return;
         }
         CharterRelocationSession charter = CharterRelocationSessions.get(playerUuid);
         if (charter != null && charter.isGizmoMoveActive()) {
-            applyCharterOffset(store, charter, offset);
+            applyCharterOffset(playerRef, ref, store, charter, offset);
             return;
         }
         PropPlacementSession prop = PropPlacementSessions.get(playerUuid);
         if (prop != null && prop.isGizmoMoveActive()) {
-            applyPropOffset(store, prop, offset);
+            applyPropOffset(playerRef, ref, store, prop, offset);
         }
     }
 
@@ -101,10 +101,13 @@ final class PlacementGizmoLivePreview {
     }
 
     private static void movePreviewTo(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
         @Nonnull UUID playerUuid,
         @Nonnull Vector3d visualPos
     ) {
+        ensurePreviewExists(playerRef, ref, store, playerUuid);
         Ref<EntityStore> previewRef = firstPreviewRef(playerUuid);
         if (previewRef == null) {
             return;
@@ -216,6 +219,7 @@ final class PlacementGizmoLivePreview {
 
     private static void applyPlotOffset(
         @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
         @Nonnull PlotPlacementSession session,
         @Nonnull Vector3d offset
@@ -242,6 +246,7 @@ final class PlacementGizmoLivePreview {
                 )
             );
         Vector3d visualPos = new Vector3d(spawnCorner).add(offset);
+        ensurePreviewExists(playerRef, ref, store, playerRef.getUuid());
         Ref<EntityStore> previewRef = firstValid(session.getPreviewEntityRefs());
         if (previewRef == null) {
             return;
@@ -252,13 +257,12 @@ final class PlacementGizmoLivePreview {
             visualPos,
             AetherhavenWorldPrefabPreview.rotationFromYaw(session.getPrefabYaw())
         );
-        if (PlotPlacementClientPrefabPreview.hasEntityOverlay(payload)) {
-            Vector3f overlayPos = new Vector3f((float) visualPos.x, (float) visualPos.y, (float) visualPos.z);
-            PlotPlacementClientPrefabPreview.sendEntityOverlayAt(playerRef, overlayPos);
-        }
+        moveEntityOverlay(playerRef, playerRef.getUuid(), payload, visualPos);
     }
 
     private static void applyPropOffset(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
         @Nonnull PropPlacementSession session,
         @Nonnull Vector3d offset
@@ -285,6 +289,7 @@ final class PlacementGizmoLivePreview {
                 )
             );
         Vector3d visualPos = new Vector3d(spawnCorner).add(offset);
+        ensurePreviewExists(playerRef, ref, store, playerRef.getUuid());
         Ref<EntityStore> previewRef = firstValid(session.getPreviewEntityRefs());
         if (previewRef == null) {
             return;
@@ -295,25 +300,25 @@ final class PlacementGizmoLivePreview {
             visualPos,
             AetherhavenWorldPrefabPreview.rotationFromYaw(session.getYaw())
         );
+        movePropEntityOverlay(playerRef, playerRef.getUuid(), session, offset);
     }
 
     private static void applyCharterOffset(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
         @Nonnull CharterRelocationSession session,
         @Nonnull Vector3d offset
     ) {
+        ensurePreviewExists(playerRef, ref, store, playerRef.getUuid());
         Vector3i anchor = session.getAnchor();
         Vector3d visualPos = new Vector3d(anchor.x + offset.x, anchor.y + offset.y, anchor.z + offset.z);
+        Rotation3f rotation = new Rotation3f(0f, (float) session.getBlockHorizontalRotation().getRadians(), 0f);
         for (Ref<EntityStore> previewRef : session.getPreviewEntityRefs()) {
             if (previewRef == null || !previewRef.isValid()) {
                 continue;
             }
-            TransformComponent transform = store.getComponent(previewRef, TransformComponent.getComponentType());
-            if (transform == null) {
-                continue;
-            }
-            transform.teleportPosition(visualPos);
-            store.putComponent(previewRef, TransformComponent.getComponentType(), transform);
+            TransformComponentUtil.replacePreservingChunk(previewRef, store, visualPos, rotation);
         }
     }
 
@@ -330,9 +335,140 @@ final class PlacementGizmoLivePreview {
             if (transform == null) {
                 continue;
             }
-            transform.teleportRotation(rotation);
-            store.putComponent(previewRef, TransformComponent.getComponentType(), transform);
+            TransformComponentUtil.replacePreservingChunk(
+                previewRef,
+                store,
+                new Vector3d(transform.getPosition()),
+                rotation
+            );
         }
+    }
+
+    private static void ensurePreviewExists(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID playerUuid
+    ) {
+        if (firstPreviewRef(playerUuid) != null) {
+            return;
+        }
+        PlotPlacementSession plot = PlotPlacementSessions.get(playerUuid);
+        if (plot != null && plot.isGizmoMoveActive()) {
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin == null) {
+                return;
+            }
+            ConstructionDefinition def = plugin.getConstructionCatalog().get(plot.getConstructionId());
+            if (def == null) {
+                return;
+            }
+            Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(plot.getAnchor(), plot.getPrefabYaw());
+            PlotPlacementClientPrefabPreview.sendMoveOrFull(
+                playerRef,
+                def.getPrefabPath(),
+                plot.getRotationSteps(),
+                prefabOrigin,
+                plot.getPrefabYaw(),
+                plot
+            );
+            return;
+        }
+        CharterRelocationSession charter = CharterRelocationSessions.get(playerUuid);
+        if (charter != null && charter.isGizmoMoveActive()) {
+            PlacementGizmoPreviewRefresh.refreshCharter(ref, store, playerRef, charter);
+            return;
+        }
+        PropPlacementSession prop = PropPlacementSessions.get(playerUuid);
+        if (prop == null || !prop.isGizmoMoveActive()) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        PropDefinition def = plugin.getPropCatalog().get(prop.getPropId());
+        if (def == null) {
+            return;
+        }
+        PlotPlacementClientPrefabPreview.sendMoveOrFullStandalone(
+            playerRef,
+            store,
+            prop.getPreviewEntityRefs(),
+            def.getPrefabPath(),
+            prop.getRotationSteps(),
+            prop.getAnchor(),
+            prop.getYaw()
+        );
+    }
+
+    private static void moveEntityOverlay(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull UUID playerUuid,
+        @Nullable PlotPlacementClientPrefabPreview.Payload payload,
+        @Nonnull Vector3d visualPos
+    ) {
+        if (payload == null || !PlotPlacementClientPrefabPreview.hasEntityOverlay(payload)) {
+            return;
+        }
+        Vector3i floor = new Vector3i(MathUtil.floor(visualPos.x), MathUtil.floor(visualPos.y), MathUtil.floor(visualPos.z));
+        if (PlacementGizmoPivot.takeOverlayFloorIfChanged(playerUuid, floor)) {
+            PlotPlacementClientPrefabPreview.sendEntityOverlayMoved(
+                playerRef,
+                new Vector3f(floor.x, floor.y, floor.z),
+                payload
+            );
+            return;
+        }
+        PlotPlacementClientPrefabPreview.sendEntityOverlayAt(
+            playerRef,
+            new Vector3f((float) visualPos.x, (float) visualPos.y, (float) visualPos.z)
+        );
+    }
+
+    /**
+     * Keep the existing entity overlay and move its paste origin the same way the placement page does.
+     * Hide-and-resend makes the client treat an entity-only preview as centered on {@code position}.
+     */
+    private static void movePropEntityOverlay(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull UUID playerUuid,
+        @Nonnull PropPlacementSession session,
+        @Nonnull Vector3d offset
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        PropDefinition def = plugin.getPropCatalog().get(session.getPropId());
+        if (def == null) {
+            return;
+        }
+        PlotPlacementClientPrefabPreview.Payload payload =
+            PlotPlacementClientPrefabPreview.loadPayload(def.getPrefabPath(), session.getRotationSteps());
+        if (payload == null || !PlotPlacementClientPrefabPreview.hasEntityOverlay(payload)) {
+            return;
+        }
+        Vector3i visualOrigin = new Vector3i(
+            session.getAnchor().x + (int) Math.round(offset.x),
+            session.getAnchor().y + (int) Math.round(offset.y),
+            session.getAnchor().z + (int) Math.round(offset.z)
+        );
+        Vector3i overlayFloor =
+            PlotPlacementClientPrefabPreview.resolveClientPreviewPosition(
+                visualOrigin,
+                payload,
+                session.getYaw()
+            );
+        if (!PlacementGizmoPivot.takeOverlayFloorIfChanged(playerUuid, overlayFloor)) {
+            return;
+        }
+        PlotPlacementClientPrefabPreview.sendEntityOverlayPositionOnly(
+            playerRef,
+            visualOrigin,
+            payload,
+            session.getYaw()
+        );
     }
 
     @Nullable

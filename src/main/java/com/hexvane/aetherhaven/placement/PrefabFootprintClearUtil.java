@@ -15,7 +15,6 @@ import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
-import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
 import org.joml.Vector3i;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -31,8 +30,6 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
 import com.hypixel.hytale.server.core.universe.world.SetBlockSettings;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.ChunkColumn;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.FluidSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -173,25 +170,17 @@ public final class PrefabFootprintClearUtil {
      */
     private static void clearFluidAtColumn(
         @Nonnull Store<ChunkStore> fluidStore,
-        @Nonnull WorldChunk chunk,
+        @Nonnull World world,
         int x,
         int y,
         int z
     ) {
-        Ref<ChunkStore> section = sectionRefForBlockY(chunk, y);
+        Ref<ChunkStore> section = ChunkSectionBlockUtil.sectionRefAt(world, x, y, z);
         if (section == null) {
             return;
         }
         FluidSection fluidSection = fluidStore.ensureAndGetComponent(section, FluidSection.getComponentType());
         fluidSection.setFluid(x, y, z, 0, (byte) 0);
-    }
-
-    @SuppressWarnings("deprecation")
-    private static Ref<ChunkStore> sectionRefForBlockY(@Nonnull WorldChunk chunk, int blockY) {
-        Ref<ChunkStore> columnRef = chunk.getReference();
-        Store<ChunkStore> store = columnRef.getStore();
-        ChunkColumn column = store.getComponent(columnRef, ChunkColumn.getComponentType());
-        return column == null ? null : column.getSection(ChunkUtil.chunkCoordinate(blockY));
     }
 
     /**
@@ -206,13 +195,12 @@ public final class PrefabFootprintClearUtil {
         boolean preserveWater
     ) {
         ConstructionPrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
-        LocalCachedChunkAccessor chunkAccessor = ConstructionPasteOps.createAccessor(world, anchor, buffer);
         for (PendingBlock pb : seq.pendingBlocks()) {
             int bx = anchor.x + pb.x();
             int by = anchor.y + pb.y();
             int bz = anchor.z + pb.z();
             if (ConstructionPasteOps.shouldPreserveWorldWaterAtPrefabCell(
-                preserveWater, pb, world, bx, by, bz, chunkAccessor
+                preserveWater, pb, world, bx, by, bz
             )) {
                 continue;
             }
@@ -223,8 +211,7 @@ public final class PrefabFootprintClearUtil {
             world,
             anchor,
             seq.pendingBlocks(),
-            preserveWater,
-            chunkAccessor
+            preserveWater
         );
         PrefabTriggerVolumeCleanup.removeVolumesInPrefabBox(world, anchor, yaw, buffer);
     }
@@ -267,10 +254,7 @@ public final class PrefabFootprintClearUtil {
                     // Prefer setBlock over breakBlock so multi-block furniture (aquariums, etc.) always loses its
                     // block-entity. Orphan block entities keep ticking and can restore fluids/props after teardown.
                     forceClearBlockCell(world, x, y, z, discardContainerContents);
-                    WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
-                    if (chunk != null) {
-                        clearFluidAtColumn(fluidStore, chunk, x, y, z);
-                    }
+                    clearFluidAtColumn(fluidStore, world, x, y, z);
                 }
             }
         }
@@ -322,11 +306,10 @@ public final class PrefabFootprintClearUtil {
         if (y < 0 || y >= 320) {
             return null;
         }
-        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
-        if (chunk == null) {
+        if (ChunkSectionBlockUtil.sectionRefAt(world, x, y, z) == null) {
             return null;
         }
-        return BlockType.getAssetMap().getAsset(chunk.getBlock(x, y, z));
+        return ChunkSectionBlockUtil.blockType(world, x, y, z);
     }
 
     public static boolean isProductionStorageBlockTypeId(@Nonnull String blockTypeId) {
@@ -381,26 +364,16 @@ public final class PrefabFootprintClearUtil {
         int z,
         boolean discardContainerContents
     ) {
-        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
-        if (chunk == null) {
+        if (ChunkSectionBlockUtil.sectionRefAt(world, x, y, z) == null) {
             return;
         }
         // Grab any block-entity before setBlock; some clears leave the chunk-store entity alive (aquarium heartbeat
         // then restores fluid/fish after teardown).
-        Ref<ChunkStore> blockEntityRef = chunk.getBlockComponentEntity(x, y, z);
+        Ref<ChunkStore> blockEntityRef = ChunkSectionBlockUtil.blockEntityRefAt(world, x, y, z);
         if (discardContainerContents && blockEntityRef != null && blockEntityRef.isValid()) {
             discardItemContainerContents(world, blockEntityRef);
         }
-        chunk.setBlock(
-            x,
-            y,
-            z,
-            BlockType.EMPTY_ID,
-            BlockType.EMPTY,
-            0,
-            0,
-            FORCE_CLEAR_SETTINGS
-        );
+        ChunkSectionBlockUtil.setBlockEmpty(world, x, y, z, FORCE_CLEAR_SETTINGS);
         if (blockEntityRef != null && blockEntityRef.isValid()) {
             world.getChunkStore().getStore().removeEntity(blockEntityRef, RemoveReason.REMOVE);
         }

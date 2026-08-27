@@ -1,37 +1,22 @@
 package com.hexvane.aetherhaven.construction.assembly;
 
-import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /** Cached obstructed footprint cells for one clearing-phase job (avoids full-footprint scans each preview tick). */
 public final class PlotAssemblyClearingRuntime {
     private final ArrayList<Vector3i> obstructedWorldCells = new ArrayList<>();
     private final Map<Long, Vector3i> byPackedCoord = new HashMap<>();
-    @Nullable
-    private LocalCachedChunkAccessor chunkAccessor;
     private static final int PRUNE_INTERVAL_TICKS = 5;
     private int ticksSinceFullPrune;
-
-    @Nonnull
-    private LocalCachedChunkAccessor chunkAccessor(@Nonnull World world, @Nonnull PlotAssemblyJob job) {
-        LocalCachedChunkAccessor acc = chunkAccessor;
-        if (acc == null) {
-            acc = ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
-            chunkAccessor = acc;
-        }
-        return acc;
-    }
 
     @Nonnull
     public static PlotAssemblyClearingRuntime empty() {
@@ -41,8 +26,6 @@ public final class PlotAssemblyClearingRuntime {
     @Nonnull
     public static PlotAssemblyClearingRuntime scanLoadedFootprint(@Nonnull World world, @Nonnull PlotAssemblyJob job) {
         PlotAssemblyClearingRuntime rt = new PlotAssemblyClearingRuntime();
-        LocalCachedChunkAccessor chunkAccessor =
-            ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
         Vector3i anchor = job.anchor();
         List<PendingBlock> footprint = job.footprintCells();
         for (int i = 0; i < footprint.size(); i++) {
@@ -51,7 +34,7 @@ public final class PlotAssemblyClearingRuntime {
             int wy = anchor.y + pb.y();
             int wz = anchor.z + pb.z();
             Vector3i cell = new Vector3i(wx, wy, wz);
-            if (AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell, chunkAccessor)) {
+            if (AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell)) {
                 rt.addCell(cell);
             }
         }
@@ -93,10 +76,9 @@ public final class PlotAssemblyClearingRuntime {
 
     /** Drops cached cells that no longer hold a solid block (e.g. broken manually without the staff). */
     public void pruneStale(@Nonnull World world, @Nonnull PlotAssemblyJob job) {
-        LocalCachedChunkAccessor acc = chunkAccessor(world, job);
         for (int i = obstructedWorldCells.size() - 1; i >= 0; i--) {
             Vector3i cell = obstructedWorldCells.get(i);
-            if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell, acc)) {
+            if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell)) {
                 removeCellInternal(cell.x, cell.y, cell.z);
             }
         }
@@ -109,11 +91,6 @@ public final class PlotAssemblyClearingRuntime {
         }
         ticksSinceFullPrune = 0;
         pruneStale(world, job);
-    }
-
-    @Nonnull
-    public LocalCachedChunkAccessor getOrCreateChunkAccessor(@Nonnull World world, @Nonnull PlotAssemblyJob job) {
-        return chunkAccessor(world, job);
     }
 
     /** Hot path: copy cached obstructed cells without stale pruning. */
@@ -130,7 +107,6 @@ public final class PlotAssemblyClearingRuntime {
         @Nonnull AssemblySectionMapper sectionMapper,
         int flatSection
     ) {
-        LocalCachedChunkAccessor acc = chunkAccessor(world, job);
         Vector3i anchor = job.anchor();
         List<PendingBlock> footprint = job.footprintCells();
         for (int i = 0; i < footprint.size(); i++) {
@@ -142,7 +118,7 @@ public final class PlotAssemblyClearingRuntime {
             int wy = anchor.y + pb.y();
             int wz = anchor.z + pb.z();
             Vector3i cell = new Vector3i(wx, wy, wz);
-            if (AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell, acc)) {
+            if (AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell)) {
                 addCell(cell);
             }
         }
@@ -190,13 +166,12 @@ public final class PlotAssemblyClearingRuntime {
         @Nonnull ArrayList<Vector3i> out
     ) {
         pruneStale(world, job);
-        LocalCachedChunkAccessor acc = chunkAccessor(world, job);
         int cx = centerWorld.x;
         int cy = centerWorld.y;
         int cz = centerWorld.z;
         for (int i = 0; i < obstructedWorldCells.size(); i++) {
             Vector3i cell = obstructedWorldCells.get(i);
-            if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell, acc)) {
+            if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell)) {
                 continue;
             }
             int dx = Math.abs(cell.x - cx);
@@ -225,13 +200,12 @@ public final class PlotAssemblyClearingRuntime {
         @Nonnull List<Vector3i> out
     ) {
         pruneStale(world, job);
-        LocalCachedChunkAccessor acc = chunkAccessor(world, job);
         double ox = observerPos.x();
         double oy = observerPos.y();
         double oz = observerPos.z();
         for (int i = 0; i < obstructedWorldCells.size(); i++) {
             Vector3i cell = obstructedWorldCells.get(i);
-            if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell, acc)) {
+            if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell)) {
                 continue;
             }
             double cellCx = cell.x + 0.5;
@@ -251,10 +225,9 @@ public final class PlotAssemblyClearingRuntime {
         @Nonnull PlotAssemblyJob job,
         @Nonnull ArrayList<Vector3i> out
     ) {
-        LocalCachedChunkAccessor acc = chunkAccessor(world, job);
         for (int i = 0; i < obstructedWorldCells.size(); i++) {
             Vector3i cell = obstructedWorldCells.get(i);
-            if (AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell, acc)) {
+            if (AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell)) {
                 out.add(cell);
             }
         }
@@ -264,4 +237,3 @@ public final class PlotAssemblyClearingRuntime {
         return ((long) x & 0x3FFFFFL) << 42 | ((long) y & 0xFFFL) << 30 | ((long) z & 0x3FFFFFL);
     }
 }
-

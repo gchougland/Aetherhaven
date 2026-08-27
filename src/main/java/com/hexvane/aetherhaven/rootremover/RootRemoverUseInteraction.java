@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.rootremover;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
@@ -87,7 +88,7 @@ public final class RootRemoverUseInteraction extends SimpleBlockInteraction {
             interactionContext.getState().state = InteractionState.Failed;
             return;
         }
-        BlockType clicked = world.getBlockType(targetBlock.x(), targetBlock.y(), targetBlock.z());
+        BlockType clicked = ChunkSectionBlockUtil.blockType(world, targetBlock.x(), targetBlock.y(), targetBlock.z());
         interactionContext.getState().state =
             RootRemoverService.isTrunkBlock(clicked) ? InteractionState.Finished : InteractionState.Failed;
     }

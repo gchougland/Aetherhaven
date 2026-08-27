@@ -238,6 +238,9 @@ public final class PlotCraftingCatalog {
     }
 
     static boolean isCraftable(@Nonnull ConstructionDefinition def) {
+        if (def.isLegacyPlotSupport()) {
+            return false;
+        }
         if (def.isWallSegment()) {
             return false;
         }

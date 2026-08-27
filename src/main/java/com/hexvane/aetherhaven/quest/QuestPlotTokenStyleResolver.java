@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.quest;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.community.CommunityCatalogService;
 import com.hexvane.aetherhaven.community.CommunityManifestEntry;
@@ -58,9 +59,16 @@ public final class QuestPlotTokenStyleResolver {
             if (!requiredModsSatisfied(def, community)) {
                 continue;
             }
-            if (catalog.matchesGameplayConstruction(id, base)) {
-                candidates.add(def);
+            if (!catalog.matchesGameplayConstruction(id, base)) {
+                continue;
             }
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(base) && !isHouseOnly(catalog, id)) {
+                continue;
+            }
+            if (def.isLegacyPlotSupport()) {
+                continue;
+            }
+            candidates.add(def);
         }
         if (candidates.isEmpty()) {
             return base;
@@ -68,6 +76,13 @@ public final class QuestPlotTokenStyleResolver {
         ConstructionDefinition picked = candidates.get(random.nextInt(candidates.size()));
         String id = picked.getId();
         return id != null && !id.isBlank() ? id.trim() : base;
+    }
+
+    /** True when the stored construction counts as a house and nothing else. */
+    private static boolean isHouseOnly(@Nonnull ConstructionCatalog catalog, @Nonnull String storedId) {
+        List<String> gameplayIds = catalog.resolveGameplayConstructionIds(storedId);
+        return gameplayIds.size() == 1
+            && AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(gameplayIds.get(0));
     }
 
     private static boolean requiredModsSatisfied(

@@ -4,7 +4,7 @@
     "Description": "aetherhaven_items.items.Aetherhaven_Block_Palette.description"
   },
   "Parent": "Furniture_Village_Crate",
-  "Categories": ["Items.Misc", "Aetherhaven.All"],
+  "Categories": [],
   "Quality": "Uncommon",
   "MaxStack": 16,
   "Set": "Aetherhaven",

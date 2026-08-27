@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.placement;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCompleter;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
@@ -148,7 +149,7 @@ public final class PlotBuildingRelocation {
 
         Runnable onComplete =
             () -> {
-                world.breakBlock(signPos.x, signPos.y, signPos.z, SIGN_BREAK_SETTINGS);
+                ChunkSectionBlockUtil.breakBlock(world, signPos.x, signPos.y, signPos.z, SIGN_BREAK_SETTINGS);
                 ConstructionCompleter.finishBuild(world, plugin, playerUuid, movePlotId, prefabOrigin, session.getPrefabYaw());
             };
         ConstructionAnimator.start(

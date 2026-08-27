@@ -40,16 +40,13 @@ public final class VillagerBlockUtil {
     private VillagerBlockUtil() {}
 
     /**
-     * Block rotation index; delegates to {@link WorldChunk#getRotationIndex(int, int, int)} (same path as
-     * {@link com.hypixel.hytale.server.core.universe.world.accessor.IChunkAccessorSync}) until section access is
-     * non-deprecated.
+     * Block rotation index for an already-resident column.
      */
-    @SuppressWarnings({ "deprecation", "removal" })
-    static int rotationIndexForLoadedChunk(@Nonnull WorldChunk chunk, int x, int y, int z) {
+    static int rotationIndexForLoadedChunk(@Nonnull World world, int x, int y, int z) {
         if (y < 0 || y >= 320) {
             return 0;
         }
-        return chunk.getRotationIndex(x, y, z);
+        return ChunkSectionBlockUtil.rotationIndex(world, x, y, z);
     }
 
     public static int blockRotationIndexNoLoad(@Nonnull World world, int x, int y, int z) {
@@ -57,7 +54,7 @@ public final class VillagerBlockUtil {
             return 0;
         }
         WorldChunk wc = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
-        return wc != null ? rotationIndexForLoadedChunk(wc, x, y, z) : 0;
+        return wc != null ? rotationIndexForLoadedChunk(world, x, y, z) : 0;
     }
 
     /** Feet Y at column or {@link Integer#MIN_VALUE} if unknown (chunk not loaded). */
@@ -202,7 +199,7 @@ public final class VillagerBlockUtil {
         if (chunk == null) {
             return null;
         }
-        return BlockType.getAssetMap().getAsset(chunk.getBlock(x, y, z));
+        return ChunkSectionBlockUtil.blockType(world, x, y, z);
     }
 
     /** True when an NPC can stand at feet Y in this column (passable feet/head, solid ground below). */
@@ -474,7 +471,7 @@ public final class VillagerBlockUtil {
         }
         WorldChunk wc = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (wc != null) {
-            RotationTuple rt = RotationTuple.get(rotationIndexForLoadedChunk(wc, x, y, z));
+            RotationTuple rt = RotationTuple.get(rotationIndexForLoadedChunk(world, x, y, z));
             return DoorInteraction.getDoorAtPosition(world.getChunkStore(), x, y, z, rt.yaw()) != null;
         }
         return isDoorBlockTypeWhenChunkUnknown(t);
@@ -603,13 +600,12 @@ public final class VillagerBlockUtil {
      * empty air for some rotations.
      */
     @Nonnull
-    @SuppressWarnings({ "deprecation", "removal" })
     public static Vector3i resolveMountBaseBlock(@Nonnull World world, int x, int y, int z) {
         WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (chunk == null) {
             return new Vector3i(x, y, z);
         }
-        int filler = chunk.getFiller(x, y, z);
+        int filler = ChunkSectionBlockUtil.filler(world, x, y, z);
         if (filler == FillerBlockUtil.NO_FILLER) {
             return new Vector3i(x, y, z);
         }

@@ -93,11 +93,11 @@ public final class PlotPlacementCommit {
         if (!ok) {
             return false;
         }
-        chunk.setTicking(x, y, z, true);
+        ChunkSectionBlockUtil.setTicking(world, x, y, z, true);
 
         BlockComponentSection blockComponentSection = ChunkSectionBlockUtil.blockComponentSectionAt(world, x, y, z);
         if (blockComponentSection == null) {
-            world.breakBlock(x, y, z, PLACE_SETTINGS);
+            ChunkSectionBlockUtil.breakBlock(world, x, y, z, PLACE_SETTINGS);
             return false;
         }
 
@@ -105,7 +105,7 @@ public final class PlotPlacementCommit {
         if (!attachPlotSignBlockEntity(
             world, chunk, blockComponentSection, x, y, z, blockType, rotationIndex, constructionId, plotIdStr
         )) {
-            world.breakBlock(x, y, z, PLACE_SETTINGS);
+            ChunkSectionBlockUtil.breakBlock(world, x, y, z, PLACE_SETTINGS);
             return false;
         }
         return true;
@@ -127,8 +127,8 @@ public final class PlotPlacementCommit {
         @Nonnull String constructionId,
         @Nonnull String plotIdStr
     ) {
-        chunk.setTicking(x, y, z, true);
-        Ref<ChunkStore> signRef = chunk.getBlockComponentEntity(x, y, z);
+        ChunkSectionBlockUtil.setTicking(world, x, y, z, true);
+        Ref<ChunkStore> signRef = ChunkSectionBlockUtil.blockEntityRefAt(world, x, y, z);
         if (signRef == null || !signRef.isValid()) {
             Holder<ChunkStore> template = blockType.getBlockEntity();
             if (template == null) {
@@ -154,7 +154,7 @@ public final class PlotPlacementCommit {
                 holder
             );
         }
-        signRef = chunk.getBlockComponentEntity(x, y, z);
+        signRef = ChunkSectionBlockUtil.blockEntityRefAt(world, x, y, z);
         if (signRef == null || !signRef.isValid()) {
             return false;
         }
@@ -199,7 +199,7 @@ public final class PlotPlacementCommit {
             atType != null && AetherhavenConstants.PLOT_SIGN_ITEM_ID.equals(atType.getId());
 
         if (blockIsSign) {
-            if (isPlotSignLinked(chunk, x, y, z, constructionId, plotIdStr)) {
+            if (isPlotSignLinked(world, x, y, z, constructionId, plotIdStr)) {
                 return LinkRepairResult.ALREADY_OK;
             }
             BlockType blockType = atType;
@@ -256,14 +256,14 @@ public final class PlotPlacementCommit {
     }
 
     private static boolean isPlotSignLinked(
-        @Nonnull WorldChunk chunk,
+        @Nonnull World world,
         int x,
         int y,
         int z,
         @Nonnull String constructionId,
         @Nonnull String plotIdStr
     ) {
-        Ref<ChunkStore> signRef = chunk.getBlockComponentEntity(x, y, z);
+        Ref<ChunkStore> signRef = ChunkSectionBlockUtil.blockEntityRefAt(world, x, y, z);
         if (signRef == null || !signRef.isValid()) {
             return false;
         }
@@ -285,12 +285,12 @@ public final class PlotPlacementCommit {
         @Nonnull Store<EntityStore> entityStore
     ) {
         if (world.isInThread()) {
-            world.breakBlock(x, y, z, PLACE_SETTINGS);
+            ChunkSectionBlockUtil.breakBlock(world, x, y, z, PLACE_SETTINGS);
             return placePlotSignOnWorldThread(world, x, y, z, prefabYaw, constructionId, plotId);
         }
         return CompletableFuture.supplyAsync(
                 () -> {
-                    world.breakBlock(x, y, z, PLACE_SETTINGS);
+                    ChunkSectionBlockUtil.breakBlock(world, x, y, z, PLACE_SETTINGS);
                     return placePlotSignOnWorldThread(world, x, y, z, prefabYaw, constructionId, plotId);
                 },
                 world

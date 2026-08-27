@@ -119,7 +119,7 @@ public final class PathToolReplaceFilterEditorHelper {
         if (chunk == null) {
             return null;
         }
-        BlockType blockType = BlockType.getAssetMap().getAsset(chunk.getBlock(x, y, z));
+        BlockType blockType = ChunkSectionBlockUtil.blockType(world, x, y, z);
         if (blockType == null || blockType == BlockType.EMPTY) {
             return null;
         }

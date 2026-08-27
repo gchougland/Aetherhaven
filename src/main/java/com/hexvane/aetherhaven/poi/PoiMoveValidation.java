@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.poi;
 
+
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.universe.world.World;
 import javax.annotation.Nonnull;
@@ -20,7 +22,7 @@ public final class PoiMoveValidation {
         if (expectedType == null || expectedType.isBlank()) {
             return true;
         }
-        BlockType bt = world.getBlockType(x, y, z);
+        BlockType bt = ChunkSectionBlockUtil.blockType(world, x, y, z);
         return bt != null && expectedType.equals(bt.getId());
     }
 }

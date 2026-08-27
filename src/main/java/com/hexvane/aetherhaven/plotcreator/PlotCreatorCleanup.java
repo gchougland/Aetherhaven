@@ -123,6 +123,6 @@ public final class PlotCreatorCleanup {
         if (ch == null) {
             return;
         }
-        ch.setBlock(pos.x, pos.y, pos.z, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, 10);
+        ChunkSectionBlockUtil.setBlockEmpty(world, pos.x, pos.y, pos.z, 10);
     }
 }

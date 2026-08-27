@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.town;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyWorldRegistry;
 import com.hexvane.aetherhaven.map.TownBorderMapOverlayService;
@@ -67,7 +68,7 @@ public final class TownDissolutionService {
         TownBorderMapOverlayService.onWorldTownsChanged(world);
         TownMapMarkerProvider.removeTownMarkerFromAllPlayers(world, townId);
         TownMapMarkerCache.scheduleRebuild(world);
-        world.breakBlock(town.getCharterX(), town.getCharterY(), town.getCharterZ(), BREAK_SETTINGS);
+        ChunkSectionBlockUtil.breakBlock(world, town.getCharterX(), town.getCharterY(), town.getCharterZ(), BREAK_SETTINGS);
     }
 
     private static void collectLoadedBoundNpcUuids(
@@ -130,10 +131,10 @@ public final class TownDissolutionService {
     ) {
         PropPlotTeardown.packageIntersecting(world, plugin, p.toFootprint(), actingPlayer, entityStore);
         if (p.getState() == PlotInstanceState.BLUEPRINTING) {
-            world.breakBlock(p.getSignX(), p.getSignY(), p.getSignZ(), BREAK_SETTINGS);
+            ChunkSectionBlockUtil.breakBlock(world, p.getSignX(), p.getSignY(), p.getSignZ(), BREAK_SETTINGS);
         } else if (p.getState() == PlotInstanceState.ASSEMBLING) {
             AssemblyWorldRegistry.remove(world, p.getPlotId());
-            world.breakBlock(p.getSignX(), p.getSignY(), p.getSignZ(), BREAK_SETTINGS);
+            ChunkSectionBlockUtil.breakBlock(world, p.getSignX(), p.getSignY(), p.getSignZ(), BREAK_SETTINGS);
             PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(entityStore, p.toFootprint(), town);
             clearPlotBlocks(world, p.toFootprint(), blockClearMode, sparseClear);
         } else if (p.getState() == PlotInstanceState.COMPLETE) {

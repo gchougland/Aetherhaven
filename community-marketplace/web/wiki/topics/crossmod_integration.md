@@ -90,6 +90,35 @@ Same `npcRoleId` under `Villagers/` replaces the **whole** villager definition. 
 
 Item ids are appended (duplicates skipped). Put full gift lists on your own villager def when you own that role.
 
+### Wintertide gifts
+
+What a villager **gives the player** on Wintertide is separate from loves, likes, and dislikes. Built-in Aetherhaven roles have their own tables. For your villager, add `wintertideGifts` on the villager definition:
+
+```json
+{
+  "npcRoleId": "YourMod_Fisherman",
+  "dialogueVillagerKind": "angler",
+  "wintertideGifts": [
+    { "itemId": "Fish_Salmon_Item", "count": 8 },
+    { "itemId": "CozyFishing_Wooden_Rod", "count": 1 }
+  ]
+}
+```
+
+Leave `count` out to give 1. To roll a random item from a list, use `pickOne`, and `repeats` to roll that row more than once:
+
+```json
+"wintertideGifts": [
+  {
+    "pickOne": ["Plant_Flower_Orchid_Blue", "Plant_Flower_Orchid_Red"],
+    "count": 1,
+    "repeats": 16
+  }
+]
+```
+
+If `wintertideGifts` is present, it is used even when `dialogueVillagerKind` matches a built-in role. If you omit it, Aetherhaven uses the built-in table for that kind when there is one, otherwise a fallback present.
+
 ## Villager schedules
 
 Villagers follow a weekly routine: at set days and times they go to symbolic locations (home, work, inn, park, gaia altar, shop, or your own registered symbols). Aetherhaven resolves those symbols to town plots at runtime.

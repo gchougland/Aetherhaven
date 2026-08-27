@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.placement;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
@@ -23,7 +24,7 @@ public final class WallPlacementRemoveService {
 
     /** Removes the plot sign block if it is still in the world (undo fallback). */
     public static void breakPlotSignAt(@Nonnull World world, int x, int y, int z) {
-        world.breakBlock(x, y, z, BREAK_SETTINGS);
+        ChunkSectionBlockUtil.breakBlock(world, x, y, z, BREAK_SETTINGS);
     }
 
     public static boolean removeWallPlot(

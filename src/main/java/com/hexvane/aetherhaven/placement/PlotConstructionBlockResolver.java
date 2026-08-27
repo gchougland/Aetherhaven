@@ -32,7 +32,6 @@ public final class PlotConstructionBlockResolver {
     private PlotConstructionBlockResolver() {}
 
     @Nonnull
-    @SuppressWarnings({ "deprecation", "removal" })
     private static BlockPosition baseBlockPosition(@Nonnull World world, @Nonnull BlockPosition position) {
         if (position.y < 0 || position.y >= 320) {
             return position;
@@ -41,7 +40,7 @@ public final class PlotConstructionBlockResolver {
         if (chunk == null) {
             return position;
         }
-        int filler = chunk.getFiller(position.x, position.y, position.z);
+        int filler = ChunkSectionBlockUtil.filler(world, position.x, position.y, position.z);
         if (filler == 0) {
             return position;
         }
@@ -97,7 +96,7 @@ public final class PlotConstructionBlockResolver {
         int bestY = 0;
         int bestDist = Integer.MAX_VALUE;
         for (int y = yMin; y <= yMax; y++) {
-            Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(blockX, y, blockZ);
+            Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, blockX, y, blockZ);
             if (blockRef == null) {
                 continue;
             }

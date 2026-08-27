@@ -1,0 +1,8 @@
+{
+  "id": "plot_jszzas_town_hall",
+  "displayName": "Jszza's Town Hall",
+  "legacyPlotSupport": true,
+  "countsAsConstructionId": "plot_town_hall",
+  "treasuryGoldCoinCost": 50,
+  "touristDestination": true
+}

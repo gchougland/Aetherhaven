@@ -12,7 +12,6 @@ import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
-import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
@@ -21,8 +20,6 @@ import com.hypixel.hytale.server.core.prefab.PrefabStore;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.world.SetBlockSettings;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import java.nio.file.Path;
@@ -90,9 +87,8 @@ public final class PropPrefabOps {
             }
             clearBlockCell(world, bx, by, bz);
         }
-        LocalCachedChunkAccessor chunkAccessor = ConstructionPasteOps.createAccessor(world, origin, buffer);
         ConstructionPasteOps.clearAllFluidsInPrefabFootprint(
-            world, origin, seq.pendingBlocks(), false, chunkAccessor
+            world, origin, seq.pendingBlocks(), false
         );
     }
 
@@ -262,21 +258,19 @@ public final class PropPrefabOps {
         if (y < 0 || y >= 320) {
             return null;
         }
-        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
-        if (chunk == null) {
+        if (ChunkSectionBlockUtil.sectionRefAt(world, x, y, z) == null) {
             return null;
         }
-        return BlockType.getAssetMap().getAsset(chunk.getBlock(x, y, z));
+        return ChunkSectionBlockUtil.blockType(world, x, y, z);
     }
 
     /** Mirrors {@code PrefabFootprintClearUtil#forceClearBlockCell} (private there). */
     private static void clearBlockCell(@Nonnull World world, int x, int y, int z) {
-        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
-        if (chunk == null) {
+        if (ChunkSectionBlockUtil.sectionRefAt(world, x, y, z) == null) {
             return;
         }
-        Ref<ChunkStore> blockEntityRef = chunk.getBlockComponentEntity(x, y, z);
-        chunk.setBlock(x, y, z, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, FORCE_CLEAR_SETTINGS);
+        Ref<ChunkStore> blockEntityRef = ChunkSectionBlockUtil.blockEntityRefAt(world, x, y, z);
+        ChunkSectionBlockUtil.setBlockEmpty(world, x, y, z, FORCE_CLEAR_SETTINGS);
         if (blockEntityRef != null && blockEntityRef.isValid()) {
             world.getChunkStore().getStore().removeEntity(blockEntityRef, RemoveReason.REMOVE);
         }

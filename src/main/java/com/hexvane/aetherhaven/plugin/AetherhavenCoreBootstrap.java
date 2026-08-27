@@ -12,6 +12,8 @@ import com.hexvane.aetherhaven.command.AetherhavenJournalCommand;
 import com.hexvane.aetherhaven.generated.HstatsBuildMetadata;
 import com.hexvane.aetherhaven.hud.AetherhavenHudRefreshSystem;
 import com.hexvane.aetherhaven.hud.AetherhavenHudSupport;
+import com.hexvane.aetherhaven.entity.BlockEntityScaleMigrated;
+import com.hexvane.aetherhaven.entity.BlockEntityScaleRepairSystem;
 import com.hexvane.aetherhaven.entity.EntityRotationRepairSystem;
 import com.hexvane.aetherhaven.map.TeleporterWarpSanitizer;
 import com.hexvane.aetherhaven.npc.AetherhavenNpcRoleLoader;
@@ -44,6 +46,7 @@ import com.hexvane.aetherhaven.villager.VillagerLocatePlayerInitSystem;
 import com.hexvane.aetherhaven.territory.TerritoryProtectionBootstrap;
 import com.hexvane.aetherhaven.tourist.TouristReconcileService;
 import com.hexvane.aetherhaven.town.TownResidentReconcileService;
+import com.hexvane.aetherhaven.town.RetiredBuiltInPlotMigration;
 import com.hexvane.aetherhaven.festival.wintertide.WintertideGiftService;
 import com.hexvane.aetherhaven.ui.GaiaStatueRevivePage;
 import com.hexvane.aetherhaven.ui.QuestJournalPage;
@@ -127,8 +130,10 @@ public final class AetherhavenCoreBootstrap {
         PlotLocatePlayerComponent.register(plugin.getEntityStoreRegistry());
         PlayerPlotTokenUnlockState.register(plugin.getEntityStoreRegistry());
         PlayerConstructionFavoritesState.register(plugin.getEntityStoreRegistry());
+        BlockEntityScaleMigrated.register(plugin.getEntityStoreRegistry());
         plugin.getEntityStoreRegistry().registerSystem(new EntityRotationRepairSystem.OnHolderAdd());
         plugin.getEntityStoreRegistry().registerSystem(new EntityRotationRepairSystem.OnRefAdded());
+        plugin.getEntityStoreRegistry().registerSystem(new BlockEntityScaleRepairSystem());
         plugin.getEntityStoreRegistry().registerSystem(new TownJournalPlayerInitSystem());
         plugin.getEntityStoreRegistry().registerSystem(new VillagerLocatePlayerInitSystem());
         plugin.getEntityStoreRegistry().registerSystem(new PlotLocatePlayerInitSystem());
@@ -335,6 +340,12 @@ public final class AetherhavenCoreBootstrap {
                                     TownResidentReconcileService.onTownMemberPlayerReady(
                                         player.getWorld(),
                                         AetherhavenPlugin.get(),
+                                        uc.getUuid()
+                                    );
+                                    RetiredBuiltInPlotMigration.notifyOwnerIfNeeded(
+                                        player.getWorld(),
+                                        AetherhavenPlugin.get(),
+                                        readyPlayerRef,
                                         uc.getUuid()
                                     );
                                     WintertideGiftService.onTownMemberPlayerReady(

@@ -355,6 +355,15 @@ public final class TownRecord {
     @SerializedName("unlockedBlockPaletteIds")
     private LinkedHashSet<String> unlockedBlockPaletteIds;
 
+    /** Plot ids already paid the one-time gold return for retired built-in Jimmy/Jszza buildings. */
+    @Nullable
+    @SerializedName("reimbursedRetiredPlotIds")
+    private LinkedHashSet<String> reimbursedRetiredPlotIds;
+
+    /** Gold returned for retired buildings, shown to the owner once on join. */
+    @SerializedName("pendingRetiredBuildingGoldNotice")
+    private long pendingRetiredBuildingGoldNotice;
+
     /**
      * Per-resident cosmetic overrides: resident key ({@code role:...} / {@code character:...}) → slot id → cosmetic id.
      * Missing slot or {@code default} means use the villager's catalog look for that slot.
@@ -2074,6 +2083,31 @@ public final class TownRecord {
         }
         long next = getTreasuryGoldCoinCount() + delta;
         this.treasuryGoldCoinCount = Math.max(0L, next);
+    }
+
+    @Nonnull
+    public Set<String> reimbursedRetiredPlotIds() {
+        if (reimbursedRetiredPlotIds == null) {
+            reimbursedRetiredPlotIds = new LinkedHashSet<>();
+        }
+        return reimbursedRetiredPlotIds;
+    }
+
+    public long getPendingRetiredBuildingGoldNotice() {
+        return Math.max(0L, pendingRetiredBuildingGoldNotice);
+    }
+
+    public void addPendingRetiredBuildingGoldNotice(long gold) {
+        if (gold <= 0L) {
+            return;
+        }
+        pendingRetiredBuildingGoldNotice = getPendingRetiredBuildingGoldNotice() + gold;
+    }
+
+    public long consumePendingRetiredBuildingGoldNotice() {
+        long gold = getPendingRetiredBuildingGoldNotice();
+        pendingRetiredBuildingGoldNotice = 0L;
+        return gold;
     }
 
     @Nonnull

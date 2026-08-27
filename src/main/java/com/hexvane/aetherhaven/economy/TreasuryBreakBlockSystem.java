@@ -57,7 +57,7 @@ public final class TreasuryBreakBlockSystem extends EntityEventSystem<EntityStor
         if (chunk == null) {
             return;
         }
-        Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(pos.x, pos.y, pos.z);
+        Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, pos.x, pos.y, pos.z);
         if (blockRef == null) {
             return;
         }

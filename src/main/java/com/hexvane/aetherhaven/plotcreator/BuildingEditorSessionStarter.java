@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.plotcreator;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
@@ -365,7 +366,7 @@ public final class BuildingEditorSessionStarter {
         for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
             for (int y = fp.getMinY(); y <= fp.getMaxY(); y++) {
                 for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
-                    if (!AetherhavenConstants.SHOP_SPOT_BLOCK_TYPE_ID.equals(world.getBlockType(x, y, z).getId())) {
+                    if (!AetherhavenConstants.SHOP_SPOT_BLOCK_TYPE_ID.equals(ChunkSectionBlockUtil.blockType(world, x, y, z).getId())) {
                         continue;
                     }
                     Vector3i pos = new Vector3i(x, y, z);
@@ -389,7 +390,7 @@ public final class BuildingEditorSessionStarter {
         for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
             for (int y = fp.getMinY(); y <= fp.getMaxY(); y++) {
                 for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
-                    if (!AetherhavenConstants.INN_BELL_BLOCK_TYPE_ID.equals(world.getBlockType(x, y, z).getId())) {
+                    if (!AetherhavenConstants.INN_BELL_BLOCK_TYPE_ID.equals(ChunkSectionBlockUtil.blockType(world, x, y, z).getId())) {
                         continue;
                     }
                     draft.setInnBellLocalPos(PlotCreatorLocalCoords.toLocal(draft, new Vector3i(x, y, z)));

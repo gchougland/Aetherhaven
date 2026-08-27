@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.ui;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.plot.PlotTokenInventory;
@@ -702,6 +703,10 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
             sendError(store, ref, "Unknown construction: " + session.getConstructionId());
             return false;
         }
+        if (def.isLegacyPlotSupport()) {
+            sendError(store, ref, "This building now comes from the marketplace.");
+            return false;
+        }
         Player player = store.getComponent(ref, Player.getComponentType());
         CombinedItemContainer inv =
             player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
@@ -1082,7 +1087,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
     }
 
     private static boolean isReplaceableSignCell(@Nonnull World world, int x, int y, int z) {
-        BlockType t = world.getBlockType(x, y, z);
+        BlockType t = ChunkSectionBlockUtil.blockType(world, x, y, z);
         return t == null || t.getMaterial() == BlockMaterial.Empty;
     }
 

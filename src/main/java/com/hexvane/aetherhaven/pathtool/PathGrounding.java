@@ -6,7 +6,6 @@ import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -67,10 +66,9 @@ public final class PathGrounding {
         if (y < 0 || y > 320) {
             return null;
         }
-        WorldChunk c = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
-        if (c == null) {
+        if (ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z)) == null) {
             return null;
         }
-        return BlockType.getAssetMap().getAsset(c.getBlock(x, y, z));
+        return ChunkSectionBlockUtil.blockType(world, x, y, z);
     }
 }

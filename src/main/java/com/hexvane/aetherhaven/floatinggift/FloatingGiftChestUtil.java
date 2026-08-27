@@ -151,7 +151,7 @@ public final class FloatingGiftChestUtil {
         }
         WindowManager.closeAndRemoveAll(chest.getWindows());
 
-        world.breakBlock(pos.x, pos.y, pos.z, SetBlockSettings.NO_DROP_ITEMS);
+        ChunkSectionBlockUtil.breakBlock(world, pos.x, pos.y, pos.z, SetBlockSettings.NO_DROP_ITEMS);
     }
 
     /**

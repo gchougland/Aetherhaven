@@ -1,13 +1,12 @@
 package com.hexvane.aetherhaven.world;
 
+import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
-import com.hypixel.hytale.server.core.universe.world.SetBlockSettings;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.accessor.ChunkAccessor;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockOperations;
 import com.hypixel.hytale.server.core.universe.world.chunk.ChunkFlag;
@@ -20,6 +19,7 @@ import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import java.util.concurrent.CompletableFuture;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector3ic;
 
 /**
  * Chunk column and section block access without deprecated {@link World} chunk helpers or
@@ -175,16 +175,22 @@ public final class ChunkSectionBlockUtil {
     }
 
     public static int blockId(@Nonnull World world, int x, int y, int z) {
-        BlockChunk chunk = blockChunkAt(world, x, z);
-        if (chunk == null || y < ChunkUtil.MIN_Y || y >= ChunkUtil.HEIGHT) {
+        BlockSection section = blockSectionAt(world, x, y, z);
+        if (section == null) {
             return BlockType.EMPTY_ID;
         }
-        return chunk.getBlock(x, y, z);
+        return section.get(x, y, z);
     }
 
     @Nullable
     public static BlockType blockType(@Nonnull World world, int x, int y, int z) {
-        return BlockType.getAssetMap().getAsset(blockId(world, x, y, z));
+        int id = blockId(world, x, y, z);
+        return BlockType.getAssetMap().getAsset(id);
+    }
+
+    @Nullable
+    public static BlockType blockType(@Nonnull World world, @Nonnull Vector3ic pos) {
+        return blockType(world, pos.x(), pos.y(), pos.z());
     }
 
     public static int rotationIndex(@Nonnull World world, int x, int y, int z) {
@@ -192,7 +198,114 @@ public final class ChunkSectionBlockUtil {
         if (section == null) {
             return RotationTuple.NONE_INDEX;
         }
-        return section.getRotationIndex(ChunkUtil.indexBlock(x, y, z));
+        return section.getRotationIndex(x, y, z);
+    }
+
+    public static int filler(@Nonnull World world, int x, int y, int z) {
+        BlockSection section = blockSectionAt(world, x, y, z);
+        if (section == null) {
+            return FillerBlockUtil.NO_FILLER;
+        }
+        return section.getFiller(x, y, z);
+    }
+
+    public static boolean setTicking(@Nonnull World world, int x, int y, int z, boolean ticking) {
+        BlockSection section = blockSectionAt(world, x, y, z);
+        if (section == null) {
+            return false;
+        }
+        return section.setTicking(x, y, z, ticking);
+    }
+
+    /**
+     * Copy of a parked or live block-entity holder at the cell, matching the old
+     * {@code WorldChunk#getBlockComponentHolder} behavior.
+     */
+    @Nullable
+    public static Holder<ChunkStore> blockEntityHolderAt(@Nonnull World world, int worldX, int worldY, int worldZ) {
+        BlockComponentSection section = blockComponentSectionAt(world, worldX, worldY, worldZ);
+        if (section == null) {
+            return null;
+        }
+        int index = ChunkUtil.indexBlock(worldX, worldY, worldZ);
+        Ref<ChunkStore> reference = section.getBlockReference(index);
+        if (reference != null && reference.isValid()) {
+            return reference.getStore().copyEntity(reference);
+        }
+        Holder<ChunkStore> holder = section.getBlockHolder(index);
+        return holder != null ? holder.clone() : null;
+    }
+
+    /**
+     * Loads the column if needed (without forcing ticking) and returns its {@link BlockChunk}.
+     */
+    @Nullable
+    public static BlockChunk loadBlockChunk(@Nonnull World world, int blockX, int blockZ) {
+        BlockChunk inMemory = blockChunkAt(world, blockX, blockZ);
+        if (inMemory != null) {
+            return inMemory;
+        }
+        if (!world.isInThread()) {
+            return CompletableFuture.supplyAsync(() -> loadBlockChunk(world, blockX, blockZ), world).join();
+        }
+        long chunkIndex = ChunkUtil.indexChunkFromBlock(blockX, blockZ);
+        Ref<ChunkStore> loaded = world.getChunkStore().getChunkReferenceAsync(chunkIndex).join();
+        if (loaded == null || !loaded.isValid()) {
+            return null;
+        }
+        return world.getChunkStore().getStore().getComponent(loaded, BlockChunk.getComponentType());
+    }
+
+    /**
+     * Highest non-transparent block Y in the column, or {@link ChunkUtil#MIN_Y}{@code - 1} if empty.
+     */
+    public static short columnHeight(@Nonnull World world, int blockX, int blockZ) {
+        BlockChunk chunk = loadBlockChunk(world, blockX, blockZ);
+        if (chunk == null) {
+            return (short) (ChunkUtil.MIN_Y - 1);
+        }
+        return chunk.getHeight(blockX, blockZ);
+    }
+
+    public static boolean breakBlock(@Nonnull World world, int x, int y, int z, int settings) {
+        return setBlockEmpty(world, x, y, z, settings);
+    }
+
+    /**
+     * Marks the 3x3x3 neighborhood as ticking so support/block-entity state updates.
+     * {@code allowPartialLoad} loads missing columns; otherwise unloaded neighbors are skipped.
+     */
+    public static boolean performBlockUpdate(
+        @Nonnull World world,
+        int x,
+        int y,
+        int z,
+        boolean allowPartialLoad
+    ) {
+        boolean success = true;
+        for (int ix = -1; ix < 2; ix++) {
+            int wx = x + ix;
+            for (int iz = -1; iz < 2; iz++) {
+                int wz = z + iz;
+                if (allowPartialLoad) {
+                    if (loadBlockChunk(world, wx, wz) == null) {
+                        success = false;
+                        continue;
+                    }
+                } else if (chunkRefIfInMemory(world, wx, wz) == null) {
+                    success = false;
+                    continue;
+                }
+                for (int iy = -1; iy < 2; iy++) {
+                    setTicking(world, wx, y + iy, wz, true);
+                }
+            }
+        }
+        return success;
+    }
+
+    public static boolean performBlockUpdate(@Nonnull World world, int x, int y, int z) {
+        return performBlockUpdate(world, x, y, z, true);
     }
 
     public static boolean setBlock(
@@ -312,77 +425,4 @@ public final class ChunkSectionBlockUtil {
         return sectionRef;
     }
 
-    /**
-     * {@link ChunkAccessor} adapter for {@link World} after U6 removed {@code World implements ChunkAccessor}.
-     */
-    @Nonnull
-    public static ChunkAccessor chunkAccessor(@Nonnull World world) {
-        return new WorldChunkAccessor(world);
-    }
-
-    public static final class WorldChunkAccessor implements ChunkAccessor {
-        private final World world;
-
-        public WorldChunkAccessor(@Nonnull World world) {
-            this.world = world;
-        }
-
-        @Override
-        @Nullable
-        public WorldChunk getChunkIfInMemory(long index) {
-            return worldChunkIfInMemory(world, index);
-        }
-
-        @Override
-        @Nullable
-        public WorldChunk loadChunkIfInMemory(long index) {
-            WorldChunk chunk = getChunkIfInMemory(index);
-            if (chunk != null) {
-                chunk.setFlag(ChunkFlag.TICKING, true);
-            }
-            return chunk;
-        }
-
-        @Override
-        @Nullable
-        public WorldChunk getChunkIfLoaded(long index) {
-            WorldChunk chunk = getChunkIfInMemory(index);
-            return chunk != null && chunk.is(ChunkFlag.TICKING) ? chunk : null;
-        }
-
-        @Override
-        @Nullable
-        public WorldChunk getChunkIfNonTicking(long index) {
-            return worldChunkIfNonTicking(world, index);
-        }
-
-        @Override
-        @Nullable
-        public WorldChunk getChunk(long index) {
-            int blockX = ChunkUtil.xOfChunkIndex(index) * 16 + 8;
-            int blockZ = ChunkUtil.zOfChunkIndex(index) * 16 + 8;
-            return resolveTickingChunk(world, blockX, blockZ);
-        }
-
-        /**
-         * Matches {@link com.hypixel.hytale.server.core.universe.world.IWorldChunks#getNonTickingChunk}: any
-         * in-memory column (including ticking). Name is historical; do not filter on {@link ChunkFlag#TICKING}.
-         */
-        @Override
-        @Nullable
-        public WorldChunk getNonTickingChunk(long index) {
-            WorldChunk inMemory = worldChunkIfInMemory(world, index);
-            if (inMemory != null) {
-                return inMemory;
-            }
-            if (!world.isInThread()) {
-                return CompletableFuture.supplyAsync(() -> getNonTickingChunk(index), world).join();
-            }
-            Ref<ChunkStore> loaded = world.getChunkStore().getChunkReferenceAsync(index).join();
-            if (loaded == null || !loaded.isValid()) {
-                return null;
-            }
-            return world.getChunkStore().getStore().getComponent(loaded, WorldChunk.getComponentType());
-        }
-    }
 }

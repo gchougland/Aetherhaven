@@ -104,7 +104,7 @@ public final class AetherhavenStarterTownCommand extends AbstractPlayerCommand {
         Vector3d playerPosition = transform.getPosition();
         int x = (int) Math.floor(playerPosition.x);
         int z = (int) Math.floor(playerPosition.z);
-        WorldChunk surfaceChunk = ChunkSectionBlockUtil.worldChunkIfNonTicking(world, ChunkUtil.indexChunkFromBlock(x, z));
+        WorldChunk surfaceChunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
         if (surfaceChunk == null) {
             context.sendMessage(Message.translation("aetherhaven_commands_help.commands.aetherhaven.startertown.chunkMissing"));
             return;

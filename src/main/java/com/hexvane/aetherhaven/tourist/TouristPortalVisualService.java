@@ -39,7 +39,6 @@ public final class TouristPortalVisualService {
         });
     }
 
-    @SuppressWarnings({ "deprecation", "removal" })
     public static void applyColorVariantAtBlock(
         @Nonnull World world,
         @Nonnull Vector3i basePos,
@@ -70,16 +69,17 @@ public final class TouristPortalVisualService {
             if (chunk == null) {
                 return;
             }
-            BlockType current = chunk.getBlockType(cell.x, cell.y, cell.z);
+            BlockType current = ChunkSectionBlockUtil.blockType(world, cell.x, cell.y, cell.z);
             if (current != null && targetId.equals(current.getId())) {
                 return;
             }
             if (current == null || !TownPortalTravelColor.isTouristPortalBlockTypeId(current.getId())) {
                 return;
             }
-            int rotationIndex = chunk.getRotationIndex(cell.x, cell.y, cell.z);
-            int filler = chunk.getFiller(cell.x, cell.y, cell.z);
-            chunk.setBlock(
+            int rotationIndex = ChunkSectionBlockUtil.rotationIndex(world, cell.x, cell.y, cell.z);
+            int filler = ChunkSectionBlockUtil.filler(world, cell.x, cell.y, cell.z);
+            ChunkSectionBlockUtil.setBlock(
+                world,
                 cell.x,
                 cell.y,
                 cell.z,

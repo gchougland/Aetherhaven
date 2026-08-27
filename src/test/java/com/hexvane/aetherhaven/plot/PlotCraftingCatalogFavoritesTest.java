@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.plot;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.gson.Gson;
@@ -77,5 +78,17 @@ class PlotCraftingCatalogFavoritesTest {
         var coreFavorite = PlotCraftingCatalog.favoritesGroups(catalog, Set.of(townHall.getId()), Set.of());
         assertEquals(1, coreFavorite.size());
         assertEquals("plot_town_hall", coreFavorite.get(0).groupKey());
+    }
+
+    @Test
+    void legacyPlotSupportIsNotCraftable() {
+        ConstructionDefinition stub =
+            GSON.fromJson(
+                """
+                {"id":"plot_jszzas_house","displayName":"Jszza's House","legacyPlotSupport":true,"countsAsConstructionId":"plot_house","treasuryGoldCoinCost":48}
+                """,
+                ConstructionDefinition.class
+            );
+        assertFalse(PlotCraftingCatalog.isCraftable(stub));
     }
 }

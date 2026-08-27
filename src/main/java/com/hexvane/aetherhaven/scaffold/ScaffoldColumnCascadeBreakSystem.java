@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.scaffold;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.component.Archetype;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -70,7 +71,7 @@ public final class ScaffoldColumnCascadeBreakSystem extends EntityEventSystem<En
         if (by < ChunkUtil.MIN_Y || by > ChunkUtil.HEIGHT_MINUS_1) {
             return false;
         }
-        BlockType below = world.getBlockType(x, by, z);
+        BlockType below = ChunkSectionBlockUtil.blockType(world, x, by, z);
         if (below == null) {
             return false;
         }
@@ -92,7 +93,7 @@ public final class ScaffoldColumnCascadeBreakSystem extends EntityEventSystem<En
             if (ny < ChunkUtil.MIN_Y || ny > ChunkUtil.HEIGHT_MINUS_1) {
                 continue;
             }
-            BlockType t = world.getBlockType(nx, ny, nz);
+            BlockType t = ChunkSectionBlockUtil.blockType(world, nx, ny, nz);
             if (!isWoodScaffold(t)) {
                 continue;
             }
@@ -110,7 +111,7 @@ public final class ScaffoldColumnCascadeBreakSystem extends EntityEventSystem<En
                 if (ny < ChunkUtil.MIN_Y || ny > ChunkUtil.HEIGHT_MINUS_1) {
                     continue;
                 }
-                BlockType t = world.getBlockType(nx, ny, nz);
+                BlockType t = ChunkSectionBlockUtil.blockType(world, nx, ny, nz);
                 if (!isWoodScaffold(t)) {
                     continue;
                 }
@@ -210,7 +211,7 @@ public final class ScaffoldColumnCascadeBreakSystem extends EntityEventSystem<En
     ) {
         Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
         for (Vector3i p : floatingDescendingY) {
-            BlockType t = world.getBlockType(p.x(), p.y(), p.z());
+            BlockType t = ChunkSectionBlockUtil.blockType(world, p.x(), p.y(), p.z());
             if (!isWoodScaffold(t)) {
                 continue;
             }

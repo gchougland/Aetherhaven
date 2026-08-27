@@ -138,7 +138,7 @@ public final class PoiExtractor {
                 matchedType = expectedType;
             }
             if (anchor == null) {
-                BlockType at = world.getBlockType(wx, wy, wz);
+                BlockType at = ChunkSectionBlockUtil.blockType(world, wx, wy, wz);
                 String actual = at != null ? at.getId() : null;
                 boolean optionalQuestBoard =
                     AetherhavenConstants.QUEST_BOARD_ITEM_ID.equals(expectedType)
@@ -172,7 +172,7 @@ public final class PoiExtractor {
             if (expectedType != null) {
                 String remapped =
                     BlockPaletteRemapper.remapBlockTypeId(expectedType, blockPaletteSelections);
-                BlockType atCell = world.getBlockType(wx, wy, wz);
+                BlockType atCell = ChunkSectionBlockUtil.blockType(world, wx, wy, wz);
                 String actual = atCell != null ? atCell.getId() : null;
                 boolean optionalQuestBoard =
                     AetherhavenConstants.QUEST_BOARD_ITEM_ID.equals(expectedType)
@@ -195,10 +195,10 @@ public final class PoiExtractor {
             if (standY != Integer.MIN_VALUE) {
                 wy = standY;
             }
-            BlockType at = world.getBlockType(wx, wy, wz);
+            BlockType at = ChunkSectionBlockUtil.blockType(world, wx, wy, wz);
             if (at == null || at.getId() == null || "Empty".equalsIgnoreCase(at.getId())) {
                 Vector3i support = VillagerBlockUtil.resolveSupportBlockFromClick(world, new Vector3i(wx, wy, wz));
-                BlockType supportType = world.getBlockType(support.x, support.y, support.z);
+                BlockType supportType = ChunkSectionBlockUtil.blockType(world, support.x, support.y, support.z);
                 if (supportType != null && supportType.getId() != null) {
                     resolvedExpectedType = supportType.getId();
                 }
@@ -247,7 +247,7 @@ public final class PoiExtractor {
         int cz,
         @Nonnull String expectedType
     ) {
-        BlockType center = world.getBlockType(cx, cy, cz);
+        BlockType center = ChunkSectionBlockUtil.blockType(world, cx, cy, cz);
         if (center != null && blockTypeIdMatches(expectedType, center.getId())) {
             return VillagerBlockUtil.resolveMountBaseBlock(world, cx, cy, cz);
         }
@@ -266,7 +266,7 @@ public final class PoiExtractor {
                     int x = cx + dx;
                     int y = cy + dy;
                     int z = cz + dz;
-                    BlockType bt = world.getBlockType(x, y, z);
+                    BlockType bt = ChunkSectionBlockUtil.blockType(world, x, y, z);
                     if (bt == null || !blockTypeIdMatches(expectedType, bt.getId())) {
                         continue;
                     }
@@ -292,7 +292,6 @@ public final class PoiExtractor {
         return found ? new Vector3i(bestX, bestY, bestZ) : null;
     }
 
-    @SuppressWarnings({ "deprecation", "removal" })
     private static boolean isFillerVoxel(@Nonnull World world, int x, int y, int z) {
         WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, 
             com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(x, z)
@@ -300,7 +299,7 @@ public final class PoiExtractor {
         if (chunk == null) {
             return false;
         }
-        return chunk.getFiller(x, y, z) != FillerBlockUtil.NO_FILLER;
+        return ChunkSectionBlockUtil.filler(world, x, y, z) != FillerBlockUtil.NO_FILLER;
     }
 
     private static boolean blockTypeIdMatches(@Nonnull String expectedId, @Nonnull String actualId) {

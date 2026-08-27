@@ -1,5 +1,32 @@
 # Changelog
 
+## [3.1.1] - 8/27/2026
+
+### Added
+
+- **Wintertide gifts (crossmod)** Mod villagers can set the gifts they give on Wintertide with `wintertideGifts` on their villager file.
+
+### Changed
+
+- **Jszza buildings** Jszza buildings now come from the marketplace instead of being included with Aetherhaven. Towns that already built them get their gold back in the treasury, and those buildings still work as houses or workplaces.
+- **Jimmy buildings** Jimmy's tavern, church, lumbermill, workshop, and houses now come from the marketplace. Towns that already built them get their gold back in the treasury, and those buildings still work as houses or workplaces.
+
+### Fixed
+
+- **Plot creator** Marking shop stalls and tourist portals no longer crashes the world.
+- **Building decorations** Maps, treasure, and other things inside buildings are the right size again after Hytale Update 6.
+- **Plot staff** Dragging the move arrows moves the building preview with them again.
+- **Plot staff** Moving a building preview no longer leaves extra copies of things that were inside it.
+- **Props** Dragging the move arrows moves the prop outline and the things inside the preview with it.
+- **Starter town command** Creative `/ah startertown` works again while you are standing in the world.
+- **Housing quests** House quests give a house plot token, not a shop or workplace that also counts as a house.
+- **Plot tokens** You can scroll off a plot token in the hotbar again.
+- **Block palettes** You can scroll off a block palette in the hotbar again.
+- **Props** Downloaded and other crate style props can be scrolled off in the hotbar again.
+- **Block palettes** Palette items stay hidden from the creative menu, including when variants are shown.
+- **Props** Virtual prop items stay hidden from the creative menu, so shop props no longer show twice.
+- **Props** Creative `/ah prop give` lists marketplace props you have downloaded.
+
 ## [3.1.0] - 8/26/2026 (Hytale Update 6)
 
 ### Added

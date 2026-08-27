@@ -218,6 +218,7 @@ aetherhaven.ui.townJournal.removePlotSuccess=Building removed.
 aetherhaven.ui.townJournal.removePlotSuccessGoldAndToken=Building removed. Gold returned to the treasury and plot token returned.
 aetherhaven.ui.townJournal.removePlotSuccessTokenOnly=Building removed. Plot token returned.
 aetherhaven.ui.townJournal.removePlotSuccessGoldOnly=Building removed. Gold returned to the treasury.
+aetherhaven.ui.townJournal.retiredBuildingsGoldReturned=Some buildings now come from the marketplace. {gold} gold was put back in your town treasury. Those buildings are still in your town.
 aetherhaven.ui.townJournal.repairPlotTooltip=Fix missing shelves, safes, and work spots for this building. Stand near it first.
 aetherhaven.ui.townJournal.repairPlotOk=Fixed {count} spot(s) for that building.
 aetherhaven.ui.townJournal.repairPlotNothing=That building looks fine already.

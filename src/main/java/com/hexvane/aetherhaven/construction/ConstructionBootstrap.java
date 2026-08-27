@@ -212,7 +212,7 @@ public final class ConstructionBootstrap {
                 if (chunk == null) {
                     return null;
                 }
-                Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(targetBlock.x, targetBlock.y, targetBlock.z);
+                Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, targetBlock.x, targetBlock.y, targetBlock.z);
                 if (blockRef == null || blockRef.getStore().getComponent(blockRef, CharterBlock.getComponentType()) == null) {
                     return null;
                 }
@@ -250,7 +250,7 @@ public final class ConstructionBootstrap {
                 }
                 Store<EntityStore> store = ref.getStore();
                 World world = store.getExternalData().getWorld();
-                BlockType bt = world.getBlockType(targetBlock.x, targetBlock.y, targetBlock.z);
+                BlockType bt = ChunkSectionBlockUtil.blockType(world, targetBlock.x, targetBlock.y, targetBlock.z);
                 if (bt == null || bt == BlockType.EMPTY
                     || !AetherhavenConstants.ITEM_CHARTER_AMENDMENTS_TABLE.equals(bt.getId())) {
                     return null;

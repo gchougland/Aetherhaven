@@ -94,6 +94,7 @@ public final class AetherhavenWorldRegistries {
             plugin.getWorkplaceUnlockCatalog(),
             plugin.getConstructionCatalog()
         );
+        RetiredBuiltInPlotMigration.applyAll(existing, plugin);
     }
 
     @Nonnull
@@ -106,6 +107,7 @@ public final class AetherhavenWorldRegistries {
                 plugin.getWorkplaceUnlockCatalog(),
                 plugin.getConstructionCatalog()
             );
+            RetiredBuiltInPlotMigration.applyAll(m, plugin);
             return m;
         });
     }

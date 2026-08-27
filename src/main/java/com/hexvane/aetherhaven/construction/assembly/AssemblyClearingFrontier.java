@@ -1,12 +1,11 @@
 package com.hexvane.aetherhaven.construction.assembly;
 
-import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
 import java.util.ArrayList;
 import java.util.Comparator;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector3i;
 
 /**
  * Growth frontier for the clearing phase: obstructed footprint cells with at least one 6-neighbor open to air (live
@@ -33,11 +32,10 @@ public final class AssemblyClearingFrontier {
         @Nonnull PlotAssemblyJob job,
         int wx,
         int wy,
-        int wz,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor
+        int wz
     ) {
         Vector3i cell = new Vector3i(wx, wy, wz);
-        if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell, chunkAccessor)) {
+        if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell)) {
             return false;
         }
         for (int i = 0; i < NEIGHBOR_OFFSETS.length; i++) {
@@ -49,7 +47,7 @@ public final class AssemblyClearingFrontier {
             if (!AssemblyObstructionUtil.footprintContainsWorldCell(job, neighbor)) {
                 return true;
             }
-            if (!AssemblyObstructionUtil.blocksClearingExposureAt(world, nx, ny, nz, chunkAccessor)) {
+            if (!AssemblyObstructionUtil.blocksClearingExposureAt(world, nx, ny, nz)) {
                 return true;
             }
         }
@@ -63,22 +61,20 @@ public final class AssemblyClearingFrontier {
     public static ArrayList<Vector3i> frontierWorldCellsLive(
         @Nonnull World world,
         @Nonnull PlotAssemblyJob job,
-        @Nonnull ArrayList<Vector3i> obstructedWorldCells,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor
+        @Nonnull ArrayList<Vector3i> obstructedWorldCells
     ) {
-        return frontierWorldCellsLive(world, job, obstructedWorldCells, chunkAccessor, null, 0);
+        return frontierWorldCellsLive(world, job, obstructedWorldCells, null, 0);
     }
 
     /**
-     * Like {@link #frontierWorldCellsLive(World, PlotAssemblyJob, ArrayList, LocalCachedChunkAccessor)} but only
-     * considers obstructed cells in {@code activeSectionFlat} when {@code sectionMapper} is non-null.
+     * Like {@link #frontierWorldCellsLive(World, PlotAssemblyJob, ArrayList)} but only considers obstructed cells in
+     * {@code activeSectionFlat} when {@code sectionMapper} is non-null.
      */
     @Nonnull
     public static ArrayList<Vector3i> frontierWorldCellsLive(
         @Nonnull World world,
         @Nonnull PlotAssemblyJob job,
         @Nonnull ArrayList<Vector3i> obstructedWorldCells,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor,
         @Nullable AssemblySectionMapper sectionMapper,
         int activeSectionFlat
     ) {
@@ -97,11 +93,11 @@ public final class AssemblyClearingFrontier {
         ArrayList<Vector3i> stillObstructed = new ArrayList<>();
         for (int i = 0; i < scoped.size(); i++) {
             Vector3i cell = scoped.get(i);
-            if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell, chunkAccessor)) {
+            if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell)) {
                 continue;
             }
             stillObstructed.add(cell);
-            if (isFrontierCellLive(world, job, cell.x, cell.y, cell.z, chunkAccessor)) {
+            if (isFrontierCellLive(world, job, cell.x, cell.y, cell.z)) {
                 frontier.add(cell);
             }
         }

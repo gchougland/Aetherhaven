@@ -1,0 +1,8 @@
+{
+  "id": "plot_jszzas_house",
+  "displayName": "Jszza's House",
+  "legacyPlotSupport": true,
+  "countsAsConstructionId": "plot_house",
+  "treasuryGoldCoinCost": 48,
+  "maxHomeResidents": 1
+}

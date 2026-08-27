@@ -1,12 +1,8 @@
 package com.hexvane.aetherhaven.construction.assembly;
 
-import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import org.joml.Vector3i;
-import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
-import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
@@ -36,9 +32,6 @@ public final class PlotAssemblyFrontierRuntime {
     private final int maxPrefabY;
     private final int minPrefabZ;
     private final int maxPrefabZ;
-
-    @Nullable
-    private LocalCachedChunkAccessor cachedChunkAccessor;
 
     @Nullable
     private final AssemblySectionMapper sectionMapper;
@@ -265,23 +258,6 @@ public final class PlotAssemblyFrontierRuntime {
 
     public int indexAtPrefabCoord(int rx, int ry, int rz) {
         return prefabCoordToIndex.get(packPrefabCell(rx, ry, rz));
-    }
-
-    /** Clears cached chunks so the next placement pass re-queries the world (stale refs after unload). */
-    public void clearChunkAccessor() {
-        this.cachedChunkAccessor = null;
-    }
-
-    @Nonnull
-    public LocalCachedChunkAccessor getOrCreateChunkAccessor(
-        @Nonnull World world,
-        @Nonnull Vector3i anchor,
-        @Nonnull IPrefabBuffer buffer
-    ) {
-        if (cachedChunkAccessor == null) {
-            cachedChunkAccessor = ConstructionPasteOps.createAccessor(world, anchor, buffer);
-        }
-        return cachedChunkAccessor;
     }
 
     private static long packPrefabCell(int x, int y, int z) {

@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.scaffold;
 
 
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
@@ -125,7 +126,7 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
             clientPlacement.y,
             clientPlacement.z
         );
-        world.performBlockUpdate(clientPlacement.x, clientPlacement.y, clientPlacement.z, false);
+        ChunkSectionBlockUtil.performBlockUpdate(world, clientPlacement.x, clientPlacement.y, clientPlacement.z, false);
     }
 
     /**
@@ -148,7 +149,7 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
         if (y < 0 || y >= 320) {
             return false;
         }
-        BlockType t = world.getBlockType(x, y, z);
+        BlockType t = ChunkSectionBlockUtil.blockType(world, x, y, z);
         if (t == null) {
             return false;
         }
@@ -184,7 +185,7 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
             int rx = floorBlockCoord(ray.x);
             int ry = floorBlockCoord(ray.y);
             int rz = floorBlockCoord(ray.z);
-            BlockType hitType = world.getBlockType(rx, ry, rz);
+            BlockType hitType = ChunkSectionBlockUtil.blockType(world, rx, ry, rz);
             if (hitType != null && AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(hitType.getId())) {
                 int ax = rx;
                 int ay = ry + 1;
@@ -197,7 +198,7 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
                 }
             }
             if (cellIsReplaceableForInference(world, rx, ry, rz)) {
-                BlockType below = world.getBlockType(rx, ry - 1, rz);
+                BlockType below = ChunkSectionBlockUtil.blockType(world, rx, ry - 1, rz);
                 if (below != null && AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(below.getId())) {
                     if (feetX == Integer.MIN_VALUE || (rx == feetX && rz == feetZ)) {
                         return new BlockPosition(rx, ry, rz);
@@ -211,7 +212,7 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
             int fy = floorBlockCoord(pos.y);
             int fz = floorBlockCoord(pos.z);
             if (cellIsReplaceableForInference(world, fx, fy, fz)) {
-                BlockType belowFeet = world.getBlockType(fx, fy - 1, fz);
+                BlockType belowFeet = ChunkSectionBlockUtil.blockType(world, fx, fy - 1, fz);
                 if (belowFeet != null && AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(belowFeet.getId())) {
                     return new BlockPosition(fx, fy, fz);
                 }
@@ -549,7 +550,7 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
 
                 if (AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(interactionBlockTypeKey)) {
 
-                    world.performBlockUpdate(targetBlockPosition.x(), targetBlockPosition.y(), targetBlockPosition.z(), false);
+                    ChunkSectionBlockUtil.performBlockUpdate(world, targetBlockPosition.x(), targetBlockPosition.y(), targetBlockPosition.z(), false);
 
                 }
 

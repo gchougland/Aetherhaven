@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.construction;
 
 import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 
+import com.hexvane.aetherhaven.entity.BlockEntityScaleMigration;
 import com.hexvane.aetherhaven.entity.EntityRotationUtil;
 import com.hexvane.aetherhaven.blockpalette.BlockPaletteRemapper;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyObstructionUtil;
@@ -41,9 +42,7 @@ import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferCall;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockOperations;
-import com.hypixel.hytale.server.core.universe.world.chunk.ChunkColumn;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockComponentSection;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
@@ -84,7 +83,7 @@ public final class ConstructionPasteOps {
      * {@link BlockType#getBlockEntity()} blocks still get working components/interactions.
      */
     public static final int SET_BLOCK_SETTINGS_PLACE = 0;
-    /** Air clears / {@link WorldChunk#breakBlock}: keep {@code 8|2} tuning from earlier construction fixes. */
+    /** Air clears: keep {@code 8|2} tuning from earlier construction fixes. */
     public static final int SET_BLOCK_SETTINGS_CLEAR = 10;
 
     /**
@@ -236,14 +235,9 @@ public final class ConstructionPasteOps {
         @Nonnull World world,
         int bx,
         int by,
-        int bz,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor
+        int bz
     ) {
-        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(bx, bz));
-        if (chunk == null || !chunk.getReference().isValid()) {
-            return false;
-        }
-        Ref<ChunkStore> section = sectionRefForBlockY(chunk, by);
+        Ref<ChunkStore> section = ChunkSectionBlockUtil.sectionRefAt(world, bx, by, bz);
         if (section == null) {
             return false;
         }
@@ -257,12 +251,11 @@ public final class ConstructionPasteOps {
         @Nonnull World world,
         int bx,
         int by,
-        int bz,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor
+        int bz
     ) {
         return preserveWater
             && isPrefabWaterPreservingCell(pb)
-            && worldHasFluidAt(world, bx, by, bz, chunkAccessor);
+            && worldHasFluidAt(world, bx, by, bz);
     }
 
     @Nonnull
@@ -276,9 +269,9 @@ public final class ConstructionPasteOps {
      * burst instead of pacing each no-op slot.
      */
     public static boolean isAssemblyPlacementNoOp(
+        @Nonnull World world,
         @Nonnull Vector3i origin,
         @Nonnull PendingBlock pb,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor,
         @Nonnull BlockTypeAssetMap<String, BlockType> blockTypeMap
     ) {
         if (isPureAirPrefabCell(pb)) {
@@ -293,7 +286,10 @@ public final class ConstructionPasteOps {
         int wx = origin.x + pb.x();
         int wy = origin.y + pb.y();
         int wz = origin.z + pb.z();
-        BlockType worldBlock = blockTypeAt(chunkAccessor, wx, wy, wz);
+        if (ChunkSectionBlockUtil.sectionRefAt(world, wx, wy, wz) == null) {
+            return false;
+        }
+        BlockType worldBlock = ChunkSectionBlockUtil.blockType(world, wx, wy, wz);
         if (worldBlock == null) {
             return false;
         }
@@ -313,42 +309,23 @@ public final class ConstructionPasteOps {
             return false;
         }
         if (blockTypeNeedsLiveBlockEntityRef(target)) {
-            WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(wx, wz));
-            if (chunk == null || !chunk.getReference().isValid()) {
-                return false;
-            }
-            World blockWorld = chunk.getWorld();
             BlockComponentSection blockComponents =
-                ChunkSectionBlockUtil.blockComponentSectionAt(blockWorld, wx, wy, wz);
+                ChunkSectionBlockUtil.blockComponentSectionAt(world, wx, wy, wz);
             if (blockComponents == null) {
                 return false;
             }
             int index = ChunkUtil.indexBlock(wx, wy, wz);
             if (target.getBench() != null) {
-                return ChunkSectionBlockUtil.blockEntityRefAt(blockWorld, wx, wy, wz) != null;
+                return ChunkSectionBlockUtil.blockEntityRefAt(world, wx, wy, wz) != null;
             }
             Ref<ChunkStore> blockRef = blockComponents.getBlockReference(index);
             ItemContainerBlock container =
                 blockRef != null
-                    ? blockWorld.getChunkStore().getStore().getComponent(blockRef, ItemContainerBlock.getComponentType())
+                    ? world.getChunkStore().getStore().getComponent(blockRef, ItemContainerBlock.getComponentType())
                     : null;
-            return container != null || ChunkSectionBlockUtil.blockEntityRefAt(blockWorld, wx, wy, wz) != null;
+            return container != null || ChunkSectionBlockUtil.blockEntityRefAt(world, wx, wy, wz) != null;
         }
         return true;
-    }
-
-    @Nullable
-    private static BlockType blockTypeAt(
-        @Nonnull LocalCachedChunkAccessor chunkAccessor,
-        int wx,
-        int wy,
-        int wz
-    ) {
-        WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(wx, wz));
-        if (chunk == null || !chunk.getReference().isValid()) {
-            return null;
-        }
-        return BlockType.getAssetMap().getAsset(chunk.getBlock(wx, wy, wz));
     }
 
     /**
@@ -481,7 +458,6 @@ public final class ConstructionPasteOps {
         boolean preserveWater,
         @Nonnull IPrefabBuffer bufferAccess
     ) {
-        LocalCachedChunkAccessor chunkAccessor = createAccessor(world, origin, bufferAccess);
         PrefabBufferCall secondPassCall = new PrefabBufferCall(new Random(PREFAB_BUFFER_ITERATION_SEED), prefabRotation);
         bufferAccess.forEach(
             IPrefabBuffer.iterateAllColumns(),
@@ -492,11 +468,11 @@ public final class ConstructionPasteOps {
                 if (fluidId == 0) {
                     PendingBlock pb =
                         new PendingBlock(x, y, z, blockId, holder, supportValue, blockRotation, filler, fluidId, fluidLevel);
-                    if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz, chunkAccessor)) {
+                    if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz)) {
                         return;
                     }
                 }
-                applyPrefabFluidForCell(world, bx, by, bz, fluidId, fluidLevel, chunkAccessor);
+                applyPrefabFluidForCell(world, bx, by, bz, fluidId, fluidLevel);
             },
             null,
             null,
@@ -539,14 +515,13 @@ public final class ConstructionPasteOps {
     public static boolean restoreSinglePrefabCell(
         @Nonnull World world,
         @Nonnull Vector3i origin,
-        @Nonnull PendingBlock pb,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor
+        @Nonnull PendingBlock pb
     ) {
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         if (isInteractiveBlockEntityOrigin(pb, blockTypeMap)) {
             return placeInteractiveBlockEntityCell(world, origin, pb, blockTypeMap);
         }
-        return placeOne(world, origin, pb, true, false, chunkAccessor, blockTypeMap);
+        return placeOne(world, origin, pb, true, false, blockTypeMap);
     }
 
     private static boolean placeInteractiveBlockEntityCell(
@@ -574,7 +549,7 @@ public final class ConstructionPasteOps {
             return false;
         }
         String blockKey = block.getId();
-        BlockType worldBlock = BlockType.getAssetMap().getAsset(chunk.getBlock(bx, by, bz));
+        BlockType worldBlock = ChunkSectionBlockUtil.blockType(world, bx, by, bz);
         boolean needsVoxel =
             worldBlock == null
                 || worldBlock == BlockType.EMPTY
@@ -597,7 +572,7 @@ public final class ConstructionPasteOps {
             Ref<ChunkStore> columnRef = chunk.getReference();
             if (columnRef.isValid()) {
                 Store<ChunkStore> store = columnRef.getStore();
-                Ref<ChunkStore> section = sectionRefForBlockY(chunk, by);
+                Ref<ChunkStore> section = ChunkSectionBlockUtil.sectionRefAt(world, bx, by, bz);
                 if (section != null) {
                     PrefabSupportUtil.applyEffectiveSupport(
                         store,
@@ -668,18 +643,6 @@ public final class ConstructionPasteOps {
         return chunk;
     }
 
-    @Nonnull
-    public static LocalCachedChunkAccessor createAccessor(
-        @Nonnull World world,
-        @Nonnull Vector3i origin,
-        @Nonnull IPrefabBuffer bufferAccess
-    ) {
-        double xLength = bufferAccess.getMaxX() - bufferAccess.getMinX();
-        double zLength = bufferAccess.getMaxZ() - bufferAccess.getMinZ();
-        int prefabRadius = (int) Math.floor(0.5 * Math.sqrt(xLength * xLength + zLength * zLength));
-        return LocalCachedChunkAccessor.atWorldCoords(ChunkSectionBlockUtil.chunkAccessor(world), origin.x(), origin.z(), prefabRadius);
-    }
-
     /**
      * Before assembly: clear the entire prefab footprint to air (including {@code filler != 0} furniture / multi-block
      * cells) so existing terrain does not float inside the volume until those indices reach the placement frontier.
@@ -695,7 +658,6 @@ public final class ConstructionPasteOps {
         @Nonnull Vector3i origin,
         @Nonnull List<PendingBlock> footprint,
         boolean preserveWater,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor,
         @Nonnull BlockTypeAssetMap<String, BlockType> blockTypeMap
     ) {
         for (PendingBlock pb : footprint) {
@@ -705,10 +667,10 @@ public final class ConstructionPasteOps {
             int bx = origin.x + pb.x();
             int by = origin.y + pb.y();
             int bz = origin.z + pb.z();
-            if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz, chunkAccessor)) {
+            if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz)) {
                 continue;
             }
-            applyPrefabFluidForCell(world, bx, by, bz, 0, 0, chunkAccessor);
+            applyPrefabFluidForCell(world, bx, by, bz, 0, 0);
         }
     }
 
@@ -721,17 +683,16 @@ public final class ConstructionPasteOps {
         @Nonnull World world,
         @Nonnull Vector3i origin,
         @Nonnull List<PendingBlock> footprint,
-        boolean preserveWater,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor
+        boolean preserveWater
     ) {
         for (PendingBlock pb : footprint) {
             int bx = origin.x + pb.x();
             int by = origin.y + pb.y();
             int bz = origin.z + pb.z();
-            if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz, chunkAccessor)) {
+            if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz)) {
                 continue;
             }
-            applyPrefabFluidForCell(world, bx, by, bz, 0, 0, chunkAccessor);
+            applyPrefabFluidForCell(world, bx, by, bz, 0, 0);
         }
     }
 
@@ -745,7 +706,6 @@ public final class ConstructionPasteOps {
         @Nonnull IPrefabBuffer bufferAccess,
         @Nonnull BlockTypeAssetMap<String, BlockType> blockTypeMap
     ) {
-        LocalCachedChunkAccessor chunkAccessor = createAccessor(world, origin, bufferAccess);
         for (PendingBlock pb : pending) {
             int bx = origin.x + pb.x;
             int by = origin.y + pb.y;
@@ -755,13 +715,13 @@ public final class ConstructionPasteOps {
                 continue;
             }
             if (pb.blockId == 0) {
-                if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz, chunkAccessor)) {
+                if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz)) {
                     continue;
                 }
                 if (force) {
                     ChunkSectionBlockUtil.setBlockEmpty(world, bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
                 } else {
-                    world.breakBlock(bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
+                    ChunkSectionBlockUtil.breakBlock(world, bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
                 }
             } else {
                 ChunkSectionBlockUtil.setBlockEmpty(world, bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
@@ -770,8 +730,7 @@ public final class ConstructionPasteOps {
     }
 
     /**
-     * @return false if the target chunk column is not available (e.g. unloaded mid tick); caller should retry later
-     *     with a fresh {@link LocalCachedChunkAccessor}.
+     * @return false if the target chunk column is not available (e.g. unloaded mid tick); caller should retry later.
      */
     public static boolean placeOne(
         @Nonnull World world,
@@ -779,7 +738,6 @@ public final class ConstructionPasteOps {
         @Nonnull PendingBlock pb,
         boolean force,
         boolean preserveWater,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor,
         @Nonnull BlockTypeAssetMap<String, BlockType> blockTypeMap
     ) {
         int bx = origin.x + pb.x;
@@ -800,18 +758,18 @@ public final class ConstructionPasteOps {
         // Multi-block companions: never write a second origin voxel (that floats a duplicate wardrobe/chest).
         if (pb.filler != FillerBlockUtil.NO_FILLER) {
             if (pb.holder != null) {
-                setBlockEntityHolder(world, chunk, bx, by, bz, block, pb.blockRotation, pb.holder.clone());
+                setBlockEntityHolder(world, bx, by, bz, block, pb.blockRotation, pb.holder.clone());
             }
             return true;
         }
         if (pb.blockId == 0) {
-            if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz, chunkAccessor)) {
+            if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz)) {
                 return true;
             }
             if (force) {
                 ChunkSectionBlockUtil.setBlockEmpty(world, bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
             } else {
-                world.breakBlock(bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
+                ChunkSectionBlockUtil.breakBlock(world, bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
             }
             return true;
         }
@@ -834,12 +792,8 @@ public final class ConstructionPasteOps {
             return false;
         }
         if (PrefabSupportUtil.needsSupportPhysics(block, pb.blockRotation) || pb.supportValue != 0) {
-            Ref<ChunkStore> ref = chunk.getReference();
-            if (!ref.isValid()) {
-                return false;
-            }
-            Store<ChunkStore> store = ref.getStore();
-            Ref<ChunkStore> section = sectionRefForBlockY(chunk, by);
+            Store<ChunkStore> store = world.getChunkStore().getStore();
+            Ref<ChunkStore> section = ChunkSectionBlockUtil.sectionRefAt(world, bx, by, bz);
             if (section != null) {
                 if (PrefabSupportUtil.needsSupportPhysics(block, pb.blockRotation)) {
                     PrefabSupportUtil.markDecoForAssemblyPaste(
@@ -860,14 +814,14 @@ public final class ConstructionPasteOps {
             }
         }
         if (pb.holder != null) {
-            setBlockEntityHolder(world, chunk, bx, by, bz, block, pb.blockRotation, pb.holder.clone());
+            setBlockEntityHolder(world, bx, by, bz, block, pb.blockRotation, pb.holder.clone());
         }
         return true;
     }
 
     /**
-     * Force-writes every non-air prefab solid using {@link WorldChunk#setBlock} (same as {@code PrefabUtil} force
-     * paste). Rebuilds placement order from {@code buffer} so completion does not depend on the incremental job list.
+     * Force-writes every non-air prefab solid using {@link ChunkSectionBlockUtil#setBlock}. Rebuilds placement order
+     * from {@code buffer} so completion does not depend on the incremental job list.
      * Filler cells only attach holders — never a second origin voxel (avoids floating duplicate furniture).
      */
     public static void forcePasteAllSolids(
@@ -890,13 +844,11 @@ public final class ConstructionPasteOps {
     ) {
         ConstructionPrefabSequence seq = buildSequence(bufferAccess, yaw, blockPaletteSelections);
         List<PendingBlock> cells = withoutPureAirCells(seq.pendingBlocks());
-        LocalCachedChunkAccessor chunkAccessor = createAccessor(world, origin, bufferAccess);
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         for (int i = 0; i < cells.size(); i++) {
             PendingBlock pb = cells.get(i);
-            if (!forceSetSolid(world, origin, pb, preserveWater, chunkAccessor, blockTypeMap)) {
-                chunkAccessor = createAccessor(world, origin, bufferAccess);
-                forceSetSolid(world, origin, pb, preserveWater, chunkAccessor, blockTypeMap);
+            if (!forceSetSolid(world, origin, pb, preserveWater, blockTypeMap)) {
+                forceSetSolid(world, origin, pb, preserveWater, blockTypeMap);
             }
         }
     }
@@ -914,14 +866,12 @@ public final class ConstructionPasteOps {
         int startIndex,
         int maxCells
     ) {
-        LocalCachedChunkAccessor chunkAccessor = createAccessor(world, origin, bufferAccess);
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         int end = Math.min(cells.size(), startIndex + Math.max(0, maxCells));
         for (int i = startIndex; i < end; i++) {
             PendingBlock pb = cells.get(i);
-            if (!forceSetSolid(world, origin, pb, preserveWater, chunkAccessor, blockTypeMap)) {
-                chunkAccessor = createAccessor(world, origin, bufferAccess);
-                forceSetSolid(world, origin, pb, preserveWater, chunkAccessor, blockTypeMap);
+            if (!forceSetSolid(world, origin, pb, preserveWater, blockTypeMap)) {
+                forceSetSolid(world, origin, pb, preserveWater, blockTypeMap);
             }
         }
         return end;
@@ -932,7 +882,6 @@ public final class ConstructionPasteOps {
         @Nonnull Vector3i origin,
         @Nonnull PendingBlock pb,
         boolean preserveWater,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor,
         @Nonnull BlockTypeAssetMap<String, BlockType> blockTypeMap
     ) {
         int bx = origin.x + pb.x();
@@ -943,7 +892,7 @@ public final class ConstructionPasteOps {
             return false;
         }
         if (pb.blockId() == 0) {
-            if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz, chunkAccessor)) {
+            if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz)) {
                 return true;
             }
             ChunkSectionBlockUtil.setBlockEmpty(world, bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
@@ -958,7 +907,7 @@ public final class ConstructionPasteOps {
         }
         if (pb.filler() != FillerBlockUtil.NO_FILLER) {
             if (pb.holder() != null) {
-                setBlockEntityHolder(world, chunk, bx, by, bz, block, pb.blockRotation(), pb.holder().clone());
+                setBlockEntityHolder(world, bx, by, bz, block, pb.blockRotation(), pb.holder().clone());
             }
             return true;
         }
@@ -981,7 +930,7 @@ public final class ConstructionPasteOps {
             Ref<ChunkStore> ref = chunk.getReference();
             if (ref.isValid()) {
                 Store<ChunkStore> store = ref.getStore();
-                Ref<ChunkStore> section = sectionRefForBlockY(chunk, by);
+                Ref<ChunkStore> section = ChunkSectionBlockUtil.sectionRefAt(world, bx, by, bz);
                 if (section != null) {
                     PrefabSupportUtil.applyEffectiveSupport(
                         store,
@@ -997,7 +946,7 @@ public final class ConstructionPasteOps {
             }
         }
         if (pb.holder() != null) {
-            setBlockEntityHolder(world, chunk, bx, by, bz, block, pb.blockRotation(), pb.holder().clone());
+            setBlockEntityHolder(world, bx, by, bz, block, pb.blockRotation(), pb.holder().clone());
         }
         return true;
     }
@@ -1016,7 +965,6 @@ public final class ConstructionPasteOps {
         @Nonnull List<Holder<EntityStore>> prefabEntitiesInOrder,
         @Nonnull ComponentAccessor<EntityStore> entityAccessor
     ) {
-        LocalCachedChunkAccessor chunkAccessor = createAccessor(world, origin, bufferAccess);
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         PrefabBufferCall secondPassCall = new PrefabBufferCall(new Random(PREFAB_BUFFER_ITERATION_SEED), prefabRotation);
         bufferAccess.forEach(
@@ -1028,11 +976,11 @@ public final class ConstructionPasteOps {
                 if (fluidId == 0) {
                     PendingBlock pb =
                         new PendingBlock(x, y, z, blockId, holder, supportValue, blockRotation, filler, fluidId, fluidLevel);
-                    if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz, chunkAccessor)) {
+                    if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz)) {
                         return;
                     }
                 }
-                applyPrefabFluidForCell(world, bx, by, bz, fluidId, fluidLevel, chunkAccessor);
+                applyPrefabFluidForCell(world, bx, by, bz, fluidId, fluidLevel);
             },
             null,
             null,
@@ -1054,7 +1002,6 @@ public final class ConstructionPasteOps {
 
     public static void setBlockEntityHolder(
         @Nonnull World world,
-        @Nonnull WorldChunk chunk,
         int bx,
         int by,
         int bz,
@@ -1118,39 +1065,19 @@ public final class ConstructionPasteOps {
         );
     }
 
-    @SuppressWarnings("deprecation")
-    private static Ref<ChunkStore> sectionRefForBlockY(@Nonnull WorldChunk chunk, int blockY) {
-        Ref<ChunkStore> columnRef = chunk.getReference();
-        if (!columnRef.isValid()) {
-            return null;
-        }
-        Store<ChunkStore> store = columnRef.getStore();
-        ChunkColumn column = store.getComponent(columnRef, ChunkColumn.getComponentType());
-        if (column == null) {
-            return null;
-        }
-        Ref<ChunkStore> section = column.getSection(ChunkUtil.chunkCoordinate(blockY));
-        return section != null && section.isValid() ? section : null;
-    }
-
     public static void applyPrefabFluidForCell(
         @Nonnull World world,
         int bx,
         int by,
         int bz,
         int fluidId,
-        int fluidLevel,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor
+        int fluidLevel
     ) {
-        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(bx, bz));
-        if (chunk == null || !chunk.getReference().isValid()) {
-            return;
-        }
-        Store<ChunkStore> fluidStore = world.getChunkStore().getStore();
-        Ref<ChunkStore> section = sectionRefForBlockY(chunk, by);
+        Ref<ChunkStore> section = ChunkSectionBlockUtil.sectionRefAt(world, bx, by, bz);
         if (section == null) {
             return;
         }
+        Store<ChunkStore> fluidStore = world.getChunkStore().getStore();
         FluidSection fluidSection = fluidStore.ensureAndGetComponent(section, FluidSection.getComponentType());
         fluidSection.setFluid(bx, by, bz, fluidId, (byte) fluidLevel);
     }
@@ -1204,6 +1131,7 @@ public final class ConstructionPasteOps {
             && clone.getComponent(Invulnerable.getComponentType()) == null) {
             clone.ensureComponent(Invulnerable.getComponentType());
         }
+        BlockEntityScaleMigration.migratePrefabSpawn(clone);
         entityAccessor.addEntity(clone, AddReason.LOAD);
     }
 }

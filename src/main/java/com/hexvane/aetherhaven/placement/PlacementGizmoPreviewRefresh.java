@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.placement;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
@@ -104,7 +105,11 @@ public final class PlacementGizmoPreviewRefresh {
             PlotPlacementClientPrefabPreview.clearWorldPreview(store, session);
             PlotPlacementClientPrefabPreview.hide(playerRef);
         }
-        PlotPlacementPreviewSync.syncSpectators(world, uc.getUuid(), session, def, prefabOrigin, true);
+        boolean placerNeedFull =
+            !session.hasSpectatorPreviewActive()
+                || !session.getConstructionId().equals(session.getLastSpectatorPreviewConstructionId())
+                || session.getRotationSteps() != session.getLastSpectatorPreviewRotationSteps();
+        PlotPlacementPreviewSync.syncSpectators(world, uc.getUuid(), session, def, prefabOrigin, placerNeedFull);
         PlotPlacementWireframeOverlay.send(playerRef, fp, placementValid, town);
         if (session.isGizmoMoveActive()) {
             PlacementGizmoService.syncPointGizmo(playerRef, fp, (float) session.getPrefabYaw().getRadians());
@@ -178,6 +183,12 @@ public final class PlacementGizmoPreviewRefresh {
             return;
         }
         PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf, def);
+        int dx = (int) Math.round(offset.x);
+        int dy = (int) Math.round(offset.y);
+        int dz = (int) Math.round(offset.z);
+        if (!PlacementGizmoPivot.takeWireframeShiftIfChanged(playerRef.getUuid(), dx, dy, dz)) {
+            return;
+        }
         PlotPlacementWireframeOverlay.send(playerRef, shiftFootprint(fp, offset), true, null);
     }
 
@@ -188,7 +199,40 @@ public final class PlacementGizmoPreviewRefresh {
     ) {
         Vector3i anchor = session.getAnchor();
         PlotFootprintRecord fp = new PlotFootprintRecord(anchor.x, anchor.y, anchor.z, anchor.x, anchor.y, anchor.z);
+        int dx = (int) Math.round(offset.x);
+        int dy = (int) Math.round(offset.y);
+        int dz = (int) Math.round(offset.z);
+        if (!PlacementGizmoPivot.takeWireframeShiftIfChanged(playerRef.getUuid(), dx, dy, dz)) {
+            return;
+        }
         PlotPlacementWireframeOverlay.send(playerRef, shiftFootprint(fp, offset), true, null);
+    }
+
+    public static void refreshPropWireframeDuringDrag(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull PropPlacementSession session,
+        @Nonnull Vector3d offset
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        PropCatalog catalog = plugin.getPropCatalog();
+        IPrefabBuffer buffer =
+            PropPlacementValidator.resolveValidatedBuffer(
+                session.getWorld(), catalog, session.getPropId(), session.getAnchor(), session.getYaw()
+            );
+        if (buffer == null) {
+            return;
+        }
+        PlotFootprintRecord fp = PropPrefabOps.placementOutlineFootprint(session.getAnchor(), session.getYaw(), buffer);
+        int dx = (int) Math.round(offset.x);
+        int dy = (int) Math.round(offset.y);
+        int dz = (int) Math.round(offset.z);
+        if (!PlacementGizmoPivot.takeWireframeShiftIfChanged(playerRef.getUuid(), dx, dy, dz)) {
+            return;
+        }
+        PropPlacementWireframeOverlay.send(playerRef, shiftFootprint(fp, offset), true);
     }
 
     @Nonnull
@@ -264,7 +308,7 @@ public final class PlacementGizmoPreviewRefresh {
     }
 
     private static boolean isReplaceable(@Nonnull World world, int x, int y, int z) {
-        BlockType t = world.getBlockType(x, y, z);
+        BlockType t = ChunkSectionBlockUtil.blockType(world, x, y, z);
         return t == null || t.getMaterial() == BlockMaterial.Empty;
     }
 

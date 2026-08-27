@@ -305,7 +305,7 @@ public final class RescueVillagerSpawnService {
         if (chunk == null) {
             return false;
         }
-        BlockType bt = BlockType.getAssetMap().getAsset(chunk.getBlock(x, y, z));
+        BlockType bt = ChunkSectionBlockUtil.blockType(world, x, y, z);
         return bt != null && blockTypeId.equals(bt.getId());
     }
 

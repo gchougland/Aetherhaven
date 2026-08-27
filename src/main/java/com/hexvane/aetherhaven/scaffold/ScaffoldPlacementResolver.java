@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.scaffold;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.math.shape.Box;
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -81,7 +82,7 @@ public final class ScaffoldPlacementResolver {
     public static int highestScaffoldY(@Nonnull World world, int x, int z) {
         int top = -1;
         for (int y = 319; y >= 0; y--) {
-            BlockType t = world.getBlockType(x, y, z);
+            BlockType t = ChunkSectionBlockUtil.blockType(world, x, y, z);
             if (t != null && AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(t.getId())) {
                 top = y;
                 break;
@@ -93,7 +94,7 @@ public final class ScaffoldPlacementResolver {
     /** Lowest wood scaffold in column {@code (x,z)}, or {@code -1} if none. */
     public static int lowestScaffoldY(@Nonnull World world, int x, int z) {
         for (int y = 0; y <= 319; y++) {
-            BlockType t = world.getBlockType(x, y, z);
+            BlockType t = ChunkSectionBlockUtil.blockType(world, x, y, z);
             if (t != null && AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(t.getId())) {
                 return y;
             }
@@ -110,13 +111,13 @@ public final class ScaffoldPlacementResolver {
         if (ySeed < ChunkUtil.MIN_Y || ySeed > ChunkUtil.HEIGHT_MINUS_1) {
             return -1;
         }
-        BlockType at = world.getBlockType(x, ySeed, z);
+        BlockType at = ChunkSectionBlockUtil.blockType(world, x, ySeed, z);
         if (at == null || !AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(at.getId())) {
             return -1;
         }
         int top = ySeed;
         for (int y = ySeed + 1; y <= ChunkUtil.HEIGHT_MINUS_1; y++) {
-            BlockType t = world.getBlockType(x, y, z);
+            BlockType t = ChunkSectionBlockUtil.blockType(world, x, y, z);
             if (t != null && AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(t.getId())) {
                 top = y;
             } else {
@@ -236,7 +237,7 @@ public final class ScaffoldPlacementResolver {
 
         Vector3i attachRef = resolveAttachColumn(world, clientPlacement, clientState.blockFace);
         BlockType belowPlacement =
-            world.getBlockType(clientPlacement.x(), clientPlacement.y() - 1, clientPlacement.z());
+            ChunkSectionBlockUtil.blockType(world, clientPlacement.x(), clientPlacement.y() - 1, clientPlacement.z());
         boolean belowPlacementIsScaffold =
             belowPlacement != null && AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(belowPlacement.getId());
         BlockFace pFace = clientState.blockFace;
@@ -252,7 +253,7 @@ public final class ScaffoldPlacementResolver {
         double relYOnApex = ray != null ? (ray.y - (double) topY) : -99.0;
 
         if (rayColumn && rayHitY < topY) {
-            BlockType hitSeg = world.getBlockType(cx, rayHitY, cz);
+            BlockType hitSeg = ChunkSectionBlockUtil.blockType(world, cx, rayHitY, cz);
             if (hitSeg != null && AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(hitSeg.getId())) {
                 Vector3i up = cellClearForTower(world, apexPlusOne.x(), apexPlusOne.y(), apexPlusOne.z());
                 return java.util.Optional.of(up != null ? up : clientPlacement);
@@ -330,7 +331,7 @@ public final class ScaffoldPlacementResolver {
 
         if (face == BlockFace.Up) {
             if (rayColumn && rayHitY < topY) {
-                BlockType lowerSeg = world.getBlockType(cx, rayHitY, cz);
+                BlockType lowerSeg = ChunkSectionBlockUtil.blockType(world, cx, rayHitY, cz);
                 if (lowerSeg != null && AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(lowerSeg.getId())) {
                     Vector3i up = cellClearForTower(world, apexPlusOne.x(), apexPlusOne.y(), apexPlusOne.z());
                     return java.util.Optional.of(up != null ? up : clientPlacement);
@@ -420,7 +421,7 @@ public final class ScaffoldPlacementResolver {
         Vector3i attach = resolveAttachColumn(world, clientPlacement, clientState.blockFace);
         Position ray = clientState.raycastHit;
 
-        BlockType attachType = world.getBlockType(attach.x(), attach.y(), attach.z());
+        BlockType attachType = ChunkSectionBlockUtil.blockType(world, attach.x(), attach.y(), attach.z());
         if (attachType == null || !AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(attachType.getId())) {
             return java.util.Optional.empty();
         }
@@ -516,7 +517,7 @@ public final class ScaffoldPlacementResolver {
             return false;
         }
         Vector3i attach = resolveAttachColumn(world, clientPlacement, clientState.blockFace);
-        BlockType hit = world.getBlockType(attach.x(), attach.y(), attach.z());
+        BlockType hit = ChunkSectionBlockUtil.blockType(world, attach.x(), attach.y(), attach.z());
         if (hit == null || !AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(hit.getId())) {
             return false;
         }
@@ -553,7 +554,7 @@ public final class ScaffoldPlacementResolver {
             int rx = floorBlock(ray.x);
             int ry = floorBlock(ray.y);
             int rz = floorBlock(ray.z);
-            BlockType hit = world.getBlockType(rx, ry, rz);
+            BlockType hit = ChunkSectionBlockUtil.blockType(world, rx, ry, rz);
             if (hit != null && AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(hit.getId())) {
                 int apexY = scaffoldSegmentTopY(world, rx, ry, rz);
                 if (apexY >= 0) {
@@ -562,7 +563,7 @@ public final class ScaffoldPlacementResolver {
             }
         }
         Vector3i attach = resolveAttachColumn(world, clientPlacement, protocolFace);
-        BlockType at = world.getBlockType(attach.x(), attach.y(), attach.z());
+        BlockType at = ChunkSectionBlockUtil.blockType(world, attach.x(), attach.y(), attach.z());
         if (at == null || !AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(at.getId())) {
             return null;
         }
@@ -647,16 +648,16 @@ public final class ScaffoldPlacementResolver {
         @Nonnull BlockFace protocolFace
     ) {
         Vector3i primary = attachmentCell(clientPlacement, protocolFace);
-        BlockType atPlacement = world.getBlockType(clientPlacement.x(), clientPlacement.y(), clientPlacement.z());
+        BlockType atPlacement = ChunkSectionBlockUtil.blockType(world, clientPlacement.x(), clientPlacement.y(), clientPlacement.z());
         if (atPlacement != null && AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(atPlacement.getId())) {
             return new Vector3i(clientPlacement);
         }
-        BlockType atPrimary = world.getBlockType(primary.x(), primary.y(), primary.z());
+        BlockType atPrimary = ChunkSectionBlockUtil.blockType(world, primary.x(), primary.y(), primary.z());
         if (atPrimary != null && AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(atPrimary.getId())) {
             return primary;
         }
         BlockType below =
-            world.getBlockType(clientPlacement.x(), clientPlacement.y() - 1, clientPlacement.z());
+            ChunkSectionBlockUtil.blockType(world, clientPlacement.x(), clientPlacement.y() - 1, clientPlacement.z());
         if (below != null && AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(below.getId())) {
             int x = clientPlacement.x();
             int z = clientPlacement.z();
@@ -684,7 +685,7 @@ public final class ScaffoldPlacementResolver {
             return false;
         }
         int ry = floorBlock(ray.y);
-        BlockType t = world.getBlockType(rx, ry, rz);
+        BlockType t = ChunkSectionBlockUtil.blockType(world, rx, ry, rz);
         return t != null
             && AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(t.getId())
             && ry < topY;
@@ -730,7 +731,7 @@ public final class ScaffoldPlacementResolver {
     }
 
     private static boolean isReplaceable(@Nonnull World world, int x, int y, int z) {
-        BlockType t = world.getBlockType(x, y, z);
+        BlockType t = ChunkSectionBlockUtil.blockType(world, x, y, z);
         if (t == null) {
             return false;
         }

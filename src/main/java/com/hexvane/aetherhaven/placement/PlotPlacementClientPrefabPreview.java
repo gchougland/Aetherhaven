@@ -238,6 +238,7 @@ public final class PlotPlacementClientPrefabPreview {
         if (!hasEntityOverlay(payload)) {
             return;
         }
+        hide(viewer);
         Vector3i clientPos = resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw);
         writeEntityOverlayToViewer(viewer, world, flooredPosition(clientPos), payload);
     }
@@ -268,6 +269,7 @@ public final class PlotPlacementClientPrefabPreview {
         if (!hasEntityOverlay(payload)) {
             return;
         }
+        hide(playerRef);
         Vector3i clientPos = resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw);
         writeEntityOverlay(playerRef, flooredPosition(clientPos), payload);
     }
@@ -289,6 +291,19 @@ public final class PlotPlacementClientPrefabPreview {
         ShowTriggerVolumePastePrefabPreview packet = buildEntityOverlayPositionPacket(position);
         applyTintFromPlayerPosition(playerRef, packet);
         playerRef.getPacketHandler().write(packet);
+    }
+
+    /** Clears then resends prefab entity ghosts at a new origin so they do not stack. */
+    public static void sendEntityOverlayMoved(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Vector3f position,
+        @Nonnull Payload payload
+    ) {
+        if (!hasEntityOverlay(payload)) {
+            return;
+        }
+        hide(playerRef);
+        writeEntityOverlay(playerRef, position, payload);
     }
 
     @Nonnull

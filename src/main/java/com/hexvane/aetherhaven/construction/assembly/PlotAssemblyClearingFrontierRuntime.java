@@ -1,7 +1,6 @@
 package com.hexvane.aetherhaven.construction.assembly;
 
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -33,7 +32,6 @@ public final class PlotAssemblyClearingFrontierRuntime {
         @Nonnull World world,
         @Nonnull PlotAssemblyJob job,
         @Nonnull PlotAssemblyClearingRuntime clearingRt,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor,
         @Nullable AssemblySectionMapper sectionMapper,
         int activeSectionFlat
     ) {
@@ -42,9 +40,9 @@ public final class PlotAssemblyClearingFrontierRuntime {
         clearingRt.appendObstructedCells(obstructed);
         ArrayList<Vector3i> live =
             sectionMapper == null
-                ? AssemblyClearingFrontier.frontierWorldCellsLive(world, job, obstructed, chunkAccessor)
+                ? AssemblyClearingFrontier.frontierWorldCellsLive(world, job, obstructed)
                 : AssemblyClearingFrontier.frontierWorldCellsLive(
-                    world, job, obstructed, chunkAccessor, sectionMapper, activeSectionFlat
+                    world, job, obstructed, sectionMapper, activeSectionFlat
                 );
         for (int i = 0; i < live.size(); i++) {
             Vector3i c = live.get(i);
@@ -110,7 +108,6 @@ public final class PlotAssemblyClearingFrontierRuntime {
         @Nonnull World world,
         @Nonnull PlotAssemblyJob job,
         @Nonnull PlotAssemblyClearingRuntime clearingRt,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor,
         int wx,
         int wy,
         int wz,
@@ -130,12 +127,12 @@ public final class PlotAssemblyClearingFrontierRuntime {
             if (!clearingRt.containsWorldCell(nx, ny, nz)) {
                 continue;
             }
-            if (AssemblyClearingFrontier.isFrontierCellLive(world, job, nx, ny, nz, chunkAccessor)) {
+            if (AssemblyClearingFrontier.isFrontierCellLive(world, job, nx, ny, nz)) {
                 frontierWorld.add(packBlock(nx, ny, nz));
             }
         }
         if (frontierWorld.isEmpty() && !clearingRt.isEmpty()) {
-            seedLowestObstructedLayer(world, job, clearingRt, chunkAccessor, sectionMapper, activeSectionFlat);
+            seedLowestObstructedLayer(world, job, clearingRt, sectionMapper, activeSectionFlat);
         }
     }
 
@@ -143,7 +140,6 @@ public final class PlotAssemblyClearingFrontierRuntime {
         @Nonnull World world,
         @Nonnull PlotAssemblyJob job,
         @Nonnull PlotAssemblyClearingRuntime clearingRt,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor,
         @Nullable AssemblySectionMapper sectionMapper,
         int activeSectionFlat
     ) {
@@ -166,7 +162,7 @@ public final class PlotAssemblyClearingFrontierRuntime {
         int minY = Integer.MAX_VALUE;
         for (int i = 0; i < scoped.size(); i++) {
             Vector3i cell = scoped.get(i);
-            if (AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell, chunkAccessor)) {
+            if (AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell)) {
                 minY = Math.min(minY, cell.y);
             }
         }
@@ -176,7 +172,7 @@ public final class PlotAssemblyClearingFrontierRuntime {
         for (int i = 0; i < scoped.size(); i++) {
             Vector3i cell = scoped.get(i);
             if (cell.y == minY
-                && AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell, chunkAccessor)) {
+                && AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell)) {
                 frontierWorld.add(packBlock(cell.x, cell.y, cell.z));
             }
         }

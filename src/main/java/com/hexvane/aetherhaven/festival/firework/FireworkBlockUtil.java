@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.festival.firework;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.entity.EntityChunkUtil;
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
@@ -17,7 +18,7 @@ public final class FireworkBlockUtil {
         if (!EntityChunkUtil.isPositionChunkInMemory(world, probe)) {
             return false;
         }
-        BlockType type = world.getBlockType(x, y, z);
+        BlockType type = ChunkSectionBlockUtil.blockType(world, x, y, z);
         if (type == null || type == BlockType.EMPTY) {
             return false;
         }

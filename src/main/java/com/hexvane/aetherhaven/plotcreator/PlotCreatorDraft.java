@@ -201,7 +201,7 @@ public final class PlotCreatorDraft {
     /** When true, save also uploads this building to the community marketplace for review. */
     private boolean submitToCommunity;
 
-    /** Crafting bench style filter id (core, jimmy, jszza, hytiny, misc). */
+    /** Crafting bench style filter id (core, jimmy, hytiny, misc). */
     @Nullable
     private String styleId;
 

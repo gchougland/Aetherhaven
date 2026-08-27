@@ -189,19 +189,21 @@ public final class ConstructionCatalog {
             LOGGER.atWarning().log("Skipping construction file with missing id: %s", label);
             return;
         }
-        if (def.getPrefabPath() == null || def.getPrefabPath().isBlank()) {
+        if (!def.isLegacyPlotSupport() && (def.getPrefabPath() == null || def.getPrefabPath().isBlank())) {
             LOGGER.atWarning().log("Skipping construction %s: missing prefabPath (%s)", def.getId(), label);
             return;
         }
         String id = def.getId();
-        Path prefabResolved = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
-        if (prefabResolved == null) {
-            LOGGER.atWarning().log(
-                "Construction %s prefabPath '%s' not found in asset packs (may load later) (%s)",
-                id,
-                def.getPrefabPath(),
-                label
-            );
+        if (!def.isLegacyPlotSupport()) {
+            Path prefabResolved = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
+            if (prefabResolved == null) {
+                LOGGER.atWarning().log(
+                    "Construction %s prefabPath '%s' not found in asset packs (may load later) (%s)",
+                    id,
+                    def.getPrefabPath(),
+                    label
+                );
+            }
         }
         if (map.containsKey(id)) {
             LOGGER.atInfo().log("Construction id %s overridden by later asset (%s)", id, label);

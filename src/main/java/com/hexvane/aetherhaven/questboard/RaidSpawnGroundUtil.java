@@ -27,7 +27,7 @@ final class RaidSpawnGroundUtil {
         if (chunk == null) {
             return null;
         }
-        int surfaceGroundY = chunk.getHeight(bx, bz);
+        int surfaceGroundY = ChunkSectionBlockUtil.columnHeight(world, bx, bz);
         if (surfaceGroundY < 1) {
             return null;
         }
@@ -69,10 +69,10 @@ final class RaidSpawnGroundUtil {
         if (!isSafeRaidStand(world, chunk, bx, feetY, bz)) {
             return null;
         }
-        if (!hasSolidGroundDepth(chunk, bx, feetY, bz, SOLID_GROUND_DEPTH)) {
+        if (!hasSolidGroundDepth(world, bx, feetY, bz, SOLID_GROUND_DEPTH)) {
             return null;
         }
-        if (!hasOpenSky(chunk, bx, feetY, bz)) {
+        if (!hasOpenSky(world, bx, feetY, bz)) {
             return null;
         }
         return new Vector3d(bx + 0.5, feetY, bz + 0.5);
@@ -93,7 +93,7 @@ final class RaidSpawnGroundUtil {
         int feetY,
         int bz
     ) {
-        if (!isWalkableStand(chunk, bx, feetY, bz)) {
+        if (!isWalkableStand(world, bx, feetY, bz)) {
             return false;
         }
         if (hasFluid(world, chunk, bx, feetY, bz) || hasFluid(world, chunk, bx, feetY + 1, bz)) {
@@ -122,14 +122,14 @@ final class RaidSpawnGroundUtil {
     }
 
     private static boolean hasSolidGroundDepth(
-        @Nonnull WorldChunk chunk,
+        @Nonnull World world,
         int bx,
         int feetY,
         int bz,
         int depth
     ) {
         for (int d = 1; d <= depth; d++) {
-            BlockType below = readBlock(chunk, bx, feetY - d, bz);
+            BlockType below = readBlock(world, bx, feetY - d, bz);
             if (below == null || !isGround(below)) {
                 return false;
             }
@@ -137,10 +137,10 @@ final class RaidSpawnGroundUtil {
         return true;
     }
 
-    private static boolean hasOpenSky(@Nonnull WorldChunk chunk, int bx, int feetY, int bz) {
+    private static boolean hasOpenSky(@Nonnull World world, int bx, int feetY, int bz) {
         int top = Math.min(319, feetY + OPEN_SKY_CLEARANCE_BLOCKS);
         for (int y = feetY + 2; y <= top; y++) {
-            BlockType block = readBlock(chunk, bx, y, bz);
+            BlockType block = readBlock(world, bx, y, bz);
             if (block == null || !isPassable(block)) {
                 return false;
             }
@@ -154,10 +154,10 @@ final class RaidSpawnGroundUtil {
         return ChunkSectionBlockUtil.resolveTickingChunk(world, x, z);
     }
 
-    private static boolean isWalkableStand(@Nonnull WorldChunk chunk, int bx, int feetY, int bz) {
-        BlockType feet = readBlock(chunk, bx, feetY, bz);
-        BlockType head = readBlock(chunk, bx, feetY + 1, bz);
-        BlockType below = readBlock(chunk, bx, feetY - 1, bz);
+    private static boolean isWalkableStand(@Nonnull World world, int bx, int feetY, int bz) {
+        BlockType feet = readBlock(world, bx, feetY, bz);
+        BlockType head = readBlock(world, bx, feetY + 1, bz);
+        BlockType below = readBlock(world, bx, feetY - 1, bz);
         if (feet == null || head == null || below == null) {
             return false;
         }
@@ -165,11 +165,11 @@ final class RaidSpawnGroundUtil {
     }
 
     @Nullable
-    private static BlockType readBlock(@Nonnull WorldChunk chunk, int x, int y, int z) {
+    private static BlockType readBlock(@Nonnull World world, int x, int y, int z) {
         if (y < 0 || y >= 320) {
             return null;
         }
-        return BlockType.getAssetMap().getAsset(chunk.getBlock(x, y, z));
+        return ChunkSectionBlockUtil.blockType(world, x, y, z);
     }
 
     private static boolean isPassable(@Nonnull BlockType type) {

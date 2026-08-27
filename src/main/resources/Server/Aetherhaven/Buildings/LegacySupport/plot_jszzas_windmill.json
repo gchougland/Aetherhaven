@@ -1,0 +1,7 @@
+{
+  "id": "plot_jszzas_windmill",
+  "displayName": "Jszza's Windmill",
+  "legacyPlotSupport": true,
+  "countsAsConstructionId": "plot_farm",
+  "treasuryGoldCoinCost": 45
+}

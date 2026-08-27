@@ -1,0 +1,7 @@
+{
+  "id": "plot_jimmys_builders_workshop",
+  "displayName": "Jimmy's Builder's Workshop",
+  "legacyPlotSupport": true,
+  "countsAsConstructionId": "plot_builders_hut",
+  "treasuryGoldCoinCost": 45
+}

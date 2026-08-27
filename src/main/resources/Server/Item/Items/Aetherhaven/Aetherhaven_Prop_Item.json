@@ -4,7 +4,7 @@
     "Description": "aetherhaven_items.items.Aetherhaven_Prop_Item.description"
   },
   "Parent": "Furniture_Village_Crate",
-  "Categories": ["Items.Tools", "Aetherhaven.All"],
+  "Categories": [],
   "Quality": "Common",
   "Recipe": null,
   "MaxStack": 16,

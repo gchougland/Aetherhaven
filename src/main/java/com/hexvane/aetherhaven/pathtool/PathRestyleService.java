@@ -115,9 +115,11 @@ public final class PathRestyleService {
             }
             int index = t == BlockType.EMPTY ? BlockType.EMPTY_ID : BlockType.getAssetMap().getIndex(u.blockId);
             if (t != BlockType.EMPTY) {
-                ch.setBlock(u.x, u.y, u.z, index, t, u.rotationIndex, 0, SET);
+                ChunkSectionBlockUtil.setBlock(
+                    world, u.x, u.y, u.z, index, t, u.rotationIndex, FillerBlockUtil.NO_FILLER, SET
+                );
             } else {
-                ch.setBlock(u.x, u.y, u.z, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, 10);
+                ChunkSectionBlockUtil.setBlockEmpty(world, u.x, u.y, u.z, 10);
             }
         }
     }

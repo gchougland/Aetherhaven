@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.prefab;
 
+import com.hexvane.aetherhaven.entity.TransformComponentUtil;
 import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
@@ -10,7 +11,6 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.environment.config.Environment;
 import com.hypixel.hytale.server.core.asset.util.ColorParseUtil;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentPrefabPreview;
-import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -89,18 +89,7 @@ public final class AetherhavenWorldPrefabPreview {
         @Nonnull Vector3d position,
         @Nonnull Rotation3f rotation
     ) {
-        if (!ref.isValid()) {
-            return;
-        }
-        TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
-        if (transform == null) {
-            return;
-        }
-        transform.teleportPosition(position);
-        transform.teleportRotation(rotation);
-        // Mutating TransformComponent in place is enough for TransformSystems to detect change next tick;
-        // putComponent forces the store to treat the component as written for this frame.
-        store.putComponent(ref, TransformComponent.getComponentType(), transform);
+        TransformComponentUtil.replacePreservingChunk(ref, store, position, rotation);
     }
 
     public static void updatePositionAtBlockCorner(

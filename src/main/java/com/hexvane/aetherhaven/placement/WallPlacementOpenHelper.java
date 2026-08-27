@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.placement;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
@@ -75,7 +76,7 @@ public final class WallPlacementOpenHelper {
     }
 
     private static boolean isReplaceable(@Nonnull World world, int x, int y, int z) {
-        BlockType t = world.getBlockType(x, y, z);
+        BlockType t = ChunkSectionBlockUtil.blockType(world, x, y, z);
         return t == null || t.getMaterial() == BlockMaterial.Empty;
     }
 

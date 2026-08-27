@@ -110,7 +110,7 @@ public final class PlotConstructionOpenHelper {
         int bestY = y;
         int bestDist = Integer.MAX_VALUE;
         for (int yy = yMin; yy <= yMax; yy++) {
-            Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(x, yy, z);
+            Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, x, yy, z);
             if (!isLinkedPlotSign(blockRef, constructionId, plotIdStr)) {
                 continue;
             }

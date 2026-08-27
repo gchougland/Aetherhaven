@@ -106,12 +106,12 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         if (chunk == null) {
             return;
         }
-        int blockId = chunk.getBlock(pos.x, pos.y, pos.z);
+        int blockId = ChunkSectionBlockUtil.blockId(world, pos.x, pos.y, pos.z);
         BlockType type = BlockType.getAssetMap().getAsset(blockId);
         if (type == null || !AetherhavenConstants.CHARTER_BLOCK_TYPE_ID.equals(type.getId())) {
             return;
         }
-        Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(pos.x, pos.y, pos.z);
+        Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, pos.x, pos.y, pos.z);
         if (blockRef == null) {
             LOGGER.atWarning().log("Charter placed at %s but no block entity ref", pos);
             return;

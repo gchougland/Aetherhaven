@@ -111,6 +111,14 @@ public final class VillagerDefinition {
     @Nullable
     private List<String> giftDislikes;
 
+    /**
+     * Items this villager gives the player during Wintertide. When present, this list wins over the built-in
+     * kind tables so crossmod villagers can set their own presents.
+     */
+    @SerializedName("wintertideGifts")
+    @Nullable
+    private List<WintertideGiftJson> wintertideGifts;
+
     /** Translation keys for generic hub greetings (see {@code bodyMode} {@code villager_greeting}). */
     @SerializedName("dialogueGreetingLangKeys")
     @Nullable
@@ -285,6 +293,14 @@ public final class VillagerDefinition {
     @Nonnull
     public List<String> getGiftDislikes() {
         return listOrEmpty(giftDislikes);
+    }
+
+    @Nonnull
+    public List<WintertideGiftJson> getWintertideGifts() {
+        if (wintertideGifts == null || wintertideGifts.isEmpty()) {
+            return List.of();
+        }
+        return Collections.unmodifiableList(new ArrayList<>(wintertideGifts));
     }
 
     /** Appends item ids for crossmod gift patches (dedupes, case-sensitive ids). */

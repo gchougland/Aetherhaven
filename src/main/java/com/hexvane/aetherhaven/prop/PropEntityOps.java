@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.prop;
 
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
 import com.hexvane.aetherhaven.construction.ConstructionPrefabSequence;
+import com.hexvane.aetherhaven.entity.BlockEntityScaleMigration;
 import com.hexvane.aetherhaven.entity.EntityRotationUtil;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
@@ -194,6 +195,7 @@ public final class PropEntityOps {
             AetherhavenPlacedInstance.getComponentType(),
             new AetherhavenPlacedInstance(instanceId.toString(), AetherhavenPlacedInstance.Kind.PROP)
         );
+        BlockEntityScaleMigration.migratePrefabSpawn(clone);
         entityAccessor.addEntity(clone, AddReason.LOAD);
         return entityUuid;
     }

@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.shopspot;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
@@ -41,7 +42,7 @@ public final class ShopSpotExtractor {
         for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
             for (int y = fp.getMinY(); y <= fp.getMaxY(); y++) {
                 for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
-                    if (!AetherhavenConstants.SHOP_SPOT_BLOCK_TYPE_ID.equals(world.getBlockType(x, y, z).getId())) {
+                    if (!AetherhavenConstants.SHOP_SPOT_BLOCK_TYPE_ID.equals(ChunkSectionBlockUtil.blockType(world, x, y, z).getId())) {
                         continue;
                     }
                     Vector3i pos = new Vector3i(x, y, z);

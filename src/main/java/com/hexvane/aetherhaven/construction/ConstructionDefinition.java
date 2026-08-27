@@ -248,6 +248,13 @@ public final class ConstructionDefinition {
     @SerializedName("excludeFromTownJournal")
     private boolean excludeFromTownJournal;
 
+    /**
+     * Kept so already placed plots still count as houses or workplaces after the prefab was removed from the mod.
+     * Not craftable or placeable.
+     */
+    @SerializedName("legacyPlotSupport")
+    private boolean legacyPlotSupport;
+
     /** Town wall segment: journal excluded, overlap rules differ, completion moves to {@link com.hexvane.aetherhaven.town.WallSegmentRecord}. */
     @SerializedName("wallSegment")
     private boolean wallSegment;
@@ -648,6 +655,10 @@ public final class ConstructionDefinition {
 
     public boolean isExcludeFromTownJournal() {
         return excludeFromTownJournal;
+    }
+
+    public boolean isLegacyPlotSupport() {
+        return legacyPlotSupport;
     }
 
     public boolean isWallSegment() {

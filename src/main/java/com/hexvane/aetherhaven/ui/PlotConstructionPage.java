@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.ui;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
@@ -2644,7 +2645,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         if (!refunded.isEmpty()) {
             PlotMaterialDepositService.refundToPlayer(player, ref, store, refunded, dropPos);
         }
-        world.breakBlock(blockWorldPos.x, blockWorldPos.y, blockWorldPos.z, BREAK_SETTINGS);
+        ChunkSectionBlockUtil.breakBlock(world, blockWorldPos.x, blockWorldPos.y, blockWorldPos.z, BREAK_SETTINGS);
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (def.consumesPlotToken()) {
             PlotTokenInventory.grantDefinitionTokenToPlayer(def, player, ref, store, dropPos);

@@ -1,6 +1,9 @@
 package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.universe.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3i;
@@ -59,9 +62,17 @@ public final class PlotCreatorLocalCoords {
         return draft.isInsideBounds(worldPos);
     }
 
+    /**
+     * In-memory block id, or {@code null} when the column is not loaded. Must not use {@link World#getBlockType}:
+     * {@code getChunk()} waits for unloaded columns, drains {@code world.execute} work inside {@code Store.tick},
+     * and crashes with "Store is currently processing!".
+     */
     @Nullable
-    public static String blockTypeAt(@Nonnull com.hypixel.hytale.server.core.universe.world.World world, @Nonnull Vector3i pos) {
-        var bt = world.getBlockType(pos.x, pos.y, pos.z);
+    public static String blockTypeAt(@Nonnull World world, @Nonnull Vector3i pos) {
+        if (ChunkSectionBlockUtil.worldChunkIfInMemory(world, pos.x, pos.z) == null) {
+            return null;
+        }
+        BlockType bt = ChunkSectionBlockUtil.blockType(world, pos.x, pos.y, pos.z);
         return bt != null ? bt.getId() : null;
     }
 }

@@ -13,7 +13,6 @@ import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -152,11 +151,14 @@ public final class StarterTownLayoutPlanner {
         int maxHeight = Integer.MIN_VALUE;
         for (int x = relative.getMinX(); x <= relative.getMaxX(); x++) {
             for (int z = relative.getMinZ(); z <= relative.getMaxZ(); z++) {
-                WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfNonTicking(world, ChunkUtil.indexChunkFromBlock(x, z));
-                if (chunk == null || !chunk.getReference().isValid()) {
+                if (ChunkSectionBlockUtil.loadBlockChunk(world, x, z) == null) {
                     return null;
                 }
-                int h = chunk.getHeight(x, z) + 1;
+                int columnHeight = ChunkSectionBlockUtil.columnHeight(world, x, z);
+                if (columnHeight < ChunkUtil.MIN_Y) {
+                    return null;
+                }
+                int h = columnHeight + 1;
                 heights.add(h);
                 minHeight = Math.min(minHeight, h);
                 maxHeight = Math.max(maxHeight, h);

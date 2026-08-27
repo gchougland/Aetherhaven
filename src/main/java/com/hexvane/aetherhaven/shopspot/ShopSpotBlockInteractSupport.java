@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.shopspot;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -50,6 +51,6 @@ public final class ShopSpotBlockInteractSupport {
     }
 
     public static boolean isShopSpotBlock(@Nonnull World world, @Nonnull Vector3i targetBlock) {
-        return AetherhavenConstants.SHOP_SPOT_BLOCK_TYPE_ID.equals(world.getBlockType(targetBlock).getId());
+        return AetherhavenConstants.SHOP_SPOT_BLOCK_TYPE_ID.equals(ChunkSectionBlockUtil.blockType(world, targetBlock).getId());
     }
 }

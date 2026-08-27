@@ -66,7 +66,7 @@ public final class ShopSafeUseInteraction extends SimpleBlockInteraction {
             context.getState().state = InteractionState.Failed;
             return;
         }
-        Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(targetBlock.x, targetBlock.y, targetBlock.z);
+        Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, targetBlock.x, targetBlock.y, targetBlock.z);
         if (blockRef == null) {
             context.getState().state = InteractionState.Failed;
             return;

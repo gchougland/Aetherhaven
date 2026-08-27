@@ -8,7 +8,6 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -24,11 +23,10 @@ public final class ShopSpotBlockUtil {
 
     @Nullable
     public static ShopSpotBlock getBlockComponent(@Nonnull World world, @Nonnull Vector3i pos) {
-        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
-        if (chunk == null) {
+        if (ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z)) == null) {
             return null;
         }
-        Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(pos.x, pos.y, pos.z);
+        Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, pos.x, pos.y, pos.z);
         if (blockRef == null) {
             return null;
         }
@@ -61,11 +59,10 @@ public final class ShopSpotBlockUtil {
 
     /** @return false if the chunk or block entity is not ready yet (caller may retry on the world thread). */
     public static boolean writeBlockComponent(@Nonnull World world, @Nonnull Vector3i pos, @Nonnull ShopSpotBlock block) {
-        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
-        if (chunk == null) {
+        if (ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z)) == null) {
             return false;
         }
-        Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(pos.x, pos.y, pos.z);
+        Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, pos.x, pos.y, pos.z);
         if (blockRef == null) {
             return false;
         }
@@ -106,6 +103,6 @@ public final class ShopSpotBlockUtil {
     }
 
     public static void breakBlock(@Nonnull World world, @Nonnull Vector3i pos) {
-        world.breakBlock(pos.x, pos.y, pos.z, 0);
+        ChunkSectionBlockUtil.breakBlock(world, pos.x, pos.y, pos.z, 0);
     }
 }

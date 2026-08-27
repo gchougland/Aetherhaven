@@ -2,8 +2,10 @@ package com.hexvane.aetherhaven.command;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.community.CommunityPropValidator;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
+import com.hexvane.aetherhaven.prop.PropCatalog;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.ResidentNpcRecord;
@@ -13,6 +15,7 @@ import com.hexvane.aetherhaven.tourist.TouristPortalRecord;
 import com.hexvane.aetherhaven.tourist.TouristPortalRegistry;
 import com.hypixel.hytale.server.core.command.system.CommandSender;
 import com.hypixel.hytale.server.core.command.system.suggestion.SuggestionResult;
+import com.hypixel.hytale.server.core.command.system.suggestion.SuggestionUtil;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -54,6 +57,33 @@ public final class AetherhavenCommandSuggest {
 
     public static void suggestPrefix(@Nonnull SuggestionResult result, @Nullable String partial, @Nonnull String... values) {
         suggestPrefix(result, partial, List.of(values));
+    }
+
+    /**
+     * Tab-completes prop ids for {@code /ah prop give}. Marketplace downloads are listed first so they
+     * stay visible instead of being pushed past the client suggestion cap by shipped ids.
+     */
+    public static void suggestPropIds(
+        @Nonnull SuggestionResult result,
+        @Nullable String partial,
+        @Nonnull PropCatalog catalog
+    ) {
+        TreeSet<String> community = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        TreeSet<String> rest = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        for (String id : catalog.ids()) {
+            if (id == null || id.isBlank()) {
+                continue;
+            }
+            if (CommunityPropValidator.isValidCommunityPropId(id)) {
+                community.add(id);
+            } else {
+                rest.add(id);
+            }
+        }
+        List<String> ordered = new ArrayList<>(community.size() + rest.size());
+        ordered.addAll(community);
+        ordered.addAll(rest);
+        SuggestionUtil.suggestFiltered(ordered, partial == null ? "" : partial, result);
     }
 
     @Nullable

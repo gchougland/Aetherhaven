@@ -113,16 +113,13 @@ public final class AetherhavenArgTypes {
             if (plugin == null) {
                 return;
             }
-            // Sorted so the first MAX suggestions stay stable as props are added/removed.
-            AetherhavenCommandSuggest.suggestPrefix(
-                result, textAlreadyEntered, new TreeSet<>(plugin.getPropCatalog().ids())
-            );
+            AetherhavenCommandSuggest.suggestPropIds(result, textAlreadyEntered, plugin.getPropCatalog());
         }
 
         @Override
         public int getSuggestionValueCount() {
-            // Never claim the truncated suggestion list is complete (hash order used to hide ids).
-            return -1;
+            AetherhavenPlugin plugin = AetherhavenCommandSuggest.plugin();
+            return plugin != null ? plugin.getPropCatalog().ids().size() : -1;
         }
     };
 

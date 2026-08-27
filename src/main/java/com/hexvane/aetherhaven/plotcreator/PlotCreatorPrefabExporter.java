@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.festival.CustomFestivalPaths;
 import com.hexvane.aetherhaven.festival.FestivalPrefabSize;
 import com.hexvane.aetherhaven.guild.marker.AdventurerSpawnMarkerEntity;
@@ -29,10 +30,7 @@ import com.hypixel.hytale.server.core.prefab.PrefabSaveException;
 import com.hypixel.hytale.server.core.prefab.PrefabStore;
 import com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
-import com.hypixel.hytale.server.core.universe.world.chunk.ChunkColumn;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.EntitySection;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.FluidSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -116,9 +114,6 @@ public final class PlotCreatorPrefabExporter {
         int halfWidth = width / 2;
         int halfDepth = depth / 2;
 
-        LocalCachedChunkAccessor accessor =
-            LocalCachedChunkAccessor.atWorldCoords(world, xMin + halfWidth, zMin + halfDepth, Math.max(width, depth));
-
         BlockSelection selection = new BlockSelection();
         selection.setPosition(xMin + halfWidth, yMin, zMin + halfDepth);
         selection.setSelectionArea(new Vector3i(xMin, yMin, zMin), new Vector3i(xMax, yMax, zMax));
@@ -139,18 +134,17 @@ public final class PlotCreatorPrefabExporter {
 
         for (int x = xMin; x <= xMax; x++) {
             for (int z = zMin; z <= zMax; z++) {
-                WorldChunk chunk = accessor.getChunk(ChunkUtil.indexChunkFromBlock(x, z));
-                if (chunk == null) {
+                if (ChunkSectionBlockUtil.loadBlockChunk(world, x, z) == null) {
                     continue;
                 }
-                Store<ChunkStore> chunkStore = chunk.getReference().getStore();
+                Store<ChunkStore> chunkStore = chunkStoreAccessor.getStore();
                 int lastSection = -1;
                 Ref<ChunkStore> sectionRef = null;
                 BlockSection blockSection = null;
                 BlockPhysics blockPhysics = null;
 
                 for (int y = top; y >= bottom; y--) {
-                    int block = chunk.getBlock(x, y, z);
+                    int block = ChunkSectionBlockUtil.blockId(world, x, y, z);
                     if (lastSection != ChunkUtil.indexSection(y)) {
                         lastSection = ChunkUtil.indexSection(y);
                         sectionRef = chunkStoreAccessor.getChunkSectionReferenceAtBlock(x, y, z);
@@ -214,7 +208,7 @@ public final class PlotCreatorPrefabExporter {
                             rotation,
                             filler,
                             support,
-                            chunk.getBlockComponentHolder(x, y, z)
+                            ChunkSectionBlockUtil.blockEntityHolderAt(world, x, y, z)
                         );
                     }
                         // Match BuilderTools PrefabSaver: always write the fluid layer explicitly so fluid-only
@@ -338,26 +332,22 @@ public final class PlotCreatorPrefabExporter {
 
         ChunkStore chunkStore = world.getChunkStore();
         Store<ChunkStore> chunkComponentStore = chunkStore.getStore();
-        int minChunkX = xMin >> 5;
-        int maxChunkX = (xMin + width) >> 5;
-        int minChunkZ = zMin >> 5;
-        int maxChunkZ = (zMin + depth) >> 5;
+        int minChunkX = ChunkUtil.chunkCoordinate(xMin);
+        int maxChunkX = ChunkUtil.chunkCoordinate(xMin + width);
+        int minChunkZ = ChunkUtil.chunkCoordinate(zMin);
+        int maxChunkZ = ChunkUtil.chunkCoordinate(zMin + depth);
+        int minSectionY = ChunkUtil.chunkCoordinate(yMin);
+        int maxSectionY = ChunkUtil.chunkCoordinate(yMin + height);
 
         for (int cx = minChunkX; cx <= maxChunkX; cx++) {
             for (int cz = minChunkZ; cz <= maxChunkZ; cz++) {
-                Ref<ChunkStore> chunkRef = chunkStore.getChunkReference(ChunkUtil.indexChunk(cx, cz));
-                if (chunkRef == null || !chunkRef.isValid()) {
+                int columnBlockX = cx << 5;
+                int columnBlockZ = cz << 5;
+                if (ChunkSectionBlockUtil.loadBlockChunk(world, columnBlockX, columnBlockZ) == null) {
                     continue;
                 }
-                ChunkColumn chunkColumn = chunkComponentStore.getComponent(chunkRef, ChunkColumn.getComponentType());
-                if (chunkColumn == null) {
-                    continue;
-                }
-                var sectionRefs = chunkColumn.getSections();
-                if (sectionRefs == null) {
-                    continue;
-                }
-                for (var sectionRef : sectionRefs) {
+                for (int cy = minSectionY; cy <= maxSectionY; cy++) {
+                    Ref<ChunkStore> sectionRef = chunkStore.getChunkSectionReference(cx, cy, cz);
                     if (sectionRef == null || !sectionRef.isValid()) {
                         continue;
                     }

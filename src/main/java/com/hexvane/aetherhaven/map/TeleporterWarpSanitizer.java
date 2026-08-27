@@ -101,7 +101,7 @@ public final class TeleporterWarpSanitizer {
                     continue;
                 }
                 for (int y = minY; y <= maxY; y++) {
-                    Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(x, y, z);
+                    Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, x, y, z);
                     if (blockRef == null) {
                         continue;
                     }

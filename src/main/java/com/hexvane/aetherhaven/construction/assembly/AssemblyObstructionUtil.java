@@ -1,51 +1,31 @@
 package com.hexvane.aetherhaven.construction.assembly;
 
-import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
-
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
-import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
-import org.joml.Vector3i;
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector3i;
 
 /** Footprint obstruction checks for the assembly clearing phase. */
 public final class AssemblyObstructionUtil {
     private AssemblyObstructionUtil() {}
 
     @Nullable
-    private static BlockType blockTypeAt(
-        @Nonnull World world,
-        int wx,
-        int wy,
-        int wz,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor
-    ) {
-        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(wx, wz));
-        if (chunk == null || !chunk.getReference().isValid()) {
+    private static BlockType blockTypeAt(@Nonnull World world, int wx, int wy, int wz) {
+        if (ChunkSectionBlockUtil.sectionRefAt(world, wx, wy, wz) == null) {
             return null;
         }
-        int blockId = chunk.getBlock(wx, wy, wz);
-        return BlockType.getAssetMap().getAsset(blockId);
+        return ChunkSectionBlockUtil.blockType(world, wx, wy, wz);
     }
 
-    public static boolean isObstructedAt(
-        @Nonnull World world,
-        @Nonnull Vector3i anchor,
-        int wx,
-        int wy,
-        int wz,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor
-    ) {
-        BlockType bt = blockTypeAt(world, wx, wy, wz, chunkAccessor);
+    public static boolean isObstructedAt(@Nonnull World world, int wx, int wy, int wz) {
+        BlockType bt = blockTypeAt(world, wx, wy, wz);
         return bt != null && bt != BlockType.EMPTY;
     }
 
@@ -53,14 +33,8 @@ public final class AssemblyObstructionUtil {
      * Solid terrain/obstructions that seal a face for clearing-frontier purposes. {@code Plant_Grass} foliage and other
      * soft plants still count as {@link #isObstructedAt} but do not hide solid blocks below from the frontier.
      */
-    public static boolean blocksClearingExposureAt(
-        @Nonnull World world,
-        int wx,
-        int wy,
-        int wz,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor
-    ) {
-        BlockType bt = blockTypeAt(world, wx, wy, wz, chunkAccessor);
+    public static boolean blocksClearingExposureAt(@Nonnull World world, int wx, int wy, int wz) {
+        BlockType bt = blockTypeAt(world, wx, wy, wz);
         if (bt == null || bt == BlockType.EMPTY) {
             return false;
         }
@@ -100,8 +74,6 @@ public final class AssemblyObstructionUtil {
         @Nullable AssemblySectionMapper sectionMapper,
         int flatSection
     ) {
-        LocalCachedChunkAccessor chunkAccessor =
-            ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
         Vector3i anchor = job.anchor();
         List<PendingBlock> footprint = job.footprintCells();
         for (int i = 0; i < footprint.size(); i++) {
@@ -112,24 +84,11 @@ public final class AssemblyObstructionUtil {
             int wx = anchor.x + pb.x();
             int wy = anchor.y + pb.y();
             int wz = anchor.z + pb.z();
-            WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(wx, wz));
-            if (chunk == null || !chunk.getReference().isValid()) {
-                continue;
-            }
-            BlockType bt = blockTypeAt(world, wx, wy, wz, chunkAccessor);
+            BlockType bt = blockTypeAt(world, wx, wy, wz);
             if (!isSoftClearingSkippedBlock(bt)) {
                 continue;
             }
-            chunk.setBlock(
-                wx,
-                wy,
-                wz,
-                BlockType.EMPTY_ID,
-                BlockType.EMPTY,
-                0,
-                0,
-                ConstructionPasteOps.SET_BLOCK_SETTINGS_CLEAR
-            );
+            ChunkSectionBlockUtil.setBlockEmpty(world, wx, wy, wz, ConstructionPasteOps.SET_BLOCK_SETTINGS_CLEAR);
         }
     }
 
@@ -147,21 +106,10 @@ public final class AssemblyObstructionUtil {
         @Nonnull PlotAssemblyJob job,
         @Nonnull Vector3i cellWorld
     ) {
-        LocalCachedChunkAccessor chunkAccessor =
-            ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
-        return isObstructedFootprintCell(world, job, cellWorld, chunkAccessor);
-    }
-
-    public static boolean isObstructedFootprintCell(
-        @Nonnull World world,
-        @Nonnull PlotAssemblyJob job,
-        @Nonnull Vector3i cellWorld,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor
-    ) {
         if (!footprintContainsWorldCell(job, cellWorld)) {
             return false;
         }
-        return isObstructedAt(world, job.anchor(), cellWorld.x, cellWorld.y, cellWorld.z, chunkAccessor);
+        return isObstructedAt(world, cellWorld.x, cellWorld.y, cellWorld.z);
     }
 
     public static boolean footprintContainsWorldCell(@Nonnull PlotAssemblyJob job, @Nonnull Vector3i cellWorld) {
@@ -170,8 +118,6 @@ public final class AssemblyObstructionUtil {
 
     /** {@code true} when every loaded footprint cell is air (unloaded columns are ignored). */
     public static boolean isFootprintClearInLoadedChunks(@Nonnull World world, @Nonnull PlotAssemblyJob job) {
-        LocalCachedChunkAccessor chunkAccessor =
-            ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
         List<PendingBlock> footprint = job.footprintCells();
         Vector3i anchor = job.anchor();
         for (int i = 0; i < footprint.size(); i++) {
@@ -179,11 +125,10 @@ public final class AssemblyObstructionUtil {
             int wx = anchor.x + pb.x();
             int wy = anchor.y + pb.y();
             int wz = anchor.z + pb.z();
-            WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(wx, wz));
-            if (chunk == null || !chunk.getReference().isValid()) {
+            if (ChunkSectionBlockUtil.sectionRefAt(world, wx, wy, wz) == null) {
                 continue;
             }
-            if (isObstructedAt(world, anchor, wx, wy, wz, chunkAccessor)) {
+            if (isObstructedAt(world, wx, wy, wz)) {
                 return false;
             }
         }
@@ -207,8 +152,6 @@ public final class AssemblyObstructionUtil {
         if (sectionMapper == null) {
             return hasObstructionsInLoadedChunks(world, job);
         }
-        LocalCachedChunkAccessor chunkAccessor =
-            ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
         Vector3i anchor = job.anchor();
         List<PendingBlock> footprint = job.footprintCells();
         int vol = sectionMapper.sectionCount();
@@ -221,11 +164,10 @@ public final class AssemblyObstructionUtil {
                 int wx = anchor.x + pb.x();
                 int wy = anchor.y + pb.y();
                 int wz = anchor.z + pb.z();
-                WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(wx, wz));
-                if (chunk == null || !chunk.getReference().isValid()) {
+                if (ChunkSectionBlockUtil.sectionRefAt(world, wx, wy, wz) == null) {
                     continue;
                 }
-                if (isObstructedAt(world, anchor, wx, wy, wz, chunkAccessor)) {
+                if (isObstructedAt(world, wx, wy, wz)) {
                     return true;
                 }
             }

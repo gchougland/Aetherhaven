@@ -294,7 +294,7 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
         int bx = (int) Math.floor(next.x);
         int by = (int) Math.floor(next.y);
         int bz = (int) Math.floor(next.z);
-        BlockType below = world.getBlockType(bx, by - 1, bz);
+        BlockType below = ChunkSectionBlockUtil.blockType(world, bx, by - 1, bz);
         if (below != null && below != BlockType.EMPTY) {
             spawnRewardChest(world, gift.getGiftType(), gift.getOwnerPlayerUuid(), bx, by, bz);
             commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
@@ -348,7 +348,7 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
     /**
      * Clears decorative grass in the chest column. Skips air voxels so stacked grass above an empty chest cell is still
      * removed (old logic broke on the first air block and left grass that caused {@code placeBlock} to break/drop).
-     * Uses {@link WorldChunk#setBlock} with silent settings so grasses do not break into dropped items.
+     * Uses {@link ChunkSectionBlockUtil#setBlockEmpty} with silent settings so grasses do not break into dropped items.
      */
     private static void clearPlantGrassDecorationColumn(
         @Nonnull World world,
@@ -363,14 +363,14 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
             if (ch == null) {
                 break;
             }
-            BlockType bt = BlockType.getAssetMap().getAsset(ch.getBlock(x, py, z));
+            BlockType bt = ChunkSectionBlockUtil.blockType(world, x, py, z);
             if (bt == null || bt == BlockType.EMPTY) {
                 continue;
             }
             if (!isPlantGrassDecoration(bt)) {
                 break;
             }
-            ch.setBlock(x, py, z, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, SET_BLOCK_SILENT);
+            ChunkSectionBlockUtil.setBlockEmpty(world, x, py, z, SET_BLOCK_SILENT);
         }
     }
 

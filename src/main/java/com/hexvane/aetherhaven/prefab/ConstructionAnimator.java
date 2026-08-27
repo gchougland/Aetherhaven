@@ -13,7 +13,6 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.prefab.event.PrefabPasteEvent;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.PrefabUtil;
 import java.util.List;
@@ -168,7 +167,6 @@ public final class ConstructionAnimator {
             return;
         }
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
-        LocalCachedChunkAccessor chunkAccessor = ConstructionPasteOps.createAccessor(world, origin, bufferAccess);
         ConstructionPasteOps.prepAssemblySite(
             world,
             origin,
@@ -184,7 +182,6 @@ public final class ConstructionAnimator {
             origin,
             seq.pendingBlocks(),
             preserveWater,
-            chunkAccessor,
             blockTypeMap
         );
         ConstructionAnimator job = new ConstructionAnimator(
@@ -211,13 +208,11 @@ public final class ConstructionAnimator {
         if (finished.get()) {
             return;
         }
-        LocalCachedChunkAccessor chunkAccessor = ConstructionPasteOps.createAccessor(world, origin, bufferAccess);
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         int placed = 0;
         while (index < pendingBlocks.size() && placed < blocksPerBatch) {
             PendingBlock pb = pendingBlocks.get(index);
-            if (!ConstructionPasteOps.placeOne(world, origin, pb, force, preserveWater, chunkAccessor, blockTypeMap)) {
-                chunkAccessor = ConstructionPasteOps.createAccessor(world, origin, bufferAccess);
+            if (!ConstructionPasteOps.placeOne(world, origin, pb, force, preserveWater, blockTypeMap)) {
                 plugin.scheduleOnWorld(world, this::runBatch, batchDelayMs);
                 return;
             }

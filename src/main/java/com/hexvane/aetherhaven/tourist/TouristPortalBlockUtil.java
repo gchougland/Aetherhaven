@@ -8,7 +8,6 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import java.util.UUID;
@@ -70,29 +69,25 @@ public final class TouristPortalBlockUtil {
      * True for the non-filler base cell of a multi-block portal. Filler voxels share the block type id but must not
      * create their own {@link TouristPortalRecord}.
      */
-    @SuppressWarnings({ "deprecation", "removal" })
     public static boolean isPortalBaseBlock(@Nonnull World world, int x, int y, int z) {
-        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
-        if (chunk == null) {
+        if (ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z)) == null) {
             return false;
         }
-        if (!isTouristPortalBlock(chunk.getBlockType(x, y, z))) {
+        if (!isTouristPortalBlock(ChunkSectionBlockUtil.blockType(world, x, y, z))) {
             return false;
         }
-        return chunk.getFiller(x, y, z) == 0;
+        return ChunkSectionBlockUtil.filler(world, x, y, z) == 0;
     }
 
     /**
      * Resolves any clicked voxel of the multi-block portal to the base voxel that owns its block component.
      */
     @Nonnull
-    @SuppressWarnings({ "deprecation", "removal" })
     public static Vector3i resolvePortalBaseBlock(@Nonnull World world, @Nonnull Vector3i pos) {
-        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
-        if (chunk == null) {
+        if (ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z)) == null) {
             return new Vector3i(pos);
         }
-        int filler = chunk.getFiller(pos.x, pos.y, pos.z);
+        int filler = ChunkSectionBlockUtil.filler(world, pos.x, pos.y, pos.z);
         if (filler == FillerBlockUtil.NO_FILLER) {
             return new Vector3i(pos);
         }
@@ -105,11 +100,10 @@ public final class TouristPortalBlockUtil {
 
     @Nullable
     public static TouristPortalBlock getBlockComponent(@Nonnull World world, @Nonnull Vector3i pos) {
-        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
-        if (chunk == null) {
+        if (ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z)) == null) {
             return null;
         }
-        Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(pos.x, pos.y, pos.z);
+        Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, pos.x, pos.y, pos.z);
         if (blockRef == null) {
             return null;
         }
@@ -117,11 +111,10 @@ public final class TouristPortalBlockUtil {
     }
 
     public static boolean writeBlockComponent(@Nonnull World world, @Nonnull Vector3i pos, @Nonnull TouristPortalBlock block) {
-        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
-        if (chunk == null) {
+        if (ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x, pos.z)) == null) {
             return false;
         }
-        Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(pos.x, pos.y, pos.z);
+        Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, pos.x, pos.y, pos.z);
         if (blockRef == null) {
             return false;
         }
@@ -282,11 +275,10 @@ public final class TouristPortalBlockUtil {
         if (y < 0 || y >= 320) {
             return null;
         }
-        WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z));
-        if (chunk == null) {
+        if (ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(x, z)) == null) {
             return null;
         }
-        return chunk.getBlockType(x, y, z);
+        return ChunkSectionBlockUtil.blockType(world, x, y, z);
     }
 
     @Nonnull

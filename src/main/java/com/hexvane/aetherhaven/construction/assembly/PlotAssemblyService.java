@@ -41,7 +41,6 @@ import com.hypixel.hytale.server.core.prefab.event.PrefabPasteEvent;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.PrefabUtil;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -318,7 +317,7 @@ public final class PlotAssemblyService {
         List<PendingBlock> nonAirCells = ConstructionPasteOps.withoutPureAirCells(footprintCells);
         List<PendingBlock> placementOrder = nonAirCells;
 
-        world.breakBlock(physicalSignWorld.x, physicalSignWorld.y, physicalSignWorld.z, BREAK_SIGN_SETTINGS);
+        ChunkSectionBlockUtil.breakBlock(world, physicalSignWorld.x, physicalSignWorld.y, physicalSignWorld.z, BREAK_SIGN_SETTINGS);
 
         long wallNow = System.currentTimeMillis();
         plot.setPrefabWorldPlacement(anchor.x, anchor.y, anchor.z, yaw);
@@ -526,11 +525,10 @@ public final class PlotAssemblyService {
         }
         PlotAssemblyClearingFrontierRuntime clearingFrontierRt = null;
         if (!clearingRt.isEmpty()) {
-            LocalCachedChunkAccessor acc = clearingRt.getOrCreateChunkAccessor(world, job);
             int activeSection = plot.getAssemblyActiveSectionIndex();
             clearingFrontierRt =
                 PlotAssemblyClearingFrontierRuntime.rebuild(
-                    world, job, clearingRt, acc, mapper, activeSection
+                    world, job, clearingRt, mapper, activeSection
                 );
         }
         AssemblyWorldRegistry.put(
@@ -661,8 +659,6 @@ public final class PlotAssemblyService {
         if (AssemblyWorldRegistry.phase(world, job.plotId()) == PlotAssemblyPhase.PLACING) {
             return;
         }
-        LocalCachedChunkAccessor chunkAccessor =
-            ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         ConstructionPasteOps.prepAssemblySite(
             world,
@@ -679,7 +675,6 @@ public final class PlotAssemblyService {
             job.anchor(),
             job.footprintCells(),
             job.preserveWater(),
-            chunkAccessor,
             blockTypeMap
         );
         AssemblySectionMapper sectionMapper = sectionMapperFor(plot, job.pendingBlocks());
@@ -821,12 +816,11 @@ public final class PlotAssemblyService {
                         );
                         PlotAssemblyClearingFrontierRuntime clearingFrontierRt =
                             AssemblyWorldRegistry.clearingFrontierRuntime(world, job.plotId());
-                        LocalCachedChunkAccessor chunkAccessor = clearingRt.getOrCreateChunkAccessor(world, job);
                         if (clearingFrontierRt == null) {
                             int activeSection = clearingPlot.getAssemblyActiveSectionIndex();
                             clearingFrontierRt =
                                 PlotAssemblyClearingFrontierRuntime.rebuild(
-                                    world, job, clearingRt, chunkAccessor, clearingMapper, activeSection
+                                    world, job, clearingRt, clearingMapper, activeSection
                                 );
                             AssemblyWorldRegistry.updateClearingFrontierRuntime(
                                 world, job.plotId(), clearingFrontierRt
@@ -858,7 +852,6 @@ public final class PlotAssemblyService {
                                     job,
                                     cell,
                                     null,
-                                    chunkAccessor,
                                     clearingFrontierRt
                                 );
                             if (!outcome.progressed()) {
@@ -1015,14 +1008,12 @@ public final class PlotAssemblyService {
         if (!isChunkLoadedForBlock(world, job.anchor(), pending.get(placementIndex))) {
             return PlacementAdvanceOutcome.noProgress();
         }
-        LocalCachedChunkAccessor chunkAccessor = rt.getOrCreateChunkAccessor(world, job.anchor(), job.buffer());
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         PendingBlock pb = pending.get(placementIndex);
         boolean wroteBlock =
-            !ConstructionPasteOps.isAssemblyPlacementNoOp(job.anchor(), pb, chunkAccessor, blockTypeMap);
+            !ConstructionPasteOps.isAssemblyPlacementNoOp(world, job.anchor(), pb, blockTypeMap);
         if (wroteBlock) {
-            if (!ConstructionPasteOps.placeOne(world, job.anchor(), pb, true, job.preserveWater(), chunkAccessor, blockTypeMap)) {
-                rt.clearChunkAccessor();
+            if (!ConstructionPasteOps.placeOne(world, job.anchor(), pb, true, job.preserveWater(), blockTypeMap)) {
                 return PlacementAdvanceOutcome.noProgress();
             }
         }
@@ -1033,7 +1024,6 @@ public final class PlotAssemblyService {
             TownManager tmAdv = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             if (maybeAdvanceAssemblySection(tmAdv, town, plot, pending, sm, persistProgress)) {
                 rt.rebuildFrontierFromPlot(pending, plot);
-                rt.clearChunkAccessor();
             }
         }
         if (fromStaff && staffActor != null && wroteBlock) {
@@ -1399,7 +1389,6 @@ public final class PlotAssemblyService {
         List<PendingBlock> pending = job.pendingBlocks();
         IntOpenHashSet placedSet = new IntOpenHashSet();
         plot.fillAssemblyPlacedSet(placedSet, pending.size());
-        LocalCachedChunkAccessor chunkAccessor = ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         boolean any = false;
         for (int i = 0; i < pending.size(); i++) {
@@ -1409,11 +1398,8 @@ public final class PlotAssemblyService {
             if (!isChunkLoadedForBlock(world, job.anchor(), pending.get(i))) {
                 return false;
             }
-            if (!ConstructionPasteOps.placeOne(world, job.anchor(), pending.get(i), true, job.preserveWater(), chunkAccessor, blockTypeMap)) {
-                chunkAccessor = ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
-                if (!ConstructionPasteOps.placeOne(world, job.anchor(), pending.get(i), true, job.preserveWater(), chunkAccessor, blockTypeMap)) {
-                    continue;
-                }
+            if (!ConstructionPasteOps.placeOne(world, job.anchor(), pending.get(i), true, job.preserveWater(), blockTypeMap)) {
+                continue;
             }
             plot.addAssemblyPlacedIndex(i);
             any = true;
@@ -1559,9 +1545,8 @@ public final class PlotAssemblyService {
             if (clearingSectionHasAnyObstructedCell(mapper, job.anchor(), obstructed, next)) {
                 plot.setAssemblyActiveSectionIndex(next);
                 markAssemblyTownDirty(dirtyTowns, town);
-                LocalCachedChunkAccessor acc = clearingRt.getOrCreateChunkAccessor(world, job);
                 PlotAssemblyClearingFrontierRuntime rebuilt =
-                    PlotAssemblyClearingFrontierRuntime.rebuild(world, job, clearingRt, acc, mapper, next);
+                    PlotAssemblyClearingFrontierRuntime.rebuild(world, job, clearingRt, mapper, next);
                 AssemblyWorldRegistry.updateClearingFrontierRuntime(world, job.plotId(), rebuilt);
                 return;
             }
@@ -1586,12 +1571,11 @@ public final class PlotAssemblyService {
             clearingFrontierRt.appendFrontierWorldCells(out);
             return;
         }
-        LocalCachedChunkAccessor chunkAccessor = clearingRt.getOrCreateChunkAccessor(world, job);
         AssemblySectionMapper mapper = clearingSectionMapper(job, plot);
         int activeSection = plot.getAssemblyActiveSectionIndex();
         clearingFrontierRt =
             PlotAssemblyClearingFrontierRuntime.rebuild(
-                world, job, clearingRt, chunkAccessor, mapper, activeSection
+                world, job, clearingRt, mapper, activeSection
             );
         AssemblyWorldRegistry.updateClearingFrontierRuntime(world, job.plotId(), clearingFrontierRt);
         clearingFrontierRt.appendFrontierWorldCells(out);
@@ -1842,11 +1826,6 @@ public final class PlotAssemblyService {
         @Nonnull Vector3i cellWorld,
         @Nullable UUID staffActor
     ) {
-        PlotAssemblyClearingRuntime clearingRt = AssemblyWorldRegistry.clearingRuntime(world, job.plotId());
-        LocalCachedChunkAccessor chunkAccessor =
-            clearingRt != null
-                ? clearingRt.getOrCreateChunkAccessor(world, job)
-                : ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
         return advanceClearingAtCell(
             world,
             plugin,
@@ -1857,7 +1836,6 @@ public final class PlotAssemblyService {
             job,
             cellWorld,
             staffActor,
-            chunkAccessor,
             AssemblyWorldRegistry.clearingFrontierRuntime(world, job.plotId())
         );
     }
@@ -1873,7 +1851,6 @@ public final class PlotAssemblyService {
         @Nonnull PlotAssemblyJob job,
         @Nonnull Vector3i cellWorld,
         @Nullable UUID staffActor,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor,
         @Nullable PlotAssemblyClearingFrontierRuntime clearingFrontierRt
     ) {
         if (plot.getState() != PlotInstanceState.ASSEMBLING) {
@@ -1893,17 +1870,17 @@ public final class PlotAssemblyService {
             maybeBeginPlacingAfterClear(world, plugin, entityStore, town, plot, job);
             return ClearingAdvanceOutcome.noProgress();
         }
-        if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cellWorld, chunkAccessor)) {
+        if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cellWorld)) {
             noteClearingCellCleared(
-                world, job, plot, clearingRt, clearingFrontierRt, chunkAccessor, cellWorld
+                world, job, plot, clearingRt, clearingFrontierRt, cellWorld
             );
             maybeBeginPlacingAfterClear(world, plugin, entityStore, town, plot, job);
             return ClearingAdvanceOutcome.skipped();
         }
         if (!AssemblyStaffClearBreak.breakWithLoot(world, cellWorld, entityAccessor)) {
-            if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cellWorld, chunkAccessor)) {
+            if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cellWorld)) {
                 noteClearingCellCleared(
-                    world, job, plot, clearingRt, clearingFrontierRt, chunkAccessor, cellWorld
+                    world, job, plot, clearingRt, clearingFrontierRt, cellWorld
                 );
                 maybeBeginPlacingAfterClear(world, plugin, entityStore, town, plot, job);
                 return ClearingAdvanceOutcome.skipped();
@@ -1911,7 +1888,7 @@ public final class PlotAssemblyService {
             return ClearingAdvanceOutcome.noProgress();
         }
         noteClearingCellCleared(
-            world, job, plot, clearingRt, clearingFrontierRt, chunkAccessor, cellWorld
+            world, job, plot, clearingRt, clearingFrontierRt, cellWorld
         );
         if (staffActor != null) {
             PlotAssemblyPreviewSystem.markStaffAssemblyBlockPlaced(staffActor);
@@ -1933,7 +1910,6 @@ public final class PlotAssemblyService {
         @Nonnull PlotInstance plot,
         @Nonnull PlotAssemblyClearingRuntime clearingRt,
         @Nullable PlotAssemblyClearingFrontierRuntime clearingFrontierRt,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor,
         @Nonnull Vector3i cellWorld
     ) {
         clearingRt.removeCell(cellWorld.x, cellWorld.y, cellWorld.z);
@@ -1944,7 +1920,6 @@ public final class PlotAssemblyService {
                 world,
                 job,
                 clearingRt,
-                chunkAccessor,
                 cellWorld.x,
                 cellWorld.y,
                 cellWorld.z,

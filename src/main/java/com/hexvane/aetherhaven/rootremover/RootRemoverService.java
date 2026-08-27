@@ -22,7 +22,6 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.modules.entity.item.ItemComponent;
 import com.hypixel.hytale.server.core.modules.interaction.BlockHarvestUtils;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -63,7 +62,7 @@ public final class RootRemoverService {
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Vector3i targetBlock
     ) {
-        BlockType clicked = world.getBlockType(targetBlock.x(), targetBlock.y(), targetBlock.z());
+        BlockType clicked = ChunkSectionBlockUtil.blockType(world, targetBlock.x(), targetBlock.y(), targetBlock.z());
         if (!isTrunkBlock(clicked)) {
             return false;
         }
@@ -107,16 +106,17 @@ public final class RootRemoverService {
 
         int cleared = 0;
         for (Vector3i pos : ordered) {
-            BlockType blockType = world.getBlockType(pos.x(), pos.y(), pos.z());
+            BlockType blockType = ChunkSectionBlockUtil.blockType(world, pos.x(), pos.y(), pos.z());
             if (!isTreeWoodStructure(blockType)) {
                 continue;
             }
             allDrops.addAll(resolveDrops(blockType));
-            WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x(), pos.z()));
-            if (chunk == null) {
+            if (ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(pos.x(), pos.z())) == null) {
                 continue;
             }
-            chunk.setBlock(pos.x(), pos.y(), pos.z(), dirtIdx, dirtType, 0, 0, SET_BLOCK);
+            ChunkSectionBlockUtil.setBlock(
+                world, pos.x(), pos.y(), pos.z(), dirtIdx, dirtType, 0, 0, SET_BLOCK
+            );
             cleared++;
         }
 
@@ -187,7 +187,7 @@ public final class RootRemoverService {
         if (y < ChunkUtil.MIN_Y || y > ChunkUtil.HEIGHT_MINUS_1) {
             return false;
         }
-        BlockType t = world.getBlockType(x, y, z);
+        BlockType t = ChunkSectionBlockUtil.blockType(world, x, y, z);
         return t != null && !isPassableForGroundNeighbor(t);
     }
 
@@ -218,7 +218,7 @@ public final class RootRemoverService {
     private static Set<Vector3i> collectTreeWoodComponent(@Nonnull World world, @Nonnull Vector3i start) {
         HashSet<Vector3i> component = new HashSet<>();
         ArrayDeque<Vector3i> queue = new ArrayDeque<>();
-        BlockType startType = world.getBlockType(start.x(), start.y(), start.z());
+        BlockType startType = ChunkSectionBlockUtil.blockType(world, start.x(), start.y(), start.z());
         if (!isTreeWoodStructure(startType)) {
             return component;
         }
@@ -238,7 +238,7 @@ public final class RootRemoverService {
                 if (component.contains(n)) {
                     continue;
                 }
-                BlockType t = world.getBlockType(nx, ny, nz);
+                BlockType t = ChunkSectionBlockUtil.blockType(world, nx, ny, nz);
                 if (!isTreeWoodStructure(t)) {
                     continue;
                 }

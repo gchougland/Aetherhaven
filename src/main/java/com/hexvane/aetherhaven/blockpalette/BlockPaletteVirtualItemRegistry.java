@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.blockpalette;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.protocol.ItemBase;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import java.util.Collections;
@@ -93,11 +94,29 @@ public final class BlockPaletteVirtualItemRegistry {
             ItemBase clone = originalPacket.clone();
             clone.id = virtualId;
             clone.icon = iconPath;
-            clone.variant = true;
+            hideFromCreativeMenu(clone);
+            copyHeldItemInteractions(originalPacket, clone);
             return clone;
         } catch (Exception e) {
             LOGGER.atWarning().log("Failed to create block palette virtual item %s: %s", virtualId, e.getMessage());
             return null;
+        }
+    }
+
+    /**
+     * Virtual icon clones are not pickable assets. {@code variant} alone still shows them when the player
+     * displays variants; empty categories is what shop palettes use to stay out of the item library.
+     */
+    private static void hideFromCreativeMenu(@Nonnull ItemBase clone) {
+        clone.variant = true;
+        clone.categories = new String[0];
+        clone.subCategory = null;
+    }
+
+    /** Keep SwapFrom on the clone so the hotbar can scroll off a virtual palette. */
+    private static void copyHeldItemInteractions(@Nonnull ItemBase original, @Nonnull ItemBase clone) {
+        if (clone.interactions == null || !clone.interactions.containsKey(InteractionType.SwapFrom)) {
+            clone.interactions = original.interactions;
         }
     }
 

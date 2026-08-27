@@ -344,6 +344,11 @@ public final class PlacementGizmoService {
         CharterRelocationSession charter = CharterRelocationSessions.get(playerUuid);
         if (charter != null && charter.isGizmoMoveActive()) {
             PlacementGizmoPreviewRefresh.refreshCharterWireframeDuringDrag(playerRef, charter, offset);
+            return;
+        }
+        PropPlacementSession prop = PropPlacementSessions.get(playerUuid);
+        if (prop != null && prop.isGizmoMoveActive()) {
+            PlacementGizmoPreviewRefresh.refreshPropWireframeDuringDrag(playerRef, prop, offset);
         }
     }
 

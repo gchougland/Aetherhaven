@@ -115,12 +115,12 @@ public final class PathCementService {
             if (!PathToolReplacePredicate.isReplaceable(cfg, world, x, y, z, playerReplaceBlockIds)) {
                 continue;
             }
-            int oldIdx = ch.getBlock(x, y, z);
+            int oldIdx = ChunkSectionBlockUtil.blockId(world, x, y, z);
             BlockType oldT = BlockType.getAssetMap().getAsset(oldIdx);
             if (oldT == null) {
                 continue;
             }
-            int oldRot = chunkRotationIndex(ch, x, y, z);
+            int oldRot = ChunkSectionBlockUtil.rotationIndex(world, x, y, z);
             String placeId = pickPlaceId(p.lateralIndex, random, pathStyleIndex, pathWidthBlocks, cfg);
             if (!placePathBlock(world, x, y, z, placeId, RotationTuple.NONE_INDEX, PLACE)) {
                 continue;
@@ -163,14 +163,6 @@ public final class PathCementService {
         @Nonnull AetherhavenPluginConfig cfg
     ) {
         return pickPlaceIdInternal(lateralIndex, r, pathStyleIndex, pathWidthBlocks, cfg);
-    }
-
-    @SuppressWarnings({ "deprecation", "removal" })
-    private static int chunkRotationIndex(@Nonnull WorldChunk chunk, int x, int y, int z) {
-        if (y < 0 || y >= 320) {
-            return 0;
-        }
-        return chunk.getRotationIndex(x, y, z);
     }
 
     @Nonnull
@@ -234,7 +226,6 @@ public final class PathCementService {
      * Clears rubble, {@code Plant_Grass*}, and {@code Plant_Bush*} above the path surface before replace checks and
      * placement so foliage never blocks {@link PathGrounding} or {@link WorldChunk#placeBlock}. Removals are undoable.
      */
-    @SuppressWarnings({ "deprecation", "removal" })
     private static void prepareColumnForPathSurface(
         @Nonnull World world,
         int x,
@@ -253,7 +244,7 @@ public final class PathCementService {
             if (ch == null) {
                 break;
             }
-            int idx = ch.getBlock(x, cy, z);
+            int idx = ChunkSectionBlockUtil.blockId(world, x, cy, z);
             BlockType bt = BlockType.getAssetMap().getAsset(idx);
             if (bt == null || bt == BlockType.EMPTY) {
                 continue;
@@ -263,16 +254,16 @@ public final class PathCementService {
             }
             String id = bt.getId();
             if (PathRubbleUtil.isRubble(bt)) {
-                world.breakBlock(x, cy, z, BREAK_SETTINGS);
+                ChunkSectionBlockUtil.breakBlock(world, x, cy, z, BREAK_SETTINGS);
                 alreadyCleared.add(k);
                 continue;
             }
             if (PathFoliageUtil.isPlantBushId(id) || PathFoliageUtil.isPlantGrassId(id)) {
-                appendUndoCell(ch, x, cy, z, id, undos);
+                appendUndoCell(world, x, cy, z, id, undos);
                 if (PathFoliageUtil.isPlantBushId(id)) {
-                    world.breakBlock(x, cy, z, BREAK_SETTINGS);
+                    ChunkSectionBlockUtil.breakBlock(world, x, cy, z, BREAK_SETTINGS);
                 } else {
-                    ch.setBlock(x, cy, z, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, SET_BLOCK);
+                    ChunkSectionBlockUtil.setBlockEmpty(world, x, cy, z, SET_BLOCK);
                 }
                 alreadyCleared.add(k);
                 continue;
@@ -281,9 +272,8 @@ public final class PathCementService {
         }
     }
 
-    @SuppressWarnings({ "deprecation", "removal" })
     private static void appendUndoCell(
-        @Nonnull WorldChunk ch,
+        @Nonnull World world,
         int x,
         int y,
         int z,
@@ -295,7 +285,7 @@ public final class PathCementService {
         u.y = y;
         u.z = z;
         u.blockId = blockId;
-        u.rotationIndex = chunkRotationIndex(ch, x, y, z);
+        u.rotationIndex = ChunkSectionBlockUtil.rotationIndex(world, x, y, z);
         undos.add(u);
     }
 }

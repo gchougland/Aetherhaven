@@ -31,9 +31,11 @@ public final class PathToolRestoreService {
             }
             int index = t == BlockType.EMPTY ? BlockType.EMPTY_ID : BlockType.getAssetMap().getIndex(c.blockId);
             if (t != BlockType.EMPTY) {
-                ch.setBlock(c.x, c.y, c.z, index, t, c.rotationIndex, 0, SET);
+                ChunkSectionBlockUtil.setBlock(
+                    world, c.x, c.y, c.z, index, t, c.rotationIndex, 0, SET
+                );
             } else {
-                ch.setBlock(c.x, c.y, c.z, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, 10);
+                ChunkSectionBlockUtil.setBlockEmpty(world, c.x, c.y, c.z, 10);
             }
             ok++;
         }

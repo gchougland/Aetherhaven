@@ -40,7 +40,7 @@ final class AssemblyStaffClearBreak {
         if (worldChunk == null) {
             return false;
         }
-        BlockType blockType = worldChunk.getBlockType(cellWorld.x, cellWorld.y, cellWorld.z);
+        BlockType blockType = ChunkSectionBlockUtil.blockType(world, cellWorld.x, cellWorld.y, cellWorld.z);
         if (blockType == null || blockType == BlockType.EMPTY) {
             return false;
         }

@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.shopspot;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.command.AetherhavenInnDebugCommand;
@@ -66,7 +67,7 @@ public final class CommerceBootstrap {
                 }
                 Store<EntityStore> store = ref.getStore();
                 World world = store.getExternalData().getWorld();
-                BlockType bt = world.getBlockType(targetBlock.x, targetBlock.y, targetBlock.z);
+                BlockType bt = ChunkSectionBlockUtil.blockType(world, targetBlock.x, targetBlock.y, targetBlock.z);
                 if (bt == null || bt == BlockType.EMPTY
                     || !AetherhavenConstants.ITEM_BANQUET_TABLE.equals(bt.getId())) {
                     return null;

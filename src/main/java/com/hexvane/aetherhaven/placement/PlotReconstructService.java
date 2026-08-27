@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.placement;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCompleter;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
@@ -119,7 +120,7 @@ public final class PlotReconstructService {
         Runnable onComplete =
             () -> {
                 if (plot.getState() == PlotInstanceState.BLUEPRINTING) {
-                    world.breakBlock(plot.getSignX(), plot.getSignY(), plot.getSignZ(), SIGN_BREAK_SETTINGS);
+                    ChunkSectionBlockUtil.breakBlock(world, plot.getSignX(), plot.getSignY(), plot.getSignZ(), SIGN_BREAK_SETTINGS);
                 }
                 ConstructionCompleter.finishBuild(world, plugin, actorUuid, plotId, finalAnchor, yaw);
             };

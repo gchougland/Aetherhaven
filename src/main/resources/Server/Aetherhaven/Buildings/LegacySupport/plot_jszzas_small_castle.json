@@ -1,0 +1,8 @@
+{
+  "id": "plot_jszzas_small_castle",
+  "displayName": "Jszza's Small Castle",
+  "legacyPlotSupport": true,
+  "countsAsConstructionId": "plot_house",
+  "treasuryGoldCoinCost": 50,
+  "maxHomeResidents": 1
+}

@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.plotcreator;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.poi.marker.PoiMarkerDedupUtil;
@@ -194,9 +195,9 @@ public final class PlotCreatorWorldRegistrar {
     }
 
     private static void removeOldPlotSignIfPresent(@Nonnull World world, @Nonnull PlotInstance existing) {
-        BlockType bt = world.getBlockType(existing.getSignX(), existing.getSignY(), existing.getSignZ());
+        BlockType bt = ChunkSectionBlockUtil.blockType(world, existing.getSignX(), existing.getSignY(), existing.getSignZ());
         if (bt != null && AetherhavenConstants.PLOT_SIGN_ITEM_ID.equals(bt.getId())) {
-            world.breakBlock(existing.getSignX(), existing.getSignY(), existing.getSignZ(), BREAK_SETTINGS);
+            ChunkSectionBlockUtil.breakBlock(world, existing.getSignX(), existing.getSignY(), existing.getSignZ(), BREAK_SETTINGS);
         }
     }
 }

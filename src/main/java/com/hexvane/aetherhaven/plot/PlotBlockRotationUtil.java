@@ -36,8 +36,7 @@ public final class PlotBlockRotationUtil {
     }
 
     /**
-     * Packed rotation index for {@link com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk#setBlock} /
-     * prefab placement, derived from the block already in the world.
+     * Packed rotation index for section block writes / prefab placement, derived from the block already in the world.
      */
     public static int readBlockRotationIndex(@Nonnull World world, @Nonnull Vector3i blockWorldPos) {
         int y = blockWorldPos.y;

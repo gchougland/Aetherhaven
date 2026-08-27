@@ -209,7 +209,7 @@ public final class QuestBoardPoiEnsure {
         if (y < 0 || y >= 320) {
             return false;
         }
-        BlockType bt = world.getBlockType(x, y, z);
+        BlockType bt = ChunkSectionBlockUtil.blockType(world, x, y, z);
         return bt != null && AetherhavenConstants.QUEST_BOARD_ITEM_ID.equals(bt.getId());
     }
 

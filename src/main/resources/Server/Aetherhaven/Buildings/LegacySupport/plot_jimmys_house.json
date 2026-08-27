@@ -1,0 +1,8 @@
+{
+  "id": "plot_jimmys_house",
+  "displayName": "Jimmy's House",
+  "legacyPlotSupport": true,
+  "countsAsConstructionId": "plot_house",
+  "treasuryGoldCoinCost": 30,
+  "maxHomeResidents": 1
+}

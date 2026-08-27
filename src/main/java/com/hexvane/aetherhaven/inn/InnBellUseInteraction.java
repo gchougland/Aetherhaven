@@ -152,7 +152,7 @@ public final class InnBellUseInteraction extends SimpleBlockInteraction {
         if (chunk == null) {
             return false;
         }
-        BlockType type = chunk.getBlockType(pos.x, pos.y, pos.z);
+        BlockType type = ChunkSectionBlockUtil.blockType(world, pos.x, pos.y, pos.z);
         return type != null && AetherhavenConstants.INN_BELL_BLOCK_TYPE_ID.equals(type.getId());
     }
 

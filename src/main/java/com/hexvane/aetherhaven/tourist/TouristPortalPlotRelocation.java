@@ -94,7 +94,7 @@ public final class TouristPortalPlotRelocation {
                 continue;
             }
             // Portal type present but not the base cell => filler voxel from the 2-block portal.
-            if (!TouristPortalBlockUtil.isTouristPortalBlock(world.getBlockType(pos.x, pos.y, pos.z))) {
+            if (!TouristPortalBlockUtil.isTouristPortalBlock(ChunkSectionBlockUtil.blockType(world, pos.x, pos.y, pos.z))) {
                 continue;
             }
             if (TouristPortalBlockUtil.isPortalBaseBlock(world, pos.x, pos.y, pos.z)) {

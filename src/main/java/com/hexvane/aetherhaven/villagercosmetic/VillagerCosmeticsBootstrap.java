@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.villagercosmetic;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -39,7 +40,7 @@ public final class VillagerCosmeticsBootstrap {
                 }
                 var store = ref.getStore();
                 World world = store.getExternalData().getWorld();
-                BlockType bt = world.getBlockType(targetBlock.x, targetBlock.y, targetBlock.z);
+                BlockType bt = ChunkSectionBlockUtil.blockType(world, targetBlock.x, targetBlock.y, targetBlock.z);
                 if (bt == null
                     || bt == BlockType.EMPTY
                     || !AetherhavenConstants.BLOCK_VILLAGER_WARDROBE.equals(bt.getId())) {

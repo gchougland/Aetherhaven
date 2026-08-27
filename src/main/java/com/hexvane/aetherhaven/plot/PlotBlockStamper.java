@@ -239,7 +239,7 @@ public final class PlotBlockStamper {
         for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
             for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
                 for (int y = fp.getMinY(); y <= fp.getMaxY(); y++) {
-                    BlockType bt = world.getBlockType(x, y, z);
+                    BlockType bt = ChunkSectionBlockUtil.blockType(world, x, y, z);
                     if (bt == null || !isGaiaStatueBlockTypeId(bt.getId())) {
                         continue;
                     }
@@ -262,8 +262,8 @@ public final class PlotBlockStamper {
     }
 
     @Nullable
-    private static Ref<ChunkStore> blockRefAt(@Nonnull WorldChunk chunk, int wx, int y, int wz) {
-        Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(wx, y, wz);
+    private static Ref<ChunkStore> blockRefAt(@Nonnull World world, int wx, int y, int wz) {
+        Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, wx, y, wz);
         if (blockRef != null) {
             return blockRef;
         }
@@ -272,7 +272,7 @@ public final class PlotBlockStamper {
             if (yy < 0 || yy >= 320) {
                 continue;
             }
-            Ref<ChunkStore> r = chunk.getBlockComponentEntity(wx, yy, wz);
+            Ref<ChunkStore> r = ChunkSectionBlockUtil.blockEntityRefAt(world, wx, yy, wz);
             if (r != null) {
                 return r;
             }
@@ -288,7 +288,7 @@ public final class PlotBlockStamper {
         if (chunk == null) {
             return position;
         }
-        int filler = chunk.getFiller(wx, y, wz);
+        int filler = ChunkSectionBlockUtil.filler(world, wx, y, wz);
         if (filler == FillerBlockUtil.NO_FILLER) {
             return position;
         }
@@ -301,10 +301,10 @@ public final class PlotBlockStamper {
 
     @Nullable
     private static Ref<ChunkStore> gaiaStatueBlockRef(
-        @Nonnull World world, @Nonnull WorldChunk chunk, int wx, int y, int wz
+        @Nonnull World world, int wx, int y, int wz
     ) {
         BlockPosition base = gaiaStatueBaseBlock(world, wx, y, wz);
-        return chunk.getBlockComponentEntity(base.x, base.y, base.z);
+        return ChunkSectionBlockUtil.blockEntityRefAt(world, base.x, base.y, base.z);
     }
 
     @Nonnull
@@ -357,7 +357,7 @@ public final class PlotBlockStamper {
         }
 
         if (!force) {
-            Ref<ChunkStore> existing = gaiaStatueBlockRef(world, chunk, baseX, baseY, baseZ);
+            Ref<ChunkStore> existing = gaiaStatueBlockRef(world, baseX, baseY, baseZ);
             if (existing != null) {
                 GaiaStatueBlock gs = existing.getStore().getComponent(existing, GaiaStatueBlock.getComponentType());
                 if (gs != null && linksMatch(gs.getPlotId(), gs.getTownId(), plotId, town)) {
@@ -370,7 +370,7 @@ public final class PlotBlockStamper {
         }
 
         Vector3i cell = new Vector3i(baseX, baseY, baseZ);
-        BlockType placedType = world.getBlockType(baseX, baseY, baseZ);
+        BlockType placedType = ChunkSectionBlockUtil.blockType(world, baseX, baseY, baseZ);
         String placeBlockTypeId =
             placedType != null ? placedType.getId() : AetherhavenConstants.STATUE_OF_GAIA_BLOCK_TYPE_ID;
         Rotation blockYaw = PlotBlockRotationUtil.readBlockYaw(world, cell);
@@ -378,7 +378,6 @@ public final class PlotBlockStamper {
         int rotationIndex = PlotBlockRotationUtil.readBlockRotationIndex(world, cell);
         ensureBlockPlaced(
             world,
-            chunk,
             baseX,
             baseY,
             baseZ,
@@ -387,7 +386,7 @@ public final class PlotBlockStamper {
             rotationIndex
         );
 
-        Ref<ChunkStore> blockRef = gaiaStatueBlockRef(world, chunk, baseX, baseY, baseZ);
+        Ref<ChunkStore> blockRef = gaiaStatueBlockRef(world, baseX, baseY, baseZ);
         if (blockRef == null) {
             LOGGER.atWarning().log("No block entity after re-placing Gaia statue at %s,%s,%s", baseX, baseY, baseZ);
             return StampOutcome.FAILED;
@@ -444,7 +443,6 @@ public final class PlotBlockStamper {
             int rotationIndex = PlotBlockRotationUtil.readBlockRotationIndex(world, cell);
             ensureBlockPlaced(
                 world,
-                chunk,
                 wx,
                 wy,
                 wz,
@@ -466,7 +464,7 @@ public final class PlotBlockStamper {
         }
 
         if (!force) {
-            Ref<ChunkStore> existing = blockRefAt(chunk, wx, managementY, wz);
+            Ref<ChunkStore> existing = blockRefAt(world, wx, managementY, wz);
             if (existing != null) {
                 ManagementBlock mb = existing.getStore().getComponent(existing, ManagementBlock.getComponentType());
                 if (mb != null && linksMatch(mb.getPlotId(), mb.getTownId(), plotId, town)) {
@@ -484,7 +482,6 @@ public final class PlotBlockStamper {
         int rotationIndex = PlotBlockRotationUtil.readBlockRotationIndex(world, cell);
         ensureBlockPlaced(
             world,
-            chunk,
             wx,
             managementY,
             wz,
@@ -493,7 +490,7 @@ public final class PlotBlockStamper {
             rotationIndex
         );
 
-        Ref<ChunkStore> blockRef = blockRefAt(chunk, wx, managementY, wz);
+        Ref<ChunkStore> blockRef = blockRefAt(world, wx, managementY, wz);
         if (blockRef == null) {
             LOGGER.atWarning().log("No block entity after re-placing management block at %s,%s,%s", wx, managementY, wz);
             return StampOutcome.FAILED;
@@ -546,7 +543,6 @@ public final class PlotBlockStamper {
             int rotationIndex = PlotBlockRotationUtil.readBlockRotationIndex(world, cell);
             ensureBlockPlaced(
                 world,
-                chunk,
                 wx,
                 wy,
                 wz,
@@ -561,7 +557,7 @@ public final class PlotBlockStamper {
         }
 
         if (!force) {
-            Ref<ChunkStore> existing = blockRefAt(chunk, wx, treasuryY, wz);
+            Ref<ChunkStore> existing = blockRefAt(world, wx, treasuryY, wz);
             if (existing != null) {
                 TreasuryBlock tb = existing.getStore().getComponent(existing, TreasuryBlock.getComponentType());
                 if (tb != null && linksMatch(tb.getPlotId(), tb.getTownId(), plotId, town)) {
@@ -579,7 +575,6 @@ public final class PlotBlockStamper {
         int rotationIndex = PlotBlockRotationUtil.readBlockRotationIndex(world, cell);
         ensureBlockPlaced(
             world,
-            chunk,
             wx,
             treasuryY,
             wz,
@@ -588,7 +583,7 @@ public final class PlotBlockStamper {
             rotationIndex
         );
 
-        Ref<ChunkStore> blockRef = blockRefAt(chunk, wx, treasuryY, wz);
+        Ref<ChunkStore> blockRef = blockRefAt(world, wx, treasuryY, wz);
         if (blockRef == null) {
             LOGGER.atWarning().log("No block entity after re-placing treasury at %s,%s,%s", wx, treasuryY, wz);
             return StampOutcome.FAILED;
@@ -641,7 +636,6 @@ public final class PlotBlockStamper {
             int rotationIndex = PlotBlockRotationUtil.readBlockRotationIndex(world, cell);
             ensureBlockPlaced(
                 world,
-                chunk,
                 wx,
                 wy,
                 wz,
@@ -656,7 +650,7 @@ public final class PlotBlockStamper {
         }
 
         if (!force) {
-            Ref<ChunkStore> existing = blockRefAt(chunk, wx, safeY, wz);
+            Ref<ChunkStore> existing = blockRefAt(world, wx, safeY, wz);
             if (existing != null) {
                 ShopSafeBlock sb = existing.getStore().getComponent(existing, ShopSafeBlock.getComponentType());
                 if (sb != null && linksMatch(sb.getPlotId(), sb.getTownId(), plotId, town)) {
@@ -674,7 +668,6 @@ public final class PlotBlockStamper {
         int rotationIndex = PlotBlockRotationUtil.readBlockRotationIndex(world, cell);
         ensureBlockPlaced(
             world,
-            chunk,
             wx,
             safeY,
             wz,
@@ -683,7 +676,7 @@ public final class PlotBlockStamper {
             rotationIndex
         );
 
-        Ref<ChunkStore> blockRef = blockRefAt(chunk, wx, safeY, wz);
+        Ref<ChunkStore> blockRef = blockRefAt(world, wx, safeY, wz);
         if (blockRef == null) {
             LOGGER.atWarning().log("No block entity after re-placing shop safe at %s,%s,%s", wx, safeY, wz);
             return StampOutcome.FAILED;
@@ -756,7 +749,6 @@ public final class PlotBlockStamper {
         PrefabFootprintClearUtil.forceClearProductionStorageAt(world, wx, placeY, wz);
         ensureBlockPlaced(
             world,
-            chunk,
             wx,
             placeY,
             wz,
@@ -765,7 +757,7 @@ public final class PlotBlockStamper {
             rotationIndex
         );
 
-        BlockType placed = world.getBlockType(wx, placeY, wz);
+        BlockType placed = ChunkSectionBlockUtil.blockType(world, wx, placeY, wz);
         if (placed == null || !blockTypeIdMatches(AetherhavenConstants.BLOCK_PRODUCTION_STORAGE, placed.getId())) {
             LOGGER.atWarning().log("Production storage missing after re-place at %s,%s,%s", wx, placeY, wz);
             return StampOutcome.FAILED;
@@ -783,7 +775,7 @@ public final class PlotBlockStamper {
         for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
             for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
                 for (int y = minY; y <= maxY; y++) {
-                    BlockType bt = world.getBlockType(x, y, z);
+                    BlockType bt = ChunkSectionBlockUtil.blockType(world, x, y, z);
                     if (bt == null || !blockTypeIdMatches(AetherhavenConstants.BLOCK_PRODUCTION_STORAGE, bt.getId())) {
                         continue;
                     }
@@ -808,7 +800,7 @@ public final class PlotBlockStamper {
             if (y < 0 || y >= 320) {
                 continue;
             }
-            BlockType bt = world.getBlockType(wx, y, wz);
+            BlockType bt = ChunkSectionBlockUtil.blockType(world, wx, y, wz);
             if (bt != null && blockTypeIdMatches(blockTypeId, bt.getId())) {
                 return y;
             }
@@ -818,7 +810,6 @@ public final class PlotBlockStamper {
 
     private static void ensureBlockPlaced(
         @Nonnull World world,
-        @Nonnull WorldChunk chunk,
         int wx,
         int y,
         int wz,
@@ -834,7 +825,7 @@ public final class PlotBlockStamper {
         }
         boolean placed = tryPlaceBlock(world, wx, y, wz, blockType, rotationIndex, PLACE_SETTINGS);
         if (!placed) {
-            world.breakBlock(wx, y, wz, PLACE_SETTINGS);
+            ChunkSectionBlockUtil.breakBlock(world, wx, y, wz, PLACE_SETTINGS);
             placed = tryPlaceBlock(world, wx, y, wz, blockType, rotationIndex, PLACE_SETTINGS);
         }
         if (!placed) {

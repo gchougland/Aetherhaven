@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.plot;
 
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
@@ -16,7 +17,6 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import java.util.HashSet;
 import java.util.List;
@@ -79,7 +79,6 @@ public final class PlotImportantBlockRestorer {
             ConstructionPasteOps.buildSequence(buffer, yaw, plot.getBlockPaletteSelections());
         List<ConstructionPasteOps.PendingBlock> cells =
             ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
-        LocalCachedChunkAccessor accessor = ConstructionPasteOps.createAccessor(world, anchor, buffer);
         int placed = 0;
         for (ConstructionPasteOps.PendingBlock pb : cells) {
             if (pb.filler() != FillerBlockUtil.NO_FILLER) {
@@ -104,7 +103,7 @@ public final class PlotImportantBlockRestorer {
             if (!prefabOriginCellNeedsRestore(world, wx, wy, wz, block)) {
                 continue;
             }
-            if (ConstructionPasteOps.restoreSinglePrefabCell(world, anchor, pb, accessor)) {
+            if (ConstructionPasteOps.restoreSinglePrefabCell(world, anchor, pb)) {
                 placed++;
             } else {
                 LOGGER.atWarning().log(
@@ -176,7 +175,7 @@ public final class PlotImportantBlockRestorer {
     private static boolean prefabOriginCellNeedsRestore(
         @Nonnull World world, int wx, int wy, int wz, @Nonnull BlockType expected
     ) {
-        BlockType at = world.getBlockType(wx, wy, wz);
+        BlockType at = ChunkSectionBlockUtil.blockType(world, wx, wy, wz);
         if (at == null || at == BlockType.EMPTY) {
             return true;
         }

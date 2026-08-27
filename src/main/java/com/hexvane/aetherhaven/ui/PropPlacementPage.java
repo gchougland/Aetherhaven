@@ -251,7 +251,7 @@ public final class PropPlacementPage extends AetherhavenInteractiveCustomUIPage<
         PropDefinition def = catalog.get(session.getPropId());
         if (def != null) {
             boolean ghostOk =
-                PlotPlacementClientPrefabPreview.sendFullStandalone(
+                PlotPlacementClientPrefabPreview.sendMoveOrFullStandalone(
                     pr,
                     store,
                     session.getPreviewEntityRefs(),
