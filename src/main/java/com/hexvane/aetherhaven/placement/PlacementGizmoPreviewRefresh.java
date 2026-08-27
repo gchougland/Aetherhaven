@@ -30,6 +30,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector3d;
 import org.joml.Vector3i;
 
 /** Refreshes placement previews after the Point tool gizmo moves a hologram. */
@@ -155,6 +156,54 @@ public final class PlacementGizmoPreviewRefresh {
         if (session.isGizmoMoveActive()) {
             PlacementGizmoService.syncPointGizmo(playerRef, fp, (float) session.getYaw().getRadians());
         }
+    }
+
+    /** Moves the white footprint outline with the hologram while the Point gizmo is dragged. */
+    public static void refreshPlotWireframeDuringDrag(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull PlotPlacementSession session,
+        @Nonnull Vector3d offset
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(session.getConstructionId());
+        if (def == null) {
+            return;
+        }
+        Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(session.getAnchor(), session.getPrefabYaw());
+        IPrefabBuffer buf = PrefabResolveUtil.resolvePrefabBuffer(def.getPrefabPath());
+        if (buf == null) {
+            return;
+        }
+        PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf, def);
+        PlotPlacementWireframeOverlay.send(playerRef, shiftFootprint(fp, offset), true, null);
+    }
+
+    public static void refreshCharterWireframeDuringDrag(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull CharterRelocationSession session,
+        @Nonnull Vector3d offset
+    ) {
+        Vector3i anchor = session.getAnchor();
+        PlotFootprintRecord fp = new PlotFootprintRecord(anchor.x, anchor.y, anchor.z, anchor.x, anchor.y, anchor.z);
+        PlotPlacementWireframeOverlay.send(playerRef, shiftFootprint(fp, offset), true, null);
+    }
+
+    @Nonnull
+    private static PlotFootprintRecord shiftFootprint(@Nonnull PlotFootprintRecord fp, @Nonnull Vector3d offset) {
+        int dx = (int) Math.round(offset.x);
+        int dy = (int) Math.round(offset.y);
+        int dz = (int) Math.round(offset.z);
+        return new PlotFootprintRecord(
+            fp.getMinX() + dx,
+            fp.getMinY() + dy,
+            fp.getMinZ() + dz,
+            fp.getMaxX() + dx,
+            fp.getMaxY() + dy,
+            fp.getMaxZ() + dz
+        );
     }
 
     public static void refreshCharter(

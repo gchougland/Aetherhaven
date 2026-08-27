@@ -30,12 +30,12 @@ public final class PlotCreatorStepForwardInteraction extends SimpleInstantIntera
     @Nonnull
     @Override
     public WaitForDataFrom getWaitForDataFrom() {
-        return WaitForDataFrom.Client;
+        return WaitForDataFrom.Server;
     }
 
     @Override
     public boolean needsRemoteSync() {
-        return true;
+        return false;
     }
 
     @Override

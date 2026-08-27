@@ -32,12 +32,7 @@ public final class PlotCreatorStatusHud extends CustomUIHud {
         String stepKey = "step." + step.name();
         b.set("#StepName.TextSpans", Message.translation(LANG_PREFIX + stepKey + ".title"));
         if (step == PlotCreatorStep.BOUNDS) {
-            PlotCreatorDraft draft = session.getDraft();
-            String hintKey =
-                draft.getBoundsPhase() == PlotCreatorBoundsPhase.FACE_ADJUST
-                    ? stepKey + ".hint.faces"
-                    : stepKey + ".hint.initial";
-            b.set("#StepHelp.TextSpans", Message.translation(LANG_PREFIX + hintKey));
+            b.set("#StepHelp.TextSpans", Message.translation(LANG_PREFIX + stepKey + ".hint"));
             b.set("#DetailLine.Visible", false);
         } else {
             b.set("#StepHelp.TextSpans", Message.translation(LANG_PREFIX + stepKey + ".hint"));

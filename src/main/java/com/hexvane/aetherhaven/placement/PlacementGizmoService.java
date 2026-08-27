@@ -327,7 +327,24 @@ public final class PlacementGizmoService {
         Vector3d offset = new Vector3d(after).sub(committed);
         PlacementGizmoPivot.remember(playerUuid, after);
         PlacementGizmoLivePreview.applyDragOffset(playerRef, ref, store, offset);
+        refreshWireframeDuringDrag(playerRef, playerUuid, offset);
         return true;
+    }
+
+    private static void refreshWireframeDuringDrag(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull UUID playerUuid,
+        @Nonnull Vector3d offset
+    ) {
+        PlotPlacementSession plot = PlotPlacementSessions.get(playerUuid);
+        if (plot != null && plot.isGizmoMoveActive()) {
+            PlacementGizmoPreviewRefresh.refreshPlotWireframeDuringDrag(playerRef, plot, offset);
+            return;
+        }
+        CharterRelocationSession charter = CharterRelocationSessions.get(playerUuid);
+        if (charter != null && charter.isGizmoMoveActive()) {
+            PlacementGizmoPreviewRefresh.refreshCharterWireframeDuringDrag(playerRef, charter, offset);
+        }
     }
 
     public static boolean handlePointRotate(

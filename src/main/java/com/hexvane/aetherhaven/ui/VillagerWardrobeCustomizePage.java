@@ -9,7 +9,6 @@ import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
 import com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticAppearanceService;
 import com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticCatalog;
 import com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticDefinition;
-import com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticKeys;
 import com.hexvane.aetherhaven.villagercosmetic.VillagerCosmeticPreviewSession;
 import com.hexvane.aetherhaven.villagercosmetic.WardrobeResidentDirectory;
 import com.hexvane.aetherhaven.villagercosmetic.WardrobeResidentDirectory.WardrobeResidentRow;
@@ -35,7 +34,6 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -242,7 +240,7 @@ public final class VillagerWardrobeCustomizePage extends AetherhavenInteractiveC
                         }
                         applyToAllResidents(store, liveTown, plugin, overrides);
                         tm.updateTown(liveTown);
-                        VillagerCosmeticAppearanceService.refreshAllTownBoundNpcs(world, store, liveTown);
+                        VillagerCosmeticAppearanceService.refreshWardrobeNpcs(world, store, liveTown, plugin);
                         NotificationUtil.sendNotification(
                             playerRef.getPacketHandler(),
                             Message.translation(LANG + ".applyToAllSuccess"),
@@ -356,19 +354,8 @@ public final class VillagerWardrobeCustomizePage extends AetherhavenInteractiveC
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull Map<String, String> overrides
     ) {
-        LinkedHashSet<String> keys = new LinkedHashSet<>();
-        keys.add(residentKey);
         for (WardrobeResidentRow row : WardrobeResidentDirectory.list(store, town, plugin)) {
-            keys.add(row.residentKey());
-        }
-        for (Ref<EntityStore> npcRef : VillagerCosmeticAppearanceService.collectTownNpcRefs(store, town)) {
-            String key = VillagerCosmeticKeys.resolve(npcRef, store);
-            if (key != null) {
-                keys.add(key);
-            }
-        }
-        for (String key : keys) {
-            town.replaceVillagerCosmeticOverrides(key, overrides);
+            town.replaceVillagerCosmeticOverrides(row.residentKey(), overrides);
         }
     }
 

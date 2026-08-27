@@ -128,12 +128,9 @@ public final class PlotCreatorProgressModel {
         h = 31 * h + (draft.isImportantSpotsConfirmed() ? 1 : 0);
         h = 31 * h + draft.getKinds().hashCode();
         h = 31 * h + draft.getSelectedSpots().hashCode();
-        h = 31 * h + (draft.getCornerFirst() != null ? 1 : 0);
-        h = 31 * h + (draft.getCornerSecond() != null ? 1 : 0);
+        h = 31 * h + (draft.getCornerFirst() != null ? draft.getCornerFirst().hashCode() : 0);
+        h = 31 * h + (draft.getCornerSecond() != null ? draft.getCornerSecond().hashCode() : 0);
         h = 31 * h + draft.getBoundsPhase().ordinal();
-        h = 31 * h + (draft.getHoveredBoundsFace() != null ? draft.getHoveredBoundsFace().ordinal() : -1);
-        h = 31 * h + (draft.getBoundsDragStart() != null ? draft.getBoundsDragStart().hashCode() : 0);
-        h = 31 * h + (draft.getBoundsDragEnd() != null ? draft.getBoundsDragEnd().hashCode() : 0);
         h = 31 * h + (draft.getPlotAnchor() != null ? 1 : 0);
         h = 31 * h + (nonBlank(draft.getDisplayName()) ? 1 : 0);
         h = 31 * h + (nonBlank(draft.getConstructionId()) ? 1 : 0);

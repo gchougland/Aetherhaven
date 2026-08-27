@@ -65,7 +65,7 @@ public final class HallowsEveBatDirectorSystem extends TickingSystem<EntityStore
             if (square == null) {
                 continue;
             }
-            HallowsEveBatSpawnService.ensureBats(world, townId, square);
+            HallowsEveBatSpawnService.scheduleEnsureBats(world, townId, square);
         }
     }
 }

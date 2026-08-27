@@ -132,7 +132,7 @@ public final class BuildingEditorFestivalSessionStarter {
         draft.setKinds(List.of(PlotBuildingKind.FESTIVAL));
         draft.setBuildingEditorMode(true);
         PlotCreatorBoundsValidation.commitCorners(draft, min, max);
-        draft.setBoundsPhase(PlotCreatorBoundsPhase.FACE_ADJUST);
+        draft.setBoundsPhase(PlotCreatorBoundsPhase.SELECTION);
         draft.setPlotAnchor(new Vector3i(center));
         draft.setPrefabOriginMin(new Vector3i(min));
         draft.setFestivalSizeLocked(true);

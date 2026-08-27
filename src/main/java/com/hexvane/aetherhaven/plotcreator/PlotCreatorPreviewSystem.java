@@ -87,12 +87,6 @@ public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntitySt
             LAST_GUIDE_SIG.put(uuid, guideSig);
             PlotCreatorHudSupport.refreshAll(player, pr, session);
         }
-        if (session.getDraft().isEditingBounds()) {
-            PlotCreatorBoundsInput.tickHover(session, ref, store, pr);
-            if (session.getDraft().isBoundsPrimaryHeld()) {
-                PlotCreatorBoundsInput.onDragTick(session, ref, store, pr);
-            }
-        }
         long sig = wireframeSignature(session.getDraft());
         Long prevSig = LAST_WIREFRAME_SIG.get(uuid);
         if (prevSig == null || prevSig != sig) {
@@ -258,10 +252,7 @@ public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntitySt
     private static long wireframeSignature(@Nonnull PlotCreatorDraft draft) {
         PlotCreatorService.BoundsPreview preview = PlotCreatorService.boundsPreview(draft);
         if (preview == null) {
-            long h = draft.isEditingBounds() ? 1L : 0L;
-            h = 31 * h + draft.getBoundsPhase().ordinal();
-            h = 31 * h + (draft.getHoveredBoundsFace() != null ? draft.getHoveredBoundsFace().ordinal() : -1);
-            return h;
+            return draft.isEditingBounds() ? 1L : 0L;
         }
         Vector3i min = preview.min();
         Vector3i max = preview.max();
@@ -272,11 +263,6 @@ public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntitySt
         h = 31 * h + max.x;
         h = 31 * h + max.y;
         h = 31 * h + max.z;
-        if (draft.isEditingBounds()) {
-            h = 31 * h + draft.getBoundsPhase().ordinal();
-            h = 31 * h + (draft.getHoveredBoundsFace() != null ? draft.getHoveredBoundsFace().ordinal() : -1);
-            h = 31 * h + (draft.getActiveBoundsFaceDrag() != null ? draft.getActiveBoundsFaceDrag().ordinal() : -1);
-        }
         h = 31 * h + draft.getStep().ordinal();
         h = 31 * h + draft.getWallPieceIndex();
         h = 31 * h + draft.getWallPieceSubstepIndex();

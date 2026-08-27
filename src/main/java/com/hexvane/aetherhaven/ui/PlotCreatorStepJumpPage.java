@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorInteractions;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorSelectionBoundsService;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorService;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorSession;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorStep;
@@ -123,6 +124,7 @@ public final class PlotCreatorStepJumpPage extends AetherhavenInteractiveCustomU
         if (!PlotCreatorService.jumpToStep(session, target, ref, store)) {
             return;
         }
+        PlotCreatorSelectionBoundsService.syncForSession(session, playerRef, ref, store);
         // Let onStepEntered replace this page when the target opens a wizard panel.
         if (!PlotCreatorService.stepAutoOpensPanel(target)) {
             player.getPageManager().setPage(ref, store, Page.None);

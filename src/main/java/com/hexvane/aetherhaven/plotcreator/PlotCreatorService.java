@@ -187,6 +187,8 @@ public final class PlotCreatorService {
             return;
         }
         PlotCreatorSubstepGrants.revokeAllIfPresent(session, ref, store);
+        PlotCreatorSelectionBoundsService.deactivateIfPresent(playerRef);
+        PlotCreatorSelectionBoundsService.restoreNormalStaffInHand(playerRef, ref, store);
         PlotCreatorCleanup.endSession(session, playerRef, true);
     }
 
@@ -210,12 +212,7 @@ public final class PlotCreatorService {
             return err;
         }
         PlotCreatorBoundsValidation.commitCorners(draft, min, max);
-        draft.setBoundsDragStart(null);
-        draft.setBoundsDragEnd(null);
-        draft.setActiveBoundsFaceDrag(null);
-        draft.setBoundsPrimaryHeld(false);
-        draft.setHoveredBoundsFace(null);
-        draft.setBoundsPhase(PlotCreatorBoundsPhase.FACE_ADJUST);
+        draft.setBoundsPhase(PlotCreatorBoundsPhase.SELECTION);
         if (PlotCreatorWallPieceAuthoring.isBoundsSubstep(draft)) {
             PlotCreatorWallPieceAuthoring.commitBoundsToCurrentPiece(draft);
         }
@@ -236,11 +233,18 @@ public final class PlotCreatorService {
         refreshBoundsVisuals(session, playerRef);
     }
 
-    /** Wireframe during drag and face panels during face adjust. */
+    /** Wireframe when not using vanilla selection; wall connection markers on wall pieces. */
     public static void refreshBoundsVisuals(@Nonnull PlotCreatorSession session, @Nonnull PlayerRef playerRef) {
         PlotCreatorDraft draft = session.getDraft();
         World world = session.getWorld();
         UUID uuid = playerRef.getUuid();
+        if (PlotCreatorSelectionBoundsService.isActive(uuid) && draft.isEditingBounds()) {
+            clearPlotCreatorWireframe(playerRef, world);
+            if (draft.getStep() == PlotCreatorStep.WALL_PIECES) {
+                PlotCreatorWallConnectionOverlay.draw(playerRef, draft);
+            }
+            return;
+        }
         @Nullable
         BoundsPreview preview = boundsPreview(draft);
         if (preview == null) {
@@ -255,17 +259,6 @@ public final class PlotCreatorService {
             new PlotFootprintRecord(preview.min.x, preview.min.y, preview.min.z, preview.max.x, preview.max.y, preview.max.z);
         PlotPlacementWireframeOverlay.sendWithoutClear(playerRef, fp, true, null);
         PLOT_CREATOR_WIREFRAME_ACTIVE.put(uuid, Boolean.TRUE);
-        if (draft.isEditingBounds()
-            && draft.getCornerFirst() != null
-            && draft.getCornerSecond() != null) {
-            PlotCreatorBoundsFaceOverlay.draw(
-                playerRef,
-                preview.min,
-                preview.max,
-                draft.getHoveredBoundsFace(),
-                draft.getActiveBoundsFaceDrag()
-            );
-        }
         if (draft.getStep() == PlotCreatorStep.WALL_PIECES) {
             PlotCreatorWallConnectionOverlay.draw(playerRef, draft);
         }
@@ -275,11 +268,6 @@ public final class PlotCreatorService {
     static BoundsPreview boundsPreview(@Nonnull PlotCreatorDraft draft) {
         if (draft.getCornerFirst() != null && draft.getCornerSecond() != null) {
             return new BoundsPreview(draft.boundsMin(), draft.boundsMax());
-        }
-        Vector3i start = draft.getBoundsDragStart();
-        Vector3i end = draft.getBoundsDragEnd();
-        if (start != null && end != null) {
-            return new BoundsPreview(PlotCreatorBoundsValidation.min(start, end), PlotCreatorBoundsValidation.max(start, end));
         }
         return null;
     }
@@ -451,6 +439,7 @@ public final class PlotCreatorService {
             closeMaterialsMenu(session, player, ref, store);
             if (PlotCreatorWallPieceAuthoring.backWithinStep(session.getDraft())) {
                 maybeSuggestWallPieceCost(session);
+                syncSelectionBoundsMode(session, ref, store);
                 return;
             }
         }
@@ -617,17 +606,7 @@ public final class PlotCreatorService {
             PlotCreatorSubstepGrants.grantCurrentSubstep(session, player, ref, store);
         }
         if (step == PlotCreatorStep.BOUNDS) {
-            PlotCreatorDraft d = session.getDraft();
-            d.setBoundsDragStart(null);
-            d.setBoundsDragEnd(null);
-            d.setActiveBoundsFaceDrag(null);
-            d.setBoundsPrimaryHeld(false);
-            d.setHoveredBoundsFace(null);
-            if (d.getCornerFirst() != null && d.getCornerSecond() != null) {
-                d.setBoundsPhase(PlotCreatorBoundsPhase.FACE_ADJUST);
-            } else {
-                d.setBoundsPhase(PlotCreatorBoundsPhase.INITIAL_DRAG);
-            }
+            session.getDraft().setBoundsPhase(PlotCreatorBoundsPhase.SELECTION);
             PlotCreatorService.refreshBoundsVisuals(session, playerRef);
         }
         if (step == PlotCreatorStep.WALL_PIECES) {
@@ -635,6 +614,7 @@ public final class PlotCreatorService {
             maybeSuggestWallPieceCost(session);
             PlotCreatorService.refreshBoundsVisuals(session, playerRef);
         }
+        syncSelectionBoundsMode(session, ref, store);
         if (step == PlotCreatorStep.KIND) {
             PlotCreatorInteractions.openKindPanel(playerRef, ref, store, session);
         }
@@ -775,6 +755,21 @@ public final class PlotCreatorService {
         draft.setImportantSpotsConfirmed(true);
     }
 
+    private static void syncSelectionBoundsMode(
+        @Nonnull PlotCreatorSession session,
+        @Nullable Ref<EntityStore> ref,
+        @Nullable Store<EntityStore> store
+    ) {
+        if (ref == null || store == null) {
+            return;
+        }
+        PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
+        if (playerRef == null) {
+            return;
+        }
+        PlotCreatorSelectionBoundsService.syncForSession(session, playerRef, ref, store);
+    }
+
     @Nullable
     private static Player playerFrom(@Nullable Ref<EntityStore> ref, @Nullable Store<EntityStore> store) {
         if (ref == null || store == null) {
@@ -833,6 +828,7 @@ public final class PlotCreatorService {
         closeMaterialsMenu(session, playerFrom(ref, store), ref, store);
         if (PlotCreatorWallPieceAuthoring.advanceWithinStep(session.getDraft())) {
             maybeSuggestWallPieceCost(session);
+            syncSelectionBoundsMode(session, ref, store);
             return true;
         }
         advance(session, ref, store);

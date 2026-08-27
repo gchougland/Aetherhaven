@@ -87,7 +87,9 @@
     },
     {
       "Model": "Cosmetics/Head/CowboyHat.blockymodel",
-      "Texture": "Cosmetics/Head/CowboyHat_Red.png"
+      "Texture": "Cosmetics/Head/CowboyHat_Leather.png",
+      "GradientSet": "Fantasy_Cotton",
+      "GradientId": "Red"
     },
     {
       "Model": "Cosmetics/Capes/Cape_Void_Hero.blockymodel",

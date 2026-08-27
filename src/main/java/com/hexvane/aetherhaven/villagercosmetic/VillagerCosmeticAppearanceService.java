@@ -1,7 +1,11 @@
 package com.hexvane.aetherhaven.villagercosmetic;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.guild.GuildHallAdventurerPoolService;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownResidentEligibility;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
+import com.hexvane.aetherhaven.villagercosmetic.WardrobeResidentDirectory.WardrobeResidentRow;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -329,6 +333,10 @@ public final class VillagerCosmeticAppearanceService {
         @Nonnull Store<EntityStore> store,
         @Nonnull TownRecord town
     ) {
+        if (!shouldApplySavedCosmetics(npcRef, store, town)) {
+            restoreBaseCharacterLook(npcRef, store);
+            return;
+        }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {
             return;
@@ -361,14 +369,74 @@ public final class VillagerCosmeticAppearanceService {
     }
 
     /**
-     * Re-applies saved cosmetics to every live town NPC. Defers one frame so model packets flush after town data is saved.
+     * Wardrobe overrides are keyed by character id (e.g. {@code character:grunk_stonebelly}). Unhired guild hall
+     * adventurers share those keys with hired guards and must not inherit saved looks until they are hired.
      */
-    public static void refreshAllTownBoundNpcs(
-        @Nonnull World world,
+    public static boolean shouldApplySavedCosmetics(
+        @Nonnull Ref<EntityStore> npcRef,
         @Nonnull Store<EntityStore> store,
         @Nonnull TownRecord town
     ) {
-        List<Ref<EntityStore>> npcRefs = collectTownNpcRefs(store, town);
+        TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+        if (binding == null) {
+            return false;
+        }
+        UUIDComponent uc = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        if (uc != null && TownResidentEligibility.excludeFromResidentLists(town, uc.getUuid(), binding)) {
+            return false;
+        }
+        TownsfolkCharacterBinding tb = store.getComponent(npcRef, TownsfolkCharacterBinding.getComponentType());
+        if (tb != null && TownsfolkAssignmentKinds.isGuildHallAdventurer(tb.getAssignmentKind())) {
+            return false;
+        }
+        if (uc != null && GuildHallAdventurerPoolService.isGuildHallAdventurer(town, uc.getUuid())) {
+            return false;
+        }
+        return true;
+    }
+
+    /** Strips wardrobe overrides so pool adventurers keep their authored character look. */
+    private static void restoreBaseCharacterLook(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        String modelAssetId = resolveBaseModelAssetId(npcRef, store);
+        if (modelAssetId == null || modelAssetId.isBlank()) {
+            return;
+        }
+        ModelComponent existing = store.getComponent(npcRef, ModelComponent.getComponentType());
+        Model currentModel = existing != null ? existing.getModel() : null;
+        Float scale = currentModel != null ? currentModel.getScale() : null;
+        Model base =
+            buildModelWithOverrides(
+                modelAssetId,
+                scale,
+                Map.of(),
+                plugin.getVillagerCosmeticCatalog(),
+                currentModel
+            );
+        if (base == null) {
+            base = com.hexvane.aetherhaven.villager.NpcModelSpawnUtil.buildScaledModel(modelAssetId, scale);
+        }
+        if (base != null) {
+            applyModel(npcRef, store, base);
+        }
+    }
+
+    /**
+     * Re-applies saved cosmetics to live wardrobe residents. Defers one frame so model packets flush after town data is saved.
+     */
+    public static void refreshWardrobeNpcs(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        List<Ref<EntityStore>> npcRefs = collectWardrobeNpcRefs(store, town, plugin);
         world.execute(
             () -> {
                 for (Ref<EntityStore> npcRef : npcRefs) {
@@ -378,6 +446,23 @@ public final class VillagerCosmeticAppearanceService {
                 }
             }
         );
+    }
+
+    /** Live NPC refs for villagers listed in the wardrobe (residents, hired guards, citizen tourists). */
+    @Nonnull
+    public static List<Ref<EntityStore>> collectWardrobeNpcRefs(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        List<Ref<EntityStore>> refs = new ArrayList<>();
+        for (WardrobeResidentRow row : WardrobeResidentDirectory.list(store, town, plugin)) {
+            Ref<EntityStore> npcRef = store.getExternalData().getRefFromUUID(row.entityUuid());
+            if (npcRef != null && npcRef.isValid()) {
+                refs.add(npcRef);
+            }
+        }
+        return refs;
     }
 
     /**

@@ -3,33 +3,6 @@
     "Name": "aetherhaven_items.items.Aetherhaven_Plot_Creator_Staff.name",
     "Description": "aetherhaven_items.items.Aetherhaven_Plot_Creator_Staff.description"
   },
-  "Recipe": {
-    "TimeSeconds": 3,
-    "Input": [
-      {
-        "ItemId": "Ingredient_Bar_Iron",
-        "Quantity": 8
-      },
-      {
-        "ResourceTypeId": "Wood_Trunk",
-        "Quantity": 10
-      },
-      {
-        "ItemId": "Ingredient_Fibre",
-        "Quantity": 10
-      }
-    ],
-    "BenchRequirement": [
-      {
-        "Id": "Aetherhaven_TownPlanningDesk",
-        "Type": "Crafting",
-        "Categories": [
-          "Aetherhaven_TownPlanning_Tools"
-        ],
-        "RequiredTierLevel": 1
-      }
-    ]
-  },
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Plot_Creator_Staff.png",
   "Categories": [
     "Items.Tools",
@@ -62,9 +35,18 @@
       -41
     ]
   },
+  "BuilderTool": {
+    "Id": "Selection",
+    "IsBrush": false,
+    "SurvivalAllowed": true
+  },
   "Interactions": {
     "Primary": {
       "Interactions": [
+        {
+          "Type": "AetherhavenPlotCreatorBoundsSelection",
+          "AllowIndefiniteHold": true
+        },
         {
           "Type": "AetherhavenPlotCreatorBlock"
         }
@@ -72,6 +54,10 @@
     },
     "Secondary": {
       "Interactions": [
+        {
+          "Type": "AetherhavenPlotCreatorBoundsSelection",
+          "AllowIndefiniteHold": true
+        },
         {
           "Type": "AetherhavenPlotCreatorBlock"
         }

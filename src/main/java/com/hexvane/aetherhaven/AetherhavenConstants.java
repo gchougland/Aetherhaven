@@ -154,6 +154,9 @@ public final class AetherhavenConstants {
 
     public static final String PLOT_CREATOR_STAFF_ITEM_ID = "Aetherhaven_Plot_Creator_Staff";
 
+    /** Internal hotbar swap variant with the Selection builder tool (bounds step only). */
+    public static final String PLOT_CREATOR_STAFF_BOUNDS_ITEM_ID = "Aetherhaven_Plot_Creator_Staff_Bounds";
+
     /** Creative-only staff for editing existing buildings (PlotCreator subplugin). */
     public static final String BUILDING_EDITOR_STAFF_ITEM_ID = "Aetherhaven_Building_Editor_Staff";
 

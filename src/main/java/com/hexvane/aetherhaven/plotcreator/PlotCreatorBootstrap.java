@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.command.AetherhavenPlotCreatorCommand;
 import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
 import com.hexvane.aetherhaven.placement.PlacementGizmoInput;
 import com.hexvane.aetherhaven.placement.PlacementGizmoPacketAdapter;
+import com.hypixel.hytale.builtin.buildertools.BuilderToolsPlugin;
 import com.hexvane.aetherhaven.placement.PlotPlacementPlayerRemoveSystem;
 import com.hexvane.aetherhaven.placement.PlotPlacementSpectatorSyncSystem;
 import com.hexvane.aetherhaven.placement.WallPlacementEditHelper;
@@ -28,6 +29,9 @@ public final class PlotCreatorBootstrap {
     @Nullable
     private static PlacementGizmoPacketAdapter placementGizmoPacketAdapter;
 
+    @Nullable
+    private static PlotCreatorSelectionBoundsAdapter plotCreatorSelectionBoundsAdapter;
+
     public static void registerAssetCodecs(@Nonnull AetherhavenPlugin core) {
         core
             .getCodecRegistry(Interaction.CODEC)
@@ -35,16 +39,9 @@ public final class PlotCreatorBootstrap {
         core
             .getCodecRegistry(Interaction.CODEC)
             .register(
-                "AetherhavenPlotCreatorBoundsDrag",
-                PlotCreatorBoundsDragInteraction.class,
-                PlotCreatorBoundsDragInteraction.CODEC
-            );
-        core
-            .getCodecRegistry(Interaction.CODEC)
-            .register(
-                "AetherhavenPlotCreatorBoundsAdjust",
-                PlotCreatorBoundsAdjustInteraction.class,
-                PlotCreatorBoundsAdjustInteraction.CODEC
+                "AetherhavenPlotCreatorBoundsSelection",
+                PlotCreatorBoundsSelectionInteraction.class,
+                PlotCreatorBoundsSelectionInteraction.CODEC
             );
         core
             .getCodecRegistry(Interaction.CODEC)
@@ -168,6 +165,13 @@ public final class PlotCreatorBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new PlotPlacementPlayerRemoveSystem());
         placementGizmoPacketAdapter = new PlacementGizmoPacketAdapter();
         placementGizmoPacketAdapter.register();
+        plotCreatorSelectionBoundsAdapter = new PlotCreatorSelectionBoundsAdapter();
+        plotCreatorSelectionBoundsAdapter.register();
+        BuilderToolsPlugin builderTools = BuilderToolsPlugin.get();
+        if (builderTools != null) {
+            builderTools.setSelectionBoundsUpdatedCallback(PlotCreatorSelectionBoundsService::onSelectionBoundsUpdatedCallback);
+            builderTools.setSelectionClearedCallback(PlotCreatorSelectionBoundsService::onSelectionClearedCallback);
+        }
         core.registerAetherhavenSubcommand(new AetherhavenPlotCreatorCommand());
         plugin
             .getEventRegistry()
@@ -183,7 +187,6 @@ public final class PlotCreatorBootstrap {
                     );
                 }
             );
-        PlotCreatorBoundsInput.register(plugin.getEventRegistry());
         PlacementGizmoInput.register(plugin.getEventRegistry());
     }
 }

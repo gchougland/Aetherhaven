@@ -14,9 +14,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -29,6 +27,14 @@ public final class HallowsEveBatSpawnService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     private HallowsEveBatSpawnService() {}
+
+    public static void scheduleEnsureBats(
+        @Nonnull World world,
+        @Nonnull UUID townId,
+        @Nonnull PlotInstance square
+    ) {
+        world.execute(() -> ensureBats(world, townId, square));
+    }
 
     public static void ensureBats(@Nonnull World world, @Nonnull UUID townId, @Nonnull PlotInstance square) {
         if (!HallowsEveBatComponent.isRegistered()) {
@@ -48,14 +54,26 @@ public final class HallowsEveBatSpawnService {
     }
 
     public static void despawnBats(@Nonnull World world, @Nonnull UUID townId) {
-        if (!HallowsEveBatComponent.isRegistered()) {
-            return;
-        }
         var entityStore = world.getEntityStore();
-        if (entityStore == null) {
+        if (entityStore == null || !HallowsEveBatComponent.isRegistered()) {
             return;
         }
-        removeRefs(entityStore.getStore(), collectTownBats(entityStore.getStore(), townId));
+        Store<EntityStore> store = entityStore.getStore();
+        store.forEachChunk(
+            Query.and(HallowsEveBatComponent.getComponentType()),
+            (chunk, commandBuffer) -> {
+                for (int i = 0; i < chunk.size(); i++) {
+                    HallowsEveBatComponent bat = chunk.getComponent(i, HallowsEveBatComponent.getComponentType());
+                    Ref<EntityStore> ref = chunk.getReferenceTo(i);
+                    if (bat == null || ref == null || !ref.isValid()) {
+                        continue;
+                    }
+                    if (townId.equals(bat.getTownId())) {
+                        commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
+                    }
+                }
+            }
+        );
     }
 
     /** Drops bats whose town is not currently running Hallow's Eve in this world. */
@@ -63,27 +81,23 @@ public final class HallowsEveBatSpawnService {
         if (!HallowsEveBatComponent.isRegistered()) {
             return;
         }
-        List<Ref<EntityStore>> orphans = new ArrayList<>();
         store.forEachChunk(
             Query.and(HallowsEveBatComponent.getComponentType()),
             (chunk, commandBuffer) -> {
                 for (int i = 0; i < chunk.size(); i++) {
                     HallowsEveBatComponent bat = chunk.getComponent(i, HallowsEveBatComponent.getComponentType());
-                    if (bat == null) {
+                    Ref<EntityStore> ref = chunk.getReferenceTo(i);
+                    if (bat == null || ref == null || !ref.isValid()) {
                         continue;
                     }
                     UUID townId = bat.getTownId();
                     if (townId != null && activeTownIds.contains(townId)) {
                         continue;
                     }
-                    Ref<EntityStore> ref = chunk.getReferenceTo(i);
-                    if (ref != null && ref.isValid()) {
-                        orphans.add(ref);
-                    }
+                    commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
                 }
             }
         );
-        removeRefs(store, orphans);
     }
 
     @Nonnull
@@ -109,27 +123,6 @@ public final class HallowsEveBatSpawnService {
 
     private static int countBats(@Nonnull Store<EntityStore> store, @Nonnull UUID townId) {
         return countByTown(store).getOrDefault(townId, 0);
-    }
-
-    @Nonnull
-    private static List<Ref<EntityStore>> collectTownBats(@Nonnull Store<EntityStore> store, @Nonnull UUID townId) {
-        List<Ref<EntityStore>> refs = new ArrayList<>();
-        store.forEachChunk(
-            Query.and(HallowsEveBatComponent.getComponentType()),
-            (chunk, commandBuffer) -> {
-                for (int i = 0; i < chunk.size(); i++) {
-                    HallowsEveBatComponent bat = chunk.getComponent(i, HallowsEveBatComponent.getComponentType());
-                    if (bat == null || !townId.equals(bat.getTownId())) {
-                        continue;
-                    }
-                    Ref<EntityStore> ref = chunk.getReferenceTo(i);
-                    if (ref != null && ref.isValid()) {
-                        refs.add(ref);
-                    }
-                }
-            }
-        );
-        return refs;
     }
 
     private static void spawnOne(
@@ -197,13 +190,5 @@ public final class HallowsEveBatSpawnService {
 
     private static double centerZ(@Nonnull PlotFootprintRecord fp) {
         return (fp.getMinZ() + fp.getMaxZ() + 1) * 0.5;
-    }
-
-    private static void removeRefs(@Nonnull Store<EntityStore> store, @Nonnull List<Ref<EntityStore>> refs) {
-        for (Ref<EntityStore> ref : refs) {
-            if (ref != null && ref.isValid()) {
-                store.removeEntity(ref, RemoveReason.REMOVE);
-            }
-        }
     }
 }

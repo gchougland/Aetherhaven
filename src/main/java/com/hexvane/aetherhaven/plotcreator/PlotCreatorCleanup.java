@@ -29,6 +29,11 @@ public final class PlotCreatorCleanup {
     ) {
         PlotCreatorSessions.remove(session.getPlayerUuid());
         if (playerRef != null) {
+            PlotCreatorSelectionBoundsService.deactivateIfPresent(playerRef);
+            Ref<EntityStore> ref = playerRef.getReference();
+            if (ref != null && ref.isValid()) {
+                PlotCreatorSelectionBoundsService.restoreNormalStaffInHand(playerRef, ref, ref.getStore());
+            }
             PlotCreatorService.clearPlotCreatorWireframe(playerRef, session.getWorld());
             returnDepositChestIfOpen(session, playerRef);
         }

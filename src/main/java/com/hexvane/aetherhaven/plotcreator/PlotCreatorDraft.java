@@ -20,16 +20,7 @@ public final class PlotCreatorDraft {
     private Vector3i cornerSecond;
 
     @Nonnull
-    private PlotCreatorBoundsPhase boundsPhase = PlotCreatorBoundsPhase.INITIAL_DRAG;
-    @Nullable
-    private Vector3i boundsDragStart;
-    @Nullable
-    private Vector3i boundsDragEnd;
-    @Nullable
-    private PlotCreatorBoundsFace hoveredBoundsFace;
-    @Nullable
-    private PlotCreatorBoundsFace activeBoundsFaceDrag;
-    private boolean boundsPrimaryHeld;
+    private PlotCreatorBoundsPhase boundsPhase = PlotCreatorBoundsPhase.SELECTION;
 
     @Nullable
     private Vector3i plotAnchor;
@@ -296,66 +287,17 @@ public final class PlotCreatorDraft {
         this.boundsPhase = boundsPhase;
     }
 
-    @Nullable
-    public Vector3i getBoundsDragStart() {
-        return boundsDragStart;
-    }
-
-    public void setBoundsDragStart(@Nullable Vector3i boundsDragStart) {
-        this.boundsDragStart = boundsDragStart != null ? new Vector3i(boundsDragStart) : null;
-    }
-
-    @Nullable
-    public Vector3i getBoundsDragEnd() {
-        return boundsDragEnd;
-    }
-
-    public void setBoundsDragEnd(@Nullable Vector3i boundsDragEnd) {
-        this.boundsDragEnd = boundsDragEnd != null ? new Vector3i(boundsDragEnd) : null;
-    }
-
-    @Nullable
-    public PlotCreatorBoundsFace getHoveredBoundsFace() {
-        return hoveredBoundsFace;
-    }
-
-    public void setHoveredBoundsFace(@Nullable PlotCreatorBoundsFace hoveredBoundsFace) {
-        this.hoveredBoundsFace = hoveredBoundsFace;
-    }
-
-    @Nullable
-    public PlotCreatorBoundsFace getActiveBoundsFaceDrag() {
-        return activeBoundsFaceDrag;
-    }
-
-    public void setActiveBoundsFaceDrag(@Nullable PlotCreatorBoundsFace activeBoundsFaceDrag) {
-        this.activeBoundsFaceDrag = activeBoundsFaceDrag;
-    }
-
-    public boolean isBoundsPrimaryHeld() {
-        return boundsPrimaryHeld;
-    }
-
-    public void setBoundsPrimaryHeld(boolean boundsPrimaryHeld) {
-        this.boundsPrimaryHeld = boundsPrimaryHeld;
-    }
-
-    /** True while the drag and face adjust tools own a build box: the bounds step, or a wall piece's box. */
+    /** True while the selection tool marks a build box: the bounds step, or a wall piece's box. */
     public boolean isEditingBounds() {
         return step == PlotCreatorStep.BOUNDS
             || (step == PlotCreatorStep.WALL_PIECES && wallPieceSubstepIndex == 0);
     }
 
-    /** Clears committed corners and returns to the initial drag sub-phase. */
+    /** Clears committed corners so the player can draw a new selection box. */
     public void resetBoundsEditing() {
         cornerFirst = null;
         cornerSecond = null;
-        boundsPhase = PlotCreatorBoundsPhase.INITIAL_DRAG;
-        boundsDragStart = null;
-        boundsDragEnd = null;
-        hoveredBoundsFace = null;
-        activeBoundsFaceDrag = null;
-        boundsPrimaryHeld = false;
+        boundsPhase = PlotCreatorBoundsPhase.SELECTION;
         plotAnchor = null;
     }
 

@@ -488,7 +488,7 @@ items.Aetherhaven_Plot_Token_Unlock_Page.instance.name=Plot Blueprint
 items.Aetherhaven_Plot_Token_Unlock_Page.instance.description=Use this to gain an unlock point. Spend unlock points at your plot crafting bench to unlock new buildings.
 
 items.Aetherhaven_Plot_Creator_Staff.name=Plot Creator Staff
-items.Aetherhaven_Plot_Creator_Staff.description=Turn a build into a custom town building. See the town journal Guide. F starts or acts on the current step. Primary-click blocks for bounds and spots. Q/E previous/next. R cancels.
+items.Aetherhaven_Plot_Creator_Staff.description=Turn a build into a custom town building. See the town journal Guide. F starts or acts on the current step. While marking a build box, E confirms the box. Q/E previous/next on other steps. R cancels.
 items.Aetherhaven_Building_Editor_Staff.name=Building Editor Staff
 items.Aetherhaven_Building_Editor_Staff.description=Creative only. Pick an existing building, load it nearby, and edit its blocks and important spots. Saves over the building files when you finish.
 

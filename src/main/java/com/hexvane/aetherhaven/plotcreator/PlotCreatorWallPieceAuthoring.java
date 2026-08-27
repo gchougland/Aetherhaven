@@ -63,19 +63,12 @@ public final class PlotCreatorWallPieceAuthoring {
         if (piece == null) {
             return;
         }
-        draft.setBoundsDragStart(null);
-        draft.setBoundsDragEnd(null);
-        draft.setActiveBoundsFaceDrag(null);
-        draft.setBoundsPrimaryHeld(false);
-        draft.setHoveredBoundsFace(null);
         draft.setCornerFirst(piece.getCornerFirst());
         draft.setCornerSecond(piece.getCornerSecond());
         draft.setPlotAnchor(piece.getAnchor());
         draft.getMaterials().clear();
         draft.getMaterials().addAll(piece.getMaterials());
-        draft.setBoundsPhase(
-            piece.hasBounds() ? PlotCreatorBoundsPhase.FACE_ADJUST : PlotCreatorBoundsPhase.INITIAL_DRAG
-        );
+        draft.setBoundsPhase(PlotCreatorBoundsPhase.SELECTION);
     }
 
     /** Copies the shared build cost list back onto the current piece. */

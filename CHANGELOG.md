@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.1.0] - Unreleased (Hytale Update 6)
+## [3.1.0] - 8/26/2026 (Hytale Update 6)
 
 ### Added
 
@@ -11,6 +11,7 @@
 
 ### Changed
 
+- **Plot creator build area** Mark the build box with the vanilla selection drag tool instead of the old face handles. The staff switches while you mark the area, then switches back when you press E to continue. Primary drag marks the box, secondary drag resizes a side, and it works in survival mode too.
 - **Town difficulty** Building cost difficulty is per town, not per world. Each town picks Easy, Normal, Hard, or custom costs when it is founded. The town owner can change it later in Town Journal Settings, with `/ah town difficulty`, or with `/ah difficulty`. Existing worlds copy the old world difficulty onto towns that have not chosen yet.
 - **Hytale Update 6** Aetherhaven runs on Hytale Update 6.
 - **Town protection** Change who may break blocks and use things in your town from Town Journal Settings instead of the tourist portal.

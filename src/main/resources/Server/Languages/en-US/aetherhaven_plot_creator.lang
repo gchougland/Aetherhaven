@@ -176,10 +176,8 @@ aetherhaven.plotcreator.stepJump.hint = Locked steps need earlier steps finished
 aetherhaven.plotcreator.hud.WELCOME.f = Begin
 aetherhaven.plotcreator.hud.WELCOME.e = Begin
 
-aetherhaven.plotcreator.hud.BOUNDS.primary = Hold and drag to mark the build box
-aetherhaven.plotcreator.hud.BOUNDS.primaryFace = Drag to resize the highlighted side
-aetherhaven.plotcreator.hud.BOUNDS.secondary = Secondary to expand toward where you look (stand inside the box)
-aetherhaven.plotcreator.hud.BOUNDS.secondaryShrink = Shrink toward where you look
+aetherhaven.plotcreator.hud.BOUNDS.primary = Drag to mark the build box
+aetherhaven.plotcreator.hud.BOUNDS.secondary = Drag a side to resize the box
 aetherhaven.plotcreator.hud.BOUNDS.confirm = E to confirm build area
 aetherhaven.plotcreator.hud.BOUNDS.redo = Q to redo the build box
 aetherhaven.plotcreator.hud.ANCHOR.primary = Click one of the four outside corners of the footprint
@@ -279,8 +277,7 @@ aetherhaven.plotcreator.step.WELCOME.hint = Turn something you built into a town
 
 aetherhaven.plotcreator.step.BOUNDS.title = Mark build area
 aetherhaven.plotcreator.step.BOUNDS.short = Bounds
-aetherhaven.plotcreator.step.BOUNDS.hint.initial = Hold primary and drag to mark a rough box. Point at blocks or empty air. The plot sign goes at the center when you press E to continue.
-aetherhaven.plotcreator.step.BOUNDS.hint.faces = Stand inside the box. Secondary expands toward where you look. Crouch and secondary shrinks. You can also drag side panels. Press E when the box looks right.
+aetherhaven.plotcreator.step.BOUNDS.hint = Drag with primary to mark the build box. Drag a side to resize it. Press E when the box looks right.
 
 aetherhaven.plotcreator.step.ANCHOR.title = Plot sign spot
 aetherhaven.plotcreator.step.ANCHOR.short = Sign

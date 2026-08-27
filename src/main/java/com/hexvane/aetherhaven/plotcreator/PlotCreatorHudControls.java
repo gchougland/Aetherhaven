@@ -92,18 +92,11 @@ public final class PlotCreatorHudControls {
 
     @Nonnull
     private static List<Row> boundsRows(@Nonnull PlotCreatorSession session) {
-        PlotCreatorDraft draft = session.getDraft();
         List<Row> rows = new ArrayList<>();
-        if (draft.getBoundsPhase() == PlotCreatorBoundsPhase.FACE_ADJUST) {
-            rows.add(row(ToolKeybindSlot.PRIMARY, "hud.BOUNDS.primaryFace"));
-            rows.add(row(ToolKeybindSlot.SECONDARY, "hud.BOUNDS.secondary"));
-            rows.add(modifierRow("Crouch", ToolKeybindSlot.SECONDARY, "hud.BOUNDS.secondaryShrink"));
-            rows.add(row(ToolKeybindSlot.ABILITY1, "hud.BOUNDS.redo"));
-        } else {
-            rows.add(row(ToolKeybindSlot.PRIMARY, "hud.BOUNDS.primary"));
-            rows.add(row(ToolKeybindSlot.ABILITY1, "hud.common.q"));
-        }
+        rows.add(row(ToolKeybindSlot.PRIMARY, "hud.BOUNDS.primary"));
+        rows.add(row(ToolKeybindSlot.SECONDARY, "hud.BOUNDS.secondary"));
         rows.add(row(ToolKeybindSlot.ABILITY2, "hud.BOUNDS.confirm"));
+        rows.add(row(ToolKeybindSlot.ABILITY1, "hud.common.q"));
         rows.add(row(ToolKeybindSlot.ABILITY3, "hud.common.r"));
         return rows;
     }

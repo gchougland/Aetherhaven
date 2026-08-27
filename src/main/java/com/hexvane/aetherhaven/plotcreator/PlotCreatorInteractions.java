@@ -30,9 +30,7 @@ public final class PlotCreatorInteractions {
     private PlotCreatorInteractions() {}
 
     public static boolean isPlotCreatorStaff(@Nullable ItemStack stack) {
-        return stack != null
-            && !stack.isEmpty()
-            && AetherhavenConstants.PLOT_CREATOR_STAFF_ITEM_ID.equals(stack.getItemId());
+        return PlotCreatorStaffBoundsSwap.isAnyStaff(stack);
     }
 
     /** Plot creator staff or building editor staff (wizard keybinds while a session is active). */
@@ -78,18 +76,11 @@ public final class PlotCreatorInteractions {
             context.getState().state = InteractionState.Failed;
             return;
         }
-        if (draft.isEditingBounds() && draft.getBoundsPhase() == PlotCreatorBoundsPhase.FACE_ADJUST) {
-            draft.resetBoundsEditing();
-            PlotCreatorWallPieceDraft wallPiece = draft.currentWallPiece();
-            if (draft.getStep() == PlotCreatorStep.WALL_PIECES && wallPiece != null) {
-                wallPiece.clearShape();
-            }
-            PlotCreatorService.refreshBoundsVisuals(session, playerRef);
-            refreshHud(playerRef, ref, commandBuffer.getStore(), session);
-            context.getState().state = InteractionState.Finished;
-            return;
+        if (draft.isEditingBounds()) {
+            PlotCreatorSelectionBoundsService.prepareBoundsStepConfirm(session, playerRef, ref, commandBuffer.getStore());
         }
         PlotCreatorService.back(session, ref, commandBuffer.getStore());
+        PlotCreatorSelectionBoundsService.syncForSession(session, playerRef, ref, commandBuffer.getStore());
         refreshHud(playerRef, ref, commandBuffer.getStore(), session);
         context.getState().state = InteractionState.Finished;
     }
@@ -108,10 +99,31 @@ public final class PlotCreatorInteractions {
             context.getState().state = InteractionState.Failed;
             return;
         }
+        PlotCreatorDraft draft = session.getDraft();
+        if (draft.isEditingBounds()) {
+            if (draft.isFestivalSizeLocked()) {
+                playerRef.sendMessage(Message.translation(MSG + ".error.boundsLockedFestival"));
+                context.getState().state = InteractionState.Failed;
+                return;
+            }
+            String boundsErr =
+                PlotCreatorSelectionBoundsService.prepareBoundsStepConfirm(
+                    session,
+                    playerRef,
+                    ref,
+                    commandBuffer.getStore()
+                );
+            if (boundsErr != null) {
+                playerRef.sendMessage(Message.translation(MSG + ".error." + boundsErr));
+                context.getState().state = InteractionState.Failed;
+                return;
+            }
+        }
         if (!tryAdvanceForward(session, playerRef, ref, commandBuffer.getStore())) {
             context.getState().state = InteractionState.Failed;
             return;
         }
+        PlotCreatorSelectionBoundsService.syncForSession(session, playerRef, ref, commandBuffer.getStore());
         refreshHud(playerRef, ref, commandBuffer.getStore(), session);
         context.getState().state = InteractionState.Finished;
     }
@@ -313,6 +325,9 @@ public final class PlotCreatorInteractions {
         }
         if (step == PlotCreatorStep.BOUNDS) {
             if (d.getCornerFirst() == null || d.getCornerSecond() == null) {
+                PlotCreatorSelectionBoundsService.prepareBoundsStepConfirm(session, playerRef, ref, store);
+            }
+            if (d.getCornerFirst() == null || d.getCornerSecond() == null) {
                 playerRef.sendMessage(Message.translation(MSG + ".error.needBounds"));
                 return false;
             }
@@ -391,9 +406,13 @@ public final class PlotCreatorInteractions {
             return true;
         }
         if (step == PlotCreatorStep.WALL_PIECES) {
+            boolean boundsSubstep = PlotCreatorWallPieceAuthoring.isBoundsSubstep(d);
+            if (boundsSubstep) {
+                PlotCreatorSelectionBoundsService.prepareBoundsStepConfirm(session, playerRef, ref, store);
+            }
             if (!PlotCreatorWallPieceAuthoring.currentSubstepSatisfied(d)) {
                 playerRef.sendMessage(
-                    PlotCreatorWallPieceAuthoring.isBoundsSubstep(d)
+                    boundsSubstep
                         ? Message.translation(MSG + ".error.needBounds")
                         : Message
                             .translation(MSG + ".error.wallConnectionMissing")

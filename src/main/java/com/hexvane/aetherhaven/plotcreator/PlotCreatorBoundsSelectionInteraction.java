@@ -7,40 +7,28 @@ import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.InteractionState;
-import com.hypixel.hytale.protocol.InteractionSyncData;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
-import com.hypixel.hytale.server.core.modules.interaction.interaction.config.client.ChargingInteraction;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.none.BuilderToolInteraction;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/**
- * Plot creator staff primary: hold primary to drag mark build bounds. Uses {@link ChargingInteraction} so the
- * client keeps sending hold ticks; a plain {@code SimpleInteraction} finishes instantly and never drags.
- */
-public final class PlotCreatorBoundsDragInteraction extends ChargingInteraction {
-    private static final float CHARGE_HELD = -1f;
-    private static final float CHARGE_CANCELED = -2f;
-
+/** Plot creator staff: runs the embedded Selection builder tool while marking build bounds. */
+public final class PlotCreatorBoundsSelectionInteraction extends BuilderToolInteraction {
     @Nonnull
-    public static final BuilderCodec<PlotCreatorBoundsDragInteraction> CODEC =
+    public static final BuilderCodec<PlotCreatorBoundsSelectionInteraction> CODEC =
         BuilderCodec
             .builder(
-                PlotCreatorBoundsDragInteraction.class,
-                PlotCreatorBoundsDragInteraction::new,
-                ChargingInteraction.CODEC
+                PlotCreatorBoundsSelectionInteraction.class,
+                PlotCreatorBoundsSelectionInteraction::new,
+                BuilderToolInteraction.CODEC
             )
-            .documentation("Plot creator staff: hold primary to drag mark build bounds.")
+            .documentation("Plot creator staff: vanilla Selection tool while marking build bounds.")
             .build();
-
-    public PlotCreatorBoundsDragInteraction() {
-        allowIndefiniteHold = true;
-        displayProgress = false;
-    }
 
     @Override
     protected void tick0(
@@ -53,10 +41,6 @@ public final class PlotCreatorBoundsDragInteraction extends ChargingInteraction 
         if (SubpluginInteractionGuard.failIfDisabled(context, AetherhavenPluginIds.PLOT_CREATOR)) {
             return;
         }
-        if (type != InteractionType.Primary) {
-            context.getState().state = InteractionState.Finished;
-            return;
-        }
         CommandBuffer<EntityStore> commandBuffer = context.getCommandBuffer();
         @Nullable
         Ref<EntityStore> ref = context.getEntity();
@@ -65,7 +49,7 @@ public final class PlotCreatorBoundsDragInteraction extends ChargingInteraction 
             return;
         }
         ItemStack hand = context.getHeldItem();
-        if (!PlotCreatorInteractions.isPlotCreatorStaff(hand)) {
+        if (!PlotCreatorStaffBoundsSwap.isBoundsStaff(hand)) {
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -75,37 +59,21 @@ public final class PlotCreatorBoundsDragInteraction extends ChargingInteraction 
             return;
         }
         PlotCreatorSession session = PlotCreatorSessions.get(playerRef.getUuid());
-        if (session == null || !session.getDraft().isEditingBounds()) {
+        PlotCreatorDraft draft = session != null ? session.getDraft() : null;
+        if (session == null
+            || draft == null
+            || !draft.isEditingBounds()
+            || draft.isFestivalSizeLocked()) {
             context.getState().state = InteractionState.Finished;
             return;
         }
-
-        InteractionSyncData clientState = context.getClientState();
-        if (clientState == null) {
-            context.getState().state = InteractionState.Failed;
-            return;
-        }
-
-        Store<EntityStore> store = commandBuffer.getStore();
-        PlotCreatorDraft draft = session.getDraft();
-        float charge = clientState.chargeValue;
-
-        if (charge == CHARGE_HELD) {
-            if (!draft.isBoundsPrimaryHeld()) {
-                PlotCreatorBoundsInput.onPrimaryPress(session, ref, store, playerRef);
-            }
-            PlotCreatorBoundsInput.onDragTick(session, ref, store, playerRef);
+        PlotCreatorSelectionBoundsService.ensureSurvivalAccess(playerRef, ref, commandBuffer.getStore());
+        super.tick0(firstRun, time, type, context, cooldownHandler);
+        // Keep the tool active while dragging; release when idle so F / Use is not blocked behind this chain.
+        if ((context.getState().state == InteractionState.Finished
+                || context.getState().state == InteractionState.Skip)
+            && PlotCreatorSelectionBoundsService.isSelectionDragRecent(playerRef.getUuid())) {
             context.getState().state = InteractionState.NotFinished;
-            return;
         }
-
-        if (draft.isBoundsPrimaryHeld()) {
-            if (charge == CHARGE_CANCELED) {
-                PlotCreatorBoundsInput.cancelPrimaryHold(session, playerRef);
-            } else {
-                PlotCreatorBoundsInput.onPrimaryRelease(session, ref, store, playerRef);
-            }
-        }
-        context.getState().state = InteractionState.Finished;
     }
 }

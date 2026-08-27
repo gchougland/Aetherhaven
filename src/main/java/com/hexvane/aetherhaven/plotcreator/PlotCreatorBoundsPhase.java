@@ -1,7 +1,6 @@
 package com.hexvane.aetherhaven.plotcreator;
 
-/** Sub-phase within {@link PlotCreatorStep#BOUNDS}. */
+/** Sub-phase within bounds editing (vanilla Selection tool box). */
 public enum PlotCreatorBoundsPhase {
-    INITIAL_DRAG,
-    FACE_ADJUST
+    SELECTION
 }

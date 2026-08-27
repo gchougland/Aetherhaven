@@ -100,11 +100,7 @@ public final class PlotCreatorFestivalDraftSetup {
         Vector3i min = new Vector3i(draft.boundsMin());
         Vector3i max = FestivalPrefabSize.maxFromMin(min);
         PlotCreatorBoundsValidation.commitCorners(draft, min, max);
-        draft.setBoundsPhase(PlotCreatorBoundsPhase.FACE_ADJUST);
-        draft.setBoundsDragStart(null);
-        draft.setBoundsDragEnd(null);
-        draft.setActiveBoundsFaceDrag(null);
-        draft.setHoveredBoundsFace(null);
+        draft.setBoundsPhase(PlotCreatorBoundsPhase.SELECTION);
         Vector3i center =
             new Vector3i(min.x + FestivalPrefabSize.SPAN_X / 2, min.y, min.z + FestivalPrefabSize.SPAN_Z / 2);
         draft.setPlotAnchor(new Vector3i(center));
