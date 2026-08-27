@@ -8,7 +8,7 @@ import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabMaterialsCatalog;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.difficulty.EffectiveBuildingCosts;
-import com.hexvane.aetherhaven.difficulty.WorldDifficultyState;
+import com.hexvane.aetherhaven.difficulty.TownDifficultySettings;
 import java.lang.reflect.Field;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -31,7 +31,7 @@ class PlotJournalRemovalRefundServiceTest {
     @Test
     void goldRefundIsEightyPercentFloored() throws ReflectiveOperationException {
         ConstructionDefinition def = testDefinition("plot_flower_shop", 45L);
-        WorldDifficultyState difficulty = WorldDifficultyState.normalUntilChosen();
+        TownDifficultySettings difficulty = TownDifficultySettings.normalUntilChosen();
         long paid =
             EffectiveBuildingCosts.forDefinition(def, difficulty, PrefabMaterialsCatalog.empty())
                 .getTreasuryGoldCoinCost();
@@ -46,7 +46,7 @@ class PlotJournalRemovalRefundServiceTest {
     @Test
     void difficultyMultiplierAffectsRefundBase() throws ReflectiveOperationException {
         ConstructionDefinition def = testDefinition("plot_house", 48L);
-        WorldDifficultyState hard = new WorldDifficultyState();
+        TownDifficultySettings hard = new TownDifficultySettings();
         hard.setDifficultyChosen(true);
         hard.setGoldCostMultiplier(2.0);
         long paid =

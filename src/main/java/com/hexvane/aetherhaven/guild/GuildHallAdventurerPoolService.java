@@ -56,6 +56,7 @@ import org.joml.Vector3i;
 public final class GuildHallAdventurerPoolService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final float ADVENTURER_FILL_CHANCE = 0.5f;
+    private static final int MAX_GUILD_HALL_SPAWN_ATTEMPTS_PER_SLOT = 3;
 
     private record AdventurerInPlotDespawn(@Nullable String characterId, @Nonnull UUID entityUuid) {}
 
@@ -548,7 +549,7 @@ public final class GuildHallAdventurerPoolService {
         }
 
         int spawned = 0;
-        for (int slot : town.getGuildHallAdventurerFilledSlots()) {
+        for (int slot : new ArrayList<>(town.getGuildHallAdventurerFilledSlots())) {
             if (slot < 0 || slot >= spawnSlots.size()) {
                 continue;
             }
@@ -568,28 +569,76 @@ public final class GuildHallAdventurerPoolService {
             if (rerollEntropy != null) {
                 seed ^= rerollEntropy;
             }
-            var result =
-                TownsfolkSpawnService.trySpawn(
-                    world,
-                    plugin,
-                    town,
-                    store,
-                    pos,
-                    TownsfolkAssignmentKinds.GUILD_ADVENTURER,
-                    null,
-                    new Random(seed),
-                    new Rotation3f(0.0F, spawnSlot.yawRadians(), 0.0F),
-                    spawnSlot.yawRadians(),
-                    markerPos
-                );
-            if (result.isEmpty()) {
-                continue;
+
+            List<String> guardEligible = pool.availableGuardEligibleCharacterIds(town.getTownId(), catalog);
+            int maxAttempts = Math.min(MAX_GUILD_HALL_SPAWN_ATTEMPTS_PER_SLOT, guardEligible.size());
+            Set<String> failedCharacterIds = new HashSet<>();
+            boolean slotFilled = false;
+            for (int attempt = 0; attempt < maxAttempts; attempt++) {
+                List<String> candidates = new ArrayList<>();
+                for (String id : guardEligible) {
+                    if (!failedCharacterIds.contains(id)) {
+                        candidates.add(id);
+                    }
+                }
+                if (candidates.isEmpty()) {
+                    break;
+                }
+                Random attemptRandom = new Random(seed ^ (long) attempt * 0x5851F42D4C957F2DL);
+                String characterId =
+                    pool.pickRandomGuardEligibleCharacterId(
+                        town.getTownId(),
+                        catalog,
+                        attemptRandom,
+                        failedCharacterIds
+                    );
+                if (characterId == null) {
+                    break;
+                }
+                var result =
+                    TownsfolkSpawnService.trySpawn(
+                        world,
+                        plugin,
+                        town,
+                        store,
+                        pos,
+                        TownsfolkAssignmentKinds.GUILD_ADVENTURER,
+                        characterId,
+                        attemptRandom,
+                        new Rotation3f(0.0F, spawnSlot.yawRadians(), 0.0F),
+                        spawnSlot.yawRadians(),
+                        markerPos
+                    );
+                if (result.isEmpty()) {
+                    failedCharacterIds.add(characterId);
+                    LOGGER.atWarning().log(
+                        "Guild hall adventurer spawn failed for slot %s character %s in town %s (attempt %s/%s)",
+                        slot,
+                        characterId,
+                        town.getTownId(),
+                        attempt + 1,
+                        maxAttempts
+                    );
+                    continue;
+                }
+                String uuidStr = result.get().entityUuid().toString();
+                town.getGuildHallAdventurerNpcIds().add(uuidStr);
+                town.getGuildHallAdventurerSlotByNpcId().put(uuidStr, slot);
+                tm.updateTown(town);
+                spawned++;
+                slotFilled = true;
+                break;
             }
-            String uuidStr = result.get().entityUuid().toString();
-            town.getGuildHallAdventurerNpcIds().add(uuidStr);
-            town.getGuildHallAdventurerSlotByNpcId().put(uuidStr, slot);
-            tm.updateTown(town);
-            spawned++;
+            if (!slotFilled && !failedCharacterIds.isEmpty()) {
+                if (town.getGuildHallAdventurerFilledSlots().remove(Integer.valueOf(slot))) {
+                    tm.updateTown(town);
+                    LOGGER.atWarning().log(
+                        "Cleared guild hall adventurer slot %s for town %s after persistent spawn failures",
+                        slot,
+                        town.getTownId()
+                    );
+                }
+            }
         }
         return spawned;
     }

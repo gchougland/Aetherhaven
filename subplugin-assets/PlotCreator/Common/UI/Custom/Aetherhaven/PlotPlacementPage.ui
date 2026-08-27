@@ -342,6 +342,12 @@ $C.@PageOverlay {
         Text: "";
       }
 
+      $C.@SecondaryTextButton #MoveGizmoButton {
+        Anchor: (Bottom: 10, Width: 448, Height: 36);
+        Padding: (Horizontal: 12);
+        Text: "";
+      }
+
       Group {
         FlexWeight: 1;
       }

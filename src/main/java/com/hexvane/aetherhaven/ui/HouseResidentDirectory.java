@@ -3,13 +3,16 @@ package com.hexvane.aetherhaven.ui;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.equipment.data.EquipmentProfileCatalog;
 import com.hexvane.aetherhaven.guild.GuildHallAdventurerPoolService;
 import com.hexvane.aetherhaven.town.HiredGuardRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownResidentDisplay;
 import com.hexvane.aetherhaven.town.TownResidentEligibility;
+import com.hexvane.aetherhaven.tourist.TouristRecord;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
+import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterCatalog;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -88,59 +91,9 @@ public final class HouseResidentDirectory {
                 }
             }
         );
-        addStoryFallbackIfMissing(
-            byUuid,
-            town,
-            plugin,
-            catalog,
-            currentHousePlotId,
-            hideElsewhereHoused,
-            town.getElderEntityUuid(),
-            AetherhavenConstants.ELDER_NPC_ROLE_ID,
-            TownVillagerBinding.KIND_ELDER
+        byUuid.putAll(
+            collectOfflineAssignableCandidates(town, plugin, currentHousePlotId, hideElsewhereHoused)
         );
-        addStoryFallbackIfMissing(
-            byUuid,
-            town,
-            plugin,
-            catalog,
-            currentHousePlotId,
-            hideElsewhereHoused,
-            town.getInnkeeperEntityUuid(),
-            AetherhavenConstants.INNKEEPER_NPC_ROLE_ID,
-            TownVillagerBinding.KIND_INNKEEPER
-        );
-        for (HiredGuardRecord rec : town.getHiredGuardRecords()) {
-            if (rec.isCitizen()) {
-                continue;
-            }
-            UUID guardUuid = rec.getEntityUuid();
-            if (guardUuid == null || byUuid.containsKey(guardUuid)) {
-                continue;
-            }
-            if (GuildHallAdventurerPoolService.isGuildHallAdventurer(town, guardUuid)) {
-                continue;
-            }
-            if (TownResidentEligibility.excludeFromHouseAssignmentPicker(town, guardUuid)) {
-                continue;
-            }
-            if (hideElsewhereHoused
-                && isHomeResidentElsewhereOnHouse(town, catalog, currentHousePlotId, guardUuid)) {
-                continue;
-            }
-            String roleId = guardRoleIdForRecord(rec, plugin);
-            TownResidentDisplay.Resolved display =
-                TownResidentDisplay.resolveOffline(plugin, roleId, rec.getCharacterId(), null);
-            byUuid.put(
-                guardUuid,
-                new HouseResidentRow(
-                    display.displayName(),
-                    guardUuid,
-                    display.portraitPath(),
-                    roleLineMessage(TownVillagerBinding.KIND_GUARD, roleId)
-                )
-            );
-        }
         List<HouseResidentRow> out = new ArrayList<>(byUuid.values());
         out.sort(Comparator.comparing(HouseResidentRow::displayName, String.CASE_INSENSITIVE_ORDER));
         return out;
@@ -212,6 +165,24 @@ public final class HouseResidentDirectory {
                 );
             }
         }
+        for (TouristRecord rec : town.getTouristRecords()) {
+            UUID touristUuid = rec.getEntityUuid();
+            if (touristUuid != null && touristUuid.equals(entityUuid)) {
+                TownResidentDisplay.Resolved display =
+                    TownResidentDisplay.resolveOffline(
+                        plugin,
+                        AetherhavenConstants.NPC_TOWNSFOLK,
+                        rec.getCharacterId(),
+                        null
+                    );
+                return new HouseResidentRow(
+                    display.displayName(),
+                    entityUuid,
+                    display.portraitPath(),
+                    roleLineMessage(TownVillagerBinding.KIND_TOWNSFOLK, AetherhavenConstants.NPC_TOWNSFOLK)
+                );
+            }
+        }
         return null;
     }
 
@@ -245,10 +216,274 @@ public final class HouseResidentDirectory {
         return tb != null && TownsfolkAssignmentKinds.isGuildHallAdventurer(tb.getAssignmentKind());
     }
 
+    private static void addTouristRecordFallbacks(
+        @Nonnull Map<UUID, HouseResidentRow> byUuid,
+        @Nonnull TownRecord town,
+        @Nullable AetherhavenPlugin plugin,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull UUID currentHousePlotId,
+        boolean hideElsewhereHoused
+    ) {
+        for (TouristRecord rec : town.getTouristRecords()) {
+            if (rec.isCitizen()) {
+                continue;
+            }
+            UUID touristUuid = rec.getEntityUuid();
+            if (touristUuid == null || byUuid.containsKey(touristUuid)) {
+                continue;
+            }
+            if (GuildHallAdventurerPoolService.isGuildHallAdventurer(town, touristUuid)) {
+                continue;
+            }
+            if (TownResidentEligibility.excludeFromHouseAssignmentPicker(town, touristUuid)) {
+                continue;
+            }
+            if (hideElsewhereHoused
+                && isHomeResidentElsewhereOnHouse(town, catalog, currentHousePlotId, touristUuid)) {
+                continue;
+            }
+            String characterId = rec.getCharacterId();
+            if (characterId == null || characterId.isBlank()) {
+                continue;
+            }
+            TownResidentDisplay.Resolved display =
+                resolveOfflineDisplay(
+                    plugin,
+                    AetherhavenConstants.NPC_TOWNSFOLK,
+                    characterId,
+                    null
+                );
+            byUuid.put(
+                touristUuid,
+                new HouseResidentRow(
+                    display.displayName(),
+                    touristUuid,
+                    display.portraitPath(),
+                    roleLineMessage(TownVillagerBinding.KIND_TOWNSFOLK, AetherhavenConstants.NPC_TOWNSFOLK)
+                )
+            );
+        }
+    }
+
+    private static void addHousingQuestTargetFallbackIfMissing(
+        @Nonnull Map<UUID, HouseResidentRow> byUuid,
+        @Nonnull TownRecord town,
+        @Nullable AetherhavenPlugin plugin,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull UUID currentHousePlotId,
+        boolean hideElsewhereHoused,
+        @Nonnull String questId
+    ) {
+        if (!town.hasQuestActive(questId)) {
+            return;
+        }
+        UUID targetUuid = TownResidentEligibility.resolveLiveHousingQuestTargetUuid(town, questId);
+        if (targetUuid == null || byUuid.containsKey(targetUuid)) {
+            return;
+        }
+        if (GuildHallAdventurerPoolService.isGuildHallAdventurer(town, targetUuid)) {
+            return;
+        }
+        if (TownResidentEligibility.excludeFromHouseAssignmentPicker(town, targetUuid)) {
+            return;
+        }
+        if (hideElsewhereHoused
+            && isHomeResidentElsewhereOnHouse(town, catalog, currentHousePlotId, targetUuid)) {
+            return;
+        }
+        HouseResidentRow row = rowForHousingQuestTarget(town, plugin, targetUuid, questId);
+        if (row != null) {
+            byUuid.put(targetUuid, row);
+        }
+    }
+
+    @Nullable
+    private static HouseResidentRow rowForHousingQuestTarget(
+        @Nonnull TownRecord town,
+        @Nullable AetherhavenPlugin plugin,
+        @Nonnull UUID entityUuid,
+        @Nonnull String questId
+    ) {
+        if (AetherhavenConstants.QUEST_HOUSE_GUARD.equals(questId)) {
+            for (HiredGuardRecord rec : town.getHiredGuardRecords()) {
+                UUID guardUuid = rec.getEntityUuid();
+                if (guardUuid != null && guardUuid.equals(entityUuid)) {
+                    String roleId = guardRoleIdForRecord(rec, plugin);
+                    TownResidentDisplay.Resolved display =
+                        resolveOfflineDisplay(plugin, roleId, rec.getCharacterId(), null);
+                    return new HouseResidentRow(
+                        display.displayName(),
+                        entityUuid,
+                        display.portraitPath(),
+                        roleLineMessage(TownVillagerBinding.KIND_GUARD, roleId)
+                    );
+                }
+            }
+            return null;
+        }
+        if (AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK.equals(questId)) {
+            for (TouristRecord rec : town.getTouristRecords()) {
+                UUID touristUuid = rec.getEntityUuid();
+                if (touristUuid != null && touristUuid.equals(entityUuid)) {
+                    TownResidentDisplay.Resolved display =
+                        resolveOfflineDisplay(
+                            plugin,
+                            AetherhavenConstants.NPC_TOWNSFOLK,
+                            rec.getCharacterId(),
+                            null
+                        );
+                    return new HouseResidentRow(
+                        display.displayName(),
+                        entityUuid,
+                        display.portraitPath(),
+                        roleLineMessage(TownVillagerBinding.KIND_TOWNSFOLK, AetherhavenConstants.NPC_TOWNSFOLK)
+                    );
+                }
+            }
+            return null;
+        }
+        return null;
+    }
+
+    /**
+     * Offline assignment candidates (tourist/guard records and housing quest targets). Package-private for unit tests.
+     */
+    @Nonnull
+    static Map<UUID, HouseResidentRow> collectOfflineAssignableCandidates(
+        @Nonnull TownRecord town,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull UUID currentHousePlotId,
+        boolean hideElsewhereHoused
+    ) {
+        return collectOfflineAssignableCandidates(
+            town,
+            null,
+            catalog,
+            TownsfolkCharacterCatalog.empty(),
+            EquipmentProfileCatalog.empty(),
+            currentHousePlotId,
+            hideElsewhereHoused
+        );
+    }
+
+    /**
+     * Offline assignment candidates (tourist/guard records and housing quest targets). Package-private for unit tests.
+     */
+    @Nonnull
+    static Map<UUID, HouseResidentRow> collectOfflineAssignableCandidates(
+        @Nonnull TownRecord town,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID currentHousePlotId,
+        boolean hideElsewhereHoused
+    ) {
+        return collectOfflineAssignableCandidates(
+            town,
+            plugin,
+            plugin.getConstructionCatalog(),
+            plugin.getTownsfolkCharacterCatalog(),
+            plugin.getEquipmentProfileCatalog(),
+            currentHousePlotId,
+            hideElsewhereHoused
+        );
+    }
+
+    @Nonnull
+    private static Map<UUID, HouseResidentRow> collectOfflineAssignableCandidates(
+        @Nonnull TownRecord town,
+        @Nullable AetherhavenPlugin plugin,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull TownsfolkCharacterCatalog characterCatalog,
+        @Nonnull EquipmentProfileCatalog equipmentProfileCatalog,
+        @Nonnull UUID currentHousePlotId,
+        boolean hideElsewhereHoused
+    ) {
+        Map<UUID, HouseResidentRow> byUuid = new LinkedHashMap<>();
+        addStoryFallbackIfMissing(
+            byUuid,
+            town,
+            plugin,
+            catalog,
+            currentHousePlotId,
+            hideElsewhereHoused,
+            town.getElderEntityUuid(),
+            AetherhavenConstants.ELDER_NPC_ROLE_ID,
+            TownVillagerBinding.KIND_ELDER
+        );
+        addStoryFallbackIfMissing(
+            byUuid,
+            town,
+            plugin,
+            catalog,
+            currentHousePlotId,
+            hideElsewhereHoused,
+            town.getInnkeeperEntityUuid(),
+            AetherhavenConstants.INNKEEPER_NPC_ROLE_ID,
+            TownVillagerBinding.KIND_INNKEEPER
+        );
+        for (HiredGuardRecord rec : town.getHiredGuardRecords()) {
+            if (rec.isCitizen()) {
+                continue;
+            }
+            UUID guardUuid = rec.getEntityUuid();
+            if (guardUuid == null || byUuid.containsKey(guardUuid)) {
+                continue;
+            }
+            if (GuildHallAdventurerPoolService.isGuildHallAdventurer(town, guardUuid)) {
+                continue;
+            }
+            if (TownResidentEligibility.excludeFromHouseAssignmentPicker(town, guardUuid)) {
+                continue;
+            }
+            if (hideElsewhereHoused
+                && isHomeResidentElsewhereOnHouse(town, catalog, currentHousePlotId, guardUuid)) {
+                continue;
+            }
+            String roleId = guardRoleIdForRecord(rec, characterCatalog, equipmentProfileCatalog);
+            TownResidentDisplay.Resolved display =
+                resolveOfflineDisplay(plugin, roleId, rec.getCharacterId(), null);
+            byUuid.put(
+                guardUuid,
+                new HouseResidentRow(
+                    display.displayName(),
+                    guardUuid,
+                    display.portraitPath(),
+                    roleLineMessage(TownVillagerBinding.KIND_GUARD, roleId)
+                )
+            );
+        }
+        addTouristRecordFallbacks(
+            byUuid,
+            town,
+            plugin,
+            catalog,
+            currentHousePlotId,
+            hideElsewhereHoused
+        );
+        addHousingQuestTargetFallbackIfMissing(
+            byUuid,
+            town,
+            plugin,
+            catalog,
+            currentHousePlotId,
+            hideElsewhereHoused,
+            AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK
+        );
+        addHousingQuestTargetFallbackIfMissing(
+            byUuid,
+            town,
+            plugin,
+            catalog,
+            currentHousePlotId,
+            hideElsewhereHoused,
+            AetherhavenConstants.QUEST_HOUSE_GUARD
+        );
+        return byUuid;
+    }
+
     private static void addStoryFallbackIfMissing(
         @Nonnull Map<UUID, HouseResidentRow> byUuid,
         @Nonnull TownRecord town,
-        @Nonnull AetherhavenPlugin plugin,
+        @Nullable AetherhavenPlugin plugin,
         @Nonnull ConstructionCatalog catalog,
         @Nonnull UUID currentHousePlotId,
         boolean hideElsewhereHoused,
@@ -265,7 +500,7 @@ public final class HouseResidentDirectory {
         if (hideElsewhereHoused && isHomeResidentElsewhereOnHouse(town, catalog, currentHousePlotId, entityUuid)) {
             return;
         }
-        TownResidentDisplay.Resolved display = TownResidentDisplay.resolveOffline(plugin, roleId, null, null);
+        TownResidentDisplay.Resolved display = resolveOfflineDisplay(plugin, roleId, null, null);
         byUuid.put(
             entityUuid,
             new HouseResidentRow(
@@ -278,18 +513,46 @@ public final class HouseResidentDirectory {
     }
 
     @Nonnull
-    private static String guardRoleIdForRecord(@Nonnull HiredGuardRecord rec, @Nonnull AetherhavenPlugin plugin) {
+    private static String guardRoleIdForRecord(@Nonnull HiredGuardRecord rec, @Nullable AetherhavenPlugin plugin) {
+        TownsfolkCharacterCatalog characterCatalog =
+            plugin != null ? plugin.getTownsfolkCharacterCatalog() : TownsfolkCharacterCatalog.empty();
+        EquipmentProfileCatalog equipmentProfileCatalog =
+            plugin != null ? plugin.getEquipmentProfileCatalog() : EquipmentProfileCatalog.empty();
+        return guardRoleIdForRecord(rec, characterCatalog, equipmentProfileCatalog);
+    }
+
+    @Nonnull
+    private static String guardRoleIdForRecord(
+        @Nonnull HiredGuardRecord rec,
+        @Nonnull TownsfolkCharacterCatalog characterCatalog,
+        @Nonnull EquipmentProfileCatalog equipmentProfileCatalog
+    ) {
         String characterId = rec.getCharacterId();
         if (characterId != null && !characterId.isBlank()) {
-            var def = plugin.getTownsfolkCharacterCatalog().byId(characterId);
+            var def = characterCatalog.byId(characterId);
             if (def != null && def.getEquipmentProfileId() != null && !def.getEquipmentProfileId().isBlank()) {
-                var profile = plugin.getEquipmentProfileCatalog().byId(def.getEquipmentProfileId());
+                var profile = equipmentProfileCatalog.byId(def.getEquipmentProfileId());
                 if (profile != null && profile.getGuardNpcRole() != null && !profile.getGuardNpcRole().isBlank()) {
                     return profile.getGuardNpcRole().trim();
                 }
             }
         }
         return AetherhavenConstants.NPC_GUARD_KNIGHT;
+    }
+
+    @Nonnull
+    private static TownResidentDisplay.Resolved resolveOfflineDisplay(
+        @Nullable AetherhavenPlugin plugin,
+        @Nonnull String roleId,
+        @Nullable String characterId,
+        @Nullable String modelAssetId
+    ) {
+        if (plugin != null) {
+            return TownResidentDisplay.resolveOffline(plugin, roleId, characterId, modelAssetId);
+        }
+        String label =
+            characterId != null && !characterId.isBlank() ? characterId.trim() : NpcPortraitProvider.displayLabelForRoleId(roleId);
+        return new TownResidentDisplay.Resolved(label, NpcPortraitProvider.portraitPathForRoleId(roleId));
     }
 
     static boolean isHomeResidentElsewhereOnHouse(

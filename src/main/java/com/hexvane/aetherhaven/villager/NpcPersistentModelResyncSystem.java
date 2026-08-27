@@ -24,6 +24,7 @@ import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
 import com.hypixel.hytale.server.core.modules.entity.system.ModelSystems;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.components.FailedSpawnComponent;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.systems.RoleBuilderSystem;
 import java.util.Set;
@@ -59,6 +60,9 @@ public final class NpcPersistentModelResyncSystem extends HolderSystem<EntitySto
             return;
         }
         if (hasCustomInteractBox(holder)) {
+            return;
+        }
+        if (holder.getComponent(FailedSpawnComponent.getComponentType()) != null) {
             return;
         }
         UUIDComponent uuidComponent = holder.getComponent(UUIDComponent.getComponentType());

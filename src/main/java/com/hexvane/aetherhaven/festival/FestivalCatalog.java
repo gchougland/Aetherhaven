@@ -36,29 +36,40 @@ public final class FestivalCatalog {
 
     private final Map<String, FestivalDefinition> byId;
     private final Set<String> customFestivalIds;
+    private final FestivalGreetingLangIndex greetingLangIndex;
 
     private FestivalCatalog(
         @Nonnull Map<String, FestivalDefinition> byId,
-        @Nonnull Set<String> customFestivalIds
+        @Nonnull Set<String> customFestivalIds,
+        @Nonnull FestivalGreetingLangIndex greetingLangIndex
     ) {
         this.byId = byId;
         this.customFestivalIds = customFestivalIds;
+        this.greetingLangIndex = greetingLangIndex;
     }
 
     @Nonnull
     public static FestivalCatalog empty() {
-        return new FestivalCatalog(Collections.emptyMap(), Set.of());
+        return new FestivalCatalog(Collections.emptyMap(), Set.of(), FestivalGreetingLangIndex.empty());
     }
 
     @Nonnull
     public static FestivalCatalog forTests(@Nonnull List<FestivalDefinition> defs) {
+        return forTests(defs, FestivalGreetingLangIndex.empty());
+    }
+
+    @Nonnull
+    public static FestivalCatalog forTests(
+        @Nonnull List<FestivalDefinition> defs,
+        @Nonnull FestivalGreetingLangIndex greetingLangIndex
+    ) {
         Map<String, FestivalDefinition> map = new LinkedHashMap<>();
         for (FestivalDefinition def : defs) {
             if (def != null && !def.getId().isEmpty()) {
                 map.put(def.getId(), def);
             }
         }
-        return new FestivalCatalog(Collections.unmodifiableMap(map), Set.of());
+        return new FestivalCatalog(Collections.unmodifiableMap(map), Set.of(), greetingLangIndex);
     }
 
     @Nonnull
@@ -104,7 +115,8 @@ public final class FestivalCatalog {
         if (!map.isEmpty()) {
             LOGGER.atInfo().log("Loaded %s festival(s): %s", map.size(), map.keySet());
         }
-        return new FestivalCatalog(Collections.unmodifiableMap(map), customIds);
+        FestivalGreetingLangIndex greetingLangIndex = FestivalGreetingLangIndex.load(classLoader);
+        return new FestivalCatalog(Collections.unmodifiableMap(map), customIds, greetingLangIndex);
     }
 
     @Nonnull
@@ -197,6 +209,11 @@ public final class FestivalCatalog {
                 );
             }
         }
+    }
+
+    @Nonnull
+    public FestivalGreetingLangIndex greetingLangIndex() {
+        return greetingLangIndex;
     }
 
     public boolean isCustomFestival(@Nullable String id) {

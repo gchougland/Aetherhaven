@@ -3,8 +3,8 @@ package com.hexvane.aetherhaven.difficulty;
 import com.google.gson.annotations.SerializedName;
 import javax.annotation.Nonnull;
 
-/** Per-world difficulty settings persisted in {@code worlds/<world>/difficulty.json}. */
-public final class WorldDifficultyState {
+/** Per-town difficulty settings persisted on {@link com.hexvane.aetherhaven.town.TownRecord}. */
+public final class TownDifficultySettings {
     @SerializedName("preset")
     private String preset = DifficultyPreset.NORMAL.persisted();
 
@@ -20,7 +20,7 @@ public final class WorldDifficultyState {
     @SerializedName("difficultyChosen")
     private boolean difficultyChosen;
 
-    public WorldDifficultyState() {}
+    public TownDifficultySettings() {}
 
     @Nonnull
     public DifficultyPreset getPreset() {
@@ -63,10 +63,10 @@ public final class WorldDifficultyState {
         this.difficultyChosen = difficultyChosen;
     }
 
-    /** Gameplay costs before the world has saved a difficulty choice. */
+    /** Gameplay costs before the town has saved a difficulty choice. */
     @Nonnull
-    public static WorldDifficultyState normalUntilChosen() {
-        WorldDifficultyState s = new WorldDifficultyState();
+    public static TownDifficultySettings normalUntilChosen() {
+        TownDifficultySettings s = new TownDifficultySettings();
         s.setPreset(DifficultyPreset.NORMAL);
         s.setResourceCostMultiplier(1.0);
         s.setGoldCostMultiplier(1.0);
@@ -101,11 +101,20 @@ public final class WorldDifficultyState {
 
     /** Effective settings for building costs (Normal until chosen). */
     @Nonnull
-    public WorldDifficultyState effectiveForGameplay() {
+    public TownDifficultySettings effectiveForGameplay() {
         if (difficultyChosen) {
             return this;
         }
         return normalUntilChosen();
+    }
+
+    /** Copies all fields from another settings object. */
+    public void copyFrom(@Nonnull TownDifficultySettings other) {
+        setPreset(other.getPreset());
+        setResourceCostMultiplier(other.getResourceCostMultiplier());
+        setGoldCostMultiplier(other.getGoldCostMultiplier());
+        setRequireAllPrefabBlocks(other.isRequireAllPrefabBlocks());
+        setDifficultyChosen(other.isDifficultyChosen());
     }
 
     public static double clampMultiplier(double v) {

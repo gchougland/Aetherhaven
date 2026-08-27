@@ -4,8 +4,9 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.PoiScoring;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
+import com.hexvane.aetherhaven.command.TownPermissionUtil;
+import com.hexvane.aetherhaven.difficulty.DifficultyAccess;
 import com.hexvane.aetherhaven.difficulty.DifficultyPreset;
-import com.hexvane.aetherhaven.difficulty.WorldDifficultyState;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
 import com.hexvane.aetherhaven.dialogue.DialogueActionExecutor;
 import com.hexvane.aetherhaven.guide.GuideMarkdownUiAppender;
@@ -327,6 +328,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
 
         boolean plotModalBlocking = false;
         PlotInstance plotForRemoveModal = null;
+        TownRecord townForRemoveModal = null;
         if (!abandonModalBlocking
             && plotRemoveConfirmOpen
             && pendingRemovePlotId != null
@@ -340,6 +342,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 && townPlot.playerCanRemovePlots(uc.getUuid())) {
                 plotModalBlocking = true;
                 plotForRemoveModal = plotInst;
+                townForRemoveModal = townPlot;
             } else {
                 plotRemoveConfirmOpen = false;
                 pendingRemovePlotId = null;
@@ -391,14 +394,14 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             );
             ConstructionDefinition removeModalDef =
                 plugin.getConstructionCatalog().get(plotForRemoveModal.getConstructionId());
-            if (removeModalDef != null) {
+            if (removeModalDef != null && townForRemoveModal != null) {
                 commandBuilder.set(
                     "#JournalPlotRemoveModalText.TextSpans",
                     Message.translation(
                         PlotJournalRemovalRefundService.confirmBodyLangKey(
                             removeModalDef,
                             plotForRemoveModal,
-                            world,
+                            townForRemoveModal,
                             plugin
                         )
                     )
@@ -1120,6 +1123,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         @Nonnull World world
     ) {
         commandBuilder.set("#SettingsStatus.TextSpans", Message.raw(""));
+        TownRecord journalSettingsTown = uc != null ? journalTown(world, store, ref, plugin, uc.getUuid()) : null;
         if (plugin == null) {
             commandBuilder.set("#SettingsSaveButton.Disabled", true);
             commandBuilder.set("#SettingsResetDefaultsButton.Disabled", true);
@@ -1132,13 +1136,22 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             );
             return;
         }
-        WorldDifficultyState worldDifficulty = AetherhavenWorldRegistries.getOrLoadWorldDifficulty(world, plugin);
-        commandBuilder.set(
-            "#SettingsDifficultyCurrent.TextSpans",
-            Message.translation("aetherhaven_difficulty.aetherhaven.difficulty.journalCurrent")
-                .param("preset", Message.translation(presetLangKey(worldDifficulty.getPreset())))
-        );
-        boolean difficultyUi = JournalTabVisibility.difficultyTab();
+        if (journalSettingsTown != null) {
+            commandBuilder.set(
+                "#SettingsDifficultyCurrent.TextSpans",
+                Message.translation("aetherhaven_difficulty.aetherhaven.difficulty.journalCurrent")
+                    .param(
+                        "preset",
+                        Message.translation(presetLangKey(journalSettingsTown.getDifficultySettings().getPreset()))
+                    )
+            );
+        } else {
+            commandBuilder.set(
+                "#SettingsDifficultyCurrent.TextSpans",
+                Message.translation("aetherhaven_difficulty.aetherhaven.difficulty.journalNoTown")
+            );
+        }
+        boolean difficultyUi = JournalTabVisibility.difficultyTab() && journalSettingsTown != null;
         commandBuilder.set("#SettingsOpenDifficultyButton.Visible", difficultyUi);
         if (difficultyUi) {
             eventBuilder.addEventBinding(
@@ -3223,15 +3236,29 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             if (!JournalTabVisibility.difficultyTab()) {
                 return;
             }
-            if (!JournalSettingsAccess.canOpen(store, ref)) {
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (plugin == null || uc == null) {
+                return;
+            }
+            World world = store.getExternalData().getWorld();
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
+            if (town == null) {
                 return;
             }
             Player player = store.getComponent(ref, Player.getComponentType());
-            if (player == null) {
+            PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+            if (player == null || pr == null) {
+                return;
+            }
+            boolean admin = TownPermissionUtil.canAdministerForeignTowns(player, pr);
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            if (!DifficultyAccess.canChangeDifficulty(tm, uc.getUuid(), town, admin)) {
+                pr.sendMessage(Message.translation("aetherhaven_difficulty.aetherhaven.difficulty.ownersOnly"));
                 return;
             }
             // openCustomPage replaces the journal; do not require getCustomPage() == null.
-            player.getPageManager().openCustomPage(ref, store, new DifficultyPage(playerRef));
+            player.getPageManager().openCustomPage(ref, store, new DifficultyPage(playerRef, town.getTownId()));
             return;
         }
         if (action.equalsIgnoreCase("SettingsSave")) {

@@ -75,7 +75,14 @@ public final class BlockPaletteVirtualItemRegistry {
             String baseItemId = resolveCloneItemId(virtualId);
             Item originalItem = Item.getAssetMap().getAsset(baseItemId);
             if (originalItem == null) {
-                LOGGER.atWarning().log("Cannot create block palette virtual item: base item not found");
+                originalItem = Item.getAssetMap().getAsset("Furniture_Village_Crate");
+            }
+            if (originalItem == null) {
+                LOGGER.atWarning().log(
+                    "Cannot create block palette virtual item for %s: base item %s not found",
+                    virtualId,
+                    baseItemId
+                );
                 return null;
             }
             ItemBase originalPacket = originalItem.toPacket();
@@ -96,7 +103,12 @@ public final class BlockPaletteVirtualItemRegistry {
 
     @Nonnull
     private static String resolveCloneItemId(@Nonnull String itemId) {
-        if (BlockPaletteShopItemIds.paletteIdFromItemId(itemId) != null) {
+        if (BlockPaletteVirtualItemRegistry.isVirtualId(itemId)
+            || BlockPaletteConstants.ITEM_ID.equals(itemId)) {
+            return BlockPaletteConstants.ITEM_ID;
+        }
+        if (BlockPaletteShopItemIds.paletteIdFromItemId(itemId) != null
+            && Item.getAssetMap().getAsset(itemId) != null) {
             return itemId;
         }
         return BlockPaletteConstants.ITEM_ID;

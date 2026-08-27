@@ -2,13 +2,23 @@
 
 ## [3.1.0] - Unreleased (Hytale Update 6)
 
+### Added
+
+- **Plot placement staff** Move the preview with drag arrows from the placement menu, then place or reopen the menu with right click.
+- **Props** Move a prop preview with drag arrows from the placement menu the same way.
+- **Festival greetings (crossmod)** Mod villagers can add festival hub lines in lang files using `*.dialogue.festival.<festivalId>.greeting.<dialogueVillagerKind>.<index>` without patching Aetherhaven festival JSON.
+- **Town villagers** Creative command `/aetherhaven villager fixresidents` to move in job villagers when their building quest is done but they were not recognized as town residents.
+
 ### Changed
 
+- **Town difficulty** Building cost difficulty is per town, not per world. Each town picks Easy, Normal, Hard, or custom costs when it is founded. The town owner can change it later in Town Journal Settings, with `/ah town difficulty`, or with `/ah difficulty`. Existing worlds copy the old world difficulty onto towns that have not chosen yet.
 - **Hytale Update 6** Aetherhaven runs on Hytale Update 6.
 - **Town protection** Change who may break blocks and use things in your town from Town Journal Settings instead of the tourist portal.
 
 ### Fixed
 
+- **Plot placement gizmo** Move with gizmo now shows axis hints at the preview center and you can drag the building with left click without aiming at a hidden spot. The vanilla drag arrows work on the small marker at the center.
+- **Block palette icons** Catalog palettes without a dedicated shop item no longer spam a missing base item warning on join.
 - **Building staff** Buildings place and clear again instead of the green preview resetting without placing a block.
 - **Floating gifts** Gift chests open with F again after you pop a balloon.
 - **Floating gifts** You can pop gift balloons with a sword again, not only with arrows.

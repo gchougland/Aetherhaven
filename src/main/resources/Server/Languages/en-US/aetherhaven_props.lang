@@ -33,6 +33,9 @@ aetherhaven.ui.propplacement.error.blocked=Something is in the way.
 aetherhaven.ui.propplacement.error.unknownProp=That prop is unknown.
 aetherhaven.ui.propplacement.error.prefabMissing=That prop's build data is missing.
 aetherhaven.ui.propplacement.error.festivalSquare=Props cannot be placed on the festival square.
+aetherhaven.ui.propplacement.moveGizmo=Move with gizmo
+aetherhaven.ui.propplacement.moveGizmoTooltip=Close this menu, then left click the center of the preview to show the move arrows. Drag the arrows to move it. Right click to open the menu again.
+aetherhaven.ui.propplacement.moveGizmoNeedProp=Hold the prop you are placing to use the move gizmo.
 
 aetherhaven.ui.propprefabbrowser.title=Create Prop
 aetherhaven.ui.propprefabbrowser.previewTitle=Preview

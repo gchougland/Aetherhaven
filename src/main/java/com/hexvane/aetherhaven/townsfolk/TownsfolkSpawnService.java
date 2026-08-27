@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterCatalog;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
+import com.hexvane.aetherhaven.entity.EntityChunkUtil;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.NpcModelSpawnUtil;
 import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
@@ -221,7 +222,15 @@ public final class TownsfolkSpawnService {
             null
         );
         if (pair == null) {
-            LOGGER.atWarning().log("Failed to spawn townsfolk NPC %s for town %s", characterId, town.getTownId());
+            logSpawnPipelineRejection(
+                world,
+                town,
+                kind,
+                characterId,
+                character.getModelAssetId(),
+                spawnPos,
+                guildHallSpawnMarkerPosition
+            );
             return Optional.empty();
         }
         Ref<EntityStore> ref = pair.first();
@@ -470,6 +479,35 @@ public final class TownsfolkSpawnService {
                     );
                 }
             }
+        );
+    }
+
+    private static void logSpawnPipelineRejection(
+        @Nonnull World world,
+        @Nonnull TownRecord town,
+        @Nonnull String assignmentKind,
+        @Nonnull String characterId,
+        @Nonnull String modelAssetId,
+        @Nonnull Vector3d spawnPos,
+        @Nullable Vector3d guildHallSpawnMarkerPosition
+    ) {
+        boolean spawnChunkLoaded = EntityChunkUtil.isPositionChunkInMemory(world, spawnPos);
+        boolean markerChunkLoaded =
+            guildHallSpawnMarkerPosition != null
+                && EntityChunkUtil.isPositionChunkInMemory(world, guildHallSpawnMarkerPosition);
+        LOGGER.atWarning().log(
+            "Failed to spawn townsfolk NPC %s for town %s "
+                + "(assignment=%s, model=%s, pos=%.1f,%.1f,%.1f, spawnChunkLoaded=%s, markerChunkLoaded=%s, "
+                + "spawnRejectedByPipeline=true; entity removed during spawn, likely FailedSpawnComponent)",
+            characterId,
+            town.getTownId(),
+            assignmentKind,
+            modelAssetId,
+            spawnPos.x,
+            spawnPos.y,
+            spawnPos.z,
+            spawnChunkLoaded,
+            guildHallSpawnMarkerPosition == null ? "n/a" : markerChunkLoaded
         );
     }
 }

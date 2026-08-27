@@ -42,6 +42,9 @@ aetherhaven.ui.plotplacement.moveYmTooltip=Nudge one block down
 aetherhaven.ui.plotplacement.moveYpTooltip=Nudge one block up
 aetherhaven.ui.plotplacement.snapToLocation=Snap to me
 aetherhaven.ui.plotplacement.snapToLocationTooltip=Move the preview to where you are standing
+aetherhaven.ui.plotplacement.moveGizmo=Move with gizmo
+aetherhaven.ui.plotplacement.moveGizmoTooltip=Close this menu, then left click the center of the preview to show the move arrows. Drag the arrows to move it. Right click to open the menu again.
+aetherhaven.ui.plotplacement.moveGizmoNeedStaff=Hold the plot placement staff to use the move gizmo.
 aetherhaven.ui.plotplacement.moveDropdownSuffix= (move)
 
 # === UI: move town charter (relocate territory center) ===

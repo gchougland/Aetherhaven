@@ -3,13 +3,16 @@ package com.hexvane.aetherhaven.command;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.difficulty.DifficultyAccess;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownCommandResolution;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.ui.DifficultyPage;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
-import com.hypixel.hytale.protocol.GameMode;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -33,7 +36,8 @@ public final class AetherhavenDifficultyCommand extends AbstractPlayerCommand {
         @Nonnull World world
     ) {
         Player player = store.getComponent(ref, Player.getComponentType());
-        if (player == null) {
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (player == null || uc == null) {
             return;
         }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
@@ -41,14 +45,21 @@ public final class AetherhavenDifficultyCommand extends AbstractPlayerCommand {
             playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
             return;
         }
-        var worldState = AetherhavenWorldRegistries.getOrLoadWorldDifficulty(world, plugin);
-        if (!DifficultyAccess.canChangeDifficulty(store, ref, worldState)) {
-            playerRef.sendMessage(Message.translation(MSG + ".operatorsOnly"));
+        boolean admin = TownPermissionUtil.canAdministerForeignTowns(player, playerRef);
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownCommandResolution res = TownCommandResolution.resolveForOwnerAction(tm, uc.getUuid(), null, admin);
+        if (!res.isOk()) {
+            playerRef.sendMessage(res.error());
+            return;
+        }
+        TownRecord town = res.townOrThrow();
+        if (!DifficultyAccess.canChangeDifficulty(tm, uc.getUuid(), town, admin)) {
+            playerRef.sendMessage(Message.translation(MSG + ".ownersOnly"));
             return;
         }
         if (player.getPageManager().getCustomPage() != null) {
             return;
         }
-        player.getPageManager().openCustomPage(ref, store, new DifficultyPage(playerRef));
+        player.getPageManager().openCustomPage(ref, store, new DifficultyPage(playerRef, town.getTownId()));
     }
 }

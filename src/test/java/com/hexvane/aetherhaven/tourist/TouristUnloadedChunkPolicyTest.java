@@ -41,12 +41,38 @@ class TouristUnloadedChunkPolicyTest {
     }
 
     @Test
-    void failedSpawnDoesNotConsumePlannedSlot() {
-        assertFalse(TouristPortalTickService.shouldConsumePlannedSpawnSlot(false));
+    void spawnPipelineFailureConsumesPlannedSlot() {
+        assertTrue(
+            TouristPortalTickService.shouldConsumePlannedSpawnSlot(
+                TouristPortalTickService.PlannedSpawnAttemptOutcome.SPAWN_FAILED
+            )
+        );
     }
 
     @Test
     void successfulSpawnConsumesPlannedSlot() {
-        assertTrue(TouristPortalTickService.shouldConsumePlannedSpawnSlot(true));
+        assertTrue(
+            TouristPortalTickService.shouldConsumePlannedSpawnSlot(
+                TouristPortalTickService.PlannedSpawnAttemptOutcome.SUCCESS
+            )
+        );
+    }
+
+    @Test
+    void noCharacterAvailableDoesNotConsumePlannedSlot() {
+        assertFalse(
+            TouristPortalTickService.shouldConsumePlannedSpawnSlot(
+                TouristPortalTickService.PlannedSpawnAttemptOutcome.NO_CHARACTER
+            )
+        );
+    }
+
+    @Test
+    void deferredPortalDoesNotConsumePlannedSlot() {
+        assertFalse(
+            TouristPortalTickService.shouldConsumePlannedSpawnSlot(
+                TouristPortalTickService.PlannedSpawnAttemptOutcome.DEFERRED
+            )
+        );
     }
 }

@@ -2,9 +2,10 @@ package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.difficulty.DifficultyPreset;
-import com.hexvane.aetherhaven.difficulty.WorldDifficultyPersistence;
-import com.hexvane.aetherhaven.difficulty.WorldDifficultyState;
+import com.hexvane.aetherhaven.difficulty.TownDifficultySettings;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -38,22 +39,51 @@ public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<Dif
     private static final int CARD_ICON = 36;
     private static final int CARD_ICON_SELECTED = 44;
 
+    private final UUID townId;
+    @Nullable
+    private final UUID openStylePickerTownIdAfterSave;
+
     private boolean templateAppended;
     private boolean customizeMode;
     private DifficultyPreset selectedPreset = DifficultyPreset.NORMAL;
     private double resourceMult = 1.0;
     private double goldMult = 1.0;
     private boolean requireAllBlocks;
-    @Nullable
-    private final UUID openStylePickerTownIdAfterSave;
 
-    public DifficultyPage(@Nonnull PlayerRef playerRef) {
-        this(playerRef, null);
+    public DifficultyPage(@Nonnull PlayerRef playerRef, @Nonnull UUID townId) {
+        this(playerRef, townId, null);
     }
 
-    public DifficultyPage(@Nonnull PlayerRef playerRef, @Nullable UUID openStylePickerTownIdAfterSave) {
+    public DifficultyPage(@Nonnull PlayerRef playerRef, @Nonnull UUID townId, @Nullable UUID openStylePickerTownIdAfterSave) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
+        this.townId = townId;
         this.openStylePickerTownIdAfterSave = openStylePickerTownIdAfterSave;
+    }
+
+    /** Opens difficulty for the player's owned town in their current world, or null if unavailable. */
+    @Nullable
+    public static DifficultyPage tryOpenForOwnedTown(@Nonnull PlayerRef playerRef) {
+        com.hypixel.hytale.component.Ref<EntityStore> ref = playerRef.getReference();
+        if (ref == null || !ref.isValid()) {
+            return null;
+        }
+        Store<EntityStore> store = ref.getStore();
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return null;
+        }
+        com.hypixel.hytale.server.core.entity.UUIDComponent uc =
+            store.getComponent(ref, com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
+        if (uc == null) {
+            return null;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.findTownForOwnerInWorld(uc.getUuid());
+        if (town == null) {
+            return null;
+        }
+        return new DifficultyPage(playerRef, town.getTownId());
     }
 
     @Override
@@ -66,7 +96,7 @@ public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<Dif
         if (!templateAppended) {
             commandBuilder.append("Aetherhaven/DifficultyPage.ui");
             templateAppended = true;
-            loadFromWorld(store);
+            loadFromTown(store);
             // Static labels only when the template is first attached. Later sendUpdate calls must not
             // re-set chrome or the client can log "Selected element ... not found".
             AetherhavenUiLocalization.applyDifficultyPage(commandBuilder);
@@ -75,13 +105,18 @@ public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<Dif
         applyDynamicState(commandBuilder);
     }
 
-    private void loadFromWorld(@Nonnull Store<EntityStore> store) {
+    private void loadFromTown(@Nonnull Store<EntityStore> store) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {
             return;
         }
         World world = store.getExternalData().getWorld();
-        WorldDifficultyState state = AetherhavenWorldRegistries.getOrLoadWorldDifficulty(world, plugin);
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.getTown(townId);
+        if (town == null) {
+            return;
+        }
+        TownDifficultySettings state = town.getDifficultySettings();
         selectedPreset = state.getPreset();
         resourceMult = state.getResourceCostMultiplier();
         goldMult = state.getGoldCostMultiplier();
@@ -148,7 +183,7 @@ public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<Dif
     }
 
     private static String formatMult(double v) {
-        return String.format("%.1fx", WorldDifficultyState.clampMultiplier(v));
+        return String.format("%.1fx", TownDifficultySettings.clampMultiplier(v));
     }
 
     private void wireEvents(@Nonnull UIEventBuilder eventBuilder) {
@@ -195,11 +230,11 @@ public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<Dif
         @Nonnull PageData data
     ) {
         if (data.resourceMult != null && !requireAllBlocks) {
-            resourceMult = WorldDifficultyState.clampMultiplier(data.resourceMult);
+            resourceMult = TownDifficultySettings.clampMultiplier(data.resourceMult);
             selectedPreset = DifficultyPreset.CUSTOM;
         }
         if (data.goldMult != null) {
-            goldMult = WorldDifficultyState.clampMultiplier(data.goldMult);
+            goldMult = TownDifficultySettings.clampMultiplier(data.goldMult);
             selectedPreset = DifficultyPreset.CUSTOM;
         }
         if (data.allBlocks != null) {
@@ -241,7 +276,7 @@ public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<Dif
                 return;
             }
             case "Save" -> {
-                saveWorld(ref, store);
+                saveTown(ref, store);
                 return;
             }
             default -> {
@@ -257,20 +292,32 @@ public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<Dif
         sendUpdate(cmd, new UIEventBuilder(), false);
     }
 
-    private void saveWorld(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+    private void saveTown(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (plugin == null || pr == null) {
             return;
         }
         World world = store.getExternalData().getWorld();
-        WorldDifficultyState state = AetherhavenWorldRegistries.getOrLoadWorldDifficulty(world, plugin);
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.getTown(townId);
+        if (town == null) {
+            NotificationUtil.sendNotification(
+                pr.getPacketHandler(),
+                Message.translation(MSG + ".townMissing"),
+                NotificationStyle.Danger
+            );
+            close();
+            return;
+        }
+        TownDifficultySettings state = town.getDifficultySettings();
         state.setPreset(selectedPreset);
-        state.setResourceCostMultiplier(WorldDifficultyState.clampMultiplier(resourceMult));
-        state.setGoldCostMultiplier(WorldDifficultyState.clampMultiplier(goldMult));
+        state.setResourceCostMultiplier(TownDifficultySettings.clampMultiplier(resourceMult));
+        state.setGoldCostMultiplier(TownDifficultySettings.clampMultiplier(goldMult));
         state.setRequireAllPrefabBlocks(requireAllBlocks);
         state.setDifficultyChosen(true);
-        WorldDifficultyPersistence.save(world, plugin, state);
+        town.setDifficultySettings(state);
+        tm.updateTown(town);
         NotificationUtil.sendNotification(
             pr.getPacketHandler(),
             Message.translation(MSG + ".saved"),
@@ -308,4 +355,3 @@ public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<Dif
         private Boolean allBlocks;
     }
 }
-

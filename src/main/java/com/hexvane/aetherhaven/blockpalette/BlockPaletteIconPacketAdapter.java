@@ -16,6 +16,7 @@ import com.hypixel.hytale.protocol.packets.window.UpdateWindow;
 import com.hypixel.hytale.server.core.io.adapter.PacketAdapters;
 import com.hypixel.hytale.server.core.io.adapter.PacketFilter;
 import com.hypixel.hytale.server.core.io.adapter.PlayerPacketFilter;
+import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -90,9 +91,11 @@ public final class BlockPaletteIconPacketAdapter {
                 all.put(virtualId, virtualBase);
             }
             String shopId = BlockPaletteShopItemIds.forPaletteId(paletteId);
-            ItemBase shopBase = virtualItems.getOrCreateVirtualItemBase(shopId, paletteId);
-            if (shopBase != null) {
-                all.put(shopId, shopBase);
+            if (Item.getAssetMap().getAsset(shopId) == null) {
+                ItemBase shopBase = virtualItems.getOrCreateVirtualItemBase(shopId, paletteId);
+                if (shopBase != null) {
+                    all.put(shopId, shopBase);
+                }
             }
         }
         sendVirtualItemDefinitions(playerRef, all, true);

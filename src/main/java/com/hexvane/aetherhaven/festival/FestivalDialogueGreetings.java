@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.VillagerDialogueKindResolver;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
@@ -34,9 +35,18 @@ public final class FestivalDialogueGreetings {
         if (festival == null) {
             return null;
         }
-        TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
-        String kind = binding != null ? binding.getKind() : null;
-        return FestivalGreetingPicker.pickMessage(festival, kind, playerUuid, npcEntityUuid, gameEpochDay);
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        FestivalGreetingLangIndex greetingIndex =
+            plugin != null ? plugin.getFestivalCatalog().greetingLangIndex() : FestivalGreetingLangIndex.empty();
+        String kind = VillagerDialogueKindResolver.resolve(store, npcRef, plugin);
+        return FestivalGreetingPicker.pickMessage(
+            festival,
+            greetingIndex,
+            kind,
+            playerUuid,
+            npcEntityUuid,
+            gameEpochDay
+        );
     }
 
     /** The festival running in this villager's town right now, or null. */

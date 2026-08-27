@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.command;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.BuildingQuestResidentReconcileService;
 import com.hexvane.aetherhaven.town.VillagerTownResetService;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.ResidentNpcRecord;
@@ -51,6 +52,7 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
         this.addSubCommand(new ListSubCommand());
         this.addSubCommand(new LocateSubCommand());
         this.addSubCommand(new FixInnSubCommand());
+        this.addSubCommand(new FixResidentsSubCommand());
         this.addSubCommand(new ResetSubCommand());
         this.addSubCommand(new RespawnSubCommand());
         this.addSubCommand(new PurgeSubCommand());
@@ -420,6 +422,53 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
                     .param("promoted", String.valueOf(report.getPromotedResidents()))
                     .param("removed", String.valueOf(report.getRemovedPoolEntries()))
             );
+        }
+    }
+
+    private static final class FixResidentsSubCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
+
+        FixResidentsSubCommand() {
+            super("fixresidents", "aetherhaven_commands_help.commands.aetherhaven.villager.fixresidents.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
+        }
+
+        @Override
+        protected void execute(
+            @Nonnull CommandContext context,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull World world
+        ) {
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin == null || !AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
+                return;
+            }
+            TownCommandResolution res = townTarget.resolve(context, world, store, ref, playerRef, true);
+            if (!res.isOk()) {
+                playerRef.sendMessage(res.error());
+                return;
+            }
+            TownRecord town = res.townOrThrow();
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            BuildingQuestResidentReconcileService.ReconcileReport report =
+                BuildingQuestResidentReconcileService.reconcileForTown(world, plugin, town, tm, store);
+            if (report.getPromoted() > 0) {
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_commands_help.aetherhaven.villager.fixresidentsDone")
+                        .param("promoted", String.valueOf(report.getPromoted()))
+                        .param("alreadyOk", String.valueOf(report.getAlreadyOk()))
+                        .param("skippedNoNpc", String.valueOf(report.getSkippedNoNpc()))
+                );
+            } else {
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_commands_help.aetherhaven.villager.fixresidentsNone")
+                        .param("alreadyOk", String.valueOf(report.getAlreadyOk()))
+                        .param("skippedNoNpc", String.valueOf(report.getSkippedNoNpc()))
+                );
+            }
         }
     }
 

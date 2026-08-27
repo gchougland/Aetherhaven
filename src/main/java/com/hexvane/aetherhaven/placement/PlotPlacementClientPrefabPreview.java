@@ -169,6 +169,32 @@ public final class PlotPlacementClientPrefabPreview {
         return true;
     }
 
+    /**
+     * Moves an existing hologram when possible; only respawns when the preview entity is missing.
+     * Safe for gizmo commit paths that must not call {@code removeEntity} unnecessarily.
+     */
+    public static boolean sendMoveOrFull(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull String prefabPathKey,
+        int rotationSteps,
+        @Nonnull Vector3i prefabOriginWorld,
+        @Nonnull Rotation placementYaw,
+        @Nonnull PlotPlacementSession session
+    ) {
+        Payload payload = resolvePayload(prefabPathKey, rotationSteps, session);
+        if (payload == null) {
+            return false;
+        }
+        List<Ref<EntityStore>> refs = session.getPreviewEntityRefs();
+        if (!refs.isEmpty()) {
+            Ref<EntityStore> previewRef = refs.getFirst();
+            if (previewRef != null && previewRef.isValid()) {
+                return sendPositionOnly(playerRef, prefabOriginWorld, payload, placementYaw, session);
+            }
+        }
+        return sendFull(playerRef, prefabPathKey, rotationSteps, prefabOriginWorld, placementYaw, session);
+    }
+
     public static boolean sendPositionOnly(
         @Nonnull PlayerRef playerRef,
         @Nonnull Vector3i prefabOriginWorld,
@@ -256,7 +282,11 @@ public final class PlotPlacementClientPrefabPreview {
             return;
         }
         Vector3i clientPos = resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw);
-        ShowTriggerVolumePastePrefabPreview packet = buildEntityOverlayPositionPacket(flooredPosition(clientPos));
+        sendEntityOverlayAt(playerRef, flooredPosition(clientPos));
+    }
+
+    public static void sendEntityOverlayAt(@Nonnull PlayerRef playerRef, @Nonnull Vector3f position) {
+        ShowTriggerVolumePastePrefabPreview packet = buildEntityOverlayPositionPacket(position);
         applyTintFromPlayerPosition(playerRef, packet);
         playerRef.getPacketHandler().write(packet);
     }
@@ -338,6 +368,42 @@ public final class PlotPlacementClientPrefabPreview {
         previewRefs.add(ref);
         sendEntityOverlayFull(playerRef, prefabOriginWorld, payload, placementYaw);
         return true;
+    }
+
+    /** Moves an existing standalone hologram when possible; respawns only if missing. */
+    public static boolean sendMoveOrFullStandalone(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull List<Ref<EntityStore>> previewRefs,
+        @Nonnull String prefabPathKey,
+        int rotationSteps,
+        @Nonnull Vector3i prefabOriginWorld,
+        @Nonnull Rotation placementYaw
+    ) {
+        Payload payload = loadPayload(prefabPathKey, rotationSteps);
+        if (payload == null) {
+            return false;
+        }
+        if (!previewRefs.isEmpty()) {
+            Ref<EntityStore> previewRef = previewRefs.getFirst();
+            if (previewRef != null && previewRef.isValid()) {
+                Vector3i spawnCorner =
+                    flooredOrigin(resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw));
+                AetherhavenWorldPrefabPreview.updatePositionAtBlockCorner(
+                    store,
+                    previewRef,
+                    spawnCorner,
+                    AetherhavenWorldPrefabPreview.rotationFromYaw(placementYaw)
+                );
+                if (hasEntityOverlay(payload)) {
+                    sendEntityOverlayPositionOnly(playerRef, prefabOriginWorld, payload, placementYaw);
+                }
+                return true;
+            }
+        }
+        return sendFullStandalone(
+            playerRef, store, previewRefs, prefabPathKey, rotationSteps, prefabOriginWorld, placementYaw
+        );
     }
 
     @Nullable

@@ -172,6 +172,9 @@ public final class TouristReconcileService {
                     if (liveUuid != null) {
                         UUID recorded = rec.getEntityUuid();
                         if (recorded == null || !recorded.equals(liveUuid)) {
+                            if (recorded != null) {
+                                town.replaceEntityUuidInQuestTargets(recorded, liveUuid);
+                            }
                             rec.setEntityUuid(liveUuid);
                             changed = true;
                             synced++;
@@ -503,6 +506,10 @@ public final class TouristReconcileService {
                 if (existing != null
                     && live.entityUuid() != null
                     && !live.entityUuid().equals(existing.getEntityUuid())) {
+                    UUID recorded = existing.getEntityUuid();
+                    if (recorded != null) {
+                        town.replaceEntityUuidInQuestTargets(recorded, live.entityUuid());
+                    }
                     existing.setEntityUuid(live.entityUuid());
                     if (repairTouristIdentity(live.ref(), store, plugin, town, existing)) {
                         ensureAutonomyAfterBind(live.ref(), store, plugin, town, world, existing);

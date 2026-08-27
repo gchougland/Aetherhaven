@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.joml.Vector3i;
 
 /** Server-side state while a player is positioning a prop (preview + UI), see {@link PropPlacementSessions}. */
@@ -27,6 +28,8 @@ public final class PropPlacementSession {
     private int rotationSteps;
 
     private final List<Ref<EntityStore>> previewEntityRefs = new ArrayList<>();
+
+    private boolean gizmoMoveActive;
 
     public PropPlacementSession(
         @Nonnull UUID playerUuid,
@@ -95,5 +98,13 @@ public final class PropPlacementSession {
             case 3 -> Rotation.TwoSeventy;
             default -> Rotation.None;
         };
+    }
+
+    public boolean isGizmoMoveActive() {
+        return gizmoMoveActive;
+    }
+
+    public void setGizmoMoveActive(boolean gizmoMoveActive) {
+        this.gizmoMoveActive = gizmoMoveActive;
     }
 }

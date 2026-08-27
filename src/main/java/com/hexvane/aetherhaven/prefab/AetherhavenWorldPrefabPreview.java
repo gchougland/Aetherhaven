@@ -98,6 +98,9 @@ public final class AetherhavenWorldPrefabPreview {
         }
         transform.teleportPosition(position);
         transform.teleportRotation(rotation);
+        // Mutating TransformComponent in place is enough for TransformSystems to detect change next tick;
+        // putComponent forces the store to treat the component as written for this frame.
+        store.putComponent(ref, TransformComponent.getComponentType(), transform);
     }
 
     public static void updatePositionAtBlockCorner(

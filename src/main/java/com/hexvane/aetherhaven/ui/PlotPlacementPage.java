@@ -15,6 +15,7 @@ import com.hexvane.aetherhaven.placement.PlotPlacementSessions;
 import com.hexvane.aetherhaven.placement.PlotPlacementRotationUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementValidator;
 import com.hexvane.aetherhaven.placement.PlotPlacementCameraUtil;
+import com.hexvane.aetherhaven.placement.PlacementGizmoService;
 import com.hexvane.aetherhaven.placement.PlotBuildingRelocation;
 import com.hexvane.aetherhaven.placement.PlotPlacementNudgeUtil;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyPreviewSystem;
@@ -133,6 +134,8 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         commandBuilder.set("#BtnRotate.TooltipTextSpans", Message.translation(p + ".rotateTooltip"));
         commandBuilder.set("#SnapToLocationButton.TextSpans", Message.translation(p + ".snapToLocation"));
         commandBuilder.set("#SnapToLocationButton.TooltipTextSpans", Message.translation(p + ".snapToLocationTooltip"));
+        commandBuilder.set("#MoveGizmoButton.TextSpans", Message.translation(p + ".moveGizmo"));
+        commandBuilder.set("#MoveGizmoButton.TooltipTextSpans", Message.translation(p + ".moveGizmoTooltip"));
     }
 
     @Override
@@ -217,6 +220,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         }
 
         bind(eventBuilder, "#SnapToLocationButton", "SnapToLocation");
+        bind(eventBuilder, "#MoveGizmoButton", "MoveGizmo");
         bind(eventBuilder, "#BtnXm", "MoveXm");
         bind(eventBuilder, "#BtnXp", "MoveXp");
         bind(eventBuilder, "#BtnZm", "MoveZm");
@@ -488,6 +492,23 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 } else {
                     scheduleRebuild(ref, store);
                 }
+                return;
+            }
+            case "MoveGizmo" -> {
+                World world = store.getExternalData().getWorld();
+                world.execute(
+                    () -> {
+                        if (!ref.isValid()) {
+                            return;
+                        }
+                        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+                        if (pr != null && PlacementGizmoService.tryEnterPlotGizmoMode(ref, store, pr)) {
+                            birdsEyeEnabled = false;
+                            smoothPanGeneration++;
+                            close();
+                        }
+                    }
+                );
                 return;
             }
             default -> {
@@ -861,6 +882,10 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 }
                 PlayerRef prCancel = store.getComponent(ref, PlayerRef.getComponentType());
                 if (prCancel != null) {
+                    UUIDComponent ucExit = store.getComponent(ref, UUIDComponent.getComponentType());
+                    if (ucExit != null) {
+                        PlacementGizmoService.exitGizmoModeForPlayer(ucExit.getUuid(), prCancel);
+                    }
                     clearClientPrefabPreview(prCancel);
                 }
                 PlotPlacementWireframeOverlay.clearFor(prCancel);
@@ -883,6 +908,10 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 if (tryPlace(ref, store)) {
                     PlayerRef prDone = store.getComponent(ref, PlayerRef.getComponentType());
                     if (prDone != null) {
+                        UUIDComponent ucExit = store.getComponent(ref, UUIDComponent.getComponentType());
+                        if (ucExit != null) {
+                            PlacementGizmoService.exitGizmoModeForPlayer(ucExit.getUuid(), prDone);
+                        }
                         clearClientPrefabPreview(prDone);
                     }
                     PlotPlacementWireframeOverlay.clearFor(prDone);

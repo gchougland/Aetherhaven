@@ -8,7 +8,7 @@ import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import com.hexvane.aetherhaven.construction.PlotMaterialDepositService;
 import com.hexvane.aetherhaven.construction.PrefabMaterialsCatalog;
 import com.hexvane.aetherhaven.difficulty.EffectiveBuildingCosts;
-import com.hexvane.aetherhaven.difficulty.WorldDifficultyState;
+import com.hexvane.aetherhaven.difficulty.TownDifficultySettings;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.inventory.BenchAdjacentChestUtil;
@@ -342,7 +342,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         long goldCost = effectiveCosts.getTreasuryGoldCoinCost();
         PlotInstance blueprintPlot = resolveBlueprintPlot(store, ref);
         TownRecord treasuryTown =
-            !managementUi && !completed && goldCost > 0 ? resolveTownForPlotSign(store, ref) : null;
+            !managementUi && !completed && goldCost > 0 ? resolveTownForPlotSign(store) : null;
         UUIDComponent ucComp = store.getComponent(ref, UUIDComponent.getComponentType());
         UUID playerUuid = ucComp != null ? ucComp.getUuid() : null;
         boolean treasuryPerm =
@@ -2663,7 +2663,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
     }
 
     @Nullable
-    private TownRecord resolveTownForPlotSign(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref) {
+    private TownRecord resolveTownForPlotSign(@Nonnull Store<EntityStore> store) {
         AetherhavenPlugin p = AetherhavenPlugin.get();
         if (p == null) {
             return null;
@@ -2796,7 +2796,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = resolveTownForPlotSign(store, ref);
+        TownRecord town = resolveTownForPlotSign(store);
         if (town != null) {
             tm.updateTown(town);
         }
@@ -2833,7 +2833,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = resolveTownForPlotSign(store, ref);
+        TownRecord town = resolveTownForPlotSign(store);
         if (town != null) {
             tm.updateTown(town);
         }
@@ -2923,10 +2923,11 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
     private EffectiveBuildingCosts resolveEffectiveCosts(@Nonnull Store<EntityStore> store, @Nonnull ConstructionDefinition def) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {
-            return EffectiveBuildingCosts.forDefinition(def, WorldDifficultyState.normalUntilChosen(), PrefabMaterialsCatalog.empty());
+            return EffectiveBuildingCosts.forDefinition(def, TownDifficultySettings.normalUntilChosen(), PrefabMaterialsCatalog.empty());
         }
-        World world = store.getExternalData().getWorld();
-        WorldDifficultyState difficulty = AetherhavenWorldRegistries.getOrLoadWorldDifficulty(world, plugin);
+        TownRecord town = resolveTownForPlotSign(store);
+        TownDifficultySettings difficulty =
+            town != null ? town.effectiveDifficultyForGameplay() : TownDifficultySettings.normalUntilChosen();
         return EffectiveBuildingCosts.forDefinition(def, difficulty, plugin.getPrefabMaterialsCatalog());
     }
 

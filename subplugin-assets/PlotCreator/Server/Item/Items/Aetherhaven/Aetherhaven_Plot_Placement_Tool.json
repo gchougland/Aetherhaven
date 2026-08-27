@@ -32,7 +32,13 @@
     "Translation": [-30.6, -31.2],
     "Rotation": [45, 90, 0]
   },
+  "BuilderTool": {
+    "Id": "Point",
+    "IsBrush": false,
+    "SurvivalAllowed": true
+  },
   "Interactions": {
+    "Primary": "Builder_Tool",
     "Secondary": {
       "Interactions": [
         {
@@ -43,10 +49,12 @@
     }
   },
   "InteractionConfig": {
+    "DebugOutlines": true,
     "UseDistance": {
-      "Adventure": 10,
-      "Creative": 64
-    }
+      "Adventure": 128,
+      "Creative": 128
+    },
+    "AllEntities": true
   },
   "Tags": {
     "Family": ["Aetherhaven"],

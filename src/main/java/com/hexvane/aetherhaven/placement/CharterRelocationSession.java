@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /** Server-side state while the town owner repositions the charter block. */
 public final class CharterRelocationSession {
@@ -34,6 +35,8 @@ public final class CharterRelocationSession {
 
     @Nonnull
     private final List<Ref<EntityStore>> previewEntityRefs = new ArrayList<>();
+
+    private boolean gizmoMoveActive;
 
     public CharterRelocationSession(@Nonnull World world, @Nonnull Vector3i charterAnchor, @Nonnull UUID townId) {
         this.world = world;
@@ -70,6 +73,10 @@ public final class CharterRelocationSession {
 
     public void rotateClockwise90() {
         rotationSteps = (rotationSteps + 1) % 4;
+    }
+
+    public void setRotationSteps(int rotationSteps) {
+        this.rotationSteps = (rotationSteps % 4 + 4) % 4;
     }
 
     /** Horizontal block rotation (NESW) when placing the charter block. */
@@ -132,5 +139,13 @@ public final class CharterRelocationSession {
     @Nonnull
     public List<Ref<EntityStore>> getPreviewEntityRefs() {
         return previewEntityRefs;
+    }
+
+    public boolean isGizmoMoveActive() {
+        return gizmoMoveActive;
+    }
+
+    public void setGizmoMoveActive(boolean gizmoMoveActive) {
+        this.gizmoMoveActive = gizmoMoveActive;
     }
 }

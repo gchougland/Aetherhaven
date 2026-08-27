@@ -57,6 +57,11 @@ author: Hexvane
   - Permission: `hexvane.aetherhaven.command.aetherhaven.town.style`
   - Access: Adventure
 
+- **`/ah town difficulty [townName]`** — Open the building cost difficulty menu for your town.
+  - `[townName]` — Full town name with spaces. Omit for your own town.
+  - Permission: `hexvane.aetherhaven.command.aetherhaven.town.difficulty`
+  - Access: Adventure
+
 ### Floating gifts
 
 - **`/ah floatinggift next`** — See when your next floating gift balloon can appear.
@@ -74,7 +79,7 @@ author: Hexvane
 
 These are for creative mode or people running the server. Not needed for normal town play.
 
-- **`/ah difficulty`** — Open the world difficulty menu for building costs.
+- **`/ah difficulty`** — Open the building cost difficulty menu for your town (same as `/ah town difficulty`).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.difficulty`
   - Access: Creative
 

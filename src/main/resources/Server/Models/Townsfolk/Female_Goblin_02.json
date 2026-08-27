@@ -9,7 +9,7 @@
     },
     {
       "Model": "Cosmetics/Underwears/Underwear.blockymodel",
-      "Texture": "Cosmetics/Underwears/Underwear_Textures/Underwear_Boxer_Texture.png",
+      "Texture": "Cosmetics/Underwears/Underwear_Textures/Underwear_Bandeau_Texture.png",
       "GradientSet": "Colored_Cotton",
       "GradientId": "Cream"
     },

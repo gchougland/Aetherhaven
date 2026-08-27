@@ -1,8 +1,7 @@
 package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.difficulty.WorldDifficultyPersistence;
-import com.hexvane.aetherhaven.difficulty.WorldDifficultyState;
+import com.hexvane.aetherhaven.difficulty.TownDifficultyMigration;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyMarkerSpawner;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyWorldRegistry;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService;
@@ -300,7 +299,6 @@ public final class AetherhavenWorldRegistries {
             TOURIST_PORTAL_REGISTRIES.remove(world.getName());
             WORLD_NPC_REGISTRIES.remove(world.getName());
             WorldNpcExistenceReconcile.clearWorld(world.getName());
-            WorldDifficultyPersistence.unloadWorld(world);
             TownsfolkPoolPersistence.unloadWorld(world);
             PropWorldRegistries.unloadWorld(world);
             return;
@@ -355,13 +353,7 @@ public final class AetherhavenWorldRegistries {
             }
         }
         WorldNpcExistenceReconcile.clearWorld(world.getName());
-        WorldDifficultyPersistence.unloadWorld(world);
         TownsfolkPoolPersistence.unloadWorld(world);
-    }
-
-    @Nonnull
-    public static WorldDifficultyState getOrLoadWorldDifficulty(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
-        return WorldDifficultyPersistence.getOrLoad(world, plugin);
     }
 
     /** Save all town files (e.g. server shutdown). */
@@ -390,7 +382,6 @@ public final class AetherhavenWorldRegistries {
                 WorldNpcPersistence.save(w, p, e.getValue());
             }
         }
-        WorldDifficultyPersistence.saveAll();
         TownsfolkPoolPersistence.saveAll();
         PropWorldRegistries.saveAll();
     }
@@ -399,9 +390,9 @@ public final class AetherhavenWorldRegistries {
         if (PersistentWorldSupport.isTemporaryInstance(world)) {
             return;
         }
-        WorldDifficultyPersistence.loadFromDisk(world, plugin);
         refreshTownDataFromDisk(world, plugin);
         getOrCreateTownManager(world, plugin);
+        TownDifficultyMigration.migrateLegacyWorldDifficultyIfNeeded(world, plugin);
         getOrCreatePoiRegistry(world, plugin);
         PropWorldRegistries.getOrCreatePropRegistry(world, plugin);
         getOrCreatePathToolRegistry(world, plugin);

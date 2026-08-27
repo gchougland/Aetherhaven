@@ -5,7 +5,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabMaterialsCatalog;
 import com.hexvane.aetherhaven.difficulty.EffectiveBuildingCosts;
-import com.hexvane.aetherhaven.difficulty.WorldDifficultyState;
+import com.hexvane.aetherhaven.difficulty.TownDifficultySettings;
 import com.hexvane.aetherhaven.plot.PlotTokenInventory;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -29,13 +29,13 @@ public final class PlotJournalRemovalRefundService {
     public static long computeGoldRefund(
         @Nonnull ConstructionDefinition def,
         @Nonnull PlotInstance plot,
-        @Nonnull World world,
+        @Nonnull TownRecord town,
         @Nonnull AetherhavenPlugin plugin
     ) {
         if (!buildGoldWasPaid(plot)) {
             return 0L;
         }
-        WorldDifficultyState difficulty = AetherhavenWorldRegistries.getOrLoadWorldDifficulty(world, plugin);
+        TownDifficultySettings difficulty = town.effectiveDifficultyForGameplay();
         PrefabMaterialsCatalog prefabMaterials = plugin.getPrefabMaterialsCatalog();
         long paidGold =
             EffectiveBuildingCosts.forDefinition(def, difficulty, prefabMaterials).getTreasuryGoldCoinCost();
@@ -66,7 +66,7 @@ public final class PlotJournalRemovalRefundService {
         @Nonnull Store<EntityStore> store,
         @Nonnull Vector3d dropPosition
     ) {
-        long goldRefund = computeGoldRefund(def, plot, world, plugin);
+        long goldRefund = computeGoldRefund(def, plot, town, plugin);
         if (goldRefund > 0L) {
             town.addTreasuryGoldCoins(goldRefund);
         }
@@ -82,10 +82,10 @@ public final class PlotJournalRemovalRefundService {
     public static String confirmBodyLangKey(
         @Nonnull ConstructionDefinition def,
         @Nonnull PlotInstance plot,
-        @Nonnull World world,
+        @Nonnull TownRecord town,
         @Nonnull AetherhavenPlugin plugin
     ) {
-        boolean gold = computeGoldRefund(def, plot, world, plugin) > 0L;
+        boolean gold = computeGoldRefund(def, plot, town, plugin) > 0L;
         boolean token = def.consumesPlotToken();
         if (gold && token) {
             return LANG_PREFIX + "plotRemoveConfirmBodyGoldAndToken";

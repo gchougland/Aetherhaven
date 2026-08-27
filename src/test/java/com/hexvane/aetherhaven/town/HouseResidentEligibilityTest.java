@@ -77,4 +77,58 @@ class HouseResidentEligibilityTest {
 
         assertFalse(TownResidentEligibility.excludeFromHouseAssignmentPicker(town, uuid));
     }
+
+    @Test
+    void activeTouristWithStaleQuestTargetUuidIsAllowedWhenInvited() {
+        TownRecord town = new TownRecord();
+        UUID staleTargetUuid = UUID.randomUUID();
+        UUID liveTouristUuid = UUID.randomUUID();
+        town
+            .getTouristRecords()
+            .add(
+                new TouristRecord(
+                    "char_a",
+                    liveTouristUuid,
+                    UUID.randomUUID(),
+                    true,
+                    false,
+                    1L,
+                    20
+                )
+            );
+        town.addActiveQuest(AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK);
+        town.setQuestTargetEntityUuid(AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK, staleTargetUuid);
+
+        assertFalse(TownResidentEligibility.excludeFromHouseAssignmentPicker(town, liveTouristUuid));
+    }
+
+    @Test
+    void unhousedGuardWithStaleQuestTargetUuidIsAllowedWhenOnlyGuard() {
+        TownRecord town = new TownRecord();
+        UUID staleTargetUuid = UUID.randomUUID();
+        UUID liveGuardUuid = UUID.randomUUID();
+        town.getHiredGuardRecords().add(new HiredGuardRecord("guard_a", liveGuardUuid, "profile", false));
+        town.addActiveQuest(AetherhavenConstants.QUEST_HOUSE_GUARD);
+        town.setQuestTargetEntityUuid(AetherhavenConstants.QUEST_HOUSE_GUARD, staleTargetUuid);
+
+        assertFalse(TownResidentEligibility.excludeFromHouseAssignmentPicker(town, liveGuardUuid));
+    }
+
+    @Test
+    void questTargetUuidSyncAllowsAssignmentAfterReconcile() {
+        TownRecord town = new TownRecord();
+        UUID staleTargetUuid = UUID.randomUUID();
+        UUID liveTouristUuid = UUID.randomUUID();
+        town
+            .getTouristRecords()
+            .add(new TouristRecord("char_a", liveTouristUuid, UUID.randomUUID(), false, false, 1L, 20));
+        town.addActiveQuest(AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK);
+        town.setQuestTargetEntityUuid(AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK, staleTargetUuid);
+
+        assertTrue(TownResidentEligibility.excludeFromHouseAssignmentPicker(town, liveTouristUuid));
+
+        town.replaceEntityUuidInQuestTargets(staleTargetUuid, liveTouristUuid);
+
+        assertFalse(TownResidentEligibility.excludeFromHouseAssignmentPicker(town, liveTouristUuid));
+    }
 }

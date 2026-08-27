@@ -9,7 +9,13 @@
   "Recipe": null,
   "MaxStack": 16,
   "Set": "Aetherhaven",
+  "BuilderTool": {
+    "Id": "Point",
+    "IsBrush": false,
+    "SurvivalAllowed": true
+  },
   "Interactions": {
+    "Primary": "Builder_Tool",
     "Secondary": {
       "Interactions": [
         {
@@ -20,10 +26,12 @@
     }
   },
   "InteractionConfig": {
+    "DebugOutlines": true,
     "UseDistance": {
-      "Adventure": 10,
-      "Creative": 64
-    }
+      "Adventure": 128,
+      "Creative": 128
+    },
+    "AllEntities": true
   },
   "Tags": {
     "Family": ["Aetherhaven"],

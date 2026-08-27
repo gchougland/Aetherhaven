@@ -34,7 +34,21 @@ public final class ClasspathResourceScanner {
      */
     @Nonnull
     public static List<String> listJsonFiles(@Nonnull ClassLoader classLoader, @Nonnull String directoryPrefix) {
+        return listFiles(classLoader, directoryPrefix, ".json");
+    }
+
+    /**
+     * @param extension including the dot, e.g. {@code .lang} (compared case-insensitively)
+     */
+    @Nonnull
+    public static List<String> listFiles(
+        @Nonnull ClassLoader classLoader,
+        @Nonnull String directoryPrefix,
+        @Nonnull String extension
+    ) {
         String prefix = directoryPrefix.endsWith("/") ? directoryPrefix : directoryPrefix + "/";
+        String ext = extension.startsWith(".") ? extension : "." + extension;
+        String extLower = ext.toLowerCase();
         LinkedHashSet<String> out = new LinkedHashSet<>();
         try {
             URL anchor = classLoader.getResource(ANCHOR_RESOURCE);
@@ -43,9 +57,9 @@ public final class ClasspathResourceScanner {
                 return List.of();
             }
             if ("jar".equalsIgnoreCase(anchor.getProtocol())) {
-                scanJar(anchor, prefix, out);
+                scanJar(anchor, prefix, extLower, out);
             } else {
-                scanDirectory(anchor, prefix, out);
+                scanDirectory(anchor, prefix, extLower, out);
             }
         } catch (Exception e) {
             LOGGER.atSevere().withCause(e).log("ClasspathResourceScanner failed for prefix %s", prefix);
@@ -53,8 +67,12 @@ public final class ClasspathResourceScanner {
         return new ArrayList<>(out);
     }
 
-    private static void scanJar(@Nonnull URL anchorJarEntry, @Nonnull String prefix, @Nonnull LinkedHashSet<String> out)
-        throws IOException {
+    private static void scanJar(
+        @Nonnull URL anchorJarEntry,
+        @Nonnull String prefix,
+        @Nonnull String extensionLower,
+        @Nonnull LinkedHashSet<String> out
+    ) throws IOException {
         JarURLConnection conn = (JarURLConnection) anchorJarEntry.openConnection();
         try (JarFile jar = conn.getJarFile()) {
             Enumeration<JarEntry> entries = jar.entries();
@@ -64,15 +82,19 @@ public final class ClasspathResourceScanner {
                     continue;
                 }
                 String name = e.getName();
-                if (name.startsWith(prefix) && name.endsWith(".json")) {
+                if (name.startsWith(prefix) && name.toLowerCase().endsWith(extensionLower)) {
                     out.add(name);
                 }
             }
         }
     }
 
-    private static void scanDirectory(@Nonnull URL anchorResource, @Nonnull String prefix, @Nonnull LinkedHashSet<String> out)
-        throws Exception {
+    private static void scanDirectory(
+        @Nonnull URL anchorResource,
+        @Nonnull String prefix,
+        @Nonnull String extensionLower,
+        @Nonnull LinkedHashSet<String> out
+    ) throws Exception {
         URI uri = anchorResource.toURI();
         Path anchorPath = Path.of(uri);
         Path serverDir = findServerDirectory(anchorPath);
@@ -94,7 +116,11 @@ public final class ClasspathResourceScanner {
         }
         try (var stream = Files.walk(target, FileVisitOption.FOLLOW_LINKS)) {
             stream
-                .filter(p -> Files.isRegularFile(p) && p.toString().endsWith(".json"))
+                .filter(
+                    p ->
+                        Files.isRegularFile(p)
+                            && p.getFileName().toString().toLowerCase().endsWith(extensionLower)
+                )
                 .forEach(
                     p -> {
                         Path relPath = serverDir.relativize(p);

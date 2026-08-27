@@ -11,6 +11,7 @@ import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerSystem;
 import com.hexvane.aetherhaven.patrol.GuardFollowPlayerSystem;
 import com.hexvane.aetherhaven.questboard.TownRankCapacity;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.VillagerDialogueKindResolver;
 import com.hexvane.aetherhaven.bard.BardDialogueSongs;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.dialogue.data.DialogueChoiceDefinition;
@@ -1328,15 +1329,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
 
     @Nonnull
     private String wintertideNpcKind(@Nonnull Store<EntityStore> store) {
-        if (npcRef == null || !npcRef.isValid()) {
-            return "default";
-        }
-        TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
-        String kind = binding != null ? binding.getKind() : null;
-        if (kind == null || kind.isBlank()) {
-            return "default";
-        }
-        return kind.trim().toLowerCase(Locale.ROOT);
+        return VillagerDialogueKindResolver.resolve(store, npcRef, AetherhavenPlugin.get());
     }
 
     @Nonnull

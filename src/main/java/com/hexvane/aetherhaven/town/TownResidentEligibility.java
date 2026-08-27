@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.guild.GuardHireService;
 import com.hexvane.aetherhaven.guild.GuildHallAdventurerPoolService;
 import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
+import com.hexvane.aetherhaven.tourist.TouristRecord;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import java.util.UUID;
@@ -151,11 +152,138 @@ public final class TownResidentEligibility {
         return plugin.getTownsfolkCharacterCatalog().isTownsfolkRole(roleId);
     }
 
+    /**
+     * Live entity uuid for an active housing quest target (record uuid when reconciled, else stored quest target).
+     */
+    @Nullable
+    public static UUID resolveLiveHousingQuestTargetUuid(@Nonnull TownRecord town, @Nonnull String questId) {
+        if (!town.hasQuestActive(questId)) {
+            return null;
+        }
+        UUID target = town.getQuestTargetEntityUuid(questId);
+        if (target == null) {
+            return null;
+        }
+        if (AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK.equals(questId)) {
+            TouristRecord rec = TouristPortalTickService.findTouristRecord(town, target);
+            if (rec != null && rec.getEntityUuid() != null) {
+                return rec.getEntityUuid();
+            }
+            String characterId = characterIdForTouristQuestTarget(town, target);
+            if (characterId != null) {
+                for (TouristRecord tourist : town.getTouristRecords()) {
+                    if (characterId.equalsIgnoreCase(tourist.getCharacterId()) && tourist.getEntityUuid() != null) {
+                        return tourist.getEntityUuid();
+                    }
+                }
+            }
+            return target;
+        }
+        if (AetherhavenConstants.QUEST_HOUSE_GUARD.equals(questId)) {
+            for (HiredGuardRecord rec : town.getHiredGuardRecords()) {
+                UUID guardUuid = rec.getEntityUuid();
+                if (guardUuid != null && guardUuid.equals(target)) {
+                    return guardUuid;
+                }
+            }
+            String characterId = characterIdForGuardQuestTarget(town, target);
+            if (characterId != null) {
+                for (HiredGuardRecord guard : town.getHiredGuardRecords()) {
+                    if (characterId.equalsIgnoreCase(guard.getCharacterId()) && guard.getEntityUuid() != null) {
+                        return guard.getEntityUuid();
+                    }
+                }
+            }
+            return target;
+        }
+        return target;
+    }
+
+    @Nullable
+    private static String characterIdForTouristQuestTarget(@Nonnull TownRecord town, @Nonnull UUID targetUuid) {
+        TouristRecord rec = TouristPortalTickService.findTouristRecord(town, targetUuid);
+        if (rec != null && rec.getCharacterId() != null && !rec.getCharacterId().isBlank()) {
+            return rec.getCharacterId();
+        }
+        return null;
+    }
+
+    @Nullable
+    private static String characterIdForGuardQuestTarget(@Nonnull TownRecord town, @Nonnull UUID targetUuid) {
+        HiredGuardRecord rec = findHiredGuardRecord(town, targetUuid);
+        if (rec != null && rec.getCharacterId() != null && !rec.getCharacterId().isBlank()) {
+            return rec.getCharacterId();
+        }
+        return null;
+    }
+
     private static boolean isQuestTargetForActiveQuest(
         @Nonnull TownRecord town,
         @Nonnull UUID entityUuid,
         @Nonnull String questId
     ) {
-        return town.hasQuestActive(questId) && entityUuid.equals(town.getQuestTargetEntityUuid(questId));
+        if (!town.hasQuestActive(questId)) {
+            return false;
+        }
+        UUID target = town.getQuestTargetEntityUuid(questId);
+        if (target != null && entityUuid.equals(target)) {
+            return true;
+        }
+        UUID liveTarget = resolveLiveHousingQuestTargetUuid(town, questId);
+        if (liveTarget != null && entityUuid.equals(liveTarget)) {
+            return true;
+        }
+        if (target == null) {
+            return false;
+        }
+        if (AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK.equals(questId)) {
+            TouristRecord entityRec = TouristPortalTickService.findTouristRecord(town, entityUuid);
+            TouristRecord targetRec = TouristPortalTickService.findTouristRecord(town, target);
+            if (entityRec != null && targetRec != null) {
+                return entityRec.getCharacterId().equalsIgnoreCase(targetRec.getCharacterId());
+            }
+            if (entityRec != null
+                && entityRec.isInvitedToStay()
+                && TouristPortalTickService.findTouristRecord(town, target) == null) {
+                return true;
+            }
+            return false;
+        }
+        if (AetherhavenConstants.QUEST_HOUSE_GUARD.equals(questId)) {
+            HiredGuardRecord entityGuard = findHiredGuardRecord(town, entityUuid);
+            HiredGuardRecord targetGuard = findHiredGuardRecord(town, target);
+            if (entityGuard != null && targetGuard != null) {
+                return entityGuard.getCharacterId().equalsIgnoreCase(targetGuard.getCharacterId());
+            }
+            if (entityGuard != null
+                && !entityGuard.isCitizen()
+                && findHiredGuardRecord(town, target) == null
+                && countUnhousedHiredGuards(town) == 1) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    private static int countUnhousedHiredGuards(@Nonnull TownRecord town) {
+        int count = 0;
+        for (HiredGuardRecord rec : town.getHiredGuardRecords()) {
+            if (!rec.isCitizen() && rec.getEntityUuid() != null) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    @Nullable
+    private static HiredGuardRecord findHiredGuardRecord(@Nonnull TownRecord town, @Nonnull UUID entityUuid) {
+        for (HiredGuardRecord rec : town.getHiredGuardRecords()) {
+            UUID u = rec.getEntityUuid();
+            if (u != null && u.equals(entityUuid)) {
+                return rec;
+            }
+        }
+        return null;
     }
 }

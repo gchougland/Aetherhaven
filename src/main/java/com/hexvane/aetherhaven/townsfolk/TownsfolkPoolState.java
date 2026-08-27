@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -98,11 +99,33 @@ public final class TownsfolkPoolState {
         @Nonnull TownsfolkCharacterCatalog catalog,
         @Nonnull Random random
     ) {
+        return pickRandomGuardEligibleCharacterId(townId, catalog, random, Set.of());
+    }
+
+    @Nullable
+    public String pickRandomGuardEligibleCharacterId(
+        @Nonnull UUID townId,
+        @Nonnull TownsfolkCharacterCatalog catalog,
+        @Nonnull Random random,
+        @Nonnull Set<String> excludeCharacterIds
+    ) {
         List<String> available = availableGuardEligibleCharacterIds(townId, catalog);
-        if (available.isEmpty()) {
+        if (excludeCharacterIds.isEmpty()) {
+            if (available.isEmpty()) {
+                return null;
+            }
+            return available.get(random.nextInt(available.size()));
+        }
+        List<String> candidates = new ArrayList<>();
+        for (String id : available) {
+            if (!excludeCharacterIds.contains(id)) {
+                candidates.add(id);
+            }
+        }
+        if (candidates.isEmpty()) {
             return null;
         }
-        return available.get(random.nextInt(available.size()));
+        return candidates.get(random.nextInt(candidates.size()));
     }
 
     public void checkout(@Nonnull TownsfolkPoolCheckoutRecord record) {

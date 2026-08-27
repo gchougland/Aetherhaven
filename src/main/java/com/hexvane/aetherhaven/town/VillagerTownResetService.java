@@ -561,6 +561,7 @@ public final class VillagerTownResetService {
             } else {
                 UUID recorded = rec.getEntityUuid();
                 if (recorded != null && !recorded.equals(resolved)) {
+                    town.replaceEntityUuidInQuestTargets(recorded, resolved);
                     rec.setEntityUuid(resolved);
                     if (map.containsKey(recorded)) {
                         CapturedNpc stale = map.get(recorded);
@@ -877,6 +878,9 @@ public final class VillagerTownResetService {
                 map.remove(recorded);
             }
             if (!resolved.equals(recorded)) {
+                if (recorded != null) {
+                    town.replaceEntityUuidInQuestTargets(recorded, resolved);
+                }
                 rec.setEntityUuid(resolved);
             }
             String characterId = rec.getCharacterId().trim();

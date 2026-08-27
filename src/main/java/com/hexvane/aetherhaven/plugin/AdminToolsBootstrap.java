@@ -58,7 +58,9 @@ public final class AdminToolsBootstrap {
             DifficultyPage.class,
             AetherhavenConstants.PAGE_DIFFICULTY,
             playerRef ->
-                AetherhavenFeatures.isLoaded(AetherhavenPluginIds.ADMIN_TOOLS) ? new DifficultyPage(playerRef) : null
+                AetherhavenFeatures.isLoaded(AetherhavenPluginIds.ADMIN_TOOLS)
+                    ? DifficultyPage.tryOpenForOwnedTown(playerRef)
+                    : null
         );
     }
 

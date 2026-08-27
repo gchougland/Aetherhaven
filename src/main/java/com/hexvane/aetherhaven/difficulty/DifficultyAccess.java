@@ -1,22 +1,23 @@
 package com.hexvane.aetherhaven.difficulty;
 
-import com.hexvane.aetherhaven.ui.JournalSettingsAccess;
-import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hexvane.aetherhaven.town.TownCommandResolution;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 
 public final class DifficultyAccess {
     private DifficultyAccess() {}
 
+    /** True when the sender may open or save difficulty for the given town (owner, or admin with a named town). */
     public static boolean canChangeDifficulty(
-        @Nonnull Store<EntityStore> store,
-        @Nonnull Ref<EntityStore> ref,
-        @Nonnull WorldDifficultyState worldState
+        @Nonnull TownManager tm,
+        @Nonnull UUID senderUuid,
+        @Nonnull TownRecord town,
+        boolean isAdmin
     ) {
-        if (!worldState.isDifficultyChosen()) {
-            return true;
-        }
-        return JournalSettingsAccess.canOpen(store, ref);
+        TownCommandResolution res =
+            TownCommandResolution.resolveForOwnerAction(tm, senderUuid, town.getDisplayName(), isAdmin);
+        return res.isOk() && res.townOrThrow().getTownId().equals(town.getTownId());
     }
 }

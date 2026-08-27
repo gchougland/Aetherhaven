@@ -22,7 +22,7 @@ Most of what you need to learn is explained inside the game through the **Town J
 
 - Place a **town charter** to define your town borders and name your settlement
 - Invite friends to join your town and share building progress
-- Choose **world difficulty** when founding (Easy, Normal, Hard, or custom building costs)
+- Choose **town difficulty** when founding (Easy, Normal, Hard, or custom building costs)
 - See your town borders on the world map with a waypoint you can toggle in the journal
 - Move or dissolve your town through the charter when you need a fresh start
 

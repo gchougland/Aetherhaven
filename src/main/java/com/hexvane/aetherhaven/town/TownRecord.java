@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.town;
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.difficulty.TownDifficultySettings;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtState;
 import com.hexvane.aetherhaven.production.PlotProductionState;
 import com.hexvane.aetherhaven.restaurant.PlotRestaurantState;
@@ -313,6 +314,14 @@ public final class TownRecord {
     @Nullable
     @SerializedName("preferredBuildingStyleId")
     private String preferredBuildingStyleId;
+
+    /**
+     * Building cost difficulty for this town. Null or unset {@code difficultyChosen} uses Normal costs until the owner
+     * picks at founding or via the journal.
+     */
+    @Nullable
+    @SerializedName("difficulty")
+    private TownDifficultySettings difficulty;
 
     /** Non-owner members: player UUID string -> {@link TownMemberRole} name. */
     @Nullable
@@ -2586,6 +2595,27 @@ public final class TownRecord {
 
     public boolean hasPreferredBuildingStyle() {
         return preferredBuildingStyleId != null && !preferredBuildingStyleId.isBlank();
+    }
+
+    @Nonnull
+    public TownDifficultySettings getDifficultySettings() {
+        if (difficulty == null) {
+            difficulty = TownDifficultySettings.normalUntilChosen();
+        }
+        return difficulty;
+    }
+
+    public void setDifficultySettings(@Nonnull TownDifficultySettings settings) {
+        this.difficulty = settings;
+    }
+
+    public boolean hasDifficultyChosen() {
+        return difficulty != null && difficulty.isDifficultyChosen();
+    }
+
+    @Nonnull
+    public TownDifficultySettings effectiveDifficultyForGameplay() {
+        return getDifficultySettings().effectiveForGameplay();
     }
 
     @Nonnull

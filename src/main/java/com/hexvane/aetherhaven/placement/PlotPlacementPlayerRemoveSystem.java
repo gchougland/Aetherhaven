@@ -9,6 +9,7 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.UUID;
@@ -42,6 +43,10 @@ public final class PlotPlacementPlayerRemoveSystem extends RefSystem<EntityStore
             return;
         }
         UUID placerUuid = uc.getUuid();
+        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+        if (pr != null) {
+            PlacementGizmoService.exitGizmoModeForPlayer(placerUuid, pr);
+        }
         PlotPlacementSession session = PlotPlacementSessions.get(placerUuid);
         if (session == null) {
             return;

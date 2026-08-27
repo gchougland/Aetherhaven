@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 
-/** Resolves building material and gold costs from world difficulty settings. */
+/** Resolves building material and gold costs from town difficulty settings. */
 public final class EffectiveBuildingCosts {
     private final List<MaterialRequirement> materials;
     private final long treasuryGoldCoinCost;
@@ -20,10 +20,10 @@ public final class EffectiveBuildingCosts {
     @Nonnull
     public static EffectiveBuildingCosts forDefinition(
         @Nonnull ConstructionDefinition def,
-        @Nonnull WorldDifficultyState worldDifficulty,
+        @Nonnull TownDifficultySettings townDifficulty,
         @Nonnull PrefabMaterialsCatalog prefabMaterials
     ) {
-        WorldDifficultyState effective = worldDifficulty.effectiveForGameplay();
+        TownDifficultySettings effective = townDifficulty.effectiveForGameplay();
         List<MaterialRequirement> base;
         if (effective.isRequireAllPrefabBlocks()) {
             String cid = def.getId();

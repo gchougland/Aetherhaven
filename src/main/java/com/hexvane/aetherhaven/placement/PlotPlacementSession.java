@@ -65,6 +65,9 @@ public final class PlotPlacementSession {
     @Nullable
     private Vector3i lastSpectatorPreviewOriginFloored;
 
+    /** When true, the placement menu is closed and the vanilla entity move gizmo drives the preview. */
+    private boolean gizmoMoveActive;
+
     public PlotPlacementSession(@Nonnull World world, @Nonnull Vector3i anchor, int rotationSteps, @Nonnull String constructionId) {
         this(world, anchor, rotationSteps, constructionId, null);
     }
@@ -295,5 +298,13 @@ public final class PlotPlacementSession {
         lastSpectatorPreviewConstructionId = null;
         lastSpectatorPreviewRotationSteps = -1;
         lastSpectatorPreviewOriginFloored = null;
+    }
+
+    public boolean isGizmoMoveActive() {
+        return gizmoMoveActive;
+    }
+
+    public void setGizmoMoveActive(boolean gizmoMoveActive) {
+        this.gizmoMoveActive = gizmoMoveActive;
     }
 }

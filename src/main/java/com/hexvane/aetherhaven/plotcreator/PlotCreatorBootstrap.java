@@ -4,6 +4,8 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.command.AetherhavenPlotCreatorCommand;
 import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
+import com.hexvane.aetherhaven.placement.PlacementGizmoInput;
+import com.hexvane.aetherhaven.placement.PlacementGizmoPacketAdapter;
 import com.hexvane.aetherhaven.placement.PlotPlacementPlayerRemoveSystem;
 import com.hexvane.aetherhaven.placement.PlotPlacementSpectatorSyncSystem;
 import com.hexvane.aetherhaven.placement.WallPlacementEditHelper;
@@ -18,9 +20,13 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.ser
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.universe.world.World;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public final class PlotCreatorBootstrap {
     private PlotCreatorBootstrap() {}
+
+    @Nullable
+    private static PlacementGizmoPacketAdapter placementGizmoPacketAdapter;
 
     public static void registerAssetCodecs(@Nonnull AetherhavenPlugin core) {
         core
@@ -160,6 +166,8 @@ public final class PlotCreatorBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new PlotCreatorSpotPreviewHideSystem());
         plugin.getEntityStoreRegistry().registerSystem(new PlotPlacementSpectatorSyncSystem());
         plugin.getEntityStoreRegistry().registerSystem(new PlotPlacementPlayerRemoveSystem());
+        placementGizmoPacketAdapter = new PlacementGizmoPacketAdapter();
+        placementGizmoPacketAdapter.register();
         core.registerAetherhavenSubcommand(new AetherhavenPlotCreatorCommand());
         plugin
             .getEventRegistry()
@@ -176,5 +184,6 @@ public final class PlotCreatorBootstrap {
                 }
             );
         PlotCreatorBoundsInput.register(plugin.getEventRegistry());
+        PlacementGizmoInput.register(plugin.getEventRegistry());
     }
 }
