@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.1.2] - Unreleased
+
+### Fixed
+
+- **Packaging wand** Putting the wand away no longer crashes the world when a prop placement preview is open.
+
 ## [3.1.1] - 8/27/2026
 
 ### Added

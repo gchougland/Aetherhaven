@@ -57,7 +57,7 @@ public final class PropPackagingWandTickSystem extends TickingSystem<EntityStore
         store.forEachChunk(
             Query.and(Player.getComponentType(), PlayerRef.getComponentType(), UUIDComponent.getComponentType()),
             (archetypeChunk, commandBuffer) -> {
-                tickChunk(world, store, archetypeChunk);
+                tickChunk(world, store, archetypeChunk, commandBuffer);
             }
         );
     }
@@ -65,7 +65,8 @@ public final class PropPackagingWandTickSystem extends TickingSystem<EntityStore
     private void tickChunk(
         @Nonnull World world,
         @Nonnull Store<EntityStore> store,
-        @Nonnull ArchetypeChunk<EntityStore> archetypeChunk
+        @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
         for (int i = 0; i < archetypeChunk.size(); i++) {
             Ref<EntityStore> ref = archetypeChunk.getReferenceTo(i);
@@ -84,7 +85,7 @@ public final class PropPackagingWandTickSystem extends TickingSystem<EntityStore
             if (!holdingWand) {
                 if (OVERLAY_ACTIVE.remove(playerUuid)) {
                     PropPackagingOverlay.clearFor(playerRef);
-                    PlotFootprintOverlayRefresh.afterClearDebugShapes(ref, store);
+                    PlotFootprintOverlayRefresh.afterClearDebugShapes(ref, commandBuffer);
                 }
                 continue;
             }

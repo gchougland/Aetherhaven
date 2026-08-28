@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.ui.CharterRelocationPage;
 import com.hexvane.aetherhaven.ui.PlotPlacementPage;
 import com.hexvane.aetherhaven.ui.PropPlacementPage;
 import com.hexvane.aetherhaven.ui.WallPlacementPage;
+import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.entities.Player;
@@ -18,6 +19,23 @@ import javax.annotation.Nonnull;
 public final class PlotFootprintOverlayRefresh {
     private PlotFootprintOverlayRefresh() {}
 
+    /**
+     * From a ticking system: queue until the command buffer is consumed (after {@code processing} unlocks).
+     * Placement pages may write hologram transforms; that is illegal while the store is processing.
+     */
+    public static void afterClearDebugShapes(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        commandBuffer.run(store -> {
+            if (!ref.isValid()) {
+                return;
+            }
+            afterClearDebugShapes(ref, store);
+        });
+    }
+
+    /** World-thread Store path. Do not call from a ticking system; use the {@link CommandBuffer} overload. */
     public static void afterClearDebugShapes(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         Player player = store.getComponent(ref, Player.getComponentType());
         if (player == null) {

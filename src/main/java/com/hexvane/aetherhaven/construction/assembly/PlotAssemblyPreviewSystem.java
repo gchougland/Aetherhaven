@@ -274,7 +274,7 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
     ) {
         AssemblyMarkerPreviewSync.clearAllMarkers(world, ref, store, commandBuffer);
         PathDebugPreviewUtil.clear(pr);
-        PlotFootprintOverlayRefresh.afterClearDebugShapes(ref, store);
+        PlotFootprintOverlayRefresh.afterClearDebugShapes(ref, commandBuffer);
     }
 
     @Nonnull

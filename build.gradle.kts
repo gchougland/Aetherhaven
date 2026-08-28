@@ -6,7 +6,7 @@ plugins {
 import java.util.zip.ZipFile
 
 group = "com.hexvane"
-version = "3.1.1"
+version = "3.1.2"
 val javaVersion = 25
 
 repositories {
