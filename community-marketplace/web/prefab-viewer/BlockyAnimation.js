@@ -2,7 +2,7 @@
  * Apply the hold-last pose from a .blockyanim (open trapdoors, doors, etc.).
  */
 import * as THREE from "three";
-import { assetUrl } from "./BlockCatalog.js?v=45";
+import { assetUrl } from "./BlockCatalog.js?v=46";
 
 /** @type {Map<string, Promise<object|null>>} */
 const animCache = new Map();

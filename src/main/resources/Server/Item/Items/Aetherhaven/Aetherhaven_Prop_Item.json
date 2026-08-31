@@ -3,10 +3,8 @@
     "Name": "aetherhaven_items.items.Aetherhaven_Prop_Item.name",
     "Description": "aetherhaven_items.items.Aetherhaven_Prop_Item.description"
   },
-  "Icon": "Icons/ItemsGenerated/Furniture_Village_Crate.png",
-  "Model": "Items/CreativeTools/EditorTool.blockymodel",
+  "Parent": "Furniture_Village_Crate",
   "PlayerAnimationsId": "Item",
-  "ItemSoundSetId": "ISS_Blocks_Wood",
   "Categories": [],
   "Quality": "Common",
   "Recipe": null,
@@ -26,6 +24,13 @@
         {
           "Type": "OpenCustomUI",
           "Page": { "Id": "AetherhavenPropPlacement" }
+        }
+      ]
+    },
+    "SwapFrom": {
+      "Interactions": [
+        {
+          "Type": "ChangeActiveSlot"
         }
       ]
     }

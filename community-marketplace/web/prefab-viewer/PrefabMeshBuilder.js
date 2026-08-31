@@ -7,11 +7,11 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=45";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=45";
+} from "./BlockCatalog.js?v=46";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=46";
 
 /** Bump when transform math changes — shown in the viewer so we can confirm the live build. */
-export const PREFAB_VIEWER_TRANSFORM_REV = "xform-45";
+export const PREFAB_VIEWER_TRANSFORM_REV = "xform-46";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
@@ -128,23 +128,31 @@ export function rawBlockEntityScale(comps) {
 }
 
 /**
- * Prefabs still on pre–Update 6 identity-at-2 almost always keep at least one block entity
- * above 1 (natural was 2). Post-U6 exports stay ≤ 1. Detect per prefab, not per entity:
- * old builds often mix scale 2 with 1.0/0.8 pieces that still need halving.
+ * Prefab JSON from before Update 6 omits BlockEntity.Version. U6+ exporters write
+ * Version >= 1. Scale thresholds alone miss older builds whose pieces all sit at or
+ * below 1.0 (still identity-at-2, so they must be halved).
+ * @param {any} blockEntity
+ * @returns {boolean}
  */
-export const OLD_BLOCK_ENTITY_SCALE_THRESHOLD = 1.001;
+export function blockEntityHasUpdate6Version(blockEntity) {
+  const version = blockEntity?.Version ?? blockEntity?.version;
+  return version != null && Number(version) >= 1;
+}
 
 /**
  * @param {any[]} entities
  * @returns {boolean}
  */
 export function prefabUsesOldBlockEntityScale(entities) {
+  let sawBlockEntity = false;
   for (const entity of entities || []) {
     const comps = entity?.Components || entity?.components || {};
     if (!isBlockEntity(comps)) {
       continue;
     }
-    if (rawBlockEntityScale(comps) > OLD_BLOCK_ENTITY_SCALE_THRESHOLD) {
+    sawBlockEntity = true;
+    const blockEntity = comps.BlockEntity || comps.blockEntity;
+    if (!blockEntityHasUpdate6Version(blockEntity)) {
       return true;
     }
   }
@@ -157,7 +165,11 @@ export function prefabUsesOldBlockEntityScale(entities) {
  * @returns {boolean}
  */
 export function isOldConventionBlockEntity(comps) {
-  return isBlockEntity(comps) && rawBlockEntityScale(comps) > OLD_BLOCK_ENTITY_SCALE_THRESHOLD;
+  if (!isBlockEntity(comps)) {
+    return false;
+  }
+  const blockEntity = comps.BlockEntity || comps.blockEntity;
+  return !blockEntityHasUpdate6Version(blockEntity);
 }
 
 /**
@@ -224,9 +236,9 @@ export function rotationTupleToEuler(index) {
  * Mesh unit density is applied in {@link loadBlockyModel} so every block, item, and
  * entity path shares the same 32 vs 64 units-per-block rule.
  *
- * Update 6 made block-entity scale 1.0 natural (was 2.0). When the prefab still uses
- * the old convention ({@link prefabUsesOldBlockEntityScale}), every block entity is
- * halved — including stored values ≤ 1. Post-U6 prefabs use the stored scale as-is.
+ * Update 6 made block-entity scale 1.0 natural (was 2.0). Prefabs that omit
+ * BlockEntity.Version still use identity-at-2, so every block entity is halved —
+ * including stored values ≤ 1. Prefabs that write Version use the stored scale as-is.
  * Item entities store the UI value as-is.
  * @param {any} comps
  * @param {string|null} [_modelPath] unused; density is baked into the loaded mesh
@@ -245,7 +257,7 @@ export function entityWorldScale(comps, _modelPath = null, oldConventionPrefab =
 }
 
 /** @deprecated Use the loader's unit scale; kept as a re-export for older callers. */
-export { isCharacterDensityModel } from "./BlockyModelLoader.js?v=45";
+export { isCharacterDensityModel } from "./BlockyModelLoader.js?v=46";
 
 /**
  * @param {any} pos

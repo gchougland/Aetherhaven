@@ -5,7 +5,7 @@
  * UV layout matches the official Blockbench codec (pixel offset + face size from settings.size, not stretch).
  */
 import * as THREE from "three";
-import { assetUrl } from "./BlockCatalog.js?v=45";
+import { assetUrl } from "./BlockCatalog.js?v=46";
 
 /** Block / furniture / placeable prop density (BlockyModelBoundsParser). */
 export const BLOCK_MODEL_UNITS = 32;

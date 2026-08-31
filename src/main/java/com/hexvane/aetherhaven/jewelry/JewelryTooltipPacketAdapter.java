@@ -385,7 +385,7 @@ public final class JewelryTooltipPacketAdapter {
             packet.type = UpdateType.AddOrUpdate;
             packet.items = toSend;
             packet.removedItems = new String[0];
-            packet.updateModels = true;
+            packet.updateModels = false;
             packet.updateIcons = false;
             playerRef.getPacketHandler().writeNoCache(packet);
         } catch (Exception e) {
