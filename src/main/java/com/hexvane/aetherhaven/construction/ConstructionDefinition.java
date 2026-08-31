@@ -234,7 +234,7 @@ public final class ConstructionDefinition {
      * on the topmost world layer of the building box; increase if flat roofs are still being targeted.
      */
     @SerializedName("autonomyNavRoofExclusionYBelowMaxY")
-    private int autonomyNavRoofExclusionYBelowMaxY = 1;
+    private int autonomyNavRoofExclusionYBelowMaxY = 4;
 
     /** When false, placement does not consume {@link #plotTokenItemId} from inventory (wall wand display tokens). */
     @SerializedName("consumesPlotToken")
@@ -642,7 +642,7 @@ public final class ConstructionDefinition {
 
     /** 0/negative = use 1. */
     public int getAutonomyNavRoofExclusionYBelowMaxY() {
-        return autonomyNavRoofExclusionYBelowMaxY > 0 ? autonomyNavRoofExclusionYBelowMaxY : 1;
+        return autonomyNavRoofExclusionYBelowMaxY > 0 ? autonomyNavRoofExclusionYBelowMaxY : 4;
     }
 
     public boolean consumesPlotToken() {

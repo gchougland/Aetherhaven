@@ -89,11 +89,21 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
     /** Tighter leash arrival for SIT/SLEEP when there is no interaction target (leash is the POI block). */
     private static final double MOUNT_ARRIVE_HORIZONTAL_SQ = 0.88 * 0.88;
     /**
+     * Standing eat spots (inn hearth / restaurant seats with {@code NONE}) need a looser XZ arrive than 0.5 so Seek
+     * can finish and start USE instead of timing out beside the table.
+     */
+    private static final double EAT_ARRIVE_HORIZONTAL_SQ = 1.75 * 1.75;
+    /**
      * Horizontal distance to the entry leash (interaction target) that counts as "reached the POI entry". Seek often
      * stops 1–3 blocks short of the leash; we do not require walking to the bed after that when an interaction target
      * is set.
      */
     private static final double POI_ENTRY_ARRIVE_HORIZONTAL_SQ = 3.5 * 3.5;
+    /**
+     * Feet must be near the leash / stand Y before TRAVEL counts as arrived. Horizontal-only checks let NPCs stop on
+     * roofs above workplaces and “use” from there.
+     */
+    private static final double ARRIVE_VERTICAL_MAX = 1.5;
     /**
      * {@link NavState#BLOCKED} and {@link NavState#DEFER}: DEFER is “delay path recompute” in vanilla Seek — it can
      * persist while an NPC is wedged against geometry (wall bug), and must not reset stuck ticks like PROGRESSING.
@@ -558,10 +568,14 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 pois, needs, binding, cellOcc, npcX, npcZ, scheduleSeg, townHasRestaurant, true, daytime
             );
         if (pick == null || !PoiScoring.isEatPoi(pick)) {
-            autonomy.setFillingHunger(false);
+            // Capacity / no free eat slot: keep the fill session so they retry soon instead of giving up until hungry again.
+            autonomy.setNextDecisionEpochMs(now + 4000L);
+            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             return false;
         }
         if (!PoiOccupancy.tryClaimStand(cellOcc, pick)) {
+            autonomy.setNextDecisionEpochMs(now + 3000L);
+            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             return false;
         }
         autonomy.setFillingHunger(true);
@@ -746,10 +760,13 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         List<UUID> innPlotIds = PoiScoring.resolveInnPlotIds(townRecord, plugin.getConstructionCatalog());
         PoiEntry pick = PoiScoring.pickEnergyRestPoi(pois, cellOcc, npcX, npcZ, homePlotId, innPlotIds);
         if (pick == null || !PoiScoring.isRestPoi(pick)) {
-            autonomy.setFillingEnergy(false);
+            autonomy.setNextDecisionEpochMs(now + 4000L);
+            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             return false;
         }
         if (!PoiOccupancy.tryClaimStand(cellOcc, pick)) {
+            autonomy.setNextDecisionEpochMs(now + 3000L);
+            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             return false;
         }
         autonomy.setFillingEnergy(true);
@@ -925,6 +942,11 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
     /** Watch / dance markers on the square, not Market Festival judging stands, ticket stalls, or Lyren's booth. */
     private static boolean isFestivalWatchPoi(@Nullable PoiEntry poi, @Nullable TownRecord town) {
         return poi != null && PoiScoring.isFestivalPoi(poi) && !isTightFestivalStandPoi(poi, town);
+    }
+
+    /** True when feet Y is close enough to the travel leash / POI stand (not a roof above it). */
+    private static boolean isVerticallyArrived(double feetY, double targetY) {
+        return Math.abs(feetY - targetY) <= ARRIVE_VERTICAL_MAX;
     }
 
     private static boolean isTightFestivalStandPoi(@Nullable PoiEntry poi, @Nullable TownRecord town) {
@@ -1139,8 +1161,23 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             }
             tx = tpx;
             tz = tpz;
+            int colX = (int) Math.floor(tpx);
+            int colZ = (int) Math.floor(tpz);
             int hintY = (int) Math.floor(tpy);
-            int clearY = VillagerBlockUtil.resolveClearStandFeetY(world, (int) Math.floor(tpx), hintY, (int) Math.floor(tpz));
+            int npcFeetY = tc != null ? (int) Math.floor(tc.getPosition().y) : hintY;
+            AutonomyNavBounds.NavVerticalRange range =
+                townRecord != null ? AutonomyNavBounds.tryRangeForPoi(plugin, townRecord, pick, colX, colZ) : null;
+            int clearY =
+                range != null && range.isUsable()
+                    ? VillagerBlockUtil.findStandYForNav(world, colX, colZ, hintY, npcFeetY, range)
+                    : VillagerBlockUtil.resolveClearStandFeetY(world, colX, hintY, colZ);
+            if (clearY == Integer.MIN_VALUE) {
+                clearY = VillagerBlockUtil.resolveClearStandFeetY(world, colX, hintY, colZ);
+                if (range != null && range.isUsable() && clearY != Integer.MIN_VALUE
+                    && (clearY < range.minFeetY() || clearY > range.maxFeetY())) {
+                    clearY = Integer.MIN_VALUE;
+                }
+            }
             leashY = clearY != Integer.MIN_VALUE ? clearY + 0.02 : tpy;
         } else {
             int bx = pick.getX();
@@ -1181,8 +1218,10 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 maxArriveSq = POI_ENTRY_ARRIVE_HORIZONTAL_SQ;
             } else if (mountKind) {
                 maxArriveSq = MOUNT_ARRIVE_HORIZONTAL_SQ;
+            } else if (PoiScoring.isEatPoi(pick)) {
+                maxArriveSq = EAT_ARRIVE_HORIZONTAL_SQ;
             }
-            if (horizSq <= maxArriveSq) {
+            if (horizSq <= maxArriveSq && isVerticallyArrived(tc.getPosition().y, finalTarget.y)) {
                 if (mountKind
                     && !pick.hasInteractionTarget()
                     && !VillagerBlockUtil.canNpcMountBlockPoi(
@@ -1232,6 +1271,10 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             );
             var route = navResult.waypoints();
             if (!route.isEmpty()) {
+                AutonomyNavBounds.NavVerticalRange standRange =
+                    AutonomyNavBounds.tryRangeForPoi(
+                        plugin, townRecord, pick, (int) Math.floor(finalTarget.x), (int) Math.floor(finalTarget.z)
+                    );
                 route =
                     PathNavTravelWaypoints.prepareForSeek(
                         world,
@@ -1239,7 +1282,8 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                         route,
                         finalTarget,
                         (int) Math.floor(tc.getPosition().y),
-                        plugin.getConfig().get().getPathNavNodeSpacing()
+                        plugin.getConfig().get().getPathNavNodeSpacing(),
+                        standRange
                     );
             }
             if (!route.isEmpty()) {
@@ -1433,6 +1477,8 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             maxArriveSq = POI_ENTRY_ARRIVE_HORIZONTAL_SQ;
         } else if (mountKind) {
             maxArriveSq = MOUNT_ARRIVE_HORIZONTAL_SQ;
+        } else if (poiEarly != null && PoiScoring.isEatPoi(poiEarly)) {
+            maxArriveSq = EAT_ARRIVE_HORIZONTAL_SQ;
         }
 
         PathNavTravelSupport.WaypointTickAction waypointAction =
@@ -1528,7 +1574,24 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             autonomy.setTravelStuckTicks(0);
         }
 
-        boolean arrived = horizSq <= maxArriveSq;
+        boolean arrivedHoriz = horizSq <= maxArriveSq;
+        boolean arrivedVert = isVerticallyArrived(pos.y, autonomy.getTargetY());
+        // Seek often stops on a walkable roof directly above the workplace / eat stand.
+        if (arrivedHoriz
+            && !arrivedVert
+            && !autonomy.hasTravelWaypoints()
+            && pos.y > autonomy.getTargetY() + ARRIVE_VERTICAL_MAX) {
+            Vector3d stand =
+                new Vector3d(autonomy.getTargetX(), autonomy.getTargetY(), autonomy.getTargetZ());
+            AutonomyStuckTeleportRecovery.teleportNpc(ref, commandBuffer, store, stand, npc);
+            AutonomyStuckTeleportRecovery.applyPostTeleportTravel(npc, autonomy, stand);
+            npc.setLeashPoint(stand);
+            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+            commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+            applyAutonomyRoleState(ref, npc, commandBuffer);
+            return;
+        }
+        boolean arrived = arrivedHoriz && arrivedVert;
         if (arrived && !autonomy.hasTravelWaypoints()) {
             closePendingDoorsAfterTravelArrival(ref, store, world, autonomy, pos, maxArriveSq);
             if (AetherhavenConstants.isScheduleZoneCommutePoi(poiId)) {

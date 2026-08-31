@@ -8,7 +8,11 @@
 
 ### Fixed
 
-- **Community marketplace** Building previews show maps and other decorations at the right height and size again.
+- **Props** In singleplayer you can scroll props off the hotbar and left or right click opens placement again.
+- **Plot tokens** In singleplayer you can scroll plot tokens off the hotbar again.
+- **Community marketplace** Prop icons show up right after download without reloading the world.
+- **Villagers** They stand at their workplaces again instead of ending up on rooftops after Hytale Update 6.
+- **Villagers** They fill hunger and rest at the Inn more reliably again, including when seats are busy or a restaurant is farther away.
 - **Packaging wand** Putting the wand away no longer crashes the world when a prop placement preview is open.
 - **Props** The preview hologram rotates with the white outline box again.
 - **Props and plot staff** Previews of things inside a build no longer get left behind when you leave or start a new placement.

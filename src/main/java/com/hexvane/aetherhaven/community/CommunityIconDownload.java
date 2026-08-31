@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hexvane.aetherhaven.plotcreator.PlotTokenIconPng;
+import com.hexvane.aetherhaven.prop.PropIconSync;
 import com.hexvane.aetherhaven.prop.PropPaths;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.asset.common.CommonAsset;
@@ -102,7 +103,7 @@ public final class CommunityIconDownload {
                 LOGGER.atWarning().withCause(e).log("Failed to write community icon for %s", entry.getId());
                 return Result.DOWNLOAD_FAILED;
             }
-            return registerAndVerify(plugin, iconFile, entry.getId(), assetPath, true);
+            return registerAndVerify(plugin, iconFile, entry.getId(), assetPath, true, entry.isProp());
         }
     }
 
@@ -197,29 +198,42 @@ public final class CommunityIconDownload {
     private static Result registerAndVerify(
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull Path iconFile,
-        @Nonnull String constructionId,
+        @Nonnull String entryId,
         @Nonnull String assetPath,
-        boolean forceRefresh
+        boolean forceRefresh,
+        boolean prop
     ) {
         CommonAsset asset = CommunityIconRegistry.registerIconFileNoSend(plugin, iconFile, forceRefresh);
         CustomBuildingIconAssetRegistry.registerIconFileNoSend(plugin, iconFile, forceRefresh);
         if (asset != null) {
             CommunityIconRegistry.broadcastAssets(List.of(asset));
-            PlotTokenIconSync.afterIconRegistered(plugin, constructionId);
+            notifyIconRegistered(plugin, entryId, prop);
         } else if (!isRegistered(assetPath)) {
             // File exists but registration was skipped (unchanged mtime) — still verify registry.
             CommonAsset existing = CommunityIconRegistry.registerIconFileNoSend(plugin, iconFile, true);
             CustomBuildingIconAssetRegistry.registerIconFileNoSend(plugin, iconFile, true);
             if (existing != null) {
                 CommunityIconRegistry.broadcastAssets(List.of(existing));
-                PlotTokenIconSync.afterIconRegistered(plugin, constructionId);
+                notifyIconRegistered(plugin, entryId, prop);
             }
         }
         if (!isRegistered(assetPath)) {
-            LOGGER.atWarning().log("Community icon for %s is on disk but not in CommonAssetRegistry", constructionId);
+            LOGGER.atWarning().log("Community icon for %s is on disk but not in CommonAssetRegistry", entryId);
             return Result.REGISTRATION_FAILED;
         }
         return Result.SUCCESS;
+    }
+
+    private static void notifyIconRegistered(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull String entryId,
+        boolean prop
+    ) {
+        if (prop) {
+            PropIconSync.afterIconRegistered(plugin, entryId);
+        } else {
+            PlotTokenIconSync.afterIconRegistered(plugin, entryId);
+        }
     }
 
     public static boolean isRegistered(@Nonnull String assetPath) {

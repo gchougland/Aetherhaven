@@ -141,7 +141,15 @@ public final class ProductionLiveWorkDetection {
         int bx = (int) Math.floor(pos.x);
         int by = (int) Math.floor(pos.y);
         int bz = (int) Math.floor(pos.z);
-        if (jobPlot.containsWorldBlock(bx, by, bz)) {
+        var fp = jobPlot.toFootprint();
+        // Footprint includes roof slabs; standing on the roof must not count as being at work.
+        int roofCut = Math.max(fp.getMinY(), fp.getMaxY() - 4);
+        if (bx >= fp.getMinX()
+            && bx <= fp.getMaxX()
+            && bz >= fp.getMinZ()
+            && bz <= fp.getMaxZ()
+            && by >= fp.getMinY()
+            && by <= roofCut) {
             return true;
         }
         return isNearWorkPoiOnPlot(pos, binding, jobPlotId, poiRegistry);
@@ -159,8 +167,9 @@ public final class ProductionLiveWorkDetection {
                 continue;
             }
             double dx = pos.x - (poi.getX() + 0.5);
+            double dy = pos.y - poi.getY();
             double dz = pos.z - (poi.getZ() + 0.5);
-            if (dx * dx + dz * dz <= WORK_POI_REACH_HORIZONTAL_SQ) {
+            if (dx * dx + dz * dz <= WORK_POI_REACH_HORIZONTAL_SQ && Math.abs(dy) <= 2.5) {
                 return true;
             }
         }

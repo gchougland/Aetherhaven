@@ -41,7 +41,7 @@
   ],
   "rotationYaw": "None",
   "autonomyNavFloorYAboveMinY": 1.0,
-  "autonomyNavMaxStandYSpanAboveMinY": 2.0,
+  "autonomyNavMaxStandYSpanAboveMinY": 6.0,
   "autonomyNavRoofExclusionYBelowMaxY": 5.0,
   "materials": [
     {
@@ -98,7 +98,29 @@
       "tags": [
         "EAT"
       ],
-      "capacity": 1,
+      "capacity": 4,
+      "blockTypeId": "Editor_Empty",
+      "interactionKind": "NONE"
+    },
+    {
+      "localX": 12,
+      "localY": 0,
+      "localZ": 5,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 2,
+      "blockTypeId": "Editor_Empty",
+      "interactionKind": "NONE"
+    },
+    {
+      "localX": 11,
+      "localY": 0,
+      "localZ": 5,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 2,
       "blockTypeId": "Editor_Empty",
       "interactionKind": "NONE"
     },

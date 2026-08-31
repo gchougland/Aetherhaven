@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.festival.CustomFestivalPaths;
 import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
+import com.hexvane.aetherhaven.prop.PropIconSync;
 import com.hexvane.aetherhaven.prop.PropPaths;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -155,7 +156,7 @@ public final class CommunityDownloadService {
                             FileInstallOutcome outcome = installFiles(plugin, entry, false, false);
                             if (outcome.result() == InstallResult.SUCCESS) {
                                 ok.incrementAndGet();
-                                successes.add(new SuccessfulInstall(entry.getId(), outcome.iconFile()));
+                                successes.add(new SuccessfulInstall(entry.getId(), outcome.iconFile(), entry.isProp()));
                                 catalog.markIconComplete(entry.getId());
                             } else {
                                 failed.incrementAndGet();
@@ -189,6 +190,10 @@ public final class CommunityDownloadService {
                 CustomBuildingIconAssetRegistry.registerIconFileNoSend(plugin, success.iconFile(), true);
                 if (asset != null) {
                     toBroadcast.add(asset);
+                }
+                if (success.prop()) {
+                    PropIconSync.afterIconRegistered(plugin, success.constructionId());
+                } else {
                     PlotTokenIconSync.afterIconRegistered(plugin, success.constructionId());
                 }
             }
@@ -198,6 +203,12 @@ public final class CommunityDownloadService {
         if (ok.get() > 0) {
             plugin.reloadConfigsAndAssetCatalogs();
             for (SuccessfulInstall success : successes) {
+                // Catalog reload can race icon atlas; refresh virtual defs again for online players.
+                if (success.prop()) {
+                    PropIconSync.afterIconRegistered(plugin, success.constructionId());
+                } else if (success.iconFile() != null) {
+                    PlotTokenIconSync.afterIconRegistered(plugin, success.constructionId());
+                }
                 reportInstall(plugin, success.constructionId(), playerUuid);
             }
             LOGGER.atInfo().log("Batch installed %s community buildings (%s failed)", ok.get(), failed.get());
@@ -205,7 +216,7 @@ public final class CommunityDownloadService {
         return new BatchResult(ok.get(), failed.get(), skipped);
     }
 
-    private record SuccessfulInstall(@Nonnull String constructionId, @Nullable Path iconFile) {}
+    private record SuccessfulInstall(@Nonnull String constructionId, @Nullable Path iconFile, boolean prop) {}
 
     private record FileInstallOutcome(@Nonnull InstallResult result, @Nullable Path iconFile) {}
 

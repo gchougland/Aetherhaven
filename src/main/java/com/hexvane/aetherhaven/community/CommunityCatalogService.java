@@ -14,6 +14,8 @@ import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hexvane.aetherhaven.plotcreator.PlotTokenIconPng;
+import com.hexvane.aetherhaven.prop.PropIconSync;
+import com.hexvane.aetherhaven.prop.PropPaths;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.asset.common.CommonAsset;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -407,7 +409,13 @@ public final class CommunityCatalogService {
     }
 
     private void notifyIconRegistered(@Nonnull Path iconFile) {
-        String constructionId = CustomBuildingsPaths.constructionIdFromIconFileName(iconFile.getFileName().toString());
+        String fileName = iconFile.getFileName().toString();
+        String propId = PropPaths.propIdFromIconFileName(fileName);
+        if (propId != null) {
+            PropIconSync.afterIconRegistered(plugin, propId);
+            return;
+        }
+        String constructionId = CustomBuildingsPaths.constructionIdFromIconFileName(fileName);
         if (constructionId != null) {
             PlotTokenIconSync.afterIconRegistered(plugin, constructionId);
         }

@@ -567,7 +567,8 @@ public final class PoiScoring {
         if (townHasRestaurant
             && poi.getTags().contains(com.hexvane.aetherhaven.AetherhavenConstants.POI_TAG_RESTAURANT)
             && hungerDef > 0.01f) {
-            s *= 2.5f;
+            // Mild preference only: a nearby inn hearth must still beat a distant restaurant on distance.
+            s *= 1.35f;
         }
         return s;
     }
@@ -903,6 +904,10 @@ public final class PoiScoring {
                 sc += ThreadLocalRandom.current().nextFloat() * WORK_POI_JITTER;
             }
             double distSq = distSqToPoi(e, npcX, npcZ);
+            // Hunger trips: prefer a nearby inn over a far restaurant so meals actually complete.
+            if (breakMode == UrgentNeedKind.HUNGER && !Double.isNaN(distSq)) {
+                sc -= (float) (Math.sqrt(distSq) * 0.25);
+            }
             if (best == null) {
                 best = e;
                 bestScore = sc;

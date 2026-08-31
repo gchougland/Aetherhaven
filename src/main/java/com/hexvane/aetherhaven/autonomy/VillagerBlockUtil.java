@@ -166,6 +166,12 @@ public final class VillagerBlockUtil {
                     return y;
                 }
             }
+            // Plot roof caps still apply on fallback: never pick a walkable above maxFeetY (attic / roof).
+            int near = findStandYNearPoiBlockY(world, bx, bz, poiBlockY, npcFeetY);
+            if (near != Integer.MIN_VALUE && near >= range.minFeetY() && near <= range.maxFeetY()) {
+                return near;
+            }
+            return Integer.MIN_VALUE;
         }
         return findStandYNearPoiBlockY(world, bx, bz, poiBlockY, npcFeetY);
     }

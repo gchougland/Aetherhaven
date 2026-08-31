@@ -7,11 +7,11 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=43";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=43";
+} from "./BlockCatalog.js?v=44";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=44";
 
 /** Bump when transform math changes — shown in the viewer so we can confirm the live build. */
-export const PREFAB_VIEWER_TRANSFORM_REV = "xform-43";
+export const PREFAB_VIEWER_TRANSFORM_REV = "xform-44";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
@@ -96,10 +96,9 @@ export function entityRotationToQuaternion(rot) {
 
 /**
  * Blockymodels are authored standing on their origin. After Update 6 the entity position
- * is the visual centre, so models are lowered by this flat half block (world distance,
- * not scaled with the entity) to keep the centre on the holder. Same idea as the grid
- * path and the Cozy Crossing town hall clock calibration.
- * See scripts/debug-clock-transform.mjs.
+ * is the visual centre, so each model is lowered by this half block in local model space
+ * (then scaled with the holder) to keep the centre on the entity. Same idea as the grid
+ * path. See scripts/debug-clock-transform.mjs.
  */
 export const BLOCK_ENTITY_PIVOT = 0.5;
 
@@ -221,7 +220,7 @@ export function entityWorldScale(comps, _modelPath = null) {
 }
 
 /** @deprecated Use the loader's unit scale; kept as a re-export for older callers. */
-export { isCharacterDensityModel } from "./BlockyModelLoader.js?v=43";
+export { isCharacterDensityModel } from "./BlockyModelLoader.js?v=44";
 
 /**
  * @param {any} pos
@@ -614,6 +613,8 @@ export async function buildPrefabMesh(prefab, options = {}) {
           // Update 6: entity position is the visual centre. Old-convention prefab JSON
           // still stores the pre-migration feet anchor, so shift like the in-game
           // BlockEntityScaleMigration, then drop feet-origin models onto that centre.
+          // Pivot is in local model units so half-height scales with EntityScale (wheel
+          // spokes at 0.5 must not keep a fixed 0.5 world offset).
           if (isOldConventionBlockEntity(comps)) {
             applyBlockEntityAnchorShift(
               holder.position,
@@ -622,7 +623,7 @@ export async function buildPrefabMesh(prefab, options = {}) {
             );
           }
           for (const child of holder.children) {
-            child.position.y -= BLOCK_ENTITY_PIVOT / worldScale;
+            child.position.y -= BLOCK_ENTITY_PIVOT;
           }
         }
 

@@ -131,7 +131,8 @@ public final class SchedulePlotCommute {
                     route,
                     finalTarget,
                     (int) Math.floor(tc.getPosition().y),
-                    plugin.getConfig().get().getPathNavNodeSpacing()
+                    plugin.getConfig().get().getPathNavNodeSpacing(),
+                    range
                 );
         }
         if (!route.isEmpty()) {

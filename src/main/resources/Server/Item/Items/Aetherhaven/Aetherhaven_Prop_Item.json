@@ -3,7 +3,9 @@
     "Name": "aetherhaven_items.items.Aetherhaven_Prop_Item.name",
     "Description": "aetherhaven_items.items.Aetherhaven_Prop_Item.description"
   },
-  "Parent": "Furniture_Village_Crate",
+  "Icon": "Icons/ItemsGenerated/Furniture_Village_Crate.png",
+  "PlayerAnimationsId": "Item",
+  "ItemSoundSetId": "ISS_Blocks_Wood",
   "Categories": [],
   "Quality": "Common",
   "Recipe": null,

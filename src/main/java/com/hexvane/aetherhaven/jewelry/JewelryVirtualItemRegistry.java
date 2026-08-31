@@ -1,7 +1,7 @@
 package com.hexvane.aetherhaven.jewelry;
 
+import com.hexvane.aetherhaven.item.VirtualHeldItemSanitize;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.protocol.ItemBase;
 import com.hypixel.hytale.protocol.ItemResourceType;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
@@ -97,7 +97,7 @@ public final class JewelryVirtualItemRegistry {
             clone.id = virtualId;
             clone.qualityIndex = qualityIndex;
             hideFromCreativeMenu(clone);
-            copyHeldItemInteractions(originalPacket, clone);
+            VirtualHeldItemSanitize.applyHeldItemClone(originalPacket, clone);
             zeroResourceQuantities(clone);
             return clone;
         } catch (Exception e) {
@@ -114,13 +114,6 @@ public final class JewelryVirtualItemRegistry {
         clone.variant = true;
         clone.categories = new String[0];
         clone.subCategory = null;
-    }
-
-    /** Keep SwapFrom on the clone so the hotbar can scroll off virtual jewelry. */
-    private static void copyHeldItemInteractions(@Nonnull ItemBase original, @Nonnull ItemBase clone) {
-        if (clone.interactions == null || !clone.interactions.containsKey(InteractionType.SwapFrom)) {
-            clone.interactions = original.interactions;
-        }
     }
 
     private static void zeroResourceQuantities(@Nonnull ItemBase clone) {

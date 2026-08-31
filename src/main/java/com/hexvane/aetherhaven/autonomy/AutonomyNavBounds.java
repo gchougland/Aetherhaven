@@ -34,7 +34,7 @@ public final class AutonomyNavBounds {
         @Nullable ConstructionDefinition def
     ) {
         int floorY = fp.getMinY() + (def != null ? def.getAutonomyNavFloorYAboveMinY() : 0);
-        int roofEx = def != null ? def.getAutonomyNavRoofExclusionYBelowMaxY() : 1;
+        int roofEx = def != null ? def.getAutonomyNavRoofExclusionYBelowMaxY() : 4;
         int span = def != null ? def.getAutonomyNavMaxStandYSpanAboveMinY() : 32;
         int fromSpan = fp.getMinY() + span;
         int fromRoof = fp.getMaxY() - roofEx;

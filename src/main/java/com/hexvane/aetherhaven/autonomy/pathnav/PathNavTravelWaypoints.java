@@ -1,11 +1,13 @@
 package com.hexvane.aetherhaven.autonomy.pathnav;
 
+import com.hexvane.aetherhaven.autonomy.AutonomyNavBounds;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import org.joml.Vector3d;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Post-processes graph waypoints for vanilla {@code Seek} + Leash: spline/path Y can differ from the surface the
@@ -34,7 +36,7 @@ public final class PathNavTravelWaypoints {
         @Nonnull Vector3d finalTarget,
         int npcFeetYBlock
     ) {
-        return prepareForSeek(world, fromNpc, path, finalTarget, npcFeetYBlock, 2.5);
+        return prepareForSeek(world, fromNpc, path, finalTarget, npcFeetYBlock, 2.5, null);
     }
 
     /**
@@ -49,6 +51,22 @@ public final class PathNavTravelWaypoints {
         @Nonnull Vector3d finalTarget,
         int npcFeetYBlock,
         double minWaypointSpacing
+    ) {
+        return prepareForSeek(world, fromNpc, path, finalTarget, npcFeetYBlock, minWaypointSpacing, null);
+    }
+
+    /**
+     * @param standRange optional plot roof/floor caps applied when reprojecting intermediate waypoint stand Y
+     */
+    @Nonnull
+    public static List<Vector3d> prepareForSeek(
+        @Nonnull World world,
+        @Nonnull Vector3d fromNpc,
+        @Nonnull List<Vector3d> path,
+        @Nonnull Vector3d finalTarget,
+        int npcFeetYBlock,
+        double minWaypointSpacing,
+        @Nullable AutonomyNavBounds.NavVerticalRange standRange
     ) {
         if (path.isEmpty()) {
             return path;
@@ -65,7 +83,14 @@ public final class PathNavTravelWaypoints {
                 int bx = (int) Math.floor(p.x());
                 int bz = (int) Math.floor(p.z());
                 int yHint = (int) Math.floor(p.y());
-                int standY = VillagerBlockUtil.findStandYForNav(world, bx, bz, yHint, npcFeetYBlock, null);
+                AutonomyNavBounds.NavVerticalRange colRange =
+                    standRange != null
+                            && standRange.isUsable()
+                            && bx == (int) Math.floor(finalTarget.x())
+                            && bz == (int) Math.floor(finalTarget.z())
+                        ? standRange
+                        : null;
+                int standY = VillagerBlockUtil.findStandYForNav(world, bx, bz, yHint, npcFeetYBlock, colRange);
                 if (standY != Integer.MIN_VALUE) {
                     w.set(i, new Vector3d(p.x(), standY + 0.02, p.z()));
                 }

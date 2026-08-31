@@ -4,6 +4,8 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hexvane.aetherhaven.plotcreator.RuntimeCommonIconBroadcast;
+import com.hexvane.aetherhaven.prop.PropIconSync;
+import com.hexvane.aetherhaven.prop.PropPaths;
 import com.hypixel.hytale.common.plugin.PluginIdentifier;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.asset.common.CommonAsset;
@@ -41,9 +43,15 @@ public final class CommunityIconRegistry {
                         return;
                     }
                     newlyRegistered.add(asset);
-                    String constructionId = CustomBuildingsPaths.constructionIdFromIconFileName(p.getFileName().toString());
-                    if (constructionId != null) {
-                        PlotTokenIconSync.afterIconRegistered(plugin, constructionId);
+                    String fileName = p.getFileName().toString();
+                    String propId = PropPaths.propIdFromIconFileName(fileName);
+                    if (propId != null) {
+                        PropIconSync.afterIconRegistered(plugin, propId);
+                    } else {
+                        String constructionId = CustomBuildingsPaths.constructionIdFromIconFileName(fileName);
+                        if (constructionId != null) {
+                            PlotTokenIconSync.afterIconRegistered(plugin, constructionId);
+                        }
                     }
                 });
         } catch (IOException e) {
@@ -62,9 +70,15 @@ public final class CommunityIconRegistry {
             return;
         }
         RuntimeCommonIconBroadcast.broadcast(List.of(asset));
-        String constructionId = CustomBuildingsPaths.constructionIdFromIconFileName(iconFile.getFileName().toString());
-        if (constructionId != null) {
-            PlotTokenIconSync.afterIconRegistered(plugin, constructionId);
+        String fileName = iconFile.getFileName().toString();
+        String propId = PropPaths.propIdFromIconFileName(fileName);
+        if (propId != null) {
+            PropIconSync.afterIconRegistered(plugin, propId);
+        } else {
+            String constructionId = CustomBuildingsPaths.constructionIdFromIconFileName(fileName);
+            if (constructionId != null) {
+                PlotTokenIconSync.afterIconRegistered(plugin, constructionId);
+            }
         }
     }
 
