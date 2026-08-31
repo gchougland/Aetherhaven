@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.community.CommunityPrefabSafety;
 import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
 import com.hexvane.aetherhaven.prefab.AetherhavenWorldPrefabPreview;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
+import com.hexvane.aetherhaven.prop.PropPlacementSession;
 import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -170,8 +171,8 @@ public final class PlotPlacementClientPrefabPreview {
     }
 
     /**
-     * Moves an existing hologram when possible; only respawns when the preview entity is missing.
-     * Safe for gizmo commit paths that must not call {@code removeEntity} unnecessarily.
+     * Moves an existing hologram when possible; respawns when missing or when rotation/path changed
+     * (baked browsable key must match {@code rotationSteps}).
      */
     public static boolean sendMoveOrFull(
         @Nonnull PlayerRef playerRef,
@@ -181,12 +182,19 @@ public final class PlotPlacementClientPrefabPreview {
         @Nonnull Rotation placementYaw,
         @Nonnull PlotPlacementSession session
     ) {
+        int priorSteps = session.getClientPrefabPreviewRotationSteps();
+        String priorPath = session.getClientPrefabPreviewPathKey();
+        int steps = (rotationSteps % 4 + 4) % 4;
+        boolean needFull =
+            priorPath == null
+                || priorSteps != steps
+                || !prefabPathKey.equals(priorPath);
         Payload payload = resolvePayload(prefabPathKey, rotationSteps, session);
         if (payload == null) {
             return false;
         }
         List<Ref<EntityStore>> refs = session.getPreviewEntityRefs();
-        if (!refs.isEmpty()) {
+        if (!needFull && !refs.isEmpty()) {
             Ref<EntityStore> previewRef = refs.getFirst();
             if (previewRef != null && previewRef.isValid()) {
                 return sendPositionOnly(playerRef, prefabOriginWorld, payload, placementYaw, session);
@@ -361,9 +369,27 @@ public final class PlotPlacementClientPrefabPreview {
         @Nonnull Vector3i prefabOriginWorld,
         @Nonnull Rotation placementYaw
     ) {
+        return sendFullStandalone(
+            playerRef, store, previewRefs, prefabPathKey, rotationSteps, prefabOriginWorld, placementYaw, null
+        );
+    }
+
+    public static boolean sendFullStandalone(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull List<Ref<EntityStore>> previewRefs,
+        @Nonnull String prefabPathKey,
+        int rotationSteps,
+        @Nonnull Vector3i prefabOriginWorld,
+        @Nonnull Rotation placementYaw,
+        @Nullable PropPlacementSession propSession
+    ) {
         Payload payload = loadPayload(prefabPathKey, rotationSteps);
         if (payload == null) {
             clearWorldPreview(store, previewRefs);
+            if (propSession != null) {
+                propSession.clearSpawnedPreviewRotationSteps();
+            }
             return false;
         }
         clearWorldPreview(store, previewRefs);
@@ -378,14 +404,20 @@ public final class PlotPlacementClientPrefabPreview {
                 AetherhavenWorldPrefabPreview.ALL_LAYERS
             );
         if (ref == null) {
+            if (propSession != null) {
+                propSession.clearSpawnedPreviewRotationSteps();
+            }
             return false;
         }
         previewRefs.add(ref);
+        if (propSession != null) {
+            propSession.setSpawnedPreviewRotationSteps((rotationSteps % 4 + 4) % 4);
+        }
         sendEntityOverlayFull(playerRef, prefabOriginWorld, payload, placementYaw);
         return true;
     }
 
-    /** Moves an existing standalone hologram when possible; respawns only if missing. */
+    /** Moves an existing standalone hologram when possible; respawns if missing or rotation changed. */
     public static boolean sendMoveOrFullStandalone(
         @Nonnull PlayerRef playerRef,
         @Nonnull Store<EntityStore> store,
@@ -395,30 +427,54 @@ public final class PlotPlacementClientPrefabPreview {
         @Nonnull Vector3i prefabOriginWorld,
         @Nonnull Rotation placementYaw
     ) {
+        return sendMoveOrFullStandalone(
+            playerRef, store, previewRefs, prefabPathKey, rotationSteps, prefabOriginWorld, placementYaw, null
+        );
+    }
+
+    public static boolean sendMoveOrFullStandalone(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull List<Ref<EntityStore>> previewRefs,
+        @Nonnull String prefabPathKey,
+        int rotationSteps,
+        @Nonnull Vector3i prefabOriginWorld,
+        @Nonnull Rotation placementYaw,
+        @Nullable PropPlacementSession propSession
+    ) {
+        int steps = (rotationSteps % 4 + 4) % 4;
+        boolean needFull = previewRefs.isEmpty();
+        if (!needFull && propSession != null && propSession.getSpawnedPreviewRotationSteps() != steps) {
+            needFull = true;
+        }
+        if (!needFull) {
+            Ref<EntityStore> previewRef = previewRefs.getFirst();
+            if (previewRef == null || !previewRef.isValid()) {
+                needFull = true;
+            }
+        }
+        if (needFull) {
+            return sendFullStandalone(
+                playerRef, store, previewRefs, prefabPathKey, rotationSteps, prefabOriginWorld, placementYaw, propSession
+            );
+        }
         Payload payload = loadPayload(prefabPathKey, rotationSteps);
         if (payload == null) {
             return false;
         }
-        if (!previewRefs.isEmpty()) {
-            Ref<EntityStore> previewRef = previewRefs.getFirst();
-            if (previewRef != null && previewRef.isValid()) {
-                Vector3i spawnCorner =
-                    flooredOrigin(resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw));
-                AetherhavenWorldPrefabPreview.updatePositionAtBlockCorner(
-                    store,
-                    previewRef,
-                    spawnCorner,
-                    AetherhavenWorldPrefabPreview.rotationFromYaw(placementYaw)
-                );
-                if (hasEntityOverlay(payload)) {
-                    sendEntityOverlayPositionOnly(playerRef, prefabOriginWorld, payload, placementYaw);
-                }
-                return true;
-            }
-        }
-        return sendFullStandalone(
-            playerRef, store, previewRefs, prefabPathKey, rotationSteps, prefabOriginWorld, placementYaw
+        Ref<EntityStore> previewRef = previewRefs.getFirst();
+        Vector3i spawnCorner =
+            flooredOrigin(resolveClientPreviewPosition(prefabOriginWorld, payload, placementYaw));
+        AetherhavenWorldPrefabPreview.updatePositionAtBlockCorner(
+            store,
+            previewRef,
+            spawnCorner,
+            AetherhavenWorldPrefabPreview.rotationFromYaw(placementYaw)
         );
+        if (hasEntityOverlay(payload)) {
+            sendEntityOverlayPositionOnly(playerRef, prefabOriginWorld, payload, placementYaw);
+        }
+        return true;
     }
 
     @Nullable

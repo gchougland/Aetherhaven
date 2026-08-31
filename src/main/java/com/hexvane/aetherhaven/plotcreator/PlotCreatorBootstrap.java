@@ -4,8 +4,6 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.command.AetherhavenPlotCreatorCommand;
 import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
-import com.hexvane.aetherhaven.placement.PlacementGizmoInput;
-import com.hexvane.aetherhaven.placement.PlacementGizmoPacketAdapter;
 import com.hypixel.hytale.builtin.buildertools.BuilderToolsPlugin;
 import com.hexvane.aetherhaven.placement.PlotPlacementPlayerRemoveSystem;
 import com.hexvane.aetherhaven.placement.PlotPlacementSpectatorSyncSystem;
@@ -25,9 +23,6 @@ import javax.annotation.Nullable;
 
 public final class PlotCreatorBootstrap {
     private PlotCreatorBootstrap() {}
-
-    @Nullable
-    private static PlacementGizmoPacketAdapter placementGizmoPacketAdapter;
 
     @Nullable
     private static PlotCreatorSelectionBoundsAdapter plotCreatorSelectionBoundsAdapter;
@@ -163,8 +158,6 @@ public final class PlotCreatorBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new PlotCreatorSpotPreviewHideSystem());
         plugin.getEntityStoreRegistry().registerSystem(new PlotPlacementSpectatorSyncSystem());
         plugin.getEntityStoreRegistry().registerSystem(new PlotPlacementPlayerRemoveSystem());
-        placementGizmoPacketAdapter = new PlacementGizmoPacketAdapter();
-        placementGizmoPacketAdapter.register();
         plotCreatorSelectionBoundsAdapter = new PlotCreatorSelectionBoundsAdapter();
         plotCreatorSelectionBoundsAdapter.register();
         BuilderToolsPlugin builderTools = BuilderToolsPlugin.get();
@@ -187,6 +180,5 @@ public final class PlotCreatorBootstrap {
                     );
                 }
             );
-        PlacementGizmoInput.register(plugin.getEventRegistry());
     }
 }

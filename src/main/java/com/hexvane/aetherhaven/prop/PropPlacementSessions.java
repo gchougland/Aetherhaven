@@ -19,20 +19,31 @@ public final class PropPlacementSessions {
     }
 
     public static void put(@Nonnull UUID playerUuid, @Nonnull PropPlacementSession session) {
-        BY_PLAYER.put(playerUuid, session);
+        PropPlacementSession previous = BY_PLAYER.put(playerUuid, session);
+        if (previous != null && previous != session) {
+            clearSessionWorldPreview(previous);
+        }
     }
 
     public static void remove(@Nonnull UUID playerUuid) {
         PropPlacementSession session = BY_PLAYER.remove(playerUuid);
-        if (session != null && session.getWorld().getEntityStore() != null) {
-            PlotPlacementClientPrefabPreview.clearWorldPreview(
-                session.getWorld().getEntityStore().getStore(),
-                session.getPreviewEntityRefs()
-            );
+        if (session != null) {
+            clearSessionWorldPreview(session);
         }
     }
 
     public static void forEachActive(@Nonnull BiConsumer<UUID, PropPlacementSession> consumer) {
         BY_PLAYER.forEach(consumer);
+    }
+
+    private static void clearSessionWorldPreview(@Nonnull PropPlacementSession session) {
+        session.clearSpawnedPreviewRotationSteps();
+        if (session.getWorld().getEntityStore() == null) {
+            return;
+        }
+        PlotPlacementClientPrefabPreview.clearWorldPreview(
+            session.getWorld().getEntityStore().getStore(),
+            session.getPreviewEntityRefs()
+        );
     }
 }

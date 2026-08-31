@@ -9,7 +9,6 @@ import com.hexvane.aetherhaven.prop.PropPlacementSessions;
 import com.hexvane.aetherhaven.prop.PropPlacementValidator;
 import com.hexvane.aetherhaven.prop.PropPlacementWireframeOverlay;
 import com.hexvane.aetherhaven.prop.PropPrefabOps;
-import com.hexvane.aetherhaven.placement.PlacementGizmoService;
 import com.hexvane.aetherhaven.placement.PlotPlacementClientPrefabPreview;
 import com.hexvane.aetherhaven.placement.PlotPlacementNudgeUtil;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
@@ -56,8 +55,6 @@ public final class PropPlacementPage extends AetherhavenInteractiveCustomUIPage<
         commandBuilder.set("#PropPlacementTitle.TextSpans", Message.translation(MSG_UI + ".title"));
         commandBuilder.set("#PlaceButton.TextSpans", Message.translation(MSG_UI + ".place"));
         commandBuilder.set("#CancelButton.TextSpans", Message.translation(MSG_UI + ".cancel"));
-        commandBuilder.set("#MoveGizmoButton.TextSpans", Message.translation(MSG_UI + ".moveGizmo"));
-        commandBuilder.set("#MoveGizmoButton.TooltipTextSpans", Message.translation(MSG_UI + ".moveGizmoTooltip"));
 
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         PropDefinition def = plugin != null ? plugin.getPropCatalog().get(session.getPropId()) : null;
@@ -80,7 +77,6 @@ public final class PropPlacementPage extends AetherhavenInteractiveCustomUIPage<
         bind(eventBuilder, "#BtnYm", "NudgeYm");
         bind(eventBuilder, "#BtnYp", "NudgeYp");
         bind(eventBuilder, "#BtnRotate", "Rotate");
-        bind(eventBuilder, "#MoveGizmoButton", "MoveGizmo");
         bind(eventBuilder, "#PlaceButton", "Place");
         bind(eventBuilder, "#CancelButton", "Cancel");
 
@@ -117,21 +113,6 @@ public final class PropPlacementPage extends AetherhavenInteractiveCustomUIPage<
             case "NudgeYm" -> session.nudge(0, -1, 0);
             case "NudgeYp" -> session.nudge(0, 1, 0);
             case "Rotate" -> session.rotateClockwise90();
-            case "MoveGizmo" -> {
-                World world = store.getExternalData().getWorld();
-                world.execute(
-                    () -> {
-                        if (!ref.isValid()) {
-                            return;
-                        }
-                        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
-                        if (pr != null && PlacementGizmoService.tryEnterPropGizmoMode(ref, store, pr)) {
-                            close();
-                        }
-                    }
-                );
-                return;
-            }
             case "Place" -> {
                 schedulePlace(ref, store);
                 return;
@@ -163,9 +144,6 @@ public final class PropPlacementPage extends AetherhavenInteractiveCustomUIPage<
             PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
             PlayerRef clearTarget = pr != null ? pr : playerRef;
             UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-            if (uc != null) {
-                PlacementGizmoService.exitGizmoModeForPlayer(uc.getUuid(), clearTarget);
-            }
             PropPlacementWireframeOverlay.clearFor(clearTarget);
             PlotPlacementClientPrefabPreview.hide(clearTarget);
             if (uc != null) {
@@ -185,9 +163,6 @@ public final class PropPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
                 PlayerRef clearTarget = pr != null ? pr : playerRef;
                 UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-                if (uc != null) {
-                    PlacementGizmoService.exitGizmoModeForPlayer(uc.getUuid(), clearTarget);
-                }
                 PropPlacementWireframeOverlay.clearFor(clearTarget);
                 PlotPlacementClientPrefabPreview.hide(clearTarget);
                 if (uc != null) {
@@ -258,7 +233,8 @@ public final class PropPlacementPage extends AetherhavenInteractiveCustomUIPage<
                     def.getPrefabPath(),
                     session.getRotationSteps(),
                     session.getAnchor(),
-                    session.getYaw()
+                    session.getYaw(),
+                    session
                 );
             if (!ghostOk) {
                 PlotPlacementClientPrefabPreview.clearWorldPreview(store, session.getPreviewEntityRefs());

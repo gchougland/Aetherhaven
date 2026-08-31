@@ -2,9 +2,18 @@
 
 ## [3.1.2] - Unreleased
 
+### Changed
+
+- **Props and plot staff** Removed Move with gizmo. Use the nudge buttons in the placement menu to move previews. Was too buggy and just doesn't work well. Maybe will add back in future.
+
 ### Fixed
 
+- **Community marketplace** Building previews show maps and other decorations at the right height and size again.
 - **Packaging wand** Putting the wand away no longer crashes the world when a prop placement preview is open.
+- **Props** The preview hologram rotates with the white outline box again.
+- **Props and plot staff** Previews of things inside a build no longer get left behind when you leave or start a new placement.
+- **Path shovel** Confirming a path places the path blocks again.
+- **Path shovel** Key hints on the shovel display match your remapped keys again.
 
 ## [3.1.1] - 8/27/2026
 

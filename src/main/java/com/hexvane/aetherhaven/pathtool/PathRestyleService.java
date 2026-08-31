@@ -75,7 +75,7 @@ public final class PathRestyleService {
             if (ch == null) {
                 continue;
             }
-            if (!PathCementService.placePathBlock(world, cell.x, cell.y, cell.z, placeId, RotationTuple.NONE_INDEX, PLACE)) {
+            if (!PathCementService.placePathBlock(world, cell.x, cell.y, cell.z, placeId, RotationTuple.NONE_INDEX, PLACE, true)) {
                 continue;
             }
             ok++;

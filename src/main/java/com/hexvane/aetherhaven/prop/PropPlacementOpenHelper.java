@@ -2,7 +2,6 @@ package com.hexvane.aetherhaven.prop;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.placement.FrontFacing;
-import com.hexvane.aetherhaven.placement.PlacementGizmoService;
 import com.hexvane.aetherhaven.placement.PlotPlacementNudgeUtil;
 import com.hexvane.aetherhaven.ui.PropPlacementPage;
 import com.hypixel.hytale.component.ComponentAccessor;
@@ -43,7 +42,6 @@ public final class PropPlacementOpenHelper {
         World world = store.getExternalData().getWorld();
         PropPlacementSession existing = PropPlacementSessions.get(uc.getUuid());
         if (existing != null && existing.getWorld().getName().equals(world.getName())) {
-            PlacementGizmoService.exitGizmoModeForPlayer(uc.getUuid(), playerRef);
             return new PropPlacementPage(playerRef, existing);
         }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();

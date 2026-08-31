@@ -36,6 +36,8 @@ public final class PathCementService {
     private static final RotationTuple FLAT = RotationTuple.NONE;
 
     private PathCementService() {}
+
+    /** Places a block only when the cell is empty (strict {@link BlockOperations#testPlaceBlock}). */
     public static boolean placePathBlock(
         @Nonnull World world,
         int x,
@@ -45,6 +47,23 @@ public final class PathCementService {
         int rotationIndex,
         int settings
     ) {
+        return placePathBlock(world, x, y, z, blockTypeKey, rotationIndex, settings, false);
+    }
+
+    /**
+     * @param allowOccupied when {@code true}, skips the empty-cell test (for path replace over soil). Callers
+     *     must already have validated the surface is replaceable.
+     */
+    public static boolean placePathBlock(
+        @Nonnull World world,
+        int x,
+        int y,
+        int z,
+        @Nonnull String blockTypeKey,
+        int rotationIndex,
+        int settings,
+        boolean allowOccupied
+    ) {
         BlockType blockType = BlockType.getAssetMap().getAsset(blockTypeKey);
         if (blockType == null) {
             return false;
@@ -53,9 +72,11 @@ public final class PathCementService {
         if (section == null) {
             return false;
         }
-        var chunkStore = world.getChunkStore().getStore();
-        if (!BlockOperations.testPlaceBlock(chunkStore, section, x, y, z, blockType, rotationIndex)) {
-            return false;
+        if (!allowOccupied) {
+            var chunkStore = world.getChunkStore().getStore();
+            if (!BlockOperations.testPlaceBlock(chunkStore, section, x, y, z, blockType, rotationIndex)) {
+                return false;
+            }
         }
         return ChunkSectionBlockUtil.setBlockByKey(world, x, y, z, blockTypeKey, settings);
     }
@@ -122,7 +143,7 @@ public final class PathCementService {
             }
             int oldRot = ChunkSectionBlockUtil.rotationIndex(world, x, y, z);
             String placeId = pickPlaceId(p.lateralIndex, random, pathStyleIndex, pathWidthBlocks, cfg);
-            if (!placePathBlock(world, x, y, z, placeId, RotationTuple.NONE_INDEX, PLACE)) {
+            if (!placePathBlock(world, x, y, z, placeId, RotationTuple.NONE_INDEX, PLACE, true)) {
                 continue;
             }
             PathToolUndoCell u = new PathToolUndoCell();

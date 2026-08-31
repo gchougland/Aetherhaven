@@ -6,7 +6,6 @@ import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyPreviewSystem;
 import com.hexvane.aetherhaven.placement.CharterRelocationService;
 import com.hexvane.aetherhaven.placement.CharterRelocationSession;
 import com.hexvane.aetherhaven.placement.CharterRelocationSessions;
-import com.hexvane.aetherhaven.placement.PlacementGizmoService;
 import com.hexvane.aetherhaven.placement.PlotPlacementCameraUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementNudgeUtil;
 import com.hexvane.aetherhaven.placement.PlotPreviewSpawner;
@@ -123,7 +122,6 @@ public final class CharterRelocationPage extends AetherhavenInteractiveCustomUIP
         bind(eventBuilder, "#BtnPanZm", "PanZm");
         bind(eventBuilder, "#BtnPanZp", "PanZp");
         bind(eventBuilder, "#SnapToLocationButton", "SnapToLocation");
-        bind(eventBuilder, "#MoveGizmoButton", "MoveGizmo");
         bind(eventBuilder, "#PlaceButton", "Place");
         bind(eventBuilder, "#CancelButton", "Cancel");
 
@@ -285,23 +283,6 @@ public final class CharterRelocationPage extends AetherhavenInteractiveCustomUIP
                 }
                 return;
             }
-            case "MoveGizmo" -> {
-                World world = store.getExternalData().getWorld();
-                world.execute(
-                    () -> {
-                        if (!ref.isValid()) {
-                            return;
-                        }
-                        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
-                        if (pr != null && PlacementGizmoService.tryEnterCharterGizmoMode(ref, store, pr)) {
-                            birdsEyeEnabled = false;
-                            smoothPanGeneration++;
-                            close();
-                        }
-                    }
-                );
-                return;
-            }
             default -> {
                 return;
             }
@@ -451,9 +432,6 @@ public final class CharterRelocationPage extends AetherhavenInteractiveCustomUIP
                 }
                 PlayerRef prCancel = store.getComponent(ref, PlayerRef.getComponentType());
                 UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-                if (prCancel != null && uc != null) {
-                    PlacementGizmoService.exitGizmoModeForPlayer(uc.getUuid(), prCancel);
-                }
                 PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
                 PlotPlacementWireframeOverlay.clearFor(prCancel);
                 if (uc != null) {
@@ -478,9 +456,6 @@ public final class CharterRelocationPage extends AetherhavenInteractiveCustomUIP
                 if (CharterRelocationService.tryCommit(ref, store, session, uc.getUuid())) {
                     PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
                     PlayerRef prDone = store.getComponent(ref, PlayerRef.getComponentType());
-                    if (prDone != null) {
-                        PlacementGizmoService.exitGizmoModeForPlayer(uc.getUuid(), prDone);
-                    }
                     PlotPlacementWireframeOverlay.clearFor(prDone);
                     CharterRelocationSessions.remove(uc.getUuid());
                     close();

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import org.joml.Vector3i;
 
 /** Server-side state while a player is positioning a prop (preview + UI), see {@link PropPlacementSessions}. */
@@ -27,9 +26,10 @@ public final class PropPlacementSession {
 
     private int rotationSteps;
 
-    private final List<Ref<EntityStore>> previewEntityRefs = new ArrayList<>();
+    /** Rotation steps baked into the last spawned world hologram, or {@code -1} if none. */
+    private int spawnedPreviewRotationSteps = -1;
 
-    private boolean gizmoMoveActive;
+    private final List<Ref<EntityStore>> previewEntityRefs = new ArrayList<>();
 
     public PropPlacementSession(
         @Nonnull UUID playerUuid,
@@ -85,6 +85,18 @@ public final class PropPlacementSession {
         setRotationSteps(rotationSteps + 1);
     }
 
+    public int getSpawnedPreviewRotationSteps() {
+        return spawnedPreviewRotationSteps;
+    }
+
+    public void setSpawnedPreviewRotationSteps(int spawnedPreviewRotationSteps) {
+        this.spawnedPreviewRotationSteps = spawnedPreviewRotationSteps;
+    }
+
+    public void clearSpawnedPreviewRotationSteps() {
+        this.spawnedPreviewRotationSteps = -1;
+    }
+
     @Nonnull
     public List<Ref<EntityStore>> getPreviewEntityRefs() {
         return previewEntityRefs;
@@ -98,13 +110,5 @@ public final class PropPlacementSession {
             case 3 -> Rotation.TwoSeventy;
             default -> Rotation.None;
         };
-    }
-
-    public boolean isGizmoMoveActive() {
-        return gizmoMoveActive;
-    }
-
-    public void setGizmoMoveActive(boolean gizmoMoveActive) {
-        this.gizmoMoveActive = gizmoMoveActive;
     }
 }

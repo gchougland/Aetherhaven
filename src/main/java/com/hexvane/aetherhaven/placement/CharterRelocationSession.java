@@ -36,8 +36,6 @@ public final class CharterRelocationSession {
     @Nonnull
     private final List<Ref<EntityStore>> previewEntityRefs = new ArrayList<>();
 
-    private boolean gizmoMoveActive;
-
     public CharterRelocationSession(@Nonnull World world, @Nonnull Vector3i charterAnchor, @Nonnull UUID townId) {
         this.world = world;
         this.townId = townId;
@@ -139,13 +137,5 @@ public final class CharterRelocationSession {
     @Nonnull
     public List<Ref<EntityStore>> getPreviewEntityRefs() {
         return previewEntityRefs;
-    }
-
-    public boolean isGizmoMoveActive() {
-        return gizmoMoveActive;
-    }
-
-    public void setGizmoMoveActive(boolean gizmoMoveActive) {
-        this.gizmoMoveActive = gizmoMoveActive;
     }
 }

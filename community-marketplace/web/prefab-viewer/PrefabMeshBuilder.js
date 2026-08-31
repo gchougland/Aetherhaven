@@ -7,11 +7,11 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=42";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=42";
+} from "./BlockCatalog.js?v=43";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=43";
 
 /** Bump when transform math changes — shown in the viewer so we can confirm the live build. */
-export const PREFAB_VIEWER_TRANSFORM_REV = "xform-42";
+export const PREFAB_VIEWER_TRANSFORM_REV = "xform-43";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
@@ -95,13 +95,10 @@ export function entityRotationToQuaternion(rot) {
 }
 
 /**
- * Blockymodels are authored standing on their origin, so a block entity turns around a
- * point above that origin: the centre of its block, exactly like the grid path, which
- * rotates a model lowered by a flat half block about the block centre.
- *
- * This is a world distance and does not scale with the entity, which is what the Cozy
- * Crossing town hall clock measures: its frame is symmetric and its two hands meet in
- * the middle, and both line up at 0.625 model units at that clock's 0.8 entity scale.
+ * Blockymodels are authored standing on their origin. After Update 6 the entity position
+ * is the visual centre, so models are lowered by this flat half block (world distance,
+ * not scaled with the entity) to keep the centre on the holder. Same idea as the grid
+ * path and the Cozy Crossing town hall clock calibration.
  * See scripts/debug-clock-transform.mjs.
  */
 export const BLOCK_ENTITY_PIVOT = 0.5;
@@ -115,6 +112,45 @@ export const BLOCK_ENTITY_PIVOT = 0.5;
  */
 export function isBlockEntity(comps) {
   return Boolean(comps?.BlockEntity || comps?.blockEntity);
+}
+
+/**
+ * Stored EntityScale for a block entity. Prefab JSON usually still uses the pre–Update 6
+ * convention where 2.0 is natural size; missing scale defaults to 2 to match the engine.
+ * @param {any} comps
+ * @returns {number}
+ */
+export function rawBlockEntityScale(comps) {
+  let entityScale = Number(comps?.EntityScale?.Scale ?? comps?.entityScale?.Scale);
+  if (!Number.isFinite(entityScale) || entityScale <= 0) {
+    return 2;
+  }
+  return entityScale;
+}
+
+/**
+ * Prefab JSON with scale &gt; 1 still uses pre–Update 6 identity-at-2. Values ≤ 1 are
+ * treated as already migrated (same heuristic as in-game migrateLoadedIfOversized).
+ * @param {any} comps
+ * @returns {boolean}
+ */
+export function isOldConventionBlockEntity(comps) {
+  return isBlockEntity(comps) && rawBlockEntityScale(comps) > 1;
+}
+
+/**
+ * Same math as Hytale PositionMigrationSystem / BlockEntityScaleMigration.applyAnchorShift:
+ * move the anchor onto the visual centre using the pre-halve scale.
+ * @param {THREE.Vector3} position mutated in place
+ * @param {THREE.Quaternion} quaternion entity rotation
+ * @param {number} oldScale stored EntityScale before /2
+ * @returns {THREE.Vector3}
+ */
+export function applyBlockEntityAnchorShift(position, quaternion, oldScale) {
+  const local = new THREE.Vector3(0, oldScale / 4 - 0.5, 0).applyQuaternion(quaternion);
+  position.add(local);
+  position.y += 0.5;
+  return position;
 }
 
 /**
@@ -165,23 +201,27 @@ export function rotationTupleToEuler(index) {
  * World scale for prefab entities (EntityScale / BlockEntity only).
  * Mesh unit density is applied in {@link loadBlockyModel} so every block, item, and
  * entity path shares the same 32 vs 64 units-per-block rule.
- * Block entity EntityScale is identity-at-2 (EntitySpawnPage multiplies the UI value by
- * BLOCK_ENTITY_BASE_SCALE = 2, and BlockEntitySystems defaults to 2), so render scale
- * is the stored value halved. Item entities store the UI value as-is.
+ *
+ * Update 6 made block-entity scale 1.0 natural (was 2.0). Prefab JSON usually still
+ * stores the old values, so those are halved for display. Already-migrated exports
+ * (scale ≤ 1) are used as-is. Item entities store the UI value as-is.
  * @param {any} comps
  * @param {string|null} [_modelPath] unused; density is baked into the loaded mesh
  */
 export function entityWorldScale(comps, _modelPath = null) {
-  const hasBlockStyle = isBlockEntity(comps);
-  let entityScale = Number(comps?.EntityScale?.Scale ?? comps?.entityScale?.Scale);
-  if (!Number.isFinite(entityScale) || entityScale <= 0) {
-    entityScale = hasBlockStyle ? 2 : 1;
+  if (!isBlockEntity(comps)) {
+    let entityScale = Number(comps?.EntityScale?.Scale ?? comps?.entityScale?.Scale);
+    if (!Number.isFinite(entityScale) || entityScale <= 0) {
+      entityScale = 1;
+    }
+    return entityScale;
   }
-  return hasBlockStyle ? entityScale / 2 : entityScale;
+  const raw = rawBlockEntityScale(comps);
+  return raw > 1 ? raw / 2 : raw;
 }
 
 /** @deprecated Use the loader's unit scale; kept as a re-export for older callers. */
-export { isCharacterDensityModel } from "./BlockyModelLoader.js?v=42";
+export { isCharacterDensityModel } from "./BlockyModelLoader.js?v=43";
 
 /**
  * @param {any} pos
@@ -540,9 +580,10 @@ export async function buildPrefabMesh(prefab, options = {}) {
         if (!placed && itemId) {
           const idef = getBlockDef(itemId);
           // Do not multiply BlockType.CustomModelScale here. Grid blocks in this viewer are
-          // drawn at native model size, and EntityScale (with BlockEntity identity-at-2)
-          // already carries the size the prop was given. Applying CMS on top was shrinking
-          // potion entities to half again while item-model props (bomb bottles) stayed large.
+          // drawn at native model size, and EntityScale (with Update 6 / old-convention
+          // handling in entityWorldScale) already carries the size the prop was given.
+          // Applying CMS on top was shrinking potion entities to half again while
+          // item-model props (bomb bottles) stayed large.
           if (idef?.itemModel) {
             const model = await getModel(idef.itemModel, idef.itemTexture || null);
             if (model) {
@@ -570,13 +611,19 @@ export async function buildPrefabMesh(prefab, options = {}) {
         const worldScale = entityWorldScale(comps, modelPath) * customModelScale;
         holder.scale.setScalar(worldScale);
         if (isBlockStyle) {
-          // Drop the models onto the pivot, then lift the holder by the same amount so the
-          // pivot only changes what the entity turns around: unrotated, it still stands on
-          // its stored position. Model space is scaled, the world offset is not.
+          // Update 6: entity position is the visual centre. Old-convention prefab JSON
+          // still stores the pre-migration feet anchor, so shift like the in-game
+          // BlockEntityScaleMigration, then drop feet-origin models onto that centre.
+          if (isOldConventionBlockEntity(comps)) {
+            applyBlockEntityAnchorShift(
+              holder.position,
+              holder.quaternion,
+              rawBlockEntityScale(comps)
+            );
+          }
           for (const child of holder.children) {
             child.position.y -= BLOCK_ENTITY_PIVOT / worldScale;
           }
-          holder.position.y += BLOCK_ENTITY_PIVOT;
         }
 
         // Skip entities we cannot resolve from vanilla/Aetherhaven catalogs (no placeholders).

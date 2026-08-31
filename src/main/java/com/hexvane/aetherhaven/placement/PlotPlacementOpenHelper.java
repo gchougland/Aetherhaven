@@ -87,7 +87,7 @@ public final class PlotPlacementOpenHelper {
         PlotPlacementClientPrefabPreview.hide(playerRef);
         PlotPlacementSession session =
             PlotPlacementSession.forRelocatingPlot(world, signAnchor, steps, plot.getConstructionId(), plotId);
-        PlotPlacementSessions.put(uc.getUuid(), session);
+        PlotPlacementSessions.replaceClearingWorldPreview(uc.getUuid(), session, store);
         return new PlotPlacementPage(playerRef, session);
     }
 
@@ -107,12 +107,10 @@ public final class PlotPlacementOpenHelper {
         World world = store.getExternalData().getWorld();
         CharterRelocationSession charterReloc = CharterRelocationSessions.get(uc.getUuid());
         if (charterReloc != null && charterReloc.getWorld().getName().equals(world.getName())) {
-            PlacementGizmoService.exitGizmoModeForPlayer(uc.getUuid(), playerRef);
             return new CharterRelocationPage(playerRef, charterReloc);
         }
         PlotPlacementSession existing = PlotPlacementSessions.get(uc.getUuid());
         if (existing != null && existing.getWorld().getName().equals(world.getName())) {
-            PlacementGizmoService.exitGizmoModeForPlayer(uc.getUuid(), playerRef);
             // Active preview: do not move anchor on block right-click; only Cancel clears the session so a new
             // right-click on a block can start placement elsewhere.
             return new PlotPlacementPage(playerRef, existing);
@@ -151,7 +149,7 @@ public final class PlotPlacementOpenHelper {
             playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.buildingCannotMove"));
             return null;
         }
-        PlotPlacementSessions.put(uc.getUuid(), existing);
+        PlotPlacementSessions.replaceClearingWorldPreview(uc.getUuid(), existing, store);
         return new PlotPlacementPage(playerRef, existing);
     }
 
@@ -168,7 +166,6 @@ public final class PlotPlacementOpenHelper {
         if (s == null) {
             return;
         }
-        PlacementGizmoService.exitGizmoModeForPlayer(uc.getUuid(), pr);
         PlotPlacementSessions.remove(uc.getUuid());
         World world = store.getExternalData().getWorld();
         world.execute(

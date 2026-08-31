@@ -9,13 +9,15 @@
   "Recipe": null,
   "MaxStack": 16,
   "Set": "Aetherhaven",
-  "BuilderTool": {
-    "Id": "Point",
-    "IsBrush": false,
-    "SurvivalAllowed": true
-  },
   "Interactions": {
-    "Primary": "Builder_Tool",
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "OpenCustomUI",
+          "Page": { "Id": "AetherhavenPropPlacement" }
+        }
+      ]
+    },
     "Secondary": {
       "Interactions": [
         {

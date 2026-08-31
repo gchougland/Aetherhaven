@@ -118,6 +118,7 @@ creativeCategory.aetherhaven=Aetherhaven
 items.Aetherhaven_Plot_Placement_Tool.name=Plot Placement Staff
 items.Aetherhaven_Plot_Placement_Tool.description=Carry the plot token for the building you want. Aim at the ground to preview it, move and rotate until it fits, then confirm to place the plot sign.
 
+
 items.Aetherhaven_Wall_Wand.name=Wall Wand
 items.Aetherhaven_Wall_Wand.description=Plan stone walls around your town. Secondary use opens a top down view to chain wall, gate, and tower pieces. Primary use on an existing piece lets you extend the wall or remove it. Each piece uses a plot sign and builds like other town plots.
 items.Aetherhaven_Token_Wall.name=Wall Piece Marker

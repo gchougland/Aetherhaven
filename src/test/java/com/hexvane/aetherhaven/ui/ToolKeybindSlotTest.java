@@ -52,4 +52,33 @@ class ToolKeybindSlotTest {
         assertEquals("Q", ToolKeybindDisplay.scancodeToLabel(20));
         assertNull(ToolKeybindDisplay.scancodeToLabel(-1));
     }
+
+    @Test
+    void scancodeToLabel_mapsKeypad() {
+        assertEquals("Num3", ToolKeybindDisplay.scancodeToLabel(91));
+        assertEquals("Num0", ToolKeybindDisplay.scancodeToLabel(98));
+        assertEquals("NumEnter", ToolKeybindDisplay.scancodeToLabel(88));
+    }
+
+    @Test
+    void parseSettings_format7SparseRemapUsesKeypadLabel() {
+        String json =
+            """
+            {
+              "FormatVersion": 7,
+              "InputActions": {
+                "BlockInteractAction": {
+                  "Name": "BlockInteractAction",
+                  "Id": 15,
+                  "Bindings": [
+                    { "SourceType": 2, "GamepadButton": 2 },
+                    { "SourceType": 0, "Scancode": 91 }
+                  ]
+                }
+              }
+            }
+            """;
+        Map<String, String> overrides = ToolKeybindDisplay.parseSettingsOverrides(json);
+        assertEquals("Num3", overrides.get("BlockInteractAction"));
+    }
 }

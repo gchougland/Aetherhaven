@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.placement;
 
+import com.hexvane.aetherhaven.prop.PropPlacementSessions;
+import com.hexvane.aetherhaven.prop.PropPlacementWireframeOverlay;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -15,7 +17,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/** Clears plot placement previews for spectators when the placing player unloads. */
+/** Clears plot and prop placement previews when the placing player unloads. */
 public final class PlotPlacementPlayerRemoveSystem extends RefSystem<EntityStore> {
     @Nonnull
     @Override
@@ -45,15 +47,19 @@ public final class PlotPlacementPlayerRemoveSystem extends RefSystem<EntityStore
         UUID placerUuid = uc.getUuid();
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (pr != null) {
-            PlacementGizmoService.exitGizmoModeForPlayer(placerUuid, pr);
+            PlotPlacementClientPrefabPreview.hide(pr);
+            PlotPlacementWireframeOverlay.clearFor(pr);
+            PropPlacementWireframeOverlay.clearFor(pr);
         }
         PlotPlacementSession session = PlotPlacementSessions.get(placerUuid);
-        if (session == null) {
-            return;
+        if (session != null) {
+            World world = store.getExternalData().getWorld();
+            PlotPlacementPreviewSync.hideSpectators(world, placerUuid, session);
+            PlotPlacementClientPrefabPreview.clearWorldPreview(store, session);
+            PlotPlacementClientPrefabPreview.clearSessionCache(session);
+            PlotPlacementSessions.remove(placerUuid);
         }
-        World world = store.getExternalData().getWorld();
-        PlotPlacementPreviewSync.hideSpectators(world, placerUuid, session);
-        PlotPlacementClientPrefabPreview.clearSessionCache(session);
-        PlotPlacementSessions.remove(placerUuid);
+        // PropPlacementSessions.remove also clears world hologram entities.
+        PropPlacementSessions.remove(placerUuid);
     }
 }

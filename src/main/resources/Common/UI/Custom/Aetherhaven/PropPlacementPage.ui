@@ -188,12 +188,6 @@ $C.@PageOverlay {
         FlexWeight: 1;
       }
 
-      $C.@SecondaryTextButton #MoveGizmoButton {
-        Anchor: (Bottom: 10, Width: 392, Height: 36);
-        Padding: (Horizontal: 12);
-        Text: "";
-      }
-
       Group #RowActions {
         LayoutMode: Top;
         Anchor: (Top: 8, Width: 392);
