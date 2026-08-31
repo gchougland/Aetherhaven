@@ -3,7 +3,10 @@
     "Name": "aetherhaven_items.items.Aetherhaven_Block_Palette.name",
     "Description": "aetherhaven_items.items.Aetherhaven_Block_Palette.description"
   },
-  "Parent": "Furniture_Village_Crate",
+  "Icon": "Icons/ItemsGenerated/Furniture_Village_Crate.png",
+  "Model": "Items/CreativeTools/EditorTool.blockymodel",
+  "PlayerAnimationsId": "Item",
+  "ItemSoundSetId": "ISS_Blocks_Wood",
   "Categories": [],
   "Quality": "Uncommon",
   "MaxStack": 16,

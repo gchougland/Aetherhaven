@@ -45,6 +45,7 @@
       }
     },
     "HitboxType": "Aetherhaven_Calendar",
+    "InteractionHitboxType": "Aetherhaven_Calendar",
     "Material": "Solid",
     "Opacity": "Transparent",
     "ParticleColor": "#8b7355",

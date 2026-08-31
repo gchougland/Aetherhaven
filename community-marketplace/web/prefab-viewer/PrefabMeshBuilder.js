@@ -7,11 +7,11 @@ import {
   getBlockDef,
   getModelDef,
   resolveCubeFaces,
-} from "./BlockCatalog.js?v=44";
-import { loadBlockyModel } from "./BlockyModelLoader.js?v=44";
+} from "./BlockCatalog.js?v=45";
+import { loadBlockyModel } from "./BlockyModelLoader.js?v=45";
 
 /** Bump when transform math changes — shown in the viewer so we can confirm the live build. */
-export const PREFAB_VIEWER_TRANSFORM_REV = "xform-44";
+export const PREFAB_VIEWER_TRANSFORM_REV = "xform-45";
 
 /** @type {Map<string, THREE.Texture>} */
 const cubeTexCache = new Map();
@@ -128,13 +128,36 @@ export function rawBlockEntityScale(comps) {
 }
 
 /**
- * Prefab JSON with scale &gt; 1 still uses pre–Update 6 identity-at-2. Values ≤ 1 are
- * treated as already migrated (same heuristic as in-game migrateLoadedIfOversized).
+ * Prefabs still on pre–Update 6 identity-at-2 almost always keep at least one block entity
+ * above 1 (natural was 2). Post-U6 exports stay ≤ 1. Detect per prefab, not per entity:
+ * old builds often mix scale 2 with 1.0/0.8 pieces that still need halving.
+ */
+export const OLD_BLOCK_ENTITY_SCALE_THRESHOLD = 1.001;
+
+/**
+ * @param {any[]} entities
+ * @returns {boolean}
+ */
+export function prefabUsesOldBlockEntityScale(entities) {
+  for (const entity of entities || []) {
+    const comps = entity?.Components || entity?.components || {};
+    if (!isBlockEntity(comps)) {
+      continue;
+    }
+    if (rawBlockEntityScale(comps) > OLD_BLOCK_ENTITY_SCALE_THRESHOLD) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * @deprecated Use {@link prefabUsesOldBlockEntityScale}; kept for older callers.
  * @param {any} comps
  * @returns {boolean}
  */
 export function isOldConventionBlockEntity(comps) {
-  return isBlockEntity(comps) && rawBlockEntityScale(comps) > 1;
+  return isBlockEntity(comps) && rawBlockEntityScale(comps) > OLD_BLOCK_ENTITY_SCALE_THRESHOLD;
 }
 
 /**
@@ -201,13 +224,15 @@ export function rotationTupleToEuler(index) {
  * Mesh unit density is applied in {@link loadBlockyModel} so every block, item, and
  * entity path shares the same 32 vs 64 units-per-block rule.
  *
- * Update 6 made block-entity scale 1.0 natural (was 2.0). Prefab JSON usually still
- * stores the old values, so those are halved for display. Already-migrated exports
- * (scale ≤ 1) are used as-is. Item entities store the UI value as-is.
+ * Update 6 made block-entity scale 1.0 natural (was 2.0). When the prefab still uses
+ * the old convention ({@link prefabUsesOldBlockEntityScale}), every block entity is
+ * halved — including stored values ≤ 1. Post-U6 prefabs use the stored scale as-is.
+ * Item entities store the UI value as-is.
  * @param {any} comps
  * @param {string|null} [_modelPath] unused; density is baked into the loaded mesh
+ * @param {boolean} [oldConventionPrefab=false]
  */
-export function entityWorldScale(comps, _modelPath = null) {
+export function entityWorldScale(comps, _modelPath = null, oldConventionPrefab = false) {
   if (!isBlockEntity(comps)) {
     let entityScale = Number(comps?.EntityScale?.Scale ?? comps?.entityScale?.Scale);
     if (!Number.isFinite(entityScale) || entityScale <= 0) {
@@ -216,11 +241,11 @@ export function entityWorldScale(comps, _modelPath = null) {
     return entityScale;
   }
   const raw = rawBlockEntityScale(comps);
-  return raw > 1 ? raw / 2 : raw;
+  return oldConventionPrefab ? raw / 2 : raw;
 }
 
 /** @deprecated Use the loader's unit scale; kept as a re-export for older callers. */
-export { isCharacterDensityModel } from "./BlockyModelLoader.js?v=44";
+export { isCharacterDensityModel } from "./BlockyModelLoader.js?v=45";
 
 /**
  * @param {any} pos
@@ -391,7 +416,12 @@ export async function buildPrefabMesh(prefab, options = {}) {
 
   const blocks = Array.isArray(prefab?.blocks) ? prefab.blocks : [];
   const fluids = Array.isArray(prefab?.fluids) ? prefab.fluids : [];
-  const entities = Array.isArray(prefab?.entities) ? prefab.entities : [];
+  const entities = Array.isArray(prefab?.entities)
+    ? prefab.entities
+    : Array.isArray(prefab?.Entities)
+      ? prefab.Entities
+      : [];
+  const oldConventionPrefab = prefabUsesOldBlockEntityScale(entities);
 
   const work = [];
   for (const b of blocks) {
@@ -607,7 +637,7 @@ export async function buildPrefabMesh(prefab, options = {}) {
           }
         }
 
-        const worldScale = entityWorldScale(comps, modelPath) * customModelScale;
+        const worldScale = entityWorldScale(comps, modelPath, oldConventionPrefab) * customModelScale;
         holder.scale.setScalar(worldScale);
         if (isBlockStyle) {
           // Update 6: entity position is the visual centre. Old-convention prefab JSON
@@ -615,7 +645,7 @@ export async function buildPrefabMesh(prefab, options = {}) {
           // BlockEntityScaleMigration, then drop feet-origin models onto that centre.
           // Pivot is in local model units so half-height scales with EntityScale (wheel
           // spokes at 0.5 must not keep a fixed 0.5 world offset).
-          if (isOldConventionBlockEntity(comps)) {
+          if (oldConventionPrefab) {
             applyBlockEntityAnchorShift(
               holder.position,
               holder.quaternion,

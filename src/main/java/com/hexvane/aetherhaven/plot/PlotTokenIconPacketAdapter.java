@@ -344,7 +344,7 @@ public final class PlotTokenIconPacketAdapter {
             packet.type = UpdateType.AddOrUpdate;
             packet.items = toSend;
             packet.removedItems = new String[0];
-            packet.updateModels = false;
+            packet.updateModels = true;
             packet.updateIcons = true;
             playerRef.getPacketHandler().writeNoCache(packet);
         } catch (Exception e) {

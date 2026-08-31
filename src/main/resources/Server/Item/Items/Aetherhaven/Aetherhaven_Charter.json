@@ -57,6 +57,7 @@
       }
     },
     "HitboxType": "Aetherhaven_Charter",
+    "InteractionHitboxType": "Aetherhaven_Charter",
     "Material": "Solid",
     "Opacity": "Transparent",
     "ParticleColor": "#797668",

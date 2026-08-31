@@ -20,5 +20,14 @@
     "Type": ["Tool"],
     "Family": ["Aetherhaven"]
   },
-  "ItemSoundSetId": "ISS_Blocks_Wood"
+  "ItemSoundSetId": "ISS_Blocks_Wood",
+  "Interactions": {
+    "SwapFrom": {
+      "Interactions": [
+        {
+          "Type": "ChangeActiveSlot"
+        }
+      ]
+    }
+  }
 }

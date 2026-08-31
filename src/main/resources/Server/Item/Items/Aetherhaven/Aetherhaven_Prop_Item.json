@@ -4,6 +4,7 @@
     "Description": "aetherhaven_items.items.Aetherhaven_Prop_Item.description"
   },
   "Icon": "Icons/ItemsGenerated/Furniture_Village_Crate.png",
+  "Model": "Items/CreativeTools/EditorTool.blockymodel",
   "PlayerAnimationsId": "Item",
   "ItemSoundSetId": "ISS_Blocks_Wood",
   "Categories": [],

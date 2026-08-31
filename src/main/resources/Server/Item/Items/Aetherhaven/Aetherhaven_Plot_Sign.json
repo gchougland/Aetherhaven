@@ -39,6 +39,7 @@
       }
     },
     "HitboxType": "Aetherhaven_Plot_Sign",
+    "InteractionHitboxType": "Aetherhaven_Plot_Sign",
     "IgnoreSupportWhenPlaced": true,
     "Material": "Solid",
     "Opacity": "Transparent",
