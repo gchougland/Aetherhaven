@@ -388,6 +388,23 @@ public final class ChunkSectionBlockUtil {
         @Nonnull String blockTypeKey,
         int settings
     ) {
+        return setBlockByKey(world, x, y, z, blockTypeKey, RotationTuple.NONE_INDEX, settings);
+    }
+
+    /**
+     * Rotation matters for more than just the look of the block: Hytale lays out the filler blocks of a block whose
+     * hitbox leaves its own cell from the rotated hitbox, so a rotated block written as unrotated claims the wrong
+     * cells.
+     */
+    public static boolean setBlockByKey(
+        @Nonnull World world,
+        int x,
+        int y,
+        int z,
+        @Nonnull String blockTypeKey,
+        int rotationIndex,
+        int settings
+    ) {
         int index = BlockType.getAssetMap().getIndex(blockTypeKey);
         if (index < 0) {
             return false;
@@ -403,7 +420,7 @@ public final class ChunkSectionBlockUtil {
             z,
             index,
             blockType,
-            RotationTuple.NONE_INDEX,
+            rotationIndex,
             FillerBlockUtil.NO_FILLER,
             settings
         );

@@ -3,6 +3,8 @@ package com.hexvane.aetherhaven.jewelry;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.difficulty.LootRarityDifficulty;
+import com.hexvane.aetherhaven.difficulty.TownDifficultySettings;
 import com.hexvane.aetherhaven.loot.LootChestPlotBlueprintLoot;
 import com.hexvane.aetherhaven.prop.PropLoot;
 import com.hexvane.aetherhaven.prop.PropLootExclusions;
@@ -56,11 +58,23 @@ public final class LootChestBonusApplier {
         int adventureZoneIndex,
         boolean force
     ) {
+        return tryInjectJewelryToContainer(
+            inv, cfg, rnd, adventureZoneIndex, force, LootRarityDifficulty.currentOrNormal());
+    }
+
+    public static boolean tryInjectJewelryToContainer(
+        @Nonnull SimpleItemContainer inv,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ThreadLocalRandom rnd,
+        int adventureZoneIndex,
+        boolean force,
+        @Nonnull TownDifficultySettings difficulty
+    ) {
         short slot = randomEmptySlot(inv, rnd);
         if (slot < 0) {
             return false;
         }
-        ItemStack bonus = JewelryChestLoot.rollForWorldChest(rnd, cfg, adventureZoneIndex, force);
+        ItemStack bonus = JewelryChestLoot.rollForWorldChest(rnd, cfg, adventureZoneIndex, force, difficulty);
         if (bonus == null || ItemStack.isEmpty(bonus)) {
             return false;
         }
@@ -91,7 +105,20 @@ public final class LootChestBonusApplier {
         @Nonnull ThreadLocalRandom rnd,
         boolean force
     ) {
-        double p = cfg.getLootChestGoldCoinChance();
+        return tryInjectGoldCoinsToContainer(inv, cfg, rnd, force, LootRarityDifficulty.currentOrNormal());
+    }
+
+    public static boolean tryInjectGoldCoinsToContainer(
+        @Nonnull SimpleItemContainer inv,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ThreadLocalRandom rnd,
+        boolean force,
+        @Nonnull TownDifficultySettings difficulty
+    ) {
+        double p = LootRarityDifficulty.scaleChance(
+            cfg.getLootChestGoldCoinChance(),
+            difficulty.getGoldLootRarityMultiplier()
+        );
         if (!force) {
             if (p <= 0.0) {
                 return false;
@@ -119,6 +146,7 @@ public final class LootChestBonusApplier {
             return false;
         }
         int q = min + (max > min ? rnd.nextInt(max - min + 1) : 0);
+        q = LootRarityDifficulty.scaleQuantity(q, difficulty.getGoldLootRarityMultiplier());
         if (q <= 0) {
             return false;
         }
@@ -167,10 +195,14 @@ public final class LootChestBonusApplier {
         boolean force
     ) {
         if (!force) {
-            if (cfg.getLootChestPlotTokenChance() <= 0.0) {
+            double chance = LootRarityDifficulty.scaleChance(
+                cfg.getLootChestPlotTokenChance(),
+                LootRarityDifficulty.currentOrNormal().getOtherLootRarityMultiplier()
+            );
+            if (chance <= 0.0) {
                 return false;
             }
-            if (rnd.nextDouble() >= cfg.getLootChestPlotTokenChance()) {
+            if (rnd.nextDouble() >= chance) {
                 return false;
             }
         }
@@ -216,10 +248,14 @@ public final class LootChestBonusApplier {
         boolean force
     ) {
         if (!force) {
-            if (cfg.getLootChestPlotBlueprintChance() <= 0.0) {
+            double chance = LootRarityDifficulty.scaleChance(
+                cfg.getLootChestPlotBlueprintChance(),
+                LootRarityDifficulty.currentOrNormal().getOtherLootRarityMultiplier()
+            );
+            if (chance <= 0.0) {
                 return false;
             }
-            if (rnd.nextDouble() >= cfg.getLootChestPlotBlueprintChance()) {
+            if (rnd.nextDouble() >= chance) {
                 return false;
             }
         }
@@ -262,10 +298,14 @@ public final class LootChestBonusApplier {
         boolean force
     ) {
         if (!force) {
-            if (cfg.getLootChestPropChance() <= 0.0) {
+            double chance = LootRarityDifficulty.scaleChance(
+                cfg.getLootChestPropChance(),
+                LootRarityDifficulty.currentOrNormal().getOtherLootRarityMultiplier()
+            );
+            if (chance <= 0.0) {
                 return false;
             }
-            if (rnd.nextDouble() >= cfg.getLootChestPropChance()) {
+            if (rnd.nextDouble() >= chance) {
                 return false;
             }
         }
@@ -309,10 +349,14 @@ public final class LootChestBonusApplier {
         boolean force
     ) {
         if (!force) {
-            if (cfg.getLootChestBlockPaletteChance() <= 0.0) {
+            double chance = LootRarityDifficulty.scaleChance(
+                cfg.getLootChestBlockPaletteChance(),
+                LootRarityDifficulty.currentOrNormal().getOtherLootRarityMultiplier()
+            );
+            if (chance <= 0.0) {
                 return false;
             }
-            if (rnd.nextDouble() >= cfg.getLootChestBlockPaletteChance()) {
+            if (rnd.nextDouble() >= chance) {
                 return false;
             }
         }
@@ -612,9 +656,31 @@ public final class LootChestBonusApplier {
         boolean force
     ) {
         boolean changed = false;
-        changed |= tryInjectOptionalItemRoll(inv, cfg.getLootChestGaiaShardItemId(), cfg.getLootChestGaiaShardChance(), rnd, force);
-        changed |= tryInjectOptionalItemRoll(inv, cfg.getLootChestGaiaCatalystItemId(), cfg.getLootChestGaiaCatalystChance(), rnd, force);
-        changed |= tryInjectOptionalItemRoll(inv, cfg.getLootChestHeartberryItemId(), cfg.getLootChestHeartberryChance(), rnd, force);
+        double otherMult = LootRarityDifficulty.currentOrNormal().getOtherLootRarityMultiplier();
+        changed |=
+            tryInjectOptionalItemRoll(
+                inv,
+                cfg.getLootChestGaiaShardItemId(),
+                LootRarityDifficulty.scaleChance(cfg.getLootChestGaiaShardChance(), otherMult),
+                rnd,
+                force
+            );
+        changed |=
+            tryInjectOptionalItemRoll(
+                inv,
+                cfg.getLootChestGaiaCatalystItemId(),
+                LootRarityDifficulty.scaleChance(cfg.getLootChestGaiaCatalystChance(), otherMult),
+                rnd,
+                force
+            );
+        changed |=
+            tryInjectOptionalItemRoll(
+                inv,
+                cfg.getLootChestHeartberryItemId(),
+                LootRarityDifficulty.scaleChance(cfg.getLootChestHeartberryChance(), otherMult),
+                rnd,
+                force
+            );
         return changed;
     }
 

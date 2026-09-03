@@ -1,19 +1,33 @@
 # Changelog
 
-## [3.1.2] - Unreleased
+## [3.1.2] - 8/31/2026
+
+### Added
+
+- **Jewelry** Creative command `/ah jewelry give` can give a chosen ring or necklace with gem, metal, and rarity.
+- **Loot4Everyone** Aetherhaven chest bonuses work with Loot4Everyone per-player loot chests.
 
 ### Changed
 
+- **Difficulty** Custom difficulty now lets you tune buy prices, sell return, taxes, building upgrades, production unlocks, building staff, and loot rarities.
+- **Hard difficulty** Buildings and shop buys cost more, upgrades and unlocks cost double, taxes and loot are lower, and selling returns less. No longer requires every blueprint block by default.
+- **Shops** Selling items returns less gold by default.
+- **Difficulty** Admins can force every town to use the server difficulty.
 - **Props and plot staff** Removed Move with gizmo. Use the nudge buttons in the placement menu to move previews. Was too buggy and just doesn't work well. Maybe will add back in future.
 
 ### Fixed
 
-- **Community marketplace** Building previews show decorations at the right size and height again after Hytale Update 6, for both older builds and newer props.
-- **Plot signs** You can use the whole sign again, not only the bottom of the post.
+- **Jewelry in chests** Gem jewelry can spawn again if item assets were not ready on the first chest scan (empty id list no longer sticks forever). Chest rolls also apply zone rarity correctly instead of always using the non-zone table first.
+- **Jewelry rarity borders** After Update 6, stack quality must match rarity. Borders now follow Common through Legendary instead of always showing Rare.
+- **Founder monument** Worlds no longer freeze when a founder statue with a bad or outdated player skin is loaded, including while starting a raid quest.
+- **Plot signs** You can aim anywhere on the sign to highlight and use it, instead of only the bottom corner of the post. Signs already standing in your town fix themselves when the world loads.
+- **Town charter** Moving the charter places it facing the way you were looking instead of always facing north.
 - **Props** In singleplayer you can scroll props off the hotbar and left or right click opens placement again.
 - **Plot tokens** In singleplayer you can scroll plot tokens off the hotbar again.
 - **Block palettes** In singleplayer you can scroll block palettes off the hotbar and use them again.
 - **Jewelry** In singleplayer you can scroll jewelry off the hotbar again.
+- **Town command** In singleplayer the command camera and its tool hotbar respond to your mouse and keys again.
+- **Plot creator** In singleplayer editing a building's bounds works again.
 - **Community marketplace** Prop icons show up right after download without reloading the world.
 - **Villagers** They stand at their workplaces again instead of ending up on rooftops after Hytale Update 6.
 - **Villagers** They fill hunger and rest at the Inn more reliably again when seats are free and when that is their best option.

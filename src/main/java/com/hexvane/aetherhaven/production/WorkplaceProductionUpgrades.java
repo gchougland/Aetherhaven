@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.production;
 
+import com.hexvane.aetherhaven.difficulty.BuildingUpgradeCostScaler;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -143,6 +144,17 @@ public final class WorkplaceProductionUpgrades {
         };
     }
 
+    public static int effectiveIngotCost(@Nonnull Branch branch, int tier, @Nonnull TownRecord town) {
+        return BuildingUpgradeCostScaler.scaleResourceCount(
+            ingotCost(branch, tier),
+            town.effectiveDifficultyForGameplay()
+        );
+    }
+
+    public static long effectiveGoldCost(@Nonnull Branch branch, int tier, @Nonnull TownRecord town) {
+        return BuildingUpgradeCostScaler.scaleGold(goldCost(branch, tier), town.effectiveDifficultyForGameplay());
+    }
+
     public static boolean canAfford(
         @Nonnull PlotProductionState state,
         @Nonnull Branch branch,
@@ -158,8 +170,8 @@ public final class WorkplaceProductionUpgrades {
         if (ingot == null) {
             return false;
         }
-        int needIngot = ingotCost(branch, tier);
-        long needGold = goldCost(branch, tier);
+        int needIngot = effectiveIngotCost(branch, tier, town);
+        long needGold = effectiveGoldCost(branch, tier, town);
         if (InventoryMaterials.count(inv, ingot) < needIngot) {
             return false;
         }
@@ -200,8 +212,8 @@ public final class WorkplaceProductionUpgrades {
         if (ingot == null) {
             return PurchaseResult.PREREQUISITES;
         }
-        int needIngot = ingotCost(branch, tier);
-        long needGold = goldCost(branch, tier);
+        int needIngot = effectiveIngotCost(branch, tier, town);
+        long needGold = effectiveGoldCost(branch, tier, town);
         if (InventoryMaterials.count(inv, ingot) < needIngot) {
             return PurchaseResult.NEED_INGOT;
         }

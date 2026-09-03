@@ -71,6 +71,18 @@ public final class JewelryVirtualItemRegistry {
     ) {
         ItemBase cached = virtualItemCache.get(virtualId);
         if (cached != null) {
+            // Rebuild when qualities load later: an early miss falls back to the asset Quality (Rare on jewelry).
+            if (cached.qualityIndex == qualityIndex) {
+                return cached;
+            }
+            ItemBase rebuilt = buildVirtualItemBase(baseItemId, virtualId, qualityIndex);
+            if (rebuilt != null) {
+                virtualItemCache.put(virtualId, rebuilt);
+                for (Set<String> sent : sentToPlayer.values()) {
+                    sent.remove(virtualId);
+                }
+                return rebuilt;
+            }
             return cached;
         }
         return virtualItemCache.computeIfAbsent(virtualId, id -> buildVirtualItemBase(baseItemId, virtualId, qualityIndex));

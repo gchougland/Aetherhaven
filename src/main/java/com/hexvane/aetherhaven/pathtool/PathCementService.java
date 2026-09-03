@@ -78,7 +78,7 @@ public final class PathCementService {
                 return false;
             }
         }
-        return ChunkSectionBlockUtil.setBlockByKey(world, x, y, z, blockTypeKey, settings);
+        return ChunkSectionBlockUtil.setBlockByKey(world, x, y, z, blockTypeKey, rotationIndex, settings);
     }
 
 

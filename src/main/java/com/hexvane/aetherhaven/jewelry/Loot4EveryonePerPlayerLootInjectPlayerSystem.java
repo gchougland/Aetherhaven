@@ -14,24 +14,25 @@ import com.hypixel.hytale.protocol.GameMode;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.windows.ContainerBlockWindow;
 import com.hypixel.hytale.server.core.entity.entities.player.windows.Window;
+import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
-import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockComponentSection;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 
 /**
- * When a player opens a vanilla (non-Lootr) world loot chest, run bonus injection if chunk-load missed it, or retry
- * supplemental rolls when prerequisites were not ready at load.
+ * Injects Aetherhaven bonus loot into Loot4Everyone per-player containers when a player has an open L4E chest window.
  */
-public final class LootChestOpenBonusInjectPlayerSystem extends EntityTickingSystem<EntityStore> {
+public final class Loot4EveryonePerPlayerLootInjectPlayerSystem extends EntityTickingSystem<EntityStore> {
     @Nonnull
     private final AetherhavenPlugin plugin;
 
-    public LootChestOpenBonusInjectPlayerSystem(@Nonnull AetherhavenPlugin plugin) {
+    public Loot4EveryonePerPlayerLootInjectPlayerSystem(@Nonnull AetherhavenPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -50,10 +51,24 @@ public final class LootChestOpenBonusInjectPlayerSystem extends EntityTickingSys
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
         AetherhavenPluginConfig cfg = this.plugin.getConfig().get();
+        if (!cfg.isLootChestLoot4EveryonePerPlayerCompatibilityEnabled()) {
+            return;
+        }
+        if (!Loot4EveryoneIntegration.isAvailable()) {
+            return;
+        }
+
         Player player = archetypeChunk.getComponent(index, Player.getComponentType());
         if (player == null) {
             return;
         }
+        Ref<EntityStore> playerRef = archetypeChunk.getReferenceTo(index);
+        PlayerRef playerRefComponent = store.getComponent(playerRef, PlayerRef.getComponentType());
+        if (playerRefComponent == null) {
+            return;
+        }
+        UUID playerUuid = playerRefComponent.getUuid();
+
         World world = store.getExternalData().getWorld();
         if (world.getWorldConfig().getGameMode() == GameMode.Creative && !cfg.isLootChestApplyInCreative()) {
             return;
@@ -62,15 +77,23 @@ public final class LootChestOpenBonusInjectPlayerSystem extends EntityTickingSys
         ComponentType<ChunkStore, ?> lootrType = LootrIntegration.getLootComponentType();
         ChunkStore chunkStore = world.getChunkStore();
         Store<ChunkStore> chunkComponentStore = chunkStore.getStore();
-        boolean changedAny = false;
+        boolean injectedAny = false;
 
         for (Window window : player.getWindowManager().getWindows()) {
             if (!(window instanceof ContainerBlockWindow containerWindow)) {
                 continue;
             }
+            if (!(containerWindow.getItemContainer() instanceof SimpleItemContainer inv)) {
+                continue;
+            }
+
             int x = containerWindow.getX();
             int y = containerWindow.getY();
             int z = containerWindow.getZ();
+            if (!Loot4EveryoneReflection.hasTemplate(world, x, y, z)) {
+                continue;
+            }
+
             Ref<ChunkStore> sectionRef = chunkStore.getChunkSectionReferenceAtBlock(x, y, z);
             if (sectionRef == null || !sectionRef.isValid()) {
                 continue;
@@ -87,64 +110,49 @@ public final class LootChestOpenBonusInjectPlayerSystem extends EntityTickingSys
             if (lootrType != null && chunkComponentStore.getComponent(blockEntityRef, lootrType) != null) {
                 continue;
             }
-            if (Loot4EveryoneIntegration.isAvailable() && Loot4EveryoneReflection.hasTemplate(world, x, y, z)) {
+            BlockModule.BlockStateInfo state =
+                chunkComponentStore.getComponent(blockEntityRef, BlockModule.BlockStateInfo.getComponentType());
+            if (state == null) {
                 continue;
             }
-            ItemContainerBlock container = chunkComponentStore.getComponent(blockEntityRef, ItemContainerBlock.getComponentType());
-            BlockModule.BlockStateInfo state = chunkComponentStore.getComponent(blockEntityRef, BlockModule.BlockStateInfo.getComponentType());
-            if (container == null || state == null) {
-                continue;
-            }
+            LootChestWorldGenerated.ensureTagged(chunkComponentStore, blockEntityRef);
             String blockTypeId = LootChestBonusInjectSystem.resolveBlockTypeIdForState(chunkComponentStore, state);
             if (!LootChestBonusApplier.isEligibleForBlockId(blockTypeId, cfg)) {
                 continue;
             }
-            if (!LootChestWorldGenerated.isWorldLootChest(chunkComponentStore, blockEntityRef)) {
+
+            Loot4EveryoneChestProcessedPlayers processed =
+                chunkComponentStore.getComponent(blockEntityRef, Loot4EveryoneChestProcessedPlayers.getComponentType());
+            if (processed == null) {
+                processed = new Loot4EveryoneChestProcessedPlayers();
+                chunkComponentStore.putComponent(
+                    blockEntityRef,
+                    Loot4EveryoneChestProcessedPlayers.getComponentType(),
+                    processed
+                );
+            }
+            if (processed.contains(playerUuid)) {
                 continue;
             }
-            ComponentType<ChunkStore, LootChestBonusApplied> coreAppliedType = LootChestBonusApplied.getComponentType();
-            ComponentType<ChunkStore, LootChestSupplementalBonusApplied> supplementalAppliedType =
-                LootChestSupplementalBonusApplied.getComponentType();
-            boolean coreApplied = chunkComponentStore.getComponent(blockEntityRef, coreAppliedType) != null;
-            boolean supplementalApplied =
-                chunkComponentStore.getComponent(blockEntityRef, supplementalAppliedType) instanceof LootChestSupplementalBonusApplied s
-                    && s.isCurrentPipeline();
-            if (coreApplied && supplementalApplied) {
-                continue;
-            }
+
             ThreadLocalRandom rnd = ThreadLocalRandom.current();
-            boolean changed = false;
-            if (!supplementalApplied) {
-                changed |= LootChestBonusApplier.applyWorldChestSupplementalBonusesOnce(
-                    chunkComponentStore,
-                    blockEntityRef,
-                    state,
-                    container,
-                    this.plugin,
-                    cfg,
-                    rnd
-                );
-            }
-            if (!coreApplied) {
-                changed |= LootChestBonusApplier.applyWorldChestCoreBonusesOnce(
-                    world,
-                    chunkComponentStore,
-                    blockEntityRef,
-                    state,
-                    container,
-                    blockTypeId,
-                    this.plugin,
-                    cfg,
-                    rnd
-                );
-            }
-            if (changed) {
-                changedAny = true;
+            if (LootChestBonusApplier.applyOpenContainerBonuses(
+                inv,
+                world,
+                chunkComponentStore,
+                state,
+                this.plugin,
+                cfg,
+                rnd
+            )) {
+                injectedAny = true;
                 player.getWindowManager().markWindowChanged(window.getId());
+                state.markNeedsSaving(chunkComponentStore);
             }
+            processed.add(playerUuid);
         }
 
-        if (changedAny) {
+        if (injectedAny) {
             player.getWindowManager().updateWindows();
         }
     }

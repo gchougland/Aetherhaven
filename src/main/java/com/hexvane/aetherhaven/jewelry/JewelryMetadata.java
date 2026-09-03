@@ -247,7 +247,13 @@ public final class JewelryMetadata {
         next.put("rarity", new BsonString(rarity.wireName()));
         next.put("appraised", BsonBoolean.valueOf(appraised));
         next.put("traits", traits);
-        return syncInstanceDescriptionForTooltip(writeRoot(stack, next));
+        ItemStack written = syncInstanceDescriptionForTooltip(writeRoot(stack, next));
+        // Update 6: stack quality overrides the item asset Quality for borders/labels.
+        int qualityIndex = JewelryItemQualityIndex.forRarity(rarity, stack.getItemId());
+        if (qualityIndex >= 0) {
+            return written.withQuality(qualityIndex);
+        }
+        return written;
     }
 
     /**
@@ -266,7 +272,20 @@ public final class JewelryMetadata {
         BsonDocument tp = new BsonDocument();
         tp.put("Description", new BsonString(JewelryTooltipMessages.toPlainEnglishDescription(stack)));
         stack = stack.withMetadata(INSTANCE_TRANSLATION_PROPERTIES_KEY, tp);
-        return JewelryNativeTooltipManager.apply(stack);
+        stack = JewelryNativeTooltipManager.apply(stack);
+        JewelryRarity rarity = readRarity(stack);
+        if (rarity != null) {
+            String baseId = stack.getItemId();
+            String resolved = JewelryVirtualItemRegistry.getBaseItemId(baseId);
+            if (resolved != null) {
+                baseId = resolved;
+            }
+            int qualityIndex = JewelryItemQualityIndex.forRarity(rarity, baseId);
+            if (qualityIndex >= 0 && stack.getQualityIndex() != qualityIndex) {
+                stack = stack.withQuality(qualityIndex);
+            }
+        }
+        return stack;
     }
 
     @Nonnull

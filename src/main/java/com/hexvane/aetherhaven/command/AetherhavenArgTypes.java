@@ -310,6 +310,30 @@ public final class AetherhavenArgTypes {
         "line"
     );
 
+    public static final SingleArgumentType<String> JEWELRY_PIECE = fixedStrings(
+        "jewelryPiece",
+        new String[] {"ring", "necklace"},
+        "ring"
+    );
+
+    public static final SingleArgumentType<String> JEWELRY_METAL = fixedStrings(
+        "jewelryMetal",
+        new String[] {"gold", "silver"},
+        "gold"
+    );
+
+    public static final SingleArgumentType<String> JEWELRY_GEM = fixedStrings(
+        "jewelryGem",
+        new String[] {"zephyr", "topaz", "emerald", "diamond", "sapphire", "ruby", "voidstone"},
+        "ruby"
+    );
+
+    public static final SingleArgumentType<String> JEWELRY_RARITY = fixedStrings(
+        "jewelryRarity",
+        new String[] {"common", "uncommon", "rare", "mythic", "legendary"},
+        "rare"
+    );
+
     public static final SingleArgumentType<String> VILLAGER_NPC_ROLE = new SingleArgumentType<>(
         langName("villagerNpcRole"),
         langUsage("villagerNpcRole"),

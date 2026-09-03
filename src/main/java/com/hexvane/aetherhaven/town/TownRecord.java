@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.town;
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.difficulty.DifficultyResolver;
 import com.hexvane.aetherhaven.difficulty.TownDifficultySettings;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtState;
 import com.hexvane.aetherhaven.production.PlotProductionState;
@@ -2649,7 +2650,7 @@ public final class TownRecord {
 
     @Nonnull
     public TownDifficultySettings effectiveDifficultyForGameplay() {
-        return getDifficultySettings().effectiveForGameplay();
+        return DifficultyResolver.effectiveForTown(this);
     }
 
     @Nonnull

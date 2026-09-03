@@ -294,11 +294,11 @@ public final class JewelryTooltipPacketAdapter {
             return;
         }
         newVirtual.put(virtualId, virtualBase);
-        if (!virtualId.equals(item.itemId)) {
-            ItemWithAllMetadata copy = new ItemWithAllMetadata(item);
-            copy.itemId = virtualId;
-            entry.setValue(copy);
-        }
+        // Update 6: stack quality overrides ItemBase.qualityIndex for borders.
+        ItemWithAllMetadata copy = new ItemWithAllMetadata(item);
+        copy.itemId = virtualId;
+        copy.quality = qualityIndex;
+        entry.setValue(copy);
     }
 
     private void processCustomPage(@Nonnull PlayerRef playerRef, @Nonnull CustomPage customPage) {

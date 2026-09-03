@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
 import com.hexvane.aetherhaven.command.TownPermissionUtil;
 import com.hexvane.aetherhaven.difficulty.DifficultyAccess;
 import com.hexvane.aetherhaven.difficulty.DifficultyPreset;
+import com.hexvane.aetherhaven.difficulty.DifficultyResolver;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
 import com.hexvane.aetherhaven.dialogue.DialogueActionExecutor;
 import com.hexvane.aetherhaven.guide.GuideMarkdownUiAppender;
@@ -1137,12 +1138,24 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             return;
         }
         if (journalSettingsTown != null) {
+            DifficultyPreset shown =
+                DifficultyResolver.isForced()
+                    ? DifficultyResolver.serverState().getDifficulty().getPreset()
+                    : journalSettingsTown.getDifficultySettings().getPreset();
+            commandBuilder.set(
+                "#SettingsDifficultyCurrent.TextSpans",
+                Message.translation("aetherhaven_difficulty.aetherhaven.difficulty.journalCurrent")
+                    .param("preset", Message.translation(presetLangKey(shown)))
+            );
+        } else if (DifficultyResolver.isForced()) {
             commandBuilder.set(
                 "#SettingsDifficultyCurrent.TextSpans",
                 Message.translation("aetherhaven_difficulty.aetherhaven.difficulty.journalCurrent")
                     .param(
                         "preset",
-                        Message.translation(presetLangKey(journalSettingsTown.getDifficultySettings().getPreset()))
+                        Message.translation(
+                            presetLangKey(DifficultyResolver.serverState().getDifficulty().getPreset())
+                        )
                     )
             );
         } else {
@@ -1152,6 +1165,9 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             );
         }
         boolean difficultyUi = JournalTabVisibility.difficultyTab() && journalSettingsTown != null;
+        if (DifficultyResolver.isForced()) {
+            difficultyUi = JournalTabVisibility.difficultyTab();
+        }
         commandBuilder.set("#SettingsOpenDifficultyButton.Visible", difficultyUi);
         if (difficultyUi) {
             eventBuilder.addEventBinding(
@@ -3241,17 +3257,25 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             if (plugin == null || uc == null) {
                 return;
             }
-            World world = store.getExternalData().getWorld();
-            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
-            if (town == null) {
-                return;
-            }
             Player player = store.getComponent(ref, Player.getComponentType());
             PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
             if (player == null || pr == null) {
                 return;
             }
             boolean admin = TownPermissionUtil.canAdministerForeignTowns(player, pr);
+            if (DifficultyResolver.isForced()) {
+                if (admin) {
+                    player.getPageManager().openCustomPage(ref, store, DifficultyPage.forServer(playerRef));
+                } else {
+                    pr.sendMessage(Message.translation("aetherhaven_difficulty.aetherhaven.difficulty.serverLocked"));
+                }
+                return;
+            }
+            World world = store.getExternalData().getWorld();
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
+            if (town == null) {
+                return;
+            }
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             if (!DifficultyAccess.canChangeDifficulty(tm, uc.getUuid(), town, admin)) {
                 pr.sendMessage(Message.translation("aetherhaven_difficulty.aetherhaven.difficulty.ownersOnly"));

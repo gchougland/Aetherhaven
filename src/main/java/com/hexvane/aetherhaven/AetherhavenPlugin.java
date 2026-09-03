@@ -457,6 +457,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         // Stone-model prewarming needs the complete townsfolk catalog so custom meshes (for example Prowl) are
         // isolated before any client receives the Common asset set.
         this.config.get();
+        com.hexvane.aetherhaven.difficulty.ServerDifficultyPersistence.load(this);
         this.reloadAetherhavenAssetCatalogs();
         // Mod packs register in setup0() before LoadAssetEvent, so AssetPackRegisterEvent is not fired then;
         // Asset Editor only sees packs from that event or its early setup() pass. Re-dispatch after assets load.
@@ -495,6 +496,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
      */
     public void reloadConfigsAndAssetCatalogs() {
         this.config.load().join();
+        com.hexvane.aetherhaven.difficulty.ServerDifficultyPersistence.load(this);
         this.reloadAetherhavenAssetCatalogs();
         this.shopPriceCatalog = ShopPriceFiles.loadCatalog(this);
         ShopPriceTooltipMessages.clearCache();
@@ -711,6 +713,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.plotTokenVirtualItemRegistry = null;
         this.propVirtualItemRegistry = null;
         instance = null;
+        com.hexvane.aetherhaven.difficulty.ServerDifficultyPersistence.clearCache();
         AetherhavenWorldRegistries.saveAll();
         TownSaveCoordinator.shutdown();
         this.constructionScheduler.shutdown();

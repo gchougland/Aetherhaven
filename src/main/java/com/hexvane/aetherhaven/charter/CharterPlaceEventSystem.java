@@ -11,7 +11,10 @@ import com.hexvane.aetherhaven.quest.PlayerQuestProgressionService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.difficulty.DifficultyResolver;
+import com.hexvane.aetherhaven.difficulty.TownDifficultySettings;
 import com.hexvane.aetherhaven.ui.DifficultyPage;
+import com.hexvane.aetherhaven.ui.TownStylePickerPage;
 import com.hexvane.aetherhaven.world.PersistentWorldSupport;
 import com.hypixel.hytale.component.Archetype;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -154,6 +157,19 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
 
         Player player = entityStore.getComponent(entityRef, Player.getComponentType());
         if (player == null || player.getPageManager().getCustomPage() != null) {
+            return;
+        }
+        if (DifficultyResolver.isForced()) {
+            TownDifficultySettings forced = DifficultyResolver.serverState().effectiveForcedSettings();
+            TownDifficultySettings copy = new TownDifficultySettings();
+            copy.copyFrom(forced);
+            copy.setDifficultyChosen(true);
+            record.setDifficultySettings(copy);
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            tm.updateTown(record);
+            player
+                .getPageManager()
+                .openCustomPage(entityRef, entityStore, new TownStylePickerPage(playerRef, record.getTownId()));
             return;
         }
         player

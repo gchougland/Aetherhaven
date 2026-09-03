@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.difficulty.BuildingUpgradeCostScaler;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.production.PlotProductionState;
@@ -284,7 +285,10 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
         if (unlocked) {
             return Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.tooltip.unlockedSub");
         }
-        int need = line.resourceCost();
+        int need = BuildingUpgradeCostScaler.scaleProductionUnlockResource(
+            line.resourceCost(),
+            town.effectiveDifficultyForGameplay()
+        );
         int held = InventoryMaterials.count(inv, line.itemId());
         boolean itemOk = held >= need;
         Message body =
@@ -292,7 +296,11 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
                 .param("held", String.valueOf(held))
                 .param("need", String.valueOf(need))
                 .color(itemOk ? TOOLTIP_OK_COLOR : TOOLTIP_BAD_COLOR);
-        long goldNeed = WorkplaceUnlockCatalog.goldCoinsForRarityTier(line.rarityTier());
+        long goldNeed =
+            BuildingUpgradeCostScaler.scaleProductionUnlockGold(
+                WorkplaceUnlockCatalog.goldCoinsForRarityTier(line.rarityTier()),
+                town.effectiveDifficultyForGameplay()
+            );
         if (goldNeed > 0L) {
             long goldHeld = GoldCoinPayment.totalAvailable(town, inv, allowTreasuryGold);
             boolean goldOk = goldHeld >= goldNeed;
@@ -363,8 +371,16 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
         if (inv == null) {
             return;
         }
-        int needRes = line.resourceCost();
-        long goldCost = WorkplaceUnlockCatalog.goldCoinsForRarityTier(line.rarityTier());
+        int needRes =
+            BuildingUpgradeCostScaler.scaleProductionUnlockResource(
+                line.resourceCost(),
+                town.effectiveDifficultyForGameplay()
+            );
+        long goldCost =
+            BuildingUpgradeCostScaler.scaleProductionUnlockGold(
+                WorkplaceUnlockCatalog.goldCoinsForRarityTier(line.rarityTier()),
+                town.effectiveDifficultyForGameplay()
+            );
         if (InventoryMaterials.count(inv, itemId) < needRes) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),

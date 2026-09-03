@@ -213,8 +213,8 @@ public final class ProductionUpgradeTreeUi {
         }
         int tier = WorkplaceProductionUpgrades.nextTier(state, branch);
         String ingot = WorkplaceProductionUpgrades.ingotItemId(branch);
-        int needIngot = ingot != null ? WorkplaceProductionUpgrades.ingotCost(branch, tier) : 0;
-        long needGold = WorkplaceProductionUpgrades.goldCost(branch, tier);
+        int needIngot = ingot != null ? WorkplaceProductionUpgrades.effectiveIngotCost(branch, tier, town) : 0;
+        long needGold = WorkplaceProductionUpgrades.effectiveGoldCost(branch, tier, town);
         int heldIngot = ingot != null ? InventoryMaterials.count(inv, ingot) : 0;
         boolean ingotOk = heldIngot >= needIngot;
         Message ingotLine =

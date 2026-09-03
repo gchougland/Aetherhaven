@@ -139,8 +139,69 @@ public final class AetherhavenUiLocalization {
         b.set("#CardHardDesc.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.hard.desc"));
         b.set("#CustomizeButton.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.customize"));
         b.set("#ResourceMultLabel.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.resourceMult"));
+        b.set("#ResourceMultLabel.TooltipTextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.resourceMult.tooltip"));
         b.set("#GoldMultLabel.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.goldMult"));
+        b.set("#GoldMultLabel.TooltipTextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.goldMult.tooltip"));
         b.set("#AllBlocksToggle #AllBlocksLabel.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.allBlocks"));
+        b.set(
+            "#AllBlocksToggle #AllBlocksLabel.TooltipTextSpans",
+            t("aetherhaven_difficulty.aetherhaven.difficulty.allBlocks.tooltip")
+        );
+        b.set("#BuyPriceMultLabel.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.buyPriceMult"));
+        b.set("#BuyPriceMultLabel.TooltipTextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.buyPriceMult.tooltip"));
+        b.set("#SellMarginLabel.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.sellMargin"));
+        b.set("#SellMarginLabel.TooltipTextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.sellMargin.tooltip"));
+        b.set("#TaxMultLabel.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.taxMult"));
+        b.set("#TaxMultLabel.TooltipTextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.taxMult.tooltip"));
+        b.set("#UpgradeGoldMultLabel.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.upgradeGoldMult"));
+        b.set(
+            "#UpgradeGoldMultLabel.TooltipTextSpans",
+            t("aetherhaven_difficulty.aetherhaven.difficulty.upgradeGoldMult.tooltip")
+        );
+        b.set(
+            "#UpgradeResourceMultLabel.TextSpans",
+            t("aetherhaven_difficulty.aetherhaven.difficulty.upgradeResourceMult")
+        );
+        b.set(
+            "#UpgradeResourceMultLabel.TooltipTextSpans",
+            t("aetherhaven_difficulty.aetherhaven.difficulty.upgradeResourceMult.tooltip")
+        );
+        b.set("#UnlockGoldMultLabel.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.unlockGoldMult"));
+        b.set(
+            "#UnlockGoldMultLabel.TooltipTextSpans",
+            t("aetherhaven_difficulty.aetherhaven.difficulty.unlockGoldMult.tooltip")
+        );
+        b.set(
+            "#UnlockResourceMultLabel.TextSpans",
+            t("aetherhaven_difficulty.aetherhaven.difficulty.unlockResourceMult")
+        );
+        b.set(
+            "#UnlockResourceMultLabel.TooltipTextSpans",
+            t("aetherhaven_difficulty.aetherhaven.difficulty.unlockResourceMult.tooltip")
+        );
+        b.set("#GoldLootMultLabel.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.goldLootMult"));
+        b.set("#GoldLootMultLabel.TooltipTextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.goldLootMult.tooltip"));
+        b.set("#OtherLootMultLabel.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.otherLootMult"));
+        b.set(
+            "#OtherLootMultLabel.TooltipTextSpans",
+            t("aetherhaven_difficulty.aetherhaven.difficulty.otherLootMult.tooltip")
+        );
+        b.set(
+            "#BuildingStaffToggle #BuildingStaffLabel.TextSpans",
+            t("aetherhaven_difficulty.aetherhaven.difficulty.buildingStaffDisabled")
+        );
+        b.set(
+            "#BuildingStaffToggle #BuildingStaffLabel.TooltipTextSpans",
+            t("aetherhaven_difficulty.aetherhaven.difficulty.buildingStaffDisabled.tooltip")
+        );
+        b.set(
+            "#ForceAllTownsToggle #ForceAllTownsLabel.TextSpans",
+            t("aetherhaven_difficulty.aetherhaven.difficulty.forceAllTowns")
+        );
+        b.set(
+            "#ForceAllTownsToggle #ForceAllTownsLabel.TooltipTextSpans",
+            t("aetherhaven_difficulty.aetherhaven.difficulty.forceAllTowns.tooltip")
+        );
         b.set("#BackToPresetsButton.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.back"));
         b.set("#SaveButton.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.save"));
         b.set("#CancelButton.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.cancel"));

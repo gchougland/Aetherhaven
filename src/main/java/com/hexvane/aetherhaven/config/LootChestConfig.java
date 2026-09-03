@@ -60,6 +60,15 @@ public final class LootChestConfig {
             .documentation("When true, injects Aetherhaven bonus loot into Lootr per-player containers (once per player per chest).")
             .add()
             .append(
+                new KeyedCodec<>("Loot4EveryonePerPlayerCompatibilityEnabled", Codec.BOOLEAN),
+                (o, v) -> o.loot4EveryonePerPlayerCompatibilityEnabled = v == null || v,
+                o -> o.loot4EveryonePerPlayerCompatibilityEnabled
+            )
+            .documentation(
+                "When true, injects Aetherhaven bonus loot into Loot4Everyone per-player containers (once per player per chest)."
+            )
+            .add()
+            .append(
                 new KeyedCodec<>("Gold", LootChestGoldConfig.CODEC),
                 (o, v) -> o.gold = v != null ? v : new LootChestGoldConfig(),
                 o -> o.gold
@@ -112,6 +121,7 @@ public final class LootChestConfig {
     private String excludeBlockIdSubstrings = "";
     private boolean applyInCreative = false;
     private boolean lootrPerPlayerCompatibilityEnabled = true;
+    private boolean loot4EveryonePerPlayerCompatibilityEnabled = true;
     @Nonnull
     private LootChestGoldConfig gold = new LootChestGoldConfig();
     @Nonnull
@@ -135,6 +145,7 @@ public final class LootChestConfig {
             "Bonus rolls apply only to dungeon/world chests (block entities that spawn with a Droplist). Player-placed storage is ignored."
                 + " BlockIdSubstrings optionally narrows by block type id. Gold defaults to chance 1.0 when there is room."
                 + " JewelryChance default 0.12 for procedural jewelry (glow rings are separate). Use ExcludeBlockIdSubstrings to skip specific block ids. ApplyInCreative for testing."
+                + " LootrPerPlayerCompatibilityEnabled and Loot4EveryonePerPlayerCompatibilityEnabled inject bonuses into those mods per-player chests."
                 + " (Built-in /droplist only simulates ItemDropList assets, not this injection.)";
     }
 
@@ -163,6 +174,10 @@ public final class LootChestConfig {
 
     public boolean isLootrPerPlayerCompatibilityEnabled() {
         return lootrPerPlayerCompatibilityEnabled;
+    }
+
+    public boolean isLoot4EveryonePerPlayerCompatibilityEnabled() {
+        return loot4EveryonePerPlayerCompatibilityEnabled;
     }
 
     @Nonnull

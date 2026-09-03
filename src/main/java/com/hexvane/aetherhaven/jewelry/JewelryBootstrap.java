@@ -63,12 +63,16 @@ public final class JewelryBootstrap {
         LootChestBonusApplied.register(plugin.getChunkStoreRegistry());
         LootChestSupplementalBonusApplied.register(plugin.getChunkStoreRegistry());
         LootrChestProcessedPlayers.register(plugin.getChunkStoreRegistry());
+        Loot4EveryoneChestProcessedPlayers.register(plugin.getChunkStoreRegistry());
         plugin.getChunkStoreRegistry().registerSystem(new LootChestWorldLootMarkSystem());
         plugin.getChunkStoreRegistry().registerSystem(new LootChestBonusInjectSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new LootChestOpenBonusInjectPlayerSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new LootrPerPlayerLootInjectPlayerSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new LootrIntegrationStartupSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new Loot4EveryonePerPlayerLootInjectPlayerSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new Loot4EveryoneIntegrationStartupSystem());
         core.registerJewelryNativeTooltipHooks();
         core.registerJewelryRarityBorderPackets();
+        core.registerAetherhavenSubcommand(new com.hexvane.aetherhaven.command.AetherhavenJewelryCommand());
     }
 }

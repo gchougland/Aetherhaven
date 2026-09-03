@@ -289,6 +289,11 @@ public final class TownTaxService {
         long finalTotal =
             stewards ? (long) Math.floor(afterFounder * (feastPm / 1000.0)) : afterFounder;
 
+        double taxMult = town.effectiveDifficultyForGameplay().getTaxMultiplier();
+        if (!Double.isNaN(taxMult) && taxMult > 0.0 && Math.abs(taxMult - 1.0) >= 0.0001) {
+            finalTotal = Math.max(0L, Math.round(finalTotal * taxMult));
+        }
+
         return new TaxMorningBreakdown(
             hall,
             policyId,

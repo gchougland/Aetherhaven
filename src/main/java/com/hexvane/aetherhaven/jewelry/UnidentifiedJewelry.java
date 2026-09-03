@@ -9,8 +9,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Runtime helper: pick a random jewelry item id, roll instance stats, keep {@link JewelryMetadata} unappraised
- * (the rolled bundle is still hidden until appraisal in UI).
+ * Runtime helper: pick a random jewelry item id. Trait rolling is left to {@link JewelryMetadata} so loot chests can
+ * apply zone-aware rarity.
  */
 public final class UnidentifiedJewelry {
     @Nullable
@@ -23,7 +23,10 @@ public final class UnidentifiedJewelry {
         return rollEnchantedStack(random);
     }
 
-    /** Random gem jewelry with rolled traits, unappraised. */
+    /**
+     * Random gem jewelry base stack (no traits yet). Callers that need rolled traits must run
+     * {@link JewelryMetadata#ensureRolled} or {@link JewelryMetadata#ensureRolledForLootChest}.
+     */
     @Nonnull
     public static ItemStack rollEnchantedStack(@Nonnull ThreadLocalRandom random) {
         String[] ids = allEnchantedJewelryItemIds();
@@ -31,29 +34,33 @@ public final class UnidentifiedJewelry {
             return ItemStack.EMPTY;
         }
         String id = ids[random.nextInt(ids.length)];
-        ItemStack stack = new ItemStack(id, 1);
-        return JewelryMetadata.ensureRolled(stack);
+        return new ItemStack(id, 1);
     }
 
     @Nonnull
     private static String[] allEnchantedJewelryItemIds() {
         String[] c = cachedIds;
-        if (c != null) {
+        if (c != null && c.length > 0) {
             return c;
         }
         synchronized (UnidentifiedJewelry.class) {
             c = cachedIds;
-            if (c != null) {
+            if (c != null && c.length > 0) {
                 return c;
             }
             List<String> list = new ObjectArrayList<>();
             for (String id : Item.getAssetMap().getAssetMap().keySet()) {
-                if (JewelryPieceKind.isEnchanted(id)) {
-                    list.add(id);
+                String baseId = JewelryVirtualItemRegistry.getBaseItemId(id);
+                String resolveId = baseId != null ? baseId : id;
+                if (JewelryPieceKind.isEnchanted(resolveId)) {
+                    list.add(resolveId);
                 }
             }
             c = list.toArray(new String[0]);
-            cachedIds = c;
+            // Never permanently cache an empty scan: jewelry assets may not be loaded yet at first chest inject.
+            if (c.length > 0) {
+                cachedIds = c;
+            }
             return c;
         }
     }

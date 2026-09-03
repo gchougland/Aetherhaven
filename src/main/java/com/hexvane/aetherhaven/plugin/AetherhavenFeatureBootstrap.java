@@ -12,6 +12,7 @@ import com.hexvane.aetherhaven.guild.GuildBootstrap;
 import com.hexvane.aetherhaven.jewelry.JewelryBootstrap;
 import com.hexvane.aetherhaven.jewelry.JewelryGemTraits;
 import com.hexvane.aetherhaven.jewelry.JewelryNativeTooltipManager;
+import com.hexvane.aetherhaven.jewelry.Loot4EveryoneIntegration;
 import com.hexvane.aetherhaven.jewelry.LootrIntegration;
 import com.hexvane.aetherhaven.pathtool.PathDesignerBootstrap;
 import com.hexvane.aetherhaven.patrol.PatrolRoutesBootstrap;
@@ -124,6 +125,9 @@ public final class AetherhavenFeatureBootstrap {
             JewelryGemTraits.validateStatIdsAtStartup();
             if (LootrIntegration.tryInitialize()) {
                 LootrIntegration.registerIfAvailable(core);
+            }
+            if (Loot4EveryoneIntegration.tryInitialize()) {
+                Loot4EveryoneIntegration.registerIfAvailable();
             }
             jewelryStarted = true;
         }

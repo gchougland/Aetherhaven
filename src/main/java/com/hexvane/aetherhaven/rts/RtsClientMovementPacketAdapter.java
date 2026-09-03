@@ -2,11 +2,7 @@ package com.hexvane.aetherhaven.rts;
 
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.MovementStates;
-import com.hypixel.hytale.protocol.Packet;
 import com.hypixel.hytale.protocol.packets.player.ClientMovement;
-import com.hypixel.hytale.server.core.io.adapter.PacketAdapters;
-import com.hypixel.hytale.server.core.io.adapter.PacketFilter;
-import com.hypixel.hytale.server.core.io.adapter.PlayerPacketFilter;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,23 +29,11 @@ public final class RtsClientMovementPacketAdapter {
 
     private static final ConcurrentHashMap<UUID, Snapshot> LATEST = new ConcurrentHashMap<>();
 
-    @Nullable
-    private PacketFilter inboundFilter;
-
     public void register() {
-        inboundFilter = PacketAdapters.registerInbound((PlayerPacketFilter) this::onInboundPacket);
         LOGGER.atInfo().log("RTS ClientMovement packet adapter registered");
     }
 
     public void deregister() {
-        if (inboundFilter != null) {
-            try {
-                PacketAdapters.deregisterInbound(inboundFilter);
-            } catch (Exception e) {
-                LOGGER.atWarning().log("Failed to deregister RTS ClientMovement inbound filter: %s", e.getMessage());
-            }
-            inboundFilter = null;
-        }
         LATEST.clear();
     }
 
@@ -58,11 +42,8 @@ public final class RtsClientMovementPacketAdapter {
         return LATEST.remove(playerId);
     }
 
-    /** Observe only — vanilla handler still processes the packet. */
-    private boolean onInboundPacket(@Nonnull PlayerRef playerRef, @Nonnull Packet packet) {
-        if (!(packet instanceof ClientMovement movement)) {
-            return false;
-        }
+    /** Observe only — the server still processes the packet. */
+    public static void observe(@Nonnull PlayerRef playerRef, @Nonnull ClientMovement movement) {
         Snapshot snap = new Snapshot();
         if (movement.movementStates != null) {
             MovementStates states = movement.movementStates;
@@ -79,6 +60,5 @@ public final class RtsClientMovementPacketAdapter {
             snap.sequence = System.nanoTime();
             LATEST.put(playerRef.getUuid(), snap);
         }
-        return false;
     }
 }

@@ -142,6 +142,11 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
             return;
         }
         TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownOwningPlot(job.plotId());
+        PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
+        if (BuildingStaffDifficultyGate.failIfDisabled(town, pr)) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
         if (town == null) {
             channel.resetChargeSession();
             return;

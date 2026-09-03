@@ -751,8 +751,8 @@ public final class AetherhavenPluginConfig {
     private double productionOfflineMultiplier = 0.8;
     /** Max in-game minutes per offline catch-up pass. Default 7 days. */
     private int productionOfflineCatchUpMaxMinutes = 10080;
-    /** Buyer price at player shop spots as percent of catalog price (1-100). Default 75. */
-    private int shopSpotPlayerListingPricePercent = 75;
+    /** Buyer price at player shop spots as percent of catalog price (1-100). Default 60. */
+    private int shopSpotPlayerListingPricePercent = 60;
 
     private double pathToolNodeBlockYOffset = 1.0;
     private int pathToolSamplesPerBlock = 2;
@@ -1366,6 +1366,10 @@ public final class AetherhavenPluginConfig {
 
     public boolean isLootChestLootrPerPlayerCompatibilityEnabled() {
         return getLootChest().isLootrPerPlayerCompatibilityEnabled();
+    }
+
+    public boolean isLootChestLoot4EveryonePerPlayerCompatibilityEnabled() {
+        return getLootChest().isLoot4EveryonePerPlayerCompatibilityEnabled();
     }
 
     @Nonnull

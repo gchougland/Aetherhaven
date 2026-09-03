@@ -75,6 +75,12 @@ public final class ExportAvatarSkinCommand extends AbstractPlayerCommand {
                 Message.translation("aetherhaven_commands_root.commands.aetherhaven.exportskin.invalidSkin").param("detail", e.getMessage())
             );
             return;
+        } catch (RuntimeException e) {
+            context.sendMessage(
+                Message.translation("aetherhaven_commands_root.commands.aetherhaven.exportskin.invalidSkin")
+                    .param("detail", e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName())
+            );
+            return;
         }
         JsonObject json;
         try {

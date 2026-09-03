@@ -626,6 +626,16 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
                 return;
             }
             boolean admin = TownPermissionUtil.canAdministerForeignTowns(player, playerRef);
+            if (com.hexvane.aetherhaven.difficulty.DifficultyResolver.isForced()) {
+                if (admin) {
+                    player.getPageManager().openCustomPage(ref, store, DifficultyPage.forServer(playerRef));
+                } else {
+                    playerRef.sendMessage(
+                        Message.translation("aetherhaven_difficulty.aetherhaven.difficulty.serverLocked")
+                    );
+                }
+                return;
+            }
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             String townOpt = context.provided(townArg) ? context.get(townArg) : null;
             TownCommandResolution res = TownCommandResolution.resolveForOwnerAction(tm, uc.getUuid(), townOpt, admin);

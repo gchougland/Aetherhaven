@@ -2,18 +2,23 @@ package com.hexvane.aetherhaven.floatinggift;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
+import com.hexvane.aetherhaven.difficulty.DifficultyResolver;
+import com.hexvane.aetherhaven.difficulty.LootRarityDifficulty;
+import com.hexvane.aetherhaven.difficulty.TownDifficultySettings;
 import com.hexvane.aetherhaven.jewelry.JewelryChestLoot;
 import com.hexvane.aetherhaven.jewelry.LootChestBonusApplier;
 import com.hexvane.aetherhaven.prop.PropLoot;
 import com.hexvane.aetherhaven.prop.PropLootExclusions;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackSlotTransaction;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,16 +43,35 @@ public final class FloatingGiftChestLoot {
         AetherhavenPluginConfig cfg = plugin.getConfig().get();
         FloatingGiftLootBundle bundle = FloatingGiftLootFiles.loadBundle(plugin);
         ThreadLocalRandom rnd = ThreadLocalRandom.current();
+        TownDifficultySettings difficulty = difficultyForOwner(ownerRef, ownerStore);
 
         List<ItemStack> stacks = new ArrayList<>();
         switch (type) {
             case REGULAR -> addRegularLoot(stacks, bundle, ownerRef, ownerStore, rnd);
-            case GREEN -> addGreenLoot(stacks, bundle, cfg, rnd);
-            case RED -> addRedLoot(stacks, bundle, plugin, rnd);
+            case GREEN -> addGreenLoot(stacks, bundle, cfg, rnd, difficulty);
+            case RED -> addRedLoot(stacks, bundle, plugin, rnd, difficulty);
         }
         addZoneFillerLoot(stacks, bundle, rnd);
         placeStacksRandomly(inv, stacks, rnd);
-        LootChestBonusApplier.tryInjectGoldCoinsToContainer(inv, cfg, rnd, true);
+        LootChestBonusApplier.tryInjectGoldCoinsToContainer(inv, cfg, rnd, true, difficulty);
+    }
+
+    @Nonnull
+    private static TownDifficultySettings difficultyForOwner(
+        @Nullable Ref<EntityStore> ownerRef,
+        @Nullable Store<EntityStore> ownerStore
+    ) {
+        UUID playerUuid = null;
+        if (ownerRef != null && ownerStore != null && ownerRef.isValid()) {
+            UUIDComponent uc = ownerStore.getComponent(ownerRef, UUIDComponent.getComponentType());
+            if (uc != null) {
+                playerUuid = uc.getUuid();
+            }
+        }
+        return DifficultyResolver.effectiveForLoot(
+            playerUuid,
+            ownerStore != null ? ownerStore.getExternalData().getWorld() : null
+        );
     }
 
     private static void addRegularLoot(
@@ -68,11 +92,16 @@ public final class FloatingGiftChestLoot {
         @Nonnull List<ItemStack> out,
         @Nonnull FloatingGiftLootBundle bundle,
         @Nonnull AetherhavenPluginConfig cfg,
-        @Nonnull ThreadLocalRandom rnd
+        @Nonnull ThreadLocalRandom rnd,
+        @Nonnull TownDifficultySettings difficulty
     ) {
-        ItemStack jewelry = JewelryChestLoot.rollForChest(rnd, cfg);
-        if (!ItemStack.isEmpty(jewelry)) {
-            out.add(jewelry);
+        // Green gifts always include jewelry; rarity multipliers still apply via world-chest style chance when low
+        double keepChance = LootRarityDifficulty.scaleChance(1.0, difficulty.getOtherLootRarityMultiplier());
+        if (keepChance >= 1.0 || rnd.nextDouble() < keepChance) {
+            ItemStack jewelry = JewelryChestLoot.rollForChest(rnd, cfg);
+            if (!ItemStack.isEmpty(jewelry)) {
+                out.add(jewelry);
+            }
         }
         ItemStack extra = bundle.tableFor(FloatingGiftType.GREEN).rollStack(rnd);
         if (extra != null && !ItemStack.isEmpty(extra)) {
@@ -84,7 +113,8 @@ public final class FloatingGiftChestLoot {
         @Nonnull List<ItemStack> out,
         @Nonnull FloatingGiftLootBundle bundle,
         @Nonnull AetherhavenPlugin plugin,
-        @Nonnull ThreadLocalRandom rnd
+        @Nonnull ThreadLocalRandom rnd,
+        @Nonnull TownDifficultySettings difficulty
     ) {
         out.addAll(bundle.tableFor(FloatingGiftType.RED).rollUniqueStacks(bundle.getRedFurnitureRolls(), rnd));
         out.addAll(
@@ -95,7 +125,8 @@ public final class FloatingGiftChestLoot {
                 rnd
             )
         );
-        if (rnd.nextDouble() < 0.35) {
+        double paletteChance = LootRarityDifficulty.scaleChance(0.35, difficulty.getOtherLootRarityMultiplier());
+        if (rnd.nextDouble() < paletteChance) {
             ItemStack palette =
                 com.hexvane.aetherhaven.blockpalette.BlockPaletteLoot.roll(plugin.getBlockPaletteCatalog(), rnd);
             if (palette != null && !ItemStack.isEmpty(palette)) {

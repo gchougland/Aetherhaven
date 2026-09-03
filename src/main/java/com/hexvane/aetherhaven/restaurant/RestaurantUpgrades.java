@@ -1,11 +1,13 @@
 package com.hexvane.aetherhaven.restaurant;
 
+import com.hexvane.aetherhaven.difficulty.BuildingUpgradeCostScaler;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackSlotTransaction;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -95,6 +97,28 @@ public final class RestaurantUpgrades {
         };
     }
 
+    @Nonnull
+    public static List<IngredientCost> effectiveIngredientCosts(
+        @Nonnull Branch branch,
+        int tier,
+        @Nonnull TownRecord town
+    ) {
+        List<IngredientCost> base = ingredientCosts(branch, tier);
+        if (base.isEmpty()) {
+            return base;
+        }
+        var difficulty = town.effectiveDifficultyForGameplay();
+        List<IngredientCost> scaled = new ArrayList<>(base.size());
+        for (IngredientCost c : base) {
+            scaled.add(new IngredientCost(c.itemId(), BuildingUpgradeCostScaler.scaleResourceCount(c.count(), difficulty)));
+        }
+        return scaled;
+    }
+
+    public static long effectiveGoldCost(@Nonnull Branch branch, int tier, @Nonnull TownRecord town) {
+        return BuildingUpgradeCostScaler.scaleGold(goldCost(branch, tier), town.effectiveDifficultyForGameplay());
+    }
+
     /** Hunger decay multiplier after satiety tier (1.0 = no bonus). */
     public static float satietyDecayMultiplier(int satietyLevel) {
         return switch (Math.max(0, Math.min(MAX_BRANCH_LEVEL, satietyLevel))) {
@@ -134,12 +158,12 @@ public final class RestaurantUpgrades {
         if (tier <= 0) {
             return false;
         }
-        for (IngredientCost c : ingredientCosts(branch, tier)) {
+        for (IngredientCost c : effectiveIngredientCosts(branch, tier, town)) {
             if (InventoryMaterials.count(inv, c.itemId()) < c.count()) {
                 return false;
             }
         }
-        long needGold = goldCost(branch, tier);
+        long needGold = effectiveGoldCost(branch, tier, town);
         return needGold <= 0L || GoldCoinPayment.canAfford(town, inv, needGold, allowTreasuryGold);
     }
 
@@ -165,13 +189,13 @@ public final class RestaurantUpgrades {
         if (tier <= 0) {
             return PurchaseResult.MAXED;
         }
-        List<IngredientCost> costs = ingredientCosts(branch, tier);
+        List<IngredientCost> costs = effectiveIngredientCosts(branch, tier, town);
         for (IngredientCost c : costs) {
             if (InventoryMaterials.count(inv, c.itemId()) < c.count()) {
                 return PurchaseResult.NEED_INGREDIENT;
             }
         }
-        long needGold = goldCost(branch, tier);
+        long needGold = effectiveGoldCost(branch, tier, town);
         if (needGold > 0L && !GoldCoinPayment.canAfford(town, inv, needGold, allowTreasuryGold)) {
             return PurchaseResult.NEED_GOLD;
         }

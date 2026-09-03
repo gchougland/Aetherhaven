@@ -18,11 +18,13 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.modules.block.BlockEntity;
+import com.hypixel.hytale.server.core.universe.world.SetBlockSettings;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockComponentSection;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import javax.annotation.Nonnull;
@@ -30,8 +32,15 @@ import org.joml.Vector3i;
 
 public final class PlotPlacementCommit {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    /** Bit 2 skips automatic block-entity attachment in {@code placeBlock}; we attach explicitly on the world thread. */
-    private static final int PLACE_SETTINGS = 10;
+    /**
+     * {@link SetBlockSettings#NO_UPDATE_STATE} skips automatic block-entity attachment in {@code placeBlock}; we attach
+     * explicitly on the world thread.
+     *
+     * <p>Filler blocks must stay enabled. The sign is 2.5 blocks tall and reaches into the cell beside it, and a block
+     * is only targetable in cells that hold either the block or one of its fillers. Suppressing them left just the
+     * anchor cell, so the sign only highlighted when you aimed at its bottom corner.
+     */
+    private static final int PLACE_SETTINGS = SetBlockSettings.NO_UPDATE_STATE;
 
     public enum LinkRepairResult {
         ALREADY_OK,
@@ -199,6 +208,7 @@ public final class PlotPlacementCommit {
             atType != null && AetherhavenConstants.PLOT_SIGN_ITEM_ID.equals(atType.getId());
 
         if (blockIsSign) {
+            ensurePlotSignFillers(world, x, y, z, atType);
             if (isPlotSignLinked(world, x, y, z, constructionId, plotIdStr)) {
                 return LinkRepairResult.ALREADY_OK;
             }
@@ -253,6 +263,36 @@ public final class PlotPlacementCommit {
             return LinkRepairResult.FAILED;
         }
         return LinkRepairResult.PLACED;
+    }
+
+    /**
+     * Lays out the sign's filler blocks when they are missing, so signs that were already standing in a save become
+     * fully targetable instead of only highlighting at their bottom corner.
+     */
+    private static void ensurePlotSignFillers(@Nonnull World world, int x, int y, int z, @Nonnull BlockType blockType) {
+        // The sign is always at least three cells tall, so the cell above the anchor is one of its fillers.
+        BlockType above = ChunkSectionBlockUtil.blockType(world, x, y + 1, z);
+        if (above != null && AetherhavenConstants.PLOT_SIGN_ITEM_ID.equals(above.getId())) {
+            return;
+        }
+        int blockId = BlockType.getAssetMap().getIndex(AetherhavenConstants.PLOT_SIGN_ITEM_ID);
+        if (blockId < 0) {
+            return;
+        }
+        // FORCE_CHANGED: the fillers are written inside the same branch that Hytale skips when the block id and
+        // rotation are unchanged, which is exactly the case here. NO_SEND_PARTICLES keeps the repair silent instead of
+        // puffing break particles at every sign in town on world load.
+        ChunkSectionBlockUtil.setBlock(
+            world,
+            x,
+            y,
+            z,
+            blockId,
+            blockType,
+            PlotBlockRotationUtil.readBlockRotationIndex(world, new Vector3i(x, y, z)),
+            FillerBlockUtil.NO_FILLER,
+            PLACE_SETTINGS | SetBlockSettings.FORCE_CHANGED | SetBlockSettings.NO_SEND_PARTICLES
+        );
     }
 
     private static boolean isPlotSignLinked(

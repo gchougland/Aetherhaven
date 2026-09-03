@@ -91,6 +91,12 @@ public final class FounderMonumentSpawnService {
         } catch (CosmeticsModule.InvalidSkinException e) {
             LOGGER.atWarning().withCause(e).log("Founder monument: invalid player skin");
             return null;
+        } catch (RuntimeException e) {
+            // CosmeticsModule.isValidTexture NPEs when a registry part has a null textures map (seen after Update 6
+            // for some persisted founder skins). Treat that as unusable cosmetics and let the caller use the stone
+            // fallback instead of killing the world task queue.
+            LOGGER.atWarning().withCause(e).log("Founder monument: cosmetics validation failed");
+            return null;
         }
         ModelAttachment[] skinAttachments;
         try {

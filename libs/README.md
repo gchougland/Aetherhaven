@@ -9,3 +9,7 @@ These JARs are **not** shipped with Aetherhaven. They exist so local builds can 
 3. For `runServer`, also copy the same JAR into `run/mods/` so the Lootr plugin loads at runtime.
 
 Without `libs/Lootr-0.2.11.jar`, Gradle skips the Lootr `compileOnly` dependency and the Lootr adapter sources will not compile. Core Aetherhaven still runs without Lootr installed.
+
+## Loot4Everyone
+
+Loot4Everyone compatibility is reflection-only. No JAR is needed under `libs/`.

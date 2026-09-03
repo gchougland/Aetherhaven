@@ -91,6 +91,7 @@ public final class AetherhavenCoreBootstrap {
         plugin.registerPlotTokenIconPackets();
         plugin.registerPropIconPackets();
         plugin.registerBlockPaletteIconPackets();
+        com.hexvane.aetherhaven.net.AetherhavenInboundPackets.register();
 
         AetherhavenSharedEntityComponents.register(plugin);
         AetherhavenSharedChunkComponents.register(plugin);

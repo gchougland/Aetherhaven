@@ -2,7 +2,8 @@ package com.hexvane.aetherhaven.jewelry;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
-import com.hexvane.aetherhaven.world.WorldZoneIndex;
+import com.hexvane.aetherhaven.difficulty.LootRarityDifficulty;
+import com.hexvane.aetherhaven.difficulty.TownDifficultySettings;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
@@ -31,7 +32,15 @@ public final class JewelryChestLoot {
      */
     @Nonnull
     public static ItemStack rollForChest(@Nonnull ThreadLocalRandom rnd, @Nonnull AetherhavenPluginConfig cfg) {
-        return rollForChest(rnd, cfg, WorldZoneIndex.UNKNOWN_DEFAULT);
+        ItemStack artifact = tryRollGlowRing(rnd, LARGE_GLOW_SHARE, GLOW_SHARE);
+        if (artifact != null) {
+            return artifact;
+        }
+        ItemStack stack = UnidentifiedJewelry.rollEnchantedStack(rnd);
+        if (ItemStack.isEmpty(stack)) {
+            return stack;
+        }
+        return JewelryMetadata.ensureRolled(stack);
     }
 
     @Nonnull
@@ -59,14 +68,32 @@ public final class JewelryChestLoot {
         int adventureZoneIndex,
         boolean force
     ) {
+        return rollForWorldChest(rnd, cfg, adventureZoneIndex, force, LootRarityDifficulty.currentOrNormal());
+    }
+
+    @Nullable
+    public static ItemStack rollForWorldChest(
+        @Nonnull ThreadLocalRandom rnd,
+        @Nonnull AetherhavenPluginConfig cfg,
+        int adventureZoneIndex,
+        boolean force,
+        @Nonnull TownDifficultySettings difficulty
+    ) {
         if (force) {
             return rollForChest(rnd, cfg, adventureZoneIndex);
         }
-        ItemStack artifact = tryRollGlowRing(rnd, LARGE_GLOW_ABS, GLOW_ABS);
+        double otherMult = difficulty.getOtherLootRarityMultiplier();
+        ItemStack artifact =
+            tryRollGlowRing(
+                rnd,
+                LootRarityDifficulty.scaleChance(LARGE_GLOW_ABS, otherMult),
+                LootRarityDifficulty.scaleChance(GLOW_ABS, otherMult)
+            );
         if (artifact != null) {
             return artifact;
         }
-        double proceduralChance = cfg.getLootChestJewelryChance();
+        double proceduralChance =
+            LootRarityDifficulty.scaleChance(cfg.getLootChestJewelryChance(), otherMult);
         if (proceduralChance <= 0.0 || rnd.nextDouble() >= proceduralChance) {
             return null;
         }
@@ -96,6 +123,9 @@ public final class JewelryChestLoot {
         int adventureZoneIndex
     ) {
         ItemStack stack = UnidentifiedJewelry.rollEnchantedStack(rnd);
+        if (ItemStack.isEmpty(stack)) {
+            return stack;
+        }
         return JewelryMetadata.ensureRolledForLootChest(stack, rnd, cfg, adventureZoneIndex);
     }
 

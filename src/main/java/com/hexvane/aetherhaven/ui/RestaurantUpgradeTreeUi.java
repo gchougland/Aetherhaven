@@ -142,7 +142,7 @@ public final class RestaurantUpgradeTreeUi {
         int tier = RestaurantUpgrades.nextTier(state, branch);
         Message body = head;
         boolean firstCost = true;
-        for (IngredientCost c : RestaurantUpgrades.ingredientCosts(branch, tier)) {
+        for (IngredientCost c : RestaurantUpgrades.effectiveIngredientCosts(branch, tier, town)) {
             int held = InventoryMaterials.count(inv, c.itemId());
             boolean ok = held >= c.count();
             Message line =
@@ -154,7 +154,7 @@ public final class RestaurantUpgradeTreeUi {
             body = Message.join(body, Message.raw(firstCost ? "\n\n" : "\n"), line);
             firstCost = false;
         }
-        long needGold = RestaurantUpgrades.goldCost(branch, tier);
+        long needGold = RestaurantUpgrades.effectiveGoldCost(branch, tier, town);
         if (needGold > 0L) {
             long goldHeld = GoldCoinPayment.totalAvailable(town, inv, allowTreasuryGold);
             boolean goldOk = goldHeld >= needGold;

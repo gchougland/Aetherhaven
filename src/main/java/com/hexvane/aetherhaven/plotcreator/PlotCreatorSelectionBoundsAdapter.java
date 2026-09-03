@@ -9,9 +9,6 @@ import com.hypixel.hytale.protocol.packets.buildertools.BuilderToolSelectionTool
 import com.hypixel.hytale.protocol.packets.buildertools.BuilderToolSelectionTransform;
 import com.hypixel.hytale.protocol.packets.buildertools.BuilderToolSelectionUpdate;
 import com.hypixel.hytale.protocol.packets.buildertools.BuilderToolSetTransformationModeState;
-import com.hypixel.hytale.server.core.io.adapter.PacketAdapters;
-import com.hypixel.hytale.server.core.io.adapter.PacketFilter;
-import com.hypixel.hytale.server.core.io.adapter.PlayerPacketFilter;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -22,26 +19,16 @@ import javax.annotation.Nullable;
 public final class PlotCreatorSelectionBoundsAdapter {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
-    @Nullable
-    private PacketFilter inboundFilter;
-
     public void register() {
-        inboundFilter = PacketAdapters.registerInbound((PlayerPacketFilter) this::onInboundPacket);
         LOGGER.atInfo().log("Plot creator selection bounds packet adapter registered");
     }
 
     public void deregister() {
-        if (inboundFilter != null) {
-            try {
-                PacketAdapters.deregisterInbound(inboundFilter);
-            } catch (Exception e) {
-                LOGGER.atWarning().log("Failed to deregister plot creator selection bounds filter: %s", e.getMessage());
-            }
-            inboundFilter = null;
-        }
+        // Packet interception is owned by AetherhavenInboundPackets for the lifetime of each connection.
     }
 
-    private boolean onInboundPacket(@Nonnull PlayerRef playerRef, @Nonnull Packet packet) {
+    /** Returns {@code true} when the packet was consumed and must not reach the vanilla builder tools. */
+    public static boolean handleInbound(@Nonnull PlayerRef playerRef, @Nonnull Packet packet) {
         try {
             if (!isBuilderToolServerPacket(packet)) {
                 return false;
@@ -84,7 +71,7 @@ public final class PlotCreatorSelectionBoundsAdapter {
         return false;
     }
 
-    private boolean handleSelectionBoundsPacket(
+    private static boolean handleSelectionBoundsPacket(
         @Nonnull PlayerRef playerRef,
         @Nonnull PlotCreatorSession session,
         @Nonnull Ref<EntityStore> ref,

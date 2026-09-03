@@ -14,11 +14,16 @@ public enum JewelryGem {
 
     @Nullable
     public static JewelryGem fromItemId(@Nonnull String itemId) {
-        int u = itemId.lastIndexOf('_');
-        if (u < 0 || u >= itemId.length() - 1) {
+        String resolveId = itemId;
+        String baseId = JewelryVirtualItemRegistry.getBaseItemId(itemId);
+        if (baseId != null) {
+            resolveId = baseId;
+        }
+        int u = resolveId.lastIndexOf('_');
+        if (u < 0 || u >= resolveId.length() - 1) {
             return null;
         }
-        String suffix = itemId.substring(u + 1);
+        String suffix = resolveId.substring(u + 1);
         try {
             return JewelryGem.valueOf(suffix.toUpperCase());
         } catch (IllegalArgumentException e) {

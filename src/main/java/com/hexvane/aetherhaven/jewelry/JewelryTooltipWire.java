@@ -122,9 +122,13 @@ public final class JewelryTooltipWire {
         }
         if (JewelryItemIds.isJewelry(baseId) && rarity != null) {
             String virtualId = JewelryVirtualItemRegistry.generateVirtualId(baseId, rarity.wireName());
-            putVirtualDefinition(baseId, rarity, registry, out);
+            ItemBase virtualBase = putVirtualDefinition(baseId, rarity, registry, out);
             if (!virtualId.equals(itemId)) {
                 itemStackDoc.put(idKey, new BsonString(virtualId));
+                modified = true;
+            }
+            if (virtualBase != null) {
+                itemStackDoc.put("Quality", new org.bson.BsonInt32(virtualBase.qualityIndex));
                 modified = true;
             }
         }
@@ -136,7 +140,8 @@ public final class JewelryTooltipWire {
         return modified;
     }
 
-    private static void putVirtualDefinition(
+    @Nullable
+    private static ItemBase putVirtualDefinition(
         @Nonnull String baseId,
         @Nonnull JewelryRarity rarity,
         @Nonnull JewelryVirtualItemRegistry registry,
@@ -148,6 +153,7 @@ public final class JewelryTooltipWire {
         if (virtualBase != null) {
             out.put(virtualId, virtualBase);
         }
+        return virtualBase;
     }
 
 }

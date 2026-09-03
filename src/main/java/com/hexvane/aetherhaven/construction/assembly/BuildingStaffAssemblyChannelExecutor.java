@@ -75,6 +75,10 @@ public final class BuildingStaffAssemblyChannelExecutor {
             channel.resetChargeSession();
             return true;
         }
+        if (BuildingStaffDifficultyGate.isDisabled(town)) {
+            channel.resetChargeSession();
+            return true;
+        }
         PlotInstance plot = town.findPlotById(job.plotId());
         if (plot == null || plot.getState() != PlotInstanceState.ASSEMBLING) {
             channel.resetChargeSession();

@@ -93,6 +93,18 @@ public final class LootChestBonusInjectSystem extends RefSystem<ChunkStore> {
                 if (c == null || state == null) {
                     return;
                 }
+                if (Loot4EveryoneIntegration.isAvailable()) {
+                    org.joml.Vector3i pos = new org.joml.Vector3i();
+                    if (state.fillWorldPos(s, pos)
+                        && Loot4EveryoneReflection.hasTemplate(s, pos.x, pos.y, pos.z)) {
+                        ComponentType<ChunkStore, LootChestWorldLootPending> pendingSkip =
+                            LootChestWorldLootPending.getComponentType();
+                        if (s.getComponent(ref, pendingSkip) != null) {
+                            s.removeComponent(ref, pendingSkip);
+                        }
+                        return;
+                    }
+                }
                 ComponentType<ChunkStore, LootChestWorldLootPending> pendingType = LootChestWorldLootPending.getComponentType();
                 boolean pending = s.getComponent(ref, pendingType) != null;
                 ComponentType<ChunkStore, LootChestWorldGenerated> worldType = LootChestWorldGenerated.getComponentType();

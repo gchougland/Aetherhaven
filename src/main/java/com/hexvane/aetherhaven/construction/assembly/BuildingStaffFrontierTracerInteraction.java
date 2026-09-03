@@ -132,6 +132,11 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
             context.getState().state = InteractionState.Failed;
             return;
         }
+        PlayerRef playerMsg = store.getComponent(playerRef, PlayerRef.getComponentType());
+        if (BuildingStaffDifficultyGate.failIfDisabled(null, playerMsg)) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
         UUIDComponent uc = store.getComponent(playerRef, UUIDComponent.getComponentType());
         if (uc == null) {
             context.getState().state = InteractionState.Failed;
@@ -172,6 +177,9 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
             }
             TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownOwningPlot(job.plotId());
             if (town == null) {
+                continue;
+            }
+            if (BuildingStaffDifficultyGate.isDisabled(town)) {
                 continue;
             }
             PlotInstance plot = town.findPlotById(job.plotId());

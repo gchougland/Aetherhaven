@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.command;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.difficulty.DifficultyAccess;
+import com.hexvane.aetherhaven.difficulty.DifficultyResolver;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownCommandResolution;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -25,6 +26,7 @@ public final class AetherhavenDifficultyCommand extends AbstractPlayerCommand {
     public AetherhavenDifficultyCommand() {
         super("difficulty", "aetherhaven_commands_root.commands.aetherhaven.difficulty.desc");
         this.setPermissionGroups("hytale:WorldEditor");
+        this.addSubCommand(new ServerSubcommand());
     }
 
     @Override
@@ -46,6 +48,13 @@ public final class AetherhavenDifficultyCommand extends AbstractPlayerCommand {
             return;
         }
         boolean admin = TownPermissionUtil.canAdministerForeignTowns(player, playerRef);
+        if (DifficultyResolver.isForced() && admin) {
+            if (player.getPageManager().getCustomPage() != null) {
+                return;
+            }
+            player.getPageManager().openCustomPage(ref, store, DifficultyPage.forServer(playerRef));
+            return;
+        }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownCommandResolution res = TownCommandResolution.resolveForOwnerAction(tm, uc.getUuid(), null, admin);
         if (!res.isOk()) {
@@ -57,9 +66,42 @@ public final class AetherhavenDifficultyCommand extends AbstractPlayerCommand {
             playerRef.sendMessage(Message.translation(MSG + ".ownersOnly"));
             return;
         }
+        if (DifficultyResolver.isForced()) {
+            playerRef.sendMessage(Message.translation(MSG + ".serverLocked"));
+            return;
+        }
         if (player.getPageManager().getCustomPage() != null) {
             return;
         }
         player.getPageManager().openCustomPage(ref, store, new DifficultyPage(playerRef, town.getTownId()));
+    }
+
+    private static final class ServerSubcommand extends AbstractPlayerCommand {
+        private ServerSubcommand() {
+            super("server", "aetherhaven_commands_root.commands.aetherhaven.difficulty.desc");
+            this.setPermissionGroups("hytale:WorldEditor");
+        }
+
+        @Override
+        protected void execute(
+            @Nonnull CommandContext context,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull World world
+        ) {
+            Player player = store.getComponent(ref, Player.getComponentType());
+            if (player == null) {
+                return;
+            }
+            if (!TownPermissionUtil.canAdministerForeignTowns(player, playerRef)) {
+                playerRef.sendMessage(Message.translation(MSG + ".ownersOnly"));
+                return;
+            }
+            if (player.getPageManager().getCustomPage() != null) {
+                return;
+            }
+            player.getPageManager().openCustomPage(ref, store, DifficultyPage.forServer(playerRef));
+        }
     }
 }

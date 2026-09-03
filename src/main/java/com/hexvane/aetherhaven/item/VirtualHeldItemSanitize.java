@@ -13,16 +13,16 @@ import javax.annotation.Nullable;
  * Virtual {@link ItemBase} clones are icon/id overlays of a real item. Keep {@code blockId}, {@code model}, and
  * {@code texture} intact so the held mesh resolves (crate parent uses the block mesh; plot tokens use their model).
  *
- * <p>Only ensure {@link InteractionType#SwapFrom} → {@code *Default_Swap} for hotbar scroll prediction, and drop
- * unarmed {@code Block_Primary}/{@code Block_Secondary} when the clone has no placeable block (those roots soft-lock
- * the integrated client after Update 6).
+ * <p>Interactions are copied from the real item verbatim so the client predicts exactly the root interactions the
+ * server will run. A {@link InteractionType#SwapFrom} fallback is only filled in when the real item declares none, and
+ * unarmed {@code Block_Primary}/{@code Block_Secondary} are dropped when the clone has no placeable block.
  */
 public final class VirtualHeldItemSanitize {
     private VirtualHeldItemSanitize() {}
 
     /**
-     * Deep-copies interactions onto {@code clone}, forces scroll-off {@code SwapFrom}, and strips block-place roots
-     * when {@code blockId == 0}. Does not mutate model, texture, or block id.
+     * Deep-copies interactions onto {@code clone}, fills in a scroll-off {@code SwapFrom} when the real item has none,
+     * and strips block-place roots when {@code blockId == 0}. Does not mutate model, texture, or block id.
      */
     public static void applyHeldItemClone(@Nullable ItemBase original, @Nonnull ItemBase clone) {
         // Item.toPacket() uses Object2IntOpenHashMap; keep that wire type (EnumMap breaks client interaction lookup).
@@ -38,13 +38,17 @@ public final class VirtualHeldItemSanitize {
             stripBlockPlacementInteractions(copy);
         }
 
-        int swapId = RootInteraction.getAssetMap().getIndex(ChangeActiveSlotInteraction.DEFAULT_ROOT.getId());
-        if (swapId < 0) {
-            // Same fallback Item.toPacket() uses when the generated Default_Swap is not indexed yet.
-            swapId = RootInteraction.getRootInteractionIdOrUnknown(ChangeActiveSlotInteraction.DEFAULT_ROOT.getId());
-        }
-        if (swapId >= 0) {
-            copy.put(InteractionType.SwapFrom, swapId);
+        // Overriding an existing SwapFrom would make the client run a different root than the server, which desyncs
+        // the chain, so only supply one when the real item declares none.
+        if (!copy.containsKey(InteractionType.SwapFrom)) {
+            int swapId = RootInteraction.getAssetMap().getIndex(ChangeActiveSlotInteraction.DEFAULT_ROOT.getId());
+            if (swapId < 0) {
+                // Same fallback Item.toPacket() uses when the generated Default_Swap is not indexed yet.
+                swapId = RootInteraction.getRootInteractionIdOrUnknown(ChangeActiveSlotInteraction.DEFAULT_ROOT.getId());
+            }
+            if (swapId >= 0) {
+                copy.put(InteractionType.SwapFrom, swapId);
+            }
         }
         clone.interactions = copy;
     }
