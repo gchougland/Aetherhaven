@@ -47,7 +47,7 @@ public final class CommunitySubmissionService {
         @Nonnull String playerName,
         @Nonnull String propId
     ) {
-        return uploadSavedProp(plugin, playerUuid, playerName, propId);
+        return uploadSavedProp(plugin, playerUuid, playerName, propId, false, null);
     }
 
     @Nullable
@@ -60,6 +60,17 @@ public final class CommunitySubmissionService {
     ) {
         String error = uploadSavedBuilding(plugin, playerUuid, playerName, constructionId, true, outcome);
         return error;
+    }
+
+    @Nullable
+    public static String updateSavedProp(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID playerUuid,
+        @Nonnull String playerName,
+        @Nonnull String propId,
+        @Nonnull UpdateOutcome outcome
+    ) {
+        return uploadSavedProp(plugin, playerUuid, playerName, propId, true, outcome);
     }
 
     public static final class UpdateOutcome {
@@ -159,7 +170,9 @@ public final class CommunitySubmissionService {
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull UUID playerUuid,
         @Nonnull String playerName,
-        @Nonnull String propId
+        @Nonnull String propId,
+        boolean update,
+        @Nullable UpdateOutcome outcome
     ) {
         CommunityMarketplaceConfig cfg = plugin.getConfig().get().getCommunityMarketplace();
         if (!cfg.isEnabled()) {
@@ -202,12 +215,29 @@ public final class CommunitySubmissionService {
             headers.put("X-Player-Uuid", playerUuid.toString().trim().toLowerCase(java.util.Locale.ROOT));
             headers.put("X-Player-Name", playerName);
             headers.put("X-Content-Type", "prop");
-            String url = cfg.getApiBaseUrl() + "/api/v1/submissions";
-            CommunityHttpClient.HttpResult result = CommunityHttpClient.postMultipartResult(url, headers, BOUNDARY, body);
+            String url =
+                cfg.getApiBaseUrl()
+                    + (update ? "/api/v1/submissions/" + propId.trim() : "/api/v1/submissions");
+            CommunityHttpClient.HttpResult result =
+                update
+                    ? CommunityHttpClient.putMultipartResult(url, headers, BOUNDARY, body)
+                    : CommunityHttpClient.postMultipartResult(url, headers, BOUNDARY, body);
             if (!result.isSuccess()) {
                 return mapUploadError(result);
             }
-            LOGGER.atInfo().log("Community prop submission uploaded for %s by %s", propId, playerUuid);
+            String response = result.getBody();
+            if (response == null) {
+                return "upload_failed";
+            }
+            if (update && outcome != null) {
+                outcome.waitingForReview = parseWaitingForReview(response);
+            }
+            LOGGER.atInfo().log(
+                "Community prop submission %s for %s by %s",
+                update ? "updated" : "uploaded",
+                propId,
+                playerUuid
+            );
             return null;
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Community prop submission failed for %s", propId);
@@ -217,7 +247,7 @@ public final class CommunitySubmissionService {
 
     /** Sends chat feedback for a submission result ({@code err == null} is success). */
     public static void notifyPlayer(@Nonnull PlayerRef playerRef, @Nullable String err) {
-        notifyPlayer(playerRef, err, false, false);
+        notifyPlayer(playerRef, err, false, false, false);
     }
 
     /** Sends chat feedback for a building editor community update. */
@@ -226,24 +256,36 @@ public final class CommunitySubmissionService {
         @Nullable String err,
         boolean waitingForReview
     ) {
-        notifyPlayer(playerRef, err, true, waitingForReview);
+        notifyPlayer(playerRef, err, true, waitingForReview, false);
+    }
+
+    /** Sends chat feedback for a prop editor community update. */
+    public static void notifyPropUpdatePlayer(
+        @Nonnull PlayerRef playerRef,
+        @Nullable String err,
+        boolean waitingForReview
+    ) {
+        notifyPlayer(playerRef, err, true, waitingForReview, true);
     }
 
     private static void notifyPlayer(
         @Nonnull PlayerRef playerRef,
         @Nullable String err,
         boolean update,
-        boolean waitingForReview
+        boolean waitingForReview,
+        boolean prop
     ) {
         if (err == null) {
             if (update) {
-                playerRef.sendMessage(
-                    Message.translation(
-                        waitingForReview
-                            ? "aetherhaven_building_editor.aetherhaven.buildingeditor.success.submittedForReview"
-                            : "aetherhaven_building_editor.aetherhaven.buildingeditor.success.updatedSubmission"
-                    )
-                );
+                String successKey =
+                    waitingForReview
+                        ? (prop
+                            ? "aetherhaven_building_editor.aetherhaven.buildingeditor.success.submittedPropForReview"
+                            : "aetherhaven_building_editor.aetherhaven.buildingeditor.success.submittedForReview")
+                        : (prop
+                            ? "aetherhaven_building_editor.aetherhaven.buildingeditor.success.updatedPropSubmission"
+                            : "aetherhaven_building_editor.aetherhaven.buildingeditor.success.updatedSubmission");
+                playerRef.sendMessage(Message.translation(successKey));
             } else {
                 playerRef.sendMessage(
                     Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.success.submittedCommunity")
@@ -262,23 +304,22 @@ public final class CommunitySubmissionService {
             return;
         }
         if (isRateLimitedError(err)) {
-            playerRef.sendMessage(
-                Message.translation(
-                    update
-                        ? "aetherhaven_building_editor.aetherhaven.buildingeditor.error.communityRateLimited"
-                        : "aetherhaven_plot_creator.aetherhaven.plotcreator.error.communityRateLimited"
-                )
-            );
+            String rateKey =
+                update
+                    ? (prop
+                        ? "aetherhaven_building_editor.aetherhaven.buildingeditor.error.communityPropRateLimited"
+                        : "aetherhaven_building_editor.aetherhaven.buildingeditor.error.communityRateLimited")
+                    : "aetherhaven_plot_creator.aetherhaven.plotcreator.error.communityRateLimited";
+            playerRef.sendMessage(Message.translation(rateKey));
             return;
         }
-        playerRef.sendMessage(
-            Message.translation(
-                    update
-                        ? "aetherhaven_building_editor.aetherhaven.buildingeditor.error.communityUpdate"
-                        : "aetherhaven_plot_creator.aetherhaven.plotcreator.error.communitySubmit"
-                )
-                .param("reason", Message.raw(err))
-        );
+        String failKey =
+            update
+                ? (prop
+                    ? "aetherhaven_building_editor.aetherhaven.buildingeditor.error.communityPropUpdate"
+                    : "aetherhaven_building_editor.aetherhaven.buildingeditor.error.communityUpdate")
+                : "aetherhaven_plot_creator.aetherhaven.plotcreator.error.communitySubmit";
+        playerRef.sendMessage(Message.translation(failKey).param("reason", Message.raw(err)));
     }
 
     private static boolean isRateLimitedError(@Nonnull String err) {

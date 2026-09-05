@@ -50,9 +50,10 @@
         "GatherType": "Unbreakable"
       }
     },
-    "HitboxType": "Aetherhaven_Villager_Wardrobe",
-    "InteractionHitboxType": "Aetherhaven_Villager_Wardrobe",
+    "HitboxType": "Wardrobe",
+    "InteractionHitboxType": "Wardrobe",
     "Material": "Solid",
+    "Opacity": "Transparent",
     "Support": {
       "Down": [
         {

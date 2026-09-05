@@ -10,9 +10,9 @@
     0
   ],
   "rotationYaw": "None",
-  "autonomyNavFloorYAboveMinY": 1,
-  "autonomyNavMaxStandYSpanAboveMinY": 2,
-  "autonomyNavRoofExclusionYBelowMaxY": 5,
+  "autonomyNavFloorYAboveMinY": 1.0,
+  "autonomyNavMaxStandYSpanAboveMinY": 2.0,
+  "autonomyNavRoofExclusionYBelowMaxY": 5.0,
   "selfBuildGameDays": 1.0,
   "treasuryGoldCoinCost": 56,
   "materials": [
@@ -62,16 +62,17 @@
       "interactionKind": "SIT"
     },
     {
-      "localX": 8,
+      "localX": 10,
       "localY": 2,
-      "localZ": -9,
+      "localZ": -8,
       "tags": [
         "EAT",
         "RESTAURANT"
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Chair",
-      "interactionKind": "USE_BENCH"
+      "interactionKind": "USE_BENCH",
+      "interactionTargetYawDegrees": 90.00001
     },
     {
       "localX": 9,
@@ -83,31 +84,21 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Chair",
-      "interactionKind": "USE_BENCH"
+      "interactionKind": "USE_BENCH",
+      "interactionTargetYawDegrees": 0.0
     },
     {
-      "localX": 10,
+      "localX": 8,
       "localY": 2,
-      "localZ": -8,
+      "localZ": -9,
       "tags": [
         "EAT",
         "RESTAURANT"
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Chair",
-      "interactionKind": "USE_BENCH"
-    },
-    {
-      "localX": 12,
-      "localY": 2,
-      "localZ": -5,
-      "tags": [
-        "EAT",
-        "RESTAURANT"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Furniture_Tavern_Chair",
-      "interactionKind": "USE_BENCH"
+      "interactionKind": "USE_BENCH",
+      "interactionTargetYawDegrees": 180.0
     },
     {
       "localX": 13,
@@ -119,7 +110,21 @@
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Tavern_Chair",
-      "interactionKind": "USE_BENCH"
+      "interactionKind": "USE_BENCH",
+      "interactionTargetYawDegrees": 180.0
+    },
+    {
+      "localX": 12,
+      "localY": 2,
+      "localZ": -5,
+      "tags": [
+        "EAT",
+        "RESTAURANT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetYawDegrees": 0.0
     }
   ],
   "managementBlockLocalPos": [
@@ -129,11 +134,22 @@
   ],
   "styleId": "core",
   "tags": [
-    "work",
-    "eat",
     "shop",
-    "restaurant"
+    "work"
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_restaurant.displayName",
-  "touristDestination": true
+  "touristDestination": true,
+  "frontFacing": "North",
+  "boundsLocal": {
+    "min": [
+      1,
+      1,
+      -11
+    ],
+    "max": [
+      15,
+      9,
+      -1
+    ]
+  }
 }

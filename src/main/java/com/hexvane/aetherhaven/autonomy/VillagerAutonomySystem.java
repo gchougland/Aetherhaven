@@ -473,8 +473,9 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             townRecord != null
                 && RestaurantBenefitService.townHasCompleteRestaurant(townRecord, plugin.getConstructionCatalog());
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        UUID villagerUuid = uc != null ? uc.getUuid() : null;
         Set<UUID> breakPlotAllowlist =
-            townRecord != null && uc != null
+            townRecord != null && villagerUuid != null
                 ? PoiScoring.resolveUrgentBreakPlotAllowlist(
                     needs,
                     autonomy.isFillingHunger(),
@@ -482,13 +483,17 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                     autonomy.isFillingFun(),
                     daytime,
                     townRecord,
-                    uc.getUuid(),
+                    villagerUuid,
                     plugin.getConstructionCatalog()
                 )
                 : null;
+        List<PoiEntry> pickPool =
+            PoiScoring.withoutNeedCapReachedPois(
+                pois, needs, townRecord, plugin.getConstructionCatalog(), villagerUuid
+            );
         PoiEntry pick =
             PoiScoring.pickBest(
-                pois,
+                pickPool,
                 needs,
                 binding,
                 cellOcc,
@@ -513,11 +518,11 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             return;
         }
-        if (PoiScoring.isEatPoi(pick) && PoiScoring.needsHungerBreak(needs, true, daytime)) {
+        if (PoiScoring.isEatPoi(pick) && PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger(), daytime)) {
             autonomy.setFillingHunger(true);
-        } else if (PoiScoring.isRestPoi(pick) && PoiScoring.needsEnergyBreak(needs, true)) {
+        } else if (PoiScoring.isRestPoi(pick) && PoiScoring.needsEnergyBreak(needs, autonomy.isFillingEnergy())) {
             autonomy.setFillingEnergy(true);
-        } else if (PoiScoring.isFunPoi(pick) && PoiScoring.needsFunBreak(needs, true, daytime)) {
+        } else if (PoiScoring.isFunPoi(pick) && PoiScoring.needsFunBreak(needs, autonomy.isFillingFun(), daytime)) {
             autonomy.setFillingFun(true);
         }
         beginTravelToPoi(ref, store, commandBuffer, world, npc, autonomy, now, plugin, townRecord, binding.getTownId(), tc, pick);
@@ -563,9 +568,22 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         boolean townHasRestaurant =
             townRecord != null
                 && RestaurantBenefitService.townHasCompleteRestaurant(townRecord, plugin.getConstructionCatalog());
+        UUIDComponent mealUuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
+        UUID villagerUuid = mealUuidComp != null ? mealUuidComp.getUuid() : null;
+        List<PoiEntry> eatPool =
+            PoiScoring.withoutNeedCapReachedPois(
+                pois, needs, townRecord, plugin.getConstructionCatalog(), villagerUuid
+            );
+        if (!PoiScoring.hasSatisfiableHungerPoi(
+            eatPool, cellOcc, needs, townRecord, plugin.getConstructionCatalog(), villagerUuid
+        )) {
+            // Inn/shared spots already at their fill cap — end the meal session instead of looping USE.
+            autonomy.setFillingHunger(false);
+            return false;
+        }
         PoiEntry pick =
             PoiScoring.pickBest(
-                pois, needs, binding, cellOcc, npcX, npcZ, scheduleSeg, townHasRestaurant, true, daytime
+                eatPool, needs, binding, cellOcc, npcX, npcZ, scheduleSeg, townHasRestaurant, true, daytime
             );
         if (pick == null || !PoiScoring.isEatPoi(pick)) {
             // Capacity / no free eat slot: keep the fill session so they retry soon instead of giving up until hungry again.
@@ -758,7 +776,18 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         double npcZ = tc != null ? tc.getPosition().z : Double.NaN;
         UUID homePlotId = PoiScoring.resolveHomePlotId(townRecord, uc.getUuid(), plugin.getConstructionCatalog());
         List<UUID> innPlotIds = PoiScoring.resolveInnPlotIds(townRecord, plugin.getConstructionCatalog());
-        PoiEntry pick = PoiScoring.pickEnergyRestPoi(pois, cellOcc, npcX, npcZ, homePlotId, innPlotIds);
+        List<PoiEntry> restPool =
+            PoiScoring.withoutNeedCapReachedPois(
+                pois, needs, townRecord, plugin.getConstructionCatalog(), uc.getUuid()
+            );
+        if (!PoiScoring.hasSatisfiableEnergyPoi(
+            restPool, cellOcc, uc.getUuid(), townRecord, plugin.getConstructionCatalog()
+        )) {
+            // Inn/shared beds already at their fill cap — end the rest session instead of looping mount/USE.
+            autonomy.setFillingEnergy(false);
+            return false;
+        }
+        PoiEntry pick = PoiScoring.pickEnergyRestPoi(restPool, cellOcc, npcX, npcZ, homePlotId, innPlotIds);
         if (pick == null || !PoiScoring.isRestPoi(pick)) {
             autonomy.setNextDecisionEpochMs(now + 4000L);
             commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
@@ -1207,7 +1236,10 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             double dz = tc.getPosition().z - finalTarget.z;
             double horizSq = dx * dx + dz * dz;
             double maxArriveSq = ARRIVE_HORIZONTAL_SQ;
-            boolean mountKind = pick.getInteractionKind() == PoiInteractionKind.SIT || pick.getInteractionKind() == PoiInteractionKind.SLEEP;
+            boolean mountKind =
+                pick.getInteractionKind() == PoiInteractionKind.SIT
+                    || pick.getInteractionKind() == PoiInteractionKind.SLEEP
+                    || VillagerBlockUtil.isFurnitureMountPoi(world, pick.getX(), pick.getY(), pick.getZ());
             boolean festivalWatch = isFestivalWatchPoi(pick, townRecord);
             boolean tightStand = isTightFestivalStandPoi(pick, townRecord);
             if (festivalWatch) {
@@ -1231,7 +1263,8 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                         tc.getPosition().z,
                         pick.getX(),
                         pick.getY(),
-                        pick.getZ()
+                        pick.getZ(),
+                        false
                     )) {
                     commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
                     applyAutonomyRoleState(ref, npc, commandBuffer);
@@ -1463,11 +1496,16 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         double dz = pos.z - leash.z;
         double horizSq = dx * dx + dz * dz;
 
+        World world = store.getExternalData().getWorld();
+
         double maxArriveSq = ARRIVE_HORIZONTAL_SQ;
         boolean mountKind =
             poiEarly != null
                 && (poiEarly.getInteractionKind() == PoiInteractionKind.SIT
-                    || poiEarly.getInteractionKind() == PoiInteractionKind.SLEEP);
+                    || poiEarly.getInteractionKind() == PoiInteractionKind.SLEEP
+                    || VillagerBlockUtil.isFurnitureMountPoi(
+                        world, poiEarly.getX(), poiEarly.getY(), poiEarly.getZ()
+                    ));
         boolean tightStandTravel = isTightFestivalStandPoi(poiEarly, townRecord);
         if (travelingToFestival && isFestivalWatchPoi(poiEarly, townRecord)) {
             maxArriveSq = FESTIVAL_SPOT_ARRIVED_DIST_SQ;
@@ -1503,8 +1541,6 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return;
         }
 
-        World world = store.getExternalData().getWorld();
-
         VillagerDoorUtil.tryOpenDoorsTowardLeash(
             world,
             pos,
@@ -1517,7 +1553,9 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 && horizSq <= maxArriveSq
                 && poiEarly != null
                 && !poiEarly.hasInteractionTarget()
-                && !VillagerBlockUtil.canNpcMountBlockPoi(world, pos.x, pos.y, pos.z, poiEarly.getX(), poiEarly.getY(), poiEarly.getZ());
+                && !VillagerBlockUtil.canNpcMountBlockPoi(
+                    world, pos.x, pos.y, pos.z, poiEarly.getX(), poiEarly.getY(), poiEarly.getZ(), false
+                );
 
         NavState nav = NavState.INIT;
         MotionController mc = npc.getRole() != null ? npc.getRole().getActiveMotionController() : null;
@@ -1626,7 +1664,9 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             }
             if (mountKind
                 && !poi.hasInteractionTarget()
-                && !VillagerBlockUtil.canNpcMountBlockPoi(world, pos.x, pos.y, pos.z, poi.getX(), poi.getY(), poi.getZ())) {
+                && !VillagerBlockUtil.canNpcMountBlockPoi(
+                    world, pos.x, pos.y, pos.z, poi.getX(), poi.getY(), poi.getZ(), false
+                )) {
                 commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
                 applyAutonomyRoleState(ref, npc, commandBuffer);
                 return;
@@ -1671,16 +1711,19 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             failTravel(autonomy, now, "OCCUPIED", commandBuffer, ref, npc);
             return false;
         }
-        // Physical seat slots (benches have 2) — independently of POI capacity / village TRAVEL counts.
+        // Physical seat/bed slots — independently of POI capacity / village TRAVEL counts.
         VillagerBlockUtil.FurnitureMountKind furniture =
             VillagerBlockUtil.furnitureMountKind(world, poi.getX(), poi.getY(), poi.getZ());
-        if (furniture == VillagerBlockUtil.FurnitureMountKind.SEAT
+        if ((furniture == VillagerBlockUtil.FurnitureMountKind.SEAT
+                || furniture == VillagerBlockUtil.FurnitureMountKind.BED)
             && !VillagerBlockUtil.hasAvailableSeat(world, poi.getX(), poi.getY(), poi.getZ())) {
             failTravel(autonomy, now, "MOUNT_FULL", commandBuffer, ref, npc);
             return false;
         }
         boolean mountKind =
-            poi.getInteractionKind() == PoiInteractionKind.SIT || poi.getInteractionKind() == PoiInteractionKind.SLEEP;
+            poi.getInteractionKind() == PoiInteractionKind.SIT
+                || poi.getInteractionKind() == PoiInteractionKind.SLEEP
+                || VillagerBlockUtil.isFurnitureMountPoi(world, poi.getX(), poi.getY(), poi.getZ());
         if (mountKind && !poi.hasInteractionTarget()) {
             TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
             if (tc == null
@@ -1691,9 +1734,27 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                     tc.getPosition().z,
                     poi.getX(),
                     poi.getY(),
-                    poi.getZ()
+                    poi.getZ(),
+                    false
                 )) {
                 failTravel(autonomy, now, "MOUNT_FULL", commandBuffer, ref, npc);
+                return false;
+            }
+        }
+        // Inn/shared utility spots stop mid-meter; never begin USE (or equip food) when already at that cap.
+        if (plugin != null
+            && (PoiScoring.isEatPoi(poi) || PoiScoring.isRestPoi(poi) || PoiScoring.isFunPoi(poi))) {
+            VillagerNeeds needs = store.getComponent(ref, VillagerNeeds.getComponentType());
+            if (needs != null
+                && isNeedFillMeterFullAtPoi(poi, needs, townRecord, plugin, selfUuid, false)) {
+                if (PoiScoring.isEatPoi(poi)) {
+                    autonomy.setFillingHunger(false);
+                } else if (PoiScoring.isRestPoi(poi)) {
+                    autonomy.setFillingEnergy(false);
+                } else if (PoiScoring.isFunPoi(poi)) {
+                    autonomy.setFillingFun(false);
+                }
+                failTravel(autonomy, now, "NEED_CAP", commandBuffer, ref, npc);
                 return false;
             }
         }
@@ -1934,21 +1995,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             && !leaveForQuestBoard
             && !needFilledAtPoi) {
             if (isNpcBlockMounted(store, commandBuffer, ref)) {
-                stopSeekThenRestoreMountedPose(ref, store, commandBuffer, npc);
-                if (poi != null
-                    && VillagerWorkVisuals.tickHit(
-                        ref,
-                        store,
-                        commandBuffer,
-                        npc,
-                        poi,
-                        binding.getKind(),
-                        now,
-                        autonomy.getLastWorkHitEpochMs()
-                    )) {
-                    autonomy.setLastWorkHitEpochMs(now);
-                    commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
-                }
+                stopSeekThenRestoreMountedPose(ref, store, commandBuffer, npc, poi);
                 return;
             }
             if (poi != null && isActiveNeedFillAtPoi(autonomy, poi, shopping)) {
@@ -2281,11 +2328,11 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull PoiEntry poi
     ) {
         if (isNpcBlockMounted(store, commandBuffer, ref)) {
-            stopSeekThenRestoreMountedPose(ref, store, commandBuffer, npc);
+            stopSeekThenRestoreMountedPose(ref, store, commandBuffer, npc, poi);
             return;
         }
         if (PoiAutonomyVisuals.ensureMountedForPoi(ref, store, commandBuffer, poi)) {
-            stopSeekThenRestoreMountedPose(ref, store, commandBuffer, npc);
+            stopSeekThenRestoreMountedPose(ref, store, commandBuffer, npc, poi);
             return;
         }
         holdStandingPoiUse(ref, store, commandBuffer, npc);
@@ -2611,7 +2658,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull NPCEntity npc
     ) {
         if (isNpcBlockMounted(store, commandBuffer, ref)) {
-            stopSeekThenRestoreMountedPose(ref, store, commandBuffer, npc);
+            stopSeekThenRestoreMountedPose(ref, store, commandBuffer, npc, null);
             return;
         }
         holdStandingPoiUse(ref, store, commandBuffer, npc);
@@ -2649,22 +2696,28 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
     }
 
     /**
-     * Exit autonomy Seek (Idle) without leaving the seat: rebuild Sit/Sleep Status after Idle clears overlays.
+     * Exit autonomy Seek without Idle wander (that rotates the head/body on furniture). Hold stand-still, rebuild
+     * Sit/Sleep from the furniture block, and lock facing to the mount forward.
      */
     private static void stopSeekThenRestoreMountedPose(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
-        @Nonnull NPCEntity npc
+        @Nonnull NPCEntity npc,
+        @Nullable PoiEntry poi
     ) {
-        if (npc.getRole() != null) {
+        TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+        if (tc != null) {
+            NpcStandStill.hold(ref, store, npc, tc.getPosition(), commandBuffer);
+        } else if (npc.getRole() != null) {
             String state = NpcSupportUtil.stateName(commandBuffer.getStore(), ref);
             if (state.startsWith(AetherhavenConstants.NPC_STATE_AUTONOMY_POI)) {
-                NpcSupportUtil.setState(ref, "Idle", null, commandBuffer);
+                NpcSupportUtil.setState(ref, AetherhavenConstants.NPC_STATE_STAND_STILL, null, commandBuffer);
             }
         }
         NpcAnimationPlayback.play(ref, npc, AnimationSlot.Movement, null, commandBuffer);
-        reaffirmMountedPose(ref, store, commandBuffer, npc);
+        NpcAnimationPlayback.play(ref, npc, AnimationSlot.Emote, null, commandBuffer);
+        reaffirmMountedPose(ref, store, commandBuffer, npc, poi);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
     }
 
@@ -2672,24 +2725,30 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
-        @Nonnull NPCEntity npc
+        @Nonnull NPCEntity npc,
+        @Nullable PoiEntry poi
     ) {
-        MountedComponent mounted = commandBuffer.getComponent(ref, MountedComponent.getComponentType());
-        if (mounted == null) {
-            mounted = store.getComponent(ref, MountedComponent.getComponentType());
+        World world = store.getExternalData().getWorld();
+        VillagerBlockUtil.FurnitureMountKind furniture = VillagerBlockUtil.FurnitureMountKind.NONE;
+        if (poi != null) {
+            furniture = VillagerBlockUtil.furnitureMountKind(world, poi.getX(), poi.getY(), poi.getZ());
         }
-        String pose = "Sit";
-        if (mounted != null && mounted.getBlockMountType() == com.hypixel.hytale.protocol.BlockMountType.Bed) {
-            pose = "Sleep";
-            ModelComponent mc = store.getComponent(ref, ModelComponent.getComponentType());
-            if (mc != null
-                && mc.getModel() != null
-                && !mc.getModel().getAnimationSetMap().containsKey("Sleep")
-                && mc.getModel().getAnimationSetMap().containsKey("Sit")) {
-                pose = "Sit";
+        if (furniture == VillagerBlockUtil.FurnitureMountKind.NONE) {
+            MountedComponent mounted = commandBuffer.getComponent(ref, MountedComponent.getComponentType());
+            if (mounted == null) {
+                mounted = store.getComponent(ref, MountedComponent.getComponentType());
+            }
+            if (mounted != null && mounted.getBlockMountType() == com.hypixel.hytale.protocol.BlockMountType.Bed) {
+                furniture = VillagerBlockUtil.FurnitureMountKind.BED;
+            } else if (mounted != null) {
+                furniture = VillagerBlockUtil.FurnitureMountKind.SEAT;
             }
         }
+        String pose = furniture == VillagerBlockUtil.FurnitureMountKind.BED ? "Sleep" : "Sit";
         NpcAnimationPlayback.play(ref, npc, AnimationSlot.Status, pose, commandBuffer);
+        if (poi != null) {
+            PoiAutonomyVisuals.lockFacingToMount(ref, store, commandBuffer, world, poi);
+        }
     }
 
     public static void applyAutonomyRoleState(

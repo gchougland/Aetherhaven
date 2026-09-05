@@ -1031,9 +1031,16 @@ public final class PlotCreatorService {
             );
             return false;
         }
+        boolean communityEnabled = plugin.getConfig().get().getCommunityMarketplace().isEnabled();
+        boolean communityEdit = draft.isCommunitySubmissionEdit() && communityEnabled;
         boolean submit =
-            draft.isSubmitToCommunity() && plugin.getConfig().get().getCommunityMarketplace().isEnabled();
+            draft.isSubmitToCommunity() && communityEnabled && !draft.isCommunitySubmissionEdit();
         String propId = draft.getConstructionId().trim();
+        if (draft.getEditingConstructionId() != null && !draft.getEditingConstructionId().isBlank()) {
+            propId = draft.getEditingConstructionId().trim();
+            draft.setConstructionId(propId);
+            syncPrefabFileNameFromConstructionId(draft);
+        }
         if (submit) {
             propId =
                 com.hexvane.aetherhaven.community.CommunityPropValidator.assignCatalogId(
@@ -1042,13 +1049,20 @@ public final class PlotCreatorService {
             draft.setConstructionId(propId);
             syncPrefabFileNameFromConstructionId(draft);
         }
-        if (plugin.getPropCatalog().contains(propId) && draft.getEditingConstructionId() == null) {
+        if (plugin.getPropCatalog().contains(propId)
+            && draft.getEditingConstructionId() == null
+            && !communityEdit) {
             playerRef.sendMessage(
                 Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.id_taken")
             );
             return false;
         }
         String prefabKey = draft.getPrefabPath();
+        if (prefabKey == null || prefabKey.isBlank()) {
+            if (draft.getLockedPrefabPathKey() != null && !draft.getLockedPrefabPathKey().isBlank()) {
+                prefabKey = draft.getLockedPrefabPathKey();
+            }
+        }
         if (prefabKey == null || prefabKey.isBlank()) {
             playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.incomplete"));
             return false;
@@ -1089,17 +1103,36 @@ public final class PlotCreatorService {
                 .atWarning()
                 .log("Prop icon generation after save returned %s for %s", iconResult, propId);
         }
-        if (submit) {
+        if (communityEdit) {
+            String playerName = playerRef.getUsername() != null ? playerRef.getUsername() : "Unknown";
+            CommunitySubmissionService.UpdateOutcome outcome = new CommunitySubmissionService.UpdateOutcome();
+            String submitErr =
+                CommunitySubmissionService.updateSavedProp(
+                    plugin, playerRef.getUuid(), playerName, propId, outcome
+                );
+            boolean waitingForReview = draft.isCommunitySubmissionApproved() || outcome.isWaitingForReview();
+            CommunitySubmissionService.notifyPropUpdatePlayer(playerRef, submitErr, waitingForReview);
+            if (submitErr != null) {
+                return false;
+            }
+        } else if (submit) {
             String playerName = playerRef.getUsername() != null ? playerRef.getUsername() : "Unknown";
             String submitErr =
                 CommunitySubmissionService.submitSavedProp(plugin, playerRef.getUuid(), playerName, propId);
             CommunitySubmissionService.notifyPlayer(playerRef, submitErr);
         }
         draft.setStep(PlotCreatorStep.DONE);
-        playerRef.sendMessage(
-            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.success.propSaved")
-                .param("name", draft.getDisplayName() != null ? draft.getDisplayName() : propId)
-        );
+        if (communityEdit) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_building_editor.aetherhaven.buildingeditor.success.savedProp")
+                    .param("id", propId)
+            );
+        } else {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.success.propSaved")
+                    .param("name", draft.getDisplayName() != null ? draft.getDisplayName() : propId)
+            );
+        }
         endSessionAfterSave(playerRef, session);
         return true;
     }

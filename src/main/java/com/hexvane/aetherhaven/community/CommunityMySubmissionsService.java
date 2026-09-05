@@ -7,6 +7,8 @@ import com.hexvane.aetherhaven.config.CommunityMarketplaceConfig;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hexvane.aetherhaven.plotcreator.PlotTokenIconPng;
+import com.hexvane.aetherhaven.prop.PropPaths;
+import com.google.gson.JsonObject;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,7 +23,7 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Fetches owned marketplace buildings and prepares local files for building editor sessions. */
+/** Fetches owned marketplace submissions and prepares local files for building editor sessions. */
 public final class CommunityMySubmissionsService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final Gson GSON = new Gson();
@@ -56,7 +58,7 @@ public final class CommunityMySubmissionsService {
     }
 
     /**
-     * Ensures building JSON and prefab exist locally for editing.
+     * Ensures definition JSON and prefab exist locally for editing (building or prop).
      *
      * @return {@code null} on success, or an error key
      */
@@ -71,7 +73,10 @@ public final class CommunityMySubmissionsService {
         if (catalogId.isBlank()) {
             return "building_missing";
         }
-        if (hasEditableLocalFiles(plugin.getDataDirectory(), catalogId)) {
+        if (entry.isProp()) {
+            return ensureLocalPropFilesForEdit(plugin, entry, playerUuid, playerName);
+        }
+        if (hasEditableLocalBuildingFiles(plugin.getDataDirectory(), catalogId)) {
             return null;
         }
         if (entry.isApproved()) {
@@ -87,7 +92,34 @@ public final class CommunityMySubmissionsService {
             );
             return installResultToError(result);
         }
-        return downloadPendingSubmissionFiles(plugin, entry, playerUuid, playerName);
+        return downloadPendingBuildingSubmissionFiles(plugin, entry, playerUuid, playerName);
+    }
+
+    @Nullable
+    private static String ensureLocalPropFilesForEdit(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull CommunityMySubmissionEntry entry,
+        @Nonnull UUID playerUuid,
+        @Nonnull String playerName
+    ) {
+        String catalogId = entry.catalogId();
+        if (hasEditableLocalPropFiles(plugin.getDataDirectory(), catalogId)) {
+            return null;
+        }
+        if (entry.isApproved()) {
+            CommunityManifestEntry manifestEntry = resolveManifestEntry(plugin.getCommunityCatalogService(), catalogId);
+            if (manifestEntry == null) {
+                return "download_failed";
+            }
+            CommunityDownloadService.InstallResult result = CommunityDownloadService.install(
+                plugin,
+                manifestEntry,
+                false,
+                playerUuid
+            );
+            return installResultToError(result);
+        }
+        return downloadPendingPropSubmissionFiles(plugin, entry, playerUuid, playerName);
     }
 
     @Nullable
@@ -138,7 +170,7 @@ public final class CommunityMySubmissionsService {
         }
     }
 
-    private static boolean hasEditableLocalFiles(@Nonnull Path dataDir, @Nonnull String catalogId) {
+    private static boolean hasEditableLocalBuildingFiles(@Nonnull Path dataDir, @Nonnull String catalogId) {
         if (Files.isRegularFile(CustomBuildingsPaths.buildingFile(dataDir, catalogId))) {
             Path prefab = CustomBuildingsPaths.resolvePrefabFile(dataDir, catalogId + ".prefab.json");
             if (prefab != null && Files.isRegularFile(prefab)) {
@@ -154,8 +186,17 @@ public final class CommunityMySubmissionsService {
         return false;
     }
 
+    private static boolean hasEditableLocalPropFiles(@Nonnull Path dataDir, @Nonnull String catalogId) {
+        if (!Files.isRegularFile(PropPaths.propFileUnderDataDir(dataDir, catalogId))) {
+            return false;
+        }
+        String prefabKey = PropPaths.prefabPathKeyFromPropId(catalogId);
+        Path prefab = PropPaths.propPrefabFile(dataDir, PropPaths.prefabFileNameFromKey(prefabKey));
+        return Files.isRegularFile(prefab);
+    }
+
     @Nullable
-    private static String downloadPendingSubmissionFiles(
+    private static String downloadPendingBuildingSubmissionFiles(
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull CommunityMySubmissionEntry entry,
         @Nonnull UUID playerUuid,
@@ -196,6 +237,81 @@ public final class CommunityMySubmissionsService {
             return null;
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Failed to download owned submission %s", submissionId);
+            return "io_error";
+        }
+    }
+
+    @Nullable
+    private static String downloadPendingPropSubmissionFiles(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull CommunityMySubmissionEntry entry,
+        @Nonnull UUID playerUuid,
+        @Nonnull String playerName
+    ) {
+        String submissionId = entry.ownerDownloadSubmissionId();
+        if (submissionId == null || submissionId.isBlank()) {
+            return "download_failed";
+        }
+        CommunityMarketplaceConfig cfg = plugin.getConfig().get().getCommunityMarketplace();
+        Map<String, String> headers = playerHeaders(playerUuid, playerName);
+        String base = cfg.getApiBaseUrl() + "/api/v1/my-submissions/" + submissionId;
+        byte[] propBytes = CommunityHttpClient.getBytes(base + "/prop.json", headers);
+        byte[] prefabBytes = CommunityHttpClient.getBytes(base + "/prefab.json", headers);
+        if (propBytes == null || propBytes.length == 0 || prefabBytes == null || prefabBytes.length == 0) {
+            return "download_failed";
+        }
+        CommunityPrefabSafety.Result safety = CommunityPrefabSafety.validate(prefabBytes);
+        if (!safety.isSafe()) {
+            LOGGER.atWarning().log("Refused unsafe owned prop submission prefab %s: %s", submissionId, safety.detail());
+            return "unsafe_prefab: " + safety.detail();
+        }
+        String catalogId = entry.catalogId();
+        Path dataDir = plugin.getDataDirectory();
+        String prefabKey = PropPaths.prefabPathKeyFromPropId(catalogId);
+        try {
+            Files.createDirectories(PropPaths.propsDirectory(dataDir));
+            Files.createDirectories(PropPaths.propPrefabsDirectory(dataDir));
+            Files.createDirectories(CommunityPaths.iconsDirectory(dataDir));
+            Files.createDirectories(CustomBuildingsPaths.iconsDirectory(dataDir));
+
+            JsonObject root;
+            try {
+                root = GSON.fromJson(new String(propBytes, java.nio.charset.StandardCharsets.UTF_8), JsonObject.class);
+            } catch (Exception e) {
+                root = null;
+            }
+            if (root == null) {
+                root = new JsonObject();
+            }
+            root.addProperty("id", catalogId);
+            root.addProperty("prefabPath", prefabKey);
+            if (!root.has("displayName") || root.get("displayName").isJsonNull()) {
+                root.addProperty("displayName", entry.getDisplayName());
+            }
+            String iconAsset = PropPaths.iconAssetPath(catalogId);
+            root.addProperty("iconPath", iconAsset);
+            Files.writeString(PropPaths.propFileUnderDataDir(dataDir, catalogId), GSON.toJson(root));
+            Files.write(
+                PropPaths.propPrefabFile(dataDir, PropPaths.prefabFileNameFromKey(prefabKey)),
+                prefabBytes
+            );
+
+            byte[] iconBytes = CommunityHttpClient.getBytes(base + "/icon.png", headers);
+            if (iconBytes != null && PlotTokenIconPng.isValid(iconBytes)) {
+                Path iconFile = PropPaths.iconFile(dataDir, catalogId);
+                PlotTokenIconPng.writeAtomically(iconFile, iconBytes);
+                Path communityIcon = CommunityPaths.iconsDirectory(dataDir).resolve(PropPaths.iconFileName(catalogId));
+                if (!communityIcon.equals(iconFile)) {
+                    Files.createDirectories(communityIcon.getParent());
+                    Files.write(communityIcon, iconBytes);
+                }
+                CustomBuildingIconAssetRegistry.registerIconFile(plugin, iconFile);
+                com.hexvane.aetherhaven.prop.PropIconSync.afterIconRegistered(plugin, catalogId);
+            }
+            plugin.reloadConfigsAndAssetCatalogs();
+            return null;
+        } catch (IOException e) {
+            LOGGER.atWarning().withCause(e).log("Failed to download owned prop submission %s", submissionId);
             return "io_error";
         }
     }

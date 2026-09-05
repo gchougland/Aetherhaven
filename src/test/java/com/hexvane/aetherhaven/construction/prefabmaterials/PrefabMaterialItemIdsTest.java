@@ -30,6 +30,33 @@ class PrefabMaterialItemIdsTest {
     }
 
     @Test
+    void mergeNormalizedMapsLargeChestToTwoSmall() {
+        List<MaterialRequirement> merged =
+            PrefabMaterialItemIds.mergeNormalized(
+                List.of(
+                    MaterialRequirement.ofItem("Furniture_Village_Chest_Large", 3),
+                    MaterialRequirement.ofItem("Furniture_Village_Chest_Small", 1),
+                    MaterialRequirement.ofItem("Furniture_Tavern_Chest_Large", 1)
+                )
+            );
+        assertEquals(2, merged.size());
+        assertEquals(
+            7,
+            merged.stream()
+                .filter(m -> "Furniture_Village_Chest_Small".equals(m.getItemId()))
+                .mapToInt(MaterialRequirement::getCount)
+                .sum()
+        );
+        assertEquals(
+            2,
+            merged.stream()
+                .filter(m -> "Furniture_Tavern_Chest_Small".equals(m.getItemId()))
+                .mapToInt(MaterialRequirement::getCount)
+                .sum()
+        );
+    }
+
+    @Test
     void prefabBlockNormalizerMapsTrunkFullBlocks() {
         assertEquals("Wood_Oak_Trunk", PrefabBlockNormalizer.normalizeBlockToItemId("Wood_Oak_Trunk_Full"));
     }

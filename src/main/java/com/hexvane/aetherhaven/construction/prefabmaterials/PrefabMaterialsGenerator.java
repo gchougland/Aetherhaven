@@ -33,7 +33,7 @@ public final class PrefabMaterialsGenerator {
         Map<String, Integer> items = new HashMap<>();
         Map<String, Integer> resources = new HashMap<>();
         PrefabJsonStream.forEachBlock(prefabPath, (name, filler) -> countBlock(name, filler, items, resources));
-        return toSortedRequirements(items, resources);
+        return PrefabMaterialItemIds.mergeNormalized(toSortedRequirements(items, resources));
     }
 
     @Nonnull
@@ -42,7 +42,7 @@ public final class PrefabMaterialsGenerator {
             Map<String, Integer> items = new HashMap<>();
             Map<String, Integer> resources = new HashMap<>();
             PrefabJsonStream.forEachBlock(reader, (name, filler) -> countBlock(name, filler, items, resources));
-            return toSortedRequirements(items, resources);
+            return PrefabMaterialItemIds.mergeNormalized(toSortedRequirements(items, resources));
         } catch (IllegalArgumentException e) {
             throw e;
         } catch (IOException e) {

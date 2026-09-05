@@ -61,16 +61,24 @@ aetherhaven.ui.memberPermissions.err.notOwner=Only the town owner can edit permi
 aetherhaven.ui.memberPermissions.err.notInTown=That player is not in this town.
 
 # === Town territory expansion (town hall records shelf) ===
-aetherhaven.ui.expansion.title=Expand town borders
-aetherhaven.ui.expansion.summary=Each square is four map chunks. Pick one next to your town to add it. Gold comes from your inventory and treasury if you may spend treasury gold.
+aetherhaven.ui.expansion.title=Town borders
+aetherhaven.ui.expansion.summary=Each square is four map chunks. Pick empty land next to your town to claim it, or pick land you own to sell it. Gold for claims comes from your inventory and treasury if you may spend treasury gold. Selling puts gold in the treasury.
 aetherhaven.ui.expansion.back=Back
 aetherhaven.ui.expansion.claimButton=Claim land
+aetherhaven.ui.expansion.sellButton=Sell land
 aetherhaven.ui.expansion.claimCost=Next land cost: {cost} gold
+aetherhaven.ui.expansion.sellRefund=Sell for: {refund} gold
 aetherhaven.ui.expansion.err.claimLimit=Your town cannot claim any more land.
 aetherhaven.ui.expansion.claimSuccess=That land is now part of your town.
+aetherhaven.ui.expansion.sellSuccess=That land is no longer part of your town.
 aetherhaven.ui.expansion.err.noPermission=You cannot claim land for this town.
 aetherhaven.ui.expansion.err.notClaimable=You can only claim land next to your town that no one else owns.
 aetherhaven.ui.expansion.err.notEnoughGold=You do not have enough gold for this claim.
+aetherhaven.ui.expansion.err.sellNoPermission=You cannot sell land for this town.
+aetherhaven.ui.expansion.err.sellNotOwned=You can only sell land your town already owns.
+aetherhaven.ui.expansion.err.sellHasBuildings=You cannot sell land that has buildings on it.
+aetherhaven.ui.expansion.err.sellCharter=You cannot sell the land under your town charter.
+aetherhaven.ui.expansion.err.sellWouldSplit=You cannot sell land that would split your town apart.
 aetherhaven.ui.plotconstruction.expandTooltip=Expand town borders
 aetherhaven.ui.plotconstruction.expandTerritory=Expand borders
 

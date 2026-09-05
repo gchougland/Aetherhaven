@@ -7,7 +7,7 @@
     "TimeSeconds": 0,
     "Input": [
       {
-        "ItemId": "Rock_Stone_Cobble",
+        "ResourceTypeId": "Rock",
         "Quantity": 16
       }
     ],

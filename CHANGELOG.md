@@ -1,10 +1,31 @@
 # Changelog
 
-## [3.1.3] - Unreleased
+## [3.1.3] - 9/5/2026
+
+### Added
+
+- **Building editor** You can edit marketplace props you submitted from a Props tab on the Building Editor Staff.
+- **Town borders** You can sell land from the same Expand borders map in the town hall. You get half the last expand price back in the treasury. You cannot sell land that has buildings on it.
+
+### Changed
+
+- **Town charter** Crafting the town charter accepts any kind of stone, not only cobblestone.
 
 ### Fixed
 
 - **World Hanging on Load** Worlds with founder monuments no longer freeze when loading into the world.
+- **Birthday dialogue** Elder Lyren's birthday gift talk shows the right words again.
+- **Guard Command Post** Using the command post no longer crashes the world.
+- **Park benches** Villagers sit on park benches instead of standing and spinning on them.
+- **Blueprint materials** When requiring every block, large chests count as two small chests of the same kind, and furniture you cannot craft is no longer required.
+- **Raid quests** Accepting a raid no longer freezes the world when spawn search has to load new chunks outside town.
+- **Wardrobes** You can use Workplace Stores and the Villager Wardrobe by aiming anywhere on the furniture, not only one block of it.
+- **Inn visitors** Visitors at the inn no longer keep pulling out food and putting it away after a snack. They eat until the inn fills them, then stop.
+- **Inn beds** Villagers lie down in beds instead of sitting or floating on them. Any spot on a chair or bed uses that furniture. While seated or sleeping they face forward and stay still. They also stop hopping in and out of rest once the inn has filled them.
+- **Builder visitor** The builder guest at the inn no longer disappears after a world restart while the builders hut quest is active.
+- **Chairs** Villagers no longer float above a chair for a moment before sitting. Restaurant guests sit to eat instead of standing beside the table.
+- **Gaia statue** The Gaia statue uses the proper statue collision size instead of a single block.
+- **Villager health** Villagers no longer show health bars on world join from a tiny missing bit of health after armor stats apply.
 
 ## [3.1.2] - 8/31/2026
 

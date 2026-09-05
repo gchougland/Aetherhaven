@@ -23,7 +23,7 @@
         "GatherType": "Unbreakable"
       }
     },
-    "HitboxType": "Full",
+    "HitboxType": "Statue",
     "Material": "Solid",
     "Opacity": "Transparent",
     "ParticleColor": "#8a9ba8",

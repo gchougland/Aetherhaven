@@ -3,12 +3,100 @@
   "prefabPath": "plot_restaurant.prefab.json",
   "materials": [
     {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 133
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 84
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 75
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 66
+    },
+    {
       "resourceTypeId": "Wood_All",
-      "count": 400
+      "count": 59
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 52
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 27
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 27
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 20
     },
     {
       "resourceTypeId": "Rock",
-      "count": 150
+      "count": 19
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 18
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Flat",
+      "count": 16
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Mossy",
+      "count": 6
+    },
+    {
+      "itemId": "Furniture_Tavern_Chair",
+      "count": 5
+    },
+    {
+      "itemId": "Deco_Rope",
+      "count": 3
+    },
+    {
+      "itemId": "Furniture_Tavern_Candle",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Tavern_Chandelier",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Tavern_Table",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_Cooking",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Crude_Candle",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Sign",
+      "count": 1
+    },
+    {
+      "itemId": "Wood_Softwood_Fence_Gate",
+      "count": 1
     }
   ]
 }

@@ -28,6 +28,7 @@
       }
     },
     "HitboxType": "Wardrobe",
+    "InteractionHitboxType": "Wardrobe",
     "Material": "Solid",
     "ParticleColor": "#543022",
     "Support": {

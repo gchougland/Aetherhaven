@@ -127,6 +127,7 @@ public final class AetherhavenUiLocalization {
         b.set("#ExpansionSummary.TextSpans", t("aetherhaven_town.aetherhaven.ui.expansion.summary"));
         b.set("#ExpansionBackButton.TextSpans", t("aetherhaven_town.aetherhaven.ui.expansion.back"));
         b.set("#ExpansionClaimButton.TextSpans", t("aetherhaven_town.aetherhaven.ui.expansion.claimButton"));
+        b.set("#ExpansionSellButton.TextSpans", t("aetherhaven_town.aetherhaven.ui.expansion.sellButton"));
     }
 
     public static void applyDifficultyPage(@Nonnull UICommandBuilder b) {

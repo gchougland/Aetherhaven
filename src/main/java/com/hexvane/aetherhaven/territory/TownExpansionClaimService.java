@@ -65,4 +65,41 @@ public final class TownExpansionClaimService {
         TownBorderMapOverlayService.refreshPlayer(world, playerUuid);
         return null;
     }
+
+    @Nullable
+    public static String trySellChunk(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull UUID playerUuid,
+        int chunkX,
+        int chunkZ
+    ) {
+        if (!town.playerCanClaimTerritoryExpansion(playerUuid)) {
+            return "aetherhaven_town.aetherhaven.ui.expansion.err.sellNoPermission";
+        }
+        TownTerritoryClaims.SellClaimBlockReject reject =
+            TownTerritoryClaims.reasonCannotSellClaimBlock(town, chunkX, chunkZ);
+        if (reject != null) {
+            return switch (reject) {
+                case NOT_OWNED -> "aetherhaven_town.aetherhaven.ui.expansion.err.sellNotOwned";
+                case HAS_BUILDINGS -> "aetherhaven_town.aetherhaven.ui.expansion.err.sellHasBuildings";
+                case CHARTER_OUTSIDE -> "aetherhaven_town.aetherhaven.ui.expansion.err.sellCharter";
+                case WOULD_SPLIT -> "aetherhaven_town.aetherhaven.ui.expansion.err.sellWouldSplit";
+            };
+        }
+        var cfg = plugin.getConfig().get();
+        long refund = TownTerritoryClaims.sellClaimBlockRefundGold(town, cfg);
+        if (!TownTerritoryClaims.removeClaimBlock(town, chunkX, chunkZ)) {
+            return "aetherhaven_town.aetherhaven.ui.expansion.err.sellNotOwned";
+        }
+        if (refund > 0L) {
+            town.addTreasuryGoldCoins(refund);
+        }
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        tm.updateTown(town);
+        TownBorderMapOverlayService.invalidateOverlaysForWorld(world);
+        TownBorderMapOverlayService.refreshPlayer(world, playerUuid);
+        return null;
+    }
 }

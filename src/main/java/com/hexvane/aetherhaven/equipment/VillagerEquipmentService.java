@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.equipment;
 
 import com.hexvane.aetherhaven.equipment.data.EquipmentProfileCatalog;
 import com.hexvane.aetherhaven.equipment.data.EquipmentProfileDefinition;
+import com.hexvane.aetherhaven.villager.TownVillagerHealthTopUp;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -89,6 +90,8 @@ public final class VillagerEquipmentService {
                 }
             }
             putArmor(npcRef, store, commandBuffer, armor);
+            // Armor Health modifiers apply on the next Recalculate; queue a full top-up so max and current match.
+            TownVillagerHealthTopUp.request(npcRef, store);
         } catch (RuntimeException ex) {
             LOGGER.at(Level.FINE).withCause(ex).log("Could not equip armor on NPC");
         }

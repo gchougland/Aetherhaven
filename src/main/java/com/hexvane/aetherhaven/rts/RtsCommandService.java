@@ -311,7 +311,7 @@ public final class RtsCommandService {
         tc.getPosition().set(dest);
         tc.getRotation().set(pitch, yaw, roll);
         accessor.putComponent(playerRef, TransformComponent.getComponentType(), tc);
-        accessor.addComponent(
+        accessor.putComponent(
             playerRef,
             Teleport.getComponentType(),
             Teleport.createForPlayer(dest, tc.getRotation())

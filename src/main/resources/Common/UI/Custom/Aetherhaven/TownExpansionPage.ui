@@ -131,6 +131,13 @@ $C.@PageOverlay {
 
           Label #ExpansionCostLabel {
             Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #e8dcc8);
+            Anchor: (Bottom: 4);
+            Text: "";
+          }
+
+          Label #ExpansionSellRefundLabel {
+            Visible: false;
+            Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #e8dcc8);
             Anchor: (Bottom: 8);
             Text: "";
           }
@@ -152,6 +159,12 @@ $C.@PageOverlay {
             }
 
             $C.@TextButton #ExpansionClaimButton {
+              FlexWeight: 1;
+              Anchor: (Right: 8, Height: 36);
+              Text: "";
+            }
+
+            $C.@TextButton #ExpansionSellButton {
               FlexWeight: 1;
               Anchor: (Height: 36);
               Text: "";

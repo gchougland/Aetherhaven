@@ -32,20 +32,6 @@
       "localY": 0,
       "localZ": -7,
       "tags": [
-        "workActivity:craft",
-        "WORK"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Wood_Softwood_Planks",
-      "interactionKind": "WORK_SURFACE",
-      "workResidentKind": "pyrotechnic",
-      "interactionTargetYawDegrees": -177.00612
-    },
-    {
-      "localX": 7,
-      "localY": 0,
-      "localZ": -7,
-      "tags": [
         "SHOP"
       ],
       "capacity": 1,
@@ -100,6 +86,20 @@
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "SIT",
       "interactionTargetYawDegrees": -15.163978
+    },
+    {
+      "localX": 7,
+      "localY": 1,
+      "localZ": -6,
+      "tags": [
+        "WORK",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "workResidentKind": "pyrotechnic",
+      "interactionTargetYawDegrees": 155.21356
     }
   ],
   "managementBlockLocalPos": [
@@ -109,5 +109,22 @@
   ],
   "touristDestination": true,
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_bomb_shop.displayName",
-  "styleId": "core"
+  "styleId": "core",
+  "frontFacing": "North",
+  "tags": [
+    "shop",
+    "work"
+  ],
+  "boundsLocal": {
+    "min": [
+      1,
+      0,
+      -9
+    ],
+    "max": [
+      15,
+      15,
+      -1
+    ]
+  }
 }

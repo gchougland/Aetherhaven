@@ -80,7 +80,12 @@ public final class VillagerDialogueKindResolver {
 
     @Nonnull
     private static String normalizeKind(@Nonnull String kind) {
-        return kind.trim().toLowerCase(Locale.ROOT);
+        String normalized = kind.trim().toLowerCase(Locale.ROOT);
+        // Elder Lyren's dialogueVillagerKind is elder_lyren; lang lines use elder.
+        if ("elder_lyren".equals(normalized)) {
+            return "elder";
+        }
+        return normalized;
     }
 
     /** Shared default bucket name for festival greeting lookup. */

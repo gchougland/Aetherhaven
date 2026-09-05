@@ -119,7 +119,7 @@ public final class ChunkSectionBlockUtil {
             return CompletableFuture.supplyAsync(() -> resolveTickingChunk(world, blockX, blockZ), world).join();
         }
         Ref<ChunkStore> loaded =
-            world.getChunkStore().getChunkReferenceAsync(chunkIndex, GetChunkFlags.SET_TICKING).join();
+            awaitChunkReference(world, world.getChunkStore().getChunkReferenceAsync(chunkIndex, GetChunkFlags.SET_TICKING));
         if (loaded == null) {
             return null;
         }
@@ -249,11 +249,27 @@ public final class ChunkSectionBlockUtil {
             return CompletableFuture.supplyAsync(() -> loadBlockChunk(world, blockX, blockZ), world).join();
         }
         long chunkIndex = ChunkUtil.indexChunkFromBlock(blockX, blockZ);
-        Ref<ChunkStore> loaded = world.getChunkStore().getChunkReferenceAsync(chunkIndex).join();
+        Ref<ChunkStore> loaded = awaitChunkReference(world, world.getChunkStore().getChunkReferenceAsync(chunkIndex));
         if (loaded == null || !loaded.isValid()) {
             return null;
         }
         return world.getChunkStore().getStore().getComponent(loaded, BlockChunk.getComponentType());
+    }
+
+    /**
+     * Waits for an async chunk load without deadlocking the world thread. Chunk completion is posted back onto
+     * the world task queue, so a bare {@code join()} from that thread never finishes — drain until done (same
+     * pattern as {@code World} validation / boot loads).
+     */
+    @Nullable
+    private static Ref<ChunkStore> awaitChunkReference(
+        @Nonnull World world,
+        @Nonnull CompletableFuture<Ref<ChunkStore>> future
+    ) {
+        while (!future.isDone()) {
+            world.consumeTaskQueue();
+        }
+        return future.join();
     }
 
     /**

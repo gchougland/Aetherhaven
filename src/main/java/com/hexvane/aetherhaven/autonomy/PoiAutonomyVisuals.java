@@ -3,7 +3,6 @@ package com.hexvane.aetherhaven.autonomy;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.entity.EntityRotationUtil;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.entity.TransformComponentUtil;
 import com.hexvane.aetherhaven.equipment.VillagerEquipmentService;
 import com.hexvane.aetherhaven.npc.NpcAnimationPlayback;
 import com.hexvane.aetherhaven.poi.PoiEntry;
@@ -16,6 +15,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
+import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.protocol.AnimationSlot;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
@@ -24,6 +24,7 @@ import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.entity.AnimationUtils;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -97,13 +98,11 @@ public final class PoiAutonomyVisuals {
         }
         VillagerBlockUtil.FurnitureMountKind furniture =
             VillagerBlockUtil.furnitureMountKind(world, poi.getX(), poi.getY(), poi.getZ());
-        // Chairs always seat the NPC, even for WORK / desk POIs (mountOnUse only defaults true for SIT/SLEEP).
-        boolean shouldMount =
-            furniture != VillagerBlockUtil.FurnitureMountKind.NONE
-                && (poi.isMountOnUse() || furniture == VillagerBlockUtil.FurnitureMountKind.SEAT);
-        if (shouldMount) {
+        // Any POI on a chair or bed mounts from the block — not from POI interaction kind.
+        if (furniture != VillagerBlockUtil.FurnitureMountKind.NONE) {
             if (tryMountBlockPoi(npcRef, store, commandBuffer, poi)) {
                 playMountedFurnitureAnim(npcRef, store, commandBuffer, furniture);
+                lockFacingToMount(npcRef, store, commandBuffer, world, poi);
                 return;
             }
             if (furniture == VillagerBlockUtil.FurnitureMountKind.SEAT) {
@@ -126,6 +125,7 @@ public final class PoiAutonomyVisuals {
                         ))) {
                     sleepPoiFallbackPose(npcRef, store, commandBuffer, poi);
                     playMountedFurnitureAnim(npcRef, store, commandBuffer, furniture);
+                    lockFacingToMount(npcRef, store, commandBuffer, world, poi);
                     return;
                 }
             }
@@ -156,6 +156,8 @@ public final class PoiAutonomyVisuals {
         @Nonnull PoiEntry poi
     ) {
         if (VillagerAutonomySystem.isNpcBlockMounted(store, commandBuffer, npcRef)) {
+            World world = store.getExternalData().getWorld();
+            lockFacingToMount(npcRef, store, commandBuffer, world, poi);
             return true;
         }
         Set<String> tags = poi.getTags();
@@ -163,22 +165,22 @@ public final class PoiAutonomyVisuals {
         if (isEatPoi(tags)) {
             VillagerBlockUtil.FurnitureMountKind furniture =
                 VillagerBlockUtil.furnitureMountKind(world, poi.getX(), poi.getY(), poi.getZ());
-            if (furniture == VillagerBlockUtil.FurnitureMountKind.SEAT && tryMountBlockPoi(npcRef, store, commandBuffer, poi)) {
+            if (furniture != VillagerBlockUtil.FurnitureMountKind.NONE
+                && tryMountBlockPoi(npcRef, store, commandBuffer, poi)) {
                 playMountedFurnitureAnim(npcRef, store, commandBuffer, furniture);
+                lockFacingToMount(npcRef, store, commandBuffer, world, poi);
                 return true;
             }
             return false;
         }
         VillagerBlockUtil.FurnitureMountKind furniture =
             VillagerBlockUtil.furnitureMountKind(world, poi.getX(), poi.getY(), poi.getZ());
-        boolean shouldMount =
-            furniture != VillagerBlockUtil.FurnitureMountKind.NONE
-                && (poi.isMountOnUse() || furniture == VillagerBlockUtil.FurnitureMountKind.SEAT);
-        if (!shouldMount) {
+        if (furniture == VillagerBlockUtil.FurnitureMountKind.NONE) {
             return false;
         }
         if (tryMountBlockPoi(npcRef, store, commandBuffer, poi)) {
             playMountedFurnitureAnim(npcRef, store, commandBuffer, furniture);
+            lockFacingToMount(npcRef, store, commandBuffer, world, poi);
             return true;
         }
         if (furniture == VillagerBlockUtil.FurnitureMountKind.BED) {
@@ -196,6 +198,7 @@ public final class PoiAutonomyVisuals {
                     ))) {
                 sleepPoiFallbackPose(npcRef, store, commandBuffer, poi);
                 playMountedFurnitureAnim(npcRef, store, commandBuffer, furniture);
+                lockFacingToMount(npcRef, store, commandBuffer, world, poi);
                 return false;
             }
         }
@@ -385,7 +388,7 @@ public final class PoiAutonomyVisuals {
     }
 
     /**
-     * Any eat / feast POI: held food + Consume. If the POI block is a chair/seat, mount then Sit (do not Seek).
+     * Any eat / feast POI: held food + Consume. Chair/bed under the POI mounts Sit/Sleep from the block.
      */
     private static void beginEatPoiUse(
         @Nonnull Ref<EntityStore> npcRef,
@@ -396,8 +399,9 @@ public final class PoiAutonomyVisuals {
     ) {
         VillagerBlockUtil.FurnitureMountKind furniture =
             VillagerBlockUtil.furnitureMountKind(world, poi.getX(), poi.getY(), poi.getZ());
-        if (furniture == VillagerBlockUtil.FurnitureMountKind.SEAT && tryMountBlockPoi(npcRef, store, commandBuffer, poi)) {
+        if (furniture != VillagerBlockUtil.FurnitureMountKind.NONE && tryMountBlockPoi(npcRef, store, commandBuffer, poi)) {
             playMountedFurnitureAnim(npcRef, store, commandBuffer, furniture);
+            lockFacingToMount(npcRef, store, commandBuffer, world, poi);
         } else {
             faceTowardBlock(npcRef, store, commandBuffer, poi);
         }
@@ -419,14 +423,50 @@ public final class PoiAutonomyVisuals {
         if (mountAnim != null) {
             NpcAnimationPlayback.play(npcRef, npc, AnimationSlot.Status, mountAnim, commandBuffer);
         }
-        // Walk/seek overlays must not keep running on a seated NPC.
+        // Walk/seek/emote overlays must not keep running on a seated or sleeping NPC.
         NpcAnimationPlayback.play(npcRef, npc, AnimationSlot.Movement, null, commandBuffer);
+        NpcAnimationPlayback.play(npcRef, npc, AnimationSlot.Emote, null, commandBuffer);
     }
 
     /**
-     * Align to the seat then mount like {@link com.hexvane.aetherhaven.guild.GuildHallAdventurerChairMount}: put
-     * Transform on the command buffer, try several hit points. Trust {@link BlockMountAPI.Mounted}; do not face-yaw
-     * after (that fights the seat orientation and unseats visuals).
+     * Keeps body and head aimed along the chair/bed mount forward until dismount. Call each USE tick while mounted.
+     */
+    public static void lockFacingToMount(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull World world,
+        @Nonnull PoiEntry poi
+    ) {
+        Vector3i block = VillagerBlockUtil.resolveMountBaseBlock(world, poi.getX(), poi.getY(), poi.getZ());
+        Float mountYaw = VillagerBlockUtil.seatForwardYawRadians(world, block);
+        if (mountYaw == null) {
+            return;
+        }
+        applyBodyYaw(npcRef, store, commandBuffer, mountYaw);
+        applyHeadYaw(npcRef, store, commandBuffer, mountYaw);
+    }
+
+    private static void applyHeadYaw(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        float yawRadians
+    ) {
+        HeadRotation head = commandBuffer.getComponent(npcRef, HeadRotation.getComponentType());
+        if (head == null) {
+            head = store.getComponent(npcRef, HeadRotation.getComponentType());
+        }
+        if (head == null) {
+            return;
+        }
+        head.teleportRotation(new Rotation3f(0.0F, yawRadians, 0.0F));
+        commandBuffer.putComponent(npcRef, HeadRotation.getComponentType(), head);
+    }
+
+    /**
+     * Align interact hits then mount. Never teleport onto the seat before {@link BlockMountAPI} succeeds — that left
+     * villagers floating above chairs for a beat when mount failed or Sit had not applied yet.
      */
     private static boolean tryMountBlockPoi(
         @Nonnull Ref<EntityStore> npcRef,
@@ -447,28 +487,22 @@ public final class PoiAutonomyVisuals {
             return false;
         }
         Vector3d p = tc.getPosition();
+        // Final USE mount: skip approach ray (tables beside restaurant chairs). Still require seat range.
         if (!poi.hasInteractionTarget()
-            && !VillagerBlockUtil.canNpcMountBlockPoi(world, p.x, p.y, p.z, block.x, block.y, block.z)) {
+            && !VillagerBlockUtil.canNpcMountBlockPoi(world, p.x, p.y, p.z, block.x, block.y, block.z, false)) {
             return false;
         }
         try {
-            // Prefer the best free seat (center first on multi-seat benches). Never hit from the approach cell first —
-            // that biases village benches onto their sideways offset seat. Always mount the furniture origin, never a
-            // filler voxel — filler origin shifts the side seat into empty air for some orientations.
             Vector3d seatPos = VillagerBlockUtil.preferredAvailableSeatWorldPosition(world, block);
             Vector3d blockCenter = new Vector3d(block.x + 0.5, block.y + 0.5, block.z + 0.5);
-            if (seatPos != null) {
-                TransformComponentUtil.replacePreservingChunk(npcRef, store, commandBuffer, seatPos, tc.getRotation());
-            } else {
-                commandBuffer.putComponent(npcRef, TransformComponent.getComponentType(), tc);
-            }
+            // Keep feet where they are until mount succeeds — BlockMountAPI places them on the seat.
+            commandBuffer.putComponent(npcRef, TransformComponent.getComponentType(), tc);
             Vector3d primary = seatPos != null ? seatPos : blockCenter;
             BlockMountAPI.BlockMountResult result =
                 tryMountWithHits(store, npcRef, commandBuffer, block, primary, blockCenter);
             if (!(result instanceof BlockMountAPI.Mounted)) {
                 return false;
             }
-            // Re-put mounted transform so chunk linkage and seat pose stick through autonomy systems.
             TransformComponent mountedTc = commandBuffer.getComponent(npcRef, TransformComponent.getComponentType());
             if (mountedTc == null) {
                 mountedTc = store.getComponent(npcRef, TransformComponent.getComponentType());
@@ -692,7 +726,8 @@ public final class PoiAutonomyVisuals {
                 case BED -> "Sleep";
                 case NONE -> null;
             };
-        return resolveModelAnimation(store, npcRef, primary, furniture == VillagerBlockUtil.FurnitureMountKind.BED);
+        // Never fall Sleep back to Sit — that makes villagers sit upright on beds.
+        return resolveModelAnimation(store, npcRef, primary, false);
     }
 
     /**
@@ -711,7 +746,7 @@ public final class PoiAutonomyVisuals {
                 case SLEEP -> "Sleep";
                 case WORK_SURFACE, USE_CONTAINER, NONE -> null;
             };
-        return resolveModelAnimation(store, npcRef, primary, kind == PoiInteractionKind.SLEEP);
+        return resolveModelAnimation(store, npcRef, primary, false);
     }
 
     @Nullable
@@ -729,8 +764,12 @@ public final class PoiAutonomyVisuals {
         if (model != null && model.getAnimationSetMap().containsKey(primary)) {
             return primary;
         }
-        String fallback = preferSitFallback ? "Sit" : primary;
-        if (model != null && fallback != null && model.getAnimationSetMap().containsKey(fallback)) {
+        // Parent models (Player) often carry Sleep/Sit; AnimationSetMap may omit inherited keys — still play primary.
+        if (!preferSitFallback) {
+            return primary;
+        }
+        String fallback = "Sit";
+        if (model != null && model.getAnimationSetMap().containsKey(fallback)) {
             return fallback;
         }
         LOGGER.at(Level.FINE).atMostEvery(1, TimeUnit.MINUTES).log(

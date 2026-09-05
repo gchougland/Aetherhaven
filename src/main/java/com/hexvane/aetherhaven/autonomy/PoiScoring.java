@@ -441,7 +441,7 @@ public final class PoiScoring {
         @Nonnull ConstructionCatalog constructionCatalog
     ) {
         if (fillingHunger && needsHungerBreak(needs, true, daytime)) {
-            if (hasSatisfiableHungerPoi(candidates, cellOccupancy)) {
+            if (hasSatisfiableHungerPoi(candidates, cellOccupancy, needs, town, constructionCatalog, entityUuid)) {
                 return UrgentNeedKind.HUNGER;
             }
         }
@@ -460,7 +460,7 @@ public final class PoiScoring {
         float bestMeter = Float.MAX_VALUE;
         if (daytime
             && needsHungerBreak(needs, false, daytime)
-            && hasSatisfiableHungerPoi(candidates, cellOccupancy)
+            && hasSatisfiableHungerPoi(candidates, cellOccupancy, needs, town, constructionCatalog, entityUuid)
             && needs.getHunger() < bestMeter) {
             best = UrgentNeedKind.HUNGER;
             bestMeter = needs.getHunger();
@@ -492,6 +492,55 @@ public final class PoiScoring {
             }
         }
         return false;
+    }
+
+    /**
+     * True when some eat POI still has capacity and can raise hunger for this villager (respects the inn 80% cap).
+     */
+    public static boolean hasSatisfiableHungerPoi(
+        @Nonnull List<PoiEntry> candidates,
+        @Nonnull Map<String, Integer> cellOccupancy,
+        @Nonnull VillagerNeeds needs,
+        @Nullable TownRecord town,
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nullable UUID villagerUuid
+    ) {
+        for (PoiEntry e : candidates) {
+            if (!isEatPoi(e) || !hasAvailableCapacity(e, cellOccupancy)) {
+                continue;
+            }
+            if (isNeedMeterFilledForPoi(e, needs, town, constructionCatalog, villagerUuid)) {
+                continue;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Drops eat/rest POIs that are already topped for this villager (inn shared spots stop at
+     * {@link #INN_UTILITY_NEED_CAP}). Prevents re-entering USE just to abort with no fill.
+     */
+    @Nonnull
+    public static List<PoiEntry> withoutNeedCapReachedPois(
+        @Nonnull List<PoiEntry> candidates,
+        @Nonnull VillagerNeeds needs,
+        @Nullable TownRecord town,
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nullable UUID villagerUuid
+    ) {
+        if (town == null || candidates.isEmpty()) {
+            return candidates;
+        }
+        List<PoiEntry> out = new ArrayList<>(candidates.size());
+        for (PoiEntry e : candidates) {
+            if ((isEatPoi(e) || isRestPoi(e))
+                && isNeedMeterFilledForPoi(e, needs, town, constructionCatalog, villagerUuid)) {
+                continue;
+            }
+            out.add(e);
+        }
+        return out;
     }
 
     public static boolean hasSatisfiableEnergyPoi(

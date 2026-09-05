@@ -4744,6 +4744,12 @@
             "Roll": 0.0
           }
         },
+        "UUID": {
+          "UUID": {
+            "$binary": "hNTj4j1pNVKVKxjLzqCVSw==",
+            "$type": "04"
+          }
+        },
         "PreventPickup": {},
         "EntityScale": {
           "Scale": 1.0
@@ -4754,6 +4760,7 @@
             "Quantity": 1,
             "Durability": 0.0,
             "MaxDurability": 0.0,
+            "Quality": 11,
             "OverrideDroppedItemAnimation": true
           },
           "StackDelay": 1.5,
@@ -4788,6 +4795,12 @@
             "Roll": 0.10678723454475403
           }
         },
+        "UUID": {
+          "UUID": {
+            "$binary": "jegkzsaCOqC4iZkmVGQGOw==",
+            "$type": "04"
+          }
+        },
         "PreventPickup": {},
         "EntityScale": {
           "Scale": 1.0
@@ -4798,6 +4811,7 @@
             "Quantity": 1,
             "Durability": 0.0,
             "MaxDurability": 0.0,
+            "Quality": 11,
             "OverrideDroppedItemAnimation": true
           },
           "StackDelay": 1.5,
@@ -4832,6 +4846,12 @@
             "Roll": 0.0
           }
         },
+        "UUID": {
+          "UUID": {
+            "$binary": "9AGHd4gzPLuAb8EjUdmFHQ==",
+            "$type": "04"
+          }
+        },
         "PreventPickup": {},
         "EntityScale": {
           "Scale": 1.0
@@ -4842,6 +4862,7 @@
             "Quantity": 1,
             "Durability": 0.0,
             "MaxDurability": 0.0,
+            "Quality": 11,
             "OverrideDroppedItemAnimation": true
           },
           "StackDelay": 1.5,
@@ -4876,6 +4897,12 @@
             "Roll": 0.0
           }
         },
+        "UUID": {
+          "UUID": {
+            "$binary": "mmLa9QfhOc+RpcWGSBl09w==",
+            "$type": "04"
+          }
+        },
         "PreventPickup": {},
         "EntityScale": {
           "Scale": 1.0
@@ -4886,6 +4913,7 @@
             "Quantity": 1,
             "Durability": 0.0,
             "MaxDurability": 0.0,
+            "Quality": 11,
             "OverrideDroppedItemAnimation": true
           },
           "StackDelay": 1.5,
@@ -4920,6 +4948,12 @@
             "Roll": 0.1674160659313202
           }
         },
+        "UUID": {
+          "UUID": {
+            "$binary": "d//eGg+8NjeF64jBZdsVMQ==",
+            "$type": "04"
+          }
+        },
         "PreventPickup": {},
         "EntityScale": {
           "Scale": 1.0
@@ -4930,6 +4964,7 @@
             "Quantity": 1,
             "Durability": 0.0,
             "MaxDurability": 0.0,
+            "Quality": 11,
             "OverrideDroppedItemAnimation": true
           },
           "StackDelay": 1.5,

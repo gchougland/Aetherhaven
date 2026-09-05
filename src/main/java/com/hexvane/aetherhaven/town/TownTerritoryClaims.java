@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -198,6 +199,27 @@ public final class TownTerritoryClaims {
             + cfg.getTerritoryExpansionClaimCostIncrementGold() * (long) purchased;
     }
 
+    /** Price of the most recent expand step (or first claim cost when none purchased yet). */
+    public static long lastClaimBlockCostGold(@Nonnull TownRecord town, @Nonnull AetherhavenPluginConfig cfg) {
+        int purchased = countExpansionClaimBlocks(town);
+        int step = Math.max(0, purchased - 1);
+        return cfg.getTerritoryExpansionFirstClaimCostGold()
+            + cfg.getTerritoryExpansionClaimCostIncrementGold() * (long) step;
+    }
+
+    /** Half of {@link #lastClaimBlockCostGold}, floored. */
+    public static long sellClaimBlockRefundGold(@Nonnull TownRecord town, @Nonnull AetherhavenPluginConfig cfg) {
+        return lastClaimBlockCostGold(town, cfg) / 2L;
+    }
+
+    /** Why a 2×2 claim block cannot be sold, or {@code null} if it can. */
+    public enum SellClaimBlockReject {
+        NOT_OWNED,
+        HAS_BUILDINGS,
+        CHARTER_OUTSIDE,
+        WOULD_SPLIT
+    }
+
     public static void initializeStarterClaims(@Nonnull TownRecord town) {
         town.getClaimedTerritoryChunksMutable().clear();
         town.getClaimedTerritoryChunksMutable().addAll(
@@ -369,6 +391,124 @@ public final class TownTerritoryClaims {
             }
         }
         return true;
+    }
+
+    public static boolean isClaimBlockFullyOwned(@Nonnull TownRecord town, int anchorChunkX, int anchorChunkZ) {
+        migrateIfNeeded(town);
+        for (int dx = 0; dx < CLAIM_BLOCK_CHUNK_SIZE; dx++) {
+            for (int dz = 0; dz < CLAIM_BLOCK_CHUNK_SIZE; dz++) {
+                if (!contains(town, anchorChunkX + dx, anchorChunkZ + dz)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Nullable
+    public static SellClaimBlockReject reasonCannotSellClaimBlock(
+        @Nonnull TownRecord town,
+        int anchorChunkX,
+        int anchorChunkZ
+    ) {
+        migrateIfNeeded(town);
+        if (!isClaimBlockFullyOwned(town, anchorChunkX, anchorChunkZ)) {
+            return SellClaimBlockReject.NOT_OWNED;
+        }
+        LongSet remaining = toChunkIndexSet(town);
+        for (int dx = 0; dx < CLAIM_BLOCK_CHUNK_SIZE; dx++) {
+            for (int dz = 0; dz < CLAIM_BLOCK_CHUNK_SIZE; dz++) {
+                remaining.remove(ChunkUtil.indexChunk(anchorChunkX + dx, anchorChunkZ + dz));
+            }
+        }
+        if (remaining.isEmpty()) {
+            return SellClaimBlockReject.CHARTER_OUTSIDE;
+        }
+        long charterKey = ChunkUtil.indexChunk(charterChunkX(town), charterChunkZ(town));
+        if (!remaining.contains(charterKey)) {
+            return SellClaimBlockReject.CHARTER_OUTSIDE;
+        }
+        if (!allPlotFootprintsInsideChunkSet(town, remaining)) {
+            return SellClaimBlockReject.HAS_BUILDINGS;
+        }
+        if (!isOrthogonallyConnected(remaining)) {
+            return SellClaimBlockReject.WOULD_SPLIT;
+        }
+        return null;
+    }
+
+    public static boolean canSellClaimBlock(@Nonnull TownRecord town, int anchorChunkX, int anchorChunkZ) {
+        return reasonCannotSellClaimBlock(town, anchorChunkX, anchorChunkZ) == null;
+    }
+
+    /**
+     * Removes a fully owned 2×2 claim block when {@link #canSellClaimBlock} allows it.
+     *
+     * @return {@code true} if the block was removed
+     */
+    public static boolean removeClaimBlock(@Nonnull TownRecord town, int anchorChunkX, int anchorChunkZ) {
+        if (!canSellClaimBlock(town, anchorChunkX, anchorChunkZ)) {
+            return false;
+        }
+        LongSet removeKeys = new LongOpenHashSet(CLAIM_BLOCK_CHUNK_SIZE * CLAIM_BLOCK_CHUNK_SIZE);
+        for (int dx = 0; dx < CLAIM_BLOCK_CHUNK_SIZE; dx++) {
+            for (int dz = 0; dz < CLAIM_BLOCK_CHUNK_SIZE; dz++) {
+                removeKeys.add(ChunkUtil.indexChunk(anchorChunkX + dx, anchorChunkZ + dz));
+            }
+        }
+        town.getClaimedTerritoryChunksMutable()
+            .removeIf(c -> removeKeys.contains(ChunkUtil.indexChunk(c.getChunkX(), c.getChunkZ())));
+        return true;
+    }
+
+    private static boolean allPlotFootprintsInsideChunkSet(@Nonnull TownRecord town, @Nonnull LongSet chunks) {
+        for (PlotInstance plot : town.getPlotInstances()) {
+            PlotFootprintRecord fp = plot.toFootprint();
+            for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
+                for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
+                    long key = ChunkUtil.indexChunk(ChunkUtil.chunkCoordinate(x), ChunkUtil.chunkCoordinate(z));
+                    if (!chunks.contains(key)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    /** True when every claimed chunk is reachable from every other via orthogonal adjacency. */
+    static boolean isOrthogonallyConnected(@Nonnull LongSet chunks) {
+        if (chunks.isEmpty()) {
+            return false;
+        }
+        long start = chunks.iterator().nextLong();
+        LongOpenHashSet visited = new LongOpenHashSet(chunks.size());
+        ArrayDeque<Long> queue = new ArrayDeque<>();
+        queue.add(start);
+        visited.add(start);
+        while (!queue.isEmpty()) {
+            long key = queue.removeFirst();
+            int cx = ChunkUtil.xOfChunkIndex(key);
+            int cz = ChunkUtil.zOfChunkIndex(key);
+            tryEnqueueNeighbor(chunks, visited, queue, cx - 1, cz);
+            tryEnqueueNeighbor(chunks, visited, queue, cx + 1, cz);
+            tryEnqueueNeighbor(chunks, visited, queue, cx, cz - 1);
+            tryEnqueueNeighbor(chunks, visited, queue, cx, cz + 1);
+        }
+        return visited.size() == chunks.size();
+    }
+
+    private static void tryEnqueueNeighbor(
+        @Nonnull LongSet chunks,
+        @Nonnull LongOpenHashSet visited,
+        @Nonnull ArrayDeque<Long> queue,
+        int chunkX,
+        int chunkZ
+    ) {
+        long key = ChunkUtil.indexChunk(chunkX, chunkZ);
+        if (chunks.contains(key) && visited.add(key)) {
+            queue.add(key);
+        }
     }
 
     /**

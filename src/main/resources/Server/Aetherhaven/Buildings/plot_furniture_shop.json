@@ -24,20 +24,6 @@
   ],
   "pois": [
     {
-      "localX": -6,
-      "localY": 0,
-      "localZ": -3,
-      "tags": [
-        "workActivity:read",
-        "WORK"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Wood_Softwood_Planks",
-      "interactionKind": "WORK_SURFACE",
-      "workResidentKind": "furniture_merchant",
-      "interactionTargetYawDegrees": -125.08958
-    },
-    {
       "localX": 3,
       "localY": 0,
       "localZ": -3,
@@ -132,6 +118,20 @@
       "blockTypeId": "Cloth_Block_Wool_Green",
       "interactionKind": "SIT",
       "interactionTargetYawDegrees": 140.61378
+    },
+    {
+      "localX": -5,
+      "localY": 1,
+      "localZ": -2,
+      "tags": [
+        "WORK",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "workResidentKind": "furniture_merchant",
+      "interactionTargetYawDegrees": -92.6091
     }
   ],
   "managementBlockLocalPos": [

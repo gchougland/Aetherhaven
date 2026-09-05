@@ -162,6 +162,7 @@ def normalize_block_to_item_id(raw_name: str) -> str | None:
     """
     Map a prefab block name to the item/block id players supply.
     Strips leading '*', collapses *_State_Definitions_* variants, maps *_Hollow to base id, and maps *_Trunk_Full to *_Trunk.
+    Large chests are remapped to small chests in finalize_item_counts (with quantity x2).
     """
     name = raw_name.strip()
     if not name or name == "Empty":
@@ -230,7 +231,20 @@ def count_prefab_blocks(prefab_path: Path, conversions: ConversionTable) -> Mate
         print(f"  skipped {filler_skipped} multi-block filler cells (filler != 0)")
     if converted_blocks:
         print(f"  applied conversions to {converted_blocks} prefab block instance(s)")
+    result.items = finalize_item_counts(result.items)
     return result
+
+
+def finalize_item_counts(items: Counter[str]) -> Counter[str]:
+    """Large chests are unobtainable; require two matching small chests instead (mirrors PrefabMaterialItemIds)."""
+    out: Counter[str] = Counter()
+    for item_id, count in items.items():
+        if item_id.endswith("_Chest_Large"):
+            small = item_id[: -len("_Chest_Large")] + "_Chest_Small"
+            out[small] += count * 2
+        else:
+            out[item_id] += count
+    return out
 
 
 def material_counts_to_json(counts: MaterialCounts) -> list[dict[str, object]]:

@@ -422,15 +422,24 @@ public final class InnPoolService {
         @Nonnull TownRecord town,
         @Nonnull TownManager tm,
         @Nonnull Set<UUID> keepUuids,
+        @Nonnull Set<UUID> loadedVisitorUuids,
         @Nonnull List<LoadedInnVisitor> keepersInOrder
     ) {
         List<String> previous = new ArrayList<>(town.getInnPoolNpcIds());
         List<String> rebuilt = new ArrayList<>();
         for (String sid : previous) {
             UUID u = parseUuid(sid);
-            if (u != null && keepUuids.contains(u)) {
+            if (u == null) {
+                continue;
+            }
+            if (keepUuids.contains(u)) {
+                rebuilt.add(u.toString());
+            } else if (!loadedVisitorUuids.contains(u)) {
+                // Not among loaded visitors — still in an unloaded chunk; keep the pool slot so morning fill
+                // does not spawn a replacement that later despawns the returning visitor.
                 rebuilt.add(u.toString());
             }
+            // else: loaded but not a keeper → duplicate/excess; drop (entity scheduled for removal)
         }
         for (LoadedInnVisitor keeper : keepersInOrder) {
             String sid = keeper.uuid().toString();
@@ -440,7 +449,25 @@ public final class InnPoolService {
             }
         }
         if (rebuilt.size() > MAX_VISITORS) {
-            rebuilt = new ArrayList<>(rebuilt.subList(0, MAX_VISITORS));
+            // Prefer currently loaded keepers, then prior list order (unloaded slots), when capping.
+            List<String> capped = new ArrayList<>(MAX_VISITORS);
+            for (LoadedInnVisitor keeper : keepersInOrder) {
+                String sid = keeper.uuid().toString();
+                if (rebuilt.stream().anyMatch(s -> sid.equalsIgnoreCase(s))
+                    && capped.stream().noneMatch(s -> sid.equalsIgnoreCase(s))
+                    && capped.size() < MAX_VISITORS) {
+                    capped.add(sid);
+                }
+            }
+            for (String sid : rebuilt) {
+                if (capped.size() >= MAX_VISITORS) {
+                    break;
+                }
+                if (capped.stream().noneMatch(s -> sid.equalsIgnoreCase(s))) {
+                    capped.add(sid);
+                }
+            }
+            rebuilt = capped;
         }
         boolean changed =
             rebuilt.size() != town.getInnPoolNpcIds().size()
@@ -491,12 +518,25 @@ public final class InnPoolService {
         for (LoadedInnVisitor k : finalKeepers) {
             keepUuids.add(k.uuid());
         }
+        Set<UUID> loadedVisitorUuids = new LinkedHashSet<>();
+        for (LoadedInnVisitor v : loaded) {
+            loadedVisitorUuids.add(v.uuid());
+        }
 
         List<UUID> toRemove = new ArrayList<>();
         for (LoadedInnVisitor v : loaded) {
-            if (!keepUuids.contains(v.uuid())) {
-                toRemove.add(v.uuid());
+            if (keepUuids.contains(v.uuid())) {
+                continue;
             }
+            // Quest-locked visitors must never be culled as "excess" during load races.
+            if (v.questLocked() || town.isInnVisitorLocked(v.uuid())) {
+                keepUuids.add(v.uuid());
+                if (finalKeepers.stream().noneMatch(k -> k.uuid().equals(v.uuid()))) {
+                    finalKeepers.add(v);
+                }
+                continue;
+            }
+            toRemove.add(v.uuid());
         }
         report.removedDuplicates = toRemove.size();
 
@@ -521,9 +561,11 @@ public final class InnPoolService {
         }
 
         int poolSizeBefore = town.getInnPoolNpcIds().size();
-        if (!finalKeepers.isEmpty()) {
-            syncInnPoolListFromKeepers(town, tm, keepUuids, finalKeepers);
-        } else if (!toRemove.isEmpty()) {
+        if (!finalKeepers.isEmpty() || !loaded.isEmpty()) {
+            // Keepers and/or loaded visitors present — sync list while preserving unloaded pool UUIDs.
+            syncInnPoolListFromKeepers(town, tm, keepUuids, loadedVisitorUuids, finalKeepers);
+        }
+        if (!toRemove.isEmpty()) {
             for (UUID u : toRemove) {
                 String sid = u.toString();
                 town.getInnPoolNpcIds().removeIf(s -> sid.equalsIgnoreCase(s != null ? s.trim() : ""));
@@ -534,14 +576,7 @@ public final class InnPoolService {
             report.poolEntriesFixed++;
         }
 
-        if (!finalKeepers.isEmpty()) {
-            for (String sid : new ArrayList<>(town.getInnLockedEntityUuids())) {
-                UUID u = parseUuid(sid);
-                if (u != null && !keepUuids.contains(u)) {
-                    town.removeInnLockedEntity(u);
-                }
-            }
-        }
+        // Only clear locks for visitors we are actually despawning — never for unloaded pool UUIDs.
         if (report.poolEntriesFixed > 0 || !toRemove.isEmpty()) {
             tm.updateTown(town);
         }
@@ -1381,30 +1416,9 @@ public final class InnPoolService {
         if (!anyLockedMissingRef) {
             return;
         }
-        if (town.hasQuestActive(AetherhavenConstants.QUEST_BLACKSMITH_SHOP)) {
-            presentRoles.add(AetherhavenConstants.NPC_BLACKSMITH);
-        }
-        if (town.hasQuestActive(AetherhavenConstants.QUEST_MERCHANT_STALL)) {
-            presentRoles.add(AetherhavenConstants.NPC_MERCHANT);
-        }
-        if (town.hasQuestActive(AetherhavenConstants.QUEST_FARM_PLOT)) {
-            presentRoles.add(AetherhavenConstants.NPC_FARMER);
-        }
-        if (town.hasQuestActive(AetherhavenConstants.QUEST_GAIA_ALTAR)) {
-            presentRoles.add(AetherhavenConstants.NPC_PRIESTESS);
-        }
-        if (town.hasQuestActive(AetherhavenConstants.QUEST_MINERS_HUT)) {
-            presentRoles.add(AetherhavenConstants.NPC_MINER);
-        }
-        if (town.hasQuestActive(AetherhavenConstants.QUEST_LUMBERMILL)) {
-            presentRoles.add(AetherhavenConstants.NPC_LOGGER);
-        }
-        if (town.hasQuestActive(AetherhavenConstants.QUEST_BARN)) {
-            presentRoles.add(AetherhavenConstants.NPC_RANCHER);
-        }
-        if (town.hasQuestActive(AetherhavenConstants.QUEST_BUILD_GUILD_HALL)) {
-            presentRoles.add(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID);
-        }
+        // Match prioritizedInnRoleOrder / isRoleRequiredByActiveInnQuest — including builder (was omitted and
+        // caused a second Rowan to spawn on load when the locked UUID ref lagged).
+        presentRoles.addAll(prioritizedInnRoleOrder(town));
     }
 
     /** Unlocked pool UUIDs still without a store ref (e.g. still loading after restart). */
@@ -2261,7 +2275,7 @@ public final class InnPoolService {
 
     /**
      * When a visitor is quest-locked but missing from {@link TownRecord#getInnPoolNpcIds()}, add them so vacant-slot
-     * fill logic does not treat their slot as open.
+     * fill logic does not treat their slot as open. If the list is full, drop an unlocked non-quest visitor first.
      */
     public static void ensureVisitorListedInInnPool(@Nonnull TownRecord town, @Nonnull UUID entityUuid) {
         String sid = entityUuid.toString();
@@ -2270,9 +2284,24 @@ public final class InnPoolService {
                 return;
             }
         }
-        if (town.getInnPoolNpcIds().size() < MAX_VISITORS) {
-            town.getInnPoolNpcIds().add(sid);
+        if (town.getInnPoolNpcIds().size() >= MAX_VISITORS) {
+            UUID displace = null;
+            for (String existing : town.getInnPoolNpcIds()) {
+                UUID u = parseUuid(existing);
+                if (u == null || town.isInnVisitorLocked(u)) {
+                    continue;
+                }
+                displace = u;
+                break;
+            }
+            if (displace == null) {
+                return;
+            }
+            String drop = displace.toString();
+            town.getInnPoolNpcIds().removeIf(s -> drop.equalsIgnoreCase(s != null ? s.trim() : ""));
+            town.removeInnLockedEntity(displace);
         }
+        town.getInnPoolNpcIds().add(sid);
     }
 
     private static int promoteEligibleVisitorsToResidents(

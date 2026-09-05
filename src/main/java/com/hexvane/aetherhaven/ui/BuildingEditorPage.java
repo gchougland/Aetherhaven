@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import com.hexvane.aetherhaven.plotcreator.BuildingEditorFestivalSessionStarter;
+import com.hexvane.aetherhaven.plotcreator.BuildingEditorPropSessionStarter;
 import com.hexvane.aetherhaven.plotcreator.BuildingEditorSessionStarter;
 import com.hexvane.aetherhaven.plotcreator.BuildingEditorWallStyleSessionStarter;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorWallStyleLoader;
@@ -44,12 +45,14 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
     private static final String ROWS = "#BuildingRows";
     private static final String TAB_ALL = "All";
     private static final String TAB_MINE = "Mine";
+    private static final String TAB_PROPS = "Props";
     private static final String TAB_FESTIVALS = "Festivals";
     private static final String TAB_WALLS = "Walls";
 
     private enum Tab {
         ALL,
         MINE,
+        PROPS,
         FESTIVALS,
         WALLS
     }
@@ -109,10 +112,14 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
         boolean marketplaceEnabled =
             plugin != null && plugin.getConfig().get().getCommunityMarketplace().isEnabled();
         boolean mineTab = activeTab == Tab.MINE;
+        boolean propsTab = activeTab == Tab.PROPS;
+        boolean submissionsTab = mineTab || propsTab;
         boolean festivalsTab = activeTab == Tab.FESTIVALS;
         boolean wallsTab = activeTab == Tab.WALLS;
-        boolean loadingMine = mineTab && (mySubmissionsFetchInFlight.get() || mineEditInFlight.get());
+        boolean loadingSubmissions =
+            submissionsTab && (mySubmissionsFetchInFlight.get() || mineEditInFlight.get());
         boolean showMineEmpty = mineTab && mySubmissionsLoaded && filteredMineSubmissions().isEmpty();
+        boolean showPropsEmpty = propsTab && mySubmissionsLoaded && filteredPropSubmissions().isEmpty();
         boolean showFestivalsEmpty = festivalsTab && filteredFestivals().isEmpty();
         boolean showWallsEmpty = wallsTab && filteredWallStyles().isEmpty();
 
@@ -120,22 +127,32 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
         String hintKey =
             mineTab
                 ? MSG + ".hint.pickMine"
-                : festivalsTab
-                    ? MSG + ".hint.pickFestival"
-                    : wallsTab ? MSG + ".hint.pickWall" : MSG + ".hint.pick";
+                : propsTab
+                    ? MSG + ".hint.pickProps"
+                    : festivalsTab
+                        ? MSG + ".hint.pickFestival"
+                        : wallsTab ? MSG + ".hint.pickWall" : MSG + ".hint.pick";
         commandBuilder.set("#StepHint.TextSpans", Message.translation(hintKey));
         commandBuilder.set(
-            "#StepHint.Visible", !loadingMine && !showMineEmpty && !showFestivalsEmpty && !showWallsEmpty
+            "#StepHint.Visible",
+            !loadingSubmissions && !showMineEmpty && !showPropsEmpty && !showFestivalsEmpty && !showWallsEmpty
         );
-        commandBuilder.set("#LoadingLabel.Visible", loadingMine);
-        commandBuilder.set("#LoadingLabel.TextSpans", Message.translation(MSG + ".loadingMine"));
-        commandBuilder.set("#EmptyLabel.Visible", showMineEmpty || showFestivalsEmpty || showWallsEmpty);
+        commandBuilder.set("#LoadingLabel.Visible", loadingSubmissions);
+        commandBuilder.set(
+            "#LoadingLabel.TextSpans",
+            Message.translation(propsTab ? MSG + ".loadingProps" : MSG + ".loadingMine")
+        );
+        commandBuilder.set(
+            "#EmptyLabel.Visible", showMineEmpty || showPropsEmpty || showFestivalsEmpty || showWallsEmpty
+        );
         commandBuilder.set(
             "#EmptyLabel.TextSpans",
             Message.translation(
                 showFestivalsEmpty
                     ? MSG + ".emptyFestivals"
-                    : showWallsEmpty ? MSG + ".emptyWalls" : MSG + ".emptyMine"
+                    : showWallsEmpty
+                        ? MSG + ".emptyWalls"
+                        : showPropsEmpty ? MSG + ".emptyProps" : MSG + ".emptyMine"
             )
         );
         commandBuilder.set("#CloseButton.TextSpans", Message.translation(MSG + ".button.close"));
@@ -145,17 +162,24 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
             Message.translation(
                 festivalsTab
                     ? MSG + ".searchFestivalPlaceholder"
-                    : wallsTab ? MSG + ".searchWallPlaceholder" : MSG + ".searchPlaceholder"
+                    : wallsTab
+                        ? MSG + ".searchWallPlaceholder"
+                        : propsTab ? MSG + ".searchPropsPlaceholder" : MSG + ".searchPlaceholder"
             )
         );
         commandBuilder.set("#EditorTabs.SelectedTab", tabId(activeTab));
-        commandBuilder.set("#RefreshRow.Visible", mineTab && marketplaceEnabled);
-        commandBuilder.set("#RefreshLabel.TextSpans", Message.translation(MSG + ".refreshMine"));
-        commandBuilder.set("#RefreshButton.Disabled", loadingMine || mineEditInFlight.get());
+        commandBuilder.set("#RefreshRow.Visible", submissionsTab && marketplaceEnabled);
+        commandBuilder.set(
+            "#RefreshLabel.TextSpans",
+            Message.translation(propsTab ? MSG + ".refreshProps" : MSG + ".refreshMine")
+        );
+        commandBuilder.set("#RefreshButton.Disabled", loadingSubmissions || mineEditInFlight.get());
 
         commandBuilder.clear(ROWS);
         if (mineTab) {
             buildMineRows(commandBuilder, eventBuilder, plugin);
+        } else if (propsTab) {
+            buildPropRows(commandBuilder, eventBuilder, plugin);
         } else if (festivalsTab) {
             buildFestivalRows(commandBuilder, eventBuilder, plugin);
         } else if (wallsTab) {
@@ -164,7 +188,7 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
             buildAllRows(commandBuilder, eventBuilder, plugin);
         }
 
-        if (mineTab && marketplaceEnabled && !mySubmissionsLoaded && !mySubmissionsFetchInFlight.get()) {
+        if (submissionsTab && marketplaceEnabled && !mySubmissionsLoaded && !mySubmissionsFetchInFlight.get()) {
             startMineSubmissionsFetch(ref, store);
         }
     }
@@ -286,7 +310,7 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
             String row = ROWS + "[" + i + "]";
             commandBuilder.set(row + " #SelectHilite.Visible", false);
             commandBuilder.set(row + " #BuildingName.TextSpans", Message.raw(entry.getDisplayName()));
-            commandBuilder.set(row + " #BuildingId.TextSpans", mineRowDetailMessage(entry));
+            commandBuilder.set(row + " #BuildingId.TextSpans", submissionRowDetailMessage(entry));
             String iconPath =
                 plugin != null
                     ? ConstructionTokenIconPath.forConstructionId(catalogId, plugin.getDataDirectory())
@@ -301,8 +325,36 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
         }
     }
 
+    private void buildPropRows(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nullable AetherhavenPlugin plugin
+    ) {
+        List<CommunityMySubmissionEntry> entries = filteredPropSubmissions();
+        for (int i = 0; i < entries.size(); i++) {
+            CommunityMySubmissionEntry entry = entries.get(i);
+            String catalogId = entry.catalogId();
+            commandBuilder.append(ROWS, "Aetherhaven/BuildingEditorRow.ui");
+            String row = ROWS + "[" + i + "]";
+            commandBuilder.set(row + " #SelectHilite.Visible", false);
+            commandBuilder.set(row + " #BuildingName.TextSpans", Message.raw(entry.getDisplayName()));
+            commandBuilder.set(row + " #BuildingId.TextSpans", submissionRowDetailMessage(entry));
+            String iconPath =
+                plugin != null
+                    ? PropIconPath.forPropId(catalogId, plugin.getDataDirectory())
+                    : PropIconPath.forPropId(catalogId, null);
+            commandBuilder.set(row + " #IconBox #BuildingIcon.AssetPath", iconPath);
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                row + " #Select",
+                EventData.of("Action", "SelectProp").append("ConstructionId", catalogId),
+                false
+            );
+        }
+    }
+
     @Nonnull
-    private Message mineRowDetailMessage(@Nonnull CommunityMySubmissionEntry entry) {
+    private Message submissionRowDetailMessage(@Nonnull CommunityMySubmissionEntry entry) {
         String statusKey =
             entry.isUpdateWaiting()
                 ? MSG + ".status.updateWaiting"
@@ -345,9 +397,22 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
 
     @Nonnull
     private List<CommunityMySubmissionEntry> filteredMineSubmissions() {
+        return filteredSubmissions(false);
+    }
+
+    @Nonnull
+    private List<CommunityMySubmissionEntry> filteredPropSubmissions() {
+        return filteredSubmissions(true);
+    }
+
+    @Nonnull
+    private List<CommunityMySubmissionEntry> filteredSubmissions(boolean propsOnly) {
         List<CommunityMySubmissionEntry> out = new ArrayList<>();
         String q = searchQuery.trim().toLowerCase(Locale.ROOT);
         for (CommunityMySubmissionEntry entry : mySubmissions) {
+            if (entry.isProp() != propsOnly) {
+                continue;
+            }
             if (!q.isEmpty()) {
                 String id = entry.catalogId().toLowerCase(Locale.ROOT);
                 String name = entry.getDisplayName().toLowerCase(Locale.ROOT);
@@ -440,6 +505,7 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
     private static String tabId(@Nonnull Tab tab) {
         return switch (tab) {
             case MINE -> TAB_MINE;
+            case PROPS -> TAB_PROPS;
             case FESTIVALS -> TAB_FESTIVALS;
             case WALLS -> TAB_WALLS;
             case ALL -> TAB_ALL;
@@ -450,6 +516,9 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
         String id = tabId != null ? tabId.trim() : "";
         if (TAB_MINE.equalsIgnoreCase(id)) {
             return Tab.MINE;
+        }
+        if (TAB_PROPS.equalsIgnoreCase(id)) {
+            return Tab.PROPS;
         }
         if (TAB_FESTIVALS.equalsIgnoreCase(id)) {
             return Tab.FESTIVALS;
@@ -484,7 +553,9 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
                     world,
                     () -> {
                         mySubmissionsFetchInFlight.set(false);
-                        if (!ref.isValid() || isDismissed() || activeTab != Tab.MINE) {
+                        if (!ref.isValid()
+                            || isDismissed()
+                            || (activeTab != Tab.MINE && activeTab != Tab.PROPS)) {
                             return;
                         }
                         mySubmissions = fetched;
@@ -502,14 +573,34 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
         @Nonnull Store<EntityStore> store,
         @Nonnull String catalogId
     ) {
+        startSubmissionEdit(ref, store, catalogId, false);
+    }
+
+    private void startPropEdit(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String catalogId
+    ) {
+        startSubmissionEdit(ref, store, catalogId, true);
+    }
+
+    private void startSubmissionEdit(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String catalogId,
+        boolean prop
+    ) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (plugin == null || pr == null) {
             return;
         }
         CommunityMySubmissionEntry entry = findMineEntry(catalogId);
-        if (entry == null) {
-            playerRef.sendMessage(Message.translation(MSG + ".error.unknownBuilding").param("id", catalogId));
+        if (entry == null || entry.isProp() != prop) {
+            playerRef.sendMessage(
+                Message.translation(prop ? MSG + ".error.unknownProp" : MSG + ".error.unknownBuilding")
+                    .param("id", catalogId)
+            );
             return;
         }
         if (!mineEditInFlight.compareAndSet(false, true)) {
@@ -532,21 +623,32 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
                         }
                         if (err != null) {
                             playerRef.sendMessage(
-                                Message.translation(MSG + ".error.prepareMine")
+                                Message.translation(prop ? MSG + ".error.prepareProp" : MSG + ".error.prepareMine")
                                     .param("reason", Message.raw(err))
                             );
                             refresh(ref, store);
                             return;
                         }
                         plugin.reloadConfigsAndAssetCatalogs();
-                        BuildingEditorSessionStarter.startFromConstructionId(
-                            playerRef,
-                            ref,
-                            store,
-                            catalogId,
-                            true,
-                            liveOnMarketplace
-                        );
+                        if (prop) {
+                            BuildingEditorPropSessionStarter.startFromPropId(
+                                playerRef,
+                                ref,
+                                store,
+                                catalogId,
+                                true,
+                                liveOnMarketplace
+                            );
+                        } else {
+                            BuildingEditorSessionStarter.startFromConstructionId(
+                                playerRef,
+                                ref,
+                                store,
+                                catalogId,
+                                true,
+                                liveOnMarketplace
+                            );
+                        }
                     },
                     1L
                 );
@@ -579,7 +681,7 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
             Tab next = parseTab(data.selectedTab);
             if (next != activeTab) {
                 activeTab = next;
-                if (next == Tab.MINE) {
+                if (next == Tab.MINE || next == Tab.PROPS) {
                     mySubmissionsLoaded = false;
                 }
                 refresh(ref, store);
@@ -604,6 +706,10 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
         }
         if ("SelectMine".equals(data.action) && data.constructionId != null && !data.constructionId.isBlank()) {
             startMineEdit(ref, store, data.constructionId);
+            return;
+        }
+        if ("SelectProp".equals(data.action) && data.constructionId != null && !data.constructionId.isBlank()) {
+            startPropEdit(ref, store, data.constructionId);
             return;
         }
         if ("SelectWallStyle".equals(data.action) && data.styleId != null && !data.styleId.isBlank()) {

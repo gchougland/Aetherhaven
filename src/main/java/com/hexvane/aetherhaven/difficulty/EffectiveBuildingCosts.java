@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.difficulty;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import com.hexvane.aetherhaven.construction.PrefabMaterialsCatalog;
+import com.hexvane.aetherhaven.construction.prefabmaterials.PrefabMaterialItemIds;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -32,6 +33,8 @@ public final class EffectiveBuildingCosts {
             } else {
                 base = def.getMaterials();
             }
+            // Re-apply at gameplay time so recipe checks see loaded Item assets (catalog may load earlier).
+            base = PrefabMaterialItemIds.mergeNormalized(base);
         } else {
             base = scaleMaterials(def.getMaterials(), effective.getResourceCostMultiplier());
         }

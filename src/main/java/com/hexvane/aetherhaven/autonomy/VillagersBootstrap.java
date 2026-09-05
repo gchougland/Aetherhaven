@@ -25,6 +25,7 @@ import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentSystem;
 import com.hexvane.aetherhaven.ui.VillagerNeedsOverviewPage;
 import com.hexvane.aetherhaven.villager.NpcPersistentModelResyncSystem;
 import com.hexvane.aetherhaven.villager.TownVillagerEnvironmentalDamageFilterSystem;
+import com.hexvane.aetherhaven.villager.TownVillagerHealthTopUpSystem;
 import com.hexvane.aetherhaven.villager.TownVillagerNpcWorldSpawnSanitizeSystems;
 import com.hexvane.aetherhaven.villager.ResidentLastKnownPositionSystem;
 import com.hexvane.aetherhaven.villager.VillagerLocateTrailSystem;
@@ -145,6 +146,8 @@ public final class VillagersBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new VillagerDeathHandlerSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new HiredGuardDeathRemoveSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new TownVillagerEnvironmentalDamageFilterSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new TownVillagerHealthTopUpSystem.OnAdd());
+        plugin.getEntityStoreRegistry().registerSystem(new TownVillagerHealthTopUpSystem.AfterRecalculate());
         plugin.getEntityStoreRegistry().registerSystem(new RescueVillagerBreakBlockSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new PoiMarkerSystems.EnsurePrefabCopyable());
         plugin.getEntityStoreRegistry().registerSystem(new NpcPersistentModelResyncSystem());

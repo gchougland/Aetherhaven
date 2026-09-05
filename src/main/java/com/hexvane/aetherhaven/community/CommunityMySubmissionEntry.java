@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** One owned marketplace building row for the building editor picker. */
+/** One owned marketplace building or prop row for the building editor picker. */
 public final class CommunityMySubmissionEntry {
     @SerializedName("kind")
     private String kind;
@@ -26,6 +26,10 @@ public final class CommunityMySubmissionEntry {
 
     @SerializedName("version")
     private String version;
+
+    /** Marketplace content kind: building, wall, or prop. */
+    @SerializedName("contentType")
+    private String contentType;
 
     /** Set when a pending row replaces an approved row for the same catalog id. */
     private transient boolean liveVersionExists;
@@ -73,6 +77,15 @@ public final class CommunityMySubmissionEntry {
     @Nonnull
     public String getVersion() {
         return version != null ? version : "1";
+    }
+
+    @Nonnull
+    public String getContentType() {
+        return contentType != null ? contentType : "";
+    }
+
+    public boolean isProp() {
+        return "prop".equalsIgnoreCase(getContentType()) || catalogId().startsWith("prop_community_");
     }
 
     public boolean isApproved() {

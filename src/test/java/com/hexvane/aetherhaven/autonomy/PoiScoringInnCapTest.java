@@ -109,6 +109,78 @@ class PoiScoringInnCapTest {
     }
 
     @Test
+    void withoutNeedCapReachedPois_dropsInnEatWhenHungerAt80() {
+        UUID townId = UUID.randomUUID();
+        UUID innPlotId = UUID.randomUUID();
+        UUID villagerUuid = UUID.randomUUID();
+        TownRecord town = townWithInn(townId, innPlotId);
+        ConstructionCatalog catalog = houseInnCatalog();
+        PoiEntry innEat = poi(innPlotId, townId, 1, 64, 1, List.of("EAT"), PoiInteractionKind.NONE);
+        PoiEntry innSit = poi(innPlotId, townId, 2, 64, 2, List.of("FUN", "SIT"), PoiInteractionKind.SIT);
+
+        VillagerNeeds needs = VillagerNeeds.full();
+        needs.setHunger(PoiScoring.INN_UTILITY_NEED_CAP);
+
+        List<PoiEntry> filtered =
+            PoiScoring.withoutNeedCapReachedPois(List.of(innEat, innSit), needs, town, catalog, villagerUuid);
+
+        assertEquals(1, filtered.size());
+        assertEquals(innSit.getId(), filtered.get(0).getId());
+        assertFalse(
+            PoiScoring.hasSatisfiableHungerPoi(
+                List.of(innEat, innSit), Map.of(), needs, town, catalog, villagerUuid
+            )
+        );
+    }
+
+    @Test
+    void withoutNeedCapReachedPois_keepsInnEatWhenHungry() {
+        UUID townId = UUID.randomUUID();
+        UUID innPlotId = UUID.randomUUID();
+        UUID villagerUuid = UUID.randomUUID();
+        TownRecord town = townWithInn(townId, innPlotId);
+        ConstructionCatalog catalog = houseInnCatalog();
+        PoiEntry innEat = poi(innPlotId, townId, 1, 64, 1, List.of("EAT"), PoiInteractionKind.NONE);
+
+        VillagerNeeds needs = VillagerNeeds.full();
+        needs.setHunger(40f);
+
+        List<PoiEntry> filtered =
+            PoiScoring.withoutNeedCapReachedPois(List.of(innEat), needs, town, catalog, villagerUuid);
+
+        assertEquals(1, filtered.size());
+        assertTrue(
+            PoiScoring.hasSatisfiableHungerPoi(
+                List.of(innEat), Map.of(), needs, town, catalog, villagerUuid
+            )
+        );
+    }
+
+    @Test
+    void withoutNeedCapReachedPois_dropsInnRestWhenEnergyAt80() {
+        UUID townId = UUID.randomUUID();
+        UUID innPlotId = UUID.randomUUID();
+        UUID villagerUuid = UUID.randomUUID();
+        TownRecord town = townWithInn(townId, innPlotId);
+        ConstructionCatalog catalog = houseInnCatalog();
+        PoiEntry innBed =
+            poi(innPlotId, townId, 1, 64, 1, List.of("SLEEP", "ENERGY"), PoiInteractionKind.SLEEP);
+
+        VillagerNeeds needs = VillagerNeeds.full();
+        needs.setEnergy(PoiScoring.INN_UTILITY_NEED_CAP);
+
+        List<PoiEntry> filtered =
+            PoiScoring.withoutNeedCapReachedPois(List.of(innBed), needs, town, catalog, villagerUuid);
+
+        assertTrue(filtered.isEmpty());
+        assertFalse(
+            PoiScoring.hasSatisfiableEnergyPoi(
+                filtered, Map.of(), villagerUuid, town, catalog
+            )
+        );
+    }
+
+    @Test
     void isInnUtilityNeedCapPoi_onlyForSharedInnUtilitySpots() {
         UUID townId = UUID.randomUUID();
         UUID innPlotId = UUID.randomUUID();

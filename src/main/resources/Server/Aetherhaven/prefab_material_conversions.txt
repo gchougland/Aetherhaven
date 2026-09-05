@@ -14,6 +14,10 @@
 #   resource:<ResourceTypeId>:<count>  — per block, add resource-type requirement
 #   Comma-separate multiple outputs on one line.
 #
+# Also applied at runtime (PrefabMaterialItemIds):
+#   *_Chest_Large → 2x matching *_Chest_Small
+#   Furniture_* with no crafting recipe is dropped from requirements
+#
 # Examples:
 #   Furniture_Temple_Dark_Candle = Ingredient_Bar_Iron:3
 #   pattern:*_Branch* = skip

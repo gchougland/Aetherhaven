@@ -29,8 +29,8 @@ import org.joml.Vector3i;
  * Ground sampling and block queries for POI visuals. Travel uses vanilla NPC Seek + leash.
  */
 public final class VillagerBlockUtil {
-    /** Max horizontal distance from POI block center (XZ) for bed/chair mount attempts. */
-    public static final double MOUNT_POI_MAX_HORIZONTAL = 0.92;
+    /** Max horizontal distance from a free seat (XZ) for bed/chair/bench mount attempts. */
+    public static final double MOUNT_POI_MAX_HORIZONTAL = 1.1;
 
     /** Max blocks to raycast downward when resolving stand placement from air clicks. */
     public static final double DOWNCAST_MAX_DISTANCE = 32.0;
@@ -428,16 +428,17 @@ public final class VillagerBlockUtil {
             return null;
         }
         int rotationIndex = blockRotationIndexNoLoad(world, base.x, base.y, base.z);
-        RotatedMountPointsArray seats = blockType.getSeats();
-        if (seats != null) {
-            BlockMountPoint[] points = seats.getRotated(rotationIndex);
+        // Beds before seats — matches {@link #furnitureMountKind} and bed Sleep pose.
+        RotatedMountPointsArray beds = blockType.getBeds();
+        if (beds != null) {
+            BlockMountPoint[] points = beds.getRotated(rotationIndex);
             if (points != null && points.length > 0) {
                 return points[0];
             }
         }
-        RotatedMountPointsArray beds = blockType.getBeds();
-        if (beds != null) {
-            BlockMountPoint[] points = beds.getRotated(rotationIndex);
+        RotatedMountPointsArray seats = blockType.getSeats();
+        if (seats != null) {
+            BlockMountPoint[] points = seats.getRotated(rotationIndex);
             if (points != null && points.length > 0) {
                 return points[0];
             }
@@ -635,20 +636,28 @@ public final class VillagerBlockUtil {
     }
 
     /**
-     * Picks an empty seat for multi-seat furniture (e.g. village benches). Uses vanilla
+     * Picks an empty seat or bed mount point for furniture. Uses vanilla
      * {@link BlockMountComponent#findAvailableSeat} so occupancy matches what {@code mountOnBlock} checks (identity of
      * rotated mount points), not entity feet — feet positions lag command-buffer mounts and blocked the second seat.
-     * Always resolves filler voxels to the furniture origin first.
+     * Always resolves filler voxels to the furniture origin first. Beds use {@link BlockType#getBeds()} (they have no
+     * seats); chairs/benches use {@link BlockType#getSeats()}.
      */
     @Nullable
     public static Vector3d preferredAvailableSeatWorldPosition(@Nonnull World world, @Nonnull Vector3i mountBlock) {
         Vector3i base = resolveMountBaseBlock(world, mountBlock.x, mountBlock.y, mountBlock.z);
         BlockType blockType = blockTypeNoLoad(world, base.x, base.y, base.z);
-        if (blockType == null || blockType.getSeats() == null) {
+        if (blockType == null) {
             return null;
         }
         int rotationIndex = blockRotationIndexNoLoad(world, base.x, base.y, base.z);
-        BlockMountPoint[] points = blockType.getSeats().getRotated(rotationIndex);
+        // Prefer beds when present so interact hits feed BlockMountAPI bed mounts (Sleep), not seat (Sit).
+        BlockMountPoint[] points = null;
+        if (blockType.getBeds() != null) {
+            points = blockType.getBeds().getRotated(rotationIndex);
+        }
+        if ((points == null || points.length == 0) && blockType.getSeats() != null) {
+            points = blockType.getSeats().getRotated(rotationIndex);
+        }
         if (points == null || points.length == 0) {
             return null;
         }
@@ -736,20 +745,50 @@ public final class VillagerBlockUtil {
         int by,
         int bz
     ) {
-        double hdx = npcX - (bx + 0.5);
-        double hdz = npcZ - (bz + 0.5);
-        if (hdx * hdx + hdz * hdz > MOUNT_POI_MAX_HORIZONTAL * MOUNT_POI_MAX_HORIZONTAL) {
-            return false;
-        }
-        if (npcYFeet < by - 1.25 || npcYFeet > by + 2.75) {
-            return false;
-        }
-        return hasClearHorizontalApproachToBlockColumn(world, npcX, npcYFeet, npcZ, bx, bz);
+        return canNpcMountBlockPoi(world, npcX, npcYFeet, npcZ, bx, by, bz, true);
     }
 
     /**
-     * Ray through XZ from NPC feet toward block center; each stepped cell must have passable feet+head space, except
-     * the POI column (bed/chair occupies that cell).
+     * @param requireClearApproach when false, only distance/height to a free seat matter (for final POI USE mounts
+     *     beside tables that would fail the approach ray).
+     */
+    public static boolean canNpcMountBlockPoi(
+        @Nonnull World world,
+        double npcX,
+        double npcYFeet,
+        double npcZ,
+        int bx,
+        int by,
+        int bz,
+        boolean requireClearApproach
+    ) {
+        Vector3i base = resolveMountBaseBlock(world, bx, by, bz);
+        Vector3d seatPos = preferredAvailableSeatWorldPosition(world, base);
+        if (seatPos == null) {
+            return false;
+        }
+        double hdx = npcX - seatPos.x;
+        double hdz = npcZ - seatPos.z;
+        if (hdx * hdx + hdz * hdz > MOUNT_POI_MAX_HORIZONTAL * MOUNT_POI_MAX_HORIZONTAL) {
+            return false;
+        }
+        if (npcYFeet < base.y - 1.25 || npcYFeet > base.y + 2.75) {
+            return false;
+        }
+        if (!requireClearApproach) {
+            return true;
+        }
+        return hasClearHorizontalApproachToBlockColumn(world, npcX, npcYFeet, npcZ, base.x, base.y, base.z);
+    }
+
+    /** True when the POI block is a chair/bench/bed the villager should mount for any interaction kind. */
+    public static boolean isFurnitureMountPoi(@Nonnull World world, int poiX, int poiY, int poiZ) {
+        return furnitureMountKind(world, poiX, poiY, poiZ) != FurnitureMountKind.NONE;
+    }
+
+    /**
+     * Ray through XZ from NPC feet toward furniture origin center; each stepped cell must have passable feet+head
+     * space, except columns that belong to the same multi-block furniture footprint (origin + fillers).
      */
     private static boolean hasClearHorizontalApproachToBlockColumn(
         @Nonnull World world,
@@ -757,10 +796,12 @@ public final class VillagerBlockUtil {
         double npcYFeet,
         double npcZ,
         int bx,
+        int by,
         int bz
     ) {
-        double tx = bx + 0.5;
-        double tz = bz + 0.5;
+        Vector3i targetBase = resolveMountBaseBlock(world, bx, by, bz);
+        double tx = targetBase.x + 0.5;
+        double tz = targetBase.z + 0.5;
         int footY = (int) Math.floor(npcYFeet);
         for (int i = 1; i <= 20; i++) {
             double t = i / 21.0;
@@ -768,7 +809,8 @@ public final class VillagerBlockUtil {
             double z = npcZ + (tz - npcZ) * t;
             int cx = (int) Math.floor(x);
             int cz = (int) Math.floor(z);
-            if (cx == bx && cz == bz) {
+            if (columnBelongsToMountBase(world, cx, footY, cz, targetBase)
+                || columnBelongsToMountBase(world, cx, targetBase.y, cz, targetBase)) {
                 continue;
             }
             if (!columnPassableForNpcBody(world, cx, footY, cz)) {
@@ -776,6 +818,20 @@ public final class VillagerBlockUtil {
             }
         }
         return true;
+    }
+
+    private static boolean columnBelongsToMountBase(
+        @Nonnull World world,
+        int x,
+        int y,
+        int z,
+        @Nonnull Vector3i targetBase
+    ) {
+        if (y < 0 || y >= 320) {
+            return false;
+        }
+        Vector3i sampleBase = resolveMountBaseBlock(world, x, y, z);
+        return sampleBase.x == targetBase.x && sampleBase.y == targetBase.y && sampleBase.z == targetBase.z;
     }
 
     private static boolean columnPassableForNpcBody(@Nonnull World world, int x, int y, int z) {

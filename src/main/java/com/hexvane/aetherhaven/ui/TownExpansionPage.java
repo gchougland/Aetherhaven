@@ -135,8 +135,23 @@ public final class TownExpansionPage extends AetherhavenInteractiveCustomUIPage<
         boolean canClaim =
             selectedChunkX != Integer.MIN_VALUE
                 && TownTerritoryClaims.canClaimBlock(town, selectedChunkX, selectedChunkZ, tm.allTowns(), cfg);
+        boolean canSell =
+            selectedChunkX != Integer.MIN_VALUE
+                && TownTerritoryClaims.canSellClaimBlock(town, selectedChunkX, selectedChunkZ);
         boolean atLimit = TownTerritoryClaims.expansionClaimLimitReached(town, cfg);
         commandBuilder.set("#ExpansionClaimButton.Disabled", !canClaim || atLimit);
+        commandBuilder.set("#ExpansionSellButton.Disabled", !canSell);
+        if (canSell) {
+            long refund = TownTerritoryClaims.sellClaimBlockRefundGold(town, cfg);
+            commandBuilder.set("#ExpansionSellRefundLabel.Visible", true);
+            commandBuilder.set(
+                "#ExpansionSellRefundLabel.TextSpans",
+                Message.translation("aetherhaven_town.aetherhaven.ui.expansion.sellRefund")
+                    .param("refund", Long.toString(refund))
+            );
+        } else {
+            commandBuilder.set("#ExpansionSellRefundLabel.Visible", false);
+        }
         if (lastErrKey != null) {
             commandBuilder.set("#ExpansionErr.Visible", true);
             commandBuilder.set("#ExpansionErr.TextSpans", Message.translation(lastErrKey));
@@ -388,6 +403,12 @@ public final class TownExpansionPage extends AetherhavenInteractiveCustomUIPage<
             new EventData().append("Action", "Claim"),
             false
         );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#ExpansionSellButton",
+            new EventData().append("Action", "Sell"),
+            false
+        );
     }
 
     private static void bindPan(@Nonnull UIEventBuilder eventBuilder, @Nonnull String selector, @Nonnull String action) {
@@ -483,6 +504,40 @@ public final class TownExpansionPage extends AetherhavenInteractiveCustomUIPage<
             selectedChunkZ = Integer.MIN_VALUE;
             lastErrKey = null;
             playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.ui.expansion.claimSuccess"));
+            refreshDynamic(ref, store);
+            return;
+        }
+        if (action.equalsIgnoreCase("Sell")) {
+            if (selectedChunkX == Integer.MIN_VALUE) {
+                return;
+            }
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            World world = store.getExternalData().getWorld();
+            if (plugin == null) {
+                return;
+            }
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            TownRecord town = tm.getTown(townUuid);
+            if (town == null) {
+                return;
+            }
+            UUID playerUuid = playerRef.getUuid();
+            if (playerUuid == null) {
+                return;
+            }
+            String errKey =
+                TownExpansionClaimService.trySellChunk(
+                    world, plugin, town, playerUuid, selectedChunkX, selectedChunkZ
+                );
+            if (errKey != null) {
+                lastErrKey = errKey;
+                refreshDynamic(ref, store);
+                return;
+            }
+            selectedChunkX = Integer.MIN_VALUE;
+            selectedChunkZ = Integer.MIN_VALUE;
+            lastErrKey = null;
+            playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.ui.expansion.sellSuccess"));
             refreshDynamic(ref, store);
         }
     }
