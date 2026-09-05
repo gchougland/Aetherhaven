@@ -17,7 +17,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -31,11 +30,11 @@ import javax.imageio.ImageIO;
 /**
  * Creates one opaque stone texture per cosmetic canvas size. Blockymodel UVs use pixel coordinates, so each distinct
  * canvas size needs a matching texture. Keeping this set bounded is critical: source-specific duplicates can overflow
- * or destabilize the client's global character atlas and corrupt unrelated NPC textures.
+ * or destabilize the client's global character atlas and corrupt unrelated NPC textures. Statues reuse the original
+ * clothing meshes and only swap those textures.
  */
 final class FounderMonumentStoneTextures {
     private static final String PATH_PREFIX = "Characters/Aetherhaven/Founder_Monument_Stone_CanvasV4_";
-    private static final String MODEL_PATH_PREFIX = "Characters/Aetherhaven/Founder_Monument_AttachmentV2_";
     private static final Map<String, Dimensions> DIMENSIONS_BY_HASH = new HashMap<>();
     private static String stoneSourceHash;
     private static BufferedImage stoneSourceImage;
@@ -54,9 +53,6 @@ final class FounderMonumentStoneTextures {
         Set<Dimensions> dimensions = new HashSet<>();
         for (String texturePath : cosmeticTexturePaths(registry)) {
             collectDimensions(texturePath, dimensions);
-        }
-        for (String modelPath : cosmeticModelPaths(registry)) {
-            ensureIsolatedModel(modelPath);
         }
         collectConfiguredVillagerDimensions(dimensions);
         for (Dimensions size : dimensions) {
@@ -92,7 +88,6 @@ final class FounderMonumentStoneTextures {
             }
             if (!"Characters/Player.blockymodel".equals(asset.getModel())) {
                 collectDimensions(asset.getTexture(), dimensions);
-                ensureIsolatedModel(asset.getModel());
             }
             ModelAttachment[] attachments = asset.getDefaultAttachments();
             if (attachments == null) {
@@ -101,7 +96,6 @@ final class FounderMonumentStoneTextures {
             for (ModelAttachment attachment : attachments) {
                 if (!"Characters/Player.blockymodel".equals(attachment.getModel())) {
                     collectDimensions(attachment.getTexture(), dimensions);
-                    ensureIsolatedModel(attachment.getModel());
                 }
             }
         }
@@ -128,7 +122,7 @@ final class FounderMonumentStoneTextures {
             ModelAttachment source = attachments[i];
             String stoneTexture = resolveStoneTexture(source.getTexture(), stoneSource, stoneBySource);
             stoneAttachments[i] = new ModelAttachment(
-                ensureIsolatedModel(source.getModel()),
+                source.getModel(),
                 stoneTexture,
                 null,
                 null,
@@ -187,50 +181,6 @@ final class FounderMonumentStoneTextures {
     }
 
     @Nonnull
-    static synchronized String ensureIsolatedModel(@Nonnull String sourceModel) {
-        if (sourceModel.startsWith(MODEL_PATH_PREFIX)) {
-            return sourceModel;
-        }
-        CommonAsset source = CommonAssetRegistry.getByName(sourceModel);
-        if (source == null) {
-            throw new IllegalArgumentException("Missing source model " + sourceModel);
-        }
-        String hash = source.getHash();
-        String shortHash = hash.substring(0, Math.min(24, hash.length()));
-        String isolatedPath = MODEL_PATH_PREFIX + shortHash + ".blockymodel";
-        if (CommonAssetRegistry.hasCommonAsset(isolatedPath)) {
-            return isolatedPath;
-        }
-        if (Universe.get().getPlayerCount() > 0) {
-            throw new IllegalStateException("Founder monument attachment model was not prewarmed: " + sourceModel);
-        }
-        registerGeneratedAsset(isolatedPath, isolateModelBytes(source.getBlob().join()));
-        return isolatedPath;
-    }
-
-    /**
-     * Common assets are content-addressed. A byte-for-byte model copy can therefore be deduplicated with the original
-     * NPC model and reuse its cached material/UV state despite having a different path. Trailing JSON whitespace keeps
-     * geometry identical while giving the statue-only model its own content hash.
-     */
-    @Nonnull
-    static byte[] isolateModelBytes(@Nonnull byte[] source) {
-        byte[] isolated = Arrays.copyOf(source, source.length + 2);
-        isolated[source.length] = '\n';
-        isolated[source.length + 1] = ' ';
-        return isolated;
-    }
-
-    private static void registerGeneratedAsset(@Nonnull String path, @Nonnull byte[] bytes) {
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            throw new IllegalStateException("Aetherhaven plugin is not available");
-        }
-        String packId = new PluginIdentifier(plugin.getManifest()).toString();
-        CommonAssetRegistry.addCommonAsset(packId, new GeneratedCommonAsset(path, bytes));
-    }
-
-    @Nonnull
     private static Set<String> cosmeticTexturePaths(@Nonnull CosmeticRegistry registry) {
         Set<String> paths = new HashSet<>();
         for (Map<String, PlayerSkinPart> partMap : cosmeticPartMaps(registry)) {
@@ -247,23 +197,6 @@ final class FounderMonumentStoneTextures {
         }
         // PlayerSkinModelExporter substitutes this NPC-safe ear texture for a legacy cosmetics entry.
         paths.add("Characters/Body_Attachments/Ears/Ears1_Textures/Ears1_Greyscale_Texture.png");
-        return paths;
-    }
-
-    @Nonnull
-    private static Set<String> cosmeticModelPaths(@Nonnull CosmeticRegistry registry) {
-        Set<String> paths = new HashSet<>();
-        for (Map<String, PlayerSkinPart> partMap : cosmeticPartMaps(registry)) {
-            for (PlayerSkinPart part : partMap.values()) {
-                addModel(paths, part.getModel());
-                if (part.getVariants() != null) {
-                    for (PlayerSkinPart.Variant variant : part.getVariants().values()) {
-                        addModel(paths, variant.getModel());
-                    }
-                }
-            }
-        }
-        paths.remove("Characters/Player.blockymodel");
         return paths;
     }
 
@@ -305,12 +238,6 @@ final class FounderMonumentStoneTextures {
     private static void addTexture(@Nonnull Set<String> paths, String texture) {
         if (texture != null && !texture.isEmpty()) {
             paths.add(texture);
-        }
-    }
-
-    private static void addModel(@Nonnull Set<String> paths, String model) {
-        if (model != null && !model.isEmpty()) {
-            paths.add(model);
         }
     }
 

@@ -129,7 +129,7 @@ public final class FounderMonumentSpawnService {
         if (!"Characters/Player.blockymodel".equals(appearanceAsset.getModel())) {
             return buildStoneModel(
                 appearanceAsset,
-                FounderMonumentStoneTextures.ensureIsolatedModel(appearanceAsset.getModel()),
+                appearanceAsset.getModel(),
                 appearanceAsset.getTexture(),
                 attachments
             );

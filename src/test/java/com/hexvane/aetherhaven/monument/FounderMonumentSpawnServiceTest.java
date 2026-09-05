@@ -60,18 +60,6 @@ class FounderMonumentSpawnServiceTest {
     }
 
     @Test
-    void isolatedAttachmentModelKeepsJsonButChangesContentIdentity() {
-        byte[] original = "{\"lod\":\"auto\",\"nodes\":[]}".getBytes(StandardCharsets.UTF_8);
-        byte[] isolated = FounderMonumentStoneTextures.isolateModelBytes(original);
-
-        assertEquals(original.length + 2, isolated.length);
-        assertEquals(
-            JsonParser.parseString(new String(original, StandardCharsets.UTF_8)),
-            JsonParser.parseString(new String(isolated, StandardCharsets.UTF_8))
-        );
-    }
-
-    @Test
     void dedicatedBodyIntegratesTheOtherwiseDetachedFaceQuad() throws Exception {
         try (
             var stream = getClass()

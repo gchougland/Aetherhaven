@@ -454,8 +454,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         if (this.aetherhavenCommand != null) {
             this.getCommandRegistry().registerCommand(this.aetherhavenCommand);
         }
-        // Stone-model prewarming needs the complete townsfolk catalog so custom meshes (for example Prowl) are
-        // isolated before any client receives the Common asset set.
+        // Stone texture prewarm needs the townsfolk catalog so custom canvas sizes (for example Prowl) exist
+        // before any client builds its entity atlas. Statues reuse the original clothing meshes.
         this.config.get();
         com.hexvane.aetherhaven.difficulty.ServerDifficultyPersistence.load(this);
         this.reloadAetherhavenAssetCatalogs();

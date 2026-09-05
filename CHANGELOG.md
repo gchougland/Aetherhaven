@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.1.3] - Unreleased
+
+### Fixed
+
+- **Founder monument** Joining no longer gets stuck loading extra founder statue clothing files. Statues reuse the normal clothing meshes and only use the stone textures.
+
 ## [3.1.2] - 8/31/2026
 
 ### Added
