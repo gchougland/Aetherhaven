@@ -11,11 +11,14 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.BlockEntity;
 import com.hypixel.hytale.server.core.modules.entity.EntityModule;
+import com.hypixel.hytale.server.core.modules.entity.component.EntityScaleComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.Intangible;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import org.joml.Vector3d;
@@ -39,7 +42,7 @@ public final class AssemblyMarkerSpawner {
         int y,
         int z,
         @Nonnull AssemblyMarkerKind kind,
-        @Nullable String texturePath,
+        @Nullable String blockTypeOrTexture,
         float scale
     ) {
         try {
@@ -53,10 +56,6 @@ public final class AssemblyMarkerSpawner {
             if (st == null) {
                 st = new BuildingStaffPreviewPlayerComponent();
                 store.addComponent(ownerRef, BuildingStaffPreviewPlayerComponent.getComponentType(), st);
-            }
-            Model model = AssemblyMarkerModels.modelFor(kind, texturePath, scale);
-            if (model == null) {
-                return;
             }
             BuildingStaffMarkerEntity ent = new BuildingStaffMarkerEntity();
             if (!EntityModule.get().isKnown(ent)) {
@@ -72,14 +71,39 @@ public final class AssemblyMarkerSpawner {
             holder.ensureComponent(UUIDComponent.getComponentType());
             holder.addComponent(EntityStore.REGISTRY.getNonSerializedComponentType(), NonSerialized.get());
             holder.addComponent(Intangible.getComponentType(), Intangible.INSTANCE);
+
+            if (kind == AssemblyMarkerKind.PLACING) {
+                String blockTypeKey =
+                    blockTypeOrTexture != null && !blockTypeOrTexture.isBlank()
+                        ? blockTypeOrTexture.trim()
+                        : AssemblyMarkerTextureResolver.blockTypeKeyForPlacingBlockId(Integer.MIN_VALUE);
+                holder.addComponent(BlockEntity.getComponentType(), new BlockEntity(blockTypeKey));
+                holder.addComponent(EntityScaleComponent.getComponentType(), new EntityScaleComponent(scale));
+            } else if (AssemblyMarkerModels.modelFor(kind, blockTypeOrTexture, scale) == null) {
+                return;
+            }
+
             Store<EntityStore> wstore = world.getEntityStore().getStore();
             wstore.addEntity(holder, AddReason.SPAWN);
             Ref<EntityStore> markerRef = ent.getReference();
             if (markerRef == null || !markerRef.isValid()) {
                 return;
             }
-            wstore.putComponent(markerRef, ModelComponent.getComponentType(), new ModelComponent(model));
-            wstore.putComponent(markerRef, PersistentModel.getComponentType(), new PersistentModel(model.toReference()));
+            if (kind == AssemblyMarkerKind.PLACING) {
+                // Legacy Entity types get Velocity auto-added; BlockEntity physics then ticks and NPE-removes us.
+                // Preview markers are static visuals — drop Velocity so BlockEntitySystems.Ticking never matches.
+                if (wstore.getArchetype(markerRef).contains(Velocity.getComponentType())) {
+                    wstore.removeComponent(markerRef, Velocity.getComponentType());
+                }
+            } else {
+                Model model = AssemblyMarkerModels.modelFor(kind, blockTypeOrTexture, scale);
+                if (model == null) {
+                    wstore.removeEntity(markerRef, RemoveReason.REMOVE);
+                    return;
+                }
+                wstore.putComponent(markerRef, ModelComponent.getComponentType(), new ModelComponent(model));
+                wstore.putComponent(markerRef, PersistentModel.getComponentType(), new PersistentModel(model.toReference()));
+            }
             UUIDComponent markerUuid = wstore.getComponent(markerRef, UUIDComponent.getComponentType());
             if (markerUuid == null) {
                 wstore.removeEntity(markerRef, RemoveReason.REMOVE);
@@ -88,8 +112,8 @@ public final class AssemblyMarkerSpawner {
             st.getCellKeyToMarkerUuid().put(cellKey, markerUuid.getUuid());
             st.getCellKeyToKind().put(cellKey, kind);
             st.getCellKeyToLastScale().put(cellKey, scale);
-            if (kind == AssemblyMarkerKind.PLACING && texturePath != null) {
-                st.getCellKeyToLastTexture().put(cellKey, texturePath);
+            if (kind == AssemblyMarkerKind.PLACING && blockTypeOrTexture != null) {
+                st.getCellKeyToLastBlockKey().put(cellKey, blockTypeOrTexture);
             }
         } finally {
             Ref<EntityStore> ownerRef2 = world.getEntityRef(ownerPlayerEntityUuid);
@@ -207,6 +231,58 @@ public final class AssemblyMarkerSpawner {
     ) {
         commandBuffer.putComponent(markerRef, ModelComponent.getComponentType(), new ModelComponent(model));
         commandBuffer.putComponent(markerRef, PersistentModel.getComponentType(), new PersistentModel(model.toReference()));
+    }
+
+    public static void applyPlacingScale(
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull Ref<EntityStore> markerRef,
+        float scale
+    ) {
+        EntityScaleComponent existing = commandBuffer.getComponent(markerRef, EntityScaleComponent.getComponentType());
+        if (existing != null) {
+            existing.setScale(scale);
+            return;
+        }
+        commandBuffer.addComponent(markerRef, EntityScaleComponent.getComponentType(), new EntityScaleComponent(scale));
+    }
+
+    public static void applyPlacingScaleImmediate(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> markerRef,
+        float scale
+    ) {
+        EntityScaleComponent existing = store.getComponent(markerRef, EntityScaleComponent.getComponentType());
+        if (existing != null) {
+            existing.setScale(scale);
+            return;
+        }
+        store.addComponent(markerRef, EntityScaleComponent.getComponentType(), new EntityScaleComponent(scale));
+    }
+
+    public static void applyPlacingBlockType(
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull Ref<EntityStore> markerRef,
+        @Nonnull String blockTypeKey
+    ) {
+        BlockEntity existing = commandBuffer.getComponent(markerRef, BlockEntity.getComponentType());
+        if (existing != null) {
+            existing.setBlockTypeKey(blockTypeKey, markerRef, commandBuffer);
+            return;
+        }
+        commandBuffer.addComponent(markerRef, BlockEntity.getComponentType(), new BlockEntity(blockTypeKey));
+    }
+
+    public static void applyPlacingBlockTypeImmediate(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> markerRef,
+        @Nonnull String blockTypeKey
+    ) {
+        BlockEntity existing = store.getComponent(markerRef, BlockEntity.getComponentType());
+        if (existing != null) {
+            existing.setBlockTypeKey(blockTypeKey, markerRef, store);
+            return;
+        }
+        store.addComponent(markerRef, BlockEntity.getComponentType(), new BlockEntity(blockTypeKey));
     }
 
     @Nonnull

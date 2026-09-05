@@ -4,17 +4,17 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import org.joml.Vector3i;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +31,8 @@ public final class AssemblyMarkerPreviewSync {
         int y,
         int z,
         @Nonnull AssemblyMarkerKind kind,
-        @Nullable String texturePath,
+        /** Placing: block type key. Clearing: unused (null). */
+        @Nullable String blockTypeKey,
         double grow01
     ) {
         public long cellKey() {
@@ -75,7 +76,8 @@ public final class AssemblyMarkerPreviewSync {
         @Nonnull UUID ownerPlayerEntityUuid,
         @Nonnull List<DesiredMarker> desired,
         boolean syncClearing,
-        boolean syncPlacing
+        boolean syncPlacing,
+        float dt
     ) {
         syncMarkersInternal(
             world,
@@ -86,7 +88,8 @@ public final class AssemblyMarkerPreviewSync {
             desired,
             syncClearing,
             syncPlacing,
-            true
+            true,
+            dt
         );
     }
 
@@ -110,7 +113,8 @@ public final class AssemblyMarkerPreviewSync {
             desired,
             syncClearing,
             syncPlacing,
-            false
+            false,
+            0.0f
         );
     }
 
@@ -123,7 +127,8 @@ public final class AssemblyMarkerPreviewSync {
         @Nonnull List<DesiredMarker> desired,
         boolean syncClearing,
         boolean syncPlacing,
-        boolean useCommandBuffer
+        boolean useCommandBuffer,
+        float dt
     ) {
         if (useCommandBuffer && commandBuffer != null) {
             ensurePreviewState(commandBuffer, playerRef);
@@ -160,7 +165,7 @@ public final class AssemblyMarkerPreviewSync {
             UUID markerId = e.getValue();
             it.remove();
             st.getCellKeyToLastScale().remove(key);
-            st.getCellKeyToLastTexture().remove(key);
+            st.getCellKeyToLastBlockKey().remove(key);
             st.getCellKeyToKind().remove(key);
             removeMarkerEntity(world, markerId, commandBuffer, useCommandBuffer);
         }
@@ -169,31 +174,11 @@ public final class AssemblyMarkerPreviewSync {
             long key = d.cellKey();
             AssemblyMarkerKind kind = d.kind();
             float scale = AssemblyMarkerModels.scaleForGrow01(kind, d.grow01());
-            String texture = d.texturePath();
+            String blockTypeKey = d.blockTypeKey();
 
             UUID existingId = st.getCellKeyToMarkerUuid().get(key);
             if (existingId == null) {
-                if (st.getPendingSpawnCellKeys().add(key)) {
-                    final int sx = d.x();
-                    final int sy = d.y();
-                    final int sz = d.z();
-                    final String texCopy = texture;
-                    final float scaleCopy = scale;
-                    world.execute(
-                        () ->
-                            AssemblyMarkerSpawner.spawnMarker(
-                                world,
-                                ownerPlayerEntityUuid,
-                                key,
-                                sx,
-                                sy,
-                                sz,
-                                kind,
-                                texCopy,
-                                scaleCopy
-                            )
-                    );
-                }
+                queueSpawn(world, ownerPlayerEntityUuid, st, key, d, kind, blockTypeKey, scale);
                 continue;
             }
 
@@ -201,58 +186,138 @@ public final class AssemblyMarkerPreviewSync {
             if (markerRef == null || !markerRef.isValid()) {
                 st.getCellKeyToMarkerUuid().remove(key);
                 st.getCellKeyToLastScale().remove(key);
-                st.getCellKeyToLastTexture().remove(key);
+                st.getCellKeyToLastBlockKey().remove(key);
                 st.getCellKeyToKind().remove(key);
-                if (st.getPendingSpawnCellKeys().add(key)) {
-                    final int sx = d.x();
-                    final int sy = d.y();
-                    final int sz = d.z();
-                    final String texCopy = texture;
-                    final float scaleCopy = scale;
-                    world.execute(
-                        () ->
-                            AssemblyMarkerSpawner.spawnMarker(
-                                world,
-                                ownerPlayerEntityUuid,
-                                key,
-                                sx,
-                                sy,
-                                sz,
-                                kind,
-                                texCopy,
-                                scaleCopy
-                            )
-                    );
-                }
+                queueSpawn(world, ownerPlayerEntityUuid, st, key, d, kind, blockTypeKey, scale);
                 continue;
             }
 
-            Float prevScale = st.getCellKeyToLastScale().get(key);
-            float prevScaleVal = prevScale == null ? -1.0F : prevScale.floatValue();
-            String prevTexture = st.getCellKeyToLastTexture().get(key);
-            boolean scaleChanged = AssemblyMarkerModels.scaleChanged(prevScaleVal, scale);
-            boolean textureChanged =
-                kind == AssemblyMarkerKind.PLACING && texture != null && !Objects.equals(prevTexture, texture);
-            if (!scaleChanged && !textureChanged) {
-                continue;
-            }
-
-            Model model = AssemblyMarkerModels.modelFor(kind, texture, scale);
-            if (model == null) {
-                continue;
-            }
-            if (useCommandBuffer && commandBuffer != null) {
-                AssemblyMarkerSpawner.applyModelUpdate(commandBuffer, markerRef, model);
+            if (kind == AssemblyMarkerKind.PLACING) {
+                updatePlacingMarker(
+                    store,
+                    commandBuffer,
+                    useCommandBuffer,
+                    st,
+                    key,
+                    markerRef,
+                    blockTypeKey,
+                    scale,
+                    d.grow01(),
+                    dt
+                );
             } else {
-                store.putComponent(markerRef, ModelComponent.getComponentType(), new ModelComponent(model));
-                store.putComponent(markerRef, PersistentModel.getComponentType(), new PersistentModel(model.toReference()));
-            }
-            st.getCellKeyToLastScale().put(key, scale);
-            if (kind == AssemblyMarkerKind.PLACING && texture != null) {
-                st.getCellKeyToLastTexture().put(key, texture);
+                updateClearingMarker(store, commandBuffer, useCommandBuffer, st, key, markerRef, scale);
             }
             st.getCellKeyToKind().put(key, kind);
         }
+    }
+
+    private static void queueSpawn(
+        @Nonnull World world,
+        @Nonnull UUID ownerPlayerEntityUuid,
+        @Nonnull BuildingStaffPreviewPlayerComponent st,
+        long key,
+        @Nonnull DesiredMarker d,
+        @Nonnull AssemblyMarkerKind kind,
+        @Nullable String blockTypeKey,
+        float scale
+    ) {
+        if (!st.getPendingSpawnCellKeys().add(key)) {
+            return;
+        }
+        final int sx = d.x();
+        final int sy = d.y();
+        final int sz = d.z();
+        final String keyCopy = blockTypeKey;
+        final float scaleCopy = scale;
+        world.execute(
+            () ->
+                AssemblyMarkerSpawner.spawnMarker(
+                    world,
+                    ownerPlayerEntityUuid,
+                    key,
+                    sx,
+                    sy,
+                    sz,
+                    kind,
+                    keyCopy,
+                    scaleCopy
+                )
+        );
+    }
+
+    private static void updatePlacingMarker(
+        @Nonnull Store<EntityStore> store,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
+        boolean useCommandBuffer,
+        @Nonnull BuildingStaffPreviewPlayerComponent st,
+        long key,
+        @Nonnull Ref<EntityStore> markerRef,
+        @Nullable String blockTypeKey,
+        float scale,
+        double grow01,
+        float dt
+    ) {
+        Float prevScale = st.getCellKeyToLastScale().get(key);
+        float prevScaleVal = prevScale == null ? -1.0F : prevScale.floatValue();
+        String prevKey = st.getCellKeyToLastBlockKey().get(key);
+        boolean scaleChanged = AssemblyMarkerModels.scaleChanged(prevScaleVal, scale);
+        boolean blockChanged = blockTypeKey != null && !Objects.equals(prevKey, blockTypeKey);
+
+        if (blockChanged && blockTypeKey != null) {
+            if (useCommandBuffer && commandBuffer != null) {
+                AssemblyMarkerSpawner.applyPlacingBlockType(commandBuffer, markerRef, blockTypeKey);
+            } else {
+                AssemblyMarkerSpawner.applyPlacingBlockTypeImmediate(store, markerRef, blockTypeKey);
+            }
+            st.getCellKeyToLastBlockKey().put(key, blockTypeKey);
+        }
+        if (scaleChanged) {
+            if (useCommandBuffer && commandBuffer != null) {
+                AssemblyMarkerSpawner.applyPlacingScale(commandBuffer, markerRef, scale);
+            } else {
+                AssemblyMarkerSpawner.applyPlacingScaleImmediate(store, markerRef, scale);
+            }
+            st.getCellKeyToLastScale().put(key, scale);
+        }
+
+        if (dt > 0.0f) {
+            TransformComponent transform =
+                useCommandBuffer && commandBuffer != null
+                    ? commandBuffer.getComponent(markerRef, TransformComponent.getComponentType())
+                    : store.getComponent(markerRef, TransformComponent.getComponentType());
+            if (transform != null) {
+                Rotation3f rot = transform.getRotation();
+                rot.addYaw(AssemblyMarkerModels.spinYawRadiansPerSec(grow01) * dt);
+            }
+        }
+    }
+
+    private static void updateClearingMarker(
+        @Nonnull Store<EntityStore> store,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
+        boolean useCommandBuffer,
+        @Nonnull BuildingStaffPreviewPlayerComponent st,
+        long key,
+        @Nonnull Ref<EntityStore> markerRef,
+        float scale
+    ) {
+        Float prevScale = st.getCellKeyToLastScale().get(key);
+        float prevScaleVal = prevScale == null ? -1.0F : prevScale.floatValue();
+        if (!AssemblyMarkerModels.scaleChanged(prevScaleVal, scale)) {
+            return;
+        }
+        Model model = AssemblyMarkerModels.modelFor(AssemblyMarkerKind.CLEARING, null, scale);
+        if (model == null) {
+            return;
+        }
+        if (useCommandBuffer && commandBuffer != null) {
+            AssemblyMarkerSpawner.applyModelUpdate(commandBuffer, markerRef, model);
+        } else {
+            store.putComponent(markerRef, ModelComponent.getComponentType(), new ModelComponent(model));
+            store.putComponent(markerRef, PersistentModel.getComponentType(), new PersistentModel(model.toReference()));
+        }
+        st.getCellKeyToLastScale().put(key, scale);
     }
 
     @Nonnull
@@ -273,8 +338,8 @@ public final class AssemblyMarkerPreviewSync {
         for (Vector3i cell : placingCells) {
             double grow01 = grow01ForCell(cell, staffInHand, channel, nowNs);
             int blockId = AssemblyMarkerTextureResolver.resolvePlacingBlockId(world, plugin, cell);
-            String texture = AssemblyMarkerTextureResolver.textureForPlacingBlockId(blockId);
-            out.add(new DesiredMarker(cell.x, cell.y, cell.z, AssemblyMarkerKind.PLACING, texture, grow01));
+            String blockTypeKey = AssemblyMarkerTextureResolver.blockTypeKeyForPlacingBlockId(blockId);
+            out.add(new DesiredMarker(cell.x, cell.y, cell.z, AssemblyMarkerKind.PLACING, blockTypeKey, grow01));
         }
         return out;
     }

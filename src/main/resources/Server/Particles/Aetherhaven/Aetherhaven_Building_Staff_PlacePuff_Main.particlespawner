@@ -1,0 +1,76 @@
+{
+  "RenderMode": "Erosion",
+  "ParticleRotationInfluence": "BillboardY",
+  "LinearFiltering": false,
+  "LightInfluence": 0.55,
+  "ParticleRotateWithSpawner": false,
+  "MaxConcurrentParticles": 3,
+  "ParticleLifeSpan": {
+    "Min": 0.5,
+    "Max": 0.8
+  },
+  "SpawnRate": {
+    "Min": 1.0,
+    "Max": 1.0
+  },
+  "EmitOffset": {
+    "X": { "Min": -0.22, "Max": 0.22 },
+    "Y": { "Min": -0.18, "Max": 0.22 },
+    "Z": { "Min": -0.22, "Max": 0.22 }
+  },
+  "Particle": {
+    "Texture": "Particles/Textures/Smoke/SmokeRound2.png",
+    "ScaleRatioConstraint": "None",
+    "SoftParticles": "Require",
+    "Animation": {
+      "0": {
+        "FrameIndex": { "Min": 0, "Max": 0 },
+        "Scale": {
+          "X": { "Min": 0.55, "Max": 0.7 },
+          "Y": { "Min": 0.55, "Max": 0.7 }
+        },
+        "Opacity": 0.95,
+        "Color": "#d8d0c4"
+      },
+      "30": {
+        "Scale": {
+          "X": { "Min": 1.1, "Max": 1.3 },
+          "Y": { "Min": 1.1, "Max": 1.3 }
+        },
+        "Color": "#b0aaa0"
+      },
+      "100": {
+        "Opacity": 0,
+        "Scale": {
+          "X": { "Min": 1.6, "Max": 1.9 },
+          "Y": { "Min": 1.65, "Max": 1.95 }
+        },
+        "Color": "#9a9690"
+      }
+    },
+    "InitialAnimationFrame": {
+      "Opacity": 0.95,
+      "Color": "#ebe4d8",
+      "FrameIndex": { "Min": 0, "Max": 0 },
+      "Scale": {
+        "X": { "Min": 0.45, "Max": 0.58 },
+        "Y": { "Min": 0.45, "Max": 0.58 }
+      },
+      "Rotation": {
+        "Z": { "Min": -180.0, "Max": 180.0 }
+      }
+    }
+  },
+  "SpawnBurst": true,
+  "TotalParticles": {
+    "Min": 2,
+    "Max": 3
+  },
+  "Attractors": [
+    {
+      "DampingMultiplier": {
+        "Y": 0.82
+      }
+    }
+  ]
+}

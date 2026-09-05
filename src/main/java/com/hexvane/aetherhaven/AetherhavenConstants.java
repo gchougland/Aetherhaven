@@ -240,6 +240,12 @@ public final class AetherhavenConstants {
      */
     public static final String BUILDING_STAFF_STEP_PARTICLE_SYSTEM_ID = "Aetherhaven_Building_Staff_Step";
 
+    /**
+     * Visible dust/smoke puff at each block placed by the building staff
+     * ({@code Server/Particles/Aetherhaven/Aetherhaven_Building_Staff_PlacePuff.particlesystem}).
+     */
+    public static final String BUILDING_STAFF_PLACE_PUFF_PARTICLE_SYSTEM_ID = "Aetherhaven_Building_Staff_PlacePuff";
+
     /** Mist along look direction while channeling secondary (server-spawned at staff tip with head rotation). */
     public static final String BUILDING_STAFF_STREAM_PARTICLE_SYSTEM_ID = "Aetherhaven_Building_Staff_Stream";
 

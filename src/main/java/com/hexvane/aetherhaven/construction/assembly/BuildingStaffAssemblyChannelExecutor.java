@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.construction.assembly;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
@@ -12,13 +13,19 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.spatial.SpatialResource;
 import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.math.vector.Rotation3fc;
+import com.hypixel.hytale.protocol.BlockSoundEvent;
 import com.hypixel.hytale.protocol.Color;
+import com.hypixel.hytale.protocol.SoundCategory;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.asset.type.blocksound.config.BlockSoundSet;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.modules.entity.EntityModule;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
+import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -29,6 +36,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Commits building-staff brush placement on the entity tick so block writes align with marker growth (preview updates
@@ -39,6 +47,9 @@ public final class BuildingStaffAssemblyChannelExecutor {
     private static final Color TRACER_TINT = new Color((byte) 170, (byte) 255, (byte) 230);
     private static final ConcurrentHashMap<UUID, Long> LAST_NO_MANA_HINT_NS = new ConcurrentHashMap<>();
     private static final long NO_MANA_HINT_INTERVAL_NS = 2_000_000_000L;
+
+    private static final float PLACE_SOUND_PITCH_MIN = 0.85f;
+    private static final float PLACE_SOUND_PITCH_MAX = 1.15f;
 
     private BuildingStaffAssemblyChannelExecutor() {}
 
@@ -154,6 +165,8 @@ public final class BuildingStaffAssemblyChannelExecutor {
                     break;
                 }
                 int idx = batch.getInt(bi);
+                PendingBlock pendingBlock =
+                    idx >= 0 && idx < job.pendingBlocks().size() ? job.pendingBlocks().get(idx) : null;
                 PlotAssemblyService.PlacementAdvanceOutcome outcome =
                     PlotAssemblyService.advancePlacementAtIndex(
                         world, plugin, store, town, plot, job, idx, true, playerUuid, true, true
@@ -166,6 +179,7 @@ public final class BuildingStaffAssemblyChannelExecutor {
                         break;
                     }
                     anyAction = true;
+                    playStaffPlaceEffects(commandBuffer, job, pendingBlock);
                 }
                 if (plot.getState() != PlotInstanceState.ASSEMBLING) {
                     break;
@@ -179,6 +193,57 @@ public final class BuildingStaffAssemblyChannelExecutor {
             ParticleUtil.spawnParticleEffect(AetherhavenConstants.BUILDING_STAFF_STEP_PARTICLE_SYSTEM_ID, p, store);
         }
         return true;
+    }
+
+    private static void playStaffPlaceEffects(
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull PlotAssemblyJob job,
+        @Nullable PendingBlock pendingBlock
+    ) {
+        if (pendingBlock == null) {
+            return;
+        }
+        int bx = job.anchor().x + pendingBlock.x();
+        int by = job.anchor().y + pendingBlock.y();
+        int bz = job.anchor().z + pendingBlock.z();
+        double cx = bx + 0.5;
+        double cy = by + 0.5;
+        double cz = bz + 0.5;
+        int blockId = pendingBlock.blockId();
+        ParticleUtil.spawnParticleEffect(
+            AetherhavenConstants.BUILDING_STAFF_PLACE_PUFF_PARTICLE_SYSTEM_ID,
+            new Vector3d(cx, cy, cz),
+            commandBuffer
+        );
+        if (blockId != BlockType.EMPTY_ID) {
+            playBlockBuildSound(blockId, cx, cy, cz, commandBuffer);
+        }
+    }
+
+    private static void playBlockBuildSound(
+        int blockId,
+        double x,
+        double y,
+        double z,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        BlockType blockType = BlockType.getAssetMap().getAsset(blockId);
+        if (blockType == null) {
+            return;
+        }
+        BlockSoundSet soundSet = BlockSoundSet.getAssetMap().getAsset(blockType.getBlockSoundSetIndex());
+        if (soundSet == null) {
+            return;
+        }
+        int soundEventIndex = soundSet.getSoundEventIndices().getOrDefault(BlockSoundEvent.Build, SoundEvent.EMPTY_ID);
+        if (soundEventIndex == SoundEvent.EMPTY_ID) {
+            return;
+        }
+        float pitch =
+            PLACE_SOUND_PITCH_MIN
+                + java.util.concurrent.ThreadLocalRandom.current().nextFloat()
+                    * (PLACE_SOUND_PITCH_MAX - PLACE_SOUND_PITCH_MIN);
+        SoundUtil.playSoundEvent3d(soundEventIndex, SoundCategory.SFX, x, y, z, 1.0f, pitch, commandBuffer);
     }
 
     private static void maybeNotifyNoMana(

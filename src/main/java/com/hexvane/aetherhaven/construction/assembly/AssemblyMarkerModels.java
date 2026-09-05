@@ -8,18 +8,19 @@ import javax.annotation.Nullable;
 
 /** Cached assembly marker models with runtime texture and grow scale. */
 public final class AssemblyMarkerModels {
-    /** Building marker prop is half block at unit scale; 2x matches a visible placement ghost. */
-    private static final float BUILDING_SCALE_MIN = 1.06f;
-    private static final float BUILDING_SCALE_MAX = 2.12f;
+    /** Placing markers are BlockEntity previews; unit scale matches a full block. */
+    private static final float PLACE_SCALE_MIN = 0.25f;
+    private static final float PLACE_SCALE_MAX = 1.0f;
 
     /** Destruction marker prop renders at half block extent at unit scale. */
     private static final float DESTRUCTION_SCALE_MIN = 2.2f;
     private static final float DESTRUCTION_SCALE_MAX = 4.0f;
 
-    private static final float SCALE_EPS = 1.0e-4f;
+    /** Slow continuous yaw while idle; ramps toward max as the channel grows. */
+    private static final float SPIN_YAW_IDLE_RAD_PER_SEC = 0.7f;
+    private static final float SPIN_YAW_MAX_RAD_PER_SEC = 8.0f;
 
-    @Nullable
-    private static volatile Model buildingTemplate;
+    private static final float SCALE_EPS = 1.0e-4f;
 
     @Nullable
     private static volatile Model destructionTemplate;
@@ -29,28 +30,33 @@ public final class AssemblyMarkerModels {
     public static float scaleForGrow01(@Nonnull AssemblyMarkerKind kind, double grow01) {
         double g = Math.min(1.0, Math.max(0.0, grow01));
         if (kind == AssemblyMarkerKind.PLACING) {
-            return (float) (BUILDING_SCALE_MIN + (BUILDING_SCALE_MAX - BUILDING_SCALE_MIN) * g);
+            return (float) (PLACE_SCALE_MIN + (PLACE_SCALE_MAX - PLACE_SCALE_MIN) * g);
         }
         return (float) (DESTRUCTION_SCALE_MIN + (DESTRUCTION_SCALE_MAX - DESTRUCTION_SCALE_MIN) * g);
     }
 
+    /** Yaw spin rate for placing BlockEntity previews; idle is slow, grows with {@code grow01}. */
+    public static float spinYawRadiansPerSec(double grow01) {
+        double g = Math.min(1.0, Math.max(0.0, grow01));
+        double t = g * g;
+        return (float) (SPIN_YAW_IDLE_RAD_PER_SEC + (SPIN_YAW_MAX_RAD_PER_SEC - SPIN_YAW_IDLE_RAD_PER_SEC) * t);
+    }
+
+    /** Destruction markers only — placing uses {@code BlockEntity} + {@code EntityScaleComponent}. */
     @Nullable
     public static Model modelFor(
         @Nonnull AssemblyMarkerKind kind,
         @Nullable String texturePath,
         float scale
     ) {
-        Model template = templateFor(kind);
+        if (kind != AssemblyMarkerKind.CLEARING) {
+            return null;
+        }
+        Model template = destructionTemplate();
         if (template == null) {
             return null;
         }
-        String tex =
-            kind == AssemblyMarkerKind.PLACING
-                ? AssemblyMarkerTextureResolver.entitySafeTexture(
-                    texturePath != null && !texturePath.isBlank() ? texturePath.trim() : template.getTexture()
-                )
-                : template.getTexture();
-        return copyWithTextureAndScale(template, tex, scale);
+        return copyWithTextureAndScale(template, template.getTexture(), scale);
     }
 
     public static boolean scaleChanged(float prev, float next) {
@@ -58,19 +64,7 @@ public final class AssemblyMarkerModels {
     }
 
     @Nullable
-    private static Model templateFor(@Nonnull AssemblyMarkerKind kind) {
-        if (kind == AssemblyMarkerKind.PLACING) {
-            Model cached = buildingTemplate;
-            if (cached != null) {
-                return cached;
-            }
-            ModelAsset asset = ModelAsset.getAssetMap().getAsset(AetherhavenConstants.MODEL_ASSET_BUILDING_MARKER);
-            if (asset == null) {
-                return null;
-            }
-            buildingTemplate = Model.createUnitScaleModel(asset);
-            return buildingTemplate;
-        }
+    private static Model destructionTemplate() {
         Model cached = destructionTemplate;
         if (cached != null) {
             return cached;

@@ -32,9 +32,9 @@ public final class BuildingStaffPreviewPlayerComponent implements Component<Enti
     @Nonnull
     private final Map<Long, Float> cellKeyToLastScale = new HashMap<>();
 
-    /** Last texture path for placing markers. */
+    /** Last block type key for placing BlockEntity markers (or unused for clearing). */
     @Nonnull
-    private final Map<Long, String> cellKeyToLastTexture = new HashMap<>();
+    private final Map<Long, String> cellKeyToLastBlockKey = new HashMap<>();
 
     /** Marker kind per cell. */
     @Nonnull
@@ -73,8 +73,8 @@ public final class BuildingStaffPreviewPlayerComponent implements Component<Enti
     }
 
     @Nonnull
-    public Map<Long, String> getCellKeyToLastTexture() {
-        return cellKeyToLastTexture;
+    public Map<Long, String> getCellKeyToLastBlockKey() {
+        return cellKeyToLastBlockKey;
     }
 
     @Nonnull
@@ -90,7 +90,7 @@ public final class BuildingStaffPreviewPlayerComponent implements Component<Enti
     public void clearAllTracking() {
         cellKeyToMarkerUuid.clear();
         cellKeyToLastScale.clear();
-        cellKeyToLastTexture.clear();
+        cellKeyToLastBlockKey.clear();
         cellKeyToKind.clear();
         pendingSpawnCellKeys.clear();
     }

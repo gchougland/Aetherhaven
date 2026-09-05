@@ -10,6 +10,7 @@
 ### Changed
 
 - **Town charter** Crafting the town charter accepts any kind of stone, not only cobblestone.
+- **Building staff** While you hold the staff, upcoming build blocks show as small spinning copies of the real block. Charging makes them grow and spin faster, then they settle in with a place sound and sparkles.
 
 ### Fixed
 

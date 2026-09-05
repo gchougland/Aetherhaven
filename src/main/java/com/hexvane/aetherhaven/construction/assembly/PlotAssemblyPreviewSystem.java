@@ -31,9 +31,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Per-player assembly preview markers (building and destruction models) while the building staff is held.
+ * Per-player assembly preview markers while the building staff is held.
  *
- * <p>Markers are owner-only entities, not debug shapes, so plot footprint wireframes do not wipe them.</p>
+ * <p>Placing cells use owner-only BlockEntity previews; clearing cells use Destruction_Marker models.
+ * Markers are not debug shapes, so plot footprint wireframes do not wipe them.</p>
  */
 public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityStore> {
     /**
@@ -261,7 +262,8 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
             ownerUuid,
             desired,
             !cells.obstruction().isEmpty(),
-            !cells.frontier().isEmpty()
+            !cells.frontier().isEmpty(),
+            dt
         );
     }
 

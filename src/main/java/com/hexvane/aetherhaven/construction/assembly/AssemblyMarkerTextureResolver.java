@@ -17,10 +17,13 @@ import org.joml.Vector3i;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Resolves block texture paths for building staff placement preview markers. */
+/** Resolves block type keys and texture paths for building staff placement preview markers. */
 public final class AssemblyMarkerTextureResolver {
     /** Entity {@link com.hypixel.hytale.server.core.asset.type.model.config.Model} textures must use these roots. */
     private static final String ENTITY_TEXTURE_FALLBACK = "Items/Aetherhaven/Building_Marker/Building_Marker.png";
+
+    /** Fallback when a pending block id cannot be resolved to a BlockType key. */
+    private static final String FALLBACK_BLOCK_TYPE_KEY = "Rock_Stone";
 
     @Nullable
     private static volatile String cachedFallbackTexture;
@@ -56,6 +59,23 @@ public final class AssemblyMarkerTextureResolver {
             return Integer.MIN_VALUE;
         }
         return pending.get(idx).blockId();
+    }
+
+    /** Block type asset key for a placing {@link com.hypixel.hytale.server.core.entity.entities.BlockEntity} preview. */
+    @Nonnull
+    public static String blockTypeKeyForPlacingBlockId(int blockId) {
+        if (blockId == BlockType.EMPTY_ID || blockId == Integer.MIN_VALUE) {
+            return FALLBACK_BLOCK_TYPE_KEY;
+        }
+        BlockType blockType = BlockType.getAssetMap().getAsset(blockId);
+        if (blockType == null) {
+            return FALLBACK_BLOCK_TYPE_KEY;
+        }
+        String id = blockType.getId();
+        if (id == null || id.isBlank()) {
+            return FALLBACK_BLOCK_TYPE_KEY;
+        }
+        return id.trim();
     }
 
     @Nonnull
