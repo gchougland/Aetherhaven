@@ -67,7 +67,9 @@ import com.hexvane.aetherhaven.plugin.GameTimeTickListener;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
+import com.hypixel.hytale.server.core.event.events.BootEvent;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
+import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.time.Instant;
@@ -191,6 +193,16 @@ public final class FestivalsBootstrap {
         WintertideDialogueHandlers.register(core);
         SnowballDialogueHandlers.register(core);
         core.registerAetherhavenSubcommand(new AetherhavenFestivalCommand());
+        plugin
+            .getEventRegistry()
+            .registerGlobal(
+                BootEvent.class,
+                event -> {
+                    for (World world : Universe.get().getWorlds().values()) {
+                        world.execute(() -> FestivalService.applyForWorld(world, world.getEntityStore().getStore(), core));
+                    }
+                }
+            );
     }
 
     @Nonnull

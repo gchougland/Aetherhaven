@@ -9,11 +9,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.hexvane.aetherhaven.AetherhavenConstants;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
+import com.hypixel.hytale.server.core.asset.type.model.config.ModelAttachment;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import javax.imageio.ImageIO;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +28,7 @@ class FounderMonumentSpawnServiceTest {
             JsonObject model = JsonParser.parseReader(new InputStreamReader(stream, StandardCharsets.UTF_8)).getAsJsonObject();
 
             assertEquals("Player", model.get("Parent").getAsString());
-            assertEquals(AetherhavenConstants.FOUNDER_MONUMENT_STATUE_BODY_MODEL, model.get("Model").getAsString());
+            assertEquals("Characters/Player.blockymodel", model.get("Model").getAsString());
             assertEquals(AetherhavenConstants.FOUNDER_MONUMENT_STATUE_BASE_TEXTURE, model.get("Texture").getAsString());
             assertNull(model.get("GradientSet"));
             assertNull(model.get("GradientId"));
@@ -39,24 +37,22 @@ class FounderMonumentSpawnServiceTest {
     }
 
     @Test
-    void generatedStoneTexturesPreserveCanvasAndStayOpaque() throws Exception {
-        BufferedImage stoneSource = new BufferedImage(2, 2, BufferedImage.TYPE_INT_ARGB);
-        stoneSource.setRGB(0, 0, 0xFF112233);
-        stoneSource.setRGB(1, 0, 0xFF445566);
-        stoneSource.setRGB(0, 1, 0xFF778899);
-        stoneSource.setRGB(1, 1, 0xFFAABBCC);
-        for (int[] size : new int[][] { { 32, 32 }, { 64, 96 }, { 256, 128 } }) {
-            BufferedImage stone = ImageIO.read(
-                new ByteArrayInputStream(
-                    FounderMonumentStoneTextures.generateStonePng(size[0], size[1], stoneSource)
-                )
-            );
-            assertEquals(size[0], stone.getWidth());
-            assertEquals(size[1], stone.getHeight());
-            assertEquals(0xFF112233, stone.getRGB(0, 0));
-            assertEquals(0xFF445566, stone.getRGB(1, 0));
-            assertEquals(0xFF778899, stone.getRGB(0, 1));
-        }
+    void stonePrepareUsesOnlyPackagedTextures() {
+        ModelAttachment[] source = {
+            new ModelAttachment(
+                "Characters/Clothes/Example.blockymodel",
+                "Characters/Clothes/Example.png",
+                null,
+                null,
+                1.0
+            )
+        };
+        FounderMonumentStoneTextures.Prepared prepared =
+            FounderMonumentStoneTextures.prepare("Characters/Some/Skin.png", source);
+        assertEquals(AetherhavenConstants.FOUNDER_MONUMENT_STATUE_TEXTURE, prepared.baseTexture());
+        assertEquals(1, prepared.attachments().length);
+        assertEquals("Characters/Clothes/Example.blockymodel", prepared.attachments()[0].getModel());
+        assertEquals(AetherhavenConstants.FOUNDER_MONUMENT_STATUE_TEXTURE, prepared.attachments()[0].getTexture());
     }
 
     @Test
@@ -89,6 +85,73 @@ class FounderMonumentSpawnServiceTest {
         assertEquals(1.0f, FounderMonumentSpawnService.safePersistScale(Float.NaN));
         assertEquals(1.0f, FounderMonumentSpawnService.safePersistScale(Float.POSITIVE_INFINITY));
         assertEquals(1.25f, FounderMonumentSpawnService.safePersistScale(1.25f));
+    }
+
+    @Test
+    void pedestalBlockMatchesSpawnOffset() {
+        var pedestal = FounderMonumentSpawnService.pedestalBlockFromStatuePosition(12.5, 41.05, -3.5);
+        assertEquals(12, pedestal.x);
+        assertEquals(40, pedestal.y);
+        assertEquals(-4, pedestal.z);
+    }
+
+    @Test
+    void playerBodyIsNotTreatedAsAFinishedStatue() {
+        assertTrue(!FounderMonumentStatueRestoreSystem.isStoneStatueMesh(null));
+        assertTrue(!FounderMonumentStatueRestoreSystem.isClientVisibleStatue(null, null));
+    }
+
+    @Test
+    void pedestalRecoversWhenStatueMeshIsMissing() {
+        assertTrue(FounderMonumentStatueRestoreSystem.needsBlockRecovery("town", "{\"id\":\"skin\"}", "Ada", false));
+        assertTrue(FounderMonumentStatueRestoreSystem.needsBlockRecovery("town", "", "", false));
+        assertTrue(FounderMonumentStatueRestoreSystem.needsBlockRecovery("", "{\"id\":\"skin\"}", "", false));
+        assertTrue(FounderMonumentStatueRestoreSystem.needsBlockRecovery("", "", "", false));
+        assertTrue(!FounderMonumentStatueRestoreSystem.needsBlockRecovery("town", "{\"id\":\"skin\"}", "Ada", true));
+        assertTrue(FounderMonumentStatueRestoreSystem.needsBlockRecovery("{\"id\":\"skin\"}", "uuid", false));
+        assertTrue(FounderMonumentStatueRestoreSystem.needsBlockRecovery("", "uuid", false));
+        assertTrue(FounderMonumentStatueRestoreSystem.needsBlockRecovery("", "", false));
+    }
+
+    @Test
+    void emptyPipeCellsAreNotTreatedAsPlacedPedestals() {
+        assertTrue(!FounderMonumentStatueRestoreSystem.isPlacedPedestal("", "", ""));
+        assertTrue(FounderMonumentStatueRestoreSystem.isPlacedPedestal("town", "", ""));
+        assertTrue(FounderMonumentStatueRestoreSystem.isPlacedPedestal("", "{\"id\":\"skin\"}", ""));
+        assertTrue(FounderMonumentStatueRestoreSystem.isPlacedPedestal("", "", "Ada"));
+    }
+
+    @Test
+    void mergeKeepsSavedFacingAndSkin() {
+        var zero = new com.hypixel.hytale.math.vector.Rotation3f(0f, 0f, 0f);
+        var facing = new com.hypixel.hytale.math.vector.Rotation3f(0f, (float) Math.PI, 0f);
+        assertTrue(FounderMonumentStatueRestoreSystem.isIdentityRotation(zero));
+        assertTrue(!FounderMonumentStatueRestoreSystem.isIdentityRotation(facing));
+        assertEquals((float) Math.PI, FounderMonumentStatueRestoreSystem.mergeRotation(zero, facing).yaw());
+        assertEquals((float) Math.PI, FounderMonumentStatueRestoreSystem.mergeRotation(facing, zero).yaw());
+        assertEquals("skin", FounderMonumentStatueRestoreSystem.firstNonBlank("", "skin"));
+        assertEquals("skin", FounderMonumentStatueRestoreSystem.firstNonBlank("skin", "other"));
+    }
+
+    @Test
+    void savedStatueModelStaysTheNormalPlayerBody() {
+        var saved = FounderMonumentSpawnService.bootSafePersistentModel(1.25f);
+        assertEquals("Player", saved.getModelReference().getModelAssetId());
+        assertEquals(1.25f, saved.getModelReference().getScale());
+        assertTrue(saved.getModelReference().isStaticModel());
+        assertTrue(!FounderMonumentSpawnService.isStatuePersistentModel(saved));
+        assertTrue(
+            FounderMonumentSpawnService.isStatuePersistentModel(
+                new com.hypixel.hytale.server.core.modules.entity.component.PersistentModel(
+                    new com.hypixel.hytale.server.core.asset.type.model.config.Model.ModelReference(
+                        AetherhavenConstants.FOUNDER_MONUMENT_STATUE_MODEL_ID,
+                        1.0f,
+                        null,
+                        true
+                    )
+                )
+            )
+        );
     }
 
     private static JsonObject findNode(com.google.gson.JsonArray nodes, String name) {

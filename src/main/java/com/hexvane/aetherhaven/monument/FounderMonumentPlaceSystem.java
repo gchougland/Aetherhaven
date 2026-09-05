@@ -146,7 +146,15 @@ public final class FounderMonumentPlaceSystem extends EntityEventSystem<EntitySt
         cs.putComponent(
             blockRef,
             FounderMonumentBlock.getComponentType(),
-            new FounderMonumentBlock(town.getTownId().toString(), statueUuid.toString())
+            new FounderMonumentBlock(
+                town.getTownId().toString(),
+                statueUuid.toString(),
+                FounderMonumentStatueSkin.fromProtocol(skin).getSkinJson(),
+                label,
+                statueRotation.pitch(),
+                statueRotation.yaw(),
+                statueRotation.roll()
+            )
         );
         town.incrementFounderMonumentPlaced();
         tm.updateTown(town);

@@ -4,7 +4,7 @@
 
 ### Fixed
 
-- **Founder monument** Joining no longer gets stuck loading extra founder statue clothing files. Statues reuse the normal clothing meshes and only use the stone textures.
+- **World Hanging on Load** Worlds with founder monuments no longer freeze when loading into the world.
 
 ## [3.1.2] - 8/31/2026
 

@@ -13,6 +13,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.SoundCategory;
+import com.hypixel.hytale.server.core.HytaleServer;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -50,6 +51,9 @@ public final class FestivalService {
         @Nonnull Store<EntityStore> store,
         @Nonnull AetherhavenPlugin plugin
     ) {
+        if (!HytaleServer.get().isBooted()) {
+            return;
+        }
         WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
         if (wtr == null) {
             return;

@@ -27,7 +27,6 @@ import com.hexvane.aetherhaven.jewelry.JewelryInventoryTooltipSync;
 import com.hexvane.aetherhaven.jewelry.JewelryNativeTooltipManager;
 import com.hexvane.aetherhaven.jewelry.JewelryTooltipPacketAdapter;
 import com.hexvane.aetherhaven.jewelry.JewelryVirtualItemRegistry;
-import com.hexvane.aetherhaven.monument.FounderMonumentSpawnService;
 import com.hexvane.aetherhaven.plot.PlotTokenIconPacketAdapter;
 import com.hexvane.aetherhaven.plot.PlotTokenVirtualItemRegistry;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
@@ -454,8 +453,6 @@ public final class AetherhavenPlugin extends JavaPlugin {
         if (this.aetherhavenCommand != null) {
             this.getCommandRegistry().registerCommand(this.aetherhavenCommand);
         }
-        // Stone texture prewarm needs the townsfolk catalog so custom canvas sizes (for example Prowl) exist
-        // before any client builds its entity atlas. Statues reuse the original clothing meshes.
         this.config.get();
         com.hexvane.aetherhaven.difficulty.ServerDifficultyPersistence.load(this);
         this.reloadAetherhavenAssetCatalogs();
@@ -472,11 +469,6 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 CommonAssetModule commonAssets = CommonAssetModule.get();
                 if (commonAssets != null) {
                     commonAssets.loadCommonAssets(pack, System.nanoTime());
-                    try {
-                        FounderMonumentSpawnService.prewarmStoneTextures();
-                    } catch (RuntimeException e) {
-                        LOGGER.atWarning().withCause(e).log("Could not prewarm founder monument stone textures");
-                    }
                     if (Universe.get().getPlayerCount() > 0) {
                         Universe.get().broadcastPacketNoCache(new RequestCommonAssetsRebuild());
                     }

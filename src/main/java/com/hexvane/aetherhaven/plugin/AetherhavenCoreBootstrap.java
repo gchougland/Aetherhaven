@@ -15,6 +15,7 @@ import com.hexvane.aetherhaven.hud.AetherhavenHudSupport;
 import com.hexvane.aetherhaven.entity.BlockEntityScaleMigrated;
 import com.hexvane.aetherhaven.entity.BlockEntityScaleRepairSystem;
 import com.hexvane.aetherhaven.entity.EntityRotationRepairSystem;
+import com.hexvane.aetherhaven.entity.NpcRoleActivateOrderSystem;
 import com.hexvane.aetherhaven.map.TeleporterWarpSanitizer;
 import com.hexvane.aetherhaven.npc.AetherhavenNpcRoleLoader;
 import com.hexvane.aetherhaven.plot.GaiaStatueBlock;
@@ -134,6 +135,7 @@ public final class AetherhavenCoreBootstrap {
         BlockEntityScaleMigrated.register(plugin.getEntityStoreRegistry());
         plugin.getEntityStoreRegistry().registerSystem(new EntityRotationRepairSystem.OnHolderAdd());
         plugin.getEntityStoreRegistry().registerSystem(new EntityRotationRepairSystem.OnRefAdded());
+        plugin.getEntityStoreRegistry().registerSystem(new NpcRoleActivateOrderSystem());
         plugin.getEntityStoreRegistry().registerSystem(new BlockEntityScaleRepairSystem());
         plugin.getEntityStoreRegistry().registerSystem(new TownJournalPlayerInitSystem());
         plugin.getEntityStoreRegistry().registerSystem(new VillagerLocatePlayerInitSystem());

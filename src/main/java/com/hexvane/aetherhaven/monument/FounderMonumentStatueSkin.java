@@ -54,6 +54,11 @@ public final class FounderMonumentStatueSkin implements Component<EntityStore> {
     public FounderMonumentStatueSkin() {}
 
     @Nonnull
+    public String getSkinJson() {
+        return skinJson != null ? skinJson : "";
+    }
+
+    @Nonnull
     public static FounderMonumentStatueSkin fromProtocol(@Nonnull PlayerSkin skin) {
         FounderMonumentStatueSkin c = new FounderMonumentStatueSkin();
         c.skinJson = GSON.toJson(skin);
@@ -65,6 +70,11 @@ public final class FounderMonumentStatueSkin implements Component<EntityStore> {
      */
     @Nullable
     public PlayerSkin tryToProtocol() {
+        return tryParseSkinJson(skinJson);
+    }
+
+    @Nullable
+    public static PlayerSkin tryParseSkinJson(@Nullable String skinJson) {
         if (skinJson == null || skinJson.isEmpty()) {
             return null;
         }

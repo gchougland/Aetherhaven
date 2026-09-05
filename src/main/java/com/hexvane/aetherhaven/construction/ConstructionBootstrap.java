@@ -56,6 +56,8 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.ser
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.event.events.BootEvent;
+import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
 import com.hypixel.hytale.server.core.universe.world.events.StartWorldEvent;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -316,7 +318,7 @@ public final class ConstructionBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new ScaffoldColumnCascadeBreakSystem());
         plugin.getEntityStoreRegistry().registerSystem(new PlayerBlockBreakBonusSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new FounderMonumentPlaceSystem(core));
-        plugin.getEntityStoreRegistry().registerSystem(new FounderMonumentStatueRestoreSystem());
+        plugin.getChunkStoreRegistry().registerSystem(new FounderMonumentStatueRestoreSystem.BlockLoad());
         plugin.getEntityStoreRegistry().registerSystem(new FounderMonumentBreakSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new BuildingStaffPreviewPlayerRemoveSystem());
 
@@ -327,6 +329,20 @@ public final class ConstructionBootstrap {
                 event -> {
                     World world = event.getWorld();
                     world.execute(() -> AssemblyMarkerSpawner.purgeAllInWorld(world));
+                }
+            );
+        plugin
+            .getEventRegistry()
+            .registerGlobal(BootEvent.class, event -> FounderMonumentStatueRestoreSystem.restorePendingAfterBoot());
+        plugin
+            .getEventRegistry()
+            .registerGlobal(
+                PlayerReadyEvent.class,
+                event -> {
+                    if (event.getPlayer() == null || event.getPlayer().getWorld() == null) {
+                        return;
+                    }
+                    FounderMonumentStatueRestoreSystem.scanLoadedPedestals(event.getPlayer().getWorld());
                 }
             );
     }

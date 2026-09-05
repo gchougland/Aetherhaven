@@ -1,14 +1,24 @@
 package com.hexvane.aetherhaven.monument;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.cosmetics.PlayerSkinModelExporter;
+import com.hexvane.aetherhaven.plot.FounderMonumentBlock;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
 import com.hypixel.hytale.server.core.asset.type.model.config.ModelAttachment;
+import com.hypixel.hytale.component.AddReason;
+import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.math.shape.Box;
 import com.hypixel.hytale.logger.HytaleLogger;
 import org.joml.Vector3d;
+import org.joml.Vector3i;
 import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.protocol.PlayerSkin;
 import com.hypixel.hytale.server.core.Message;
@@ -16,13 +26,18 @@ import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.cosmetics.CosmeticsModule;
 import com.hypixel.hytale.server.core.entity.Frozen;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.modules.entity.component.ActiveAnimationComponent;
+import com.hypixel.hytale.server.core.modules.entity.component.BoundingBox;
+import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.Invulnerable;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentDisplayName;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.npc.NPCPlugin;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
@@ -30,10 +45,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Spawns a frozen NPC whose mesh matches the placer's cosmetics. {@link CosmeticsModule#createModel(PlayerSkin)} only
- * validates the skin and loads the base {@code Player} asset — it does not attach clothing; {@link PlayerSkinModelExporter}
- * resolves the full attachment list from the registry. Stone is applied with textures matching each source texture's
- * native canvas dimensions; one shared attachment texture corrupts pixel-space UV sampling in the entity atlas.
+ * Spawns a frozen decorative statue whose mesh matches the placer's cosmetics. Not an NPC, so boot never rebuilds
+ * an Elder role for it. {@link CosmeticsModule#createModel(PlayerSkin)} only validates the skin and loads the base
+ * {@code Player} asset — it does not attach clothing; {@link PlayerSkinModelExporter} resolves the full attachment
+ * list from the registry. Stone uses only the two packaged statue textures so join never has to send generated
+ * Common files.
  */
 public final class FounderMonumentSpawnService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -41,11 +57,6 @@ public final class FounderMonumentSpawnService {
         "Characters/Body_Attachments/Faces/Player_Face_Detached.blockymodel";
 
     private FounderMonumentSpawnService() {}
-
-    /** Registers all required stone texture canvas sizes before any client builds its initial entity atlas. */
-    public static void prewarmStoneTextures() {
-        FounderMonumentStoneTextures.prewarm();
-    }
 
     /**
      * {@link com.hypixel.hytale.server.core.asset.type.model.config.Model.ModelReference#toModel()} requires a positive scale;
@@ -65,15 +76,29 @@ public final class FounderMonumentSpawnService {
         return asset != null ? toStaticModel(Model.createScaledModel(asset, 1.0f, null, null, true)) : null;
     }
 
+    /**
+     * Saved model id must stay {@code Player}. Persisting {@code Founder_Monument_Statue} makes the next boot compile
+     * a second player mesh in {@code SetRenderedModel} while the world thread holds the asset read lock, which freezes
+     * {@code Universe.getUniverseReady()}.
+     */
     @Nonnull
     public static PersistentModel toPersistentModel(@Nonnull Model model) {
+        return bootSafePersistentModel(model.getScale());
+    }
+
+    @Nonnull
+    public static PersistentModel bootSafePersistentModel(float scale) {
         return new PersistentModel(
-            new Model.ModelReference(
-                AetherhavenConstants.FOUNDER_MONUMENT_STATUE_MODEL_ID,
-                safePersistScale(model.getScale()),
-                model.getRandomAttachmentIds(),
-                true
-            )
+            new Model.ModelReference("Player", safePersistScale(scale), null, true)
+        );
+    }
+
+    public static boolean isStatuePersistentModel(@Nullable PersistentModel persistentModel) {
+        if (persistentModel == null) {
+            return false;
+        }
+        return AetherhavenConstants.FOUNDER_MONUMENT_STATUE_MODEL_ID.equals(
+            persistentModel.getModelReference().getModelAssetId()
         );
     }
 
@@ -150,7 +175,7 @@ public final class FounderMonumentSpawnService {
             .toArray(ModelAttachment[]::new);
         return buildStoneModel(
             statueAsset,
-            statueAsset.getModel(),
+            AetherhavenConstants.FOUNDER_MONUMENT_STATUE_BODY_MODEL,
             statueAsset.getTexture(),
             withoutIntegratedFace
         );
@@ -168,7 +193,7 @@ public final class FounderMonumentSpawnService {
         try {
             stone = FounderMonumentStoneTextures.prepare(baseTexture, attachments);
         } catch (RuntimeException e) {
-            LOGGER.atWarning().withCause(e).log("Founder monument: failed to prepare dimension-matched stone textures");
+            LOGGER.atWarning().withCause(e).log("Founder monument: failed to prepare packaged stone textures");
             return null;
         }
         Model merged = new Model(
@@ -214,42 +239,94 @@ public final class FounderMonumentSpawnService {
         @Nonnull String displayNameForLabel,
         @Nonnull Rotation3f rotation
     ) {
-        NPCPlugin npc = NPCPlugin.get();
-        if (npc == null) {
-            return null;
-        }
-        int roleIndex = npc.getIndex(AetherhavenConstants.ELDER_NPC_ROLE_ID);
-        if (roleIndex < 0) {
-            LOGGER.atWarning().log("Founder monument: no NPC role %s", AetherhavenConstants.ELDER_NPC_ROLE_ID);
-            return null;
-        }
         Model monumentModel = buildMonumentModel(skin);
         if (monumentModel == null) {
             return null;
         }
-        Vector3d pos = new Vector3d(blockX + 0.5, blockY + 1.05, blockZ + 0.5);
-        var pair = npc.spawnEntity(
+        return spawnFounderStatue(
+            world,
             store,
-            roleIndex,
-            pos,
+            new Vector3d(blockX + 0.5, blockY + 1.05, blockZ + 0.5),
             rotation,
-            monumentModel,
-            (npcEntity, holder, st) -> holder.addComponent(FounderMonumentStatueSkin.getComponentType(), FounderMonumentStatueSkin.fromProtocol(skin)),
-            null
+            skin,
+            displayNameForLabel,
+            monumentModel
         );
-        if (pair == null) {
+    }
+
+    /**
+     * Same spawn as placing a monument. Uses the player's saved clothing when the skin is valid, otherwise the stone
+     * body so a statue still appears.
+     */
+    @Nullable
+    public static UUID spawnStatueLikePlace(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        int blockX,
+        int blockY,
+        int blockZ,
+        @Nullable PlayerSkin skin,
+        @Nonnull String displayNameForLabel,
+        @Nonnull Rotation3f rotation
+    ) {
+        if (skin != null) {
+            UUID clothed =
+                spawnFounderStatue(world, store, blockX, blockY, blockZ, skin, displayNameForLabel, rotation);
+            if (clothed != null) {
+                return clothed;
+            }
+        }
+        Model fallback = buildFallbackModel();
+        if (fallback == null) {
             return null;
         }
-        Ref<EntityStore> ref = pair.first();
-        store.putComponent(ref, ModelComponent.getComponentType(), new ModelComponent(monumentModel));
-        store.putComponent(ref, PersistentModel.getComponentType(), toPersistentModel(monumentModel));
-        store.ensureComponent(ref, Frozen.getComponentType());
-        store.putComponent(ref, Invulnerable.getComponentType(), Invulnerable.INSTANCE);
-        store.putComponent(
-            ref,
+        return spawnFounderStatue(
+            world,
+            store,
+            new Vector3d(blockX + 0.5, blockY + 1.05, blockZ + 0.5),
+            rotation,
+            skin,
+            displayNameForLabel,
+            fallback
+        );
+    }
+
+    /**
+     * Spawns a statue at an exact world position using a model built off the world thread. Saved
+     * {@link PersistentModel} stays {@code Player} so the next boot does not compile a second mesh.
+     */
+    @Nullable
+    public static UUID spawnFounderStatue(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Vector3d pos,
+        @Nonnull Rotation3f rotation,
+        @Nullable PlayerSkin skin,
+        @Nonnull String displayNameForLabel,
+        @Nonnull Model monumentModel
+    ) {
+        FounderMonumentStatueSkin storedSkin =
+            skin != null ? FounderMonumentStatueSkin.fromProtocol(skin) : new FounderMonumentStatueSkin();
+        Holder<EntityStore> holder = EntityStore.REGISTRY.newHolder();
+        holder.addComponent(TransformComponent.getComponentType(), new TransformComponent(pos, rotation));
+        holder.addComponent(HeadRotation.getComponentType(), new HeadRotation(rotation));
+        holder.addComponent(ModelComponent.getComponentType(), new ModelComponent(monumentModel));
+        holder.addComponent(PersistentModel.getComponentType(), toPersistentModel(monumentModel));
+        holder.ensureComponent(ActiveAnimationComponent.getComponentType());
+        holder.addComponent(FounderMonumentStatueSkin.getComponentType(), storedSkin);
+        holder.addComponent(
             PersistentDisplayName.getComponentType(),
             new PersistentDisplayName(Message.raw(displayNameForLabel))
         );
+        holder.addComponent(BoundingBox.getComponentType(), new BoundingBox(Box.horizontallyCentered(0.8, 2.0, 0.8)));
+        holder.addComponent(NetworkId.getComponentType(), new NetworkId(store.getExternalData().takeNextNetworkId()));
+        holder.ensureComponent(Frozen.getComponentType());
+        holder.putComponent(Invulnerable.getComponentType(), Invulnerable.INSTANCE);
+        holder.ensureComponent(UUIDComponent.getComponentType());
+        Ref<EntityStore> ref = store.addEntity(holder, AddReason.SPAWN);
+        if (ref == null || !ref.isValid()) {
+            return null;
+        }
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         return uc != null ? uc.getUuid() : null;
     }
@@ -281,6 +358,130 @@ public final class FounderMonumentSpawnService {
             dynamic.getPhobia(),
             dynamic.getPhobiaModelAssetId()
         );
+    }
+
+    /** Pedestal block under a statue spawned at {@code (block + 0.5, blockY + 1.05, block + 0.5)}. */
+    @Nonnull
+    public static Vector3i pedestalBlockFromStatuePosition(double x, double y, double z) {
+        return new Vector3i((int) Math.floor(x), (int) Math.round(y - 1.05), (int) Math.floor(z));
+    }
+
+    @Nullable
+    public static Ref<ChunkStore> findMonumentBlockNear(@Nonnull World world, double statueX, double statueY, double statueZ) {
+        Vector3i pedestal = pedestalBlockFromStatuePosition(statueX, statueY, statueZ);
+        Ref<ChunkStore> exact = monumentBlockAt(world, pedestal.x, pedestal.y, pedestal.z);
+        if (exact != null) {
+            return exact;
+        }
+        for (int y = pedestal.y - 2; y <= pedestal.y + 1; y++) {
+            if (y == pedestal.y) {
+                continue;
+            }
+            Ref<ChunkStore> blockRef = monumentBlockAt(world, pedestal.x, y, pedestal.z);
+            if (blockRef != null) {
+                return blockRef;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private static Ref<ChunkStore> monumentBlockAt(@Nonnull World world, int x, int y, int z) {
+        Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, x, y, z);
+        if (blockRef == null || !blockRef.isValid()) {
+            return null;
+        }
+        if (blockRef.getStore().getComponent(blockRef, FounderMonumentBlock.getComponentType()) == null) {
+            return null;
+        }
+        return blockRef;
+    }
+
+    public static void persistStatueOnBlock(
+        @Nonnull World world,
+        double statueX,
+        double statueY,
+        double statueZ,
+        @Nullable UUID statueEntityUuid,
+        @Nonnull String skinJson,
+        @Nonnull String label,
+        @Nonnull Rotation3f rotation
+    ) {
+        Ref<ChunkStore> blockRef = findMonumentBlockNear(world, statueX, statueY, statueZ);
+        if (blockRef == null || !blockRef.isValid()) {
+            return;
+        }
+        Store<ChunkStore> cs = blockRef.getStore();
+        FounderMonumentBlock existing = cs.getComponent(blockRef, FounderMonumentBlock.getComponentType());
+        if (existing == null) {
+            return;
+        }
+        String mergedSkin = firstNonBlank(skinJson, existing.getSkinJson());
+        String mergedLabel = firstNonBlank(label, existing.getLabel());
+        Rotation3f mergedRotation =
+            isIdentityRotation(rotation)
+                ? new Rotation3f(existing.getPitch(), existing.getYaw(), existing.getRoll())
+                : rotation;
+        String townId = firstNonBlank(existing.getTownId(), lookupTownId(world, statueX, statueZ));
+        cs.putComponent(
+            blockRef,
+            FounderMonumentBlock.getComponentType(),
+            new FounderMonumentBlock(
+                townId,
+                statueEntityUuid != null ? statueEntityUuid.toString() : existing.getStatueEntityUuid(),
+                mergedSkin,
+                mergedLabel,
+                mergedRotation.pitch(),
+                mergedRotation.yaw(),
+                mergedRotation.roll()
+            )
+        );
+    }
+
+    @Nonnull
+    private static String lookupTownId(@Nonnull World world, double statueX, double statueZ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return "";
+        }
+        TownManager towns = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town =
+            towns.findTownContainingBlock(world.getName(), (int) Math.floor(statueX), (int) Math.floor(statueZ));
+        return town != null ? town.getTownId().toString() : "";
+    }
+
+    static boolean isIdentityRotation(@Nonnull Rotation3f rotation) {
+        return Math.abs(rotation.pitch()) < 0.0001f
+            && Math.abs(rotation.yaw()) < 0.0001f
+            && Math.abs(rotation.roll()) < 0.0001f;
+    }
+
+    @Nonnull
+    static String firstNonBlank(@Nullable String preferred, @Nullable String fallback) {
+        if (preferred != null && !preferred.isBlank()) {
+            return preferred;
+        }
+        return fallback != null ? fallback : "";
+    }
+
+    static void applyStatueFacing(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Rotation3f rotation
+    ) {
+        if (isIdentityRotation(rotation)) {
+            return;
+        }
+        TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
+        if (transform != null) {
+            transform.setRotation(rotation);
+        }
+        HeadRotation head = store.getComponent(ref, HeadRotation.getComponentType());
+        if (head != null) {
+            head.setRotation(rotation);
+        } else {
+            store.putComponent(ref, HeadRotation.getComponentType(), new HeadRotation(rotation));
+        }
     }
 
     /**

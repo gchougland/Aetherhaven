@@ -1,6 +1,6 @@
 {
   "Parent": "Player",
-  "Model": "Characters/Aetherhaven/Founder_Monument_Player_Body.blockymodel",
+  "Model": "Characters/Player.blockymodel",
   "Texture": "Characters/Aetherhaven/Founder_Monument_Stone_Base_256x128.png",
   "DefaultAttachments": [],
   "MinScale": 1,
