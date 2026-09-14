@@ -107,6 +107,39 @@ public final class NpcStandStill {
         VillagerAutonomySystem.clearAutonomySeekState(ref, npc, commandBuffer);
     }
 
+    /** Store path for festival end / relocation (no command buffer). Never touches {@link Frozen}. */
+    public static void release(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull NPCEntity npc,
+        @Nonnull Store<EntityStore> store
+    ) {
+        if (npc.getRole() == null) {
+            return;
+        }
+        StateSupport stateSupport = NpcSupportUtil.stateSupport(store, ref);
+        if (stateSupport == null) {
+            return;
+        }
+        int standStill = stateSupport.getStateHelper().getStateIndex(AetherhavenConstants.NPC_STATE_STAND_STILL);
+        if (standStill >= 0 && stateSupport.inState(standStill)) {
+            stateSupport.setState(ref, "Idle", null, store);
+            npc.playAnimation(ref, AnimationSlot.Action, null, store);
+            npc.playAnimation(ref, AnimationSlot.Emote, null, store);
+            npc.playAnimation(ref, AnimationSlot.Status, null, store);
+            store.putComponent(ref, NPCEntity.getComponentType(), npc);
+            return;
+        }
+        String state = NpcSupportUtil.stateName(store, ref);
+        if (state == null || !state.startsWith(AetherhavenConstants.NPC_STATE_AUTONOMY_POI)) {
+            return;
+        }
+        NpcSupportUtil.setState(ref, "Idle", null, store);
+        npc.playAnimation(ref, AnimationSlot.Action, null, store);
+        npc.playAnimation(ref, AnimationSlot.Emote, null, store);
+        npc.playAnimation(ref, AnimationSlot.Status, null, store);
+        store.putComponent(ref, NPCEntity.getComponentType(), npc);
+    }
+
     /** Clears leftover walk velocity and movement flags after a state change (not a per-tick AI fight). */
     public static void clearResidualMotion(
         @Nonnull Store<EntityStore> store,

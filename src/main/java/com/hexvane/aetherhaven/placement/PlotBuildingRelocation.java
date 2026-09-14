@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.prop.PropPlotTeardown;
 import com.hexvane.aetherhaven.shopspot.ShopSpotPlotRelocation;
 import com.hexvane.aetherhaven.shopspot.ShopSpotRegistry;
+import com.hexvane.aetherhaven.tourist.TouristAutonomySystem;
 import com.hexvane.aetherhaven.tourist.TouristPortalPlotRelocation;
 import com.hexvane.aetherhaven.tourist.TouristPortalRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -17,13 +18,16 @@ import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.villager.AetherhavenNpcTeleport;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.math.vector.Rotation3f;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -180,6 +184,7 @@ public final class PlotBuildingRelocation {
         double tx = town.getCharterX() + 0.5;
         double ty = town.getCharterY() + 0.02;
         double tz = town.getCharterZ() + 0.5;
+        Vector3d charterFeet = new Vector3d(tx, ty, tz);
         LinkedHashSet<UUID> ids = new LinkedHashSet<>();
         town.collectTrackedNpcEntityUuids(ids);
         UUID nil = new UUID(0L, 0L);
@@ -199,10 +204,9 @@ public final class PlotBuildingRelocation {
             if (!footprintContainsBlockColumn(fp, p.x, p.y, p.z)) {
                 continue;
             }
-            p.x = tx;
-            p.y = ty;
-            p.z = tz;
-            store.putComponent(er, TransformComponent.getComponentType(), tc);
+            Rotation3f rot = tc.getRotation() != null ? tc.getRotation() : new Rotation3f(0f, 0f, 0f);
+            AetherhavenNpcTeleport.apply(er, store, Teleport.createExact(charterFeet, rot));
+            TouristAutonomySystem.resetAfterForcedRelocation(er, store, charterFeet);
         }
     }
 

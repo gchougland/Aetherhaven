@@ -12,6 +12,8 @@ import com.hexvane.aetherhaven.festival.wintertide.WintertideSessionIndex;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.tourist.TouristAutonomyState;
+import com.hexvane.aetherhaven.tourist.TouristAutonomySystem;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -32,7 +34,8 @@ import javax.annotation.Nullable;
 /**
  * Nudges villagers who have a spot at the running festival. Interrupting their current activity is all that is needed:
  * {@link VillagerAutonomySystem} sends anyone with a festival spot straight to it on their next idle tick, and stops
- * doing so once the festival is over.
+ * doing so once the festival is over. On end, portal tourists are interrupted the same way so they resume shopping or
+ * leave through their portal instead of keeping a stale festival visit.
  */
 public final class FestivalAttendanceService {
     private FestivalAttendanceService() {}
@@ -72,7 +75,7 @@ public final class FestivalAttendanceService {
         interruptTownVillagers(store, town, kinds);
     }
 
-    /** Interrupts the spot villagers once more so they pick their normal schedule back up. */
+    /** Interrupts spot villagers and portal tourists so they pick normal schedules / leave through the portal. */
     public static void releaseAttendees(
         @Nonnull World world,
         @Nonnull Store<EntityStore> store,
@@ -80,6 +83,40 @@ public final class FestivalAttendanceService {
         @Nonnull TownRecord town
     ) {
         interruptTownVillagers(store, town, null);
+        interruptTownTourists(store, plugin, town);
+    }
+
+    /** Clears stale festival visit state on portal townsfolk after the square swaps back. */
+    private static void interruptTownTourists(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town
+    ) {
+        long now = VillagerAutonomySystem.resolveAutonomyNowMs(store);
+        List<Ref<EntityStore>> targets = new ArrayList<>();
+        Query<EntityStore> query =
+            Query.and(
+                TownVillagerBinding.getComponentType(),
+                TouristAutonomyState.getComponentType(),
+                NPCEntity.getComponentType()
+            );
+        store.forEachChunk(query, (chunk, commandBuffer) -> {
+            for (int i = 0; i < chunk.size(); i++) {
+                TownVillagerBinding binding = chunk.getComponent(i, TownVillagerBinding.getComponentType());
+                if (binding == null || !town.getTownId().equals(binding.getTownId())) {
+                    continue;
+                }
+                Ref<EntityStore> ref = chunk.getReferenceTo(i);
+                if (ref != null && ref.isValid()) {
+                    targets.add(ref);
+                }
+            }
+        });
+        for (Ref<EntityStore> ref : targets) {
+            if (ref.isValid()) {
+                TouristAutonomySystem.resetAutonomyAfterFestival(ref, store, plugin, town, now);
+            }
+        }
     }
 
     private static void interruptTownVillagers(

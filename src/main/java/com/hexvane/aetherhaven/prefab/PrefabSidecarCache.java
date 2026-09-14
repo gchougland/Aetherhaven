@@ -30,10 +30,12 @@ public final class PrefabSidecarCache {
             return;
         }
         try {
-            if (Files.deleteIfExists(lpf)) {
+            if (lpf.getFileSystem().isReadOnly()) {
+                LOGGER.atFine().log("Skipping prefab LPF delete on read-only filesystem %s", lpf);
+            } else if (Files.deleteIfExists(lpf)) {
                 LOGGER.atFine().log("Removed stale prefab LPF cache %s", lpf);
             }
-        } catch (IOException e) {
+        } catch (IOException | UnsupportedOperationException e) {
             LOGGER.atWarning().log("Could not delete prefab LPF cache %s: %s", lpf, e.getMessage());
         }
         PrefabBufferUtil.removeCached(lpf);

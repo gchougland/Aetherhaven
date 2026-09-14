@@ -15,6 +15,7 @@ import com.hexvane.aetherhaven.autonomy.pathnav.PathNavTravelWaypoints;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.npc.NpcAnimationPlayback;
 import com.hexvane.aetherhaven.npc.NpcFaceVisuals;
+import com.hexvane.aetherhaven.npc.NpcStandStill;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiOccupancy;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
@@ -594,6 +595,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         if (portal == null) {
             return false;
         }
+        NpcStandStill.release(ref, npc, store);
         Vector3i blockPos = portal.getBlockPosition();
         Vector3d feet = TouristPortalBlockUtil.returnStandPosition(world, blockPos);
         autonomy.clearVisitPlot();
@@ -605,6 +607,107 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
     public static boolean isReturningHome(@Nonnull TouristAutonomyState autonomy) {
         return autonomy.getPhase() == TouristAutonomyState.PHASE_RETURNING
             || AetherhavenConstants.isTouristPortalReturnPoi(autonomy.getTargetPoiUuid());
+    }
+
+    /**
+     * After a festival ends: drop festival visit/travel and StandStill so portal tourists resume shopping or walk
+     * home through their portal when leave is due. Skips tourists already returning home.
+     */
+    public static void resetAutonomyAfterFestival(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        long nowMs
+    ) {
+        NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
+        if (npc == null) {
+            return;
+        }
+        TouristAutonomyState autonomy = store.getComponent(ref, TouristAutonomyState.getComponentType());
+        if (autonomy == null) {
+            return;
+        }
+        NpcStandStill.release(ref, npc, store);
+        if (isReturningHome(autonomy)) {
+            return;
+        }
+        TownsfolkCharacterBinding tb = store.getComponent(ref, TownsfolkCharacterBinding.getComponentType());
+        TouristRecord rec = null;
+        if (tb != null && tb.getCharacterId() != null && !tb.getCharacterId().isBlank()) {
+            rec = TouristPortalTickService.findTouristRecord(town, tb.getCharacterId());
+        }
+        if (rec == null) {
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (uc != null) {
+                rec = TouristPortalTickService.findTouristRecord(town, uc.getUuid());
+            }
+        }
+        autonomy.clearVisitPlot();
+        autonomy.clearTravelTarget();
+        autonomy.resetAutonomyStallTracking();
+        autonomy.setPhaseEndEpochMs(0L);
+        autonomy.setTravelStuckTicks(0);
+        World world = store.getExternalData().getWorld();
+        boolean leaveDue =
+            rec != null
+                && !rec.isInvitedToStay()
+                && !rec.isCitizen()
+                && TouristPortalTickService.shouldTouristLeaveNow(rec, store);
+        if (leaveDue && world != null) {
+            UUID portalId = rec.getPortalId();
+            if (portalId != null) {
+                autonomy.setHomePortalId(portalId);
+            }
+            if (beginReturnToPortalOnStore(ref, store, plugin, npc, autonomy, nowMs, town, world)) {
+                store.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+                store.putComponent(ref, NPCEntity.getComponentType(), npc);
+                applyAutonomyRoleStateOnStore(ref, npc, store);
+                return;
+            }
+        }
+        autonomy.setPhase(TouristAutonomyState.PHASE_IDLE);
+        autonomy.setNextDecisionEpochMs(nowMs);
+        autonomy.setNextPoiPickEpochMs(nowMs);
+        store.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+        clearAutonomyRoleStateOnStore(ref, npc, store);
+    }
+
+    /**
+     * After a forced move out of a building footprint (festival prefab swap): clear stale festival visit targets and
+     * StandStill, plant the leash at the new feet, and idle so the next tick re-picks a destination.
+     */
+    public static void resetAfterForcedRelocation(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Vector3d newFeet
+    ) {
+        NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
+        if (npc == null) {
+            return;
+        }
+        TouristAutonomyState autonomy = store.getComponent(ref, TouristAutonomyState.getComponentType());
+        if (autonomy == null) {
+            return;
+        }
+        NpcStandStill.release(ref, npc, store);
+        npc.setLeashPoint(new Vector3d(newFeet));
+        if (isReturningHome(autonomy)) {
+            store.putComponent(ref, NPCEntity.getComponentType(), npc);
+            return;
+        }
+        long nowMs = resolveNowMs(store);
+        autonomy.clearVisitPlot();
+        autonomy.clearTravelTarget();
+        autonomy.resetAutonomyStallTracking();
+        autonomy.setPhase(TouristAutonomyState.PHASE_IDLE);
+        autonomy.setPhaseEndEpochMs(0L);
+        autonomy.setTravelStuckTicks(0);
+        autonomy.setNextDecisionEpochMs(nowMs);
+        autonomy.setNextPoiPickEpochMs(nowMs);
+        store.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+        store.putComponent(ref, NPCEntity.getComponentType(), npc);
+        clearAutonomyRoleStateOnStore(ref, npc, store);
     }
 
     private static boolean isReturningTravel(@Nonnull TouristAutonomyState autonomy) {

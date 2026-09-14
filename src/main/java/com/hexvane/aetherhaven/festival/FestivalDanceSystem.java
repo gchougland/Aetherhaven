@@ -127,9 +127,24 @@ public final class FestivalDanceSystem extends EntityTickingSystem<EntityStore> 
             return;
         }
 
+        TouristAutonomyState touristState = store.getComponent(ref, TouristAutonomyState.getComponentType());
+        boolean returningHome = touristState != null && TouristAutonomySystem.isReturningHome(touristState);
+        World world = store.getExternalData().getWorld();
+        TownRecord town = null;
+        if (world != null && binding.getTownId() != null) {
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            town = tm.getTown(binding.getTownId());
+        }
+        boolean festivalActive = town != null && town.getActiveFestivalId() != null;
+
         DanceHold active = ACTIVE_DANCE.get(entityUuid);
         if (active != null) {
-            if (active.untilMs() > nowMs && !NpcFaceVisuals.isInInteractionDialogue(npc)) {
+            boolean keepHold =
+                festivalActive
+                    && !returningHome
+                    && active.untilMs() > nowMs
+                    && !NpcFaceVisuals.isInInteractionDialogue(npc);
+            if (keepHold) {
                 holdDance(ref, store, commandBuffer, npc, active.emote(), nowMs);
                 return;
             }
@@ -139,6 +154,9 @@ public final class FestivalDanceSystem extends EntityTickingSystem<EntityStore> 
             NpcStandStill.release(ref, npc, commandBuffer);
         }
 
+        if (returningHome) {
+            return;
+        }
         if (NpcFaceVisuals.isInInteractionDialogue(npc)) {
             return;
         }
@@ -160,13 +178,7 @@ public final class FestivalDanceSystem extends EntityTickingSystem<EntityStore> 
         NEXT_CHECK_MS.put(entityUuid, nowMs + CHECK_INTERVAL_MS);
         trimTimingMaps();
 
-        World world = store.getExternalData().getWorld();
-        if (world == null || binding.getTownId() == null) {
-            return;
-        }
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.getTown(binding.getTownId());
-        if (town == null || town.getActiveFestivalId() == null) {
+        if (world == null || town == null || !festivalActive) {
             return;
         }
         PoiEntry stallSpot =
@@ -296,6 +308,9 @@ public final class FestivalDanceSystem extends EntityTickingSystem<EntityStore> 
     ) {
         TouristAutonomyState tourist = store.getComponent(ref, TouristAutonomyState.getComponentType());
         if (tourist != null) {
+            if (TouristAutonomySystem.isReturningHome(tourist)) {
+                return false;
+            }
             UUID visitPlot = tourist.getVisitPlotUuid();
             if (visitPlot == null || !visitPlot.equals(square.getPlotId())) {
                 return false;

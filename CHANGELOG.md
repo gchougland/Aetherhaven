@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.4] - 9/7/2026
+
+### Fixed
+
+- **Snowball festival visitors** After the snowball festival ends, townsfolk visitors go back to shopping and leave through the portal at night instead of hanging around the square.
+- **Server startup** The server starts even when the Aetherhaven mod file cannot be written to.
+
 ## [3.1.3] - 9/5/2026
 
 ### Added
