@@ -1,87 +1,77 @@
 {
   "audio": "BrightFemale_Work_2.ogg",
-  "audioSha256": "2932b09a1b9936634194305d7911bb7bd8e094bc5dffd70e2c8934bdedc5f151",
-  "durationMs": 2178,
+  "audioSha256": "ab4d7ea731832b8aadbbd6144dd8f2d7940f986a426759b605536d0abb91bfbc",
+  "durationMs": 2924,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.01,
+      "end": 0.11,
       "value": "X"
     },
     {
-      "start": 0.01,
-      "end": 0.08,
+      "start": 0.11,
+      "end": 0.76,
       "value": "B"
     },
     {
-      "start": 0.08,
-      "end": 0.15,
-      "value": "C"
-    },
-    {
-      "start": 0.15,
-      "end": 0.29,
-      "value": "B"
-    },
-    {
-      "start": 0.29,
-      "end": 0.44,
-      "value": "A"
-    },
-    {
-      "start": 0.44,
-      "end": 0.52,
-      "value": "C"
-    },
-    {
-      "start": 0.52,
-      "end": 0.6,
-      "value": "A"
-    },
-    {
-      "start": 0.6,
-      "end": 0.7,
-      "value": "B"
-    },
-    {
-      "start": 0.7,
-      "end": 0.84,
+      "start": 0.76,
+      "end": 0.88,
       "value": "X"
     },
     {
-      "start": 0.84,
+      "start": 0.88,
+      "end": 0.97,
+      "value": "B"
+    },
+    {
+      "start": 0.97,
+      "end": 1.04,
+      "value": "C"
+    },
+    {
+      "start": 1.04,
       "end": 1.19,
-      "value": "B"
+      "value": "A"
     },
     {
       "start": 1.19,
       "end": 1.29,
-      "value": "A"
-    },
-    {
-      "start": 1.29,
-      "end": 1.44,
-      "value": "B"
-    },
-    {
-      "start": 1.44,
-      "end": 1.93,
       "value": "C"
     },
     {
-      "start": 1.93,
-      "end": 2.07,
-      "value": "E"
+      "start": 1.29,
+      "end": 1.57,
+      "value": "F"
     },
     {
-      "start": 2.07,
-      "end": 2.14,
+      "start": 1.57,
+      "end": 2.01,
       "value": "B"
     },
     {
-      "start": 2.14,
-      "end": 2.17,
+      "start": 2.01,
+      "end": 2.1,
+      "value": "A"
+    },
+    {
+      "start": 2.1,
+      "end": 2.26,
+      "value": "B"
+    },
+    {
+      "start": 2.26,
+      "end": 2.68,
+      "value": "C"
+    },
+    {
+      "start": 2.68,
+      "end": 2.89,
+      "value": "E"
+    },
+    {
+      "start": 2.89,
+      "end": 2.92,
       "value": "X"
     }
   ]

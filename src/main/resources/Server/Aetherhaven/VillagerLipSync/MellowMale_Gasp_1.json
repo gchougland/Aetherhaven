@@ -1,77 +1,77 @@
 {
   "audio": "MellowMale_Gasp_1.ogg",
-  "audioSha256": "1bc11d94d739082ebb278c575067b44850a550bab5242dabe99f7896ef78e87a",
-  "durationMs": 1979,
+  "audioSha256": "c234f8bc4ce417b8ee7b24c368426330e224e87162661fc09c09b8e14cf2d73e",
+  "durationMs": 2083,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.11,
+      "end": 0.01,
       "value": "X"
     },
     {
-      "start": 0.11,
-      "end": 0.19,
+      "start": 0.01,
+      "end": 0.07,
       "value": "B"
     },
     {
-      "start": 0.19,
-      "end": 0.31,
+      "start": 0.07,
+      "end": 0.23,
       "value": "A"
     },
     {
-      "start": 0.31,
-      "end": 0.38,
+      "start": 0.23,
+      "end": 0.4,
       "value": "C"
     },
     {
-      "start": 0.38,
-      "end": 0.65,
+      "start": 0.4,
+      "end": 0.68,
       "value": "E"
     },
     {
-      "start": 0.65,
-      "end": 0.86,
+      "start": 0.68,
+      "end": 0.89,
       "value": "F"
     },
     {
-      "start": 0.86,
-      "end": 1.18,
+      "start": 0.89,
+      "end": 1.1,
       "value": "B"
     },
     {
-      "start": 1.18,
-      "end": 1.31,
+      "start": 1.1,
+      "end": 1.17,
       "value": "C"
+    },
+    {
+      "start": 1.17,
+      "end": 1.31,
+      "value": "E"
     },
     {
       "start": 1.31,
       "end": 1.38,
-      "value": "E"
-    },
-    {
-      "start": 1.38,
-      "end": 1.45,
       "value": "F"
     },
     {
-      "start": 1.45,
-      "end": 1.56,
+      "start": 1.38,
+      "end": 1.48,
       "value": "A"
     },
     {
-      "start": 1.56,
-      "end": 1.75,
-      "value": "B"
-    },
-    {
-      "start": 1.75,
-      "end": 1.82,
+      "start": 1.48,
+      "end": 1.6,
       "value": "C"
     },
     {
-      "start": 1.82,
-      "end": 1.97,
+      "start": 1.6,
+      "end": 1.88,
+      "value": "B"
+    },
+    {
+      "start": 1.88,
+      "end": 2.08,
       "value": "X"
     }
   ]

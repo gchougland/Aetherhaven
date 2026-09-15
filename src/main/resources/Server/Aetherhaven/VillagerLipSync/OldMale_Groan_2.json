@@ -1,0 +1,98 @@
+{
+  "audio": "OldMale_Groan_2.ogg",
+  "audioSha256": "fcf072901ae7e8c264cd6620c135cc9d8cfe73c586ee648c85dc73f54f6f7945",
+  "durationMs": 2329,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.06,
+      "value": "B"
+    },
+    {
+      "start": 0.06,
+      "end": 0.11,
+      "value": "A"
+    },
+    {
+      "start": 0.11,
+      "end": 0.27,
+      "value": "B"
+    },
+    {
+      "start": 0.27,
+      "end": 0.53,
+      "value": "F"
+    },
+    {
+      "start": 0.53,
+      "end": 0.58,
+      "value": "E"
+    },
+    {
+      "start": 0.58,
+      "end": 0.76,
+      "value": "C"
+    },
+    {
+      "start": 0.76,
+      "end": 0.9,
+      "value": "B"
+    },
+    {
+      "start": 0.9,
+      "end": 1.18,
+      "value": "E"
+    },
+    {
+      "start": 1.18,
+      "end": 1.25,
+      "value": "F"
+    },
+    {
+      "start": 1.25,
+      "end": 1.38,
+      "value": "A"
+    },
+    {
+      "start": 1.38,
+      "end": 1.44,
+      "value": "C"
+    },
+    {
+      "start": 1.44,
+      "end": 1.5,
+      "value": "B"
+    },
+    {
+      "start": 1.5,
+      "end": 1.64,
+      "value": "C"
+    },
+    {
+      "start": 1.64,
+      "end": 1.71,
+      "value": "E"
+    },
+    {
+      "start": 1.71,
+      "end": 2.06,
+      "value": "F"
+    },
+    {
+      "start": 2.06,
+      "end": 2.2,
+      "value": "B"
+    },
+    {
+      "start": 2.2,
+      "end": 2.32,
+      "value": "X"
+    }
+  ]
+}

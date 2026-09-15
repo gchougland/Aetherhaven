@@ -7,7 +7,7 @@ as requested. Goblins use Gravely. Friendly/outgoing traits favor Bright or Warm
 quiet, shy, sleepy and contemplative traits favor Mellow; rough/grumpy traits favor
 Gravely. The cast is authored, not rolled at spawn.
 
-All eight base profiles also accept `Lower` and `Higher` suffixes (two semitones).
+All eleven base profiles also accept `Lower` and `Higher` suffixes (two semitones).
 These reuse the same recordings and animation files, with matched playback rates.
 The plain profiles play at the original pitch. No random pitch jitter is applied.
 
@@ -19,11 +19,11 @@ The plain profiles play at the original pitch. No random pitch jitter is applied
 | Pepper Ashford | BrightFemale |  | chef |
 | Bozo Bleak | GravelyMale |  | clown |
 | Vaelith Prismshade | MellowFemale |  | crystal_keeper |
-| Elder Lyren | MellowMaleLower |  | elder_lyren |
+| Elder Lyren | OldMale |  | elder_lyren |
 | Irienne Mossmark | WarmFemale |  | farmer |
 | Ivy Bloomwell | BrightFemaleHigher |  | florist |
 | Cap'n Clive | GravelyMale |  | furniture_merchant |
-| Lyra Fairhollow | WarmFemaleLower |  | guild_master |
+| Lyra Fairhollow | OldFemale |  | guild_master |
 | Corin Mosscup | BrightMale |  | innkeeper |
 | Seren Fairhollow | WarmFemale |  | logger |
 | Vex Sunderlane | BrightMaleLower |  | merchant |

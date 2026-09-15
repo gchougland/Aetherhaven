@@ -1,6 +1,6 @@
 {
   "formatVersion": 1,
-  "duration": 131,
+  "duration": 120,
   "holdLastKeyframe": false,
   "nodeAnimations": {
     "L-Forearm": {
@@ -57,16 +57,6 @@
         },
         {
           "time": 120,
-          "delta": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0,
-            "w": 1.0
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 131,
           "delta": {
             "x": 0.0,
             "y": 0.0,
@@ -142,16 +132,6 @@
             "w": 1.0
           },
           "interpolationType": "smooth"
-        },
-        {
-          "time": 131,
-          "delta": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0,
-            "w": 1.0
-          },
-          "interpolationType": "smooth"
         }
       ],
       "position": [],
@@ -213,16 +193,6 @@
         },
         {
           "time": 120,
-          "delta": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0,
-            "w": 1.0
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 131,
           "delta": {
             "x": 0.0,
             "y": 0.0,
@@ -298,16 +268,6 @@
             "w": 1.0
           },
           "interpolationType": "smooth"
-        },
-        {
-          "time": 131,
-          "delta": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0,
-            "w": 1.0
-          },
-          "interpolationType": "smooth"
         }
       ],
       "position": [],
@@ -376,16 +336,6 @@
             "w": 1.0
           },
           "interpolationType": "smooth"
-        },
-        {
-          "time": 131,
-          "delta": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0,
-            "w": 1.0
-          },
-          "interpolationType": "smooth"
         }
       ],
       "position": [],
@@ -447,16 +397,6 @@
         },
         {
           "time": 120,
-          "delta": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0,
-            "w": 1.0
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 131,
           "delta": {
             "x": 0.0,
             "y": 0.0,

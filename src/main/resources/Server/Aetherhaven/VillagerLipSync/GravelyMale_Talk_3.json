@@ -1,72 +1,67 @@
 {
   "audio": "GravelyMale_Talk_3.ogg",
-  "audioSha256": "77711b89ed80075f032ea555f6487a55fe9cc3dd96e7e5cf63cfe5579ad02b7c",
-  "durationMs": 1684,
+  "audioSha256": "abc1ad89d66eb494b79ddec3a501dd3fbccbc9b2c8a190ff3be3c0b67317e587",
+  "durationMs": 2284,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.04,
+      "end": 0.01,
       "value": "X"
     },
     {
-      "start": 0.04,
-      "end": 0.12,
-      "value": "B"
-    },
-    {
-      "start": 0.12,
-      "end": 0.22,
-      "value": "A"
-    },
-    {
-      "start": 0.22,
-      "end": 0.38,
-      "value": "B"
-    },
-    {
-      "start": 0.38,
-      "end": 0.45,
-      "value": "C"
-    },
-    {
-      "start": 0.45,
-      "end": 0.52,
-      "value": "B"
-    },
-    {
-      "start": 0.52,
-      "end": 0.66,
-      "value": "C"
-    },
-    {
-      "start": 0.66,
-      "end": 0.74,
-      "value": "A"
-    },
-    {
-      "start": 0.74,
-      "end": 0.91,
-      "value": "C"
-    },
-    {
-      "start": 0.91,
-      "end": 0.95,
+      "start": 0.01,
+      "end": 0.43,
       "value": "E"
     },
     {
-      "start": 0.95,
-      "end": 1.56,
-      "value": "F"
+      "start": 0.43,
+      "end": 0.51,
+      "value": "A"
     },
     {
-      "start": 1.56,
-      "end": 1.63,
+      "start": 0.51,
+      "end": 0.79,
+      "value": "C"
+    },
+    {
+      "start": 0.79,
+      "end": 0.86,
+      "value": "E"
+    },
+    {
+      "start": 0.86,
+      "end": 1.28,
       "value": "B"
     },
     {
-      "start": 1.63,
-      "end": 1.68,
+      "start": 1.28,
+      "end": 1.42,
+      "value": "F"
+    },
+    {
+      "start": 1.42,
+      "end": 1.5,
+      "value": "A"
+    },
+    {
+      "start": 1.5,
+      "end": 1.56,
+      "value": "B"
+    },
+    {
+      "start": 1.56,
+      "end": 2.1,
+      "value": "F"
+    },
+    {
+      "start": 2.1,
+      "end": 2.24,
+      "value": "B"
+    },
+    {
+      "start": 2.24,
+      "end": 2.28,
       "value": "X"
     }
   ]

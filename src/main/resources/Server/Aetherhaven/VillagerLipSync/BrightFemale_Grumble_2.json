@@ -1,62 +1,77 @@
 {
   "audio": "BrightFemale_Grumble_2.ogg",
-  "audioSha256": "f3108bfb7b6170a591cbdaf21803ba7dfbc165f57de6eac9f6c6fd0e51865294",
-  "durationMs": 1993,
+  "audioSha256": "1d110151f94630ac71fe47a77aa5e3c7843a89ac94b7c4d19e6f770450e22bf4",
+  "durationMs": 2571,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.01,
-      "value": "X"
-    },
-    {
-      "start": 0.01,
-      "end": 0.44,
+      "end": 0.32,
       "value": "B"
     },
     {
-      "start": 0.44,
-      "end": 0.58,
+      "start": 0.32,
+      "end": 0.88,
       "value": "F"
     },
     {
-      "start": 0.58,
-      "end": 0.77,
-      "value": "B"
-    },
-    {
-      "start": 0.77,
-      "end": 0.91,
+      "start": 0.88,
+      "end": 1.03,
       "value": "A"
     },
     {
-      "start": 0.91,
-      "end": 1.13,
-      "value": "C"
+      "start": 1.03,
+      "end": 1.27,
+      "value": "B"
     },
     {
-      "start": 1.13,
-      "end": 1.21,
+      "start": 1.27,
+      "end": 1.39,
       "value": "A"
     },
     {
-      "start": 1.21,
-      "end": 1.31,
+      "start": 1.39,
+      "end": 1.6,
+      "value": "D"
+    },
+    {
+      "start": 1.6,
+      "end": 1.67,
+      "value": "F"
+    },
+    {
+      "start": 1.67,
+      "end": 1.81,
       "value": "B"
     },
     {
-      "start": 1.31,
-      "end": 1.52,
+      "start": 1.81,
+      "end": 2.02,
+      "value": "E"
+    },
+    {
+      "start": 2.02,
+      "end": 2.3,
+      "value": "B"
+    },
+    {
+      "start": 2.3,
+      "end": 2.37,
       "value": "C"
     },
     {
-      "start": 1.52,
-      "end": 1.94,
+      "start": 2.37,
+      "end": 2.44,
+      "value": "A"
+    },
+    {
+      "start": 2.44,
+      "end": 2.52,
       "value": "B"
     },
     {
-      "start": 1.94,
-      "end": 1.99,
+      "start": 2.52,
+      "end": 2.57,
       "value": "X"
     }
   ]

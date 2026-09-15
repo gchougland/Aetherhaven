@@ -1,0 +1,78 @@
+{
+  "audio": "OldFemale_Grumble_1.ogg",
+  "audioSha256": "5884d607dce468eb9ef874985f4da7563dcfada8730cc3b4bf2e71038d763761",
+  "durationMs": 2491,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.13,
+      "value": "B"
+    },
+    {
+      "start": 0.13,
+      "end": 0.48,
+      "value": "F"
+    },
+    {
+      "start": 0.48,
+      "end": 0.69,
+      "value": "B"
+    },
+    {
+      "start": 0.69,
+      "end": 0.88,
+      "value": "X"
+    },
+    {
+      "start": 0.88,
+      "end": 0.95,
+      "value": "B"
+    },
+    {
+      "start": 0.95,
+      "end": 1.22,
+      "value": "C"
+    },
+    {
+      "start": 1.22,
+      "end": 1.29,
+      "value": "B"
+    },
+    {
+      "start": 1.29,
+      "end": 1.36,
+      "value": "C"
+    },
+    {
+      "start": 1.36,
+      "end": 1.43,
+      "value": "B"
+    },
+    {
+      "start": 1.43,
+      "end": 1.53,
+      "value": "A"
+    },
+    {
+      "start": 1.53,
+      "end": 1.77,
+      "value": "F"
+    },
+    {
+      "start": 1.77,
+      "end": 2.05,
+      "value": "B"
+    },
+    {
+      "start": 2.05,
+      "end": 2.49,
+      "value": "X"
+    }
+  ]
+}

@@ -1,46 +1,61 @@
 {
   "audio": "BrightMale_Sigh_2.ogg",
-  "audioSha256": "4b2b8cd50bb9aec14c94031f673b2ed8365def25edc963dc5dcb5b0b2b716a25",
-  "durationMs": 2221,
+  "audioSha256": "bf60870155c3d122a42732c87bcfceeeb557d40e2d0e33ef816c420914f82c2f",
+  "durationMs": 2225,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.02,
+      "end": 0.05,
       "value": "X"
     },
     {
-      "start": 0.02,
-      "end": 0.3,
+      "start": 0.05,
+      "end": 0.39,
       "value": "B"
     },
     {
-      "start": 0.3,
-      "end": 0.72,
+      "start": 0.39,
+      "end": 0.67,
       "value": "C"
     },
     {
-      "start": 0.72,
+      "start": 0.67,
       "end": 0.88,
       "value": "X"
     },
     {
       "start": 0.88,
-      "end": 1.53,
+      "end": 1.11,
       "value": "B"
     },
     {
-      "start": 1.53,
-      "end": 2.02,
+      "start": 1.11,
+      "end": 1.19,
+      "value": "A"
+    },
+    {
+      "start": 1.19,
+      "end": 1.35,
+      "value": "B"
+    },
+    {
+      "start": 1.35,
+      "end": 1.49,
       "value": "C"
     },
     {
-      "start": 2.02,
-      "end": 2.16,
+      "start": 1.49,
+      "end": 1.98,
+      "value": "E"
+    },
+    {
+      "start": 1.98,
+      "end": 2.12,
       "value": "B"
     },
     {
-      "start": 2.16,
+      "start": 2.12,
       "end": 2.22,
       "value": "X"
     }

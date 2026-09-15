@@ -1,0 +1,43 @@
+{
+  "audio": "RustyRobot_Gasp_1.ogg",
+  "audioSha256": "4071b264fd5c00984bdf88ed9bb55d29d4e2d87fc73f13b2e172782de1272319",
+  "durationMs": 1001,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.11,
+      "value": "X"
+    },
+    {
+      "start": 0.11,
+      "end": 0.31,
+      "value": "B"
+    },
+    {
+      "start": 0.31,
+      "end": 0.73,
+      "value": "X"
+    },
+    {
+      "start": 0.73,
+      "end": 0.77,
+      "value": "B"
+    },
+    {
+      "start": 0.77,
+      "end": 0.88,
+      "value": "C"
+    },
+    {
+      "start": 0.88,
+      "end": 0.95,
+      "value": "B"
+    },
+    {
+      "start": 0.95,
+      "end": 1.0,
+      "value": "X"
+    }
+  ]
+}

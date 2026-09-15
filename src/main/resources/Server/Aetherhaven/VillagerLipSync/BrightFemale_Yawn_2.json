@@ -1,42 +1,47 @@
 {
   "audio": "BrightFemale_Yawn_2.ogg",
-  "audioSha256": "5b702b30dc20ffa8680c53cc9cb3d5d63b900e245bbcbc6c1026d20679aabe8e",
-  "durationMs": 1539,
+  "audioSha256": "ed1f93743dd8f8cbae04c56e6f2077ab29a52cd31080444d59680883f695b5f2",
+  "durationMs": 1798,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.05,
+      "end": 0.01,
       "value": "X"
     },
     {
-      "start": 0.05,
-      "end": 0.13,
+      "start": 0.01,
+      "end": 0.51,
+      "value": "B"
+    },
+    {
+      "start": 0.51,
+      "end": 0.61,
       "value": "A"
     },
     {
-      "start": 0.13,
-      "end": 0.57,
+      "start": 0.61,
+      "end": 0.94,
       "value": "B"
     },
     {
-      "start": 0.57,
-      "end": 0.85,
-      "value": "C"
+      "start": 0.94,
+      "end": 1.08,
+      "value": "E"
     },
     {
-      "start": 0.85,
-      "end": 0.99,
+      "start": 1.08,
+      "end": 1.22,
       "value": "D"
     },
     {
-      "start": 0.99,
-      "end": 1.48,
+      "start": 1.22,
+      "end": 1.71,
       "value": "B"
     },
     {
-      "start": 1.48,
-      "end": 1.53,
+      "start": 1.71,
+      "end": 1.79,
       "value": "X"
     }
   ]

@@ -1,7 +1,7 @@
 {
   "audio": "WarmMale_Question_2.ogg",
-  "audioSha256": "b135dcbf7e698395f3a6b145d1eee224855248978262359ac9f07180ad1a50b2",
-  "durationMs": 1050,
+  "audioSha256": "4e14e472ada3df881639dc7c019298047b1e94035ab700e6c7b44cf36aa50b96",
+  "durationMs": 1326,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
@@ -16,37 +16,62 @@
     },
     {
       "start": 0.04,
-      "end": 0.21,
+      "end": 0.05,
+      "value": "X"
+    },
+    {
+      "start": 0.05,
+      "end": 0.09,
       "value": "A"
     },
     {
-      "start": 0.21,
-      "end": 0.54,
-      "value": "C"
-    },
-    {
-      "start": 0.54,
-      "end": 0.62,
-      "value": "A"
-    },
-    {
-      "start": 0.62,
-      "end": 0.85,
+      "start": 0.09,
+      "end": 0.24,
       "value": "E"
     },
     {
-      "start": 0.85,
-      "end": 0.92,
-      "value": "F"
-    },
-    {
-      "start": 0.92,
-      "end": 0.99,
+      "start": 0.24,
+      "end": 0.31,
       "value": "B"
     },
     {
-      "start": 0.99,
-      "end": 1.04,
+      "start": 0.31,
+      "end": 0.45,
+      "value": "C"
+    },
+    {
+      "start": 0.45,
+      "end": 0.53,
+      "value": "A"
+    },
+    {
+      "start": 0.53,
+      "end": 0.73,
+      "value": "C"
+    },
+    {
+      "start": 0.73,
+      "end": 0.94,
+      "value": "B"
+    },
+    {
+      "start": 0.94,
+      "end": 1.08,
+      "value": "E"
+    },
+    {
+      "start": 1.08,
+      "end": 1.22,
+      "value": "F"
+    },
+    {
+      "start": 1.22,
+      "end": 1.29,
+      "value": "B"
+    },
+    {
+      "start": 1.29,
+      "end": 1.32,
       "value": "X"
     }
   ]

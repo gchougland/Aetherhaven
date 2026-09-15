@@ -31,10 +31,10 @@ def write(path,data):
     if not path.exists() or path.read_text(encoding='utf-8') != serialized:
         path.write_text(serialized,encoding='utf-8')
 
-def analyze(clip,reanalyze):
-    source=RES/'Common/Sounds/Aetherhaven/Life'/clip['file']
+def analyze(clip,reanalyze,source_root=None,cues_root=None):
+    source=(source_root if source_root is not None else RES/'Common/Sounds/Aetherhaven/Life')/clip['file']
     digest=hashlib.sha256(source.read_bytes()).hexdigest()
-    target=CUES/(source.stem+'.json')
+    target=(cues_root if cues_root is not None else CUES)/(source.stem+'.json')
     if target.exists() and not reanalyze:
         old=json.loads(target.read_text())
         if old.get('audioSha256')==digest:return old

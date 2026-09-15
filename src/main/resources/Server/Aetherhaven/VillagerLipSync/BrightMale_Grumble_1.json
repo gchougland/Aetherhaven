@@ -1,72 +1,77 @@
 {
   "audio": "BrightMale_Grumble_1.ogg",
-  "audioSha256": "cabdfc4b1bfc7d24fba504336ab3eb46fb0301124617d90893184b1584591460",
-  "durationMs": 2607,
+  "audioSha256": "80db26177b52b72b76d18ad94c4b87d12f515812cd45842c37b5399cc1f2b5f0",
+  "durationMs": 2254,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.02,
-      "value": "X"
-    },
-    {
-      "start": 0.02,
-      "end": 0.12,
+      "end": 0.11,
       "value": "B"
     },
     {
-      "start": 0.12,
-      "end": 0.54,
+      "start": 0.11,
+      "end": 0.39,
       "value": "C"
     },
     {
-      "start": 0.54,
-      "end": 0.89,
+      "start": 0.39,
+      "end": 0.92,
       "value": "B"
     },
     {
-      "start": 0.89,
-      "end": 1.02,
-      "value": "X"
+      "start": 0.92,
+      "end": 0.99,
+      "value": "C"
     },
     {
-      "start": 1.02,
+      "start": 0.99,
       "end": 1.08,
-      "value": "B"
+      "value": "D"
     },
     {
       "start": 1.08,
-      "end": 1.21,
+      "end": 1.12,
       "value": "C"
     },
     {
-      "start": 1.21,
-      "end": 1.31,
+      "start": 1.12,
+      "end": 1.22,
       "value": "A"
     },
     {
-      "start": 1.31,
-      "end": 1.74,
-      "value": "F"
+      "start": 1.22,
+      "end": 1.36,
+      "value": "E"
     },
     {
-      "start": 1.74,
-      "end": 1.88,
+      "start": 1.36,
+      "end": 1.64,
       "value": "B"
     },
     {
-      "start": 1.88,
-      "end": 2.37,
+      "start": 1.64,
+      "end": 1.92,
       "value": "F"
     },
     {
-      "start": 2.37,
-      "end": 2.51,
+      "start": 1.92,
+      "end": 2.06,
+      "value": "E"
+    },
+    {
+      "start": 2.06,
+      "end": 2.13,
+      "value": "F"
+    },
+    {
+      "start": 2.13,
+      "end": 2.2,
       "value": "B"
     },
     {
-      "start": 2.51,
-      "end": 2.6,
+      "start": 2.2,
+      "end": 2.25,
       "value": "X"
     }
   ]

@@ -1,0 +1,138 @@
+{
+  "audio": "OldMale_Thinking_2.ogg",
+  "audioSha256": "20bbceb3f2b2ea6643bc82ae8ce5e61abfc57a5667e32a37bc4145fd9b479d42",
+  "durationMs": 4349,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.08,
+      "value": "B"
+    },
+    {
+      "start": 0.08,
+      "end": 0.64,
+      "value": "C"
+    },
+    {
+      "start": 0.64,
+      "end": 0.92,
+      "value": "B"
+    },
+    {
+      "start": 0.92,
+      "end": 1.18,
+      "value": "E"
+    },
+    {
+      "start": 1.18,
+      "end": 1.25,
+      "value": "F"
+    },
+    {
+      "start": 1.25,
+      "end": 1.41,
+      "value": "A"
+    },
+    {
+      "start": 1.41,
+      "end": 1.48,
+      "value": "C"
+    },
+    {
+      "start": 1.48,
+      "end": 1.55,
+      "value": "B"
+    },
+    {
+      "start": 1.55,
+      "end": 1.69,
+      "value": "A"
+    },
+    {
+      "start": 1.69,
+      "end": 1.75,
+      "value": "B"
+    },
+    {
+      "start": 1.75,
+      "end": 1.93,
+      "value": "F"
+    },
+    {
+      "start": 1.93,
+      "end": 1.98,
+      "value": "E"
+    },
+    {
+      "start": 1.98,
+      "end": 2.23,
+      "value": "C"
+    },
+    {
+      "start": 2.23,
+      "end": 2.44,
+      "value": "B"
+    },
+    {
+      "start": 2.44,
+      "end": 2.51,
+      "value": "C"
+    },
+    {
+      "start": 2.51,
+      "end": 2.65,
+      "value": "B"
+    },
+    {
+      "start": 2.65,
+      "end": 2.77,
+      "value": "X"
+    },
+    {
+      "start": 2.77,
+      "end": 2.84,
+      "value": "B"
+    },
+    {
+      "start": 2.84,
+      "end": 2.9,
+      "value": "A"
+    },
+    {
+      "start": 2.9,
+      "end": 3.26,
+      "value": "E"
+    },
+    {
+      "start": 3.26,
+      "end": 3.4,
+      "value": "B"
+    },
+    {
+      "start": 3.4,
+      "end": 3.47,
+      "value": "C"
+    },
+    {
+      "start": 3.47,
+      "end": 3.55,
+      "value": "A"
+    },
+    {
+      "start": 3.55,
+      "end": 4.08,
+      "value": "C"
+    },
+    {
+      "start": 4.08,
+      "end": 4.29,
+      "value": "B"
+    },
+    {
+      "start": 4.29,
+      "end": 4.34,
+      "value": "X"
+    }
+  ]
+}

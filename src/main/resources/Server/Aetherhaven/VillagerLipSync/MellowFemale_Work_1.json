@@ -1,87 +1,67 @@
 {
   "audio": "MellowFemale_Work_1.ogg",
-  "audioSha256": "835603f11bc50f9cc5299d20f409639ad307e825b4a4241dbad846988712d37a",
-  "durationMs": 2325,
+  "audioSha256": "3508f1bb505bc617f6e24ef7079c65b536ad063a92ff851d69f1e8f439e6c0c8",
+  "durationMs": 2341,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.01,
+      "end": 0.02,
       "value": "X"
     },
     {
-      "start": 0.01,
-      "end": 0.06,
+      "start": 0.02,
+      "end": 0.26,
       "value": "B"
     },
     {
-      "start": 0.06,
-      "end": 0.14,
-      "value": "A"
-    },
-    {
-      "start": 0.14,
+      "start": 0.26,
       "end": 0.33,
-      "value": "B"
+      "value": "E"
     },
     {
       "start": 0.33,
-      "end": 0.43,
+      "end": 0.41,
       "value": "A"
     },
     {
-      "start": 0.43,
-      "end": 0.55,
-      "value": "C"
-    },
-    {
-      "start": 0.55,
-      "end": 0.88,
+      "start": 0.41,
+      "end": 0.86,
       "value": "B"
     },
     {
-      "start": 0.88,
-      "end": 0.99,
-      "value": "A"
-    },
-    {
-      "start": 0.99,
+      "start": 0.86,
       "end": 1.11,
-      "value": "D"
+      "value": "C"
     },
     {
       "start": 1.11,
-      "end": 1.67,
+      "end": 1.6,
       "value": "B"
+    },
+    {
+      "start": 1.6,
+      "end": 1.67,
+      "value": "C"
     },
     {
       "start": 1.67,
-      "end": 1.72,
-      "value": "C"
-    },
-    {
-      "start": 1.72,
-      "end": 1.93,
+      "end": 1.88,
       "value": "D"
     },
     {
-      "start": 1.93,
-      "end": 2.0,
-      "value": "B"
-    },
-    {
-      "start": 2.0,
-      "end": 2.21,
+      "start": 1.88,
+      "end": 1.95,
       "value": "C"
     },
     {
-      "start": 2.21,
-      "end": 2.28,
+      "start": 1.95,
+      "end": 2.3,
       "value": "B"
     },
     {
-      "start": 2.28,
-      "end": 2.32,
+      "start": 2.3,
+      "end": 2.34,
       "value": "X"
     }
   ]

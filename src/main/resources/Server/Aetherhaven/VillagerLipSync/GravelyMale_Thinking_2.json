@@ -1,0 +1,113 @@
+{
+  "audio": "GravelyMale_Thinking_2.ogg",
+  "audioSha256": "d00f180a5053f621441e0ac2e9f4bea180959f7b8b93581bf152532965947b88",
+  "durationMs": 3906,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.35,
+      "value": "B"
+    },
+    {
+      "start": 0.35,
+      "end": 0.47,
+      "value": "A"
+    },
+    {
+      "start": 0.47,
+      "end": 0.67,
+      "value": "B"
+    },
+    {
+      "start": 0.67,
+      "end": 1.01,
+      "value": "X"
+    },
+    {
+      "start": 1.01,
+      "end": 1.07,
+      "value": "B"
+    },
+    {
+      "start": 1.07,
+      "end": 1.41,
+      "value": "F"
+    },
+    {
+      "start": 1.41,
+      "end": 1.53,
+      "value": "A"
+    },
+    {
+      "start": 1.53,
+      "end": 1.74,
+      "value": "F"
+    },
+    {
+      "start": 1.74,
+      "end": 1.81,
+      "value": "B"
+    },
+    {
+      "start": 1.81,
+      "end": 1.88,
+      "value": "C"
+    },
+    {
+      "start": 1.88,
+      "end": 1.95,
+      "value": "E"
+    },
+    {
+      "start": 1.95,
+      "end": 2.52,
+      "value": "B"
+    },
+    {
+      "start": 2.52,
+      "end": 2.71,
+      "value": "F"
+    },
+    {
+      "start": 2.71,
+      "end": 2.79,
+      "value": "A"
+    },
+    {
+      "start": 2.79,
+      "end": 2.87,
+      "value": "C"
+    },
+    {
+      "start": 2.87,
+      "end": 3.16,
+      "value": "A"
+    },
+    {
+      "start": 3.16,
+      "end": 3.22,
+      "value": "C"
+    },
+    {
+      "start": 3.22,
+      "end": 3.28,
+      "value": "B"
+    },
+    {
+      "start": 3.28,
+      "end": 3.49,
+      "value": "E"
+    },
+    {
+      "start": 3.49,
+      "end": 3.84,
+      "value": "B"
+    },
+    {
+      "start": 3.84,
+      "end": 3.9,
+      "value": "X"
+    }
+  ]
+}

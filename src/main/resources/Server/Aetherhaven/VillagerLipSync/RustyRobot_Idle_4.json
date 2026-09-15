@@ -1,0 +1,53 @@
+{
+  "audio": "RustyRobot_Idle_4.ogg",
+  "audioSha256": "8f5c3c973c89700f4df8e0cdab0969cc107c24a0e52cb1e5175f144302e2ebc3",
+  "durationMs": 2294,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.06,
+      "value": "B"
+    },
+    {
+      "start": 0.06,
+      "end": 0.72,
+      "value": "A"
+    },
+    {
+      "start": 0.72,
+      "end": 1.03,
+      "value": "B"
+    },
+    {
+      "start": 1.03,
+      "end": 1.24,
+      "value": "F"
+    },
+    {
+      "start": 1.24,
+      "end": 1.8,
+      "value": "B"
+    },
+    {
+      "start": 1.8,
+      "end": 1.94,
+      "value": "X"
+    },
+    {
+      "start": 1.94,
+      "end": 2.28,
+      "value": "B"
+    },
+    {
+      "start": 2.28,
+      "end": 2.29,
+      "value": "X"
+    }
+  ]
+}

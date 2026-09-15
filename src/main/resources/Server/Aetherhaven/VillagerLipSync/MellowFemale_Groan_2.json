@@ -1,7 +1,7 @@
 {
   "audio": "MellowFemale_Groan_2.ogg",
-  "audioSha256": "14ac5fbce95873d55dc3a6523e6f52b5cb9a28baa2ac0287e428adef5a109fd6",
-  "durationMs": 1069,
+  "audioSha256": "d4b6199dc0b392ddbf90cc10953f19d14f1b744215740bac7a9b65dc14a62cc8",
+  "durationMs": 2324,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
@@ -11,32 +11,42 @@
     },
     {
       "start": 0.01,
-      "end": 0.23,
-      "value": "C"
-    },
-    {
-      "start": 0.23,
-      "end": 0.31,
-      "value": "A"
-    },
-    {
-      "start": 0.31,
-      "end": 0.4,
+      "end": 0.59,
       "value": "B"
     },
     {
-      "start": 0.4,
-      "end": 0.61,
-      "value": "C"
+      "start": 0.59,
+      "end": 1.04,
+      "value": "X"
     },
     {
-      "start": 0.61,
-      "end": 1.03,
+      "start": 1.04,
+      "end": 1.1,
       "value": "B"
     },
     {
-      "start": 1.03,
-      "end": 1.06,
+      "start": 1.1,
+      "end": 1.22,
+      "value": "F"
+    },
+    {
+      "start": 1.22,
+      "end": 1.57,
+      "value": "B"
+    },
+    {
+      "start": 1.57,
+      "end": 1.78,
+      "value": "C"
+    },
+    {
+      "start": 1.78,
+      "end": 2.27,
+      "value": "B"
+    },
+    {
+      "start": 2.27,
+      "end": 2.32,
       "value": "X"
     }
   ]

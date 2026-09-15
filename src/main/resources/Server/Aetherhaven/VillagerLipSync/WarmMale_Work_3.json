@@ -1,7 +1,7 @@
 {
   "audio": "WarmMale_Work_3.ogg",
-  "audioSha256": "ef0ff313cbf3dd1e2c0952d6741a83c86ce1744768207803bbebff8ae67a7dbe",
-  "durationMs": 1269,
+  "audioSha256": "d5f7da76f3563a228028b55c786cf903399d15353b64928357c6d7fb4519a9de",
+  "durationMs": 1272,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
@@ -11,57 +11,52 @@
     },
     {
       "start": 0.01,
-      "end": 0.07,
+      "end": 0.11,
       "value": "B"
     },
     {
-      "start": 0.07,
-      "end": 0.12,
+      "start": 0.11,
+      "end": 0.18,
       "value": "C"
     },
     {
-      "start": 0.12,
-      "end": 0.2,
+      "start": 0.18,
+      "end": 0.44,
       "value": "A"
     },
     {
-      "start": 0.2,
-      "end": 0.46,
-      "value": "C"
-    },
-    {
-      "start": 0.46,
+      "start": 0.44,
       "end": 0.51,
       "value": "B"
     },
     {
       "start": 0.51,
-      "end": 0.7,
+      "end": 0.64,
       "value": "C"
     },
     {
-      "start": 0.7,
-      "end": 0.78,
+      "start": 0.64,
+      "end": 0.72,
       "value": "A"
     },
     {
-      "start": 0.78,
-      "end": 0.93,
+      "start": 0.72,
+      "end": 0.95,
       "value": "C"
     },
     {
-      "start": 0.93,
-      "end": 1.0,
+      "start": 0.95,
+      "end": 1.02,
       "value": "E"
     },
     {
-      "start": 1.0,
-      "end": 1.21,
+      "start": 1.02,
+      "end": 1.16,
       "value": "B"
     },
     {
-      "start": 1.21,
-      "end": 1.26,
+      "start": 1.16,
+      "end": 1.27,
       "value": "X"
     }
   ]

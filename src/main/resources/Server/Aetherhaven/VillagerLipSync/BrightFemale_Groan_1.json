@@ -1,67 +1,77 @@
 {
   "audio": "BrightFemale_Groan_1.ogg",
-  "audioSha256": "8a4d4942d90c510a3ed337b0f8177b44c077e94e21b1b2e618f24bafa15d1959",
-  "durationMs": 2978,
+  "audioSha256": "289ff4fe6ccf7b3c2f7e4520f70628687429cfc7306c597c0a64f51f7d06be28",
+  "durationMs": 2684,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.02,
-      "value": "X"
-    },
-    {
-      "start": 0.02,
-      "end": 1.03,
+      "end": 0.05,
       "value": "B"
     },
     {
-      "start": 1.03,
-      "end": 1.48,
-      "value": "A"
-    },
-    {
-      "start": 1.48,
-      "end": 1.56,
-      "value": "B"
-    },
-    {
-      "start": 1.56,
-      "end": 1.64,
-      "value": "A"
-    },
-    {
-      "start": 1.64,
-      "end": 1.86,
-      "value": "C"
-    },
-    {
-      "start": 1.86,
-      "end": 1.94,
-      "value": "A"
-    },
-    {
-      "start": 1.94,
-      "end": 2.37,
-      "value": "F"
-    },
-    {
-      "start": 2.37,
-      "end": 2.58,
+      "start": 0.05,
+      "end": 0.24,
       "value": "E"
     },
     {
-      "start": 2.58,
-      "end": 2.79,
+      "start": 0.24,
+      "end": 0.38,
       "value": "F"
     },
     {
-      "start": 2.79,
-      "end": 2.88,
+      "start": 0.38,
+      "end": 0.66,
+      "value": "B"
+    },
+    {
+      "start": 0.66,
+      "end": 0.78,
       "value": "A"
     },
     {
-      "start": 2.88,
-      "end": 2.97,
+      "start": 0.78,
+      "end": 1.07,
+      "value": "B"
+    },
+    {
+      "start": 1.07,
+      "end": 1.27,
+      "value": "A"
+    },
+    {
+      "start": 1.27,
+      "end": 1.52,
+      "value": "C"
+    },
+    {
+      "start": 1.52,
+      "end": 1.63,
+      "value": "A"
+    },
+    {
+      "start": 1.63,
+      "end": 2.11,
+      "value": "B"
+    },
+    {
+      "start": 2.11,
+      "end": 2.32,
+      "value": "E"
+    },
+    {
+      "start": 2.32,
+      "end": 2.46,
+      "value": "F"
+    },
+    {
+      "start": 2.46,
+      "end": 2.6,
+      "value": "B"
+    },
+    {
+      "start": 2.6,
+      "end": 2.68,
       "value": "X"
     }
   ]

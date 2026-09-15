@@ -1,0 +1,53 @@
+{
+  "audio": "OldFemale_Laugh_1.ogg",
+  "audioSha256": "c4527808fa561848d03b5bef580f3327e3275dcde2bff95b5e16624a41256a9a",
+  "durationMs": 2246,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.8,
+      "value": "B"
+    },
+    {
+      "start": 0.8,
+      "end": 0.87,
+      "value": "C"
+    },
+    {
+      "start": 0.87,
+      "end": 1.01,
+      "value": "D"
+    },
+    {
+      "start": 1.01,
+      "end": 1.15,
+      "value": "F"
+    },
+    {
+      "start": 1.15,
+      "end": 1.23,
+      "value": "A"
+    },
+    {
+      "start": 1.23,
+      "end": 1.65,
+      "value": "C"
+    },
+    {
+      "start": 1.65,
+      "end": 1.93,
+      "value": "B"
+    },
+    {
+      "start": 1.93,
+      "end": 2.24,
+      "value": "X"
+    }
+  ]
+}

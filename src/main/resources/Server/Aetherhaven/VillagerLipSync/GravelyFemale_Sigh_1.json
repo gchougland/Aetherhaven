@@ -1,62 +1,47 @@
 {
   "audio": "GravelyFemale_Sigh_1.ogg",
-  "audioSha256": "a8d0d7ceafae1d0ba8ab04b369391fb5784478c2832be0e7cee426105fc3d7db",
-  "durationMs": 2601,
+  "audioSha256": "2e73149b258dad9bc6abc87201a3dd43d155d2b9bf11139a5dbc98a95de2d6c6",
+  "durationMs": 1981,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.01,
+      "end": 0.04,
       "value": "X"
     },
     {
-      "start": 0.01,
-      "end": 0.43,
-      "value": "A"
-    },
-    {
-      "start": 0.43,
-      "end": 0.59,
+      "start": 0.04,
+      "end": 0.1,
       "value": "B"
     },
     {
-      "start": 0.59,
-      "end": 0.79,
-      "value": "A"
-    },
-    {
-      "start": 0.79,
-      "end": 0.91,
-      "value": "D"
-    },
-    {
-      "start": 0.91,
-      "end": 1.33,
-      "value": "B"
-    },
-    {
-      "start": 1.33,
-      "end": 1.47,
+      "start": 0.1,
+      "end": 0.44,
       "value": "C"
     },
     {
-      "start": 1.47,
-      "end": 1.54,
+      "start": 0.44,
+      "end": 0.77,
+      "value": "A"
+    },
+    {
+      "start": 0.77,
+      "end": 1.03,
       "value": "E"
     },
     {
-      "start": 1.54,
-      "end": 1.68,
+      "start": 1.03,
+      "end": 1.45,
       "value": "C"
     },
     {
-      "start": 1.68,
-      "end": 1.89,
+      "start": 1.45,
+      "end": 1.8,
       "value": "B"
     },
     {
-      "start": 1.89,
-      "end": 2.6,
+      "start": 1.8,
+      "end": 1.98,
       "value": "X"
     }
   ]

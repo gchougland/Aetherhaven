@@ -1,0 +1,68 @@
+{
+  "audio": "OldMale_Idle_4.ogg",
+  "audioSha256": "134a5448622e2cefc73acfec7cb5d3a472a6f7e2fbbf8583dec71249abe6c287",
+  "durationMs": 2333,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.02,
+      "value": "X"
+    },
+    {
+      "start": 0.02,
+      "end": 0.18,
+      "value": "B"
+    },
+    {
+      "start": 0.18,
+      "end": 0.39,
+      "value": "C"
+    },
+    {
+      "start": 0.39,
+      "end": 0.94,
+      "value": "B"
+    },
+    {
+      "start": 0.94,
+      "end": 1.0,
+      "value": "E"
+    },
+    {
+      "start": 1.0,
+      "end": 1.14,
+      "value": "F"
+    },
+    {
+      "start": 1.14,
+      "end": 1.27,
+      "value": "A"
+    },
+    {
+      "start": 1.27,
+      "end": 1.37,
+      "value": "C"
+    },
+    {
+      "start": 1.37,
+      "end": 1.44,
+      "value": "E"
+    },
+    {
+      "start": 1.44,
+      "end": 2.07,
+      "value": "F"
+    },
+    {
+      "start": 2.07,
+      "end": 2.21,
+      "value": "B"
+    },
+    {
+      "start": 2.21,
+      "end": 2.33,
+      "value": "X"
+    }
+  ]
+}

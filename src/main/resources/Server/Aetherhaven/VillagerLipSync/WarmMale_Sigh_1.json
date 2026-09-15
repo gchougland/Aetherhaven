@@ -1,7 +1,7 @@
 {
   "audio": "WarmMale_Sigh_1.ogg",
-  "audioSha256": "ba97e391d3ead977a100942d2531ffe50dc2af2db6cb65532f2627c825c59829",
-  "durationMs": 1925,
+  "audioSha256": "7b3d7e3415b5994ea21de2d9c04b4f80cb0ef6d4257fe2b64d424c797b087380",
+  "durationMs": 1698,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
@@ -11,18 +11,18 @@
     },
     {
       "start": 0.01,
-      "end": 0.04,
+      "end": 0.06,
       "value": "B"
     },
     {
-      "start": 0.04,
-      "end": 0.12,
-      "value": "A"
+      "start": 0.06,
+      "end": 0.32,
+      "value": "F"
     },
     {
-      "start": 0.12,
+      "start": 0.32,
       "end": 0.58,
-      "value": "C"
+      "value": "A"
     },
     {
       "start": 0.58,
@@ -31,47 +31,42 @@
     },
     {
       "start": 0.72,
-      "end": 0.86,
-      "value": "A"
-    },
-    {
-      "start": 0.86,
-      "end": 1.0,
+      "end": 0.93,
       "value": "E"
     },
     {
-      "start": 1.0,
-      "end": 1.07,
-      "value": "F"
-    },
-    {
-      "start": 1.07,
-      "end": 1.15,
+      "start": 0.93,
+      "end": 1.01,
       "value": "A"
     },
     {
-      "start": 1.15,
-      "end": 1.36,
-      "value": "B"
+      "start": 1.01,
+      "end": 1.2,
+      "value": "F"
     },
     {
-      "start": 1.36,
-      "end": 1.64,
+      "start": 1.2,
+      "end": 1.34,
       "value": "D"
     },
     {
-      "start": 1.64,
-      "end": 1.71,
+      "start": 1.34,
+      "end": 1.41,
       "value": "C"
     },
     {
-      "start": 1.71,
-      "end": 1.85,
+      "start": 1.41,
+      "end": 1.49,
+      "value": "A"
+    },
+    {
+      "start": 1.49,
+      "end": 1.64,
       "value": "B"
     },
     {
-      "start": 1.85,
-      "end": 1.92,
+      "start": 1.64,
+      "end": 1.69,
       "value": "X"
     }
   ]

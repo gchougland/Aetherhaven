@@ -1,0 +1,38 @@
+{
+  "audio": "OldFemale_Yawn_1.ogg",
+  "audioSha256": "83eed64aa7794777b0fcedc9cc710902040820b8e450d387777a565496daf68b",
+  "durationMs": 2043,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.08,
+      "value": "X"
+    },
+    {
+      "start": 0.08,
+      "end": 0.4,
+      "value": "B"
+    },
+    {
+      "start": 0.4,
+      "end": 0.48,
+      "value": "A"
+    },
+    {
+      "start": 0.48,
+      "end": 1.44,
+      "value": "C"
+    },
+    {
+      "start": 1.44,
+      "end": 1.65,
+      "value": "B"
+    },
+    {
+      "start": 1.65,
+      "end": 2.04,
+      "value": "X"
+    }
+  ]
+}

@@ -1,245 +1,926 @@
 {
-  "All_Gasp_1.mp3": [
-    2.33,
-    4.005,
-    6.19,
-    7.755,
-    10.17,
-    12.21,
-    14.245
-  ],
-  "All_Gasp_2.mp3": [
-    2.675,
-    4.8,
-    7.09,
-    9.09,
-    11.325,
-    13.605,
-    16.095
-  ],
-  "All_Groan_1.mp3": [
-    3.315,
-    7.375,
-    10.275,
-    13.47,
-    16.185,
-    18.865,
-    22.07
-  ],
-  "All_Groan_2.mp3": [
-    2.765,
-    5.88,
-    7.935,
-    9.61,
-    11.17,
-    12.725,
-    14.57
-  ],
-  "All_Grumble_1.mp3": [
-    2.83,
-    5.59,
-    8.195,
-    10.59,
-    12.705,
-    14.795,
-    17.595
-  ],
-  "All_Grumble_2.mp3": [
-    2.115,
-    4.155,
-    6.155,
-    7.94,
-    9.76,
-    11.495,
-    13.635
-  ],
-  "All_Laugh_1.mp3": [
-    2.075,
-    4.215,
-    6.45,
-    8.34,
-    10.57,
-    12.925,
-    15.415
-  ],
-  "All_Laugh_2.mp3": [
-    2.425,
-    4.605,
-    6.925,
-    8.92,
-    10.91,
-    12.855,
-    15.255
-  ],
-  "All_Question_1.mp3": [
-    1.46,
-    2.745,
-    3.945,
-    5.12,
-    6.42,
-    7.625,
-    9.245
-  ],
-  "All_Question_2.mp3": [
-    1.635,
-    2.935,
-    4.255,
-    5.37,
-    6.68,
-    7.875,
-    9.32
-  ],
-  "All_Sigh_1.mp3": [
-    2.13,
-    4.825,
-    7.455,
-    9.78,
-    11.945,
-    14.0,
-    16.57
-  ],
-  "All_Sigh_2.mp3": [
-    2.545,
-    5.13,
-    7.705,
-    9.99,
-    12.345,
-    14.525,
-    17.23
-  ],
-  "All_Stomach.mp3": [
-    1.72,
-    3.21,
-    4.94,
-    6.5,
-    8.735,
-    10.36,
-    12.735
-  ],
-  "All_Talk_1.mp3": [
-    1.605,
-    3.01,
-    4.585,
-    5.89,
-    7.315,
-    8.84,
-    10.32
-  ],
-  "All_Talk_2.mp3": [
-    2.0,
-    3.77,
-    5.53,
-    7.05,
-    8.69,
-    10.31,
-    12.19
-  ],
-  "All_Talk_3.mp3": [
-    1.615,
-    3.095,
-    4.665,
-    6.33,
-    8.05,
-    9.295,
-    10.985
-  ],
-  "All_Yawn_1.mp3": [
-    2.01,
-    4.8,
-    7.48,
-    10.175,
-    12.83,
-    15.4,
-    18.525
-  ],
-  "All_Yawn_2.mp3": [
-    1.66,
-    4.5,
-    7.515,
-    10.71,
-    13.395,
-    15.88,
-    18.785
-  ],
-  "All_Idle_1.mp3": [
-    2.63,
-    5.02,
-    7.53,
-    9.7,
-    12.12,
-    14.2,
-    16.85
-  ],
-  "All_Idle_2.mp3": [
-    2.0,
-    4.02,
-    6.09,
-    7.91,
-    9.64,
-    11.075,
-    13.0
-  ],
-  "All_Idle_3.mp3": [
-    3.63,
-    6.88,
-    9.19,
-    11.31,
-    13.74,
-    15.95,
-    18.46
-  ],
-  "All_Idle_4.mp3": [
-    2.81,
-    5.58,
-    8.14,
-    10.42,
-    12.59,
-    14.76,
-    17.38
-  ],
-  "All_Work_1.mp3": [
-    3.24,
-    6.01,
-    8.83,
-    11.39,
-    14.03,
-    16.58,
-    19.46
-  ],
-  "All_Work_2.mp3": [
-    2.36,
-    4.68,
-    7.4,
-    9.69,
-    12.45,
-    14.71,
-    17.86
-  ],
-  "All_Work_3.mp3": [
-    1.7,
-    3.68,
-    6.43,
-    8.0,
-    9.71,
-    11.5,
-    13.48
-  ],
-  "All_Work_4.mp3": [
-    1.93,
-    3.57,
-    5.81,
-    8.01,
-    10.1,
-    12.05,
-    14.815
-  ],
-  "All_Thinking.mp3": [
-    1.63,
-    3.41,
-    4.72,
-    6.1,
-    7.38,
-    8.87,
-    10.28
-  ]
+  "Humans_Stomach_1.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      1.8325,
+      4.1625,
+      6.0275,
+      7.665,
+      9.245,
+      10.83,
+      12.385,
+      13.905,
+      15.335
+    ],
+    "sourceSha256": "e3384c6d1db3251ad76baf86103b350cd7b9e676bae347793d86aa259a3d6683"
+  },
+  "Humans_Groan_1.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      2.835,
+      6.4025,
+      9.4,
+      12.025,
+      13.37,
+      14.825,
+      17.1575,
+      18.8075,
+      22.0975
+    ],
+    "sourceSha256": "a9a3f64c5c5e057ee3379ce8d5f0d615960026564e1ca38340de7130511c541a"
+  },
+  "Humans_Groan_2.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      2.3075,
+      4.8425,
+      7.38,
+      8.875,
+      11.3275,
+      13.195,
+      14.9,
+      16.4125,
+      19.05
+    ],
+    "sourceSha256": "b5860da8a7ef87dcc69303660854393dee1574834a1eb611bf413983aacffaa1"
+  },
+  "Humans_Laugh_1.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      2.3,
+      4.38,
+      6.6775,
+      8.46,
+      10.12,
+      11.775,
+      13.83,
+      16.0475,
+      18.3575
+    ],
+    "sourceSha256": "cde09d9644aed153c848af1497e8267f7fb6f5d2ad6a9a72248314c7e30694e2"
+  },
+  "Humans_Laugh_2.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      1.9725,
+      4.16,
+      6.3875,
+      8.52,
+      10.2575,
+      12.2625,
+      14.4125,
+      16.55,
+      18.9625
+    ],
+    "sourceSha256": "09cd5bbb59a5cd99f598c6a9702335790ea80d3d560d372a3eb8f909a645c423"
+  },
+  "Humans_Question_1.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      1.595,
+      2.755,
+      4.795,
+      6.545,
+      8.0375,
+      9.59,
+      11.2025,
+      12.7925,
+      15.2775
+    ],
+    "sourceSha256": "2034396f0b58317e78c74a213da8a9dd9d1ea11e7c98544076a5fd8debed68ac"
+  },
+  "Humans_Question_2.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      2.09,
+      4.14,
+      6.2275,
+      7.975,
+      9.975,
+      11.775,
+      13.755,
+      15.98,
+      18.51
+    ],
+    "sourceSha256": "2b0cc9fd7b52a6c9af0da479a57988fef5dcac6437bcfef439643da86b379020"
+  },
+  "Humans_Sigh_1.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      2.1275,
+      4.34,
+      6.67,
+      8.7025,
+      10.8875,
+      12.665,
+      15.04,
+      17.185,
+      19.75
+    ],
+    "sourceSha256": "2e96ae40626ea9cad8808bbb878518af4dfb0144df26df454d2a8703fd1dc187"
+  },
+  "Humans_Sigh_2.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      2.21,
+      4.88,
+      7.63,
+      10.1,
+      12.44,
+      14.7975,
+      17.53,
+      20.295,
+      24.26
+    ],
+    "sourceSha256": "6ae400cf7567695b9146bac429122fd29ed4f185aaae2ee15c43cf5a7c9558ba"
+  },
+  "Humans_Talk_1.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      1.6425,
+      2.9475,
+      4.53,
+      5.81,
+      7.8275,
+      9.7275,
+      11.7025,
+      13.8425,
+      16.2025
+    ],
+    "sourceSha256": "f7713abfa9456b9a2db1b7901ae341943b71093720017a63c5ab385774b91071"
+  },
+  "Humans_Talk_2.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      2.085,
+      3.8075,
+      5.5825,
+      6.8475,
+      8.45,
+      10.0675,
+      11.9925,
+      14.2675,
+      17.2375
+    ],
+    "sourceSha256": "9d3e5a7b664fad14ddcad008b3131db987bc1f975e7781e4b76a7d4a3277c121"
+  },
+  "Humans_Talk_3.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      1.5675,
+      2.9675,
+      4.95,
+      6.6725,
+      8.555,
+      10.4225,
+      12.7425,
+      15.18,
+      18.765
+    ],
+    "sourceSha256": "fbcea7e8df31d93bb5defbd2b623f730e1940fdc0ca1d33178dcb568a2a5807c"
+  },
+  "Humans_Yawn_1.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      2.6825,
+      5.78,
+      8.2725,
+      10.755,
+      12.245,
+      14.52,
+      17.1175,
+      19.7425,
+      22.5675
+    ],
+    "sourceSha256": "373df72f1d5966e6a6ad52e22f0b66d35ab7f73209cea879ff8c8d8a0c034332"
+  },
+  "Humans_Yawn_2.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      2.04,
+      4.805,
+      6.9825,
+      9.06,
+      11.14,
+      12.995,
+      15.3,
+      17.59,
+      19.875
+    ],
+    "sourceSha256": "250489dc840c3179eb53e733174b782037e79e0fde9b65a47cdca7d718ba36a5"
+  },
+  "Humans_Gasp_1.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      2.1375,
+      4.325,
+      6.6075,
+      8.6375,
+      10.72,
+      13.115,
+      15.2875,
+      17.63,
+      20.12
+    ],
+    "sourceSha256": "d7eac3f0e337ed912ed9686397d02cc642637096357c3f8a74fc438efa0afcc9"
+  },
+  "Humans_Gasp_2.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      2.195,
+      4.315,
+      6.67,
+      8.6925,
+      11.1275,
+      13.335,
+      15.6475,
+      17.9375,
+      20.795
+    ],
+    "sourceSha256": "735b1a17d7305a900f4aa8ff81d55129ace0591a260e47869eea23be94c3fb33"
+  },
+  "Humans_Grumble_1.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      2.5875,
+      5.0825,
+      7.355,
+      9.6475,
+      11.975,
+      14.2825,
+      17.25,
+      19.855,
+      22.5825
+    ],
+    "sourceSha256": "434fd4682d2958b141acc33e321e3937e711709a3d8108739c20e2d8216eeece"
+  },
+  "Humans_Grumble_2.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      2.675,
+      5.0375,
+      7.385,
+      9.2925,
+      11.2075,
+      13.29,
+      15.6975,
+      18.02,
+      20.61
+    ],
+    "sourceSha256": "22c770055c8f13a6e07cc7a3246f63add525cb0207939075b19d94e53fc81700"
+  },
+  "Humans_Idle_1.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      2.685,
+      5.28,
+      8.0125,
+      10.5625,
+      12.64,
+      14.9025,
+      17.8375,
+      20.4675,
+      23.175
+    ],
+    "sourceSha256": "988a8bf06b28e69bc976c781bc9faaa5bad4573a4569808cc7c953a7114fc11a"
+  },
+  "Humans_Idle_2.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      1.9575,
+      3.7875,
+      5.88,
+      7.6525,
+      9.255,
+      10.83,
+      12.955,
+      15.1675,
+      17.545
+    ],
+    "sourceSha256": "f3bf23f5c62d10e4f3a93aebc767c62e8dae55e9fd0a1740633b4e198191e978"
+  },
+  "Humans_Idle_3.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      3.6675,
+      6.41,
+      9.1125,
+      10.955,
+      13.2625,
+      15.4825,
+      18.015,
+      20.8225,
+      23.015
+    ],
+    "sourceSha256": "da8970fb3a62cffbb23c70147ef2bdcf3016c66b1e3181d69dd6f77e718a4ddd"
+  },
+  "Humans_Idle_4.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      2.555,
+      5.2525,
+      7.8025,
+      9.7725,
+      11.6525,
+      13.545,
+      15.8125,
+      17.885,
+      20.365
+    ],
+    "sourceSha256": "e9a3e681107b8273ee5467617e8e621de72e89c8d59340e7dbfa4cfdcf7562da"
+  },
+  "Humans_Work_1.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      2.725,
+      5.3325,
+      7.94,
+      10.085,
+      12.4775,
+      14.695,
+      17.2875,
+      19.6525,
+      22.355
+    ],
+    "sourceSha256": "d20b0b5f1eb73accb6abb7a5f64cec14a736ca46477ce9c074058b38cb0f63dc"
+  },
+  "Humans_Work_2.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      3.105,
+      5.8025,
+      8.5475,
+      10.8725,
+      13.685,
+      16.16,
+      18.8475,
+      21.6625,
+      24.65
+    ],
+    "sourceSha256": "0e64c21faf6ab8517d82918bdb155f3685094782eb557351f5b19f6538d54189"
+  },
+  "Humans_Work_3.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      1.905,
+      3.555,
+      5.3,
+      6.7525,
+      8.5075,
+      10.265,
+      12.1,
+      13.95,
+      15.915
+    ],
+    "sourceSha256": "6bd5d1a94273e3ce0f83ff0ae59e22dfc55f1649ede491d652d55eba0e9bf17b"
+  },
+  "Humans_Work_4.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      1.995,
+      3.8,
+      6.0425,
+      8.2025,
+      10.0475,
+      11.7575,
+      13.8625,
+      15.7125,
+      18.1225
+    ],
+    "sourceSha256": "9f541ed9680f8db95a4c557b5af66ccea687c7d544247f4f2e211fd27df01ad7"
+  },
+  "Humans_Thinking_1.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      2.8925,
+      5.71,
+      8.74,
+      11.1875,
+      13.1125,
+      15.0925,
+      18.1425,
+      20.8575,
+      23.0775
+    ],
+    "sourceSha256": "0f40c148c754912f962514e5389fd679a0833a9161e19c7ad56b1e3227c3256e"
+  },
+  "Humans_Thinking_2.mp3": {
+    "profiles": [
+      "BrightFemale",
+      "BrightMale",
+      "WarmFemale",
+      "WarmMale",
+      "MellowFemale",
+      "MellowMale",
+      "GravelyMale",
+      "GravelyFemale",
+      "OldMale",
+      "OldFemale"
+    ],
+    "cuts": [
+      4.2575,
+      7.7275,
+      11.8675,
+      15.535,
+      19.595,
+      23.19,
+      27.1875,
+      31.135,
+      35.5675
+    ],
+    "sourceSha256": "ea8d8df19c680e97f374e89cde63e5361e9b2d5f0407f7d72a1c25c51f18ff31"
+  },
+  "RustyRobot_Gasp_1.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "cc5f87db259c5017b2ec0cf58e6400af12fc2c6fc9712368a950574b8b415b5a"
+  },
+  "RustyRobot_Gasp_2.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "a7c3017292d672163f8805352dbfe648d07375eebbdb7aaae075a492cf8130c1"
+  },
+  "RustyRobot_Groan_1.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "223200e725ccf5d131003118df2fbbce20dac5a4985e69ca6bb1f74ac38ff891"
+  },
+  "RustyRobot_Groan_2.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "02ca50e336ab5eab90c47860a1dcb57027cce60ac0ef4453abf08e0db8b69340"
+  },
+  "RustyRobot_Grumble_1.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "530e982db7152025f25b53e5894f6c4f5c53b4d47ca32b59cb6c62a01131c5ff"
+  },
+  "RustyRobot_Grumble_2.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "bdc387b7cb157105084ca8002dcaf1119b18c1d5df0cd09cb1c01764aac5a2ba"
+  },
+  "RustyRobot_Idle_1.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "51734e5d6e22b1a117fa663e3b57111360311c590c8a02f565d528d68be5d9b5"
+  },
+  "RustyRobot_Idle_2.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "32168aeaf2923030afd50a51941710a5a2cf35dcc008c5bf6611687084f64a5e"
+  },
+  "RustyRobot_Idle_3.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "685228dc438ff3112f2355f3f789b68bff55beb2511fc3552b2fa3aa55f52579"
+  },
+  "RustyRobot_Idle_4.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "e9d616fbcbf432e1aa6f798448f0acf80647d9722b1c808b2c926588c2766efd"
+  },
+  "RustyRobot_Laugh_1.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "eb78517df88faac3235aa8c9f549098e8b91114311b1f05c89d312628e4b89a6"
+  },
+  "RustyRobot_Laugh_2.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "7a7893e5c406c04c83d6f93d844c377fd37d45a6ad7827f2d1efd659b360f16b"
+  },
+  "RustyRobot_Question_1.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "96ef4d17206ae7e42a9a0cbce86328805564b85b93a7ce81be728eb08cc3bd93"
+  },
+  "RustyRobot_Question_2.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "5e9b6b2453ff4fc398454d7a00cc2cc595b0494fd9aa83a81839a2ba9d2b8c2a"
+  },
+  "RustyRobot_Sigh_1.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "2f48f209da59d4847c066f39a48f8d8b9a3227f755d2791ed6102e365c4c8dcc"
+  },
+  "RustyRobot_Sigh_2.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "74694abf876dce4004a68110f493af6e81c39d5d977206e33176bc3d66092148"
+  },
+  "RustyRobot_Stomach_1.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "3f6730f07e83f47eb674bfdced4df15069ad185a4047020d7a7581438dd75510"
+  },
+  "RustyRobot_Talk_1.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "53fe3d49bb65d5284afa4b8ff983ef9beb72b626dc20811859d739cc86162986"
+  },
+  "RustyRobot_Talk_2.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "4741de3a9d7447f6a77d8a7517a9a531e4a1bd4d8c983c64d26cacd14bee6763"
+  },
+  "RustyRobot_Talk_3.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "1be79c36f84f3eed0f5f302f399f8043958212be8f0f5a8c5ebdb67b5e4da598"
+  },
+  "RustyRobot_Thinking_1.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "ca303ddd7bece668f92b86d9ff11fb961104be54b9e5086497640d0a44379285"
+  },
+  "RustyRobot_Thinking_2.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "582dfa254301b10e3d0c00e138a1599e8ef4e2b9751e46ce625f4cf990836f7b"
+  },
+  "RustyRobot_Work_1.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "80ce6979a84f14c0948ba1e10fa1f2fc06357e75184a93c0910eda72442742fd"
+  },
+  "RustyRobot_Work_2.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "91883dab307738c9b8d8d85dc66df0d8a8f033bb932259f7954bd58634e97fe5"
+  },
+  "RustyRobot_Work_3.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "cd865f75b5e04e94dceb0c037efa50138536d2216ad56b057d0b04cca353f2c9"
+  },
+  "RustyRobot_Work_4.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "6461901e477daac8e1d2fc616c63efd0aa08c21a731e052e957f133371574d90"
+  },
+  "RustyRobot_Yawn_1.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "d474dc8471ab695830c5192c00a9716a20cf588c954446e1c5a53682790801f0"
+  },
+  "RustyRobot_Yawn_2.mp3": {
+    "profiles": [
+      "RustyRobot"
+    ],
+    "cuts": [],
+    "sourceSha256": "66b0e0b3690c428f23736479eb805e32c3648026620d44561b9fb0e1e7994545"
+  }
 }

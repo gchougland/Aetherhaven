@@ -713,70 +713,70 @@
           }
         },
         {
-          "time": 1,
+          "time": 5,
           "delta": {
             "x": 120,
             "y": 0
           }
         },
         {
-          "time": 3,
+          "time": 58,
           "delta": {
             "x": 0,
             "y": 0
           }
         },
         {
-          "time": 4,
+          "time": 64,
+          "delta": {
+            "x": 120,
+            "y": 0
+          }
+        },
+        {
+          "time": 68,
           "delta": {
             "x": 0,
             "y": 0
           }
         },
         {
-          "time": 6,
+          "time": 79,
+          "delta": {
+            "x": 120,
+            "y": 0
+          }
+        },
+        {
+          "time": 107,
           "delta": {
             "x": 140,
             "y": 0
           }
         },
         {
-          "time": 31,
+          "time": 137,
           "delta": {
             "x": 120,
             "y": 0
           }
         },
         {
-          "time": 100,
-          "delta": {
-            "x": 140,
-            "y": 0
-          }
-        },
-        {
-          "time": 134,
-          "delta": {
-            "x": 220,
-            "y": -30
-          }
-        },
-        {
-          "time": 142,
-          "delta": {
-            "x": 120,
-            "y": 0
-          }
-        },
-        {
-          "time": 146,
+          "time": 145,
           "delta": {
             "x": 0,
             "y": 0
           }
         },
         {
-          "time": 149,
+          "time": 153,
+          "delta": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "time": 157,
           "delta": {
             "x": 0,
             "y": 0
@@ -801,7 +801,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 1,
+          "time": 5,
           "delta": {
             "x": 1,
             "y": 1,
@@ -810,7 +810,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 3,
+          "time": 58,
           "delta": {
             "x": 1,
             "y": 1,
@@ -819,7 +819,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 4,
+          "time": 64,
           "delta": {
             "x": 1,
             "y": 1,
@@ -828,7 +828,25 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 6,
+          "time": 68,
+          "delta": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          },
+          "interpolationType": "smooth"
+        },
+        {
+          "time": 79,
+          "delta": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          },
+          "interpolationType": "smooth"
+        },
+        {
+          "time": 107,
           "delta": {
             "x": 1,
             "y": 1.08,
@@ -837,7 +855,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 31,
+          "time": 137,
           "delta": {
             "x": 1,
             "y": 1,
@@ -846,25 +864,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 100,
-          "delta": {
-            "x": 1,
-            "y": 1.08,
-            "z": 1
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 134,
-          "delta": {
-            "x": 1,
-            "y": 1.08,
-            "z": 1
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 142,
+          "time": 145,
           "delta": {
             "x": 1,
             "y": 1,
@@ -873,7 +873,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 146,
+          "time": 153,
           "delta": {
             "x": 1,
             "y": 1,
@@ -882,7 +882,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 149,
+          "time": 157,
           "delta": {
             "x": 1,
             "y": 1,

@@ -39,7 +39,8 @@ public final class NpcFaceVisuals {
         "NPC/Intelligent/Slothian/Models/Model.blockymodel", "Slothian",
         "NPC/Undead/Skeleton/Models/Model.blockymodel", "Skeleton",
         "NPC/Intelligent/Kweebec_Rootling/Kweebec_Rootling.blockymodel", "Kweebec",
-        "Characters/Player_With_Face.blockymodel", "Outlander"
+        "Characters/Player_With_Face.blockymodel", "Outlander",
+        "NPC/Gear/Robot.blockymodel", "MachinariaRobot"
     );
     private static final String[] TALK_ANIMATIONS = { "Talk", "Talk2", "Talk3", "Talk4", "Talk5" };
 

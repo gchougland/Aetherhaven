@@ -1,52 +1,47 @@
 {
   "audio": "GravelyMale_Idle_4.ogg",
-  "audioSha256": "46ffa9ce702fabe609b44d836af671f6e087d9ede8aef1de8280bb5ec387f543",
-  "durationMs": 2243,
+  "audioSha256": "fa0512e5621b7f16ae538b444cf532e44fa2ce14d6f6ad578ddccacdcfd773bb",
+  "durationMs": 2221,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.01,
+      "end": 0.04,
       "value": "X"
     },
     {
-      "start": 0.01,
-      "end": 0.05,
+      "start": 0.04,
+      "end": 0.12,
       "value": "B"
     },
     {
-      "start": 0.05,
-      "end": 0.71,
+      "start": 0.12,
+      "end": 0.82,
       "value": "A"
     },
     {
-      "start": 0.71,
-      "end": 0.89,
-      "value": "B"
-    },
-    {
-      "start": 0.89,
-      "end": 1.01,
-      "value": "A"
-    },
-    {
-      "start": 1.01,
-      "end": 1.37,
+      "start": 0.82,
+      "end": 1.2,
       "value": "E"
     },
     {
-      "start": 1.37,
-      "end": 1.86,
-      "value": "C"
-    },
-    {
-      "start": 1.86,
-      "end": 2.14,
+      "start": 1.2,
+      "end": 1.34,
       "value": "B"
     },
     {
-      "start": 2.14,
-      "end": 2.24,
+      "start": 1.34,
+      "end": 1.76,
+      "value": "C"
+    },
+    {
+      "start": 1.76,
+      "end": 2.11,
+      "value": "B"
+    },
+    {
+      "start": 2.11,
+      "end": 2.22,
       "value": "X"
     }
   ]

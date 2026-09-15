@@ -15,6 +15,21 @@ class CreatureFaceAssetsTest {
         return JsonParser.parseString(Files.readString(path)).getAsJsonObject();
     }
 
+    @Test void machinariaRobotRoutesBothDialogueAndActivityFacesAtEveryPitch() {
+        String model = "NPC/Gear/Robot.blockymodel";
+        assertTrue(NpcFaceVisuals.supportsFaceModel(model));
+        for (String resident : new String[]{"Machinaria_Mechanic", "Copper_Pin", "Reginald_Volt"}) {
+            for (String pitch : new String[]{"", "_Lower", "_Higher"}) {
+                String source = "Aetherhaven_Life_Actions" + pitch;
+                assertEquals(source + "_MachinariaRobot",
+                    NpcFaceVisuals.itemAnimationsForModelAsset(resident, model, source));
+            }
+        }
+        assertEquals("Machinaria_CustomActions",
+            NpcFaceVisuals.itemAnimationsForModel(model, "Machinaria_CustomActions"));
+        assertFalse(NpcFaceVisuals.supportsFaceModel("NPC/Gear/Clockwork_Golem.blockymodel"));
+    }
+
     @Test void eachResidentUsesNativeFacesInBothAnimationSlotsAndAtEveryPitch() throws Exception {
         var rigs = json(RES.resolve("defaults/villager_creature_faces.json"));
         assertEquals(11, rigs.size());

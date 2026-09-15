@@ -1,7 +1,7 @@
 {
   "audio": "WarmMale_Talk_3.ogg",
-  "audioSha256": "67eb2a83d82d137b2d0bc7cdb5569cb934a1f987a9f114adad284934d2b3c3fc",
-  "durationMs": 1468,
+  "audioSha256": "50dba4790cf30fdde2737bcd882cd3150b86b7478407e0ebef9cca3e16a12b8a",
+  "durationMs": 1631,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
@@ -11,62 +11,77 @@
     },
     {
       "start": 0.01,
-      "end": 0.04,
+      "end": 0.05,
       "value": "B"
     },
     {
-      "start": 0.04,
-      "end": 0.14,
+      "start": 0.05,
+      "end": 0.09,
       "value": "A"
     },
     {
-      "start": 0.14,
-      "end": 0.47,
-      "value": "B"
+      "start": 0.09,
+      "end": 0.27,
+      "value": "D"
     },
     {
-      "start": 0.47,
-      "end": 0.61,
+      "start": 0.27,
+      "end": 0.41,
+      "value": "F"
+    },
+    {
+      "start": 0.41,
+      "end": 0.55,
       "value": "C"
     },
     {
-      "start": 0.61,
-      "end": 0.69,
+      "start": 0.55,
+      "end": 0.62,
+      "value": "E"
+    },
+    {
+      "start": 0.62,
+      "end": 0.7,
       "value": "A"
     },
     {
-      "start": 0.69,
-      "end": 0.83,
-      "value": "E"
-    },
-    {
-      "start": 0.83,
-      "end": 0.9,
+      "start": 0.7,
+      "end": 0.78,
       "value": "B"
     },
     {
-      "start": 0.9,
-      "end": 1.18,
+      "start": 0.78,
+      "end": 0.99,
       "value": "F"
     },
     {
-      "start": 1.18,
-      "end": 1.25,
-      "value": "E"
+      "start": 0.99,
+      "end": 1.1,
+      "value": "A"
     },
     {
-      "start": 1.25,
-      "end": 1.32,
-      "value": "F"
-    },
-    {
-      "start": 1.32,
-      "end": 1.39,
+      "start": 1.1,
+      "end": 1.15,
       "value": "B"
     },
     {
-      "start": 1.39,
-      "end": 1.46,
+      "start": 1.15,
+      "end": 1.33,
+      "value": "C"
+    },
+    {
+      "start": 1.33,
+      "end": 1.4,
+      "value": "E"
+    },
+    {
+      "start": 1.4,
+      "end": 1.54,
+      "value": "B"
+    },
+    {
+      "start": 1.54,
+      "end": 1.63,
       "value": "X"
     }
   ]

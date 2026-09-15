@@ -1,0 +1,78 @@
+{
+  "audio": "OldMale_Laugh_1.ogg",
+  "audioSha256": "a11944f2cb2c359225930629f84935cef8ae05f9051025da2de7862fab65e360",
+  "durationMs": 2145,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.02,
+      "value": "X"
+    },
+    {
+      "start": 0.02,
+      "end": 0.6,
+      "value": "B"
+    },
+    {
+      "start": 0.6,
+      "end": 0.67,
+      "value": "X"
+    },
+    {
+      "start": 0.67,
+      "end": 0.75,
+      "value": "B"
+    },
+    {
+      "start": 0.75,
+      "end": 0.83,
+      "value": "A"
+    },
+    {
+      "start": 0.83,
+      "end": 1.1,
+      "value": "E"
+    },
+    {
+      "start": 1.1,
+      "end": 1.17,
+      "value": "B"
+    },
+    {
+      "start": 1.17,
+      "end": 1.24,
+      "value": "C"
+    },
+    {
+      "start": 1.24,
+      "end": 1.32,
+      "value": "A"
+    },
+    {
+      "start": 1.32,
+      "end": 1.64,
+      "value": "C"
+    },
+    {
+      "start": 1.64,
+      "end": 1.71,
+      "value": "B"
+    },
+    {
+      "start": 1.71,
+      "end": 1.85,
+      "value": "C"
+    },
+    {
+      "start": 1.85,
+      "end": 2.06,
+      "value": "B"
+    },
+    {
+      "start": 2.06,
+      "end": 2.14,
+      "value": "X"
+    }
+  ]
+}

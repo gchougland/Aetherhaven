@@ -47,7 +47,7 @@ class ProwlFaceAssetsTest {
                 count++;
             }
         }
-        assertEquals(714, count);
+        assertEquals(988, count);
     }
 
     @Test void dialogueMoodAndLipTracksAllUseProwlAtlasWhilePreservingPitch() throws Exception {

@@ -1,0 +1,128 @@
+{
+  "audio": "BrightFemale_Thinking_2.ogg",
+  "audioSha256": "bb60583348e770e66c51bd5982871634402712954441bdcfe8149960162e771d",
+  "durationMs": 4199,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.07,
+      "value": "B"
+    },
+    {
+      "start": 0.07,
+      "end": 0.12,
+      "value": "A"
+    },
+    {
+      "start": 0.12,
+      "end": 0.61,
+      "value": "B"
+    },
+    {
+      "start": 0.61,
+      "end": 0.68,
+      "value": "E"
+    },
+    {
+      "start": 0.68,
+      "end": 0.75,
+      "value": "F"
+    },
+    {
+      "start": 0.75,
+      "end": 0.89,
+      "value": "A"
+    },
+    {
+      "start": 0.89,
+      "end": 0.96,
+      "value": "B"
+    },
+    {
+      "start": 0.96,
+      "end": 1.17,
+      "value": "F"
+    },
+    {
+      "start": 1.17,
+      "end": 1.25,
+      "value": "A"
+    },
+    {
+      "start": 1.25,
+      "end": 1.54,
+      "value": "C"
+    },
+    {
+      "start": 1.54,
+      "end": 1.62,
+      "value": "A"
+    },
+    {
+      "start": 1.62,
+      "end": 1.83,
+      "value": "B"
+    },
+    {
+      "start": 1.83,
+      "end": 2.04,
+      "value": "C"
+    },
+    {
+      "start": 2.04,
+      "end": 2.46,
+      "value": "B"
+    },
+    {
+      "start": 2.46,
+      "end": 2.58,
+      "value": "X"
+    },
+    {
+      "start": 2.58,
+      "end": 2.65,
+      "value": "B"
+    },
+    {
+      "start": 2.65,
+      "end": 2.78,
+      "value": "C"
+    },
+    {
+      "start": 2.78,
+      "end": 2.85,
+      "value": "F"
+    },
+    {
+      "start": 2.85,
+      "end": 3.67,
+      "value": "B"
+    },
+    {
+      "start": 3.67,
+      "end": 3.88,
+      "value": "E"
+    },
+    {
+      "start": 3.88,
+      "end": 3.95,
+      "value": "C"
+    },
+    {
+      "start": 3.95,
+      "end": 4.16,
+      "value": "E"
+    },
+    {
+      "start": 4.16,
+      "end": 4.19,
+      "value": "X"
+    }
+  ]
+}

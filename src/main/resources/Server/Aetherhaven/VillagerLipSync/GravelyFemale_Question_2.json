@@ -1,62 +1,77 @@
 {
   "audio": "GravelyFemale_Question_2.ogg",
-  "audioSha256": "22aba0f844535207b713ee52f8f0412680e3878ad1f3de1f77839ca20eb5a0cf",
-  "durationMs": 1528,
+  "audioSha256": "e60ebc7a0f9fedde26e8bad321376cc307fe4a8abd3d267422777aa84495a110",
+  "durationMs": 1729,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.01,
-      "value": "X"
+      "end": 0.19,
+      "value": "E"
     },
     {
-      "start": 0.01,
-      "end": 0.05,
-      "value": "B"
-    },
-    {
-      "start": 0.05,
-      "end": 0.16,
-      "value": "F"
-    },
-    {
-      "start": 0.16,
-      "end": 0.37,
-      "value": "B"
-    },
-    {
-      "start": 0.37,
-      "end": 0.65,
+      "start": 0.19,
+      "end": 0.33,
       "value": "C"
     },
     {
-      "start": 0.65,
-      "end": 0.79,
-      "value": "E"
-    },
-    {
-      "start": 0.79,
-      "end": 0.87,
+      "start": 0.33,
+      "end": 0.44,
       "value": "A"
     },
     {
-      "start": 0.87,
-      "end": 1.1,
-      "value": "D"
+      "start": 0.44,
+      "end": 0.5,
+      "value": "C"
     },
     {
-      "start": 1.1,
-      "end": 1.24,
+      "start": 0.5,
+      "end": 0.55,
+      "value": "B"
+    },
+    {
+      "start": 0.55,
+      "end": 0.65,
+      "value": "A"
+    },
+    {
+      "start": 0.65,
+      "end": 0.8,
+      "value": "C"
+    },
+    {
+      "start": 0.8,
+      "end": 0.94,
       "value": "E"
     },
     {
-      "start": 1.24,
-      "end": 1.45,
-      "value": "F"
+      "start": 0.94,
+      "end": 1.01,
+      "value": "B"
     },
     {
-      "start": 1.45,
-      "end": 1.52,
+      "start": 1.01,
+      "end": 1.17,
+      "value": "A"
+    },
+    {
+      "start": 1.17,
+      "end": 1.34,
+      "value": "B"
+    },
+    {
+      "start": 1.34,
+      "end": 1.55,
+      "value": "C"
+    },
+    {
+      "start": 1.55,
+      "end": 1.69,
+      "value": "B"
+    },
+    {
+      "start": 1.69,
+      "end": 1.72,
       "value": "X"
     }
   ]

@@ -1,0 +1,83 @@
+{
+  "audio": "OldMale_Question_2.ogg",
+  "audioSha256": "167e7be3f914ebeb6ca955241f2a0044cbb65c63d6f6179eb9bd89b38087563b",
+  "durationMs": 1944,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.07,
+      "value": "B"
+    },
+    {
+      "start": 0.07,
+      "end": 0.27,
+      "value": "E"
+    },
+    {
+      "start": 0.27,
+      "end": 0.34,
+      "value": "F"
+    },
+    {
+      "start": 0.34,
+      "end": 0.42,
+      "value": "A"
+    },
+    {
+      "start": 0.42,
+      "end": 0.58,
+      "value": "B"
+    },
+    {
+      "start": 0.58,
+      "end": 0.72,
+      "value": "C"
+    },
+    {
+      "start": 0.72,
+      "end": 0.93,
+      "value": "E"
+    },
+    {
+      "start": 0.93,
+      "end": 1.07,
+      "value": "F"
+    },
+    {
+      "start": 1.07,
+      "end": 1.26,
+      "value": "B"
+    },
+    {
+      "start": 1.26,
+      "end": 1.35,
+      "value": "A"
+    },
+    {
+      "start": 1.35,
+      "end": 1.47,
+      "value": "B"
+    },
+    {
+      "start": 1.47,
+      "end": 1.54,
+      "value": "C"
+    },
+    {
+      "start": 1.54,
+      "end": 1.89,
+      "value": "B"
+    },
+    {
+      "start": 1.89,
+      "end": 1.94,
+      "value": "X"
+    }
+  ]
+}

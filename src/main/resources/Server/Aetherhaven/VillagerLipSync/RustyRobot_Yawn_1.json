@@ -1,0 +1,68 @@
+{
+  "audio": "RustyRobot_Yawn_1.ogg",
+  "audioSha256": "4f76350ef43c4b0cea712c72172e16c69b7fc51ddcabe8de6a6359be2d6d85a8",
+  "durationMs": 1920,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.47,
+      "value": "C"
+    },
+    {
+      "start": 0.47,
+      "end": 0.96,
+      "value": "B"
+    },
+    {
+      "start": 0.96,
+      "end": 1.04,
+      "value": "A"
+    },
+    {
+      "start": 1.04,
+      "end": 1.17,
+      "value": "E"
+    },
+    {
+      "start": 1.17,
+      "end": 1.29,
+      "value": "B"
+    },
+    {
+      "start": 1.29,
+      "end": 1.43,
+      "value": "E"
+    },
+    {
+      "start": 1.43,
+      "end": 1.5,
+      "value": "C"
+    },
+    {
+      "start": 1.5,
+      "end": 1.57,
+      "value": "F"
+    },
+    {
+      "start": 1.57,
+      "end": 1.74,
+      "value": "B"
+    },
+    {
+      "start": 1.74,
+      "end": 1.82,
+      "value": "A"
+    },
+    {
+      "start": 1.82,
+      "end": 1.9,
+      "value": "C"
+    },
+    {
+      "start": 1.9,
+      "end": 1.91,
+      "value": "X"
+    }
+  ]
+}

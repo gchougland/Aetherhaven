@@ -549,6 +549,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.townsfolkCharacterCatalog =
             TownsfolkCharacterCatalog.loadFromAssetPacksOrClasspath(cl, this.townsfolkPersonalityCatalog);
         this.speechVoiceCatalog = SpeechVoiceCatalog.loadFromAssetPacksOrClasspath(cl);
+        com.hexvane.aetherhaven.autonomy.VillagerLifeSpeech.reloadFromAssetPacks();
         this.equipmentProfileCatalog = EquipmentProfileCatalog.loadFromAssetPacksOrClasspath(cl);
         ReputationRewardCatalog.refreshFromVillagerCatalog(this.villagerDefinitionCatalog);
         this.dialogueResolver.reloadFromVillagerCatalog(this.villagerDefinitionCatalog);

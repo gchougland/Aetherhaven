@@ -11,7 +11,7 @@ public final class VillagerLifePolicy {
     public static final long COOLDOWN_MS = 45_000;
     public static final float FUN_PER_SECOND = 3;
     static final String[] VOICES = {"BrightFemale", "BrightMale", "WarmFemale", "WarmMale",
-        "MellowFemale", "MellowMale", "GravelyMale", "GravelyFemale"};
+        "MellowFemale", "MellowMale", "GravelyMale", "GravelyFemale", "OldMale", "OldFemale", "RustyRobot"};
     private static final String[] TOPICS = {"Food", "Work", "Home", "Music", "Flower", "Rain"};
 
     private VillagerLifePolicy() {}

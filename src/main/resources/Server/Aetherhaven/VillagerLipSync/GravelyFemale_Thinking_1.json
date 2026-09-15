@@ -1,7 +1,7 @@
 {
   "audio": "GravelyFemale_Thinking_1.ogg",
-  "audioSha256": "83d97442a8be776973024f2479a85e5f94d590a993c9dd8650c066dce74d3185",
-  "durationMs": 1453,
+  "audioSha256": "a02464d67986aa4a7d59bf2e5adda45e7c2f1b360f1f03e1c546e273f2b042fe",
+  "durationMs": 2534,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
@@ -11,12 +11,97 @@
     },
     {
       "start": 0.01,
-      "end": 0.84,
+      "end": 0.07,
       "value": "B"
     },
     {
-      "start": 0.84,
-      "end": 1.45,
+      "start": 0.07,
+      "end": 0.12,
+      "value": "A"
+    },
+    {
+      "start": 0.12,
+      "end": 0.38,
+      "value": "C"
+    },
+    {
+      "start": 0.38,
+      "end": 0.45,
+      "value": "E"
+    },
+    {
+      "start": 0.45,
+      "end": 0.66,
+      "value": "F"
+    },
+    {
+      "start": 0.66,
+      "end": 0.93,
+      "value": "B"
+    },
+    {
+      "start": 0.93,
+      "end": 1.11,
+      "value": "A"
+    },
+    {
+      "start": 1.11,
+      "end": 1.23,
+      "value": "C"
+    },
+    {
+      "start": 1.23,
+      "end": 1.37,
+      "value": "D"
+    },
+    {
+      "start": 1.37,
+      "end": 1.44,
+      "value": "B"
+    },
+    {
+      "start": 1.44,
+      "end": 1.58,
+      "value": "C"
+    },
+    {
+      "start": 1.58,
+      "end": 1.72,
+      "value": "B"
+    },
+    {
+      "start": 1.72,
+      "end": 1.93,
+      "value": "C"
+    },
+    {
+      "start": 1.93,
+      "end": 2.0,
+      "value": "E"
+    },
+    {
+      "start": 2.0,
+      "end": 2.07,
+      "value": "C"
+    },
+    {
+      "start": 2.07,
+      "end": 2.21,
+      "value": "B"
+    },
+    {
+      "start": 2.21,
+      "end": 2.34,
+      "value": "A"
+    },
+    {
+      "start": 2.34,
+      "end": 2.47,
+      "value": "B"
+    },
+    {
+      "start": 2.47,
+      "end": 2.53,
       "value": "X"
     }
   ]

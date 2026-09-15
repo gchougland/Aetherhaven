@@ -1,0 +1,98 @@
+{
+  "audio": "OldFemale_Gasp_2.ogg",
+  "audioSha256": "8953df70294b885332399548ff1d4cd03b2e57c5bcc19b2cf7e7d1ab83c0a116",
+  "durationMs": 2381,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.17,
+      "value": "B"
+    },
+    {
+      "start": 0.17,
+      "end": 0.29,
+      "value": "A"
+    },
+    {
+      "start": 0.29,
+      "end": 0.47,
+      "value": "D"
+    },
+    {
+      "start": 0.47,
+      "end": 0.55,
+      "value": "C"
+    },
+    {
+      "start": 0.55,
+      "end": 0.62,
+      "value": "A"
+    },
+    {
+      "start": 0.62,
+      "end": 0.69,
+      "value": "B"
+    },
+    {
+      "start": 0.69,
+      "end": 0.77,
+      "value": "A"
+    },
+    {
+      "start": 0.77,
+      "end": 0.87,
+      "value": "B"
+    },
+    {
+      "start": 0.87,
+      "end": 0.94,
+      "value": "F"
+    },
+    {
+      "start": 0.94,
+      "end": 1.02,
+      "value": "A"
+    },
+    {
+      "start": 1.02,
+      "end": 1.12,
+      "value": "C"
+    },
+    {
+      "start": 1.12,
+      "end": 1.26,
+      "value": "B"
+    },
+    {
+      "start": 1.26,
+      "end": 1.33,
+      "value": "C"
+    },
+    {
+      "start": 1.33,
+      "end": 1.41,
+      "value": "A"
+    },
+    {
+      "start": 1.41,
+      "end": 1.72,
+      "value": "C"
+    },
+    {
+      "start": 1.72,
+      "end": 2.0,
+      "value": "B"
+    },
+    {
+      "start": 2.0,
+      "end": 2.38,
+      "value": "X"
+    }
+  ]
+}

@@ -1,57 +1,57 @@
 {
   "audio": "BrightFemale_Talk_3.ogg",
-  "audioSha256": "75af64bea794e4070f94e9ffced4214f5effa85b4cf26f3b73b41a2ef920d0c2",
-  "durationMs": 1508,
+  "audioSha256": "fd212dd3153d030c733b527cc44ce6930862e9f6dc95d3d9e4014007cbd77752",
+  "durationMs": 1533,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.01,
+      "end": 0.06,
       "value": "X"
     },
     {
-      "start": 0.01,
-      "end": 0.56,
+      "start": 0.06,
+      "end": 0.14,
       "value": "B"
     },
     {
-      "start": 0.56,
-      "end": 0.63,
-      "value": "C"
+      "start": 0.14,
+      "end": 0.22,
+      "value": "A"
     },
     {
-      "start": 0.63,
-      "end": 0.77,
+      "start": 0.22,
+      "end": 0.68,
       "value": "B"
     },
     {
-      "start": 0.77,
-      "end": 0.98,
-      "value": "C"
-    },
-    {
-      "start": 0.98,
-      "end": 1.12,
+      "start": 0.68,
+      "end": 0.89,
       "value": "F"
     },
     {
-      "start": 1.12,
-      "end": 1.19,
-      "value": "E"
+      "start": 0.89,
+      "end": 1.03,
+      "value": "C"
     },
     {
-      "start": 1.19,
-      "end": 1.26,
+      "start": 1.03,
+      "end": 1.11,
+      "value": "A"
+    },
+    {
+      "start": 1.11,
+      "end": 1.28,
       "value": "F"
     },
     {
-      "start": 1.26,
-      "end": 1.47,
+      "start": 1.28,
+      "end": 1.49,
       "value": "B"
     },
     {
-      "start": 1.47,
-      "end": 1.5,
+      "start": 1.49,
+      "end": 1.53,
       "value": "X"
     }
   ]

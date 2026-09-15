@@ -1,77 +1,72 @@
 {
   "audio": "WarmFemale_Groan_1.ogg",
-  "audioSha256": "002f88a8e3315b5c194dd4c304a1ba03beacb9bce45733a3cf407c6f35e01593",
-  "durationMs": 2271,
+  "audioSha256": "41a2d7b9dfe42468d1728406a5623f4ba57db45ea5b585b66a694d43fbebb26c",
+  "durationMs": 2757,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.01,
+      "end": 0.03,
       "value": "X"
     },
     {
-      "start": 0.01,
-      "end": 0.11,
+      "start": 0.03,
+      "end": 0.1,
       "value": "B"
     },
     {
-      "start": 0.11,
-      "end": 0.19,
-      "value": "A"
-    },
-    {
-      "start": 0.19,
-      "end": 0.55,
+      "start": 0.1,
+      "end": 0.94,
       "value": "F"
     },
     {
-      "start": 0.55,
-      "end": 0.69,
+      "start": 0.94,
+      "end": 1.08,
+      "value": "B"
+    },
+    {
+      "start": 1.08,
+      "end": 1.36,
       "value": "C"
     },
     {
-      "start": 0.69,
-      "end": 0.83,
+      "start": 1.36,
+      "end": 1.43,
       "value": "B"
     },
     {
-      "start": 0.83,
-      "end": 0.92,
+      "start": 1.43,
+      "end": 1.51,
       "value": "A"
     },
     {
-      "start": 0.92,
-      "end": 1.14,
+      "start": 1.51,
+      "end": 1.64,
+      "value": "C"
+    },
+    {
+      "start": 1.64,
+      "end": 1.99,
       "value": "B"
     },
     {
-      "start": 1.14,
-      "end": 1.28,
+      "start": 1.99,
+      "end": 2.13,
       "value": "F"
     },
     {
-      "start": 1.28,
-      "end": 1.7,
-      "value": "B"
-    },
-    {
-      "start": 1.7,
-      "end": 1.91,
+      "start": 2.13,
+      "end": 2.27,
       "value": "E"
     },
     {
-      "start": 1.91,
-      "end": 2.12,
+      "start": 2.27,
+      "end": 2.62,
       "value": "F"
     },
     {
-      "start": 2.12,
-      "end": 2.19,
-      "value": "B"
-    },
-    {
-      "start": 2.19,
-      "end": 2.27,
+      "start": 2.62,
+      "end": 2.75,
       "value": "X"
     }
   ]

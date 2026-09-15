@@ -1,0 +1,103 @@
+{
+  "audio": "RustyRobot_Question_1.ogg",
+  "audioSha256": "901c78a8d3c25a38b139ce5e1ec93bed1ed76755a02b4aa3c8457c5271f613b6",
+  "durationMs": 2990,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.16,
+      "value": "B"
+    },
+    {
+      "start": 0.16,
+      "end": 0.44,
+      "value": "C"
+    },
+    {
+      "start": 0.44,
+      "end": 0.51,
+      "value": "B"
+    },
+    {
+      "start": 0.51,
+      "end": 0.72,
+      "value": "C"
+    },
+    {
+      "start": 0.72,
+      "end": 0.93,
+      "value": "B"
+    },
+    {
+      "start": 0.93,
+      "end": 1.11,
+      "value": "A"
+    },
+    {
+      "start": 1.11,
+      "end": 1.29,
+      "value": "C"
+    },
+    {
+      "start": 1.29,
+      "end": 1.5,
+      "value": "B"
+    },
+    {
+      "start": 1.5,
+      "end": 1.7,
+      "value": "A"
+    },
+    {
+      "start": 1.7,
+      "end": 1.81,
+      "value": "C"
+    },
+    {
+      "start": 1.81,
+      "end": 2.08,
+      "value": "B"
+    },
+    {
+      "start": 2.08,
+      "end": 2.26,
+      "value": "C"
+    },
+    {
+      "start": 2.26,
+      "end": 2.33,
+      "value": "B"
+    },
+    {
+      "start": 2.33,
+      "end": 2.43,
+      "value": "D"
+    },
+    {
+      "start": 2.43,
+      "end": 2.47,
+      "value": "C"
+    },
+    {
+      "start": 2.47,
+      "end": 2.79,
+      "value": "A"
+    },
+    {
+      "start": 2.79,
+      "end": 2.97,
+      "value": "E"
+    },
+    {
+      "start": 2.97,
+      "end": 2.98,
+      "value": "X"
+    }
+  ]
+}

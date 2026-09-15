@@ -1,0 +1,93 @@
+{
+  "audio": "OldFemale_Thinking_1.ogg",
+  "audioSha256": "1539350eebb629736fceb8ec24f71d3ecbc98222579d2a3a3d04036d189ed3d7",
+  "durationMs": 3414,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.09,
+      "value": "X"
+    },
+    {
+      "start": 0.09,
+      "end": 0.14,
+      "value": "B"
+    },
+    {
+      "start": 0.14,
+      "end": 0.26,
+      "value": "C"
+    },
+    {
+      "start": 0.26,
+      "end": 0.47,
+      "value": "D"
+    },
+    {
+      "start": 0.47,
+      "end": 0.61,
+      "value": "C"
+    },
+    {
+      "start": 0.61,
+      "end": 0.89,
+      "value": "B"
+    },
+    {
+      "start": 0.89,
+      "end": 1.09,
+      "value": "X"
+    },
+    {
+      "start": 1.09,
+      "end": 1.46,
+      "value": "B"
+    },
+    {
+      "start": 1.46,
+      "end": 1.53,
+      "value": "C"
+    },
+    {
+      "start": 1.53,
+      "end": 2.03,
+      "value": "B"
+    },
+    {
+      "start": 2.03,
+      "end": 2.77,
+      "value": "C"
+    },
+    {
+      "start": 2.77,
+      "end": 2.96,
+      "value": "A"
+    },
+    {
+      "start": 2.96,
+      "end": 3.07,
+      "value": "C"
+    },
+    {
+      "start": 3.07,
+      "end": 3.14,
+      "value": "B"
+    },
+    {
+      "start": 3.14,
+      "end": 3.21,
+      "value": "F"
+    },
+    {
+      "start": 3.21,
+      "end": 3.35,
+      "value": "B"
+    },
+    {
+      "start": 3.35,
+      "end": 3.41,
+      "value": "X"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "formatVersion": 1,
-  "duration": 132,
+  "duration": 134,
   "holdLastKeyframe": false,
   "nodeAnimations": {
     "R-Arm": {
@@ -67,6 +67,16 @@
         },
         {
           "time": 132,
+          "delta": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "interpolationType": "smooth"
+        },
+        {
+          "time": 134,
           "delta": {
             "x": 0.0,
             "y": 0.0,
@@ -152,6 +162,16 @@
             "w": 1.0
           },
           "interpolationType": "smooth"
+        },
+        {
+          "time": 134,
+          "delta": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "interpolationType": "smooth"
         }
       ],
       "position": [],
@@ -223,6 +243,16 @@
         },
         {
           "time": 132,
+          "delta": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "interpolationType": "smooth"
+        },
+        {
+          "time": 134,
           "delta": {
             "x": 0.0,
             "y": 0.0,

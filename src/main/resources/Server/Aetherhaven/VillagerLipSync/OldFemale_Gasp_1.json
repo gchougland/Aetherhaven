@@ -1,0 +1,78 @@
+{
+  "audio": "OldFemale_Gasp_1.ogg",
+  "audioSha256": "ba9e69090007adef6b18ff678f66a44a0fc18a9883ff076e0966dd0a497e3719",
+  "durationMs": 2456,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.09,
+      "value": "B"
+    },
+    {
+      "start": 0.09,
+      "end": 0.17,
+      "value": "A"
+    },
+    {
+      "start": 0.17,
+      "end": 0.25,
+      "value": "B"
+    },
+    {
+      "start": 0.25,
+      "end": 0.33,
+      "value": "A"
+    },
+    {
+      "start": 0.33,
+      "end": 0.57,
+      "value": "E"
+    },
+    {
+      "start": 0.57,
+      "end": 0.78,
+      "value": "F"
+    },
+    {
+      "start": 0.78,
+      "end": 1.15,
+      "value": "A"
+    },
+    {
+      "start": 1.15,
+      "end": 1.23,
+      "value": "C"
+    },
+    {
+      "start": 1.23,
+      "end": 1.42,
+      "value": "F"
+    },
+    {
+      "start": 1.42,
+      "end": 1.47,
+      "value": "E"
+    },
+    {
+      "start": 1.47,
+      "end": 1.79,
+      "value": "C"
+    },
+    {
+      "start": 1.79,
+      "end": 1.86,
+      "value": "B"
+    },
+    {
+      "start": 1.86,
+      "end": 2.45,
+      "value": "X"
+    }
+  ]
+}

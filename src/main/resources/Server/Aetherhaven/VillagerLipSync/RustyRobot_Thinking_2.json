@@ -1,0 +1,163 @@
+{
+  "audio": "RustyRobot_Thinking_2.ogg",
+  "audioSha256": "b8ea25433e0ced3e5303583918e5b89d101052c353533d61c45b4e48ad29cb16",
+  "durationMs": 5701,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.18,
+      "value": "B"
+    },
+    {
+      "start": 0.18,
+      "end": 0.98,
+      "value": "F"
+    },
+    {
+      "start": 0.98,
+      "end": 1.06,
+      "value": "E"
+    },
+    {
+      "start": 1.06,
+      "end": 1.51,
+      "value": "C"
+    },
+    {
+      "start": 1.51,
+      "end": 1.71,
+      "value": "X"
+    },
+    {
+      "start": 1.71,
+      "end": 2.27,
+      "value": "B"
+    },
+    {
+      "start": 2.27,
+      "end": 2.43,
+      "value": "C"
+    },
+    {
+      "start": 2.43,
+      "end": 2.5,
+      "value": "F"
+    },
+    {
+      "start": 2.5,
+      "end": 2.57,
+      "value": "B"
+    },
+    {
+      "start": 2.57,
+      "end": 2.7,
+      "value": "X"
+    },
+    {
+      "start": 2.7,
+      "end": 2.93,
+      "value": "B"
+    },
+    {
+      "start": 2.93,
+      "end": 3.28,
+      "value": "X"
+    },
+    {
+      "start": 3.28,
+      "end": 3.34,
+      "value": "B"
+    },
+    {
+      "start": 3.34,
+      "end": 3.39,
+      "value": "C"
+    },
+    {
+      "start": 3.39,
+      "end": 3.46,
+      "value": "B"
+    },
+    {
+      "start": 3.46,
+      "end": 3.59,
+      "value": "X"
+    },
+    {
+      "start": 3.59,
+      "end": 3.67,
+      "value": "B"
+    },
+    {
+      "start": 3.67,
+      "end": 3.78,
+      "value": "A"
+    },
+    {
+      "start": 3.78,
+      "end": 3.87,
+      "value": "C"
+    },
+    {
+      "start": 3.87,
+      "end": 4.33,
+      "value": "B"
+    },
+    {
+      "start": 4.33,
+      "end": 4.58,
+      "value": "A"
+    },
+    {
+      "start": 4.58,
+      "end": 4.64,
+      "value": "C"
+    },
+    {
+      "start": 4.64,
+      "end": 4.69,
+      "value": "B"
+    },
+    {
+      "start": 4.69,
+      "end": 4.9,
+      "value": "C"
+    },
+    {
+      "start": 4.9,
+      "end": 5.04,
+      "value": "B"
+    },
+    {
+      "start": 5.04,
+      "end": 5.25,
+      "value": "D"
+    },
+    {
+      "start": 5.25,
+      "end": 5.32,
+      "value": "C"
+    },
+    {
+      "start": 5.32,
+      "end": 5.6,
+      "value": "E"
+    },
+    {
+      "start": 5.6,
+      "end": 5.67,
+      "value": "B"
+    },
+    {
+      "start": 5.67,
+      "end": 5.7,
+      "value": "X"
+    }
+  ]
+}

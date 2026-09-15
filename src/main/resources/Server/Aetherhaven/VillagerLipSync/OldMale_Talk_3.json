@@ -1,0 +1,103 @@
+{
+  "audio": "OldMale_Talk_3.ogg",
+  "audioSha256": "ed4437d5c08a346cd9873c59db443ca264e8783a73c25d3e47d655cdcfb56ba6",
+  "durationMs": 3398,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.27,
+      "value": "B"
+    },
+    {
+      "start": 0.27,
+      "end": 0.41,
+      "value": "F"
+    },
+    {
+      "start": 0.41,
+      "end": 0.62,
+      "value": "C"
+    },
+    {
+      "start": 0.62,
+      "end": 1.04,
+      "value": "B"
+    },
+    {
+      "start": 1.04,
+      "end": 1.21,
+      "value": "X"
+    },
+    {
+      "start": 1.21,
+      "end": 1.27,
+      "value": "B"
+    },
+    {
+      "start": 1.27,
+      "end": 1.32,
+      "value": "C"
+    },
+    {
+      "start": 1.32,
+      "end": 1.53,
+      "value": "D"
+    },
+    {
+      "start": 1.53,
+      "end": 1.6,
+      "value": "B"
+    },
+    {
+      "start": 1.6,
+      "end": 1.67,
+      "value": "C"
+    },
+    {
+      "start": 1.67,
+      "end": 1.75,
+      "value": "A"
+    },
+    {
+      "start": 1.75,
+      "end": 2.31,
+      "value": "C"
+    },
+    {
+      "start": 2.31,
+      "end": 2.59,
+      "value": "B"
+    },
+    {
+      "start": 2.59,
+      "end": 2.8,
+      "value": "E"
+    },
+    {
+      "start": 2.8,
+      "end": 2.87,
+      "value": "F"
+    },
+    {
+      "start": 2.87,
+      "end": 3.17,
+      "value": "A"
+    },
+    {
+      "start": 3.17,
+      "end": 3.31,
+      "value": "B"
+    },
+    {
+      "start": 3.31,
+      "end": 3.39,
+      "value": "X"
+    }
+  ]
+}

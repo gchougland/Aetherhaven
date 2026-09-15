@@ -1,67 +1,82 @@
 {
   "audio": "WarmFemale_Laugh_1.ogg",
-  "audioSha256": "327342a837b9db944d649969c87ebe5c5a3bb49496c531ff5dc145444a26e39e",
-  "durationMs": 1999,
+  "audioSha256": "cd15f4a53edd88091d46382b5c6362da69757005388c0c34294343d74508357a",
+  "durationMs": 2192,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.01,
+      "end": 0.03,
       "value": "X"
     },
     {
-      "start": 0.01,
-      "end": 0.06,
+      "start": 0.03,
+      "end": 0.1,
       "value": "B"
     },
     {
-      "start": 0.06,
-      "end": 0.45,
+      "start": 0.1,
+      "end": 0.37,
       "value": "C"
     },
     {
-      "start": 0.45,
-      "end": 0.73,
+      "start": 0.37,
+      "end": 0.51,
       "value": "B"
     },
     {
-      "start": 0.73,
-      "end": 0.83,
+      "start": 0.51,
+      "end": 0.59,
       "value": "A"
     },
     {
-      "start": 0.83,
-      "end": 1.04,
+      "start": 0.59,
+      "end": 0.81,
       "value": "B"
     },
     {
-      "start": 1.04,
-      "end": 1.12,
+      "start": 0.81,
+      "end": 1.1,
+      "value": "X"
+    },
+    {
+      "start": 1.1,
+      "end": 1.17,
+      "value": "B"
+    },
+    {
+      "start": 1.17,
+      "end": 1.24,
+      "value": "F"
+    },
+    {
+      "start": 1.24,
+      "end": 1.45,
+      "value": "B"
+    },
+    {
+      "start": 1.45,
+      "end": 1.59,
+      "value": "C"
+    },
+    {
+      "start": 1.59,
+      "end": 1.68,
       "value": "A"
     },
     {
-      "start": 1.12,
-      "end": 1.33,
-      "value": "F"
+      "start": 1.68,
+      "end": 2.08,
+      "value": "C"
     },
     {
-      "start": 1.33,
-      "end": 1.4,
-      "value": "E"
-    },
-    {
-      "start": 1.4,
-      "end": 1.82,
-      "value": "F"
-    },
-    {
-      "start": 1.82,
-      "end": 1.89,
+      "start": 2.08,
+      "end": 2.15,
       "value": "B"
     },
     {
-      "start": 1.89,
-      "end": 1.99,
+      "start": 2.15,
+      "end": 2.19,
       "value": "X"
     }
   ]

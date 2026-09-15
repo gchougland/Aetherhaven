@@ -1,32 +1,87 @@
 {
   "audio": "MellowMale_Thinking_1.ogg",
-  "audioSha256": "ae543b00bd583435339762b3cb23b7a691ac72e539ad12c88420c945803a64e2",
-  "durationMs": 913,
+  "audioSha256": "51250bec5696e6371a6ce36eb9b8054fe8e14cdbb07ad262e1f10424930ee667",
+  "durationMs": 1901,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.02,
+      "end": 0.01,
       "value": "X"
     },
     {
-      "start": 0.02,
+      "start": 0.01,
+      "end": 0.06,
+      "value": "A"
+    },
+    {
+      "start": 0.06,
       "end": 0.24,
       "value": "B"
     },
     {
       "start": 0.24,
-      "end": 0.45,
-      "value": "C"
+      "end": 0.31,
+      "value": "F"
     },
     {
-      "start": 0.45,
-      "end": 0.8,
+      "start": 0.31,
+      "end": 0.66,
       "value": "B"
     },
     {
+      "start": 0.66,
+      "end": 0.8,
+      "value": "C"
+    },
+    {
       "start": 0.8,
-      "end": 0.91,
+      "end": 0.98,
+      "value": "X"
+    },
+    {
+      "start": 0.98,
+      "end": 1.04,
+      "value": "B"
+    },
+    {
+      "start": 1.04,
+      "end": 1.1,
+      "value": "C"
+    },
+    {
+      "start": 1.1,
+      "end": 1.17,
+      "value": "F"
+    },
+    {
+      "start": 1.17,
+      "end": 1.25,
+      "value": "A"
+    },
+    {
+      "start": 1.25,
+      "end": 1.51,
+      "value": "C"
+    },
+    {
+      "start": 1.51,
+      "end": 1.58,
+      "value": "B"
+    },
+    {
+      "start": 1.58,
+      "end": 1.72,
+      "value": "C"
+    },
+    {
+      "start": 1.72,
+      "end": 1.79,
+      "value": "B"
+    },
+    {
+      "start": 1.79,
+      "end": 1.9,
       "value": "X"
     }
   ]

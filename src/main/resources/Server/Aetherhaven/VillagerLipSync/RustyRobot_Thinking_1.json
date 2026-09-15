@@ -1,0 +1,78 @@
+{
+  "audio": "RustyRobot_Thinking_1.ogg",
+  "audioSha256": "85c0dbafad02ec355c6cb2293d5231175fe06c55640e08ea2b5256259e2a581b",
+  "durationMs": 3315,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.98,
+      "value": "B"
+    },
+    {
+      "start": 0.98,
+      "end": 1.12,
+      "value": "X"
+    },
+    {
+      "start": 1.12,
+      "end": 1.18,
+      "value": "B"
+    },
+    {
+      "start": 1.18,
+      "end": 1.31,
+      "value": "F"
+    },
+    {
+      "start": 1.31,
+      "end": 1.44,
+      "value": "B"
+    },
+    {
+      "start": 1.44,
+      "end": 1.63,
+      "value": "C"
+    },
+    {
+      "start": 1.63,
+      "end": 1.77,
+      "value": "B"
+    },
+    {
+      "start": 1.77,
+      "end": 2.03,
+      "value": "A"
+    },
+    {
+      "start": 2.03,
+      "end": 2.12,
+      "value": "C"
+    },
+    {
+      "start": 2.12,
+      "end": 2.46,
+      "value": "B"
+    },
+    {
+      "start": 2.46,
+      "end": 2.58,
+      "value": "D"
+    },
+    {
+      "start": 2.58,
+      "end": 2.65,
+      "value": "C"
+    },
+    {
+      "start": 2.65,
+      "end": 3.0,
+      "value": "E"
+    },
+    {
+      "start": 3.0,
+      "end": 3.31,
+      "value": "X"
+    }
+  ]
+}

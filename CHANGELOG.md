@@ -5,7 +5,7 @@
 ### Added
 
 - **Villager animations** Villagers and townsfolk have new work, idle, and social animations, including reading, sweeping, crafting, laughing, pondering, yawning, and stretching. Their eyes, eyebrows, and mouths show expressions while they act and talk.
-- **Villager voices** Expressive gibberish speech, laughter, gasps, grumbles, groans, sighs, and yawns bring conversations to life. Eight voice types and deeper or higher variants give each character a voice suited to their race, gender, and personality.
+- **Villager voices** Expressive gibberish speech, laughter, gasps, grumbles, groans, sighs, and yawns bring conversations to life. Eleven voice types and deeper or higher variants give each character a voice suited to their race, gender, and personality, including elderly voices for Lyren and Lyra and a rusty robot voice for Machinaria characters. Each voice uses its own dialogue, idle, work, and thinking lines.
 - **Conversations** Villagers seek out neighbors to chat when they need fun. People working or relaxing in the same building can also strike up a conversation, including inn visitors and the innkeeper. They take turns speaking and react to each other with gestures and expressions.
 - **Romantic conversations** Villagers sometimes show affection with heart bubbles and the same floating hearts as a loved gift. Their partner can return the affection or reject it, leaving the first villager downcast and groaning.
 - **Speech and thought bubbles** Bubbles show topics, feelings, and reactions using expressive icons and familiar items. Thoughts reflect personalities, interests, favorite gifts, and needs. Villagers can think or talk about rain, and residents without a house sometimes think about a home.

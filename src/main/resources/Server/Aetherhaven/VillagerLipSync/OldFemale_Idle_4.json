@@ -1,0 +1,58 @@
+{
+  "audio": "OldFemale_Idle_4.ogg",
+  "audioSha256": "911b05d590e79aa73f48be10f225ddefe9115db4e448d0e70fa87f709b061933",
+  "durationMs": 2092,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.06,
+      "value": "B"
+    },
+    {
+      "start": 0.06,
+      "end": 0.68,
+      "value": "C"
+    },
+    {
+      "start": 0.68,
+      "end": 0.75,
+      "value": "X"
+    },
+    {
+      "start": 0.75,
+      "end": 0.81,
+      "value": "B"
+    },
+    {
+      "start": 0.81,
+      "end": 1.15,
+      "value": "C"
+    },
+    {
+      "start": 1.15,
+      "end": 1.36,
+      "value": "B"
+    },
+    {
+      "start": 1.36,
+      "end": 1.45,
+      "value": "A"
+    },
+    {
+      "start": 1.45,
+      "end": 1.69,
+      "value": "C"
+    },
+    {
+      "start": 1.69,
+      "end": 1.9,
+      "value": "B"
+    },
+    {
+      "start": 1.9,
+      "end": 2.09,
+      "value": "X"
+    }
+  ]
+}

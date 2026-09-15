@@ -1,6 +1,6 @@
 {
   "formatVersion": 1,
-  "duration": 133,
+  "duration": 141,
   "holdLastKeyframe": false,
   "nodeAnimations": {
     "R-Arm": {
@@ -76,7 +76,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 133,
+          "time": 141,
           "delta": {
             "x": 0.0,
             "y": 0.0,
@@ -164,7 +164,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 133,
+          "time": 141,
           "delta": {
             "x": 0.0,
             "y": 0.0,
@@ -252,7 +252,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 133,
+          "time": 141,
           "delta": {
             "x": 0.0,
             "y": 0.0,

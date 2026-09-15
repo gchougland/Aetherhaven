@@ -1,0 +1,83 @@
+{
+  "audio": "OldFemale_Laugh_2.ogg",
+  "audioSha256": "1f92f503d7255aaa5815ce04364957caa0888d8a02dd10f291a2875e548b2d37",
+  "durationMs": 2516,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.08,
+      "value": "B"
+    },
+    {
+      "start": 0.08,
+      "end": 0.28,
+      "value": "C"
+    },
+    {
+      "start": 0.28,
+      "end": 0.35,
+      "value": "B"
+    },
+    {
+      "start": 0.35,
+      "end": 0.43,
+      "value": "A"
+    },
+    {
+      "start": 0.43,
+      "end": 0.61,
+      "value": "B"
+    },
+    {
+      "start": 0.61,
+      "end": 0.79,
+      "value": "A"
+    },
+    {
+      "start": 0.79,
+      "end": 0.93,
+      "value": "B"
+    },
+    {
+      "start": 0.93,
+      "end": 1.07,
+      "value": "F"
+    },
+    {
+      "start": 1.07,
+      "end": 1.49,
+      "value": "C"
+    },
+    {
+      "start": 1.49,
+      "end": 1.63,
+      "value": "F"
+    },
+    {
+      "start": 1.63,
+      "end": 1.77,
+      "value": "C"
+    },
+    {
+      "start": 1.77,
+      "end": 1.84,
+      "value": "B"
+    },
+    {
+      "start": 1.84,
+      "end": 2.19,
+      "value": "F"
+    },
+    {
+      "start": 2.19,
+      "end": 2.51,
+      "value": "X"
+    }
+  ]
+}

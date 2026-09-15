@@ -1,82 +1,77 @@
 {
   "audio": "WarmFemale_Idle_3.ogg",
-  "audioSha256": "9cf10f7a392633ae68afd717d5517d44c2bc2cbd27a0bf3b0046816d8f69c5fa",
-  "durationMs": 2046,
+  "audioSha256": "abe439b28d10520c15c5b29aa7608e49ce34f3e525e282fe800db67b222a120e",
+  "durationMs": 2492,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.03,
+      "end": 0.04,
       "value": "X"
     },
     {
-      "start": 0.03,
-      "end": 0.08,
+      "start": 0.04,
+      "end": 0.34,
       "value": "B"
     },
     {
-      "start": 0.08,
-      "end": 0.16,
-      "value": "A"
+      "start": 0.34,
+      "end": 0.41,
+      "value": "C"
     },
     {
-      "start": 0.16,
-      "end": 0.6,
+      "start": 0.41,
+      "end": 0.83,
       "value": "F"
     },
     {
-      "start": 0.6,
-      "end": 0.67,
+      "start": 0.83,
+      "end": 0.97,
       "value": "B"
     },
     {
-      "start": 0.67,
-      "end": 0.74,
-      "value": "C"
-    },
-    {
-      "start": 0.74,
-      "end": 0.92,
+      "start": 0.97,
+      "end": 1.13,
       "value": "X"
     },
     {
-      "start": 0.92,
-      "end": 0.96,
+      "start": 1.13,
+      "end": 1.19,
       "value": "B"
     },
     {
-      "start": 0.96,
-      "end": 1.14,
+      "start": 1.19,
+      "end": 1.32,
       "value": "C"
     },
     {
-      "start": 1.14,
-      "end": 1.28,
-      "value": "B"
-    },
-    {
-      "start": 1.28,
-      "end": 1.49,
-      "value": "C"
-    },
-    {
-      "start": 1.49,
-      "end": 1.56,
-      "value": "E"
-    },
-    {
-      "start": 1.56,
-      "end": 1.84,
+      "start": 1.32,
+      "end": 1.4,
       "value": "A"
     },
     {
-      "start": 1.84,
-      "end": 1.99,
+      "start": 1.4,
+      "end": 1.51,
+      "value": "F"
+    },
+    {
+      "start": 1.51,
+      "end": 2.0,
+      "value": "C"
+    },
+    {
+      "start": 2.0,
+      "end": 2.23,
+      "value": "A"
+    },
+    {
+      "start": 2.23,
+      "end": 2.41,
       "value": "B"
     },
     {
-      "start": 1.99,
-      "end": 2.04,
+      "start": 2.41,
+      "end": 2.49,
       "value": "X"
     }
   ]

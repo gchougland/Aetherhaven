@@ -9,6 +9,7 @@ public record VillagerVoiceProfile(String id, String recording, float pitch, Str
         String base = variant.isEmpty() ? key : key.substring(0, key.length() - variant.length());
         String canonical = null;
         for (String voice : VillagerLifePolicy.VOICES) if (voice.equalsIgnoreCase(base)) canonical = voice;
+        if (canonical == null) canonical = VillagerLifeSpeech.recordingName(base);
         if (canonical == null) {
             String tone = switch (base.toLowerCase(java.util.Locale.ROOT)) {
                 case "low" -> "Gravely";

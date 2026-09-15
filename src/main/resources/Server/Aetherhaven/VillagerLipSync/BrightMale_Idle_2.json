@@ -1,7 +1,7 @@
 {
   "audio": "BrightMale_Idle_2.ogg",
-  "audioSha256": "67a6cc2920069d641aa8132786a9dbbecb1e3691fe581d756cdb84b15c8bc909",
-  "durationMs": 1895,
+  "audioSha256": "044c75b99d54631a5646deb5288cc98671df6cb142a2b9957dcf420cb4095cd0",
+  "durationMs": 1678,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
@@ -11,72 +11,67 @@
     },
     {
       "start": 0.01,
-      "end": 0.04,
+      "end": 0.25,
       "value": "B"
     },
     {
-      "start": 0.04,
-      "end": 0.21,
-      "value": "A"
-    },
-    {
-      "start": 0.21,
-      "end": 0.33,
-      "value": "B"
-    },
-    {
-      "start": 0.33,
-      "end": 0.54,
+      "start": 0.25,
+      "end": 0.39,
       "value": "E"
     },
     {
-      "start": 0.54,
-      "end": 0.83,
+      "start": 0.39,
+      "end": 0.62,
       "value": "F"
     },
     {
-      "start": 0.83,
-      "end": 0.92,
+      "start": 0.62,
+      "end": 0.72,
       "value": "B"
     },
     {
-      "start": 0.92,
-      "end": 1.02,
+      "start": 0.72,
+      "end": 0.82,
       "value": "D"
     },
     {
-      "start": 1.02,
-      "end": 1.06,
+      "start": 0.82,
+      "end": 0.86,
       "value": "C"
     },
     {
-      "start": 1.06,
-      "end": 1.14,
+      "start": 0.86,
+      "end": 0.94,
       "value": "A"
     },
     {
-      "start": 1.14,
-      "end": 1.31,
+      "start": 0.94,
+      "end": 1.08,
       "value": "F"
     },
     {
-      "start": 1.31,
-      "end": 1.38,
+      "start": 1.08,
+      "end": 1.15,
       "value": "C"
     },
     {
-      "start": 1.38,
-      "end": 1.66,
+      "start": 1.15,
+      "end": 1.36,
       "value": "E"
     },
     {
-      "start": 1.66,
-      "end": 1.8,
+      "start": 1.36,
+      "end": 1.57,
       "value": "F"
     },
     {
-      "start": 1.8,
-      "end": 1.89,
+      "start": 1.57,
+      "end": 1.64,
+      "value": "B"
+    },
+    {
+      "start": 1.64,
+      "end": 1.67,
       "value": "X"
     }
   ]

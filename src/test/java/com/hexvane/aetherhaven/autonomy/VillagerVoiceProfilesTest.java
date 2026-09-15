@@ -36,7 +36,8 @@ class VillagerVoiceProfilesTest {
 
     @Test void requestedNamedVoicesArePreserved() throws Exception {
         for (var entry : java.util.Map.of("Logger","WarmFemale","Rancher","MellowMale","Crystal_Keeper","MellowFemale",
-            "Clown","GravelyMale","Miner","GravelyMaleLower","Pyrotechnic","GravelyMaleHigher","Blacksmith","WarmMaleLower").entrySet()) {
+            "Clown","GravelyMale","Miner","GravelyMaleLower","Pyrotechnic","GravelyMaleHigher","Blacksmith","WarmMaleLower",
+            "Elder_Lyren","OldMale","Guild_Master","OldFemale").entrySet()) {
             var data = JsonParser.parseString(Files.readString(RES.resolve("Server/Aetherhaven/Villagers/Aetherhaven_" + entry.getKey() + ".json"))).getAsJsonObject();
             assertEquals(entry.getValue(), data.get("speechVoiceId").getAsString());
         }
@@ -55,7 +56,7 @@ class VillagerVoiceProfilesTest {
 
     @Test void consecutiveDialogueSelectionsNeverRepeatTheSameRecording() {
         for (String profile : VillagerLifePolicy.VOICES) for (String suffix : new String[]{"","Lower","Higher"}) {
-            for (String mood : new String[]{"Talk","Question","Laugh","Gasp","Grumble","Groan","Yawn","Sigh","Idle","Work"}) {
+            for (String mood : new String[]{"Talk","Question","Laugh","Gasp","Grumble","Groan","Yawn","Sigh","Idle","Work","Thinking"}) {
                 String previous = null;
                 for (int choice = -20; choice < 20; choice++) {
                     var clip = VillagerLifeSpeech.selectExcept(profile + suffix, mood, choice, previous);
@@ -66,7 +67,7 @@ class VillagerVoiceProfilesTest {
             }
         }
         var thinking = VillagerLifeSpeech.select("MellowMale", "Thinking", 0);
-        assertNull(VillagerLifeSpeech.selectExcept("MellowMale", "Thinking", 0, thinking.clip()));
+        assertNotEquals(thinking.clip(), VillagerLifeSpeech.selectExcept("MellowMale", "Thinking", 0, thinking.clip()).clip());
     }
 
     @Test void pitchedVariantsReuseAudioAndKeepFaceBodyAndTimingInStep() throws Exception {

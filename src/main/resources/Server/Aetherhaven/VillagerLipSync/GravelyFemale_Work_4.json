@@ -1,37 +1,57 @@
 {
   "audio": "GravelyFemale_Work_4.ogg",
-  "audioSha256": "f9d6783dbb1ac3405bdaf84493444d52e30fd189a149a1cf72533d6a64922b8e",
-  "durationMs": 1509,
+  "audioSha256": "99245d00a9f79dd3d6f2d3ee706e1119d3d6bbb14200a5568fd44460e1be7def",
+  "durationMs": 1815,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.09,
+      "end": 0.05,
       "value": "B"
     },
     {
-      "start": 0.09,
-      "end": 0.17,
+      "start": 0.05,
+      "end": 0.1,
       "value": "A"
     },
     {
-      "start": 0.17,
-      "end": 0.3,
-      "value": "F"
-    },
-    {
-      "start": 0.3,
-      "end": 1.0,
+      "start": 0.1,
+      "end": 0.22,
       "value": "C"
     },
     {
-      "start": 1.0,
-      "end": 1.35,
+      "start": 0.22,
+      "end": 0.55,
       "value": "B"
     },
     {
-      "start": 1.35,
-      "end": 1.5,
+      "start": 0.55,
+      "end": 0.78,
+      "value": "E"
+    },
+    {
+      "start": 0.78,
+      "end": 1.06,
+      "value": "C"
+    },
+    {
+      "start": 1.06,
+      "end": 1.13,
+      "value": "B"
+    },
+    {
+      "start": 1.13,
+      "end": 1.48,
+      "value": "C"
+    },
+    {
+      "start": 1.48,
+      "end": 1.76,
+      "value": "B"
+    },
+    {
+      "start": 1.76,
+      "end": 1.81,
       "value": "X"
     }
   ]

@@ -1,7 +1,7 @@
 {
   "audio": "WarmFemale_Question_1.ogg",
-  "audioSha256": "1059d41468c02c4751f38db3256a05f2b27e3368fcba39ead0897db5b1a46a00",
-  "durationMs": 941,
+  "audioSha256": "4383b193fe2aa3639b9c8fa741d44d2bfb8c4e92cee3f447d48d3b3527c6484b",
+  "durationMs": 1598,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
@@ -11,52 +11,57 @@
     },
     {
       "start": 0.01,
-      "end": 0.05,
+      "end": 0.06,
       "value": "B"
     },
     {
-      "start": 0.05,
-      "end": 0.13,
-      "value": "A"
-    },
-    {
-      "start": 0.13,
-      "end": 0.2,
+      "start": 0.06,
+      "end": 0.18,
       "value": "C"
     },
     {
-      "start": 0.2,
-      "end": 0.26,
-      "value": "E"
-    },
-    {
-      "start": 0.26,
-      "end": 0.34,
+      "start": 0.18,
+      "end": 0.3,
       "value": "A"
     },
     {
-      "start": 0.34,
+      "start": 0.3,
       "end": 0.38,
-      "value": "C"
+      "value": "D"
     },
     {
       "start": 0.38,
-      "end": 0.56,
+      "end": 0.46,
+      "value": "A"
+    },
+    {
+      "start": 0.46,
+      "end": 0.76,
+      "value": "D"
+    },
+    {
+      "start": 0.76,
+      "end": 0.83,
+      "value": "C"
+    },
+    {
+      "start": 0.83,
+      "end": 1.07,
       "value": "B"
     },
     {
-      "start": 0.56,
-      "end": 0.63,
-      "value": "F"
+      "start": 1.07,
+      "end": 1.21,
+      "value": "C"
     },
     {
-      "start": 0.63,
-      "end": 0.84,
+      "start": 1.21,
+      "end": 1.56,
       "value": "B"
     },
     {
-      "start": 0.84,
-      "end": 0.94,
+      "start": 1.56,
+      "end": 1.59,
       "value": "X"
     }
   ]

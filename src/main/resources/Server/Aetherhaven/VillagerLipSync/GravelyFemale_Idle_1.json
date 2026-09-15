@@ -1,82 +1,72 @@
 {
   "audio": "GravelyFemale_Idle_1.ogg",
-  "audioSha256": "a5e01731b75cdaf498679d9fb8d09b4b8425bbfc87685309f7d92f730fe2c31c",
-  "durationMs": 2560,
+  "audioSha256": "253b00f47e24dc24c385843884bb4cedf1eb53029e9092c1307a2dc85904cf32",
+  "durationMs": 2526,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.01,
-      "value": "X"
+      "end": 0.04,
+      "value": "A"
     },
     {
-      "start": 0.01,
-      "end": 0.07,
-      "value": "B"
-    },
-    {
-      "start": 0.07,
-      "end": 0.33,
+      "start": 0.04,
+      "end": 0.37,
       "value": "C"
     },
     {
-      "start": 0.33,
-      "end": 0.47,
+      "start": 0.37,
+      "end": 0.82,
       "value": "B"
     },
     {
-      "start": 0.47,
-      "end": 0.55,
+      "start": 0.82,
+      "end": 0.9,
       "value": "A"
     },
     {
-      "start": 0.55,
-      "end": 0.84,
-      "value": "B"
-    },
-    {
-      "start": 0.84,
-      "end": 0.92,
-      "value": "A"
-    },
-    {
-      "start": 0.92,
-      "end": 1.13,
+      "start": 0.9,
+      "end": 1.23,
       "value": "E"
     },
     {
-      "start": 1.13,
-      "end": 1.2,
-      "value": "B"
-    },
-    {
-      "start": 1.2,
-      "end": 1.62,
+      "start": 1.23,
+      "end": 1.37,
       "value": "C"
     },
     {
-      "start": 1.62,
-      "end": 1.76,
+      "start": 1.37,
+      "end": 1.51,
+      "value": "B"
+    },
+    {
+      "start": 1.51,
+      "end": 1.65,
+      "value": "C"
+    },
+    {
+      "start": 1.65,
+      "end": 1.85,
       "value": "D"
     },
     {
-      "start": 1.76,
-      "end": 1.83,
+      "start": 1.85,
+      "end": 1.93,
       "value": "C"
     },
     {
-      "start": 1.83,
-      "end": 2.02,
+      "start": 1.93,
+      "end": 2.2,
       "value": "A"
     },
     {
-      "start": 2.02,
-      "end": 2.15,
+      "start": 2.2,
+      "end": 2.33,
       "value": "B"
     },
     {
-      "start": 2.15,
-      "end": 2.55,
+      "start": 2.33,
+      "end": 2.52,
       "value": "X"
     }
   ]

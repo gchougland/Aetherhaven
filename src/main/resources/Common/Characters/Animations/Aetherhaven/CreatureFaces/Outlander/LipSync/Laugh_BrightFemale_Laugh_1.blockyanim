@@ -636,82 +636,47 @@
         {
           "time": 0,
           "delta": {
-            "x": 0,
-            "y": 0
-          }
-        },
-        {
-          "time": 1,
-          "delta": {
-            "x": 0,
-            "y": 0
-          }
-        },
-        {
-          "time": 6,
-          "delta": {
-            "x": 140,
+            "x": 120,
             "y": -10
+          }
+        },
+        {
+          "time": 11,
+          "delta": {
+            "x": 0,
+            "y": 0
           }
         },
         {
           "time": 16,
           "delta": {
-            "x": 0,
-            "y": 0
-          }
-        },
-        {
-          "time": 21,
-          "delta": {
-            "x": 120,
-            "y": -10
-          }
-        },
-        {
-          "time": 26,
-          "delta": {
-            "x": 0,
-            "y": 0
-          }
-        },
-        {
-          "time": 31,
-          "delta": {
             "x": 140,
             "y": -10
           }
         },
         {
-          "time": 34,
-          "delta": {
-            "x": 120,
-            "y": -10
-          }
-        },
-        {
-          "time": 37,
+          "time": 25,
           "delta": {
             "x": 0,
             "y": 0
           }
         },
         {
-          "time": 44,
+          "time": 33,
           "delta": {
             "x": 120,
             "y": -10
           }
         },
         {
-          "time": 66,
+          "time": 48,
           "delta": {
-            "x": 180,
-            "y": -30
+            "x": 0,
+            "y": 0
           }
         },
         {
-          "time": 74,
+          "time": 54,
           "delta": {
             "x": 120,
             "y": -10
@@ -720,47 +685,33 @@
         {
           "time": 83,
           "delta": {
-            "x": 140,
-            "y": -10
+            "x": 220,
+            "y": -30
           }
         },
         {
           "time": 87,
-          "delta": {
-            "x": 220,
-            "y": -30
-          }
-        },
-        {
-          "time": 91,
-          "delta": {
-            "x": 180,
-            "y": -30
-          }
-        },
-        {
-          "time": 95,
-          "delta": {
-            "x": 120,
-            "y": -10
-          }
-        },
-        {
-          "time": 104,
-          "delta": {
-            "x": 220,
-            "y": -30
-          }
-        },
-        {
-          "time": 116,
           "delta": {
             "x": 0,
             "y": 0
           }
         },
         {
-          "time": 118,
+          "time": 96,
+          "delta": {
+            "x": 120,
+            "y": -10
+          }
+        },
+        {
+          "time": 124,
+          "delta": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "time": 127,
           "delta": {
             "x": 0,
             "y": 0
@@ -785,19 +736,10 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 1,
+          "time": 11,
           "delta": {
             "x": 1,
             "y": 1,
-            "z": 1
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 6,
-          "delta": {
-            "x": 1,
-            "y": 1.08,
             "z": 1
           },
           "interpolationType": "smooth"
@@ -806,40 +748,13 @@
           "time": 16,
           "delta": {
             "x": 1,
-            "y": 1,
-            "z": 1
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 21,
-          "delta": {
-            "x": 1,
-            "y": 1,
-            "z": 1
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 26,
-          "delta": {
-            "x": 1,
-            "y": 1,
-            "z": 1
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 31,
-          "delta": {
-            "x": 1,
             "y": 1.08,
             "z": 1
           },
           "interpolationType": "smooth"
         },
         {
-          "time": 34,
+          "time": 25,
           "delta": {
             "x": 1,
             "y": 1,
@@ -848,7 +763,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 37,
+          "time": 33,
           "delta": {
             "x": 1,
             "y": 1,
@@ -857,7 +772,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 44,
+          "time": 48,
           "delta": {
             "x": 1,
             "y": 1,
@@ -866,16 +781,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 66,
-          "delta": {
-            "x": 1,
-            "y": 1.08,
-            "z": 1
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 74,
+          "time": 54,
           "delta": {
             "x": 1,
             "y": 1,
@@ -896,22 +802,13 @@
           "time": 87,
           "delta": {
             "x": 1,
-            "y": 1.08,
+            "y": 1,
             "z": 1
           },
           "interpolationType": "smooth"
         },
         {
-          "time": 91,
-          "delta": {
-            "x": 1,
-            "y": 1.08,
-            "z": 1
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 95,
+          "time": 96,
           "delta": {
             "x": 1,
             "y": 1,
@@ -920,16 +817,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 104,
-          "delta": {
-            "x": 1,
-            "y": 1.08,
-            "z": 1
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 116,
+          "time": 124,
           "delta": {
             "x": 1,
             "y": 1,
@@ -938,7 +826,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 118,
+          "time": 127,
           "delta": {
             "x": 1,
             "y": 1,

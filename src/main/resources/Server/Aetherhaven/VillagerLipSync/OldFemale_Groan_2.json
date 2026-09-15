@@ -1,0 +1,68 @@
+{
+  "audio": "OldFemale_Groan_2.ogg",
+  "audioSha256": "22eae0d92172719a39b8dccccb423f1d2b0216d326a772556a062ea7d301026e",
+  "durationMs": 2432,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.17,
+      "value": "B"
+    },
+    {
+      "start": 0.17,
+      "end": 0.31,
+      "value": "E"
+    },
+    {
+      "start": 0.31,
+      "end": 0.52,
+      "value": "F"
+    },
+    {
+      "start": 0.52,
+      "end": 1.15,
+      "value": "B"
+    },
+    {
+      "start": 1.15,
+      "end": 1.29,
+      "value": "C"
+    },
+    {
+      "start": 1.29,
+      "end": 1.36,
+      "value": "B"
+    },
+    {
+      "start": 1.36,
+      "end": 1.57,
+      "value": "C"
+    },
+    {
+      "start": 1.57,
+      "end": 1.64,
+      "value": "B"
+    },
+    {
+      "start": 1.64,
+      "end": 1.85,
+      "value": "C"
+    },
+    {
+      "start": 1.85,
+      "end": 2.13,
+      "value": "B"
+    },
+    {
+      "start": 2.13,
+      "end": 2.43,
+      "value": "X"
+    }
+  ]
+}

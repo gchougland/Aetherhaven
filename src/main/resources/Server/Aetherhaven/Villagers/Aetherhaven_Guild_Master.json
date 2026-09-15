@@ -290,7 +290,7 @@
     "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.main_hub.greeting.2"
   ],
   "dialogueGiftHintLangKeys": [],
-  "speechVoiceId": "WarmFemaleLower",
+  "speechVoiceId": "OldFemale",
   "birthdaySeason": "Winter",
   "birthdayDay": 13,
   "dialogueBirthdayGreetingLangKeys": [

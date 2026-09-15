@@ -1,62 +1,57 @@
 {
   "audio": "WarmFemale_Yawn_1.ogg",
-  "audioSha256": "ac59e1aff52b7eae61d71ecfdca52ed07a37a135faca23f0efee7e0f1c1a2f7c",
-  "durationMs": 2125,
+  "audioSha256": "54fa2d63c733ef12c1d5c37b2a5071fdc7ca8221fb9a83566a0327772a6f2580",
+  "durationMs": 2362,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.03,
+      "end": 0.05,
       "value": "X"
     },
     {
-      "start": 0.03,
-      "end": 0.1,
+      "start": 0.05,
+      "end": 0.92,
       "value": "B"
     },
     {
-      "start": 0.1,
-      "end": 0.16,
+      "start": 0.92,
+      "end": 1.13,
       "value": "C"
     },
     {
-      "start": 0.16,
-      "end": 0.58,
-      "value": "F"
-    },
-    {
-      "start": 0.58,
-      "end": 0.72,
-      "value": "B"
-    },
-    {
-      "start": 0.72,
-      "end": 0.86,
+      "start": 1.13,
+      "end": 1.24,
       "value": "A"
     },
     {
-      "start": 0.86,
-      "end": 1.01,
-      "value": "D"
-    },
-    {
-      "start": 1.01,
-      "end": 1.05,
+      "start": 1.24,
+      "end": 1.4,
       "value": "C"
     },
     {
-      "start": 1.05,
-      "end": 1.52,
+      "start": 1.4,
+      "end": 1.47,
       "value": "B"
     },
     {
-      "start": 1.52,
-      "end": 2.01,
+      "start": 1.47,
+      "end": 1.68,
       "value": "F"
     },
     {
-      "start": 2.01,
-      "end": 2.12,
+      "start": 1.68,
+      "end": 1.95,
+      "value": "A"
+    },
+    {
+      "start": 1.95,
+      "end": 2.25,
+      "value": "B"
+    },
+    {
+      "start": 2.25,
+      "end": 2.36,
       "value": "X"
     }
   ]

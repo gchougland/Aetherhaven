@@ -1,0 +1,58 @@
+{
+  "audio": "RustyRobot_Sigh_2.ogg",
+  "audioSha256": "e42f9061b2c3f14216aff0451404703ddf13804c5246b6f67186d0a106618575",
+  "durationMs": 1691,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.04,
+      "value": "B"
+    },
+    {
+      "start": 0.04,
+      "end": 0.44,
+      "value": "A"
+    },
+    {
+      "start": 0.44,
+      "end": 0.74,
+      "value": "E"
+    },
+    {
+      "start": 0.74,
+      "end": 0.88,
+      "value": "F"
+    },
+    {
+      "start": 0.88,
+      "end": 1.09,
+      "value": "C"
+    },
+    {
+      "start": 1.09,
+      "end": 1.16,
+      "value": "B"
+    },
+    {
+      "start": 1.16,
+      "end": 1.23,
+      "value": "F"
+    },
+    {
+      "start": 1.23,
+      "end": 1.44,
+      "value": "D"
+    },
+    {
+      "start": 1.44,
+      "end": 1.69,
+      "value": "X"
+    }
+  ]
+}

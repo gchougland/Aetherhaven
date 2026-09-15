@@ -168,134 +168,6 @@
       "Looping": false,
       "BlendingDuration": 0.3
     },
-    "Surprise_BrightFemale_Gasp_1": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_BrightFemale_Gasp_1.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_BrightFemale_Gasp_1.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_BrightFemale_Gasp_1.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Surprise_BrightMale_Gasp_1": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_BrightMale_Gasp_1.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_BrightMale_Gasp_1.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_BrightMale_Gasp_1.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Surprise_WarmFemale_Gasp_1": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_WarmFemale_Gasp_1.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_WarmFemale_Gasp_1.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_WarmFemale_Gasp_1.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Surprise_WarmMale_Gasp_1": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_WarmMale_Gasp_1.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_WarmMale_Gasp_1.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_WarmMale_Gasp_1.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Surprise_MellowFemale_Gasp_1": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_MellowFemale_Gasp_1.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_MellowFemale_Gasp_1.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_MellowFemale_Gasp_1.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Surprise_MellowMale_Gasp_1": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_MellowMale_Gasp_1.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_MellowMale_Gasp_1.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_MellowMale_Gasp_1.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Surprise_GravelyMale_Gasp_1": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_GravelyMale_Gasp_1.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_GravelyMale_Gasp_1.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_GravelyMale_Gasp_1.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Surprise_GravelyFemale_Gasp_1": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_GravelyFemale_Gasp_1.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_GravelyFemale_Gasp_1.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_GravelyFemale_Gasp_1.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Surprise_BrightFemale_Gasp_2": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_BrightFemale_Gasp_2.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_BrightFemale_Gasp_2.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_BrightFemale_Gasp_2.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Surprise_BrightMale_Gasp_2": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_BrightMale_Gasp_2.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_BrightMale_Gasp_2.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_BrightMale_Gasp_2.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Surprise_WarmFemale_Gasp_2": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_WarmFemale_Gasp_2.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_WarmFemale_Gasp_2.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_WarmFemale_Gasp_2.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Surprise_WarmMale_Gasp_2": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_WarmMale_Gasp_2.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_WarmMale_Gasp_2.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_WarmMale_Gasp_2.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Surprise_MellowFemale_Gasp_2": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_MellowFemale_Gasp_2.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_MellowFemale_Gasp_2.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_MellowFemale_Gasp_2.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Surprise_MellowMale_Gasp_2": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_MellowMale_Gasp_2.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_MellowMale_Gasp_2.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_MellowMale_Gasp_2.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Surprise_GravelyMale_Gasp_2": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_GravelyMale_Gasp_2.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_GravelyMale_Gasp_2.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_GravelyMale_Gasp_2.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Surprise_GravelyFemale_Gasp_2": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_GravelyFemale_Gasp_2.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_GravelyFemale_Gasp_2.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_GravelyFemale_Gasp_2.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
     "Hungry_BrightFemale_Groan_1": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_BrightFemale_Groan_1.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_BrightFemale_Groan_1.blockyanim",
@@ -420,6 +292,38 @@
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_GravelyFemale_Groan_1.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_GravelyFemale_Groan_1.blockyanim",
       "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Bored_GravelyFemale_Groan_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Hungry_OldMale_Groan_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_OldMale_Groan_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_OldMale_Groan_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Hungry_OldMale_Groan_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Bored_OldMale_Groan_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_OldMale_Groan_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_OldMale_Groan_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Bored_OldMale_Groan_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Hungry_OldFemale_Groan_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_OldFemale_Groan_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_OldFemale_Groan_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Hungry_OldFemale_Groan_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Bored_OldFemale_Groan_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_OldFemale_Groan_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_OldFemale_Groan_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Bored_OldFemale_Groan_1.blockyanim",
       "Speed": 0.8908987181403393,
       "Looping": false,
       "BlendingDuration": 0.35
@@ -552,130 +456,34 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
-    "Disagree_BrightFemale_Grumble_1": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_BrightFemale_Grumble_1.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_BrightFemale_Grumble_1.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_BrightFemale_Grumble_1.blockyanim",
+    "Hungry_OldMale_Groan_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_OldMale_Groan_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_OldMale_Groan_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Hungry_OldMale_Groan_2.blockyanim",
       "Speed": 0.8908987181403393,
       "Looping": false,
       "BlendingDuration": 0.35
     },
-    "Disagree_BrightMale_Grumble_1": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_BrightMale_Grumble_1.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_BrightMale_Grumble_1.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_BrightMale_Grumble_1.blockyanim",
+    "Bored_OldMale_Groan_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_OldMale_Groan_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_OldMale_Groan_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Bored_OldMale_Groan_2.blockyanim",
       "Speed": 0.8908987181403393,
       "Looping": false,
       "BlendingDuration": 0.35
     },
-    "Disagree_WarmFemale_Grumble_1": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_WarmFemale_Grumble_1.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_WarmFemale_Grumble_1.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_WarmFemale_Grumble_1.blockyanim",
+    "Hungry_OldFemale_Groan_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_OldFemale_Groan_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_OldFemale_Groan_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Hungry_OldFemale_Groan_2.blockyanim",
       "Speed": 0.8908987181403393,
       "Looping": false,
       "BlendingDuration": 0.35
     },
-    "Disagree_WarmMale_Grumble_1": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_WarmMale_Grumble_1.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_WarmMale_Grumble_1.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_WarmMale_Grumble_1.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Disagree_MellowFemale_Grumble_1": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_MellowFemale_Grumble_1.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_MellowFemale_Grumble_1.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_MellowFemale_Grumble_1.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Disagree_MellowMale_Grumble_1": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_MellowMale_Grumble_1.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_MellowMale_Grumble_1.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_MellowMale_Grumble_1.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Disagree_GravelyMale_Grumble_1": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_GravelyMale_Grumble_1.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_GravelyMale_Grumble_1.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_GravelyMale_Grumble_1.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Disagree_GravelyFemale_Grumble_1": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_GravelyFemale_Grumble_1.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_GravelyFemale_Grumble_1.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_GravelyFemale_Grumble_1.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Disagree_BrightFemale_Grumble_2": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_BrightFemale_Grumble_2.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_BrightFemale_Grumble_2.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_BrightFemale_Grumble_2.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Disagree_BrightMale_Grumble_2": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_BrightMale_Grumble_2.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_BrightMale_Grumble_2.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_BrightMale_Grumble_2.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Disagree_WarmFemale_Grumble_2": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_WarmFemale_Grumble_2.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_WarmFemale_Grumble_2.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_WarmFemale_Grumble_2.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Disagree_WarmMale_Grumble_2": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_WarmMale_Grumble_2.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_WarmMale_Grumble_2.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_WarmMale_Grumble_2.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Disagree_MellowFemale_Grumble_2": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_MellowFemale_Grumble_2.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_MellowFemale_Grumble_2.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_MellowFemale_Grumble_2.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Disagree_MellowMale_Grumble_2": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_MellowMale_Grumble_2.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_MellowMale_Grumble_2.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_MellowMale_Grumble_2.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Disagree_GravelyMale_Grumble_2": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_GravelyMale_Grumble_2.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_GravelyMale_Grumble_2.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_GravelyMale_Grumble_2.blockyanim",
-      "Speed": 0.8908987181403393,
-      "Looping": false,
-      "BlendingDuration": 0.35
-    },
-    "Disagree_GravelyFemale_Grumble_2": {
-      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_GravelyFemale_Grumble_2.blockyanim",
-      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_GravelyFemale_Grumble_2.blockyanim",
-      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_GravelyFemale_Grumble_2.blockyanim",
+    "Bored_OldFemale_Groan_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_OldFemale_Groan_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_OldFemale_Groan_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Bored_OldFemale_Groan_2.blockyanim",
       "Speed": 0.8908987181403393,
       "Looping": false,
       "BlendingDuration": 0.35
@@ -744,6 +552,22 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
+    "Laugh_OldMale_Laugh_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Laugh_OldMale_Laugh_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Laugh_OldMale_Laugh_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Laugh_OldMale_Laugh_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Laugh_OldFemale_Laugh_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Laugh_OldFemale_Laugh_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Laugh_OldFemale_Laugh_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Laugh_OldFemale_Laugh_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
     "Laugh_BrightFemale_Laugh_2": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Laugh_BrightFemale_Laugh_2.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Laugh_BrightFemale_Laugh_2.blockyanim",
@@ -804,6 +628,22 @@
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Laugh_GravelyFemale_Laugh_2.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Laugh_GravelyFemale_Laugh_2.blockyanim",
       "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Laugh_GravelyFemale_Laugh_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Laugh_OldMale_Laugh_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Laugh_OldMale_Laugh_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Laugh_OldMale_Laugh_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Laugh_OldMale_Laugh_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Laugh_OldFemale_Laugh_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Laugh_OldFemale_Laugh_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Laugh_OldFemale_Laugh_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Laugh_OldFemale_Laugh_2.blockyanim",
       "Speed": 0.8908987181403393,
       "Looping": false,
       "BlendingDuration": 0.35
@@ -872,6 +712,22 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
+    "Question_OldMale_Question_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Question_OldMale_Question_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Question_OldMale_Question_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Question_OldMale_Question_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Question_OldFemale_Question_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Question_OldFemale_Question_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Question_OldFemale_Question_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Question_OldFemale_Question_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
     "Question_BrightFemale_Question_2": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Question_BrightFemale_Question_2.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Question_BrightFemale_Question_2.blockyanim",
@@ -932,6 +788,22 @@
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Question_GravelyFemale_Question_2.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Question_GravelyFemale_Question_2.blockyanim",
       "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Question_GravelyFemale_Question_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Question_OldMale_Question_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Question_OldMale_Question_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Question_OldMale_Question_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Question_OldMale_Question_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Question_OldFemale_Question_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Question_OldFemale_Question_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Question_OldFemale_Question_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Question_OldFemale_Question_2.blockyanim",
       "Speed": 0.8908987181403393,
       "Looping": false,
       "BlendingDuration": 0.35
@@ -1000,6 +872,22 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
+    "Bored_OldMale_Sigh_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_OldMale_Sigh_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_OldMale_Sigh_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Bored_OldMale_Sigh_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Bored_OldFemale_Sigh_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_OldFemale_Sigh_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_OldFemale_Sigh_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Bored_OldFemale_Sigh_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
     "Bored_BrightFemale_Sigh_2": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_BrightFemale_Sigh_2.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_BrightFemale_Sigh_2.blockyanim",
@@ -1060,6 +948,22 @@
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_GravelyFemale_Sigh_2.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_GravelyFemale_Sigh_2.blockyanim",
       "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Bored_GravelyFemale_Sigh_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Bored_OldMale_Sigh_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_OldMale_Sigh_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_OldMale_Sigh_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Bored_OldMale_Sigh_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Bored_OldFemale_Sigh_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_OldFemale_Sigh_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_OldFemale_Sigh_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Bored_OldFemale_Sigh_2.blockyanim",
       "Speed": 0.8908987181403393,
       "Looping": false,
       "BlendingDuration": 0.35
@@ -1320,6 +1224,70 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
+    "Greet_OldMale_Talk_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Greet_OldMale_Talk_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Greet_OldMale_Talk_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Greet_OldMale_Talk_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Explain_OldMale_Talk_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Explain_OldMale_Talk_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Explain_OldMale_Talk_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Explain_OldMale_Talk_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Story_OldMale_Talk_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Story_OldMale_Talk_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Story_OldMale_Talk_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Story_OldMale_Talk_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Agree_OldMale_Talk_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Agree_OldMale_Talk_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Agree_OldMale_Talk_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Agree_OldMale_Talk_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Greet_OldFemale_Talk_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Greet_OldFemale_Talk_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Greet_OldFemale_Talk_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Greet_OldFemale_Talk_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Explain_OldFemale_Talk_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Explain_OldFemale_Talk_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Explain_OldFemale_Talk_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Explain_OldFemale_Talk_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Story_OldFemale_Talk_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Story_OldFemale_Talk_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Story_OldFemale_Talk_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Story_OldFemale_Talk_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Agree_OldFemale_Talk_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Agree_OldFemale_Talk_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Agree_OldFemale_Talk_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Agree_OldFemale_Talk_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
     "Greet_BrightFemale_Talk_2": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Greet_BrightFemale_Talk_2.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Greet_BrightFemale_Talk_2.blockyanim",
@@ -1572,6 +1540,70 @@
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Agree_GravelyFemale_Talk_2.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Agree_GravelyFemale_Talk_2.blockyanim",
       "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Agree_GravelyFemale_Talk_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Greet_OldMale_Talk_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Greet_OldMale_Talk_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Greet_OldMale_Talk_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Greet_OldMale_Talk_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Explain_OldMale_Talk_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Explain_OldMale_Talk_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Explain_OldMale_Talk_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Explain_OldMale_Talk_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Story_OldMale_Talk_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Story_OldMale_Talk_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Story_OldMale_Talk_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Story_OldMale_Talk_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Agree_OldMale_Talk_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Agree_OldMale_Talk_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Agree_OldMale_Talk_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Agree_OldMale_Talk_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Greet_OldFemale_Talk_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Greet_OldFemale_Talk_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Greet_OldFemale_Talk_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Greet_OldFemale_Talk_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Explain_OldFemale_Talk_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Explain_OldFemale_Talk_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Explain_OldFemale_Talk_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Explain_OldFemale_Talk_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Story_OldFemale_Talk_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Story_OldFemale_Talk_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Story_OldFemale_Talk_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Story_OldFemale_Talk_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Agree_OldFemale_Talk_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Agree_OldFemale_Talk_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Agree_OldFemale_Talk_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Agree_OldFemale_Talk_2.blockyanim",
       "Speed": 0.8908987181403393,
       "Looping": false,
       "BlendingDuration": 0.35
@@ -1832,6 +1864,70 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
+    "Greet_OldMale_Talk_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Greet_OldMale_Talk_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Greet_OldMale_Talk_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Greet_OldMale_Talk_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Explain_OldMale_Talk_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Explain_OldMale_Talk_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Explain_OldMale_Talk_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Explain_OldMale_Talk_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Story_OldMale_Talk_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Story_OldMale_Talk_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Story_OldMale_Talk_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Story_OldMale_Talk_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Agree_OldMale_Talk_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Agree_OldMale_Talk_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Agree_OldMale_Talk_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Agree_OldMale_Talk_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Greet_OldFemale_Talk_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Greet_OldFemale_Talk_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Greet_OldFemale_Talk_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Greet_OldFemale_Talk_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Explain_OldFemale_Talk_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Explain_OldFemale_Talk_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Explain_OldFemale_Talk_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Explain_OldFemale_Talk_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Story_OldFemale_Talk_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Story_OldFemale_Talk_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Story_OldFemale_Talk_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Story_OldFemale_Talk_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Agree_OldFemale_Talk_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Agree_OldFemale_Talk_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Agree_OldFemale_Talk_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Agree_OldFemale_Talk_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
     "Sleepy_BrightFemale_Yawn_1": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sleepy_BrightFemale_Yawn_1.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sleepy_BrightFemale_Yawn_1.blockyanim",
@@ -1960,6 +2056,38 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
+    "Sleepy_OldMale_Yawn_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sleepy_OldMale_Yawn_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sleepy_OldMale_Yawn_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sleepy_OldMale_Yawn_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Stretch_OldMale_Yawn_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Stretch_OldMale_Yawn_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Stretch_OldMale_Yawn_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Stretch_OldMale_Yawn_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sleepy_OldFemale_Yawn_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sleepy_OldFemale_Yawn_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sleepy_OldFemale_Yawn_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sleepy_OldFemale_Yawn_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Stretch_OldFemale_Yawn_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Stretch_OldFemale_Yawn_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Stretch_OldFemale_Yawn_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Stretch_OldFemale_Yawn_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
     "Sleepy_BrightFemale_Yawn_2": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sleepy_BrightFemale_Yawn_2.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sleepy_BrightFemale_Yawn_2.blockyanim",
@@ -2084,6 +2212,358 @@
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Stretch_GravelyFemale_Yawn_2.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Stretch_GravelyFemale_Yawn_2.blockyanim",
       "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Stretch_GravelyFemale_Yawn_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sleepy_OldMale_Yawn_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sleepy_OldMale_Yawn_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sleepy_OldMale_Yawn_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sleepy_OldMale_Yawn_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Stretch_OldMale_Yawn_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Stretch_OldMale_Yawn_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Stretch_OldMale_Yawn_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Stretch_OldMale_Yawn_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sleepy_OldFemale_Yawn_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sleepy_OldFemale_Yawn_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sleepy_OldFemale_Yawn_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sleepy_OldFemale_Yawn_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Stretch_OldFemale_Yawn_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Stretch_OldFemale_Yawn_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Stretch_OldFemale_Yawn_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Stretch_OldFemale_Yawn_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_BrightFemale_Gasp_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_BrightFemale_Gasp_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_BrightFemale_Gasp_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_BrightFemale_Gasp_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_BrightMale_Gasp_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_BrightMale_Gasp_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_BrightMale_Gasp_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_BrightMale_Gasp_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_WarmFemale_Gasp_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_WarmFemale_Gasp_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_WarmFemale_Gasp_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_WarmFemale_Gasp_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_WarmMale_Gasp_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_WarmMale_Gasp_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_WarmMale_Gasp_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_WarmMale_Gasp_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_MellowFemale_Gasp_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_MellowFemale_Gasp_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_MellowFemale_Gasp_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_MellowFemale_Gasp_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_MellowMale_Gasp_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_MellowMale_Gasp_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_MellowMale_Gasp_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_MellowMale_Gasp_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_GravelyMale_Gasp_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_GravelyMale_Gasp_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_GravelyMale_Gasp_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_GravelyMale_Gasp_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_GravelyFemale_Gasp_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_GravelyFemale_Gasp_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_GravelyFemale_Gasp_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_GravelyFemale_Gasp_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_OldMale_Gasp_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_OldMale_Gasp_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_OldMale_Gasp_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_OldMale_Gasp_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_OldFemale_Gasp_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_OldFemale_Gasp_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_OldFemale_Gasp_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_OldFemale_Gasp_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_BrightFemale_Gasp_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_BrightFemale_Gasp_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_BrightFemale_Gasp_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_BrightFemale_Gasp_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_BrightMale_Gasp_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_BrightMale_Gasp_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_BrightMale_Gasp_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_BrightMale_Gasp_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_WarmFemale_Gasp_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_WarmFemale_Gasp_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_WarmFemale_Gasp_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_WarmFemale_Gasp_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_WarmMale_Gasp_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_WarmMale_Gasp_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_WarmMale_Gasp_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_WarmMale_Gasp_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_MellowFemale_Gasp_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_MellowFemale_Gasp_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_MellowFemale_Gasp_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_MellowFemale_Gasp_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_MellowMale_Gasp_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_MellowMale_Gasp_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_MellowMale_Gasp_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_MellowMale_Gasp_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_GravelyMale_Gasp_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_GravelyMale_Gasp_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_GravelyMale_Gasp_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_GravelyMale_Gasp_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_GravelyFemale_Gasp_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_GravelyFemale_Gasp_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_GravelyFemale_Gasp_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_GravelyFemale_Gasp_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_OldMale_Gasp_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_OldMale_Gasp_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_OldMale_Gasp_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_OldMale_Gasp_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_OldFemale_Gasp_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_OldFemale_Gasp_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_OldFemale_Gasp_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_OldFemale_Gasp_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_BrightFemale_Grumble_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_BrightFemale_Grumble_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_BrightFemale_Grumble_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_BrightFemale_Grumble_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_BrightMale_Grumble_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_BrightMale_Grumble_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_BrightMale_Grumble_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_BrightMale_Grumble_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_WarmFemale_Grumble_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_WarmFemale_Grumble_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_WarmFemale_Grumble_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_WarmFemale_Grumble_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_WarmMale_Grumble_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_WarmMale_Grumble_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_WarmMale_Grumble_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_WarmMale_Grumble_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_MellowFemale_Grumble_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_MellowFemale_Grumble_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_MellowFemale_Grumble_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_MellowFemale_Grumble_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_MellowMale_Grumble_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_MellowMale_Grumble_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_MellowMale_Grumble_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_MellowMale_Grumble_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_GravelyMale_Grumble_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_GravelyMale_Grumble_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_GravelyMale_Grumble_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_GravelyMale_Grumble_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_GravelyFemale_Grumble_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_GravelyFemale_Grumble_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_GravelyFemale_Grumble_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_GravelyFemale_Grumble_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_OldMale_Grumble_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_OldMale_Grumble_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_OldMale_Grumble_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_OldMale_Grumble_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_OldFemale_Grumble_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_OldFemale_Grumble_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_OldFemale_Grumble_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_OldFemale_Grumble_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_BrightFemale_Grumble_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_BrightFemale_Grumble_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_BrightFemale_Grumble_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_BrightFemale_Grumble_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_BrightMale_Grumble_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_BrightMale_Grumble_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_BrightMale_Grumble_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_BrightMale_Grumble_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_WarmFemale_Grumble_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_WarmFemale_Grumble_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_WarmFemale_Grumble_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_WarmFemale_Grumble_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_WarmMale_Grumble_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_WarmMale_Grumble_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_WarmMale_Grumble_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_WarmMale_Grumble_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_MellowFemale_Grumble_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_MellowFemale_Grumble_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_MellowFemale_Grumble_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_MellowFemale_Grumble_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_MellowMale_Grumble_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_MellowMale_Grumble_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_MellowMale_Grumble_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_MellowMale_Grumble_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_GravelyMale_Grumble_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_GravelyMale_Grumble_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_GravelyMale_Grumble_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_GravelyMale_Grumble_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_GravelyFemale_Grumble_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_GravelyFemale_Grumble_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_GravelyFemale_Grumble_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_GravelyFemale_Grumble_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_OldMale_Grumble_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_OldMale_Grumble_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_OldMale_Grumble_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_OldMale_Grumble_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_OldFemale_Grumble_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_OldFemale_Grumble_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_OldFemale_Grumble_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_OldFemale_Grumble_2.blockyanim",
       "Speed": 0.8908987181403393,
       "Looping": false,
       "BlendingDuration": 0.35
@@ -2536,6 +3016,118 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
+    "LookAround_OldMale_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldMale_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldMale_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_OldMale_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Fidget_OldMale_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_OldMale_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_OldMale_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Fidget_OldMale_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldMale_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldMale_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_OldMale_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldMale_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldMale_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_OldMale_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_OldMale_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldMale_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldMale_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_OldMale_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_OldMale_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldMale_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldMale_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_OldMale_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_OldMale_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldMale_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldMale_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_OldMale_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_OldFemale_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldFemale_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldFemale_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_OldFemale_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Fidget_OldFemale_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_OldFemale_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_OldFemale_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Fidget_OldFemale_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldFemale_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldFemale_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_OldFemale_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldFemale_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldFemale_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_OldFemale_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_OldFemale_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldFemale_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldFemale_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_OldFemale_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_OldFemale_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldFemale_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldFemale_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_OldFemale_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_OldFemale_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldFemale_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldFemale_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_OldFemale_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
     "LookAround_BrightFemale_Idle_2": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_BrightFemale_Idle_2.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_BrightFemale_Idle_2.blockyanim",
@@ -2980,6 +3572,118 @@
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_GravelyFemale_Idle_2.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_GravelyFemale_Idle_2.blockyanim",
       "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_GravelyFemale_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_OldMale_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldMale_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldMale_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_OldMale_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Fidget_OldMale_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_OldMale_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_OldMale_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Fidget_OldMale_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldMale_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldMale_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_OldMale_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldMale_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldMale_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_OldMale_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_OldMale_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldMale_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldMale_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_OldMale_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_OldMale_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldMale_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldMale_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_OldMale_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_OldMale_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldMale_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldMale_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_OldMale_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_OldFemale_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldFemale_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldFemale_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_OldFemale_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Fidget_OldFemale_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_OldFemale_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_OldFemale_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Fidget_OldFemale_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldFemale_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldFemale_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_OldFemale_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldFemale_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldFemale_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_OldFemale_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_OldFemale_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldFemale_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldFemale_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_OldFemale_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_OldFemale_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldFemale_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldFemale_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_OldFemale_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_OldFemale_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldFemale_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldFemale_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_OldFemale_Idle_2.blockyanim",
       "Speed": 0.8908987181403393,
       "Looping": false,
       "BlendingDuration": 0.35
@@ -3432,6 +4136,118 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
+    "LookAround_OldMale_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldMale_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldMale_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_OldMale_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Fidget_OldMale_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_OldMale_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_OldMale_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Fidget_OldMale_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldMale_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldMale_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_OldMale_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldMale_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldMale_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_OldMale_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_OldMale_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldMale_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldMale_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_OldMale_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_OldMale_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldMale_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldMale_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_OldMale_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_OldMale_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldMale_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldMale_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_OldMale_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_OldFemale_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldFemale_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldFemale_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_OldFemale_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Fidget_OldFemale_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_OldFemale_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_OldFemale_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Fidget_OldFemale_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldFemale_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldFemale_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_OldFemale_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldFemale_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldFemale_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_OldFemale_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_OldFemale_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldFemale_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldFemale_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_OldFemale_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_OldFemale_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldFemale_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldFemale_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_OldFemale_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_OldFemale_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldFemale_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldFemale_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_OldFemale_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
     "LookAround_BrightFemale_Idle_4": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_BrightFemale_Idle_4.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_BrightFemale_Idle_4.blockyanim",
@@ -3880,6 +4696,118 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
+    "LookAround_OldMale_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldMale_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldMale_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_OldMale_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Fidget_OldMale_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_OldMale_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_OldMale_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Fidget_OldMale_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldMale_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldMale_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_OldMale_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldMale_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldMale_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_OldMale_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_OldMale_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldMale_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldMale_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_OldMale_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_OldMale_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldMale_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldMale_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_OldMale_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_OldMale_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldMale_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldMale_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_OldMale_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_OldFemale_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldFemale_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldFemale_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_OldFemale_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Fidget_OldFemale_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_OldFemale_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_OldFemale_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Fidget_OldFemale_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldFemale_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldFemale_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_OldFemale_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldFemale_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldFemale_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_OldFemale_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_OldFemale_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldFemale_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldFemale_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_OldFemale_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_OldFemale_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldFemale_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldFemale_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_OldFemale_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_OldFemale_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldFemale_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldFemale_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_OldFemale_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
     "LookAround_BrightFemale_Work_1": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_BrightFemale_Work_1.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_BrightFemale_Work_1.blockyanim",
@@ -4260,6 +5188,102 @@
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_GravelyFemale_Work_1.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_GravelyFemale_Work_1.blockyanim",
       "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_GravelyFemale_Work_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_OldMale_Work_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldMale_Work_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldMale_Work_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_OldMale_Work_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_OldMale_Work_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldMale_Work_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldMale_Work_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_OldMale_Work_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_OldMale_Work_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldMale_Work_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldMale_Work_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_OldMale_Work_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_OldMale_Work_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldMale_Work_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldMale_Work_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_OldMale_Work_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_OldMale_Work_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldMale_Work_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldMale_Work_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_OldMale_Work_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldMale_Work_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Work_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Work_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldMale_Work_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_OldFemale_Work_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldFemale_Work_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldFemale_Work_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_OldFemale_Work_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_OldFemale_Work_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldFemale_Work_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldFemale_Work_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_OldFemale_Work_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_OldFemale_Work_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldFemale_Work_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldFemale_Work_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_OldFemale_Work_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_OldFemale_Work_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldFemale_Work_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldFemale_Work_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_OldFemale_Work_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_OldFemale_Work_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldFemale_Work_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldFemale_Work_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_OldFemale_Work_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldFemale_Work_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Work_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Work_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldFemale_Work_1.blockyanim",
       "Speed": 0.8908987181403393,
       "Looping": false,
       "BlendingDuration": 0.35
@@ -4648,6 +5672,102 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
+    "LookAround_OldMale_Work_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldMale_Work_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldMale_Work_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_OldMale_Work_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_OldMale_Work_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldMale_Work_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldMale_Work_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_OldMale_Work_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_OldMale_Work_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldMale_Work_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldMale_Work_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_OldMale_Work_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_OldMale_Work_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldMale_Work_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldMale_Work_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_OldMale_Work_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_OldMale_Work_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldMale_Work_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldMale_Work_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_OldMale_Work_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldMale_Work_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Work_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Work_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldMale_Work_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_OldFemale_Work_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldFemale_Work_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldFemale_Work_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_OldFemale_Work_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_OldFemale_Work_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldFemale_Work_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldFemale_Work_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_OldFemale_Work_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_OldFemale_Work_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldFemale_Work_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldFemale_Work_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_OldFemale_Work_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_OldFemale_Work_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldFemale_Work_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldFemale_Work_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_OldFemale_Work_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_OldFemale_Work_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldFemale_Work_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldFemale_Work_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_OldFemale_Work_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldFemale_Work_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Work_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Work_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldFemale_Work_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
     "LookAround_BrightFemale_Work_3": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_BrightFemale_Work_3.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_BrightFemale_Work_3.blockyanim",
@@ -5028,6 +6148,102 @@
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_GravelyFemale_Work_3.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_GravelyFemale_Work_3.blockyanim",
       "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_GravelyFemale_Work_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_OldMale_Work_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldMale_Work_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldMale_Work_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_OldMale_Work_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_OldMale_Work_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldMale_Work_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldMale_Work_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_OldMale_Work_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_OldMale_Work_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldMale_Work_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldMale_Work_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_OldMale_Work_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_OldMale_Work_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldMale_Work_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldMale_Work_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_OldMale_Work_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_OldMale_Work_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldMale_Work_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldMale_Work_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_OldMale_Work_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldMale_Work_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Work_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Work_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldMale_Work_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_OldFemale_Work_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldFemale_Work_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldFemale_Work_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_OldFemale_Work_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_OldFemale_Work_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldFemale_Work_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldFemale_Work_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_OldFemale_Work_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_OldFemale_Work_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldFemale_Work_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldFemale_Work_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_OldFemale_Work_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_OldFemale_Work_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldFemale_Work_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldFemale_Work_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_OldFemale_Work_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_OldFemale_Work_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldFemale_Work_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldFemale_Work_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_OldFemale_Work_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldFemale_Work_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Work_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Work_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldFemale_Work_3.blockyanim",
       "Speed": 0.8908987181403393,
       "Looping": false,
       "BlendingDuration": 0.35
@@ -5416,6 +6632,102 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
+    "LookAround_OldMale_Work_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldMale_Work_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldMale_Work_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_OldMale_Work_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_OldMale_Work_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldMale_Work_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldMale_Work_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_OldMale_Work_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_OldMale_Work_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldMale_Work_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldMale_Work_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_OldMale_Work_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_OldMale_Work_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldMale_Work_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldMale_Work_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_OldMale_Work_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_OldMale_Work_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldMale_Work_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldMale_Work_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_OldMale_Work_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldMale_Work_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Work_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Work_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldMale_Work_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_OldFemale_Work_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldFemale_Work_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_OldFemale_Work_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_OldFemale_Work_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_OldFemale_Work_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldFemale_Work_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_OldFemale_Work_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_OldFemale_Work_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_OldFemale_Work_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldFemale_Work_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_OldFemale_Work_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_OldFemale_Work_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_OldFemale_Work_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldFemale_Work_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_OldFemale_Work_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_OldFemale_Work_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_OldFemale_Work_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldFemale_Work_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_OldFemale_Work_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_OldFemale_Work_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldFemale_Work_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Work_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Work_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldFemale_Work_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
     "Ponder_BrightFemale_Thinking_1": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_BrightFemale_Thinking_1.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_BrightFemale_Thinking_1.blockyanim",
@@ -5540,6 +6852,886 @@
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_GravelyFemale_Thinking_1.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_GravelyFemale_Thinking_1.blockyanim",
       "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_GravelyFemale_Thinking_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Ponder_OldMale_Thinking_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_OldMale_Thinking_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_OldMale_Thinking_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Ponder_OldMale_Thinking_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldMale_Thinking_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Thinking_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Thinking_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldMale_Thinking_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Ponder_OldFemale_Thinking_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_OldFemale_Thinking_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_OldFemale_Thinking_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Ponder_OldFemale_Thinking_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldFemale_Thinking_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Thinking_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Thinking_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldFemale_Thinking_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Ponder_BrightFemale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_BrightFemale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_BrightFemale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Ponder_BrightFemale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_BrightFemale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_BrightFemale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_BrightFemale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_BrightFemale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Ponder_BrightMale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_BrightMale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_BrightMale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Ponder_BrightMale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_BrightMale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_BrightMale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_BrightMale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_BrightMale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Ponder_WarmFemale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_WarmFemale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_WarmFemale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Ponder_WarmFemale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_WarmFemale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_WarmFemale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_WarmFemale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_WarmFemale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Ponder_WarmMale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_WarmMale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_WarmMale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Ponder_WarmMale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_WarmMale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_WarmMale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_WarmMale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_WarmMale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Ponder_MellowFemale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_MellowFemale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_MellowFemale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Ponder_MellowFemale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_MellowFemale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_MellowFemale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_MellowFemale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_MellowFemale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Ponder_MellowMale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_MellowMale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_MellowMale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Ponder_MellowMale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_MellowMale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_MellowMale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_MellowMale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_MellowMale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Ponder_GravelyMale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_GravelyMale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_GravelyMale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Ponder_GravelyMale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_GravelyMale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_GravelyMale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_GravelyMale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_GravelyMale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Ponder_GravelyFemale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_GravelyFemale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_GravelyFemale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Ponder_GravelyFemale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_GravelyFemale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_GravelyFemale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_GravelyFemale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_GravelyFemale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Ponder_OldMale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_OldMale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_OldMale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Ponder_OldMale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldMale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldMale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldMale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Ponder_OldFemale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_OldFemale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_OldFemale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Ponder_OldFemale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_OldFemale_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_OldFemale_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_OldFemale_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_RustyRobot_Gasp_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_RustyRobot_Gasp_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_RustyRobot_Gasp_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_RustyRobot_Gasp_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_RustyRobot_Gasp_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_RustyRobot_Gasp_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Surprise_RustyRobot_Gasp_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Surprise_RustyRobot_Gasp_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Hungry_RustyRobot_Groan_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_RustyRobot_Groan_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_RustyRobot_Groan_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Hungry_RustyRobot_Groan_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Bored_RustyRobot_Groan_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_RustyRobot_Groan_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_RustyRobot_Groan_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Bored_RustyRobot_Groan_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Hungry_RustyRobot_Groan_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_RustyRobot_Groan_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_RustyRobot_Groan_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Hungry_RustyRobot_Groan_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Bored_RustyRobot_Groan_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_RustyRobot_Groan_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_RustyRobot_Groan_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Bored_RustyRobot_Groan_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_RustyRobot_Grumble_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_RustyRobot_Grumble_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_RustyRobot_Grumble_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_RustyRobot_Grumble_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_RustyRobot_Grumble_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_RustyRobot_Grumble_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Disagree_RustyRobot_Grumble_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Disagree_RustyRobot_Grumble_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_RustyRobot_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_RustyRobot_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_RustyRobot_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_RustyRobot_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Fidget_RustyRobot_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_RustyRobot_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_RustyRobot_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Fidget_RustyRobot_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_RustyRobot_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_RustyRobot_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_RustyRobot_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_RustyRobot_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_RustyRobot_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_RustyRobot_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_RustyRobot_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_RustyRobot_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_RustyRobot_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_RustyRobot_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_RustyRobot_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_RustyRobot_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_RustyRobot_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_RustyRobot_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_RustyRobot_Idle_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_RustyRobot_Idle_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_RustyRobot_Idle_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_RustyRobot_Idle_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_RustyRobot_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_RustyRobot_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_RustyRobot_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_RustyRobot_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Fidget_RustyRobot_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_RustyRobot_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_RustyRobot_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Fidget_RustyRobot_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_RustyRobot_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_RustyRobot_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_RustyRobot_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_RustyRobot_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_RustyRobot_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_RustyRobot_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_RustyRobot_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_RustyRobot_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_RustyRobot_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_RustyRobot_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_RustyRobot_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_RustyRobot_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_RustyRobot_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_RustyRobot_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_RustyRobot_Idle_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_RustyRobot_Idle_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_RustyRobot_Idle_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_RustyRobot_Idle_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_RustyRobot_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_RustyRobot_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_RustyRobot_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_RustyRobot_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Fidget_RustyRobot_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_RustyRobot_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_RustyRobot_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Fidget_RustyRobot_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_RustyRobot_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_RustyRobot_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_RustyRobot_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_RustyRobot_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_RustyRobot_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_RustyRobot_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_RustyRobot_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_RustyRobot_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_RustyRobot_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_RustyRobot_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_RustyRobot_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_RustyRobot_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_RustyRobot_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_RustyRobot_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_RustyRobot_Idle_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_RustyRobot_Idle_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_RustyRobot_Idle_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_RustyRobot_Idle_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_RustyRobot_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_RustyRobot_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_RustyRobot_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_RustyRobot_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Fidget_RustyRobot_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_RustyRobot_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Fidget_RustyRobot_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Fidget_RustyRobot_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_RustyRobot_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_RustyRobot_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_RustyRobot_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_RustyRobot_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_RustyRobot_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_RustyRobot_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_RustyRobot_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_RustyRobot_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_RustyRobot_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_RustyRobot_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_RustyRobot_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_RustyRobot_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_RustyRobot_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_RustyRobot_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_RustyRobot_Idle_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_RustyRobot_Idle_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_RustyRobot_Idle_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_RustyRobot_Idle_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Laugh_RustyRobot_Laugh_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Laugh_RustyRobot_Laugh_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Laugh_RustyRobot_Laugh_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Laugh_RustyRobot_Laugh_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Laugh_RustyRobot_Laugh_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Laugh_RustyRobot_Laugh_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Laugh_RustyRobot_Laugh_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Laugh_RustyRobot_Laugh_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Question_RustyRobot_Question_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Question_RustyRobot_Question_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Question_RustyRobot_Question_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Question_RustyRobot_Question_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Question_RustyRobot_Question_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Question_RustyRobot_Question_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Question_RustyRobot_Question_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Question_RustyRobot_Question_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Bored_RustyRobot_Sigh_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_RustyRobot_Sigh_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_RustyRobot_Sigh_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Bored_RustyRobot_Sigh_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Bored_RustyRobot_Sigh_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_RustyRobot_Sigh_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_RustyRobot_Sigh_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Bored_RustyRobot_Sigh_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Greet_RustyRobot_Talk_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Greet_RustyRobot_Talk_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Greet_RustyRobot_Talk_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Greet_RustyRobot_Talk_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Explain_RustyRobot_Talk_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Explain_RustyRobot_Talk_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Explain_RustyRobot_Talk_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Explain_RustyRobot_Talk_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Story_RustyRobot_Talk_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Story_RustyRobot_Talk_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Story_RustyRobot_Talk_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Story_RustyRobot_Talk_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Agree_RustyRobot_Talk_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Agree_RustyRobot_Talk_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Agree_RustyRobot_Talk_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Agree_RustyRobot_Talk_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Greet_RustyRobot_Talk_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Greet_RustyRobot_Talk_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Greet_RustyRobot_Talk_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Greet_RustyRobot_Talk_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Explain_RustyRobot_Talk_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Explain_RustyRobot_Talk_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Explain_RustyRobot_Talk_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Explain_RustyRobot_Talk_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Story_RustyRobot_Talk_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Story_RustyRobot_Talk_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Story_RustyRobot_Talk_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Story_RustyRobot_Talk_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Agree_RustyRobot_Talk_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Agree_RustyRobot_Talk_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Agree_RustyRobot_Talk_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Agree_RustyRobot_Talk_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Greet_RustyRobot_Talk_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Greet_RustyRobot_Talk_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Greet_RustyRobot_Talk_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Greet_RustyRobot_Talk_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Explain_RustyRobot_Talk_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Explain_RustyRobot_Talk_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Explain_RustyRobot_Talk_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Explain_RustyRobot_Talk_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Story_RustyRobot_Talk_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Story_RustyRobot_Talk_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Story_RustyRobot_Talk_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Story_RustyRobot_Talk_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Agree_RustyRobot_Talk_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Agree_RustyRobot_Talk_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Agree_RustyRobot_Talk_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Agree_RustyRobot_Talk_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Ponder_RustyRobot_Thinking_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_RustyRobot_Thinking_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_RustyRobot_Thinking_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Ponder_RustyRobot_Thinking_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_RustyRobot_Thinking_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Thinking_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Thinking_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_RustyRobot_Thinking_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Ponder_RustyRobot_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_RustyRobot_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Ponder_RustyRobot_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Ponder_RustyRobot_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_RustyRobot_Thinking_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Thinking_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Thinking_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_RustyRobot_Thinking_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_RustyRobot_Work_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_RustyRobot_Work_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_RustyRobot_Work_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_RustyRobot_Work_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_RustyRobot_Work_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_RustyRobot_Work_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_RustyRobot_Work_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_RustyRobot_Work_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_RustyRobot_Work_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_RustyRobot_Work_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_RustyRobot_Work_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_RustyRobot_Work_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_RustyRobot_Work_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_RustyRobot_Work_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_RustyRobot_Work_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_RustyRobot_Work_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_RustyRobot_Work_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_RustyRobot_Work_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_RustyRobot_Work_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_RustyRobot_Work_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_RustyRobot_Work_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Work_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Work_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_RustyRobot_Work_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_RustyRobot_Work_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_RustyRobot_Work_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_RustyRobot_Work_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_RustyRobot_Work_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_RustyRobot_Work_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_RustyRobot_Work_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_RustyRobot_Work_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_RustyRobot_Work_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_RustyRobot_Work_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_RustyRobot_Work_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_RustyRobot_Work_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_RustyRobot_Work_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_RustyRobot_Work_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_RustyRobot_Work_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_RustyRobot_Work_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_RustyRobot_Work_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_RustyRobot_Work_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_RustyRobot_Work_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_RustyRobot_Work_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_RustyRobot_Work_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_RustyRobot_Work_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Work_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Work_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_RustyRobot_Work_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_RustyRobot_Work_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_RustyRobot_Work_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_RustyRobot_Work_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_RustyRobot_Work_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_RustyRobot_Work_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_RustyRobot_Work_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_RustyRobot_Work_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_RustyRobot_Work_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_RustyRobot_Work_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_RustyRobot_Work_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_RustyRobot_Work_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_RustyRobot_Work_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_RustyRobot_Work_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_RustyRobot_Work_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_RustyRobot_Work_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_RustyRobot_Work_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_RustyRobot_Work_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_RustyRobot_Work_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_RustyRobot_Work_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_RustyRobot_Work_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_RustyRobot_Work_3": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Work_3.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Work_3.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_RustyRobot_Work_3.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_RustyRobot_Work_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_RustyRobot_Work_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/LookAround_RustyRobot_Work_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/LookAround_RustyRobot_Work_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Craft_RustyRobot_Work_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Craft_RustyRobot_Work_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Craft_RustyRobot_Work_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Craft_RustyRobot_Work_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_RustyRobot_Work_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_RustyRobot_Work_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sweep_RustyRobot_Work_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sweep_RustyRobot_Work_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_RustyRobot_Work_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_RustyRobot_Work_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Inspect_RustyRobot_Work_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Inspect_RustyRobot_Work_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_RustyRobot_Work_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Tend_RustyRobot_Work_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Tend_RustyRobot_Work_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Tend_RustyRobot_Work_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_RustyRobot_Work_4": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Work_4.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/ReadLoop_RustyRobot_Work_4.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/ReadLoop_RustyRobot_Work_4.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sleepy_RustyRobot_Yawn_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sleepy_RustyRobot_Yawn_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sleepy_RustyRobot_Yawn_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sleepy_RustyRobot_Yawn_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Stretch_RustyRobot_Yawn_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Stretch_RustyRobot_Yawn_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Stretch_RustyRobot_Yawn_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Stretch_RustyRobot_Yawn_1.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sleepy_RustyRobot_Yawn_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Sleepy_RustyRobot_Yawn_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Sleepy_RustyRobot_Yawn_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Sleepy_RustyRobot_Yawn_2.blockyanim",
+      "Speed": 0.8908987181403393,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Stretch_RustyRobot_Yawn_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Stretch_RustyRobot_Yawn_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Stretch_RustyRobot_Yawn_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Stretch_RustyRobot_Yawn_2.blockyanim",
       "Speed": 0.8908987181403393,
       "Looping": false,
       "BlendingDuration": 0.35

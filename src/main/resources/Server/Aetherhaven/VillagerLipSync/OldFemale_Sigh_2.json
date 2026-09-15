@@ -1,0 +1,63 @@
+{
+  "audio": "OldFemale_Sigh_2.ogg",
+  "audioSha256": "92cbf7cefbf8b4f1ba48499ff275b55e2c57d7d9859d035bbdf6eef5ff8d9ebb",
+  "durationMs": 2692,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.04,
+      "value": "X"
+    },
+    {
+      "start": 0.04,
+      "end": 0.79,
+      "value": "B"
+    },
+    {
+      "start": 0.79,
+      "end": 0.88,
+      "value": "X"
+    },
+    {
+      "start": 0.88,
+      "end": 1.04,
+      "value": "B"
+    },
+    {
+      "start": 1.04,
+      "end": 1.11,
+      "value": "C"
+    },
+    {
+      "start": 1.11,
+      "end": 1.18,
+      "value": "B"
+    },
+    {
+      "start": 1.18,
+      "end": 1.25,
+      "value": "C"
+    },
+    {
+      "start": 1.25,
+      "end": 1.32,
+      "value": "B"
+    },
+    {
+      "start": 1.32,
+      "end": 1.46,
+      "value": "C"
+    },
+    {
+      "start": 1.46,
+      "end": 2.09,
+      "value": "B"
+    },
+    {
+      "start": 2.09,
+      "end": 2.69,
+      "value": "X"
+    }
+  ]
+}

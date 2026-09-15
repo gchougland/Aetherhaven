@@ -17,7 +17,8 @@ def main():
     cast=[('BrightFemale','Talk','Story'),('BrightMale','Question','Question'),
           ('WarmFemale','Laugh','Laugh'),('WarmMale','Grumble','Disagree'),
           ('MellowFemale','Yawn','Sleepy'),('MellowMale','Groan','Hungry'),
-          ('GravelyMale','Talk','Explain'),('GravelyFemale','Gasp','Surprise')]
+          ('GravelyMale','Talk','Explain'),('GravelyFemale','Gasp','Surprise'),
+          ('OldMale','Thinking','Ponder'),('OldFemale','Laugh','Laugh'),('RustyRobot','Talk','Story')]
     index=json.loads((ROOT/'src/main/resources/defaults/villager_life_playback.json').read_text())
     scenes=[];sound=[];rate=None;fps=30
     for profile,mood,gesture in cast:
@@ -45,6 +46,6 @@ def main():
             process.stdin.write(im.tobytes())
     process.stdin.close()
     if process.wait()!=0:raise RuntimeError('Preview video encoding failed')
-    print('Created synchronized lip-sync-preview.mp4 with all eight profiles.')
+    print(f'Created synchronized lip-sync-preview.mp4 with all {len(cast)} profiles.')
 
 if __name__=='__main__':main()

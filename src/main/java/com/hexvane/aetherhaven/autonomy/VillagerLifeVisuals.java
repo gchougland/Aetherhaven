@@ -50,9 +50,12 @@ public final class VillagerLifeVisuals {
             VillagerLifeProps.equip(ref, cue.gesture(), store);
             AnimationUtils.playAnimation(ref, BODY_SLOT, NpcFaceVisuals.itemAnimationsForFaceRig(ref, clip.actionsId(), store), expression.actionId(), false, store);
             NpcFaceVisuals.playDialogueExpression(ref, expression.id(), expression.durationMs()/1000f, store);
+        } else {
+            VillagerLifeProps.equip(ref, cue.gesture(), store);
+            AnimationUtils.playAnimation(ref, BODY_SLOT, NpcFaceVisuals.itemAnimationsForFaceRig(ref, BODY_ANIMATIONS, store), cue.gesture(), false, store);
         }
         if (volume > .001f) com.hexvane.aetherhaven.ui.UiSoundEffects.play2d(player, store, PREFIX + clip.clip(), SoundCategory.SFX, volume, clip.pitch());
-        long duration = Math.max(clip.audioMs(), expression == null ? 0 : expression.durationMs());
+        long duration = Math.max(clip.audioMs(), expression == null ? VillagerLifeTiming.durationMs(cue.gesture()) : expression.durationMs());
         var life = state(ref, store);
         life.visualUntilMs = System.currentTimeMillis() + duration;
         life.nextAmbientVoiceMs = life.visualUntilMs + 5000;

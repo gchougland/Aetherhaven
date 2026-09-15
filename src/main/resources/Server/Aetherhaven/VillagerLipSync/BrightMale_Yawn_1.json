@@ -1,67 +1,102 @@
 {
   "audio": "BrightMale_Yawn_1.ogg",
-  "audioSha256": "9485e0da40a11b51fd011dff96fc3c918a957f70fed40077cf2c6ad84a78297f",
-  "durationMs": 2404,
+  "audioSha256": "8ae165171c053f2865d06730c7d56d21df32ddfb32cdaa3c42e17adcb9d8c8ee",
+  "durationMs": 2811,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.01,
+      "end": 0.15,
       "value": "X"
     },
     {
-      "start": 0.01,
-      "end": 0.27,
+      "start": 0.15,
+      "end": 0.21,
       "value": "B"
     },
     {
-      "start": 0.27,
-      "end": 0.62,
-      "value": "F"
-    },
-    {
-      "start": 0.62,
-      "end": 1.05,
-      "value": "B"
-    },
-    {
-      "start": 1.05,
-      "end": 1.19,
-      "value": "A"
-    },
-    {
-      "start": 1.19,
-      "end": 1.27,
+      "start": 0.21,
+      "end": 0.45,
       "value": "D"
     },
     {
-      "start": 1.27,
-      "end": 1.34,
+      "start": 0.45,
+      "end": 0.5,
+      "value": "C"
+    },
+    {
+      "start": 0.5,
+      "end": 0.68,
       "value": "B"
     },
     {
-      "start": 1.34,
-      "end": 1.55,
+      "start": 0.68,
+      "end": 0.75,
+      "value": "E"
+    },
+    {
+      "start": 0.75,
+      "end": 1.03,
       "value": "F"
     },
     {
-      "start": 1.55,
-      "end": 1.9,
+      "start": 1.03,
+      "end": 1.17,
       "value": "B"
     },
     {
-      "start": 1.9,
-      "end": 2.11,
+      "start": 1.17,
+      "end": 1.32,
+      "value": "X"
+    },
+    {
+      "start": 1.32,
+      "end": 1.4,
+      "value": "B"
+    },
+    {
+      "start": 1.4,
+      "end": 1.5,
+      "value": "A"
+    },
+    {
+      "start": 1.5,
+      "end": 1.71,
+      "value": "C"
+    },
+    {
+      "start": 1.71,
+      "end": 1.79,
+      "value": "A"
+    },
+    {
+      "start": 1.79,
+      "end": 1.94,
       "value": "F"
     },
     {
-      "start": 2.11,
-      "end": 2.25,
+      "start": 1.94,
+      "end": 2.08,
+      "value": "C"
+    },
+    {
+      "start": 2.08,
+      "end": 2.36,
+      "value": "E"
+    },
+    {
+      "start": 2.36,
+      "end": 2.57,
+      "value": "F"
+    },
+    {
+      "start": 2.57,
+      "end": 2.71,
       "value": "B"
     },
     {
-      "start": 2.25,
-      "end": 2.4,
+      "start": 2.71,
+      "end": 2.81,
       "value": "X"
     }
   ]

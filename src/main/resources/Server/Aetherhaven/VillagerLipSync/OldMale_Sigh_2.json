@@ -1,0 +1,93 @@
+{
+  "audio": "OldMale_Sigh_2.ogg",
+  "audioSha256": "e86a4a2f2ae8e34114044619c7fff00402efdc53e566e3e367b572deb1546b4d",
+  "durationMs": 3273,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.11,
+      "value": "B"
+    },
+    {
+      "start": 0.11,
+      "end": 0.51,
+      "value": "D"
+    },
+    {
+      "start": 0.51,
+      "end": 0.56,
+      "value": "C"
+    },
+    {
+      "start": 0.56,
+      "end": 0.74,
+      "value": "B"
+    },
+    {
+      "start": 0.74,
+      "end": 1.55,
+      "value": "A"
+    },
+    {
+      "start": 1.55,
+      "end": 1.95,
+      "value": "B"
+    },
+    {
+      "start": 1.95,
+      "end": 2.12,
+      "value": "E"
+    },
+    {
+      "start": 2.12,
+      "end": 2.26,
+      "value": "F"
+    },
+    {
+      "start": 2.26,
+      "end": 2.38,
+      "value": "A"
+    },
+    {
+      "start": 2.38,
+      "end": 2.44,
+      "value": "C"
+    },
+    {
+      "start": 2.44,
+      "end": 2.49,
+      "value": "B"
+    },
+    {
+      "start": 2.49,
+      "end": 2.61,
+      "value": "A"
+    },
+    {
+      "start": 2.61,
+      "end": 2.83,
+      "value": "E"
+    },
+    {
+      "start": 2.83,
+      "end": 3.11,
+      "value": "F"
+    },
+    {
+      "start": 3.11,
+      "end": 3.18,
+      "value": "B"
+    },
+    {
+      "start": 3.18,
+      "end": 3.27,
+      "value": "X"
+    }
+  ]
+}

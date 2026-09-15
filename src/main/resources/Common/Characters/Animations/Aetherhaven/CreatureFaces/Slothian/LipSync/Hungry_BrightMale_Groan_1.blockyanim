@@ -420,6 +420,36 @@
           "interpolationType": "smooth"
         },
         {
+          "time": 3,
+          "delta": {
+            "x": 0.0,
+            "y": 0,
+            "z": 0,
+            "w": 1.0
+          },
+          "interpolationType": "smooth"
+        },
+        {
+          "time": 11,
+          "delta": {
+            "x": 0.0,
+            "y": 0,
+            "z": 0,
+            "w": 1.0
+          },
+          "interpolationType": "smooth"
+        },
+        {
+          "time": 14,
+          "delta": {
+            "x": 0.03769018266993454,
+            "y": 0,
+            "z": 0,
+            "w": 0.9992894726405892
+          },
+          "interpolationType": "smooth"
+        },
+        {
           "time": 25,
           "delta": {
             "x": 0.03769018266993454,
@@ -432,6 +462,26 @@
         {
           "time": 28,
           "delta": {
+            "x": 0.20791169081775934,
+            "y": 0,
+            "z": 0,
+            "w": 0.9781476007338057
+          },
+          "interpolationType": "smooth"
+        },
+        {
+          "time": 40,
+          "delta": {
+            "x": 0.20791169081775934,
+            "y": 0,
+            "z": 0,
+            "w": 0.9781476007338057
+          },
+          "interpolationType": "smooth"
+        },
+        {
+          "time": 43,
+          "delta": {
             "x": 0.12117638582965055,
             "y": 0,
             "z": 0,
@@ -440,12 +490,32 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 67,
+          "time": 44,
           "delta": {
             "x": 0.12117638582965055,
             "y": 0,
             "z": 0,
             "w": 0.992630990608929
+          },
+          "interpolationType": "smooth"
+        },
+        {
+          "time": 47,
+          "delta": {
+            "x": 0.03769018266993454,
+            "y": 0,
+            "z": 0,
+            "w": 0.9992894726405892
+          },
+          "interpolationType": "smooth"
+        },
+        {
+          "time": 67,
+          "delta": {
+            "x": 0.03769018266993454,
+            "y": 0,
+            "z": 0,
+            "w": 0.9992894726405892
           },
           "interpolationType": "smooth"
         },
@@ -460,7 +530,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 77,
+          "time": 82,
           "delta": {
             "x": 0.0,
             "y": 0,
@@ -470,47 +540,27 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 80,
+          "time": 85,
           "delta": {
-            "x": 0.03769018266993454,
+            "x": 0.20791169081775934,
             "y": 0,
             "z": 0,
-            "w": 0.9992894726405892
+            "w": 0.9781476007338057
           },
           "interpolationType": "smooth"
         },
         {
-          "time": 83,
+          "time": 101,
           "delta": {
-            "x": 0.03769018266993454,
+            "x": 0.20791169081775934,
             "y": 0,
             "z": 0,
-            "w": 0.9992894726405892
+            "w": 0.9781476007338057
           },
           "interpolationType": "smooth"
         },
         {
-          "time": 86,
-          "delta": {
-            "x": 0.0,
-            "y": 0,
-            "z": 0,
-            "w": 1.0
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 99,
-          "delta": {
-            "x": 0.0,
-            "y": 0,
-            "z": 0,
-            "w": 1.0
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 102,
+          "time": 104,
           "delta": {
             "x": 0.12117638582965055,
             "y": 0,
@@ -520,17 +570,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 105,
-          "delta": {
-            "x": 0.1357155724343044,
-            "y": 0,
-            "z": 0,
-            "w": 0.9907478404714436
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 108,
+          "time": 106,
           "delta": {
             "x": 0.12117638582965055,
             "y": 0,
@@ -540,17 +580,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 118,
-          "delta": {
-            "x": 0.12117638582965055,
-            "y": 0,
-            "z": 0,
-            "w": 0.992630990608929
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 121,
+          "time": 109,
           "delta": {
             "x": 0.0,
             "y": 0,
@@ -560,7 +590,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 125,
+          "time": 113,
           "delta": {
             "x": 0.0,
             "y": 0,
@@ -570,7 +600,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 128,
+          "time": 116,
           "delta": {
             "x": 0.0836778433323155,
             "y": 0,
@@ -580,7 +610,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 150,
+          "time": 124,
           "delta": {
             "x": 0.0836778433323155,
             "y": 0,
@@ -590,107 +620,107 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 153,
+          "time": 127,
           "delta": {
-            "x": 0.1357155724343044,
+            "x": 0.03769018266993454,
             "y": 0,
             "z": 0,
-            "w": 0.9907478404714436
+            "w": 0.9992894726405892
           },
           "interpolationType": "smooth"
         },
         {
-          "time": 154,
+          "time": 140,
           "delta": {
-            "x": 0.1357155724343044,
+            "x": 0.03769018266993454,
             "y": 0,
             "z": 0,
-            "w": 0.9907478404714436
+            "w": 0.9992894726405892
+          },
+          "interpolationType": "smooth"
+        },
+        {
+          "time": 143,
+          "delta": {
+            "x": 0.0836778433323155,
+            "y": 0,
+            "z": 0,
+            "w": 0.9964928592495044
+          },
+          "interpolationType": "smooth"
+        },
+        {
+          "time": 149,
+          "delta": {
+            "x": 0.0836778433323155,
+            "y": 0,
+            "z": 0,
+            "w": 0.9964928592495044
+          },
+          "interpolationType": "smooth"
+        },
+        {
+          "time": 152,
+          "delta": {
+            "x": 0.03769018266993454,
+            "y": 0,
+            "z": 0,
+            "w": 0.9992894726405892
           },
           "interpolationType": "smooth"
         },
         {
           "time": 157,
           "delta": {
-            "x": 0.12117638582965055,
+            "x": 0.03769018266993454,
             "y": 0,
             "z": 0,
-            "w": 0.992630990608929
+            "w": 0.9992894726405892
           },
           "interpolationType": "smooth"
         },
         {
-          "time": 169,
-          "delta": {
-            "x": 0.12117638582965055,
-            "y": 0,
-            "z": 0,
-            "w": 0.992630990608929
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 172,
-          "delta": {
-            "x": 0.1357155724343044,
-            "y": 0,
-            "z": 0,
-            "w": 0.9907478404714436
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 177,
-          "delta": {
-            "x": 0.1357155724343044,
-            "y": 0,
-            "z": 0,
-            "w": 0.9907478404714436
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 180,
+          "time": 160,
           "delta": {
             "x": 0.0836778433323155,
             "y": 0,
             "z": 0,
             "w": 0.9964928592495044
+          },
+          "interpolationType": "smooth"
+        },
+        {
+          "time": 187,
+          "delta": {
+            "x": 0.0836778433323155,
+            "y": 0,
+            "z": 0,
+            "w": 0.9964928592495044
+          },
+          "interpolationType": "smooth"
+        },
+        {
+          "time": 190,
+          "delta": {
+            "x": 0.0,
+            "y": 0,
+            "z": 0,
+            "w": 1.0
+          },
+          "interpolationType": "smooth"
+        },
+        {
+          "time": 199,
+          "delta": {
+            "x": 0.0,
+            "y": 0,
+            "z": 0,
+            "w": 1.0
           },
           "interpolationType": "smooth"
         },
         {
           "time": 202,
-          "delta": {
-            "x": 0.0836778433323155,
-            "y": 0,
-            "z": 0,
-            "w": 0.9964928592495044
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 205,
-          "delta": {
-            "x": 0.0,
-            "y": 0,
-            "z": 0,
-            "w": 1.0
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 208,
-          "delta": {
-            "x": 0.0,
-            "y": 0,
-            "z": 0,
-            "w": 1.0
-          },
-          "interpolationType": "smooth"
-        },
-        {
-          "time": 211,
           "delta": {
             "x": 0.0,
             "y": 0,

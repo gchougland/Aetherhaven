@@ -648,16 +648,37 @@
           }
         },
         {
-          "time": 3,
+          "time": 4,
           "delta": {
             "x": 140,
             "y": 0
           }
         },
         {
-          "time": 10,
+          "time": 7,
           "delta": {
-            "x": 120,
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "time": 12,
+          "delta": {
+            "x": 220,
+            "y": -30
+          }
+        },
+        {
+          "time": 15,
+          "delta": {
+            "x": 180,
+            "y": -30
+          }
+        },
+        {
+          "time": 17,
+          "delta": {
+            "x": 0,
             "y": 0
           }
         },
@@ -669,14 +690,14 @@
           }
         },
         {
-          "time": 35,
+          "time": 32,
           "delta": {
             "x": 180,
             "y": -30
           }
         },
         {
-          "time": 43,
+          "time": 48,
           "delta": {
             "x": 120,
             "y": 0
@@ -690,35 +711,35 @@
           }
         },
         {
-          "time": 64,
+          "time": 59,
           "delta": {
             "x": 120,
             "y": 0
           }
         },
         {
-          "time": 76,
+          "time": 72,
           "delta": {
             "x": 140,
             "y": 0
           }
         },
         {
-          "time": 89,
+          "time": 80,
           "delta": {
             "x": 120,
             "y": 0
           }
         },
         {
-          "time": 101,
+          "time": 97,
           "delta": {
             "x": 0,
             "y": 0
           }
         },
         {
-          "time": 102,
+          "time": 99,
           "delta": {
             "x": 0,
             "y": 0
@@ -752,7 +773,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 3,
+          "time": 4,
           "delta": {
             "x": 1,
             "y": 1.08,
@@ -761,7 +782,34 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 10,
+          "time": 7,
+          "delta": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          },
+          "interpolationType": "smooth"
+        },
+        {
+          "time": 12,
+          "delta": {
+            "x": 1,
+            "y": 1.08,
+            "z": 1
+          },
+          "interpolationType": "smooth"
+        },
+        {
+          "time": 15,
+          "delta": {
+            "x": 1,
+            "y": 1.08,
+            "z": 1
+          },
+          "interpolationType": "smooth"
+        },
+        {
+          "time": 17,
           "delta": {
             "x": 1,
             "y": 1,
@@ -779,7 +827,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 35,
+          "time": 32,
           "delta": {
             "x": 1,
             "y": 1.08,
@@ -788,7 +836,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 43,
+          "time": 48,
           "delta": {
             "x": 1,
             "y": 1,
@@ -806,7 +854,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 64,
+          "time": 59,
           "delta": {
             "x": 1,
             "y": 1,
@@ -815,7 +863,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 76,
+          "time": 72,
           "delta": {
             "x": 1,
             "y": 1.08,
@@ -824,7 +872,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 89,
+          "time": 80,
           "delta": {
             "x": 1,
             "y": 1,
@@ -833,7 +881,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 101,
+          "time": 97,
           "delta": {
             "x": 1,
             "y": 1,
@@ -842,7 +890,7 @@
           "interpolationType": "smooth"
         },
         {
-          "time": 102,
+          "time": 99,
           "delta": {
             "x": 1,
             "y": 1,

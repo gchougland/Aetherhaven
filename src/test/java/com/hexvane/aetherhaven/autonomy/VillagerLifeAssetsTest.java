@@ -122,7 +122,7 @@ class VillagerLifeAssetsTest {
                 }
             }
         }
-        assertEquals(216, clips);
+        assertEquals(308, clips);
     }
 
     @Test void originalAnimationsAreBoundAndAlwaysReturnToNeutral() throws Exception {
@@ -175,7 +175,7 @@ class VillagerLifeAssetsTest {
         int animations = 0;
         for (String profile : VillagerLifePolicy.VOICES) {
             for (String mood : new String[]{"Talk", "Question", "Laugh", "Gasp", "Grumble", "Groan", "Yawn", "Sigh", "Stomach", "Idle", "Work", "Thinking"}) {
-                int variants = switch (mood) { case "Talk" -> 3; case "Stomach", "Thinking" -> 1; case "Idle", "Work" -> 4; default -> 2; };
+                int variants = switch (mood) { case "Talk" -> 3; case "Stomach" -> 1; case "Idle", "Work" -> 4; default -> 2; };
                 for (int i = 0; i < variants; i++) {
                     var clip = VillagerLifeSpeech.select(profile, mood, i);
                     assertNotNull(clip);
@@ -202,7 +202,7 @@ class VillagerLifeAssetsTest {
                 }
             }
         }
-        assertEquals(672, animations);
+        assertEquals(946, animations);
     }
 
     @Test void readingEyesScanLinesAndLaughKeepsAnAlertUpperLid() throws Exception {
@@ -254,7 +254,7 @@ class VillagerLifeAssetsTest {
     @Test void everyAnimationIncludesUnusedChannelsRequiredByTheClient() throws Exception {
         try (var files = Files.walk(RES.resolve("Common/Characters/Animations/Aetherhaven/Life"))) {
             var animations = files.filter(p -> p.toString().endsWith(".blockyanim")).toList();
-            assertEquals(1394, animations.size());
+            assertEquals(1942, animations.size());
             for (Path file : animations) {
                 var animation = JsonParser.parseString(Files.readString(file)).getAsJsonObject();
                 for (var node : animation.getAsJsonObject("nodeAnimations").entrySet()) {
@@ -273,7 +273,7 @@ class VillagerLifeAssetsTest {
         var asset = decode(com.hypixel.hytale.server.core.asset.type.itemanimation.config.ItemPlayerAnimations.CODEC,
             Files.readString(file), file);
         assertEquals(com.hypixel.hytale.protocol.AnimationSlot.Action, VillagerLifeVisuals.BODY_SLOT);
-        assertEquals(693, asset.getAnimations().size());
+        assertEquals(967, asset.getAnimations().size());
         for (var entry : asset.getAnimations().entrySet()) {
             var action = entry.getValue();
             assertEquals("Characters/Animations/Aetherhaven/Life/" + (entry.getKey().contains("_") ? "Actions/" : "")
@@ -368,7 +368,7 @@ class VillagerLifeAssetsTest {
             for (String pitch : new String[]{"", "_Lower", "_Higher"}) {
                 Path path = RES.resolve("Server/Item/Animations/Aetherhaven_Life_Actions" + pitch + "_" + rig + ".json");
                 var table = decode(com.hypixel.hytale.server.core.asset.type.itemanimation.config.ItemPlayerAnimations.CODEC, Files.readString(path), path);
-                assertEquals(693, table.getAnimations().size());
+                assertEquals(967, table.getAnimations().size());
             }
         }
     }

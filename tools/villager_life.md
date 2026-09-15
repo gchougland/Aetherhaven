@@ -213,9 +213,14 @@ fidgeting, preserve seated Status, and wait for the selected recording to finish
 
 ## Voiced idle, work and dialogue responses
 
-The four Idle, four Work and one Thinking masters add 72 recordings, for 216
-recordings across eight profiles. `villager_voice_splits.json` preserves the
-reviewed boundaries and the import manifest records source hashes and timestamps.
+The refreshed script provides four Idle, four Work and two Thinking variations,
+alongside three Talk variations, two of each other voiced reaction and one
+Stomach clip per voice. Eleven profiles provide 308 recordings. `villager_voice_splits.json`
+preserves the reviewed boundaries and the import manifest records source hashes
+and timestamps. ElevenLabs allows ten distinct voices per dialogue generation,
+so the ten human profiles share each master and RustyRobot has separate masters.
+Split entries specify the ordered profiles and bind reviewed cuts to the source
+checksum. Run the importer with `--stage-only` to validate a set before publishing.
 Idle never selects Work; work chooses either category. Tool swings retain their
 body animation while the recording drives Face. Ponder uses Thinking, and reading
 occasionally chooses Thinking between quieter Idle/Work utterances.
@@ -239,8 +244,10 @@ Yawn, Sigh, Idle, Work, None. Thinking pairs with Ponder; Question pairs with th
 question gesture. Existing assets explicitly mark 42 quest offers and 104 quest
 responses. Unknown categories fall back to Talk. `speechVoiceId` on villager and
 townsfolk definitions selects BrightFemale, BrightMale, WarmFemale, WarmMale,
-MellowFemale, MellowMale, GravelyMale or GravelyFemale, shared by player dialogue
-and NPC conversations. Existing tone names still map to these profiles.
+MellowFemale, MellowMale, GravelyMale, GravelyFemale, OldMale, OldFemale or RustyRobot,
+shared by player dialogue and NPC conversations. Existing tone names still map to
+consistent profiles. Add-ons can register further recording families under
+`Server/Aetherhaven/VoiceClips/`; see `docs/modding/crossmod-integration.md`.
 
 ReadLoop keeps both hands on the book across its closed seam. Voiced reading
 actions hold their final pose until the silent loop resumes, and guild readers

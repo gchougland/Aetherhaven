@@ -1,0 +1,93 @@
+{
+  "audio": "RustyRobot_Groan_1.ogg",
+  "audioSha256": "380118d56a47ca5682a2f3b1fc30acbb6e51fa0f7ee738a512e3a66d546a624c",
+  "durationMs": 2816,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.5,
+      "value": "B"
+    },
+    {
+      "start": 0.5,
+      "end": 0.85,
+      "value": "F"
+    },
+    {
+      "start": 0.85,
+      "end": 0.92,
+      "value": "E"
+    },
+    {
+      "start": 0.92,
+      "end": 1.13,
+      "value": "B"
+    },
+    {
+      "start": 1.13,
+      "end": 1.55,
+      "value": "C"
+    },
+    {
+      "start": 1.55,
+      "end": 1.69,
+      "value": "X"
+    },
+    {
+      "start": 1.69,
+      "end": 1.74,
+      "value": "B"
+    },
+    {
+      "start": 1.74,
+      "end": 1.78,
+      "value": "C"
+    },
+    {
+      "start": 1.78,
+      "end": 1.92,
+      "value": "B"
+    },
+    {
+      "start": 1.92,
+      "end": 2.13,
+      "value": "X"
+    },
+    {
+      "start": 2.13,
+      "end": 2.19,
+      "value": "B"
+    },
+    {
+      "start": 2.19,
+      "end": 2.39,
+      "value": "C"
+    },
+    {
+      "start": 2.39,
+      "end": 2.61,
+      "value": "B"
+    },
+    {
+      "start": 2.61,
+      "end": 2.65,
+      "value": "D"
+    },
+    {
+      "start": 2.65,
+      "end": 2.79,
+      "value": "B"
+    },
+    {
+      "start": 2.79,
+      "end": 2.81,
+      "value": "X"
+    }
+  ]
+}

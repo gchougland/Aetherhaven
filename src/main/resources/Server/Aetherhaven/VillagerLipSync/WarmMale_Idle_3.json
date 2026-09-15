@@ -1,57 +1,82 @@
 {
   "audio": "WarmMale_Idle_3.ogg",
-  "audioSha256": "1d09d35647ebafe63e93a0c1fd74835335eaeaa8cf06449276f11468c8959acc",
-  "durationMs": 1829,
+  "audioSha256": "2fabe4647c948ef9db28393f99853153da1f3985221b6bdd03b217986f87259d",
+  "durationMs": 1708,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.04,
+      "end": 0.01,
       "value": "X"
     },
     {
-      "start": 0.04,
-      "end": 0.44,
+      "start": 0.01,
+      "end": 0.07,
       "value": "B"
     },
     {
-      "start": 0.44,
-      "end": 0.76,
+      "start": 0.07,
+      "end": 0.18,
       "value": "A"
     },
     {
-      "start": 0.76,
-      "end": 0.82,
+      "start": 0.18,
+      "end": 0.33,
       "value": "B"
     },
     {
-      "start": 0.82,
-      "end": 1.01,
+      "start": 0.33,
+      "end": 0.4,
+      "value": "E"
+    },
+    {
+      "start": 0.4,
+      "end": 0.71,
+      "value": "A"
+    },
+    {
+      "start": 0.71,
+      "end": 0.78,
+      "value": "B"
+    },
+    {
+      "start": 0.78,
+      "end": 0.91,
       "value": "C"
     },
     {
-      "start": 1.01,
-      "end": 1.09,
+      "start": 0.91,
+      "end": 0.99,
       "value": "A"
     },
     {
-      "start": 1.09,
-      "end": 1.19,
+      "start": 0.99,
+      "end": 1.13,
       "value": "F"
     },
     {
-      "start": 1.19,
-      "end": 1.26,
+      "start": 1.13,
+      "end": 1.34,
+      "value": "C"
+    },
+    {
+      "start": 1.34,
+      "end": 1.41,
+      "value": "E"
+    },
+    {
+      "start": 1.41,
+      "end": 1.48,
       "value": "B"
     },
     {
-      "start": 1.26,
-      "end": 1.75,
-      "value": "D"
+      "start": 1.48,
+      "end": 1.62,
+      "value": "C"
     },
     {
-      "start": 1.75,
-      "end": 1.82,
+      "start": 1.62,
+      "end": 1.7,
       "value": "X"
     }
   ]

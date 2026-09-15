@@ -1,0 +1,73 @@
+{
+  "audio": "OldMale_Grumble_1.ogg",
+  "audioSha256": "7dc7475bf388a8463814af94d85f56979e315f4926155ffbf397745cd3f826d7",
+  "durationMs": 2426,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.07,
+      "value": "B"
+    },
+    {
+      "start": 0.07,
+      "end": 0.54,
+      "value": "C"
+    },
+    {
+      "start": 0.54,
+      "end": 0.89,
+      "value": "B"
+    },
+    {
+      "start": 0.89,
+      "end": 1.02,
+      "value": "X"
+    },
+    {
+      "start": 1.02,
+      "end": 1.1,
+      "value": "B"
+    },
+    {
+      "start": 1.1,
+      "end": 1.18,
+      "value": "A"
+    },
+    {
+      "start": 1.18,
+      "end": 1.52,
+      "value": "E"
+    },
+    {
+      "start": 1.52,
+      "end": 1.59,
+      "value": "B"
+    },
+    {
+      "start": 1.59,
+      "end": 1.8,
+      "value": "C"
+    },
+    {
+      "start": 1.8,
+      "end": 1.87,
+      "value": "D"
+    },
+    {
+      "start": 1.87,
+      "end": 2.36,
+      "value": "B"
+    },
+    {
+      "start": 2.36,
+      "end": 2.42,
+      "value": "X"
+    }
+  ]
+}

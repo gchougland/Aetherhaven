@@ -1,0 +1,88 @@
+{
+  "audio": "OldMale_Work_2.ogg",
+  "audioSha256": "129b4af0027c1cffda19e93963c44f08d051a01d762251f0f7668c5d562c7d12",
+  "durationMs": 2631,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.05,
+      "value": "B"
+    },
+    {
+      "start": 0.05,
+      "end": 0.24,
+      "value": "C"
+    },
+    {
+      "start": 0.24,
+      "end": 0.39,
+      "value": "A"
+    },
+    {
+      "start": 0.39,
+      "end": 0.51,
+      "value": "B"
+    },
+    {
+      "start": 0.51,
+      "end": 0.97,
+      "value": "A"
+    },
+    {
+      "start": 0.97,
+      "end": 1.04,
+      "value": "B"
+    },
+    {
+      "start": 1.04,
+      "end": 1.18,
+      "value": "C"
+    },
+    {
+      "start": 1.18,
+      "end": 1.46,
+      "value": "D"
+    },
+    {
+      "start": 1.46,
+      "end": 1.53,
+      "value": "B"
+    },
+    {
+      "start": 1.53,
+      "end": 1.6,
+      "value": "C"
+    },
+    {
+      "start": 1.6,
+      "end": 1.69,
+      "value": "A"
+    },
+    {
+      "start": 1.69,
+      "end": 2.0,
+      "value": "D"
+    },
+    {
+      "start": 2.0,
+      "end": 2.14,
+      "value": "B"
+    },
+    {
+      "start": 2.14,
+      "end": 2.35,
+      "value": "C"
+    },
+    {
+      "start": 2.35,
+      "end": 2.49,
+      "value": "B"
+    },
+    {
+      "start": 2.49,
+      "end": 2.63,
+      "value": "X"
+    }
+  ]
+}

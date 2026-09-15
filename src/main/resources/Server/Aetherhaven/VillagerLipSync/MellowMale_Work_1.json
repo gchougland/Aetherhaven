@@ -1,81 +1,101 @@
 {
   "audio": "MellowMale_Work_1.ogg",
-  "audioSha256": "f0edcf2c249c006890b1c70c33a048cd597498e29371b6b2aeea952a315d5a9a",
-  "durationMs": 2423,
+  "audioSha256": "81f95e669078b54a5404a30e673c7dea49e87cc16980983a4e7ac338a7cb748d",
+  "durationMs": 2210,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.07,
+      "end": 0.09,
       "value": "X"
     },
     {
-      "start": 0.07,
-      "end": 0.12,
+      "start": 0.09,
+      "end": 0.16,
       "value": "B"
     },
     {
-      "start": 0.12,
-      "end": 0.24,
+      "start": 0.16,
+      "end": 0.22,
       "value": "C"
     },
     {
-      "start": 0.24,
-      "end": 0.31,
+      "start": 0.22,
+      "end": 0.29,
       "value": "E"
     },
     {
-      "start": 0.31,
-      "end": 0.38,
+      "start": 0.29,
+      "end": 0.36,
       "value": "F"
     },
     {
-      "start": 0.38,
-      "end": 0.46,
+      "start": 0.36,
+      "end": 0.47,
       "value": "A"
     },
     {
-      "start": 0.46,
+      "start": 0.47,
       "end": 0.56,
-      "value": "C"
+      "value": "D"
     },
     {
       "start": 0.56,
-      "end": 0.91,
+      "end": 0.7,
       "value": "B"
     },
     {
-      "start": 0.91,
-      "end": 1.02,
+      "start": 0.7,
+      "end": 0.77,
+      "value": "C"
+    },
+    {
+      "start": 0.77,
+      "end": 0.84,
+      "value": "B"
+    },
+    {
+      "start": 0.84,
+      "end": 0.92,
       "value": "A"
     },
     {
-      "start": 1.02,
-      "end": 1.19,
-      "value": "D"
+      "start": 0.92,
+      "end": 0.98,
+      "value": "E"
     },
     {
-      "start": 1.19,
-      "end": 1.4,
+      "start": 0.98,
+      "end": 1.04,
+      "value": "F"
+    },
+    {
+      "start": 1.04,
+      "end": 1.32,
       "value": "C"
     },
     {
-      "start": 1.4,
-      "end": 1.75,
+      "start": 1.32,
+      "end": 1.59,
       "value": "B"
     },
     {
-      "start": 1.75,
-      "end": 1.8,
+      "start": 1.59,
+      "end": 1.66,
       "value": "C"
     },
     {
-      "start": 1.8,
-      "end": 1.94,
+      "start": 1.66,
+      "end": 1.8,
       "value": "D"
     },
     {
-      "start": 1.94,
+      "start": 1.8,
+      "end": 1.87,
+      "value": "B"
+    },
+    {
+      "start": 1.87,
       "end": 2.01,
       "value": "C"
     },
@@ -86,17 +106,7 @@
     },
     {
       "start": 2.08,
-      "end": 2.22,
-      "value": "C"
-    },
-    {
-      "start": 2.22,
-      "end": 2.29,
-      "value": "B"
-    },
-    {
-      "start": 2.29,
-      "end": 2.42,
+      "end": 2.2,
       "value": "X"
     }
   ]

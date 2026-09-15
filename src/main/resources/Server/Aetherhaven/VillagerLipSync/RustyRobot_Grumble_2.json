@@ -1,0 +1,83 @@
+{
+  "audio": "RustyRobot_Grumble_2.ogg",
+  "audioSha256": "a005b3059b1a7a15942a4c92d94c2a1f3bc557cf9fa8ae8ac5b12878e1fc221e",
+  "durationMs": 3083,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.08,
+      "value": "X"
+    },
+    {
+      "start": 0.08,
+      "end": 0.16,
+      "value": "A"
+    },
+    {
+      "start": 0.16,
+      "end": 0.88,
+      "value": "F"
+    },
+    {
+      "start": 0.88,
+      "end": 1.16,
+      "value": "E"
+    },
+    {
+      "start": 1.16,
+      "end": 1.23,
+      "value": "C"
+    },
+    {
+      "start": 1.23,
+      "end": 1.44,
+      "value": "B"
+    },
+    {
+      "start": 1.44,
+      "end": 1.65,
+      "value": "E"
+    },
+    {
+      "start": 1.65,
+      "end": 1.73,
+      "value": "A"
+    },
+    {
+      "start": 1.73,
+      "end": 2.28,
+      "value": "B"
+    },
+    {
+      "start": 2.28,
+      "end": 2.4,
+      "value": "X"
+    },
+    {
+      "start": 2.4,
+      "end": 2.48,
+      "value": "B"
+    },
+    {
+      "start": 2.48,
+      "end": 2.63,
+      "value": "A"
+    },
+    {
+      "start": 2.63,
+      "end": 2.72,
+      "value": "C"
+    },
+    {
+      "start": 2.72,
+      "end": 3.07,
+      "value": "B"
+    },
+    {
+      "start": 3.07,
+      "end": 3.08,
+      "value": "X"
+    }
+  ]
+}

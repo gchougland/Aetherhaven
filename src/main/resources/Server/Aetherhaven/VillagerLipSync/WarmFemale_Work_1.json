@@ -1,92 +1,72 @@
 {
   "audio": "WarmFemale_Work_1.ogg",
-  "audioSha256": "5105f3d3a998f1f5fe3aee85e152708b02a477fc33e17d07e5b051a9143cd084",
-  "durationMs": 2558,
+  "audioSha256": "d46698b5a086fc096e67b699fd2352b4dd39d463bc594410684f0cc82f7d173e",
+  "durationMs": 2477,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
       "start": 0.0,
-      "end": 0.02,
+      "end": 0.05,
       "value": "X"
     },
     {
-      "start": 0.02,
-      "end": 0.06,
-      "value": "B"
-    },
-    {
-      "start": 0.06,
-      "end": 0.17,
+      "start": 0.05,
+      "end": 0.21,
       "value": "C"
     },
     {
-      "start": 0.17,
-      "end": 0.27,
-      "value": "A"
-    },
-    {
-      "start": 0.27,
-      "end": 0.89,
-      "value": "B"
-    },
-    {
-      "start": 0.89,
-      "end": 1.05,
-      "value": "C"
-    },
-    {
-      "start": 1.05,
-      "end": 1.13,
-      "value": "A"
-    },
-    {
-      "start": 1.13,
-      "end": 1.32,
-      "value": "C"
-    },
-    {
-      "start": 1.32,
-      "end": 1.37,
+      "start": 0.21,
+      "end": 0.28,
       "value": "E"
     },
     {
-      "start": 1.37,
-      "end": 1.55,
-      "value": "F"
-    },
-    {
-      "start": 1.55,
-      "end": 1.7,
-      "value": "X"
-    },
-    {
-      "start": 1.7,
-      "end": 1.76,
+      "start": 0.28,
+      "end": 0.91,
       "value": "B"
     },
     {
-      "start": 1.76,
-      "end": 1.82,
-      "value": "F"
+      "start": 0.91,
+      "end": 0.98,
+      "value": "D"
     },
     {
-      "start": 1.82,
-      "end": 2.1,
+      "start": 0.98,
+      "end": 1.07,
+      "value": "A"
+    },
+    {
+      "start": 1.07,
+      "end": 1.47,
+      "value": "C"
+    },
+    {
+      "start": 1.47,
+      "end": 1.54,
       "value": "B"
     },
     {
-      "start": 2.1,
-      "end": 2.31,
+      "start": 1.54,
+      "end": 1.68,
       "value": "F"
     },
     {
-      "start": 2.31,
-      "end": 2.52,
+      "start": 1.68,
+      "end": 1.89,
       "value": "B"
     },
     {
-      "start": 2.52,
-      "end": 2.55,
+      "start": 1.89,
+      "end": 2.17,
+      "value": "F"
+    },
+    {
+      "start": 2.17,
+      "end": 2.38,
+      "value": "B"
+    },
+    {
+      "start": 2.38,
+      "end": 2.47,
       "value": "X"
     }
   ]

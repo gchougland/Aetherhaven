@@ -1,7 +1,7 @@
 {
   "audio": "GravelyMale_Idle_3.ogg",
-  "audioSha256": "adf4c2b63ebfec778cb9fc16b10c21180ffccff6a5dba702a3e0acaf28530e3a",
-  "durationMs": 2138,
+  "audioSha256": "da36565c1c085946487b03e6a62eddfded8220772985e12771773a2be6e0d3b7",
+  "durationMs": 2350,
   "recognizer": "Rhubarb 1.14.0 phonetic",
   "mouthCues": [
     {
@@ -11,77 +11,62 @@
     },
     {
       "start": 0.01,
-      "end": 0.04,
+      "end": 0.09,
       "value": "B"
     },
     {
-      "start": 0.04,
-      "end": 0.21,
+      "start": 0.09,
+      "end": 0.29,
       "value": "A"
     },
     {
-      "start": 0.21,
-      "end": 0.37,
+      "start": 0.29,
+      "end": 0.83,
       "value": "F"
     },
     {
-      "start": 0.37,
-      "end": 0.7,
-      "value": "A"
-    },
-    {
-      "start": 0.7,
-      "end": 0.77,
+      "start": 0.83,
+      "end": 0.97,
       "value": "B"
     },
     {
-      "start": 0.77,
-      "end": 0.98,
-      "value": "F"
-    },
-    {
-      "start": 0.98,
-      "end": 1.12,
-      "value": "B"
-    },
-    {
-      "start": 1.12,
-      "end": 1.19,
-      "value": "C"
-    },
-    {
-      "start": 1.19,
-      "end": 1.27,
+      "start": 0.97,
+      "end": 1.17,
       "value": "A"
     },
     {
-      "start": 1.27,
+      "start": 1.17,
       "end": 1.34,
-      "value": "F"
+      "value": "E"
     },
     {
       "start": 1.34,
-      "end": 1.62,
+      "end": 1.43,
+      "value": "A"
+    },
+    {
+      "start": 1.43,
+      "end": 1.5,
       "value": "B"
     },
     {
-      "start": 1.62,
-      "end": 1.76,
+      "start": 1.5,
+      "end": 1.71,
+      "value": "E"
+    },
+    {
+      "start": 1.71,
+      "end": 2.13,
       "value": "F"
     },
     {
-      "start": 1.76,
-      "end": 1.97,
-      "value": "C"
-    },
-    {
-      "start": 1.97,
-      "end": 2.04,
+      "start": 2.13,
+      "end": 2.27,
       "value": "B"
     },
     {
-      "start": 2.04,
-      "end": 2.13,
+      "start": 2.27,
+      "end": 2.34,
       "value": "X"
     }
   ]

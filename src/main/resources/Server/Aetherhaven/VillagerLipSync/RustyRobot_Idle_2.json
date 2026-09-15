@@ -1,0 +1,98 @@
+{
+  "audio": "RustyRobot_Idle_2.ogg",
+  "audioSha256": "e2796f7c00b6e0fc7732ed5b4c9fac82e5b0906f6ca259f1895c6cc4767377de",
+  "durationMs": 2661,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.03,
+      "value": "B"
+    },
+    {
+      "start": 0.03,
+      "end": 0.19,
+      "value": "A"
+    },
+    {
+      "start": 0.19,
+      "end": 0.37,
+      "value": "C"
+    },
+    {
+      "start": 0.37,
+      "end": 0.44,
+      "value": "B"
+    },
+    {
+      "start": 0.44,
+      "end": 0.65,
+      "value": "A"
+    },
+    {
+      "start": 0.65,
+      "end": 0.98,
+      "value": "B"
+    },
+    {
+      "start": 0.98,
+      "end": 1.05,
+      "value": "A"
+    },
+    {
+      "start": 1.05,
+      "end": 1.11,
+      "value": "B"
+    },
+    {
+      "start": 1.11,
+      "end": 1.31,
+      "value": "C"
+    },
+    {
+      "start": 1.31,
+      "end": 1.61,
+      "value": "B"
+    },
+    {
+      "start": 1.61,
+      "end": 1.75,
+      "value": "F"
+    },
+    {
+      "start": 1.75,
+      "end": 2.04,
+      "value": "B"
+    },
+    {
+      "start": 2.04,
+      "end": 2.18,
+      "value": "C"
+    },
+    {
+      "start": 2.18,
+      "end": 2.25,
+      "value": "B"
+    },
+    {
+      "start": 2.25,
+      "end": 2.33,
+      "value": "A"
+    },
+    {
+      "start": 2.33,
+      "end": 2.42,
+      "value": "C"
+    },
+    {
+      "start": 2.42,
+      "end": 2.63,
+      "value": "E"
+    },
+    {
+      "start": 2.63,
+      "end": 2.66,
+      "value": "X"
+    }
+  ]
+}
