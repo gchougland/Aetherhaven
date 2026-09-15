@@ -21,7 +21,7 @@
   "CombatConfig": { "EntityEffect": "Immunity_Fire" },
   "Invulnerable": { "Compute": "Invulnerable" },
   "KnockbackScale": 0.5,
-  "ApplySeparation": true,
+  "ApplySeparation": false,
   "SeparationOverrideAlwaysSeparate": "Off",
   "SeparationDistance": 2.5,
   "SeparationMode": "Push",

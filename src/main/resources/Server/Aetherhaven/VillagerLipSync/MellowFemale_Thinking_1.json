@@ -1,0 +1,43 @@
+{
+  "audio": "MellowFemale_Thinking_1.ogg",
+  "audioSha256": "9fdf1326968fcdcab35753b860299f05107d1dc56edb9b511ac7080441d6ca54",
+  "durationMs": 635,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.05,
+      "value": "B"
+    },
+    {
+      "start": 0.05,
+      "end": 0.06,
+      "value": "X"
+    },
+    {
+      "start": 0.06,
+      "end": 0.11,
+      "value": "A"
+    },
+    {
+      "start": 0.11,
+      "end": 0.29,
+      "value": "F"
+    },
+    {
+      "start": 0.29,
+      "end": 0.57,
+      "value": "B"
+    },
+    {
+      "start": 0.57,
+      "end": 0.63,
+      "value": "X"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "audio": "BrightFemale_Question_1.ogg",
+  "audioSha256": "abc420eaaa624ac887d476e4475d441f4d9112a54ace750c83dbd54d0d9204d8",
+  "durationMs": 1155,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.05,
+      "value": "B"
+    },
+    {
+      "start": 0.05,
+      "end": 0.14,
+      "value": "A"
+    },
+    {
+      "start": 0.14,
+      "end": 0.43,
+      "value": "C"
+    },
+    {
+      "start": 0.43,
+      "end": 0.55,
+      "value": "A"
+    },
+    {
+      "start": 0.55,
+      "end": 0.91,
+      "value": "B"
+    },
+    {
+      "start": 0.91,
+      "end": 1.05,
+      "value": "F"
+    },
+    {
+      "start": 1.05,
+      "end": 1.12,
+      "value": "B"
+    },
+    {
+      "start": 1.12,
+      "end": 1.15,
+      "value": "X"
+    }
+  ]
+}

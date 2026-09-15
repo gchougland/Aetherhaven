@@ -1,0 +1,48 @@
+{
+  "audio": "BrightMale_Sigh_2.ogg",
+  "audioSha256": "4b2b8cd50bb9aec14c94031f673b2ed8365def25edc963dc5dcb5b0b2b716a25",
+  "durationMs": 2221,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.02,
+      "value": "X"
+    },
+    {
+      "start": 0.02,
+      "end": 0.3,
+      "value": "B"
+    },
+    {
+      "start": 0.3,
+      "end": 0.72,
+      "value": "C"
+    },
+    {
+      "start": 0.72,
+      "end": 0.88,
+      "value": "X"
+    },
+    {
+      "start": 0.88,
+      "end": 1.53,
+      "value": "B"
+    },
+    {
+      "start": 1.53,
+      "end": 2.02,
+      "value": "C"
+    },
+    {
+      "start": 2.02,
+      "end": 2.16,
+      "value": "B"
+    },
+    {
+      "start": 2.16,
+      "end": 2.22,
+      "value": "X"
+    }
+  ]
+}

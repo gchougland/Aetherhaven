@@ -29,6 +29,18 @@ class PoiScoringNeedBreakTest {
     private static final Gson GSON = new Gson();
 
     @Test
+    void scheduledLeisureUsesFunSpotsEvenWithFullNeedsAndNoPreferredPlot() {
+        UUID townId = UUID.randomUUID();
+        UUID plotId = UUID.randomUUID();
+        var binding = new TownVillagerBinding(townId, TownVillagerBinding.KIND_BUILDER, null, null);
+        var bench = poi(plotId, townId, 2, 64, 2, List.of("FUN", "SIT"), PoiInteractionKind.SIT);
+        var meal = poi(plotId, townId, 1, 64, 1, List.of("EAT"), PoiInteractionKind.USE_CONTAINER);
+        var picked = PoiScoring.pickBest(List.of(meal, bench), VillagerNeeds.full(), binding, Map.of(),
+            0, 0, "park", false, false, false, false, true, null);
+        assertEquals(bench, picked);
+    }
+
+    @Test
     void pickEnergyRestPoi_prefersHomeBedOverInnBed() {
         UUID townId = UUID.randomUUID();
         UUID homePlotId = UUID.randomUUID();
@@ -112,7 +124,7 @@ class PoiScoringNeedBreakTest {
     }
 
     @Test
-    void pickFunBreakPoi_ignoresFunPoiOnNonParkPlots() {
+    void pickFunBreakPoi_includesFunPoiOnOtherCompletedPlots() {
         UUID townId = UUID.randomUUID();
         UUID parkPlotId = UUID.randomUUID();
         UUID shopPlotId = UUID.randomUUID();
@@ -137,7 +149,7 @@ class PoiScoringNeedBreakTest {
                 town,
                 houseInnCatalog()
             );
-        assertEquals(parkBench.getId(), pick.getId());
+        assertEquals(shopBench.getId(), pick.getId());
     }
 
     @Test

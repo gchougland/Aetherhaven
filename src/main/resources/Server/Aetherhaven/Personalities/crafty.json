@@ -14,5 +14,20 @@
   },
   "preferredScheduleLocations": [
     "home"
-  ]
+  ],
+  "thoughtItemWeights": {
+    "Tool_Hammer_Iron": 1,
+    "Ingredient_Bar_Iron": 1,
+    "Tool_Repair_Kit_Iron": 1
+  },
+  "socialEmoteWeights": {
+    "Question": 6,
+    "Surprise": 2,
+    "Explain": 3
+  },
+  "idleEmoteWeights": {
+    "LookAround": 4,
+    "Fidget": 2,
+    "Stretch": 1
+  }
 }

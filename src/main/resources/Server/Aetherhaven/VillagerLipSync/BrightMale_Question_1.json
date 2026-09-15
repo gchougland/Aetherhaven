@@ -1,0 +1,48 @@
+{
+  "audio": "BrightMale_Question_1.ogg",
+  "audioSha256": "53fdc114c54f67088ad46e8f9c70800e2658186392e19102b12811c44e3415f8",
+  "durationMs": 953,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.07,
+      "value": "B"
+    },
+    {
+      "start": 0.07,
+      "end": 0.12,
+      "value": "C"
+    },
+    {
+      "start": 0.12,
+      "end": 0.22,
+      "value": "D"
+    },
+    {
+      "start": 0.22,
+      "end": 0.26,
+      "value": "C"
+    },
+    {
+      "start": 0.26,
+      "end": 0.35,
+      "value": "A"
+    },
+    {
+      "start": 0.35,
+      "end": 0.83,
+      "value": "F"
+    },
+    {
+      "start": 0.83,
+      "end": 0.95,
+      "value": "X"
+    }
+  ]
+}

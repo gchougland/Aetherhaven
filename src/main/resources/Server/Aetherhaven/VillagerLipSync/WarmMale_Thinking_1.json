@@ -1,0 +1,38 @@
+{
+  "audio": "WarmMale_Thinking_1.ogg",
+  "audioSha256": "a67ce8d9a67a86a7e2101a052759d460f1a50f9b9a3f11cfe0c9e614b7db075f",
+  "durationMs": 684,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.02,
+      "value": "X"
+    },
+    {
+      "start": 0.02,
+      "end": 0.09,
+      "value": "B"
+    },
+    {
+      "start": 0.09,
+      "end": 0.3,
+      "value": "C"
+    },
+    {
+      "start": 0.3,
+      "end": 0.51,
+      "value": "B"
+    },
+    {
+      "start": 0.51,
+      "end": 0.58,
+      "value": "C"
+    },
+    {
+      "start": 0.58,
+      "end": 0.68,
+      "value": "X"
+    }
+  ]
+}

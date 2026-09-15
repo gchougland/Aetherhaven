@@ -1,0 +1,63 @@
+{
+  "audio": "WarmFemale_Sigh_2.ogg",
+  "audioSha256": "1931c0cadbe4827fef64dea0cb60e5c6c67d40005224f4bc8d88b6c29968c964",
+  "durationMs": 2189,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.06,
+      "value": "B"
+    },
+    {
+      "start": 0.06,
+      "end": 0.07,
+      "value": "X"
+    },
+    {
+      "start": 0.07,
+      "end": 0.13,
+      "value": "A"
+    },
+    {
+      "start": 0.13,
+      "end": 0.71,
+      "value": "C"
+    },
+    {
+      "start": 0.71,
+      "end": 1.13,
+      "value": "B"
+    },
+    {
+      "start": 1.13,
+      "end": 1.21,
+      "value": "A"
+    },
+    {
+      "start": 1.21,
+      "end": 1.49,
+      "value": "B"
+    },
+    {
+      "start": 1.49,
+      "end": 1.98,
+      "value": "F"
+    },
+    {
+      "start": 1.98,
+      "end": 2.05,
+      "value": "B"
+    },
+    {
+      "start": 2.05,
+      "end": 2.18,
+      "value": "X"
+    }
+  ]
+}

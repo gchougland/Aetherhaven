@@ -1,0 +1,68 @@
+{
+  "audio": "BrightFemale_Groan_2.ogg",
+  "audioSha256": "308ca3c3b1bb620216d48106574c6f25ed3fa86bd41f8a7bd90207d9e1308f67",
+  "durationMs": 2546,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.03,
+      "value": "B"
+    },
+    {
+      "start": 0.03,
+      "end": 0.05,
+      "value": "A"
+    },
+    {
+      "start": 0.05,
+      "end": 0.83,
+      "value": "F"
+    },
+    {
+      "start": 0.83,
+      "end": 1.08,
+      "value": "X"
+    },
+    {
+      "start": 1.08,
+      "end": 1.14,
+      "value": "B"
+    },
+    {
+      "start": 1.14,
+      "end": 1.27,
+      "value": "C"
+    },
+    {
+      "start": 1.27,
+      "end": 1.39,
+      "value": "A"
+    },
+    {
+      "start": 1.39,
+      "end": 1.56,
+      "value": "F"
+    },
+    {
+      "start": 1.56,
+      "end": 1.6,
+      "value": "E"
+    },
+    {
+      "start": 1.6,
+      "end": 1.93,
+      "value": "C"
+    },
+    {
+      "start": 1.93,
+      "end": 2.49,
+      "value": "B"
+    },
+    {
+      "start": 2.49,
+      "end": 2.54,
+      "value": "X"
+    }
+  ]
+}

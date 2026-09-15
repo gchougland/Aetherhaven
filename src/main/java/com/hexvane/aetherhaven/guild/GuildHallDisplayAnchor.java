@@ -109,6 +109,8 @@ public final class GuildHallDisplayAnchor implements Component<EntityStore> {
     }
 
     public static final int MAX_CHAIR_MOUNT_ATTEMPTS = 30;
+    long nextAmbientMs;
+    long ambientEndMs;
 
     /** True after a successful mount, sit fallback, or max failed attempts. */
     public boolean isChairMountFinished() {
@@ -177,6 +179,8 @@ public final class GuildHallDisplayAnchor implements Component<EntityStore> {
         copy.markerX = markerX;
         copy.markerY = markerY;
         copy.markerZ = markerZ;
+        copy.nextAmbientMs = nextAmbientMs;
+        copy.ambientEndMs = ambientEndMs;
         return copy;
     }
 }

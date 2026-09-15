@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.equipment.data.EquipmentProfileCatalog;
 import com.hexvane.aetherhaven.equipment.data.EquipmentProfileDefinition;
 import com.hexvane.aetherhaven.villager.TownVillagerHealthTopUp;
 import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -11,6 +12,7 @@ import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
+import java.util.Objects;
 import java.util.logging.Level;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,7 +26,7 @@ public final class VillagerEquipmentService {
     public static void applyProfile(
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull Store<EntityStore> store,
-        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
         @Nonnull EquipmentProfileCatalog catalog,
         @Nonnull String profileId
     ) {
@@ -62,8 +64,7 @@ public final class VillagerEquipmentService {
             for (short s = 0; s < capacity; s++) {
                 hb.getInventory().setItemStackForSlot(s, ItemStack.EMPTY);
             }
-            hb.setActiveSlot((byte) 0, npcRef, commandBuffer);
-            markHotbarEquipmentDirty(hb, (byte) 0, npcRef, commandBuffer);
+            markHotbarEquipmentDirty(hb, (byte) 0, npcRef, commandBuffer != null ? commandBuffer : store);
             putHotbar(npcRef, store, commandBuffer, hb);
         } catch (RuntimeException ex) {
             LOGGER.at(Level.FINE).withCause(ex).log("Could not clear NPC hotbar");
@@ -113,8 +114,7 @@ public final class VillagerEquipmentService {
                 for (short s = 0; s < capacity; s++) {
                     hb.getInventory().setItemStackForSlot(s, ItemStack.EMPTY);
                 }
-                hb.setActiveSlot((byte) 0, npcRef, commandBuffer);
-                markHotbarEquipmentDirty(hb, (byte) 0, npcRef, commandBuffer);
+                markHotbarEquipmentDirty(hb, (byte) 0, npcRef, commandBuffer != null ? commandBuffer : store);
                 putHotbar(npcRef, store, commandBuffer, hb);
                 return;
             }
@@ -128,8 +128,7 @@ public final class VillagerEquipmentService {
                 hb.getInventory().setItemStackForSlot(s, new ItemStack(itemId, 1));
                 active = (byte) s;
             }
-            hb.setActiveSlot(active, npcRef, commandBuffer);
-            markHotbarEquipmentDirty(hb, active, npcRef, commandBuffer);
+            markHotbarEquipmentDirty(hb, active, npcRef, commandBuffer != null ? commandBuffer : store);
             putHotbar(npcRef, store, commandBuffer, hb);
         } catch (RuntimeException ex) {
             LOGGER.at(Level.FINE).withCause(ex).log("Could not equip hotbar on NPC");
@@ -173,19 +172,21 @@ public final class VillagerEquipmentService {
     /**
      * NPC held-item visuals only refresh on active-slot changes or {@link InventoryComponent.Hotbar#setOutdatedEquipment}.
      * Replacing the item in the already-active slot needs both.
+     * Pass the command buffer during a tick, or the store when running a deferred command.
      */
     public static void markHotbarEquipmentDirty(
         @Nonnull InventoryComponent.Hotbar hb,
         byte targetSlot,
         @Nonnull Ref<EntityStore> npcRef,
-        @Nullable CommandBuffer<EntityStore> commandBuffer
+        @Nonnull ComponentAccessor<EntityStore> accessor
     ) {
+        Objects.requireNonNull(accessor, "Held-item refresh requires an ECS accessor");
         byte current = hb.getActiveSlot();
         if (current == targetSlot) {
             byte alt = alternateHotbarSlot(hb, targetSlot);
-            hb.setActiveSlot(alt, npcRef, commandBuffer);
+            hb.setActiveSlot(alt, npcRef, accessor);
         }
-        hb.setActiveSlot(targetSlot, npcRef, commandBuffer);
+        hb.setActiveSlot(targetSlot, npcRef, accessor);
         hb.setOutdatedEquipment(true);
     }
 

@@ -1,0 +1,73 @@
+{
+  "audio": "GravelyMale_Work_2.ogg",
+  "audioSha256": "18dca27748c3b2e4ee51feff4d0dc39c5b4edb0f624308d39c38bde29c6e7a40",
+  "durationMs": 2731,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.03,
+      "value": "X"
+    },
+    {
+      "start": 0.03,
+      "end": 0.36,
+      "value": "B"
+    },
+    {
+      "start": 0.36,
+      "end": 0.53,
+      "value": "A"
+    },
+    {
+      "start": 0.53,
+      "end": 0.88,
+      "value": "C"
+    },
+    {
+      "start": 0.88,
+      "end": 1.1,
+      "value": "B"
+    },
+    {
+      "start": 1.1,
+      "end": 1.18,
+      "value": "A"
+    },
+    {
+      "start": 1.18,
+      "end": 1.43,
+      "value": "C"
+    },
+    {
+      "start": 1.43,
+      "end": 1.78,
+      "value": "E"
+    },
+    {
+      "start": 1.78,
+      "end": 1.99,
+      "value": "D"
+    },
+    {
+      "start": 1.99,
+      "end": 2.13,
+      "value": "C"
+    },
+    {
+      "start": 2.13,
+      "end": 2.2,
+      "value": "E"
+    },
+    {
+      "start": 2.2,
+      "end": 2.63,
+      "value": "A"
+    },
+    {
+      "start": 2.63,
+      "end": 2.73,
+      "value": "X"
+    }
+  ]
+}

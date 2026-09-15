@@ -85,7 +85,8 @@
               "id": "q_house_priestess"
             }
           ],
-          "next": "serah_house_finish"
+          "next": "serah_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.root.c2",
@@ -136,7 +137,8 @@
               "id": "q_gaia_altar"
             }
           ],
-          "next": "serah_done"
+          "next": "serah_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.root.c5",
@@ -294,13 +296,15 @@
               "id": "q_gaia_altar"
             }
           ],
-          "next": "serah_altar_accepted"
+          "next": "serah_altar_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "serah_altar_accepted": {
       "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.speaker",
@@ -324,7 +328,8 @@
               "id": "q_gaia_altar"
             }
           ],
-          "next": "serah_abandoned"
+          "next": "serah_abandoned",
+          "speechClip": "Sigh"
         },
         {
           "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_building.c1",
@@ -364,13 +369,15 @@
               "id": "q_house_priestess"
             }
           ],
-          "next": "serah_house_accepted"
+          "next": "serah_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "serah_house_accepted": {
       "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.speaker",
@@ -681,7 +688,8 @@
               "langKey": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.main_hub.opener.accepted"
             }
           ],
-          "next": "main_hub"
+          "next": "main_hub",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_offer.c1",
@@ -693,7 +701,8 @@
           ],
           "next": "main_hub"
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "draught_quest_active": {
       "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_active.speaker",
@@ -717,7 +726,8 @@
               "id": "q_priestess_gaia_draught"
             }
           ],
-          "next": "draught_quest_complete"
+          "next": "draught_quest_complete",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_turnin.c1",

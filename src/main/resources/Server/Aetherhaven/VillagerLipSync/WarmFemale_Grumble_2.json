@@ -1,0 +1,73 @@
+{
+  "audio": "WarmFemale_Grumble_2.ogg",
+  "audioSha256": "faf7a6a456c2855284191eada7baf4dd4a497f91896dca6bdc76ea2985b5b597",
+  "durationMs": 1856,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.06,
+      "value": "X"
+    },
+    {
+      "start": 0.06,
+      "end": 0.12,
+      "value": "B"
+    },
+    {
+      "start": 0.12,
+      "end": 0.66,
+      "value": "F"
+    },
+    {
+      "start": 0.66,
+      "end": 0.77,
+      "value": "A"
+    },
+    {
+      "start": 0.77,
+      "end": 0.86,
+      "value": "B"
+    },
+    {
+      "start": 0.86,
+      "end": 0.93,
+      "value": "C"
+    },
+    {
+      "start": 0.93,
+      "end": 1.01,
+      "value": "A"
+    },
+    {
+      "start": 1.01,
+      "end": 1.1,
+      "value": "C"
+    },
+    {
+      "start": 1.1,
+      "end": 1.17,
+      "value": "B"
+    },
+    {
+      "start": 1.17,
+      "end": 1.25,
+      "value": "A"
+    },
+    {
+      "start": 1.25,
+      "end": 1.64,
+      "value": "C"
+    },
+    {
+      "start": 1.64,
+      "end": 1.78,
+      "value": "B"
+    },
+    {
+      "start": 1.78,
+      "end": 1.85,
+      "value": "X"
+    }
+  ]
+}

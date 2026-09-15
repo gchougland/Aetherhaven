@@ -1,0 +1,23 @@
+{
+  "audio": "GravelyFemale_Thinking_1.ogg",
+  "audioSha256": "83d97442a8be776973024f2479a85e5f94d590a993c9dd8650c066dce74d3185",
+  "durationMs": 1453,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.84,
+      "value": "B"
+    },
+    {
+      "start": 0.84,
+      "end": 1.45,
+      "value": "X"
+    }
+  ]
+}

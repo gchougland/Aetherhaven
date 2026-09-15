@@ -84,7 +84,8 @@
               "id": "q_house_builder"
             }
           ],
-          "next": "rowan_house_finish"
+          "next": "rowan_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.root.hc2",
@@ -135,7 +136,8 @@
               "id": "q_builders_hut"
             }
           ],
-          "next": "rowan_done"
+          "next": "rowan_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.root.c2",
@@ -198,13 +200,15 @@
               "id": "q_builders_hut"
             }
           ],
-          "next": "rowan_accepted"
+          "next": "rowan_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "rowan_accepted": {
       "speaker": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.speaker",
@@ -228,7 +232,8 @@
               "id": "q_builders_hut"
             }
           ],
-          "next": "rowan_abandoned"
+          "next": "rowan_abandoned",
+          "speechClip": "Sigh"
         },
         {
           "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_building.c1",
@@ -268,13 +273,15 @@
               "id": "q_house_builder"
             }
           ],
-          "next": "rowan_house_accepted"
+          "next": "rowan_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "rowan_house_accepted": {
       "speaker": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.speaker",

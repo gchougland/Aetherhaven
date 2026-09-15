@@ -85,7 +85,8 @@
               "id": "q_house_chef"
             }
           ],
-          "next": "pepper_house_finish"
+          "next": "pepper_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.root.c_house_remind",
@@ -138,7 +139,8 @@
               "id": "q_chef_restaurant"
             }
           ],
-          "next": "pepper_done"
+          "next": "pepper_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.root.c7",
@@ -208,13 +210,15 @@
               "id": "q_chef_restaurant"
             }
           ],
-          "next": "pepper_accepted"
+          "next": "pepper_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_quest_restaurant.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "pepper_accepted": {
       "speaker": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_accepted.speaker",
@@ -238,7 +242,8 @@
               "id": "q_chef_restaurant"
             }
           ],
-          "next": "pepper_abandoned"
+          "next": "pepper_abandoned",
+          "speechClip": "Sigh"
         },
         {
           "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_building.c1",
@@ -278,13 +283,15 @@
               "id": "q_house_chef"
             }
           ],
-          "next": "pepper_house_accepted"
+          "next": "pepper_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_house_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "pepper_house_accepted": {
       "speaker": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_house_accepted.speaker",

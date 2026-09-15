@@ -293,17 +293,7 @@ public final class VillagerScheduleResolver {
                     personalityCatalog,
                     personalityIds
                 );
-            case LOC_PARK ->
-                resolveSharedBuilding(
-                    town,
-                    constructionCatalog,
-                    sharedConstructionId(loc, villagerDef),
-                    loc,
-                    tickState,
-                    timeJump,
-                    personalityCatalog,
-                    personalityIds
-                );
+            case LOC_PARK -> VillagerScheduleResolveOutcome.browseTownWide();
             case LOC_GAIA_ALTAR ->
                 resolveSharedBuilding(
                     town,

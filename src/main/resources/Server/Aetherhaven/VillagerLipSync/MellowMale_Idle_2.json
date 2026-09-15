@@ -1,0 +1,58 @@
+{
+  "audio": "MellowMale_Idle_2.ogg",
+  "audioSha256": "b552107377e5c0e6ba0f4068ae4f941938e0ab6257a87d05d33d06cb3ebffd43",
+  "durationMs": 1411,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.04,
+      "value": "X"
+    },
+    {
+      "start": 0.04,
+      "end": 0.12,
+      "value": "B"
+    },
+    {
+      "start": 0.12,
+      "end": 0.21,
+      "value": "A"
+    },
+    {
+      "start": 0.21,
+      "end": 0.27,
+      "value": "C"
+    },
+    {
+      "start": 0.27,
+      "end": 0.82,
+      "value": "B"
+    },
+    {
+      "start": 0.82,
+      "end": 0.96,
+      "value": "C"
+    },
+    {
+      "start": 0.96,
+      "end": 1.03,
+      "value": "E"
+    },
+    {
+      "start": 1.03,
+      "end": 1.24,
+      "value": "D"
+    },
+    {
+      "start": 1.24,
+      "end": 1.38,
+      "value": "E"
+    },
+    {
+      "start": 1.38,
+      "end": 1.41,
+      "value": "X"
+    }
+  ]
+}

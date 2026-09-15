@@ -1,0 +1,68 @@
+{
+  "audio": "WarmMale_Talk_1.ogg",
+  "audioSha256": "a36fa21a759a8e3b72c48210a60757e732645eb75c6fc038540912739b15a54f",
+  "durationMs": 1232,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.05,
+      "value": "A"
+    },
+    {
+      "start": 0.05,
+      "end": 0.25,
+      "value": "D"
+    },
+    {
+      "start": 0.25,
+      "end": 0.39,
+      "value": "F"
+    },
+    {
+      "start": 0.39,
+      "end": 0.53,
+      "value": "B"
+    },
+    {
+      "start": 0.53,
+      "end": 0.67,
+      "value": "F"
+    },
+    {
+      "start": 0.67,
+      "end": 0.77,
+      "value": "A"
+    },
+    {
+      "start": 0.77,
+      "end": 0.87,
+      "value": "D"
+    },
+    {
+      "start": 0.87,
+      "end": 0.95,
+      "value": "A"
+    },
+    {
+      "start": 0.95,
+      "end": 1.01,
+      "value": "C"
+    },
+    {
+      "start": 1.01,
+      "end": 1.2,
+      "value": "B"
+    },
+    {
+      "start": 1.2,
+      "end": 1.23,
+      "value": "X"
+    }
+  ]
+}

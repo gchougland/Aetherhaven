@@ -28,9 +28,9 @@ import org.joml.Vector3d;
  */
 public final class VillagerWorkVisuals {
     private static final long WORK_HIT_INTERVAL_MS = 1300L;
-    private static final long LEISURE_EMOTE_INTERVAL_MS = 5500L;
-    private static final String[] LEISURE_EMOTES = {"PonderDismissive", "Yawn", "Laugh"};
-    private static final String READ_EMOTE = "PonderDismissive";
+    private static final long LEISURE_EMOTE_INTERVAL_MS = 7000L;
+    private static final String[] LEISURE_EMOTES = {"Aetherhaven_Life_LookAround", "Aetherhaven_Life_Fidget", "Aetherhaven_Life_Stretch"};
+    private static final String READ_EMOTE = "Aetherhaven_Life_Read";
 
     private VillagerWorkVisuals() {}
 
@@ -49,6 +49,8 @@ public final class VillagerWorkVisuals {
         long nowMs,
         long lastHitEpochMs
     ) {
+        var life = store.getComponent(npcRef, VillagerLifeState.getComponentType());
+        if (life != null && System.currentTimeMillis() < life.visualUntilMs) return false;
         // Never overlay tool swings or fidget emotes on sleep / meal consume.
         if (poi.getInteractionKind() == com.hexvane.aetherhaven.poi.PoiInteractionKind.SLEEP
             || PoiScoring.isEatPoi(poi)) {
@@ -63,21 +65,25 @@ public final class VillagerWorkVisuals {
             // Fun spots always; READ/CRAFT fidget at desks and quiet benches; LEISURE on work = stand (bard).
             if (!PoiScoring.isWorkPoi(poi)
                 || activity == VillagerWorkActivity.READ
-                || activity == VillagerWorkActivity.CRAFT) {
-                playLeisureBeat(npcRef, store, commandBuffer, npc, activity);
-                // Emotes can leave Face looking neutral while mood still thinks Grin is set.
-                NpcFaceVisuals.applyMoodFace(npcRef, commandBuffer, store);
+                || activity == VillagerWorkActivity.CRAFT
+                || activity == VillagerWorkActivity.SWEEP
+                || activity == VillagerWorkActivity.INSPECT
+                || activity == VillagerWorkActivity.TEND) {
+                playLeisureBeat(npcRef, store, commandBuffer, npc, activity, PoiScoring.isWorkPoi(poi));
                 return true;
             }
-            return false;
+            commandBuffer.run(s -> { if (npcRef.isValid()) VillagerLifeVisuals.workMurmur(npcRef, s); });
+            return true;
         }
         if (!PoiScoring.isWorkPoi(poi)) {
             return false;
         }
         if (activity.playsToolAction()) {
+            commandBuffer.run(s -> { if (npcRef.isValid()) VillagerLifeVisuals.workMurmur(npcRef, s); });
             playToolSwing(npcRef, store, commandBuffer, npc, activity);
             spawnHitFx(store, commandBuffer, poi, activity);
-            NpcFaceVisuals.applyMoodFace(npcRef, commandBuffer, store);
+            // The murmur owns Face until its exact lip track finishes; restoring
+            // the mood here would erase it on the same tick as the tool swing.
         }
         return true;
     }
@@ -87,13 +93,26 @@ public final class VillagerWorkVisuals {
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull NPCEntity npc,
-        @Nonnull VillagerWorkActivity activity
+        @Nonnull VillagerWorkActivity activity,
+        boolean working
     ) {
         // Keep Sit/Sleep Status; sprinkle Emote only.
-        String emote = activity == VillagerWorkActivity.READ
-            ? READ_EMOTE
-            : LEISURE_EMOTES[ThreadLocalRandom.current().nextInt(LEISURE_EMOTES.length)];
-        NpcAnimationPlayback.play(npcRef, npc, AnimationSlot.Emote, emote, commandBuffer);
+        String emote = switch (activity) {
+            case READ -> READ_EMOTE;
+            case CRAFT -> "Aetherhaven_Life_Craft";
+            case SWEEP -> "Aetherhaven_Life_Sweep";
+            case INSPECT -> "Aetherhaven_Life_Inspect";
+            case TEND -> "Aetherhaven_Life_Tend";
+            default -> LEISURE_EMOTES[ThreadLocalRandom.current().nextInt(LEISURE_EMOTES.length)];
+        };
+        String gesture = emote.substring("Aetherhaven_Life_".length());
+        commandBuffer.run(s -> {
+            if (!npcRef.isValid()) return;
+            long duration = VillagerLifeVisuals.ambient(npcRef, gesture, working, s);
+            var life = s.getComponent(npcRef, VillagerLifeState.getComponentType());
+            if (life == null) { life = new VillagerLifeState(); s.putComponent(npcRef, VillagerLifeState.getComponentType(), life); }
+            life.visualUntilMs = System.currentTimeMillis() + duration + 300;
+        });
         commandBuffer.putComponent(npcRef, NPCEntity.getComponentType(), npc);
     }
 

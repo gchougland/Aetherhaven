@@ -111,7 +111,8 @@
               "id": "q_house_blacksmith"
             }
           ],
-          "next": "garren_house_finish"
+          "next": "garren_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.root.c4",
@@ -162,7 +163,8 @@
               "id": "q_blacksmith_shop"
             }
           ],
-          "next": "garren_done"
+          "next": "garren_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.root.c7",
@@ -225,13 +227,15 @@
               "id": "q_blacksmith_shop"
             }
           ],
-          "next": "garren_shop_accepted"
+          "next": "garren_shop_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "garren_shop_accepted": {
       "speaker": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.speaker",
@@ -255,7 +259,8 @@
               "id": "q_blacksmith_shop"
             }
           ],
-          "next": "garren_abandoned"
+          "next": "garren_abandoned",
+          "speechClip": "Sigh"
         },
         {
           "text": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.c1",
@@ -295,13 +300,15 @@
               "id": "q_house_blacksmith"
             }
           ],
-          "next": "garren_house_accepted"
+          "next": "garren_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "garren_house_accepted": {
       "speaker": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.speaker",

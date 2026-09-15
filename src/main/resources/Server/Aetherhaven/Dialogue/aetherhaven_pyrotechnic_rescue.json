@@ -20,7 +20,8 @@
               "type": "close"
             }
           ],
-          "next": null
+          "next": null,
+          "speechClip": "Agree"
         }
       ]
     }

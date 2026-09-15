@@ -13,5 +13,20 @@
   },
   "preferredScheduleLocations": [
     "home"
-  ]
+  ],
+  "thoughtItemWeights": {
+    "Deco_Scrap_Book_Pile_Small": 1,
+    "Plant_Flower_Blood_Rose": 1,
+    "Furniture_Village_Bed": 1
+  },
+  "socialEmoteWeights": {
+    "Agree": 6,
+    "Question": 3,
+    "Explain": 1
+  },
+  "idleEmoteWeights": {
+    "Inspect": 4,
+    "Fidget": 3,
+    "LookAround": 1
+  }
 }

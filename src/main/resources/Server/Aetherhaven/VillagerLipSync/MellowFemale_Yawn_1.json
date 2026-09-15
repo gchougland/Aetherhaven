@@ -1,0 +1,58 @@
+{
+  "audio": "MellowFemale_Yawn_1.ogg",
+  "audioSha256": "3138fa03f8b42a96138dc08c85811d27a2a8cdddbdcbaaa121bb0fb0f3db9e74",
+  "durationMs": 2010,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.02,
+      "value": "X"
+    },
+    {
+      "start": 0.02,
+      "end": 0.09,
+      "value": "B"
+    },
+    {
+      "start": 0.09,
+      "end": 0.22,
+      "value": "E"
+    },
+    {
+      "start": 0.22,
+      "end": 0.36,
+      "value": "F"
+    },
+    {
+      "start": 0.36,
+      "end": 0.5,
+      "value": "C"
+    },
+    {
+      "start": 0.5,
+      "end": 0.78,
+      "value": "B"
+    },
+    {
+      "start": 0.78,
+      "end": 0.95,
+      "value": "A"
+    },
+    {
+      "start": 0.95,
+      "end": 1.14,
+      "value": "C"
+    },
+    {
+      "start": 1.14,
+      "end": 1.91,
+      "value": "B"
+    },
+    {
+      "start": 1.91,
+      "end": 2.0,
+      "value": "X"
+    }
+  ]
+}

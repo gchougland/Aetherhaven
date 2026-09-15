@@ -1,0 +1,427 @@
+{
+  "Aetherhaven_Charter": {
+    "topic": "Item_Aetherhaven_Charter",
+    "sourcePack": "Aetherhaven",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Aetherhaven_Charter.png"
+  },
+  "Aetherhaven_Festival_Ticket_Autumn": {
+    "topic": "Item_Aetherhaven_Festival_Ticket_Autumn",
+    "sourcePack": "Aetherhaven",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Aetherhaven_Festival_Ticket_Autumn.png"
+  },
+  "Aetherhaven_Festival_Ticket_Spring": {
+    "topic": "Item_Aetherhaven_Festival_Ticket_Spring",
+    "sourcePack": "Aetherhaven",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Aetherhaven_Festival_Ticket_Spring.png"
+  },
+  "Aetherhaven_Festival_Ticket_Summer": {
+    "topic": "Item_Aetherhaven_Festival_Ticket_Summer",
+    "sourcePack": "Aetherhaven",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Aetherhaven_Festival_Ticket_Summer.png"
+  },
+  "Aetherhaven_Festival_Ticket_Winter": {
+    "topic": "Item_Aetherhaven_Festival_Ticket_Winter",
+    "sourcePack": "Aetherhaven",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Aetherhaven_Festival_Ticket_Winter.png"
+  },
+  "Aetherhaven_Gold_Coin": {
+    "topic": "Item_Aetherhaven_Gold_Coin",
+    "sourcePack": "Aetherhaven",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Aetherhaven_Gold_Coin.png"
+  },
+  "Bench_Builders": {
+    "topic": "Item_Bench_Builders",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Bench_Architects.png"
+  },
+  "Bench_Furniture": {
+    "topic": "Item_Bench_Furniture",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Bench_Furniture.png"
+  },
+  "Bench_Memories": {
+    "topic": "Item_Bench_Memories",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Bench_Memories.png"
+  },
+  "Deco_Coral_Shell": {
+    "topic": "Item_Deco_Coral_Shell",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Deco_Coral_Shell.png"
+  },
+  "Deco_Scrap_Book_Pile_Small": {
+    "topic": "Item_Deco_Scrap_Book_Pile_Small",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Deco_Scrap_Book_Pile_Small.png"
+  },
+  "Deco_Treasure": {
+    "topic": "Item_Deco_Treasure",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Deco_Scrap_Treasure.png"
+  },
+  "Deco_Treasure_Pile_Large": {
+    "topic": "Item_Deco_Treasure_Pile_Large",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Deco_Scrap_Treasure_Pile_Large.png"
+  },
+  "Deco_Treasure_Pile_Small": {
+    "topic": "Item_Deco_Treasure_Pile_Small",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Deco_Scrap_Treasure_Pile_Small.png"
+  },
+  "Farming_Collar": {
+    "topic": "Item_Farming_Collar",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Deco_Dog_Collar.png"
+  },
+  "Fish_Pufferfish_Item": {
+    "topic": "Item_Fish_Pufferfish_Item",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Fish_Pufferfish_Item.png"
+  },
+  "Fish_Salmon_Item": {
+    "topic": "Item_Fish_Salmon_Item",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Fish_Salmon_Item.png"
+  },
+  "Food_Bread": {
+    "topic": "Item_Food_Bread",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Food_Bread.png"
+  },
+  "Food_Fish_Grilled": {
+    "topic": "Item_Food_Fish_Grilled",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Food_Fish_Grilled.png"
+  },
+  "Food_Pie_Apple": {
+    "topic": "Item_Food_Pie_Apple",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Food_Pie_Apple.png"
+  },
+  "Food_Pie_Meat": {
+    "topic": "Item_Food_Pie_Meat",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Food_Pie_Meat.png"
+  },
+  "Furniture_Ancient_Candle": {
+    "topic": "Item_Furniture_Ancient_Candle",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Furniture_Ancient_Candle.png"
+  },
+  "Furniture_Dungeon_Chest_Epic": {
+    "topic": "Item_Furniture_Dungeon_Chest_Epic",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Furniture_Dungeon_Chest_Epic.png"
+  },
+  "Furniture_Village_Bed": {
+    "topic": "Item_Furniture_Village_Bed",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Furniture_Village_Bed.png"
+  },
+  "Ingredient_Bar_Gold": {
+    "topic": "Item_Ingredient_Bar_Gold",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Ingredient_Bar_Gold.png"
+  },
+  "Ingredient_Bar_Iron": {
+    "topic": "Item_Ingredient_Bar_Iron",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Ingredient_Bar_Iron.png"
+  },
+  "Ingredient_Bar_Mithril": {
+    "topic": "Item_Ingredient_Bar_Mithril",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Ingredient_Bar_Mithril.png"
+  },
+  "Ingredient_Bar_Onyxium": {
+    "topic": "Item_Ingredient_Bar_Onyxium",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Ingredient_Bar_Onyxium.png"
+  },
+  "Ingredient_Bar_Prisma": {
+    "topic": "Item_Ingredient_Bar_Prisma",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Ingredient_Bar_Prisma.png"
+  },
+  "Ingredient_Crystal_Blue": {
+    "topic": "Item_Ingredient_Crystal_Blue",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Ingredient_Crystal_Fragments_Blue.png"
+  },
+  "Ingredient_Crystal_Cyan": {
+    "topic": "Item_Ingredient_Crystal_Cyan",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Ingredient_Crystal_Fragments_Cyan.png"
+  },
+  "Ingredient_Crystal_Green": {
+    "topic": "Item_Ingredient_Crystal_Green",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Ingredient_Crystal_Fragments_Green.png"
+  },
+  "Ingredient_Crystal_Pink": {
+    "topic": "Item_Ingredient_Crystal_Pink",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Ingredient_Crystal_Pink.png"
+  },
+  "Ingredient_Hay": {
+    "topic": "Item_Ingredient_Hay",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Deco_Hay.png"
+  },
+  "Ingredient_Motes_Light": {
+    "topic": "Item_Ingredient_Motes_Light",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Ingredient_Motes_Light.png"
+  },
+  "Objective_Treasure_Map": {
+    "topic": "Item_Objective_Treasure_Map",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Tool_Map.png"
+  },
+  "Ore_Mithril": {
+    "topic": "Item_Ore_Mithril",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Ore_Mithril.png"
+  },
+  "Plant_Cactus_Flower": {
+    "topic": "Item_Plant_Cactus_Flower",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Plant_Cactus_Flower.png"
+  },
+  "Plant_Crop_Carrot": {
+    "topic": "Item_Plant_Crop_Carrot",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Plant_Crop_Carrot.png"
+  },
+  "Plant_Crop_Wheat_Item": {
+    "topic": "Item_Plant_Crop_Wheat_Item",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Plant_Crop_Wheat.png"
+  },
+  "Plant_Flower_Blood_Rose": {
+    "topic": "Item_Plant_Flower_Blood_Rose",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Plant_Flower_Blood_Rose.png"
+  },
+  "Plant_Flower_Bushy_Blue": {
+    "topic": "Item_Plant_Flower_Bushy_Blue",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Plant_Flower_Bushy_Blue.png"
+  },
+  "Plant_Flower_Bushy_Cyan": {
+    "topic": "Item_Plant_Flower_Bushy_Cyan",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Plant_Flower_Bushy_Cyan.png"
+  },
+  "Plant_Flower_Bushy_Green": {
+    "topic": "Item_Plant_Flower_Bushy_Green",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Plant_Flower_Bushy_Green.png"
+  },
+  "Plant_Fruit_Apple": {
+    "topic": "Item_Plant_Fruit_Apple",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Plant_Fruit_Apple.png"
+  },
+  "Plant_Seeds_Carrot": {
+    "topic": "Item_Plant_Seeds_Carrot",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Plant_Seeds_Carrot.png"
+  },
+  "Plant_Seeds_Tomato": {
+    "topic": "Item_Plant_Seeds_Tomato",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Plant_Seeds_Tomato.png"
+  },
+  "Plant_Seeds_Wheat": {
+    "topic": "Item_Plant_Seeds_Wheat",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Plant_Seeds_Wheat.png"
+  },
+  "Potion_Health": {
+    "topic": "Item_Potion_Health",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Potion_Health.png"
+  },
+  "Potion_Health_Greater": {
+    "topic": "Item_Potion_Health_Greater",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Potion_Health_Greater.png"
+  },
+  "Potion_Health_Large": {
+    "topic": "Item_Potion_Health_Large",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Potion_Health_Large.png"
+  },
+  "Recipe_Food_Pie_Apple": {
+    "topic": "Item_Recipe_Food_Pie_Apple",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Recipe_Food_Pie_Apple.png"
+  },
+  "Recipe_Food_Pie_Meat": {
+    "topic": "Item_Recipe_Food_Pie_Meat",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Recipe_Page.png"
+  },
+  "Recipe_Food_Pie_Pumpkin": {
+    "topic": "Item_Recipe_Food_Pie_Pumpkin",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Recipe_Page.png"
+  },
+  "Recipe_Food_Salad_Caesar": {
+    "topic": "Item_Recipe_Food_Salad_Caesar",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Recipe_Page.png"
+  },
+  "Rock_Gem_Diamond": {
+    "topic": "Item_Rock_Gem_Diamond",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Rock_Gem_Diamond.png"
+  },
+  "Rock_Gem_Ruby": {
+    "topic": "Item_Rock_Gem_Ruby",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Rock_Gem_Ruby.png"
+  },
+  "Rock_Gem_Topaz": {
+    "topic": "Item_Rock_Gem_Topaz",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Rock_Gem_Topaz.png"
+  },
+  "Rock_Gem_Voidstone": {
+    "topic": "Item_Rock_Gem_Voidstone",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Rock_Gem_Voidstone.png"
+  },
+  "Rock_Gem_Zephyr": {
+    "topic": "Item_Rock_Gem_Zephyr",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Rock_Gem_Zephyr.png"
+  },
+  "Tool_Feedbag": {
+    "topic": "Item_Tool_Feedbag",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Tool_Feedbag.png"
+  },
+  "Tool_Fishing_Trap": {
+    "topic": "Item_Tool_Fishing_Trap",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Tool_Fishing_Trap.png"
+  },
+  "Tool_Hammer_Crude": {
+    "topic": "Item_Tool_Hammer_Crude",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Tool_Hammer_Crude.png"
+  },
+  "Tool_Hammer_Iron": {
+    "topic": "Item_Tool_Hammer_Iron",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Tool_Hammer_Iron.png"
+  },
+  "Tool_Hatchet_Adamantite": {
+    "topic": "Item_Tool_Hatchet_Adamantite",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Tool_Hatchet_Adamantite.png"
+  },
+  "Tool_Hatchet_Iron": {
+    "topic": "Item_Tool_Hatchet_Iron",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Tool_Hatchet_Iron.png"
+  },
+  "Tool_Hatchet_Mithril": {
+    "topic": "Item_Tool_Hatchet_Mithril",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Tool_Hatchet_Mithril.png"
+  },
+  "Tool_Hatchet_Onyxium": {
+    "topic": "Item_Tool_Hatchet_Onyxium",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Tool_Hatchet_Onyxium.png"
+  },
+  "Tool_Map": {
+    "topic": "Item_Tool_Map",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Tool_Map.png"
+  },
+  "Tool_Pickaxe_Adamantite": {
+    "topic": "Item_Tool_Pickaxe_Adamantite",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Tool_Pickaxe_Adamantite.png"
+  },
+  "Tool_Pickaxe_Iron": {
+    "topic": "Item_Tool_Pickaxe_Iron",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Tool_Pickaxe_Iron.png"
+  },
+  "Tool_Pickaxe_Mithril": {
+    "topic": "Item_Tool_Pickaxe_Mithril",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Tool_Pickaxe_Mithril.png"
+  },
+  "Tool_Pickaxe_Onyxium": {
+    "topic": "Item_Tool_Pickaxe_Onyxium",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Tool_Pickaxe_Onyxium.png"
+  },
+  "Tool_Repair_Kit_Iron": {
+    "topic": "Item_Tool_Repair_Kit_Iron",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Tool_Repair_Kit_Iron.png"
+  },
+  "Tool_Watering_Can": {
+    "topic": "Item_Tool_Watering_Can",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Tool_Watering_Can.png"
+  },
+  "Utility_Bag_Seed": {
+    "topic": "Item_Utility_Bag_Seed",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Utility_Bag_Seed.png"
+  },
+  "Weapon_Axe_Adamantite": {
+    "topic": "Item_Weapon_Axe_Adamantite",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Weapon_Axe_Adamantite.png"
+  },
+  "Weapon_Axe_Bone": {
+    "topic": "Item_Weapon_Axe_Bone",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Weapon_Axe_Bone.png"
+  },
+  "Weapon_Axe_Cobalt": {
+    "topic": "Item_Weapon_Axe_Cobalt",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Weapon_Axe_Cobalt.png"
+  },
+  "Weapon_Axe_Copper": {
+    "topic": "Item_Weapon_Axe_Copper",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Weapon_Axe_Copper.png"
+  },
+  "Weapon_Bomb": {
+    "topic": "Item_Weapon_Bomb",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Weapon_Bomb_Fire_Goblin.png"
+  },
+  "Weapon_Bomb_Continuous": {
+    "topic": "Item_Weapon_Bomb_Continuous",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Weapon_Bomb_Fire_Goblin.png"
+  },
+  "Weapon_Bomb_Fire": {
+    "topic": "Item_Weapon_Bomb_Fire",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Weapon_Bomb_Fire_Goblin.png"
+  },
+  "Weapon_Bomb_Large_Fire": {
+    "topic": "Item_Weapon_Bomb_Large_Fire",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Weapon_Bomb_Large_Fire.png"
+  },
+  "Weapon_Sword_Iron": {
+    "topic": "Item_Weapon_Sword_Iron",
+    "sourcePack": "Hytale",
+    "sourceIcon": "Common/Icons/ItemsGenerated/Weapon_Sword_Iron.png"
+  }
+}

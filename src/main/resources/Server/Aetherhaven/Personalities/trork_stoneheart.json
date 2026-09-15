@@ -14,5 +14,21 @@
   },
   "preferredScheduleLocations": [
     "park"
-  ]
+  ],
+  "thoughtItemWeights": {
+    "Tool_Hammer_Iron": 1,
+    "Food_Pie_Meat": 1,
+    "Weapon_Sword_Iron": 1
+  },
+  "socialEmoteWeights": {
+    "Agree": 4,
+    "Explain": 3,
+    "Laugh": 2,
+    "Story": 2
+  },
+  "idleEmoteWeights": {
+    "LookAround": 4,
+    "Fidget": 2,
+    "Stretch": 1
+  }
 }

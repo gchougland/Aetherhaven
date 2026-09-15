@@ -85,7 +85,8 @@
               "id": "q_house_farmer"
             }
           ],
-          "next": "irienne_house_finish"
+          "next": "irienne_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_farmer.aetherhaven.dialogue.aetherhaven_farmer.root.c2",
@@ -136,7 +137,8 @@
               "id": "q_farm_plot"
             }
           ],
-          "next": "irienne_done"
+          "next": "irienne_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_farmer.aetherhaven.dialogue.aetherhaven_farmer.root.c5",
@@ -199,13 +201,15 @@
               "id": "q_farm_plot"
             }
           ],
-          "next": "irienne_accepted"
+          "next": "irienne_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_farmer.aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "irienne_accepted": {
       "speaker": "aetherhaven_dialogue_farmer.aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.speaker",
@@ -229,7 +233,8 @@
               "id": "q_farm_plot"
             }
           ],
-          "next": "irienne_abandoned"
+          "next": "irienne_abandoned",
+          "speechClip": "Sigh"
         },
         {
           "text": "aetherhaven_dialogue_farmer.aetherhaven.dialogue.aetherhaven_farmer.irienne_building.c1",
@@ -269,13 +274,15 @@
               "id": "q_house_farmer"
             }
           ],
-          "next": "irienne_house_accepted"
+          "next": "irienne_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_farmer.aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "irienne_house_accepted": {
       "speaker": "aetherhaven_dialogue_farmer.aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.speaker",

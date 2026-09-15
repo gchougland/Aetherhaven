@@ -1,0 +1,58 @@
+{
+  "audio": "GravelyFemale_Talk_1.ogg",
+  "audioSha256": "83c0a308d1eb6fab73d1a6fa6ba4033b1fb76ec7c4c48b625c79a7aa03660e9a",
+  "durationMs": 1645,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.03,
+      "value": "A"
+    },
+    {
+      "start": 0.03,
+      "end": 0.4,
+      "value": "C"
+    },
+    {
+      "start": 0.4,
+      "end": 0.61,
+      "value": "B"
+    },
+    {
+      "start": 0.61,
+      "end": 0.75,
+      "value": "F"
+    },
+    {
+      "start": 0.75,
+      "end": 0.9,
+      "value": "A"
+    },
+    {
+      "start": 0.9,
+      "end": 1.02,
+      "value": "D"
+    },
+    {
+      "start": 1.02,
+      "end": 1.08,
+      "value": "C"
+    },
+    {
+      "start": 1.08,
+      "end": 1.16,
+      "value": "A"
+    },
+    {
+      "start": 1.16,
+      "end": 1.47,
+      "value": "B"
+    },
+    {
+      "start": 1.47,
+      "end": 1.64,
+      "value": "X"
+    }
+  ]
+}

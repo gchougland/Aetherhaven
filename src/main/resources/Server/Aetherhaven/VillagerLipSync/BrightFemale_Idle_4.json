@@ -1,0 +1,88 @@
+{
+  "audio": "BrightFemale_Idle_4.ogg",
+  "audioSha256": "c799028b6a661bbd06cb78c4b3497d6e28f67f2a63f067f278fe310fe00859e3",
+  "durationMs": 2512,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.06,
+      "value": "B"
+    },
+    {
+      "start": 0.06,
+      "end": 0.25,
+      "value": "F"
+    },
+    {
+      "start": 0.25,
+      "end": 0.39,
+      "value": "B"
+    },
+    {
+      "start": 0.39,
+      "end": 0.81,
+      "value": "F"
+    },
+    {
+      "start": 0.81,
+      "end": 1.02,
+      "value": "B"
+    },
+    {
+      "start": 1.02,
+      "end": 1.14,
+      "value": "X"
+    },
+    {
+      "start": 1.14,
+      "end": 1.22,
+      "value": "B"
+    },
+    {
+      "start": 1.22,
+      "end": 1.33,
+      "value": "A"
+    },
+    {
+      "start": 1.33,
+      "end": 1.57,
+      "value": "C"
+    },
+    {
+      "start": 1.57,
+      "end": 1.78,
+      "value": "B"
+    },
+    {
+      "start": 1.78,
+      "end": 1.92,
+      "value": "C"
+    },
+    {
+      "start": 1.92,
+      "end": 1.99,
+      "value": "B"
+    },
+    {
+      "start": 1.99,
+      "end": 2.34,
+      "value": "F"
+    },
+    {
+      "start": 2.34,
+      "end": 2.48,
+      "value": "B"
+    },
+    {
+      "start": 2.48,
+      "end": 2.51,
+      "value": "X"
+    }
+  ]
+}

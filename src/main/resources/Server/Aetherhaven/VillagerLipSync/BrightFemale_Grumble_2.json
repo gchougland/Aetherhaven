@@ -1,0 +1,63 @@
+{
+  "audio": "BrightFemale_Grumble_2.ogg",
+  "audioSha256": "f3108bfb7b6170a591cbdaf21803ba7dfbc165f57de6eac9f6c6fd0e51865294",
+  "durationMs": 1993,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.44,
+      "value": "B"
+    },
+    {
+      "start": 0.44,
+      "end": 0.58,
+      "value": "F"
+    },
+    {
+      "start": 0.58,
+      "end": 0.77,
+      "value": "B"
+    },
+    {
+      "start": 0.77,
+      "end": 0.91,
+      "value": "A"
+    },
+    {
+      "start": 0.91,
+      "end": 1.13,
+      "value": "C"
+    },
+    {
+      "start": 1.13,
+      "end": 1.21,
+      "value": "A"
+    },
+    {
+      "start": 1.21,
+      "end": 1.31,
+      "value": "B"
+    },
+    {
+      "start": 1.31,
+      "end": 1.52,
+      "value": "C"
+    },
+    {
+      "start": 1.52,
+      "end": 1.94,
+      "value": "B"
+    },
+    {
+      "start": 1.94,
+      "end": 1.99,
+      "value": "X"
+    }
+  ]
+}

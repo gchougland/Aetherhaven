@@ -1,0 +1,73 @@
+{
+  "audio": "BrightFemale_Laugh_2.ogg",
+  "audioSha256": "d60370becacbb2aa0519767226210fc0639210c71b20400db42ab6de7b4f8368",
+  "durationMs": 2306,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.08,
+      "value": "B"
+    },
+    {
+      "start": 0.08,
+      "end": 0.43,
+      "value": "F"
+    },
+    {
+      "start": 0.43,
+      "end": 0.64,
+      "value": "B"
+    },
+    {
+      "start": 0.64,
+      "end": 0.76,
+      "value": "A"
+    },
+    {
+      "start": 0.76,
+      "end": 1.14,
+      "value": "F"
+    },
+    {
+      "start": 1.14,
+      "end": 1.21,
+      "value": "C"
+    },
+    {
+      "start": 1.21,
+      "end": 1.29,
+      "value": "A"
+    },
+    {
+      "start": 1.29,
+      "end": 1.64,
+      "value": "C"
+    },
+    {
+      "start": 1.64,
+      "end": 1.71,
+      "value": "B"
+    },
+    {
+      "start": 1.71,
+      "end": 1.85,
+      "value": "C"
+    },
+    {
+      "start": 1.85,
+      "end": 2.06,
+      "value": "B"
+    },
+    {
+      "start": 2.06,
+      "end": 2.25,
+      "value": "A"
+    },
+    {
+      "start": 2.25,
+      "end": 2.3,
+      "value": "X"
+    }
+  ]
+}

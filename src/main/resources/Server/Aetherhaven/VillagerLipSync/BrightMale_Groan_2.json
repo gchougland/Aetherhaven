@@ -1,0 +1,68 @@
+{
+  "audio": "BrightMale_Groan_2.ogg",
+  "audioSha256": "2d0da3d70d294f174a02f78948c834fd18e89a58a535868a7acfaaca8a9a96ef",
+  "durationMs": 2722,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.02,
+      "value": "X"
+    },
+    {
+      "start": 0.02,
+      "end": 0.88,
+      "value": "B"
+    },
+    {
+      "start": 0.88,
+      "end": 1.12,
+      "value": "X"
+    },
+    {
+      "start": 1.12,
+      "end": 1.21,
+      "value": "B"
+    },
+    {
+      "start": 1.21,
+      "end": 1.35,
+      "value": "C"
+    },
+    {
+      "start": 1.35,
+      "end": 1.47,
+      "value": "A"
+    },
+    {
+      "start": 1.47,
+      "end": 1.85,
+      "value": "F"
+    },
+    {
+      "start": 1.85,
+      "end": 1.92,
+      "value": "B"
+    },
+    {
+      "start": 1.92,
+      "end": 2.31,
+      "value": "D"
+    },
+    {
+      "start": 2.31,
+      "end": 2.38,
+      "value": "C"
+    },
+    {
+      "start": 2.38,
+      "end": 2.62,
+      "value": "B"
+    },
+    {
+      "start": 2.62,
+      "end": 2.72,
+      "value": "X"
+    }
+  ]
+}

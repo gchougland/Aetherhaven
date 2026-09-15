@@ -103,14 +103,14 @@ public final class GuildHallAdventurerChairMount {
             return false;
         }
         if (!anchor.isChairAlignedForMount()) {
-            alignFeetForSeatMount(npcRef, commandBuffer, world, mountBlock);
+            // BlockMountAPI positions the NPC at its allocated seat after a successful mount.
             anchor.setChairAlignedForMount(true);
             return false;
         }
         try {
             Vector3d feet = tc.getPosition();
             Vector3d hitBlockCenter = new Vector3d(mountBlock.x + 0.5, mountBlock.y + 0.5, mountBlock.z + 0.5);
-            Vector3d seatHit = seatWorldPosition(world, mountBlock);
+            Vector3d seatHit = VillagerBlockUtil.preferredAvailableSeatWorldPosition(world, mountBlock);
             Vector3d feetPick = new Vector3d(feet.x, feet.y + 0.5, feet.z);
             Vector3d primaryHit = seatHit != null ? seatHit : feetPick;
             BlockMountAPI.BlockMountResult result =

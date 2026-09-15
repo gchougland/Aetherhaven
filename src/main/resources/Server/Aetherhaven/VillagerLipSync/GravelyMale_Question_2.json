@@ -1,0 +1,78 @@
+{
+  "audio": "GravelyMale_Question_2.ogg",
+  "audioSha256": "03b513ea43e1915da0b85ecdf1c0366987c8110c788f7b1a11ee4fb89ce925f0",
+  "durationMs": 1445,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.03,
+      "value": "X"
+    },
+    {
+      "start": 0.03,
+      "end": 0.09,
+      "value": "B"
+    },
+    {
+      "start": 0.09,
+      "end": 0.21,
+      "value": "F"
+    },
+    {
+      "start": 0.21,
+      "end": 0.29,
+      "value": "A"
+    },
+    {
+      "start": 0.29,
+      "end": 0.35,
+      "value": "F"
+    },
+    {
+      "start": 0.35,
+      "end": 0.54,
+      "value": "C"
+    },
+    {
+      "start": 0.54,
+      "end": 0.68,
+      "value": "E"
+    },
+    {
+      "start": 0.68,
+      "end": 0.75,
+      "value": "C"
+    },
+    {
+      "start": 0.75,
+      "end": 0.89,
+      "value": "A"
+    },
+    {
+      "start": 0.89,
+      "end": 1.06,
+      "value": "B"
+    },
+    {
+      "start": 1.06,
+      "end": 1.13,
+      "value": "E"
+    },
+    {
+      "start": 1.13,
+      "end": 1.34,
+      "value": "F"
+    },
+    {
+      "start": 1.34,
+      "end": 1.41,
+      "value": "B"
+    },
+    {
+      "start": 1.41,
+      "end": 1.44,
+      "value": "X"
+    }
+  ]
+}

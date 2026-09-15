@@ -1,0 +1,63 @@
+{
+  "audio": "MellowFemale_Gasp_1.ogg",
+  "audioSha256": "6d48f67f03d59e063b534ac531acefe67e9fb389d26659dba9f8def00a8d1dbd",
+  "durationMs": 2150,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.37,
+      "value": "B"
+    },
+    {
+      "start": 0.37,
+      "end": 0.49,
+      "value": "X"
+    },
+    {
+      "start": 0.49,
+      "end": 0.54,
+      "value": "B"
+    },
+    {
+      "start": 0.54,
+      "end": 0.86,
+      "value": "E"
+    },
+    {
+      "start": 0.86,
+      "end": 1.0,
+      "value": "F"
+    },
+    {
+      "start": 1.0,
+      "end": 1.16,
+      "value": "A"
+    },
+    {
+      "start": 1.16,
+      "end": 1.63,
+      "value": "B"
+    },
+    {
+      "start": 1.63,
+      "end": 1.72,
+      "value": "A"
+    },
+    {
+      "start": 1.72,
+      "end": 1.9,
+      "value": "C"
+    },
+    {
+      "start": 1.9,
+      "end": 2.11,
+      "value": "B"
+    },
+    {
+      "start": 2.11,
+      "end": 2.14,
+      "value": "X"
+    }
+  ]
+}

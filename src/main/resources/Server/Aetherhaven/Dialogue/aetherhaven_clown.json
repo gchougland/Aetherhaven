@@ -84,7 +84,8 @@
               "id": "q_house_clown"
             }
           ],
-          "next": "pip_house_finish"
+          "next": "pip_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.c_house_remind",
@@ -135,7 +136,8 @@
               "id": "q_clown_tent"
             }
           ],
-          "next": "pip_done"
+          "next": "pip_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.root.c_tent_building",
@@ -198,13 +200,15 @@
               "id": "q_clown_tent"
             }
           ],
-          "next": "pip_tent_accepted"
+          "next": "pip_tent_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_quest_tent.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "pip_tent_accepted": {
       "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_tent_accepted.speaker",
@@ -228,7 +232,8 @@
               "id": "q_clown_tent"
             }
           ],
-          "next": "pip_abandoned"
+          "next": "pip_abandoned",
+          "speechClip": "Sigh"
         },
         {
           "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_building.c1",
@@ -268,13 +273,15 @@
               "id": "q_house_clown"
             }
           ],
-          "next": "pip_house_accepted"
+          "next": "pip_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_house_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "pip_house_accepted": {
       "speaker": "aetherhaven_dialogue_clown.aetherhaven.dialogue.aetherhaven_clown.pip_house_accepted.speaker",

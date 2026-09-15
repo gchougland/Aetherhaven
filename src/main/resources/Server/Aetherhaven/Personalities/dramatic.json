@@ -15,5 +15,21 @@
   "preferredScheduleLocations": [
     "inn",
     "park"
-  ]
+  ],
+  "thoughtItemWeights": {
+    "Rock_Gem_Diamond": 1,
+    "Plant_Flower_Blood_Rose": 1,
+    "Rock_Gem_Ruby": 1
+  },
+  "socialEmoteWeights": {
+    "Story": 5,
+    "Laugh": 4,
+    "Surprise": 2,
+    "Agree": 1
+  },
+  "idleEmoteWeights": {
+    "Stretch": 3,
+    "Greet": 2,
+    "Laugh": 2
+  }
 }

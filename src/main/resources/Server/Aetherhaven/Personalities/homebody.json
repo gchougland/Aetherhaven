@@ -14,5 +14,20 @@
   },
   "preferredScheduleLocations": [
     "home"
-  ]
+  ],
+  "thoughtItemWeights": {
+    "Furniture_Village_Bed": 1,
+    "Deco_Scrap_Book_Pile_Small": 1,
+    "Food_Bread": 1
+  },
+  "socialEmoteWeights": {
+    "Agree": 6,
+    "Question": 3,
+    "Explain": 1
+  },
+  "idleEmoteWeights": {
+    "Stretch": 4,
+    "Sleepy": 2,
+    "LookAround": 1
+  }
 }

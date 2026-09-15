@@ -1,0 +1,13 @@
+{
+  "Layers": [
+    {
+      "Files": [
+        "Sounds/Aetherhaven/Life/GravelyMale_Question_1.ogg"
+      ]
+    }
+  ],
+  "Volume": -6,
+  "MaxDistance": 16,
+  "StartAttenuationDistance": 3,
+  "PreventSoundInterruption": true
+}

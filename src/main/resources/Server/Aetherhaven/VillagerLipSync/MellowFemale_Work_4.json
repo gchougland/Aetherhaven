@@ -1,0 +1,53 @@
+{
+  "audio": "MellowFemale_Work_4.ogg",
+  "audioSha256": "0d8cb855380d8dde0fc77b4be9429710f19aaaf941d8b80efd99330fdc56630a",
+  "durationMs": 2090,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.09,
+      "value": "X"
+    },
+    {
+      "start": 0.09,
+      "end": 0.87,
+      "value": "B"
+    },
+    {
+      "start": 0.87,
+      "end": 1.1,
+      "value": "A"
+    },
+    {
+      "start": 1.1,
+      "end": 1.16,
+      "value": "C"
+    },
+    {
+      "start": 1.16,
+      "end": 1.42,
+      "value": "B"
+    },
+    {
+      "start": 1.42,
+      "end": 1.63,
+      "value": "D"
+    },
+    {
+      "start": 1.63,
+      "end": 1.7,
+      "value": "C"
+    },
+    {
+      "start": 1.7,
+      "end": 2.05,
+      "value": "B"
+    },
+    {
+      "start": 2.05,
+      "end": 2.09,
+      "value": "X"
+    }
+  ]
+}

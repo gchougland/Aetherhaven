@@ -109,7 +109,8 @@
               "id": "q_park_plot"
             }
           ],
-          "next": "corin_park_done"
+          "next": "corin_park_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.p2",
@@ -199,7 +200,8 @@
               "id": "q_festival_square"
             }
           ],
-          "next": "corin_festival_done"
+          "next": "corin_festival_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.f2",
@@ -288,7 +290,8 @@
               "id": "q_house_innkeeper"
             }
           ],
-          "next": "corin_house_finish"
+          "next": "corin_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.c3",
@@ -348,13 +351,15 @@
               "id": "q_park_plot"
             }
           ],
-          "next": "corin_park_accepted"
+          "next": "corin_park_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "corin_park_accepted": {
       "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_accepted.speaker",
@@ -378,7 +383,8 @@
               "id": "q_park_plot"
             }
           ],
-          "next": "corin_park_abandoned"
+          "next": "corin_park_abandoned",
+          "speechClip": "Sigh"
         },
         {
           "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_building.c1",
@@ -418,13 +424,15 @@
               "id": "q_festival_square"
             }
           ],
-          "next": "corin_festival_accepted"
+          "next": "corin_festival_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_festival_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "corin_festival_accepted": {
       "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_festival_accepted.speaker",
@@ -448,7 +456,8 @@
               "id": "q_festival_square"
             }
           ],
-          "next": "corin_festival_abandoned"
+          "next": "corin_festival_abandoned",
+          "speechClip": "Sigh"
         },
         {
           "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_festival_building.c1",
@@ -488,13 +497,15 @@
               "id": "q_house_innkeeper"
             }
           ],
-          "next": "corin_house_accepted"
+          "next": "corin_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "corin_house_accepted": {
       "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.speaker",

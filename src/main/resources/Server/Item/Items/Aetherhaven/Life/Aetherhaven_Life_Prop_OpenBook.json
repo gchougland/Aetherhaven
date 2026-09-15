@@ -1,0 +1,16 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_life.items.Aetherhaven_Life_Prop_OpenBook.name"
+  },
+  "Model": "Items/Aetherhaven/Life/OpenBook.blockymodel",
+  "Texture": "Items/Weapons/Spellbook/Grimoire_Brown_Texture.png",
+  "PlayerAnimationsId": "Item",
+  "MaxStack": 1,
+  "Quality": "Common",
+  "Icon": "Icons/ItemsGenerated/Weapon_Spellbook_Grimoire_Brown.png",
+  "Tags": {
+    "Type": [
+      "AetherhavenLifeProp"
+    ]
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "audio": "WarmFemale_Work_2.ogg",
+  "audioSha256": "51ef0d2feaf681fedb8759b390b0000518747912d6a2362bc2806787d6c70178",
+  "durationMs": 2431,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.06,
+      "value": "B"
+    },
+    {
+      "start": 0.06,
+      "end": 0.59,
+      "value": "F"
+    },
+    {
+      "start": 0.59,
+      "end": 1.01,
+      "value": "B"
+    },
+    {
+      "start": 1.01,
+      "end": 1.13,
+      "value": "A"
+    },
+    {
+      "start": 1.13,
+      "end": 1.23,
+      "value": "F"
+    },
+    {
+      "start": 1.23,
+      "end": 1.3,
+      "value": "E"
+    },
+    {
+      "start": 1.3,
+      "end": 1.44,
+      "value": "C"
+    },
+    {
+      "start": 1.44,
+      "end": 1.55,
+      "value": "A"
+    },
+    {
+      "start": 1.55,
+      "end": 1.75,
+      "value": "C"
+    },
+    {
+      "start": 1.75,
+      "end": 2.31,
+      "value": "B"
+    },
+    {
+      "start": 2.31,
+      "end": 2.43,
+      "value": "X"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "audio": "MellowFemale_Sigh_1.ogg",
+  "audioSha256": "a90af1c247c57ee69ca0e2e7fc103d29e454c32f7cbc1d2d42b4ff3118b5721c",
+  "durationMs": 1760,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.17,
+      "value": "B"
+    },
+    {
+      "start": 0.17,
+      "end": 0.38,
+      "value": "C"
+    },
+    {
+      "start": 0.38,
+      "end": 0.54,
+      "value": "A"
+    },
+    {
+      "start": 0.54,
+      "end": 0.63,
+      "value": "B"
+    },
+    {
+      "start": 0.63,
+      "end": 0.77,
+      "value": "A"
+    },
+    {
+      "start": 0.77,
+      "end": 0.95,
+      "value": "D"
+    },
+    {
+      "start": 0.95,
+      "end": 1.09,
+      "value": "B"
+    },
+    {
+      "start": 1.09,
+      "end": 1.23,
+      "value": "C"
+    },
+    {
+      "start": 1.23,
+      "end": 1.65,
+      "value": "B"
+    },
+    {
+      "start": 1.65,
+      "end": 1.75,
+      "value": "X"
+    }
+  ]
+}

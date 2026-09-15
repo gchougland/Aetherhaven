@@ -1,0 +1,48 @@
+{
+  "audio": "MellowMale_Question_1.ogg",
+  "audioSha256": "3dcd411461c4630c73210ae6fb2f9d065f3e8396abcd90695d9a37ad2473ecfa",
+  "durationMs": 873,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.07,
+      "value": "B"
+    },
+    {
+      "start": 0.07,
+      "end": 0.19,
+      "value": "C"
+    },
+    {
+      "start": 0.19,
+      "end": 0.27,
+      "value": "A"
+    },
+    {
+      "start": 0.27,
+      "end": 0.59,
+      "value": "F"
+    },
+    {
+      "start": 0.59,
+      "end": 0.66,
+      "value": "E"
+    },
+    {
+      "start": 0.66,
+      "end": 0.8,
+      "value": "B"
+    },
+    {
+      "start": 0.8,
+      "end": 0.87,
+      "value": "X"
+    }
+  ]
+}

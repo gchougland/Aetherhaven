@@ -13,5 +13,20 @@
   },
   "preferredScheduleLocations": [
     "work"
-  ]
+  ],
+  "thoughtItemWeights": {
+    "Tool_Hammer_Iron": 1,
+    "Deco_Scrap_Book_Pile_Small": 1,
+    "Tool_Map": 1
+  },
+  "socialEmoteWeights": {
+    "Agree": 6,
+    "Question": 3,
+    "Explain": 1
+  },
+  "idleEmoteWeights": {
+    "LookAround": 4,
+    "Fidget": 2,
+    "Stretch": 1
+  }
 }

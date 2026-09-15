@@ -1,0 +1,68 @@
+{
+  "audio": "WarmMale_Grumble_1.ogg",
+  "audioSha256": "920ef0d9f70250011ec65cb7511067408b66dea85d61a9eda4e363c65f5c08e6",
+  "durationMs": 2110,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.04,
+      "value": "X"
+    },
+    {
+      "start": 0.04,
+      "end": 0.08,
+      "value": "B"
+    },
+    {
+      "start": 0.08,
+      "end": 0.4,
+      "value": "F"
+    },
+    {
+      "start": 0.4,
+      "end": 0.69,
+      "value": "A"
+    },
+    {
+      "start": 0.69,
+      "end": 0.94,
+      "value": "B"
+    },
+    {
+      "start": 0.94,
+      "end": 1.08,
+      "value": "A"
+    },
+    {
+      "start": 1.08,
+      "end": 1.29,
+      "value": "E"
+    },
+    {
+      "start": 1.29,
+      "end": 1.36,
+      "value": "C"
+    },
+    {
+      "start": 1.36,
+      "end": 1.44,
+      "value": "A"
+    },
+    {
+      "start": 1.44,
+      "end": 1.7,
+      "value": "C"
+    },
+    {
+      "start": 1.7,
+      "end": 2.05,
+      "value": "E"
+    },
+    {
+      "start": 2.05,
+      "end": 2.1,
+      "value": "X"
+    }
+  ]
+}

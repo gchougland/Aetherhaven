@@ -84,7 +84,8 @@
               "id": "q_house_crystal_keeper"
             }
           ],
-          "next": "vaelith_house_finish"
+          "next": "vaelith_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_house_remind",
@@ -135,7 +136,8 @@
               "id": "q_crystal_keepers_shop"
             }
           ],
-          "next": "vaelith_done"
+          "next": "vaelith_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_building",
@@ -198,13 +200,15 @@
               "id": "q_crystal_keepers_shop"
             }
           ],
-          "next": "vaelith_shop_accepted"
+          "next": "vaelith_shop_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "vaelith_shop_accepted": {
       "speaker": "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.speaker",
@@ -228,7 +232,8 @@
               "id": "q_crystal_keepers_shop"
             }
           ],
-          "next": "vaelith_abandoned"
+          "next": "vaelith_abandoned",
+          "speechClip": "Sigh"
         },
         {
           "text": "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.c1",
@@ -268,13 +273,15 @@
               "id": "q_house_crystal_keeper"
             }
           ],
-          "next": "vaelith_house_accepted"
+          "next": "vaelith_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "vaelith_house_accepted": {
       "speaker": "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_accepted.speaker",

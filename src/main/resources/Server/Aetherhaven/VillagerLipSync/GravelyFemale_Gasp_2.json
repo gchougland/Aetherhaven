@@ -1,0 +1,63 @@
+{
+  "audio": "GravelyFemale_Gasp_2.ogg",
+  "audioSha256": "c053168029871d1a83781f7ab25bbe1dac96a59be39fa80209bfe19000a25af9",
+  "durationMs": 2654,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.27,
+      "value": "B"
+    },
+    {
+      "start": 0.27,
+      "end": 0.35,
+      "value": "A"
+    },
+    {
+      "start": 0.35,
+      "end": 0.54,
+      "value": "C"
+    },
+    {
+      "start": 0.54,
+      "end": 0.94,
+      "value": "B"
+    },
+    {
+      "start": 0.94,
+      "end": 1.28,
+      "value": "F"
+    },
+    {
+      "start": 1.28,
+      "end": 1.36,
+      "value": "A"
+    },
+    {
+      "start": 1.36,
+      "end": 1.44,
+      "value": "F"
+    },
+    {
+      "start": 1.44,
+      "end": 1.52,
+      "value": "A"
+    },
+    {
+      "start": 1.52,
+      "end": 1.96,
+      "value": "C"
+    },
+    {
+      "start": 1.96,
+      "end": 2.17,
+      "value": "B"
+    },
+    {
+      "start": 2.17,
+      "end": 2.65,
+      "value": "X"
+    }
+  ]
+}

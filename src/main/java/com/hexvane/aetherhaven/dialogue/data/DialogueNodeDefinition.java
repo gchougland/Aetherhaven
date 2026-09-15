@@ -8,6 +8,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class DialogueNodeDefinition {
+    /** Recording category when entering this node; an explicit choice category takes precedence. */
+    @Nullable private String speechClip;
+    @Nullable public String getSpeechClip() { return speechClip; }
     @Nullable
     private String speaker;
     @Nullable

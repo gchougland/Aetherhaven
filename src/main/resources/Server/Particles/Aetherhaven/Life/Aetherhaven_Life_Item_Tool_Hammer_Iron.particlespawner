@@ -1,0 +1,58 @@
+{
+  "RenderMode": "BlendLinear",
+  "ParticleRotationInfluence": "Billboard",
+  "CameraOffset": -0.025,
+  "LinearFiltering": true,
+  "LightInfluence": 0,
+  "MaxConcurrentParticles": 1,
+  "TotalParticles": {
+    "Min": 1,
+    "Max": 1
+  },
+  "SpawnBurst": true,
+  "SpawnRate": {
+    "Min": 1,
+    "Max": 1
+  },
+  "ParticleLifeSpan": {
+    "Min": 2.6,
+    "Max": 2.6
+  },
+  "LifeSpan": 0.1,
+  "Particle": {
+    "Texture": "Particles/Aetherhaven/Life/Items/Centered/Tool_Hammer_Iron.png",
+    "FrameSize": {
+      "Width": 256,
+      "Height": 256
+    },
+    "ScaleRatioConstraint": "OneToOne",
+    "UVOption": "None",
+    "InitialAnimationFrame": {
+      "Opacity": 1,
+      "Scale": {
+        "X": {
+          "Min": 0.28,
+          "Max": 0.28
+        },
+        "Y": {
+          "Min": 0.28,
+          "Max": 0.28
+        }
+      }
+    },
+    "Animation": {
+      "0": {
+        "Opacity": 0
+      },
+      "8": {
+        "Opacity": 1
+      },
+      "85": {
+        "Opacity": 1
+      },
+      "100": {
+        "Opacity": 0
+      }
+    }
+  }
+}

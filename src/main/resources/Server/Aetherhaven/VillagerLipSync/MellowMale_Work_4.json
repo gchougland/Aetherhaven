@@ -1,0 +1,68 @@
+{
+  "audio": "MellowMale_Work_4.ogg",
+  "audioSha256": "55f7e6b6119f1b6c82ed25361cd9aab588ea7a085e718add41b42655745a3a48",
+  "durationMs": 1931,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.06,
+      "value": "X"
+    },
+    {
+      "start": 0.06,
+      "end": 0.15,
+      "value": "B"
+    },
+    {
+      "start": 0.15,
+      "end": 0.5,
+      "value": "C"
+    },
+    {
+      "start": 0.5,
+      "end": 0.58,
+      "value": "A"
+    },
+    {
+      "start": 0.58,
+      "end": 0.87,
+      "value": "B"
+    },
+    {
+      "start": 0.87,
+      "end": 0.96,
+      "value": "A"
+    },
+    {
+      "start": 0.96,
+      "end": 1.04,
+      "value": "C"
+    },
+    {
+      "start": 1.04,
+      "end": 1.25,
+      "value": "B"
+    },
+    {
+      "start": 1.25,
+      "end": 1.36,
+      "value": "A"
+    },
+    {
+      "start": 1.36,
+      "end": 1.71,
+      "value": "D"
+    },
+    {
+      "start": 1.71,
+      "end": 1.85,
+      "value": "B"
+    },
+    {
+      "start": 1.85,
+      "end": 1.93,
+      "value": "X"
+    }
+  ]
+}

@@ -84,7 +84,8 @@
               "id": "q_house_florist"
             }
           ],
-          "next": "ivy_house_finish"
+          "next": "ivy_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.root.c_house_remind",
@@ -135,7 +136,8 @@
               "id": "q_florist_shop"
             }
           ],
-          "next": "ivy_done"
+          "next": "ivy_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.root.c_shop_building",
@@ -198,13 +200,15 @@
               "id": "q_florist_shop"
             }
           ],
-          "next": "ivy_shop_accepted"
+          "next": "ivy_shop_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "ivy_shop_accepted": {
       "speaker": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.speaker",
@@ -228,7 +232,8 @@
               "id": "q_florist_shop"
             }
           ],
-          "next": "ivy_abandoned"
+          "next": "ivy_abandoned",
+          "speechClip": "Sigh"
         },
         {
           "text": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.ivy_building.c1",
@@ -268,13 +273,15 @@
               "id": "q_house_florist"
             }
           ],
-          "next": "ivy_house_accepted"
+          "next": "ivy_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "ivy_house_accepted": {
       "speaker": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.speaker",

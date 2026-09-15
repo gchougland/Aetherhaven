@@ -1,0 +1,63 @@
+{
+  "audio": "WarmMale_Laugh_1.ogg",
+  "audioSha256": "cfe38f16855672c1a846f29b6e1f6050476ab22cd28e462757df9dbf0413401c",
+  "durationMs": 1574,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.12,
+      "value": "B"
+    },
+    {
+      "start": 0.12,
+      "end": 0.19,
+      "value": "C"
+    },
+    {
+      "start": 0.19,
+      "end": 0.27,
+      "value": "A"
+    },
+    {
+      "start": 0.27,
+      "end": 0.38,
+      "value": "C"
+    },
+    {
+      "start": 0.38,
+      "end": 0.52,
+      "value": "E"
+    },
+    {
+      "start": 0.52,
+      "end": 0.63,
+      "value": "A"
+    },
+    {
+      "start": 0.63,
+      "end": 0.89,
+      "value": "B"
+    },
+    {
+      "start": 0.89,
+      "end": 0.97,
+      "value": "A"
+    },
+    {
+      "start": 0.97,
+      "end": 1.51,
+      "value": "B"
+    },
+    {
+      "start": 1.51,
+      "end": 1.57,
+      "value": "X"
+    }
+  ]
+}

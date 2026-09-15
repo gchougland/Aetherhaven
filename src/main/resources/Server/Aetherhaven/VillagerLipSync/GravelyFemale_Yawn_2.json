@@ -1,0 +1,53 @@
+{
+  "audio": "GravelyFemale_Yawn_2.ogg",
+  "audioSha256": "4ffdaeb4b5ae36df58876b0bdeaaa6616d7cdbf02f43d36f63dcfb1a39e41913",
+  "durationMs": 2992,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.04,
+      "value": "X"
+    },
+    {
+      "start": 0.04,
+      "end": 0.18,
+      "value": "C"
+    },
+    {
+      "start": 0.18,
+      "end": 0.39,
+      "value": "F"
+    },
+    {
+      "start": 0.39,
+      "end": 0.53,
+      "value": "C"
+    },
+    {
+      "start": 0.53,
+      "end": 0.98,
+      "value": "A"
+    },
+    {
+      "start": 0.98,
+      "end": 1.49,
+      "value": "B"
+    },
+    {
+      "start": 1.49,
+      "end": 1.98,
+      "value": "C"
+    },
+    {
+      "start": 1.98,
+      "end": 2.19,
+      "value": "B"
+    },
+    {
+      "start": 2.19,
+      "end": 2.99,
+      "value": "X"
+    }
+  ]
+}

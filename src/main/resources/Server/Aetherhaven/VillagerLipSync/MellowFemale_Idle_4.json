@@ -1,0 +1,33 @@
+{
+  "audio": "MellowFemale_Idle_4.ogg",
+  "audioSha256": "9b9c46244c1c878b8276f6d169372a67af49d05c94d170e11b18f437df383437",
+  "durationMs": 1696,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.89,
+      "value": "B"
+    },
+    {
+      "start": 0.89,
+      "end": 0.96,
+      "value": "E"
+    },
+    {
+      "start": 0.96,
+      "end": 1.04,
+      "value": "A"
+    },
+    {
+      "start": 1.04,
+      "end": 1.65,
+      "value": "B"
+    },
+    {
+      "start": 1.65,
+      "end": 1.69,
+      "value": "X"
+    }
+  ]
+}

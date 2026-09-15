@@ -1,0 +1,78 @@
+{
+  "audio": "WarmMale_Groan_1.ogg",
+  "audioSha256": "2f35caf0e3ae63c9ba0c7b32614be6a6be32b475ba177f99b0d448242ab98e87",
+  "durationMs": 2499,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.02,
+      "value": "X"
+    },
+    {
+      "start": 0.02,
+      "end": 0.09,
+      "value": "B"
+    },
+    {
+      "start": 0.09,
+      "end": 0.37,
+      "value": "F"
+    },
+    {
+      "start": 0.37,
+      "end": 0.86,
+      "value": "B"
+    },
+    {
+      "start": 0.86,
+      "end": 1.09,
+      "value": "A"
+    },
+    {
+      "start": 1.09,
+      "end": 1.31,
+      "value": "E"
+    },
+    {
+      "start": 1.31,
+      "end": 1.38,
+      "value": "F"
+    },
+    {
+      "start": 1.38,
+      "end": 1.48,
+      "value": "A"
+    },
+    {
+      "start": 1.48,
+      "end": 1.59,
+      "value": "C"
+    },
+    {
+      "start": 1.59,
+      "end": 1.74,
+      "value": "A"
+    },
+    {
+      "start": 1.74,
+      "end": 1.93,
+      "value": "B"
+    },
+    {
+      "start": 1.93,
+      "end": 2.28,
+      "value": "F"
+    },
+    {
+      "start": 2.28,
+      "end": 2.42,
+      "value": "B"
+    },
+    {
+      "start": 2.42,
+      "end": 2.49,
+      "value": "X"
+    }
+  ]
+}

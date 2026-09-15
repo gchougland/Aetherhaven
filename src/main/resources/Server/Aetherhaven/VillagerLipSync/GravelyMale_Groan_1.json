@@ -1,0 +1,73 @@
+{
+  "audio": "GravelyMale_Groan_1.ogg",
+  "audioSha256": "60d5a03775c10c369c0f1aabed85acb48be7b1e572a4bec3ee2df36427d2633a",
+  "durationMs": 2439,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.03,
+      "value": "X"
+    },
+    {
+      "start": 0.03,
+      "end": 0.15,
+      "value": "B"
+    },
+    {
+      "start": 0.15,
+      "end": 0.3,
+      "value": "A"
+    },
+    {
+      "start": 0.3,
+      "end": 0.58,
+      "value": "F"
+    },
+    {
+      "start": 0.58,
+      "end": 0.93,
+      "value": "A"
+    },
+    {
+      "start": 0.93,
+      "end": 1.11,
+      "value": "D"
+    },
+    {
+      "start": 1.11,
+      "end": 1.18,
+      "value": "C"
+    },
+    {
+      "start": 1.18,
+      "end": 1.26,
+      "value": "A"
+    },
+    {
+      "start": 1.26,
+      "end": 1.31,
+      "value": "E"
+    },
+    {
+      "start": 1.31,
+      "end": 1.43,
+      "value": "F"
+    },
+    {
+      "start": 1.43,
+      "end": 1.71,
+      "value": "B"
+    },
+    {
+      "start": 1.71,
+      "end": 2.27,
+      "value": "F"
+    },
+    {
+      "start": 2.27,
+      "end": 2.43,
+      "value": "X"
+    }
+  ]
+}

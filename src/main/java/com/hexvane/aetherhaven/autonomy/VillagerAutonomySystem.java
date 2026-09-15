@@ -186,8 +186,8 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
     ) {
         if (store.getComponent(ref, MountedComponent.getComponentType()) != null) {
             BlockMountRelease.release(ref, store, commandBuffer);
+            VillagerBlockUtil.snapNpcToStandY(ref, store, commandBuffer);
         }
-        VillagerBlockUtil.snapNpcToStandY(ref, store, commandBuffer);
     }
 
     /**
@@ -323,6 +323,9 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         }
 
         long now = resolveNowMs(store);
+        if (VillagerLifeSystem.ownsActivity(ref, store)) {
+            return;
+        }
         VillagerAutonomyState autonomy = archetypeChunk.getComponent(index, VillagerAutonomyState.getComponentType());
         if (autonomy == null) {
             autonomy = VillagerAutonomyState.fresh(now);
@@ -488,7 +491,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 )
                 : null;
         List<PoiEntry> pickPool =
-            PoiScoring.withoutNeedCapReachedPois(
+            "park".equals(scheduleSeg) ? pois : PoiScoring.withoutNeedCapReachedPois(
                 pois, needs, townRecord, plugin.getConstructionCatalog(), villagerUuid
             );
         PoiEntry pick =
@@ -1173,6 +1176,12 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull PoiEntry pick,
         boolean useTownPathNav
     ) {
+        if (PoiScoring.isEatPoi(pick) && VillagerLifeSystem.beforeMeal(ref, store, commandBuffer)) {
+            autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
+            autonomy.setNextDecisionEpochMs(now);
+            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+            return;
+        }
         autonomy.setPhase(VillagerAutonomyState.PHASE_TRAVEL);
         autonomy.resetAutonomyStallTracking();
         double tx;
@@ -1746,6 +1755,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             && (PoiScoring.isEatPoi(poi) || PoiScoring.isRestPoi(poi) || PoiScoring.isFunPoi(poi))) {
             VillagerNeeds needs = store.getComponent(ref, VillagerNeeds.getComponentType());
             if (needs != null
+                && !(PoiScoring.isFunPoi(poi) && VillagerLifeSystem.isLeisure(ref, store))
                 && isNeedFillMeterFullAtPoi(poi, needs, townRecord, plugin, selfUuid, false)) {
                 if (PoiScoring.isEatPoi(poi)) {
                     autonomy.setFillingHunger(false);
@@ -1985,6 +1995,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 && !PoiScoring.isWorkScheduleSegment(scheduleSegEarly);
         boolean needFilledAtPoi =
             poi != null
+                && !(PoiScoring.isFunPoi(poi) && VillagerLifeSystem.isLeisure(ref, store))
                 && isNeedFillMeterFullAtPoi(poi, needs, townRecord, plugin, villagerUuid, shopping);
         if (now < autonomy.getPhaseEndEpochMs()
             && !hungerLeaveNonEat
@@ -1994,6 +2005,12 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             && !scheduleLeaveWork
             && !leaveForQuestBoard
             && !needFilledAtPoi) {
+            // Upper-body beats also apply to seated readers and recreational need fills.
+            if (poi != null && VillagerWorkVisuals.tickHit(ref, store, commandBuffer, npc, poi,
+                binding.getKind(), now, autonomy.getLastWorkHitEpochMs())) {
+                autonomy.setLastWorkHitEpochMs(now);
+                commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+            }
             if (isNpcBlockMounted(store, commandBuffer, ref)) {
                 stopSeekThenRestoreMountedPose(ref, store, commandBuffer, npc, poi);
                 return;
@@ -2001,20 +2018,6 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             if (poi != null && isActiveNeedFillAtPoi(autonomy, poi, shopping)) {
                 holdNeedFillAtPoiPose(ref, store, commandBuffer, npc, poi);
                 return;
-            }
-            if (poi != null
-                && VillagerWorkVisuals.tickHit(
-                    ref,
-                    store,
-                    commandBuffer,
-                    npc,
-                    poi,
-                    binding.getKind(),
-                    now,
-                    autonomy.getLastWorkHitEpochMs()
-                )) {
-                autonomy.setLastWorkHitEpochMs(now);
-                commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             }
             holdStandingPoiUse(ref, store, commandBuffer, npc);
             return;
@@ -2032,7 +2035,8 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                     RestaurantBenefitService.restaurantStateForPoi(townRecord, poi)
                 );
             autonomy.setPhaseEndEpochMs(now + (long) (dur * 1000L));
-            autonomy.setLastWorkHitEpochMs(0L);
+            // Extending the same POI visit must not restart an unfinished work emote.
+            // Keep its pacing timestamp; only a new POI visit resets it.
             commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             if (!isNpcBlockMounted(store, commandBuffer, ref)) {
                 holdStandingPoiUse(ref, store, commandBuffer, npc);

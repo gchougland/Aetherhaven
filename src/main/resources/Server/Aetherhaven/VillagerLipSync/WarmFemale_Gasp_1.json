@@ -1,0 +1,68 @@
+{
+  "audio": "WarmFemale_Gasp_1.ogg",
+  "audioSha256": "475a7293ec382dd976b4e6988c8048436f7636d22653025444345503abb11296",
+  "durationMs": 1795,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.32,
+      "value": "B"
+    },
+    {
+      "start": 0.32,
+      "end": 0.4,
+      "value": "A"
+    },
+    {
+      "start": 0.4,
+      "end": 0.45,
+      "value": "F"
+    },
+    {
+      "start": 0.45,
+      "end": 0.57,
+      "value": "E"
+    },
+    {
+      "start": 0.57,
+      "end": 0.64,
+      "value": "F"
+    },
+    {
+      "start": 0.64,
+      "end": 0.71,
+      "value": "B"
+    },
+    {
+      "start": 0.71,
+      "end": 1.13,
+      "value": "F"
+    },
+    {
+      "start": 1.13,
+      "end": 1.21,
+      "value": "A"
+    },
+    {
+      "start": 1.21,
+      "end": 1.61,
+      "value": "C"
+    },
+    {
+      "start": 1.61,
+      "end": 1.75,
+      "value": "B"
+    },
+    {
+      "start": 1.75,
+      "end": 1.79,
+      "value": "X"
+    }
+  ]
+}

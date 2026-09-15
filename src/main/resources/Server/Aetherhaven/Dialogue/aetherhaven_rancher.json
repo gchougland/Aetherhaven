@@ -85,7 +85,8 @@
               "id": "q_house_rancher"
             }
           ],
-          "next": "thalen_house_finish"
+          "next": "thalen_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.root.hc2",
@@ -136,7 +137,8 @@
               "id": "q_barn"
             }
           ],
-          "next": "thalen_done"
+          "next": "thalen_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.root.c2",
@@ -199,13 +201,15 @@
               "id": "q_barn"
             }
           ],
-          "next": "thalen_accepted"
+          "next": "thalen_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "thalen_accepted": {
       "speaker": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_accepted.speaker",
@@ -229,7 +233,8 @@
               "id": "q_barn"
             }
           ],
-          "next": "thalen_abandoned"
+          "next": "thalen_abandoned",
+          "speechClip": "Sigh"
         },
         {
           "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_building.c1",
@@ -269,13 +274,15 @@
               "id": "q_house_rancher"
             }
           ],
-          "next": "thalen_house_accepted"
+          "next": "thalen_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "thalen_house_accepted": {
       "speaker": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.speaker",

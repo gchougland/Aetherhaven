@@ -110,6 +110,9 @@ public final class VillagerScheduleService {
         if (VillagerFollowPlayerSystem.shouldSkipAutonomy(follow)) {
             return;
         }
+        if (com.hexvane.aetherhaven.autonomy.VillagerLifeSystem.ownsActivity(ref, store)) {
+            return;
+        }
         String roleId = npc.getRoleName();
         if (roleId == null || roleId.isBlank()) {
             return;

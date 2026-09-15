@@ -25,6 +25,28 @@ public final class TownsfolkPersonalityDefinition {
     @Nullable
     private List<String> preferredScheduleLocations;
 
+    @SerializedName("thoughtItemWeights")
+    private Map<String, Double> thoughtItemWeights;
+
+    @SerializedName("socialEmoteWeights")
+    private Map<String, Double> socialEmoteWeights;
+
+    @SerializedName("idleEmoteWeights")
+    private Map<String, Double> idleEmoteWeights;
+
+    @Nonnull
+    public Map<String, Double> getThoughtItemWeights() { return weightsOrEmpty(thoughtItemWeights); }
+
+    @Nonnull
+    public Map<String, Double> getSocialEmoteWeights() { return weightsOrEmpty(socialEmoteWeights); }
+
+    @Nonnull
+    public Map<String, Double> getIdleEmoteWeights() { return weightsOrEmpty(idleEmoteWeights); }
+
+    private static Map<String, Double> weightsOrEmpty(Map<String, Double> weights) {
+        return weights == null ? Map.of() : Collections.unmodifiableMap(new HashMap<>(weights));
+    }
+
     @Nonnull
     public String getId() {
         return id != null ? id.trim() : "";

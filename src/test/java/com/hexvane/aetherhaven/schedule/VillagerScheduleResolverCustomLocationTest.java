@@ -22,6 +22,14 @@ class VillagerScheduleResolverCustomLocationTest {
     private final Gson gson = new Gson();
 
     @Test
+    void legacyParkScheduleBecomesTownWideLeisureEvenWithoutAPark() {
+        var out = VillagerScheduleResolver.resolvePlot(new TownRecord(), new TownVillagerBinding(), UUID.randomUUID(),
+            "park", null, ConstructionCatalog.empty(), null, false, null, null, ScheduleLocationCatalog.empty());
+        assertNull(out.plotId());
+        org.junit.jupiter.api.Assertions.assertTrue(out.clearPreferredPlot());
+    }
+
+    @Test
     void resolvesRegisteredCustomLocationToCompletePlot() {
         UUID plotId = UUID.randomUUID();
         TownRecord town = new TownRecord();

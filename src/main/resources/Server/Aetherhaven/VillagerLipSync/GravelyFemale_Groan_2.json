@@ -1,0 +1,53 @@
+{
+  "audio": "GravelyFemale_Groan_2.ogg",
+  "audioSha256": "066759959218bb6ebc70abad3b1b15617f58515946fe75608716c901b1b31112",
+  "durationMs": 1902,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.25,
+      "value": "C"
+    },
+    {
+      "start": 0.25,
+      "end": 0.32,
+      "value": "F"
+    },
+    {
+      "start": 0.32,
+      "end": 0.4,
+      "value": "A"
+    },
+    {
+      "start": 0.4,
+      "end": 0.47,
+      "value": "C"
+    },
+    {
+      "start": 0.47,
+      "end": 0.61,
+      "value": "B"
+    },
+    {
+      "start": 0.61,
+      "end": 0.75,
+      "value": "C"
+    },
+    {
+      "start": 0.75,
+      "end": 0.82,
+      "value": "E"
+    },
+    {
+      "start": 0.82,
+      "end": 1.17,
+      "value": "B"
+    },
+    {
+      "start": 1.17,
+      "end": 1.9,
+      "value": "X"
+    }
+  ]
+}

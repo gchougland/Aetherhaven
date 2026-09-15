@@ -1,0 +1,68 @@
+{
+  "audio": "MellowFemale_Groan_1.ogg",
+  "audioSha256": "b1ac6758b66617319fecc0020a69dc433ce9c73958878d2a890e11026e513166",
+  "durationMs": 1972,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.28,
+      "value": "B"
+    },
+    {
+      "start": 0.28,
+      "end": 0.42,
+      "value": "C"
+    },
+    {
+      "start": 0.42,
+      "end": 0.7,
+      "value": "B"
+    },
+    {
+      "start": 0.7,
+      "end": 0.83,
+      "value": "A"
+    },
+    {
+      "start": 0.83,
+      "end": 0.98,
+      "value": "D"
+    },
+    {
+      "start": 0.98,
+      "end": 1.05,
+      "value": "C"
+    },
+    {
+      "start": 1.05,
+      "end": 1.13,
+      "value": "A"
+    },
+    {
+      "start": 1.13,
+      "end": 1.19,
+      "value": "B"
+    },
+    {
+      "start": 1.19,
+      "end": 1.32,
+      "value": "F"
+    },
+    {
+      "start": 1.32,
+      "end": 1.88,
+      "value": "B"
+    },
+    {
+      "start": 1.88,
+      "end": 1.97,
+      "value": "X"
+    }
+  ]
+}

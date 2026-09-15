@@ -11,15 +11,26 @@
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_completed", "questId": "q_build_guild_hall" },
-              { "type": "npc_is_unhoused_hired_guard" },
               {
-                "type": "not",
-                "condition": { "type": "quest_completed_for_npc", "questId": "q_house_guard" }
+                "type": "town_quest_completed",
+                "questId": "q_build_guild_hall"
+              },
+              {
+                "type": "npc_is_unhoused_hired_guard"
               },
               {
                 "type": "not",
-                "condition": { "type": "town_quest_active", "questId": "q_house_guard" }
+                "condition": {
+                  "type": "quest_completed_for_npc",
+                  "questId": "q_house_guard"
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_active",
+                  "questId": "q_house_guard"
+                }
               }
             ]
           },
@@ -31,25 +42,47 @@
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_guard" },
-              { "type": "npc_is_quest_target", "questId": "q_house_guard" },
-              { "type": "town_npc_home_resident_house" }
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_guard"
+              },
+              {
+                "type": "npc_is_quest_target",
+                "questId": "q_house_guard"
+              },
+              {
+                "type": "town_npc_home_resident_house"
+              }
             ]
           },
           "whenFalse": "hide",
-          "actions": [{ "type": "complete_quest", "id": "q_house_guard" }],
-          "next": "guard_house_finish"
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_house_guard"
+            }
+          ],
+          "next": "guard_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_guard.aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_remind",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_guard" },
-              { "type": "npc_is_quest_target", "questId": "q_house_guard" },
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_guard"
+              },
+              {
+                "type": "npc_is_quest_target",
+                "questId": "q_house_guard"
+              },
               {
                 "type": "not",
-                "condition": { "type": "town_npc_home_resident_house" }
+                "condition": {
+                  "type": "town_npc_home_resident_house"
+                }
               }
             ]
           },
@@ -61,12 +94,20 @@
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_guard" },
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_guard"
+              },
               {
                 "type": "not",
-                "condition": { "type": "npc_is_quest_target", "questId": "q_house_guard" }
+                "condition": {
+                  "type": "npc_is_quest_target",
+                  "questId": "q_house_guard"
+                }
               },
-              { "type": "npc_is_unhoused_hired_guard" }
+              {
+                "type": "npc_is_unhoused_hired_guard"
+              }
             ]
           },
           "whenFalse": "hide",
@@ -74,14 +115,20 @@
         },
         {
           "text": "aetherhaven_dialogue_guard.aetherhaven.dialogue.aetherhaven_guard.main_hub.dismiss",
-          "condition": { "type": "npc_is_hired_guard" },
+          "condition": {
+            "type": "npc_is_hired_guard"
+          },
           "whenFalse": "hide",
           "next": "dismiss_confirm"
         },
         {
           "text": "aetherhaven_dialogue_guard.aetherhaven.dialogue.aetherhaven_guard.main_hub.leave",
           "next": null,
-          "actions": [{ "type": "close" }]
+          "actions": [
+            {
+              "type": "close"
+            }
+          ]
         }
       ]
     },
@@ -93,7 +140,10 @@
           "text": "aetherhaven_dialogue_guard.aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.accept",
           "condition": {
             "type": "not",
-            "condition": { "type": "town_quest_active", "questId": "q_house_guard" }
+            "condition": {
+              "type": "town_quest_active",
+              "questId": "q_house_guard"
+            }
           },
           "whenFalse": "hide",
           "actions": [
@@ -103,13 +153,15 @@
               "bindTargetEntity": true
             }
           ],
-          "next": "guard_house_accepted"
+          "next": "guard_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_guard.aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.decline",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "guard_house_accepted": {
       "speaker": "",
@@ -157,9 +209,15 @@
       "choices": [
         {
           "text": "aetherhaven_dialogue_guard.aetherhaven.dialogue.aetherhaven_guard.dismiss_confirm.yes",
-          "condition": { "type": "npc_is_hired_guard" },
+          "condition": {
+            "type": "npc_is_hired_guard"
+          },
           "whenFalse": "disabled",
-          "actions": [{ "type": "dismiss_hired_guard" }]
+          "actions": [
+            {
+              "type": "dismiss_hired_guard"
+            }
+          ]
         },
         {
           "text": "aetherhaven_dialogue_guard.aetherhaven.dialogue.aetherhaven_guard.dismiss_confirm.no",
@@ -169,4 +227,3 @@
     }
   }
 }
-

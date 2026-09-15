@@ -1,0 +1,78 @@
+{
+  "audio": "MellowMale_Yawn_2.ogg",
+  "audioSha256": "4d6699ca7a45f4f4ad50a7418518892512c1a795f872251613dcf7949ea44ab2",
+  "durationMs": 2032,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.03,
+      "value": "X"
+    },
+    {
+      "start": 0.03,
+      "end": 0.15,
+      "value": "B"
+    },
+    {
+      "start": 0.15,
+      "end": 0.29,
+      "value": "E"
+    },
+    {
+      "start": 0.29,
+      "end": 0.36,
+      "value": "F"
+    },
+    {
+      "start": 0.36,
+      "end": 0.44,
+      "value": "A"
+    },
+    {
+      "start": 0.44,
+      "end": 0.62,
+      "value": "B"
+    },
+    {
+      "start": 0.62,
+      "end": 0.83,
+      "value": "C"
+    },
+    {
+      "start": 0.83,
+      "end": 1.18,
+      "value": "B"
+    },
+    {
+      "start": 1.18,
+      "end": 1.26,
+      "value": "A"
+    },
+    {
+      "start": 1.26,
+      "end": 1.32,
+      "value": "B"
+    },
+    {
+      "start": 1.32,
+      "end": 1.51,
+      "value": "C"
+    },
+    {
+      "start": 1.51,
+      "end": 1.72,
+      "value": "B"
+    },
+    {
+      "start": 1.72,
+      "end": 1.86,
+      "value": "C"
+    },
+    {
+      "start": 1.86,
+      "end": 2.03,
+      "value": "X"
+    }
+  ]
+}

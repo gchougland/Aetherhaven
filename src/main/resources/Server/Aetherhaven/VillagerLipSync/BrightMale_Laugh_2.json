@@ -1,0 +1,73 @@
+{
+  "audio": "BrightMale_Laugh_2.ogg",
+  "audioSha256": "a3759f297964f464273d077ec1b181f32b04bc0fa3444de0cb28b0e2007257bf",
+  "durationMs": 2150,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.02,
+      "value": "X"
+    },
+    {
+      "start": 0.02,
+      "end": 0.44,
+      "value": "B"
+    },
+    {
+      "start": 0.44,
+      "end": 0.58,
+      "value": "C"
+    },
+    {
+      "start": 0.58,
+      "end": 0.65,
+      "value": "B"
+    },
+    {
+      "start": 0.65,
+      "end": 0.73,
+      "value": "A"
+    },
+    {
+      "start": 0.73,
+      "end": 1.01,
+      "value": "F"
+    },
+    {
+      "start": 1.01,
+      "end": 1.09,
+      "value": "A"
+    },
+    {
+      "start": 1.09,
+      "end": 1.19,
+      "value": "F"
+    },
+    {
+      "start": 1.19,
+      "end": 1.26,
+      "value": "B"
+    },
+    {
+      "start": 1.26,
+      "end": 1.54,
+      "value": "C"
+    },
+    {
+      "start": 1.54,
+      "end": 1.61,
+      "value": "F"
+    },
+    {
+      "start": 1.61,
+      "end": 2.1,
+      "value": "B"
+    },
+    {
+      "start": 2.1,
+      "end": 2.14,
+      "value": "X"
+    }
+  ]
+}

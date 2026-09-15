@@ -1,0 +1,16 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_life.items.Aetherhaven_Life_Prop_Broom.name"
+  },
+  "Model": "Items/Aetherhaven/Life/Broom.blockymodel",
+  "Texture": "Items/Halloween_Props/Broomstick_Texture.png",
+  "PlayerAnimationsId": "Item",
+  "MaxStack": 1,
+  "Quality": "Common",
+  "Icon": "Icons/ItemsGenerated/Halloween_Broomstick.png",
+  "Tags": {
+    "Type": [
+      "AetherhavenLifeProp"
+    ]
+  }
+}

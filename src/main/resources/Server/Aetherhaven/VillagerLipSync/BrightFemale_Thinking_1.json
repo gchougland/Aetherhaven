@@ -1,0 +1,38 @@
+{
+  "audio": "BrightFemale_Thinking_1.ogg",
+  "audioSha256": "66d829d51218722b092905b63e4ced3c59aeef3af7c3a7b47cf13d8b7ccefcdc",
+  "durationMs": 1023,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.13,
+      "value": "B"
+    },
+    {
+      "start": 0.13,
+      "end": 0.27,
+      "value": "F"
+    },
+    {
+      "start": 0.27,
+      "end": 0.9,
+      "value": "C"
+    },
+    {
+      "start": 0.9,
+      "end": 0.97,
+      "value": "B"
+    },
+    {
+      "start": 0.97,
+      "end": 1.02,
+      "value": "X"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "audio": "BrightMale_Work_3.ogg",
+  "audioSha256": "d01e1966861f6659be63f3116e6ad2ab12ba86885400ea5390508ec92620753f",
+  "durationMs": 1588,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.15,
+      "value": "F"
+    },
+    {
+      "start": 0.15,
+      "end": 0.26,
+      "value": "A"
+    },
+    {
+      "start": 0.26,
+      "end": 0.36,
+      "value": "B"
+    },
+    {
+      "start": 0.36,
+      "end": 0.49,
+      "value": "X"
+    },
+    {
+      "start": 0.49,
+      "end": 0.54,
+      "value": "B"
+    },
+    {
+      "start": 0.54,
+      "end": 0.72,
+      "value": "C"
+    },
+    {
+      "start": 0.72,
+      "end": 0.8,
+      "value": "A"
+    },
+    {
+      "start": 0.8,
+      "end": 0.99,
+      "value": "B"
+    },
+    {
+      "start": 0.99,
+      "end": 1.13,
+      "value": "C"
+    },
+    {
+      "start": 1.13,
+      "end": 1.27,
+      "value": "D"
+    },
+    {
+      "start": 1.27,
+      "end": 1.55,
+      "value": "B"
+    },
+    {
+      "start": 1.55,
+      "end": 1.58,
+      "value": "X"
+    }
+  ]
+}

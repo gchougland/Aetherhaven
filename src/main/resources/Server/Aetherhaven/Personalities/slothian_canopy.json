@@ -16,5 +16,21 @@
   "preferredScheduleLocations": [
     "home",
     "park"
-  ]
+  ],
+  "thoughtItemWeights": {
+    "Furniture_Village_Bed": 1,
+    "Plant_Fruit_Apple": 1,
+    "Plant_Flower_Blood_Rose": 1
+  },
+  "socialEmoteWeights": {
+    "Agree": 4,
+    "Explain": 3,
+    "Laugh": 2,
+    "Story": 2
+  },
+  "idleEmoteWeights": {
+    "Stretch": 4,
+    "Sleepy": 2,
+    "LookAround": 1
+  }
 }

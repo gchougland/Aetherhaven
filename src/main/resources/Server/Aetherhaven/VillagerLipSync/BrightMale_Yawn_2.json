@@ -1,0 +1,68 @@
+{
+  "audio": "BrightMale_Yawn_2.ogg",
+  "audioSha256": "7e2fba9afdfeefc75417f1c0214a34659c486e179b327019b866ba7443f4ae22",
+  "durationMs": 2424,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.08,
+      "value": "B"
+    },
+    {
+      "start": 0.08,
+      "end": 0.7,
+      "value": "F"
+    },
+    {
+      "start": 0.7,
+      "end": 0.91,
+      "value": "B"
+    },
+    {
+      "start": 0.91,
+      "end": 1.26,
+      "value": "X"
+    },
+    {
+      "start": 1.26,
+      "end": 1.49,
+      "value": "B"
+    },
+    {
+      "start": 1.49,
+      "end": 1.57,
+      "value": "A"
+    },
+    {
+      "start": 1.57,
+      "end": 1.69,
+      "value": "B"
+    },
+    {
+      "start": 1.69,
+      "end": 1.9,
+      "value": "C"
+    },
+    {
+      "start": 1.9,
+      "end": 2.04,
+      "value": "E"
+    },
+    {
+      "start": 2.04,
+      "end": 2.39,
+      "value": "B"
+    },
+    {
+      "start": 2.39,
+      "end": 2.42,
+      "value": "X"
+    }
+  ]
+}

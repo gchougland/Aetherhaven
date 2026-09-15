@@ -29,11 +29,19 @@ public final class NpcAnimationPlayback {
         @Nullable String animationId,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
+        play(ref, npc, slot, animationId, false, commandBuffer);
+    }
+
+    /** Force finite emotes to restart even if their previous id remains active. */
+    public static void play(
+        @Nonnull Ref<EntityStore> ref, @Nonnull NPCEntity npc, @Nonnull AnimationSlot slot,
+        @Nullable String animationId, boolean force, @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
         commandBuffer.run(store -> {
             if (!ref.isValid()) {
                 return;
             }
-            npc.playAnimation(ref, slot, animationId, store);
+            npc.playAnimation(ref, slot, animationId, force, store);
         });
     }
 

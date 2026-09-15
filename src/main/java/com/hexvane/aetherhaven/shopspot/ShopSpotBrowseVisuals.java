@@ -43,11 +43,11 @@ public final class ShopSpotBrowseVisuals {
     }
 
     private static void playPonder(@Nonnull Ref<EntityStore> npcRef, @Nonnull CommandBuffer<EntityStore> commandBuffer) {
-        NpcAnimationPlayback.play(npcRef, AnimationSlot.Emote, PONDER_EMOTE_ID, commandBuffer);
+        commandBuffer.run(s -> { if (npcRef.isValid()) com.hexvane.aetherhaven.autonomy.VillagerLifeVisuals.ponder(npcRef, s); });
     }
 
     private static void playPonder(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store) {
-        AnimationUtils.playAnimation(npcRef, AnimationSlot.Emote, null, PONDER_EMOTE_ID, false, store);
+        com.hexvane.aetherhaven.autonomy.VillagerLifeVisuals.ponder(npcRef, store);
     }
 
     private static void stopPonder(
@@ -57,12 +57,14 @@ public final class ShopSpotBrowseVisuals {
     ) {
         NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
         if (commandBuffer != null) {
+            NpcAnimationPlayback.stop(npcRef, AnimationSlot.Action, commandBuffer);
             NpcAnimationPlayback.stop(npcRef, AnimationSlot.Emote, commandBuffer);
             if (npc != null) {
                 NpcAnimationPlayback.play(npcRef, npc, AnimationSlot.Emote, null, commandBuffer);
             }
             return;
         }
+        AnimationUtils.stopAnimation(npcRef, AnimationSlot.Action, store);
         AnimationUtils.stopAnimation(npcRef, AnimationSlot.Emote, store);
         if (npc != null) {
             npc.playAnimation(npcRef, AnimationSlot.Emote, null, store);

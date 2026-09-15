@@ -19,6 +19,9 @@ public enum VillagerWorkActivity {
     /** Quiet busywork fidget at a desk / bench (no tool swings). */
     CRAFT(null, null, null, null, null, true, 1.0f),
     READ(null, null, null, null, null, true, 1.0f),
+    SWEEP(null, null, null, null, null, true, 1.0f),
+    INSPECT(null, null, null, null, null, true, 1.0f),
+    TEND(null, null, null, null, null, true, 1.0f),
     LEISURE(null, null, null, null, null, true, 1.0f);
 
     public static final String TAG_PREFIX = "workActivity:";
@@ -105,7 +108,15 @@ public enum VillagerWorkActivity {
         }
         // Desk staff ignore tool-swing tags (legacy craft desks) so they stay quiet immediately.
         if (isDeskRoleBinding(bindingKind)) {
-            return tagged != null && tagged.isLeisure() ? tagged : READ;
+            if (tagged != null && tagged.isLeisure()) return tagged;
+            return switch (bindingKind.trim().toLowerCase(Locale.ROOT)) {
+                case TownVillagerBinding.KIND_CHEF -> CRAFT;
+                case TownVillagerBinding.KIND_FLORIST -> TEND;
+                case TownVillagerBinding.KIND_INNKEEPER -> SWEEP;
+                case TownVillagerBinding.KIND_MERCHANT, TownVillagerBinding.KIND_FURNITURE_MERCHANT,
+                     TownVillagerBinding.KIND_CRYSTAL_KEEPER, TownVillagerBinding.KIND_PYROTECHNIC -> INSPECT;
+                default -> READ;
+            };
         }
         // Bard stands at the stage; no craft / tool overlays (even on legacy craft-tagged spots).
         if (isBardBinding(bindingKind)) {
@@ -125,7 +136,8 @@ public enum VillagerWorkActivity {
                 case TownVillagerBinding.KIND_MINER -> MINE;
                 case TownVillagerBinding.KIND_LOGGER -> CHOP;
                 case TownVillagerBinding.KIND_FARMER -> WATER;
-                case TownVillagerBinding.KIND_RANCHER, TownVillagerBinding.KIND_BUILDER -> CRAFT;
+                case TownVillagerBinding.KIND_RANCHER -> TEND;
+                case TownVillagerBinding.KIND_BUILDER -> CRAFT;
                 default -> LEISURE;
             };
         }
@@ -200,6 +212,9 @@ public enum VillagerWorkActivity {
                 case "smith", "forge", "anvil" -> SMITH;
                 case "craft", "build" -> CRAFT;
                 case "read" -> READ;
+                case "sweep", "clean" -> SWEEP;
+                case "inspect", "sort" -> INSPECT;
+                case "tend" -> TEND;
                 case "leisure", "fun" -> LEISURE;
                 default -> null;
             };

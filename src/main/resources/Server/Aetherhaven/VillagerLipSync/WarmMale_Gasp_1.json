@@ -1,0 +1,73 @@
+{
+  "audio": "WarmMale_Gasp_1.ogg",
+  "audioSha256": "399d3049c25f9efbbc2d8c8806719ad3a49cff35e27e0092d854a1fc14c37456",
+  "durationMs": 1432,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.24,
+      "value": "B"
+    },
+    {
+      "start": 0.24,
+      "end": 0.33,
+      "value": "X"
+    },
+    {
+      "start": 0.33,
+      "end": 0.39,
+      "value": "B"
+    },
+    {
+      "start": 0.39,
+      "end": 0.51,
+      "value": "E"
+    },
+    {
+      "start": 0.51,
+      "end": 0.72,
+      "value": "F"
+    },
+    {
+      "start": 0.72,
+      "end": 0.85,
+      "value": "B"
+    },
+    {
+      "start": 0.85,
+      "end": 0.98,
+      "value": "C"
+    },
+    {
+      "start": 0.98,
+      "end": 1.07,
+      "value": "A"
+    },
+    {
+      "start": 1.07,
+      "end": 1.18,
+      "value": "F"
+    },
+    {
+      "start": 1.18,
+      "end": 1.25,
+      "value": "C"
+    },
+    {
+      "start": 1.25,
+      "end": 1.39,
+      "value": "B"
+    },
+    {
+      "start": 1.39,
+      "end": 1.43,
+      "value": "X"
+    }
+  ]
+}

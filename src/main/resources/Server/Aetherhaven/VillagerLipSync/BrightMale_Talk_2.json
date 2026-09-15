@@ -1,0 +1,68 @@
+{
+  "audio": "BrightMale_Talk_2.ogg",
+  "audioSha256": "59d7b609ea85c51fdc3b4ba8bb209031f3cd38bfe5b7be11ad4b9b22a4aec1d3",
+  "durationMs": 1710,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.05,
+      "value": "B"
+    },
+    {
+      "start": 0.05,
+      "end": 0.16,
+      "value": "C"
+    },
+    {
+      "start": 0.16,
+      "end": 0.37,
+      "value": "B"
+    },
+    {
+      "start": 0.37,
+      "end": 0.58,
+      "value": "E"
+    },
+    {
+      "start": 0.58,
+      "end": 0.72,
+      "value": "F"
+    },
+    {
+      "start": 0.72,
+      "end": 0.86,
+      "value": "B"
+    },
+    {
+      "start": 0.86,
+      "end": 1.06,
+      "value": "F"
+    },
+    {
+      "start": 1.06,
+      "end": 1.27,
+      "value": "B"
+    },
+    {
+      "start": 1.27,
+      "end": 1.48,
+      "value": "C"
+    },
+    {
+      "start": 1.48,
+      "end": 1.69,
+      "value": "B"
+    },
+    {
+      "start": 1.69,
+      "end": 1.7,
+      "value": "X"
+    }
+  ]
+}

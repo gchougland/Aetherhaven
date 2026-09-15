@@ -1,0 +1,58 @@
+{
+  "audio": "MellowFemale_Grumble_1.ogg",
+  "audioSha256": "3e6408d2bcc34585b216211fcd728826e316d068682ccf82f2c3bf940bf7cab3",
+  "durationMs": 1820,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.08,
+      "value": "B"
+    },
+    {
+      "start": 0.08,
+      "end": 0.2,
+      "value": "A"
+    },
+    {
+      "start": 0.2,
+      "end": 0.44,
+      "value": "F"
+    },
+    {
+      "start": 0.44,
+      "end": 0.94,
+      "value": "B"
+    },
+    {
+      "start": 0.94,
+      "end": 1.01,
+      "value": "E"
+    },
+    {
+      "start": 1.01,
+      "end": 1.15,
+      "value": "B"
+    },
+    {
+      "start": 1.15,
+      "end": 1.36,
+      "value": "C"
+    },
+    {
+      "start": 1.36,
+      "end": 1.78,
+      "value": "B"
+    },
+    {
+      "start": 1.78,
+      "end": 1.82,
+      "value": "X"
+    }
+  ]
+}

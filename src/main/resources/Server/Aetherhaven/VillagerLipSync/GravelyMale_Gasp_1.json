@@ -1,0 +1,73 @@
+{
+  "audio": "GravelyMale_Gasp_1.ogg",
+  "audioSha256": "303c16bd7f1590a2eeceaf2d83eb82ad70d041692afd17aeaccfbeb43b070ecb",
+  "durationMs": 1711,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.19,
+      "value": "B"
+    },
+    {
+      "start": 0.19,
+      "end": 0.31,
+      "value": "A"
+    },
+    {
+      "start": 0.31,
+      "end": 0.53,
+      "value": "D"
+    },
+    {
+      "start": 0.53,
+      "end": 0.6,
+      "value": "B"
+    },
+    {
+      "start": 0.6,
+      "end": 0.67,
+      "value": "A"
+    },
+    {
+      "start": 0.67,
+      "end": 0.73,
+      "value": "B"
+    },
+    {
+      "start": 0.73,
+      "end": 0.81,
+      "value": "A"
+    },
+    {
+      "start": 0.81,
+      "end": 1.11,
+      "value": "E"
+    },
+    {
+      "start": 1.11,
+      "end": 1.25,
+      "value": "B"
+    },
+    {
+      "start": 1.25,
+      "end": 1.32,
+      "value": "C"
+    },
+    {
+      "start": 1.32,
+      "end": 1.67,
+      "value": "B"
+    },
+    {
+      "start": 1.67,
+      "end": 1.71,
+      "value": "X"
+    }
+  ]
+}

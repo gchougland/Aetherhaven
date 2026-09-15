@@ -1,0 +1,33 @@
+{
+  "audio": "GravelyMale_Thinking_1.ogg",
+  "audioSha256": "af647fd3e0953df6e864a9d773c6df120ccc114aad0740c2e9d4a05f2b178567",
+  "durationMs": 787,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.05,
+      "value": "A"
+    },
+    {
+      "start": 0.05,
+      "end": 0.19,
+      "value": "C"
+    },
+    {
+      "start": 0.19,
+      "end": 0.75,
+      "value": "B"
+    },
+    {
+      "start": 0.75,
+      "end": 0.78,
+      "value": "X"
+    }
+  ]
+}

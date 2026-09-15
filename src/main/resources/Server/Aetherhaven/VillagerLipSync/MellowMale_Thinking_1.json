@@ -1,0 +1,33 @@
+{
+  "audio": "MellowMale_Thinking_1.ogg",
+  "audioSha256": "ae543b00bd583435339762b3cb23b7a691ac72e539ad12c88420c945803a64e2",
+  "durationMs": 913,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.02,
+      "value": "X"
+    },
+    {
+      "start": 0.02,
+      "end": 0.24,
+      "value": "B"
+    },
+    {
+      "start": 0.24,
+      "end": 0.45,
+      "value": "C"
+    },
+    {
+      "start": 0.45,
+      "end": 0.8,
+      "value": "B"
+    },
+    {
+      "start": 0.8,
+      "end": 0.91,
+      "value": "X"
+    }
+  ]
+}

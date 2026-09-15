@@ -85,7 +85,8 @@
               "id": "q_house_miner"
             }
           ],
-          "next": "gorruk_house_finish"
+          "next": "gorruk_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_miner.aetherhaven.dialogue.aetherhaven_miner.root.hc2",
@@ -136,7 +137,8 @@
               "id": "q_miners_hut"
             }
           ],
-          "next": "gorruk_done"
+          "next": "gorruk_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_miner.aetherhaven.dialogue.aetherhaven_miner.root.c2",
@@ -199,13 +201,15 @@
               "id": "q_miners_hut"
             }
           ],
-          "next": "gorruk_accepted"
+          "next": "gorruk_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_miner.aetherhaven.dialogue.aetherhaven_miner.gorruk_quest_hut.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "gorruk_accepted": {
       "speaker": "aetherhaven_dialogue_miner.aetherhaven.dialogue.aetherhaven_miner.gorruk_accepted.speaker",
@@ -229,7 +233,8 @@
               "id": "q_miners_hut"
             }
           ],
-          "next": "gorruk_abandoned"
+          "next": "gorruk_abandoned",
+          "speechClip": "Sigh"
         },
         {
           "text": "aetherhaven_dialogue_miner.aetherhaven.dialogue.aetherhaven_miner.gorruk_building.c1",
@@ -269,13 +274,15 @@
               "id": "q_house_miner"
             }
           ],
-          "next": "gorruk_house_accepted"
+          "next": "gorruk_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_miner.aetherhaven.dialogue.aetherhaven_miner.gorruk_house_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "gorruk_house_accepted": {
       "speaker": "aetherhaven_dialogue_miner.aetherhaven.dialogue.aetherhaven_miner.gorruk_house_accepted.speaker",

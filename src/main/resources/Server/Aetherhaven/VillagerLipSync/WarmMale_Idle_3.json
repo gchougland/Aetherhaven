@@ -1,0 +1,58 @@
+{
+  "audio": "WarmMale_Idle_3.ogg",
+  "audioSha256": "1d09d35647ebafe63e93a0c1fd74835335eaeaa8cf06449276f11468c8959acc",
+  "durationMs": 1829,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.04,
+      "value": "X"
+    },
+    {
+      "start": 0.04,
+      "end": 0.44,
+      "value": "B"
+    },
+    {
+      "start": 0.44,
+      "end": 0.76,
+      "value": "A"
+    },
+    {
+      "start": 0.76,
+      "end": 0.82,
+      "value": "B"
+    },
+    {
+      "start": 0.82,
+      "end": 1.01,
+      "value": "C"
+    },
+    {
+      "start": 1.01,
+      "end": 1.09,
+      "value": "A"
+    },
+    {
+      "start": 1.09,
+      "end": 1.19,
+      "value": "F"
+    },
+    {
+      "start": 1.19,
+      "end": 1.26,
+      "value": "B"
+    },
+    {
+      "start": 1.26,
+      "end": 1.75,
+      "value": "D"
+    },
+    {
+      "start": 1.75,
+      "end": 1.82,
+      "value": "X"
+    }
+  ]
+}

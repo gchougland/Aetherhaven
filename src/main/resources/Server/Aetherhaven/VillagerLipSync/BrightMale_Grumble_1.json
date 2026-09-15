@@ -1,0 +1,73 @@
+{
+  "audio": "BrightMale_Grumble_1.ogg",
+  "audioSha256": "cabdfc4b1bfc7d24fba504336ab3eb46fb0301124617d90893184b1584591460",
+  "durationMs": 2607,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.02,
+      "value": "X"
+    },
+    {
+      "start": 0.02,
+      "end": 0.12,
+      "value": "B"
+    },
+    {
+      "start": 0.12,
+      "end": 0.54,
+      "value": "C"
+    },
+    {
+      "start": 0.54,
+      "end": 0.89,
+      "value": "B"
+    },
+    {
+      "start": 0.89,
+      "end": 1.02,
+      "value": "X"
+    },
+    {
+      "start": 1.02,
+      "end": 1.08,
+      "value": "B"
+    },
+    {
+      "start": 1.08,
+      "end": 1.21,
+      "value": "C"
+    },
+    {
+      "start": 1.21,
+      "end": 1.31,
+      "value": "A"
+    },
+    {
+      "start": 1.31,
+      "end": 1.74,
+      "value": "F"
+    },
+    {
+      "start": 1.74,
+      "end": 1.88,
+      "value": "B"
+    },
+    {
+      "start": 1.88,
+      "end": 2.37,
+      "value": "F"
+    },
+    {
+      "start": 2.37,
+      "end": 2.51,
+      "value": "B"
+    },
+    {
+      "start": 2.51,
+      "end": 2.6,
+      "value": "X"
+    }
+  ]
+}

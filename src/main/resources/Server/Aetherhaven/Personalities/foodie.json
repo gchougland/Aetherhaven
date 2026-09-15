@@ -14,5 +14,22 @@
   },
   "preferredScheduleLocations": [
     "inn"
-  ]
+  ],
+  "thoughtItemWeights": {
+    "Food_Pie_Meat": 1,
+    "Food_Bread": 1,
+    "Food_Pie_Apple": 1,
+    "Food_Fish_Grilled": 1
+  },
+  "socialEmoteWeights": {
+    "Agree": 4,
+    "Explain": 3,
+    "Laugh": 2,
+    "Story": 2
+  },
+  "idleEmoteWeights": {
+    "LookAround": 4,
+    "Fidget": 2,
+    "Stretch": 1
+  }
 }

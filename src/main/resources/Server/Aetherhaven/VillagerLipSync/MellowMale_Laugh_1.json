@@ -1,0 +1,88 @@
+{
+  "audio": "MellowMale_Laugh_1.ogg",
+  "audioSha256": "164bc0ce98d583a9d2d42bd4324cc8c7e0ccb8780dc686086dd1df73fa56cd20",
+  "durationMs": 2102,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.03,
+      "value": "X"
+    },
+    {
+      "start": 0.03,
+      "end": 0.14,
+      "value": "B"
+    },
+    {
+      "start": 0.14,
+      "end": 0.22,
+      "value": "A"
+    },
+    {
+      "start": 0.22,
+      "end": 0.27,
+      "value": "C"
+    },
+    {
+      "start": 0.27,
+      "end": 0.46,
+      "value": "F"
+    },
+    {
+      "start": 0.46,
+      "end": 0.6,
+      "value": "C"
+    },
+    {
+      "start": 0.6,
+      "end": 0.68,
+      "value": "A"
+    },
+    {
+      "start": 0.68,
+      "end": 0.89,
+      "value": "C"
+    },
+    {
+      "start": 0.89,
+      "end": 0.96,
+      "value": "B"
+    },
+    {
+      "start": 0.96,
+      "end": 1.04,
+      "value": "A"
+    },
+    {
+      "start": 1.04,
+      "end": 1.2,
+      "value": "B"
+    },
+    {
+      "start": 1.2,
+      "end": 1.28,
+      "value": "A"
+    },
+    {
+      "start": 1.28,
+      "end": 1.57,
+      "value": "B"
+    },
+    {
+      "start": 1.57,
+      "end": 1.65,
+      "value": "A"
+    },
+    {
+      "start": 1.65,
+      "end": 1.93,
+      "value": "B"
+    },
+    {
+      "start": 1.93,
+      "end": 2.1,
+      "value": "X"
+    }
+  ]
+}

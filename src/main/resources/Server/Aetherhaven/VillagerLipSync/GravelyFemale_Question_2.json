@@ -1,0 +1,63 @@
+{
+  "audio": "GravelyFemale_Question_2.ogg",
+  "audioSha256": "22aba0f844535207b713ee52f8f0412680e3878ad1f3de1f77839ca20eb5a0cf",
+  "durationMs": 1528,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.05,
+      "value": "B"
+    },
+    {
+      "start": 0.05,
+      "end": 0.16,
+      "value": "F"
+    },
+    {
+      "start": 0.16,
+      "end": 0.37,
+      "value": "B"
+    },
+    {
+      "start": 0.37,
+      "end": 0.65,
+      "value": "C"
+    },
+    {
+      "start": 0.65,
+      "end": 0.79,
+      "value": "E"
+    },
+    {
+      "start": 0.79,
+      "end": 0.87,
+      "value": "A"
+    },
+    {
+      "start": 0.87,
+      "end": 1.1,
+      "value": "D"
+    },
+    {
+      "start": 1.1,
+      "end": 1.24,
+      "value": "E"
+    },
+    {
+      "start": 1.24,
+      "end": 1.45,
+      "value": "F"
+    },
+    {
+      "start": 1.45,
+      "end": 1.52,
+      "value": "X"
+    }
+  ]
+}

@@ -272,6 +272,8 @@ public final class PoiAutonomyVisuals {
             tryClearCampfireHeldFood(npcRef, store, commandBuffer);
         }
         // Leaving a work station: drop tools so park / home / leisure do not keep the watering can, etc.
+        if (commandBuffer != null) commandBuffer.run(s -> { if (npcRef.isValid()) VillagerLifeProps.clear(npcRef, s); });
+        else VillagerLifeProps.clear(npcRef, store);
         if (poi != null && isWorkTaggedPoi(poi)) {
             VillagerEquipmentService.clearHotbar(npcRef, store, commandBuffer);
         }
@@ -375,9 +377,13 @@ public final class PoiAutonomyVisuals {
             ItemStack active = hb.getActiveItem();
             if (active != null && AetherhavenConstants.CAMPFIRE_EAT_ITEM_ID.equals(active.getItemId())) {
                 hb.getInventory().removeItemStackFromSlot((short) slot);
-                VillagerEquipmentService.markHotbarEquipmentDirty(hb, slot, npcRef, commandBuffer);
+                VillagerEquipmentService.markHotbarEquipmentDirty(hb, slot, npcRef, commandBuffer != null ? commandBuffer : store);
             }
-            commandBuffer.putComponent(npcRef, InventoryComponent.Hotbar.getComponentType(), hb);
+            if (commandBuffer != null) {
+                commandBuffer.putComponent(npcRef, InventoryComponent.Hotbar.getComponentType(), hb);
+            } else {
+                store.putComponent(npcRef, InventoryComponent.Hotbar.getComponentType(), hb);
+            }
         } catch (RuntimeException ex) {
             LOGGER.at(Level.FINE).withCause(ex).log("Could not clear campfire display item from NPC hotbar");
         }
@@ -438,13 +444,27 @@ public final class PoiAutonomyVisuals {
         @Nonnull World world,
         @Nonnull PoiEntry poi
     ) {
-        Vector3i block = VillagerBlockUtil.resolveMountBaseBlock(world, poi.getX(), poi.getY(), poi.getZ());
-        Float mountYaw = VillagerBlockUtil.seatForwardYawRadians(world, block);
-        if (mountYaw == null) {
-            return;
-        }
-        applyBodyYaw(npcRef, store, commandBuffer, mountYaw);
-        applyHeadYaw(npcRef, store, commandBuffer, mountYaw);
+        // The first seat's transform is not valid for another occupant of a bench.
+        // Resolve the occupied mount after queued additions and pose writes have finished.
+        commandBuffer.run(s -> {
+            if (!npcRef.isValid()) return;
+            var mounted = s.getComponent(npcRef, com.hypixel.hytale.builtin.mounts.MountedComponent.getComponentType());
+            if (mounted == null || mounted.getMountedToBlock() == null || !mounted.getMountedToBlock().isValid()) return;
+            var blockRef = mounted.getMountedToBlock();
+            var seats = blockRef.getStore().getComponent(blockRef, com.hypixel.hytale.builtin.mounts.BlockMountComponent.getComponentType());
+            if (seats == null) return;
+            var occupied = seats.getSeatBlockBySeatedEntity(npcRef);
+            if (occupied == null) return;
+            var tc = s.getComponent(npcRef, TransformComponent.getComponentType());
+            if (tc == null) return;
+            var position = occupied.computeWorldSpacePosition(seats.getBlockPos());
+            var rotation = occupied.computeRotationEuler(seats.getExpectedRotation());
+            if (tc.getPosition().distanceSquared(position) > .0001) tc.setPosition(position);
+            tc.setRotation(rotation);
+            s.putComponent(npcRef, TransformComponent.getComponentType(), tc);
+            var head = s.getComponent(npcRef, HeadRotation.getComponentType());
+            if (head != null) { head.setRotation(rotation); s.putComponent(npcRef, HeadRotation.getComponentType(), head); }
+        });
     }
 
     private static void applyHeadYaw(
@@ -592,6 +612,7 @@ public final class PoiAutonomyVisuals {
             return;
         }
         NpcAnimationPlayback.playItem(npcRef, AnimationSlot.Action, ipa, "Consume", commandBuffer);
+        commandBuffer.run(s -> { if (npcRef.isValid()) VillagerLifeVisuals.eatingSound(npcRef, s); });
     }
 
     /**

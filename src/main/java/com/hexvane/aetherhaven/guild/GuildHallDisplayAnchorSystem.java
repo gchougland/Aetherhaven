@@ -97,8 +97,7 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
             } else {
                 anchor.incrementChairMountAttempts();
                 if (anchor.getChairMountAttempts() >= GuildHallDisplayAnchor.MAX_CHAIR_MOUNT_ATTEMPTS) {
-                    GuildHallAdventurerChairMount.applySeatPoseFallback(ref, store, commandBuffer, anchor);
-                    anchor.setSitFallbackApplied(true);
+                    // An occupied or unavailable mount must not become a floating fake Sit.
                     anchor.markChairMountFinished();
                 }
                 anchorChanged = true;
@@ -111,7 +110,7 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
         if (seated) {
             GuildHallAdventurerChairMount.ensureSitVisuals(ref, store, anchor);
         }
-        if (seated || (anchor.isChairMountFinished() && !hasSeat)) {
+        if (seated || anchor.isChairMountFinished()) {
             anchorChanged |= applyDisplayStateIfNeeded(npc, ref, commandBuffer, anchor);
         }
 
@@ -120,6 +119,7 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
         }
 
         boolean inDialogue = isInInteractionDialogue(npc);
+        tickAmbient(ref, store, commandBuffer, anchor, inDialogue);
         if (seated) {
             if (blockMounted) {
                 syncSeatedHeadToMountedBody(ref, store, commandBuffer, inDialogue);
@@ -135,6 +135,31 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
             && !hasSeat) {
             lockDisplayTransform(ref, store, commandBuffer, anchor);
         }
+    }
+
+    private static void tickAmbient(Ref<EntityStore> ref, Store<EntityStore> store,
+                                    CommandBuffer<EntityStore> buffer, GuildHallDisplayAnchor anchor, boolean dialogue) {
+        long now = System.currentTimeMillis();
+        if (dialogue) { anchor.nextAmbientMs = now + 10_000; return; }
+        buffer.run(s -> { if (ref.isValid()) com.hexvane.aetherhaven.autonomy.VillagerLifeVisuals.continueReading(ref, s); });
+        if (anchor.ambientEndMs != 0) {
+            if (now < anchor.ambientEndMs) return;
+            anchor.ambientEndMs = 0;
+            buffer.run(s -> { if (ref.isValid()) com.hexvane.aetherhaven.autonomy.VillagerLifeVisuals.endAmbient(ref, s); });
+        }
+        if (anchor.nextAmbientMs == 0) anchor.nextAmbientMs = now + java.util.concurrent.ThreadLocalRandom.current().nextLong(3000, 12000);
+        if (now < anchor.nextAmbientMs) return;
+        String[] gestures = {"Eat", "Read", "Read", "Sleepy", "Stretch", "LookAround", "Fidget"};
+        String gesture = gestures[java.util.concurrent.ThreadLocalRandom.current().nextInt(gestures.length)];
+        anchor.nextAmbientMs = now + java.util.concurrent.ThreadLocalRandom.current().nextLong(18000, 32000);
+        buffer.run(s -> {
+            if (!ref.isValid()) return;
+            long duration = com.hexvane.aetherhaven.autonomy.VillagerLifeVisuals.ambient(ref, gesture, s);
+            if (gesture.equals("Read")) duration = java.util.concurrent.ThreadLocalRandom.current().nextLong(18000, 26000);
+            anchor.ambientEndMs = System.currentTimeMillis() + duration + 300;
+            anchor.nextAmbientMs = Math.max(anchor.nextAmbientMs, anchor.ambientEndMs + 4000);
+        });
+        buffer.putComponent(ref, GuildHallDisplayAnchor.getComponentType(), anchor);
     }
 
     /** {@link StateSupport#getStateName()} is {@code State.subState}, not the bare state id. */
@@ -197,6 +222,9 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
     ) {
         World world = store.getExternalData().getWorld();
         Vector3d target = VillagerBlockUtil.snapNpcFeetToStand(world, anchor.getSpawnMarkerPosition());
+        var current = commandBuffer.getComponent(ref, TransformComponent.getComponentType());
+        if (current != null && current.getPosition().distanceSquared(target) < .0001
+            && Math.abs(current.getRotation().yaw() - anchor.getYawRadians()) < .001) return;
         TransformComponentUtil.replacePreservingChunk(
             ref,
             commandBuffer,

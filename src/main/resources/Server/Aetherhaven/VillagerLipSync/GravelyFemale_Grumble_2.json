@@ -1,0 +1,53 @@
+{
+  "audio": "GravelyFemale_Grumble_2.ogg",
+  "audioSha256": "414d789a65e23cdef22e2931a898f0f9a0004ba7eaab9ce9f76aeda65adaa7ad",
+  "durationMs": 2405,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.17,
+      "value": "X"
+    },
+    {
+      "start": 0.17,
+      "end": 0.31,
+      "value": "B"
+    },
+    {
+      "start": 0.31,
+      "end": 0.71,
+      "value": "F"
+    },
+    {
+      "start": 0.71,
+      "end": 0.76,
+      "value": "E"
+    },
+    {
+      "start": 0.76,
+      "end": 0.94,
+      "value": "C"
+    },
+    {
+      "start": 0.94,
+      "end": 1.08,
+      "value": "B"
+    },
+    {
+      "start": 1.08,
+      "end": 1.71,
+      "value": "C"
+    },
+    {
+      "start": 1.71,
+      "end": 1.99,
+      "value": "B"
+    },
+    {
+      "start": 1.99,
+      "end": 2.4,
+      "value": "X"
+    }
+  ]
+}

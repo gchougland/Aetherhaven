@@ -1,0 +1,58 @@
+{
+  "audio": "GravelyMale_Laugh_1.ogg",
+  "audioSha256": "cb284a75ec3caec2153fa9bbacab924fc5f5708c808930a5b811389c932cad31",
+  "durationMs": 2055,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.1,
+      "value": "B"
+    },
+    {
+      "start": 0.1,
+      "end": 0.66,
+      "value": "C"
+    },
+    {
+      "start": 0.66,
+      "end": 0.78,
+      "value": "A"
+    },
+    {
+      "start": 0.78,
+      "end": 1.04,
+      "value": "B"
+    },
+    {
+      "start": 1.04,
+      "end": 1.12,
+      "value": "A"
+    },
+    {
+      "start": 1.12,
+      "end": 1.48,
+      "value": "B"
+    },
+    {
+      "start": 1.48,
+      "end": 1.56,
+      "value": "A"
+    },
+    {
+      "start": 1.56,
+      "end": 1.98,
+      "value": "B"
+    },
+    {
+      "start": 1.98,
+      "end": 2.05,
+      "value": "X"
+    }
+  ]
+}

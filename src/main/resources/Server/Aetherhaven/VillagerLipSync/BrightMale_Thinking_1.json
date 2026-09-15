@@ -1,0 +1,43 @@
+{
+  "audio": "BrightMale_Thinking_1.ogg",
+  "audioSha256": "b48895dc21eb5b6c87f8be8c3b92b8776493a38328b3ea08dd53aa01f41e4942",
+  "durationMs": 1109,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.07,
+      "value": "B"
+    },
+    {
+      "start": 0.07,
+      "end": 0.41,
+      "value": "C"
+    },
+    {
+      "start": 0.41,
+      "end": 0.55,
+      "value": "B"
+    },
+    {
+      "start": 0.55,
+      "end": 0.77,
+      "value": "A"
+    },
+    {
+      "start": 0.77,
+      "end": 1.07,
+      "value": "B"
+    },
+    {
+      "start": 1.07,
+      "end": 1.1,
+      "value": "X"
+    }
+  ]
+}

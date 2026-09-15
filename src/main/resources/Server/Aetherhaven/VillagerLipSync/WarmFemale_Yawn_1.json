@@ -1,0 +1,63 @@
+{
+  "audio": "WarmFemale_Yawn_1.ogg",
+  "audioSha256": "ac59e1aff52b7eae61d71ecfdca52ed07a37a135faca23f0efee7e0f1c1a2f7c",
+  "durationMs": 2125,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.03,
+      "value": "X"
+    },
+    {
+      "start": 0.03,
+      "end": 0.1,
+      "value": "B"
+    },
+    {
+      "start": 0.1,
+      "end": 0.16,
+      "value": "C"
+    },
+    {
+      "start": 0.16,
+      "end": 0.58,
+      "value": "F"
+    },
+    {
+      "start": 0.58,
+      "end": 0.72,
+      "value": "B"
+    },
+    {
+      "start": 0.72,
+      "end": 0.86,
+      "value": "A"
+    },
+    {
+      "start": 0.86,
+      "end": 1.01,
+      "value": "D"
+    },
+    {
+      "start": 1.01,
+      "end": 1.05,
+      "value": "C"
+    },
+    {
+      "start": 1.05,
+      "end": 1.52,
+      "value": "B"
+    },
+    {
+      "start": 1.52,
+      "end": 2.01,
+      "value": "F"
+    },
+    {
+      "start": 2.01,
+      "end": 2.12,
+      "value": "X"
+    }
+  ]
+}

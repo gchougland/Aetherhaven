@@ -15,5 +15,21 @@
   "preferredScheduleLocations": [
     "inn",
     "park"
-  ]
+  ],
+  "thoughtItemWeights": {
+    "Aetherhaven_Gold_Coin": 1,
+    "Plant_Flower_Blood_Rose": 1,
+    "Rock_Gem_Diamond": 1
+  },
+  "socialEmoteWeights": {
+    "Story": 5,
+    "Laugh": 4,
+    "Surprise": 2,
+    "Agree": 1
+  },
+  "idleEmoteWeights": {
+    "LookAround": 4,
+    "Fidget": 2,
+    "Stretch": 1
+  }
 }

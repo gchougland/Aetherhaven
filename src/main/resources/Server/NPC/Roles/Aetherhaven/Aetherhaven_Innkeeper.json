@@ -37,7 +37,7 @@
   },
   "Invulnerable": { "Compute": "Invulnerable" },
   "KnockbackScale": 0.5,
-  "ApplySeparation": true,
+  "ApplySeparation": false,
   "SeparationDistance": 2.5,
   "SeparationMode": "Push",
   "SeparationPushDistanceWeightTarget": 8,

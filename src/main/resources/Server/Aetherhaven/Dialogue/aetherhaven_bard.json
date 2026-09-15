@@ -213,7 +213,8 @@
               "id": "q_house_bard"
             }
           ],
-          "next": "elias_house_finish"
+          "next": "elias_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house_remind",
@@ -305,13 +306,15 @@
               "id": "q_house_bard"
             }
           ],
-          "next": "elias_house_accepted"
+          "next": "elias_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.c_later",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "elias_house_accepted": {
       "speaker": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.elias_house_accepted.speaker",

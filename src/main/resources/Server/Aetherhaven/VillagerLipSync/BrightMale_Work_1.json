@@ -1,0 +1,103 @@
+{
+  "audio": "BrightMale_Work_1.ogg",
+  "audioSha256": "2e001c7fd13ce6a4fd7266a63605b0decdd0bd4bf5df90361109578dacf1986e",
+  "durationMs": 2516,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.12,
+      "value": "D"
+    },
+    {
+      "start": 0.12,
+      "end": 0.17,
+      "value": "C"
+    },
+    {
+      "start": 0.17,
+      "end": 0.25,
+      "value": "A"
+    },
+    {
+      "start": 0.25,
+      "end": 0.44,
+      "value": "C"
+    },
+    {
+      "start": 0.44,
+      "end": 0.58,
+      "value": "B"
+    },
+    {
+      "start": 0.58,
+      "end": 0.72,
+      "value": "X"
+    },
+    {
+      "start": 0.72,
+      "end": 0.78,
+      "value": "B"
+    },
+    {
+      "start": 0.78,
+      "end": 0.9,
+      "value": "C"
+    },
+    {
+      "start": 0.9,
+      "end": 1.05,
+      "value": "A"
+    },
+    {
+      "start": 1.05,
+      "end": 1.22,
+      "value": "D"
+    },
+    {
+      "start": 1.22,
+      "end": 1.26,
+      "value": "C"
+    },
+    {
+      "start": 1.26,
+      "end": 1.67,
+      "value": "B"
+    },
+    {
+      "start": 1.67,
+      "end": 1.88,
+      "value": "E"
+    },
+    {
+      "start": 1.88,
+      "end": 2.02,
+      "value": "F"
+    },
+    {
+      "start": 2.02,
+      "end": 2.09,
+      "value": "E"
+    },
+    {
+      "start": 2.09,
+      "end": 2.16,
+      "value": "F"
+    },
+    {
+      "start": 2.16,
+      "end": 2.34,
+      "value": "A"
+    },
+    {
+      "start": 2.34,
+      "end": 2.48,
+      "value": "B"
+    },
+    {
+      "start": 2.48,
+      "end": 2.51,
+      "value": "X"
+    }
+  ]
+}

@@ -15,5 +15,21 @@
   "preferredScheduleLocations": [
     "park",
     "inn"
-  ]
+  ],
+  "thoughtItemWeights": {
+    "Food_Pie_Meat": 1,
+    "Plant_Fruit_Apple": 1,
+    "Fish_Pufferfish_Item": 1
+  },
+  "socialEmoteWeights": {
+    "Story": 5,
+    "Laugh": 4,
+    "Surprise": 2,
+    "Agree": 1
+  },
+  "idleEmoteWeights": {
+    "Stretch": 3,
+    "Greet": 2,
+    "Laugh": 2
+  }
 }

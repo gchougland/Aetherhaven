@@ -289,6 +289,11 @@ public final class PoiScoring {
         );
     }
 
+    public static List<UUID> resolveRecreationPlotIds(TownRecord town) {
+        return town.getPlotInstances().stream().filter(p -> p.getState() == PlotInstanceState.COMPLETE)
+            .map(PlotInstance::getPlotId).toList();
+    }
+
     /** Completed park plots in the town (shared leisure utility; no villager assignment required). */
     @Nonnull
     public static List<UUID> resolveParkPlotIds(
@@ -322,7 +327,7 @@ public final class PoiScoring {
         UrgentNeedKind breakMode =
             pickBestBreakMode(needs, fillingHungerSession, fillingEnergySession, fillingFunSession, daytime);
         if (breakMode == UrgentNeedKind.FUN) {
-            List<UUID> parkPlotIds = resolveParkPlotIds(town, constructionCatalog);
+            List<UUID> parkPlotIds = resolveRecreationPlotIds(town);
             return parkPlotIds.isEmpty() ? null : new HashSet<>(parkPlotIds);
         }
         if (breakMode == UrgentNeedKind.ENERGY) {
@@ -375,14 +380,14 @@ public final class PoiScoring {
         @Nonnull TownRecord town,
         @Nonnull ConstructionCatalog constructionCatalog
     ) {
-        List<UUID> parkPlotIds = resolveParkPlotIds(town, constructionCatalog);
+        List<UUID> parkPlotIds = resolveRecreationPlotIds(town);
         if (parkPlotIds.isEmpty()) {
             return null;
         }
         Set<UUID> parkPlots = new HashSet<>(parkPlotIds);
         Map<UUID, List<PoiEntry>> byPlot = new HashMap<>();
         for (PoiEntry e : candidates) {
-            if (!isFunPoi(e) || e.getPlotId() == null || !parkPlots.contains(e.getPlotId())) {
+            if (!isFunPoi(e) || isFestivalPoi(e) || e.getPlotId() == null || !parkPlots.contains(e.getPlotId())) {
                 continue;
             }
             if (!hasAvailableCapacity(e, cellOccupancy)) {
@@ -876,6 +881,7 @@ public final class PoiScoring {
         boolean breakOverride = atWork && needsBreakForSchedule(needs, daytime);
         boolean workOnlyShift = preferredPlot != null && atWork && !breakOverride && breakMode == null;
         boolean shopBrowseShift = atShop && breakMode == null;
+        boolean leisureShift = "park".equals(scheduleLocation) && breakMode == null;
         boolean allowTownWide = breakMode != null || (atWork && breakOverride);
         PoiEntry best = null;
         float bestScore = 0f;
@@ -922,6 +928,8 @@ public final class PoiScoring {
                     && (e.getPlotId() == null || !breakPlotAllowlist.contains(e.getPlotId()))) {
                     continue;
                 }
+            } else if (leisureShift) {
+                if (!isFunPoi(e)) continue;
             } else if (shopBrowseShift) {
                 if (!isShopPoi(e)) {
                     continue;
@@ -1016,7 +1024,7 @@ public final class PoiScoring {
         // When the weekly schedule sets preferredPlotId, we must still pick a POI in that plot even if needs are full
         // (scores near zero); otherwise they never enter TRAVEL and stay on local wander (e.g. near Gaia after revival).
         // Urgent need breaks always allow a scored POI even without preferredPlot.
-        if (preferredPlot == null && !shopBrowseShift && breakMode == null && bestScore < 8f) {
+        if (preferredPlot == null && !shopBrowseShift && !leisureShift && breakMode == null && bestScore < 8f) {
             return null;
         }
         return best;

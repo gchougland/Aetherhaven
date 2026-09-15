@@ -83,7 +83,8 @@
               "id": "q_build_inn"
             }
           ],
-          "next": "quest_accepted"
+          "next": "quest_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c1",
@@ -134,7 +135,8 @@
               "id": "q_build_inn"
             }
           ],
-          "next": "inn_done"
+          "next": "inn_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c3",
@@ -196,7 +198,8 @@
               "id": "q_house_elder"
             }
           ],
-          "next": "lyren_house_finish"
+          "next": "lyren_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c5",
@@ -324,7 +327,8 @@
               "id": "q_build_town_hall"
             }
           ],
-          "next": "town_hall_done"
+          "next": "town_hall_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c11",
@@ -390,7 +394,8 @@
               "id": "q_tourist_portal"
             }
           ],
-          "next": "tourist_portal_done"
+          "next": "tourist_portal_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c9",
@@ -404,7 +409,8 @@
           "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c10",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "quest_accepted": {
       "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.quest_accepted.speaker",
@@ -448,13 +454,15 @@
               "id": "q_house_elder"
             }
           ],
-          "next": "lyren_house_accepted"
+          "next": "lyren_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.lyren_house_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "lyren_house_accepted": {
       "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.lyren_house_accepted.speaker",
@@ -498,13 +506,15 @@
               "id": "q_build_town_hall"
             }
           ],
-          "next": "town_hall_accepted"
+          "next": "town_hall_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.town_hall_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "town_hall_accepted": {
       "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.town_hall_accepted.speaker",
@@ -548,13 +558,15 @@
               "id": "q_tourist_portal"
             }
           ],
-          "next": "tourist_portal_accepted"
+          "next": "tourist_portal_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.tourist_portal_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "tourist_portal_accepted": {
       "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.tourist_portal_accepted.speaker",

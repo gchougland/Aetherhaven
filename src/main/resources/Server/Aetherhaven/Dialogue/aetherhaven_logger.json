@@ -85,7 +85,8 @@
               "id": "q_house_logger"
             }
           ],
-          "next": "seren_house_finish"
+          "next": "seren_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_logger.aetherhaven.dialogue.aetherhaven_logger.root.hc2",
@@ -136,7 +137,8 @@
               "id": "q_lumbermill"
             }
           ],
-          "next": "seren_done"
+          "next": "seren_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_logger.aetherhaven.dialogue.aetherhaven_logger.root.c2",
@@ -199,13 +201,15 @@
               "id": "q_lumbermill"
             }
           ],
-          "next": "seren_accepted"
+          "next": "seren_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_logger.aetherhaven.dialogue.aetherhaven_logger.seren_quest_mill.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "seren_accepted": {
       "speaker": "aetherhaven_dialogue_logger.aetherhaven.dialogue.aetherhaven_logger.seren_accepted.speaker",
@@ -229,7 +233,8 @@
               "id": "q_lumbermill"
             }
           ],
-          "next": "seren_abandoned"
+          "next": "seren_abandoned",
+          "speechClip": "Sigh"
         },
         {
           "text": "aetherhaven_dialogue_logger.aetherhaven.dialogue.aetherhaven_logger.seren_building.c1",
@@ -269,13 +274,15 @@
               "id": "q_house_logger"
             }
           ],
-          "next": "seren_house_accepted"
+          "next": "seren_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_logger.aetherhaven.dialogue.aetherhaven_logger.seren_house_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "seren_house_accepted": {
       "speaker": "aetherhaven_dialogue_logger.aetherhaven.dialogue.aetherhaven_logger.seren_house_accepted.speaker",

@@ -1,0 +1,53 @@
+{
+  "audio": "WarmFemale_Talk_3.ogg",
+  "audioSha256": "f5645a9a54aaff17aab4414b02840ea5c85af546166a116a3295dd67ea94165f",
+  "durationMs": 1517,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.05,
+      "value": "X"
+    },
+    {
+      "start": 0.05,
+      "end": 0.52,
+      "value": "B"
+    },
+    {
+      "start": 0.52,
+      "end": 0.59,
+      "value": "F"
+    },
+    {
+      "start": 0.59,
+      "end": 0.67,
+      "value": "A"
+    },
+    {
+      "start": 0.67,
+      "end": 0.83,
+      "value": "C"
+    },
+    {
+      "start": 0.83,
+      "end": 1.11,
+      "value": "B"
+    },
+    {
+      "start": 1.11,
+      "end": 1.32,
+      "value": "F"
+    },
+    {
+      "start": 1.32,
+      "end": 1.46,
+      "value": "B"
+    },
+    {
+      "start": 1.46,
+      "end": 1.51,
+      "value": "X"
+    }
+  ]
+}

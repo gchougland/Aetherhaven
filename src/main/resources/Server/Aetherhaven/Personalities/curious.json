@@ -13,5 +13,20 @@
   },
   "preferredScheduleLocations": [
     "park"
-  ]
+  ],
+  "thoughtItemWeights": {
+    "Deco_Scrap_Book_Pile_Small": 1,
+    "Tool_Map": 1,
+    "Rock_Gem_Zephyr": 1
+  },
+  "socialEmoteWeights": {
+    "Question": 6,
+    "Surprise": 2,
+    "Explain": 3
+  },
+  "idleEmoteWeights": {
+    "Inspect": 4,
+    "Fidget": 3,
+    "LookAround": 1
+  }
 }

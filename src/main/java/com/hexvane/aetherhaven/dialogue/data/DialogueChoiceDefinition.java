@@ -8,6 +8,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class DialogueChoiceDefinition {
+    /** Recording category for the NPC response after selecting this choice. */
+    @Nullable private String speechClip;
+    @Nullable public String getSpeechClip() { return speechClip; }
+    public void setSpeechClip(@Nullable String value) { speechClip = value; }
     /** Optional stable id for crossmod patches (replace vs append). */
     @Nullable
     private String id;

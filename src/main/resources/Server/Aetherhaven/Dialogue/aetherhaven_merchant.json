@@ -99,7 +99,8 @@
               "id": "q_house_merchant"
             }
           ],
-          "next": "vex_house_finish"
+          "next": "vex_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.c4",
@@ -150,7 +151,8 @@
               "id": "q_merchant_stall"
             }
           ],
-          "next": "vex_done"
+          "next": "vex_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.c7",
@@ -245,7 +247,8 @@
               "id": "q_player_shop"
             }
           ],
-          "next": "vex_player_shop_done"
+          "next": "vex_player_shop_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.c12",
@@ -286,13 +289,15 @@
               "id": "q_merchant_stall"
             }
           ],
-          "next": "vex_accepted"
+          "next": "vex_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "vex_accepted": {
       "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.speaker",
@@ -316,7 +321,8 @@
               "id": "q_merchant_stall"
             }
           ],
-          "next": "vex_abandoned"
+          "next": "vex_abandoned",
+          "speechClip": "Sigh"
         },
         {
           "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_building.c1",
@@ -356,13 +362,15 @@
               "id": "q_player_shop"
             }
           ],
-          "next": "vex_player_shop_accepted"
+          "next": "vex_player_shop_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_quest_player_shop.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "vex_player_shop_accepted": {
       "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_player_shop_accepted.speaker",
@@ -386,7 +394,8 @@
               "id": "q_player_shop"
             }
           ],
-          "next": "vex_player_shop_abandoned"
+          "next": "vex_player_shop_abandoned",
+          "speechClip": "Sigh"
         },
         {
           "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_player_shop_building.c1",
@@ -426,13 +435,15 @@
               "id": "q_house_merchant"
             }
           ],
-          "next": "vex_house_accepted"
+          "next": "vex_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "vex_house_accepted": {
       "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.speaker",

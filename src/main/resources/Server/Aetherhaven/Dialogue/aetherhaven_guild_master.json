@@ -59,7 +59,8 @@
               "id": "q_build_guild_hall"
             }
           ],
-          "next": "guild_hall_done"
+          "next": "guild_hall_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.main_hub.c_guild_building",
@@ -139,7 +140,8 @@
               "id": "q_house_guild_master"
             }
           ],
-          "next": "lyra_house_finish"
+          "next": "lyra_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.main_hub.c_house_remind",
@@ -184,13 +186,15 @@
               "id": "q_build_guild_hall"
             }
           ],
-          "next": "guild_hall_accepted"
+          "next": "guild_hall_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.guild_hall_offer.decline",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "guild_hall_accepted": {
       "speaker": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.guild_hall_accepted.speaker",
@@ -234,13 +238,15 @@
               "id": "q_house_guild_master"
             }
           ],
-          "next": "lyra_house_accepted"
+          "next": "lyra_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.lyra_house_offer.decline",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "lyra_house_accepted": {
       "speaker": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.lyra_house_accepted.speaker",

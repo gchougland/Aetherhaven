@@ -14,5 +14,20 @@
   },
   "preferredScheduleLocations": [
     "shop"
-  ]
+  ],
+  "thoughtItemWeights": {
+    "Rock_Gem_Diamond": 1,
+    "Plant_Flower_Blood_Rose": 1,
+    "Deco_Scrap_Book_Pile_Small": 1
+  },
+  "socialEmoteWeights": {
+    "Agree": 6,
+    "Question": 3,
+    "Explain": 1
+  },
+  "idleEmoteWeights": {
+    "Inspect": 4,
+    "Fidget": 3,
+    "LookAround": 1
+  }
 }

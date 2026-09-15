@@ -1,0 +1,78 @@
+{
+  "audio": "WarmMale_Yawn_2.ogg",
+  "audioSha256": "bff95531b258c00440dc517b4f2b28ebf96e73868c80a6ec4f9129861fd66ab4",
+  "durationMs": 2625,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.08,
+      "value": "X"
+    },
+    {
+      "start": 0.08,
+      "end": 0.15,
+      "value": "B"
+    },
+    {
+      "start": 0.15,
+      "end": 0.57,
+      "value": "F"
+    },
+    {
+      "start": 0.57,
+      "end": 0.65,
+      "value": "A"
+    },
+    {
+      "start": 0.65,
+      "end": 0.99,
+      "value": "B"
+    },
+    {
+      "start": 0.99,
+      "end": 1.17,
+      "value": "X"
+    },
+    {
+      "start": 1.17,
+      "end": 1.25,
+      "value": "B"
+    },
+    {
+      "start": 1.25,
+      "end": 1.36,
+      "value": "A"
+    },
+    {
+      "start": 1.36,
+      "end": 1.58,
+      "value": "B"
+    },
+    {
+      "start": 1.58,
+      "end": 1.66,
+      "value": "A"
+    },
+    {
+      "start": 1.66,
+      "end": 1.73,
+      "value": "B"
+    },
+    {
+      "start": 1.73,
+      "end": 2.0,
+      "value": "C"
+    },
+    {
+      "start": 2.0,
+      "end": 2.56,
+      "value": "B"
+    },
+    {
+      "start": 2.56,
+      "end": 2.62,
+      "value": "X"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "audio": "GravelyMale_Yawn_2.ogg",
+  "audioSha256": "601d8b0287cd2d6c8c13a8d5404d110d1328e0d9120aa361ddedd883678f7bbf",
+  "durationMs": 2348,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.74,
+      "value": "B"
+    },
+    {
+      "start": 0.74,
+      "end": 0.82,
+      "value": "A"
+    },
+    {
+      "start": 0.82,
+      "end": 1.16,
+      "value": "B"
+    },
+    {
+      "start": 1.16,
+      "end": 1.24,
+      "value": "A"
+    },
+    {
+      "start": 1.24,
+      "end": 1.39,
+      "value": "B"
+    },
+    {
+      "start": 1.39,
+      "end": 1.74,
+      "value": "C"
+    },
+    {
+      "start": 1.74,
+      "end": 2.23,
+      "value": "B"
+    },
+    {
+      "start": 2.23,
+      "end": 2.34,
+      "value": "X"
+    }
+  ]
+}

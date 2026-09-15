@@ -220,7 +220,7 @@ public final class NpcFaceVisuals {
         store.putComponent(npcRef, NpcFaceVisualState.getComponentType(), faceState);
         World world = store.getExternalData().getWorld();
         scheduleTalkRestore(npcRef, world, config, config.talkDurationSeconds());
-        // Speech blips are started from DialoguePage with the resolved body text (letter-mapped).
+        // Player dialogue has its own recording-specific facial timeline.
     }
 
     public static void clearDialogueFace(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store) {
@@ -238,6 +238,29 @@ public final class NpcFaceVisuals {
         applyMoodFace(npcRef, store);
     }
 
+    /** Original finite expression; ambient mood yields until the full acting beat ends. */
+    public static void playExpression(@Nonnull Ref<EntityStore> ref, @Nonnull String animationId,
+                                      float seconds, @Nonnull Store<EntityStore> store) {
+        playExpression(ref, animationId, seconds, store, false);
+    }
+
+    public static void playDialogueExpression(@Nonnull Ref<EntityStore> ref, @Nonnull String animationId,
+                                              float seconds, @Nonnull Store<EntityStore> store) {
+        playExpression(ref, animationId, seconds, store, true);
+    }
+
+    private static void playExpression(Ref<EntityStore> ref, String animationId, float seconds, Store<EntityStore> store, boolean dialogue) {
+        if (!supportsFaceExpressions(ref, store)) return;
+        NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
+        if (npc == null || (!dialogue && isInInteractionDialogue(npc))) return;
+        npc.playAnimation(ref, AnimationSlot.Face, animationId, true, store);
+        NpcFaceVisualState state = store.getComponent(ref, NpcFaceVisualState.getComponentType());
+        if (state == null) state = NpcFaceVisualState.fresh();
+        state.setTalkUntilMs(System.currentTimeMillis() + Math.round(seconds * 1000));
+        store.putComponent(ref, NpcFaceVisualState.getComponentType(), state);
+        scheduleTalkRestore(ref, store.getExternalData().getWorld(), readConfig(), seconds);
+    }
+
     public static void onDialogueOpened(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store) {
         onDialogueOpened(npcRef, null, store);
     }
@@ -247,9 +270,10 @@ public final class NpcFaceVisuals {
         @Nullable Ref<EntityStore> playerEntityRef,
         @Nonnull Store<EntityStore> store
     ) {
+        if (playerEntityRef != null) return; // DialoguePage already started the selected lip track.
         MoodConfig config = readConfig();
         applyMoodFace(npcRef, store, config);
-        playTalkBurst(npcRef, playerEntityRef, store, config);
+        playTalkBurst(npcRef, null, store, config);
     }
 
     @Nonnull

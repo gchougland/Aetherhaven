@@ -1,0 +1,53 @@
+{
+  "audio": "MellowMale_Grumble_1.ogg",
+  "audioSha256": "229c41c74a8332ce1d1c64970c17f2fd30594508d5964a88a0e80f539e90a45f",
+  "durationMs": 1998,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.03,
+      "value": "X"
+    },
+    {
+      "start": 0.03,
+      "end": 0.11,
+      "value": "B"
+    },
+    {
+      "start": 0.11,
+      "end": 0.19,
+      "value": "A"
+    },
+    {
+      "start": 0.19,
+      "end": 1.06,
+      "value": "B"
+    },
+    {
+      "start": 1.06,
+      "end": 1.13,
+      "value": "F"
+    },
+    {
+      "start": 1.13,
+      "end": 1.21,
+      "value": "A"
+    },
+    {
+      "start": 1.21,
+      "end": 1.51,
+      "value": "C"
+    },
+    {
+      "start": 1.51,
+      "end": 1.86,
+      "value": "B"
+    },
+    {
+      "start": 1.86,
+      "end": 1.99,
+      "value": "X"
+    }
+  ]
+}

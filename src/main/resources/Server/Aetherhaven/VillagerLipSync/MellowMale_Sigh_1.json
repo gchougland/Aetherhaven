@@ -1,0 +1,58 @@
+{
+  "audio": "MellowMale_Sigh_1.ogg",
+  "audioSha256": "5a11478e9a51062eefa5e9271929f209d9c578363bbd076a3808a5a49ca7624a",
+  "durationMs": 1834,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.05,
+      "value": "X"
+    },
+    {
+      "start": 0.05,
+      "end": 0.13,
+      "value": "B"
+    },
+    {
+      "start": 0.13,
+      "end": 0.23,
+      "value": "A"
+    },
+    {
+      "start": 0.23,
+      "end": 0.52,
+      "value": "C"
+    },
+    {
+      "start": 0.52,
+      "end": 0.73,
+      "value": "B"
+    },
+    {
+      "start": 0.73,
+      "end": 0.81,
+      "value": "A"
+    },
+    {
+      "start": 0.81,
+      "end": 0.92,
+      "value": "D"
+    },
+    {
+      "start": 0.92,
+      "end": 1.0,
+      "value": "A"
+    },
+    {
+      "start": 1.0,
+      "end": 1.61,
+      "value": "B"
+    },
+    {
+      "start": 1.61,
+      "end": 1.83,
+      "value": "X"
+    }
+  ]
+}

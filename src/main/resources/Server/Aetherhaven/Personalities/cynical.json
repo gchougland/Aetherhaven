@@ -16,5 +16,20 @@
   "preferredScheduleLocations": [
     "inn",
     "home"
-  ]
+  ],
+  "thoughtItemWeights": {
+    "Deco_Scrap_Book_Pile_Small": 1,
+    "Aetherhaven_Gold_Coin": 1,
+    "Tool_Map": 1
+  },
+  "socialEmoteWeights": {
+    "Disagree": 5,
+    "Question": 3,
+    "Explain": 2
+  },
+  "idleEmoteWeights": {
+    "Bored": 3,
+    "Fidget": 2,
+    "LookAround": 2
+  }
 }

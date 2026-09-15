@@ -1,0 +1,13 @@
+{
+  "CullDistance": 28,
+  "BoundingRadius": 2,
+  "LifeSpan": 2.8,
+  "Spawners": [
+    {
+      "SpawnerId": "Aetherhaven_Life_Speech"
+    },
+    {
+      "SpawnerId": "Aetherhaven_Life_Item_Weapon_Sword_Iron"
+    }
+  ]
+}

@@ -109,7 +109,8 @@
               "id": "q_house_furniture_merchant"
             }
           ],
-          "next": "clive_house_finish"
+          "next": "clive_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_furniture_merchant.aetherhaven.dialogue.aetherhaven_furniture_merchant.root.c_house_remind",
@@ -160,7 +161,8 @@
               "id": "q_furniture_shop"
             }
           ],
-          "next": "clive_done"
+          "next": "clive_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_furniture_merchant.aetherhaven.dialogue.aetherhaven_furniture_merchant.root.c_shop_building",
@@ -223,13 +225,15 @@
               "id": "q_furniture_shop"
             }
           ],
-          "next": "clive_shop_accepted"
+          "next": "clive_shop_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_furniture_merchant.aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_quest_shop.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "clive_shop_accepted": {
       "speaker": "aetherhaven_dialogue_furniture_merchant.aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_shop_accepted.speaker",
@@ -253,7 +257,8 @@
               "id": "q_furniture_shop"
             }
           ],
-          "next": "clive_abandoned"
+          "next": "clive_abandoned",
+          "speechClip": "Sigh"
         },
         {
           "text": "aetherhaven_dialogue_furniture_merchant.aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_building.c1",
@@ -293,13 +298,15 @@
               "id": "q_house_furniture_merchant"
             }
           ],
-          "next": "clive_house_accepted"
+          "next": "clive_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_furniture_merchant.aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_house_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "clive_house_accepted": {
       "speaker": "aetherhaven_dialogue_furniture_merchant.aetherhaven.dialogue.aetherhaven_furniture_merchant.clive_house_accepted.speaker",

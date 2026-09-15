@@ -170,7 +170,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
     @Nullable
     private String nodeEnterAppliedForNodeId;
 
-    /** Last node id that started letter speech (avoid restarting on unrelated rebuilds). */
+    /** Last node id that started a voiced response (avoid restarting on unrelated rebuilds). */
     @Nullable
     private String speechStartedForNodeId;
 
@@ -343,13 +343,14 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         commandBuilder.set(BODY_TEXT_SPANS, bodyMsg);
         setChoicesFrameVisible(commandBuilder, true);
         appendChoices(ref, store, commandBuilder, eventBuilder, node);
-        maybeStartLetterSpeech(ref, store, bodyMsg);
+        maybeStartVoicedSpeech(ref, store);
     }
 
-    private void maybeStartLetterSpeech(
+    private String pendingSpeechClip;
+
+    private void maybeStartVoicedSpeech(
         @Nonnull Ref<EntityStore> ref,
-        @Nonnull Store<EntityStore> store,
-        @Nonnull Message bodyMsg
+        @Nonnull Store<EntityStore> store
     ) {
         if (npcRef == null || !npcRef.isValid()) {
             return;
@@ -358,8 +359,11 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             return;
         }
         speechStartedForNodeId = nodeId;
-        String plain = DialogueMessagePlainText.resolve(bodyMsg, playerRef.getLanguage());
-        NpcDialogueSpeech.startTalkSpeech(ref, npcRef, store, plain);
+        DialogueNodeDefinition node = tree != null ? tree.getNode(nodeId) : null;
+        String category = pendingSpeechClip != null ? pendingSpeechClip
+            : com.hexvane.aetherhaven.speech.DialogueSpeechCue.forNode(node == null ? null : node.getSpeechClip(), nodeId);
+        pendingSpeechClip = null;
+        NpcDialogueSpeech.startClip(ref, npcRef, store, category);
     }
 
     @Nonnull
@@ -1583,8 +1587,12 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         }
         DialogueActionBatchResult batch = new DialogueActionBatchResult();
         actions.runBatch(choice.getActions(), ref, store, batch, npcRef);
-        if (npcRef != null && npcRef.isValid()) {
-            NpcFaceVisuals.playTalkBurst(npcRef, ref, store);
+        pendingSpeechClip = choice.getSpeechClip();
+        if (pendingSpeechClip != null && (batch.isCloseDialogue() || (batch.getGotoNodeId() == null && choice.getNext() == null))
+            && npcRef != null && npcRef.isValid()) {
+            if (batch.isCloseDialogue()) NpcDialogueSpeech.startClosingClip(ref, npcRef, store, pendingSpeechClip);
+            else NpcDialogueSpeech.startClip(ref, npcRef, store, pendingSpeechClip);
+            pendingSpeechClip = null;
         }
         speechStartedForNodeId = null;
         applyBatchNavigation(ref, store, batch, choice.getNext());

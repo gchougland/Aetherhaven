@@ -14,5 +14,20 @@
   },
   "preferredScheduleLocations": [
     "shop"
-  ]
+  ],
+  "thoughtItemWeights": {
+    "Aetherhaven_Gold_Coin": 2,
+    "Rock_Gem_Diamond": 1,
+    "Ingredient_Bar_Gold": 1
+  },
+  "socialEmoteWeights": {
+    "Question": 6,
+    "Surprise": 2,
+    "Explain": 3
+  },
+  "idleEmoteWeights": {
+    "LookAround": 4,
+    "Fidget": 2,
+    "Stretch": 1
+  }
 }

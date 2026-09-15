@@ -1,0 +1,58 @@
+{
+  "audio": "BrightFemale_Talk_1.ogg",
+  "audioSha256": "98ca967945b395ba6c691caf16cfe237239d9098ffee66d480612f07f777dd17",
+  "durationMs": 1559,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.05,
+      "value": "A"
+    },
+    {
+      "start": 0.05,
+      "end": 0.21,
+      "value": "C"
+    },
+    {
+      "start": 0.21,
+      "end": 0.63,
+      "value": "B"
+    },
+    {
+      "start": 0.63,
+      "end": 0.77,
+      "value": "E"
+    },
+    {
+      "start": 0.77,
+      "end": 0.84,
+      "value": "F"
+    },
+    {
+      "start": 0.84,
+      "end": 1.03,
+      "value": "D"
+    },
+    {
+      "start": 1.03,
+      "end": 1.08,
+      "value": "C"
+    },
+    {
+      "start": 1.08,
+      "end": 1.54,
+      "value": "B"
+    },
+    {
+      "start": 1.54,
+      "end": 1.55,
+      "value": "X"
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "audio": "GravelyMale_Talk_1.ogg",
+  "audioSha256": "cfc602eee643a5e12d87539334b42388a3bc4fd7a52388c0a679a225ff94cb89",
+  "durationMs": 1480,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.06,
+      "value": "B"
+    },
+    {
+      "start": 0.06,
+      "end": 0.18,
+      "value": "C"
+    },
+    {
+      "start": 0.18,
+      "end": 0.25,
+      "value": "B"
+    },
+    {
+      "start": 0.25,
+      "end": 0.32,
+      "value": "C"
+    },
+    {
+      "start": 0.32,
+      "end": 0.53,
+      "value": "B"
+    },
+    {
+      "start": 0.53,
+      "end": 0.67,
+      "value": "F"
+    },
+    {
+      "start": 0.67,
+      "end": 0.79,
+      "value": "A"
+    },
+    {
+      "start": 0.79,
+      "end": 0.87,
+      "value": "C"
+    },
+    {
+      "start": 0.87,
+      "end": 0.95,
+      "value": "A"
+    },
+    {
+      "start": 0.95,
+      "end": 1.05,
+      "value": "C"
+    },
+    {
+      "start": 1.05,
+      "end": 1.47,
+      "value": "B"
+    },
+    {
+      "start": 1.47,
+      "end": 1.48,
+      "value": "X"
+    }
+  ]
+}

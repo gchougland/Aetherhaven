@@ -14,5 +14,21 @@
   },
   "preferredScheduleLocations": [
     "park"
-  ]
+  ],
+  "thoughtItemWeights": {
+    "Plant_Fruit_Apple": 1,
+    "Plant_Flower_Blood_Rose": 1,
+    "Plant_Crop_Carrot": 1
+  },
+  "socialEmoteWeights": {
+    "Agree": 4,
+    "Explain": 3,
+    "Laugh": 2,
+    "Story": 2
+  },
+  "idleEmoteWeights": {
+    "LookAround": 4,
+    "Fidget": 2,
+    "Stretch": 1
+  }
 }

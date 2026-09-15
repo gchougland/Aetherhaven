@@ -84,7 +84,8 @@
               "id": "q_house_pyrotechnic"
             }
           ],
-          "next": "grubble_house_finish"
+          "next": "grubble_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_pyrotechnic.aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_house_remind",
@@ -135,7 +136,8 @@
               "id": "q_pyrotechnic_shop"
             }
           ],
-          "next": "grubble_done"
+          "next": "grubble_done",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_pyrotechnic.aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_building",
@@ -198,13 +200,15 @@
               "id": "q_pyrotechnic_shop"
             }
           ],
-          "next": "grubble_shop_accepted"
+          "next": "grubble_shop_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_pyrotechnic.aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "grubble_shop_accepted": {
       "speaker": "aetherhaven_dialogue_pyrotechnic.aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.speaker",
@@ -228,7 +232,8 @@
               "id": "q_pyrotechnic_shop"
             }
           ],
-          "next": "grubble_abandoned"
+          "next": "grubble_abandoned",
+          "speechClip": "Sigh"
         },
         {
           "text": "aetherhaven_dialogue_pyrotechnic.aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.c1",
@@ -268,13 +273,15 @@
               "id": "q_house_pyrotechnic"
             }
           ],
-          "next": "grubble_house_accepted"
+          "next": "grubble_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_pyrotechnic.aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.c1",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "grubble_house_accepted": {
       "speaker": "aetherhaven_dialogue_pyrotechnic.aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.speaker",

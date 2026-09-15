@@ -1,0 +1,13 @@
+{
+  "CullDistance": 28,
+  "BoundingRadius": 2,
+  "LifeSpan": 2.8,
+  "Spawners": [
+    {
+      "SpawnerId": "Aetherhaven_Life_Thought"
+    },
+    {
+      "SpawnerId": "Aetherhaven_Life_Item_Food_Pie_Meat"
+    }
+  ]
+}

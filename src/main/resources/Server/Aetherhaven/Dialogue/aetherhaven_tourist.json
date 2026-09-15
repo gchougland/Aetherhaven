@@ -11,15 +11,26 @@
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_has_complete_plot", "constructionId": "plot_tourist_portal" },
-              { "type": "npc_is_active_tourist" },
               {
-                "type": "not",
-                "condition": { "type": "quest_completed_for_npc", "questId": "q_house_townsfolk" }
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_tourist_portal"
+              },
+              {
+                "type": "npc_is_active_tourist"
               },
               {
                 "type": "not",
-                "condition": { "type": "town_quest_active", "questId": "q_house_townsfolk" }
+                "condition": {
+                  "type": "quest_completed_for_npc",
+                  "questId": "q_house_townsfolk"
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_active",
+                  "questId": "q_house_townsfolk"
+                }
               }
             ]
           },
@@ -32,8 +43,14 @@
           "visibilityCondition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_townsfolk" },
-              { "type": "npc_is_quest_target", "questId": "q_house_townsfolk" },
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_townsfolk"
+              },
+              {
+                "type": "npc_is_quest_target",
+                "questId": "q_house_townsfolk"
+              },
               {
                 "type": "town_quest_objective_incomplete",
                 "questId": "q_house_townsfolk",
@@ -41,10 +58,16 @@
               }
             ]
           },
-          "condition": { "type": "player_has_tourist_move_in_items" },
+          "condition": {
+            "type": "player_has_tourist_move_in_items"
+          },
           "whenFalse": "disabled",
           "disabledReason": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_give_missing",
-          "actions": [{ "type": "deliver_tourist_move_in_items" }],
+          "actions": [
+            {
+              "type": "deliver_tourist_move_in_items"
+            }
+          ],
           "next": "tourist_house_gift_received"
         },
         {
@@ -52,22 +75,42 @@
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_townsfolk" },
-              { "type": "npc_is_quest_target", "questId": "q_house_townsfolk" },
-              { "type": "town_npc_home_resident_house" }
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_townsfolk"
+              },
+              {
+                "type": "npc_is_quest_target",
+                "questId": "q_house_townsfolk"
+              },
+              {
+                "type": "town_npc_home_resident_house"
+              }
             ]
           },
           "whenFalse": "hide",
-          "actions": [{ "type": "complete_quest", "id": "q_house_townsfolk" }],
-          "next": "tourist_house_finish"
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_house_townsfolk"
+            }
+          ],
+          "next": "tourist_house_finish",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_remind_gift",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_townsfolk" },
-              { "type": "npc_is_quest_target", "questId": "q_house_townsfolk" },
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_townsfolk"
+              },
+              {
+                "type": "npc_is_quest_target",
+                "questId": "q_house_townsfolk"
+              },
               {
                 "type": "town_quest_objective_incomplete",
                 "questId": "q_house_townsfolk",
@@ -83,8 +126,14 @@
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_townsfolk" },
-              { "type": "npc_is_quest_target", "questId": "q_house_townsfolk" },
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_townsfolk"
+              },
+              {
+                "type": "npc_is_quest_target",
+                "questId": "q_house_townsfolk"
+              },
               {
                 "type": "town_quest_objective_complete",
                 "questId": "q_house_townsfolk",
@@ -92,7 +141,9 @@
               },
               {
                 "type": "not",
-                "condition": { "type": "town_npc_home_resident_house" }
+                "condition": {
+                  "type": "town_npc_home_resident_house"
+                }
               }
             ]
           },
@@ -104,12 +155,20 @@
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_townsfolk" },
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_townsfolk"
+              },
               {
                 "type": "not",
-                "condition": { "type": "npc_is_quest_target", "questId": "q_house_townsfolk" }
+                "condition": {
+                  "type": "npc_is_quest_target",
+                  "questId": "q_house_townsfolk"
+                }
               },
-              { "type": "npc_is_active_tourist" }
+              {
+                "type": "npc_is_active_tourist"
+              }
             ]
           },
           "whenFalse": "hide",
@@ -118,7 +177,11 @@
         {
           "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.main_hub.leave",
           "next": null,
-          "actions": [{ "type": "close" }]
+          "actions": [
+            {
+              "type": "close"
+            }
+          ]
         }
       ]
     },
@@ -131,9 +194,14 @@
           "icon": "move_in_item",
           "visibilityCondition": {
             "type": "not",
-            "condition": { "type": "town_quest_active", "questId": "q_house_townsfolk" }
+            "condition": {
+              "type": "town_quest_active",
+              "questId": "q_house_townsfolk"
+            }
           },
-          "condition": { "type": "player_has_tourist_move_in_items" },
+          "condition": {
+            "type": "player_has_tourist_move_in_items"
+          },
           "whenFalse": "disabled",
           "disabledReason": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_give_missing",
           "actions": [
@@ -142,15 +210,19 @@
               "id": "q_house_townsfolk",
               "bindTargetEntity": true
             },
-            { "type": "deliver_tourist_move_in_items" }
+            {
+              "type": "deliver_tourist_move_in_items"
+            }
           ],
-          "next": "tourist_house_accepted"
+          "next": "tourist_house_accepted",
+          "speechClip": "Agree"
         },
         {
           "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.decline",
           "next": null
         }
-      ]
+      ],
+      "speechClip": "Question"
     },
     "tourist_house_accepted": {
       "speaker": "",

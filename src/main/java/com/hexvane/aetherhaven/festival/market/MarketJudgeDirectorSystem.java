@@ -171,14 +171,7 @@ public final class MarketJudgeDirectorSystem extends EntityTickingSystem<EntityS
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nullable NPCEntity npc
     ) {
-        if (npc != null) {
-            NpcAnimationPlayback.play(
-                ref, npc, AnimationSlot.Emote, ShopSpotBrowseVisuals.PONDER_EMOTE_ID, commandBuffer
-            );
-            commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
-            return;
-        }
-        NpcAnimationPlayback.play(ref, AnimationSlot.Emote, ShopSpotBrowseVisuals.PONDER_EMOTE_ID, commandBuffer);
+        ShopSpotBrowseVisuals.beginPonder(ref, commandBuffer.getStore(), commandBuffer);
     }
 
     private static boolean isPlayingEmote(

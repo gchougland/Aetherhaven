@@ -1,0 +1,53 @@
+{
+  "audio": "WarmMale_Question_2.ogg",
+  "audioSha256": "b135dcbf7e698395f3a6b145d1eee224855248978262359ac9f07180ad1a50b2",
+  "durationMs": 1050,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.01,
+      "value": "X"
+    },
+    {
+      "start": 0.01,
+      "end": 0.04,
+      "value": "B"
+    },
+    {
+      "start": 0.04,
+      "end": 0.21,
+      "value": "A"
+    },
+    {
+      "start": 0.21,
+      "end": 0.54,
+      "value": "C"
+    },
+    {
+      "start": 0.54,
+      "end": 0.62,
+      "value": "A"
+    },
+    {
+      "start": 0.62,
+      "end": 0.85,
+      "value": "E"
+    },
+    {
+      "start": 0.85,
+      "end": 0.92,
+      "value": "F"
+    },
+    {
+      "start": 0.92,
+      "end": 0.99,
+      "value": "B"
+    },
+    {
+      "start": 0.99,
+      "end": 1.04,
+      "value": "X"
+    }
+  ]
+}

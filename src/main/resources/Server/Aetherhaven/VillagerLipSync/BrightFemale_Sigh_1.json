@@ -1,0 +1,58 @@
+{
+  "audio": "BrightFemale_Sigh_1.ogg",
+  "audioSha256": "6619a43577c8c06a09b16dc498c8ea8c4d14fff674c32ed2110e5d5a9816ebcd",
+  "durationMs": 1946,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.06,
+      "value": "X"
+    },
+    {
+      "start": 0.06,
+      "end": 0.71,
+      "value": "B"
+    },
+    {
+      "start": 0.71,
+      "end": 0.85,
+      "value": "F"
+    },
+    {
+      "start": 0.85,
+      "end": 1.2,
+      "value": "B"
+    },
+    {
+      "start": 1.2,
+      "end": 1.41,
+      "value": "E"
+    },
+    {
+      "start": 1.41,
+      "end": 1.55,
+      "value": "C"
+    },
+    {
+      "start": 1.55,
+      "end": 1.62,
+      "value": "E"
+    },
+    {
+      "start": 1.62,
+      "end": 1.76,
+      "value": "F"
+    },
+    {
+      "start": 1.76,
+      "end": 1.89,
+      "value": "A"
+    },
+    {
+      "start": 1.89,
+      "end": 1.94,
+      "value": "X"
+    }
+  ]
+}

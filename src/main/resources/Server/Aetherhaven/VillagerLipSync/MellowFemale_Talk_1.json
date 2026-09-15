@@ -1,0 +1,48 @@
+{
+  "audio": "MellowFemale_Talk_1.ogg",
+  "audioSha256": "91d40619c466df1dca8d853ac3f47669bc5944b154232b7be06411b2d8423b30",
+  "durationMs": 1385,
+  "recognizer": "Rhubarb 1.14.0 phonetic",
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.04,
+      "value": "A"
+    },
+    {
+      "start": 0.04,
+      "end": 0.18,
+      "value": "C"
+    },
+    {
+      "start": 0.18,
+      "end": 0.32,
+      "value": "B"
+    },
+    {
+      "start": 0.32,
+      "end": 0.67,
+      "value": "F"
+    },
+    {
+      "start": 0.67,
+      "end": 0.8,
+      "value": "A"
+    },
+    {
+      "start": 0.8,
+      "end": 0.93,
+      "value": "D"
+    },
+    {
+      "start": 0.93,
+      "end": 1.35,
+      "value": "B"
+    },
+    {
+      "start": 1.35,
+      "end": 1.38,
+      "value": "X"
+    }
+  ]
+}
