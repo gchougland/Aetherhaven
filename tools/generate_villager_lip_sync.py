@@ -18,7 +18,7 @@ RES=ROOT/'src/main/resources'
 CUES=RES/'Server/Aetherhaven/VillagerLipSync'
 RHUBARB=ROOT/'build/rhubarb/Rhubarb-Lip-Sync-1.14.0-Windows/rhubarb.exe'
 GESTURES={'Talk':['Greet','Explain','Story','Agree'],'Question':['Question'],'Laugh':['Laugh'],
-          'Gasp':['Surprise'],'Grumble':['Disagree'],'Groan':['Hungry'],'Yawn':['Sleepy','Stretch'],'Sigh':['Bored']}
+          'Gasp':['Surprise'],'Grumble':['Disagree'],'Groan':['Hungry','Bored'],'Yawn':['Sleepy','Stretch'],'Sigh':['Bored']}
 GESTURES.update(Idle=['LookAround','Fidget','ReadLoop','Craft','Sweep','Inspect','Tend'],
                 Work=['LookAround','Craft','Sweep','Inspect','Tend','ReadLoop'],Thinking=['Ponder','ReadLoop'])
 SHAPES={'A':(0,0),'B':(120,0),'C':(140,0),'D':(160,0),'E':(220,-30),'F':(180,-30),'X':(0,0)}
@@ -27,7 +27,9 @@ def write(path,data):
     if path.suffix == '.blockyanim':
         complete_channels(data)
     path.parent.mkdir(parents=True,exist_ok=True)
-    path.write_text(json.dumps(data,indent=2)+'\n',encoding='utf-8')
+    serialized=json.dumps(data,indent=2)+'\n'
+    if not path.exists() or path.read_text(encoding='utf-8') != serialized:
+        path.write_text(serialized,encoding='utf-8')
 
 def analyze(clip,reanalyze):
     source=RES/'Common/Sounds/Aetherhaven/Life'/clip['file']
@@ -107,9 +109,27 @@ def compile_assets(clips):
             model['AnimationSets'][asset_id]={'Animations':[{'Animation':path,'Looping':False,'BlendingDuration':.04}]}
             entry['faces'][gesture]={'id':asset_id,'durationMs':math.ceil(end/60*1000),'actionId':suffix}
             count+=1
+    # Reuse the exact OGG and animation files. Hytale's audio pitch changes playback
+    # rate, so each alias uses the same rate for its Action and standalone Face.
+    for variant,semitones in [('Lower',-2),('Higher',2)]:
+        pitch=2**(semitones/12)
+        variant_actions=copy.deepcopy(actions)
+        for name,action in variant_actions['Animations'].items():
+            if '_' in name:action['Speed']=pitch
+        write(RES/f'Server/Item/Animations/Aetherhaven_Life_Actions_{variant}.json',variant_actions)
+        for group in index.values():
+            for clip in group:
+                for expression in clip['faces'].values():
+                    binding=copy.deepcopy(model['AnimationSets'][expression['id']])
+                    binding['Animations'][0]['Speed']=pitch
+                    model['AnimationSets'][expression['id']+'_'+variant]=binding
     write(model_path,model)
     write(actions_path,actions)
     write(RES/'defaults/villager_life_playback.json',index)
+    from villager_prowl_faces import generate as generate_prowl_faces
+    generate_prowl_faces(RES,write)
+    from villager_creature_faces import generate as generate_creature_faces
+    generate_creature_faces(RES,write)
     print(f'Compiled {count} synchronized expression variants for {len(clips)} exact audio events.',flush=True)
 
 def main():

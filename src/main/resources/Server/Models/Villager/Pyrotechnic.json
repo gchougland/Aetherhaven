@@ -50,6 +50,14 @@
           "Looping": true
         }
       ]
+    },
+    "GlideIdle": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Glide/Glide_Idle.blockyanim",
+          "Speed": 1
+        }
+      ]
     }
   },
   "Icon": "Icons/ModelsGenerated/Aetherhaven_Pyrotechnic.png",

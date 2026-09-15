@@ -634,6 +634,60 @@ $C.@PageOverlay {
                         }
                       }
 
+                      Label #SettingsVillagerSpeechVolumeLabel {
+                        Anchor: (Bottom: 4);
+                        Style: (...$C.@DefaultLabelStyle, TextColor: #c8c2b0, RenderBold: true);
+                        Text: "";
+                      }
+                      Group #SettingsVillagerSpeechVolumeRow {
+                        LayoutMode: Left;
+                        Anchor: (Bottom: 14, Height: 30);
+
+                        Group {
+                          LayoutMode: Middle;
+                          Anchor: (Width: 360, Height: 30, Right: 12);
+                          $C.@Slider #SettingsVillagerSpeechVolumeSlider {
+                            @Anchor = (Width: 340);
+                            Value: 70;
+                            Min: 0;
+                            Max: 100;
+                          }
+                        }
+
+                        Label #SettingsVillagerSpeechVolumeValue {
+                          Anchor: (Width: 70, Top: 5);
+                          Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8);
+                          Text: "";
+                        }
+                      }
+
+                      Label #SettingsVillagerChatterFrequencyLabel {
+                        Anchor: (Bottom: 4);
+                        Style: (...$C.@DefaultLabelStyle, TextColor: #c8c2b0, RenderBold: true);
+                        Text: "";
+                      }
+                      Group #SettingsVillagerChatterFrequencyRow {
+                        LayoutMode: Left;
+                        Anchor: (Bottom: 14, Height: 30);
+
+                        Group {
+                          LayoutMode: Middle;
+                          Anchor: (Width: 360, Height: 30, Right: 12);
+                          $C.@Slider #SettingsVillagerChatterFrequencySlider {
+                            @Anchor = (Width: 340);
+                            Value: 100;
+                            Min: 0;
+                            Max: 200;
+                          }
+                        }
+
+                        Label #SettingsVillagerChatterFrequencyValue {
+                          Anchor: (Width: 70, Top: 5);
+                          Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8);
+                          Text: "";
+                        }
+                      }
+
                       Label #SettingsHudHeading {
                         Anchor: (Top: 8, Bottom: 6);
                         Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2, FontSize: 16);

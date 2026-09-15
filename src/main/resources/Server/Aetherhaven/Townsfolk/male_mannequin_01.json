@@ -14,7 +14,7 @@
     "tourist"
   ],
   "befriendable": false,
-  "speechVoiceId": "mid",
+  "speechVoiceId": "MellowMaleHigher",
   "moveInRequirements": [
     {
       "itemId": "Ingredient_Fabric_Scrap_Wool",

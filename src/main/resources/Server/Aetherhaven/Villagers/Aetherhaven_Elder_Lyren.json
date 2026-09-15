@@ -6,7 +6,7 @@
   "workConstructionId": "plot_town_hall",
   "displayName": "Elder Lyren",
   "portraitIcon": "Aetherhaven_Elder_Lyren.png",
-  "speechVoiceId": "low",
+  "speechVoiceId": "MellowMaleLower",
   "uiSortOrder": 0,
   "reputationMilestones": [
     {

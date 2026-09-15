@@ -928,6 +928,10 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         commandBuilder.set("#SettingsBirthdayDayDropdown #Input.Value", String.valueOf(birthdayDay));
         commandBuilder.set("#SettingsSpeechEnableCheck #CheckBox.Value", journalPrefs.isDialogueSpeechEnabled());
         commandBuilder.set("#SettingsSpeechVolumeSlider.Value", journalPrefs.getDialogueSpeechVolumePercent());
+        commandBuilder.set("#SettingsVillagerSpeechVolumeSlider.Value", journalPrefs.getVillagerSpeechVolumePercent());
+        commandBuilder.set("#SettingsVillagerSpeechVolumeValue.TextSpans", Message.raw(journalPrefs.getVillagerSpeechVolumePercent() + "%"));
+        commandBuilder.set("#SettingsVillagerChatterFrequencySlider.Value", journalPrefs.getVillagerChatterFrequencyPercent());
+        commandBuilder.set("#SettingsVillagerChatterFrequencyValue.TextSpans", Message.raw(journalPrefs.getVillagerChatterFrequencyPercent() + "%"));
         commandBuilder.set(
             "#SettingsSpeechVolumeValue.TextSpans",
             Message.raw(journalPrefs.getDialogueSpeechVolumePercent() + "%")
@@ -974,9 +978,16 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             "#SettingsSpeechVolumeSlider",
             new EventData()
                 .append("Action", "DialogueSpeechVolumePreview")
-                .append("@SpeechVolume", "#SettingsSpeechVolumeSlider.Value"),
+                .append("@SpeechVolume", "#SettingsSpeechVolumeSlider.Value")
+                .append("@VillagerSpeechVolume", "#SettingsVillagerSpeechVolumeSlider.Value")
+                .append("@VillagerChatterFrequency", "#SettingsVillagerChatterFrequencySlider.Value"),
             false
         );
+
+        eventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged, "#SettingsVillagerSpeechVolumeSlider",
+            new EventData().append("Action", "VillagerSpeechVolumeChanged").append("@VillagerSpeechVolume", "#SettingsVillagerSpeechVolumeSlider.Value"), false);
+        eventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged, "#SettingsVillagerChatterFrequencySlider",
+            new EventData().append("Action", "VillagerChatterFrequencyChanged").append("@VillagerChatterFrequency", "#SettingsVillagerChatterFrequencySlider.Value"), false);
 
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.ValueChanged,
@@ -996,6 +1007,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 .append("@RtsAspect", "#SettingsRtsPickAspectField.Value")
                 .append("@SpeechEnabled", "#SettingsSpeechEnableCheck #CheckBox.Value")
                 .append("@SpeechVolume", "#SettingsSpeechVolumeSlider.Value")
+                .append("@VillagerSpeechVolume", "#SettingsVillagerSpeechVolumeSlider.Value")
+                .append("@VillagerChatterFrequency", "#SettingsVillagerChatterFrequencySlider.Value")
                 .append("@HudTime", "#SettingsHudTimeCheck #CheckBox.Value")
                 .append("@HudDate", "#SettingsHudDateCheck #CheckBox.Value")
                 .append("@HudGold", "#SettingsHudGoldCheck #CheckBox.Value")
@@ -2541,6 +2554,28 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
             return;
         }
+        if (action.equalsIgnoreCase("VillagerSpeechVolumeChanged")) {
+            if (data.villagerSpeechVolumePercent == null) return;
+            PlayerTownJournalState st = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+            if (st == null) st = new PlayerTownJournalState();
+            st.setVillagerSpeechVolumePercent(data.villagerSpeechVolumePercent);
+            store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
+            UICommandBuilder cmd = new UICommandBuilder();
+            cmd.set("#SettingsVillagerSpeechVolumeValue.TextSpans", Message.raw(st.getVillagerSpeechVolumePercent() + "%"));
+            sendUpdate(cmd, new UIEventBuilder(), false);
+            return;
+        }
+        if (action.equalsIgnoreCase("VillagerChatterFrequencyChanged")) {
+            if (data.villagerChatterFrequencyPercent == null) return;
+            PlayerTownJournalState st = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+            if (st == null) st = new PlayerTownJournalState();
+            st.setVillagerChatterFrequencyPercent(data.villagerChatterFrequencyPercent);
+            store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
+            UICommandBuilder cmd = new UICommandBuilder();
+            cmd.set("#SettingsVillagerChatterFrequencyValue.TextSpans", Message.raw(st.getVillagerChatterFrequencyPercent() + "%"));
+            sendUpdate(cmd, new UIEventBuilder(), false);
+            return;
+        }
         if (action.equalsIgnoreCase("DialogueSpeechVolumePreview")) {
             int volumePercent = data.speechVolumePercent != null
                 ? Math.max(0, Math.min(100, data.speechVolumePercent))
@@ -3206,6 +3241,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                     ? data.hudOpacityPercent / 100f
                     : st.getHudBackgroundOpacity()
             );
+            if (data.villagerSpeechVolumePercent != null) st.setVillagerSpeechVolumePercent(data.villagerSpeechVolumePercent);
+            if (data.villagerChatterFrequencyPercent != null) st.setVillagerChatterFrequencyPercent(data.villagerChatterFrequencyPercent);
             st.setDialogueSpeechPreferences(
                 data.speechEnabled == null || Boolean.TRUE.equals(data.speechEnabled),
                 data.speechVolumePercent != null ? data.speechVolumePercent : st.getDialogueSpeechVolumePercent()
@@ -3929,6 +3966,10 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 d -> d.hudOpacityPercent
             )
             .add()
+            .append(new KeyedCodec<>("@VillagerSpeechVolume", Codec.INTEGER), (d, v) -> d.villagerSpeechVolumePercent = v, d -> d.villagerSpeechVolumePercent)
+            .add()
+            .append(new KeyedCodec<>("@VillagerChatterFrequency", Codec.INTEGER), (d, v) -> d.villagerChatterFrequencyPercent = v, d -> d.villagerChatterFrequencyPercent)
+            .add()
             .append(new KeyedCodec<>("@SpeechEnabled", Codec.BOOLEAN), (d, v) -> d.speechEnabled = v, d -> d.speechEnabled)
             .add()
             .append(
@@ -4039,6 +4080,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         private Boolean speechEnabled;
         @Nullable
         private Integer speechVolumePercent;
+        private Integer villagerSpeechVolumePercent;
+        private Integer villagerChatterFrequencyPercent;
         @Nullable
         private String hudStatusPlacement;
         @Nullable

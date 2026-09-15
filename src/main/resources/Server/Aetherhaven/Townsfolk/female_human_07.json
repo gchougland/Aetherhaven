@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_mage",
-  "speechVoiceId": "soft",
+  "speechVoiceId": "WarmFemaleLower",
   "moveInRequirements": [
     {
       "itemId": "Food_Pie_Pumpkin",

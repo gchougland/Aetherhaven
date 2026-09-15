@@ -14,7 +14,7 @@
     "tourist"
   ],
   "befriendable": false,
-  "speechVoiceId": "mid",
+  "speechVoiceId": "MellowMale",
   "moveInRequirements": [
     {
       "itemId": "Food_Salad_Caesar",

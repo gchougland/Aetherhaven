@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_archer",
-  "speechVoiceId": "mid",
+  "speechVoiceId": "WarmMaleHigher",
   "moveInRequirements": [
     {
       "itemId": "Ingredient_Crystal_Yellow",

@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_knight",
-  "speechVoiceId": "low",
+  "speechVoiceId": "MellowMale",
   "moveInRequirements": [
     {
       "itemId": "Food_Fish_Raw_Rare",

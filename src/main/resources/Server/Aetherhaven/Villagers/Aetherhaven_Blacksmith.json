@@ -7,7 +7,7 @@
   "workEquipmentProfileId": "work_blacksmith",
   "displayName": "Garren Vale",
   "portraitIcon": "Aetherhaven_Blacksmith.png",
-  "speechVoiceId": "low",
+  "speechVoiceId": "WarmMaleLower",
   "uiSortOrder": 3,
   "innPoolEligible": true,
   "innPoolOrder": 1,

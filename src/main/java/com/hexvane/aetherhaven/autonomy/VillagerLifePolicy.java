@@ -20,7 +20,8 @@ public final class VillagerLifePolicy {
         return working && useWorkVoice ? "Work" : "Idle";
     }
 
-    public static String voice(UUID id) { return VOICES[Math.floorMod(id.hashCode(), VOICES.length)]; }
+    /** Compatibility fallback for callers without character data; spawn identity must never choose a voice. */
+    public static String voice(UUID ignored) { return "WarmMale"; }
     public static String topic(UUID id, long now) { return TOPICS[Math.floorMod(id.hashCode() + (int)(now / 30_000), TOPICS.length)]; }
 
     public static boolean canSocialize(float hunger, float energy) {

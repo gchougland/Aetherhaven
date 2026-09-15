@@ -98,5 +98,15 @@
       0,
       -110
     ]
+  },
+  "AnimationSets": {
+    "GlideIdle": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Glide/Glide_Idle.blockyanim",
+          "Speed": 1
+        }
+      ]
+    }
   }
 }

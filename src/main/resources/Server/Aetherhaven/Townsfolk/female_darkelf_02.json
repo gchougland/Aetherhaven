@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_knight",
-  "speechVoiceId": "low",
+  "speechVoiceId": "MellowFemaleLower",
   "moveInRequirements": [
     {
       "itemId": "Food_Kebab_Meat",

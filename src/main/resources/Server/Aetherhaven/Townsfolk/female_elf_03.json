@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_archer",
-  "speechVoiceId": "soft",
+  "speechVoiceId": "BrightFemaleLower",
   "moveInRequirements": [
     {
       "itemId": "Ingredient_Hay",

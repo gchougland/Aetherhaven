@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_mage",
-  "speechVoiceId": "low",
+  "speechVoiceId": "MellowMaleLower",
   "moveInRequirements": [
     {
       "itemId": "Ingredient_Crystal_Green",

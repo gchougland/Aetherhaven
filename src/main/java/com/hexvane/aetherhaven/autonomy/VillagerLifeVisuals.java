@@ -30,16 +30,28 @@ public final class VillagerLifeVisuals {
         if (cue.clip().equals("None")) return 0;
         var id = store.getComponent(ref, com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
         if (id == null) return 0;
-        var clip = VillagerLifeSpeech.select(VillagerLifePersonality.voice(ref, id.getUuid(), store), cue.clip(),
-            java.util.concurrent.ThreadLocalRandom.current().nextInt());
-        if (clip == null) return 0;
+        var preferences = store.getComponent(player, com.hexvane.aetherhaven.ui.PlayerTownJournalState.getComponentType());
+        if (preferences == null) {
+            preferences = new com.hexvane.aetherhaven.ui.PlayerTownJournalState();
+            store.putComponent(player, com.hexvane.aetherhaven.ui.PlayerTownJournalState.getComponentType(), preferences);
+        }
+        var clip = VillagerLifeSpeech.selectExcept(VillagerLifePersonality.voice(ref, id.getUuid(), store), cue.clip(),
+            java.util.concurrent.ThreadLocalRandom.current().nextInt(), preferences.getLastDialogueClip());
+        if (clip == null) {
+            preferences.setLastDialogueClip(null);
+            VillagerLifeProps.equip(ref, cue.gesture(), store);
+            AnimationUtils.playAnimation(ref, BODY_SLOT, NpcFaceVisuals.itemAnimationsForFaceRig(ref, BODY_ANIMATIONS, store), cue.gesture(), false, store);
+            state(ref, store).visualUntilMs = System.currentTimeMillis() + VillagerLifeTiming.durationMs(cue.gesture());
+            return VillagerLifeTiming.durationMs(cue.gesture());
+        }
+        preferences.setLastDialogueClip(clip.clip());
         var expression = clip.faces().get(cue.gesture());
         if (expression != null && NpcFaceVisuals.supportsFaceExpressions(ref, store)) {
             VillagerLifeProps.equip(ref, cue.gesture(), store);
-            AnimationUtils.playAnimation(ref, BODY_SLOT, BODY_ANIMATIONS, expression.actionId(), false, store);
+            AnimationUtils.playAnimation(ref, BODY_SLOT, NpcFaceVisuals.itemAnimationsForFaceRig(ref, clip.actionsId(), store), expression.actionId(), false, store);
             NpcFaceVisuals.playDialogueExpression(ref, expression.id(), expression.durationMs()/1000f, store);
         }
-        if (volume > .001f) com.hexvane.aetherhaven.ui.UiSoundEffects.play2d(player, store, PREFIX + clip.clip(), SoundCategory.SFX, volume, 1f);
+        if (volume > .001f) com.hexvane.aetherhaven.ui.UiSoundEffects.play2d(player, store, PREFIX + clip.clip(), SoundCategory.SFX, volume, clip.pitch());
         long duration = Math.max(clip.audioMs(), expression == null ? 0 : expression.durationMs());
         var life = state(ref, store);
         life.visualUntilMs = System.currentTimeMillis() + duration;
@@ -69,7 +81,7 @@ public final class VillagerLifeVisuals {
         if (npc != null && NpcFaceVisuals.isInInteractionDialogue(npc)) return;
         if (life.readingLoop && life.readingResumeMs != 0 && System.currentTimeMillis() >= life.readingResumeMs) {
             life.readingResumeMs = 0;
-            AnimationUtils.playAnimation(ref, BODY_SLOT, BODY_ANIMATIONS, "ReadLoop", false, store);
+            AnimationUtils.playAnimation(ref, BODY_SLOT, NpcFaceVisuals.itemAnimationsForFaceRig(ref, BODY_ANIMATIONS, store), "ReadLoop", false, store);
         }
     }
 
@@ -82,7 +94,7 @@ public final class VillagerLifeVisuals {
         var life = state(ref, store);
         if (!life.readingLoop) {
             VillagerLifeProps.equip(ref, "ReadLoop", store);
-            AnimationUtils.playAnimation(ref, BODY_SLOT, BODY_ANIMATIONS, "ReadLoop", false, store);
+            AnimationUtils.playAnimation(ref, BODY_SLOT, NpcFaceVisuals.itemAnimationsForFaceRig(ref, BODY_ANIMATIONS, store), "ReadLoop", false, store);
             life.readingLoop = true;
         }
         maintainReading(ref, store);
@@ -94,10 +106,10 @@ public final class VillagerLifeVisuals {
             if (id != null) {
                 long duration = voice(ref, id.getUuid(), mood, "ReadLoop", store);
                 life.readingResumeMs = now + duration;
-                life.nextAmbientVoiceMs = now + duration + rng.nextLong(7000, 14000);
+                life.nextAmbientVoiceMs = now + duration + rng.nextLong(3500, 7000);
             }
         }
-        return 6000;
+        return Math.max(6000, life.readingResumeMs - now);
     }
 
     /** Tool swings retain their body track while a new idle/work recording drives the face. */
@@ -113,8 +125,8 @@ public final class VillagerLifeVisuals {
         if (clip == null) return;
         var face = clip.faces().get("LookAround");
         if (face != null) NpcFaceVisuals.playExpression(ref, face.id(), face.durationMs()/1000f, store);
-        sound(ref, clip.clip(), store);
-        life.nextAmbientVoiceMs = now + clip.audioMs() + java.util.concurrent.ThreadLocalRandom.current().nextLong(9000, 18000);
+        VillagerSpeechAudio.play(ref, clip, true, store);
+        life.nextAmbientVoiceMs = now + clip.audioMs() + java.util.concurrent.ThreadLocalRandom.current().nextLong(4500, 9000);
     }
 
     static void emote(Ref<EntityStore> ref, String gesture, Store<EntityStore> store) {
@@ -131,7 +143,7 @@ public final class VillagerLifeVisuals {
         if (npc != null) {
             // Player-rig Emote resolves cosmetic Emote assets, not Model.AnimationSets.
             // ThirdPersonFace pairs the facial track with the body at Action priority.
-            AnimationUtils.playAnimation(ref, BODY_SLOT, BODY_ANIMATIONS, gesture, false, store);
+            AnimationUtils.playAnimation(ref, BODY_SLOT, NpcFaceVisuals.itemAnimationsForFaceRig(ref, BODY_ANIMATIONS, store), gesture, false, store);
         }
         face(ref, gesture, false, store);
     }
@@ -156,14 +168,6 @@ public final class VillagerLifeVisuals {
         ParticleUtil.spawnParticleEffect(PREFIX + (speech ? "Speech_" : "Thought_") + icon, pos, store);
     }
 
-    static void sound(Ref<EntityStore> ref, String id, Store<EntityStore> store) {
-        TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
-        int sound = SoundEvent.getAssetMap().getIndex(PREFIX + id);
-        if (tc == null || sound < 0) return;
-        Vector3d p = tc.getPosition();
-        SoundUtil.playSoundEvent3d(sound, SoundCategory.SFX, p.x, p.y + 1.5, p.z, .7f, 1f, store);
-    }
-
     static long voice(Ref<EntityStore> ref, UUID id, String mood, Store<EntityStore> store) {
         String gesture = switch (mood) {
             case "Groan" -> "Hungry"; case "Yawn" -> "Sleepy"; case "Sigh" -> "Bored"; default -> null;
@@ -172,6 +176,10 @@ public final class VillagerLifeVisuals {
     }
 
     private static long voice(Ref<EntityStore> ref, UUID id, String mood, String gesture, Store<EntityStore> store) {
+        return voice(ref, id, mood, gesture, store, !mood.equals("Stomach"));
+    }
+
+    private static long voice(Ref<EntityStore> ref, UUID id, String mood, String gesture, Store<EntityStore> store, boolean randomChatter) {
         String profile = VillagerLifePersonality.voice(ref, id, store);
         var clip = VillagerLifeSpeech.select(profile, mood, java.util.concurrent.ThreadLocalRandom.current().nextInt());
         if (clip == null) {
@@ -181,13 +189,13 @@ public final class VillagerLifeVisuals {
         var expression = gesture == null ? null : clip.faces().get(gesture);
         if (expression != null) {
             VillagerLifeProps.equip(ref, gesture, store);
-            AnimationUtils.playAnimation(ref, BODY_SLOT, BODY_ANIMATIONS, expression.actionId(), false, store);
+            AnimationUtils.playAnimation(ref, BODY_SLOT, NpcFaceVisuals.itemAnimationsForFaceRig(ref, clip.actionsId(), store), expression.actionId(), false, store);
             NpcFaceVisuals.playExpression(ref, expression.id(), expression.durationMs() / 1000f, store);
-            sound(ref, clip.clip(), store);
+            VillagerSpeechAudio.play(ref, clip, randomChatter, store);
             return Math.max(clip.audioMs(), expression.durationMs());
         }
         if (gesture != null) silentEmote(ref, gesture, store);
-        sound(ref, clip.clip(), store);
+        VillagerSpeechAudio.play(ref, clip, randomChatter, store);
         return clip.audioMs();
     }
 
@@ -231,7 +239,7 @@ public final class VillagerLifeVisuals {
             if (id != null) {
                 String mood = VillagerLifePolicy.ambientMood(working, java.util.concurrent.ThreadLocalRandom.current().nextBoolean());
                 long duration = voice(ref, id.getUuid(), mood, gesture, store);
-                life.nextAmbientVoiceMs = now + duration + java.util.concurrent.ThreadLocalRandom.current().nextLong(9000, 18000);
+                life.nextAmbientVoiceMs = now + duration + java.util.concurrent.ThreadLocalRandom.current().nextLong(4500, 9000);
                 return Math.max(duration, VillagerLifeTiming.durationMs(gesture));
             }
         }
@@ -256,7 +264,25 @@ public final class VillagerLifeVisuals {
         long speechMs = voice(ref, id, switch (gesture) {
             case "Question" -> "Question"; case "Laugh" -> "Laugh";
             case "Surprise" -> "Gasp"; case "Disagree" -> "Grumble"; default -> "Talk";
-        }, gesture, store);
+        }, gesture, store, false);
         return Math.max(speechMs, VillagerLifeTiming.durationMs(gesture));
+    }
+
+    static long romance(Ref<EntityStore> speaker, Ref<EntityStore> listener, UUID speakerId,
+                        VillagerRomance.Beat beat, Store<EntityStore> store) {
+        bubble(speaker, beat.speechBubble(), beat.bubble(), store);
+        if (beat.hearts()) loveHearts(speaker, store);
+        // Conversation audio bypasses the random idle-chatter limiter so the groan
+        // cannot be swallowed by the preceding affectionate utterance.
+        long voiceMs = voice(speaker, speakerId, beat.voice(), beat.gesture(), store, false);
+        silentEmote(listener, beat.listenerGesture(), store);
+        if (beat.listenerBubble() != null) bubble(listener, false, beat.listenerBubble(), store);
+        if (beat.listenerHearts()) loveHearts(listener, store);
+        return Math.max(voiceMs, Math.max(VillagerLifeTiming.durationMs(beat.gesture()),
+            VillagerLifeTiming.durationMs(beat.listenerGesture())));
+    }
+
+    private static void loveHearts(Ref<EntityStore> ref, Store<EntityStore> store) {
+        com.hexvane.aetherhaven.villager.gift.VillagerGiftService.playLoveGiftParticles(ref, store);
     }
 }

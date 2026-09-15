@@ -6,7 +6,7 @@
   "workConstructionId": "plot_clown_tent",
   "displayName": "Bozo Bleak",
   "portraitIcon": "Aetherhaven_Clown.png",
-  "speechVoiceId": "high",
+  "speechVoiceId": "GravelyMale",
   "uiSortOrder": 15,
   "innPoolEligible": true,
   "innPoolOrder": 10,

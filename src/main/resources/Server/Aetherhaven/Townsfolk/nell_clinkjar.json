@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_mage",
-  "speechVoiceId": "high",
+  "speechVoiceId": "BrightFemaleHigher",
   "moveInRequirements": [
     {
       "itemId": "Ingredient_Bar_Bronze",

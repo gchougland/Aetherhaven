@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_archer",
-  "speechVoiceId": "sharp",
+  "speechVoiceId": "BrightFemaleLower",
   "moveInRequirements": [
     {
       "itemId": "Food_Cheese",

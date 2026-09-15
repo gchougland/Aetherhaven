@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_mage",
-  "speechVoiceId": "mid",
+  "speechVoiceId": "WarmMale",
   "moveInRequirements": [
     {
       "itemId": "Food_Kebab_Vegetable",

@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_archer",
-  "speechVoiceId": "sharp",
+  "speechVoiceId": "BrightMaleLower",
   "moveInRequirements": [
     {
       "itemId": "Food_Kebab_Meat",

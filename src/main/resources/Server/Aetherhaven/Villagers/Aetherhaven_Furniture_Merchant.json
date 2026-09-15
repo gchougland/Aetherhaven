@@ -142,7 +142,7 @@
     "aetherhaven_dialogue_furniture_merchant.aetherhaven.dialogue.aetherhaven_furniture_merchant.main_hub.hint.dislike.0",
     "aetherhaven_dialogue_furniture_merchant.aetherhaven.dialogue.aetherhaven_furniture_merchant.main_hub.hint.dislike.1"
   ],
-  "speechVoiceId": "low",
+  "speechVoiceId": "GravelyMale",
   "birthdaySeason": "Summer",
   "birthdayDay": 9,
   "dialogueBirthdayGreetingLangKeys": [

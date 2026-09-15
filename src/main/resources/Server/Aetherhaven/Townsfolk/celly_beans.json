@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_rogue",
-  "speechVoiceId": "high",
+  "speechVoiceId": "BrightFemale",
   "moveInRequirements": [
     {
       "itemId": "Food_Bread",

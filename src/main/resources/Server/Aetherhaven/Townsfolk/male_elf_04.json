@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_knight",
-  "speechVoiceId": "mid",
+  "speechVoiceId": "WarmMaleLower",
   "moveInRequirements": [
     {
       "itemId": "Food_Fish_Grilled",

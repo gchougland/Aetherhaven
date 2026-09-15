@@ -14,7 +14,7 @@
     "tourist"
   ],
   "befriendable": false,
-  "speechVoiceId": "low",
+  "speechVoiceId": "MellowMaleLower",
   "moveInRequirements": [
     {
       "itemId": "Food_Pie_Apple",

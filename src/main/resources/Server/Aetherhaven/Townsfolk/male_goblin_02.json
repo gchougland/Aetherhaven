@@ -14,7 +14,7 @@
     "tourist"
   ],
   "befriendable": false,
-  "speechVoiceId": "low",
+  "speechVoiceId": "GravelyMaleHigher",
   "moveInRequirements": [
     {
       "itemId": "Ingredient_Bar_Copper",

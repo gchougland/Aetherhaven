@@ -53,6 +53,10 @@ final class VillagerLifePersonality {
         } else {
             var npc = store.getComponent(ref, NPCEntity.getComponentType());
             var definition = npc == null ? null : plugin.getVillagerDefinitionCatalog().byNpcRoleId(npc.getRoleName());
+            if (definition == null && binding != null) {
+                String kind = binding.getKind().replaceFirst("^(visitor_|rescue_)", "");
+                definition = plugin.getVillagerDefinitionCatalog().byDialogueVillagerKind(kind);
+            }
             if (definition != null) {
                 loves = definition.getGiftLoves();
                 dislikes = definition.getGiftDislikes();
@@ -67,7 +71,8 @@ final class VillagerLifePersonality {
         String voice = plugin == null ? null : identity(ref, store, plugin).voice;
         var character = store.getComponent(ref, TownsfolkCharacterBinding.getComponentType());
         var definition = plugin == null || character == null ? null : plugin.getTownsfolkCharacterCatalog().byId(character.getCharacterId());
-        return voiceFor(voice, definition == null ? null : definition.getGender(), id);
+        return VillagerVoiceProfile.resolve(voice, definition == null ? null : definition.getGender(),
+            definition == null ? null : definition.getRace()).id();
     }
 
     static String voiceFor(String configured, UUID id) {
@@ -75,17 +80,7 @@ final class VillagerLifePersonality {
     }
 
     static String voiceFor(String configured, String gender, UUID id) {
-        if (configured != null) for (String profile : VillagerLifePolicy.VOICES)
-            if (profile.equalsIgnoreCase(configured.replace(" ", ""))) return profile;
-        String fallback = VillagerLifePolicy.voice(id);
-        String tone = configured == null ? "" : switch (configured) {
-            case "low" -> "Gravely"; case "high", "sharp" -> "Bright";
-            case "soft" -> "Mellow"; case "mid" -> "Warm"; default -> "";
-        };
-        if (tone.isEmpty()) tone = fallback.replace("Female", "").replace("Male", "");
-        String suffix = "female".equalsIgnoreCase(gender) ? "Female"
-            : "male".equalsIgnoreCase(gender) ? "Male" : fallback.endsWith("Female") ? "Female" : "Male";
-        return tone + suffix;
+        return VillagerVoiceProfile.resolve(configured, gender, null).id();
     }
 
     static String thought(Ref<EntityStore> ref, Store<EntityStore> store, AetherhavenPlugin plugin) {

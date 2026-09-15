@@ -206,14 +206,14 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         }
         autonomy.clearVisitPlot();
         autonomy.clearTravelWaypoints();
-        if (beginReturnToPortalOnStore(ref, store, plugin, npc, autonomy, now, town, world)) {
+        if (beginReturnToPortalBuffered(ref, store, commandBuffer, plugin, npc, autonomy, now, town, world)) {
             commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
             commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
             applyAutonomyRoleState(ref, npc, commandBuffer);
             return true;
         }
         AutonomyStuckTeleportRecovery.resolvePortalForReturn(world, plugin, town, autonomy, rec);
-        if (beginReturnToPortalOnStore(ref, store, plugin, npc, autonomy, now, town, world)) {
+        if (beginReturnToPortalBuffered(ref, store, commandBuffer, plugin, npc, autonomy, now, town, world)) {
             commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
             commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
             applyAutonomyRoleState(ref, npc, commandBuffer);
@@ -565,7 +565,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         @Nonnull TownRecord town,
         @Nonnull World world
     ) {
-        if (!beginReturnToPortalOnStore(ref, store, plugin, npc, autonomy, now, town, world)) {
+        if (!beginReturnToPortalBuffered(ref, store, commandBuffer, plugin, npc, autonomy, now, town, world)) {
             autonomy.setPhase(TouristAutonomyState.PHASE_IDLE);
             commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
             return;
@@ -575,7 +575,16 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         applyAutonomyRoleState(ref, npc, commandBuffer);
     }
 
-    /** Routes a tourist back to their home portal (safe outside tick and from tick). */
+    private static boolean beginReturnToPortalBuffered(
+        Ref<EntityStore> ref, Store<EntityStore> store, CommandBuffer<EntityStore> commandBuffer,
+        AetherhavenPlugin plugin, NPCEntity npc, TouristAutonomyState autonomy, long now,
+        TownRecord town, World world
+    ) {
+        return prepareReturnToPortal(ref, store, plugin, npc, autonomy, now, town, world,
+            () -> NpcStandStill.release(ref, npc, commandBuffer));
+    }
+
+    /** Routes a tourist back to their home portal. Only call outside ECS processing. */
     public static boolean beginReturnToPortalOnStore(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
@@ -586,6 +595,14 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         @Nonnull TownRecord town,
         @Nonnull World world
     ) {
+        return prepareReturnToPortal(ref, store, plugin, npc, autonomy, now, town, world,
+            () -> NpcStandStill.release(ref, npc, store));
+    }
+
+    private static boolean prepareReturnToPortal(
+        Ref<EntityStore> ref, Store<EntityStore> store, AetherhavenPlugin plugin, NPCEntity npc,
+        TouristAutonomyState autonomy, long now, TownRecord town, World world, Runnable releaseStandStill
+    ) {
         UUID portalId = autonomy.getHomePortalId();
         if (portalId == null) {
             return false;
@@ -595,7 +612,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         if (portal == null) {
             return false;
         }
-        NpcStandStill.release(ref, npc, store);
+        releaseStandStill.run();
         Vector3i blockPos = portal.getBlockPosition();
         Vector3d feet = TouristPortalBlockUtil.returnStandPosition(world, blockPos);
         autonomy.clearVisitPlot();

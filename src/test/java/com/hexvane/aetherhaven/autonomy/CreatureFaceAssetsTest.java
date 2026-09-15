@@ -1,0 +1,117 @@
+package com.hexvane.aetherhaven.autonomy;
+
+import static org.junit.jupiter.api.Assertions.*;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.hexvane.aetherhaven.npc.NpcFaceVisuals;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import org.junit.jupiter.api.Test;
+
+@org.junit.jupiter.api.Tag("autonomy")
+class CreatureFaceAssetsTest {
+    private static final Path RES = Path.of("src/main/resources");
+    private static JsonObject json(Path path) throws Exception {
+        return JsonParser.parseString(Files.readString(path)).getAsJsonObject();
+    }
+
+    @Test void eachResidentUsesNativeFacesInBothAnimationSlotsAndAtEveryPitch() throws Exception {
+        var rigs = json(RES.resolve("defaults/villager_creature_faces.json"));
+        assertEquals(11, rigs.size());
+        for (var entry : rigs.entrySet()) {
+            var profile = entry.getValue().getAsJsonObject();
+            String rig = profile.get("rig").getAsString();
+            String model = profile.get("model").getAsString();
+            assertTrue(NpcFaceVisuals.supportsFaceModel(model));
+            var bindings = json(RES.resolve("Server/Models/Townsfolk/" + entry.getKey() + ".json")).getAsJsonObject("AnimationSets");
+            for (String pitch : new String[]{"", "_Lower", "_Higher"}) {
+                String original = "Aetherhaven_Life_Actions" + pitch;
+                String selected = NpcFaceVisuals.itemAnimationsForModelAsset(entry.getKey(), model, original);
+                assertEquals(original + "_" + rig, selected);
+                var source = json(RES.resolve("Server/Item/Animations/" + original + ".json")).getAsJsonObject("Animations");
+                var table = json(RES.resolve("Server/Item/Animations/" + selected + ".json")).getAsJsonObject("Animations");
+                assertEquals(source.keySet(), table.keySet());
+                for (var action : table.entrySet()) {
+                    var actual = action.getValue().getAsJsonObject();
+                    var previous = source.getAsJsonObject(action.getKey());
+                    for (String key : new String[]{"ThirdPerson", "ThirdPersonMoving", "Looping", "Speed", "BlendingDuration"})
+                        assertEquals(previous.get(key), actual.get(key), entry.getKey() + ":" + key);
+                    assertTrue(actual.get("ThirdPersonFace").getAsString().contains("/CreatureFaces/" + rig + "/"));
+                    assertTrue(Files.exists(RES.resolve("Common/" + actual.get("ThirdPersonFace").getAsString())));
+                }
+                var face = bindings.getAsJsonObject("Aetherhaven_Life_Lip_Explain_BrightMale_Talk_1" + pitch)
+                    .getAsJsonArray("Animations").get(0).getAsJsonObject();
+                assertTrue(face.get("Animation").getAsString().contains("/CreatureFaces/" + rig + "/"));
+                assertEquals(source.getAsJsonObject("Explain_BrightMale_Talk_1").get("Speed").getAsDouble(),
+                    face.has("Speed") ? face.get("Speed").getAsDouble() : 1, .00001);
+            }
+            for (String mood : new String[]{"Talk", "Talk2", "Talk3", "Talk4", "Talk5", "Frown", "Grin"})
+                assertTrue(bindings.has(mood), entry.getKey() + ":" + mood);
+        }
+    }
+
+    @Test void jawsActuallyArticulateAndCloseWithoutHumanMouthUvsOrBodyTracks() throws Exception {
+        for (String rig : new String[]{"Trork", "Feran", "Klops", "Slothian", "Skeleton"}) {
+            var root = RES.resolve("Common/Characters/Animations/Aetherhaven/CreatureFaces/" + rig);
+            try (var files = Files.walk(root)) {
+                for (var path : files.filter(p -> p.toString().endsWith(".blockyanim")).toList()) {
+                    var data = json(path);
+                    var nodes = data.getAsJsonObject("nodeAnimations");
+                    assertFalse(nodes.has("Mouth"), path.toString());
+                    assertFalse(nodes.has("Head"), "Face must not override body head acting");
+                    assertTrue(nodes.has("Jaw"), path.toString());
+                    for (var bone : nodes.entrySet()) {
+                        for (String channel : new String[]{"position", "orientation", "shapeStretch", "shapeVisible", "shapeUvOffset"})
+                            assertTrue(bone.getValue().getAsJsonObject().get(channel).isJsonArray(), path + ":" + channel);
+                    }
+                    var jaw = nodes.getAsJsonObject("Jaw").getAsJsonArray("orientation");
+                    int previousTime = -1;
+                    for (var element : jaw) {
+                        var frame = element.getAsJsonObject();
+                        int time = frame.get("time").getAsInt();
+                        assertTrue(time > previousTime && time <= data.get("duration").getAsInt(), path.toString());
+                        previousTime = time;
+                        var q = frame.getAsJsonObject("delta");
+                        double x = q.get("x").getAsDouble(), w = q.get("w").getAsDouble();
+                        assertEquals(1, x*x+w*w, .000001);
+                        assertTrue(x >= 0 && x <= Math.sin(Math.toRadians(13.01)), path.toString());
+                    }
+                    if (path.toString().contains("LipSync")) {
+                        assertEquals(0, jaw.get(jaw.size()-1).getAsJsonObject().getAsJsonObject("delta").get("x").getAsDouble(), .00001);
+                    }
+                }
+            }
+            var spoken = json(root.resolve("LipSync/Explain_BrightMale_Talk_1.blockyanim")).getAsJsonObject("nodeAnimations");
+            var apertures = new java.util.HashSet<Double>();
+            for (var frame : spoken.getAsJsonObject("Jaw").getAsJsonArray("orientation"))
+                apertures.add(frame.getAsJsonObject().getAsJsonObject("delta").get("x").getAsDouble());
+            assertTrue(apertures.size() >= 4, rig + " must have varied speech apertures");
+            if (rig.equals("Klops")) {
+                assertTrue(spoken.has("Eye") && spoken.has("Eyelid-Top") && spoken.has("Eyebrow"));
+                assertFalse(spoken.has("L-Eye") || spoken.has("R-Eye"));
+            }
+        }
+    }
+
+    @Test void allTownIdleBindingsAreSilentAndKlopsRetainsItsSlowIdle() throws Exception {
+        for (String folder : new String[]{"Townsfolk", "Villager", "Human"}) {
+            try (var files = Files.list(RES.resolve("Server/Models/" + folder))) {
+                for (var path : files.filter(p -> p.toString().endsWith(".json")).toList()) {
+                    var model = json(path);
+                    if (!model.has("AnimationSets")) continue;
+                    for (var binding : model.getAsJsonObject("AnimationSets").entrySet()) {
+                        if (!binding.getKey().toLowerCase(java.util.Locale.ROOT).contains("idle")) continue;
+                        for (var animation : binding.getValue().getAsJsonObject().getAsJsonArray("Animations"))
+                            assertFalse(animation.getAsJsonObject().has("SoundEventId"), path + ":" + binding.getKey());
+                    }
+                }
+            }
+        }
+        for (String name : new String[]{"Nell_Clinkjar", "Pippin_Geargrin"}) {
+            var idle = json(RES.resolve("Server/Models/Townsfolk/" + name + ".json"))
+                .getAsJsonObject("AnimationSets").getAsJsonObject("Idle").getAsJsonArray("Animations").get(0).getAsJsonObject();
+            assertEquals(.5, idle.get("Speed").getAsDouble());
+            assertTrue(idle.get("Animation").getAsString().endsWith("Klops/Animations/Default/Idle.blockyanim"));
+        }
+    }
+}

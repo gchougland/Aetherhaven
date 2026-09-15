@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_rogue",
-  "speechVoiceId": "low",
+  "speechVoiceId": "GravelyMaleLower",
   "moveInRequirements": [
     {
       "itemId": "Food_Vegetable_Cooked",

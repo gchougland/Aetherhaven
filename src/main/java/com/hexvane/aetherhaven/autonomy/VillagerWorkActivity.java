@@ -108,7 +108,9 @@ public enum VillagerWorkActivity {
         }
         // Desk staff ignore tool-swing tags (legacy craft desks) so they stay quiet immediately.
         if (isDeskRoleBinding(bindingKind)) {
-            if (tagged != null && tagged.isLeisure()) return tagged;
+            // Older shops used read/craft as generic desk placeholders. Let the
+            // resident's job supply those actions, including already saved POIs.
+            if (tagged != null && tagged.isLeisure() && tagged != READ && tagged != CRAFT) return tagged;
             return switch (bindingKind.trim().toLowerCase(Locale.ROOT)) {
                 case TownVillagerBinding.KIND_CHEF -> CRAFT;
                 case TownVillagerBinding.KIND_FLORIST -> TEND;
@@ -142,6 +144,31 @@ public enum VillagerWorkActivity {
             };
         }
         return LEISURE;
+    }
+
+    /** Vary standing shop work without making seated readers sweep or replacing real tool work. */
+    static VillagerWorkActivity chooseBeat(PoiEntry poi, String bindingKind, boolean mounted, double roll) {
+        VillagerWorkActivity primary = resolve(poi, bindingKind);
+        boolean seated = mounted || poi.getInteractionKind() == PoiInteractionKind.SIT;
+        if (primary == SWEEP && seated) return READ;
+        if (!PoiScoring.isWorkPoi(poi) || seated || !isShopkeeper(bindingKind)
+            || poi.getInteractionKind() == PoiInteractionKind.SLEEP || PoiScoring.isEatPoi(poi)) return primary;
+        VillagerWorkActivity explicit = fromTags(poi.getTags());
+        if (explicit != null && explicit != READ && explicit != CRAFT) return primary;
+        if (roll >= 0 && roll < .25) return primary == SWEEP ? INSPECT : SWEEP;
+        if (roll >= .25 && roll < .4) return READ;
+        return primary;
+    }
+
+    private static boolean isShopkeeper(String kind) {
+        if (kind == null || TownVillagerBinding.isVisitorKind(kind)) return false;
+        return switch (kind.trim().toLowerCase(Locale.ROOT)) {
+            case TownVillagerBinding.KIND_INNKEEPER, TownVillagerBinding.KIND_MERCHANT,
+                TownVillagerBinding.KIND_CHEF, TownVillagerBinding.KIND_FLORIST,
+                TownVillagerBinding.KIND_FURNITURE_MERCHANT, TownVillagerBinding.KIND_PYROTECHNIC,
+                TownVillagerBinding.KIND_CRYSTAL_KEEPER -> true;
+            default -> false;
+        };
     }
 
     private static boolean isBardBinding(@Nullable String bindingKind) {

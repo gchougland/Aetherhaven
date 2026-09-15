@@ -153,6 +153,12 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
                 c -> c.dialogueSpeechVolumePercent
             )
             .add()
+            .append(new KeyedCodec<>("VillagerSpeechVolumePercent", Codec.INTEGER),
+                (c, v) -> c.setVillagerSpeechVolumePercent(v == null ? 70 : v), c -> c.villagerSpeechVolumePercent)
+            .add()
+            .append(new KeyedCodec<>("VillagerChatterFrequencyPercent", Codec.INTEGER),
+                (c, v) -> c.setVillagerChatterFrequencyPercent(v == null ? 100 : v), c -> c.villagerChatterFrequencyPercent)
+            .add()
             .append(
                 new KeyedCodec<>("ActiveTownId", Codec.STRING),
                 (c, v) -> c.activeTownId = v != null ? v.trim() : "",
@@ -262,6 +268,10 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
     private boolean dialogueSpeechEnabled = true;
     /** 0–100; default 70. */
     private int dialogueSpeechVolumePercent = 70;
+    private int villagerSpeechVolumePercent = 70;
+    private int villagerChatterFrequencyPercent = 100;
+    private transient String lastDialogueClip;
+    private final transient java.util.Map<UUID, Long> ambientSpeechHeard = new java.util.HashMap<>();
 
     @Nonnull
     private String activeTownId = "";
@@ -324,6 +334,10 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         c.hudPinnedQuests.addAll(hudPinnedQuests);
         c.dialogueSpeechEnabled = dialogueSpeechEnabled;
         c.dialogueSpeechVolumePercent = dialogueSpeechVolumePercent;
+        c.villagerSpeechVolumePercent = villagerSpeechVolumePercent;
+        c.villagerChatterFrequencyPercent = villagerChatterFrequencyPercent;
+        c.lastDialogueClip = lastDialogueClip;
+        c.ambientSpeechHeard.putAll(ambientSpeechHeard);
         c.activeTownId = activeTownId;
         c.toolKeyPrimary = toolKeyPrimary;
         c.toolKeySecondary = toolKeySecondary;
@@ -504,10 +518,30 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         hudBackgroundOpacity = 0f;
         dialogueSpeechEnabled = true;
         dialogueSpeechVolumePercent = 70;
+        villagerSpeechVolumePercent = 70;
+        villagerChatterFrequencyPercent = 100;
+        ambientSpeechHeard.clear();
     }
 
     public boolean isDialogueSpeechEnabled() {
         return dialogueSpeechEnabled;
+    }
+
+    public int getVillagerSpeechVolumePercent() { return villagerSpeechVolumePercent; }
+    public void setVillagerSpeechVolumePercent(int value) { villagerSpeechVolumePercent = clampSpeechVolume(value); }
+    public int getVillagerChatterFrequencyPercent() { return villagerChatterFrequencyPercent; }
+    public void setVillagerChatterFrequencyPercent(int value) { villagerChatterFrequencyPercent = Math.max(0, Math.min(200, value)); }
+    public String getLastDialogueClip() { return lastDialogueClip; }
+    public void setLastDialogueClip(String clip) { lastDialogueClip = clip; }
+
+    public boolean tryAmbientSpeech(UUID villager, long now) {
+        if (villagerChatterFrequencyPercent == 0) return false;
+        long interval = 12_000L * 100 / villagerChatterFrequencyPercent;
+        Long last = ambientSpeechHeard.get(villager);
+        if (last != null && now - last < interval) return false;
+        ambientSpeechHeard.entrySet().removeIf(e -> now - e.getValue() > Math.max(interval, 300_000));
+        ambientSpeechHeard.put(villager, now);
+        return true;
     }
 
     public void setDialogueSpeechEnabled(boolean dialogueSpeechEnabled) {

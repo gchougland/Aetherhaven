@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_archer",
-  "speechVoiceId": "sharp",
+  "speechVoiceId": "WarmMale",
   "moveInRequirements": [
     {
       "itemId": "Food_Salad_Caesar",

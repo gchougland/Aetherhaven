@@ -62,6 +62,9 @@ public final class VillagerWorkVisuals {
             return false;
         }
         if (activity.isLeisure()) {
+            activity = VillagerWorkActivity.chooseBeat(poi, bindingKind,
+                store.getComponent(npcRef, com.hypixel.hytale.builtin.mounts.MountedComponent.getComponentType()) != null,
+                ThreadLocalRandom.current().nextDouble());
             // Fun spots always; READ/CRAFT fidget at desks and quiet benches; LEISURE on work = stand (bard).
             if (!PoiScoring.isWorkPoi(poi)
                 || activity == VillagerWorkActivity.READ

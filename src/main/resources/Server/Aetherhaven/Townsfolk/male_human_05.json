@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_knight",
-  "speechVoiceId": "sharp",
+  "speechVoiceId": "BrightMaleHigher",
   "moveInRequirements": [
     {
       "itemId": "Food_Candy_Cane",

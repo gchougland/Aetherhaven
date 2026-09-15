@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_knight",
-  "speechVoiceId": "high",
+  "speechVoiceId": "BrightFemale",
   "moveInRequirements": [
     {
       "itemId": "Ingredient_Powder_Boom",

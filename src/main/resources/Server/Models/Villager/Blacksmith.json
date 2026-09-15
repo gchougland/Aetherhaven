@@ -78,5 +78,15 @@
       "GradientId": "Brown"
     }
   ],
-  "Icon": "Icons/ModelsGenerated/Aetherhaven_Blacksmith.png"
+  "Icon": "Icons/ModelsGenerated/Aetherhaven_Blacksmith.png",
+  "AnimationSets": {
+    "GlideIdle": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Glide/Glide_Idle.blockyanim",
+          "Speed": 1
+        }
+      ]
+    }
+  }
 }

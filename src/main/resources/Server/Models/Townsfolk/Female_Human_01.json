@@ -74,5 +74,15 @@
   "Model": "Characters/Player.blockymodel",
   "Texture": "Characters/Player_Textures/Player_Muscular_Greyscale.png",
   "GradientSet": "Skin",
-  "GradientId": "06"
+  "GradientId": "06",
+  "AnimationSets": {
+    "GlideIdle": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Glide/Glide_Idle.blockyanim",
+          "Speed": 1
+        }
+      ]
+    }
+  }
 }

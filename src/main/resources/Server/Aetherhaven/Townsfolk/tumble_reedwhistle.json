@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_rogue",
-  "speechVoiceId": "sharp",
+  "speechVoiceId": "BrightMaleHigher",
   "moveInRequirements": [
     {
       "itemId": "Food_Popcorn",

@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_knight",
-  "speechVoiceId": "sharp",
+  "speechVoiceId": "WarmMaleHigher",
   "moveInRequirements": [
     {
       "itemId": "Ingredient_Fire_Essence",

@@ -14,7 +14,7 @@
     "tourist"
   ],
   "befriendable": false,
-  "speechVoiceId": "high",
+  "speechVoiceId": "BrightFemale",
   "moveInRequirements": [
     {
       "itemId": "Food_Bread",

@@ -200,6 +200,11 @@
           "id": "Aetherhaven_Life_Lip_Hungry_BrightFemale_Groan_1",
           "durationMs": 4800,
           "actionId": "Hungry_BrightFemale_Groan_1"
+        },
+        "Bored": {
+          "id": "Aetherhaven_Life_Lip_Bored_BrightFemale_Groan_1",
+          "durationMs": 4800,
+          "actionId": "Bored_BrightFemale_Groan_1"
         }
       }
     },
@@ -211,6 +216,11 @@
           "id": "Aetherhaven_Life_Lip_Hungry_BrightFemale_Groan_2",
           "durationMs": 4800,
           "actionId": "Hungry_BrightFemale_Groan_2"
+        },
+        "Bored": {
+          "id": "Aetherhaven_Life_Lip_Bored_BrightFemale_Groan_2",
+          "durationMs": 4800,
+          "actionId": "Bored_BrightFemale_Groan_2"
         }
       }
     }
@@ -224,6 +234,11 @@
           "id": "Aetherhaven_Life_Lip_Hungry_BrightMale_Groan_1",
           "durationMs": 4800,
           "actionId": "Hungry_BrightMale_Groan_1"
+        },
+        "Bored": {
+          "id": "Aetherhaven_Life_Lip_Bored_BrightMale_Groan_1",
+          "durationMs": 4800,
+          "actionId": "Bored_BrightMale_Groan_1"
         }
       }
     },
@@ -235,6 +250,11 @@
           "id": "Aetherhaven_Life_Lip_Hungry_BrightMale_Groan_2",
           "durationMs": 4800,
           "actionId": "Hungry_BrightMale_Groan_2"
+        },
+        "Bored": {
+          "id": "Aetherhaven_Life_Lip_Bored_BrightMale_Groan_2",
+          "durationMs": 4800,
+          "actionId": "Bored_BrightMale_Groan_2"
         }
       }
     }
@@ -248,6 +268,11 @@
           "id": "Aetherhaven_Life_Lip_Hungry_WarmFemale_Groan_1",
           "durationMs": 4800,
           "actionId": "Hungry_WarmFemale_Groan_1"
+        },
+        "Bored": {
+          "id": "Aetherhaven_Life_Lip_Bored_WarmFemale_Groan_1",
+          "durationMs": 4800,
+          "actionId": "Bored_WarmFemale_Groan_1"
         }
       }
     },
@@ -259,6 +284,11 @@
           "id": "Aetherhaven_Life_Lip_Hungry_WarmFemale_Groan_2",
           "durationMs": 4800,
           "actionId": "Hungry_WarmFemale_Groan_2"
+        },
+        "Bored": {
+          "id": "Aetherhaven_Life_Lip_Bored_WarmFemale_Groan_2",
+          "durationMs": 4800,
+          "actionId": "Bored_WarmFemale_Groan_2"
         }
       }
     }
@@ -272,6 +302,11 @@
           "id": "Aetherhaven_Life_Lip_Hungry_WarmMale_Groan_1",
           "durationMs": 4800,
           "actionId": "Hungry_WarmMale_Groan_1"
+        },
+        "Bored": {
+          "id": "Aetherhaven_Life_Lip_Bored_WarmMale_Groan_1",
+          "durationMs": 4800,
+          "actionId": "Bored_WarmMale_Groan_1"
         }
       }
     },
@@ -283,6 +318,11 @@
           "id": "Aetherhaven_Life_Lip_Hungry_WarmMale_Groan_2",
           "durationMs": 4800,
           "actionId": "Hungry_WarmMale_Groan_2"
+        },
+        "Bored": {
+          "id": "Aetherhaven_Life_Lip_Bored_WarmMale_Groan_2",
+          "durationMs": 4800,
+          "actionId": "Bored_WarmMale_Groan_2"
         }
       }
     }
@@ -296,6 +336,11 @@
           "id": "Aetherhaven_Life_Lip_Hungry_MellowFemale_Groan_1",
           "durationMs": 4800,
           "actionId": "Hungry_MellowFemale_Groan_1"
+        },
+        "Bored": {
+          "id": "Aetherhaven_Life_Lip_Bored_MellowFemale_Groan_1",
+          "durationMs": 4800,
+          "actionId": "Bored_MellowFemale_Groan_1"
         }
       }
     },
@@ -307,6 +352,11 @@
           "id": "Aetherhaven_Life_Lip_Hungry_MellowFemale_Groan_2",
           "durationMs": 4800,
           "actionId": "Hungry_MellowFemale_Groan_2"
+        },
+        "Bored": {
+          "id": "Aetherhaven_Life_Lip_Bored_MellowFemale_Groan_2",
+          "durationMs": 4800,
+          "actionId": "Bored_MellowFemale_Groan_2"
         }
       }
     }
@@ -320,6 +370,11 @@
           "id": "Aetherhaven_Life_Lip_Hungry_MellowMale_Groan_1",
           "durationMs": 4800,
           "actionId": "Hungry_MellowMale_Groan_1"
+        },
+        "Bored": {
+          "id": "Aetherhaven_Life_Lip_Bored_MellowMale_Groan_1",
+          "durationMs": 4800,
+          "actionId": "Bored_MellowMale_Groan_1"
         }
       }
     },
@@ -331,6 +386,11 @@
           "id": "Aetherhaven_Life_Lip_Hungry_MellowMale_Groan_2",
           "durationMs": 4800,
           "actionId": "Hungry_MellowMale_Groan_2"
+        },
+        "Bored": {
+          "id": "Aetherhaven_Life_Lip_Bored_MellowMale_Groan_2",
+          "durationMs": 4800,
+          "actionId": "Bored_MellowMale_Groan_2"
         }
       }
     }
@@ -344,6 +404,11 @@
           "id": "Aetherhaven_Life_Lip_Hungry_GravelyMale_Groan_1",
           "durationMs": 4800,
           "actionId": "Hungry_GravelyMale_Groan_1"
+        },
+        "Bored": {
+          "id": "Aetherhaven_Life_Lip_Bored_GravelyMale_Groan_1",
+          "durationMs": 4800,
+          "actionId": "Bored_GravelyMale_Groan_1"
         }
       }
     },
@@ -355,6 +420,11 @@
           "id": "Aetherhaven_Life_Lip_Hungry_GravelyMale_Groan_2",
           "durationMs": 4800,
           "actionId": "Hungry_GravelyMale_Groan_2"
+        },
+        "Bored": {
+          "id": "Aetherhaven_Life_Lip_Bored_GravelyMale_Groan_2",
+          "durationMs": 4800,
+          "actionId": "Bored_GravelyMale_Groan_2"
         }
       }
     }
@@ -368,6 +438,11 @@
           "id": "Aetherhaven_Life_Lip_Hungry_GravelyFemale_Groan_1",
           "durationMs": 4800,
           "actionId": "Hungry_GravelyFemale_Groan_1"
+        },
+        "Bored": {
+          "id": "Aetherhaven_Life_Lip_Bored_GravelyFemale_Groan_1",
+          "durationMs": 4800,
+          "actionId": "Bored_GravelyFemale_Groan_1"
         }
       }
     },
@@ -379,6 +454,11 @@
           "id": "Aetherhaven_Life_Lip_Hungry_GravelyFemale_Groan_2",
           "durationMs": 4800,
           "actionId": "Hungry_GravelyFemale_Groan_2"
+        },
+        "Bored": {
+          "id": "Aetherhaven_Life_Lip_Bored_GravelyFemale_Groan_2",
+          "durationMs": 4800,
+          "actionId": "Bored_GravelyFemale_Groan_2"
         }
       }
     }

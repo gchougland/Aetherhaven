@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_rogue",
-  "speechVoiceId": "low",
+  "speechVoiceId": "MellowFemaleLower",
   "moveInRequirements": [
     {
       "itemId": "Ingredient_Motes_Light",

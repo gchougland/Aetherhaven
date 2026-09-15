@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_rogue",
-  "speechVoiceId": "soft",
+  "speechVoiceId": "MellowFemale",
   "moveInRequirements": [
     {
       "itemId": "Food_Kebab_Fruit",

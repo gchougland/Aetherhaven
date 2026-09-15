@@ -1,5 +1,36 @@
 # Changelog
 
+## [3.2.0] - Unreleased
+
+### Added
+
+- **Villager animations** Villagers and townsfolk have new work, idle, and social animations, including reading, sweeping, crafting, laughing, pondering, yawning, and stretching. Their eyes, eyebrows, and mouths show expressions while they act and talk.
+- **Villager voices** Expressive gibberish speech, laughter, gasps, grumbles, groans, sighs, and yawns bring conversations to life. Eight voice types and deeper or higher variants give each character a voice suited to their race, gender, and personality.
+- **Conversations** Villagers seek out neighbors to chat when they need fun. People working or relaxing in the same building can also strike up a conversation, including inn visitors and the innkeeper. They take turns speaking and react to each other with gestures and expressions.
+- **Romantic conversations** Villagers sometimes show affection with heart bubbles and the same floating hearts as a loved gift. Their partner can return the affection or reject it, leaving the first villager downcast and groaning.
+- **Speech and thought bubbles** Bubbles show topics, feelings, and reactions using expressive icons and familiar items. Thoughts reflect personalities, interests, favorite gifts, and needs. Villagers can think or talk about rain, and residents without a house sometimes think about a home.
+- **Needs and activity sounds** Hungry villagers react before heading for a meal, with stomach growls and groans. Eating has chewing sounds, yawning and stretching use yawn clips, and pondering uses thinking clips. Idle and work activities have their own occasional vocal reactions.
+- **Held items** Reading, sweeping, and other activities use held items, including a textured open book, broom, mallet, spoon, plant, and stone. Readers keep their book raised between reading motions and move their eyes across the page. Shopkeepers occasionally sweep between their usual work activities.
+- **Guild hall activity** Adventurers waiting in the guild hall sometimes read, eat, yawn, stretch, or fidget while standing or sitting.
+- **Speech settings** Town Journal settings include nearby villager volume and random chatter frequency, alongside the separate dialogue speech controls.
+- **More expressive races** Prowl, trorks, ferans, klops, slothians, skeletons, kweebecs, and outlanders support talking mouth or jaw movements and facial expressions where their models allow them. Mouth movements follow the selected voice clip.
+
+### Changed
+
+- **Player dialogue** Voiced clips replace the old speech blips. Dialogue choices can have matching speech and gestures, such as a questioning reaction for a quest offer. Consecutive dialogue responses avoid repeating the same recording.
+- **Leisure time** The scheduled Park period is now called Leisure. Villagers choose between conversations and recreational places, with a slight preference for conversation. Chatting restores fun.
+- **Consistent voices** Each villager keeps the same voice across worlds and servers. Goblins, the miner, and the clown use gravelly voices. Thalen uses Mellow Male, Vaelith uses Mellow Female, Seren uses Warm Female, and Elias has a deeper voice.
+- **Vanilla idle sounds** Removed built in idle animation sounds from all townsfolk and villager models so they do not interrupt their new voices.
+
+### Fixed
+
+- **Villager movement and animation** Body and facial animations play together without replacing each other. Improved animation pacing, reading loops, and transitions, and removed unwanted sliding and position snaps around idle activities.
+- **Thought bubble placement** Bubbles are smaller and sit above villagers' heads, with centered icons and tails pointing toward the head.
+- **Shared benches** Villagers use their assigned seat on benches instead of sometimes floating above an occupied seat.
+- **Activity items** Equipping temporary activity items no longer causes an inventory crash. Improved the book's size, appearance, and placement between both hands.
+- **Shopkeeper activities** Older shop work spots no longer force everyone to read. Chefs use a spoon, florists tend plants, and merchants inspect items, with occasional sweeping and reading.
+- **Tourist departures** Tourists leaving for their portal no longer cause a world error when switching out of a standing activity.
+
 ## [3.1.4] - 9/7/2026
 
 ### Fixed

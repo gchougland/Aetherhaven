@@ -1,0 +1,170 @@
+{
+  "Grunk_Stonebelly": {
+    "rig": "Trork",
+    "model": "NPC/Intelligent/Trork/Models/Model.blockymodel",
+    "jawDegrees": 20,
+    "mutedAnimations": [
+      "Run",
+      "Sleep"
+    ],
+    "faceNodes": [
+      "Jaw",
+      "L-Eye",
+      "L-Eyebrow",
+      "L-Eyelid",
+      "R-Eye",
+      "R-Eyebrow",
+      "R-Eyelid"
+    ]
+  },
+  "Saffra_Dunear": {
+    "rig": "Feran",
+    "model": "NPC/Intelligent/Feran/Models/Model.blockymodel",
+    "jawDegrees": 26,
+    "mutedAnimations": [],
+    "faceNodes": [
+      "Jaw",
+      "L-Eye",
+      "L-Eyebrow",
+      "L-Eyelid",
+      "R-Eye",
+      "R-Eyebrow",
+      "R-Eyelid"
+    ]
+  },
+  "Zephyr_Sandtail": {
+    "rig": "Feran",
+    "model": "NPC/Intelligent/Feran/Models/Model.blockymodel",
+    "jawDegrees": 26,
+    "mutedAnimations": [],
+    "faceNodes": [
+      "Jaw",
+      "L-Eye",
+      "L-Eyebrow",
+      "L-Eyelid",
+      "R-Eye",
+      "R-Eyebrow",
+      "R-Eyelid"
+    ]
+  },
+  "Nell_Clinkjar": {
+    "rig": "Klops",
+    "model": "NPC/Intelligent/Klops/Models/Model.blockymodel",
+    "jawDegrees": 18,
+    "mutedAnimations": [
+      "Idle",
+      "Run"
+    ],
+    "faceNodes": [
+      "Eye",
+      "Eyebrow",
+      "Eyelid-Bot",
+      "Eyelid-Top",
+      "Jaw"
+    ]
+  },
+  "Pippin_Geargrin": {
+    "rig": "Klops",
+    "model": "NPC/Intelligent/Klops/Models/Model.blockymodel",
+    "jawDegrees": 18,
+    "mutedAnimations": [
+      "Idle",
+      "Run"
+    ],
+    "faceNodes": [
+      "Eye",
+      "Eyebrow",
+      "Eyelid-Bot",
+      "Eyelid-Top",
+      "Jaw"
+    ]
+  },
+  "Haku_Mistclaw": {
+    "rig": "Slothian",
+    "model": "NPC/Intelligent/Slothian/Models/Model.blockymodel",
+    "jawDegrees": 24,
+    "mutedAnimations": [],
+    "faceNodes": [
+      "Jaw",
+      "L-Eye",
+      "L-Eyelid",
+      "R-Eye",
+      "R-Eyelid"
+    ]
+  },
+  "Momo_Canopy": {
+    "rig": "Slothian",
+    "model": "NPC/Intelligent/Slothian/Models/Model.blockymodel",
+    "jawDegrees": 24,
+    "mutedAnimations": [],
+    "faceNodes": [
+      "Jaw",
+      "L-Eye",
+      "L-Eyelid",
+      "R-Eye",
+      "R-Eyelid"
+    ]
+  },
+  "Rattle_Morrow": {
+    "rig": "Skeleton",
+    "model": "NPC/Undead/Skeleton/Models/Model.blockymodel",
+    "jawDegrees": 22,
+    "mutedAnimations": [
+      "Search"
+    ],
+    "faceNodes": [
+      "Jaw",
+      "L-Eye",
+      "R-Eye"
+    ]
+  },
+  "Briar_Mosscap": {
+    "rig": "Kweebec",
+    "model": "NPC/Intelligent/Kweebec_Rootling/Kweebec_Rootling.blockymodel",
+    "jawDegrees": 0,
+    "mutedAnimations": [],
+    "faceNodes": [
+      "L-Eye",
+      "L-Eyebrow",
+      "L-Eyelid",
+      "L-Eyelid-Bot",
+      "Mouth",
+      "R-Eye",
+      "R-Eyebrow",
+      "R-Eyelid",
+      "R-Eyelid-Bot"
+    ]
+  },
+  "Tumble_Reedwhistle": {
+    "rig": "KweebecSharp",
+    "model": "NPC/Intelligent/Kweebec_Rootling/Kweebec_Rootling.blockymodel",
+    "jawDegrees": 0,
+    "mutedAnimations": [],
+    "faceNodes": [
+      "Eyebrow_L",
+      "Eyebrow_R",
+      "L-Eye",
+      "L-Eyelid",
+      "L-Eyelid-Bot",
+      "Mouth",
+      "R-Eye",
+      "R-Eyelid",
+      "R-Eyelid-Bot"
+    ]
+  },
+  "Vask_Hollowmark": {
+    "rig": "Outlander",
+    "model": "Characters/Player_With_Face.blockymodel",
+    "jawDegrees": 0,
+    "mutedAnimations": [],
+    "faceNodes": [
+      "L-Eye",
+      "L-Eyelid",
+      "L-Eyelid-Bot",
+      "Mouth",
+      "R-Eye",
+      "R-Eyelid",
+      "R-Eyelid-Bot"
+    ]
+  }
+}

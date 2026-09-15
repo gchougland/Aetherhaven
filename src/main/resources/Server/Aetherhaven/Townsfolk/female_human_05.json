@@ -14,7 +14,7 @@
     "tourist"
   ],
   "befriendable": false,
-  "speechVoiceId": "soft",
+  "speechVoiceId": "MellowFemale",
   "moveInRequirements": [
     {
       "itemId": "Food_Fish_Raw_Uncommon",

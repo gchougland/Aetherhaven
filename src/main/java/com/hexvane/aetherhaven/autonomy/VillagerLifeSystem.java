@@ -199,6 +199,7 @@ public final class VillagerLifeSystem extends EntityTickingSystem<EntityStore> {
         UUID first = store.getComponent(ref, UUIDComponent.getComponentType()).getUuid();
         UUID second = store.getComponent(other, UUIDComponent.getComponentType()).getUuid();
         VillagerLifeState.Session session = new VillagerLifeState.Session(first, second, now, VillagerLifePersonality.thought(ref, store, plugin));
+        session.romance = VillagerRomance.choose(ThreadLocalRandom.current().nextDouble(), ThreadLocalRandom.current().nextDouble());
         life.session = session;
         otherLife.session = session;
         life.emoteUntilMs = otherLife.emoteUntilMs = 0;
@@ -270,7 +271,7 @@ public final class VillagerLifeSystem extends EntityTickingSystem<EntityStore> {
             hold(a, store);
             hold(b, store);
         }
-        if (now - session.talkingSinceMs >= VillagerLifePolicy.CONVERSATION_MS && now >= session.nextBeatMs) {
+        if (session.finishedTalking(now)) {
             finish(session, a, b, store, now);
             return;
         }
@@ -279,6 +280,16 @@ public final class VillagerLifeSystem extends EntityTickingSystem<EntityStore> {
         refill(a, na, seconds, store);
         refill(b, nb, seconds, store);
         if (now < session.nextBeatMs) return;
+        if (!session.romance.isEmpty()) {
+            var beat = session.romance.get(session.beat);
+            Ref<EntityStore> speaker = beat.firstSpeaks() ? a : b;
+            Ref<EntityStore> listener = beat.firstSpeaks() ? b : a;
+            long duration = VillagerLifeVisuals.romance(speaker, listener,
+                beat.firstSpeaks() ? session.first : session.second, beat, store);
+            session.nextBeatMs = now + Math.max(3300, duration + 300);
+            session.beat++;
+            return;
+        }
         boolean firstSpeaks = session.beat % 2 == 0;
         Ref<EntityStore> speaker = firstSpeaks ? a : b;
         Ref<EntityStore> listener = firstSpeaks ? b : a;

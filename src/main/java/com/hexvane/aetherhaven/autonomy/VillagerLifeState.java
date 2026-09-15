@@ -69,6 +69,12 @@ public final class VillagerLifeState implements Component<EntityStore> {
         boolean stationary;
         long readyAfterMs;
         boolean prepared;
+        java.util.List<VillagerRomance.Beat> romance = java.util.List.of();
+
+        boolean finishedTalking(long now) {
+            if (now < nextBeatMs) return false;
+            return romance.isEmpty() ? now - talkingSinceMs >= VillagerLifePolicy.CONVERSATION_MS : beat >= romance.size();
+        }
 
         Session(UUID first, UUID second, long now, String topic) {
             this.first = first;

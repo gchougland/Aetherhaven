@@ -31,6 +31,16 @@ public final class NpcFaceVisuals {
     public static final String FACE_FROWN = "Frown";
     public static final String FACE_GRIN = "Grin";
     private static final String PLAYER_BLOCKYMODEL = "Characters/Player.blockymodel";
+    private static final String PROWL_BLOCKYMODEL = "NPC/Prowl/prowl_hytale.blockymodel";
+    private static final java.util.Map<String, String> CREATURE_FACE_RIGS = java.util.Map.of(
+        "NPC/Intelligent/Trork/Models/Model.blockymodel", "Trork",
+        "NPC/Intelligent/Feran/Models/Model.blockymodel", "Feran",
+        "NPC/Intelligent/Klops/Models/Model.blockymodel", "Klops",
+        "NPC/Intelligent/Slothian/Models/Model.blockymodel", "Slothian",
+        "NPC/Undead/Skeleton/Models/Model.blockymodel", "Skeleton",
+        "NPC/Intelligent/Kweebec_Rootling/Kweebec_Rootling.blockymodel", "Kweebec",
+        "Characters/Player_With_Face.blockymodel", "Outlander"
+    );
     private static final String[] TALK_ANIMATIONS = { "Talk", "Talk2", "Talk3", "Talk4", "Talk5" };
 
     public enum NeedsMoodTier {
@@ -70,7 +80,7 @@ public final class NpcFaceVisuals {
         return binding != null && TownVillagerBinding.KIND_TOWNSFOLK.equals(binding.getKind());
     }
 
-    /** Face-slot talk and mood expressions only work on the detached player face rig. */
+    /** Allow rigs with verified facial tracks and texture mappings. */
     public static boolean supportsFaceExpressions(
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull ComponentAccessor<EntityStore> componentAccessor
@@ -87,7 +97,35 @@ public final class NpcFaceVisuals {
             return false;
         }
         String blockyModel = asset.getModel();
-        return blockyModel != null && PLAYER_BLOCKYMODEL.equals(blockyModel);
+        return supportsFaceModel(blockyModel);
+    }
+
+    public static boolean supportsFaceModel(@Nullable String model) {
+        return PLAYER_BLOCKYMODEL.equals(model) || PROWL_BLOCKYMODEL.equals(model)
+            || (model != null && CREATURE_FACE_RIGS.containsKey(model));
+    }
+
+    /** Custom Action-priority faces need the same atlas mapping as standalone Face animations. */
+    public static String itemAnimationsForFaceRig(Ref<EntityStore> ref, String animations, ComponentAccessor<EntityStore> accessor) {
+        String id = resolveModelAssetId(ref, accessor);
+        ModelAsset model = id == null ? null : ModelAsset.getAssetMap().getAsset(id);
+        return itemAnimationsForModelAsset(id, model == null ? null : model.getModel(), animations);
+    }
+
+    public static String itemAnimationsForModelAsset(@Nullable String assetId, @Nullable String model, String animations) {
+        // Tumble's native eyebrow attachment uses different bone names.
+        if ("Tumble_Reedwhistle".equals(assetId)) return withFaceRig(animations, "KweebecSharp");
+        return itemAnimationsForModel(model, animations);
+    }
+
+    public static String itemAnimationsForModel(@Nullable String model, String animations) {
+        String rig = PROWL_BLOCKYMODEL.equals(model) ? "Prowl" : model == null ? null : CREATURE_FACE_RIGS.get(model);
+        return rig == null ? animations : withFaceRig(animations, rig);
+    }
+
+    private static String withFaceRig(String animations, String rig) {
+        return (animations.equals("Aetherhaven_Life_Actions") || animations.equals("Aetherhaven_Life_Actions_Lower")
+            || animations.equals("Aetherhaven_Life_Actions_Higher")) ? animations + "_" + rig : animations;
     }
 
     public static boolean isTalkAnimation(@Nullable String animationId) {

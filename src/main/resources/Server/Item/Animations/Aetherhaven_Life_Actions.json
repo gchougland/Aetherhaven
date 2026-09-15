@@ -304,10 +304,26 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
+    "Bored_BrightFemale_Groan_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_BrightFemale_Groan_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_BrightFemale_Groan_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Bored_BrightFemale_Groan_1.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
     "Hungry_BrightMale_Groan_1": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_BrightMale_Groan_1.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_BrightMale_Groan_1.blockyanim",
       "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Hungry_BrightMale_Groan_1.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Bored_BrightMale_Groan_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_BrightMale_Groan_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_BrightMale_Groan_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Bored_BrightMale_Groan_1.blockyanim",
       "Speed": 1,
       "Looping": false,
       "BlendingDuration": 0.35
@@ -320,10 +336,26 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
+    "Bored_WarmFemale_Groan_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_WarmFemale_Groan_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_WarmFemale_Groan_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Bored_WarmFemale_Groan_1.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
     "Hungry_WarmMale_Groan_1": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_WarmMale_Groan_1.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_WarmMale_Groan_1.blockyanim",
       "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Hungry_WarmMale_Groan_1.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Bored_WarmMale_Groan_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_WarmMale_Groan_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_WarmMale_Groan_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Bored_WarmMale_Groan_1.blockyanim",
       "Speed": 1,
       "Looping": false,
       "BlendingDuration": 0.35
@@ -336,10 +368,26 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
+    "Bored_MellowFemale_Groan_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_MellowFemale_Groan_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_MellowFemale_Groan_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Bored_MellowFemale_Groan_1.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
     "Hungry_MellowMale_Groan_1": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_MellowMale_Groan_1.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_MellowMale_Groan_1.blockyanim",
       "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Hungry_MellowMale_Groan_1.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Bored_MellowMale_Groan_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_MellowMale_Groan_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_MellowMale_Groan_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Bored_MellowMale_Groan_1.blockyanim",
       "Speed": 1,
       "Looping": false,
       "BlendingDuration": 0.35
@@ -352,10 +400,26 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
+    "Bored_GravelyMale_Groan_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_GravelyMale_Groan_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_GravelyMale_Groan_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Bored_GravelyMale_Groan_1.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
     "Hungry_GravelyFemale_Groan_1": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_GravelyFemale_Groan_1.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_GravelyFemale_Groan_1.blockyanim",
       "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Hungry_GravelyFemale_Groan_1.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Bored_GravelyFemale_Groan_1": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_GravelyFemale_Groan_1.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_GravelyFemale_Groan_1.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Bored_GravelyFemale_Groan_1.blockyanim",
       "Speed": 1,
       "Looping": false,
       "BlendingDuration": 0.35
@@ -368,10 +432,26 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
+    "Bored_BrightFemale_Groan_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_BrightFemale_Groan_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_BrightFemale_Groan_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Bored_BrightFemale_Groan_2.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
     "Hungry_BrightMale_Groan_2": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_BrightMale_Groan_2.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_BrightMale_Groan_2.blockyanim",
       "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Hungry_BrightMale_Groan_2.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Bored_BrightMale_Groan_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_BrightMale_Groan_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_BrightMale_Groan_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Bored_BrightMale_Groan_2.blockyanim",
       "Speed": 1,
       "Looping": false,
       "BlendingDuration": 0.35
@@ -384,10 +464,26 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
+    "Bored_WarmFemale_Groan_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_WarmFemale_Groan_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_WarmFemale_Groan_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Bored_WarmFemale_Groan_2.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
     "Hungry_WarmMale_Groan_2": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_WarmMale_Groan_2.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_WarmMale_Groan_2.blockyanim",
       "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Hungry_WarmMale_Groan_2.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Bored_WarmMale_Groan_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_WarmMale_Groan_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_WarmMale_Groan_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Bored_WarmMale_Groan_2.blockyanim",
       "Speed": 1,
       "Looping": false,
       "BlendingDuration": 0.35
@@ -400,10 +496,26 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
+    "Bored_MellowFemale_Groan_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_MellowFemale_Groan_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_MellowFemale_Groan_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Bored_MellowFemale_Groan_2.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
     "Hungry_MellowMale_Groan_2": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_MellowMale_Groan_2.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_MellowMale_Groan_2.blockyanim",
       "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Hungry_MellowMale_Groan_2.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Bored_MellowMale_Groan_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_MellowMale_Groan_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_MellowMale_Groan_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Bored_MellowMale_Groan_2.blockyanim",
       "Speed": 1,
       "Looping": false,
       "BlendingDuration": 0.35
@@ -416,10 +528,26 @@
       "Looping": false,
       "BlendingDuration": 0.35
     },
+    "Bored_GravelyMale_Groan_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_GravelyMale_Groan_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_GravelyMale_Groan_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Bored_GravelyMale_Groan_2.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
     "Hungry_GravelyFemale_Groan_2": {
       "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_GravelyFemale_Groan_2.blockyanim",
       "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Hungry_GravelyFemale_Groan_2.blockyanim",
       "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Hungry_GravelyFemale_Groan_2.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Bored_GravelyFemale_Groan_2": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Actions/Bored_GravelyFemale_Groan_2.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Actions/Bored_GravelyFemale_Groan_2.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/Life/LipSync/Bored_GravelyFemale_Groan_2.blockyanim",
       "Speed": 1,
       "Looping": false,
       "BlendingDuration": 0.35

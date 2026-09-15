@@ -16,7 +16,7 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_rogue",
-  "speechVoiceId": "sharp",
+  "speechVoiceId": "WarmMaleHigher",
   "moveInRequirements": [
     {
       "itemId": "Ingredient_Bar_Copper",

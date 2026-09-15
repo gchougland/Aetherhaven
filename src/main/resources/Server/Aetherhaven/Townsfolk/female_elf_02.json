@@ -14,7 +14,7 @@
     "tourist"
   ],
   "befriendable": false,
-  "speechVoiceId": "soft",
+  "speechVoiceId": "WarmFemale",
   "moveInRequirements": [
     {
       "itemId": "Food_Pie_Apple",

@@ -524,6 +524,8 @@ public final class AetherhavenUiLocalization {
         b.set("#SettingsSpeechHint.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.speech.hint"));
         b.set("#SettingsSpeechEnableLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.speech.enable"));
         b.set("#SettingsSpeechVolumeLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.speech.volume"));
+        b.set("#SettingsVillagerSpeechVolumeLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.speech.ambientVolume"));
+        b.set("#SettingsVillagerChatterFrequencyLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.speech.frequency"));
         b.set("#SettingsHudTimeLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.showTime"));
         b.set("#SettingsHudDateLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.showDate"));
         b.set("#SettingsHudGoldLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.showGold"));
