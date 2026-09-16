@@ -2,7 +2,6 @@ package com.hexvane.aetherhaven.shopspot;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
-import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -16,19 +15,12 @@ public final class ShopSpotBootstrap {
             () -> {
                 ShopSpotRegistry registry = AetherhavenWorldRegistries.getOrCreateShopSpotRegistry(world, plugin);
                 Store<EntityStore> store = world.getEntityStore().getStore();
-                var tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
                 for (ShopSpotRecord record : registry.allRecords()) {
-                    if (!ShopSpotDisplayService.isSpotChunkLoaded(world, record)) {
-                        continue;
-                    }
-                    ShopSpotDisplayService.purgeOrphanDisplayEntities(world, store, registry, record);
-                    record.setDisplayEntityUuid(null);
-                    record.setListingDisplaySignature(null);
-                    TownRecord town = tm.getTown(record.getTownId());
-                    if (town != null) {
-                        ShopSpotDisplayService.syncDisplay(world, store, plugin, registry, record, town);
-                    }
+                    record.markDisplayReconciled(null);
                 }
+                // Keep recorded UUIDs until reconciliation removes their entities, so neighbors
+                // cannot mistake a valid display for an orphan during startup.
+                ShopSpotDisplayService.syncAllInWorld(world, store, plugin, registry);
                 ShopSpotPersistence.save(world, plugin, registry);
             }
         );

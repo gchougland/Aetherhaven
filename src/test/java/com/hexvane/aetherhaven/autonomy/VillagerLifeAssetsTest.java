@@ -41,7 +41,8 @@ class VillagerLifeAssetsTest {
 
     @org.junit.jupiter.api.BeforeAll
     static void registerRealCommonAssets() throws Exception {
-        for (String folder : new String[]{"Sounds/Aetherhaven/Life", "Particles/Aetherhaven/Life", "Characters/Animations/Aetherhaven/Life", "Characters/Animations/Aetherhaven/ProwlFaces", "Characters/Animations/Aetherhaven/CreatureFaces"}) {
+        for (String folder : new String[]{"Sounds/Aetherhaven/Life", "Particles/Aetherhaven/Life", "Particles/Aetherhaven/Emotions", "Items/Animations/Aetherhaven/Life", "Characters/Animations/Aetherhaven/Life", "Characters/Animations/Aetherhaven/ProwlFaces", "Characters/Animations/Aetherhaven/CreatureFaces"}) {
+            if (!Files.isDirectory(RES.resolve("Common").resolve(folder))) continue;
             try (var files = Files.walk(RES.resolve("Common").resolve(folder))) {
                 for (Path file : files.filter(Files::isRegularFile).toList()) {
                     String name = RES.resolve("Common").relativize(file).toString().replace('\\', '/');
@@ -52,6 +53,11 @@ class VillagerLifeAssetsTest {
             }
         }
         spawnerStore = com.hypixel.hytale.assetstore.AssetRegistry.register(new SpawnerStore.Config().build());
+        try (var files = Files.list(RES.resolve("Server/Particles/Aetherhaven/Emotions"))) {
+            for (Path file : files.filter(p -> p.toString().endsWith(".particlespawner")).toList()) {
+                SPAWNERS.add(file.getFileName().toString().replace(".particlespawner", ""), decode(ParticleSpawner.CODEC, Files.readString(file), file));
+            }
+        }
         try (var files = Files.list(RES.resolve("Server/Particles/Aetherhaven/Life"))) {
             for (Path file : files.filter(p -> p.toString().endsWith(".particlespawner")).toList()) {
                 var decoded = decode(ParticleSpawner.CODEC, Files.readString(file), file);
@@ -61,6 +67,9 @@ class VillagerLifeAssetsTest {
     }
 
     private static <T> T decode(com.hypixel.hytale.codec.Codec<T> codec, String json, Path file) {
+        if (codec == com.hypixel.hytale.server.core.asset.type.itemanimation.config.ItemPlayerAnimations.CODEC) {
+            try { json = LifeAssetJson.read(file).toString(); } catch (Exception e) { throw new RuntimeException(e); }
+        }
         ExtraInfo extra = new ExtraInfo();
         T decoded = codec.decode(BsonDocument.parse(json), extra);
         assertNotNull(decoded, file.toString());
@@ -104,6 +113,32 @@ class VillagerLifeAssetsTest {
         }
     }
 
+    @Test void newEmotionEffectsMatchTheWorkingLovedGiftHeartsExceptTextureAndTint() throws Exception {
+        for (String name : new String[]{"Surprise", "Confusion", "Question", "Shock", "Gloom"}) {
+            Path folder = RES.resolve("Server/Particles/Aetherhaven/Emotions");
+            Path system = folder.resolve("Aetherhaven_Emotion_" + name + ".particlesystem");
+            decode(ParticleSystem.CODEC, Files.readString(system), system);
+            var spawn = JsonParser.parseString(Files.readString(folder.resolve("Aetherhaven_Emotion_" + name + ".particlespawner"))).getAsJsonObject();
+            Path nativeDir = Path.of("../HytaleSourceCode/hytale-shared-source/HytaleAssets/Server/Particles/NPC/Emotions");
+            var expected = JsonParser.parseString(Files.readString(nativeDir.resolve("Spawners/Hearts.particlespawner"))).getAsJsonObject();
+            expected.getAsJsonObject("Particle").addProperty("Texture", "Particles/Aetherhaven/Emotions/" + name + ".png");
+            var frames = expected.getAsJsonObject("Particle");
+            frames.getAsJsonObject("InitialAnimationFrame").addProperty("Color", "#ffffff");
+            for (var frame : frames.getAsJsonObject("Animation").entrySet()) {
+                var obj = frame.getValue().getAsJsonObject();
+                if (obj.has("Color")) obj.addProperty("Color", "#ffffff");
+            }
+            assertEquals(expected, spawn, "Preserve the known-working native rendering configuration");
+            var expectedSystem = JsonParser.parseString(Files.readString(nativeDir.resolve("Hearts.particlesystem"))).getAsJsonObject();
+            expectedSystem.getAsJsonArray("Spawners").get(0).getAsJsonObject().addProperty("SpawnerId", "Aetherhaven_Emotion_" + name);
+            assertEquals(expectedSystem, JsonParser.parseString(Files.readString(system)));
+            var image = javax.imageio.ImageIO.read(RES.resolve("Common/" + spawn.getAsJsonObject("Particle").get("Texture").getAsString()).toFile());
+            assertEquals(64, image.getWidth());
+            assertEquals(64, image.getHeight());
+            assertEquals(0, image.getRGB(0, 0) >>> 24);
+        }
+    }
+
     @Test void voiceEventsDecodeAndOnlyUseOriginalLocalOggFiles() throws Exception {
         Path dir = RES.resolve("Server/Audio/SoundEvents/Aetherhaven/Life");
         int clips = 0;
@@ -131,17 +166,18 @@ class VillagerLifeAssetsTest {
         for (var entry : model.getAsJsonObject("AnimationSets").entrySet()) {
             if (!entry.getKey().startsWith("Aetherhaven_Life_")) continue;
             if (entry.getKey().startsWith("Aetherhaven_Life_Face_")) continue;
-            if (entry.getKey().startsWith("Aetherhaven_Life_Lip_")) continue;
+            if (entry.getKey().startsWith("Aetherhaven_Life_Mouth_")) continue;
             count++;
             var binding = entry.getValue().getAsJsonObject().getAsJsonArray("Animations").get(0).getAsJsonObject();
-            assertFalse(binding.get("Looping").getAsBoolean());
+            assertEquals((entry.getKey().endsWith("_Mix") || entry.getKey().endsWith("_Sweep")), binding.get("Looping").getAsBoolean());
             var anim = JsonParser.parseString(Files.readString(RES.resolve("Common").resolve(binding.get("Animation").getAsString()))).getAsJsonObject();
-            assertFalse(anim.get("holdLastKeyframe").getAsBoolean());
+            assertEquals((entry.getKey().endsWith("_Mix") || entry.getKey().endsWith("_Sweep")), anim.get("holdLastKeyframe").getAsBoolean());
             for (var node : anim.getAsJsonObject("nodeAnimations").entrySet()) {
                 var frames = node.getValue().getAsJsonObject().getAsJsonArray("orientation");
                 var last = frames.get(frames.size()-1).getAsJsonObject();
                 assertEquals(anim.get("duration").getAsInt(), last.get("time").getAsInt());
-                assertEquals(1, last.getAsJsonObject("delta").get("w").getAsDouble());
+                if ((entry.getKey().endsWith("_Mix") || entry.getKey().endsWith("_Sweep"))) assertEquals(frames.get(0).getAsJsonObject().get("delta"), last.get("delta"));
+                else assertEquals(1, last.getAsJsonObject("delta").get("w").getAsDouble());
                 for (var frame : frames) {
                     var q = frame.getAsJsonObject().getAsJsonObject("delta");
                     double norm = 0;
@@ -150,24 +186,28 @@ class VillagerLifeAssetsTest {
                 }
             }
         }
-        assertEquals(19, count);
+        assertEquals(21, count);
     }
 
-    @Test void heldPropsExistAndTheirAnimationControlsTheAttachment() throws Exception {
-        for (String gesture : new String[]{"Read", "Sweep", "Craft", "Inspect", "Tend"}) {
-            String id = VillagerLifeProps.itemFor(gesture, "builder");
-            var item = JsonParser.parseString(Files.readString(RES.resolve("Server/Item/Items/Aetherhaven/Life/" + id + ".json"))).getAsJsonObject();
-            var model = JsonParser.parseString(Files.readString(RES.resolve("Common/" + item.get("Model").getAsString()))).getAsJsonObject();
-            var root = model.getAsJsonArray("nodes").get(0).getAsJsonObject();
-            assertEquals("R-Attachment", root.get("name").getAsString());
-            assertEquals("LifePropRoot", root.getAsJsonArray("children").get(0).getAsJsonObject().get("name").getAsString());
-            var anim = JsonParser.parseString(Files.readString(RES.resolve("Common/Characters/Animations/Aetherhaven/Life/" + gesture + ".blockyanim"))).getAsJsonObject();
-            var track = anim.getAsJsonObject("nodeAnimations").getAsJsonObject("LifePropRoot");
-            assertTrue(track.getAsJsonArray("orientation").size() > 10);
-            assertTrue(track.getAsJsonArray("position").size() > 10);
-        }
-        assertEquals("Aetherhaven_Life_Prop_Spoon", VillagerLifeProps.itemFor("Craft", "chef"));
+    @Test void heldActivitiesUseOriginalItemsAndOnlyTheUniqueSpoonShips() throws Exception {
+        assertEquals("Halloween_Broomstick", VillagerLifeProps.itemFor("Sweep", "merchant"));
+        assertEquals("Tool_Hammer_Iron", VillagerLifeProps.itemFor("Craft", "builder"));
+        assertEquals("Plant_Flower_Bushy_Blue", VillagerLifeProps.itemFor("Tend", "florist"));
+        assertEquals("Weapon_Spellbook_Grimoire_Brown", VillagerLifeProps.itemFor("Read", "builder"));
+        assertEquals("Food_Salad_Caesar", VillagerLifeProps.SALAD);
+        assertEquals("Food_Salad_Caesar", VillagerLifeProps.itemFor("Mix", "chef"));
         assertNull(VillagerLifeProps.itemFor("Laugh", "chef"));
+        try (var files = Files.list(RES.resolve("Server/Item/Items/Aetherhaven/Life"))) {
+            assertEquals(java.util.List.of("Aetherhaven_Life_Prop_Spoon.json"),
+                files.map(p -> p.getFileName().toString()).sorted().toList());
+        }
+        var read = JsonParser.parseString(Files.readString(RES.resolve("Common/Characters/Animations/Aetherhaven/Life/ReadLoop.blockyanim")))
+            .getAsJsonObject().getAsJsonObject("nodeAnimations");
+        for (String hinge : new String[]{"Book-Top", "Book-Bot"}) {
+            assertTrue(Math.abs(read.getAsJsonObject(hinge).getAsJsonArray("orientation").get(0)
+                .getAsJsonObject().getAsJsonObject("delta").get("z").getAsDouble()) > .5,
+                "The original book must stay open during reading");
+        }
     }
 
     @Test void exactAudioSelectionsHaveMatchingSynchronizedExpressions() throws Exception {
@@ -192,7 +232,8 @@ class VillagerLifeAssetsTest {
                         Path file = RES.resolve("Common/" + binding.get("Animation").getAsString());
                         String json = Files.readString(file);
                         var decoded = decode(com.hypixel.hytale.server.core.asset.common.BlockyAnimationCache.BlockyAnimation.CODEC, json, file);
-                        assertEquals(face.durationMs(), Math.ceil(decoded.getDurationMillis()));
+                        assertTrue(face.durationMs() >= Math.ceil(decoded.getDurationMillis()));
+                        assertFalse(clip.mouthCues().isEmpty());
                         var mouth = JsonParser.parseString(json).getAsJsonObject().getAsJsonObject("nodeAnimations").getAsJsonObject("Mouth").getAsJsonArray("shapeUvOffset");
                         assertTrue(mouth.size() >= 3);
                         var last = mouth.get(mouth.size()-1).getAsJsonObject().getAsJsonObject("delta");
@@ -202,7 +243,7 @@ class VillagerLifeAssetsTest {
                 }
             }
         }
-        assertEquals(946, animations);
+        assertEquals(1067, animations);
     }
 
     @Test void readingEyesScanLinesAndLaughKeepsAnAlertUpperLid() throws Exception {
@@ -222,11 +263,111 @@ class VillagerLifeAssetsTest {
             assertTrue(frame.getAsJsonObject().getAsJsonObject("delta").get("y").getAsDouble() <= 1);
     }
 
+    @Test void heldBookAnimatesItsOwnMeshAndOffhandSpoonUsesNativeUtilityRules() throws Exception {
+        var book = JsonParser.parseString(Files.readString(RES.resolve("Server/Item/Items/Weapon/Spellbook/Weapon_Spellbook_Grimoire_Brown.json"))).getAsJsonObject();
+        assertFalse(book.has("UsePlayerAnimations"), "Do not replace the item's intrinsic animation with NPC character tracks");
+        var animationPath = book.get("Animation").getAsString();
+        ExtraInfo validation = new ExtraInfo();
+        com.hypixel.hytale.server.core.asset.common.CommonAssetValidator.ANIMATION_ITEM_BLOCK
+                .accept(animationPath, validation.getValidationResults());
+        assertFalse(validation.getValidationResults().hasFailed(),
+                "Item.Animation must pass the engine's path and existence validator: " + validation.getValidationResults().getResults());
+        ExtraInfo oldPathValidation = new ExtraInfo();
+        assertThrows(com.hypixel.hytale.codec.exception.CodecValidationException.class,
+                () -> com.hypixel.hytale.server.core.asset.common.CommonAssetValidator.ANIMATION_ITEM_BLOCK
+                        .accept("Characters/Animations/Aetherhaven/Life/Held/ReadLoop.blockyanim", oldPathValidation.getValidationResults()),
+                "The old character-animation path must be rejected");
+        var intrinsic = JsonParser.parseString(Files.readString(RES.resolve("Common/" + book.get("Animation").getAsString()))).getAsJsonObject();
+        decode(com.hypixel.hytale.server.core.asset.common.BlockyAnimationCache.BlockyAnimation.CODEC,
+                intrinsic.toString(), RES.resolve("Common/" + animationPath));
+        assertEquals(java.util.Set.of("Book-Top", "Book-Bot"), intrinsic.getAsJsonObject("nodeAnimations").keySet());
+        for (var node : intrinsic.getAsJsonObject("nodeAnimations").entrySet()) {
+            var frames = node.getValue().getAsJsonObject().getAsJsonArray("orientation");
+            var open = frames.get(0).getAsJsonObject().getAsJsonObject("delta");
+            assertTrue(Math.abs(open.get("z").getAsDouble()) > .5, "The intrinsic book pose must be open immediately");
+            for (var frame : frames) for (String axis : new String[]{"x", "y", "z", "w"})
+                assertEquals(open.get(axis).getAsDouble(),
+                        frame.getAsJsonObject().getAsJsonObject("delta").get(axis).getAsDouble(), 1e-7);
+        }
+        var nativePath = Path.of("../HytaleSourceCode/hytale-shared-source/HytaleAssets/Server/Item/Items/Weapon/Spellbook/Weapon_Spellbook_Grimoire_Brown.json");
+        var original = JsonParser.parseString(Files.readString(nativePath)).getAsJsonObject();
+        book.remove("Animation");
+        assertEquals(original, book, "The original book's grip, appearance and gameplay must stay unchanged");
+        var spoon = BsonDocument.parse(Files.readString(RES.resolve("Server/Item/Items/Aetherhaven/Life/Aetherhaven_Life_Prop_Spoon.json")));
+        var utility = com.hypixel.hytale.server.core.asset.type.item.config.ItemUtility.CODEC.decode(spoon.getDocument("Utility"), new ExtraInfo());
+        assertTrue(utility.isUsable());
+        var mesh = JsonParser.parseString(Files.readString(RES.resolve("Common/Items/Aetherhaven/Life/Spoon.blockymodel"))).getAsJsonObject();
+        assertEquals("L-Attachment", mesh.getAsJsonArray("nodes").get(0).getAsJsonObject().get("name").getAsString());
+    }
+
+    @Test void prowlMouthIsAnAttachablePieceUsingTheSharedAtlas() throws Exception {
+        var model = JsonParser.parseString(Files.readString(RES.resolve("Server/Models/Townsfolk/Prowl.json"))).getAsJsonObject();
+        var attachment = model.getAsJsonArray("DefaultAttachments").get(0).getAsJsonObject();
+        assertEquals("Skin", attachment.get("GradientSet").getAsString());
+        assertEquals("09", attachment.get("GradientId").getAsString());
+        var mesh = JsonParser.parseString(Files.readString(RES.resolve("Common/NPC/Prowl/Player_Mouth.blockymodel"))).getAsJsonObject();
+        var root = mesh.getAsJsonArray("nodes").get(0).getAsJsonObject();
+        assertEquals("Mouth-Attachment", root.get("name").getAsString());
+        assertTrue(root.getAsJsonObject("shape").getAsJsonObject("settings").get("isPiece").getAsBoolean());
+        var mouth = root.getAsJsonArray("children").get(0).getAsJsonObject();
+        assertEquals("Mouth", mouth.get("name").getAsString());
+        var size = mouth.getAsJsonObject("shape").getAsJsonObject("settings").getAsJsonObject("size");
+        assertEquals(20, size.get("x").getAsInt());
+        assertEquals(10, size.get("y").getAsInt());
+    }
+
+    @Test void bubblesFollowTheEntityAndAreClearedWhenItDespawns() {
+        var particle = VillagerLifeVisuals.bubbleParticle("Aetherhaven_Life_Thought_Food", 2.9f);
+        assertEquals(com.hypixel.hytale.protocol.EntityPart.Entity, particle.targetEntityPart);
+        assertFalse(particle.detachedFromModel);
+        assertTrue(particle.clearParticlesOnRemove);
+        assertNull(particle.targetNodeName, "Head tilts must not rotate the billboard offset");
+        assertEquals(new org.joml.Vector3f(0, 2.9f, 0), particle.positionOffset);
+    }
+
+    @Test void readingSuppliesTheNativeHeldItemChannelForBothSilentAndVoicedActions() throws Exception {
+        var table = LifeAssetJson.read(RES.resolve("Server/Item/Animations/Aetherhaven_Life_Actions.json")).getAsJsonObject("Animations");
+        for (String gesture : new String[]{"Read", "ReadLoop", "Read_Speech", "ReadLoop_Speech"}) {
+            var action = table.getAsJsonObject(gesture);
+            assertTrue(action.has("FirstPerson"), "The held item's hinges need their own animation channel");
+            Path heldFile = RES.resolve("Common/" + action.get("FirstPerson").getAsString());
+            var held = JsonParser.parseString(Files.readString(heldFile)).getAsJsonObject();
+            var body = LifeAssetJson.read(RES.resolve("Common/" + action.get("ThirdPerson").getAsString()));
+            decode(com.hypixel.hytale.server.core.asset.common.BlockyAnimationCache.BlockyAnimation.CODEC, held.toString(), heldFile);
+            assertEquals(body.get("duration"), held.get("duration"));
+            assertEquals(java.util.Set.of("Book-Top", "Book-Bot"), held.getAsJsonObject("nodeAnimations").keySet());
+            for (String hinge : new String[]{"Book-Top", "Book-Bot"})
+                assertEquals(body.getAsJsonObject("nodeAnimations").get(hinge), held.getAsJsonObject("nodeAnimations").get(hinge));
+        }
+    }
+
+    @Test void everyPlayerRigResidentInheritsTheSharedMouthBindingsAndPosesDoNotAnimateBrows() throws Exception {
+        for (String folder : new String[]{"Villager", "Townsfolk"}) {
+            try (var paths = Files.list(RES.resolve("Server/Models/" + folder))) {
+                for (Path path : paths.filter(p -> p.toString().endsWith(".json")).toList()) {
+                    var model = LifeAssetJson.read(path);
+                    assertNotEquals("Player", model.has("Parent") ? model.get("Parent").getAsString() : "", path.toString());
+                }
+            }
+        }
+        var sets = LifeAssetJson.read(RES.resolve("Server/Models/Human/Aetherhaven_Human.json")).getAsJsonObject("AnimationSets");
+        for (String shape : new String[]{"A", "B", "C", "D", "E", "F", "Smile_B", "Smile_C", "Smile_D"}) {
+            var binding = sets.getAsJsonObject("Aetherhaven_Life_Mouth_"+shape).getAsJsonArray("Animations").get(0).getAsJsonObject();
+            var pose = LifeAssetJson.read(RES.resolve("Common/"+binding.get("Animation").getAsString()));
+            assertEquals(java.util.Set.of("Mouth"), pose.getAsJsonObject("nodeAnimations").keySet());
+            assertTrue(pose.get("duration").getAsInt()/60.0 > binding.get("BlendingDuration").getAsDouble());
+            for (var track : pose.getAsJsonObject("nodeAnimations").getAsJsonObject("Mouth").entrySet()) {
+                var keys = track.getValue().getAsJsonArray();
+                if (!keys.isEmpty()) assertEquals(keys.get(0).getAsJsonObject().get("delta"), keys.get(keys.size()-1).getAsJsonObject().get("delta"));
+            }
+        }
+    }
+
     @Test void expressiveFaceTracksReturnToNeutralAndUseEngineFrameRate() throws Exception {
         Path dir = RES.resolve("Common/Characters/Animations/Aetherhaven/Life/Faces");
         try (var files = Files.list(dir)) {
             var all = files.toList();
-            assertEquals(29, all.size());
+            assertEquals(32, all.size());
             for (Path file : all) {
                 String json = Files.readString(file);
                 var anim = JsonParser.parseString(json).getAsJsonObject();
@@ -254,7 +395,7 @@ class VillagerLifeAssetsTest {
     @Test void everyAnimationIncludesUnusedChannelsRequiredByTheClient() throws Exception {
         try (var files = Files.walk(RES.resolve("Common/Characters/Animations/Aetherhaven/Life"))) {
             var animations = files.filter(p -> p.toString().endsWith(".blockyanim")).toList();
-            assertEquals(1942, animations.size());
+            assertTrue(animations.size() < 150, "Voice aliases must reuse identical body timelines");
             for (Path file : animations) {
                 var animation = JsonParser.parseString(Files.readString(file)).getAsJsonObject();
                 for (var node : animation.getAsJsonObject("nodeAnimations").entrySet()) {
@@ -273,18 +414,18 @@ class VillagerLifeAssetsTest {
         var asset = decode(com.hypixel.hytale.server.core.asset.type.itemanimation.config.ItemPlayerAnimations.CODEC,
             Files.readString(file), file);
         assertEquals(com.hypixel.hytale.protocol.AnimationSlot.Action, VillagerLifeVisuals.BODY_SLOT);
-        assertEquals(967, asset.getAnimations().size());
+        assertEquals(46, asset.getAnimations().size());
         for (var entry : asset.getAnimations().entrySet()) {
             var action = entry.getValue();
-            assertEquals("Characters/Animations/Aetherhaven/Life/" + (entry.getKey().contains("_") ? "Actions/" : "")
-                + entry.getKey() + ".blockyanim", action.thirdPerson);
+            assertTrue(Files.isRegularFile(RES.resolve("Common").resolve(action.thirdPerson)), entry.getKey());
             assertEquals(action.thirdPerson, action.thirdPersonMoving);
             assertNotNull(action.thirdPersonFace, "Action-priority faces must accompany body playback");
             var face = JsonParser.parseString(Files.readString(RES.resolve("Common").resolve(action.thirdPersonFace))).getAsJsonObject();
             var body = JsonParser.parseString(Files.readString(RES.resolve("Common").resolve(action.thirdPerson))).getAsJsonObject();
             assertEquals(body.get("duration").getAsInt(), face.get("duration").getAsInt());
-            assertEquals(entry.getKey().equals("ReadLoop"), action.looping);
+            assertEquals((entry.getKey().replace("_Speech", "").equals("ReadLoop") || entry.getKey().replace("_Speech", "").equals("Mix") || entry.getKey().replace("_Speech", "").equals("Sweep")), action.looping);
             assertEquals(1f, action.speed);
+            if (entry.getKey().endsWith("_Speech")) assertFalse(face.getAsJsonObject("nodeAnimations").has("Mouth"), "Only the Face slot may drive speech mouth shapes");
             var tracks = JsonParser.parseString(Files.readString(RES.resolve("Common").resolve(action.thirdPerson)))
                 .getAsJsonObject().getAsJsonObject("nodeAnimations");
             for (String untouched : new String[]{"Mouth", "L-Eye", "R-Eye", "Pelvis", "L-Thigh", "R-Thigh", "L-Calf", "R-Calf"})
@@ -303,23 +444,23 @@ class VillagerLifeAssetsTest {
                 String texture = particle.get("Texture").getAsString();
                 if (texture.endsWith("/Thought.png") || texture.endsWith("/Speech.png")) continue;
                 var icon = javax.imageio.ImageIO.read(RES.resolve("Common").resolve(texture).toFile());
-                assertEquals(256, icon.getWidth());
-                assertEquals(256, icon.getHeight());
-                int minX=256,minY=256,maxX=-1,maxY=-1;
-                for (int y=0;y<256;y++) for (int x=0;x<256;x++) {
+                assertEquals(64, icon.getWidth());
+                assertEquals(64, icon.getHeight());
+                int minX=64,minY=64,maxX=-1,maxY=-1;
+                for (int y=0;y<64;y++) for (int x=0;x<64;x++) {
                     if ((icon.getRGB(x,y) >>> 24) < 16) continue;
                     minX=Math.min(minX,x);maxX=Math.max(maxX,x);
                     minY=Math.min(minY,y);maxY=Math.max(maxY,y);
                 }
-                assertEquals(157, (minX+maxX+1)/2.0, 1.5, texture);
-                assertEquals(69, (minY+maxY+1)/2.0, 1.5, texture);
+                assertEquals(32, (minX+maxX+1)/2.0, 1.5, texture);
+                assertEquals(32, (minY+maxY+1)/2.0, 1.5, texture);
                 assertTrue(maxX-minX+1<=52 && maxY-minY+1<=48, texture);
             }
         }
     }
 
-    @Test void propActionsOverrideTheHeldItemIdleAttachmentOffset() throws Exception {
-        for (String gesture : new String[]{"Read", "Sweep", "Craft", "Inspect", "Tend"}) {
+    @Test void activitiesPreserveTheOriginalItemsHeldIdleGrip() throws Exception {
+        for (String gesture : new String[]{"Read", "Sweep", "Craft", "Mix", "Tend"}) {
             var anim = JsonParser.parseString(Files.readString(RES.resolve("Common/Characters/Animations/Aetherhaven/Life/"
                 + gesture + ".blockyanim"))).getAsJsonObject();
             var attachment = anim.getAsJsonObject("nodeAnimations").getAsJsonObject("R-Attachment");
@@ -327,18 +468,21 @@ class VillagerLifeAssetsTest {
             var frames = attachment.getAsJsonArray("position");
             assertEquals(0, frames.get(0).getAsJsonObject().get("time").getAsInt());
             assertEquals(anim.get("duration").getAsInt(), frames.get(frames.size()-1).getAsJsonObject().get("time").getAsInt());
-            for (var frame : frames) for (String axis : new String[]{"x", "y", "z"})
-                assertEquals(0, frame.getAsJsonObject().getAsJsonObject("delta").get(axis).getAsDouble());
+            double[] expected = gesture.equals("Sweep") ? new double[]{0, 0, -36}
+                : gesture.equals("Craft") ? new double[]{0, 0, 0} : new double[]{2, -2, 2.1};
+            for (var frame : frames) for (int axis = 0; axis < 3; axis++)
+                assertEquals(expected[axis], frame.getAsJsonObject().getAsJsonObject("delta")
+                    .get(new String[]{"x", "y", "z"}[axis]).getAsDouble(), .00001);
         }
     }
 
     @Test void thoughtTailTipUsesTheBillboardPivot() throws Exception {
         var icon = javax.imageio.ImageIO.read(RES.resolve("Common/Particles/Aetherhaven/Life/Thought.png").toFile());
-        int center = icon.getWidth()/2;
-        assertTrue((icon.getRGB(center, center-2) >>> 24) > 128);
-        // The last tail dot sits on the head's horizontal center, while the cloud is offset right.
-        assertTrue((icon.getRGB(center+28, center-2) >>> 24) < 16);
-        assertTrue((icon.getRGB(center+29, center-59) >>> 24) > 128);
+        assertEquals(128, icon.getWidth());
+        assertEquals(128, icon.getHeight());
+        assertTrue((icon.getRGB(64, 122) >>> 24) > 128);
+        assertTrue((icon.getRGB(92, 122) >>> 24) < 16);
+        assertTrue((icon.getRGB(64, 64) >>> 24) > 128);
     }
 
     @Test void prowlActionTablesDecodeAndRetainBodyTimingAndPitch() throws Exception {
@@ -355,7 +499,7 @@ class VillagerLifeAssetsTest {
                 assertEquals(previous.thirdPerson, action.thirdPerson);
                 assertEquals(previous.speed, action.speed);
                 assertEquals(previous.looping, action.looping);
-                assertTrue(action.thirdPersonFace.startsWith("Characters/Animations/Aetherhaven/ProwlFaces/"));
+                assertTrue(Files.isRegularFile(RES.resolve("Common/" + action.thirdPersonFace)));
                 var face = JsonParser.parseString(Files.readString(RES.resolve("Common/" + action.thirdPersonFace))).getAsJsonObject();
                 var oldFace = JsonParser.parseString(Files.readString(RES.resolve("Common/" + previous.thirdPersonFace))).getAsJsonObject();
                 assertEquals(oldFace.get("duration"), face.get("duration"));
@@ -368,7 +512,7 @@ class VillagerLifeAssetsTest {
             for (String pitch : new String[]{"", "_Lower", "_Higher"}) {
                 Path path = RES.resolve("Server/Item/Animations/Aetherhaven_Life_Actions" + pitch + "_" + rig + ".json");
                 var table = decode(com.hypixel.hytale.server.core.asset.type.itemanimation.config.ItemPlayerAnimations.CODEC, Files.readString(path), path);
-                assertEquals(967, table.getAnimations().size());
+                assertEquals(46, table.getAnimations().size());
             }
         }
     }
@@ -376,7 +520,7 @@ class VillagerLifeAssetsTest {
     @Test void continuousReadingHasAClosedSeamAndVoicedBeatsKeepTheBookRaised() throws Exception {
         Path base = RES.resolve("Common/Characters/Animations/Aetherhaven/Life");
         var loop = JsonParser.parseString(Files.readString(base.resolve("ReadLoop.blockyanim"))).getAsJsonObject();
-        assertEquals("Aetherhaven_Life_Prop_OpenBook", VillagerLifeProps.itemFor("ReadLoop", "builder"));
+        assertEquals("Weapon_Spellbook_Grimoire_Brown", VillagerLifeProps.itemFor("ReadLoop", "builder"));
         for (var node : loop.getAsJsonObject("nodeAnimations").entrySet()) {
             for (var channel : node.getValue().getAsJsonObject().entrySet()) {
                 var keys = channel.getValue().getAsJsonArray();
@@ -386,7 +530,10 @@ class VillagerLifeAssetsTest {
         }
         var clip = VillagerLifeSpeech.select("BrightFemale", "Thinking", 0);
         var action = clip.faces().get("ReadLoop");
-        var voiced = JsonParser.parseString(Files.readString(base.resolve("Actions/" + action.actionId() + ".blockyanim"))).getAsJsonObject();
+        var table = JsonParser.parseString(Files.readString(RES.resolve("Server/Item/Animations/Aetherhaven_Life_Actions.json")))
+            .getAsJsonObject().getAsJsonObject("Animations");
+        var bodyPath = table.getAsJsonObject(action.actionId()).get("ThirdPerson").getAsString();
+        var voiced = JsonParser.parseString(Files.readString(RES.resolve("Common").resolve(bodyPath))).getAsJsonObject();
         assertTrue(voiced.get("holdLastKeyframe").getAsBoolean());
         assertEquals(loop.getAsJsonObject("nodeAnimations"), voiced.getAsJsonObject("nodeAnimations"));
     }

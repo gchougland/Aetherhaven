@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
@@ -18,6 +19,9 @@ public final class PropRegistry {
 
     @Nonnull
     private final Map<UUID, PropInstance> byId = new ConcurrentHashMap<>();
+
+    // Keep a tombstone for unloaded entity companions, which cannot be found in the live store.
+    private final Set<UUID> removedInstanceIds = ConcurrentHashMap.newKeySet();
 
     /** Set by {@link com.hexvane.aetherhaven.prop.PropWorldRegistries} after load; called after add/remove/replaceAll. */
     @Nullable
@@ -44,19 +48,37 @@ public final class PropRegistry {
     }
 
     public void add(@Nonnull PropInstance instance) {
+        removedInstanceIds.remove(instance.getInstanceId());
         byId.put(instance.getInstanceId(), instance);
         requestPersist();
     }
 
     public void remove(@Nonnull UUID instanceId) {
         if (byId.remove(instanceId) != null) {
+            removedInstanceIds.add(instanceId);
             requestPersist();
         }
+    }
+
+    public boolean wasRemoved(@Nonnull UUID instanceId) {
+        return removedInstanceIds.contains(instanceId);
+    }
+
+    @Nonnull
+    public Set<UUID> removedInstanceIds() {
+        return Set.copyOf(removedInstanceIds);
+    }
+
+    public void restoreRemovedInstanceIds(@Nonnull Collection<UUID> ids) {
+        removedInstanceIds.clear();
+        removedInstanceIds.addAll(ids);
+        removedInstanceIds.removeAll(byId.keySet());
     }
 
     /** Replaces the entire registry contents without triggering persistence (used when loading from disk). */
     public void replaceAll(@Nonnull Collection<PropInstance> all) {
         byId.clear();
+        removedInstanceIds.clear();
         for (PropInstance p : all) {
             byId.put(p.getInstanceId(), p);
         }

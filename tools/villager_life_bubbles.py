@@ -2,22 +2,19 @@
 from PIL import Image
 
 BUBBLE_SCALE = .28
-CONTENT_CENTER = (64, 51)
-CANVAS_SIZE = 256
-TAIL_TIP = (35, 110)
-LAYER_OFFSET = (CANVAS_SIZE // 2 - TAIL_TIP[0], CANVAS_SIZE // 2 - TAIL_TIP[1])
+CONTENT_CENTER = (32, 32)
+CANVAS_SIZE = 64
+TAIL_TIP = (64, 123)
 
 
 def anchor_layer(source):
-    result = Image.new('RGBA', (CANVAS_SIZE, CANVAS_SIZE))
-    result.alpha_composite(source, LAYER_OFFSET)
-    return result
+    return source
 
 
 def fit_icon(source):
     source = source.convert('RGBA')
     bounds = source.getchannel('A').point(lambda a: 255 if a >= 16 else 0).getbbox()
-    result = Image.new('RGBA', (128, 128))
+    result = Image.new('RGBA', (64, 64))
     if bounds is None:
         return anchor_layer(result)
     content = source.crop(bounds)

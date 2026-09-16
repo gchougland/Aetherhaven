@@ -23,7 +23,7 @@ import java.util.concurrent.ThreadLocalRandom;
 final class VillagerLifePersonality {
     static final Set<String> ITEMS = loadItems();
     private static final Set<String> SOCIAL = Set.of("Explain", "Story", "Question", "Agree", "Laugh", "Surprise", "Disagree");
-    private static final Set<String> IDLES = Set.of("LookAround", "Fidget", "Stretch", "Inspect", "Greet", "Laugh", "Sleepy", "Bored");
+    private static final Set<String> IDLES = Set.of("LookAround", "Fidget", "Stretch", "Greet", "Laugh", "Sleepy", "Bored");
     private static final Set<String> REACTIONS = Set.of("Agree", "Laugh", "Surprise", "Disagree", "Question");
 
     private VillagerLifePersonality() {}

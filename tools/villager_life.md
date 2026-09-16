@@ -1,7 +1,7 @@
 # Villager life asset sources and validation
 
-The mod ships 19 original body motions, 27 original facial motions, eight user supplied
-voice profiles with 144 clips, including stomach sounds, and layered speech and
+The mod ships original body and facial motions, eleven user supplied
+voice profiles with 308 clips, including stomach sounds, and layered speech and
 thought particles. 85 item icons are copied from the installed Hytale assets or
 this mod, as requested. The item manifest records each source path.
 
@@ -19,6 +19,10 @@ included in the mod.
   forward lean, unequal hand heights on an angled grip, movement led by the torso.
 * [Kindel Media, stomach discomfort](https://www.pexels.com/photo/close-up-photo-of-person-having-stomach-pain-7298676/):
   overlapping, staggered palms against the abdomen and a protective upper-body curl.
+* [Open-palm product presentation](https://www.pngkey.com/detail/u2e6o0q8a9q8u2t4_slide-5-model-holding-product/):
+  inspected in the browser for ShowItem: bent elbow below the raised palm, a relaxed
+  opposite shoulder, and head/gaze turned toward the presented object. The authored
+  motion reaches forward toward the conversation partner and returns slowly.
 
 The local Hytale Player rig, expression atlases, animation assets, and
 `BlockyModelBoundsParser`, `BlockyAnimationCache`, and `NPCEntity` source supplied
@@ -31,18 +35,29 @@ frowns, closed lips and open vowels, so additional mouth textures were unnecessa
 Body gestures use the `Action` slot through the explicit
 `Server/Item/Animations/Aetherhaven_Life_Actions.json` animation set. On the Player
 rig, `Emote` resolves cosmetic emote IDs; the client rejected the previous model
-animation IDs with "No emote with id". Each Action now binds `ThirdPersonFace`
-to its expression or exact selected lip-sync recording: a separate lower-priority
-Face request alone was suppressed while Action played. The 224 voiced variants
-use body timelines extended to the facial/audio duration, holding neutral after
-the body gesture settles. Sitting remains on `Status`; body files do not animate
-facial nodes or legs. Zero wiggle weights avoid procedural item sway.
+animation IDs with "No emote with id". Silent Actions pair a full expression through
+`ThirdPersonFace`. Voiced `<gesture>_Speech` Actions pair only eyes and brows;
+`VillagerMouthPlayback` sequences reusable mouth poses on `ServerAction`, the
+dedicated overlay used by Hytale's trigger-volume animations. `Face` is also
+managed by item Action expressions; replacing it for every syllable interrupted
+the eyes/brows and hid mouth poses. Speech reserves the mood timer without playing
+another Face animation. The overlay contains only Mouth/Jaw tracks and yields
+to unrelated triggered animations; cleanup only stops an overlay it still owns.
+These tracks own disjoint bones. Body files retain natural timing and never own
+facial nodes or legs; seated Status animations remain intact. Reading, mixing and
+sweeping keep looping, including during speech. Pitch changes cue timing, not body speed.
 
-Prop actions explicitly neutralize `R-Attachment` position and orientation and
-otherwise unauthored right-wrist rotation. Hytale's Item idle translates that
-attachment by (2, -2, 2.1), which moved the prop away from the second palm when
-the action omitted this channel. The grip checker now includes this lower idle
-layer rather than validating actions in isolation.
+Held activities preserve each native item's existing held-idle attachment transform,
+including (2, -2, 2.1) for the grimoire. IK adjusts the arms around that fixed grip.
+Reading exports the native Book-Top/Book-Bot articulation to the
+`FirstPerson` channel as well as the body timeline, matching native spellbook
+action bindings. NPC character channels, including the attempted `UsePlayerAnimations`
+override, did not open the held mesh in the client. The book now uses its own
+`Animation` binding to `Items/Animations/Aetherhaven/Life/Book_Open.blockyanim`,
+a two-key static pose using the same hinge angles. Item animations require an
+item-compatible root; character action channels require `Characters/` or `NPC/`.
+The existing character timelines remain available to companion mods. Reading checks the printed page's top direction, upward-facing surfaces,
+supporting-hand contact and clearance from the moving head throughout the loop.
 
 `villager_life_ik.py` solves shoulder and elbow rotations with joint limits and
 continuous pole preferences. Palm targets follow the head or torso for nine
@@ -114,16 +129,27 @@ The analyzer is a build tool; its binary and acoustic model are not shipped.
 `Server/Aetherhaven/VillagerLipSync/<clip>.json` stores the audio hash and
 `mouthCues` with start/end seconds and shape letters. Unchanged recordings preserve
 manual edits. `--reanalyze` replaces cues; `--compile-only` exports existing cues.
-All 136 vocal clips have timelines. The eight stomach clips have no mouth motion.
-The compiler creates 208 expression variants so the same spoken phrase can match
-different gestures while keeping exactly the same mouth timing. Laughing uses
-smiling versions of the open mouth shapes.
+These editable source files are excluded from the jar; runtime uses the single
+compiled playback manifest, avoiding 297 redundant JSON assets.
+The eleven profiles provide 308 clips: 297 vocal recordings with mouth timing and
+11 stomach sounds without mouth motion. The compact compiler writes one list of
+`[milliseconds, shape]` pairs per vocal recording in the bundled playback manifest.
+Six shared mouth poses plus three laughing variants replace all per-recording face
+files. Prowl uses the player atlas. Other rigs retarget these small poses to their
+native mouths/jaws, sharing identical results across models.
 
-At runtime, `VillagerLifeSpeech` chooses one entry from
-`defaults/villager_life_playback.json`. That entry binds an exact single-file sound
-event to its corresponding facial animation and duration. Sound and face start in
-the same deferred world update. There is no runtime audio decoding, recognizer,
-per-syllable network traffic or independent sound randomization.
+At runtime, `VillagerLifeSpeech` selects the exact sound and its cue list together.
+`VillagerMouthPlayback` tracks only currently speaking entities and sends an overlay
+animation update when the shape changes, at most once per 80 ms. Slow ticks skip
+expired cues instead of replaying them. Interruptions and clip completion close
+the mouth; respawns do not resume old speech. Pitch shifts scale cue timestamps.
+There is no runtime audio decoding or speech recognizer. Unlike the former baked
+clips, this does send bounded mouth-shape updates while a character is speaking.
+
+Add-on voice manifests can provide the same optional `mouthCues` field, beginning
+at zero, using A–F, and ending closed (A). Legacy add-on facial timelines remain
+supported when the field is absent. Shared Action table aliases use `Parent`
+instead of copying definitions for every pitch or compatible skeleton.
 
 After installing the analyzer, the import/export/check pipeline can be run with:
 
@@ -134,30 +160,45 @@ python tools/rebuild_villager_life.py C:/Users/gchou/Downloads/Villager_Voices
 The synchronized MP4 preview uses `imageio-ffmpeg==0.6.0` as an optional build
 dependency. It renders the exported curves and muxes the actual Ogg recordings.
 
-## Held props and revised acting
+## Held items and revised acting
 
 The laugh now holds both sides with a partial backward lean, a broad smiling mouth
 and alert eyes. The [Anton Vierietin laugh photo](https://www.pixtastock.com/photo/101423647)
 was visually inspected for the lifted head, sideways tilt and broad smile. No photo
 is shipped. Reading eyes track slowly across lines and quickly return to the next.
 
-Six original prop models cover an open book, broom, crafting mallet, wooden spoon,
-small plant and polished stone. The book uses full Hytale spellbook atlas regions
-with writing, leather grain and painted shadows, plus standard model shading.
-It is 18 percent wider and deeper, with gold corner pieces and a bookmark. Its
-attachment sits above the palms rather than intersecting the page surface.
-Other props reuse opaque color samples from existing Hytale atlases. Prop geometry
-is original. Props are actual equipped
-items, and the animation includes their attachment transforms. The chef uses the
-spoon; other crafting uses the mallet. Existing mining, chopping, watering and
-smithing tools remain on their work equipment paths. Temporary props clear when
-the action or POI ends without clearing unrelated items.
+Activities equip the original `Halloween_Broomstick`, `Tool_Hammer_Iron`,
+`Plant_Flower_Bushy_Blue`, `Weapon_Spellbook_Grimoire_Brown`, and `Food_Salad_Caesar`
+items, with unchanged models, textures, scales, icons and held-idle grip transforms.
+Only the unique wooden spoon needs a custom item; the base assets have no spoon.
+Reading opens the grimoire's existing Book-Top and Book-Bot hinges, the same bones
+used by vanilla spellbook actions. It does not substitute a reassembled book model.
+The original brown grimoire item definition is overridden only to bind its intrinsic
+`Animation` to the open hinge pose, as native animated items do. This makes the brown
+grimoire open at rest wherever it is displayed, including when a player holds it.
+Its native gameplay definition and appearance remain unchanged.
 
-Read and Sweep share hand contact targets with the held geometry. The broom tilts
-outward during entry and recovery to clear the floor. The prop checker reconstructs
-the exported transforms at every engine frame and verifies both grips and ground
-clearance. The motion previews render those same models and their actual sampled
-material colors on the local Player rig.
+`villager_held_ik.py` solves eight arm/wrist degrees of freedom with elbow limits
+and wrist bounds. Sweeping and stirring are continuous closed cycles: the solver
+places the hands around the existing item grips, never the reverse. Sweeping
+keeps its support palm on the original shaft and brush at floor level. Mixing
+keeps the spoon inside the native salad and the bowl nearly level. The numerical
+checks sample every engine frame, including between keyframes; offline previews
+render original textured meshes. They do not substitute for client validation.
+
+Temporary stacks carry persistent ownership and previous-slot metadata so cleanup
+can distinguish an activity item from genuine equipment, even after reloading.
+Native salad goes in the main hand (Template_Food already sets Utility.Compatible).
+The existing spoon binds to L-Attachment and declares Utility.Usable, so it can
+use the normal offhand inventory filter and both items are shown. Existing items
+remain in their own slots. Retired cosmetic copies are removed during cleanup.
+
+`ShowItem` selects small native items matching Item_ conversation topics on 40%
+of eligible turns after the greeting. The real original item IDs are equipped;
+buildings and furniture are excluded. The listener's gesture and thought
+bubble are queued 1.2 seconds after the speaker bubble, including romance, and
+conversation completion waits for the pending reaction. The action is compiled
+with synchronized talking faces for all supported races and Machinaria robots.
 
 ## Checks and remaining visual verification
 
@@ -171,13 +212,12 @@ Every animation node must include `position`, `orientation`, `shapeStretch`,
 `villager_blockyanim.complete_channels` supplies these in both exporters. The
 client rejected sparse nodes with NullReferenceException during loading; the
 server's animation codec only reads duration and did not catch this. A separate
-asset test checks all 1,362 body, expression, lip-sync and extended action files.
-All bubble layers use scale 0.28. Original copied icons remain in `Items`; derived
-`Items/Centered` textures fit their visible bounds inside a 52 by 48 pixel area
-centered at (64, 51) in the original 128 pixel artwork. All layers are then placed
-unchanged at offset (93, 18) on a transparent 256 pixel canvas. The tail tip at
-(35, 110) becomes the billboard pivot (128, 128), while icons stay centered in
-the cloud at (157, 69). This works from all camera angles without world offsets.
+asset tests check the shared body, expression and mouth poses, cue timing and rig bindings.
+All bubble layers use scale 0.28. The bubble artwork is 128 by 128; derived
+`Items/Centered` textures fit visible icon bounds inside a 52 by 48 pixel area
+on a 64 by 64 canvas. Both layers share the same billboard origin. Runtime uses
+`SpawnModelParticles` attached to the entity origin, with `DetachedFromModel=false`
+and cleanup on entity removal, so the entire bubble follows walking villagers.
 Bubble placement uses the higher of collision bounds and the visible eye height
 plus head clearance, with the tail tip another 0.2 blocks above that.
 
@@ -274,11 +314,11 @@ profiles no longer use the spawned entity UUID, so moving to another world canno
 change the recording identity. Visitor/rescue role fallbacks also resolve the
 named villager definition. Goblin townsfolk always resolve to a Gravely recording.
 
-There are 24 profile names: each original profile plus `Lower` and `Higher`.
+Each recording profile supports `Lower` and `Higher` variants.
 For example, `WarmMaleLower` uses Warm Male recordings two semitones lower.
 Pitch is fixed per character, never jittered. Hytale changes audio playback rate
-with pitch, so generated Action tables and Face bindings use the same rate and
-the runtime scales the completion timers. No duplicate OGG or blockyanim files
+with pitch, so runtime cue timestamps and speech completion timers scale with it.
+Body gestures and eye expressions keep their natural speed. No duplicate OGG or blockyanim files
 are needed. Plain profiles still use their original pitch.
 
 Town Journal personal settings now include Nearby villager volume (0–100%) and
@@ -292,15 +332,13 @@ Preferences persist on the player entity, with defaults for older saves.
 
 Dialogue choices select uniformly from recordings excluding the last recording
 heard by that player. This includes switching between Greet and Explain, which
-share Talk recordings. The single Thinking recording alternates with a silent
-ponder on consecutive requests; an `All_Thinking_2.mp3` master in the same eight
-voice order would allow spoken alternatives instead.
+share Talk recordings. Thinking now has two recordings per profile, so it also avoids immediate repeats.
 
-Prowl uses a custom integrated face rig and an 18 by 8 mouth strip in the original
-texture at x=494, with the neutral cell at y=24. `villager_prowl_faces.py` remaps
-mouth UV cues to that strip for both Action-priority faces and standalone Face
-tracks, including mood restoration and pitched profiles. The model geometry and
-texture are preserved. The face support check explicitly recognizes this rig.
+Prowl now uses a player-compatible 20 by 10 mouth attachment with the native
+`Mouth1_Textures/Default_Greyscale.png` atlas. Its original mouth placement and
+18 by 8 visible footprint are preserved. The embedded old mouth is removed, and
+Prowl inherits all Human face/mouth bindings and Action tables without separate
+Prowl timelines. `villager_prowl_faces.py` makes this migration repeatable.
 Elias Thornwood now uses WarmMaleLower for a deeper voice.
 
 Native race faces are generated by `villager_creature_faces.py`, also called by
@@ -346,8 +384,79 @@ change player gift/reputation records. Balance and authored beats live in
 Shop work selection treats old read/craft tags as generic placeholders for desk
 residents, so saved shops receive the job-specific actions too. Standing merchants,
 chefs, florists, furniture merchants, crystal keepers and pyrotechnics choose their
-normal work 60% of the time, sweeping 25%, and reading 15%. Innkeepers normally
-sweep and use inspection for the 25% variation. Explicit sweep/inspect/tend tags
-remain dedicated activities. Seats and mounted NPCs do not select sweeping, and
+normal work 60% of the time, sweeping 25%, and reading 15%. Chefs mix salad,
+florists tend plants, and merchants read. Innkeepers sweep 60% and read 40%.
+Explicit sweep/mix/tend tags remain dedicated activities; retired inspection tags
+fall back to reading. Seats and mounted NPCs do not select sweeping, and
 meal, sleep, leisure, and mining/forging/chopping activities keep their own behavior.
 Garren Vale uses WarmMaleLower.
+
+
+## Compact bubbles and emotion particles
+
+The old 256px canvas stored its tail anchor in transparent padding. Runtime bubble
+icons are now 64px (content up to 52x48), with 128px bubble backgrounds. Both pivot
+at the content center; the tail is at (64,123). BillboardY keeps the icon and bubble
+in the same upright plane from every horizontal viewing direction. The world spawn
+height compensates for the 59px center-to-tail distance at .28 scale. Redundant raw
+item-icon copies no longer ship alongside the compact runtime versions.
+
+Original generated emotion art is packed to 64px by
+`generate_villager_emotion_particles.py`. Every effect clones the exact native
+`Hearts.particlesystem` and `Hearts.particlespawner` used by loved gifts. Only the
+spawner ID, texture path and red tint change (white tint preserves the new artwork).
+Renderer, opacity, scale curve, spawn rate, motion and three-second system lifetime
+are unchanged. Runtime dispatch uses the gift system's eye-height anchor and world
+queue. A regression test compares the definitions against the native assets.
+
+Question gestures/voice cues trigger question marks; pondering, disagreement and
+35% of voiced reading/thinking trigger confusion; surprise/gasps trigger surprise
+or shock; boredom/sighs and rejection trigger gloom. Effects keep a 1.4-second
+per-villager cooldown. Ordinary neutral chatter does not produce emotion particles.
+The existing loved-gift hearts remain unchanged. Prompts are in
+`villager-emotion-art.md`.
+
+## Salad mixing
+
+`villager_life_mixing.py` uses the constrained solver to move the spoon tip around
+inside the original salad while preserving both grips. The seven-second loop has
+matching endpoints. `verify_villager_mixing.py` checks spoon contact, bowl tilt,
+wrist angles, normal elbow flexion, low bowl placement and exposed spoon clearance
+above the salad. Mirrored shape dimensions use their absolute extents in the
+oriented-box collision tests. The shoulder socket is excluded only against the
+torso; the entire upper arm, forearm and hand must clear the head. The stirring
+wrist stays under 35 degrees; the underhand support allows up to 42 degrees of
+extension to hold the unmodified bowl level near the waist. Bowl yaw is free so
+its original grip can turn with the supporting hand. `verify_villager_life_props.py` verifies native grips, supporting-hand
+contacts, and sweeping floor clearance. Rock inspection remains unavailable.
+
+The [salad-preparation photograph from the Society of Behavioral Medicine](https://www.sbm.org/healthy-living/how-to-change-your-diet-five-tips-for-healthy-eating)
+was visually inspected for bent elbows, downward utensil grip and a small forward
+lean. The game pose adapts this to one hand supporting a portable salad bowl.
+
+## Shared animation assets
+
+`villager_animation_pool.py` shares identical complete timelines across voice and
+rig exporters. Node names, UVs, keyframes, duration and hold behavior must all
+match; numeric formatting and JSON key order do not matter. Stable gesture and profile IDs remain available; recording-specific animation IDs
+are replaced by shared speech actions and mouth poses. Consumers must resolve their asset paths through
+those bindings instead of deriving filenames from a voice or action ID.
+
+All speech variants reuse the 23 authored gesture files; there are no extended
+per-recording body timelines. Outlanders use the player face skeleton and reuse
+human facial assets directly. Other races retain their necessary jaw, eye and
+mouth-atlas mappings, with identical results shared automatically. Machinaria
+uses the same exporter pool within its own optional asset pack.
+
+The compiler prunes obsolete files only inside its generated output folders.
+Editable base gesture/face templates remain available as generation inputs.
+Run `test_villager_animation_pool.py` and `verify_villager_animation_reuse.py` to
+check reuse, reference integrity, durations and rig-specific motion. The latter
+also runs in `rebuild_villager_life.py`. Regenerate Machinaria after changing
+shared body exports so its action tables pick up the new paths.
+
+After rebuilding a companion mod, update its installed jar in the development
+server's `run/mods` too; a rebuilt sibling project does not update that copy.
+Check the deployed combination before a play test:
+`python tools/verify_installed_villager_animations.py --mods run/mods --mods build/dev-plugin`.
+This catches old companion animation tables referencing files removed by reuse.

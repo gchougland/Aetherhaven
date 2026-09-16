@@ -453,6 +453,7 @@ public final class DialogueActionExecutor {
             return;
         }
         UUID guardPromoteUuid = null;
+        boolean wasActiveForXp = town.hasQuestActive(qid);
         UUID touristPromoteUuid = null;
         if (AetherhavenConstants.QUEST_HOUSE_GUARD.equals(qid.trim())) {
             guardPromoteUuid = town.getQuestTargetEntityUuid(qid);
@@ -483,6 +484,7 @@ public final class DialogueActionExecutor {
             QuestLifecycleEffects.runOnComplete(world, plugin, town, tm, def, null);
             if (rewardPlayerRef != null && store != null) {
                 QuestRewardService.grantNonReputationRewards(def, town, tm, rewardPlayerRef, store);
+                if (wasActiveForXp) com.hexvane.aetherhaven.leveling.LevelingIntegration.rewardCompletion(rewardPlayerRef, store, false);
             }
         }
         if (rewardPlayerRef != null

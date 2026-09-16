@@ -24,7 +24,10 @@ def main():
             world=ik.fk(tracks,frame)
             for foot in ('L-Foot','R-Foot'):
                 assert np.linalg.norm(world[foot][1]-neutral[foot][1])<.001,(path.stem,'foot sliding')
-            if path.stem in TARGETS and .35<=frame/duration<=.78:
+            # Tool wrist rotations shift the center of the palm around its wrist pivot.
+            # Those gestures are checked against the actual rigid item's contact points
+            # by verify_villager_life_props, not the original chest-relative IK hint.
+            if path.stem in TARGETS and path.stem not in ('Sweep','Craft','Inspect','Tend','Read') and .35<=frame/duration<=.78:
                 if path.stem=='Read':
                     # Supporting palm follows the opposite grip on the rigid book.
                     target=world['R-Hand'][1]+world['R-Hand'][0]@np.array([2*BOOK_HALF_GRIP,0,0])

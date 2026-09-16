@@ -53,7 +53,7 @@ def style(trait):
 
 
 def idle(trait):
-    if trait in ('bookworm', 'curious', 'shy', 'mannequin_display'): return {'Inspect': 4, 'Fidget': 3, 'LookAround': 1}
+    if trait in ('bookworm', 'curious', 'shy', 'mannequin_display'): return {'Fidget': 4, 'LookAround': 3}
     if trait in ('lazy', 'slothian_canopy', 'homebody', 'gloomy'): return {'Stretch': 4, 'Sleepy': 2, 'LookAround': 1}
     if trait in ('grumpy', 'bitter', 'impatient', 'rude', 'cynical'): return {'Bored': 3, 'Fidget': 2, 'LookAround': 2}
     if trait in ('cheerful', 'silly', 'musical', 'dramatic', 'sporty'): return {'Stretch': 3, 'Greet': 2, 'Laugh': 2}

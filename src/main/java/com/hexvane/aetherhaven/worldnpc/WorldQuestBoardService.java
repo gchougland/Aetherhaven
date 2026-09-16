@@ -130,6 +130,7 @@ public final class WorldQuestBoardService {
             slots.remove(i);
             registry.markPlayerDirty();
             WorldNpcPersistence.save(world, plugin, registry);
+            com.hexvane.aetherhaven.leveling.LevelingIntegration.rewardCompletion(playerUuid, world, slot.isRaidQuest());
             return true;
         }
         return false;

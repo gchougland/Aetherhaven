@@ -25,8 +25,7 @@
     "Explain": 1
   },
   "idleEmoteWeights": {
-    "Inspect": 4,
-    "Fidget": 3,
+    "Fidget": 7,
     "LookAround": 1
   }
 }

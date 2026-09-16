@@ -882,6 +882,16 @@ public final class PlotCreatorService {
         if (draft.isBuildingEditorMode()) {
             return saveAndFinishBuildingEditor(plugin, session, playerRef, draft);
         }
+        if (draft.isGaiaAppearancePrefabDirty() && draft.getSessionExportedPrefabPath() != null) {
+            Path exportedPrefab = CustomBuildingsPaths.prefabsDirectory(plugin.getDataDirectory())
+                .resolve(draft.getSessionExportedPrefabPath());
+            if (PlotCreatorPrefabExporter.export(session.getWorld(), draft, exportedPrefab, true)
+                != PlotCreatorPrefabExporter.ExportResult.SUCCESS) {
+                playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.prefabExport"));
+                return false;
+            }
+            draft.setGaiaAppearancePrefabDirty(false);
+        }
         Player player = store.getComponent(ref, Player.getComponentType());
         SpendBreakdown saveFeePaid = null;
         TownRecord feeTown = null;

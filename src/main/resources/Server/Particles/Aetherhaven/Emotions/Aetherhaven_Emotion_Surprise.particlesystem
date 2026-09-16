@@ -1,0 +1,14 @@
+{
+  "Spawners": [
+    {
+      "SpawnerId": "Aetherhaven_Emotion_Surprise",
+      "PositionOffset": {
+        "X": 0,
+        "Y": 0.4,
+        "Z": -0.1
+      },
+      "FixedRotation": false
+    }
+  ],
+  "LifeSpan": 3
+}

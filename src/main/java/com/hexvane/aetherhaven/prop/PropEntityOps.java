@@ -236,24 +236,17 @@ public final class PropEntityOps {
             }
         }
 
-        String idString = instanceId.toString();
-        store.forEachEntityParallel(
-            AetherhavenPlacedInstance.getComponentType(),
-            (index, archetypeChunk, commandBuffer) -> {
-                AetherhavenPlacedInstance tag = archetypeChunk.getComponent(index, AetherhavenPlacedInstance.getComponentType());
-                if (tag == null || !idString.equals(tag.getInstanceId())) {
-                    return;
-                }
-                Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
-                if (ref != null && ref.isValid()) {
-                    toRemove.add(ref);
-                }
-            }
-        );
-
         // Exact reserved footprint (no visual padding). Skip anything already tagged to a prop instance.
         PlotFootprintRecord fp = PropPrefabOps.footprint(origin, yaw, buffer);
-        collectUntaggedFootprintLeftovers(store, fp, toRemove);
+        removeLinkedEntities(store, instanceId, toRemove, fp);
+    }
+
+    static void removeLinkedEntities(
+        @Nonnull Store<EntityStore> store, @Nonnull UUID instanceId,
+        @Nonnull Set<Ref<EntityStore>> toRemove, @Nullable PlotFootprintRecord footprint
+    ) {
+        collectTaggedEntities(store, instanceId, toRemove);
+        if (footprint != null) collectUntaggedFootprintLeftovers(store, footprint, toRemove);
 
         for (Ref<EntityStore> ref : toRemove) {
             if (ref.isValid()) {
@@ -265,26 +258,26 @@ public final class PropEntityOps {
     /** Legacy overload: tag-only removal (no footprint context). Prefer the full overload. */
     public static void removeLinkedEntities(@Nonnull World world, @Nonnull UUID instanceId) {
         Store<EntityStore> store = world.getEntityStore().getStore();
+        removeLinkedEntities(store, instanceId, new HashSet<>(), null);
+    }
+
+    static void collectTaggedEntities(
+        @Nonnull Store<EntityStore> store, @Nonnull UUID instanceId, @Nonnull Set<Ref<EntityStore>> toRemove
+    ) {
         String idString = instanceId.toString();
-        List<Ref<EntityStore>> toRemove = new ArrayList<>();
-        store.forEachEntityParallel(
+        // forEachEntityParallel must not write into an ordinary HashSet/ArrayList: concurrent
+        // adds can lose references. Scan chunks serially, then remove after iteration finishes.
+        store.forEachChunk(
             AetherhavenPlacedInstance.getComponentType(),
-            (index, archetypeChunk, commandBuffer) -> {
-                AetherhavenPlacedInstance tag = archetypeChunk.getComponent(index, AetherhavenPlacedInstance.getComponentType());
-                if (tag == null || !idString.equals(tag.getInstanceId())) {
-                    return;
-                }
-                Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
-                if (ref != null && ref.isValid()) {
-                    toRemove.add(ref);
+            (archetypeChunk, commandBuffer) -> {
+                for (int index = 0; index < archetypeChunk.size(); index++) {
+                    AetherhavenPlacedInstance tag = archetypeChunk.getComponent(index, AetherhavenPlacedInstance.getComponentType());
+                    if (tag != null && idString.equals(tag.getInstanceId())) {
+                        toRemove.add(archetypeChunk.getReferenceTo(index));
+                    }
                 }
             }
         );
-        for (Ref<EntityStore> ref : toRemove) {
-            if (ref.isValid()) {
-                store.removeEntity(ref, RemoveReason.REMOVE);
-            }
-        }
     }
 
     /**

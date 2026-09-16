@@ -345,6 +345,7 @@ public final class PlotCreatorSubstepHandler {
                     yield true;
                 }
                 draft.setGaiaStatueLocalPos(local);
+                draft.setGaiaStatueBlockTypeId(blockId);
                 PlotCreatorGaiaStatueSupport.syncPoiFromLocalPos(draft);
                 playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.blockRecorded"));
                 yield true;

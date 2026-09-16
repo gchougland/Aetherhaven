@@ -11,6 +11,7 @@ import math
 from pathlib import Path
 from generate_villager_lip_sync import RES, write
 from villager_creature_faces import jaw_track, walk
+from villager_animation_pool import AnimationPool
 
 RIG = 'MachinariaRobot'
 JAW_DEGREES = 12
@@ -19,6 +20,9 @@ JAW_DROP = 3
 
 def retarget(data):
     result = copy.deepcopy(data)
+    if 'Mouth' not in data['nodeAnimations']:
+        result['nodeAnimations'] = {}
+        return result
     frames = data['nodeAnimations']['Mouth']['shapeUvOffset']
     rotation = jaw_track(frames, JAW_DEGREES)
     # A small piston travel complements the native hinge without stretching metal.
@@ -31,6 +35,7 @@ def retarget(data):
 
 def generate(destination):
     destination = destination.resolve()
+    pool = AnimationPool(destination, write)
     model_path = destination / 'Server/Models/Machinaria_Robot_Base.json'
     model = json.loads(model_path.read_text())
     mesh_path = destination / 'Common' / model['Model']
@@ -39,7 +44,7 @@ def generate(destination):
     assert len(jaws) == 1 and jaws[0]['shape']['type'] == 'box', 'Expected the native rigid robot jaw'
     human = json.loads((RES / 'Server/Models/Human/Aetherhaven_Human.json').read_text())
     bindings = {key: copy.deepcopy(value) for key, value in human['AnimationSets'].items()
-                if key.startswith(('Aetherhaven_Life_Face_', 'Aetherhaven_Life_Lip_'))
+                if key.startswith(('Aetherhaven_Life_Face_', 'Aetherhaven_Life_Mouth_'))
                 or key in ('Talk', 'Talk2', 'Talk3', 'Talk4', 'Talk5', 'Grin', 'Frown')}
     base = RES.parents[2].parent / 'HytaleSourceCode/hytale-shared-source/HytaleAssets/Common'
     generated = {}
@@ -52,7 +57,7 @@ def generate(destination):
             if relative == source:
                 relative = 'Vanilla/' + Path(source).name
             target = f'NPC/Gear/Animations/AetherhavenFaces/{relative}'
-            write(destination / 'Common' / target, retarget(data))
+            target = pool.emit(target, retarget(data))
             generated[source] = target
         return generated[source]
 
@@ -60,15 +65,19 @@ def generate(destination):
         for animation in binding['Animations']:
             animation['Animation'] = adapt(animation['Animation'])
             animation.pop('SoundEventId', None)
-    for pitch in ('', '_Lower', '_Higher'):
+    for pitch in ('',):
         name = 'Aetherhaven_Life_Actions' + pitch
         table = json.loads((RES / f'Server/Item/Animations/{name}.json').read_text())
         for action in table['Animations'].values():
             if action.get('ThirdPersonFace'):
                 action['ThirdPersonFace'] = adapt(action['ThirdPersonFace'])
         write(destination / f'Server/Item/Animations/{name}_{RIG}.json', table)
-    model.setdefault('AnimationSets', {}).update(bindings)
+        for variant in ('_Lower','_Higher'):
+            write(destination / f'Server/Item/Animations/{name}{variant}_{RIG}.json', {'Parent':name+'_'+RIG})
+    model['AnimationSets'] = {k:v for k,v in model.get('AnimationSets', {}).items() if not k.startswith('Aetherhaven_Life_Lip_')}
+    model['AnimationSets'].update(bindings)
     write(model_path, model)
+    pool.prune(['NPC/Gear/Animations/AetherhavenFaces'])
     print(f'Generated {len(generated)} jaw timelines and three action tables for all robot residents.')
 
 

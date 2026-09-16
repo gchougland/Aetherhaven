@@ -11,7 +11,9 @@
   "Website": "${plugin_website}",
   "ServerVersion": "${server_version}",
   "OptionalDependencies": {
-    "Hytale:NPC": "*"
+    "Hytale:NPC": "*",
+    "Airijko:EndlessLevelingCore": "*",
+    "Zuxaw:RPGLeveling": "*"
   },
   "DisabledByDefault": false,
   "IncludesAssetPack": true,

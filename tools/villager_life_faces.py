@@ -8,15 +8,18 @@ import math
 import copy
 
 DURATIONS = {
+    'ShowItem': 4.8, 'Mix': 7.0,
     'Greet': 2.8, 'Explain': 3.5, 'Story': 4.2, 'Question': 3.0,
     'Agree': 2.2, 'Laugh': 4.0, 'Surprise': 2.0, 'Disagree': 2.8,
     'Hungry': 4.8, 'Sleepy': 6.0, 'Bored': 4.8,
     'LookAround': 5.8, 'Stretch': 6.0, 'Fidget': 5.0,
-    'Read': 6.0, 'Craft': 4.8, 'Sweep': 5.0, 'Inspect': 5.2, 'Tend': 5.6,
+    'Read': 6.0, 'Craft': 4.8, 'Sweep': 6.0, 'Inspect': 5.2, 'Tend': 5.6,
 }
-SOCIAL = {'Greet','Explain','Story','Question','Agree','Laugh','Surprise','Disagree'}
+SOCIAL = {'Greet','Explain','Story','Question','Agree','Laugh','Surprise','Disagree','ShowItem'}
 # Brow height, brow slant, upper lid, lower lid, pupil scale, mouth UV cell.
 EXPRESSIONS = {
+    'Mix': (-.2,3,2,1,.98,(20,0)),
+    'ShowItem': (1.1,-7,1,2,1.03,(120,-10)),
     'Greet': (1.6,-9,1,3,1.02,(120,-10)),
     'Explain': (.7,-5,1,1,1,(20,0)),
     'Story': (1.8,-10,1,2,1.08,(120,-10)),

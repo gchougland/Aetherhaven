@@ -1,0 +1,42 @@
+$C = "../Common.ui";
+
+Group #PropShopPaletteGridCell {
+  Anchor: (Width: 112, Height: 96, Right: 6, Bottom: 6);
+  Group #SelectShell {
+    LayoutMode: Full;
+    Group #SelectHilite {
+      Anchor: (Full: 0);
+      Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #3d4a5c(0.7));
+      Visible: false;
+      HitTestVisible: false;
+    }
+    Button #Select {
+      LayoutMode: Top;
+      Padding: (Full: 4);
+      TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+      TooltipText: "";
+      Style: (
+        Default: (Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #1e2430(0.85))),
+        Hovered: (Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #2a3344(0.95))),
+        Pressed: (Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #141820(0.98)))
+      );
+      Group #IconBox {
+        LayoutMode: Full;
+        FlexWeight: 1;
+        Background: #1a2530;
+        HitTestVisible: false;
+        AssetImage #BuildingIcon {
+          Anchor: (Full: 0);
+          FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+          HitTestVisible: false;
+        }
+      }
+      Label #UnlockStatus {
+        Anchor: (Height: 22);
+        Style: (...$C.@DefaultLabelStyle, FontSize: 12, HorizontalAlignment: Center, VerticalAlignment: Center);
+        HitTestVisible: false;
+        Text: "";
+      }
+    }
+  }
+}

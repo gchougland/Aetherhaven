@@ -9,6 +9,7 @@ import math
 import numpy as np
 
 TARGETS = {
+    'ShowItem':{'R':('Chest',(-12,-5,29))},
     'Laugh':{'R':('Belly',(-11,5,5)),'L':('Belly',(11,5,5))},
     'Hungry':{'R':('Belly',(-4,2,11)),'L':('Belly',(5,-1,11))},
     'Sleepy':{'R':('Mouth-Attachment',(-4,-1,3))},
@@ -25,6 +26,7 @@ def contact_target(name, side, world, phase):
     offset=np.array(offset,dtype=float)
     if name=='Craft' and side=='R':offset[1]+=1.5*math.sin(phase*math.pi*6)
     if name=='Tend':offset[2]+=1.2*math.sin(phase*math.pi*2)
+    if name=='ShowItem':offset[2]+=5*math.sin(phase*math.pi)
     rotation,position=world[anchor]
     return position+rotation@offset
 

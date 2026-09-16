@@ -35,6 +35,16 @@ public final class ShopSpotRecord {
     private String sellerName;
     @Nullable
     private UUID displayEntityUuid;
+    /** Identity of the loaded chunk already checked for orphan displays; never persisted. */
+    private transient Object reconciledDisplayChunk;
+
+    boolean needsDisplayReconciliation(Object loadedChunk) {
+        return loadedChunk != null && loadedChunk != reconciledDisplayChunk;
+    }
+
+    void markDisplayReconciled(Object loadedChunk) {
+        reconciledDisplayChunk = loadedChunk;
+    }
 
     public ShopSpotRecord() {}
 
@@ -62,6 +72,7 @@ public final class ShopSpotRecord {
     }
 
     public void setBlockPosition(@Nonnull Vector3i pos) {
+        if (blockX != pos.x || blockY != pos.y || blockZ != pos.z) reconciledDisplayChunk = null;
         this.blockX = pos.x;
         this.blockY = pos.y;
         this.blockZ = pos.z;

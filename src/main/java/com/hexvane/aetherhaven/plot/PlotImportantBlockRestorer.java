@@ -131,7 +131,9 @@ public final class PlotImportantBlockRestorer {
             ids.add(TownPortalTravelColor.blockTypeIdForPresetIndex(i));
         }
         ids.add(AetherhavenConstants.BLOCK_PRODUCTION_STORAGE);
-        ids.add(AetherhavenConstants.STATUE_OF_GAIA_BLOCK_TYPE_ID);
+        for (GaiaStatueAppearance appearance : GaiaStatueAppearance.values()) {
+            ids.add(appearance.blockTypeId());
+        }
         for (BuildingPoisDefinition.PoiRow row : def.getPois()) {
             if (row.getBlockTypeId() != null && !row.getBlockTypeId().isBlank()) {
                 String id = row.getBlockTypeId().trim();
@@ -181,6 +183,9 @@ public final class PlotImportantBlockRestorer {
         }
         String expectedId = expected.getId();
         if (expectedId == null) {
+            return false;
+        }
+        if (GaiaStatueAppearance.sameStatueFamily(expectedId, at.getId())) {
             return false;
         }
         if (TownPortalTravelColor.isTouristPortalBlockTypeId(expectedId)

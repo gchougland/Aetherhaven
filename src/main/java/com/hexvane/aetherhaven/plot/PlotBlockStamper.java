@@ -205,7 +205,8 @@ public final class PlotBlockStamper {
 
     /** Block ids are case-insensitive in the asset map but {@link BlockType#getId()} uses the registered key. */
     private static boolean blockTypeIdMatches(@Nonnull String expectedId, @Nonnull String actualId) {
-        if (expectedId.equals(actualId) || expectedId.equalsIgnoreCase(actualId)) {
+        if (GaiaStatueAppearance.sameStatueFamily(expectedId, actualId)
+            || expectedId.equals(actualId) || expectedId.equalsIgnoreCase(actualId)) {
             return true;
         }
         BlockTypeAssetMap<String, BlockType> map = BlockType.getAssetMap();

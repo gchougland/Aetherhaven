@@ -87,6 +87,7 @@ public final class WorldQuestProgressionService {
         progress.markQuestCompleted(questId);
         registry.markPlayerDirty();
         WorldNpcPersistence.save(world, plugin, registry);
+        com.hexvane.aetherhaven.leveling.LevelingIntegration.rewardCompletion(playerUuid, world, false);
         return true;
     }
 

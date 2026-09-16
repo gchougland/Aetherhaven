@@ -11,7 +11,12 @@ import java.util.Map;
 /** One selection binds the recording and facial timeline, avoiding independent random picks. */
 public final class VillagerLifeSpeech {
     record Face(String id, long durationMs, String actionId) {}
-    record Clip(String clip, long audioMs, Map<String, Face> faces, float pitch, String actionsId) {}
+    record MouthCue(long timeMs, String shape) {}
+    record Clip(String clip, long audioMs, Map<String, Face> faces, float pitch, String actionsId, List<MouthCue> mouthCues) {
+        Clip(String clip, long audioMs, Map<String, Face> faces, float pitch, String actionsId) {
+            this(clip, audioMs, faces, pitch, actionsId, List.of());
+        }
+    }
     private static volatile Map<String, List<Clip>> CLIPS = load();
     private VillagerLifeSpeech() {}
 
@@ -57,6 +62,14 @@ public final class VillagerLifeSpeech {
         if (eligible.isEmpty()) return null;
         Clip clip = eligible.get(Math.floorMod(choice, eligible.size()));
         if (voice.variant().isEmpty() || mood.equals("Stomach")) return clip;
+        if (!clip.mouthCues().isEmpty()) {
+            long audioMs = (long)Math.ceil(clip.audioMs()/voice.pitch());
+            Map<String, Face> faces = new HashMap<>();
+            clip.faces().forEach((gesture, face) -> faces.put(gesture,
+                new Face(face.id(), Math.max(audioMs, VillagerLifeTiming.durationMs(gesture)), face.actionId())));
+            return new Clip(clip.clip(), audioMs, Map.copyOf(faces), voice.pitch(), clip.actionsId(),
+                clip.mouthCues().stream().map(c -> new MouthCue(Math.round(c.timeMs()/voice.pitch()), c.shape())).toList());
+        }
         Map<String, Face> faces = new HashMap<>();
         clip.faces().forEach((gesture, face) -> faces.put(gesture, new Face(face.id() + "_" + voice.variant(),
             (long)Math.ceil(face.durationMs()/voice.pitch()), face.actionId())));
@@ -87,8 +100,20 @@ public final class VillagerLifeSpeech {
                     faces.put(f.getKey(), new Face(face.get("id").getAsString(), face.get("durationMs").getAsLong(),
                         face.get("actionId").getAsString()));
                 }
-                clips.add(new Clip(clip.get("clip").getAsString(), clip.get("audioMs").getAsLong(), Map.copyOf(faces), 1f,
-                    clip.has("actionsId") ? clip.get("actionsId").getAsString() : VillagerLifeVisuals.BODY_ANIMATIONS));
+                long audioMs = clip.get("audioMs").getAsLong();
+                List<MouthCue> cues = new ArrayList<>();
+                if (clip.has("mouthCues")) for (var valueCue : clip.getAsJsonArray("mouthCues")) {
+                    var cue = valueCue.getAsJsonArray();
+                    long time = cue.get(0).getAsLong();
+                    String shape = cue.get(1).getAsString();
+                    if (time < 0 || time > audioMs || (!cues.isEmpty() && time <= cues.getLast().timeMs())
+                        || !shape.matches("[A-F]")) throw new IllegalArgumentException("Invalid mouth cue");
+                    cues.add(new MouthCue(time, shape));
+                }
+                if (!cues.isEmpty() && (cues.getFirst().timeMs()!=0
+                        || !cues.getLast().shape().equals("A"))) throw new IllegalArgumentException("Mouth cues must start at zero and end closed");
+                clips.add(new Clip(clip.get("clip").getAsString(), audioMs, Map.copyOf(faces), 1f,
+                    clip.has("actionsId") ? clip.get("actionsId").getAsString() : VillagerLifeVisuals.BODY_ANIMATIONS, List.copyOf(cues)));
                 Clip parsed = clips.getLast();
                 if (parsed.clip().isBlank() || parsed.audioMs() <= 0 || parsed.faces().values().stream()
                         .anyMatch(f -> f.id().isBlank() || f.actionId().isBlank() || f.durationMs() <= 0))

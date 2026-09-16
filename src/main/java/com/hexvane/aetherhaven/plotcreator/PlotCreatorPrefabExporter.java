@@ -99,6 +99,7 @@ public final class PlotCreatorPrefabExporter {
             draft.setCornerSecond(new Vector3i(max));
             draft.setSaveEmptySpaces(false);
         }
+        PlotCreatorGaiaStatueSupport.captureAppearance(world, draft);
         draft.setPrefabOriginMin(new Vector3i(min));
         PlotCreatorLocalCoords.recomputeAnchorOffset(draft);
 

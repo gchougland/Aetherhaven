@@ -15,7 +15,9 @@ import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 
 /**
@@ -72,6 +74,11 @@ public final class ShopSpotOpenService {
         @Nonnull TownRecord town,
         @Nonnull Store<EntityStore> store
     ) {
+        return hasStaffedWorkplace(record, town,
+            kind -> hasWorkerOnPlot(store, town.getTownId(), record.getPlotId(), kind));
+    }
+
+    static boolean hasStaffedWorkplace(ShopSpotRecord record, TownRecord town, Predicate<String> hasWorker) {
         if (record.isPlayerControlled()) {
             return true;
         }
@@ -88,15 +95,28 @@ public final class ShopSpotOpenService {
             return false;
         }
         var catalog = plugin.getConstructionCatalog();
-        if (!ProductionWorkplaceKinds.supportsWorkerAssignmentForPlot(catalog, plot.getConstructionId())) {
-            return true;
-        }
         for (String kind : ProductionWorkplaceKinds.residentBindingKindsForPlot(catalog, plot.getConstructionId())) {
-            if (!hasWorkerOnPlot(store, town.getTownId(), plotId, kind)) {
+            if (!hasWorker.test(kind)) {
                 return false;
             }
         }
         return true;
+    }
+
+    record Assignment(UUID townId, UUID plotId, String kind) {}
+
+    /** One snapshot shared by all stalls in a deferred display refresh. Purchases still check live staffing. */
+    static Set<Assignment> captureStaffing(Store<EntityStore> store) {
+        Set<Assignment> assignments = new HashSet<>();
+        store.forEachChunk(Query.and(TownVillagerBinding.getComponentType(), UUIDComponent.getComponentType()),
+            (ArchetypeChunk<EntityStore> chunk, CommandBuffer<EntityStore> ignored) -> {
+                for (int i = 0; i < chunk.size(); i++) {
+                    var binding = chunk.getComponent(i, TownVillagerBinding.getComponentType());
+                    if (binding.getJobPlotId() != null)
+                        assignments.add(new Assignment(binding.getTownId(), binding.getJobPlotId(), binding.getKind()));
+                }
+            });
+        return assignments;
     }
 
     private static boolean hasWorkerOnPlot(
@@ -105,14 +125,10 @@ public final class ShopSpotOpenService {
         @Nonnull UUID workplacePlotId,
         @Nonnull String residentKind
     ) {
-        AtomicBoolean found = new AtomicBoolean(false);
         Query<EntityStore> q = Query.and(TownVillagerBinding.getComponentType(), UUIDComponent.getComponentType());
-        store.forEachChunk(
+        return store.forEachChunk(
             q,
             (ArchetypeChunk<EntityStore> chunk, CommandBuffer<EntityStore> commandBuffer) -> {
-                if (found.get()) {
-                    return;
-                }
                 for (int i = 0; i < chunk.size(); i++) {
                     TownVillagerBinding binding = chunk.getComponent(i, TownVillagerBinding.getComponentType());
                     if (binding == null || !townId.equals(binding.getTownId()) || !residentKind.equals(binding.getKind())) {
@@ -120,12 +136,11 @@ public final class ShopSpotOpenService {
                     }
                     UUID jobPlot = binding.getJobPlotId();
                     if (jobPlot != null && jobPlot.equals(workplacePlotId)) {
-                        found.set(true);
-                        return;
+                        return true;
                     }
                 }
+                return false;
             }
         );
-        return found.get();
     }
 }

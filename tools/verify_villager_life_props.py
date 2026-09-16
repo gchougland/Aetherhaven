@@ -1,59 +1,73 @@
-"""Validate held geometry against both animated palms and the ground plane."""
-import json
-import itertools
-import copy
+"""Validate native-item grips and supporting-hand contacts against original meshes."""
+import json,math
 import numpy as np
-from generate_villager_life_assets import ROOT, RES, quat, write_json
-from villager_life_ik import ArmIK, matrix, interpolate
-from villager_life_props import PROPS, BOOK_PALM_OFFSET, BOOK_HALF_GRIP
+from generate_villager_life_assets import ROOT,RES,quat,write_json
+from villager_life_ik import ArmIK,matrix,interpolate
+from villager_native_items import ASSETS,ITEMS,grips,animated_parts
+from villager_native_reading import SUPPORT
+from villager_prop_preview import geometry_points
 
-def position(frames,time):
-    for a,b in zip(frames,frames[1:]):
-        if time<=b['time']:
-            t=max(0,(time-a['time'])/(b['time']-a['time']));t=t*t*(3-2*t)
-            return np.array([a['delta'][k]*(1-t)+b['delta'][k]*t for k in 'xyz'])
-    return np.array([frames[-1]['delta'][k] for k in 'xyz'])
+def head_clearance(ik,world,parts):
+    """Conservative separation bound using each native box/quad's SAT axes."""
+    r,p=world['R-Attachment'];hr,hp=world['Head']
+    head_size=np.array([ik.nodes['Head']['shape']['settings']['size'][k] for k in 'xyz'])/2
+    minimum=float('inf')
+    for part in parts:
+        if not part['shape'].get('visible',True):continue
+        pr=matrix(part['orientation']);pp=np.array([part['position'][k] for k in 'xyz'])
+        pts=(hr.T@((r@((pr@geometry_points(part['shape']).T).T+pp).T).T+p-hp).T).T
+        axes=hr.T@r@pr
+        candidates=[*np.eye(3),*axes.T,*[np.cross(a,b) for a in np.eye(3) for b in axes.T]]
+        gap=0
+        for axis in candidates:
+            length=np.linalg.norm(axis)
+            if length<1e-6:continue
+            axis=axis/length;projection=pts@axis;extent=head_size@abs(axis)
+            gap=max(gap,float(projection.min()-extent),float(-extent-projection.max()))
+        minimum=min(minimum,gap)
+    return minimum
 
 def main():
-    ik=ArmIK(ROOT.parent/'HytaleSourceCode/hytale-shared-source/HytaleAssets',quat);report=[]
-    item_idle=json.loads((ik.assets/'Common/Characters/Animations/Items/Main_Handed/Item/Idle.blockyanim').read_text())['nodeAnimations']
-    for gesture,prop in {**PROPS,'ReadLoop':'OpenBook'}.items():
-        anim=json.loads((RES/f'Common/Characters/Animations/Aetherhaven/Life/{gesture}.blockyanim').read_text())
-        # Simulate the lower-priority held-item idle, which contributed attachment
-        # offsets missing from the original isolated-action verification.
-        layered=copy.deepcopy(item_idle)
-        for bone,channels in anim['nodeAnimations'].items():
-            for channel,frames in channels.items():
-                if frames:layered.setdefault(bone,{})[channel]=frames
-        root=json.loads((RES/f'Common/Items/Aetherhaven/Life/{prop}.blockymodel').read_text())['nodes'][0]['children'][0]
-        rest_rotation=matrix(root['orientation']);rest_position=np.array([root['position'][k] for k in 'xyz'])
-        track=anim['nodeAnimations']['LifePropRoot'];worst=0;second=0;lowest=1e9;active_highest=-1e9
-        for frame in range(anim['duration']+1):
-            world=ik.fk(layered,frame);parent,origin=world['R-Attachment']
-            rotation=parent@rest_rotation@matrix(interpolate(track['orientation'],frame))
-            center=origin+parent@(rest_position+position(track['position'],frame))
-            grip=center+rotation@np.array([-BOOK_HALF_GRIP,-BOOK_PALM_OFFSET,0]) if gesture in ('Read','ReadLoop') else center
-            worst=max(worst,float(np.linalg.norm(grip-world['R-Hand'][1])))
-            active=gesture=='ReadLoop' or .35<=frame/anim['duration']<=.78
-            if active and gesture in ('Read','ReadLoop','Sweep'):
-                other=center+rotation@np.array([BOOK_HALF_GRIP,-BOOK_PALM_OFFSET,0] if gesture in ('Read','ReadLoop') else [0,-np.sqrt(241),0])
-                second=max(second,float(np.linalg.norm(other-world['L-Hand'][1])))
-            if gesture=='Sweep':
-                bristles=next(n for n in root['children'] if n['name']=='Life_Bristles')
-                dims=np.array([bristles['shape']['stretch'][k] for k in 'xyz'])
-                corners=np.array(list(itertools.product([-.5,.5],repeat=3)))*dims
-                local=np.array([bristles['position'][k] for k in 'xyz'])
-                low=float(np.min((rotation@(corners+local).T).T[:,1]+center[1]))
-                if low<lowest:lowest=low;lowest_frame=frame
-                if active:active_highest=max(active_highest,low)
-        assert worst<.35,(gesture,'right grip',worst)
-        assert second<.5,(gesture,'left grip',second)
-        if gesture=='Sweep':
-            assert lowest>=-.5,('Broom through floor',lowest,lowest_frame,anim['duration'])
-            assert active_highest<3,('Broom too far from floor',active_highest)
-        report.append({'gesture':gesture,'rightGripMaxError':round(worst,3),'leftGripMaxError':round(second,3),
-                       **({'lowestBristleY':round(lowest,3),'highestSweepingBristleY':round(active_highest,3)} if gesture=='Sweep' else {})})
-    write_json(ROOT/'build/villager-life-preview/prop-validation.json',report)
-    print('Verified six held prop motions including continuous reading, two-hand grips and broom ground clearance at every engine frame.')
-
+    ik=ArmIK(ASSETS,quat);report=[]
+    for gesture,item in ITEMS.items():
+        a=json.loads((RES/f'Common/Characters/Animations/Aetherhaven/Life/{gesture}.blockyanim').read_text());tracks=a['nodeAnimations']
+        expectedP,expectedR=grips(item)
+        for f in tracks['R-Attachment']['position']:assert np.allclose([f['delta'][k] for k in 'xyz'],expectedP),('changed original grip',gesture)
+        for f in tracks['R-Attachment']['orientation']:assert np.allclose(matrix(f['delta']),expectedR,atol=1e-6),('changed original grip rotation',gesture)
+        if gesture not in ('Sweep','Read','ReadLoop'):continue
+        parts=animated_parts(item)
+        brush=np.concatenate([(matrix(n['orientation'])@geometry_points(n['shape']).T).T+np.array([n['position'][k] for k in 'xyz']) for n in parts if n['shape']['type']=='quad']) if gesture=='Sweep' else None
+        rest=ik.fk({'R-Attachment':tracks['R-Attachment']},0);rr,rp=rest['R-Attachment'];grip=rr.T@(rest['R-Hand'][1]-rp)
+        second=0;low=100;high=-100;wrist=0
+        for frame in range(a['duration']+1):
+            w=ik.fk(tracks,frame);r,p=w['R-Attachment']
+            active=gesture in ('Sweep','ReadLoop') or .35<=frame/a['duration']<=.78
+            if active:
+                target=p+r@(grip+[0,-18,0] if gesture=='Sweep' else SUPPORT)
+                second=max(second,float(np.linalg.norm(target-w['L-Hand'][1])))
+                if gesture in ('Read','ReadLoop'):
+                    assert head_clearance(ik,w,animated_parts(item,tracks,frame))>2.5,(gesture,frame,'book too close to face')
+                    # Local +Y is the top of the printed page. It must point
+                    # away from the chest and slightly upward, not under the chin.
+                    top=r@np.array([0,1,0])
+                    assert top[1]>.1 and top[2]>.8,(gesture,frame,'book is reversed or tilted down',top)
+                    # Pages are double-sided quads on opposite covers. Check
+                    # the outward side of each page, not its texture winding.
+                    for page in animated_parts(item,tracks,frame):
+                        if page['name'] not in ('Page-Top','Page-Bot'):continue
+                        normal=r@matrix(page['orientation'])@np.array([0,-1 if page['name']=='Page-Top' else 1,0])
+                        center=p+r@np.array([page['position'][axis] for axis in 'xyz'])
+                        assert normal[1]>.5,(gesture,frame,'pages face down')
+                        assert normal@(w['Head'][1]-center)>2,(gesture,frame,'pages face away from reader')
+            if brush is not None:
+                y=float(np.min((r@brush.T)[1])+p[1]);low=min(low,y);high=max(high,y)
+                for side in 'LR':
+                    q=interpolate(tracks[side+'-Hand']['orientation'],frame);wrist=max(wrist,math.degrees(2*math.acos(min(1,abs(q['w'])))))
+        assert second<.7,(gesture,'support lost',second)
+        if brush is not None:
+            assert low>=-.5 and high<4,('broom floor clearance',low,high)
+            assert wrist<35,('sweep wrist',wrist)
+        report.append(dict(gesture=gesture,maxSupportingHandError=second,minBrushY=low,maxBrushY=high,maxWristDegrees=wrist))
+    write_json(ROOT/'build/villager-life-preview/native-item-validation.json',report)
+    print('Original item grips preserved; support hands stay in contact; broom brush stays at floor level.')
 if __name__=='__main__':main()

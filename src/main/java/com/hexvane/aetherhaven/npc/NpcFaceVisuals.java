@@ -266,6 +266,7 @@ public final class NpcFaceVisuals {
         if (!npcRef.isValid()) {
             return;
         }
+        com.hexvane.aetherhaven.autonomy.VillagerMouthPlayback.cancel(npcRef, store);
         if (!supportsFaceExpressions(npcRef, store)) {
             return;
         }
@@ -292,7 +293,13 @@ public final class NpcFaceVisuals {
         if (!supportsFaceExpressions(ref, store)) return;
         NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
         if (npc == null || (!dialogue && isInInteractionDialogue(npc))) return;
+        com.hexvane.aetherhaven.autonomy.VillagerMouthPlayback.cancel(ref, store);
         npc.playAnimation(ref, AnimationSlot.Face, animationId, true, store);
+        holdExpression(ref, seconds, store);
+    }
+
+    /** Reserve expression time without replacing/restarting the client's facial layer. */
+    public static void holdExpression(@Nonnull Ref<EntityStore> ref, float seconds, @Nonnull Store<EntityStore> store) {
         NpcFaceVisualState state = store.getComponent(ref, NpcFaceVisualState.getComponentType());
         if (state == null) state = NpcFaceVisualState.fresh();
         state.setTalkUntilMs(System.currentTimeMillis() + Math.round(seconds * 1000));

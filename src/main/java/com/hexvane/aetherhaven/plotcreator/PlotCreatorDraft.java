@@ -161,6 +161,8 @@ public final class PlotCreatorDraft {
     private int[] innBellLocalPos;
     @Nullable
     private int[] gaiaStatueLocalPos;
+    private String gaiaStatueBlockTypeId;
+    private boolean gaiaAppearancePrefabDirty;
     @Nullable
     private int[] innkeeperSpawnLocal;
     @Nonnull
@@ -917,6 +919,16 @@ public final class PlotCreatorDraft {
     public void setInnBellLocalPos(@Nullable int[] innBellLocalPos) {
         this.innBellLocalPos = innBellLocalPos;
     }
+
+    @Nonnull
+    public String getGaiaStatueBlockTypeId() {
+        var appearance = com.hexvane.aetherhaven.plot.GaiaStatueAppearance.fromBlockTypeId(gaiaStatueBlockTypeId);
+        return (appearance != null ? appearance : com.hexvane.aetherhaven.plot.GaiaStatueAppearance.LIGHT).blockTypeId();
+    }
+
+    public void setGaiaStatueBlockTypeId(@Nullable String id) { this.gaiaStatueBlockTypeId = id; }
+    public boolean isGaiaAppearancePrefabDirty() { return gaiaAppearancePrefabDirty; }
+    public void setGaiaAppearancePrefabDirty(boolean dirty) { gaiaAppearancePrefabDirty = dirty; }
 
     @Nullable
     public int[] getGaiaStatueLocalPos() {

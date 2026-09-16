@@ -79,6 +79,9 @@ public final class AetherhavenSubpluginContentCatalog {
     @Nullable
     public static PluginIdentifier ownerSubplugin(@Nonnull String itemId) {
         String id = itemId.trim();
+        if (com.hexvane.aetherhaven.plot.GaiaStatueAppearance.isGaiaStatue(id)) {
+            return AetherhavenPluginIds.CONSTRUCTION;
+        }
         for (Rule rule : RULES) {
             if (rule.itemId.equalsIgnoreCase(id)) {
                 return rule.subplugin;

@@ -48,6 +48,7 @@ public final class PropPersistence {
             PropWorldFile file = PropWorldFile.readOrEmpty(path);
             List<PropInstance> loaded = PropWorldFile.toInstances(file);
             registry.replaceAll(loaded);
+            registry.restoreRemovedInstanceIds(file.getRemovedInstanceIds());
             LOGGER.atInfo().log("Aetherhaven loaded %s prop(s) for world %s from %s", loaded.size(), world.getName(), path);
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Failed to load props for world %s", world.getName());
@@ -61,6 +62,7 @@ public final class PropPersistence {
         Path path = propsFile(plugin, world.getName());
         try {
             PropWorldFile file = PropWorldFile.fromInstances(registry.all());
+            file.setRemovedInstanceIds(registry.removedInstanceIds());
             file.writeAtomic(path);
         } catch (IOException e) {
             LOGGER.atSevere().withCause(e).log("Failed to save props for world %s", world.getName());

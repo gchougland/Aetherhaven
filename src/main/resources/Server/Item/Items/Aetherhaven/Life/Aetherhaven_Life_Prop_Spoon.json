@@ -3,14 +3,19 @@
     "Name": "aetherhaven_life.items.Aetherhaven_Life_Prop_Spoon.name"
   },
   "Model": "Items/Aetherhaven/Life/Spoon.blockymodel",
-  "Texture": "Items/Weapons/Spellbook/Grimoire_Brown_Texture.png",
+  "Texture": "Items/Ingredients/Stick_Texture.png",
   "PlayerAnimationsId": "Item",
   "MaxStack": 1,
   "Quality": "Common",
-  "Icon": "Icons/ItemsGenerated/Halloween_Broomstick.png",
+  "DropOnDeath": false,
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Life_Spoon.png",
   "Tags": {
     "Type": [
       "AetherhavenLifeProp"
     ]
+  },
+  "Utility": {
+    "Usable": true,
+    "Compatible": true
   }
 }

@@ -8,14 +8,18 @@ from villager_creature_faces import walk
 
 def verify(res):
     def read(path):
-        return json.loads(path.read_text())
+        data=json.loads(path.read_text())
+        if path.parent.name=='Animations' and 'Parent' in data:
+            from villager_native_items import merge
+            data=merge(read(path.with_name(data.pop('Parent')+'.json')),data)
+        return data
     model = read(res / 'Server/Models/Machinaria_Robot_Base.json')
     mesh = read(res / 'Common' / model['Model'])
     bones = {n['name'] for root in mesh['nodes'] for n in walk(root)}
     human = read(RES / 'Server/Models/Human/Aetherhaven_Human.json')
     checked = set()
     for key, binding in model['AnimationSets'].items():
-        if not key.startswith(('Aetherhaven_Life_Face_', 'Aetherhaven_Life_Lip_')) and key not in ('Talk', 'Talk2', 'Talk3', 'Talk4', 'Talk5', 'Grin', 'Frown'):
+        if not key.startswith(('Aetherhaven_Life_Face_', 'Aetherhaven_Life_Mouth_')) and key not in ('Talk', 'Talk2', 'Talk3', 'Talk4', 'Talk5', 'Grin', 'Frown'):
             continue
         for original, animation in zip(human['AnimationSets'][key]['Animations'], binding['Animations'], strict=True):
             assert original.get('Speed', 1) == animation.get('Speed', 1)
@@ -57,6 +61,10 @@ def verify(res):
             if path not in checked:
                 # Silent reading/ponder faces are Action-only, without a Face binding.
                 data = read(path)
+                if key.endswith('_Speech'):
+                    assert not data['nodeAnimations'], 'Robot speech Action must not compete with Face jaw poses'
+                    checked.add(path)
+                    continue
                 assert set(data['nodeAnimations']) == {'Jaw'} <= bones
                 jaw = data['nodeAnimations']['Jaw']
                 assert jaw['shapeStretch'] == jaw['shapeVisible'] == jaw['shapeUvOffset'] == []
@@ -68,8 +76,16 @@ def verify(res):
         resident = read(res / path)
         assert resident['Parent'] == 'Machinaria_Robot_Base'
         assert not set(resident.get('AnimationSets', {})) & set(human['AnimationSets'])
-    spoken = read(res / 'Common/NPC/Gear/Animations/AetherhavenFaces/LipSync/Story_RustyRobot_Talk_1.blockyanim')
-    assert len({k['delta']['x'] for k in spoken['nodeAnimations']['Jaw']['orientation']}) >= 4
+    apertures=set()
+    for shape in ('A','B','C','D','E','F'):
+        binding=model['AnimationSets']['Aetherhaven_Life_Mouth_'+shape]['Animations'][0]
+        pose=read(res/'Common'/binding['Animation'])
+        opening=pose['nodeAnimations']['Jaw']['orientation'][0]['delta']['x']
+        apertures.add(opening)
+        if shape=='A':assert opening==0
+    assert len(apertures)>=4
+    combined=list((res/'Common/NPC/Gear/Animations/AetherhavenFaces').rglob('*.blockyanim'))+list((RES/'Common/Characters/Animations/Aetherhaven').rglob('*.blockyanim'))
+    assert len(combined)<1000, ('Combined villager animation budget exceeded',len(combined))
     print(f'Verified {len(checked)} native jaw animations, pitch bindings and all three resident models.')
 
 

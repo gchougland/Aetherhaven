@@ -1,6 +1,6 @@
 {
   "RenderMode": "BlendLinear",
-  "ParticleRotationInfluence": "Billboard",
+  "ParticleRotationInfluence": "BillboardY",
   "CameraOffset": 0,
   "LinearFiltering": true,
   "LightInfluence": 0,
@@ -22,8 +22,8 @@
   "Particle": {
     "Texture": "Particles/Aetherhaven/Life/Speech.png",
     "FrameSize": {
-      "Width": 256,
-      "Height": 256
+      "Width": 128,
+      "Height": 128
     },
     "ScaleRatioConstraint": "OneToOne",
     "UVOption": "None",

@@ -1,0 +1,46 @@
+{
+  "formatVersion": 1,
+  "duration": 60,
+  "holdLastKeyframe": true,
+  "nodeAnimations": {
+    "Mouth": {
+      "shapeUvOffset": [
+        {
+          "time": 0,
+          "delta": {
+            "x": 180,
+            "y": -30
+          }
+        },
+        {
+          "time": 60,
+          "delta": {
+            "x": 180,
+            "y": -30
+          }
+        }
+      ],
+      "shapeStretch": [
+        {
+          "time": 0,
+          "delta": {
+            "x": 1,
+            "y": 1.08,
+            "z": 1
+          }
+        },
+        {
+          "time": 60,
+          "delta": {
+            "x": 1,
+            "y": 1.08,
+            "z": 1
+          }
+        }
+      ],
+      "position": [],
+      "orientation": [],
+      "shapeVisible": []
+    }
+  }
+}

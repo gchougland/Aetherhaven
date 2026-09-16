@@ -311,7 +311,7 @@ public final class PlotBuildingKindRequirements {
             || AetherhavenConstants.SHOP_SPOT_BLOCK_TYPE_ID.equals(blockTypeId)
             || TownPortalTravelColor.isTouristPortalBlockTypeId(blockTypeId)
             || AetherhavenConstants.QUEST_BOARD_ITEM_ID.equals(blockTypeId)
-            || AetherhavenConstants.STATUE_OF_GAIA_BLOCK_TYPE_ID.equals(blockTypeId)
+            || PlotCreatorGaiaStatueSupport.isGaiaStatueBlockTypeId(blockTypeId)
             || "Aetherhaven_Town_Planning_Desk".equals(blockTypeId);
     }
 

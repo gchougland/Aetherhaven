@@ -64,7 +64,7 @@ class VillagerLifePersonalityTest {
             }
         }
         for (String item : VillagerLifePersonality.ITEMS) {
-            assertTrue(Files.isRegularFile(RES.resolve("Common/Particles/Aetherhaven/Life/Items/" + item + ".png")), item);
+            assertTrue(Files.isRegularFile(RES.resolve("Common/Particles/Aetherhaven/Life/Items/Centered/" + item + ".png")), item);
             for (String bubble : List.of("Speech", "Thought")) {
                 assertTrue(Files.isRegularFile(RES.resolve("Server/Particles/Aetherhaven/Life/Aetherhaven_Life_" + bubble + "_Item_" + item + ".particlesystem")), item);
             }

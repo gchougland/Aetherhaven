@@ -37,6 +37,12 @@ public final class TownRecord {
     @SerializedName("ownerUuid")
     private String ownerUuid;
 
+    @SerializedName("ownerLevelSnapshot")
+    private com.hexvane.aetherhaven.leveling.OwnerLevelSnapshot ownerLevelSnapshot;
+
+    public com.hexvane.aetherhaven.leveling.OwnerLevelSnapshot getOwnerLevelSnapshot() { return ownerLevelSnapshot; }
+    public void setOwnerLevelSnapshot(com.hexvane.aetherhaven.leveling.OwnerLevelSnapshot snapshot) { ownerLevelSnapshot = snapshot; }
+
     /** Last known username for {@link #ownerUuid} (for UI when the owner is offline). */
     @Nullable
     @SerializedName("ownerUsername")

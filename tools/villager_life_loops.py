@@ -5,7 +5,7 @@ from villager_life_ik import interpolate
 def generate_loops(res,write):
     common=res/'Common/Characters/Animations/Aetherhaven/Life'
     source=json.loads((common/'Read.blockyanim').read_text())
-    loop=copy.deepcopy(source);loop['duration']=360
+    loop=copy.deepcopy(source);loop['duration']=360;loop['holdLastKeyframe']=True
     for name,channels in loop['nodeAnimations'].items():
         for channel,keys in channels.items():
             if not keys:continue

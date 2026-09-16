@@ -15,7 +15,8 @@
       "R-Eye",
       "R-Eyebrow",
       "R-Eyelid"
-    ]
+    ],
+    "sharesHumanFaces": false
   },
   "Saffra_Dunear": {
     "rig": "Feran",
@@ -30,7 +31,8 @@
       "R-Eye",
       "R-Eyebrow",
       "R-Eyelid"
-    ]
+    ],
+    "sharesHumanFaces": false
   },
   "Zephyr_Sandtail": {
     "rig": "Feran",
@@ -45,7 +47,8 @@
       "R-Eye",
       "R-Eyebrow",
       "R-Eyelid"
-    ]
+    ],
+    "sharesHumanFaces": false
   },
   "Nell_Clinkjar": {
     "rig": "Klops",
@@ -61,7 +64,8 @@
       "Eyelid-Bot",
       "Eyelid-Top",
       "Jaw"
-    ]
+    ],
+    "sharesHumanFaces": false
   },
   "Pippin_Geargrin": {
     "rig": "Klops",
@@ -77,7 +81,8 @@
       "Eyelid-Bot",
       "Eyelid-Top",
       "Jaw"
-    ]
+    ],
+    "sharesHumanFaces": false
   },
   "Haku_Mistclaw": {
     "rig": "Slothian",
@@ -90,7 +95,8 @@
       "L-Eyelid",
       "R-Eye",
       "R-Eyelid"
-    ]
+    ],
+    "sharesHumanFaces": false
   },
   "Momo_Canopy": {
     "rig": "Slothian",
@@ -103,7 +109,8 @@
       "L-Eyelid",
       "R-Eye",
       "R-Eyelid"
-    ]
+    ],
+    "sharesHumanFaces": false
   },
   "Rattle_Morrow": {
     "rig": "Skeleton",
@@ -116,7 +123,8 @@
       "Jaw",
       "L-Eye",
       "R-Eye"
-    ]
+    ],
+    "sharesHumanFaces": false
   },
   "Briar_Mosscap": {
     "rig": "Kweebec",
@@ -133,7 +141,8 @@
       "R-Eyebrow",
       "R-Eyelid",
       "R-Eyelid-Bot"
-    ]
+    ],
+    "sharesHumanFaces": false
   },
   "Tumble_Reedwhistle": {
     "rig": "KweebecSharp",
@@ -150,7 +159,8 @@
       "R-Eye",
       "R-Eyelid",
       "R-Eyelid-Bot"
-    ]
+    ],
+    "sharesHumanFaces": false
   },
   "Vask_Hollowmark": {
     "rig": "Outlander",
@@ -165,6 +175,7 @@
       "R-Eye",
       "R-Eyelid",
       "R-Eyelid-Bot"
-    ]
+    ],
+    "sharesHumanFaces": true
   }
 }

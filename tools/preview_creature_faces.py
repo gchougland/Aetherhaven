@@ -97,14 +97,17 @@ def render(model, animation, time, read_common):
         for child in node.get('children', []):
             visit(child, world, position, texture, head)
 
-    texture = Image.open(BASE/model['Texture']).convert('RGBA')
+    def load_texture(path):
+        local=RES/'Common'/path
+        return Image.open(local if local.is_file() else BASE/path).convert('RGBA')
+    texture = load_texture(model['Texture'])
     for root in read_common(model['Model'])['nodes']:
         visit(root, np.eye(3), np.zeros(3), texture)
     for attachment in model.get('DefaultAttachments', []):
         # Inspect facial geometry without hair, hats or armor hiding the hinges.
         if not any(part in attachment['Model'].lower() for part in ('mouth', 'eye')):
             continue
-        texture = Image.open(BASE/attachment['Texture']).convert('RGBA')
+        texture = load_texture(attachment['Texture'])
         for root in read_common(attachment['Model'])['nodes']:
             if root['name'] in anchors:
                 matrix, pos, head = anchors[root['name']]
@@ -125,23 +128,25 @@ def main():
     rows = []
     for rig, (names, degrees) in RIGS.items():
         model = resolve(names[0])
-        path = RES/f'Common/Characters/Animations/Aetherhaven/CreatureFaces/{rig}/LipSync/Explain_BrightMale_Talk_1.blockyanim'
+        table = json.loads((RES/f'Server/Item/Animations/Aetherhaven_Life_Actions_{rig}.json').read_text())
+        if 'Parent' in table:
+            table = json.loads((RES/f'Server/Item/Animations/{table["Parent"]}.json').read_text())
+        table = table['Animations']
+        path = RES/'Common'/table['Explain_Speech']['ThirdPersonFace']
         data = json.loads(path.read_text())
         # Validate every generated face against every resident's actual attachments.
         for name in names:
             bones = bones_for(resolve(name))
-            for file in path.parent.parent.rglob('*.blockyanim'):
+            for file in {RES/'Common'/a['ThirdPersonFace'] for a in table.values()}:
                 tracks = json.loads(file.read_text())['nodeAnimations']
-                assert set(tracks) <= set(bones), (name, file, set(tracks)-set(bones))
-        mouth = data['nodeAnimations']['Jaw' if degrees else 'Mouth']
-        keys = mouth['orientation' if degrees else 'shapeUvOffset']
-        if degrees:
-            peak = max(keys, key=lambda f: f['delta']['x'])['time']
-        else:
-            peak = next(f['time'] for f in keys if f['delta']['x'] == 160)
+                optional = {'L-Eyebrow', 'R-Eyebrow'} if rig == 'Outlander' else set()
+                assert set(tracks) <= set(bones) | optional, (name, file, set(tracks)-set(bones))
         row = Image.new('RGB', (560, 278), '#dce1e4')
-        for i, (label, time) in enumerate([('Rest', 0), ('Speaking', peak)]):
-            row.paste(render(model, data, time, read_common), (280*i, 28))
+        for i, (label, shape) in enumerate([('Rest', 'A'), ('Speaking', 'D')]):
+            posed = copy.deepcopy(data)
+            binding = model['AnimationSets']['Aetherhaven_Life_Mouth_'+shape]['Animations'][0]
+            posed['nodeAnimations'].update(read_common(binding['Animation'])['nodeAnimations'])
+            row.paste(render(model, posed, 1, read_common), (280*i, 28))
             ImageDraw.Draw(row).text((280*i+10, 8), f'{rig}: {label}', fill='#26333e')
         rows.append(row)
         print(f'{rig}: native bones checked; closed/open pose rendered.', flush=True)

@@ -120,6 +120,7 @@ public final class AetherhavenFeatureBootstrap {
     }
 
     public static void startEnabled(@Nonnull AetherhavenPlugin core) {
+        com.hexvane.aetherhaven.leveling.LevelingIntegration.start(core);
         if (!jewelryStarted && AetherhavenFeatures.isLoaded(AetherhavenPluginIds.JEWELRY)) {
             JewelryNativeTooltipManager.refreshAllPlayers();
             JewelryGemTraits.validateStatIdsAtStartup();

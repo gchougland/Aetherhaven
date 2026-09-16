@@ -60,6 +60,11 @@ Group #PropShopRoot {
         LayoutMode: Left;
         Anchor: (Height: 32, Bottom: 8);
 
+        $C.@TextButton #RerollButton {
+          Anchor: (Width: 270, Height: 28, Right: 8);
+          Text: "";
+        }
+
         Group { FlexWeight: 1; }
 
         TextButton #ViewModeList {
@@ -111,6 +116,13 @@ Group #PropShopRoot {
         Label #PriceLine {
           Style: (...$C.@DefaultLabelStyle, TextColor: #c8a060, FontSize: 15, Wrap: true);
           Anchor: (Bottom: 2);
+          Text: "";
+        }
+
+        Label #UnlockLine {
+          Style: (...$C.@DefaultLabelStyle, TextColor: #96a9be, FontSize: 13, Wrap: true);
+          Anchor: (Bottom: 4);
+          Visible: false;
           Text: "";
         }
 

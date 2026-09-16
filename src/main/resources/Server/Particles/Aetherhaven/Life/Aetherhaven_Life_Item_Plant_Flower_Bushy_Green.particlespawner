@@ -1,6 +1,6 @@
 {
   "RenderMode": "BlendLinear",
-  "ParticleRotationInfluence": "Billboard",
+  "ParticleRotationInfluence": "BillboardY",
   "CameraOffset": -0.025,
   "LinearFiltering": true,
   "LightInfluence": 0,
@@ -22,8 +22,8 @@
   "Particle": {
     "Texture": "Particles/Aetherhaven/Life/Items/Centered/Plant_Flower_Bushy_Green.png",
     "FrameSize": {
-      "Width": 256,
-      "Height": 256
+      "Width": 64,
+      "Height": 64
     },
     "ScaleRatioConstraint": "OneToOne",
     "UVOption": "None",

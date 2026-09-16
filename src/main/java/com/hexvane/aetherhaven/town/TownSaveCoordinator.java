@@ -10,6 +10,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 import javax.annotation.Nonnull;
 
 /**
@@ -30,17 +32,15 @@ public final class TownSaveCoordinator {
         if (!manager.shouldPersist()) {
             return;
         }
-        PendingSave pending = PENDING.computeIfAbsent(manager, ignored -> new PendingSave());
-        pending.requestedAtMs = System.currentTimeMillis();
-        pending.immediate = false;
+        // Repeated production updates must not postpone persistence indefinitely, or backups stay stale.
+        PENDING.computeIfAbsent(manager, ignored -> new PendingSave(System.currentTimeMillis()));
     }
 
     public static void requestImmediateSave(@Nonnull TownManager manager) {
         if (!manager.shouldPersist()) {
             return;
         }
-        PendingSave pending = PENDING.computeIfAbsent(manager, ignored -> new PendingSave());
-        pending.requestedAtMs = System.currentTimeMillis();
+        PendingSave pending = PENDING.computeIfAbsent(manager, ignored -> new PendingSave(System.currentTimeMillis()));
         pending.immediate = true;
     }
 
@@ -55,7 +55,7 @@ public final class TownSaveCoordinator {
             return;
         }
         long nowMs = System.currentTimeMillis();
-        if (!pending.immediate && nowMs - pending.requestedAtMs < DEBOUNCE_MS) {
+        if (!pending.isDue(nowMs)) {
             return;
         }
         pending.immediate = false;
@@ -69,6 +69,8 @@ public final class TownSaveCoordinator {
             return;
         }
         try {
+            // An older queued snapshot must not overwrite this final synchronous save later.
+            awaitPendingWrites();
             writeSnapshot(manager);
             PENDING.remove(manager);
         } catch (IOException e) {
@@ -98,6 +100,24 @@ public final class TownSaveCoordinator {
             executor.shutdownNow();
         }
         ioExecutor = null;
+    }
+
+    /** Wait only for already-serialized disk writes; never enqueue work on or wait for a world thread. */
+    public static void awaitPendingWrites() throws IOException {
+        ExecutorService executor = ioExecutor;
+        if (executor == null || executor.isTerminated()) return;
+        try {
+            if (executor.isShutdown()) {
+                if (!executor.awaitTermination(30, TimeUnit.SECONDS)) throw new IOException("Town save drain timed out");
+            } else {
+                executor.submit(() -> {}).get(30, TimeUnit.SECONDS);
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IOException("Interrupted while waiting for town saves", e);
+        } catch (ExecutionException | TimeoutException | java.util.concurrent.RejectedExecutionException e) {
+            throw new IOException("Could not finish pending town saves", e);
+        }
     }
 
     private static void submitAsyncSave(@Nonnull TownManager manager) {
@@ -174,8 +194,12 @@ public final class TownSaveCoordinator {
         }
     }
 
-    private static final class PendingSave {
-        volatile long requestedAtMs;
+    static final class PendingSave {
+        final long requestedAtMs;
         volatile boolean immediate;
+
+        PendingSave(long requestedAtMs) { this.requestedAtMs = requestedAtMs; }
+
+        boolean isDue(long nowMs) { return immediate || nowMs - requestedAtMs >= DEBOUNCE_MS; }
     }
 }

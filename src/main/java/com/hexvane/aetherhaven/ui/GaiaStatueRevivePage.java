@@ -4,6 +4,9 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.plot.GaiaStatueBlock;
+import com.hexvane.aetherhaven.plot.GaiaStatueAppearance;
+import com.hexvane.aetherhaven.plot.GaiaStatueAppearanceService;
+import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.ResidentNpcRecord;
 import com.hexvane.aetherhaven.town.ResidentRegistryService;
@@ -42,9 +45,9 @@ import javax.annotation.Nullable;
 public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPage<GaiaStatueRevivePage.PageData> {
     private static final String ROWS = "#ListScroll #Rows";
 
-    private final Ref<ChunkStore> statueBlockRef;
     private final Vector3i statueBlockWorldPos;
     private boolean templateAppended;
+    private boolean showingAppearance;
 
     public GaiaStatueRevivePage(
         @Nonnull PlayerRef playerRef,
@@ -52,8 +55,9 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
         @Nonnull Vector3i statueBlockWorldPos
     ) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
-        this.statueBlockRef = statueBlockRef;
-        this.statueBlockWorldPos = statueBlockWorldPos;
+        this.showingAppearance = GaiaStatueAppearanceService.isEditorStatue(
+            statueBlockRef.getStore().getExternalData().getWorld(), statueBlockWorldPos, playerRef.getUuid());
+        this.statueBlockWorldPos = new Vector3i(statueBlockWorldPos);
     }
 
     @Override
@@ -68,6 +72,16 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
             templateAppended = true;
         }
         AetherhavenUiLocalization.applyGaiaStatueRevivePage(commandBuilder);
+        commandBuilder.set("#ReviveTab.Text", Message.translation("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.reviveTab"));
+        commandBuilder.set("#AppearanceTab.Text", Message.translation("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.appearanceTab"));
+        commandBuilder.set("#ReviveTab.Disabled", !showingAppearance);
+        commandBuilder.set("#AppearanceTab.Disabled", showingAppearance);
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ReviveTab", new EventData().append("Action", "ReviveTab"), false);
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#AppearanceTab", new EventData().append("Action", "AppearanceTab"), false);
+        if (showingAppearance) {
+            buildAppearance(ref, store, commandBuilder, eventBuilder);
+            return;
+        }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         World world = store.getExternalData().getWorld();
         if (plugin == null) {
@@ -75,8 +89,7 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
             commandBuilder.clear(ROWS);
             return;
         }
-        Store<ChunkStore> cs = statueBlockRef.getStore();
-        GaiaStatueBlock gb = cs.getComponent(statueBlockRef, GaiaStatueBlock.getComponentType());
+        GaiaStatueBlock gb = GaiaStatueAppearanceService.componentAt(world, statueBlockWorldPos);
         if (gb == null || gb.getTownId().isBlank()) {
             commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.statueNotLinked"));
             commandBuilder.clear(ROWS);
@@ -146,6 +159,26 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
+        if ("AppearanceTab".equals(data.action) || "ReviveTab".equals(data.action)) {
+            showingAppearance = "AppearanceTab".equals(data.action);
+            refresh(ref, store);
+            return;
+        }
+        if ("SetAppearance".equals(data.action)) {
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (uc == null || GaiaStatueAppearance.fromBlockTypeId(data.appearanceId) == null) return;
+            World world = store.getExternalData().getWorld();
+            world.execute(() -> {
+                if (!ref.isValid()) return;
+                boolean changed = GaiaStatueAppearanceService.change(world, statueBlockWorldPos, uc.getUuid(), data.appearanceId);
+                PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+                if (!changed && pr != null) {
+                    pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.appearanceFailed"));
+                }
+                refresh(ref, store);
+            });
+            return;
+        }
         if (data.action == null || !"Revive".equalsIgnoreCase(data.action) || data.npcRoleId == null || data.npcRoleId.isBlank()) {
             return;
         }
@@ -154,8 +187,7 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
         if (plugin == null) {
             return;
         }
-        Store<ChunkStore> cs = statueBlockRef.getStore();
-        GaiaStatueBlock gb = cs.getComponent(statueBlockRef, GaiaStatueBlock.getComponentType());
+        GaiaStatueBlock gb = GaiaStatueAppearanceService.componentAt(world, statueBlockWorldPos);
         if (gb == null || gb.getTownId().isBlank()) {
             return;
         }
@@ -259,6 +291,32 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
         );
     }
 
+    private void buildAppearance(Ref<EntityStore> ref, Store<EntityStore> store, UICommandBuilder cmd, UIEventBuilder ev) {
+        World world = store.getExternalData().getWorld();
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        boolean allowed = uc != null && GaiaStatueAppearanceService.canChange(world, statueBlockWorldPos, uc.getUuid());
+        cmd.set("#Hint.TextSpans", Message.translation(allowed
+            ? "aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.appearanceHint"
+            : "aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.appearancePermission"));
+        cmd.set("#Footer.TextSpans", Message.translation("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.appearanceFooter"));
+        cmd.clear(ROWS);
+        var type = ChunkSectionBlockUtil.blockType(world, statueBlockWorldPos.x, statueBlockWorldPos.y, statueBlockWorldPos.z);
+        GaiaStatueAppearance current = type != null ? GaiaStatueAppearance.fromBlockTypeId(type.getId()) : null;
+        int i = 0;
+        for (GaiaStatueAppearance appearance : GaiaStatueAppearance.values()) {
+            cmd.append(ROWS, "Aetherhaven/GaiaStatueAppearanceRow.ui");
+            String row = ROWS + "[" + i++ + "]";
+            cmd.set(row + " #StatueIcon.AssetPath", appearance.iconPath());
+            cmd.set(row + " #StatueName.TextSpans", Message.translation(appearance.nameKey()));
+            cmd.set(row + " #SelectAppearance.Text", Message.translation(current == appearance
+                ? "aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.selected"
+                : "aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.select"));
+            cmd.set(row + " #SelectAppearance.Disabled", !allowed || current == appearance);
+            ev.addEventBinding(CustomUIEventBindingType.Activating, row + " #SelectAppearance",
+                new EventData().append("Action", "SetAppearance").append("AppearanceId", appearance.blockTypeId()), false);
+        }
+    }
+
     private void refresh(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         UICommandBuilder cmd = new UICommandBuilder();
         UIEventBuilder ev = new UIEventBuilder();
@@ -272,6 +330,8 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
             .add()
             .append(new KeyedCodec<>("NpcRoleId", Codec.STRING), (d, v) -> d.npcRoleId = v, d -> d.npcRoleId)
             .add()
+            .append(new KeyedCodec<>("AppearanceId", Codec.STRING), (d, v) -> d.appearanceId = v, d -> d.appearanceId)
+            .add()
             .build();
 
         @Nullable
@@ -279,5 +339,8 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
 
         @Nullable
         private String npcRoleId;
+
+        @Nullable
+        private String appearanceId;
     }
 }

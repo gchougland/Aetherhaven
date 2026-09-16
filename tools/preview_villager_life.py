@@ -9,7 +9,7 @@ from pathlib import Path
 import sys
 import numpy as np
 from PIL import Image, ImageDraw
-from villager_prop_preview import textured_faces
+from villager_prop_preview import textured_faces, geometry_points
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT.parent / 'HytaleSourceCode/hytale-shared-source/HytaleAssets'
@@ -64,18 +64,13 @@ def render(anim, phase, size=(192, 256), yaw=-.54, pitch=.12):
         shape = node.get('shape', {})
         # BlockyModelBoundsParser passes the shape center to child nodes.
         position += world @ np.array([shape.get('offset', {}).get(k, 0) for k in 'xyz'])
-        if (node['name'] in kept or prop) and shape.get('type') == 'box':
-            dims = np.array([shape['settings']['size'][k] for k in 'xyz'])
-            stretch = np.array([shape.get('stretch', {}).get(k, 1) for k in 'xyz'])
-            corners = np.array([[x,y,z] for x in (-.5,.5) for y in (-.5,.5) for z in (-.5,.5)]) * dims * stretch
+        if (node['name'] in kept or prop) and shape.get('type') in ('box','quad'):
+            corners = geometry_points(shape)
             points = (world @ corners.T).T + position
             points = (camera @ points.T).T
             color = '#dcaa83' if node['name'] in ('Head','R-Hand','L-Hand') else '#76a8a0' if node['name'] in ('Chest','Belly','R-Arm','L-Arm','R-Forearm','L-Forearm') else '#5c6583'
             if prop:
                 color='#ebe0c3' if 'Pages' in node['name'] else '#6c9a58' if 'Leaf' in node['name'] or 'Stem' in node['name'] else '#b5a7ca' if 'Stone' in node['name'] else '#c3a569' if 'Bristles' in node['name'] else '#926449'
-                if texture is not None:
-                    uv=shape['textureLayout']['front']['offset'];pixel=texture.getpixel((uv['x'],uv['y']))
-                    color='#'+''.join(f'{v:02x}' for v in pixel[:3])
             if prop and texture is not None:
                 faces.extend(textured_faces(points,shape,texture))
             for indices, shade in ([] if prop and texture is not None else [([0,1,3,2],.65),([4,6,7,5],.88),([0,4,5,1],.55),([2,3,7,6],1.1),([0,2,6,4],.70),([1,5,7,3],1)]):
@@ -83,14 +78,15 @@ def render(anim, phase, size=(192, 256), yaw=-.54, pitch=.12):
                 poly = points[indices]
                 faces.append((poly[:,2].mean(), poly, rgb, '#434b57'))
         for child in node.get('children', []): walk(child, world, position,prop,texture)
-        if node['name']=='R-Attachment' and not prop and 'LifePropRoot' in anim['nodeAnimations']:
-            from villager_life_props import PROPS
-            prop_name=anim.get('previewProp',PROPS.get(anim.get('previewName')))
-            if prop_name:
-                model=json.loads((ROOT/f'src/main/resources/Common/Items/Aetherhaven/Life/{prop_name}.blockymodel').read_text())
-                item=json.loads((ROOT/f'src/main/resources/Server/Item/Items/Aetherhaven/Life/Aetherhaven_Life_Prop_{prop_name}.json').read_text())
-                atlas=Image.open(ASSETS/'Common'/item['Texture']).convert('RGBA')
-                for child in model['nodes'][0]['children']:walk(child,world,position,True,atlas)
+        if node['name'] in ('R-Attachment','L-Attachment') and not prop:
+            from villager_native_items import ITEMS,geometry
+            name=anim.get('previewName')
+            item_id=(anim.get('previewItem') or ITEMS.get(name)) if node['name']=='R-Attachment' else ('Aetherhaven_Life_Prop_Spoon' if name=='Mix' else None)
+            if item_id:
+                nodes,texture_path,scale=geometry(item_id)
+                atlas=Image.open(ASSETS/'Common'/texture_path).convert('RGBA')
+                # geometry() removes the item's authored hand binding root.
+                for child in nodes:walk(child,world*scale,position,True,atlas)
     for node in RIG['nodes']: walk(node, np.eye(3), np.zeros(3))
     im = Image.new('RGB', (size[0]*2,size[1]*2), '#e9e9e6')
     d = ImageDraw.Draw(im)

@@ -445,6 +445,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @SuppressWarnings("removal")
     protected void setup() {
         instance = this;
+        com.hexvane.aetherhaven.backup.AetherhavenBackupResource.register(this::getDataDirectory);
         AetherhavenCoreBootstrap.register(this);
     }
 
@@ -480,6 +481,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEventRegistry().register(AssetPackRegisterEvent.class, e -> this.reloadAetherhavenAssetCatalogs());
         AetherhavenFeatureBootstrap.startEnabled(this);
         CorePrefabWarmup.warmAsync(this.constructionCatalog, this.constructionScheduler);
+        com.hexvane.aetherhaven.backup.AetherhavenBackupResource.startPreparing();
         LOGGER.atInfo().log("Aetherhaven constructions loaded: %s", this.constructionCatalog.ids());
     }
 
@@ -677,6 +679,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
 
     @Override
     protected void shutdown() {
+        com.hexvane.aetherhaven.backup.AetherhavenBackupResource.shutdown();
         AetherhavenFeatureBootstrap.shutdownEnabled();
         if (this.shopPriceTooltipPacketAdapter != null) {
             this.shopPriceTooltipPacketAdapter.deregister();

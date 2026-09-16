@@ -62,6 +62,9 @@ public final class PropsBootstrap {
         PropLootExclusions.ensureDefaultFile(core);
         PropPrefabCache.invalidateCatalog(core.getPropCatalog());
         AetherhavenPlacedInstance.register(plugin.getEntityStoreRegistry());
+        plugin.getEntityStoreRegistry().registerSystem(new PropRemovedEntityCleanupSystem(
+            store -> PropWorldRegistries.getOrCreatePropRegistry(store.getExternalData().getWorld(), core)
+        ));
         plugin.getEntityStoreRegistry().registerSystem(new PropBreakBlockSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new PropPackagingWandTickSystem(core));
         core.registerAetherhavenSubcommand(new AetherhavenPropCommand());

@@ -26,44 +26,53 @@ class ProwlFaceAssetsTest {
         assertEquals("Item", NpcFaceVisuals.itemAnimationsForModel(model, "Item"));
     }
 
-    @Test void everyMappedMouthFrameStaysInsideAnExistingProwlMouthCell() throws Exception {
-        var atlas = javax.imageio.ImageIO.read(RES.resolve("Common/NPC/Prowl/prowl_hytale.png").toFile());
-        int count = 0;
-        try (var files = Files.walk(RES.resolve("Common/Characters/Animations/Aetherhaven/ProwlFaces"))) {
-            for (var path : files.filter(p -> p.toString().endsWith(".blockyanim")).toList()) {
-                var nodes = json(path).getAsJsonObject("nodeAnimations");
-                for (var entry : nodes.entrySet()) for (String channel : new String[]{"position","orientation","shapeStretch","shapeVisible","shapeUvOffset"})
-                    assertTrue(entry.getValue().getAsJsonObject().get(channel).isJsonArray(), path + ":" + channel);
-                for (var key : nodes.getAsJsonObject("Mouth").getAsJsonArray("shapeUvOffset")) {
-                    var uv = key.getAsJsonObject().getAsJsonObject("delta");
-                    assertEquals(0, uv.get("x").getAsInt(), path.toString());
-                    int y = 24 - uv.get("y").getAsInt();
-                    assertTrue(y >= 0 && y <= 120 && y % 8 == 0, path + ":" + y);
-                    assertTrue(494 + 18 <= atlas.getWidth() && y + 8 <= atlas.getHeight());
-                    boolean visible = false;
-                    for (int py=y;py<y+8;py++) for (int px=494;px<512;px++) visible |= (atlas.getRGB(px,py) >>> 24) > 0;
-                    assertTrue(visible, "Empty mouth cell: " + path);
-                }
-                count++;
+    private static JsonObject bone(com.google.gson.JsonArray nodes, String name) {
+        for (var entry : nodes) {
+            var node = entry.getAsJsonObject();
+            if (node.get("name").getAsString().equals(name)) return node;
+            if (node.has("children")) {
+                var found = bone(node.getAsJsonArray("children"), name);
+                if (found != null) return found;
             }
         }
-        assertEquals(988, count);
+        return null;
     }
 
-    @Test void dialogueMoodAndLipTracksAllUseProwlAtlasWhilePreservingPitch() throws Exception {
-        var human = json(RES.resolve("Server/Models/Human/Aetherhaven_Human.json")).getAsJsonObject("AnimationSets");
-        var prowl = json(RES.resolve("Server/Models/Townsfolk/Prowl.json")).getAsJsonObject("AnimationSets");
-        for (String name : new String[]{"Talk","Grin","Frown","Aetherhaven_Life_Lip_Explain_BrightMale_Talk_1_Lower"}) {
-            var oldBinding = human.getAsJsonObject(name).getAsJsonArray("Animations").get(0).getAsJsonObject();
-            var newBinding = prowl.getAsJsonObject(name).getAsJsonArray("Animations").get(0).getAsJsonObject();
-            assertTrue(newBinding.get("Animation").getAsString().startsWith("Characters/Animations/Aetherhaven/ProwlFaces/"));
-            assertEquals(oldBinding.get("Speed"), newBinding.get("Speed"));
+    @Test void mouthUsesPlayerAtlasAtProwlsOriginalPlacement() throws Exception {
+        var body = json(RES.resolve("Common/NPC/Prowl/prowl_hytale.blockymodel"));
+        assertNull(bone(body.getAsJsonArray("nodes"), "Mouth"), "No old embedded mouth may overlay the shared atlas");
+        var anchor = bone(body.getAsJsonArray("nodes"), "Mouth-Attachment");
+        var mesh = json(RES.resolve("Common/NPC/Prowl/Player_Mouth.blockymodel"));
+        var attached = bone(mesh.getAsJsonArray("nodes"), "Mouth-Attachment");
+        assertEquals(anchor.get("position"), attached.get("position"));
+        assertEquals(anchor.get("orientation"), attached.get("orientation"));
+        var mouth = bone(mesh.getAsJsonArray("nodes"), "Mouth");
+        var shape = mouth.getAsJsonObject("shape");
+        assertEquals(20, shape.getAsJsonObject("settings").getAsJsonObject("size").get("x").getAsInt());
+        assertEquals(10, shape.getAsJsonObject("settings").getAsJsonObject("size").get("y").getAsInt());
+        assertEquals(.9, shape.getAsJsonObject("stretch").get("x").getAsDouble());
+        assertEquals(.8, shape.getAsJsonObject("stretch").get("y").getAsDouble());
+        var offset = shape.getAsJsonObject("textureLayout").getAsJsonObject("front").getAsJsonObject("offset");
+        assertEquals(0, offset.get("x").getAsInt());
+        assertEquals(0, offset.get("y").getAsInt());
+        var model = json(RES.resolve("Server/Models/Townsfolk/Prowl.json"));
+        var attachment = model.getAsJsonArray("DefaultAttachments").get(0).getAsJsonObject();
+        assertEquals("NPC/Prowl/Player_Mouth.blockymodel", attachment.get("Model").getAsString());
+        assertEquals("Characters/Body_Attachments/Mouths/Mouth1_Textures/Default_Greyscale.png", attachment.get("Texture").getAsString());
+    }
+
+    @Test void allExpressionsAndActionsAreInheritedFromTheHumanRig() throws Exception {
+        var model = json(RES.resolve("Server/Models/Townsfolk/Prowl.json"));
+        assertEquals("Aetherhaven_Human", model.get("Parent").getAsString());
+        var prowl = model.getAsJsonObject("AnimationSets");
+        for (String name : new String[]{"Talk","Grin","Frown","Wave","PonderDismissive","Yawn","Laugh","DanceBoogie","DancePop","Aetherhaven_Life_Mouth_D","Aetherhaven_Life_Face_Read"})
+            assertFalse(prowl.has(name), "Prowl must inherit shared player facial animations");
+        var human = LifeAssetJson.read(RES.resolve("Server/Item/Animations/Aetherhaven_Life_Actions.json"));
+        for (String suffix : new String[]{"", "_Lower", "_Higher"})
+            assertEquals(human, LifeAssetJson.read(RES.resolve("Server/Item/Animations/Aetherhaven_Life_Actions"+suffix+"_Prowl.json")));
+        Path old = RES.resolve("Common/Characters/Animations/Aetherhaven/ProwlFaces");
+        if (Files.exists(old)) try (var paths = Files.walk(old)) {
+            assertEquals(0, paths.filter(p -> p.toString().endsWith(".blockyanim")).count());
         }
-        var animation = json(RES.resolve("Common/Characters/Animations/Aetherhaven/ProwlFaces/LipSync/Explain_BrightMale_Talk_1.blockyanim"));
-        var rows = new java.util.HashSet<Integer>();
-        for (var key : animation.getAsJsonObject("nodeAnimations").getAsJsonObject("Mouth").getAsJsonArray("shapeUvOffset"))
-            rows.add(key.getAsJsonObject().getAsJsonObject("delta").get("y").getAsInt());
-        assertTrue(rows.size() >= 4, "The clip must visibly change mouth shapes");
-        assertTrue(rows.contains(0), "Speech returns to Prowl's neutral mouth");
     }
 }

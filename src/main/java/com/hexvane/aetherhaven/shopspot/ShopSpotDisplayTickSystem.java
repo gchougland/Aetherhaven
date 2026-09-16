@@ -2,7 +2,6 @@ package com.hexvane.aetherhaven.shopspot;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
-import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.system.tick.TickingSystem;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -32,16 +31,6 @@ public final class ShopSpotDisplayTickSystem extends TickingSystem<EntityStore> 
             return;
         }
         ShopSpotRegistry registry = AetherhavenWorldRegistries.getOrCreateShopSpotRegistry(world, plugin);
-        var tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        for (ShopSpotRecord record : registry.allRecords()) {
-            if (!ShopSpotDisplayService.isSpotChunkLoaded(world, record)) {
-                ShopSpotDisplayService.removeDisplay(world, store, null, plugin, registry, record);
-                continue;
-            }
-            TownRecord town = tm.getTown(record.getTownId());
-            if (town != null) {
-                ShopSpotDisplayService.syncDisplay(world, store, null, plugin, registry, record, town);
-            }
-        }
+        ShopSpotDisplayService.syncAllInWorld(world, store, plugin, registry);
     }
 }

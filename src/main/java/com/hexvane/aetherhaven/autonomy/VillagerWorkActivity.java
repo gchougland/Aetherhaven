@@ -20,7 +20,7 @@ public enum VillagerWorkActivity {
     CRAFT(null, null, null, null, null, true, 1.0f),
     READ(null, null, null, null, null, true, 1.0f),
     SWEEP(null, null, null, null, null, true, 1.0f),
-    INSPECT(null, null, null, null, null, true, 1.0f),
+    MIX(null, null, null, null, null, true, 1.0f),
     TEND(null, null, null, null, null, true, 1.0f),
     LEISURE(null, null, null, null, null, true, 1.0f);
 
@@ -112,11 +112,11 @@ public enum VillagerWorkActivity {
             // resident's job supply those actions, including already saved POIs.
             if (tagged != null && tagged.isLeisure() && tagged != READ && tagged != CRAFT) return tagged;
             return switch (bindingKind.trim().toLowerCase(Locale.ROOT)) {
-                case TownVillagerBinding.KIND_CHEF -> CRAFT;
+                case TownVillagerBinding.KIND_CHEF -> MIX;
                 case TownVillagerBinding.KIND_FLORIST -> TEND;
                 case TownVillagerBinding.KIND_INNKEEPER -> SWEEP;
                 case TownVillagerBinding.KIND_MERCHANT, TownVillagerBinding.KIND_FURNITURE_MERCHANT,
-                     TownVillagerBinding.KIND_CRYSTAL_KEEPER, TownVillagerBinding.KIND_PYROTECHNIC -> INSPECT;
+                     TownVillagerBinding.KIND_CRYSTAL_KEEPER, TownVillagerBinding.KIND_PYROTECHNIC -> READ;
                 default -> READ;
             };
         }
@@ -155,7 +155,7 @@ public enum VillagerWorkActivity {
             || poi.getInteractionKind() == PoiInteractionKind.SLEEP || PoiScoring.isEatPoi(poi)) return primary;
         VillagerWorkActivity explicit = fromTags(poi.getTags());
         if (explicit != null && explicit != READ && explicit != CRAFT) return primary;
-        if (roll >= 0 && roll < .25) return primary == SWEEP ? INSPECT : SWEEP;
+        if (roll >= 0 && roll < .25) return primary == SWEEP ? READ : SWEEP;
         if (roll >= .25 && roll < .4) return READ;
         return primary;
     }
@@ -240,7 +240,8 @@ public enum VillagerWorkActivity {
                 case "craft", "build" -> CRAFT;
                 case "read" -> READ;
                 case "sweep", "clean" -> SWEEP;
-                case "inspect", "sort" -> INSPECT;
+                case "inspect", "sort" -> READ;
+                case "mix", "cook" -> MIX;
                 case "tend" -> TEND;
                 case "leisure", "fun" -> LEISURE;
                 default -> null;

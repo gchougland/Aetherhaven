@@ -51,6 +51,18 @@ public final class RaidQuestSpawnService {
             return false;
         }
 
+        int ownerLevel = com.hexvane.aetherhaven.leveling.LevelingIntegration.ownerLevel(town, store);
+        if (com.hexvane.aetherhaven.leveling.LevelingIntegration.isActive() && ownerLevel <= 0) {
+            LOGGER.atWarning().log("Raid %s postponed: town owner's level is not known yet", slot.instanceIdOrEmpty());
+            for (PlayerRef player : world.getPlayerRefs()) {
+                if (acceptingPlayerUuid.equals(player.getUuid())) {
+                    player.sendMessage(Message.raw("The town owner's level is not available yet. Have the owner join, wait a few seconds, then start the raid again."));
+                    break;
+                }
+            }
+            return false;
+        }
+
         Random rng = new Random(slot.getGenerationSeed() ^ acceptingPlayerUuid.getLeastSignificantBits());
 
         Vector3d charterMarchTarget = charterMarchTarget(world, town);
@@ -147,6 +159,7 @@ public final class RaidQuestSpawnService {
             }
             RaidQuestMarchUtil.bootstrapMarch(binding, spawnPos, marchTarget, marchNowMs);
             store.putComponent(mobRef, RaidQuestMobBinding.getComponentType(), binding);
+            com.hexvane.aetherhaven.leveling.LevelingIntegration.scaleRaid(mobRef, store, ownerLevel);
             if (mobUuid != null) {
                 spawnedUuids.add(mobUuid.getUuid().toString());
             }

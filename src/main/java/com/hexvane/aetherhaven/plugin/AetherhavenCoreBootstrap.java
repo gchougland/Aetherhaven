@@ -192,6 +192,7 @@ public final class AetherhavenCoreBootstrap {
         com.hexvane.aetherhaven.blockpalette.BlockPalettesBootstrap.register(plugin, plugin);
         // After shared components and the /ah command tree — feature packs register systems and subcommands.
         AetherhavenFeatureBootstrap.registerEnabled(plugin);
+        com.hexvane.aetherhaven.leveling.LevelingIntegration.register(plugin);
         LOGGER.atInfo().log("Aetherhaven core v%s setup complete", plugin.getManifest().getVersion().toString());
     }
 
@@ -281,7 +282,8 @@ public final class AetherhavenCoreBootstrap {
                 Ref<ChunkStore> blockRef = target.blockRef();
                 GaiaStatueBlock gb = blockRef.getStore().getComponent(blockRef, GaiaStatueBlock.getComponentType());
                 TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-                if (gb != null && TownMemberBlockAccess.denyIfNotMember(playerRef, tm, gb.getTownId(), playerUuid)) {
+                if (!com.hexvane.aetherhaven.plot.GaiaStatueAppearanceService.isEditorStatue(world, target.blockWorldPos(), playerUuid)
+                    && gb != null && TownMemberBlockAccess.denyIfNotMember(playerRef, tm, gb.getTownId(), playerUuid)) {
                     return null;
                 }
                 return new GaiaStatueRevivePage(playerRef, blockRef, target.blockWorldPos());

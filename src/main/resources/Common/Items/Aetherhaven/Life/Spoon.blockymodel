@@ -1,12 +1,11 @@
 {
   "nodes": [
     {
-      "id": "1",
-      "name": "R-Attachment",
+      "name": "L-Attachment",
       "position": {
-        "x": 0,
-        "y": 0,
-        "z": 0
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
       },
       "orientation": {
         "x": 0.0,
@@ -31,12 +30,10 @@
         },
         "textureLayout": {},
         "visible": true,
-        "doubleSided": false,
-        "shadingMode": "flat"
+        "doubleSided": false
       },
       "children": [
         {
-          "id": "2",
           "name": "LifePropRoot",
           "position": {
             "x": 2.2955206203760514e-10,
@@ -44,10 +41,10 @@
             "z": -1.0000006215871107
           },
           "orientation": {
-            "x": -0.7069992,
-            "y": 0.0739125,
-            "z": -0.0123404,
-            "w": 0.7032331
+            "x": -0.7071068,
+            "y": -0.0,
+            "z": 0.0,
+            "w": 0.7071068
           },
           "shape": {
             "type": "none",
@@ -66,23 +63,21 @@
             },
             "textureLayout": {},
             "visible": true,
-            "doubleSided": false,
-            "shadingMode": "flat"
+            "doubleSided": false
           },
           "children": [
             {
-              "id": "3",
-              "name": "Life_Handle",
+              "name": "LifeMesh_3_SpoonHandle",
               "position": {
-                "x": 0,
-                "y": 3,
-                "z": 0
+                "x": 0.0,
+                "y": -0.8,
+                "z": 0.0
               },
               "orientation": {
                 "x": 0.0,
                 "y": 0.0,
-                "z": 0.0,
-                "w": 1.0
+                "z": 1.0,
+                "w": 0.0
               },
               "shape": {
                 "type": "box",
@@ -92,22 +87,22 @@
                   "z": 0
                 },
                 "stretch": {
-                  "x": 2,
-                  "y": 18,
-                  "z": 2
+                  "x": 0.96,
+                  "y": 2.3000000000000003,
+                  "z": 0.8
                 },
                 "settings": {
                   "size": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
+                    "x": 2,
+                    "y": 8,
+                    "z": 2
                   }
                 },
                 "textureLayout": {
                   "front": {
                     "offset": {
-                      "x": 49,
-                      "y": 39
+                      "x": 1,
+                      "y": 1
                     },
                     "mirror": {
                       "x": false,
@@ -117,8 +112,8 @@
                   },
                   "back": {
                     "offset": {
-                      "x": 49,
-                      "y": 39
+                      "x": 1,
+                      "y": 1
                     },
                     "mirror": {
                       "x": false,
@@ -128,8 +123,8 @@
                   },
                   "left": {
                     "offset": {
-                      "x": 49,
-                      "y": 39
+                      "x": 1,
+                      "y": 1
                     },
                     "mirror": {
                       "x": false,
@@ -139,8 +134,8 @@
                   },
                   "right": {
                     "offset": {
-                      "x": 49,
-                      "y": 39
+                      "x": 1,
+                      "y": 1
                     },
                     "mirror": {
                       "x": false,
@@ -150,8 +145,8 @@
                   },
                   "top": {
                     "offset": {
-                      "x": 49,
-                      "y": 39
+                      "x": 1,
+                      "y": 1
                     },
                     "mirror": {
                       "x": false,
@@ -161,8 +156,8 @@
                   },
                   "bottom": {
                     "offset": {
-                      "x": 49,
-                      "y": 39
+                      "x": 1,
+                      "y": 1
                     },
                     "mirror": {
                       "x": false,
@@ -171,26 +166,25 @@
                     "angle": 0
                   }
                 },
-                "unwrapMode": "custom",
                 "visible": true,
                 "doubleSided": false,
-                "shadingMode": "flat"
+                "shadingMode": "standard"
               },
-              "children": []
+              "children": [],
+              "id": "3"
             },
             {
-              "id": "4",
-              "name": "Life_SpoonBowl",
+              "name": "LifeMesh_4_SpoonNeck",
               "position": {
-                "x": 0,
-                "y": 14,
-                "z": 0
+                "x": 0.0,
+                "y": -9.600000000000001,
+                "z": 0.0
               },
               "orientation": {
                 "x": 0.0,
                 "y": 0.0,
-                "z": 0.0,
-                "w": 1.0
+                "z": 1.0,
+                "w": 0.0
               },
               "shape": {
                 "type": "box",
@@ -200,22 +194,22 @@
                   "z": 0
                 },
                 "stretch": {
-                  "x": 6,
-                  "y": 7,
-                  "z": 2
+                  "x": 1.4000000000000001,
+                  "y": 0.5,
+                  "z": 0.8
                 },
                 "settings": {
                   "size": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
+                    "x": 2,
+                    "y": 8,
+                    "z": 2
                   }
                 },
                 "textureLayout": {
                   "front": {
                     "offset": {
-                      "x": 49,
-                      "y": 39
+                      "x": 1,
+                      "y": 1
                     },
                     "mirror": {
                       "x": false,
@@ -225,8 +219,8 @@
                   },
                   "back": {
                     "offset": {
-                      "x": 49,
-                      "y": 39
+                      "x": 1,
+                      "y": 1
                     },
                     "mirror": {
                       "x": false,
@@ -236,8 +230,8 @@
                   },
                   "left": {
                     "offset": {
-                      "x": 49,
-                      "y": 39
+                      "x": 1,
+                      "y": 1
                     },
                     "mirror": {
                       "x": false,
@@ -247,8 +241,8 @@
                   },
                   "right": {
                     "offset": {
-                      "x": 49,
-                      "y": 39
+                      "x": 1,
+                      "y": 1
                     },
                     "mirror": {
                       "x": false,
@@ -258,8 +252,8 @@
                   },
                   "top": {
                     "offset": {
-                      "x": 49,
-                      "y": 39
+                      "x": 1,
+                      "y": 1
                     },
                     "mirror": {
                       "x": false,
@@ -269,8 +263,8 @@
                   },
                   "bottom": {
                     "offset": {
-                      "x": 49,
-                      "y": 39
+                      "x": 1,
+                      "y": 1
                     },
                     "mirror": {
                       "x": false,
@@ -279,16 +273,553 @@
                     "angle": 0
                   }
                 },
-                "unwrapMode": "custom",
                 "visible": true,
                 "doubleSided": false,
-                "shadingMode": "flat"
+                "shadingMode": "standard"
               },
-              "children": []
+              "children": [],
+              "id": "4"
+            },
+            {
+              "name": "LifeMesh_5_SpoonBowlFloor",
+              "position": {
+                "x": 0.0,
+                "y": -13.600000000000001,
+                "z": -0.48
+              },
+              "orientation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 1.0,
+                "w": 0.0
+              },
+              "shape": {
+                "type": "box",
+                "offset": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                },
+                "stretch": {
+                  "x": 2.0,
+                  "y": 0.7000000000000001,
+                  "z": 0.4
+                },
+                "settings": {
+                  "size": {
+                    "x": 2,
+                    "y": 8,
+                    "z": 2
+                  }
+                },
+                "textureLayout": {
+                  "front": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "back": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "left": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "right": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "top": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "bottom": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  }
+                },
+                "visible": true,
+                "doubleSided": false,
+                "shadingMode": "standard"
+              },
+              "children": [],
+              "id": "5"
+            },
+            {
+              "name": "LifeMesh_6_SpoonRimLeft",
+              "position": {
+                "x": 2.4000000000000004,
+                "y": -13.600000000000001,
+                "z": 0.24
+              },
+              "orientation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 1.0,
+                "w": 0.0
+              },
+              "shape": {
+                "type": "box",
+                "offset": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                },
+                "stretch": {
+                  "x": 0.5599999999999999,
+                  "y": 0.7000000000000001,
+                  "z": 0.8
+                },
+                "settings": {
+                  "size": {
+                    "x": 2,
+                    "y": 8,
+                    "z": 2
+                  }
+                },
+                "textureLayout": {
+                  "front": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "back": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "left": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "right": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "top": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "bottom": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  }
+                },
+                "visible": true,
+                "doubleSided": false,
+                "shadingMode": "standard"
+              },
+              "children": [],
+              "id": "6"
+            },
+            {
+              "name": "LifeMesh_7_SpoonRimRight",
+              "position": {
+                "x": -2.4000000000000004,
+                "y": -13.600000000000001,
+                "z": 0.24
+              },
+              "orientation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 1.0,
+                "w": 0.0
+              },
+              "shape": {
+                "type": "box",
+                "offset": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                },
+                "stretch": {
+                  "x": 0.5599999999999999,
+                  "y": 0.7000000000000001,
+                  "z": 0.8
+                },
+                "settings": {
+                  "size": {
+                    "x": 2,
+                    "y": 8,
+                    "z": 2
+                  }
+                },
+                "textureLayout": {
+                  "front": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "back": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "left": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "right": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "top": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "bottom": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  }
+                },
+                "visible": true,
+                "doubleSided": false,
+                "shadingMode": "standard"
+              },
+              "children": [],
+              "id": "7"
+            },
+            {
+              "name": "LifeMesh_8_SpoonRimTop",
+              "position": {
+                "x": 0.0,
+                "y": -16.8,
+                "z": 0.24
+              },
+              "orientation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 1.0,
+                "w": 0.0
+              },
+              "shape": {
+                "type": "box",
+                "offset": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                },
+                "stretch": {
+                  "x": 2.0,
+                  "y": 0.15000000000000002,
+                  "z": 0.8
+                },
+                "settings": {
+                  "size": {
+                    "x": 2,
+                    "y": 8,
+                    "z": 2
+                  }
+                },
+                "textureLayout": {
+                  "front": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "back": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "left": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "right": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "top": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "bottom": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  }
+                },
+                "visible": true,
+                "doubleSided": false,
+                "shadingMode": "standard"
+              },
+              "children": [],
+              "id": "8"
+            },
+            {
+              "name": "LifeMesh_9_SpoonRimBottom",
+              "position": {
+                "x": 0.0,
+                "y": -10.4,
+                "z": 0.24
+              },
+              "orientation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 1.0,
+                "w": 0.0
+              },
+              "shape": {
+                "type": "box",
+                "offset": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                },
+                "stretch": {
+                  "x": 1.6,
+                  "y": 0.15000000000000002,
+                  "z": 0.8
+                },
+                "settings": {
+                  "size": {
+                    "x": 2,
+                    "y": 8,
+                    "z": 2
+                  }
+                },
+                "textureLayout": {
+                  "front": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "back": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "left": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "right": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "top": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "bottom": {
+                    "offset": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  }
+                },
+                "visible": true,
+                "doubleSided": false,
+                "shadingMode": "standard"
+              },
+              "children": [],
+              "id": "9"
             }
-          ]
+          ],
+          "id": "2"
         }
-      ]
+      ],
+      "id": "1"
     }
   ],
   "lod": "auto"

@@ -18,10 +18,31 @@ import javax.annotation.Nonnull;
  * options appear without discarding existing settings.
  */
 public final class AetherhavenPluginConfig {
+    private String levelingIntegration = "AUTO";
+    private double questCompletionXpPercent = 5;
+    private double raidCompletionXpPercent = 15;
+    public double getCompletionXpPercent(boolean raid) {
+        double value = raid ? raidCompletionXpPercent : questCompletionXpPercent;
+        return Double.isFinite(value) ? Math.clamp(value, 0, 100) : 0;
+    }
+
+    public String getLevelingIntegration() {
+        String value = levelingIntegration == null ? "AUTO" : levelingIntegration.trim().toUpperCase(java.util.Locale.ROOT);
+        return Set.of("AUTO", "ENDLESS_LEVELING", "RPG_LEVELING", "NONE").contains(value) ? value : "NONE";
+    }
     /** Hunger points (0..100) drained per second at full rate; energy/fun use lower multipliers in {@link VillagerNeedsDecaySystem}. */
     public static final float DEFAULT_VILLAGER_NEEDS_DECAY_PER_SECOND = 0.0525f;
 
     public static final BuilderCodec<AetherhavenPluginConfig> CODEC = BuilderCodec.builder(AetherhavenPluginConfig.class, AetherhavenPluginConfig::new)
+        .append(new KeyedCodec<>("QuestCompletionXpPercent", Codec.DOUBLE), (o, v) -> o.questCompletionXpPercent = v, o -> o.questCompletionXpPercent)
+        .documentation("Completion XP as a percentage of the completing player's current full level XP requirement (0 disables). Requires a leveling integration.")
+        .add()
+        .append(new KeyedCodec<>("RaidCompletionXpPercent", Codec.DOUBLE), (o, v) -> o.raidCompletionXpPercent = v, o -> o.raidCompletionXpPercent)
+        .documentation("Raid turn-in XP percentage; replaces the ordinary quest bonus, in addition to native kill XP (0 disables).")
+        .add()
+        .append(new KeyedCodec<>("LevelingIntegration", Codec.STRING), (o, v) -> o.levelingIntegration = v, o -> o.levelingIntegration)
+        .documentation("Optional town-owner NPC scaling: AUTO, ENDLESS_LEVELING, RPG_LEVELING, or NONE. AUTO prefers Endless if both are installed. Restart required.")
+        .add()
         .append(
             new KeyedCodec<>("ConstructionBlocksPerTick", Codec.INTEGER),
             (o, v) -> o.constructionBlocksPerTick = v,
@@ -1688,6 +1709,9 @@ public final class AetherhavenPluginConfig {
      * in place using {@link #defaults()} or another template (same config object the plugin already holds).
      */
     public void copyStateFrom(@Nonnull AetherhavenPluginConfig o) {
+        this.levelingIntegration = o.levelingIntegration;
+        this.questCompletionXpPercent = o.questCompletionXpPercent;
+        this.raidCompletionXpPercent = o.raidCompletionXpPercent;
         this.constructionBlocksPerTick = o.constructionBlocksPerTick;
         this.constructionMinIntervalMs = o.constructionMinIntervalMs;
         this.assemblyGameDayLengthMsOverride = o.assemblyGameDayLengthMsOverride;

@@ -1,0 +1,13 @@
+{
+  "Parent": "Aetherhaven_Statue_Of_Gaia",
+  "Icon": "Icons/ItemsGenerated/Furniture_Temple_Dark_Statue_Gaia.png",
+  "BlockType": {
+    "CustomModel": "Blocks/Decorative_Sets/Temple_Dark/Statue.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Decorative_Sets/Temple_Dark/Statue_Texture.png",
+        "Weight": 1
+      }
+    ]
+  }
+}

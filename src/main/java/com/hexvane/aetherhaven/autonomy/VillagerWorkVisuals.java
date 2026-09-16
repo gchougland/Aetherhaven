@@ -70,7 +70,7 @@ public final class VillagerWorkVisuals {
                 || activity == VillagerWorkActivity.READ
                 || activity == VillagerWorkActivity.CRAFT
                 || activity == VillagerWorkActivity.SWEEP
-                || activity == VillagerWorkActivity.INSPECT
+                || activity == VillagerWorkActivity.MIX
                 || activity == VillagerWorkActivity.TEND) {
                 playLeisureBeat(npcRef, store, commandBuffer, npc, activity, PoiScoring.isWorkPoi(poi));
                 return true;
@@ -104,7 +104,7 @@ public final class VillagerWorkVisuals {
             case READ -> READ_EMOTE;
             case CRAFT -> "Aetherhaven_Life_Craft";
             case SWEEP -> "Aetherhaven_Life_Sweep";
-            case INSPECT -> "Aetherhaven_Life_Inspect";
+            case MIX -> "Aetherhaven_Life_Mix";
             case TEND -> "Aetherhaven_Life_Tend";
             default -> LEISURE_EMOTES[ThreadLocalRandom.current().nextInt(LEISURE_EMOTES.length)];
         };

@@ -47,6 +47,9 @@ def quat(angles):
 # Each gesture has an anticipation, two expressive poses, a settle and a return.
 # Arms rotate forward around X; forearm bends bring hands toward chest/face.
 POSES = {
+    'Mix': ({'Head': (16,0,0)}, {'Head': (14,0,0)}, 420),
+    'ShowItem': ({'R-Arm': (-50, 0, -16), 'R-Forearm': (-70, 0, 0), 'L-Arm': (-25, 0, 18), 'L-Forearm': (-55, 0, -10), 'Head': (9, -8, 3)},
+                 {'R-Arm': (-65, -12, -18), 'R-Forearm': (-48, 0, 0), 'L-Arm': (-35, -8, 22), 'Head': (-3, 7, 0), 'Chest': (0, -6, 0)}, 96),
     'Greet': ({'R-Arm': (-105, 0, -30), 'R-Forearm': (-38, 0, 0), 'Head': (0, -9, 8)}, {'R-Hand': (0, 0, 30), 'R-Arm': (-110, 0, -18)}, 72),
     'Explain': ({'R-Arm': (-42, -12, -24), 'R-Forearm': (-48, 0, 15), 'L-Arm': (-24, 0, 18), 'Head': (-5, 10, 4)}, {'R-Arm': (-60, 16, -38), 'L-Forearm': (-55, 0, -15), 'Chest': (0, -8, 0)}, 78),
     'Story': ({'R-Arm': (-65, 0, -45), 'L-Arm': (-50, 0, 35), 'R-Forearm': (-35, 0, 0), 'L-Forearm': (-35, 0, 0), 'Chest': (-7, 8, 0)}, {'R-Arm': (-90, 0, -18), 'L-Arm': (-30, 0, 50), 'Head': (-12, -12, 7)}, 84),
@@ -91,12 +94,15 @@ def animations():
             tracks[bone] = {'orientation': [{'time': t, 'delta': quat(p), 'interpolationType': 'smooth'} for t, p in poses]}
         tracks = ik.bake(name, tracks, duration, a, b)
         tracks = props.bake(name, tracks, duration, ik)
+        if name == 'Mix':
+            from villager_life_mixing import bake
+            tracks = bake(ik, duration)
         path = f'Characters/Animations/Aetherhaven/Life/{name}.blockyanim'
-        write_json(COMMON / path, {'formatVersion': 1, 'duration': duration, 'holdLastKeyframe': False, 'nodeAnimations': tracks})
-        model['AnimationSets'][PREFIX + name] = {'Animations': [{'Animation': path, 'Looping': False, 'BlendingDuration': .18}]}
+        write_json(COMMON / path, {'formatVersion': 1, 'duration': duration, 'holdLastKeyframe': name in ('Mix','Sweep'), 'nodeAnimations': tracks})
+        model['AnimationSets'][PREFIX + name] = {'Animations': [{'Animation': path, 'Looping': name in ('Mix','Sweep'), 'BlendingDuration': .35}]}
         actions[name] = {'ThirdPerson': path, 'ThirdPersonMoving': path,
                          'ThirdPersonFace': f'Characters/Animations/Aetherhaven/Life/Faces/{name}.blockyanim',
-                         'Speed': 1, 'Looping': False, 'BlendingDuration': .22}
+                         'Speed': 1, 'Looping': name in ('Mix','Sweep'), 'BlendingDuration': .35}
     write_json(model_path, model)
     write_json(RES/'Server/Item/Animations/Aetherhaven_Life_Actions.json', {'Animations': actions, 'WiggleWeights': {}})
     write_json(RES/'defaults/villager_life_timing.json', {name: round(seconds*1000) for name, seconds in DURATIONS.items()})
@@ -118,12 +124,15 @@ def icon(name):
         mask = Image.new('L', im.size)
         m = ImageDraw.Draw(mask)
         if name == 'Speech':
-            m.polygon([(43*4, 78*4), (35*4, 110*4), (67*4, 78*4)], fill=255)
+            m.polygon([(52*4, 78*4), (64*4, 110*4), (76*4, 78*4)], fill=255)
             m.rounded_rectangle((11*4, 15*4, 117*4, 89*4), radius=24*4, fill=255)
         else:
             for box in [(12, 28, 64, 77), (29, 12, 85, 70), (61, 19, 115, 75), (26, 38, 96, 90),
-                        (40, 89, 55, 101), (31, 102, 39, 110)]:
+                        (56, 89, 71, 101), (60, 102, 68, 110)]:
                 m.ellipse(tuple(v*4 for v in box), fill=255)
+        shifted = Image.new('L', im.size)
+        shifted.paste(mask, (0, 13*4))
+        mask = shifted
         im.paste(INK, mask=mask.filter(ImageFilter.MaxFilter(21)))
         im.paste('#fff8ea', mask=mask)
         return im.resize((128, 128), Image.Resampling.LANCZOS)
@@ -195,16 +204,17 @@ def particles():
         else:
             pic = anchor_layer(pic)
         pic.save(path / f'{name}.png')
-        display = pic if name in ('Speech', 'Thought') else Image.alpha_composite(anchor_layer(icon('Thought')), pic)
+        display = pic.copy() if name in ('Speech', 'Thought') else icon('Thought')
+        if name not in ('Speech', 'Thought'): display.alpha_composite(pic, (32, 32))
         display = display.resize((128,128), Image.Resampling.LANCZOS)
         preview.paste(display, ((i % 7)*128, (i//7)*160), display)
         ImageDraw.Draw(preview).text(((i % 7)*128+14, (i//7)*160+132), name, fill='white')
         scale = {axis: {'Min': BUBBLE_SCALE, 'Max': BUBBLE_SCALE} for axis in ('X', 'Y')}
-        spawn = {'RenderMode': 'BlendLinear', 'ParticleRotationInfluence': 'Billboard', 'CameraOffset': -.025 if name not in ('Speech', 'Thought') else 0,
+        spawn = {'RenderMode': 'BlendLinear', 'ParticleRotationInfluence': 'BillboardY', 'CameraOffset': -.025 if name not in ('Speech', 'Thought') else 0,
                  'LinearFiltering': True, 'LightInfluence': 0, 'MaxConcurrentParticles': 1,
                  'TotalParticles': {'Min': 1, 'Max': 1}, 'SpawnBurst': True, 'SpawnRate': {'Min': 1, 'Max': 1},
                  'ParticleLifeSpan': {'Min': 2.6, 'Max': 2.6}, 'LifeSpan': .1,
-                 'Particle': {'Texture': f'Particles/Aetherhaven/Life/{name}.png', 'FrameSize': {'Width': CANVAS_SIZE, 'Height': CANVAS_SIZE},
+                 'Particle': {'Texture': f'Particles/Aetherhaven/Life/{name}.png', 'FrameSize': {'Width': pic.width, 'Height': pic.height},
                               'ScaleRatioConstraint': 'OneToOne', 'UVOption': 'None',
                               'InitialAnimationFrame': {'Opacity': 1, 'Scale': scale},
                               'Animation': {'0': {'Opacity': 0}, '8': {'Opacity': 1}, '85': {'Opacity': 1}, '100': {'Opacity': 0}}}}
@@ -250,9 +260,7 @@ def item_thoughts():
     sheet = Image.new('RGBA',(128*8,160*math.ceil(len(wanted)/8)),'#8b98ae')
     for index, item in enumerate(sorted(wanted)):
         src = available[item]
-        dst = texture_dir/(item+'.png')
-        shutil.copyfile(src, dst)
-        raw = Image.open(dst).convert('RGBA')
+        raw = Image.open(src).convert('RGBA')
         centered = texture_dir/'Centered'/(item+'.png')
         centered.parent.mkdir(parents=True, exist_ok=True)
         fit_icon(raw).save(centered)

@@ -14,6 +14,7 @@ public final class ShopSpotRegistry {
     private final World world;
     private final Map<UUID, ShopSpotRecord> byId = new HashMap<>();
     private final Map<Long, UUID> byBlockKey = new HashMap<>();
+    final ShopSpotDisplayQueue displayUpdates = new ShopSpotDisplayQueue();
 
     public ShopSpotRegistry(@Nonnull World world) {
         this.world = world;

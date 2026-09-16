@@ -74,3 +74,21 @@ aetherhaven.ui.gaiaStatue.reviveSuccess=A thread of life returns to the square.
 aetherhaven.ui.gaiaStatue.reviveFailed=The blessing did not take. Essence was returned.
 aetherhaven.ui.gaiaStatue.footer=Only the town owner may use this blessing. Missing villagers can be called back near the statue.
 aetherhaven.ui.gaiaStatue.revive=Revive
+
+aetherhaven.ui.gaiaStatue.reviveTab = Revive villagers
+aetherhaven.ui.gaiaStatue.appearanceTab = Appearance
+aetherhaven.ui.gaiaStatue.appearanceHint = Choose a statue appearance. Gaia's powers and placement footprint stay the same.
+aetherhaven.ui.gaiaStatue.appearancePermission = You need permission to manage constructions, or an active editor session containing this statue.
+aetherhaven.ui.gaiaStatue.appearanceFooter = This choice is saved with the statue and included when exporting your build.
+aetherhaven.ui.gaiaStatue.appearanceFailed = The statue could not be changed. Check your permissions and that the statue is still there.
+aetherhaven.ui.gaiaStatue.selected = Selected
+aetherhaven.ui.gaiaStatue.select = Select
+
+aetherhaven.ui.gaiaStatue.reviveTab = Revive villagers
+aetherhaven.ui.gaiaStatue.appearanceTab = Appearance
+aetherhaven.ui.gaiaStatue.appearanceHint = Choose a statue appearance. Gaia's powers and placement footprint stay the same.
+aetherhaven.ui.gaiaStatue.appearancePermission = You need permission to manage constructions, or an active editor session containing this statue.
+aetherhaven.ui.gaiaStatue.appearanceFooter = This choice is saved with the statue and included when exporting your build.
+aetherhaven.ui.gaiaStatue.appearanceFailed = The statue could not be changed. Check your permissions and that the statue is still there.
+aetherhaven.ui.gaiaStatue.selected = Selected
+aetherhaven.ui.gaiaStatue.select = Select

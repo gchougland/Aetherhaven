@@ -1,0 +1,22 @@
+$C = "../Common.ui";
+
+Group #AppearanceRow {
+  LayoutMode: Left;
+  Anchor: (Height: 64, Bottom: 8);
+  Padding: (Horizontal: 6, Vertical: 4);
+  Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+  AssetImage #StatueIcon {
+    Anchor: (Width: 56, Height: 56, Right: 8);
+    FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+  }
+  Label #StatueName {
+    Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #e8dcc8, Wrap: true);
+    FlexWeight: 1;
+    Anchor: (Right: 8);
+  }
+  $C.@TextButton #SelectAppearance {
+    Anchor: (Width: 140);
+    Padding: (Horizontal: 12);
+    Text: "";
+  }
+}

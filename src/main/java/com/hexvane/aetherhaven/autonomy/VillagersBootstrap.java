@@ -111,6 +111,7 @@ public final class VillagersBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new TownVillagerNpcWorldSpawnSanitizeSystems.EachTick());
         NpcFaceVisualState.register(plugin.getEntityStoreRegistry());
         VillagerLifeState.register(plugin.getEntityStoreRegistry());
+        VillagerMouthPlayback.register(plugin.getEntityStoreRegistry());
         VillagerAutonomyDebugTag.register(plugin.getEntityStoreRegistry());
         VillagerScheduleTickState.register(plugin.getEntityStoreRegistry());
         plugin

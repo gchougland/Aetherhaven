@@ -1,7 +1,5 @@
 package com.hexvane.aetherhaven.shopspot;
 
-import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
-
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -32,7 +30,12 @@ import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -70,7 +73,7 @@ public final class ShopSpotDisplayService {
         );
     }
 
-    private static boolean isRuntimeShopDisplayPropHolder(
+    static boolean isRuntimeShopDisplayPropHolder(
         boolean hasItem,
         boolean hasPreventPickup,
         boolean hasPreventMerging,
@@ -99,12 +102,7 @@ public final class ShopSpotDisplayService {
         @Nonnull ShopSpotRecord record,
         @Nonnull TownRecord town
     ) {
-        scheduleEntityMutation(world, () -> {
-            Store<EntityStore> deferred = world.getEntityStore().getStore();
-            if (deferred != null) {
-                syncDisplayNow(world, deferred, plugin, registry, record, town);
-            }
-        });
+        queueUpdate(world, plugin, registry, record, town);
     }
 
     private static void syncDisplayNow(
@@ -113,21 +111,25 @@ public final class ShopSpotDisplayService {
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull ShopSpotRegistry registry,
         @Nonnull ShopSpotRecord record,
-        @Nonnull TownRecord town
+        @Nonnull TownRecord town,
+        @Nonnull DisplayBatch batch
     ) {
         EntityWriter writer = new EntityWriter(store);
-        if (!ShopSpotOpenService.shouldShowDisplay(record, town, world, store)) {
-            removeDisplayNow(world, store, plugin, registry, record);
+        if (!isSpotChunkLoaded(world, record)) {
+            record.markDisplayReconciled(null);
+            removeDisplayNow(world, store, plugin, registry, record, batch);
+            return;
+        }
+        if (!batch.shouldShow(record, town)) {
+            removeDisplayNow(world, store, plugin, registry, record, batch);
             return;
         }
         String itemId = record.getItemId();
         if (itemId == null) {
-            removeDisplayNow(world, store, plugin, registry, record);
+            removeDisplayNow(world, store, plugin, registry, record, batch);
             return;
         }
-        if (!isSpotChunkLoaded(world, record)) {
-            return;
-        }
+        reconcileDisplayEntities(world, store, record, batch);
         Vector3d pos = blockCenter(record);
         pos.y += Y_OFFSET;
         String signature = ShopSpotJewelrySupport.listingDisplaySignature(itemId, record);
@@ -139,8 +141,7 @@ public final class ShopSpotDisplayService {
                 return;
             }
         }
-        purgeOrphanDisplayEntities(world, store, registry, record);
-        removeDisplayNow(world, store, plugin, registry, record);
+        removeDisplayNow(world, store, plugin, registry, record, batch);
         Ref<EntityStore> spawned = spawnDisplay(writer, world, record, itemId, pos);
         if (spawned != null && spawned.isValid()) {
             record.setListingDisplaySignature(signature);
@@ -157,12 +158,13 @@ public final class ShopSpotDisplayService {
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull ShopSpotRegistry registry
     ) {
+        var tm = com.hexvane.aetherhaven.town.AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         for (ShopSpotRecord record : registry.allRecords()) {
-            com.hexvane.aetherhaven.town.TownManager tm =
-                com.hexvane.aetherhaven.town.AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             TownRecord town = tm.getTown(record.getTownId());
             if (town != null) {
                 syncDisplay(world, store, plugin, registry, record, town);
+            } else {
+                removeDisplay(world, store, plugin, registry, record);
             }
         }
     }
@@ -185,12 +187,7 @@ public final class ShopSpotDisplayService {
         @Nonnull ShopSpotRegistry registry,
         @Nonnull ShopSpotRecord record
     ) {
-        scheduleEntityMutation(world, () -> {
-            Store<EntityStore> deferred = world.getEntityStore().getStore();
-            if (deferred != null) {
-                removeDisplayNow(world, deferred, plugin, registry, record);
-            }
-        });
+        queueUpdate(world, plugin, registry, record, null);
     }
 
     /** Synchronous display teardown for plot relocation/removal on the world thread. */
@@ -201,7 +198,8 @@ public final class ShopSpotDisplayService {
         @Nonnull ShopSpotRegistry registry,
         @Nonnull ShopSpotRecord record
     ) {
-        removeDisplayNow(world, store, plugin, registry, record);
+        registry.displayUpdates.cancel(record);
+        removeDisplayNow(world, store, plugin, registry, record, new DisplayBatch(store, registry));
     }
 
     private static void removeDisplayNow(
@@ -209,10 +207,11 @@ public final class ShopSpotDisplayService {
         @Nonnull Store<EntityStore> store,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull ShopSpotRegistry registry,
-        @Nonnull ShopSpotRecord record
+        @Nonnull ShopSpotRecord record,
+        @Nonnull DisplayBatch batch
     ) {
         EntityWriter writer = new EntityWriter(store);
-        purgeOrphanDisplayEntities(world, store, registry, record);
+        reconcileDisplayEntities(world, store, record, batch);
         UUID id = record.getDisplayEntityUuid();
         record.setDisplayEntityUuid(null);
         record.setListingDisplaySignature(null);
@@ -225,9 +224,25 @@ public final class ShopSpotDisplayService {
         }
     }
 
-    /** Entity add/remove must not run while the store is processing a system tick. */
-    private static void scheduleEntityMutation(@Nonnull World world, @Nonnull Runnable task) {
-        world.execute(task);
+    /** Coalesce overlapping tick, clock and purchase requests outside ECS processing. */
+    private static void queueUpdate(World world, AetherhavenPlugin plugin, ShopSpotRegistry registry,
+                                    ShopSpotRecord record, TownRecord town) {
+        if (!registry.displayUpdates.offer(record, town)) return;
+        world.execute(() -> {
+            var updates = registry.displayUpdates.drain();
+            if (!world.isAlive()) return;
+            var store = world.getEntityStore().getStore();
+            if (store == null) return;
+            var batch = new DisplayBatch(store, registry);
+            for (var update : updates) {
+                if (update.removal()) {
+                    removeDisplayNow(world, store, plugin, registry, update.record(), batch);
+                } else if (registry.get(update.record().getSpotId()) == update.record()) {
+                    // Removed/replaced stalls must never be respawned by stale queued work.
+                    syncDisplayNow(world, store, plugin, registry, update.record(), update.town(), batch);
+                }
+            }
+        });
     }
 
     /** Removes stale floating item props at this stall (e.g. after server restart). */
@@ -237,52 +252,81 @@ public final class ShopSpotDisplayService {
         @Nonnull ShopSpotRegistry registry,
         @Nonnull ShopSpotRecord record
     ) {
-        if (!isSpotChunkLoaded(world, record)) {
+        record.markDisplayReconciled(null);
+        reconcileDisplayEntities(world, store, record, new DisplayBatch(store, registry));
+    }
+
+    private static void reconcileDisplayEntities(World world, Store<EntityStore> store,
+                                                  ShopSpotRecord record, DisplayBatch batch) {
+        var chunk = activeDisplaySection(world, record);
+        if (chunk == null) {
+            record.markDisplayReconciled(null);
             return;
         }
-        double cx = record.getBlockX() + 0.5;
-        double cy = record.getBlockY();
-        double cz = record.getBlockZ() + 0.5;
-        Set<UUID> protectedDisplayIds = collectDisplayEntityIds(registry);
-        Set<UUID> toRemove = new LinkedHashSet<>();
-        store.forEachChunk(
-            Query.and(ItemComponent.getComponentType(), PreventPickup.getComponentType(), TransformComponent.getComponentType()),
-            (ArchetypeChunk<EntityStore> chunk, CommandBuffer<EntityStore> ignored) -> {
-                for (int i = 0; i < chunk.size(); i++) {
-                    Ref<EntityStore> ref = chunk.getReferenceTo(i);
-                    if (!ref.isValid()) {
-                        continue;
-                    }
-                    UUIDComponent uc = chunk.getComponent(i, UUIDComponent.getComponentType());
-                    if (uc == null) {
-                        continue;
-                    }
-                    if (protectedDisplayIds.contains(uc.getUuid())) {
-                        continue;
-                    }
-                    TransformComponent tc = chunk.getComponent(i, TransformComponent.getComponentType());
-                    if (tc == null) {
-                        continue;
-                    }
-                    var p = tc.getPosition();
-                    if (Math.abs(p.x - cx) <= 1.25
-                        && Math.abs(p.y - cy) <= 2.0
-                        && Math.abs(p.z - cz) <= 1.25) {
-                        toRemove.add(uc.getUuid());
-                    }
-                }
-            }
-        );
-        if (toRemove.isEmpty()) {
-            return;
+        if (!record.needsDisplayReconciliation(chunk)) return;
+        batch.purgeOrphans(record);
+        record.markDisplayReconciled(chunk);
+    }
+
+    /** Lazy per-batch indexes: at most one villager scan and one display scan, never one per stall. */
+    private static final class DisplayBatch {
+        private final Store<EntityStore> store;
+        private final ShopSpotRegistry registry;
+        private Set<ShopSpotOpenService.Assignment> staffing;
+        private Map<Long, List<Ref<EntityStore>>> displayCandidates;
+        private record Workplace(UUID townId, UUID plotId) {}
+        private final Map<Workplace, Boolean> staffedPlots = new HashMap<>();
+
+        DisplayBatch(Store<EntityStore> store, ShopSpotRegistry registry) {
+            this.store = store;
+            this.registry = registry;
         }
-        EntityWriter writer = new EntityWriter(store);
-        for (UUID id : toRemove) {
-            Ref<EntityStore> ref = findEntityByUuid(store, id);
-            if (ref != null && ref.isValid()) {
-                writer.removeEntity(ref);
+
+        boolean shouldShow(ShopSpotRecord record, TownRecord town) {
+            if (!record.hasStock()) return false;
+            if (record.isPlayerControlled()) return true;
+            if (!ShopSpotOpenService.isGameDay(store)) return false;
+            return staffedPlots.computeIfAbsent(new Workplace(town.getTownId(), record.getPlotId()), key ->
+                ShopSpotOpenService.hasStaffedWorkplace(record, town, kind -> {
+                    if (staffing == null) staffing = ShopSpotOpenService.captureStaffing(store);
+                    return staffing.contains(new ShopSpotOpenService.Assignment(key.townId(), key.plotId(), kind));
+                }));
+        }
+
+        void purgeOrphans(ShopSpotRecord record) {
+            if (displayCandidates == null) {
+                displayCandidates = new HashMap<>();
+                Set<UUID> protectedIds = collectDisplayEntityIds(registry);
+                store.forEachChunk(Query.and(ItemComponent.getComponentType(), PreventPickup.getComponentType(),
+                        PreventItemMerging.getComponentType(), Intangible.getComponentType(),
+                        UUIDComponent.getComponentType(), TransformComponent.getComponentType()),
+                    (ArchetypeChunk<EntityStore> chunk, CommandBuffer<EntityStore> ignored) -> {
+                        for (int i = 0; i < chunk.size(); i++) {
+                            var ref = chunk.getReferenceTo(i);
+                            if (!ref.isValid() || protectedIds.contains(chunk.getComponent(i, UUIDComponent.getComponentType()).getUuid())) continue;
+                            var p = chunk.getComponent(i, TransformComponent.getComponentType()).getPosition();
+                            long key = ChunkUtil.indexChunkFromBlock((int)Math.floor(p.x), (int)Math.floor(p.z));
+                            displayCandidates.computeIfAbsent(key, k -> new ArrayList<>()).add(ref);
+                        }
+                    });
+            }
+            // Include neighboring columns for stalls placed against a chunk edge.
+            Set<Long> columns = new LinkedHashSet<>();
+            for (int dx : new int[]{-2, 0, 2}) for (int dz : new int[]{-2, 0, 2})
+                columns.add(ChunkUtil.indexChunkFromBlock(record.getBlockX()+dx, record.getBlockZ()+dz));
+            for (long column : columns) for (var ref : displayCandidates.getOrDefault(column, List.of())) {
+                if (!ref.isValid()) continue;
+                var transform = store.getComponent(ref, TransformComponent.getComponentType());
+                if (transform != null && isOrphanAtSpot(record, transform.getPosition()))
+                    new EntityWriter(store).removeEntity(ref);
             }
         }
+    }
+
+    static boolean isOrphanAtSpot(ShopSpotRecord record, Vector3d position) {
+        return Math.abs(position.x - (record.getBlockX() + .5)) <= 1.25
+            && Math.abs(position.y - record.getBlockY()) <= 2.0
+            && Math.abs(position.z - (record.getBlockZ() + .5)) <= 1.25;
     }
 
     @Nonnull
@@ -297,9 +341,18 @@ public final class ShopSpotDisplayService {
         return ids;
     }
 
-    /** Avoids spawning floating item props before the stall column is in memory (see vanilla {@code UpdateLocationSystems}). */
+    /** Non-ticking sections immediately unload spawned items; never recreate displays in them every refresh. */
     static boolean isSpotChunkLoaded(@Nonnull World world, @Nonnull ShopSpotRecord record) {
-        return ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(record.getBlockX(), record.getBlockZ())) != null;
+        return activeDisplaySection(world, record) != null;
+    }
+
+    @Nullable
+    private static Ref<ChunkStore> activeDisplaySection(World world, ShopSpotRecord record) {
+        var chunks = world.getChunkStore();
+        var section = chunks.getChunkSectionReferenceAtBlock(record.getBlockX(), record.getBlockY(), record.getBlockZ());
+        if (section == null || !section.isValid()) return null;
+        return chunks.getStore().getArchetype(section).contains(ChunkStore.REGISTRY.getNonTickingComponentType())
+            ? null : section;
     }
 
     @Nonnull

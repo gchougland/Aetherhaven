@@ -16,34 +16,33 @@ class VillagerWorkActivityTest {
     }
 
     @Test void oldReadAndCraftShopMarkersUseTheResidentsJobItems() {
-        var jobs = Map.of("chef", VillagerWorkActivity.CRAFT, "florist", VillagerWorkActivity.TEND,
-            "innkeeper", VillagerWorkActivity.SWEEP, "merchant", VillagerWorkActivity.INSPECT,
-            "furniture_merchant", VillagerWorkActivity.INSPECT, "crystal_keeper", VillagerWorkActivity.INSPECT,
-            "pyrotechnic", VillagerWorkActivity.INSPECT);
+        var jobs = Map.of("chef", VillagerWorkActivity.MIX, "florist", VillagerWorkActivity.TEND,
+            "innkeeper", VillagerWorkActivity.SWEEP, "merchant", VillagerWorkActivity.READ,
+            "furniture_merchant", VillagerWorkActivity.READ, "crystal_keeper", VillagerWorkActivity.READ,
+            "pyrotechnic", VillagerWorkActivity.READ);
         for (String marker : new String[]{"read", "craft"}) {
             var work = poi("WORK", marker, PoiInteractionKind.WORK_SURFACE);
             for (var job : jobs.entrySet()) assertEquals(job.getValue(), VillagerWorkActivity.resolve(work, job.getKey()), job.getKey());
         }
-        assertTrue(VillagerLifeProps.itemFor("Craft", "chef").endsWith("Spoon"));
-        assertTrue(VillagerLifeProps.itemFor("Craft", "builder").endsWith("Mallet"));
-        assertTrue(VillagerLifeProps.itemFor("Tend", "florist").endsWith("Plant"));
-        assertTrue(VillagerLifeProps.itemFor("Inspect", "merchant").endsWith("Stone"));
+        assertEquals("Food_Salad_Caesar", VillagerLifeProps.itemFor("Mix", "chef"));
+        assertEquals("Tool_Hammer_Iron", VillagerLifeProps.itemFor("Craft", "builder"));
+        assertEquals("Plant_Flower_Bushy_Blue", VillagerLifeProps.itemFor("Tend", "florist"));
+        assertNull(VillagerLifeProps.itemFor("Inspect", "merchant"));
+        assertEquals(VillagerWorkActivity.READ, VillagerWorkActivity.resolve(poi("WORK", "inspect", PoiInteractionKind.WORK_SURFACE), "merchant"));
     }
 
     @Test void standingShopkeepersOccasionallySweepButMostlyDoTheirJob() {
         var work = poi("WORK", "read", PoiInteractionKind.WORK_SURFACE);
-        int sweeping = 0, reading = 0, inspecting = 0;
+        int sweeping = 0, reading = 0;
         for (int i = 0; i < 100; i++) {
             switch (VillagerWorkActivity.chooseBeat(work, "merchant", false, i / 100.0)) {
                 case SWEEP -> sweeping++;
                 case READ -> reading++;
-                case INSPECT -> inspecting++;
                 default -> fail("Unexpected merchant activity");
             }
         }
         assertEquals(25, sweeping);
-        assertEquals(15, reading);
-        assertEquals(60, inspecting);
+        assertEquals(75, reading);
     }
 
     @Test void seatsMealsLeisureAndExplicitActivitiesDoNotBecomeSweeping() {

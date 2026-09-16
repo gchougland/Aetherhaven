@@ -18,6 +18,13 @@ $C.@PageOverlay {
       LayoutMode: Top;
       Padding: (Full: 16);
 
+      Group #Tabs {
+        LayoutMode: Left;
+        Anchor: (Height: 40, Bottom: 12);
+        $C.@TextButton #ReviveTab { Anchor: (Width: 204, Right: 8); Text: ""; }
+        $C.@TextButton #AppearanceTab { Anchor: (Width: 204); Text: ""; }
+      }
+
       Label #Hint {
         Anchor: (Bottom: 12);
         Style: (...$C.@DefaultLabelStyle, Wrap: true);

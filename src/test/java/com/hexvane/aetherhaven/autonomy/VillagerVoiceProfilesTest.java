@@ -82,10 +82,14 @@ class VillagerVoiceProfilesTest {
                 var face = entry.getValue();
                 var binding = model.getAsJsonObject("AnimationSets").getAsJsonObject(face.id()).getAsJsonArray("Animations").get(0).getAsJsonObject();
                 var action = table.getAsJsonObject(face.actionId());
-                assertEquals(shifted.pitch(), binding.get("Speed").getAsFloat(), .000001);
-                assertEquals(shifted.pitch(), action.get("Speed").getAsFloat(), .000001);
-                assertEquals(binding.get("Animation").getAsString(), action.get("ThirdPersonFace").getAsString());
-                assertEquals(Math.ceil(base.faces().get(entry.getKey()).durationMs()/shifted.pitch()), face.durationMs());
+                assertEquals(1, action.get("Speed").getAsFloat(), .000001);
+                assertEquals(base.faces().get(entry.getKey()).id(), face.id());
+                assertEquals(base.faces().get(entry.getKey()).actionId(), face.actionId());
+                assertEquals(Math.max(shifted.audioMs(), VillagerLifeTiming.durationMs(entry.getKey())), face.durationMs());
+                for (int i=0; i<base.mouthCues().size(); i++) {
+                    assertEquals(Math.round(base.mouthCues().get(i).timeMs()/shifted.pitch()), shifted.mouthCues().get(i).timeMs());
+                    assertEquals(base.mouthCues().get(i).shape(), shifted.mouthCues().get(i).shape());
+                }
             }
         }
     }

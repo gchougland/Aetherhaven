@@ -344,6 +344,9 @@ tasks.named<ProcessResources>("processResources") {
 
     // Never ship Hytale's sidecar LPF cache — equal mtime with JSON makes the engine prefer a stale LPF.
     exclude("**/*.prefab.json.lpf")
+    // Editable analyzer output is compiled into one playback manifest; clients
+    // do not need another JSON asset for each recording.
+    exclude("Server/Aetherhaven/VillagerLipSync/**")
 
     var replaceProperties = mapOf(
         "plugin_group" to findProperty("plugin_group"),
@@ -435,6 +438,16 @@ val syncAssets = tasks.register<Copy>("syncAssets") {
     }
 }
 
+// Keep the development plugin off the server's parent classloader when another
+// plugin verifies its own root manifest. Hytale looks in the server classpath
+// before the requesting plugin jar, so loose Aetherhaven resources shadow it.
+val stageDevPlugin = tasks.register<Sync>("stageDevPlugin") {
+    group = "hytale"
+    description = "Stages only the current Aetherhaven jar for an isolated development plugin loader."
+    from(tasks.named<Jar>("jar").flatMap { it.archiveFile })
+    into(layout.buildDirectory.dir("dev-plugin"))
+}
+
 afterEvaluate {
     val runServerTask = tasks.findByName("runServer") ?: tasks.findByName("server")
     if (runServerTask == null) {
@@ -446,6 +459,24 @@ afterEvaluate {
         return@afterEvaluate
     }
     val runServer = runServerTask as JavaExec
+    val endlessInstalled = runServer.workingDir.resolve("mods").listFiles().orEmpty().any { mod ->
+        if (!mod.isFile || !mod.extension.equals("jar", ignoreCase = true)) false
+        else try {
+            ZipFile(mod).use { zip ->
+                zip.getEntry("manifest.json")?.let { manifest ->
+                    zip.getInputStream(manifest).bufferedReader().use { it.readText() }
+                        .contains(Regex("\"Name\"\\s*:\\s*\"EndlessLevelingCore\""))
+                } ?: false
+            }
+        } catch (_: java.io.IOException) { false }
+    }
+    val packagedDevRun = providers.gradleProperty("packagedDevRun").map { it.toBoolean() }.getOrElse(false) || endlessInstalled
+    if (packagedDevRun) {
+        runServer.dependsOn(stageDevPlugin)
+        runServer.classpath = runServer.classpath.minus(sourceSets.main.get().output)
+        runServer.args("--mods", layout.buildDirectory.dir("dev-plugin").get().asFile.absolutePath)
+        logger.lifecycle("Aetherhaven dev launch uses an isolated plugin jar (avoids Endless Leveling manifest shadowing).")
+    }
     // hytale-mod 0.7.x always adds an empty jvmArg when HytaleServer.aot is missing; on Windows Gradle's
     // JavaExec then fails with "Could not find or load main class" (empty ClassNotFoundException).
     runServer.jvmArgs = runServer.jvmArgs.filter { it.isNotBlank() }
@@ -456,6 +487,7 @@ afterEvaluate {
         group = "hytale"
         description =
             "Same as runServer but does not run syncAssets afterward — safe when you edit src/main/resources while testing."
+        if (packagedDevRun) dependsOn(stageDevPlugin)
         classpath = runServer.classpath
         mainClass = runServer.mainClass
         mainModule = runServer.mainModule

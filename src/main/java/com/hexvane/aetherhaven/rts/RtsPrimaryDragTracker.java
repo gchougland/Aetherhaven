@@ -79,18 +79,11 @@ final class RtsPrimaryDragTracker {
             lastRawScreen.remove(pr.getUuid());
             return;
         }
-        Long last = lastPulseMs.get(pr.getUuid());
-        if (last == null) {
+        PendingRelease release = pollPendingRelease(pr.getUuid(), System.currentTimeMillis());
+        if (release == null) {
             return;
         }
-        long idle = System.currentTimeMillis() - last;
-        if (idle < RELEASE_IDLE_MS) {
-            return;
-        }
-        lastPulseMs.remove(pr.getUuid());
-        int pulses = pulseCount.remove(pr.getUuid());
-        lastRawScreen.remove(pr.getUuid());
-        RtsDiagnostics.boxDragRelease(pr, "primary-idle", idle, pulses, session);
+        RtsDiagnostics.boxDragRelease(pr, "primary-idle", release.idleMs(), release.pulses(), session);
 
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {
@@ -103,6 +96,26 @@ final class RtsPrimaryDragTracker {
             return;
         }
         RtsMouseInputListener.finishBoxSelect(playerRef, store, commandBuffer, session, town, null, null);
+    }
+
+    record PendingRelease(long idleMs, int pulses) {}
+
+    /** Consumes expired tracking state, including drags tracked only through camera motion. */
+    @Nullable
+    static PendingRelease pollPendingRelease(@Nonnull UUID playerId, long nowMs) {
+        Long last = lastPulseMs.get(playerId);
+        if (last == null) {
+            return null;
+        }
+        long idle = nowMs - last;
+        if (idle < RELEASE_IDLE_MS) {
+            return null;
+        }
+        lastPulseMs.remove(playerId);
+        // noteScreenMotion can start the timer without onPrimaryPulse ever recording a count.
+        Integer pulses = pulseCount.remove(playerId);
+        lastRawScreen.remove(playerId);
+        return new PendingRelease(idle, pulses != null ? pulses : 0);
     }
 
     /** Extends drag lifetime while the cursor keeps moving between Primary interaction pulses. */

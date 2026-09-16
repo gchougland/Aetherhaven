@@ -1,0 +1,73 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Weapon_Spellbook_Grimoire_Brown.name"
+  },
+  "Categories": [
+    "Items.Weapons"
+  ],
+  "Icon": "Icons/ItemsGenerated/Weapon_Spellbook_Grimoire_Brown.png",
+  "Quality": "Common",
+  "ItemLevel": 40,
+  "Model": "Items/Weapons/Spellbook/Grimoire.blockymodel",
+  "Texture": "Items/Weapons/Spellbook/Grimoire_Brown_Texture.png",
+  "PlayerAnimationsId": "Spellbook",
+  "IconProperties": {
+    "Scale": 0.745,
+    "Translation": [
+      -7.8,
+      -7.8
+    ],
+    "Rotation": [
+      45,
+      90,
+      0
+    ]
+  },
+  "Interactions": {
+    "Primary": "Spellbook_Primary",
+    "Secondary": "Spellbook_Primary"
+  },
+  "InteractionVars": {
+    "Spellbook_Cast_Hurl_Charged": {
+      "Interactions": [
+        {
+          "Parent": "Spellbook_Cast_Hurl_Charged",
+          "Costs": {
+            "Mana": 100
+          }
+        }
+      ]
+    },
+    "Spellbook_Cast_Hurl_Cost": {
+      "Interactions": [
+        {
+          "Parent": "Spellbook_Cast_Cost",
+          "StatModifiers": {
+            "Mana": -100
+          }
+        }
+      ]
+    },
+    "Spellbook_Cast_Hurl_Launch": "Spellbook_Cast_Launch",
+    "Spellbook_Cast_Hurl_Effect": "Spellbook_Cast_Effect",
+    "Spellbook_Cast_Hurl_Fail": "Spellbook_Cast_Fail",
+    "Block_Effect": "Block_Swing_Down_Effect",
+    "Block_Swing_Left_Damage": "Block_Swing_Left_Damage",
+    "Block_Swing_Right_Damage": "Block_Swing_Right_Damage",
+    "Block_Swing_Down_Damage": "Block_Swing_Down_Damage"
+  },
+  "DroppedItemAnimation": "Items/Animations/Dropped/Dropped_Diagonal_Left.blockyanim",
+  "MaxStack": 25,
+  "Scale": 1.2,
+  "Tags": {
+    "Type": [
+      "Weapon"
+    ],
+    "Family": [
+      "Spellbook"
+    ]
+  },
+  "Weapon": {},
+  "ItemSoundSetId": "ISS_Weapons_Books",
+  "Animation": "Items/Animations/Aetherhaven/Life/Book_Open.blockyanim"
+}

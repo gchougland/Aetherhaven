@@ -664,6 +664,8 @@ public final class QuestBoardService {
         slot.markCompleted();
         tm.updateTown(town);
 
+        com.hexvane.aetherhaven.leveling.LevelingIntegration.rewardCompletion(playerRef, store, slot.isRaidQuest());
+
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
             QuestBoardCompletionEffects.notifyCompleted(pr, playerRef, store, completedName);

@@ -279,6 +279,9 @@ public final class VillagerLifeSystem extends EntityTickingSystem<EntityStore> {
         face(b, pa, store);
         refill(a, na, seconds, store);
         refill(b, nb, seconds, store);
+        var response = session.takeResponse(now);
+        if (response != null) VillagerLifeVisuals.respond(response.toFirst() ? a : b,
+            response.gesture(), response.bubble(), response.hearts(), store);
         if (now < session.nextBeatMs) return;
         if (!session.romance.isEmpty()) {
             var beat = session.romance.get(session.beat);
@@ -286,7 +289,10 @@ public final class VillagerLifeSystem extends EntityTickingSystem<EntityStore> {
             Ref<EntityStore> listener = beat.firstSpeaks() ? b : a;
             long duration = VillagerLifeVisuals.romance(speaker, listener,
                 beat.firstSpeaks() ? session.first : session.second, beat, store);
-            session.nextBeatMs = now + Math.max(3300, duration + 300);
+            long spokenAt = System.currentTimeMillis();
+            session.respondLater(!beat.firstSpeaks(), beat.listenerGesture(), beat.listenerBubble(), beat.listenerHearts(), spokenAt);
+            session.nextBeatMs = spokenAt + Math.max(duration,
+                VillagerLifeState.Session.RESPONSE_DELAY_MS + VillagerLifeTiming.durationMs(beat.listenerGesture())) + 300;
             session.beat++;
             return;
         }
@@ -295,15 +301,21 @@ public final class VillagerLifeSystem extends EntityTickingSystem<EntityStore> {
         Ref<EntityStore> listener = firstSpeaks ? b : a;
         if (session.beat > 0 && session.beat % 2 == 0) session.topic = VillagerLifePersonality.thought(speaker, store, plugin);
         String gesture = session.beat == 0 ? "Greet" : VillagerLifePersonality.gesture(speaker, store, plugin, false, false);
+        String shownItem = session.beat == 0 ? null : VillagerConversationItems.forTopic(session.topic, ThreadLocalRandom.current().nextDouble());
+        if (shownItem != null) {
+            VillagerLifeVisuals.state(speaker, store).conversationItemId = shownItem;
+            gesture = "ShowItem";
+        }
         long speechMs = VillagerLifeVisuals.speak(speaker, firstSpeaks ? session.first : session.second, gesture, session.topic, store);
         String reaction = VillagerLifePersonality.gesture(listener, store, plugin, false, true);
         String feeling = VillagerLifePersonality.feeling(listener, session.topic, reaction, store, plugin);
         if (feeling.equals("Love")) reaction = "Agree";
         if (feeling.equals("Disagree")) reaction = "Disagree";
-        session.nextBeatMs = now + Math.max(3300,
-            Math.max(speechMs, Math.max(VillagerLifeTiming.durationMs(gesture), VillagerLifeTiming.durationMs(reaction))) + 300);
-        VillagerLifeVisuals.emote(listener, reaction, store);
-        VillagerLifeVisuals.bubble(listener, false, feeling, store);
+        long spokenAt = System.currentTimeMillis();
+        session.nextBeatMs = spokenAt + Math.max(3300,
+            Math.max(speechMs, Math.max(VillagerLifeTiming.durationMs(gesture),
+                VillagerLifeState.Session.RESPONSE_DELAY_MS + VillagerLifeTiming.durationMs(reaction))) + 300);
+        session.respondLater(!firstSpeaks, reaction, feeling, false, spokenAt);
         // Only one voiced utterance at a time. Listener reactions remain visual.
         session.beat++;
     }
@@ -492,6 +504,8 @@ public final class VillagerLifeSystem extends EntityTickingSystem<EntityStore> {
             if (!paired(ref, session, store)) continue;
             VillagerLifeState life = store.getComponent(ref, VillagerLifeState.getComponentType());
             life.session = null;
+            VillagerLifeProps.clear(ref, store);
+            life.conversationItemId = null;
             life.socialCooldownMs = life.nextSearchMs = now + (session.talkingSinceMs == 0 ? 5000 : VillagerLifePolicy.COOLDOWN_MS);
             life.nextEmoteMs = now + 10_000;
             NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());

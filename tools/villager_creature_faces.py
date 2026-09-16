@@ -87,6 +87,11 @@ def jaw_track(frames, degrees):
 
 
 def retarget(data, rig, bones, degrees):
+    # Outlanders use Player_With_Face, the same player face nodes and mouth atlas.
+    # Their vanilla Player parent already shares expressions (including optional
+    # eyebrow tracks). Do not invent a scaled-down copy of every human timeline.
+    if rig == 'Outlander':
+        return copy.deepcopy(data)
     result = copy.deepcopy(data)
     result['nodeAnimations'] = nodes = {}
     for name, original in data.get('nodeAnimations', {}).items():
@@ -119,12 +124,15 @@ def retarget(data, rig, bones, degrees):
     return result
 
 
-def generate(res, write):
+def generate(res, write, pool=None):
+    from villager_animation_pool import AnimationPool
+    own_pool = pool is None
+    pool = pool or AnimationPool(res, write)
     resolve, read_common, bones_for = load_references(res)
     human = json.loads((res/'Server/Models/Human/Aetherhaven_Human.json').read_text())
     # Only face bindings, never native body animations from the Human parent.
     face_bindings = {name: binding for name, binding in human['AnimationSets'].items()
-                     if name.startswith(('Aetherhaven_Life_Face_', 'Aetherhaven_Life_Lip_'))
+                     if name.startswith(('Aetherhaven_Life_Face_', 'Aetherhaven_Life_Mouth_'))
                      or name in ('Talk', 'Talk2', 'Talk3', 'Talk4', 'Talk5', 'Grin', 'Frown')}
     report = {}
     for rig, (names, degrees) in RIGS.items():
@@ -134,12 +142,16 @@ def generate(res, write):
 
         def adapt(source):
             if source not in generated:
+                if rig == 'Outlander':
+                    assert effective['Model'] == 'Characters/Player_With_Face.blockymodel'
+                    generated[source] = source
+                    return source
                 data = retarget(read_common(source), rig, bones, degrees)
                 relative = source.removeprefix('Characters/Animations/Aetherhaven/Life/')
                 if relative == source:
                     relative = 'Vanilla/'+source.rsplit('/', 1)[-1]
                 target = f'Characters/Animations/Aetherhaven/CreatureFaces/{rig}/{relative}'
-                write(res/'Common'/target, data)
+                target = pool.emit(target, data)
                 generated[source] = target
             return generated[source]
 
@@ -147,17 +159,21 @@ def generate(res, write):
         for binding in overrides.values():
             for animation in binding.get('Animations', []):
                 animation['Animation'] = adapt(animation['Animation'])
-        for variant in ('', '_Lower', '_Higher'):
+        for variant in ('',):
             name = 'Aetherhaven_Life_Actions'+variant
             table = json.loads((res/f'Server/Item/Animations/{name}.json').read_text())
             for action in table['Animations'].values():
                 if action.get('ThirdPersonFace'):
                     action['ThirdPersonFace'] = adapt(action['ThirdPersonFace'])
-            write(res/f'Server/Item/Animations/{name}_{rig}.json', table)
+            write(res/f'Server/Item/Animations/{name}_{rig}.json',
+                  {'Parent':name} if rig=='Outlander' else table)
+            for pitch in ('_Lower','_Higher'):
+                write(res/f'Server/Item/Animations/{name}{pitch}_{rig}.json', {'Parent':name+'_'+rig})
         for name in names:
             model_path = res/f'Server/Models/Townsfolk/{name}.json'
             model = json.loads(model_path.read_text())
-            model.setdefault('AnimationSets', {}).update(overrides)
+            model['AnimationSets'] = {k:v for k,v in model.get('AnimationSets', {}).items() if not k.startswith('Aetherhaven_Life_Lip_')}
+            model['AnimationSets'].update(overrides)
             muted = []
             # Read the parent too, so rerunning the compiler remains auditable.
             inherited = resolve(model['Parent'])['AnimationSets']
@@ -174,10 +190,12 @@ def generate(res, write):
             report[name] = {'rig': rig, 'model': resolve(name)['Model'],
                             'jawDegrees': degrees, 'mutedAnimations': muted,
                             'faceNodes': sorted({node for source in generated for node in
-                                retarget(read_common(source), rig, bones, degrees)['nodeAnimations']})}
+                                retarget(read_common(source), rig, bones, degrees)['nodeAnimations'] if node in bones}),
+                            'sharesHumanFaces': rig == 'Outlander'}
         print(f'{rig}: {len(generated)} native face timelines; {len(names)} townsfolk.', flush=True)
     write(res/'defaults/villager_creature_faces.json', report)
     mute_town_idle_sounds(res, write)
+    if own_pool:pool.prune(['Characters/Animations/Aetherhaven/CreatureFaces'])
 
 
 def mute_town_idle_sounds(res, write):

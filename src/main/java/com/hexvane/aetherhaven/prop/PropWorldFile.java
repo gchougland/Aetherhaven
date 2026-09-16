@@ -27,6 +27,18 @@ public final class PropWorldFile {
     @SerializedName("props")
     private List<Row> props = new ArrayList<>();
 
+    @SerializedName("removedInstanceIds")
+    private List<String> removedInstanceIds = new ArrayList<>();
+
+    @Nonnull
+    public List<UUID> getRemovedInstanceIds() {
+        return parseLinkedEntityIds(removedInstanceIds);
+    }
+
+    public void setRemovedInstanceIds(@Nonnull java.util.Collection<UUID> ids) {
+        removedInstanceIds = ids.stream().map(UUID::toString).sorted().toList();
+    }
+
     @Nonnull
     public List<Row> getProps() {
         if (props == null) {

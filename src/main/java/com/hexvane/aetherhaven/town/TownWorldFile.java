@@ -49,7 +49,7 @@ public final class TownWorldFile {
         writeBytesAtomic(path, toJsonBytes(getTowns()));
     }
 
-    public static void writeBytesAtomic(@Nonnull Path path, @Nonnull byte[] jsonUtf8) throws IOException {
+    public static synchronized void writeBytesAtomic(@Nonnull Path path, @Nonnull byte[] jsonUtf8) throws IOException {
         Path dir = path.getParent();
         if (dir != null) {
             Files.createDirectories(dir);

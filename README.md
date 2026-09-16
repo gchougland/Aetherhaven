@@ -6,6 +6,8 @@ Aetherhaven is a town building mod for Hytale. Found a settlement in the world, 
 
 Download the latest release on [CurseForge](https://www.curseforge.com/hytale/mods/aetherhaven).
 
+Town and mod data are included in vanilla world backups. See [Town backups and recovery](docs/TOWN_BACKUPS.md) for the backup location and restore steps.
+
 ---
 
 ## What you do

@@ -30,6 +30,7 @@ public final class VillagerLifeVisuals {
         if (cue.clip().equals("None")) return 0;
         var id = store.getComponent(ref, com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
         if (id == null) return 0;
+        VillagerEmotionParticles.play(ref, cue.gesture(), cue.clip(), store);
         var preferences = store.getComponent(player, com.hexvane.aetherhaven.ui.PlayerTownJournalState.getComponentType());
         if (preferences == null) {
             preferences = new com.hexvane.aetherhaven.ui.PlayerTownJournalState();
@@ -49,7 +50,8 @@ public final class VillagerLifeVisuals {
         if (expression != null && NpcFaceVisuals.supportsFaceExpressions(ref, store)) {
             VillagerLifeProps.equip(ref, cue.gesture(), store);
             AnimationUtils.playAnimation(ref, BODY_SLOT, NpcFaceVisuals.itemAnimationsForFaceRig(ref, clip.actionsId(), store), expression.actionId(), false, store);
-            NpcFaceVisuals.playDialogueExpression(ref, expression.id(), expression.durationMs()/1000f, store);
+            if (clip.mouthCues().isEmpty()) NpcFaceVisuals.playDialogueExpression(ref, expression.id(), expression.durationMs()/1000f, store);
+            else VillagerMouthPlayback.start(ref, clip, cue.gesture(), expression.durationMs(), true, store);
         } else {
             VillagerLifeProps.equip(ref, cue.gesture(), store);
             AnimationUtils.playAnimation(ref, BODY_SLOT, NpcFaceVisuals.itemAnimationsForFaceRig(ref, BODY_ANIMATIONS, store), cue.gesture(), false, store);
@@ -127,7 +129,8 @@ public final class VillagerLifeVisuals {
             java.util.concurrent.ThreadLocalRandom.current().nextInt());
         if (clip == null) return;
         var face = clip.faces().get("LookAround");
-        if (face != null) NpcFaceVisuals.playExpression(ref, face.id(), face.durationMs()/1000f, store);
+        if (!clip.mouthCues().isEmpty()) VillagerMouthPlayback.start(ref, clip, "LookAround", clip.audioMs(), false, store);
+        else if (face != null) NpcFaceVisuals.playExpression(ref, face.id(), face.durationMs()/1000f, store);
         VillagerSpeechAudio.play(ref, clip, true, store);
         life.nextAmbientVoiceMs = now + clip.audioMs() + java.util.concurrent.ThreadLocalRandom.current().nextLong(4500, 9000);
     }
@@ -149,6 +152,7 @@ public final class VillagerLifeVisuals {
             AnimationUtils.playAnimation(ref, BODY_SLOT, NpcFaceVisuals.itemAnimationsForFaceRig(ref, BODY_ANIMATIONS, store), gesture, false, store);
         }
         face(ref, gesture, false, store);
+        VillagerEmotionParticles.play(ref, gesture, null, store);
     }
 
     static void face(Ref<EntityStore> ref, String gesture, boolean talking, Store<EntityStore> store) {
@@ -167,8 +171,29 @@ public final class VillagerLifeVisuals {
             height = Math.max(height, model.getModel().getEyeHeight(ref, store) + .35 * model.getModel().getScale());
         }
         // The particle canvas pivot is the tail tip, not the center of its cloud.
-        Vector3d pos = new Vector3d(tc.getPosition()).add(0, height + .2, 0);
-        ParticleUtil.spawnParticleEffect(PREFIX + (speech ? "Speech_" : "Thought_") + icon, pos, store);
+        // Compact 128px bubble: tail at y=123, content/pivot at y=64.
+        // BillboardY keeps both 64px icon and bubble in the same vertical plane.
+        var networkId = store.getComponent(ref, com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId.getComponentType());
+        if (networkId == null) return;
+        var particle = bubbleParticle(PREFIX + (speech ? "Speech_" : "Thought_") + icon,
+            (float) (height + .2 + 59 * .28 / 32));
+        var packet = new com.hypixel.hytale.protocol.packets.entities.SpawnModelParticles(networkId.getId(),
+            new com.hypixel.hytale.protocol.ModelParticle[]{particle});
+        com.hypixel.hytale.server.core.universe.world.PlayerUtil.forEachPlayerThatCanSeeEntity(ref,
+            (player, playerComponent, accessor) -> playerComponent.getPacketHandler().writeNoCache(packet), store);
+    }
+
+    static com.hypixel.hytale.protocol.ModelParticle bubbleParticle(String systemId, float height) {
+        var particle = new com.hypixel.hytale.protocol.ModelParticle();
+        particle.systemId = systemId;
+        particle.targetEntityPart = com.hypixel.hytale.protocol.EntityPart.Entity;
+        // Entity origin rather than Head: follow movement without rolling the
+        // bubble around as the villager nods or tilts their head.
+        particle.positionOffset = new org.joml.Vector3f(0, height, 0);
+        particle.scale = 1;
+        particle.detachedFromModel = false;
+        particle.clearParticlesOnRemove = true;
+        return particle;
     }
 
     static long voice(Ref<EntityStore> ref, UUID id, String mood, Store<EntityStore> store) {
@@ -192,12 +217,15 @@ public final class VillagerLifeVisuals {
         var expression = gesture == null ? null : clip.faces().get(gesture);
         if (expression != null) {
             VillagerLifeProps.equip(ref, gesture, store);
+            VillagerEmotionParticles.play(ref, gesture, mood, store);
             AnimationUtils.playAnimation(ref, BODY_SLOT, NpcFaceVisuals.itemAnimationsForFaceRig(ref, clip.actionsId(), store), expression.actionId(), false, store);
-            NpcFaceVisuals.playExpression(ref, expression.id(), expression.durationMs() / 1000f, store);
+            if (clip.mouthCues().isEmpty()) NpcFaceVisuals.playExpression(ref, expression.id(), expression.durationMs() / 1000f, store);
+            else VillagerMouthPlayback.start(ref, clip, gesture, expression.durationMs(), false, store);
             VillagerSpeechAudio.play(ref, clip, randomChatter, store);
             return Math.max(clip.audioMs(), expression.durationMs());
         }
         if (gesture != null) silentEmote(ref, gesture, store);
+        if (!clip.mouthCues().isEmpty()) VillagerMouthPlayback.start(ref, clip, gesture, clip.audioMs(), false, store);
         VillagerSpeechAudio.play(ref, clip, randomChatter, store);
         return clip.audioMs();
     }
@@ -251,15 +279,10 @@ public final class VillagerLifeVisuals {
     }
 
     public static void endAmbient(Ref<EntityStore> ref, Store<EntityStore> store) {
+        VillagerMouthPlayback.cancel(ref, store);
         AnimationUtils.stopAnimation(ref, BODY_SLOT, store);
         VillagerLifeProps.clear(ref, store);
-        var hotbar = store.getComponent(ref, com.hypixel.hytale.server.core.inventory.InventoryComponent.Hotbar.getComponentType());
-        if (hotbar != null && hotbar.getActiveItem() != null
-            && com.hexvane.aetherhaven.AetherhavenConstants.CAMPFIRE_EAT_ITEM_ID.equals(hotbar.getActiveItem().getItemId())) {
-            hotbar.getInventory().setItemStackForSlot(hotbar.getActiveSlot(), com.hypixel.hytale.server.core.inventory.ItemStack.EMPTY);
-            com.hexvane.aetherhaven.equipment.VillagerEquipmentService.markHotbarEquipmentDirty(hotbar, hotbar.getActiveSlot(), ref, store);
-            store.putComponent(ref, com.hypixel.hytale.server.core.inventory.InventoryComponent.Hotbar.getComponentType(), hotbar);
-        }
+
     }
 
     static long speak(Ref<EntityStore> ref, UUID id, String gesture, String topic, Store<EntityStore> store) {
@@ -278,14 +301,17 @@ public final class VillagerLifeVisuals {
         // Conversation audio bypasses the random idle-chatter limiter so the groan
         // cannot be swallowed by the preceding affectionate utterance.
         long voiceMs = voice(speaker, speakerId, beat.voice(), beat.gesture(), store, false);
-        silentEmote(listener, beat.listenerGesture(), store);
-        if (beat.listenerBubble() != null) bubble(listener, false, beat.listenerBubble(), store);
-        if (beat.listenerHearts()) loveHearts(listener, store);
         return Math.max(voiceMs, Math.max(VillagerLifeTiming.durationMs(beat.gesture()),
             VillagerLifeTiming.durationMs(beat.listenerGesture())));
     }
 
     private static void loveHearts(Ref<EntityStore> ref, Store<EntityStore> store) {
         com.hexvane.aetherhaven.villager.gift.VillagerGiftService.playLoveGiftParticles(ref, store);
+    }
+
+    static void respond(Ref<EntityStore> listener, String gesture, String thought, boolean hearts, Store<EntityStore> store) {
+        silentEmote(listener, gesture, store);
+        if (thought != null) bubble(listener, false, thought, store);
+        if (hearts) loveHearts(listener, store);
     }
 }
