@@ -8,6 +8,7 @@ import com.hexvane.aetherhaven.economy.TownTaxService.TaxMorningBreakdown;
 import com.hexvane.aetherhaven.economy.TownTaxService.VillagerTaxLine;
 import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.economy.api.GoldAccount;
+import com.hexvane.aetherhaven.economy.api.Transfer;
 import com.hexvane.aetherhaven.plot.TreasuryBlock;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.villager.AetherhavenRoleLabels;
@@ -41,7 +42,6 @@ import javax.annotation.Nullable;
 
 public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<TreasuryPage.PageData> {
     private static final String TAX_ROWS = "#TaxResidentRows";
-    private static final long ALL = Long.MIN_VALUE;
     private static final int MAX_TAX_ROWS = 36;
 
     private final Ref<ChunkStore> treasuryBlockRef;
@@ -125,17 +125,18 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
             false
         );
 
-        long bal = town.getTreasuryGoldCoinCount();
+        GoldAccount treasury = AetherhavenEconomy.townAccount(town);
         commandBuilder.set(
             "#Balance.TextSpans",
-            Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.coinsLine").param("count", String.valueOf(bal))
+            Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.coinsLine")
+                .param("count", AetherhavenEconomy.provider().amount(treasury))
         );
         commandBuilder.set(
             "#TreasuryAmountField.PlaceholderText",
             Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.amountPlaceholder")
         );
         commandBuilder.set("#DepositButton.Disabled", false);
-        commandBuilder.set("#WithdrawButton.Disabled", bal <= 0L);
+        commandBuilder.set("#WithdrawButton.Disabled", treasury.balance() <= 0L);
 
         if (coinsTab) {
             eventBuilder.addEventBinding(
@@ -350,89 +351,41 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
         if (uc == null || account == null || !town.playerCanOpenTreasuryPanel(uc.getUuid())) {
             return;
         }
-        // Empty field = all, as before the field existed. The provider reads its own unit.
-        long amount = parseAmount(data.amount);
-        if (amount != ALL && amount <= 0L) {
-            badAmount(pr);
-            refresh(ref, store);
-            return;
-        }
-
-        if (action.equalsIgnoreCase("Deposit")) {
-            long have = account.balance();
-            if (have <= 0L) {
-                if (pr != null) {
-                    pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.depositNoCoins"));
+        boolean deposit = action.equalsIgnoreCase("Deposit");
+        GoldAccount treasury = AetherhavenEconomy.townAccount(town);
+        // Empty field = all, as before the field existed. The provider reads and moves in its own unit.
+        String text = data.amount == null ? "" : data.amount.trim();
+        Transfer transfer = deposit
+            ? AetherhavenEconomy.provider().transfer(account, treasury, text)
+            : AetherhavenEconomy.provider().transfer(treasury, account, text);
+        switch (transfer.outcome()) {
+            case MOVED -> {
+                tm.updateTown(town);
+                tell(pr, Message.translation(deposit
+                    ? "aetherhaven_ui_shell.aetherhaven.ui.treasury.deposited"
+                    : "aetherhaven_ui_shell.aetherhaven.ui.treasury.withdrew").param("count", transfer.moved()));
+            }
+            case NOT_AN_AMOUNT -> tell(pr, Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.notAnAmount"));
+            case NOT_AVAILABLE -> {
+                if (deposit) {
+                    tell(pr, Message.translation(text.isEmpty()
+                        ? "aetherhaven_ui_shell.aetherhaven.ui.treasury.depositNoCoins"
+                        : "aetherhaven_ui_shell.aetherhaven.ui.treasury.depositNotEnough"));
+                } else if (!text.isEmpty()) {
+                    tell(pr, Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.withdrawNotEnough"));
                 }
-                refresh(ref, store);
-                return;
             }
-            long give = amount == ALL ? have : amount;
-            if (give > have) {
-                badAmount(pr);
-                refresh(ref, store);
-                return;
-            }
-            if (!account.withdraw(give)) {
-                if (pr != null) {
-                    pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.depositRemoveFailed"));
-                }
-                refresh(ref, store);
-                return;
-            }
-            town.addTreasuryGoldCoins(give);
-            tm.updateTown(town);
-            if (pr != null) {
-                pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.deposited").param("count", give));
-            }
-            refresh(ref, store);
-            return;
+            case NO_ROOM -> tell(pr, Message.translation(deposit
+                ? "aetherhaven_ui_shell.aetherhaven.ui.treasury.depositRemoveFailed"
+                : "aetherhaven_ui_shell.aetherhaven.ui.treasury.makeRoom"));
         }
-
-        if (action.equalsIgnoreCase("Withdraw")) {
-            long bal = town.getTreasuryGoldCoinCount();
-            if (bal <= 0L) {
-                refresh(ref, store);
-                return;
-            }
-            long give = amount == ALL ? Math.min(bal, 9999L) : amount;
-            if (give > bal) {
-                badAmount(pr);
-                refresh(ref, store);
-                return;
-            }
-            if (!account.deposit(give)) {
-                if (pr != null) {
-                    pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.makeRoom"));
-                }
-                refresh(ref, store);
-                return;
-            }
-            town.addTreasuryGoldCoins(-give);
-            tm.updateTown(town);
-            if (pr != null) {
-                pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.withdrew").param("count", give));
-            }
-            refresh(ref, store);
-        }
+        refresh(ref, store);
     }
 
-    /** Placeholders are plain text on the client, so the example of the provider's notation goes in the chat. */
-    private static void badAmount(@Nullable PlayerRef pr) {
+    private static void tell(@Nullable PlayerRef pr, @Nonnull Message message) {
         if (pr != null) {
-            pr.sendMessage(
-                Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.badAmount")
-                    .param("example", AetherhavenEconomy.provider().amount(10L))
-            );
+            pr.sendMessage(message);
         }
-    }
-
-    /** {@link #ALL} for a blank field, the coins otherwise (-1 when the text is not an amount). */
-    private static long parseAmount(@Nullable String text) {
-        if (text == null || text.isBlank()) {
-            return ALL;
-        }
-        return AetherhavenEconomy.provider().parseAmount(text).orElse(-1L);
     }
 
     private void refresh(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {

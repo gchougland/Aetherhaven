@@ -484,7 +484,7 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         GoldAccount account = AetherhavenEconomy.account(ref, store);
         long invCoins = account != null ? account.balance() : 0L;
         long treasuryCoins =
-            allowTreasury && payerTown != null ? payerTown.getTreasuryGoldCoinCount() : 0L;
+            allowTreasury && payerTown != null ? AetherhavenEconomy.townAccount(payerTown).balance() : 0L;
         commandBuilder.set(
             "#FundsLine.TextSpans",
             Message.translation(MSG + ".funds")

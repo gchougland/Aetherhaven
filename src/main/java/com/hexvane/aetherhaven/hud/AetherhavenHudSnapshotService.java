@@ -79,7 +79,7 @@ public final class AetherhavenHudSnapshotService {
         Ref<EntityStore> playerEntity = playerRef.getReference();
         GoldAccount account = playerEntity != null ? AetherhavenEconomy.account(playerEntity, store) : null;
         long inventoryCoins = account != null ? account.balance() : 0L;
-        long treasuryCoins = town != null ? Math.max(0L, town.getTreasuryGoldCoinCount()) : 0L;
+        long treasuryCoins = town != null ? AetherhavenEconomy.townAccount(town).balance() : 0L;
         List<HudQuestEntry> quests =
             preferences.isHudShowQuests()
                 ? questEntries(town, worldProgress, playerProgress, store, preferences.getPinnedQuestIds())

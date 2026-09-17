@@ -26,7 +26,7 @@ aetherhaven.shop.soldNotify={buyer} bought {count} {item} for {gold} gold
 aetherhaven.shop.safe.empty=There is no gold in the safe for you.
 aetherhaven.shop.safe.makeRoom=Make room in your inventory first.
 aetherhaven.shop.safe.couldNotAddCoins=Could not add gold to your inventory.
-aetherhaven.shop.safe.collected=You collected {gold} gold from the safe.
+aetherhaven.shop.safe.collected=You collected {gold} from the safe.
 
 aetherhaven.shop.config.title=Set up this shop
 aetherhaven.shop.config.intro=Choose how this stall works. NPC shops restock at dawn from the stock table you pick.

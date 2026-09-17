@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.economy.api;
 
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
@@ -7,17 +8,20 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.List;
-import java.util.OptionalLong;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Where a player's gold lives. Aetherhaven ships {@code ItemCoinEconomy} (the gold coin item); an economy mod
- * registers its own through {@link AetherhavenEconomy#register}.
+ * Where gold lives: a player's, a town treasury's, a shop safe's. Aetherhaven ships {@code ItemCoinEconomy} (the gold
+ * coin item, counts in {@code TownRecord}); an economy mod registers its own through
+ * {@link AetherhavenEconomy#register}.
  *
- * <p>Every amount is in Aetherhaven gold coins, never negative: a provider with another unit converts. The town
- * treasury and the shop safes are not covered, they stay Aetherhaven's own ledgers. The provider persists its
- * balances itself, Aetherhaven persists nothing on its behalf.
+ * <p>Every {@code long} is in Aetherhaven gold coins, never negative, and stands for something Aetherhaven owns: a
+ * price, a loot roll, the tithe, a refund. A provider with another unit converts those. What is stored (a balance)
+ * is the provider's, in its own unit, and moving a typed amount between two balances is the provider's too
+ * ({@link #transfer}): Aetherhaven never holds a converted amount. The provider persists its balances itself,
+ * Aetherhaven persists nothing on its behalf.
  */
 public interface EconomyProvider {
     /** Stable id for logs, e.g. {@code "aetherhaven:coins"}. */
@@ -27,6 +31,20 @@ public interface EconomyProvider {
     /** The player's account, or null when the entity is not a player. */
     @Nullable
     GoldAccount account(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store);
+
+    /**
+     * The town's treasury. The built-in economy keeps it in the record's coin count. Reached through
+     * {@link AetherhavenEconomy#townAccount}, which moves a count left by the built-in economy into this account first.
+     */
+    @Nonnull
+    GoldAccount townAccount(@Nonnull TownRecord town);
+
+    /**
+     * A player's shop safe in that town, credited by their sales. The built-in economy keeps it in the record's
+     * per-player count. Reached through {@link AetherhavenEconomy#shopSafe}, same migration.
+     */
+    @Nonnull
+    GoldAccount shopSafe(@Nonnull TownRecord town, @Nonnull UUID player);
 
     /**
      * Items Aetherhaven places for {@code amount} gold of loot (a dungeon chest, a broken pot). {@code itemId} is what
@@ -40,17 +58,39 @@ public interface EconomyProvider {
     List<ItemStack> lootItems(@Nonnull String itemId, long amount);
 
     /**
-     * An amount a player typed, in the provider's own unit (what {@link #amount} writes), as Aetherhaven gold coins
-     * rounded down. A whole number of coins by default. Empty when the text is not an amount at all.
+     * Moves what a player typed from one of this provider's accounts to another (a treasury deposit, a safe emptied).
+     * The text is in the provider's own unit, what {@link #amount} writes, and moves at the provider's own precision:
+     * nothing is rounded to a coin. Blank text moves everything {@code from} holds.
+     *
+     * <p>By default a whole number of coins: parsed, withdrawn, deposited, the withdrawal undone if the deposit is
+     * refused.
      */
     @Nonnull
-    default OptionalLong parseAmount(@Nonnull String text) {
-        try {
-            long coins = Long.parseLong(text.trim());
-            return coins < 0L ? OptionalLong.empty() : OptionalLong.of(coins);
-        } catch (NumberFormatException e) {
-            return OptionalLong.empty();
+    default Transfer transfer(@Nonnull GoldAccount from, @Nonnull GoldAccount to, @Nullable String text) {
+        long coins;
+        if (text == null || text.isBlank()) {
+            coins = from.balance();
+            if (coins <= 0L) {
+                return Transfer.NOT_AVAILABLE;
+            }
+        } else {
+            try {
+                coins = Long.parseLong(text.trim());
+            } catch (NumberFormatException e) {
+                return Transfer.NOT_AN_AMOUNT;
+            }
+            if (coins <= 0L) {
+                return Transfer.NOT_AN_AMOUNT;
+            }
         }
+        if (!from.withdraw(coins)) {
+            return Transfer.NOT_AVAILABLE;
+        }
+        if (!to.deposit(coins)) {
+            from.deposit(coins);
+            return Transfer.NO_ROOM;
+        }
+        return Transfer.moved(amount(coins));
     }
 
     /**
@@ -60,6 +100,15 @@ public interface EconomyProvider {
      */
     @Nonnull
     Message amount(long amount);
+
+    /**
+     * An account's balance as text, exact in the provider's unit (a balance finer than a coin shows whole). The
+     * rounded {@link GoldAccount#balance()} by default.
+     */
+    @Nonnull
+    default Message amount(@Nonnull GoldAccount account) {
+        return amount(account.balance());
+    }
 
     /**
      * Draws an amount into {@code selector}, an empty group of a page (the HUD, a price tag). Aetherhaven clears the

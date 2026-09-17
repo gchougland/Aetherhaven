@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.economy;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.town.TownRecord;
 import javax.annotation.Nonnull;
@@ -9,7 +10,8 @@ import javax.annotation.Nullable;
 /**
  * Spend town treasury gold coins and/or the player's own gold. Treasury is debited first; the remainder is withdrawn
  * from the player's {@link GoldAccount}, which the active economy provider opened for them
- * ({@code AetherhavenEconomy.account(ref, store)}).
+ * ({@code AetherhavenEconomy.account(ref, store)}). The treasury is the provider's account too
+ * ({@code AetherhavenEconomy.townAccount(town)}).
  *
  * <p>Features that accept town treasury and/or player gold should use this type so availability checks and spend
  * order stay consistent.
@@ -30,7 +32,7 @@ public final class GoldCoinPayment {
         if (!allowTreasuryDebit || town == null) {
             return account.balance();
         }
-        return Math.addExact(town.getTreasuryGoldCoinCount(), account.balance());
+        return Math.addExact(AetherhavenEconomy.townAccount(town).balance(), account.balance());
     }
 
     public static boolean canAfford(
@@ -77,20 +79,21 @@ public final class GoldCoinPayment {
         if (town == null || !allowTreasuryDebit) {
             return account.withdraw(cost) ? new SpendBreakdown(0L, cost) : null;
         }
-        long treasuryBefore = town.getTreasuryGoldCoinCount();
+        GoldAccount treasury = AetherhavenEconomy.townAccount(town);
+        long treasuryBefore = treasury.balance();
         if (Math.addExact(treasuryBefore, account.balance()) < cost) {
             return null;
         }
         long fromTreasury = Math.min(treasuryBefore, cost);
         long remainder = cost - fromTreasury;
-        if (fromTreasury > 0L) {
-            town.addTreasuryGoldCoins(-fromTreasury);
+        if (fromTreasury > 0L && !treasury.withdraw(fromTreasury)) {
+            return null;
         }
         if (remainder <= 0L) {
             return new SpendBreakdown(fromTreasury, 0L);
         }
         if (!account.withdraw(remainder)) {
-            town.setTreasuryGoldCoinCount(treasuryBefore);
+            treasury.deposit(fromTreasury);
             return null;
         }
         return new SpendBreakdown(fromTreasury, remainder);
@@ -102,11 +105,11 @@ public final class GoldCoinPayment {
      */
     public static void refund(@Nullable TownRecord town, @Nonnull GoldAccount account, @Nonnull SpendBreakdown breakdown) {
         if (breakdown.fromTreasury() > 0L && town != null) {
-            town.addTreasuryGoldCoins(breakdown.fromTreasury());
+            AetherhavenEconomy.townAccount(town).deposit(breakdown.fromTreasury());
         }
         long playerRefund = breakdown.fromPlayer();
         if (playerRefund > 0L && !account.deposit(playerRefund) && town != null) {
-            town.addTreasuryGoldCoins(playerRefund);
+            AetherhavenEconomy.townAccount(town).deposit(playerRefund);
         }
     }
 

@@ -412,9 +412,9 @@ public final class ShopSpotPurchaseService {
             return;
         }
         if (isPlayerShopPlot(plugin, town, record.getPlotId())) {
-            town.addPlayerShopSafeGold(seller, totalCost);
+            AetherhavenEconomy.shopSafe(town, seller).deposit(totalCost);
         } else {
-            town.addTreasuryGoldCoins(totalCost);
+            AetherhavenEconomy.townAccount(town).deposit(totalCost);
         }
     }
 

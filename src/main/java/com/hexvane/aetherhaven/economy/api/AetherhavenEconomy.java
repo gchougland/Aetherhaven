@@ -2,10 +2,14 @@ package com.hexvane.aetherhaven.economy.api;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.ItemCoinEconomy;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -65,6 +69,42 @@ public final class AetherhavenEconomy {
     @Nullable
     public static GoldAccount account(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         return provider().account(ref, store);
+    }
+
+    /**
+     * The town's treasury, from the provider. A coin count left in the record by the built-in economy (a server that
+     * just installed an economy mod) is moved into the account first, once, and the town saved.
+     */
+    @Nonnull
+    public static GoldAccount townAccount(@Nonnull TownRecord town) {
+        GoldAccount account = provider().townAccount(town);
+        long kept = town.getTreasuryGoldCoinCount();
+        if (kept > 0L && !usesCoinItem() && account.deposit(kept)) {
+            town.setTreasuryGoldCoinCount(0L);
+            save(town);
+            LOGGER.atInfo().log("Town %s: %d treasury gold coins moved to %s", town.getTownId(), kept, provider().id());
+        }
+        return account;
+    }
+
+    /** A player's shop safe in that town, from the provider. Same migration as {@link #townAccount}. */
+    @Nonnull
+    public static GoldAccount shopSafe(@Nonnull TownRecord town, @Nonnull UUID player) {
+        GoldAccount account = provider().shopSafe(town, player);
+        long kept = town.getPlayerShopSafeGold(player);
+        if (kept > 0L && !usesCoinItem() && account.deposit(kept)) {
+            town.withdrawPlayerShopSafeGold(player, kept);
+            save(town);
+            LOGGER.atInfo().log("Town %s: %d shop safe gold coins of %s moved to %s", town.getTownId(), kept, player, provider().id());
+        }
+        return account;
+    }
+
+    private static void save(@Nonnull TownRecord town) {
+        TownManager tm = town.getWorldName() == null ? null : AetherhavenWorldRegistries.townManagerForTown(town);
+        if (tm != null) {
+            tm.updateTown(town);
+        }
     }
 
     /** True when the gold coin item is the currency (no mod registered, or config forces it). */

@@ -644,7 +644,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
 
         if (!moderationTab) {
             long invCoins = account != null ? account.balance() : 0L;
-            long treasuryCoins = town != null ? town.getTreasuryGoldCoinCount() : 0L;
+            long treasuryCoins = town != null ? AetherhavenEconomy.townAccount(town).balance() : 0L;
             int unlockPoints = PlotTokenUnlockService.getUnlockPoints(ref, store);
 
             commandBuilder.set("#UnlockPointsLine.Visible", true);

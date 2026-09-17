@@ -1,13 +1,14 @@
 package com.hexvane.aetherhaven.economy.api;
 
 /**
- * One player's spendable gold, counted in Aetherhaven gold coins.
+ * A balance Aetherhaven spends from or pays into (a player's gold, a town treasury, a shop safe), counted in
+ * Aetherhaven gold coins.
  *
  * <p>Amounts are never negative. A provider whose own unit differs converts, and rounds {@link #balance()} down.
- * Calls happen on the world thread and never concurrently for the same player.
+ * Calls happen on the world thread and never concurrently for the same account.
  */
 public interface GoldAccount {
-    /** Coins the player can spend right now. */
+    /** Coins that can be spent right now. */
     long balance();
 
     /**

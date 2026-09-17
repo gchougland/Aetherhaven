@@ -92,7 +92,7 @@ public final class TownExpansionClaimService {
             return "aetherhaven_town.aetherhaven.ui.expansion.err.sellNotOwned";
         }
         if (refund > 0L) {
-            town.addTreasuryGoldCoins(refund);
+            AetherhavenEconomy.townAccount(town).deposit(refund);
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         tm.updateTown(town);

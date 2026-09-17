@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.shop;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.economy.api.GoldAccount;
+import com.hexvane.aetherhaven.economy.api.Transfer;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -44,31 +45,28 @@ public final class ShopSafeService {
         if (uc == null || account == null || pr == null) {
             return;
         }
-        UUID playerUuid = uc.getUuid();
-        long bal = town.getPlayerShopSafeGold(playerUuid);
-        if (bal <= 0L) {
-            NotificationUtil.sendNotification(
-                pr.getPacketHandler(),
-                Message.translation(MSG + ".empty"),
-                NotificationStyle.Warning
-            );
-            return;
-        }
-        long give = Math.min(bal, 9999L);
-        if (!account.deposit(give)) {
-            NotificationUtil.sendNotification(
+        GoldAccount safe = AetherhavenEconomy.shopSafe(town, uc.getUuid());
+        // Everything in the safe (the built-in economy caps a click at 9999 coins, as before).
+        Transfer transfer = AetherhavenEconomy.provider().transfer(safe, account, null);
+        switch (transfer.outcome()) {
+            case MOVED -> {
+                tm.updateTown(town);
+                NotificationUtil.sendNotification(
+                    pr.getPacketHandler(),
+                    Message.translation(MSG + ".collected").param("gold", transfer.moved()),
+                    NotificationStyle.Success
+                );
+            }
+            case NO_ROOM -> NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
                 Message.translation(MSG + ".makeRoom"),
                 NotificationStyle.Warning
             );
-            return;
+            default -> NotificationUtil.sendNotification(
+                pr.getPacketHandler(),
+                Message.translation(MSG + ".empty"),
+                NotificationStyle.Warning
+            );
         }
-        town.withdrawPlayerShopSafeGold(playerUuid, give);
-        tm.updateTown(town);
-        NotificationUtil.sendNotification(
-            pr.getPacketHandler(),
-            Message.translation(MSG + ".collected").param("gold", String.valueOf(give)),
-            NotificationStyle.Success
-        );
     }
 }

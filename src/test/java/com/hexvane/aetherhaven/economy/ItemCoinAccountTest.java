@@ -104,6 +104,26 @@ class ItemCoinAccountTest {
         assertEquals(0, coins(container));
     }
 
+    @Test void emptyingATreasuryIntoAnInventoryIsRefusedWhole() {
+        // No coin asset here, so 30 coins do not fit a slot: the treasury keeps everything.
+        var town = new com.hexvane.aetherhaven.town.TownRecord();
+        town.setTreasuryGoldCoinCount(30);
+        var container = new SimpleItemContainer((short) 1);
+        container.setItemStackForSlot((short) 0, new ItemStack("Tool_Hammer_Iron", 1));
+        var moved = ItemCoinEconomy.INSTANCE.transfer(ItemCoinEconomy.INSTANCE.townAccount(town), account(container), "");
+        assertEquals(com.hexvane.aetherhaven.economy.api.Transfer.Outcome.NO_ROOM, moved.outcome());
+        assertEquals(30, town.getTreasuryGoldCoinCount());
+    }
+
+    @Test void emptyingAnInventoryIntoATreasuryTakesEverything() {
+        var town = new com.hexvane.aetherhaven.town.TownRecord();
+        var container = slots(5, 10);
+        var moved = ItemCoinEconomy.INSTANCE.transfer(account(container), ItemCoinEconomy.INSTANCE.townAccount(town), null);
+        assertEquals(com.hexvane.aetherhaven.economy.api.Transfer.Outcome.MOVED, moved.outcome());
+        assertEquals(0, coins(container));
+        assertEquals(15, town.getTreasuryGoldCoinCount());
+    }
+
     @Test void splitCutsAtMaxStack() {
         // No asset registered here, so the max stack is unbounded: one stack.
         List<ItemStack> stacks = ItemCoinEconomy.split(ItemCoinEconomy.coinItemId(), 25_000);
