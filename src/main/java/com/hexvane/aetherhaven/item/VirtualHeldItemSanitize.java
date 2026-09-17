@@ -41,11 +41,8 @@ public final class VirtualHeldItemSanitize {
         // Overriding an existing SwapFrom would make the client run a different root than the server, which desyncs
         // the chain, so only supply one when the real item declares none.
         if (!copy.containsKey(InteractionType.SwapFrom)) {
+            // InteractionModule preloads DEFAULT_ROOT; resolve its registered index without creating assets here.
             int swapId = RootInteraction.getAssetMap().getIndex(ChangeActiveSlotInteraction.DEFAULT_ROOT.getId());
-            if (swapId < 0) {
-                // Same fallback Item.toPacket() uses when the generated Default_Swap is not indexed yet.
-                swapId = RootInteraction.getRootInteractionIdOrUnknown(ChangeActiveSlotInteraction.DEFAULT_ROOT.getId());
-            }
             if (swapId >= 0) {
                 copy.put(InteractionType.SwapFrom, swapId);
             }
