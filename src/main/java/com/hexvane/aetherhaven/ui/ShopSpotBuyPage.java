@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.shopspot.ShopPriceEntry;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBuyerPayment;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBlockInteractSupport;
@@ -25,8 +27,6 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.inventory.InventoryComponent;
-import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -198,8 +198,8 @@ public final class ShopSpotBuyPage extends AetherhavenInteractiveCustomUIPage<Sh
                 uc.getUuid()
             );
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, uc.getUuid());
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.HOTBAR_FIRST);
-        return GoldCoinPayment.totalAvailable(payerTown, inv, allowTreasury);
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        return account != null ? GoldCoinPayment.totalAvailable(payerTown, account, allowTreasury) : 0L;
     }
 
     private static boolean playerCanAfford(

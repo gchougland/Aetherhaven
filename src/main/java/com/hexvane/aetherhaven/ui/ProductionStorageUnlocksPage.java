@@ -3,6 +3,8 @@ package com.hexvane.aetherhaven.ui;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.difficulty.BuildingUpgradeCostScaler;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.production.PlotProductionState;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
@@ -164,7 +166,8 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
         Player player = store.getComponent(ref, Player.getComponentType());
         CombinedItemContainer inv =
             player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
-        if (inv == null) {
+        GoldAccount account = player != null ? AetherhavenEconomy.account(ref, store) : null;
+        if (inv == null || account == null) {
             commandBuilder.set(ERR_MSG + ".Visible", true);
             commandBuilder.set(ERR_MSG + ".TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.err.inventory"));
             commandBuilder.clear(ROWS);
@@ -202,7 +205,7 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
                 commandBuilder.set(cell + " #UnlockHit.TextTooltipStyle", DEFAULT_TEXT_TOOLTIP_STYLE);
                 commandBuilder.set(
                     cell + " #UnlockHit.TooltipTextSpans",
-                    cellTooltipMessage(itemLineDisplayName(line, assetItem), unlocked, line, town, inv, town.playerCanSpendTreasuryGold(uc.getUuid()))
+                    cellTooltipMessage(itemLineDisplayName(line, assetItem), unlocked, line, town, inv, account, town.playerCanSpendTreasuryGold(uc.getUuid()))
                 );
 
                 commandBuilder.set(cell + " #UnlockHit #IconFrame #LockOverlay.Visible", !unlocked);
@@ -216,7 +219,7 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
             }
         }
 
-        applyDetailPanel(commandBuilder, constructionId, ucat, state, town, inv, town.playerCanSpendTreasuryGold(uc.getUuid()));
+        applyDetailPanel(commandBuilder, constructionId, ucat, state, town, inv, account, town.playerCanSpendTreasuryGold(uc.getUuid()));
     }
 
     private void applyDetailPanel(
@@ -226,6 +229,7 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
         @Nonnull PlotProductionState state,
         @Nonnull TownRecord town,
         @Nonnull CombinedItemContainer inv,
+        @Nonnull GoldAccount account,
         boolean allowTreasuryGold
     ) {
         commandBuilder.set(DETAIL_PANEL + ".Visible", true);
@@ -242,7 +246,7 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
         }
         commandBuilder.set(DETAIL_NAME + ".TextSpans", itemLineDisplayName(line));
         boolean unlocked = line.defaultUnlocked() || state.isWorkplaceOutputUnlocked(line.itemId());
-        commandBuilder.set(DETAIL_BODY + ".TextSpans", unlockRequirementBody(unlocked, line, town, inv, allowTreasuryGold));
+        commandBuilder.set(DETAIL_BODY + ".TextSpans", unlockRequirementBody(unlocked, line, town, inv, account, allowTreasuryGold));
     }
 
     @Nonnull
@@ -265,9 +269,10 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
         @Nonnull WorkplaceUnlockCatalog.UnlockLine line,
         @Nonnull TownRecord town,
         @Nonnull CombinedItemContainer inv,
+        @Nonnull GoldAccount account,
         boolean allowTreasuryGold
     ) {
-        return Message.join(itemName, Message.raw("\n\n"), unlockRequirementBody(unlocked, line, town, inv, allowTreasuryGold));
+        return Message.join(itemName, Message.raw("\n\n"), unlockRequirementBody(unlocked, line, town, inv, account, allowTreasuryGold));
     }
 
     /**
@@ -280,6 +285,7 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
         @Nonnull WorkplaceUnlockCatalog.UnlockLine line,
         @Nonnull TownRecord town,
         @Nonnull CombinedItemContainer inv,
+        @Nonnull GoldAccount account,
         boolean allowTreasuryGold
     ) {
         if (unlocked) {
@@ -302,7 +308,7 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
                 town.effectiveDifficultyForGameplay()
             );
         if (goldNeed > 0L) {
-            long goldHeld = GoldCoinPayment.totalAvailable(town, inv, allowTreasuryGold);
+            long goldHeld = GoldCoinPayment.totalAvailable(town, account, allowTreasuryGold);
             boolean goldOk = goldHeld >= goldNeed;
             Message goldLine =
                 Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed")
@@ -368,7 +374,8 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
             return;
         }
         CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
-        if (inv == null) {
+        GoldAccount account = AetherhavenEconomy.account(ref, store);
+        if (inv == null || account == null) {
             return;
         }
         int needRes =
@@ -391,7 +398,7 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
             return;
         }
         boolean allowTreasuryGold = town.playerCanSpendTreasuryGold(uc.getUuid());
-        if (goldCost > 0L && !GoldCoinPayment.canAfford(town, inv, goldCost, allowTreasuryGold)) {
+        if (goldCost > 0L && !GoldCoinPayment.canAfford(town, account, goldCost, allowTreasuryGold)) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
                 Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.notify.needGold").param("need", goldCost),
@@ -411,7 +418,7 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
             refresh(ref, store);
             return;
         }
-        if (goldCost > 0L && !GoldCoinPayment.trySpend(town, inv, goldCost, allowTreasuryGold)) {
+        if (goldCost > 0L && !GoldCoinPayment.trySpend(town, account, goldCost, allowTreasuryGold)) {
             player.giveItem(new ItemStack(itemId, needRes), ref, store);
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),

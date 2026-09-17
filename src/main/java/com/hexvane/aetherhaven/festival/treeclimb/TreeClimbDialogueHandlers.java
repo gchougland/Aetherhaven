@@ -5,6 +5,8 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.plugin.DialogueActionRegistry;
 import com.hexvane.aetherhaven.plugin.DialogueConditionRegistry;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBuyerPayment;
@@ -15,8 +17,6 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.inventory.InventoryComponent;
-import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -214,22 +214,22 @@ public final class TreeClimbDialogueHandlers {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, playerUuid);
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, playerUuid);
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
-        if (inv == null
-            || !GoldCoinPayment.canAfford(payerTown, inv, TreeClimbIds.RACE_COST_GOLD, allowTreasury)) {
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        if (account == null
+            || !GoldCoinPayment.canAfford(payerTown, account, TreeClimbIds.RACE_COST_GOLD, allowTreasury)) {
             out.setGotoNodeId("join_need_gold");
             return;
         }
         SpendBreakdown paid =
             GoldCoinPayment.trySpendReturningBreakdown(
-                payerTown, inv, TreeClimbIds.RACE_COST_GOLD, allowTreasury
+                payerTown, account, TreeClimbIds.RACE_COST_GOLD, allowTreasury
             );
         if (paid == null) {
             out.setGotoNodeId("join_need_gold");
             return;
         }
         if (!session.join(playerUuid, paid)) {
-            GoldCoinPayment.refund(payerTown, player, playerRef, store, paid);
+            GoldCoinPayment.refund(payerTown, account, paid);
             if (payerTown != null) {
                 tm.updateTown(payerTown);
             }
@@ -266,7 +266,11 @@ public final class TreeClimbDialogueHandlers {
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, playerUuid);
-        GoldCoinPayment.refund(payerTown, player, playerRef, store, fee);
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        if (account == null) {
+            return;
+        }
+        GoldCoinPayment.refund(payerTown, account, fee);
         if (payerTown != null) {
             tm.updateTown(payerTown);
         }
@@ -324,9 +328,9 @@ public final class TreeClimbDialogueHandlers {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, playerUuid);
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, playerUuid);
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
-        return inv != null
-            && GoldCoinPayment.canAfford(payerTown, inv, TreeClimbIds.RACE_COST_GOLD, allowTreasury);
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        return account != null
+            && GoldCoinPayment.canAfford(payerTown, account, TreeClimbIds.RACE_COST_GOLD, allowTreasury);
     }
 
     @Nullable

@@ -3,6 +3,8 @@ package com.hexvane.aetherhaven.dialogue;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.guild.GuardHireService;
 import com.hexvane.aetherhaven.guild.GuildHallAdventurerPoolService;
 import com.hexvane.aetherhaven.ui.GuardRoleLabels;
@@ -364,11 +366,11 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         if (town == null || pu == null) {
             return false;
         }
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
-        if (inv == null) {
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        if (account == null) {
             return false;
         }
-        return GoldCoinPayment.canAfford(town, inv, cost, town.playerCanSpendTreasuryGold(pu.getUuid()));
+        return GoldCoinPayment.canAfford(town, account, cost, town.playerCanSpendTreasuryGold(pu.getUuid()));
     }
 
     @Override
@@ -448,11 +450,12 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         if (!s.canApplyShardUpgrade()) {
             return false;
         }
-        if (inv == null) {
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        if (account == null) {
             return false;
         }
         long cost = AetherhavenConstants.gaiaDraughtShardUpgradeGoldCost(s.getShardUpgradeCount());
-        return GoldCoinPayment.canAfford(town, inv, cost, town.playerCanSpendTreasuryGold(pu.getUuid()));
+        return GoldCoinPayment.canAfford(town, account, cost, town.playerCanSpendTreasuryGold(pu.getUuid()));
     }
 
     @Override
@@ -476,11 +479,12 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         if (!s.canApplyCatalystUpgrade()) {
             return false;
         }
-        if (inv == null) {
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        if (account == null) {
             return false;
         }
         long cost = AetherhavenConstants.gaiaDraughtCatalystUpgradeGoldCost(s.getCatalystUpgradeCount());
-        return GoldCoinPayment.canAfford(town, inv, cost, town.playerCanSpendTreasuryGold(pu.getUuid()));
+        return GoldCoinPayment.canAfford(town, account, cost, town.playerCanSpendTreasuryGold(pu.getUuid()));
     }
 
     @Override
@@ -569,11 +573,11 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         }
         int per = Math.max(1, AetherhavenConstants.PRIESTESS_HEAL_HEALTH_PER_GOLD_COIN);
         long cost = (long) Math.ceil(missing / (float) per);
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
-        if (inv == null) {
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        if (account == null) {
             return false;
         }
-        return GoldCoinPayment.canAfford(town, inv, cost, town.playerCanSpendTreasuryGold(pu.getUuid()));
+        return GoldCoinPayment.canAfford(town, account, cost, town.playerCanSpendTreasuryGold(pu.getUuid()));
     }
 
     @Override
@@ -598,13 +602,13 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
             return false;
         }
         String profileId = GuardHireService.equipmentProfileForNpc(plugin, npcRef, store);
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
-        if (profileId == null || inv == null) {
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        if (profileId == null || account == null) {
             return false;
         }
         var tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         GuardHireService.pruneDeadHiredGuards(world, plugin, town, tm, store);
-        return GuardHireService.canAfford(plugin, town, inv, pu.getUuid(), profileId)
+        return GuardHireService.canAfford(plugin, town, account, pu.getUuid(), profileId)
             && TownRankCapacity.canHireGuard(town, plugin.getQuestBoardCatalog());
     }
 

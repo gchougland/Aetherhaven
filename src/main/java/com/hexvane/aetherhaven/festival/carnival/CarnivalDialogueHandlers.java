@@ -7,6 +7,8 @@ import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
 import com.hexvane.aetherhaven.festival.FestivalRewardNotify;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.plugin.DialogueActionRegistry;
 import com.hexvane.aetherhaven.plugin.DialogueConditionRegistry;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBuyerPayment;
@@ -206,20 +208,20 @@ public final class CarnivalDialogueHandlers {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, playerUuid);
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, playerUuid);
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
-        if (inv == null
-            || !GoldCoinPayment.canAfford(payerTown, inv, CarnivalIds.GAME_COST_GOLD, allowTreasury)) {
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        if (account == null
+            || !GoldCoinPayment.canAfford(payerTown, account, CarnivalIds.GAME_COST_GOLD, allowTreasury)) {
             out.setGotoNodeId("busy");
             return;
         }
         SpendBreakdown paid =
-            GoldCoinPayment.trySpendReturningBreakdown(payerTown, inv, CarnivalIds.GAME_COST_GOLD, allowTreasury);
+            GoldCoinPayment.trySpendReturningBreakdown(payerTown, account, CarnivalIds.GAME_COST_GOLD, allowTreasury);
         if (paid == null) {
             out.setGotoNodeId("busy");
             return;
         }
         if (!session.tryBegin(playerUuid)) {
-            GoldCoinPayment.refund(payerTown, player, playerRef, store, paid);
+            GoldCoinPayment.refund(payerTown, account, paid);
             if (payerTown != null) {
                 tm.updateTown(payerTown);
             }
@@ -334,14 +336,14 @@ public final class CarnivalDialogueHandlers {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, playerUuid);
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, playerUuid);
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
-        if (inv == null
-            || !GoldCoinPayment.canAfford(payerTown, inv, CarnivalIds.GAME_COST_GOLD, allowTreasury)) {
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        if (account == null
+            || !GoldCoinPayment.canAfford(payerTown, account, CarnivalIds.GAME_COST_GOLD, allowTreasury)) {
             out.setGotoNodeId("busy");
             return;
         }
         SpendBreakdown paid =
-            GoldCoinPayment.trySpendReturningBreakdown(payerTown, inv, CarnivalIds.GAME_COST_GOLD, allowTreasury);
+            GoldCoinPayment.trySpendReturningBreakdown(payerTown, account, CarnivalIds.GAME_COST_GOLD, allowTreasury);
         if (paid == null) {
             out.setGotoNodeId("busy");
             return;
@@ -349,7 +351,7 @@ public final class CarnivalDialogueHandlers {
         boolean special =
             !town.hasQuestCompleted(AetherhavenConstants.QUEST_CLOWN_RESCUE);
         if (!session.tryBegin(playerUuid, special)) {
-            GoldCoinPayment.refund(payerTown, player, playerRef, store, paid);
+            GoldCoinPayment.refund(payerTown, account, paid);
             if (payerTown != null) {
                 tm.updateTown(payerTown);
             }
@@ -497,20 +499,20 @@ public final class CarnivalDialogueHandlers {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, playerUuid);
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, playerUuid);
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
-        if (inv == null
-            || !GoldCoinPayment.canAfford(payerTown, inv, CarnivalIds.GAME_COST_GOLD, allowTreasury)) {
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        if (account == null
+            || !GoldCoinPayment.canAfford(payerTown, account, CarnivalIds.GAME_COST_GOLD, allowTreasury)) {
             out.setGotoNodeId("busy");
             return;
         }
         SpendBreakdown paid =
-            GoldCoinPayment.trySpendReturningBreakdown(payerTown, inv, CarnivalIds.GAME_COST_GOLD, allowTreasury);
+            GoldCoinPayment.trySpendReturningBreakdown(payerTown, account, CarnivalIds.GAME_COST_GOLD, allowTreasury);
         if (paid == null) {
             out.setGotoNodeId("busy");
             return;
         }
         if (!session.tryBegin(playerUuid)) {
-            GoldCoinPayment.refund(payerTown, player, playerRef, store, paid);
+            GoldCoinPayment.refund(payerTown, account, paid);
             if (payerTown != null) {
                 tm.updateTown(payerTown);
             }

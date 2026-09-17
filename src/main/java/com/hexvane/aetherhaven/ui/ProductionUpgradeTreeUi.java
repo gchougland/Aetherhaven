@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.production.PlotProductionState;
 import com.hexvane.aetherhaven.production.WorkplaceProductionUpgrades;
@@ -42,16 +43,18 @@ public final class ProductionUpgradeTreeUi {
         @Nonnull PlotProductionState state,
         @Nonnull TownRecord town,
         @Nonnull CombinedItemContainer inv,
+        @Nonnull GoldAccount account,
         boolean allowTreasuryGold
     ) {
         applyChrome(commandBuilder);
-        bindIron(commandBuilder, eventBuilder, state, town, inv, allowTreasuryGold);
+        bindIron(commandBuilder, eventBuilder, state, town, inv, account, allowTreasuryGold);
         bindMultiBranch(
             commandBuilder,
             eventBuilder,
             state,
             town,
             inv,
+            account,
             allowTreasuryGold,
             Branch.THORIUM,
             " #UpgThorium",
@@ -66,6 +69,7 @@ public final class ProductionUpgradeTreeUi {
             state,
             town,
             inv,
+            account,
             allowTreasuryGold,
             Branch.COBALT,
             " #UpgCobalt",
@@ -80,6 +84,7 @@ public final class ProductionUpgradeTreeUi {
             state,
             town,
             inv,
+            account,
             allowTreasuryGold,
             Branch.ADAMANTITE,
             " #UpgAdamantite",
@@ -96,6 +101,7 @@ public final class ProductionUpgradeTreeUi {
         @Nonnull PlotProductionState state,
         @Nonnull TownRecord town,
         @Nonnull CombinedItemContainer inv,
+        @Nonnull GoldAccount account,
         boolean allowTreasuryGold
     ) {
         String btn = ROOT + " #UpgIron";
@@ -106,7 +112,7 @@ public final class ProductionUpgradeTreeUi {
         commandBuilder.set(btn + " #UpgIronTitle.TextSpans", t("aetherhaven.ui.productionUpgrades.iron.name"));
         commandBuilder.set(btn + ".Disabled", disabled);
         commandBuilder.set(btn + " #UpgIronIconOuter #UpgIronIconInner #UpgIronDim.Visible", maxed);
-        commandBuilder.set(btn + ".TooltipTextSpans", tooltipFor(state, branch, town, inv, allowTreasuryGold, maxed));
+        commandBuilder.set(btn + ".TooltipTextSpans", tooltipFor(state, branch, town, inv, account, allowTreasuryGold, maxed));
         if (!maxed && prereq) {
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
@@ -123,6 +129,7 @@ public final class ProductionUpgradeTreeUi {
         @Nonnull PlotProductionState state,
         @Nonnull TownRecord town,
         @Nonnull CombinedItemContainer inv,
+        @Nonnull GoldAccount account,
         boolean allowTreasuryGold,
         @Nonnull Branch branch,
         @Nonnull String btnSuffix,
@@ -146,7 +153,7 @@ public final class ProductionUpgradeTreeUi {
         commandBuilder.set(btn + titleSuffix + ".TextSpans", t(nameKey));
         commandBuilder.set(btn + ".Disabled", disabled);
         commandBuilder.set(btn + dimOverlaySuffix + ".Visible", maxed);
-        commandBuilder.set(btn + ".TooltipTextSpans", tooltipFor(state, branch, town, inv, allowTreasuryGold, maxed));
+        commandBuilder.set(btn + ".TooltipTextSpans", tooltipFor(state, branch, town, inv, account, allowTreasuryGold, maxed));
         bindDots(commandBuilder, btn, branch, level);
         if (!maxed && prereq) {
             eventBuilder.addEventBinding(
@@ -187,6 +194,7 @@ public final class ProductionUpgradeTreeUi {
         @Nonnull Branch branch,
         @Nonnull TownRecord town,
         @Nonnull CombinedItemContainer inv,
+        @Nonnull GoldAccount account,
         boolean allowTreasuryGold,
         boolean maxed
     ) {
@@ -225,7 +233,7 @@ public final class ProductionUpgradeTreeUi {
                 .color(ingotOk ? TOOLTIP_OK : TOOLTIP_BAD);
         Message body = Message.join(head, Message.raw("\n\n"), ingotLine);
         if (needGold > 0L) {
-            long goldHeld = GoldCoinPayment.totalAvailable(town, inv, allowTreasuryGold);
+            long goldHeld = GoldCoinPayment.totalAvailable(town, account, allowTreasuryGold);
             boolean goldOk = goldHeld >= needGold;
             Message goldLine =
                 t("aetherhaven.ui.productionUpgrades.tooltip.goldNeed")

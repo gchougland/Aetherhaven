@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.production;
 
 import com.hexvane.aetherhaven.difficulty.BuildingUpgradeCostScaler;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
@@ -160,6 +161,7 @@ public final class WorkplaceProductionUpgrades {
         @Nonnull Branch branch,
         @Nonnull TownRecord town,
         @Nonnull CombinedItemContainer inv,
+        @Nonnull GoldAccount account,
         boolean allowTreasuryGold
     ) {
         int tier = nextTier(state, branch);
@@ -175,7 +177,7 @@ public final class WorkplaceProductionUpgrades {
         if (InventoryMaterials.count(inv, ingot) < needIngot) {
             return false;
         }
-        return needGold <= 0L || GoldCoinPayment.canAfford(town, inv, needGold, allowTreasuryGold);
+        return needGold <= 0L || GoldCoinPayment.canAfford(town, account, needGold, allowTreasuryGold);
     }
 
     public enum PurchaseResult {
@@ -198,6 +200,7 @@ public final class WorkplaceProductionUpgrades {
         @Nonnull Branch branch,
         @Nonnull TownRecord town,
         @Nonnull CombinedItemContainer inv,
+        @Nonnull GoldAccount account,
         boolean allowTreasuryGold
     ) {
         state.migrateIfNeeded();
@@ -217,14 +220,14 @@ public final class WorkplaceProductionUpgrades {
         if (InventoryMaterials.count(inv, ingot) < needIngot) {
             return PurchaseResult.NEED_INGOT;
         }
-        if (needGold > 0L && !GoldCoinPayment.canAfford(town, inv, needGold, allowTreasuryGold)) {
+        if (needGold > 0L && !GoldCoinPayment.canAfford(town, account, needGold, allowTreasuryGold)) {
             return PurchaseResult.NEED_GOLD;
         }
         ItemStackTransaction take = inv.removeItemStack(new ItemStack(ingot, needIngot));
         if (!take.succeeded()) {
             return PurchaseResult.TAKE_INGOT_FAILED;
         }
-        if (needGold > 0L && !GoldCoinPayment.trySpend(town, inv, needGold, allowTreasuryGold)) {
+        if (needGold > 0L && !GoldCoinPayment.trySpend(town, account, needGold, allowTreasuryGold)) {
             inv.addItemStack(new ItemStack(ingot, needIngot));
             return PurchaseResult.PAY_GOLD_FAILED;
         }

@@ -4,6 +4,8 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownPlayerResolution;
@@ -284,7 +286,11 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         TownRecord town = plugin != null && uc != null ? TownPlayerResolution.resolveActiveTown(world, store, ref, tm) : null;
         boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
-        SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(town, inv, goldCost, allowTreasury);
+        GoldAccount account = AetherhavenEconomy.account(ref, store);
+        if (account == null) {
+            return;
+        }
+        SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(town, account, goldCost, allowTreasury);
         if (paid == null) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
@@ -297,7 +303,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
         if (rolled != cur) {
             ItemStackSlotTransaction r0 = inv.replaceItemStackInSlot(slot, cur, rolled);
             if (!r0.succeeded()) {
-                GoldCoinPayment.refund(town, player, ref, store, paid);
+                GoldCoinPayment.refund(town, account, paid);
                 if (town != null && plugin != null) {
                     tm.updateTown(town);
                 }
@@ -307,7 +313,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
         }
         ItemStack now = inv.getItemStack(slot);
         if (ItemStack.isEmpty(now)) {
-            GoldCoinPayment.refund(town, player, ref, store, paid);
+            GoldCoinPayment.refund(town, account, paid);
             if (town != null && plugin != null) {
                 tm.updateTown(town);
             }
@@ -317,7 +323,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
         ItemStack appraised = JewelryMetadata.setAppraised(now, true);
         ItemStackSlotTransaction r1 = inv.replaceItemStackInSlot(slot, now, appraised);
         if (!r1.succeeded()) {
-            GoldCoinPayment.refund(town, player, ref, store, paid);
+            GoldCoinPayment.refund(town, account, paid);
             if (town != null && plugin != null) {
                 tm.updateTown(town);
             }

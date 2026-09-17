@@ -4,6 +4,8 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.geode.GeodeLootFiles;
 import com.hexvane.aetherhaven.geode.GeodeLootTable;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -168,7 +170,11 @@ public final class GeodeOpenPage extends AetherhavenInteractiveCustomUIPage<Geod
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         TownRecord town = uc != null ? TownPlayerResolution.resolveActiveTown(world, store, ref, tm) : null;
         boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
-        SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(town, inv, goldCost, allowTreasury);
+        GoldAccount account = AetherhavenEconomy.account(ref, store);
+        if (account == null) {
+            return;
+        }
+        SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(town, account, goldCost, allowTreasury);
         if (paid == null) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
@@ -180,7 +186,7 @@ public final class GeodeOpenPage extends AetherhavenInteractiveCustomUIPage<Geod
         }
         ItemStackSlotTransaction takeGeode = inv.removeItemStackFromSlot(slot, 1);
         if (!takeGeode.succeeded()) {
-            GoldCoinPayment.refund(town, player, ref, store, paid);
+            GoldCoinPayment.refund(town, account, paid);
             if (town != null) {
                 tm.updateTown(town);
             }
@@ -191,7 +197,7 @@ public final class GeodeOpenPage extends AetherhavenInteractiveCustomUIPage<Geod
         GeodeLootTable table = GeodeLootFiles.loadTable(plugin);
         ItemStack reward = table.rollStack();
         if (reward == null) {
-            GoldCoinPayment.refund(town, player, ref, store, paid);
+            GoldCoinPayment.refund(town, account, paid);
             if (town != null) {
                 tm.updateTown(town);
             }
@@ -207,7 +213,7 @@ public final class GeodeOpenPage extends AetherhavenInteractiveCustomUIPage<Geod
 
         ItemStackTransaction giveTx = player.giveItem(reward, ref, store);
         if (!giveTx.succeeded()) {
-            GoldCoinPayment.refund(town, player, ref, store, paid);
+            GoldCoinPayment.refund(town, account, paid);
             if (town != null) {
                 tm.updateTown(town);
             }

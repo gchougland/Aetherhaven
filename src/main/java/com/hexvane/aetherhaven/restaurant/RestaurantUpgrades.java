@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.restaurant;
 
 import com.hexvane.aetherhaven.difficulty.BuildingUpgradeCostScaler;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
@@ -152,6 +153,7 @@ public final class RestaurantUpgrades {
         @Nonnull Branch branch,
         @Nonnull TownRecord town,
         @Nonnull CombinedItemContainer inv,
+        @Nonnull GoldAccount account,
         boolean allowTreasuryGold
     ) {
         int tier = nextTier(state, branch);
@@ -164,7 +166,7 @@ public final class RestaurantUpgrades {
             }
         }
         long needGold = effectiveGoldCost(branch, tier, town);
-        return needGold <= 0L || GoldCoinPayment.canAfford(town, inv, needGold, allowTreasuryGold);
+        return needGold <= 0L || GoldCoinPayment.canAfford(town, account, needGold, allowTreasuryGold);
     }
 
     public enum PurchaseResult {
@@ -182,6 +184,7 @@ public final class RestaurantUpgrades {
         @Nonnull Branch branch,
         @Nonnull TownRecord town,
         @Nonnull CombinedItemContainer inv,
+        @Nonnull GoldAccount account,
         boolean allowTreasuryGold
     ) {
         state.migrateIfNeeded();
@@ -196,7 +199,7 @@ public final class RestaurantUpgrades {
             }
         }
         long needGold = effectiveGoldCost(branch, tier, town);
-        if (needGold > 0L && !GoldCoinPayment.canAfford(town, inv, needGold, allowTreasuryGold)) {
+        if (needGold > 0L && !GoldCoinPayment.canAfford(town, account, needGold, allowTreasuryGold)) {
             return PurchaseResult.NEED_GOLD;
         }
         for (IngredientCost c : costs) {
@@ -204,7 +207,7 @@ public final class RestaurantUpgrades {
                 return PurchaseResult.TAKE_INGREDIENT_FAILED;
             }
         }
-        if (needGold > 0L && !GoldCoinPayment.trySpend(town, inv, needGold, allowTreasuryGold)) {
+        if (needGold > 0L && !GoldCoinPayment.trySpend(town, account, needGold, allowTreasuryGold)) {
             return PurchaseResult.PAY_GOLD_FAILED;
         }
         switch (branch) {

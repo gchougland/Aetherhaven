@@ -12,6 +12,8 @@ import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
 import com.hexvane.aetherhaven.construction.ConstructionPrefabSequence;
 import com.hexvane.aetherhaven.construction.PlotMaterialDepositService;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.inventory.BenchAdjacentChestUtil;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -30,7 +32,6 @@ import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.modules.time.TimeResource;
@@ -281,24 +282,16 @@ public final class PlotAssemblyService {
             if (player == null) {
                 return PlotAssemblyBuildStartResult.BUILDER_UNAVAILABLE;
             }
-            CombinedItemContainer inv =
-                BenchAdjacentChestUtil.combinedPlayerAndAdjacentChestsForBlock(
-                    world,
-                    entityStore,
-                    builderRef,
-                    physicalSignWorld.x,
-                    physicalSignWorld.y,
-                    physicalSignWorld.z
-                );
-            if (inv == null) {
+            GoldAccount account = AetherhavenEconomy.account(builderRef, entityStore);
+            if (account == null) {
                 return PlotAssemblyBuildStartResult.PAYMENT_FAILED;
             }
             if (goldCost > 0L) {
                 boolean allowTreasury = town.playerCanSpendTreasuryGold(assemblyOwnerUuid);
-                if (!GoldCoinPayment.canAfford(town, inv, goldCost, allowTreasury)) {
+                if (!GoldCoinPayment.canAfford(town, account, goldCost, allowTreasury)) {
                     return PlotAssemblyBuildStartResult.PAYMENT_FAILED;
                 }
-                if (GoldCoinPayment.trySpendReturningBreakdown(town, inv, goldCost, allowTreasury) == null) {
+                if (GoldCoinPayment.trySpendReturningBreakdown(town, account, goldCost, allowTreasury) == null) {
                     return PlotAssemblyBuildStartResult.PAYMENT_FAILED;
                 }
             }

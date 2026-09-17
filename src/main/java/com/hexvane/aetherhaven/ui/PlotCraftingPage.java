@@ -7,6 +7,8 @@ import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.plot.PlotBuildingStyles;
 import com.hexvane.aetherhaven.plot.PlotBuildingTypes;
 import com.hexvane.aetherhaven.plot.PlotCraftingCatalog;
@@ -633,8 +635,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             commandBuilder.set("#DenyButton.Disabled", marketplaceLoading || !hasSelection);
         }
 
-        CombinedItemContainer inv =
-            player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
+        GoldAccount account = player != null ? AetherhavenEconomy.account(ref, store) : null;
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -642,7 +643,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
 
         if (!moderationTab) {
-            long invCoins = inv != null ? GoldCoinPayment.totalAvailable(null, inv) : 0L;
+            long invCoins = account != null ? account.balance() : 0L;
             long treasuryCoins = town != null ? town.getTreasuryGoldCoinCount() : 0L;
             int unlockPoints = PlotTokenUnlockService.getUnlockPoints(ref, store);
 
@@ -693,8 +694,8 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             boolean canCraft =
                 hasVariant
                     && !variantLocked
-                    && inv != null
-                    && GoldCoinPayment.canAfford(town, inv, CRAFT_COST, allowTreasury);
+                    && account != null
+                    && GoldCoinPayment.canAfford(town, account, CRAFT_COST, allowTreasury);
             commandBuilder.set("#CraftButton.Disabled", !canCraft);
         }
 
@@ -1167,8 +1168,12 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         TownRecord town = uc != null ? TownPlayerResolution.resolveActiveTown(world, store, ref, tm) : null;
         boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
+        GoldAccount account = AetherhavenEconomy.account(ref, store);
+        if (account == null) {
+            return;
+        }
 
-        SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(town, inv, CRAFT_COST, allowTreasury);
+        SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(town, account, CRAFT_COST, allowTreasury);
         if (paid == null) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
@@ -1183,7 +1188,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         String displayName = def != null && def.getDisplayName() != null ? def.getDisplayName() : variant.displayName();
         ItemStack token = PlotTokenInventory.createTokenStack(variant.constructionId(), 1, displayName, pr.getLanguage());
         if (!inv.canAddItemStack(token)) {
-            GoldCoinPayment.refund(town, player, ref, store, paid);
+            GoldCoinPayment.refund(town, account, paid);
             if (town != null) {
                 tm.updateTown(town);
             }
@@ -1198,7 +1203,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
 
         ItemStackTransaction giveTx = player.giveItem(token, ref, store);
         if (!giveTx.succeeded()) {
-            GoldCoinPayment.refund(town, player, ref, store, paid);
+            GoldCoinPayment.refund(town, account, paid);
             if (town != null) {
                 tm.updateTown(town);
             }

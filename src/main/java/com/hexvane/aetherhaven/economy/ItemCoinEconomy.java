@@ -92,15 +92,15 @@ public final class ItemCoinEconomy implements EconomyProvider {
 
     /**
      * Gold coins held in one inventory. Withdrawals remove coin stacks in chunks, deposits give coin stacks through
-     * {@link Player#giveItem} when the account was opened for an entity, or straight into the container otherwise
-     * (tests build one on a {@code SimpleItemContainer}).
+     * {@link Player#giveItem} when the account was opened for an entity, or straight into the container otherwise.
      */
     public static final class ItemCoinAccount implements GoldAccount {
         private final CombinedItemContainer inventory;
         @Nullable private final Ref<EntityStore> ref;
         @Nullable private final Store<EntityStore> store;
 
-        ItemCoinAccount(@Nonnull CombinedItemContainer inventory) {
+        /** An account on a bare container: deposits go straight in. Tests build one on a {@code SimpleItemContainer}. */
+        public ItemCoinAccount(@Nonnull CombinedItemContainer inventory) {
             this(inventory, null, null);
         }
 

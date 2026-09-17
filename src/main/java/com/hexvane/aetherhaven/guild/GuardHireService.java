@@ -5,6 +5,8 @@ import com.hexvane.aetherhaven.npc.NpcSupportUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.entity.EntityPresenceUtil;
 import com.hexvane.aetherhaven.entity.EntityRotationUtil;
 import com.hexvane.aetherhaven.equipment.VillagerEquipmentService;
@@ -38,8 +40,6 @@ import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.server.core.inventory.InventoryComponent;
-import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentDisplayName;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.damage.DeathComponent;
@@ -60,7 +60,7 @@ public final class GuardHireService {
     public static boolean canAfford(
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull TownRecord town,
-        @Nonnull CombinedItemContainer inventory,
+        @Nonnull GoldAccount account,
         @Nonnull UUID playerUuid,
         @Nonnull String profileId
     ) {
@@ -69,7 +69,7 @@ public final class GuardHireService {
             return false;
         }
         long cost = profile.getHireGoldCost();
-        return GoldCoinPayment.canAfford(town, inventory, cost, town.playerCanSpendTreasuryGold(playerUuid));
+        return GoldCoinPayment.canAfford(town, account, cost, town.playerCanSpendTreasuryGold(playerUuid));
     }
 
     public static long hireCost(@Nonnull AetherhavenPlugin plugin, @Nonnull String profileId) {
@@ -165,11 +165,11 @@ public final class GuardHireService {
             return false;
         }
         long cost = profile.getHireGoldCost();
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
-        if (inv == null) {
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        if (account == null) {
             return false;
         }
-        if (cost > 0 && !GoldCoinPayment.trySpend(town, inv, cost, town.playerCanSpendTreasuryGold(pu.getUuid()))) {
+        if (cost > 0 && !GoldCoinPayment.trySpend(town, account, cost, town.playerCanSpendTreasuryGold(pu.getUuid()))) {
             return false;
         }
 

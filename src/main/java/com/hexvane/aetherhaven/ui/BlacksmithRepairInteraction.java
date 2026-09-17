@@ -4,6 +4,8 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownPlayerResolution;
@@ -17,10 +19,8 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.PageManager;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.choices.ChoiceInteraction;
-import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemContext;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackSlotTransaction;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -104,8 +104,8 @@ public final class BlacksmithRepairInteraction extends ChoiceInteraction {
         }
         double baseMax = itemStack.getItem().getMaxDurability();
         int cost = goldCost(itemStack, AetherhavenConstants.BLACKSMITH_REPAIR_COST_FULL);
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
-        if (inv == null) {
+        GoldAccount account = AetherhavenEconomy.account(ref, store);
+        if (account == null) {
             pageManager.setPage(ref, store, Page.None);
             return;
         }
@@ -119,12 +119,12 @@ public final class BlacksmithRepairInteraction extends ChoiceInteraction {
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         TownRecord town = uc != null ? TownPlayerResolution.resolveActiveTown(world, store, ref, tm) : null;
         boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
-        if (!GoldCoinPayment.canAfford(town, inv, cost, allowTreasury)) {
+        if (!GoldCoinPayment.canAfford(town, account, cost, allowTreasury)) {
             playerRef.sendMessage(Message.translation("aetherhaven_misc.aetherhaven.blacksmith.repair.insufficientGold").color("#ff5555"));
             pageManager.setPage(ref, store, Page.None);
             return;
         }
-        SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(town, inv, cost, allowTreasury);
+        SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(town, account, cost, allowTreasury);
         if (paid == null) {
             pageManager.setPage(ref, store, Page.None);
             return;
@@ -133,7 +133,7 @@ public final class BlacksmithRepairInteraction extends ChoiceInteraction {
         ItemStackSlotTransaction replace =
             this.itemContext.getContainer().replaceItemStackInSlot(this.itemContext.getSlot(), itemStack, restored);
         if (!replace.succeeded()) {
-            GoldCoinPayment.refund(town, player, ref, store, paid);
+            GoldCoinPayment.refund(town, account, paid);
             if (town != null) {
                 tm.updateTown(town);
             }

@@ -5,6 +5,8 @@ import com.hexvane.aetherhaven.blockpalette.BlockPaletteDefinition;
 import com.hexvane.aetherhaven.blockpalette.BlockPaletteIconResolver;
 import com.hexvane.aetherhaven.blockpalette.BlockPaletteShopPricing;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.pathtool.PathToolWidthPreviewHelper;
 import com.hexvane.aetherhaven.plot.PlotCraftingPrefabPreview;
 import com.hexvane.aetherhaven.plot.PlotCraftingPrefabPreviewClientMode;
@@ -27,8 +29,6 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.inventory.InventoryComponent;
-import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -481,9 +481,8 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, pr.getUuid());
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, pr.getUuid());
-        CombinedItemContainer inv =
-            InventoryComponent.getCombined(store, ref, InventoryComponent.HOTBAR_FIRST);
-        long invCoins = GoldCoinPayment.totalAvailable(null, inv, false);
+        GoldAccount account = AetherhavenEconomy.account(ref, store);
+        long invCoins = account != null ? account.balance() : 0L;
         long treasuryCoins =
             allowTreasury && payerTown != null ? payerTown.getTreasuryGoldCoinCount() : 0L;
         commandBuilder.set(
@@ -511,9 +510,8 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, pr.getUuid());
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, pr.getUuid());
-        CombinedItemContainer inv =
-            InventoryComponent.getCombined(store, ref, InventoryComponent.HOTBAR_FIRST);
-        return GoldCoinPayment.canAfford(payerTown, inv, price, allowTreasury);
+        GoldAccount account = AetherhavenEconomy.account(ref, store);
+        return account != null && GoldCoinPayment.canAfford(payerTown, account, price, allowTreasury);
     }
 
     private boolean matchesPropSearch(@Nonnull PropDefinition def) {

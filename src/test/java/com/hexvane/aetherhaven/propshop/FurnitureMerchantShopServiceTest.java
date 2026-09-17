@@ -3,6 +3,8 @@ package com.hexvane.aetherhaven.propshop;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.ItemCoinEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.assetstore.AssetStore;
 import com.hypixel.hytale.assetstore.AssetUpdateQuery;
@@ -68,16 +70,16 @@ class FurnitureMerchantShopServiceTest {
         return town;
     }
 
-    private static CombinedItemContainer inventory(int... stacks) {
+    private static GoldAccount inventory(int... stacks) {
         var container = new SimpleItemContainer((short) 9);
         for (short i = 0; i < stacks.length; i++) {
             container.setItemStackForSlot(i, new ItemStack(GoldCoinPayment.coinItemId(), stacks[i]));
         }
-        return new CombinedItemContainer(container);
+        return new ItemCoinEconomy.ItemCoinAccount(new CombinedItemContainer(container));
     }
 
     private static FurnitureMerchantShopService.BuyResult reroll(TownRecord shop, TownRecord payer,
-        CombinedItemContainer inventory, boolean allowTreasury) {
+        GoldAccount inventory, boolean allowTreasury) {
         return FurnitureMerchantShopService.tryReroll(shop, payer, inventory, allowTreasury, 11L,
             FurnitureMerchantShopService.inventoryToken(shop), PROPS, PALETTES);
     }
@@ -89,7 +91,7 @@ class FurnitureMerchantShopServiceTest {
         assertTrue(reroll(shop, payer, inv, true).ok());
         assertEquals(7, payer.getTreasuryGoldCoinCount());
         assertEquals(100, shop.getTreasuryGoldCoinCount());
-        assertEquals(30, GoldCoinPayment.totalAvailable(null, inv, false));
+        assertEquals(30, inv.balance());
         assertEquals(11L, shop.getFurnitureMerchantShopLastRerollEpochDay());
         assertValidStock(shop);
     }
@@ -97,7 +99,7 @@ class FurnitureMerchantShopServiceTest {
     @Test void inventoryOnlyPaymentWorksWithoutTown() {
         var inv = inventory(12, 15);
         assertTrue(reroll(town(0), null, inv, false).ok());
-        assertEquals(7, GoldCoinPayment.totalAvailable(null, inv, false));
+        assertEquals(7, inv.balance());
     }
 
     @Test void mixedPaymentUsesTreasuryFirst() {
@@ -105,7 +107,7 @@ class FurnitureMerchantShopServiceTest {
         var inv = inventory(5, 10);
         assertTrue(reroll(town(0), payer, inv, true).ok());
         assertEquals(0, payer.getTreasuryGoldCoinCount());
-        assertEquals(3, GoldCoinPayment.totalAvailable(null, inv, false));
+        assertEquals(3, inv.balance());
     }
 
     @Test void treasuryPermissionIsRespectedEvenWithEnoughTownGold() {
@@ -114,7 +116,7 @@ class FurnitureMerchantShopServiceTest {
         String before = FurnitureMerchantShopService.inventoryToken(shop);
         assertFalse(reroll(shop, shop, inv, false).ok());
         assertEquals(100, shop.getTreasuryGoldCoinCount());
-        assertEquals(19, GoldCoinPayment.totalAvailable(null, inv, false));
+        assertEquals(19, inv.balance());
         assertEquals(before, FurnitureMerchantShopService.inventoryToken(shop));
     }
 
@@ -123,7 +125,7 @@ class FurnitureMerchantShopServiceTest {
         var inv = inventory(20);
         assertTrue(reroll(shop, shop, inv, false).ok());
         assertEquals(100, shop.getTreasuryGoldCoinCount());
-        assertEquals(0, GoldCoinPayment.totalAvailable(null, inv, false));
+        assertEquals(0, inv.balance());
     }
 
     @Test void insufficientCombinedFundsPreservesCoinsAndStock() {
@@ -132,7 +134,7 @@ class FurnitureMerchantShopServiceTest {
         String before = FurnitureMerchantShopService.inventoryToken(shop);
         assertFalse(reroll(shop, shop, inv, true).ok());
         assertEquals(8, shop.getTreasuryGoldCoinCount());
-        assertEquals(11, GoldCoinPayment.totalAvailable(null, inv, false));
+        assertEquals(11, inv.balance());
         assertEquals(before, FurnitureMerchantShopService.inventoryToken(shop));
     }
 

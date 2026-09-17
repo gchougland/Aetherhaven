@@ -3,6 +3,8 @@ package com.hexvane.aetherhaven.shopspot;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
@@ -23,7 +25,6 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -122,13 +123,13 @@ public final class ShopSpotPurchaseService {
         }
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, buyer);
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, buyer);
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.HOTBAR_FIRST);
-        if (!GoldCoinPayment.canAfford(payerTown, inv, totalCost, allowTreasury)) {
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        if (account == null || !GoldCoinPayment.canAfford(payerTown, account, totalCost, allowTreasury)) {
             notify(playerRef, store, commandBuffer, Message.translation(MSG + ".cannotAfford"));
             return false;
         }
         GoldCoinPayment.SpendBreakdown breakdown =
-            GoldCoinPayment.trySpendReturningBreakdown(payerTown, inv, totalCost, allowTreasury);
+            GoldCoinPayment.trySpendReturningBreakdown(payerTown, account, totalCost, allowTreasury);
         if (breakdown == null) {
             notify(playerRef, store, commandBuffer, Message.translation(MSG + ".cannotAfford"));
             return false;
@@ -144,7 +145,7 @@ public final class ShopSpotPurchaseService {
                 targetBlock
             );
         if (!delivery.succeeded()) {
-            GoldCoinPayment.refund(payerTown, player, playerRef, store, breakdown);
+            GoldCoinPayment.refund(payerTown, account, breakdown);
             if (payerTown != null) {
                 tm.updateTown(payerTown);
             }
