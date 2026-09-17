@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.economy;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.hexvane.aetherhaven.economy.api.LootSource;
 import com.hypixel.hytale.assetstore.AssetStore;
 import com.hypixel.hytale.assetstore.AssetUpdateQuery;
 import com.hypixel.hytale.assetstore.map.DefaultAssetMap;
@@ -132,7 +133,7 @@ class ItemCoinAccountTest {
     }
 
     @Test void lootItemsIsEmptyForAnUnknownItemOrNothing() {
-        assertTrue(ItemCoinEconomy.INSTANCE.lootItems("Not_An_Item", 5).isEmpty());
-        assertTrue(ItemCoinEconomy.INSTANCE.lootItems(ItemCoinEconomy.coinItemId(), 0).isEmpty());
+        assertTrue(ItemCoinEconomy.INSTANCE.lootItems(LootSource.LOOT_CHEST, "Not_An_Item", 5).isEmpty());
+        assertTrue(ItemCoinEconomy.INSTANCE.lootItems(LootSource.BREAKABLE_CONTAINER, ItemCoinEconomy.coinItemId(), 0).isEmpty());
     }
 }

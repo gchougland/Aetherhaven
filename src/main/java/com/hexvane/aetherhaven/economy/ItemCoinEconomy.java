@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.economy;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.economy.api.EconomyProvider;
 import com.hexvane.aetherhaven.economy.api.GoldAccount;
+import com.hexvane.aetherhaven.economy.api.LootSource;
 import com.hexvane.aetherhaven.economy.api.Transfer;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -81,7 +82,7 @@ public final class ItemCoinEconomy implements EconomyProvider {
 
     @Nonnull
     @Override
-    public List<ItemStack> lootItems(@Nonnull String itemId, long amount) {
+    public List<ItemStack> lootItems(@Nonnull LootSource source, @Nonnull String itemId, long amount) {
         if (amount <= 0L || Item.getAssetMap().getAsset(itemId) == null) {
             return List.of();
         }

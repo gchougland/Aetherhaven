@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.economy.api;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.hexvane.aetherhaven.economy.ItemCoinEconomy;
+import com.hexvane.aetherhaven.economy.api.LootSource;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -51,7 +52,7 @@ class AetherhavenEconomyTest {
         @Override public GoldAccount shopSafe(TownRecord town, UUID player) {
             return ledgers.computeIfAbsent(List.of(town.getTownId(), player), k -> new MemoryAccount(0));
         }
-        @Override public List<ItemStack> lootItems(String itemId, long amount) { return List.of(); }
+        @Override public List<ItemStack> lootItems(LootSource source, String itemId, long amount) { return List.of(); }
         @Override public Message amount(long amount) { return Message.raw(String.valueOf(amount)); }
         @Override public void show(UICommandBuilder builder, String selector, long amount) {}
     }

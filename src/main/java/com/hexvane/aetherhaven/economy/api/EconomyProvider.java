@@ -47,15 +47,16 @@ public interface EconomyProvider {
     GoldAccount shopSafe(@Nonnull TownRecord town, @Nonnull UUID player);
 
     /**
-     * Items Aetherhaven places for {@code amount} gold of loot (a dungeon chest, a broken pot). {@code itemId} is what
-     * the server configured for that loot source. The built-in economy returns that item split by its max stack; a
-     * provider may return its own items instead, or nothing. No player is involved: chests are filled by chunk
-     * systems.
+     * Items Aetherhaven places for {@code amount} gold of loot from {@code source} (a dungeon chest, a broken pot).
+     * {@code itemId} is what the server configured for that source. The built-in economy returns that item split by
+     * its max stack; a provider may return its own items instead (one token worth the amount), or nothing, for one
+     * source or both. No player is involved: chests are filled by chunk systems, and each stack returned is spread
+     * over a chest's free slots in random piles, so a token of quantity one lands whole.
      *
      * @return stacks ready to place in a container or to drop; empty means no gold loot.
      */
     @Nonnull
-    List<ItemStack> lootItems(@Nonnull String itemId, long amount);
+    List<ItemStack> lootItems(@Nonnull LootSource source, @Nonnull String itemId, long amount);
 
     /**
      * Moves what a player typed from one of this provider's accounts to another (a treasury deposit, a safe emptied).
