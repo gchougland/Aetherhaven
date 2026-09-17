@@ -50,7 +50,8 @@ items.Aetherhaven_Jewelry_Crafting_Bench.description=An iron anvil for finishing
 
 # === UI: town treasury (player-facing panel: deposit, tithe tab, copy) ===
 aetherhaven.ui.treasury.title=Town treasury
-aetherhaven.ui.treasury.deposit=Deposit all gold coins
+aetherhaven.ui.treasury.amountPlaceholder=Amount, e.g. {example} (empty: all)
+aetherhaven.ui.treasury.deposit=Deposit gold coins
 aetherhaven.ui.treasury.withdraw=Withdraw gold coins
 aetherhaven.ui.treasury.hint=Each morning, villagers who are nearby and in good cheer add a little gold. Inn guests are not counted.
 aetherhaven.ui.treasury.tabCoinsTooltip=Gold: balance, deposit, withdraw

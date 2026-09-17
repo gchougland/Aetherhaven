@@ -34,6 +34,16 @@ class AetherhavenEconomyTest {
         AetherhavenEconomy.unregister(second);
     }
 
+    @Test void parseAmountReadsWholeCoinsByDefault() {
+        assertEquals(12L, first.parseAmount("12").getAsLong());
+        assertEquals(7L, first.parseAmount(" 7 ").getAsLong());
+        assertEquals(0L, first.parseAmount("0").getAsLong());
+        assertTrue(first.parseAmount("-1").isEmpty());
+        assertTrue(first.parseAmount("1.5").isEmpty());
+        assertTrue(first.parseAmount("ten").isEmpty());
+        assertTrue(first.parseAmount("").isEmpty());
+    }
+
     @Test void coinItemIsTheDefault() {
         assertSame(ItemCoinEconomy.INSTANCE, AetherhavenEconomy.provider());
         assertTrue(AetherhavenEconomy.usesCoinItem());

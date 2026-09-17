@@ -15,7 +15,6 @@ import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.inventory.BenchAdjacentChestUtil;
-import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
@@ -352,9 +351,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         boolean treasuryPerm =
             treasuryTown != null && playerUuid != null && treasuryTown.playerCanSpendTreasuryGold(playerUuid);
         long spendableGold =
-            treasuryTown != null && account != null
-                ? GoldCoinPayment.totalAvailable(treasuryTown, account, treasuryPerm)
-                : inv != null ? InventoryMaterials.count(inv, AetherhavenConstants.ITEM_GOLD_COIN) : 0L;
+            account != null ? GoldCoinPayment.totalAvailable(treasuryTown, account, treasuryPerm) : 0L;
         boolean treasuryOk =
             completed
                 || goldCost <= 0

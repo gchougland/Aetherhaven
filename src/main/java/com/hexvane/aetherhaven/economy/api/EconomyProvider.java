@@ -7,6 +7,7 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.List;
+import java.util.OptionalLong;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -37,6 +38,20 @@ public interface EconomyProvider {
      */
     @Nonnull
     List<ItemStack> lootItems(@Nonnull String itemId, long amount);
+
+    /**
+     * An amount a player typed, in the provider's own unit (what {@link #amount} writes), as Aetherhaven gold coins
+     * rounded down. A whole number of coins by default. Empty when the text is not an amount at all.
+     */
+    @Nonnull
+    default OptionalLong parseAmount(@Nonnull String text) {
+        try {
+            long coins = Long.parseLong(text.trim());
+            return coins < 0L ? OptionalLong.empty() : OptionalLong.of(coins);
+        } catch (NumberFormatException e) {
+            return OptionalLong.empty();
+        }
+    }
 
     /**
      * An amount as text, for every sentence Aetherhaven prints one in: "5 gold" by default. Passed as a

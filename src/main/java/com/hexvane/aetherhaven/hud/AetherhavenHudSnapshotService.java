@@ -1,7 +1,8 @@
 package com.hexvane.aetherhaven.hud;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.inventory.InventoryMaterials;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.questboard.QuestBoardCatalog;
 import com.hexvane.aetherhaven.questboard.QuestBoardService;
@@ -16,8 +17,6 @@ import com.hexvane.aetherhaven.worldnpc.WorldQuestIds;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
-import com.hypixel.hytale.server.core.inventory.InventoryComponent;
-import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.time.LocalDateTime;
@@ -78,11 +77,8 @@ public final class AetherhavenHudSnapshotService {
         @Nonnull PlayerTownJournalState preferences
     ) {
         Ref<EntityStore> playerEntity = playerRef.getReference();
-        CombinedItemContainer inventory =
-            playerEntity != null ? InventoryComponent.getCombined(store, playerEntity, InventoryComponent.EVERYTHING) : null;
-        long inventoryCoins = inventory != null
-            ? InventoryMaterials.count(inventory, com.hexvane.aetherhaven.AetherhavenConstants.ITEM_GOLD_COIN)
-            : 0L;
+        GoldAccount account = playerEntity != null ? AetherhavenEconomy.account(playerEntity, store) : null;
+        long inventoryCoins = account != null ? account.balance() : 0L;
         long treasuryCoins = town != null ? Math.max(0L, town.getTreasuryGoldCoinCount()) : 0L;
         List<HudQuestEntry> quests =
             preferences.isHudShowQuests()

@@ -95,6 +95,11 @@ $C.@PageOverlay {
               Style: (...$C.@DefaultLabelStyle, Wrap: true);
             }
 
+            $C.@TextField #TreasuryAmountField {
+              Anchor: (Bottom: 8, Height: 36);
+              PlaceholderText: "";
+            }
+
             $C.@TextButton #DepositButton {
               Text: "";
             }

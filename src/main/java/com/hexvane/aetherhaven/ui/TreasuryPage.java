@@ -6,7 +6,8 @@ import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.economy.TownTaxService;
 import com.hexvane.aetherhaven.economy.TownTaxService.TaxMorningBreakdown;
 import com.hexvane.aetherhaven.economy.TownTaxService.VillagerTaxLine;
-import com.hexvane.aetherhaven.inventory.InventoryMaterials;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.plot.TreasuryBlock;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.villager.AetherhavenRoleLabels;
@@ -22,12 +23,7 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
-import com.hypixel.hytale.server.core.inventory.InventoryComponent;
-import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
-import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -45,6 +41,7 @@ import javax.annotation.Nullable;
 
 public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<TreasuryPage.PageData> {
     private static final String TAX_ROWS = "#TaxResidentRows";
+    private static final long ALL = Long.MIN_VALUE;
     private static final int MAX_TAX_ROWS = 36;
 
     private final Ref<ChunkStore> treasuryBlockRef;
@@ -133,6 +130,11 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
             "#Balance.TextSpans",
             Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.coinsLine").param("count", String.valueOf(bal))
         );
+        commandBuilder.set(
+            "#TreasuryAmountField.PlaceholderText",
+            Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.amountPlaceholder")
+                .param("example", AetherhavenEconomy.provider().amount(10L))
+        );
         commandBuilder.set("#DepositButton.Disabled", false);
         commandBuilder.set("#WithdrawButton.Disabled", bal <= 0L);
 
@@ -140,13 +142,13 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
                 "#DepositButton",
-                new EventData().append("Action", "Deposit"),
+                new EventData().append("Action", "Deposit").append("@Amount", "#TreasuryAmountField.Value"),
                 false
             );
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
                 "#WithdrawButton",
-                new EventData().append("Action", "Withdraw"),
+                new EventData().append("Action", "Withdraw").append("@Amount", "#TreasuryAmountField.Value"),
                 false
             );
         } else {
@@ -344,34 +346,49 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
             return;
         }
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        Player player = store.getComponent(ref, Player.getComponentType());
+        GoldAccount account = AetherhavenEconomy.account(ref, store);
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
-        if (uc == null || player == null || !town.playerCanOpenTreasuryPanel(uc.getUuid())) {
+        if (uc == null || account == null || !town.playerCanOpenTreasuryPanel(uc.getUuid())) {
+            return;
+        }
+        // Empty field = all, as before the field existed. The provider reads its own unit.
+        long amount = parseAmount(data.amount);
+        if (amount != ALL && amount <= 0L) {
+            if (pr != null) {
+                pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.badAmount"));
+            }
+            refresh(ref, store);
             return;
         }
 
         if (action.equalsIgnoreCase("Deposit")) {
-            CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
-            int have = InventoryMaterials.count(inv, AetherhavenConstants.ITEM_GOLD_COIN);
-            if (have <= 0) {
+            long have = account.balance();
+            if (have <= 0L) {
                 if (pr != null) {
                     pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.depositNoCoins"));
                 }
                 refresh(ref, store);
                 return;
             }
-            ItemStackTransaction tx = inv.removeItemStack(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, have));
-            if (!tx.succeeded()) {
+            long give = amount == ALL ? have : amount;
+            if (give > have) {
+                if (pr != null) {
+                    pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.badAmount"));
+                }
+                refresh(ref, store);
+                return;
+            }
+            if (!account.withdraw(give)) {
                 if (pr != null) {
                     pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.depositRemoveFailed"));
                 }
                 refresh(ref, store);
                 return;
             }
-            town.addTreasuryGoldCoins(have);
+            town.addTreasuryGoldCoins(give);
             tm.updateTown(town);
             if (pr != null) {
-                pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.deposited").param("count", have));
+                pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.deposited").param("count", give));
             }
             refresh(ref, store);
             return;
@@ -383,31 +400,36 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
                 refresh(ref, store);
                 return;
             }
-            int give = (int) Math.min(bal, 9999);
-            ItemStack stack = new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, give);
-            CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
-            if (inv == null || !inv.canAddItemStack(stack)) {
+            long give = amount == ALL ? Math.min(bal, 9999L) : amount;
+            if (give > bal) {
+                if (pr != null) {
+                    pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.badAmount"));
+                }
+                refresh(ref, store);
+                return;
+            }
+            if (!account.deposit(give)) {
                 if (pr != null) {
                     pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.makeRoom"));
                 }
                 refresh(ref, store);
                 return;
             }
-            ItemStackTransaction giveTx = player.giveItem(stack, ref, store);
-            if (!giveTx.succeeded()) {
-                if (pr != null) {
-                    pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.couldNotAddCoins"));
-                }
-                refresh(ref, store);
-                return;
-            }
-            town.addTreasuryGoldCoins(-(long) give);
+            town.addTreasuryGoldCoins(-give);
             tm.updateTown(town);
             if (pr != null) {
                 pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.withdrew").param("count", give));
             }
             refresh(ref, store);
         }
+    }
+
+    /** {@link #ALL} for a blank field, the coins otherwise (-1 when the text is not an amount). */
+    private static long parseAmount(@Nullable String text) {
+        if (text == null || text.isBlank()) {
+            return ALL;
+        }
+        return AetherhavenEconomy.provider().parseAmount(text).orElse(-1L);
     }
 
     private void refresh(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
@@ -421,9 +443,13 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
         public static final BuilderCodec<PageData> CODEC = BuilderCodec.builder(PageData.class, PageData::new)
             .append(new KeyedCodec<>("Action", Codec.STRING), (d, v) -> d.action = v, d -> d.action)
             .add()
+            .append(new KeyedCodec<>("@Amount", Codec.STRING), (d, v) -> d.amount = v, d -> d.amount)
+            .add()
             .build();
 
         @Nullable
         private String action;
+        @Nullable
+        private String amount;
     }
 }

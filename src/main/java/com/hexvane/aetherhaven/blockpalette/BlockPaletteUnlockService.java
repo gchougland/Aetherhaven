@@ -14,8 +14,8 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
-import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hypixel.hytale.server.core.util.NotificationUtil;
 import javax.annotation.Nonnull;
 
@@ -58,11 +58,9 @@ public final class BlockPaletteUnlockService {
             return Result.NO_TOWN;
         }
         if (town.hasBlockPaletteUnlocked(def.getId())) {
-            Player player = store.getComponent(playerEntityRef, Player.getComponentType());
-            if (player != null) {
-                ItemStack coins =
-                    new ItemStack(GoldCoinPayment.coinItemId(), BlockPaletteConstants.DUPLICATE_UNLOCK_REFUND_GOLD);
-                player.giveItem(coins, playerEntityRef, store);
+            GoldAccount account = AetherhavenEconomy.account(playerEntityRef, store);
+            if (account != null) {
+                GoldCoinPayment.give(account, BlockPaletteConstants.DUPLICATE_UNLOCK_REFUND_GOLD);
             }
             NotificationUtil.sendNotification(
                 playerRef.getPacketHandler(),
