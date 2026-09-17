@@ -133,7 +133,6 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
         commandBuilder.set(
             "#TreasuryAmountField.PlaceholderText",
             Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.amountPlaceholder")
-                .param("example", AetherhavenEconomy.provider().amount(10L))
         );
         commandBuilder.set("#DepositButton.Disabled", false);
         commandBuilder.set("#WithdrawButton.Disabled", bal <= 0L);
@@ -354,9 +353,7 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
         // Empty field = all, as before the field existed. The provider reads its own unit.
         long amount = parseAmount(data.amount);
         if (amount != ALL && amount <= 0L) {
-            if (pr != null) {
-                pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.badAmount"));
-            }
+            badAmount(pr);
             refresh(ref, store);
             return;
         }
@@ -372,9 +369,7 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
             }
             long give = amount == ALL ? have : amount;
             if (give > have) {
-                if (pr != null) {
-                    pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.badAmount"));
-                }
+                badAmount(pr);
                 refresh(ref, store);
                 return;
             }
@@ -402,9 +397,7 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
             }
             long give = amount == ALL ? Math.min(bal, 9999L) : amount;
             if (give > bal) {
-                if (pr != null) {
-                    pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.badAmount"));
-                }
+                badAmount(pr);
                 refresh(ref, store);
                 return;
             }
@@ -421,6 +414,16 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
                 pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.withdrew").param("count", give));
             }
             refresh(ref, store);
+        }
+    }
+
+    /** Placeholders are plain text on the client, so the example of the provider's notation goes in the chat. */
+    private static void badAmount(@Nullable PlayerRef pr) {
+        if (pr != null) {
+            pr.sendMessage(
+                Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.badAmount")
+                    .param("example", AetherhavenEconomy.provider().amount(10L))
+            );
         }
     }
 
