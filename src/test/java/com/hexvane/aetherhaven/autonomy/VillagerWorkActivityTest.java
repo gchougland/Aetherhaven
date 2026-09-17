@@ -31,18 +31,33 @@ class VillagerWorkActivityTest {
         assertEquals(VillagerWorkActivity.READ, VillagerWorkActivity.resolve(poi("WORK", "inspect", PoiInteractionKind.WORK_SURFACE), "merchant"));
     }
 
-    @Test void standingShopkeepersOccasionallySweepButMostlyDoTheirJob() {
+    @Test void shopkeepersReadOccasionallyAndTakeQuietBreaks() {
         var work = poi("WORK", "read", PoiInteractionKind.WORK_SURFACE);
-        int sweeping = 0, reading = 0;
+        int sweeping = 0, reading = 0, quiet = 0;
         for (int i = 0; i < 100; i++) {
             switch (VillagerWorkActivity.chooseBeat(work, "merchant", false, i / 100.0)) {
                 case SWEEP -> sweeping++;
                 case READ -> reading++;
+                case LEISURE -> quiet++;
                 default -> fail("Unexpected merchant activity");
             }
         }
-        assertEquals(25, sweeping);
-        assertEquals(75, reading);
+        assertEquals(20, sweeping);
+        assertEquals(15, reading);
+        assertEquals(65, quiet);
+    }
+
+    @Test void explicitReadingAndSeatsStillHaveQuietBreaks() {
+        for (boolean seated : new boolean[]{false, true}) {
+            var marker = poi("WORK", "read", PoiInteractionKind.WORK_SURFACE);
+            int reading = 0;
+            for (int i = 0; i < 100; i++) {
+                var beat = VillagerWorkActivity.chooseBeat(marker, "librarian", seated, i / 100.0);
+                if (beat == VillagerWorkActivity.READ) reading++;
+                else assertEquals(VillagerWorkActivity.LEISURE, beat);
+            }
+            assertEquals(15, reading);
+        }
     }
 
     @Test void seatsMealsLeisureAndExplicitActivitiesDoNotBecomeSweeping() {

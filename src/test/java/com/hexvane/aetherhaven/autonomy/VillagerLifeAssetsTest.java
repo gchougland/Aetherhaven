@@ -243,7 +243,7 @@ class VillagerLifeAssetsTest {
                 }
             }
         }
-        assertEquals(1067, animations);
+        assertEquals(1111, animations);
     }
 
     @Test void readingEyesScanLinesAndLaughKeepsAnAlertUpperLid() throws Exception {
@@ -459,7 +459,7 @@ class VillagerLifeAssetsTest {
         }
     }
 
-    @Test void activitiesPreserveTheOriginalItemsHeldIdleGrip() throws Exception {
+    @Test void activitiesPreserveNativeGripsExceptTheApprovedSweepGrip() throws Exception {
         for (String gesture : new String[]{"Read", "Sweep", "Craft", "Mix", "Tend"}) {
             var anim = JsonParser.parseString(Files.readString(RES.resolve("Common/Characters/Animations/Aetherhaven/Life/"
                 + gesture + ".blockyanim"))).getAsJsonObject();
@@ -468,7 +468,7 @@ class VillagerLifeAssetsTest {
             var frames = attachment.getAsJsonArray("position");
             assertEquals(0, frames.get(0).getAsJsonObject().get("time").getAsInt());
             assertEquals(anim.get("duration").getAsInt(), frames.get(frames.size()-1).getAsJsonObject().get("time").getAsInt());
-            double[] expected = gesture.equals("Sweep") ? new double[]{0, 0, -36}
+            double[] expected = gesture.equals("Sweep") ? new double[]{0, 0, -4}
                 : gesture.equals("Craft") ? new double[]{0, 0, 0} : new double[]{2, -2, 2.1};
             for (var frame : frames) for (int axis = 0; axis < 3; axis++)
                 assertEquals(expected[axis], frame.getAsJsonObject().getAsJsonObject("delta")

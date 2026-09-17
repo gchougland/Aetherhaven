@@ -635,6 +635,43 @@ public final class VillagerBlockUtil {
         return preferredAvailableSeatWorldPosition(world, base) != null;
     }
 
+    /** Walk beside the free mount point, never onto the furniture's collision box. */
+    @Nullable
+    public static Vector3d availableSeatApproach(@Nonnull World world, int x, int y, int z) {
+        Vector3i base = resolveMountBaseBlock(world, x, y, z);
+        Vector3d seat = preferredAvailableSeatWorldPosition(world, base);
+        if (seat == null) return null;
+        Vector3d approach = findSeatApproach(seat, base.y, cell ->
+            isNpcStandColumn(world, cell.x, cell.y, cell.z)
+                && !isFurnitureMountPoi(world, cell.x, cell.y - 1, cell.z));
+        if (approach != null) {
+            approach.y = resolveFeetYForStandCell(world, (int) Math.floor(approach.x),
+                (int) Math.floor(approach.y), (int) Math.floor(approach.z));
+        }
+        return approach;
+    }
+
+    @Nullable
+    static Vector3d findSeatApproach(Vector3d seat, int baseY, java.util.function.Predicate<Vector3i> standable) {
+        Vector3d best = null;
+        double bestScore = Double.POSITIVE_INFINITY;
+        int sx = (int) Math.floor(seat.x), sz = (int) Math.floor(seat.z);
+        for (int dy : new int[]{0, -1, 1}) {
+            for (int dx = -2; dx <= 2; dx++) for (int dz = -2; dz <= 2; dz++) {
+                var cell = new Vector3i(sx + dx, baseY + dy, sz + dz);
+                double hx = cell.x + .5 - seat.x, hz = cell.z + .5 - seat.z;
+                double distance = hx * hx + hz * hz;
+                if (distance > MOUNT_POI_MAX_HORIZONTAL * MOUNT_POI_MAX_HORIZONTAL || !standable.test(cell)) continue;
+                double score = distance + Math.abs(dy) * 2;
+                if (score < bestScore) {
+                    bestScore = score;
+                    best = new Vector3d(cell.x + .5, cell.y + .02, cell.z + .5);
+                }
+            }
+        }
+        return best;
+    }
+
     /**
      * Picks an empty seat or bed mount point for furniture. Uses vanilla
      * {@link BlockMountComponent#findAvailableSeat} so occupancy matches what {@code mountOnBlock} checks (identity of

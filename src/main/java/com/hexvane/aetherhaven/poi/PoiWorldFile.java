@@ -66,6 +66,8 @@ public final class PoiWorldFile {
         public Boolean mountOnUse;
         @Nullable
         public String equipmentProfileId;
+        @Nullable
+        public String workResidentKind;
     }
 
     @Nonnull
@@ -147,7 +149,8 @@ public final class PoiWorldFile {
                             tx,
                             ty,
                             tz,
-                            row.interactionTargetYawRadians
+                            row.interactionTargetYawRadians,
+                            row.workResidentKind
                         )
                     );
                 } else {
@@ -170,7 +173,9 @@ public final class PoiWorldFile {
                             equipmentProfile,
                             null,
                             null,
-                            null
+                            null,
+                            row.interactionTargetYawRadians,
+                            row.workResidentKind
                         )
                     );
                 }
@@ -199,11 +204,12 @@ public final class PoiWorldFile {
             r.interactionKind = e.getInteractionKind().name();
             r.mountOnUse = e.isMountOnUse();
             r.equipmentProfileId = e.getEquipmentProfileId();
+            r.workResidentKind = e.getWorkResidentKind();
+            r.interactionTargetYawRadians = e.getInteractionTargetYawRadians();
             if (e.hasInteractionTarget()) {
                 r.interactionTargetX = e.getInteractionTargetX();
                 r.interactionTargetY = e.getInteractionTargetY();
                 r.interactionTargetZ = e.getInteractionTargetZ();
-                r.interactionTargetYawRadians = e.getInteractionTargetYawRadians();
             }
             f.getPois().add(r);
         }

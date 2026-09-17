@@ -22,7 +22,7 @@ public final class VillagerLifeState implements Component<EntityStore> {
     long nextAmbientVoiceMs;
     long nextContextThoughtMs;
     boolean readingLoop;
-    long readingResumeMs;
+    String activeLoopGesture;
     long nextPonderVoiceMs;
     Session session;
     String conversationItemId;
@@ -57,7 +57,7 @@ public final class VillagerLifeState implements Component<EntityStore> {
         copy.nextAmbientVoiceMs = nextAmbientVoiceMs;
         copy.nextContextThoughtMs = nextContextThoughtMs;
         copy.readingLoop = readingLoop;
-        copy.readingResumeMs = readingResumeMs;
+        copy.activeLoopGesture = activeLoopGesture;
         copy.nextPonderVoiceMs = nextPonderVoiceMs;
         // Intentionally shared: one atomic, world-thread conversation for both participants.
         copy.session = session;

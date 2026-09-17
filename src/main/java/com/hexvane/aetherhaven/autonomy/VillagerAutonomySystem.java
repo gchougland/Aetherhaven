@@ -143,6 +143,8 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         } else {
             releaseBlockMountAndSnapToGround(ref, store, commandBuffer);
         }
+        // Unload cannot wait for an unoccupied exit square in a cooling chunk.
+        commandBuffer.run(s -> { if (ref.isValid()) BlockMountRelease.release(ref, s, null); });
     }
 
     /**
@@ -184,10 +186,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull Store<EntityStore> store,
         @Nullable CommandBuffer<EntityStore> commandBuffer
     ) {
-        if (store.getComponent(ref, MountedComponent.getComponentType()) != null) {
-            BlockMountRelease.release(ref, store, commandBuffer);
-            VillagerBlockUtil.snapNpcToStandY(ref, store, commandBuffer);
-        }
+        VillagerSeatExit.request(ref, store, commandBuffer);
     }
 
     /**
@@ -268,6 +267,8 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return;
         }
 
+        if (store.getComponent(ref, VillagerSeatExit.getComponentType()) != null) return;
+
         TownVillagerBinding binding = archetypeChunk.getComponent(index, TownVillagerBinding.getComponentType());
         VillagerNeeds needs = archetypeChunk.getComponent(index, VillagerNeeds.getComponentType());
         if (binding == null || needs == null) {
@@ -341,6 +342,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             int phase = autonomy.getPhase();
             if (phase == VillagerAutonomyState.PHASE_IDLE || phase == VillagerAutonomyState.PHASE_TRAVEL) {
                 releaseBlockMountAndSnapToGround(ref, store, commandBuffer);
+                return; // Do not run travel against a mount queued for removal.
             }
         }
 
@@ -1217,6 +1219,15 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 }
             }
             leashY = clearY != Integer.MIN_VALUE ? clearY + 0.02 : tpy;
+        } else if (VillagerBlockUtil.isFurnitureMountPoi(world, pick.getX(), pick.getY(), pick.getZ())) {
+            Vector3d approach = VillagerBlockUtil.availableSeatApproach(world, pick.getX(), pick.getY(), pick.getZ());
+            if (approach == null) {
+                failTravel(autonomy, now, "MOUNT_UNREACHABLE", commandBuffer, ref, npc);
+                return;
+            }
+            tx = approach.x;
+            tz = approach.z;
+            leashY = approach.y;
         } else {
             int bx = pick.getX();
             int bz = pick.getZ();
@@ -1495,6 +1506,25 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return;
         }
 
+        // The free bench seat can change while approaching. Refresh the floor target
+        // before stuck recovery, which must never teleport onto an occupied bench.
+        World travelWorld = store.getExternalData().getWorld();
+        if (poiEarly != null && !poiEarly.hasInteractionTarget()
+            && VillagerBlockUtil.isFurnitureMountPoi(travelWorld, poiEarly.getX(), poiEarly.getY(), poiEarly.getZ())) {
+            Vector3d approach = VillagerBlockUtil.availableSeatApproach(travelWorld, poiEarly.getX(), poiEarly.getY(), poiEarly.getZ());
+            if (approach == null) {
+                failTravel(autonomy, now, "MOUNT_FULL_OR_UNREACHABLE", commandBuffer, ref, npc);
+                return;
+            }
+            if (approach.distanceSquared(new Vector3d(autonomy.getTargetX(), autonomy.getTargetY(), autonomy.getTargetZ())) > .01) {
+                autonomy.setTravelTarget(approach.x, approach.y, approach.z, poiEarly.getId());
+                autonomy.clearTravelWaypoints();
+                autonomy.resetAutonomyStallTracking();
+                npc.setLeashPoint(approach);
+                commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+                commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+            }
+        }
         if (!isJudgingStandPoi(poiEarly) && tryStallTeleportRecovery(ref, store, commandBuffer, npc, autonomy, tc.getPosition())) {
             return;
         }
@@ -1768,6 +1798,13 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 return false;
             }
         }
+        // A free-slot precheck is not a successful mount. Claim the actual seat
+        // before committing USE; failed mounts must not become standing leisure.
+        if (furniture != VillagerBlockUtil.FurnitureMountKind.NONE
+            && !PoiAutonomyVisuals.tryMountBlockPoi(ref, store, commandBuffer, poi)) {
+            failTravel(autonomy, now, "MOUNT_FAILED", commandBuffer, ref, npc);
+            return false;
+        }
         NpcAnimationPlayback.play(ref, npc, AnimationSlot.Movement, null, commandBuffer);
         float dur = PoiEffectTable.useDurationSeconds(poi, RestaurantBenefitService.restaurantStateForPoi(townRecord, poi));
         autonomy.setPhase(VillagerAutonomyState.PHASE_USE);
@@ -1879,6 +1916,14 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
     ) {
         UUID poiId = autonomy.getTargetPoiUuid();
         PoiEntry poi = poiId != null ? reg.get(poiId) : null;
+        // Recover old/stale USE states only by acquiring a real seat. If someone
+        // took it, leave instead of freezing above the furniture and filling fun.
+        if (poi != null && VillagerBlockUtil.isFurnitureMountPoi(world, poi.getX(), poi.getY(), poi.getZ())
+            && !PoiAutonomyVisuals.tryMountBlockPoi(ref, store, commandBuffer, poi)) {
+            abortActivePoiUseAndDismount(ref, store, commandBuffer, autonomy, needs, reg, true);
+            failTravel(autonomy, now, "MOUNT_LOST", commandBuffer, ref, npc);
+            return;
+        }
         boolean daytime = ShopSpotOpenService.isGameDay(store);
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         TransformComponent tcUse = store.getComponent(ref, TransformComponent.getComponentType());
@@ -2070,6 +2115,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 return;
             }
         }
+        boolean leavingSeat = isNpcBlockMounted(store, commandBuffer, ref);
         boolean finishedEat = false;
         boolean finishedWork = false;
         boolean finishedRest = false;
@@ -2174,6 +2220,9 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         );
         commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
         clearAutonomyRoleState(ref, npc, commandBuffer);
+        // Flush the dismount before selecting another POI. The old mount is still
+        // visible during this tick and must not count as mounting the next bench.
+        if (leavingSeat) return;
         if (plugin != null) {
             TransformComponent tc = tcUse != null ? tcUse : store.getComponent(ref, TransformComponent.getComponentType());
             if (leaveForQuestBoard

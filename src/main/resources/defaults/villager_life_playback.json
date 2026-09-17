@@ -15325,6 +15325,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -15349,11 +15359,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -15444,6 +15449,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -15468,11 +15483,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -15543,6 +15553,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -15567,11 +15587,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -15638,6 +15653,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -15662,11 +15687,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -15723,6 +15743,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -15747,11 +15777,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -15826,6 +15851,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -15850,11 +15885,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -15921,6 +15951,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -15945,11 +15985,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -16024,6 +16059,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -16048,11 +16093,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -16117,6 +16157,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -16141,11 +16191,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -16212,6 +16257,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -16236,11 +16291,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -16303,6 +16353,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -16327,11 +16387,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -16390,6 +16445,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -16414,11 +16479,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -16471,6 +16531,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -16495,11 +16565,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -16578,6 +16643,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -16602,11 +16677,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -16661,6 +16731,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -16685,11 +16765,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -16748,6 +16823,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -16772,11 +16857,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -16845,6 +16925,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -16869,11 +16959,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -16936,6 +17021,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -16960,11 +17055,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -17043,6 +17133,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -17067,11 +17167,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -17130,6 +17225,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -17154,11 +17259,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -17223,6 +17323,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -17247,11 +17357,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -17350,6 +17455,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -17374,11 +17489,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -17437,6 +17547,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -17461,11 +17581,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -17524,6 +17639,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -17548,11 +17673,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -17617,6 +17737,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -17641,11 +17771,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -17724,6 +17849,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -17748,11 +17883,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -17811,6 +17941,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -17835,11 +17975,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -17890,6 +18025,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -17914,11 +18059,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -17975,6 +18115,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -17999,11 +18149,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -18070,6 +18215,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -18094,11 +18249,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -18173,6 +18323,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -18197,11 +18357,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -18264,6 +18419,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -18288,11 +18453,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -18349,6 +18509,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -18373,11 +18543,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -18460,6 +18625,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -18484,11 +18659,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -18567,6 +18737,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -18591,11 +18771,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -18658,6 +18833,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -18682,11 +18867,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -18767,6 +18947,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -18791,11 +18981,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -18878,6 +19063,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -18902,11 +19097,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -18981,6 +19171,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -19005,11 +19205,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -19076,6 +19271,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -19100,11 +19305,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -22995,6 +23195,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -23019,11 +23229,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -23126,6 +23331,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -23150,11 +23365,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -23209,6 +23419,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -23233,11 +23453,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [
@@ -23304,6 +23519,16 @@
           "durationMs": 5800,
           "actionId": "LookAround_Speech"
         },
+        "Fidget": {
+          "id": "Aetherhaven_Life_Face_Fidget",
+          "durationMs": 5000,
+          "actionId": "Fidget_Speech"
+        },
+        "ReadLoop": {
+          "id": "Aetherhaven_Life_Face_ReadLoop",
+          "durationMs": 6000,
+          "actionId": "ReadLoop_Speech"
+        },
         "Craft": {
           "id": "Aetherhaven_Life_Face_Craft",
           "durationMs": 4800,
@@ -23328,11 +23553,6 @@
           "id": "Aetherhaven_Life_Face_Tend",
           "durationMs": 5600,
           "actionId": "Tend_Speech"
-        },
-        "ReadLoop": {
-          "id": "Aetherhaven_Life_Face_ReadLoop",
-          "durationMs": 6000,
-          "actionId": "ReadLoop_Speech"
         }
       },
       "mouthCues": [

@@ -80,41 +80,52 @@ public final class VillagerLifeVisuals {
         return duration;
     }
 
-    public static void maintainReading(Ref<EntityStore> ref, Store<EntityStore> store) {
-        var life = state(ref, store);
-        var npc = store.getComponent(ref, NPCEntity.getComponentType());
-        if (npc != null && NpcFaceVisuals.isInInteractionDialogue(npc)) return;
-        if (life.readingLoop && life.readingResumeMs != 0 && System.currentTimeMillis() >= life.readingResumeMs) {
-            life.readingResumeMs = 0;
-            AnimationUtils.playAnimation(ref, BODY_SLOT, NpcFaceVisuals.itemAnimationsForFaceRig(ref, BODY_ANIMATIONS, store), "ReadLoop", false, store);
-        }
-    }
-
     public static void continueReading(Ref<EntityStore> ref, Store<EntityStore> store) {
         var life = store.getComponent(ref, VillagerLifeState.getComponentType());
-        if (life != null && life.readingLoop) read(ref, false, store);
+        if (life != null && life.readingLoop) loop(ref, "ReadLoop", false, store);
     }
 
-    private static long read(Ref<EntityStore> ref, boolean working, Store<EntityStore> store) {
+    static String loopGesture(String gesture) {
+        return switch (gesture) {
+            case "Read", "ReadLoop" -> "ReadLoop";
+            case "Sweep", "Mix" -> gesture;
+            default -> null;
+        };
+    }
+
+    static boolean startsLoop(String active, String requested) {
+        return !java.util.Objects.equals(active, requested);
+    }
+
+    private static long loop(Ref<EntityStore> ref, String gesture, boolean working, Store<EntityStore> store) {
         var life = state(ref, store);
-        if (!life.readingLoop) {
-            VillagerLifeProps.equip(ref, "ReadLoop", store);
-            AnimationUtils.playAnimation(ref, BODY_SLOT, NpcFaceVisuals.itemAnimationsForFaceRig(ref, BODY_ANIMATIONS, store), "ReadLoop", false, store);
-            life.readingLoop = true;
+        if (startsLoop(life.activeLoopGesture, gesture)) {
+            VillagerLifeProps.equip(ref, gesture, store);
+            AnimationUtils.playAnimation(ref, BODY_SLOT, NpcFaceVisuals.itemAnimationsForFaceRig(ref, BODY_ANIMATIONS, store), gesture, false, store);
+            life.activeLoopGesture = gesture;
+            life.readingLoop = gesture.equals("ReadLoop");
         }
-        maintainReading(ref, store);
         long now = System.currentTimeMillis();
         if (now >= life.nextAmbientVoiceMs) {
             var rng = java.util.concurrent.ThreadLocalRandom.current();
-            String mood = rng.nextDouble() < .4 ? "Thinking" : VillagerLifePolicy.ambientMood(working, rng.nextBoolean());
+            String mood = gesture.equals("ReadLoop") && rng.nextDouble() < .4 ? "Thinking"
+                : VillagerLifePolicy.ambientMood(working, rng.nextBoolean());
             var id = store.getComponent(ref, com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
             if (id != null) {
-                long duration = voice(ref, id.getUuid(), mood, "ReadLoop", store);
-                life.readingResumeMs = now + duration;
-                life.nextAmbientVoiceMs = now + duration + rng.nextLong(3500, 7000);
+                var clip = VillagerLifeSpeech.select(VillagerLifePersonality.voice(ref, id.getUuid(), store), mood, rng.nextInt());
+                if (clip != null) {
+                    VillagerEmotionParticles.play(ref, gesture, mood, store);
+                    if (!clip.mouthCues().isEmpty()) VillagerMouthPlayback.start(ref, clip, gesture, clip.audioMs(), false, store);
+                    else {
+                        var expression = clip.faces().get(gesture);
+                        if (expression != null) NpcFaceVisuals.playExpression(ref, expression.id(), expression.durationMs()/1000f, store);
+                    }
+                    VillagerSpeechAudio.play(ref, clip, true, store);
+                    life.nextAmbientVoiceMs = now + clip.audioMs() + rng.nextLong(4500, 9000);
+                }
             }
         }
-        return Math.max(6000, life.readingResumeMs - now);
+        return gesture.equals("ReadLoop") ? 12_000 : VillagerLifeTiming.durationMs(gesture);
     }
 
     /** Tool swings retain their body track while a new idle/work recording drives the face. */
@@ -246,7 +257,8 @@ public final class VillagerLifeVisuals {
     }
 
     public static long ambient(Ref<EntityStore> ref, String gesture, boolean working, Store<EntityStore> store) {
-        if (gesture.equals("Read")) return read(ref, working, store);
+        String loop = loopGesture(gesture);
+        if (loop != null) return loop(ref, loop, working, store);
         if (gesture.equals("Eat")) {
             VillagerLifeProps.equip(ref, "Eat", store);
             var item = com.hypixel.hytale.server.core.asset.type.item.config.Item.getAssetMap()

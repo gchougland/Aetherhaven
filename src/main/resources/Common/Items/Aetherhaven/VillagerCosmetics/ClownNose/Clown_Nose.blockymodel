@@ -2,19 +2,19 @@
   "nodes": [
     {
       "id": "1",
-      "name": "Mouth-Attachment",
-      "position": {"x": 0, "y": 97, "z": 15},
+      "name": "Head",
+      "position": {"x": 0, "y": 86, "z": -1},
       "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
       "shape": {
         "type": "none",
-        "offset": {"x": 0, "y": 0, "z": 0},
+        "offset": {"x": 0, "y": 20, "z": 2},
         "stretch": {"x": 1, "y": 1, "z": 1},
         "settings": {
           "isPiece": true
         },
         "textureLayout": {},
         "unwrapMode": "custom",
-        "visible": true,
+        "visible": false,
         "doubleSided": false,
         "shadingMode": "flat"
       },
@@ -22,11 +22,11 @@
         {
           "id": "2",
           "name": "Nose",
-          "position": {"x": 0, "y": 4, "z": 0},
+          "position": {"x": 0, "y": -10.76, "z": 14.24},
           "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
           "shape": {
             "type": "box",
-            "offset": {"x": 0, "y": 0, "z": 3.5},
+            "offset": {"x": 0, "y": 4.5, "z": 4.625},
             "stretch": {"x": -1, "y": 1, "z": 1},
             "settings": {
               "isPiece": false,
@@ -60,7 +60,7 @@
               }
             },
             "unwrapMode": "custom",
-            "visible": true,
+            "visible": false,
             "doubleSided": false,
             "shadingMode": "flat"
           }

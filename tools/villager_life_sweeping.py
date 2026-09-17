@@ -1,55 +1,50 @@
-"""Two-arm constrained IK, retaining the original broom's vanilla staff grip."""
+"""Two-handed sweeping with the approved lower staff grip and outward elbow poles."""
 import copy,math
 import numpy as np
-from villager_held_ik import HeldIK
-from villager_native_items import geometry,grip_tracks
-from villager_life_items import flattened
+from villager_life_ik import matrix
 from villager_life_props import quaternion
-from villager_life_ik import matrix,interpolate
+from villager_native_items import grip_tracks,animated_parts
 from villager_prop_preview import geometry_points
+from villager_pose_clearance import torso_gaps
+from villager_two_bone import solve
 
 def bake(ik,duration):
-    r=HeldIK(ik,'R','Halloween_Broomstick');l=HeldIK(ik,'L','Halloween_Broomstick')
-    tracks={'R-Attachment':grip_tracks(r.item,duration)}
-    mesh,_,scale=geometry(r.item)
-    points=np.concatenate([(matrix(n['orientation'])@geometry_points(n['shape']).T).T+np.array([n['position'][k] for k in 'xyz']) for n in flattened(mesh,quaternion,scale=scale) if n['shape']['type']=='quad'])
-    rest=ik.fk(tracks,0);ar,ap=rest['R-Attachment']
-    grip=ar.T@(rest['R-Hand'][1]-ap)
-    leftGrip=grip+np.array([0.,-18.,0.])
-    seeds={'R':[-40,0,-30,-65,0,0,0,0],'L':[-30,0,25,-85,0,0,0,0]}
-    anchors=copy.deepcopy(seeds)
-    for frame in range(0,duration+1,3):
-        phase=frame/duration;beat=math.sin(phase*math.pi*2)
-        blend=1.
-        body={'Chest':{'orientation':[{'time':frame,'delta':ik.quat((5*blend,3*beat*blend,0))}]},'Head':{'orientation':[{'time':frame,'delta':ik.quat((18*blend,6*beat*blend,0))}]}}
-        world=ik.fk(body,frame);cr,cp=world['Chest'];palm=cp+cr@np.array([-13.+4*beat,-1.,20.+2*math.cos(phase*math.pi*2)])
-        horizontal=np.array([-.9,0,-.35]);horizontal/=np.linalg.norm(horizontal)
-        def tilted(angle):
-            y=horizontal*math.cos(angle)+np.array([0,1,0])*math.sin(angle)
-            x=np.cross(y,[0,0,1]);x/=np.linalg.norm(x)
-            return np.column_stack([x,y,np.cross(x,y)])
-        lo,hi=.05,1.4
-        for _ in range(24):
-            a=(lo+hi)/2;rot=tilted(a);minimum=np.min((rot@(points-grip).T)[1])+palm[1]
-            if minimum>.7:lo=a
-            else:hi=a
-        rot=tilted((lo+hi)/2)
-        seeds['R'],rp=r.solve(palm,world,anchors['R'],local=grip,rotation=rot,orientation_weight=18)
-        if frame==0:
-            for _ in range(4):seeds['R'],rp=r.solve(palm,world,seeds['R'],local=grip,rotation=rot,orientation_weight=18)
-            anchors['R']=seeds['R'].copy()
-        actualR,actualP=rp['R-Attachment'];target=actualP+actualR@leftGrip
-        # Left palm follows a real point on the unchanged shaft; wrist remains bounded.
-        seeds['L'],lp=l.solve(target,world,anchors['L'],local=[0,0,-1])
-        if frame==0:
-            for _ in range(3):seeds['L'],lp=l.solve(target,world,seeds['L'],local=[0,0,-1])
-            anchors['L']=seeds['L'].copy()
-        for side,solver in [('R',r),('L',l)]:
-            before={};solver.append(before,seeds[side],frame)
-            for name,channels in before.items():
-                q=interpolate([{'time':0,'delta':ik.quat((0,0,0))},{'time':1,'delta':channels['orientation'][0]['delta']}],blend)
-                tracks.setdefault(name,{'orientation':[]})['orientation'].append({'time':frame,'delta':q,'interpolationType':'smooth'})
-        for name in ('Head','Chest'):tracks.setdefault(name,{'orientation':[]})['orientation'].append(dict(body[name]['orientation'][0],interpolationType='smooth'))
+    tracks={'R-Attachment':grip_tracks('Halloween_Broomstick',duration)}
+    # User-approved activity-only grip; move the broom four pixels through the
+    # fixed-height hands. Native item geometry and other activities are unchanged.
+    for key in tracks['R-Attachment']['position']:key['delta']['z']=-4
+    rest=ik.fk(tracks,0);hr,_=rest['R-Hand'];ar,_=rest['R-Attachment']
+    binding=hr.T@ar
+    brush=np.concatenate([(matrix(p['orientation'])@geometry_points(p['shape']).T).T+np.array([p['position'][k] for k in 'xyz']) for p in animated_parts('Halloween_Broomstick') if p['shape']['type']=='quad'])
+    poles={'R':.5,'L':-1.};limits=np.array([-2.6,-2.6,1.,.1,.1,1.,.1,.1,1.])
+    for frame in sorted({*range(0,duration+1,3),duration}):
+        phase=frame/duration*math.pi*2
+        body={n:{'orientation':[{'time':frame,'delta':ik.quat(a)}]} for n,a in [('Chest',(0,0,0)),('Head',(0,0,0))]}
+        world=ik.fk(body,frame)
+        horizontal=np.array([-1.,0,0.]);horizontal/=np.linalg.norm(horizontal)
+        y=horizontal*math.cos(math.radians(60))+np.array([0,math.sin(math.radians(60)),0])
+        x=np.cross(y,[0,0,1]);x/=np.linalg.norm(x)
+        rotation=np.column_stack([x,y,np.cross(x,y)])@matrix(ik.quat((0,60,0)))
+        # Height is anchored to the previously approved palm, independently of
+        # the new grip. Transparent brush corners extend below the visible tips.
+        height=.7-np.min((rotation@(brush-np.array([0.,0.,-1.])).T)[1])
+        palm=np.array([3*math.cos(phase*2),height,25.+2*math.sin(phase*2)])
+        for side,target,hand,free in [('R',palm,rotation@binding.T,False),('L',palm-rotation[:,1]*18,world['L-Hand'][0],True)]:
+            best=None
+            for pole in np.unique(np.r_[np.linspace(-math.pi,math.pi,181),poles[side]]):
+                result=solve(ik,world,side,target,hand,pole,free)
+                if result is None:continue
+                rotations,points=result
+                wrist=math.degrees(math.acos(np.clip((np.trace(rotations[2])-1)/2,-1,1)))
+                cr,cp=world['Chest'];outward=(cr.T@(points[side+'-Arm'][1]-cp))[0]*(1 if side=='L' else -1)
+                gap=torso_gaps(ik,world,points)
+                score=np.maximum(0,limits-gap).sum()*100+max(0,wrist-33)*20+max(0,16-outward)*15+(pole-(.5 if side=='R' else -1.))**2*.25
+                if best is None or score<best[0]:best=(score,pole,rotations)
+            assert best is not None,('unreachable broom palm',frame,side)
+            _,poles[side],rotations=best
+            for bone,r in zip(('Arm','Forearm','Hand'),rotations):
+                tracks.setdefault(side+'-'+bone,{'orientation':[]})['orientation'].append({'time':frame,'delta':quaternion(r),'interpolationType':'smooth'})
+        for name in body:tracks.setdefault(name,{'orientation':[]})['orientation'].append(dict(body[name]['orientation'][0],interpolationType='smooth'))
     for channels in tracks.values():
         if channels.get('orientation'):channels['orientation'][-1]['delta']=copy.deepcopy(channels['orientation'][0]['delta'])
     return tracks

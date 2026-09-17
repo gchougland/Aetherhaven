@@ -17,8 +17,10 @@ CUES=RES/'Server/Aetherhaven/VillagerLipSync'
 RHUBARB=ROOT/'build/rhubarb/Rhubarb-Lip-Sync-1.14.0-Windows/rhubarb.exe'
 GESTURES={'Talk':['Greet','Explain','Story','Agree','ShowItem'],'Question':['Question'],'Laugh':['Laugh'],
           'Gasp':['Surprise'],'Grumble':['Disagree'],'Groan':['Hungry','Bored'],'Yawn':['Sleepy','Stretch'],'Sigh':['Bored']}
-GESTURES.update(Idle=['LookAround','Fidget','ReadLoop','Craft','Mix','Sweep','Inspect','Tend'],
-                Work=['LookAround','Craft','Mix','Sweep','Inspect','Tend','ReadLoop'],Thinking=['Ponder','ReadLoop'])
+# Either category can accompany any ambient work gesture, including fidgeting.
+# Both must select the eyes-only action so a silent face cannot mask mouth cues.
+AMBIENT_GESTURES=['LookAround','Fidget','ReadLoop','Craft','Mix','Sweep','Inspect','Tend']
+GESTURES.update(Idle=AMBIENT_GESTURES, Work=AMBIENT_GESTURES, Thinking=['Ponder','ReadLoop'])
 SHAPES={'A':(0,0),'B':(120,0),'C':(140,0),'D':(160,0),'E':(220,-30),'F':(180,-30),'X':(0,0)}
 
 def write(path,data):

@@ -35,8 +35,10 @@ public final class BlockMountRelease {
         }
         if (commandBuffer != null) {
             commandBuffer.tryRemoveComponent(entityRef, MountedComponent.getComponentType());
+            commandBuffer.tryRemoveComponent(entityRef, VillagerSeatExit.getComponentType());
         } else {
             store.tryRemoveComponent(entityRef, MountedComponent.getComponentType());
+            store.tryRemoveComponent(entityRef, VillagerSeatExit.getComponentType());
         }
     }
 

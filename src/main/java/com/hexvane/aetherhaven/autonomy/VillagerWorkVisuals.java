@@ -65,19 +65,12 @@ public final class VillagerWorkVisuals {
             activity = VillagerWorkActivity.chooseBeat(poi, bindingKind,
                 store.getComponent(npcRef, com.hypixel.hytale.builtin.mounts.MountedComponent.getComponentType()) != null,
                 ThreadLocalRandom.current().nextDouble());
-            // Fun spots always; READ/CRAFT fidget at desks and quiet benches; LEISURE on work = stand (bard).
-            if (!PoiScoring.isWorkPoi(poi)
-                || activity == VillagerWorkActivity.READ
-                || activity == VillagerWorkActivity.CRAFT
-                || activity == VillagerWorkActivity.SWEEP
-                || activity == VillagerWorkActivity.MIX
-                || activity == VillagerWorkActivity.TEND) {
-                playLeisureBeat(npcRef, store, commandBuffer, npc, activity, PoiScoring.isWorkPoi(poi));
-                return true;
-            }
-            commandBuffer.run(s -> { if (npcRef.isValid()) VillagerLifeVisuals.workMurmur(npcRef, s); });
+            // A quiet beat replaces a finished reading/sweeping activity too;
+            // leaving the previous loop playing would make reading permanent.
+            playLeisureBeat(npcRef, store, commandBuffer, npc, activity, PoiScoring.isWorkPoi(poi));
             return true;
         }
+
         if (!PoiScoring.isWorkPoi(poi)) {
             return false;
         }

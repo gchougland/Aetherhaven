@@ -54,6 +54,9 @@ public final class SafeBlockMount {
         @Nonnull Vector3i targetBlock,
         @Nonnull Vector3d interactPos
     ) {
+        if (commandBuffer.getComponent(entity, VillagerSeatExit.getComponentType()) != null) {
+            return BlockMountAPI.DidNotMount.ALREADY_MOUNTED;
+        }
         if (isMountedOrPending(store, commandBuffer, entity)) {
             return BlockMountAPI.DidNotMount.ALREADY_MOUNTED;
         }

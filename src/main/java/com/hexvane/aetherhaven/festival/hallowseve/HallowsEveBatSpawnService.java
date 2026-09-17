@@ -1,22 +1,25 @@
 package com.hexvane.aetherhaven.festival.hallowseve;
 
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.festival.FestivalService;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
+import com.hypixel.hytale.component.ComponentRegistry;
+import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.server.core.modules.entity.component.Invulnerable;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
-import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
@@ -28,18 +31,17 @@ public final class HallowsEveBatSpawnService {
 
     private HallowsEveBatSpawnService() {}
 
-    public static void scheduleEnsureBats(
-        @Nonnull World world,
-        @Nonnull UUID townId,
-        @Nonnull PlotInstance square
-    ) {
-        world.execute(() -> ensureBats(world, townId, square));
-    }
-
     public static void ensureBats(@Nonnull World world, @Nonnull UUID townId, @Nonnull PlotInstance square) {
-        if (!HallowsEveBatComponent.isRegistered()) {
-            return;
-        }
+        if (!HallowsEveBatComponent.isRegistered() || !world.isAlive()) return;
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) return;
+        var town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).getTown(townId);
+        if (town == null || !world.getName().equals(town.getWorldName())
+            || !HallowsEveIds.FESTIVAL_ID.equals(town.getActiveFestivalId())) return;
+        // Re-resolve after queued work: the festival may have ended or its square may have moved.
+        PlotInstance liveSquare = FestivalService.findFestivalSquare(plugin, town);
+        if (liveSquare == null || !liveSquare.getPlotId().equals(square.getPlotId())) return;
+        square = liveSquare;
         var entityStore = world.getEntityStore();
         NPCPlugin npcPlugin = NPCPlugin.get();
         if (entityStore == null || npcPlugin == null) {
@@ -58,46 +60,7 @@ public final class HallowsEveBatSpawnService {
         if (entityStore == null || !HallowsEveBatComponent.isRegistered()) {
             return;
         }
-        Store<EntityStore> store = entityStore.getStore();
-        store.forEachChunk(
-            Query.and(HallowsEveBatComponent.getComponentType()),
-            (chunk, commandBuffer) -> {
-                for (int i = 0; i < chunk.size(); i++) {
-                    HallowsEveBatComponent bat = chunk.getComponent(i, HallowsEveBatComponent.getComponentType());
-                    Ref<EntityStore> ref = chunk.getReferenceTo(i);
-                    if (bat == null || ref == null || !ref.isValid()) {
-                        continue;
-                    }
-                    if (townId.equals(bat.getTownId())) {
-                        commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
-                    }
-                }
-            }
-        );
-    }
-
-    /** Drops bats whose town is not currently running Hallow's Eve in this world. */
-    public static void despawnOrphans(@Nonnull Store<EntityStore> store, @Nonnull Set<UUID> activeTownIds) {
-        if (!HallowsEveBatComponent.isRegistered()) {
-            return;
-        }
-        store.forEachChunk(
-            Query.and(HallowsEveBatComponent.getComponentType()),
-            (chunk, commandBuffer) -> {
-                for (int i = 0; i < chunk.size(); i++) {
-                    HallowsEveBatComponent bat = chunk.getComponent(i, HallowsEveBatComponent.getComponentType());
-                    Ref<EntityStore> ref = chunk.getReferenceTo(i);
-                    if (bat == null || ref == null || !ref.isValid()) {
-                        continue;
-                    }
-                    UUID townId = bat.getTownId();
-                    if (townId != null && activeTownIds.contains(townId)) {
-                        continue;
-                    }
-                    commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
-                }
-            }
-        );
+        HallowsEveBatCleanup.removeTown(entityStore.getStore(), townId);
     }
 
     @Nonnull
@@ -134,32 +97,47 @@ public final class HallowsEveBatSpawnService {
     ) {
         Vector3d pos = randomAirPosition(square);
         Vector3d leash = flockAnchor(square);
-        var pair = npcPlugin.spawnNPC(store, HallowsEveIds.BAT_NPC_ROLE, null, pos, Rotation3f.ZERO);
-        if (pair == null) {
+        // A loaded column can still contain inactive vertical sections. Those immediately park spawned NPCs.
+        if (!isSpawnSectionActive(world, pos)) return;
+        int role = npcPlugin.getIndex(HallowsEveIds.BAT_NPC_ROLE);
+        if (role < 0) return;
+        var pair = npcPlugin.spawnEntity(store, role, pos, Rotation3f.ZERO, null,
+            (npc, holder, accessor) -> {
+                prepareTemporaryBat(holder, townId, store.getRegistry());
+                holder.putComponent(Invulnerable.getComponentType(), Invulnerable.INSTANCE);
+                npc.setLeashPoint(leash);
+            }, null);
+        if (pair == null || !pair.first().isValid()) {
             LOGGER.atWarning().log("Hallow's Eve: could not spawn bat role %s", HallowsEveIds.BAT_NPC_ROLE);
             return;
         }
         Ref<EntityStore> ref = pair.first();
-        store.putComponent(ref, Invulnerable.getComponentType(), Invulnerable.INSTANCE);
-        HallowsEveBatComponent bat = new HallowsEveBatComponent();
-        bat.setTownId(townId);
-        store.putComponent(ref, HallowsEveBatComponent.getComponentType(), bat);
-        NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
-        if (npc != null) {
-            npc.setLeashPoint(leash);
-            store.putComponent(ref, NPCEntity.getComponentType(), npc);
-        }
         NpcSpawnOriginUtil.attach(store, ref, "FESTIVAL_HALLOWS_EVE_BAT", "festival=hallows_eve", world, pos);
     }
 
-    @Nonnull
-    private static Vector3d flockAnchor(@Nonnull PlotInstance square) {
-        PlotFootprintRecord fp = square.toFootprint();
-        return new Vector3d(centerX(fp), fp.getMaxY() + HallowsEveIds.BAT_HEIGHT_ABOVE_PLOT, centerZ(fp));
+    static void prepareTemporaryBat(Holder<EntityStore> holder, UUID townId, ComponentRegistry<EntityStore> registry) {
+        HallowsEveBatComponent marker = new HallowsEveBatComponent();
+        marker.setTownId(townId);
+        holder.putComponent(HallowsEveBatComponent.getComponentType(), marker);
+        holder.ensureComponent(registry.getNonSerializedComponentType());
+    }
+
+    private static boolean isSpawnSectionActive(World world, Vector3d pos) {
+        var chunks = world.getChunkStore();
+        var section = chunks.getChunkSectionReferenceAtBlock(
+            (int) Math.floor(pos.x), (int) Math.floor(pos.y), (int) Math.floor(pos.z));
+        return section != null && section.isValid()
+            && !chunks.getStore().getArchetype(section).contains(ChunkStore.REGISTRY.getNonTickingComponentType());
     }
 
     @Nonnull
-    private static Vector3d randomAirPosition(@Nonnull PlotInstance square) {
+    static Vector3d flockAnchor(@Nonnull PlotInstance square) {
+        PlotFootprintRecord fp = square.toFootprint();
+        return new Vector3d(centerX(fp), fp.getMinY() + HallowsEveIds.BAT_HEIGHT_ABOVE_BASE, centerZ(fp));
+    }
+
+    @Nonnull
+    static Vector3d randomAirPosition(@Nonnull PlotInstance square) {
         PlotFootprintRecord fp = square.toFootprint();
         ThreadLocalRandom rng = ThreadLocalRandom.current();
         double pad = 2.0;
@@ -178,8 +156,8 @@ public final class HallowsEveBatSpawnService {
         double x = minX + rng.nextDouble() * Math.max(0.01, maxX - minX);
         double z = minZ + rng.nextDouble() * Math.max(0.01, maxZ - minZ);
         double y =
-            fp.getMaxY()
-                + HallowsEveIds.BAT_HEIGHT_ABOVE_PLOT
+            fp.getMinY()
+                + HallowsEveIds.BAT_HEIGHT_ABOVE_BASE
                 + rng.nextDouble() * HallowsEveIds.BAT_HEIGHT_JITTER;
         return new Vector3d(x, y, z);
     }

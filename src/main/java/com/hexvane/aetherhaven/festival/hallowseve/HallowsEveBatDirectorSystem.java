@@ -10,6 +10,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.system.tick.TickingSystem;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -38,6 +39,13 @@ public final class HallowsEveBatDirectorSystem extends TickingSystem<EntityStore
         if (world == null || !world.isAlive()) {
             return;
         }
+        // Run cleanup and restocking together after the entity tick, using current festival state.
+        world.execute(() -> reconcileWorld(world, plugin));
+    }
+
+    private static void reconcileWorld(World world, AetherhavenPlugin plugin) {
+        if (!world.isAlive() || world.getEntityStore() == null) return;
+        Store<EntityStore> store = world.getEntityStore().getStore();
         String worldName = world.getName();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         Set<UUID> activeTownIds = new HashSet<>();
@@ -48,13 +56,12 @@ public final class HallowsEveBatDirectorSystem extends TickingSystem<EntityStore
             if (!HallowsEveIds.FESTIVAL_ID.equals(town.getActiveFestivalId())) {
                 continue;
             }
-            activeTownIds.add(town.getTownId());
+            if (FestivalService.findFestivalSquare(plugin, town) != null) activeTownIds.add(town.getTownId());
         }
-        HallowsEveBatSpawnService.despawnOrphans(store, activeTownIds);
+        Map<UUID, Integer> counts = HallowsEveBatCleanup.reconcile(store, activeTownIds, NPCEntity.getComponentType());
         if (activeTownIds.isEmpty()) {
             return;
         }
-        Map<UUID, Integer> counts = HallowsEveBatSpawnService.countByTown(store);
         for (UUID townId : activeTownIds) {
             int have = counts.getOrDefault(townId, 0);
             if (have >= HallowsEveIds.BAT_COUNT) {
@@ -65,7 +72,7 @@ public final class HallowsEveBatDirectorSystem extends TickingSystem<EntityStore
             if (square == null) {
                 continue;
             }
-            HallowsEveBatSpawnService.scheduleEnsureBats(world, townId, square);
+            HallowsEveBatSpawnService.ensureBats(world, townId, square);
         }
     }
 }

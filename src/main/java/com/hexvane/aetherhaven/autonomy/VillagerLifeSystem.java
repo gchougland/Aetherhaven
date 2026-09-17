@@ -85,7 +85,6 @@ public final class VillagerLifeSystem extends EntityTickingSystem<EntityStore> {
             store.putComponent(ref, VillagerLifeState.getComponentType(), life);
         }
         life.nextUpdateMs = now + 250;
-        VillagerLifeVisuals.maintainReading(ref, store);
         var activity = store.getComponent(ref, VillagerAutonomyState.getComponentType());
         if (activity != null && activity.getPhase() == VillagerAutonomyState.PHASE_USE && activity.getTargetPoiUuid() != null) {
             var poi = AetherhavenWorldRegistries.getOrCreatePoiRegistry(store.getExternalData().getWorld(), plugin).get(activity.getTargetPoiUuid());
@@ -322,6 +321,7 @@ public final class VillagerLifeSystem extends EntityTickingSystem<EntityStore> {
 
     private boolean available(Ref<EntityStore> ref, Store<EntityStore> store, boolean social) {
         if (ref == null || !ref.isValid()) return false;
+        if (store.getComponent(ref, VillagerSeatExit.getComponentType()) != null) return false;
         NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
         TownVillagerBinding binding = store.getComponent(ref, TownVillagerBinding.getComponentType());
         if (npc == null || binding == null || binding.getTownId() == null || npc.getRole() == null

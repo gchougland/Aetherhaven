@@ -11,6 +11,11 @@ The following photos were visually inspected while authoring poses. They inform
 gesture silhouette and contact placement; no photos or traced animations are
 included in the mod.
 
+* [BulgarianPod101, greeting wave](https://www.bulgarianpod101.com/blog/2019/08/16/bulgarian-body-gestures/):
+  raised outward elbow and open palm. `villager_life_greeting.py` uses constrained
+  two-bone IK for two broad forearm sweeps, keeping the wrist aligned with the arm.
+  `verify_villager_greeting.py` checks arm travel, wrist stability, and body clearance.
+
 * [Will Oliveira, shrug](https://www.pexels.com/photo/confused-man-shrugging-in-studio-setting-33715994/):
   elbows below the hands, open palms, asymmetric brow and head tilt for questioning.
 * [Andrew Patrick Photo, waking and yawning](https://www.pexels.com/photo/man-yawning-and-rubbing-his-eyes-as-he-woke-up-16003598/):
@@ -460,3 +465,24 @@ server's `run/mods` too; a rebuilt sibling project does not update that copy.
 Check the deployed combination before a play test:
 `python tools/verify_installed_villager_animations.py --mods run/mods --mods build/dev-plugin`.
 This catches old companion animation tables referencing files removed by reuse.
+
+
+## Body pose clearance review
+
+`villager_life_sweeping.py` uses geometric two-bone IK with outward elbow poles,
+keeps the native broom at 60 degrees above the floor with small circular strokes.
+The user approved an activity-only broom grip exception: attachment Z=-4,
+sliding the broom four model pixels down from the lower-grip preview while both
+hands keep their world height. The original item definition is unchanged;
+transparent bristle padding is excluded from the floor-contact audit. `villager_native_tending.py` holds the original blue flowers upright;
+`villager_book_support.py` centers the native spine between the palms, preserves
+the original item grip, and clears the arm approach/release around the torso.
+The offline quad preview maps the top texture row to the top geometric edge,
+matching the base-game flower icon instead of displaying its stems upside down.
+
+`villager_pose_clearance.py` supplies the shared oriented-box clearance checks.
+`verify_villager_body_poses.py` scans every frame of the 23 shared gestures;
+`verify_villager_life_props.py` additionally checks item grip preservation,
+book opening/orientation and face clearance, supporting-hand contacts, upright
+flowers, broom angle, bristle floor clearance, and wrist limits.
+These are offline Player-rig checks, not an in-game verification of every race.

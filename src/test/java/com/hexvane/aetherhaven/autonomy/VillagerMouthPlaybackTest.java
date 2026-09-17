@@ -7,6 +7,30 @@ import org.junit.jupiter.api.Test;
 
 @org.junit.jupiter.api.Tag("autonomy")
 class VillagerMouthPlaybackTest {
+    @Test void idleAndWorkClipsHaveSpeechSafeFacesForEveryAmbientGesture() throws Exception {
+        var root = java.nio.file.Path.of("src/main/resources");
+        var actions = JsonParser.parseString(java.nio.file.Files.readString(root.resolve(
+            "Server/Item/Animations/Aetherhaven_Life_Actions.json"))).getAsJsonObject().getAsJsonObject("Animations");
+        for (String profile : VillagerLifePolicy.VOICES) {
+            for (String pitch : new String[]{"", "Lower", "Higher"}) {
+                for (String mood : new String[]{"Idle", "Work"}) for (int choice = 0; choice < 4; choice++) {
+                    var clip = VillagerLifeSpeech.select(profile + pitch, mood, choice);
+                    assertNotNull(clip);
+                    assertTrue(clip.mouthCues().stream().anyMatch(c -> !c.shape().equals("A")), clip.clip());
+                    for (String gesture : new String[]{"LookAround", "Fidget", "ReadLoop", "Craft", "Mix", "Sweep", "Inspect", "Tend"}) {
+                        var face = clip.faces().get(gesture);
+                        assertNotNull(face, clip.clip() + " must not fall back to a silent " + gesture + " face");
+                        var action = actions.getAsJsonObject(face.actionId());
+                        var nodes = JsonParser.parseString(java.nio.file.Files.readString(root.resolve(
+                            "Common/" + action.get("ThirdPersonFace").getAsString())))
+                            .getAsJsonObject().getAsJsonObject("nodeAnimations");
+                        assertFalse(nodes.has("Mouth"), clip.clip() + ": " + gesture);
+                    }
+                }
+            }
+        }
+    }
+
     @Test void mouthOverlayCannotRestartFaceOrTakeOverAnUnrelatedTriggeredAnimation() {
         assertEquals(com.hypixel.hytale.protocol.AnimationSlot.ServerAction, VillagerMouthPlayback.SLOT);
         assertNotEquals(com.hypixel.hytale.protocol.AnimationSlot.Face, VillagerMouthPlayback.SLOT);

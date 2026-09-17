@@ -89,7 +89,8 @@
       "capacity": 1,
       "blockTypeId": "Editor_Empty",
       "interactionKind": "WORK_SURFACE",
-      "workResidentKind": "innkeeper"
+      "workResidentKind": "innkeeper",
+      "interactionTargetYawDegrees": 0
     },
     {
       "localX": 13,

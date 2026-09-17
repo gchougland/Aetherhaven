@@ -50,7 +50,7 @@ POSES = {
     'Mix': ({'Head': (16,0,0)}, {'Head': (14,0,0)}, 420),
     'ShowItem': ({'R-Arm': (-50, 0, -16), 'R-Forearm': (-70, 0, 0), 'L-Arm': (-25, 0, 18), 'L-Forearm': (-55, 0, -10), 'Head': (9, -8, 3)},
                  {'R-Arm': (-65, -12, -18), 'R-Forearm': (-48, 0, 0), 'L-Arm': (-35, -8, 22), 'Head': (-3, 7, 0), 'Chest': (0, -6, 0)}, 96),
-    'Greet': ({'R-Arm': (-105, 0, -30), 'R-Forearm': (-38, 0, 0), 'Head': (0, -9, 8)}, {'R-Hand': (0, 0, 30), 'R-Arm': (-110, 0, -18)}, 72),
+    'Greet': ({'Head': (0, -5, -2)}, {}, 72),  # Authored arm arc: villager_life_greeting.bake.
     'Explain': ({'R-Arm': (-42, -12, -24), 'R-Forearm': (-48, 0, 15), 'L-Arm': (-24, 0, 18), 'Head': (-5, 10, 4)}, {'R-Arm': (-60, 16, -38), 'L-Forearm': (-55, 0, -15), 'Chest': (0, -8, 0)}, 78),
     'Story': ({'R-Arm': (-65, 0, -45), 'L-Arm': (-50, 0, 35), 'R-Forearm': (-35, 0, 0), 'L-Forearm': (-35, 0, 0), 'Chest': (-7, 8, 0)}, {'R-Arm': (-90, 0, -18), 'L-Arm': (-30, 0, 50), 'Head': (-12, -12, 7)}, 84),
     'Question': ({'R-Arm': (-35, 0, -28), 'L-Arm': (-35, 0, 28), 'R-Forearm': (-65, 0, 30), 'L-Forearm': (-65, 0, -30), 'Head': (4, 0, 14)}, {'Head': (-6, 8, 18), 'Chest': (-4, 0, 0)}, 72),
@@ -62,7 +62,7 @@ POSES = {
     'Sleepy': ({'R-Arm': (-72, 0, -12), 'R-Forearm': (-108, 0, 14), 'Head': (-18, 0, 0), 'Chest': (-8, 0, 0)}, {'Head': (18, 0, 9), 'Chest': (8, 0, 0), 'L-Arm': (8, 0, 9)}, 96),
     'Bored': ({'Chest': (9, 0, 0), 'Head': (12, 0, 10), 'R-Arm': (4, 0, -8)}, {'Head': (5, -20, -7), 'Chest': (12, 0, 4), 'L-Hand': (0, 0, 12)}, 84),
     'LookAround': ({'Head': (-4, 25, 3), 'Chest': (0, 6, 0)}, {'Head': (2, -24, -5), 'Chest': (0, -5, 0)}, 90),
-    'Stretch': ({'R-Arm': (-150, 0, -22), 'L-Arm': (-150, 0, 22), 'R-Forearm': (-25, 0, 0), 'L-Forearm': (-25, 0, 0), 'Belly': (-7, 0, 0), 'Chest': (-18, 0, 0), 'Head': (-10, 0, 0)}, {'Belly': (-5, 0, 0), 'Chest': (-14, 0, 5), 'Head': (0, 0, 10)}, 96),
+    'Stretch': ({'R-Arm': (-100, 0, -80), 'L-Arm': (-100, 0, 80), 'R-Forearm': (-20, 0, 0), 'L-Forearm': (-20, 0, 0), 'Belly': (-7, 0, 0), 'Chest': (-18, 0, 0), 'Head': (-10, 0, 0)}, {'Belly': (-5, 0, 0), 'Chest': (-14, 0, 5), 'Head': (0, 0, 10)}, 96),
     'Fidget': ({'R-Arm': (-25, 0, -8), 'R-Forearm': (-88, 0, 12), 'L-Arm': (-32, 0, 12), 'L-Forearm': (-75, 0, -24), 'Head': (12, 0, 0)}, {'R-Hand': (15, 0, -12), 'Head': (6, 8, 0)}, 78),
     'Read': ({'R-Arm': (-30, 0, -10), 'L-Arm': (-30, 0, 10), 'R-Forearm': (-65, 0, 12), 'L-Forearm': (-65, 0, -12), 'Head': (18, 0, 0)}, {'R-Hand': (0, -25, 12), 'Head': (16, -8, 0)}, 84),
     'Craft': ({'R-Arm': (-45, 0, -8), 'L-Arm': (-45, 0, 8), 'R-Forearm': (-40, 0, 0), 'L-Forearm': (-50, 0, 0), 'Head': (20, 0, 0)}, {'R-Arm': (-60, 0, -5), 'L-Hand': (0, 0, -15), 'Chest': (5, 0, 0)}, 72),
@@ -88,15 +88,23 @@ def animations():
             poses = [(0, (0, 0, 0)), (int(duration*.10), tuple(-v*.06 for v in first)),
                      (int(duration*.30), first), (int(duration*.62), second),
                      (int(duration*.82), second), (duration, (0, 0, 0))]
+            if name in ('Question','Stretch'):
+                poses[1]=(int(duration*.10),(0,0,0))
             if name in ('Greet', 'Laugh', 'Agree', 'Disagree', 'Craft', 'Sweep'):
                 poses = poses[:3] + [(int(duration*.45), second), (int(duration*.61), first),
                                      (int(duration*.77), second), (duration, (0, 0, 0))]
             tracks[bone] = {'orientation': [{'time': t, 'delta': quat(p), 'interpolationType': 'smooth'} for t, p in poses]}
         tracks = ik.bake(name, tracks, duration, a, b)
         tracks = props.bake(name, tracks, duration, ik)
-        if name == 'Mix':
+        if name == 'Greet':
+            from villager_life_greeting import bake
+            tracks = bake(ik, duration)
+        elif name == 'Mix':
             from villager_life_mixing import bake
             tracks = bake(ik, duration)
+        else:
+            from villager_body_safety import correct
+            tracks = correct(ik, tracks, duration, name)
         path = f'Characters/Animations/Aetherhaven/Life/{name}.blockyanim'
         write_json(COMMON / path, {'formatVersion': 1, 'duration': duration, 'holdLastKeyframe': name in ('Mix','Sweep'), 'nodeAnimations': tracks})
         model['AnimationSets'][PREFIX + name] = {'Animations': [{'Animation': path, 'Looping': name in ('Mix','Sweep'), 'BlendingDuration': .35}]}

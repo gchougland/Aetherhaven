@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.2.0] - Unreleased
+## [3.2.0] - 9/16/2026
 
 ### Added
 
@@ -9,9 +9,9 @@
 - **Furniture merchant** See which block palettes your town already owns, and reroll the merchant's props and palettes for 20 gold coins.
 - **Leveling support** Endless Leveling and RPG Leveling can scale villagers, guards, and raid enemies to the town owner's level.
 - **Quest XP** Earn XP from quests and raids when using a supported leveling mod.
-- **Villager activities** Villagers read, sweep, cook, and more, with new gestures and facial expressions. Waiting adventurers also have new idle activities.
+- **Villager activities** Villagers occasionally read, sweep, cook, and more, with expressive faces and smoother ongoing activities. Waiting adventurers also have new idle activities.
 - **Villager voices** Villagers have distinct voices, expressive chatter, and everyday sounds. Conversations with the player now use voices instead of speech blips.
-- **Conversations** Villagers chat with neighbors and sometimes flirt, with gestures and reactions to match.
+- **Conversations** Villagers chat with neighbors and sometimes flirt, with friendly arm waves and expressive reactions.
 - **Speech and thought bubbles** See what villagers are thinking and feeling through bubbles, hearts, and other effects.
 - **Speech settings** Adjust villager volume and chatter frequency in the Town Journal.
 
@@ -21,10 +21,12 @@
 
 ### Fixed
 
+- **Hallow's Eve** Bats no longer build up or linger after the festival, and the festival square no longer reports the wrong size.
 - **Town command selection** Releasing a selection box no longer sometimes causes a world error.
 - **Prop pickup** Picking up a prop no longer leaves pieces behind, even if part of it was unloaded.
 - **Shop performance** Reduced lag from shop displays.
-- **Shared benches** Villagers use their assigned seat instead of floating above an occupied one.
+- **Workplace facing** Residents keep their assigned work-spot direction after reloading a world.
+- **Shared benches** Villagers use open seats and step onto clear ground when leaving, without hovering or piling up on benches.
 - **Tourist departures** Tourists leaving for their portal no longer cause a world error when finishing an activity.
 
 ## [3.1.4] - 9/7/2026

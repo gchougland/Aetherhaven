@@ -35,6 +35,9 @@ def bake(gesture,tracks,duration,ik):
     if gesture=='Read':
         from villager_native_reading import bake as read
         return read(ik,tracks,duration)
+    if gesture=='Tend':
+        from villager_native_tending import bake as tend
+        return tend(ik,tracks,duration)
     return tracks
 
 

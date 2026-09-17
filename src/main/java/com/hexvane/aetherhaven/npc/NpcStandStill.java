@@ -51,6 +51,9 @@ public final class NpcStandStill {
         if (npc.getRole() == null || NpcFaceVisuals.isInInteractionDialogue(npc)) {
             return;
         }
+        String currentState = NpcSupportUtil.stateName(store, ref);
+        boolean alreadyHeld = currentState != null && (currentState.equals(AetherhavenConstants.NPC_STATE_STAND_STILL)
+            || currentState.startsWith(AetherhavenConstants.NPC_STATE_STAND_STILL + "."));
         npc.setLeashPoint(new Vector3d(leashPoint));
         if (supportsStandStillState(npc)) {
             applyStandStillStateIfNeeded(ref, npc, commandBuffer);
@@ -58,8 +61,12 @@ public final class NpcStandStill {
             VillagerAutonomySystem.applyAutonomyRoleState(ref, npc, commandBuffer);
         }
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+        // Repeated Movement stops reset the client lower-body idle blend while
+        // the upper-body activity keeps looping. Stop only when entering the hold.
         clearResidualMotion(store, ref, commandBuffer);
-        NpcAnimationPlayback.stop(ref, AnimationSlot.Movement, commandBuffer);
+        if (!alreadyHeld) {
+            NpcAnimationPlayback.stop(ref, AnimationSlot.Movement, commandBuffer);
+        }
     }
 
     /**

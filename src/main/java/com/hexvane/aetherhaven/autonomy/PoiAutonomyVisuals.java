@@ -261,7 +261,7 @@ public final class PoiAutonomyVisuals {
         boolean restoreEquipmentAfterEat
     ) {
         NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
-        BlockMountRelease.release(npcRef, store, commandBuffer);
+        VillagerSeatExit.request(npcRef, store, commandBuffer);
         if (poi != null && isEatPoi(poi.getTags())) {
             if (restoreEquipmentAfterEat) {
                 tryRestoreHeldEquipmentAfterCampfireEat(npcRef, store, commandBuffer, poi);
@@ -457,9 +457,9 @@ public final class PoiAutonomyVisuals {
             if (occupied == null) return;
             var tc = s.getComponent(npcRef, TransformComponent.getComponentType());
             if (tc == null) return;
-            var position = occupied.computeWorldSpacePosition(seats.getBlockPos());
             var rotation = occupied.computeRotationEuler(seats.getExpectedRotation());
-            if (tc.getPosition().distanceSquared(position) > .0001) tc.setPosition(position);
+            // Position is finalized after vanilla NPC collision/steering by
+            // VillagerMountedPoseSystem, before transforms are sent to viewers.
             tc.setRotation(rotation);
             s.putComponent(npcRef, TransformComponent.getComponentType(), tc);
             var head = s.getComponent(npcRef, HeadRotation.getComponentType());
@@ -488,14 +488,15 @@ public final class PoiAutonomyVisuals {
      * Align interact hits then mount. Never teleport onto the seat before {@link BlockMountAPI} succeeds — that left
      * villagers floating above chairs for a beat when mount failed or Sit had not applied yet.
      */
-    private static boolean tryMountBlockPoi(
+    static boolean tryMountBlockPoi(
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull PoiEntry poi
     ) {
+        if (commandBuffer.getComponent(npcRef, VillagerSeatExit.getComponentType()) != null) return false;
         if (SafeBlockMount.isMountedOrPending(store, commandBuffer, npcRef)) {
-            return true;
+            return VillagerAutonomySystem.isNpcBlockMounted(store, commandBuffer, npcRef);
         }
         World world = store.getExternalData().getWorld();
         Vector3i block = VillagerBlockUtil.resolveMountBaseBlock(world, poi.getX(), poi.getY(), poi.getZ());
@@ -532,7 +533,8 @@ public final class PoiAutonomyVisuals {
             }
             return true;
         } catch (RuntimeException ex) {
-            LOGGER.at(Level.FINE).withCause(ex).log("Could not mount NPC for POI block mount");
+            LOGGER.at(Level.WARNING).atMostEvery(30, TimeUnit.SECONDS).withCause(ex)
+                .log("Could not mount NPC at furniture POI %s", poi.getId());
             return false;
         }
     }
@@ -729,6 +731,11 @@ public final class PoiAutonomyVisuals {
         }
         EntityRotationUtil.setBodyYaw(tc.getRotation(), yawRadians);
         commandBuffer.putComponent(npcRef, TransformComponent.getComponentType(), tc);
+        HeadRotation head = store.getComponent(npcRef, HeadRotation.getComponentType());
+        if (head != null) {
+            head.teleportRotation(new Rotation3f(0f, yawRadians, 0f));
+            commandBuffer.putComponent(npcRef, HeadRotation.getComponentType(), head);
+        }
     }
 
     private static float bodyYawAlongMove(double dx, double dz) {

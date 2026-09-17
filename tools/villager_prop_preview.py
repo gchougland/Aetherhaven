@@ -14,7 +14,8 @@ def geometry_points(shape):
 def textured_faces(points, shape, texture):
     sx,sy=[int(shape['settings']['size'][k]) for k in 'xy']
     sz=int(shape['settings']['size'].get('z',1))
-    specifications=[('front',[0,1,2,3],sx,sy,.94)] if shape['type']=='quad' else [('left',[0,1,3,2],sz,sy,.72),('right',[5,4,6,7],sz,sy,.88),
+    # Image row zero is the top edge, while geometric +Y points upward.
+    specifications=[('front',[3,2,1,0],sx,sy,.94)] if shape['type']=='quad' else [('left',[0,1,3,2],sz,sy,.72),('right',[5,4,6,7],sz,sy,.88),
                     ('bottom',[0,4,5,1],sx,sz,.60),('top',[2,6,7,3],sx,sz,1.06),
                     ('back',[4,0,2,6],sx,sy,.76),('front',[1,5,7,3],sx,sy,.94)]
     for side,indices,width,height,shade in specifications:

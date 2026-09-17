@@ -43,7 +43,7 @@ public final class HallowsEveIds {
 
     public static final int BAT_COUNT = 6;
     public static final float BAT_RESTOCK_SECONDS = 4.0f;
-    public static final double BAT_HEIGHT_ABOVE_PLOT = 8.0;
+    public static final double BAT_HEIGHT_ABOVE_BASE = 20.0;
     public static final double BAT_HEIGHT_JITTER = 4.0;
 
     private HallowsEveIds() {}

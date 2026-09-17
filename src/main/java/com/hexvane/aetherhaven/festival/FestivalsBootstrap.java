@@ -30,6 +30,7 @@ import com.hexvane.aetherhaven.festival.pigrace.PigRaceRosterSystem;
 import com.hexvane.aetherhaven.festival.pigrace.PigRaceSystem;
 import com.hexvane.aetherhaven.festival.hallowseve.HallowsEveBatComponent;
 import com.hexvane.aetherhaven.festival.hallowseve.HallowsEveBatDirectorSystem;
+import com.hexvane.aetherhaven.festival.hallowseve.HallowsEveBatLoadCleanupSystem;
 import com.hexvane.aetherhaven.festival.hallowseve.HallowsEveDialogueHandlers;
 import com.hexvane.aetherhaven.festival.hallowseve.HallowsEveFestivalMechanic;
 import com.hexvane.aetherhaven.festival.hallowseve.HallowsEveOrbCollectSystem;
@@ -170,6 +171,7 @@ public final class FestivalsBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new HallowsEvePumpkinBurstSystem());
         plugin.getEntityStoreRegistry().registerSystem(new HallowsEvePumpkinInteractSystem());
         plugin.getEntityStoreRegistry().registerSystem(new HallowsEveBatDirectorSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new HallowsEveBatLoadCleanupSystem());
         plugin.getEntityStoreRegistry().registerSystem(new MarketStallInteractSystem());
         plugin.getEntityStoreRegistry().registerSystem(new MarketJudgeDirectorSystem());
         plugin.getEntityStoreRegistry().registerSystem(new WintertideGiftSeekSystem());

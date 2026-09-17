@@ -204,7 +204,24 @@ class AetherhavenBackupTest {
         byte[] before = Files.readAllBytes(archive());
         String marker = Files.readString(fixture.marker);
         write(data, "config.json", "{");
-        assertThrows(java.util.concurrent.ExecutionException.class, () -> fixture.worker.request().get(10, TimeUnit.SECONDS));
+        var logger = com.hypixel.hytale.logger.HytaleLogger.get("AetherhavenBackupWorker");
+        var previousLevel = logger.getLevel();
+        try {
+            // This deliberately corrupt input should fail without printing a misleading SEVERE stack trace.
+            logger.setLevel(java.util.logging.Level.OFF);
+            var failure = assertThrows(java.util.concurrent.ExecutionException.class,
+                () -> fixture.worker.request().get(10, TimeUnit.SECONDS));
+            var cause = assertInstanceOf(IOException.class, failure.getCause());
+            assertEquals("Invalid JSON in backup source: " + data.resolve("config.json"), cause.getMessage());
+            assertInstanceOf(java.io.EOFException.class, cause.getCause());
+        } finally {
+            // The future completes before the worker logs; drain it before restoring the logger.
+            try {
+                fixture.worker.close();
+            } finally {
+                logger.setLevel(previousLevel);
+            }
+        }
         assertArrayEquals(before, Files.readAllBytes(archive()));
         assertEquals(marker, Files.readString(fixture.marker));
     }

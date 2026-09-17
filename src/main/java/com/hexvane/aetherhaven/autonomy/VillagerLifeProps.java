@@ -46,9 +46,12 @@ public final class VillagerLifeProps {
     }
 
     static void equip(Ref<EntityStore> ref, String gesture, Store<EntityStore> store) {
+        var activeLife = store.getComponent(ref, VillagerLifeState.getComponentType());
+        String loop = VillagerLifeVisuals.loopGesture(gesture);
+        if (activeLife != null && !java.util.Objects.equals(loop, activeLife.activeLoopGesture)) activeLife.activeLoopGesture = null;
         if (!gesture.equals("Read") && !gesture.equals("ReadLoop")) {
             var life = store.getComponent(ref, VillagerLifeState.getComponentType());
-            if (life != null) { life.readingLoop = false; life.readingResumeMs = 0; }
+            if (life != null) { life.readingLoop = false; }
         }
         var binding = store.getComponent(ref, TownVillagerBinding.getComponentType());
         var life = VillagerLifeVisuals.state(ref, store);
@@ -85,7 +88,7 @@ public final class VillagerLifeProps {
     public static void clear(Ref<EntityStore> ref, Store<EntityStore> store) {
         var life = store.getComponent(ref, VillagerLifeState.getComponentType());
         clearOffhand(ref, life, store);
-        if (life != null) { life.readingLoop = false; life.readingResumeMs = 0; }
+        if (life != null) { life.readingLoop = false; life.activeLoopGesture = null; }
         var hotbar = store.getComponent(ref, InventoryComponent.Hotbar.getComponentType());
         if (hotbar == null) return;
         boolean changed = false;

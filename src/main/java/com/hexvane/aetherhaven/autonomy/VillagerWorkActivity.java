@@ -150,13 +150,18 @@ public enum VillagerWorkActivity {
     static VillagerWorkActivity chooseBeat(PoiEntry poi, String bindingKind, boolean mounted, double roll) {
         VillagerWorkActivity primary = resolve(poi, bindingKind);
         boolean seated = mounted || poi.getInteractionKind() == PoiInteractionKind.SIT;
-        if (primary == SWEEP && seated) return READ;
-        if (!PoiScoring.isWorkPoi(poi) || seated || !isShopkeeper(bindingKind)
-            || poi.getInteractionKind() == PoiInteractionKind.SLEEP || PoiScoring.isEatPoi(poi)) return primary;
+        if (poi.getInteractionKind() == PoiInteractionKind.SLEEP || PoiScoring.isEatPoi(poi)) return LEISURE;
+        if (primary == SWEEP && seated) return roll < .15 ? READ : LEISURE;
+        if (primary == READ) {
+            if (roll >= 0 && roll < .15) return READ;
+            if (!seated && PoiScoring.isWorkPoi(poi) && isShopkeeper(bindingKind) && roll < .35) return SWEEP;
+            return LEISURE;
+        }
+        if (!PoiScoring.isWorkPoi(poi) || seated || !isShopkeeper(bindingKind)) return primary;
         VillagerWorkActivity explicit = fromTags(poi.getTags());
         if (explicit != null && explicit != READ && explicit != CRAFT) return primary;
-        if (roll >= 0 && roll < .25) return primary == SWEEP ? READ : SWEEP;
-        if (roll >= .25 && roll < .4) return READ;
+        if (roll >= 0 && roll < .1) return READ;
+        if (roll < .3) return primary == SWEEP ? LEISURE : SWEEP;
         return primary;
     }
 

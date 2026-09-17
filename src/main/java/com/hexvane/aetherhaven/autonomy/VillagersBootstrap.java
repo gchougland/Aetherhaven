@@ -111,6 +111,7 @@ public final class VillagersBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new TownVillagerNpcWorldSpawnSanitizeSystems.EachTick());
         NpcFaceVisualState.register(plugin.getEntityStoreRegistry());
         VillagerLifeState.register(plugin.getEntityStoreRegistry());
+        VillagerSeatExit.register(plugin.getEntityStoreRegistry());
         VillagerMouthPlayback.register(plugin.getEntityStoreRegistry());
         VillagerAutonomyDebugTag.register(plugin.getEntityStoreRegistry());
         VillagerScheduleTickState.register(plugin.getEntityStoreRegistry());
@@ -135,6 +136,8 @@ public final class VillagersBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new ResidentLastKnownPositionSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new VillagerLocateTrailSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new VillagerMountedPoseSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new VillagerMountedPoseSystem.Dismount());
         plugin.getEntityStoreRegistry().registerSystem(new BlockMountDeathCleanupSystem());
         plugin.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new VillagerLifeSystem(core));

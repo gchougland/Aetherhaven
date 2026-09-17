@@ -149,13 +149,13 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
         }
         if (anchor.nextAmbientMs == 0) anchor.nextAmbientMs = now + java.util.concurrent.ThreadLocalRandom.current().nextLong(3000, 12000);
         if (now < anchor.nextAmbientMs) return;
-        String[] gestures = {"Eat", "Read", "Read", "Sleepy", "Stretch", "LookAround", "Fidget"};
+        String[] gestures = {"Eat", "Read", "Sleepy", "Stretch", "LookAround", "LookAround", "Fidget", "Ponder"};
         String gesture = gestures[java.util.concurrent.ThreadLocalRandom.current().nextInt(gestures.length)];
         anchor.nextAmbientMs = now + java.util.concurrent.ThreadLocalRandom.current().nextLong(18000, 32000);
         buffer.run(s -> {
             if (!ref.isValid()) return;
             long duration = com.hexvane.aetherhaven.autonomy.VillagerLifeVisuals.ambient(ref, gesture, s);
-            if (gesture.equals("Read")) duration = java.util.concurrent.ThreadLocalRandom.current().nextLong(18000, 26000);
+            if (gesture.equals("Read")) duration = java.util.concurrent.ThreadLocalRandom.current().nextLong(10000, 16000);
             anchor.ambientEndMs = System.currentTimeMillis() + duration + 300;
             anchor.nextAmbientMs = Math.max(anchor.nextAmbientMs, anchor.ambientEndMs + 4000);
         });

@@ -3,9 +3,10 @@ import json,math
 import numpy as np
 from generate_villager_life_assets import ROOT,RES,quat,write_json
 from villager_life_ik import ArmIK,matrix,interpolate
-from villager_native_items import ASSETS,ITEMS,grips,animated_parts
+from villager_native_items import ASSETS,ITEMS,grips,animated_parts,geometry
 from villager_native_reading import SUPPORT
-from villager_prop_preview import geometry_points
+from villager_prop_preview import geometry_points,textured_faces
+from PIL import Image
 
 def head_clearance(ik,world,parts):
     """Conservative separation bound using each native box/quad's SAT axes."""
@@ -32,11 +33,24 @@ def main():
     for gesture,item in ITEMS.items():
         a=json.loads((RES/f'Common/Characters/Animations/Aetherhaven/Life/{gesture}.blockyanim').read_text());tracks=a['nodeAnimations']
         expectedP,expectedR=grips(item)
+        if gesture=="Sweep":expectedP[2]=-4 # Explicitly approved activity-only grip.
         for f in tracks['R-Attachment']['position']:assert np.allclose([f['delta'][k] for k in 'xyz'],expectedP),('changed original grip',gesture)
         for f in tracks['R-Attachment']['orientation']:assert np.allclose(matrix(f['delta']),expectedR,atol=1e-6),('changed original grip rotation',gesture)
+        if gesture=='Tend':
+            for frame in range(round(a['duration']*.35),round(a['duration']*.78)+1):
+                assert ik.fk(tracks,frame)['R-Attachment'][0][1,1]>.9,('flowers must point up',frame)
         if gesture not in ('Sweep','Read','ReadLoop'):continue
         parts=animated_parts(item)
         brush=np.concatenate([(matrix(n['orientation'])@geometry_points(n['shape']).T).T+np.array([n['position'][k] for k in 'xyz']) for n in parts if n['shape']['type']=='quad']) if gesture=='Sweep' else None
+        if brush is not None:
+            texture=Image.open(ASSETS/'Common'/geometry(item)[1]).convert('RGBA')
+            original_brush=brush.copy()
+            visible=[]
+            for part in parts:
+                if part['shape']['type']!='quad':continue
+                pts=(matrix(part['orientation'])@geometry_points(part['shape']).T).T+np.array([part['position'][k] for k in 'xyz'])
+                for _,poly,*_ in textured_faces(pts,part['shape'],texture):visible.extend(poly)
+            brush=np.array(visible)
         rest=ik.fk({'R-Attachment':tracks['R-Attachment']},0);rr,rp=rest['R-Attachment'];grip=rr.T@(rest['R-Hand'][1]-rp)
         second=0;low=100;high=-100;wrist=0
         for frame in range(a['duration']+1):
@@ -47,6 +61,8 @@ def main():
                 second=max(second,float(np.linalg.norm(target-w['L-Hand'][1])))
                 if gesture in ('Read','ReadLoop'):
                     assert head_clearance(ik,w,animated_parts(item,tracks,frame))>2.5,(gesture,frame,'book too close to face')
+                    midpoint=r.T@((w['R-Hand'][1]+w['L-Hand'][1])/2-p)
+                    assert abs(midpoint[0]-2.4)<.2,(gesture,frame,'spine not centered',midpoint)
                     # Local +Y is the top of the printed page. It must point
                     # away from the chest and slightly upward, not under the chin.
                     top=r@np.array([0,1,0])
@@ -60,6 +76,10 @@ def main():
                         assert normal[1]>.5,(gesture,frame,'pages face down')
                         assert normal@(w['Head'][1]-center)>2,(gesture,frame,'pages face away from reader')
             if brush is not None:
+                assert abs(r[1,1]-math.sin(math.radians(60)))<.001,('broom tilt',frame)
+                previous_height=.7-np.min((r@(original_brush-np.array([0.,0.,-1.])).T)[1])
+                assert abs(w['R-Hand'][1][1]-previous_height)<.1,('hand height changed',frame)
+                assert max(w['R-Hand'][1][1],w['L-Hand'][1][1])<w['Head'][1][1]-10,('hand blocks face',frame)
                 y=float(np.min((r@brush.T)[1])+p[1]);low=min(low,y);high=max(high,y)
                 for side in 'LR':
                     q=interpolate(tracks[side+'-Hand']['orientation'],frame);wrist=max(wrist,math.degrees(2*math.acos(min(1,abs(q['w'])))))
@@ -69,5 +89,5 @@ def main():
             assert wrist<35,('sweep wrist',wrist)
         report.append(dict(gesture=gesture,maxSupportingHandError=second,minBrushY=low,maxBrushY=high,maxWristDegrees=wrist))
     write_json(ROOT/'build/villager-life-preview/native-item-validation.json',report)
-    print('Original item grips preserved; support hands stay in contact; broom brush stays at floor level.')
+    print('Item grips verified, including the approved sweep grip; support contacts and visible broom floor clearance passed.')
 if __name__=='__main__':main()
