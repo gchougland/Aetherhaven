@@ -17,6 +17,7 @@
 
 ### Changed
 
+- **Battle horn** Crouch and use the horn to dismiss all your followers.
 - **Leisure time** Park time is now Leisure. Villagers can socialize or visit recreational spots to have fun.
 
 ### Fixed

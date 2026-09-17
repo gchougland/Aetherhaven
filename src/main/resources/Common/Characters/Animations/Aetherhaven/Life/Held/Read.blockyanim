@@ -4,97 +4,97 @@
   "holdLastKeyframe": false,
   "nodeAnimations": {
     "Book-Top": {
+      "position": [],
       "orientation": [
         {
           "time": 0,
           "delta": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0,
-            "w": 1.0
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "w": 1
           },
           "interpolationType": "smooth"
         },
         {
           "time": 108,
           "delta": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.6087614,
-            "w": 0.7933533
+            "x": 0,
+            "y": 0,
+            "z": 0.60876,
+            "w": 0.79335
           },
           "interpolationType": "smooth"
         },
         {
           "time": 295,
           "delta": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.6087614,
-            "w": 0.7933533
+            "x": 0,
+            "y": 0,
+            "z": 0.60876,
+            "w": 0.79335
           },
           "interpolationType": "smooth"
         },
         {
           "time": 360,
           "delta": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0,
-            "w": 1.0
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "w": 1
           },
           "interpolationType": "smooth"
         }
       ],
-      "position": [],
       "shapeStretch": [],
       "shapeVisible": [],
       "shapeUvOffset": []
     },
     "Book-Bot": {
+      "position": [],
       "orientation": [
         {
           "time": 0,
           "delta": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0,
-            "w": 1.0
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "w": 1
           },
           "interpolationType": "smooth"
         },
         {
           "time": 108,
           "delta": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": -0.6087614,
-            "w": 0.7933533
+            "x": 0,
+            "y": 0,
+            "z": -0.60876,
+            "w": 0.79335
           },
           "interpolationType": "smooth"
         },
         {
           "time": 295,
           "delta": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": -0.6087614,
-            "w": 0.7933533
+            "x": 0,
+            "y": 0,
+            "z": -0.60876,
+            "w": 0.79335
           },
           "interpolationType": "smooth"
         },
         {
           "time": 360,
           "delta": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0,
-            "w": 1.0
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "w": 1
           },
           "interpolationType": "smooth"
         }
       ],
-      "position": [],
       "shapeStretch": [],
       "shapeVisible": [],
       "shapeUvOffset": []

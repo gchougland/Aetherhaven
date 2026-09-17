@@ -9,6 +9,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.protocol.WaitForDataFrom;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
+import com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
@@ -17,7 +18,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Calls loaded town guards to follow the player when the battle horn secondary use starts. */
+/** Calls guards, or dismisses the player's followers when crouching, at the start of horn use. */
 public final class BattleHornSummonInteraction extends SimpleInstantInteraction {
     @Nonnull
     public static final com.hypixel.hytale.codec.builder.BuilderCodec<BattleHornSummonInteraction> CODEC =
@@ -27,7 +28,7 @@ public final class BattleHornSummonInteraction extends SimpleInstantInteraction 
                 BattleHornSummonInteraction::new,
                 SimpleInstantInteraction.CODEC
             )
-            .documentation("Summon town guards to follow the player using the battle horn.")
+            .documentation("Summon town guards, or crouch to dismiss all of the player's followers.")
             .build();
 
     @Override
@@ -57,7 +58,13 @@ public final class BattleHornSummonInteraction extends SimpleInstantInteraction 
         if (plugin == null) {
             return;
         }
-        BattleHornService.callGuards(playerRef, commandBuffer, plugin);
+        var movement = commandBuffer.getComponent(playerRef, MovementStatesComponent.getComponentType());
+        var states = movement != null ? movement.getMovementStates() : null;
+        if (states != null && (states.crouching || states.forcedCrouching)) {
+            BattleHornService.dismissFollowers(playerRef, commandBuffer);
+        } else {
+            BattleHornService.callGuards(playerRef, commandBuffer, plugin);
+        }
     }
 
     @Nonnull

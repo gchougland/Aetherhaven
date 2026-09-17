@@ -96,6 +96,12 @@ assignment. Conversation timing follows the imported recordings.
 
 ## Reproduction and previews
 
+After editing body animations in an external editor, run
+`python tools/repair_villager_animation_exports.py`. It repairs quaternion rounding,
+removes neutral face/leg/cosmetic tracks that would override other slots, and copies
+the reading hinges to the held-item timelines. It preserves authored motion and
+rejects unexpected active tracks for review. Run the animation asset tests afterward.
+
 Use Python with the packages in `requirements-villager-life.txt`:
 
 ```text
