@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.reputation;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownPlayerResolution;
@@ -15,7 +16,6 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -385,7 +385,7 @@ public final class VillagerReputationService {
             return null;
         }
         int count = Math.max(1, Math.min(def.itemCount(), 9999));
-        player.giveItem(new ItemStack(itemId, count), playerRef, store);
+        GoldCoinPayment.giveItemReward(player, playerRef, store, itemId, count);
         return null;
     }
 

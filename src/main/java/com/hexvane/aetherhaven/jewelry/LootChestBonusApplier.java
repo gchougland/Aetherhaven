@@ -6,7 +6,7 @@ import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.difficulty.LootRarityDifficulty;
 import com.hexvane.aetherhaven.difficulty.TownDifficultySettings;
 import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
-import com.hexvane.aetherhaven.economy.api.LootSource;
+import com.hexvane.aetherhaven.economy.api.GoldSource;
 import com.hexvane.aetherhaven.loot.LootChestPlotBlueprintLoot;
 import com.hexvane.aetherhaven.prop.PropLoot;
 import com.hexvane.aetherhaven.prop.PropLootExclusions;
@@ -152,7 +152,7 @@ public final class LootChestBonusApplier {
             return false;
         }
         boolean any = false;
-        for (ItemStack stack : AetherhavenEconomy.provider().lootItems(LootSource.LOOT_CHEST, coinId, q)) {
+        for (ItemStack stack : AetherhavenEconomy.provider().goldItems(GoldSource.LOOT_CHEST, coinId, q)) {
             any |= addSplitAcrossRandomSlots(inv, stack, rnd);
         }
         return any;

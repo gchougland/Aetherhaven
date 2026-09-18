@@ -4,6 +4,11 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -116,5 +121,26 @@ public final class GoldCoinPayment {
     /** Gives {@code amount} gold to the player (a refund, a payout). False when the account could not take it. */
     public static boolean give(@Nonnull GoldAccount account, long amount) {
         return amount <= 0L || account.deposit(amount);
+    }
+
+    /**
+     * Hands an item reward to the player (a quest, a reputation unlock): gold through the account when the item is
+     * the coin, the item itself otherwise. With the built-in economy the coins land in the inventory as they always
+     * did, and overflow the same way when it is full.
+     */
+    public static void giveItemReward(
+        @Nonnull Player player,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String itemId,
+        int count
+    ) {
+        if (AetherhavenConstants.ITEM_GOLD_COIN.equals(itemId)) {
+            GoldAccount account = AetherhavenEconomy.account(ref, store);
+            if (account != null && give(account, count)) {
+                return;
+            }
+        }
+        player.giveItem(new ItemStack(itemId, count), ref, store);
     }
 }
