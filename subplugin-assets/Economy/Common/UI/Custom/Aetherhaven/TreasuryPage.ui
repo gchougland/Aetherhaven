@@ -90,9 +90,34 @@ $C.@PageOverlay {
           Group #CoinsTabContent {
             LayoutMode: Top;
 
-            Label #Balance {
+            // "In the treasury: [balance]", the balance drawn by the economy provider.
+            Group #BalanceLine {
+              LayoutMode: Left;
               Anchor: (Bottom: 12);
+
+              Label #BalanceText {
+                Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center);
+                Anchor: (Right: 4);
+              }
+
+              Group #Balance {
+                LayoutMode: Middle;
+                Anchor: (Vertical: 0);
+              }
+            }
+
+            // Why the treasury cannot be used, in place of the balance line.
+            Label #Notice {
+              Anchor: (Bottom: 12);
+              Visible: false;
               Style: (...$C.@DefaultLabelStyle, Wrap: true);
+            }
+
+            // Shown under an economy mod, where an amount is typed in its unit.
+            $C.@TextField #TreasuryAmountField {
+              Anchor: (Bottom: 8, Height: 36);
+              PlaceholderText: "";
+              Visible: false;
             }
 
             $C.@TextButton #DepositButton {
@@ -121,9 +146,43 @@ $C.@PageOverlay {
               Text: "";
             }
 
-            Label #TaxPolicyShort {
+            // The tax rule: a sentence, then a line where the amounts are drawn by the economy
+            // provider, "[gold] less when they are not." / "[min] to [max] scaling with...".
+            Group #TaxPolicyShort {
+              LayoutMode: Top;
               Anchor: (Bottom: 10);
-              Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #9aa6b8);
+
+              Label #Intro {
+                Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #9aa6b8);
+              }
+
+              Group {
+                LayoutMode: Left;
+                Anchor: (Top: 2);
+
+                Group #Gold {
+                  LayoutMode: Middle;
+                  Anchor: (Vertical: 0);
+                }
+
+                Label #Between {
+                  Visible: false;
+                  Style: (...$C.@DefaultLabelStyle, TextColor: #9aa6b8, VerticalAlignment: Center);
+                  Anchor: (Horizontal: 4);
+                }
+
+                Group #GoldMax {
+                  Visible: false;
+                  LayoutMode: Middle;
+                  Anchor: (Vertical: 0);
+                }
+
+                Label #After {
+                  FlexWeight: 1;
+                  Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #9aa6b8, VerticalAlignment: Center);
+                  Anchor: (Left: 4);
+                }
+              }
             }
 
             Label #TaxHallMissing {
@@ -148,9 +207,9 @@ $C.@PageOverlay {
                   Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c8d0e0);
                 }
 
-                Label #TitheSubGold {
-                  Anchor: (Width: 88);
-                  Style: (...$C.@DefaultLabelStyle, TextColor: #f2d9a6);
+                Group #TitheSubGold {
+                  LayoutMode: Middle;
+                  Anchor: (Vertical: 0);
                 }
               }
 
@@ -164,9 +223,9 @@ $C.@PageOverlay {
                   Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c8d0e0);
                 }
 
-                Label #TitheFounderGold {
-                  Anchor: (Width: 88);
-                  Style: (...$C.@DefaultLabelStyle, TextColor: #f2d9a6);
+                Group #TitheFounderGold {
+                  LayoutMode: Middle;
+                  Anchor: (Vertical: 0);
                 }
               }
 
@@ -180,9 +239,9 @@ $C.@PageOverlay {
                   Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c8d0e0);
                 }
 
-                Label #TitheFeastGold {
-                  Anchor: (Width: 88);
-                  Style: (...$C.@DefaultLabelStyle, TextColor: #f2d9a6);
+                Group #TitheFeastGold {
+                  LayoutMode: Middle;
+                  Anchor: (Vertical: 0);
                 }
               }
 
@@ -198,9 +257,9 @@ $C.@PageOverlay {
                   Text: "";
                 }
 
-                Label #TitheTotalGold {
-                  Anchor: (Width: 88);
-                  Style: (...$C.@DefaultLabelStyle, RenderBold: true, FontSize: 15, TextColor: #ffdca8);
+                Group #TitheTotalGold {
+                  LayoutMode: Middle;
+                  Anchor: (Vertical: 0);
                 }
               }
             }

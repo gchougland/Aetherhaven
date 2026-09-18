@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.feast.FeastService;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -152,7 +153,7 @@ public final class TownTaxService {
             town.setTreasuryLastTaxEpochDay(titheDay);
             town.setTreasuryLastTaxGameLocalDateEpochDay(todayGameLocalEpochDay);
             if (added > 0L) {
-                town.addTreasuryGoldCoins(added);
+                AetherhavenEconomy.townAccount(town).deposit(added);
                 TownLogService.appendEntry(
                     town,
                     new TownLogEntry(
@@ -228,7 +229,7 @@ public final class TownTaxService {
         TaxMorningBreakdown breakdown = computeTaxMorningBreakdown(town, store, cfg, plugin.getConstructionCatalog());
         long added = breakdown.finalTotal();
         if (added > 0L) {
-            town.addTreasuryGoldCoins(added);
+            AetherhavenEconomy.townAccount(town).deposit(added);
             town.setTreasuryLastTaxEpochDay(titheDay);
             WorldTimeResource wtrStamp = store.getResource(WorldTimeResource.getResourceType());
             if (wtrStamp != null) {
@@ -678,7 +679,7 @@ public final class TownTaxService {
     private static void notifyTownTaxCollected(@Nonnull Store<EntityStore> store, @Nonnull TownRecord town, long goldAdded) {
         Message msg =
             Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.notificationTaxCollected")
-                .param("amount", Long.toString(goldAdded))
+                .param("amount", AetherhavenEconomy.provider().amount(goldAdded))
                 .param("town", town.getDisplayName());
         Query<EntityStore> q = Query.and(Player.getComponentType(), UUIDComponent.getComponentType(), PlayerRef.getComponentType());
         store.forEachChunk(

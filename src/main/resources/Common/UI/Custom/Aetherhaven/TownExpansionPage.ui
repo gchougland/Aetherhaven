@@ -129,17 +129,38 @@ $C.@PageOverlay {
             }
           }
 
-          Label #ExpansionCostLabel {
-            Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #e8dcc8);
+          // "Next land cost:" and "Sell for:", the amounts drawn by the economy provider.
+          Group #ExpansionCostLine {
+            LayoutMode: Left;
             Anchor: (Bottom: 4);
-            Text: "";
+
+            Label #Text {
+              Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #e8dcc8, VerticalAlignment: Center);
+              Anchor: (Right: 4);
+              Text: "";
+            }
+
+            Group #Gold {
+              LayoutMode: Middle;
+              Anchor: (Vertical: 0);
+            }
           }
 
-          Label #ExpansionSellRefundLabel {
+          Group #ExpansionSellRefundLine {
             Visible: false;
-            Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #e8dcc8);
+            LayoutMode: Left;
             Anchor: (Bottom: 8);
-            Text: "";
+
+            Label #Text {
+              Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #e8dcc8, VerticalAlignment: Center);
+              Anchor: (Right: 4);
+              Text: "";
+            }
+
+            Group #Gold {
+              LayoutMode: Middle;
+              Anchor: (Vertical: 0);
+            }
           }
 
           Label #ExpansionErr {

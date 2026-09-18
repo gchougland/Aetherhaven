@@ -1,0 +1,32 @@
+$C = "../Common.ui";
+
+// A gold amount drawn by the built-in economy: the coin icon and a number, the HUD's sizes.
+// Appended into an empty group by ItemCoinEconomy.show; #Amount.Text carries the number. For a
+// smaller line of text, show sets #Amount.Style.FontSize and scales #Icon.Anchor to match.
+Group #GoldAmount {
+  LayoutMode: Left;
+  HitTestVisible: false;
+
+  Group #IconWrap {
+    LayoutMode: Middle;
+    Anchor: (Right: 4, Vertical: 0);
+
+    AssetImage #Icon {
+      Anchor: (Width: 30, Height: 30);
+      AssetPath: "Icons/ItemsGenerated/Aetherhaven_Gold_Coin.png";
+      FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+      HitTestVisible: false;
+    }
+  }
+
+  Group #AmountWrap {
+    LayoutMode: Middle;
+    FlexWeight: 1;
+    Anchor: (Vertical: 0);
+
+    Label #Amount {
+      Text: "0";
+      Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 16, LetterSpacing: 0.5, TextColor: #f3ca63, OutlineColor: #000000(0.9), RenderBold: true, VerticalAlignment: Center);
+    }
+  }
+}

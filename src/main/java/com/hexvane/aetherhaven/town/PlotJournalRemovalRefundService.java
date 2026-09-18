@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabMaterialsCatalog;
 import com.hexvane.aetherhaven.difficulty.EffectiveBuildingCosts;
 import com.hexvane.aetherhaven.difficulty.TownDifficultySettings;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.plot.PlotTokenInventory;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -68,7 +69,7 @@ public final class PlotJournalRemovalRefundService {
     ) {
         long goldRefund = computeGoldRefund(def, plot, town, plugin);
         if (goldRefund > 0L) {
-            town.addTreasuryGoldCoins(goldRefund);
+            AetherhavenEconomy.townAccount(town).deposit(goldRefund);
         }
         boolean tokenGranted = false;
         if (def.consumesPlotToken()) {

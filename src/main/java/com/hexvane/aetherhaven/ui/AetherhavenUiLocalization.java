@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import java.util.function.UnaryOperator;
@@ -244,11 +245,11 @@ public final class AetherhavenUiLocalization {
 
     public static void applyBlacksmithRepairPage(@Nonnull UICommandBuilder b) {
         b.set("#TitleText.TextSpans", t("aetherhaven_misc.aetherhaven.blacksmith.repair.page.title"));
-        b.set(
-            "#Hint.TextSpans",
-            Message.translation("aetherhaven_misc.aetherhaven.blacksmith.repair.page.hint")
-                .param("maxCost", AetherhavenConstants.BLACKSMITH_REPAIR_COST_FULL)
+        b.set("#HintLine #HintText.TextSpans", t("aetherhaven_misc.aetherhaven.blacksmith.repair.page.hint.cost"));
+        AetherhavenEconomy.show(
+            b, "#HintLine #MaxCost", AetherhavenConstants.BLACKSMITH_REPAIR_COST_FULL, BlacksmithRepairRowElement.FONT_SIZE
         );
+        b.set("#Hint.TextSpans", t("aetherhaven_misc.aetherhaven.blacksmith.repair.page.hint"));
         b.set("#ItemHeader.TextSpans", t("aetherhaven_misc.aetherhaven.blacksmith.repair.page.item"));
         b.set("#CostHeader.TextSpans", t("aetherhaven_misc.aetherhaven.blacksmith.repair.page.cost"));
         b.set("#DurabilityHeader.TextSpans", t("aetherhaven_misc.aetherhaven.blacksmith.repair.page.durability"));

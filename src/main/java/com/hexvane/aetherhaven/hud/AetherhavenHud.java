@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.hud;
 
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
 import com.hypixel.hytale.server.core.ui.Anchor;
@@ -19,6 +20,8 @@ public final class AetherhavenHud extends CustomUIHud {
     public static final String HUD_KEY = "Aetherhaven.CoreHud";
     public static final int STATUS_WIDTH = 286;
     public static final int QUEST_WIDTH = 370;
+    /** Size of the gold row's text, the provider draws the amount to it. */
+    static final int GOLD_FONT_SIZE = 16;
 
     @Nonnull
     private HudPanelPlacement statusPlacement;
@@ -127,13 +130,10 @@ public final class AetherhavenHud extends CustomUIHud {
             commands.set("#ClockText.TextSpans", Message.raw(snapshot.clockText()));
             changed = true;
         }
-        if (old == null
-            || old.inventoryCoins() != snapshot.inventoryCoins()
-            || old.treasuryCoins() != snapshot.treasuryCoins()
-            || old.totalCoins() != snapshot.totalCoins()) {
-            Message amount = Message.raw(String.format("%,d", snapshot.totalCoins()));
-            commands.set("#CoinTextLeft.TextSpans", amount);
-            commands.set("#CoinTextRight.TextSpans", amount);
+        if (old == null || !old.gold().equals(snapshot.gold())) {
+            AetherhavenEconomy.show(commands, "#GoldLeft", snapshot.gold(), GOLD_FONT_SIZE);
+            // On the right side the icon sits on the outside, after the number, as it always did.
+            AetherhavenEconomy.show(commands, "#GoldRight", snapshot.gold(), GOLD_FONT_SIZE, true);
             changed = true;
         }
         boolean questVisible = snapshot.showQuests() && !snapshot.quests().isEmpty();

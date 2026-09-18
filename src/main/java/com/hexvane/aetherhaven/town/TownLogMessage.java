@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.town;
 
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.ui.UiMaterialLabels;
 import com.hypixel.hytale.server.core.Message;
 import java.util.LinkedHashMap;
@@ -38,6 +39,8 @@ public final class TownLogMessage {
             }
             if ("item".equals(k) && params.containsKey(PARAM_ITEM_ID)) {
                 msg = msg.param(k, UiMaterialLabels.itemNameMessage(params.get(PARAM_ITEM_ID)));
+            } else if (isGoldParam(key, k)) {
+                msg = msg.param(k, goldAmount(v));
             } else if (!"location".equals(k) && !"cause".equals(k)) {
                 msg = msg.param(k, v);
             }
@@ -57,6 +60,21 @@ public final class TownLogMessage {
             msg = msg.param("cause", renderCause(params));
         }
         return msg;
+    }
+
+    /** The params holding gold: stored as the count of coins, written by the economy provider when shown. */
+    private static boolean isGoldParam(@Nonnull String key, @Nonnull String param) {
+        return (TownLogService.KEY_TAX.equals(key) && "amount".equals(param))
+            || (TownLogService.KEY_SHOP_SALE.equals(key) && "gold".equals(param));
+    }
+
+    @Nonnull
+    private static Message goldAmount(@Nonnull String stored) {
+        try {
+            return AetherhavenEconomy.provider().amount(Long.parseLong(stored.trim()));
+        } catch (NumberFormatException e) {
+            return Message.raw(stored);
+        }
     }
 
     @Nonnull

@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.territory;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.map.TownBorderMapOverlayService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -9,7 +11,6 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownTerritoryClaims;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -45,16 +46,16 @@ public final class TownExpansionClaimService {
             return "aetherhaven_town.aetherhaven.ui.expansion.err.notClaimable";
         }
         long cost = TownTerritoryClaims.nextClaimBlockCostGold(town, cfg);
-        Player player = store.getComponent(playerRef, Player.getComponentType());
-        if (player == null) {
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.HOTBAR_FIRST);
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store, inv);
+        if (account == null) {
             return "aetherhaven_common.aetherhaven.common.pluginNotLoaded";
         }
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.HOTBAR_FIRST);
         boolean allowTreasury = town.playerCanSpendTreasuryGold(playerUuid);
-        if (GoldCoinPayment.totalAvailable(town, inv, allowTreasury) < cost) {
+        if (GoldCoinPayment.totalAvailable(town, account, allowTreasury) < cost) {
             return "aetherhaven_town.aetherhaven.ui.expansion.err.notEnoughGold";
         }
-        if (GoldCoinPayment.trySpendReturningBreakdown(town, inv, cost, allowTreasury) == null) {
+        if (GoldCoinPayment.trySpendReturningBreakdown(town, account, cost, allowTreasury) == null) {
             return "aetherhaven_town.aetherhaven.ui.expansion.err.notEnoughGold";
         }
         if (!TownTerritoryClaims.addClaimBlock(town, chunkX, chunkZ)) {
@@ -94,7 +95,7 @@ public final class TownExpansionClaimService {
             return "aetherhaven_town.aetherhaven.ui.expansion.err.sellNotOwned";
         }
         if (refund > 0L) {
-            town.addTreasuryGoldCoins(refund);
+            AetherhavenEconomy.townAccount(town).deposit(refund);
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         tm.updateTown(town);

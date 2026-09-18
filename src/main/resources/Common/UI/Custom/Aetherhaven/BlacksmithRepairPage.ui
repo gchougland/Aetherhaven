@@ -15,6 +15,23 @@ $C.@DecoratedContainer {
   }
 
   #Content {
+    // "Price depends on wear. An item costs up to [gold]" then the how-to on its own line.
+    Group #HintLine {
+      LayoutMode: Left;
+      Anchor: (Bottom: 2);
+
+      Label #HintText {
+        Style: (...$C.@DefaultLabelStyle, TextColor: #ffffff(0.7), VerticalAlignment: Center);
+        Anchor: (Right: 4);
+        Text: "";
+      }
+
+      Group #MaxCost {
+        LayoutMode: Middle;
+        Anchor: (Vertical: 0);
+      }
+    }
+
     Label #Hint {
       Anchor: (Bottom: 8);
       Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #ffffff(0.7));
@@ -32,7 +49,7 @@ $C.@DecoratedContainer {
       }
 
       Label #CostHeader {
-        Anchor: (Width: 72);
+        Anchor: (Width: 130);
         Padding: (Horizontal: 10);
         Style: (RenderBold: true, HorizontalAlignment: End);
         Text: "";

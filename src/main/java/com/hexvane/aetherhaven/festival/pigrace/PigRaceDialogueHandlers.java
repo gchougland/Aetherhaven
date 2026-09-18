@@ -5,6 +5,8 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.festival.FestivalRewardNotify;
 import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.plugin.DialogueActionRegistry;
@@ -18,9 +20,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -154,23 +154,20 @@ public final class PigRaceDialogueHandlers {
         // Pay from the player's own / member town treasury (not the festival town they're visiting).
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, playerUuid);
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, playerUuid);
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
-        if (inv == null || !GoldCoinPayment.canAfford(payerTown, inv, amount, allowTreasury)) {
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        if (account == null || !GoldCoinPayment.canAfford(payerTown, account, amount, allowTreasury)) {
             session.setPendingStake(playerUuid, amount);
             out.setGotoNodeId("bet_failed");
             return;
         }
-        SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(payerTown, inv, amount, allowTreasury);
+        SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(payerTown, account, amount, allowTreasury);
         if (paid == null) {
             session.setPendingStake(playerUuid, amount);
             out.setGotoNodeId("bet_failed");
             return;
         }
         if (!session.placeBet(playerUuid, lane, amount)) {
-            Player player = store.getComponent(playerRef, Player.getComponentType());
-            if (player != null) {
-                GoldCoinPayment.refund(payerTown, player, playerRef, store, paid);
-            }
+            GoldCoinPayment.refund(payerTown, account, paid);
             if (payerTown != null) {
                 tm.updateTown(payerTown);
             }

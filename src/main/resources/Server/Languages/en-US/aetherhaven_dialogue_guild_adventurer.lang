@@ -1,4 +1,4 @@
-aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire=Hire {type} guard ({gold} gold)
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire=Hire {type} guard
 aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.leave=Goodbye
 aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.body=Pay the fee and this adventurer will patrol for your town. They stay until they fall in battle or you let them go. You have {current} of {max} guards.
 aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes=Yes, hire them

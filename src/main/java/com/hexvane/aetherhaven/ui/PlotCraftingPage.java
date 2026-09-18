@@ -7,6 +7,10 @@ import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.Balance;
+import com.hexvane.aetherhaven.economy.api.EconomyProvider;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.plot.PlotBuildingStyles;
 import com.hexvane.aetherhaven.plot.PlotBuildingTypes;
 import com.hexvane.aetherhaven.plot.PlotCraftingCatalog;
@@ -100,6 +104,9 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     private static final String TAB_COMMUNITY = "Community";
     private static final String TAB_MODERATION = "Moderation";
     private static final long CRAFT_COST = AetherhavenConstants.PLOT_TOKEN_CRAFT_GOLD_COST;
+    /** FontSize of the lines amounts are drawn in (#CostLine, the gold card). */
+    private static final int GOLD_LINE_FONT_SIZE = 16;
+    private static final int FUNDS_LINE_FONT_SIZE = 15;
     /** Matches {@code PlotCraftingPage.ui} list height when the toolbar row is present. */
     private static final int BUILDING_LIST_HEIGHT_NORMAL = 418;
     /** Community / moderation tab with refresh/page controls and craft only. */
@@ -633,8 +640,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             commandBuilder.set("#DenyButton.Disabled", marketplaceLoading || !hasSelection);
         }
 
-        CombinedItemContainer inv =
-            player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
+        GoldAccount account = player != null ? AetherhavenEconomy.account(ref, store) : null;
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -642,8 +648,9 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
 
         if (!moderationTab) {
-            long invCoins = inv != null ? GoldCoinPayment.totalAvailable(null, inv) : 0L;
-            long treasuryCoins = town != null ? town.getTreasuryGoldCoinCount() : 0L;
+            EconomyProvider provider = AetherhavenEconomy.provider();
+            Balance yours = account != null ? provider.balance(account) : provider.balance();
+            Balance treasury = town != null ? provider.balance(AetherhavenEconomy.townAccount(town)) : provider.balance();
             int unlockPoints = PlotTokenUnlockService.getUnlockPoints(ref, store);
 
             commandBuilder.set("#UnlockPointsLine.Visible", true);
@@ -654,16 +661,20 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             );
 
             commandBuilder.set(
-                "#CostLine.TextSpans",
+                "#CostLine #CostText.TextSpans",
                 Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.costLine")
-                    .param("cost", Message.raw(String.valueOf(CRAFT_COST)))
             );
+            AetherhavenEconomy.show(commandBuilder, "#CostLine #Cost", CRAFT_COST, GOLD_LINE_FONT_SIZE);
             commandBuilder.set(
-                "#FundsLine.TextSpans",
+                "#FundsLine #YoursText.TextSpans",
                 Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.fundsLine")
-                    .param("inv", Message.raw(String.valueOf(invCoins)))
-                    .param("treasury", Message.raw(String.valueOf(treasuryCoins)))
             );
+            AetherhavenEconomy.show(commandBuilder, "#FundsLine #Yours", yours, FUNDS_LINE_FONT_SIZE);
+            commandBuilder.set(
+                "#FundsLine #TreasuryText.TextSpans",
+                Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.fundsLine.treasury")
+            );
+            AetherhavenEconomy.show(commandBuilder, "#FundsLine #Treasury", treasury, FUNDS_LINE_FONT_SIZE);
         } else {
             commandBuilder.set("#UnlockPointsLine.Visible", false);
         }
@@ -693,8 +704,8 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             boolean canCraft =
                 hasVariant
                     && !variantLocked
-                    && inv != null
-                    && GoldCoinPayment.canAfford(town, inv, CRAFT_COST, allowTreasury);
+                    && account != null
+                    && GoldCoinPayment.canAfford(town, account, CRAFT_COST, allowTreasury);
             commandBuilder.set("#CraftButton.Disabled", !canCraft);
         }
 
@@ -1167,8 +1178,12 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         TownRecord town = uc != null ? TownPlayerResolution.resolveActiveTown(world, store, ref, tm) : null;
         boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
+        GoldAccount account = AetherhavenEconomy.account(ref, store);
+        if (account == null) {
+            return;
+        }
 
-        SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(town, inv, CRAFT_COST, allowTreasury);
+        SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(town, account, CRAFT_COST, allowTreasury);
         if (paid == null) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
@@ -1183,7 +1198,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         String displayName = def != null && def.getDisplayName() != null ? def.getDisplayName() : variant.displayName();
         ItemStack token = PlotTokenInventory.createTokenStack(variant.constructionId(), 1, displayName, pr.getLanguage());
         if (!inv.canAddItemStack(token)) {
-            GoldCoinPayment.refund(town, player, ref, store, paid);
+            GoldCoinPayment.refund(town, account, paid);
             if (town != null) {
                 tm.updateTown(town);
             }
@@ -1198,7 +1213,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
 
         ItemStackTransaction giveTx = player.giveItem(token, ref, store);
         if (!giveTx.succeeded()) {
-            GoldCoinPayment.refund(town, player, ref, store, paid);
+            GoldCoinPayment.refund(town, account, paid);
             if (town != null) {
                 tm.updateTown(town);
             }
@@ -3314,11 +3329,13 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             b.set("#InfoCountsAsValue.TextSpans", Message.raw(String.join("\n", countsAsLabels)));
         }
 
-        String buildCost = constructionGold + " gold to build from the town treasury";
-        String goldDetails = moderationTab
-            ? buildCost
-            : CRAFT_COST + " gold to craft plot token\n" + buildCost;
-        b.set("#InfoGoldValue.TextSpans", Message.raw(goldDetails));
+        b.set("#InfoGoldCraft.Visible", !moderationTab);
+        if (!moderationTab) {
+            AetherhavenEconomy.show(b, "#InfoGoldCraft #Gold", CRAFT_COST, GOLD_LINE_FONT_SIZE);
+            b.set("#InfoGoldCraft #Text.TextSpans", Message.raw("to craft plot token"));
+        }
+        AetherhavenEconomy.show(b, "#InfoGoldBuild #Gold", constructionGold, GOLD_LINE_FONT_SIZE);
+        b.set("#InfoGoldBuild #Text.TextSpans", Message.raw("to build from the town treasury"));
 
         List<String> missingMods = CommunityRequiredMods.missingPackNames(requiredMods);
         if (requiredMods.isEmpty()) {

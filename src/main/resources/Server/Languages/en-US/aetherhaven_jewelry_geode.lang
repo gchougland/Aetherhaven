@@ -50,15 +50,21 @@ items.Aetherhaven_Jewelry_Crafting_Bench.description=An iron anvil for finishing
 
 # === UI: town treasury (player-facing panel: deposit, tithe tab, copy) ===
 aetherhaven.ui.treasury.title=Town treasury
+aetherhaven.ui.treasury.amountPlaceholder=Amount (empty: all)
 aetherhaven.ui.treasury.deposit=Deposit all gold coins
+aetherhaven.ui.treasury.depositAmount=Deposit gold coins
 aetherhaven.ui.treasury.withdraw=Withdraw gold coins
 aetherhaven.ui.treasury.hint=Each morning, villagers who are nearby and in good cheer add a little gold. Inn guests are not counted.
 aetherhaven.ui.treasury.tabCoinsTooltip=Gold: balance, deposit, withdraw
 aetherhaven.ui.treasury.tabTitheTooltip=See who pays and what to expect the next morning
 aetherhaven.ui.treasury.tax.intro={live} villagers are loaded with live needs; this tithe preview has {count} rows (off-chunk residents use last saved needs from your roster when available).
-aetherhaven.ui.treasury.tax.policyShort.linear=Your town rule: up to {max} gold per person when food, rest, and fun are high; less when they are not.
-aetherhaven.ui.treasury.tax.policyShort.perCapita=Your town rule: each resident pays between {min} and {max} gold per morning, scaling with average needs (always at least {min} even when needs are empty).
-aetherhaven.ui.treasury.tax.policyShort.happiness=Your town rule: no gold when average comfort is at or below {minComfortPct}%; above that, tax rises on a curve to {peak} gold per resident at full needs (the simple linear cap without this policy is {base} gold).
+aetherhaven.ui.treasury.tax.policyShort.linear=Your town rule: when food, rest, and fun are high, each person pays up to
+aetherhaven.ui.treasury.tax.policyShort.linear.after=less when they are not.
+aetherhaven.ui.treasury.tax.policyShort.perCapita=Your town rule, per resident and per morning:
+aetherhaven.ui.treasury.tax.policyShort.perCapita.between=to
+aetherhaven.ui.treasury.tax.policyShort.perCapita.after=scaling with average needs, never below the minimum.
+aetherhaven.ui.treasury.tax.policyShort.happiness=Your town rule: no tax when average comfort is at or below {minComfortPct}%. At full needs, per resident:
+aetherhaven.ui.treasury.tax.policyShort.happiness.between=instead of the plain linear cap of
 aetherhaven.ui.treasury.tax.hallMissing=Build the town hall first—then morning gold can be collected.
 aetherhaven.ui.treasury.tax.sheetSubLabel=From villagers below
 aetherhaven.ui.treasury.tax.sheetFounderLabel=Founder statue bonus ({mult})
@@ -66,7 +72,7 @@ aetherhaven.ui.treasury.tax.sheetFeastLabel=Steward's Ledger feast bonus ({mult}
 aetherhaven.ui.treasury.tax.sheetTotalLabel=About what you get next morning
 aetherhaven.ui.treasury.tax.residentsHeader=Villagers in this list
 aetherhaven.ui.treasury.tax.residentLine={name} ({job})
-aetherhaven.ui.treasury.tax.townsfolkFlatGold=Pays {amount} gold
+aetherhaven.ui.treasury.tax.townsfolkFlatGold=Pays
 aetherhaven.ui.treasury.tax.footerMore=Only {shown} of {total} residents fit here. Load more of the town and open this again to see the rest.
 
 # === UI: open geodes (blacksmith) + result / error lines ===
@@ -118,8 +124,9 @@ aetherhaven.jewelry.gem.VOIDSTONE=Voidstone
 
 # === UI: jewelry appraisal & workbench (forging) ===
 aetherhaven.ui.jewelryAppraisal.title=Appraise jewelry
-aetherhaven.ui.jewelryAppraisal.hintPaid=Costs {cost} gold coins per piece. Select a row, then appraise to reveal rarity and traits.
+aetherhaven.ui.jewelryAppraisal.hintPaid=Costs per piece:
 aetherhaven.ui.jewelryAppraisal.hintFree=No gold fee. Select a row, then appraise to reveal rarity and traits.
+aetherhaven.ui.jewelryAppraisal.hint=Select a row, then appraise to reveal rarity and traits.
 aetherhaven.ui.jewelryAppraisal.empty=No jewelry in your hotbar, armor, or storage.
 aetherhaven.ui.jewelryAppraisal.pick=Select a piece below.
 aetherhaven.ui.jewelryAppraisal.select=Select

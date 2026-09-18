@@ -11,9 +11,11 @@ import com.hexvane.aetherhaven.construction.PrefabMaterialsCatalog;
 import com.hexvane.aetherhaven.difficulty.EffectiveBuildingCosts;
 import com.hexvane.aetherhaven.difficulty.TownDifficultySettings;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.Balance;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.inventory.BenchAdjacentChestUtil;
-import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
@@ -108,6 +110,8 @@ import javax.annotation.Nullable;
 public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPage<PlotConstructionPage.PageData> {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final int BREAK_SETTINGS = 10;
+    /** FontSize of $C.@DefaultLabelStyle, the treasury line the amounts are drawn in. */
+    private static final int TREASURY_FONT_SIZE = 16;
     private static final String MATERIALS_GRID = "#MaterialsScroll #MaterialsGrid";
     private static final int MATERIAL_GRID_COLS = 6;
     private static final String MEMBER_ROWS = "#MemberRows";
@@ -272,6 +276,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         Player player = store.getComponent(ref, Player.getComponentType());
         boolean plotReqBypassCreative = player != null && player.getGameMode() == GameMode.Creative;
         CombinedItemContainer inv = materialCombinedForPlotBlock(store, ref);
+        GoldAccount account = AetherhavenEconomy.account(ref, store, inv);
 
         if (def == null) {
             commandBuilder.set(
@@ -349,29 +354,30 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         boolean treasuryPerm =
             treasuryTown != null && playerUuid != null && treasuryTown.playerCanSpendTreasuryGold(playerUuid);
         long spendableGold =
-            treasuryTown != null && inv != null
-                ? GoldCoinPayment.totalAvailable(treasuryTown, inv, treasuryPerm)
-                : inv != null ? InventoryMaterials.count(inv, AetherhavenConstants.ITEM_GOLD_COIN) : 0L;
+            account != null ? GoldCoinPayment.totalAvailable(treasuryTown, account, treasuryPerm) : 0L;
         boolean treasuryOk =
             completed
                 || goldCost <= 0
                 || plotReqBypassCreative
                 || (treasuryTown != null
-                    && inv != null
-                    && GoldCoinPayment.canAfford(treasuryTown, inv, goldCost, treasuryPerm));
+                    && account != null
+                    && GoldCoinPayment.canAfford(treasuryTown, account, goldCost, treasuryPerm));
         boolean showTreasury = !hideConstructionDetails && goldCost > 0;
         commandBuilder.set("#TreasuryRow.Visible", showTreasury);
         if (showTreasury) {
             commandBuilder.set(
                 "#TreasuryLabel.TextSpans",
                 Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.treasuryGold")
-                    .param("available", String.valueOf(spendableGold))
-                    .param("required", String.valueOf(goldCost))
             );
-            commandBuilder.set(
-                "#TreasuryLabel.Style.TextColor",
-                plotReqBypassCreative || spendableGold >= goldCost ? "#3d913f" : "#962f2f"
-            );
+            Balance available =
+                account != null
+                    ? GoldCoinPayment.available(treasuryTown, account, treasuryPerm)
+                    : AetherhavenEconomy.provider().balance();
+            AetherhavenEconomy.show(commandBuilder, "#TreasuryAvailable", available, TREASURY_FONT_SIZE);
+            AetherhavenEconomy.show(commandBuilder, "#TreasuryRequired", goldCost, TREASURY_FONT_SIZE);
+            String color = plotReqBypassCreative || spendableGold >= goldCost ? "#3d913f" : "#962f2f";
+            commandBuilder.set("#TreasuryLabel.Style.TextColor", color);
+            commandBuilder.set("#TreasurySlash.Style.TextColor", color);
         }
 
         boolean showMaterials = !hideConstructionDetails && !requiredMaterials.isEmpty();
@@ -613,11 +619,11 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             TownRecord townPu = tmpu.getTown(townUuidMgmt);
             CombinedItemContainer invPu =
                 player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
-            if (townPu != null && invPu != null && ucComp != null) {
+            if (townPu != null && invPu != null && account != null && ucComp != null) {
                 PlotProductionState prodState = townPu.getOrCreatePlotProduction(plotUuidMgmt);
                 prodState.migrateIfNeeded();
                 boolean allowTreasury = townPu.playerCanSpendTreasuryGold(ucComp.getUuid());
-                ProductionUpgradeTreeUi.bind(commandBuilder, eventBuilder, prodState, townPu, invPu, allowTreasury);
+                ProductionUpgradeTreeUi.bind(commandBuilder, eventBuilder, prodState, townPu, invPu, account, allowTreasury);
             }
         }
 
@@ -627,11 +633,11 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             TownRecord townRu = tmru.getTown(townUuidMgmt);
             CombinedItemContainer invRu =
                 player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
-            if (townRu != null && invRu != null && ucComp != null) {
+            if (townRu != null && invRu != null && account != null && ucComp != null) {
                 PlotRestaurantState restaurantState = townRu.getOrCreatePlotRestaurant(plotUuidMgmt);
                 restaurantState.migrateIfNeeded();
                 boolean allowTreasury = townRu.playerCanSpendTreasuryGold(ucComp.getUuid());
-                RestaurantUpgradeTreeUi.bind(commandBuilder, eventBuilder, restaurantState, townRu, invRu, allowTreasury);
+                RestaurantUpgradeTreeUi.bind(commandBuilder, eventBuilder, restaurantState, townRu, invRu, account, allowTreasury);
             }
         }
 
@@ -2433,7 +2439,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 return;
             }
             boolean allowTreasury = tr.playerCanSpendTreasuryGold(uc.getUuid());
-            if (inv == null || !GoldCoinPayment.canAfford(tr, inv, goldCost, allowTreasury)) {
+            GoldAccount account = AetherhavenEconomy.account(ref, store, inv);
+            if (account == null || !GoldCoinPayment.canAfford(tr, account, goldCost, allowTreasury)) {
                 sendBuildError(store, ref, "Not enough gold (inventory + town treasury).");
                 return;
             }
@@ -3064,13 +3071,14 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             return;
         }
         CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
-        if (inv == null) {
+        GoldAccount account = AetherhavenEconomy.account(ref, store);
+        if (inv == null || account == null) {
             return;
         }
         PlotProductionState state = town.getOrCreatePlotProduction(plotId);
         state.migrateIfNeeded();
         boolean allowTreasury = town.playerCanSpendTreasuryGold(uc.getUuid());
-        PurchaseResult result = WorkplaceProductionUpgrades.tryPurchase(state, branch, town, inv, allowTreasury);
+        PurchaseResult result = WorkplaceProductionUpgrades.tryPurchase(state, branch, town, inv, account, allowTreasury);
         if (result == PurchaseResult.OK) {
             tm.updateTown(town);
             NotificationUtil.sendNotification(
@@ -3154,13 +3162,14 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             return;
         }
         CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
-        if (inv == null) {
+        GoldAccount account = AetherhavenEconomy.account(ref, store);
+        if (inv == null || account == null) {
             return;
         }
         PlotRestaurantState state = town.getOrCreatePlotRestaurant(plotId);
         state.migrateIfNeeded();
         boolean allowTreasury = town.playerCanSpendTreasuryGold(uc.getUuid());
-        RestaurantUpgrades.PurchaseResult result = RestaurantUpgrades.tryPurchase(state, branch, town, inv, allowTreasury);
+        RestaurantUpgrades.PurchaseResult result = RestaurantUpgrades.tryPurchase(state, branch, town, inv, account, allowTreasury);
         if (result == RestaurantUpgrades.PurchaseResult.OK) {
             tm.updateTown(town);
             NotificationUtil.sendNotification(

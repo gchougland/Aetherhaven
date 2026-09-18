@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.plotcreator.RuntimeCommonIconBroadcast;
 import com.hexvane.aetherhaven.territory.TownExpansionAssetDelivery;
 import com.hexvane.aetherhaven.territory.TownExpansionClaimService;
@@ -43,6 +44,8 @@ import org.joml.Vector3i;
 
 public final class TownExpansionPage extends AetherhavenInteractiveCustomUIPage<TownExpansionPage.PageData> {
     private static final int GRID = 7;
+    /** FontSize of the page's labels ($C.@DefaultLabelStyle), the lines amounts are drawn in. */
+    private static final int LINE_FONT_SIZE = 16;
     private static final int CHUNK_GROUP = TownTerritoryClaims.CLAIM_BLOCK_CHUNK_SIZE;
     private static final String GRID_ROWS = "#MapGridRows";
 
@@ -128,10 +131,8 @@ public final class TownExpansionPage extends AetherhavenInteractiveCustomUIPage<
         }
         var cfg = plugin.getConfig().get();
         long cost = TownTerritoryClaims.nextClaimBlockCostGold(town, cfg);
-        commandBuilder.set(
-            "#ExpansionCostLabel.TextSpans",
-            Message.translation("aetherhaven_town.aetherhaven.ui.expansion.claimCost").param("cost", Long.toString(cost))
-        );
+        commandBuilder.set("#ExpansionCostLine #Text.TextSpans", Message.translation("aetherhaven_town.aetherhaven.ui.expansion.claimCost"));
+        AetherhavenEconomy.show(commandBuilder, "#ExpansionCostLine #Gold", cost, LINE_FONT_SIZE);
         boolean canClaim =
             selectedChunkX != Integer.MIN_VALUE
                 && TownTerritoryClaims.canClaimBlock(town, selectedChunkX, selectedChunkZ, tm.allTowns(), cfg);
@@ -143,14 +144,11 @@ public final class TownExpansionPage extends AetherhavenInteractiveCustomUIPage<
         commandBuilder.set("#ExpansionSellButton.Disabled", !canSell);
         if (canSell) {
             long refund = TownTerritoryClaims.sellClaimBlockRefundGold(town, cfg);
-            commandBuilder.set("#ExpansionSellRefundLabel.Visible", true);
-            commandBuilder.set(
-                "#ExpansionSellRefundLabel.TextSpans",
-                Message.translation("aetherhaven_town.aetherhaven.ui.expansion.sellRefund")
-                    .param("refund", Long.toString(refund))
-            );
+            commandBuilder.set("#ExpansionSellRefundLine.Visible", true);
+            commandBuilder.set("#ExpansionSellRefundLine #Text.TextSpans", Message.translation("aetherhaven_town.aetherhaven.ui.expansion.sellRefund"));
+            AetherhavenEconomy.show(commandBuilder, "#ExpansionSellRefundLine #Gold", refund, LINE_FONT_SIZE);
         } else {
-            commandBuilder.set("#ExpansionSellRefundLabel.Visible", false);
+            commandBuilder.set("#ExpansionSellRefundLine.Visible", false);
         }
         if (lastErrKey != null) {
             commandBuilder.set("#ExpansionErr.Visible", true);

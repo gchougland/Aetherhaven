@@ -4,6 +4,9 @@ import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import com.hexvane.aetherhaven.dialogue.data.DialogueChoiceDefinition;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.tourist.TouristMoveInRequirements;
 import com.hypixel.hytale.component.Ref;
@@ -61,11 +64,29 @@ public final class DialogueChoiceItemRequirements {
         if (requirements.isEmpty()) {
             return true;
         }
+        long coins = 0L;
+        List<MaterialRequirement> items = new ArrayList<>();
+        for (MaterialRequirement m : requirements) {
+            if (GoldCoinPayment.coinItemId().equals(m.getItemId())) {
+                coins += Math.max(0, m.getCount());
+            } else {
+                items.add(m);
+            }
+        }
+        if (coins > 0L) {
+            GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+            if (account == null || account.balance() < coins) {
+                return false;
+            }
+            if (items.isEmpty()) {
+                return true;
+            }
+        }
         CombinedItemContainer inv = playerInventory(playerRef, store);
         if (inv == null) {
             return false;
         }
-        return InventoryMaterials.hasAllCheckedRequirements(inv, requirements);
+        return InventoryMaterials.hasAllCheckedRequirements(inv, items);
     }
 
     public static boolean isTouristMoveInChoice(@Nonnull DialogueChoiceDefinition choice) {

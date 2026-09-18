@@ -17,10 +17,16 @@ Button #Button {
     FlexWeight: 1;
   }
 
-  Label #Cost {
-    Anchor: (Width: 72);
-    Padding: (Horizontal: 10, Vertical: 5);
-    Style: (TextColor: #d4a832, HorizontalAlignment: End);
+  // The price, drawn by the economy provider; the same width as #CostHeader in BlacksmithRepairPage.ui.
+  Group #Cost {
+    LayoutMode: Right;
+    Anchor: (Width: 130);
+    Padding: (Horizontal: 10);
+
+    Group #Gold {
+      LayoutMode: Middle;
+      Anchor: (Vertical: 0);
+    }
   }
 
   Label #Durability {

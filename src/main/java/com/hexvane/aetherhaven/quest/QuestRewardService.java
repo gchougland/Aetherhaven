@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.quest;
 
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.quest.data.QuestReward;
 import com.hexvane.aetherhaven.reputation.VillagerReputationEntry;
@@ -12,7 +13,6 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.UUID;
@@ -141,7 +141,7 @@ public final class QuestRewardService {
                     LOGGER.atInfo().log("Skipping item reward grantTo=%s for quest %s", grantTo, def.idOrEmpty());
                     continue;
                 }
-                player.giveItem(new ItemStack(itemId.trim(), count), playerRef, store);
+                GoldCoinPayment.giveItemReward(player, playerRef, store, itemId.trim(), count);
             } else if ("learn_recipe".equalsIgnoreCase(kind)) {
                 String rid = r.recipeItemId();
                 if (rid == null || rid.isBlank()) {

@@ -202,6 +202,6 @@ aetherhaven.festival.roster.status.finished={time}
 aetherhaven.festival.roster.status.dnf=No finish
 aetherhaven.festival.roster.status.out=Out
 aetherhaven.festival.roster.status.snowflakes={lives} left
-aetherhaven.festival.roster.status.bet={pig} - {amount}g
+aetherhaven.festival.roster.status.bet={pig} - {amount}
 aetherhaven.festival.roster.status.bet_won={pig} won
 aetherhaven.festival.roster.status.bet_lost={pig} lost

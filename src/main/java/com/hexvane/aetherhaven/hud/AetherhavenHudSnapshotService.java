@@ -1,7 +1,9 @@
 package com.hexvane.aetherhaven.hud;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.inventory.InventoryMaterials;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.Balance;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.questboard.QuestBoardCatalog;
 import com.hexvane.aetherhaven.questboard.QuestBoardService;
@@ -16,8 +18,6 @@ import com.hexvane.aetherhaven.worldnpc.WorldQuestIds;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
-import com.hypixel.hytale.server.core.inventory.InventoryComponent;
-import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.time.LocalDateTime;
@@ -78,12 +78,8 @@ public final class AetherhavenHudSnapshotService {
         @Nonnull PlayerTownJournalState preferences
     ) {
         Ref<EntityStore> playerEntity = playerRef.getReference();
-        CombinedItemContainer inventory =
-            playerEntity != null ? InventoryComponent.getCombined(store, playerEntity, InventoryComponent.EVERYTHING) : null;
-        long inventoryCoins = inventory != null
-            ? InventoryMaterials.count(inventory, com.hexvane.aetherhaven.AetherhavenConstants.ITEM_GOLD_COIN)
-            : 0L;
-        long treasuryCoins = town != null ? Math.max(0L, town.getTreasuryGoldCoinCount()) : 0L;
+        GoldAccount account = playerEntity != null ? AetherhavenEconomy.account(playerEntity, store) : null;
+        Balance gold = gold(account, town);
         List<HudQuestEntry> quests =
             preferences.isHudShowQuests()
                 ? questEntries(town, worldProgress, playerProgress, store, preferences.getPinnedQuestIds())
@@ -96,9 +92,7 @@ public final class AetherhavenHudSnapshotService {
             preferences.getHudBackgroundOpacity(),
             AetherhavenCalendar.formatDate(gameTime),
             AetherhavenCalendar.formatClock(gameTime),
-            inventoryCoins,
-            treasuryCoins,
-            combinedGold(inventoryCoins, treasuryCoins),
+            gold,
             quests
         );
     }
@@ -194,12 +188,16 @@ public final class AetherhavenHudSnapshotService {
         return List.copyOf(entries);
     }
 
-    public static long combinedGold(long left, long right) {
-        long safeLeft = Math.max(0L, left);
-        long safeRight = Math.max(0L, right);
-        if (safeRight > 0L && safeLeft > Long.MAX_VALUE - safeRight) {
-            return Long.MAX_VALUE;
+    /** What the player and their town hold together, as the provider draws it; nothing when neither is known. */
+    @Nonnull
+    static Balance gold(@Nullable GoldAccount account, @Nullable TownRecord town) {
+        List<GoldAccount> accounts = new ArrayList<>(2);
+        if (account != null) {
+            accounts.add(account);
         }
-        return safeLeft + safeRight;
+        if (town != null) {
+            accounts.add(AetherhavenEconomy.townAccount(town));
+        }
+        return AetherhavenEconomy.provider().balance(accounts.toArray(GoldAccount[]::new));
     }
 }

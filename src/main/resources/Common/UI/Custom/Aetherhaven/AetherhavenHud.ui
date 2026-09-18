@@ -66,60 +66,25 @@ Group #AetherhavenHudRoot {
         LayoutMode: Full;
         Anchor: (Height: 41);
 
+        // The economy provider draws the balance into #GoldLeft or #GoldRight, whichever side is shown.
         Group #GoldLeftContent {
           LayoutMode: Left;
           Anchor: (Left: -8, Right: 0, Top: 0, Bottom: 0);
 
-          Group #GoldIconLeftWrap {
+          Group #GoldLeft {
             LayoutMode: Middle;
-            Anchor: (Right: 4, Vertical: 0);
-
-            AssetImage #GoldIconLeft {
-              Anchor: (Width: 30, Height: 30);
-              AssetPath: "Icons/ItemsGenerated/Aetherhaven_Gold_Coin.png";
-              FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
-              HitTestVisible: false;
-            }
-          }
-
-          Group #CoinTextLeftWrap {
-            LayoutMode: Middle;
-            FlexWeight: 1;
             Anchor: (Vertical: 0);
-
-            Label #CoinTextLeft {
-              Text: "0";
-              Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 16, LetterSpacing: 0.5, TextColor: #f3ca63, OutlineColor: #000000(0.9), RenderBold: true, VerticalAlignment: Center);
-            }
           }
         }
 
         Group #GoldRightContent {
-          LayoutMode: Left;
+          LayoutMode: Right;
           Anchor: (Left: 0, Right: -8, Top: 0, Bottom: 0);
           Visible: false;
 
-          Group #CoinTextRightWrap {
+          Group #GoldRight {
             LayoutMode: Middle;
-            FlexWeight: 1;
             Anchor: (Vertical: 0);
-
-            Label #CoinTextRight {
-              Text: "0";
-              Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 16, LetterSpacing: 0.5, TextColor: #f3ca63, OutlineColor: #000000(0.9), RenderBold: true, HorizontalAlignment: End, VerticalAlignment: Center);
-            }
-          }
-
-          Group #GoldIconRightWrap {
-            LayoutMode: Middle;
-            Anchor: (Left: 4, Vertical: 0);
-
-            AssetImage #GoldIconRight {
-              Anchor: (Width: 30, Height: 30);
-              AssetPath: "Icons/ItemsGenerated/Aetherhaven_Gold_Coin.png";
-              FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
-              HitTestVisible: false;
-            }
           }
         }
       }

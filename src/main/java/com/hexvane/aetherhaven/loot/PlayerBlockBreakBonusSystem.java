@@ -10,6 +10,8 @@ import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.config.BreakableContainersConfig;
 import com.hexvane.aetherhaven.config.BreakableContainersGoldConfig;
 import com.hexvane.aetherhaven.economy.BreakableContainerEligibility;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldSource;
 import com.hexvane.aetherhaven.geode.OreGeodeEligibility;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -82,7 +84,7 @@ public final class PlayerBlockBreakBonusSystem extends EntityEventSystem<EntityS
                 if (gold.isItemRegistered()) {
                     int coins = gold.rollQuantity(rnd);
                     if (coins > 0) {
-                        bonus.add(new ItemStack(gold.getItemId(), coins));
+                        bonus.addAll(AetherhavenEconomy.provider().goldItems(GoldSource.BREAKABLE_CONTAINER, gold.getItemId(), coins));
                     }
                 }
             }

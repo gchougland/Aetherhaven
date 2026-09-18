@@ -3,6 +3,8 @@ package com.hexvane.aetherhaven.shopspot;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
@@ -123,12 +125,13 @@ public final class ShopSpotPurchaseService {
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, buyer);
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, buyer);
         CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.HOTBAR_FIRST);
-        if (!GoldCoinPayment.canAfford(payerTown, inv, totalCost, allowTreasury)) {
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store, inv);
+        if (account == null || !GoldCoinPayment.canAfford(payerTown, account, totalCost, allowTreasury)) {
             notify(playerRef, store, commandBuffer, Message.translation(MSG + ".cannotAfford"));
             return false;
         }
         GoldCoinPayment.SpendBreakdown breakdown =
-            GoldCoinPayment.trySpendReturningBreakdown(payerTown, inv, totalCost, allowTreasury);
+            GoldCoinPayment.trySpendReturningBreakdown(payerTown, account, totalCost, allowTreasury);
         if (breakdown == null) {
             notify(playerRef, store, commandBuffer, Message.translation(MSG + ".cannotAfford"));
             return false;
@@ -144,7 +147,7 @@ public final class ShopSpotPurchaseService {
                 targetBlock
             );
         if (!delivery.succeeded()) {
-            GoldCoinPayment.refund(payerTown, player, playerRef, store, breakdown);
+            GoldCoinPayment.refund(payerTown, account, breakdown);
             if (payerTown != null) {
                 tm.updateTown(payerTown);
             }
@@ -411,9 +414,9 @@ public final class ShopSpotPurchaseService {
             return;
         }
         if (isPlayerShopPlot(plugin, town, record.getPlotId())) {
-            town.addPlayerShopSafeGold(seller, totalCost);
+            AetherhavenEconomy.shopSafe(town, seller).deposit(totalCost);
         } else {
-            town.addTreasuryGoldCoins(totalCost);
+            AetherhavenEconomy.townAccount(town).deposit(totalCost);
         }
     }
 
@@ -459,7 +462,7 @@ public final class ShopSpotPurchaseService {
                         .param("buyer", buyerName)
                         .param("item", UiMaterialLabels.itemNameMessage(itemId))
                         .param("count", String.valueOf(itemQty))
-                        .param("gold", String.valueOf(gold)),
+                        .param("gold", AetherhavenEconomy.provider().amount(gold)),
                     NotificationStyle.Success
                 );
                 break;

@@ -4,6 +4,8 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownPlayerResolution;
@@ -47,6 +49,8 @@ import com.hexvane.aetherhaven.jewelry.JewelryTooltipUiSupport;
 /** Appraise jewelry stacks in combined inventory; merchant charges gold, appraisal bench does not. */
 public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPage<JewelryAppraisalPage.PageData> {
     private static final String ROWS = "#Content #ListScroll #JewelryAppraisalRows";
+    /** FontSize of $C.@DefaultLabelStyle, the hint line the cost is drawn in. */
+    private static final int HINT_FONT_SIZE = 16;
     private static final int MAX_ROWS = 48;
 
     private final boolean chargeGold;
@@ -76,12 +80,12 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
         if (player == null || pr == null) {
             return;
         }
+        // Paid: "Costs per piece: [gold]" then the how-to on its own line. Free: the one sentence as it always was.
+        commandBuilder.set("#HintLine.Visible", chargeGold);
         if (chargeGold) {
-            commandBuilder.set(
-                "#Hint.TextSpans",
-                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.hintPaid")
-                    .param("cost", AetherhavenConstants.JEWELRY_APPRAISAL_GOLD_COST)
-            );
+            commandBuilder.set("#HintLine #HintText.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.hintPaid"));
+            AetherhavenEconomy.show(commandBuilder, "#HintLine #Cost", AetherhavenConstants.JEWELRY_APPRAISAL_GOLD_COST, HINT_FONT_SIZE);
+            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.hint"));
         } else {
             commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.hintFree"));
         }
@@ -284,7 +288,11 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         TownRecord town = plugin != null && uc != null ? TownPlayerResolution.resolveActiveTown(world, store, ref, tm) : null;
         boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
-        SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(town, inv, goldCost, allowTreasury);
+        GoldAccount account = AetherhavenEconomy.account(ref, store, inv);
+        if (account == null) {
+            return;
+        }
+        SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(town, account, goldCost, allowTreasury);
         if (paid == null) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
@@ -297,7 +305,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
         if (rolled != cur) {
             ItemStackSlotTransaction r0 = inv.replaceItemStackInSlot(slot, cur, rolled);
             if (!r0.succeeded()) {
-                GoldCoinPayment.refund(town, player, ref, store, paid);
+                GoldCoinPayment.refund(town, account, paid);
                 if (town != null && plugin != null) {
                     tm.updateTown(town);
                 }
@@ -307,7 +315,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
         }
         ItemStack now = inv.getItemStack(slot);
         if (ItemStack.isEmpty(now)) {
-            GoldCoinPayment.refund(town, player, ref, store, paid);
+            GoldCoinPayment.refund(town, account, paid);
             if (town != null && plugin != null) {
                 tm.updateTown(town);
             }
@@ -317,7 +325,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
         ItemStack appraised = JewelryMetadata.setAppraised(now, true);
         ItemStackSlotTransaction r1 = inv.replaceItemStackInSlot(slot, now, appraised);
         if (!r1.succeeded()) {
-            GoldCoinPayment.refund(town, player, ref, store, paid);
+            GoldCoinPayment.refund(town, account, paid);
             if (town != null && plugin != null) {
                 tm.updateTown(town);
             }

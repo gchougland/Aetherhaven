@@ -19,6 +19,7 @@ import javax.annotation.Nonnull;
  */
 public final class AetherhavenPluginConfig {
     private String levelingIntegration = "AUTO";
+    private String economyProvider = "AUTO";
     private double questCompletionXpPercent = 5;
     private double raidCompletionXpPercent = 15;
     public double getCompletionXpPercent(boolean raid) {
@@ -29,6 +30,12 @@ public final class AetherhavenPluginConfig {
     public String getLevelingIntegration() {
         String value = levelingIntegration == null ? "AUTO" : levelingIntegration.trim().toUpperCase(java.util.Locale.ROOT);
         return Set.of("AUTO", "ENDLESS_LEVELING", "RPG_LEVELING", "NONE").contains(value) ? value : "NONE";
+    }
+
+    /** {@code AUTO} uses the economy mod that registered a provider, if any; {@code COINS} keeps the gold coin item. */
+    public String getEconomyProvider() {
+        String value = economyProvider == null ? "AUTO" : economyProvider.trim().toUpperCase(java.util.Locale.ROOT);
+        return Set.of("AUTO", "COINS").contains(value) ? value : "AUTO";
     }
     /** Hunger points (0..100) drained per second at full rate; energy/fun use lower multipliers in {@link VillagerNeedsDecaySystem}. */
     public static final float DEFAULT_VILLAGER_NEEDS_DECAY_PER_SECOND = 0.0525f;
@@ -42,6 +49,9 @@ public final class AetherhavenPluginConfig {
         .add()
         .append(new KeyedCodec<>("LevelingIntegration", Codec.STRING), (o, v) -> o.levelingIntegration = v, o -> o.levelingIntegration)
         .documentation("Optional town-owner NPC scaling: AUTO, ENDLESS_LEVELING, RPG_LEVELING, or NONE. AUTO prefers Endless if both are installed. Restart required.")
+        .add()
+        .append(new KeyedCodec<>("EconomyProvider", Codec.STRING), (o, v) -> o.economyProvider = v, o -> o.economyProvider)
+        .documentation("Currency: AUTO uses the economy mod that registered a provider, if any; COINS keeps the gold coin item even then.")
         .add()
         .append(
             new KeyedCodec<>("ConstructionBlocksPerTick", Codec.INTEGER),
@@ -1710,6 +1720,7 @@ public final class AetherhavenPluginConfig {
      */
     public void copyStateFrom(@Nonnull AetherhavenPluginConfig o) {
         this.levelingIntegration = o.levelingIntegration;
+        this.economyProvider = o.economyProvider;
         this.questCompletionXpPercent = o.questCompletionXpPercent;
         this.raidCompletionXpPercent = o.raidCompletionXpPercent;
         this.constructionBlocksPerTick = o.constructionBlocksPerTick;

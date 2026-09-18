@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.quest.QuestRewardService;
 import com.hexvane.aetherhaven.quest.data.QuestReward;
 import com.hexvane.aetherhaven.questboard.QuestBoardCatalog;
@@ -42,6 +44,8 @@ public final class QuestBoardPage extends AetherhavenInteractiveCustomUIPage<Que
     private static final String CARD_ROW = "#QuestBoardRoot #Content #CardRowScroll #CardRow";
     private static final int MAX_ITEMS = 6;
     private static final int MAX_REWARD_ITEMS = 6;
+    /** Size of the reward row's text, the provider draws gold rewards to it. */
+    private static final int REWARD_COINS_FONT_SIZE = 16;
 
     /**
      * {@code append(ui)} must run only once per page instance; repeating it on every {@link #sendUpdate} duplicates the
@@ -302,8 +306,13 @@ public final class QuestBoardPage extends AetherhavenInteractiveCustomUIPage<Que
         if (hasItems) {
             int count = Math.min(itemRewards.size(), MAX_REWARD_ITEMS);
             int slotIndex = 0;
+            long coins = 0L;
             for (int j = 0; j < count; j++) {
                 QuestReward rw = itemRewards.get(j);
+                if (GoldCoinPayment.isDrawnAsGold(rw.itemId())) {
+                    coins += Math.max(1, rw.count());
+                    continue;
+                }
                 ItemGridSlot gridSlot = AetherhavenUiItemGrids.slotForKnownItem(rw.itemId().trim(), rw.count());
                 if (gridSlot == null) {
                     continue;
@@ -313,7 +322,12 @@ public final class QuestBoardPage extends AetherhavenInteractiveCustomUIPage<Que
                 slotIndex++;
                 AetherhavenUiItemGrids.setSingleSlot(cmd, itemSel + " #ItemIcon", gridSlot);
             }
-            cmd.set(card + " #RewardItemsRow.Visible", slotIndex > 0);
+            if (coins > 0L) {
+                // Gold drawn by the economy provider after the item slots, when the coin is not an item.
+                cmd.appendInline(card + " #RewardItemsRow", "Group #Coins { LayoutMode: Middle; Anchor: (Vertical: 0); }");
+                AetherhavenEconomy.show(cmd, card + " #RewardItemsRow #Coins", coins, REWARD_COINS_FONT_SIZE);
+            }
+            cmd.set(card + " #RewardItemsRow.Visible", slotIndex > 0 || coins > 0L);
         } else {
             cmd.set(card + " #RewardItemsRow.Visible", false);
         }

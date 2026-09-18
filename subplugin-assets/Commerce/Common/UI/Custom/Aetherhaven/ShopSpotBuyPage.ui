@@ -79,10 +79,17 @@ $C.@PageOverlay {
       Group {
         LayoutMode: Center;
         Anchor: (Bottom: 4, Horizontal: 0);
-        Label #PriceLine {
-          Style: @ShopInfoDetailStyle;
-          Anchor: (Width: 440);
-          Text: "";
+        Group #PriceLine {
+          LayoutMode: Left;
+          Group #Price {
+            LayoutMode: Middle;
+            Anchor: (Vertical: 0);
+          }
+          Label #PriceText {
+            Style: (...@ShopInfoDetailStyle, VerticalAlignment: Center);
+            Anchor: (Left: 4);
+            Text: "";
+          }
         }
       }
       Group {
@@ -132,10 +139,21 @@ $C.@PageOverlay {
             }
           }
 
-          Label #QtyValue {
+          Group #QtyValue {
+            LayoutMode: MiddleCenter;
             Anchor: (Width: 280, Height: 48, Left: 4, Right: 4, Vertical: 0);
-            Style: @QtyAmountStyle;
-            Text: "";
+            Group {
+              LayoutMode: Left;
+              Label #QtyText {
+                Style: (...@QtyAmountStyle, Wrap: false);
+                Anchor: (Right: 4);
+                Text: "";
+              }
+              Group #Total {
+                LayoutMode: Middle;
+                Anchor: (Vertical: 0);
+              }
+            }
           }
 
           Group #Inc1Wrap {

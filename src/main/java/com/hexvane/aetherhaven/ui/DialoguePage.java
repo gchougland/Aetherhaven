@@ -739,27 +739,28 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             return Message.raw(text);
         }
         Message m = Message.translation(text);
-        if (LANG_PRIESTESS_DRAUGHT_SHARD.equals(text)) {
-            long gold = dialogueWorldView.nextGaiaDraughtShardUpgradeGoldCost(ref, store, npcRef);
-            return m.param("gold", Long.toString(gold));
-        }
-        if (LANG_PRIESTESS_DRAUGHT_CATALYST.equals(text)) {
-            long gold = dialogueWorldView.nextGaiaDraughtCatalystUpgradeGoldCost(ref, store, npcRef);
-            return m.param("gold", Long.toString(gold));
-        }
         if (LANG_GUILD_ADVENTURER_HIRE.equals(text)) {
-            long gold = dialogueWorldView.guardHireGoldCost(ref, store, npcRef);
             String typeKey = dialogueWorldView.guardHireGuardTypeLangKey(ref, store, npcRef);
-            return withGuardHireCountParams(
-                ref,
-                store,
-                m.param("gold", Long.toString(gold)).param("type", Message.translation(typeKey))
-            );
+            return withGuardHireCountParams(ref, store, m.param("type", Message.translation(typeKey)));
         }
         if (usesTouristMoveInParams(text)) {
             return withTouristMoveInParams(ref, store, m, text);
         }
         return m;
+    }
+
+    /** What the choice costs in gold, drawn on its row after the text; 0 for a choice with no price. */
+    private long choiceGoldCost(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nullable String text) {
+        if (LANG_PRIESTESS_DRAUGHT_SHARD.equals(text)) {
+            return dialogueWorldView.nextGaiaDraughtShardUpgradeGoldCost(ref, store, npcRef);
+        }
+        if (LANG_PRIESTESS_DRAUGHT_CATALYST.equals(text)) {
+            return dialogueWorldView.nextGaiaDraughtCatalystUpgradeGoldCost(ref, store, npcRef);
+        }
+        if (LANG_GUILD_ADVENTURER_HIRE.equals(text)) {
+            return dialogueWorldView.guardHireGoldCost(ref, store, npcRef);
+        }
+        return 0L;
     }
 
     private static void setChoicesFrameVisible(@Nonnull UICommandBuilder cmd, boolean visible) {
@@ -907,6 +908,9 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         commandBuilder.set(sel + ".Disabled", disabled);
         commandBuilder.set(sel + " #Text.Style.TextColor", disabled ? "#6d6658" : "#f0e6d2");
         applyChoiceIcon(commandBuilder, sel, ch, itemRequirements);
+        DialogueChoiceRequirementsUi.applyCost(
+            commandBuilder, sel, choiceGoldCost(ref, store, text) + DialogueChoiceRequirementsUi.coins(itemRequirements)
+        );
         DialogueChoiceRequirementsUi.applyItemGrid(commandBuilder, sel, itemRequirements);
         if (!disabled) {
             eventBuilder.addEventBinding(
@@ -1008,6 +1012,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         commandBuilder.set(sel + ".Disabled", !turnIn.ready());
         commandBuilder.set(sel + " #Text.Style.TextColor", turnIn.ready() ? "#f0e6d2" : "#6d6658");
         applyChoiceIconPath(commandBuilder, sel, ICON_QUEST);
+        DialogueChoiceRequirementsUi.applyCost(commandBuilder, sel, DialogueChoiceRequirementsUi.coins(itemRequirements));
         DialogueChoiceRequirementsUi.applyItemGrid(commandBuilder, sel, itemRequirements);
         if (turnIn.ready()) {
             eventBuilder.addEventBinding(

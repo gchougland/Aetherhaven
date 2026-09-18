@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabMaterialsCatalog;
 import com.hexvane.aetherhaven.difficulty.EffectiveBuildingCosts;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -74,7 +75,7 @@ public final class RetiredBuiltInPlotMigration {
             }
         }
         if (gold > 0L) {
-            town.addTreasuryGoldCoins(gold);
+            AetherhavenEconomy.townAccount(town).deposit(gold);
             town.addPendingRetiredBuildingGoldNotice(gold);
             LOGGER.atInfo().log(
                 "Returned %s gold for buildings that now come from the marketplace",
@@ -104,6 +105,6 @@ public final class RetiredBuiltInPlotMigration {
         }
         town.consumePendingRetiredBuildingGoldNotice();
         towns.updateTown(town);
-        playerRef.sendMessage(Message.translation(NOTICE_LANG).param("gold", String.valueOf(gold)));
+        playerRef.sendMessage(Message.translation(NOTICE_LANG).param("gold", AetherhavenEconomy.provider().amount(gold)));
     }
 }

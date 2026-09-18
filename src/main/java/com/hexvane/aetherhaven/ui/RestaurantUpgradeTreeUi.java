@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.restaurant.PlotRestaurantState;
 import com.hexvane.aetherhaven.restaurant.RestaurantUpgrades;
@@ -42,6 +44,7 @@ public final class RestaurantUpgradeTreeUi {
         @Nonnull PlotRestaurantState state,
         @Nonnull TownRecord town,
         @Nonnull CombinedItemContainer inv,
+        @Nonnull GoldAccount account,
         boolean allowTreasuryGold
     ) {
         applyChrome(commandBuilder);
@@ -52,6 +55,7 @@ public final class RestaurantUpgradeTreeUi {
             state,
             town,
             inv,
+            account,
             allowTreasuryGold,
             Branch.SATIETY,
             " #UpgSatiety",
@@ -66,6 +70,7 @@ public final class RestaurantUpgradeTreeUi {
             state,
             town,
             inv,
+            account,
             allowTreasuryGold,
             Branch.SERVICE,
             " #UpgService",
@@ -82,6 +87,7 @@ public final class RestaurantUpgradeTreeUi {
         @Nonnull PlotRestaurantState state,
         @Nonnull TownRecord town,
         @Nonnull CombinedItemContainer inv,
+        @Nonnull GoldAccount account,
         boolean allowTreasuryGold,
         @Nonnull Branch branch,
         @Nonnull String btnSuffix,
@@ -101,7 +107,7 @@ public final class RestaurantUpgradeTreeUi {
         commandBuilder.set(btn + titleSuffix + ".TextSpans", t(nameKey));
         commandBuilder.set(btn + ".Disabled", disabled);
         commandBuilder.set(btn + dimOverlaySuffix + ".Visible", maxed);
-        commandBuilder.set(btn + ".TooltipTextSpans", tooltipFor(state, branch, town, inv, allowTreasuryGold, maxed));
+        commandBuilder.set(btn + ".TooltipTextSpans", tooltipFor(state, branch, town, inv, account, allowTreasuryGold, maxed));
         for (int i = 0; i < RestaurantUpgrades.MAX_BRANCH_LEVEL; i++) {
             commandBuilder.set(
                 btn + dotPrefix + i + ".Background",
@@ -124,6 +130,7 @@ public final class RestaurantUpgradeTreeUi {
         @Nonnull Branch branch,
         @Nonnull TownRecord town,
         @Nonnull CombinedItemContainer inv,
+        @Nonnull GoldAccount account,
         boolean allowTreasuryGold,
         boolean maxed
     ) {
@@ -156,12 +163,12 @@ public final class RestaurantUpgradeTreeUi {
         }
         long needGold = RestaurantUpgrades.effectiveGoldCost(branch, tier, town);
         if (needGold > 0L) {
-            long goldHeld = GoldCoinPayment.totalAvailable(town, inv, allowTreasuryGold);
+            long goldHeld = GoldCoinPayment.totalAvailable(town, account, allowTreasuryGold);
             boolean goldOk = goldHeld >= needGold;
             Message goldLine =
                 t("aetherhaven.ui.restaurantUpgrades.tooltip.goldNeed")
-                    .param("held", String.valueOf(goldHeld))
-                    .param("need", String.valueOf(needGold))
+                    .param("held", GoldCoinPayment.available(town, account, allowTreasuryGold).message())
+                    .param("need", AetherhavenEconomy.provider().amount(needGold))
                     .color(goldOk ? TOOLTIP_OK : TOOLTIP_BAD);
             body = Message.join(body, Message.raw(firstCost ? "\n\n" : "\n"), goldLine);
         }

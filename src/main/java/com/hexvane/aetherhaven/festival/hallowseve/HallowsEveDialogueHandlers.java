@@ -5,6 +5,8 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.festival.FestivalDefinition;
 import com.hexvane.aetherhaven.festival.FestivalLookSelection;
 import com.hexvane.aetherhaven.festival.FestivalService;
@@ -18,8 +20,6 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.inventory.InventoryComponent;
-import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -107,22 +107,22 @@ public final class HallowsEveDialogueHandlers {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, playerUuid);
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, playerUuid);
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
-        if (inv == null
-            || !GoldCoinPayment.canAfford(payerTown, inv, HallowsEveIds.MAZE_COST_GOLD, allowTreasury)) {
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        if (account == null
+            || !GoldCoinPayment.canAfford(payerTown, account, HallowsEveIds.MAZE_COST_GOLD, allowTreasury)) {
             out.setGotoNodeId("maze_need_gold");
             return;
         }
         SpendBreakdown paid =
             GoldCoinPayment.trySpendReturningBreakdown(
-                payerTown, inv, HallowsEveIds.MAZE_COST_GOLD, allowTreasury
+                payerTown, account, HallowsEveIds.MAZE_COST_GOLD, allowTreasury
             );
         if (paid == null) {
             out.setGotoNodeId("maze_need_gold");
             return;
         }
         if (!session.tryBegin(playerUuid, System.currentTimeMillis())) {
-            GoldCoinPayment.refund(payerTown, player, playerRef, store, paid);
+            GoldCoinPayment.refund(payerTown, account, paid);
             if (payerTown != null) {
                 tm.updateTown(payerTown);
             }

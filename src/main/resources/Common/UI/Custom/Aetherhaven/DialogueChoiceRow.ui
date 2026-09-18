@@ -21,4 +21,10 @@ Button #Row {
     Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true);
     FlexWeight: 1;
   }
+
+  // What the choice costs in gold, drawn by the economy provider; empty for most choices.
+  Group #Cost {
+    LayoutMode: Middle;
+    Anchor: (Vertical: 0, Right: 8);
+  }
 }

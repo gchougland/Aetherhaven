@@ -22,6 +22,7 @@ aetherhaven.common.noReviveVillagersPermission=You do not have permission to rev
 aetherhaven.common.noPlayerId=No player id.
 aetherhaven.common.playersOnly=Players only.
 aetherhaven.common.invalidVillager=Invalid villager.
+aetherhaven.common.goldAmount={count} gold
 
 # === Town & charter (founding, display name, charter item info) ===
 # Town / charter

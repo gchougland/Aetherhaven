@@ -18,6 +18,8 @@ import com.hexvane.aetherhaven.patrol.GuardFollowPlayerSystem;
 import com.hexvane.aetherhaven.questboard.TownRankCapacity;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtMetadata;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtService;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtState;
@@ -1037,13 +1039,14 @@ public final class DialogueActionExecutor {
         }
         boolean allowTreasury = town.playerCanSpendTreasuryGold(pu.getUuid());
         long cost = AetherhavenConstants.gaiaDraughtShardUpgradeGoldCost(s.getShardUpgradeCount());
-        if (!GoldCoinPayment.canAfford(town, inv, cost, allowTreasury)) {
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        if (account == null || !GoldCoinPayment.canAfford(town, account, cost, allowTreasury)) {
             return;
         }
         if (!GaiaDraughtService.removeOneItemFromInventory(playerRef, store, AetherhavenConstants.ITEM_SHARD_OF_GAIA)) {
             return;
         }
-        if (!GoldCoinPayment.trySpend(town, inv, cost, allowTreasury)) {
+        if (!GoldCoinPayment.trySpend(town, account, cost, allowTreasury)) {
             return;
         }
         ItemStack prev = inv.getItemStack(target.slot());
@@ -1091,13 +1094,14 @@ public final class DialogueActionExecutor {
         }
         boolean allowTreasury = town.playerCanSpendTreasuryGold(pu.getUuid());
         long cost = AetherhavenConstants.gaiaDraughtCatalystUpgradeGoldCost(s.getCatalystUpgradeCount());
-        if (!GoldCoinPayment.canAfford(town, inv, cost, allowTreasury)) {
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        if (account == null || !GoldCoinPayment.canAfford(town, account, cost, allowTreasury)) {
             return;
         }
         if (!GaiaDraughtService.removeOneItemFromInventory(playerRef, store, AetherhavenConstants.ITEM_VERDANT_CATALYST)) {
             return;
         }
-        if (!GoldCoinPayment.trySpend(town, inv, cost, allowTreasury)) {
+        if (!GoldCoinPayment.trySpend(town, account, cost, allowTreasury)) {
             return;
         }
         ItemStack prev = inv.getItemStack(target.slot());
@@ -1135,15 +1139,15 @@ public final class DialogueActionExecutor {
         }
         int per = Math.max(1, AetherhavenConstants.PRIESTESS_HEAL_HEALTH_PER_GOLD_COIN);
         long cost = (long) Math.ceil(missing / (float) per);
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
-        if (inv == null) {
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        if (account == null) {
             return;
         }
         boolean allowTreasury = town.playerCanSpendTreasuryGold(pu.getUuid());
-        if (!GoldCoinPayment.canAfford(town, inv, cost, allowTreasury)) {
+        if (!GoldCoinPayment.canAfford(town, account, cost, allowTreasury)) {
             return;
         }
-        if (!GoldCoinPayment.trySpend(town, inv, cost, allowTreasury)) {
+        if (!GoldCoinPayment.trySpend(town, account, cost, allowTreasury)) {
             return;
         }
         PlayerHealUtil.healToFull(playerRef, store);

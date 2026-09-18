@@ -5,6 +5,8 @@ import com.hexvane.aetherhaven.blockpalette.BlockPaletteDefinition;
 import com.hexvane.aetherhaven.blockpalette.BlockPaletteItemMetadata;
 import com.hexvane.aetherhaven.blockpalette.BlockPaletteShopPricing;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.prop.PropDefinition;
 import com.hexvane.aetherhaven.prop.PropItemMetadata;
 import com.hexvane.aetherhaven.prop.PropLoot;
@@ -212,7 +214,8 @@ public final class FurnitureMerchantShopService {
         PlayerRef playerRef, Ref<EntityStore> ref, Store<EntityStore> store, long epochDay, String expectedToken) {
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, playerRef.getUuid());
         var inv = InventoryComponent.getCombined(store, ref, InventoryComponent.HOTBAR_FIRST);
-        BuyResult result = tryReroll(shopTown, payerTown, inv,
+        GoldAccount account = AetherhavenEconomy.account(ref, store, inv);
+        BuyResult result = tryReroll(shopTown, payerTown, account,
             ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, playerRef.getUuid()),
             epochDay, expectedToken, eligiblePropIds(plugin), paletteIds(plugin));
         if (result.ok()) {
@@ -222,7 +225,7 @@ public final class FurnitureMerchantShopService {
         return result;
     }
 
-    static BuyResult tryReroll(TownRecord shopTown, @Nullable TownRecord payerTown, CombinedItemContainer inv,
+    static BuyResult tryReroll(TownRecord shopTown, @Nullable TownRecord payerTown, GoldAccount account,
         boolean allowTreasury, long epochDay, String expectedToken, List<String> propIds, List<String> paletteIds) {
         if (!inventoryToken(shopTown).equals(expectedToken)) {
             return BuyResult.fail("aetherhaven_prop_shop.aetherhaven.propShop.error.stockChanged");
@@ -232,8 +235,8 @@ public final class FurnitureMerchantShopService {
         }
         // Prepare both tabs before charging; failed payment must leave stock unchanged.
         InventoryRoll roll = prepareRoll(shopTown, propIds, paletteIds);
-        if (!GoldCoinPayment.canAfford(payerTown, inv, REROLL_GOLD_COST, allowTreasury)
-            || !GoldCoinPayment.trySpend(payerTown, inv, REROLL_GOLD_COST, allowTreasury)) {
+        if (!GoldCoinPayment.canAfford(payerTown, account, REROLL_GOLD_COST, allowTreasury)
+            || !GoldCoinPayment.trySpend(payerTown, account, REROLL_GOLD_COST, allowTreasury)) {
             return BuyResult.fail("aetherhaven_prop_shop.aetherhaven.propShop.error.cannotAfford");
         }
         applyRoll(shopTown, roll);
@@ -283,18 +286,19 @@ public final class FurnitureMerchantShopService {
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, buyer);
         CombinedItemContainer inv =
             InventoryComponent.getCombined(store, ref, InventoryComponent.HOTBAR_FIRST);
-        if (!GoldCoinPayment.canAfford(payerTown, inv, price, allowTreasury)) {
+        GoldAccount account = AetherhavenEconomy.account(ref, store, inv);
+        if (!GoldCoinPayment.canAfford(payerTown, account, price, allowTreasury)) {
             return BuyResult.fail("aetherhaven_prop_shop.aetherhaven.propShop.error.cannotAfford");
         }
         GoldCoinPayment.SpendBreakdown breakdown =
-            GoldCoinPayment.trySpendReturningBreakdown(payerTown, inv, price, allowTreasury);
+            GoldCoinPayment.trySpendReturningBreakdown(payerTown, account, price, allowTreasury);
         if (breakdown == null) {
             return BuyResult.fail("aetherhaven_prop_shop.aetherhaven.propShop.error.cannotAfford");
         }
         ItemStack grant = PropItemMetadata.createStack(def);
         ItemStackTransaction giveTx = player.giveItem(grant, ref, store);
         if (!giveTx.succeeded()) {
-            GoldCoinPayment.refund(payerTown, player, ref, store, breakdown);
+            GoldCoinPayment.refund(payerTown, account, breakdown);
             return BuyResult.fail("aetherhaven_prop_shop.aetherhaven.propShop.error.inventoryFull");
         }
         slot.setStock(slot.getStock() - 1);
@@ -338,18 +342,19 @@ public final class FurnitureMerchantShopService {
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, buyer);
         CombinedItemContainer inv =
             InventoryComponent.getCombined(store, ref, InventoryComponent.HOTBAR_FIRST);
-        if (!GoldCoinPayment.canAfford(payerTown, inv, price, allowTreasury)) {
+        GoldAccount account = AetherhavenEconomy.account(ref, store, inv);
+        if (!GoldCoinPayment.canAfford(payerTown, account, price, allowTreasury)) {
             return BuyResult.fail("aetherhaven_prop_shop.aetherhaven.propShop.error.cannotAfford");
         }
         GoldCoinPayment.SpendBreakdown breakdown =
-            GoldCoinPayment.trySpendReturningBreakdown(payerTown, inv, price, allowTreasury);
+            GoldCoinPayment.trySpendReturningBreakdown(payerTown, account, price, allowTreasury);
         if (breakdown == null) {
             return BuyResult.fail("aetherhaven_prop_shop.aetherhaven.propShop.error.cannotAfford");
         }
         ItemStack grant = BlockPaletteItemMetadata.createStack(def);
         ItemStackTransaction giveTx = player.giveItem(grant, ref, store);
         if (!giveTx.succeeded()) {
-            GoldCoinPayment.refund(payerTown, player, ref, store, breakdown);
+            GoldCoinPayment.refund(payerTown, account, breakdown);
             return BuyResult.fail("aetherhaven_prop_shop.aetherhaven.propShop.error.inventoryFull");
         }
         slot.setStock(slot.getStock() - 1);

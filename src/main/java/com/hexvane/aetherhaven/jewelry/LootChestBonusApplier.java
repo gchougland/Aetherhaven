@@ -5,6 +5,8 @@ import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.difficulty.LootRarityDifficulty;
 import com.hexvane.aetherhaven.difficulty.TownDifficultySettings;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.GoldSource;
 import com.hexvane.aetherhaven.loot.LootChestPlotBlueprintLoot;
 import com.hexvane.aetherhaven.prop.PropLoot;
 import com.hexvane.aetherhaven.prop.PropLootExclusions;
@@ -131,8 +133,7 @@ public final class LootChestBonusApplier {
         if (coinId.isEmpty()) {
             return false;
         }
-        Item coin = Item.getAssetMap().getAsset(coinId);
-        if (coin == null) {
+        if (Item.getAssetMap().getAsset(coinId) == null) {
             return false;
         }
         int min = cfg.getLootChestGoldCoinMin();
@@ -150,8 +151,11 @@ public final class LootChestBonusApplier {
         if (q <= 0) {
             return false;
         }
-        int itemMax = Math.max(1, coin.getMaxStack());
-        return addGoldCoinsSplitAcrossRandomSlots(inv, coinId, q, itemMax, rnd);
+        boolean any = false;
+        for (ItemStack stack : AetherhavenEconomy.provider().goldItems(GoldSource.LOOT_CHEST, coinId, q)) {
+            any |= addSplitAcrossRandomSlots(inv, stack, rnd);
+        }
+        return any;
     }
 
     public static void tryInjectPlotToken(
@@ -742,17 +746,17 @@ public final class LootChestBonusApplier {
     }
 
     /**
-     * Tries to spread {@code totalCoins} into several stacks in random free slots, with random per-stack sizes, instead of
-     * a single stack merged to the first slot.
+     * Tries to spread {@code stack} into several stacks in random free slots, with random per-stack sizes, instead of
+     * a single stack merged to the first slot. A stack of one (a token from an economy provider) lands whole.
      */
-    private static boolean addGoldCoinsSplitAcrossRandomSlots(
+    static boolean addSplitAcrossRandomSlots(
         @Nonnull SimpleItemContainer inv,
-        @Nonnull String coinId,
-        int totalCoins,
-        int itemMaxStack,
+        @Nonnull ItemStack stack,
         @Nonnull ThreadLocalRandom rnd
     ) {
-        int remaining = totalCoins;
+        Item item = Item.getAssetMap().getAsset(stack.getItemId());
+        int itemMaxStack = item == null ? Math.max(1, stack.getQuantity()) : Math.max(1, item.getMaxStack());
+        int remaining = stack.getQuantity();
         boolean any = false;
         while (remaining > 0) {
             short slot = randomEmptySlot(inv, rnd);
@@ -774,8 +778,7 @@ public final class LootChestBonusApplier {
             if (chunk > remaining) {
                 chunk = remaining;
             }
-            ItemStack stack = new ItemStack(coinId, chunk);
-            ItemStackSlotTransaction tx = inv.addItemStackToSlot(slot, stack);
+            ItemStackSlotTransaction tx = inv.addItemStackToSlot(slot, stack.withQuantity(chunk));
             if (tx.succeeded()) {
                 any = true;
                 remaining -= chunk;
