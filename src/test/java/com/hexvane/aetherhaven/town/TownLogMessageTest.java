@@ -14,7 +14,6 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.event.EventBus;
 import com.hypixel.hytale.event.IEventBus;
-import com.hypixel.hytale.protocol.LongParamValue;
 import com.hypixel.hytale.protocol.StringParamValue;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
@@ -95,17 +94,17 @@ class TownLogMessageTest {
     }
 
     @Test void storedGoldIsWrittenByTheProviderOfTheDay() {
-        TownLogEntry tax = new TownLogEntry(3L, TownLogService.KEY_TAX, TownLogMessage.taxParams("12", "Dawnmere"));
+        TownLogEntry tax = new TownLogEntry(3L, TownLogService.KEY_TAX, TownLogMessage.taxParams("1200", "Dawnmere"));
         TownLogEntry sale = new TownLogEntry(
             3L, TownLogService.KEY_SHOP_SALE, TownLogMessage.shopSaleParams("Ann", "Ingredient_Bar_Iron", "2", "7")
         );
 
         Message builtIn = param(TownLogMessage.render(tax), "amount");
         assertEquals(ItemCoinEconomy.AMOUNT_KEY, builtIn.getMessageId());
-        assertEquals(12L, ((LongParamValue) builtIn.getFormattedMessage().params.get("count")).value);
+        assertEquals("1,200", ((StringParamValue) builtIn.getFormattedMessage().params.get("count")).value);
 
         AetherhavenEconomy.register(marks);
-        assertEquals("12 marks", param(TownLogMessage.render(tax), "amount").getRawText());
+        assertEquals("1200 marks", param(TownLogMessage.render(tax), "amount").getRawText());
         Message rendered = TownLogMessage.render(sale);
         assertEquals("7 marks", param(rendered, "gold").getRawText());
         assertEquals("2", text(rendered, "count"));

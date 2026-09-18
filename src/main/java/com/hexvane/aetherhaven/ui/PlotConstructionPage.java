@@ -276,7 +276,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         Player player = store.getComponent(ref, Player.getComponentType());
         boolean plotReqBypassCreative = player != null && player.getGameMode() == GameMode.Creative;
         CombinedItemContainer inv = materialCombinedForPlotBlock(store, ref);
-        GoldAccount account = player != null ? AetherhavenEconomy.account(ref, store) : null;
+        GoldAccount account = AetherhavenEconomy.account(ref, store, inv);
 
         if (def == null) {
             commandBuilder.set(
@@ -2439,7 +2439,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 return;
             }
             boolean allowTreasury = tr.playerCanSpendTreasuryGold(uc.getUuid());
-            GoldAccount account = AetherhavenEconomy.account(ref, store);
+            GoldAccount account = AetherhavenEconomy.account(ref, store, inv);
             if (account == null || !GoldCoinPayment.canAfford(tr, account, goldCost, allowTreasury)) {
                 sendBuildError(store, ref, "Not enough gold (inventory + town treasury).");
                 return;

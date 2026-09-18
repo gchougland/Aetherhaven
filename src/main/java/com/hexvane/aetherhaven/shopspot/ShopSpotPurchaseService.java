@@ -25,6 +25,7 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -123,7 +124,8 @@ public final class ShopSpotPurchaseService {
         }
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, buyer);
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, buyer);
-        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.HOTBAR_FIRST);
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store, inv);
         if (account == null || !GoldCoinPayment.canAfford(payerTown, account, totalCost, allowTreasury)) {
             notify(playerRef, store, commandBuffer, Message.translation(MSG + ".cannotAfford"));
             return false;

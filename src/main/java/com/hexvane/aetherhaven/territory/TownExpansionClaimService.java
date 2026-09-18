@@ -11,6 +11,8 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownTerritoryClaims;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -44,7 +46,8 @@ public final class TownExpansionClaimService {
             return "aetherhaven_town.aetherhaven.ui.expansion.err.notClaimable";
         }
         long cost = TownTerritoryClaims.nextClaimBlockCostGold(town, cfg);
-        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.HOTBAR_FIRST);
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store, inv);
         if (account == null) {
             return "aetherhaven_common.aetherhaven.common.pluginNotLoaded";
         }

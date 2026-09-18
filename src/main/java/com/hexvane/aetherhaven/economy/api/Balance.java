@@ -19,6 +19,15 @@ public interface Balance {
      */
     void show(@Nonnull UICommandBuilder builder, @Nonnull String selector, int fontSize);
 
+    /**
+     * Draws as {@link #show(UICommandBuilder, String, int)} does, the pictures after the digits when
+     * {@code pictureAfter} ({@link EconomyProvider#show(UICommandBuilder, String, long, int, boolean)}). Ignored
+     * by default.
+     */
+    default void show(@Nonnull UICommandBuilder builder, @Nonnull String selector, int fontSize, boolean pictureAfter) {
+        show(builder, selector, fontSize);
+    }
+
     /** The balance as text, for a tooltip or a chat line, as {@link EconomyProvider#amount} writes an amount. */
     @Nonnull
     Message message();
@@ -28,6 +37,11 @@ public interface Balance {
         @Override
         public void show(@Nonnull UICommandBuilder builder, @Nonnull String selector, int fontSize) {
             provider.show(builder, selector, coins, fontSize);
+        }
+
+        @Override
+        public void show(@Nonnull UICommandBuilder builder, @Nonnull String selector, int fontSize, boolean pictureAfter) {
+            provider.show(builder, selector, coins, fontSize, pictureAfter);
         }
 
         @Nonnull

@@ -27,6 +27,8 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -193,7 +195,8 @@ public final class ShopSpotBuyPage extends AetherhavenInteractiveCustomUIPage<Sh
                 uc.getUuid()
             );
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, uc.getUuid());
-        GoldAccount account = AetherhavenEconomy.account(playerRef, store);
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.HOTBAR_FIRST);
+        GoldAccount account = AetherhavenEconomy.account(playerRef, store, inv);
         return account != null ? GoldCoinPayment.totalAvailable(payerTown, account, allowTreasury) : 0L;
     }
 

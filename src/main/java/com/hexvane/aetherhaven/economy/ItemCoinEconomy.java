@@ -22,6 +22,7 @@ import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,6 +38,7 @@ public final class ItemCoinEconomy implements EconomyProvider {
     /** Translation key of the default amount text, "{count} gold". */
     public static final String AMOUNT_KEY = "aetherhaven_common.aetherhaven.common.goldAmount";
     private static final String AMOUNT_UI = "Aetherhaven/GoldAmount.ui";
+    private static final String AMOUNT_UI_RIGHT = "Aetherhaven/GoldAmountRight.ui";
     /** What the document draws as written: the HUD's font size and icon size. */
     private static final int AMOUNT_UI_FONT_SIZE = 16;
     private static final int AMOUNT_UI_ICON_SIZE = 30;
@@ -56,6 +58,19 @@ public final class ItemCoinEconomy implements EconomyProvider {
         if (inventory == null) {
             return null;
         }
+        return new ItemCoinAccount(inventory, ref, store);
+    }
+
+    /**
+     * The player's account on a container the site chose ({@link AetherhavenEconomy#account(Ref, Store,
+     * CombinedItemContainer)}): the coins counted and taken there, deposits through {@link Player#giveItem}.
+     */
+    @Nonnull
+    public GoldAccount account(
+        @Nonnull CombinedItemContainer inventory,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store
+    ) {
         return new ItemCoinAccount(inventory, ref, store);
     }
 
@@ -97,13 +112,19 @@ public final class ItemCoinEconomy implements EconomyProvider {
     @Nonnull
     @Override
     public Message amount(long amount) {
-        return Message.translation(AMOUNT_KEY).param("count", amount);
+        return Message.translation(AMOUNT_KEY).param("count", number(amount));
     }
 
     @Override
     public void show(@Nonnull UICommandBuilder builder, @Nonnull String selector, long amount, int fontSize) {
-        builder.append(selector, AMOUNT_UI);
-        builder.set(selector + " #Amount.Text", String.valueOf(amount));
+        show(builder, selector, amount, fontSize, false);
+    }
+
+    /** The icon before the number, or after it in the mirrored document when the amount sits against a right edge. */
+    @Override
+    public void show(@Nonnull UICommandBuilder builder, @Nonnull String selector, long amount, int fontSize, boolean pictureAfter) {
+        builder.append(selector, pictureAfter ? AMOUNT_UI_RIGHT : AMOUNT_UI);
+        builder.set(selector + " #Amount.Text", number(amount));
         if (fontSize != AMOUNT_UI_FONT_SIZE) {
             // The document is the HUD's size; scale the number and keep the icon's proportion to it.
             int icon = Math.round(fontSize * AMOUNT_UI_ICON_SIZE / (float) AMOUNT_UI_FONT_SIZE);
@@ -118,6 +139,12 @@ public final class ItemCoinEconomy implements EconomyProvider {
     @Nonnull
     public static String coinItemId() {
         return AetherhavenConstants.ITEM_GOLD_COIN;
+    }
+
+    /** The one way a count of coins is written or drawn: grouped by thousands, as the HUD always did. */
+    @Nonnull
+    static String number(long amount) {
+        return String.format(Locale.US, "%,d", amount);
     }
 
     /** {@code amount} coins of {@code itemId} as stacks no larger than the item's max stack. */

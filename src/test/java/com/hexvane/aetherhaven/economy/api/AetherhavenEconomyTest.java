@@ -9,12 +9,16 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
+import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -40,12 +44,13 @@ class AetherhavenEconomyTest {
     }
 
     /** Ledgers in memory, one account per town and per safe, so that the migration can be watched. */
-    private static final class FakeProvider implements EconomyProvider {
+    private static class FakeProvider implements EconomyProvider {
         private final String id;
         final Map<Object, MemoryAccount> ledgers = new HashMap<>();
         FakeProvider(String id) { this.id = id; }
         @Override public String id() { return id; }
-        @Override public GoldAccount account(Ref<EntityStore> ref, Store<EntityStore> store) { return null; }
+        final MemoryAccount player = new MemoryAccount(0);
+        @Override public GoldAccount account(Ref<EntityStore> ref, Store<EntityStore> store) { return player; }
         @Override public GoldAccount townAccount(TownRecord town) {
             return ledgers.computeIfAbsent(town.getTownId(), k -> new MemoryAccount(0));
         }
@@ -164,6 +169,46 @@ class AetherhavenEconomyTest {
         assertEquals(30, AetherhavenEconomy.shopSafe(town, player).balance());
     }
 
+    /** Each command as "Type selector data" on one line. */
+    private static String commands(UICommandBuilder builder) {
+        return Stream.of(builder.getCommands())
+            .map(c -> c.type + " " + c.selector + " " + (c.data != null ? c.data : c.text))
+            .reduce("", (a, b) -> a + b + "\n");
+    }
+
+    @Test void coinItemDrawsTheIconAndTheGroupedNumberAtTheSizeOfTheLine() {
+        UICommandBuilder builder = new UICommandBuilder();
+        AetherhavenEconomy.show(builder, "#Row #Gold", 1234L, 16);
+        String queued = commands(builder);
+        assertTrue(queued.contains(" #Row #Gold Aetherhaven/GoldAmount.ui\n"), queued);
+        assertTrue(queued.contains("#Row #Gold #Amount.Text {\"0\": \"1,234\"}\n"), queued);
+        assertFalse(queued.contains("FontSize"), queued);
+
+        builder = new UICommandBuilder();
+        AetherhavenEconomy.show(builder, "#Row #Gold", 5L, 13);
+        queued = commands(builder);
+        assertTrue(queued.contains("#Row #Gold #Amount.Style.FontSize {\"0\": 13}\n"), queued);
+        assertTrue(queued.contains("#Row #Gold #Icon.Anchor"), queued);
+    }
+
+    @Test void coinItemPutsTheIconAfterTheNumberOnRequestAndAProviderMayNot() {
+        UICommandBuilder builder = new UICommandBuilder();
+        AetherhavenEconomy.show(builder, "#GoldRight", ItemCoinEconomy.INSTANCE.balance(new MemoryAccount(7)), 16, true);
+        String queued = commands(builder);
+        assertTrue(queued.contains(" #GoldRight Aetherhaven/GoldAmountRight.ui\n"), queued);
+        assertTrue(queued.contains("#GoldRight #Amount.Text {\"0\": \"7\"}\n"), queued);
+
+        // A provider that draws one way only is asked through its four-parameter show.
+        List<String> calls = new ArrayList<>();
+        EconomyProvider oneWay = new FakeProvider("test:oneway") {
+            @Override public void show(UICommandBuilder b, String selector, long amount, int fontSize) {
+                calls.add(selector + " " + amount + " " + fontSize);
+            }
+        };
+        oneWay.balance(new MemoryAccount(7)).show(new UICommandBuilder(), "#GoldRight", 16, true);
+        assertEquals(List.of("#GoldRight 7 16"), calls);
+    }
+
     @Test void coinItemIsTheDefault() {
         assertSame(ItemCoinEconomy.INSTANCE, AetherhavenEconomy.provider());
         assertTrue(AetherhavenEconomy.usesCoinItem());
@@ -173,6 +218,13 @@ class AetherhavenEconomyTest {
         AetherhavenEconomy.register(first);
         assertSame(first, AetherhavenEconomy.provider());
         assertFalse(AetherhavenEconomy.usesCoinItem());
+    }
+
+    @Test void registeredProviderIgnoresTheContainerASiteChose() {
+        AetherhavenEconomy.register(first);
+        // No entity in a unit test: the provider is handed the ref and store as they are.
+        assertSame(first.player, AetherhavenEconomy.account(null, null, null));
+        assertSame(first.player, AetherhavenEconomy.account(null, null, new CombinedItemContainer(new SimpleItemContainer((short) 1))));
     }
 
     @Test void secondRegistrationIsRefusedAndFirstStays() {

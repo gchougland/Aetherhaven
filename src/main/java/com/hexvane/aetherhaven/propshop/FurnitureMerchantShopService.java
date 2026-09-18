@@ -20,7 +20,9 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -211,7 +213,8 @@ public final class FurnitureMerchantShopService {
     public static BuyResult tryReroll(AetherhavenPlugin plugin, TownRecord shopTown, TownManager tm,
         PlayerRef playerRef, Ref<EntityStore> ref, Store<EntityStore> store, long epochDay, String expectedToken) {
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, playerRef.getUuid());
-        GoldAccount account = AetherhavenEconomy.account(ref, store);
+        var inv = InventoryComponent.getCombined(store, ref, InventoryComponent.HOTBAR_FIRST);
+        GoldAccount account = AetherhavenEconomy.account(ref, store, inv);
         BuyResult result = tryReroll(shopTown, payerTown, account,
             ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, playerRef.getUuid()),
             epochDay, expectedToken, eligiblePropIds(plugin), paletteIds(plugin));
@@ -281,7 +284,9 @@ public final class FurnitureMerchantShopService {
         UUID buyer = playerRef.getUuid();
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, buyer);
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, buyer);
-        GoldAccount account = AetherhavenEconomy.account(ref, store);
+        CombinedItemContainer inv =
+            InventoryComponent.getCombined(store, ref, InventoryComponent.HOTBAR_FIRST);
+        GoldAccount account = AetherhavenEconomy.account(ref, store, inv);
         if (!GoldCoinPayment.canAfford(payerTown, account, price, allowTreasury)) {
             return BuyResult.fail("aetherhaven_prop_shop.aetherhaven.propShop.error.cannotAfford");
         }
@@ -335,7 +340,9 @@ public final class FurnitureMerchantShopService {
         UUID buyer = playerRef.getUuid();
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, buyer);
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, buyer);
-        GoldAccount account = AetherhavenEconomy.account(ref, store);
+        CombinedItemContainer inv =
+            InventoryComponent.getCombined(store, ref, InventoryComponent.HOTBAR_FIRST);
+        GoldAccount account = AetherhavenEconomy.account(ref, store, inv);
         if (!GoldCoinPayment.canAfford(payerTown, account, price, allowTreasury)) {
             return BuyResult.fail("aetherhaven_prop_shop.aetherhaven.propShop.error.cannotAfford");
         }

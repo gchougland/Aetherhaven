@@ -140,9 +140,16 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
         AetherhavenEconomy.show(
             commandBuilder, "#BalanceLine #Balance", AetherhavenEconomy.provider().balance(treasury), BALANCE_FONT_SIZE
         );
+        // An amount is typed only under an economy mod: the built-in economy moves all the coins, as it always did.
+        boolean typed = !AetherhavenEconomy.usesCoinItem();
+        commandBuilder.set("#TreasuryAmountField.Visible", typed);
         commandBuilder.set(
             "#TreasuryAmountField.PlaceholderText",
             Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.amountPlaceholder")
+        );
+        commandBuilder.set(
+            "#DepositButton.TextSpans",
+            Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury." + (typed ? "depositAmount" : "deposit"))
         );
         commandBuilder.set("#DepositButton.Disabled", false);
         commandBuilder.set("#WithdrawButton.Disabled", treasury.balance() <= 0L);

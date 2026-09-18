@@ -32,6 +32,7 @@ import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.modules.time.TimeResource;
@@ -282,7 +283,16 @@ public final class PlotAssemblyService {
             if (player == null) {
                 return PlotAssemblyBuildStartResult.BUILDER_UNAVAILABLE;
             }
-            GoldAccount account = AetherhavenEconomy.account(builderRef, entityStore);
+            CombinedItemContainer inv =
+                BenchAdjacentChestUtil.combinedPlayerAndAdjacentChestsForBlock(
+                    world,
+                    entityStore,
+                    builderRef,
+                    physicalSignWorld.x,
+                    physicalSignWorld.y,
+                    physicalSignWorld.z
+                );
+            GoldAccount account = AetherhavenEconomy.account(builderRef, entityStore, inv);
             if (account == null) {
                 return PlotAssemblyBuildStartResult.PAYMENT_FAILED;
             }

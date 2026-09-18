@@ -113,6 +113,21 @@ public interface EconomyProvider {
     void show(@Nonnull UICommandBuilder builder, @Nonnull String selector, long amount, int fontSize);
 
     /**
+     * Draws as {@link #show(UICommandBuilder, String, long, int)} does, the pictures after the digits when
+     * {@code pictureAfter}: the amount sits against a right edge (the HUD on the right side of the screen) and its
+     * picture stays on the outside. A provider that draws one way only leaves this default, which ignores the flag.
+     */
+    default void show(
+        @Nonnull UICommandBuilder builder,
+        @Nonnull String selector,
+        long amount,
+        int fontSize,
+        boolean pictureAfter
+    ) {
+        show(builder, selector, amount, fontSize);
+    }
+
+    /**
      * What {@code accounts} hold together, taken now, exact in the provider's unit, to draw or to write. No account
      * holds nothing. The sum of {@link GoldAccount#balance()} by default, a whole number of coins: a negative
      * balance counts as nothing and the sum stops at {@link Long#MAX_VALUE}, the HUD draws it every half second.

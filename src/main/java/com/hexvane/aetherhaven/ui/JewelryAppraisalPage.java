@@ -80,14 +80,15 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
         if (player == null || pr == null) {
             return;
         }
+        // Paid: "Costs per piece: [gold]" then the how-to on its own line. Free: the one sentence as it always was.
+        commandBuilder.set("#HintLine.Visible", chargeGold);
         if (chargeGold) {
             commandBuilder.set("#HintLine #HintText.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.hintPaid"));
             AetherhavenEconomy.show(commandBuilder, "#HintLine #Cost", AetherhavenConstants.JEWELRY_APPRAISAL_GOLD_COST, HINT_FONT_SIZE);
+            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.hint"));
         } else {
-            commandBuilder.set("#HintLine #HintText.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.hintFree"));
-            commandBuilder.clear("#HintLine #Cost");
+            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.hintFree"));
         }
-        commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.hint"));
 
         CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.ARMOR_HOTBAR_UTILITY_STORAGE);
         commandBuilder.clear(ROWS);
@@ -287,7 +288,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         TownRecord town = plugin != null && uc != null ? TownPlayerResolution.resolveActiveTown(world, store, ref, tm) : null;
         boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
-        GoldAccount account = AetherhavenEconomy.account(ref, store);
+        GoldAccount account = AetherhavenEconomy.account(ref, store, inv);
         if (account == null) {
             return;
         }

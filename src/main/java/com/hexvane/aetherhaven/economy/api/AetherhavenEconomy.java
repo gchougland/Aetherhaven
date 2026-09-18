@@ -8,6 +8,7 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.UUID;
@@ -82,10 +83,40 @@ public final class AetherhavenEconomy {
         balance.show(builder, selector, fontSize);
     }
 
+    /** The same, the pictures after the digits when {@code pictureAfter} (an amount against a right edge). */
+    public static void show(
+        @Nonnull UICommandBuilder builder,
+        @Nonnull String selector,
+        @Nonnull Balance balance,
+        int fontSize,
+        boolean pictureAfter
+    ) {
+        builder.clear(selector);
+        balance.show(builder, selector, fontSize, pictureAfter);
+    }
+
     /** Shortcut for {@code provider().account(ref, store)}. */
     @Nullable
     public static GoldAccount account(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         return provider().account(ref, store);
+    }
+
+    /**
+     * The player's account for a site that pays from a container of its own: under the built-in economy, the gold
+     * coins in {@code inventory} (a shop counts the hotbar and the storage only, the plot sign adds the chests next to
+     * it, as they always did); under an economy mod, the player's account as {@link #account(Ref, Store)} gives it,
+     * the container is not read. Null when the site has no container and the coin is the currency.
+     */
+    @Nullable
+    public static GoldAccount account(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable CombinedItemContainer inventory
+    ) {
+        if (!usesCoinItem()) {
+            return provider().account(ref, store);
+        }
+        return inventory == null ? null : ItemCoinEconomy.INSTANCE.account(inventory, ref, store);
     }
 
     /**

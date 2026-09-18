@@ -170,7 +170,7 @@ public final class GeodeOpenPage extends AetherhavenInteractiveCustomUIPage<Geod
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         TownRecord town = uc != null ? TownPlayerResolution.resolveActiveTown(world, store, ref, tm) : null;
         boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
-        GoldAccount account = AetherhavenEconomy.account(ref, store);
+        GoldAccount account = AetherhavenEconomy.account(ref, store, inv);
         if (account == null) {
             return;
         }

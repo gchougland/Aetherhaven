@@ -113,9 +113,11 @@ $C.@PageOverlay {
               Style: (...$C.@DefaultLabelStyle, Wrap: true);
             }
 
+            // Shown under an economy mod, where an amount is typed in its unit.
             $C.@TextField #TreasuryAmountField {
               Anchor: (Bottom: 8, Height: 36);
               PlaceholderText: "";
+              Visible: false;
             }
 
             $C.@TextButton #DepositButton {

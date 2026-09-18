@@ -132,7 +132,8 @@ public final class AetherhavenHud extends CustomUIHud {
         }
         if (old == null || !old.gold().equals(snapshot.gold())) {
             AetherhavenEconomy.show(commands, "#GoldLeft", snapshot.gold(), GOLD_FONT_SIZE);
-            AetherhavenEconomy.show(commands, "#GoldRight", snapshot.gold(), GOLD_FONT_SIZE);
+            // On the right side the icon sits on the outside, after the number, as it always did.
+            AetherhavenEconomy.show(commands, "#GoldRight", snapshot.gold(), GOLD_FONT_SIZE, true);
             changed = true;
         }
         boolean questVisible = snapshot.showQuests() && !snapshot.quests().isEmpty();

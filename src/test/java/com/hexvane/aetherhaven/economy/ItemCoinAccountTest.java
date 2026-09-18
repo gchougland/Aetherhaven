@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.economy;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.economy.api.GoldSource;
 import com.hypixel.hytale.assetstore.AssetStore;
 import com.hypixel.hytale.assetstore.AssetUpdateQuery;
@@ -69,6 +70,18 @@ class ItemCoinAccountTest {
 
     private static long coins(SimpleItemContainer container) {
         return container.countItemStacks(s -> ItemCoinEconomy.coinItemId().equals(s.getItemId()));
+    }
+
+    @Test void coinsAreWrittenGroupedByThousandsAsTheHudAlwaysDid() {
+        assertEquals("0", ItemCoinEconomy.number(0));
+        assertEquals("999", ItemCoinEconomy.number(999));
+        assertEquals("1,234,567", ItemCoinEconomy.number(1_234_567));
+    }
+
+    @Test void coinItemCountsTheContainerASiteChose() {
+        // No entity in a unit test: the account only reads the container here.
+        assertEquals(27, AetherhavenEconomy.account(null, null, new CombinedItemContainer(slots(12, 15))).balance());
+        assertNull(AetherhavenEconomy.account(null, null, null));
     }
 
     @Test void balanceCountsEveryStack() {

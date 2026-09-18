@@ -31,6 +31,8 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -485,7 +487,9 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, pr.getUuid());
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, pr.getUuid());
-        GoldAccount account = AetherhavenEconomy.account(ref, store);
+        CombinedItemContainer inv =
+            InventoryComponent.getCombined(store, ref, InventoryComponent.HOTBAR_FIRST);
+        GoldAccount account = AetherhavenEconomy.account(ref, store, inv);
         EconomyProvider provider = AetherhavenEconomy.provider();
         Balance yours = account != null ? provider.balance(account) : provider.balance();
         Balance treasury =
@@ -520,7 +524,9 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, pr.getUuid());
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, pr.getUuid());
-        GoldAccount account = AetherhavenEconomy.account(ref, store);
+        CombinedItemContainer inv =
+            InventoryComponent.getCombined(store, ref, InventoryComponent.HOTBAR_FIRST);
+        GoldAccount account = AetherhavenEconomy.account(ref, store, inv);
         return account != null && GoldCoinPayment.canAfford(payerTown, account, price, allowTreasury);
     }
 
