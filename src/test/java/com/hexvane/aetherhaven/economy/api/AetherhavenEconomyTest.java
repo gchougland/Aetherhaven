@@ -115,6 +115,11 @@ class AetherhavenEconomyTest {
         assertEquals("12", balance.message().getRawText());
         assertEquals(new Balance.Whole(first, 0), first.balance());
         assertNotEquals(balance, first.balance(new MemoryAccount(12), new MemoryAccount(1)));
+        assertEquals(new Balance.Whole(first, 5), first.balance(new MemoryAccount(-10), new MemoryAccount(5)));
+        assertEquals(
+            new Balance.Whole(first, Long.MAX_VALUE),
+            first.balance(new MemoryAccount(Long.MAX_VALUE - 2L), new MemoryAccount(10))
+        );
     }
 
     @Test void coinItemKeepsTheTreasuryInTheTownRecord() {

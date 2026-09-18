@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.hud;
 
+import com.hexvane.aetherhaven.economy.api.Balance;
 import java.util.List;
 import javax.annotation.Nonnull;
 
@@ -12,9 +13,7 @@ public record AetherhavenHudSnapshot(
     float backgroundOpacity,
     @Nonnull String dateText,
     @Nonnull String clockText,
-    long inventoryCoins,
-    long treasuryCoins,
-    long totalCoins,
+    @Nonnull Balance gold,
     @Nonnull List<HudQuestEntry> quests
 ) {
     public AetherhavenHudSnapshot {

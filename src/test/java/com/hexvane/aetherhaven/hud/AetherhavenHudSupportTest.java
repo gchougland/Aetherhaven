@@ -8,16 +8,6 @@ import org.junit.jupiter.api.Test;
 @Tag("town")
 final class AetherhavenHudSupportTest {
     @Test
-    void combinedGoldUsesOnlyTheSumAndSaturates() {
-        assertEquals(125L, AetherhavenHudSnapshotService.combinedGold(25L, 100L));
-        assertEquals(5L, AetherhavenHudSnapshotService.combinedGold(-10L, 5L));
-        assertEquals(
-            Long.MAX_VALUE,
-            AetherhavenHudSnapshotService.combinedGold(Long.MAX_VALUE - 2L, 10L)
-        );
-    }
-
-    @Test
     void parsesAndClampsSavedPanelPlacement() {
         assertEquals(
             new HudPanelPlacement(HudPlacement.BOTTOM_RIGHT, 4000, 0),

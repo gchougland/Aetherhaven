@@ -33,6 +33,14 @@ public final class GoldCoinPayment {
         return AetherhavenConstants.ITEM_GOLD_COIN;
     }
 
+    /**
+     * Whether a reward of {@code itemId} shows as gold drawn by the economy provider rather than as the item: the
+     * coin under a provider of its own. Under the built-in economy the coin is an item and shows as one.
+     */
+    public static boolean isDrawnAsGold(@Nonnull String itemId) {
+        return !AetherhavenEconomy.usesCoinItem() && coinItemId().equals(itemId.trim());
+    }
+
     /** When treasury spend is not allowed, only the player's gold counts toward affordability. */
     public static long totalAvailable(@Nullable TownRecord town, @Nonnull GoldAccount account, boolean allowTreasuryDebit) {
         if (!allowTreasuryDebit || town == null) {

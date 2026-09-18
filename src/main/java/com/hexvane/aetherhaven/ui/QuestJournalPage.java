@@ -10,6 +10,8 @@ import com.hexvane.aetherhaven.difficulty.DifficultyPreset;
 import com.hexvane.aetherhaven.difficulty.DifficultyResolver;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
 import com.hexvane.aetherhaven.dialogue.DialogueActionExecutor;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.guide.GuideMarkdownUiAppender;
 import com.hexvane.aetherhaven.guide.GuideScheduleWeekAppender;
 import com.hexvane.aetherhaven.guide.GuideTopicFile;
@@ -133,6 +135,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
     private static final int MAX_GUIDE_GIFT_BLOCKS = 48;
     /** Icons per grid chunk (same widget as town gift history). */
     private static final int MAX_ICONS_PER_GUIDE_GIFT_GRID = 400;
+    /** Size of the reward row's text, the provider draws gold rewards to it. */
+    private static final int REWARD_COINS_FONT_SIZE = 16;
 
     private boolean templateAppended;
     @Nullable
@@ -2317,9 +2321,20 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         commandBuilder.set("#RewardReputationLine.Visible", false);
         commandBuilder.set("#RewardReputationLine.TextSpans", Message.raw(""));
         commandBuilder.set("#RewardFallback.Visible", false);
+        applyRewardCoins(commandBuilder, 0L);
         commandBuilder.set("#RewardSlot.Slots", new ItemGridSlot[]{new ItemGridSlot()});
         commandBuilder.set("#RewardQuantity.TextSpans", Message.raw(""));
         commandBuilder.set("#RewardTitle.TextSpans", Message.raw(""));
+    }
+
+    /** Gold among the rewards, drawn by the provider next to the item slot, or nothing. */
+    private static void applyRewardCoins(@Nonnull UICommandBuilder commandBuilder, long coins) {
+        commandBuilder.set("#RewardCoins.Visible", coins > 0L);
+        if (coins > 0L) {
+            AetherhavenEconomy.show(commandBuilder, "#RewardCoins", coins, REWARD_COINS_FONT_SIZE);
+        } else {
+            commandBuilder.clear("#RewardCoins");
+        }
     }
 
     private static void applyQuestRewardPreview(
@@ -2332,8 +2347,16 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         boolean hasItem = itemRw != null;
         boolean hasRep = repRw != null;
 
-        if (hasItem) {
+        if (hasItem && GoldCoinPayment.isDrawnAsGold(itemRw.itemId())) {
             commandBuilder.set("#RewardRow.Visible", true);
+            applyRewardCoins(commandBuilder, itemRw.count());
+            commandBuilder.set("#RewardSlotWrap.Visible", false);
+            commandBuilder.set("#RewardTextCluster.Visible", false);
+        } else if (hasItem) {
+            commandBuilder.set("#RewardRow.Visible", true);
+            applyRewardCoins(commandBuilder, 0L);
+            commandBuilder.set("#RewardSlotWrap.Visible", true);
+            commandBuilder.set("#RewardTextCluster.Visible", true);
             ItemGridSlot rewardSlot = AetherhavenUiItemGrids.slotForKnownItem(itemRw.itemId(), itemRw.count());
             commandBuilder.set(
                 "#RewardSlot.Slots",
@@ -2350,6 +2373,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             }
         } else {
             commandBuilder.set("#RewardRow.Visible", false);
+            applyRewardCoins(commandBuilder, 0L);
             commandBuilder.set("#RewardSlot.Slots", new ItemGridSlot[]{new ItemGridSlot()});
             commandBuilder.set("#RewardQuantity.TextSpans", Message.raw(""));
             commandBuilder.set("#RewardTitle.TextSpans", Message.raw(""));
@@ -2391,14 +2415,29 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         @Nonnull Store<EntityStore> store,
         @Nonnull TownRecord town
     ) {
-        List<com.hexvane.aetherhaven.quest.data.QuestReward> itemRewards = QuestBoardService.itemRewards(slot);
+        List<com.hexvane.aetherhaven.quest.data.QuestReward> itemRewards = new ArrayList<>();
+        long coins = 0L;
+        for (com.hexvane.aetherhaven.quest.data.QuestReward itemRw : QuestBoardService.itemRewards(slot)) {
+            if (GoldCoinPayment.isDrawnAsGold(itemRw.itemId())) {
+                coins += Math.max(1, itemRw.count());
+            } else {
+                itemRewards.add(itemRw);
+            }
+        }
         QuestRewardService.ReputationRewardPreview repRw = QuestBoardService.firstReputationReward(slot);
-        boolean hasItems = !itemRewards.isEmpty();
+        boolean hasItems = coins > 0L || !itemRewards.isEmpty();
         boolean hasRep = repRw != null;
 
         if (hasItems) {
             commandBuilder.set("#RewardRow.Visible", true);
-            if (itemRewards.size() == 1) {
+            applyRewardCoins(commandBuilder, coins);
+            commandBuilder.set("#RewardSlotWrap.Visible", !itemRewards.isEmpty());
+            if (itemRewards.isEmpty()) {
+                commandBuilder.set("#RewardTextCluster.Visible", false);
+                commandBuilder.set("#RewardSlot.Slots", new ItemGridSlot[]{new ItemGridSlot()});
+                commandBuilder.set("#RewardQuantity.TextSpans", Message.raw(""));
+                commandBuilder.set("#RewardTitle.TextSpans", Message.raw(""));
+            } else if (itemRewards.size() == 1) {
                 com.hexvane.aetherhaven.quest.data.QuestReward itemRw = itemRewards.get(0);
                 commandBuilder.set("#RewardTextCluster.Visible", true);
                 commandBuilder.set(
@@ -2427,6 +2466,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             }
         } else {
             commandBuilder.set("#RewardRow.Visible", false);
+            applyRewardCoins(commandBuilder, 0L);
             commandBuilder.set("#RewardTextCluster.Visible", false);
             commandBuilder.set("#RewardSlot.Slots", new ItemGridSlot[]{new ItemGridSlot()});
             commandBuilder.set("#RewardQuantity.TextSpans", Message.raw(""));

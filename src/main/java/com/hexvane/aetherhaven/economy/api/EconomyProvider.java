@@ -114,13 +114,15 @@ public interface EconomyProvider {
 
     /**
      * What {@code accounts} hold together, taken now, exact in the provider's unit, to draw or to write. No account
-     * holds nothing. The sum of {@link GoldAccount#balance()} by default, a whole number of coins.
+     * holds nothing. The sum of {@link GoldAccount#balance()} by default, a whole number of coins: a negative
+     * balance counts as nothing and the sum stops at {@link Long#MAX_VALUE}, the HUD draws it every half second.
      */
     @Nonnull
     default Balance balance(@Nonnull GoldAccount... accounts) {
         long sum = 0L;
         for (GoldAccount account : accounts) {
-            sum = Math.addExact(sum, account.balance());
+            long held = Math.max(0L, account.balance());
+            sum = held > Long.MAX_VALUE - sum ? Long.MAX_VALUE : sum + held;
         }
         return new Balance.Whole(this, sum);
     }

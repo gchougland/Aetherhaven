@@ -193,7 +193,14 @@ $C.@PageOverlay {
                       Anchor: (Bottom: 8);
                       Visible: false;
 
-                      Group {
+                      // Gold among the rewards, drawn by the economy provider when the coin is not an item.
+                      Group #RewardCoins {
+                        LayoutMode: Middle;
+                        Anchor: (Height: @RewardSlotSize, Right: 12);
+                        Visible: false;
+                      }
+
+                      Group #RewardSlotWrap {
                         LayoutMode: Middle;
                         Anchor: (Width: @RewardSlotSize, Height: @RewardSlotSize, Right: 12);
 

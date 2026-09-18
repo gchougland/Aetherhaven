@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.hud;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.Balance;
 import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.questboard.QuestBoardCatalog;
@@ -78,8 +79,7 @@ public final class AetherhavenHudSnapshotService {
     ) {
         Ref<EntityStore> playerEntity = playerRef.getReference();
         GoldAccount account = playerEntity != null ? AetherhavenEconomy.account(playerEntity, store) : null;
-        long inventoryCoins = account != null ? account.balance() : 0L;
-        long treasuryCoins = town != null ? AetherhavenEconomy.townAccount(town).balance() : 0L;
+        Balance gold = gold(account, town);
         List<HudQuestEntry> quests =
             preferences.isHudShowQuests()
                 ? questEntries(town, worldProgress, playerProgress, store, preferences.getPinnedQuestIds())
@@ -92,9 +92,7 @@ public final class AetherhavenHudSnapshotService {
             preferences.getHudBackgroundOpacity(),
             AetherhavenCalendar.formatDate(gameTime),
             AetherhavenCalendar.formatClock(gameTime),
-            inventoryCoins,
-            treasuryCoins,
-            combinedGold(inventoryCoins, treasuryCoins),
+            gold,
             quests
         );
     }
@@ -190,12 +188,16 @@ public final class AetherhavenHudSnapshotService {
         return List.copyOf(entries);
     }
 
-    public static long combinedGold(long left, long right) {
-        long safeLeft = Math.max(0L, left);
-        long safeRight = Math.max(0L, right);
-        if (safeRight > 0L && safeLeft > Long.MAX_VALUE - safeRight) {
-            return Long.MAX_VALUE;
+    /** What the player and their town hold together, as the provider draws it; nothing when neither is known. */
+    @Nonnull
+    static Balance gold(@Nullable GoldAccount account, @Nullable TownRecord town) {
+        List<GoldAccount> accounts = new ArrayList<>(2);
+        if (account != null) {
+            accounts.add(account);
         }
-        return safeLeft + safeRight;
+        if (town != null) {
+            accounts.add(AetherhavenEconomy.townAccount(town));
+        }
+        return AetherhavenEconomy.provider().balance(accounts.toArray(GoldAccount[]::new));
     }
 }
