@@ -12,6 +12,7 @@ import com.hexvane.aetherhaven.difficulty.EffectiveBuildingCosts;
 import com.hexvane.aetherhaven.difficulty.TownDifficultySettings;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.Balance;
 import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.festival.FestivalService;
 import com.hexvane.aetherhaven.inventory.BenchAdjacentChestUtil;
@@ -368,7 +369,11 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 "#TreasuryLabel.TextSpans",
                 Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.treasuryGold")
             );
-            AetherhavenEconomy.show(commandBuilder, "#TreasuryAvailable", spendableGold, TREASURY_FONT_SIZE);
+            Balance available =
+                account != null
+                    ? GoldCoinPayment.available(treasuryTown, account, treasuryPerm)
+                    : AetherhavenEconomy.provider().balance();
+            AetherhavenEconomy.show(commandBuilder, "#TreasuryAvailable", available, TREASURY_FONT_SIZE);
             AetherhavenEconomy.show(commandBuilder, "#TreasuryRequired", goldCost, TREASURY_FONT_SIZE);
             String color = plotReqBypassCreative || spendableGold >= goldCost ? "#3d913f" : "#962f2f";
             commandBuilder.set("#TreasuryLabel.Style.TextColor", color);

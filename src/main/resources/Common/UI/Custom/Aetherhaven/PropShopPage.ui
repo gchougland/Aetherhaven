@@ -156,10 +156,32 @@ Group #PropShopRoot {
           Text: "";
         }
 
-        Label #FundsLine {
-          Style: (...$C.@DefaultLabelStyle, TextColor: #8a8070, FontSize: 13, Wrap: true);
+        // "Your coins: [balance]  Town treasury: [balance]", the balances drawn by the economy provider.
+        Group #FundsLine {
+          LayoutMode: Left;
           Anchor: (Bottom: 8);
-          Text: "";
+
+          Label #YoursText {
+            Style: (...$C.@DefaultLabelStyle, TextColor: #8a8070, FontSize: 13, VerticalAlignment: Center);
+            Anchor: (Right: 4);
+            Text: "";
+          }
+
+          Group #Yours {
+            LayoutMode: Middle;
+            Anchor: (Vertical: 0);
+          }
+
+          Label #TreasuryText {
+            Style: (...$C.@DefaultLabelStyle, TextColor: #8a8070, FontSize: 13, VerticalAlignment: Center);
+            Anchor: (Left: 8, Right: 4);
+            Text: "";
+          }
+
+          Group #Treasury {
+            LayoutMode: Middle;
+            Anchor: (Vertical: 0);
+          }
         }
 
         $C.@TextButton #BuyButton {

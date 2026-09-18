@@ -312,7 +312,7 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
             boolean goldOk = goldHeld >= goldNeed;
             Message goldLine =
                 Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed")
-                    .param("held", AetherhavenEconomy.provider().amount(goldHeld))
+                    .param("held", GoldCoinPayment.available(town, account, allowTreasuryGold).message())
                     .param("need", AetherhavenEconomy.provider().amount(goldNeed))
                     .color(goldOk ? TOOLTIP_OK_COLOR : TOOLTIP_BAD_COLOR);
             body = Message.join(body, Message.raw("\n"), goldLine);

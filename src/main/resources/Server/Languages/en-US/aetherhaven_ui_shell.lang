@@ -3,7 +3,7 @@
 
 # === UI: town treasury (messages & debug tax) ===
 # UI — treasury
-aetherhaven.ui.treasury.coinsLine=In the treasury: {count}
+aetherhaven.ui.treasury.coinsLine=In the treasury:
 aetherhaven.ui.treasury.depositNoCoins=You have no gold coins to deposit.
 aetherhaven.ui.treasury.depositRemoveFailed=Could not remove coins from inventory.
 aetherhaven.ui.treasury.deposited=Deposited {count}.

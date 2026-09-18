@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.economy;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.Balance;
 import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
@@ -38,6 +39,15 @@ public final class GoldCoinPayment {
             return account.balance();
         }
         return Math.addExact(AetherhavenEconomy.townAccount(town).balance(), account.balance());
+    }
+
+    /** What {@link #totalAvailable} counts, exact, to draw or to write. */
+    @Nonnull
+    public static Balance available(@Nullable TownRecord town, @Nonnull GoldAccount account, boolean allowTreasuryDebit) {
+        if (!allowTreasuryDebit || town == null) {
+            return AetherhavenEconomy.provider().balance(account);
+        }
+        return AetherhavenEconomy.provider().balance(AetherhavenEconomy.townAccount(town), account);
     }
 
     public static boolean canAfford(

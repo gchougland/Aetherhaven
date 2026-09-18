@@ -8,6 +8,8 @@ import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
 import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.Balance;
+import com.hexvane.aetherhaven.economy.api.EconomyProvider;
 import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.plot.PlotBuildingStyles;
 import com.hexvane.aetherhaven.plot.PlotBuildingTypes;
@@ -104,6 +106,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     private static final long CRAFT_COST = AetherhavenConstants.PLOT_TOKEN_CRAFT_GOLD_COST;
     /** FontSize of the lines amounts are drawn in (#CostLine, the gold card). */
     private static final int GOLD_LINE_FONT_SIZE = 16;
+    private static final int FUNDS_LINE_FONT_SIZE = 15;
     /** Matches {@code PlotCraftingPage.ui} list height when the toolbar row is present. */
     private static final int BUILDING_LIST_HEIGHT_NORMAL = 418;
     /** Community / moderation tab with refresh/page controls and craft only. */
@@ -645,8 +648,9 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
 
         if (!moderationTab) {
-            long invCoins = account != null ? account.balance() : 0L;
-            long treasuryCoins = town != null ? AetherhavenEconomy.townAccount(town).balance() : 0L;
+            EconomyProvider provider = AetherhavenEconomy.provider();
+            Balance yours = account != null ? provider.balance(account) : provider.balance();
+            Balance treasury = town != null ? provider.balance(AetherhavenEconomy.townAccount(town)) : provider.balance();
             int unlockPoints = PlotTokenUnlockService.getUnlockPoints(ref, store);
 
             commandBuilder.set("#UnlockPointsLine.Visible", true);
@@ -662,11 +666,15 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             );
             AetherhavenEconomy.show(commandBuilder, "#CostLine #Cost", CRAFT_COST, GOLD_LINE_FONT_SIZE);
             commandBuilder.set(
-                "#FundsLine.TextSpans",
+                "#FundsLine #YoursText.TextSpans",
                 Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.fundsLine")
-                    .param("inv", Message.raw(String.valueOf(invCoins)))
-                    .param("treasury", Message.raw(String.valueOf(treasuryCoins)))
             );
+            AetherhavenEconomy.show(commandBuilder, "#FundsLine #Yours", yours, FUNDS_LINE_FONT_SIZE);
+            commandBuilder.set(
+                "#FundsLine #TreasuryText.TextSpans",
+                Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.fundsLine.treasury")
+            );
+            AetherhavenEconomy.show(commandBuilder, "#FundsLine #Treasury", treasury, FUNDS_LINE_FONT_SIZE);
         } else {
             commandBuilder.set("#UnlockPointsLine.Visible", false);
         }

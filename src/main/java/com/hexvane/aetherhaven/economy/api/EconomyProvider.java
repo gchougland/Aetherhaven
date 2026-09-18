@@ -19,9 +19,9 @@ import javax.annotation.Nullable;
  *
  * <p>Every {@code long} is in Aetherhaven gold coins, never negative, and stands for something Aetherhaven owns: a
  * price, a loot roll, the tithe, a refund. A provider with another unit converts those. What is stored (a balance)
- * is the provider's, in its own unit, and moving a typed amount between two balances is the provider's too
- * ({@link #transfer}): Aetherhaven never holds a converted amount. The provider persists its balances itself,
- * Aetherhaven persists nothing on its behalf.
+ * is the provider's, in its own unit, shown as it is ({@link #balance}), and moving a typed amount between two
+ * balances is the provider's too ({@link #transfer}): Aetherhaven never holds a converted amount. The provider
+ * persists its balances itself, Aetherhaven persists nothing on its behalf.
  */
 public interface EconomyProvider {
     /** Stable id for logs, e.g. {@code "aetherhaven:coins"}. */
@@ -105,19 +105,23 @@ public interface EconomyProvider {
     Message amount(long amount);
 
     /**
-     * An account's balance as text, exact in the provider's unit (a balance finer than a coin shows whole). The
-     * rounded {@link GoldAccount#balance()} by default.
-     */
-    @Nonnull
-    default Message amount(@Nonnull GoldAccount account) {
-        return amount(account.balance());
-    }
-
-    /**
      * Draws an amount into {@code selector}, an empty group of a page (a price tag, a column of the tithe sheet, a
      * dialogue choice). {@code fontSize} is that of the text next to the group: the provider draws its digits at
      * that size and its pictures to the height of such a line. Aetherhaven clears the group before calling
      * ({@link AetherhavenEconomy#show}), so the provider only appends. The coin icon and a number by default.
      */
     void show(@Nonnull UICommandBuilder builder, @Nonnull String selector, long amount, int fontSize);
+
+    /**
+     * What {@code accounts} hold together, taken now, exact in the provider's unit, to draw or to write. No account
+     * holds nothing. The sum of {@link GoldAccount#balance()} by default, a whole number of coins.
+     */
+    @Nonnull
+    default Balance balance(@Nonnull GoldAccount... accounts) {
+        long sum = 0L;
+        for (GoldAccount account : accounts) {
+            sum = Math.addExact(sum, account.balance());
+        }
+        return new Balance.Whole(this, sum);
+    }
 }

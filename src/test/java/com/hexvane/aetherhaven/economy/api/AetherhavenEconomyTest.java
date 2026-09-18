@@ -109,8 +109,12 @@ class AetherhavenEconomyTest {
         assertEquals(20, from.balance());
     }
 
-    @Test void accountBalanceIsWrittenWithAmountByDefault() {
-        assertEquals("7", first.amount(new MemoryAccount(7)).getRawText());
+    @Test void balanceIsTheSumOfTheAccountsInWholeCoinsByDefault() {
+        Balance balance = first.balance(new MemoryAccount(7), new MemoryAccount(5));
+        assertEquals(new Balance.Whole(first, 12), balance);
+        assertEquals("12", balance.message().getRawText());
+        assertEquals(new Balance.Whole(first, 0), first.balance());
+        assertNotEquals(balance, first.balance(new MemoryAccount(12), new MemoryAccount(1)));
     }
 
     @Test void coinItemKeepsTheTreasuryInTheTownRecord() {

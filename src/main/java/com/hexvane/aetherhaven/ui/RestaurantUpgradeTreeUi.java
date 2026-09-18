@@ -167,7 +167,7 @@ public final class RestaurantUpgradeTreeUi {
             boolean goldOk = goldHeld >= needGold;
             Message goldLine =
                 t("aetherhaven.ui.restaurantUpgrades.tooltip.goldNeed")
-                    .param("held", AetherhavenEconomy.provider().amount(goldHeld))
+                    .param("held", GoldCoinPayment.available(town, account, allowTreasuryGold).message())
                     .param("need", AetherhavenEconomy.provider().amount(needGold))
                     .color(goldOk ? TOOLTIP_OK : TOOLTIP_BAD);
             body = Message.join(body, Message.raw(firstCost ? "\n\n" : "\n"), goldLine);

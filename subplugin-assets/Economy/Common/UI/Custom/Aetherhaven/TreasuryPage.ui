@@ -90,8 +90,26 @@ $C.@PageOverlay {
           Group #CoinsTabContent {
             LayoutMode: Top;
 
-            Label #Balance {
+            // "In the treasury: [balance]", the balance drawn by the economy provider.
+            Group #BalanceLine {
+              LayoutMode: Left;
               Anchor: (Bottom: 12);
+
+              Label #BalanceText {
+                Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center);
+                Anchor: (Right: 4);
+              }
+
+              Group #Balance {
+                LayoutMode: Middle;
+                Anchor: (Vertical: 0);
+              }
+            }
+
+            // Why the treasury cannot be used, in place of the balance line.
+            Label #Notice {
+              Anchor: (Bottom: 12);
+              Visible: false;
               Style: (...$C.@DefaultLabelStyle, Wrap: true);
             }
 

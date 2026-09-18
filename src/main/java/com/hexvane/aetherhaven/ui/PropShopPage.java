@@ -6,6 +6,8 @@ import com.hexvane.aetherhaven.blockpalette.BlockPaletteIconResolver;
 import com.hexvane.aetherhaven.blockpalette.BlockPaletteShopPricing;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
+import com.hexvane.aetherhaven.economy.api.Balance;
+import com.hexvane.aetherhaven.economy.api.EconomyProvider;
 import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.pathtool.PathToolWidthPreviewHelper;
 import com.hexvane.aetherhaven.plot.PlotCraftingPrefabPreview;
@@ -47,9 +49,10 @@ import javax.annotation.Nullable;
 /** Cap'n Clive dialogue shop: list/grid of today's props with prefab preview and buy. */
 public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropShopPage.PageData> {
     private static final String MSG = "aetherhaven_prop_shop.aetherhaven.propShop";
-    /** Font sizes of the lines amounts are drawn in: the price under the selected item, the reroll button's label. */
+    /** Font sizes of the lines amounts are drawn in: the price under the selected item, the reroll button's label, the funds line. */
     private static final int PRICE_FONT_SIZE = 15;
     private static final int BUTTON_FONT_SIZE = 17;
+    private static final int FUNDS_FONT_SIZE = 13;
     /** $C.@ColorButtonText and $C.@ColorDisabled of Common.ui. */
     private static final String BUTTON_TEXT = "#bfcdd5";
     private static final String BUTTON_TEXT_DISABLED = "#797b7c";
@@ -177,7 +180,7 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
             commandBuilder.set("#SelectedName.TextSpans", Message.raw(""));
             commandBuilder.clear("#PriceLine");
             commandBuilder.set("#StockLine.TextSpans", Message.raw(""));
-            commandBuilder.set("#FundsLine.TextSpans", Message.raw(""));
+            commandBuilder.set("#FundsLine.Visible", false);
             return;
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
@@ -188,7 +191,7 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
             commandBuilder.set("#SelectedName.TextSpans", Message.raw(""));
             commandBuilder.clear("#PriceLine");
             commandBuilder.set("#StockLine.TextSpans", Message.raw(""));
-            commandBuilder.set("#FundsLine.TextSpans", Message.raw(""));
+            commandBuilder.set("#FundsLine.Visible", false);
             return;
         }
         long epochDay = epochDay(store);
@@ -476,22 +479,22 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         World world = store.getExternalData().getWorld();
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (world == null || pr == null) {
-            commandBuilder.set("#FundsLine.TextSpans", Message.raw(""));
+            commandBuilder.set("#FundsLine.Visible", false);
             return;
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, pr.getUuid());
         boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, pr.getUuid());
         GoldAccount account = AetherhavenEconomy.account(ref, store);
-        long invCoins = account != null ? account.balance() : 0L;
-        long treasuryCoins =
-            allowTreasury && payerTown != null ? AetherhavenEconomy.townAccount(payerTown).balance() : 0L;
-        commandBuilder.set(
-            "#FundsLine.TextSpans",
-            Message.translation(MSG + ".funds")
-                .param("inv", String.valueOf(invCoins))
-                .param("treasury", String.valueOf(treasuryCoins))
-        );
+        EconomyProvider provider = AetherhavenEconomy.provider();
+        Balance yours = account != null ? provider.balance(account) : provider.balance();
+        Balance treasury =
+            allowTreasury && payerTown != null ? provider.balance(AetherhavenEconomy.townAccount(payerTown)) : provider.balance();
+        commandBuilder.set("#FundsLine.Visible", true);
+        commandBuilder.set("#FundsLine #YoursText.TextSpans", Message.translation(MSG + ".funds"));
+        AetherhavenEconomy.show(commandBuilder, "#FundsLine #Yours", yours, FUNDS_FONT_SIZE);
+        commandBuilder.set("#FundsLine #TreasuryText.TextSpans", Message.translation(MSG + ".funds.treasury"));
+        AetherhavenEconomy.show(commandBuilder, "#FundsLine #Treasury", treasury, FUNDS_FONT_SIZE);
     }
     /** The reroll button is composed by hand, so its label takes the disabled colour itself. */
     private static void setRerollDisabled(@Nonnull UICommandBuilder commandBuilder, boolean disabled) {

@@ -76,6 +76,12 @@ public final class AetherhavenEconomy {
         provider().show(builder, selector, amount, fontSize);
     }
 
+    /** Draws {@code balance} into {@code selector} the same way, with the balance's own {@link Balance#show show}. */
+    public static void show(@Nonnull UICommandBuilder builder, @Nonnull String selector, @Nonnull Balance balance, int fontSize) {
+        builder.clear(selector);
+        balance.show(builder, selector, fontSize);
+    }
+
     /** Shortcut for {@code provider().account(ref, store)}. */
     @Nullable
     public static GoldAccount account(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {

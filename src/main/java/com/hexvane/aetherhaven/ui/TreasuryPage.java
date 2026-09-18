@@ -43,6 +43,7 @@ import javax.annotation.Nullable;
 public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<TreasuryPage.PageData> {
     private static final String TAX_ROWS = "#TaxResidentRows";
     /** Font sizes of the lines amounts are drawn in: the sheet ($C.@DefaultLabelStyle), its total, a resident row. */
+    private static final int BALANCE_FONT_SIZE = 16;
     private static final int SHEET_FONT_SIZE = 16;
     private static final int SHEET_TOTAL_FONT_SIZE = 15;
     private static final int ROW_FONT_SIZE = 13;
@@ -74,14 +75,14 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
         World world = store.getExternalData().getWorld();
         if (plugin == null) {
             applyBrokenTreasuryUi(commandBuilder);
-            commandBuilder.set("#Balance.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
+            commandBuilder.set("#Notice.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
             return;
         }
         Store<ChunkStore> cs = treasuryBlockRef.getStore();
         TreasuryBlock tb = cs.getComponent(treasuryBlockRef, TreasuryBlock.getComponentType());
         if (tb == null || tb.getTownId().isBlank()) {
             applyBrokenTreasuryUi(commandBuilder);
-            commandBuilder.set("#Balance.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.treasuryNotLinked"));
+            commandBuilder.set("#Notice.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.treasuryNotLinked"));
             return;
         }
         UUID townUuid;
@@ -89,27 +90,29 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
             townUuid = UUID.fromString(tb.getTownId().trim());
         } catch (IllegalArgumentException e) {
             applyBrokenTreasuryUi(commandBuilder);
-            commandBuilder.set("#Balance.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.invalidTownLink"));
+            commandBuilder.set("#Notice.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.invalidTownLink"));
             return;
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.getTown(townUuid);
         if (town == null) {
             applyBrokenTreasuryUi(commandBuilder);
-            commandBuilder.set("#Balance.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.townNotFound"));
+            commandBuilder.set("#Notice.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.townNotFound"));
             return;
         }
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         if (uc == null || !town.playerCanOpenTreasuryPanel(uc.getUuid())) {
             applyBrokenTreasuryUi(commandBuilder);
             commandBuilder.set(
-                "#Balance.TextSpans",
+                "#Notice.TextSpans",
                 Message.translation("aetherhaven_common.aetherhaven.common.noTreasuryPanelPermission")
             );
             return;
         }
 
         commandBuilder.set("#TreasuryTabStrip.Visible", true);
+        commandBuilder.set("#BalanceLine.Visible", true);
+        commandBuilder.set("#Notice.Visible", false);
         boolean coinsTab = treasuryTab == 0;
         commandBuilder.set("#CoinsTabContent.Visible", coinsTab);
         commandBuilder.set("#TaxTabContent.Visible", !coinsTab);
@@ -131,9 +134,11 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
 
         GoldAccount treasury = AetherhavenEconomy.townAccount(town);
         commandBuilder.set(
-            "#Balance.TextSpans",
+            "#BalanceLine #BalanceText.TextSpans",
             Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.coinsLine")
-                .param("count", AetherhavenEconomy.provider().amount(treasury))
+        );
+        AetherhavenEconomy.show(
+            commandBuilder, "#BalanceLine #Balance", AetherhavenEconomy.provider().balance(treasury), BALANCE_FONT_SIZE
         );
         commandBuilder.set(
             "#TreasuryAmountField.PlaceholderText",
@@ -162,6 +167,8 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
 
     private static void applyBrokenTreasuryUi(@Nonnull UICommandBuilder commandBuilder) {
         commandBuilder.set("#TreasuryTabStrip.Visible", false);
+        commandBuilder.set("#BalanceLine.Visible", false);
+        commandBuilder.set("#Notice.Visible", true);
         commandBuilder.set("#CoinsTabContent.Visible", true);
         commandBuilder.set("#TaxTabContent.Visible", false);
         commandBuilder.clear(TAX_ROWS);

@@ -371,10 +371,32 @@ $C.@PageOverlay {
               }
             }
 
-            Label #FundsLine {
-              Style: (...$C.@DefaultLabelStyle, TextColor: #8a8070, Wrap: true, FontSize: 15);
+            // "Your coins: [balance] · Town treasury: [balance]", the balances drawn by the economy provider.
+            Group #FundsLine {
+              LayoutMode: Left;
               Anchor: (Bottom: 10);
-              Text: "";
+
+              Label #YoursText {
+                Style: (...$C.@DefaultLabelStyle, TextColor: #8a8070, FontSize: 15, VerticalAlignment: Center);
+                Anchor: (Right: 4);
+                Text: "";
+              }
+
+              Group #Yours {
+                LayoutMode: Middle;
+                Anchor: (Vertical: 0);
+              }
+
+              Label #TreasuryText {
+                Style: (...$C.@DefaultLabelStyle, TextColor: #8a8070, FontSize: 15, VerticalAlignment: Center);
+                Anchor: (Horizontal: 4);
+                Text: "";
+              }
+
+              Group #Treasury {
+                LayoutMode: Middle;
+                Anchor: (Vertical: 0);
+              }
             }
 
             Label #UnlockPointsLine {
