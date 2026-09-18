@@ -3,11 +3,11 @@
 
 # === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
 aetherhaven.blacksmith.repair.page.title=Repair gear
-aetherhaven.blacksmith.repair.page.hint=Price depends on wear. Up to {maxCost} per item. Click a row to repair it, or use Fix all at the top.
+aetherhaven.blacksmith.repair.page.hint.cost=Price depends on wear. An item costs up to
+aetherhaven.blacksmith.repair.page.hint=Click a row to repair it, or use Fix all at the top.
 aetherhaven.blacksmith.repair.page.item=Item
 aetherhaven.blacksmith.repair.page.cost=Cost
 aetherhaven.blacksmith.repair.page.durability=Durability
-aetherhaven.blacksmith.repair.rowCost={cost}
 aetherhaven.blacksmith.repair.fixAll=Fix all
 aetherhaven.blacksmith.repair.fixAll.count={count} items
 aetherhaven.blacksmith.repair.fixAll.success=Fixed {count} items for {cost}. Good as new.

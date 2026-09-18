@@ -102,6 +102,8 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     private static final String TAB_COMMUNITY = "Community";
     private static final String TAB_MODERATION = "Moderation";
     private static final long CRAFT_COST = AetherhavenConstants.PLOT_TOKEN_CRAFT_GOLD_COST;
+    /** FontSize of the lines amounts are drawn in (#CostLine, the gold card). */
+    private static final int GOLD_LINE_FONT_SIZE = 16;
     /** Matches {@code PlotCraftingPage.ui} list height when the toolbar row is present. */
     private static final int BUILDING_LIST_HEIGHT_NORMAL = 418;
     /** Community / moderation tab with refresh/page controls and craft only. */
@@ -655,10 +657,10 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             );
 
             commandBuilder.set(
-                "#CostLine.TextSpans",
+                "#CostLine #CostText.TextSpans",
                 Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.costLine")
-                    .param("cost", AetherhavenEconomy.provider().amount(CRAFT_COST))
             );
+            AetherhavenEconomy.show(commandBuilder, "#CostLine #Cost", CRAFT_COST, GOLD_LINE_FONT_SIZE);
             commandBuilder.set(
                 "#FundsLine.TextSpans",
                 Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.fundsLine")
@@ -3319,11 +3321,13 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             b.set("#InfoCountsAsValue.TextSpans", Message.raw(String.join("\n", countsAsLabels)));
         }
 
-        Message buildCost = Message.join(AetherhavenEconomy.provider().amount(constructionGold), Message.raw(" to build from the town treasury"));
-        Message goldDetails = moderationTab
-            ? buildCost
-            : Message.join(AetherhavenEconomy.provider().amount(CRAFT_COST), Message.raw(" to craft plot token\n"), buildCost);
-        b.set("#InfoGoldValue.TextSpans", goldDetails);
+        b.set("#InfoGoldCraft.Visible", !moderationTab);
+        if (!moderationTab) {
+            AetherhavenEconomy.show(b, "#InfoGoldCraft #Gold", CRAFT_COST, GOLD_LINE_FONT_SIZE);
+            b.set("#InfoGoldCraft #Text.TextSpans", Message.raw("to craft plot token"));
+        }
+        AetherhavenEconomy.show(b, "#InfoGoldBuild #Gold", constructionGold, GOLD_LINE_FONT_SIZE);
+        b.set("#InfoGoldBuild #Text.TextSpans", Message.raw("to build from the town treasury"));
 
         List<String> missingMods = CommunityRequiredMods.missingPackNames(requiredMods);
         if (requiredMods.isEmpty()) {

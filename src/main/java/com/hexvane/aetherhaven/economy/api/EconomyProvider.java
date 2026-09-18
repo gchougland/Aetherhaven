@@ -97,9 +97,9 @@ public interface EconomyProvider {
     }
 
     /**
-     * An amount as text, for every sentence Aetherhaven prints one in: "5 gold" by default. Passed as a
-     * {@link Message#param(String, Message)} parameter, so a provider may return a translation, a raw string, or
-     * formatted text with its own images.
+     * An amount as text, for the places that hold text alone (a tooltip, a notification, a chat line): "5 gold"
+     * by default. Passed as a {@link Message#param(String, Message)} parameter, so a provider may return a
+     * translation, a raw string, or coloured spans. Pages and dialogues draw their amounts with {@link #show}.
      */
     @Nonnull
     Message amount(long amount);
@@ -114,8 +114,10 @@ public interface EconomyProvider {
     }
 
     /**
-     * Draws an amount into {@code selector}, an empty group of a page (the HUD, a price tag). Aetherhaven clears the
-     * group before calling, so the provider only appends. An icon and a number by default.
+     * Draws an amount into {@code selector}, an empty group of a page (a price tag, a column of the tithe sheet, a
+     * dialogue choice). {@code fontSize} is that of the text next to the group: the provider draws its digits at
+     * that size and its pictures to the height of such a line. Aetherhaven clears the group before calling
+     * ({@link AetherhavenEconomy#show}), so the provider only appends. The coin icon and a number by default.
      */
-    void show(@Nonnull UICommandBuilder builder, @Nonnull String selector, long amount);
+    void show(@Nonnull UICommandBuilder builder, @Nonnull String selector, long amount, int fontSize);
 }

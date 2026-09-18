@@ -109,6 +109,8 @@ import javax.annotation.Nullable;
 public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPage<PlotConstructionPage.PageData> {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final int BREAK_SETTINGS = 10;
+    /** FontSize of $C.@DefaultLabelStyle, the treasury line the amounts are drawn in. */
+    private static final int TREASURY_FONT_SIZE = 16;
     private static final String MATERIALS_GRID = "#MaterialsScroll #MaterialsGrid";
     private static final int MATERIAL_GRID_COLS = 6;
     private static final String MEMBER_ROWS = "#MemberRows";
@@ -365,13 +367,12 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             commandBuilder.set(
                 "#TreasuryLabel.TextSpans",
                 Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.treasuryGold")
-                    .param("available", AetherhavenEconomy.provider().amount(spendableGold))
-                    .param("required", AetherhavenEconomy.provider().amount(goldCost))
             );
-            commandBuilder.set(
-                "#TreasuryLabel.Style.TextColor",
-                plotReqBypassCreative || spendableGold >= goldCost ? "#3d913f" : "#962f2f"
-            );
+            AetherhavenEconomy.show(commandBuilder, "#TreasuryAvailable", spendableGold, TREASURY_FONT_SIZE);
+            AetherhavenEconomy.show(commandBuilder, "#TreasuryRequired", goldCost, TREASURY_FONT_SIZE);
+            String color = plotReqBypassCreative || spendableGold >= goldCost ? "#3d913f" : "#962f2f";
+            commandBuilder.set("#TreasuryLabel.Style.TextColor", color);
+            commandBuilder.set("#TreasurySlash.Style.TextColor", color);
         }
 
         boolean showMaterials = !hideConstructionDetails && !requiredMaterials.isEmpty();

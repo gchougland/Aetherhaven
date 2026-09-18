@@ -59,7 +59,7 @@ aetherhaven.ui.plotConstruction.updatedHome=Home assignment updated.
 aetherhaven.ui.plotConstruction.plotRemoved=Plot removed and plot token returned.
 aetherhaven.ui.plotConstruction.materialLine={item} x{need} (have {have})
 aetherhaven.ui.plotConstruction.materialsProgress={ready} of {total} materials ready
-aetherhaven.ui.plotConstruction.treasuryGold=Coins: {available} / {required}
+aetherhaven.ui.plotConstruction.treasuryGold=Coins:
 aetherhaven.ui.plotConstruction.couldNotLoadMembers=Could not load player data.
 
 # === UI: Gaia statue (small messages) ===

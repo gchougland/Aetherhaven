@@ -17,6 +17,8 @@ import javax.annotation.Nonnull;
 
 public final class ShopSpotStatusHud extends CustomUIHud {
     private static final String MSG = "aetherhaven_shop.aetherhaven.shop.hud";
+    /** FontSize of @ShopHudDetailStyle in ShopSpotStatusHud.ui, the line the price is drawn in. */
+    private static final int PRICE_FONT_SIZE = 17;
 
     public ShopSpotStatusHud(@Nonnull PlayerRef playerRef) {
         super(playerRef, AetherhavenConstants.SHOP_SPOT_HUD_KEY, 0);
@@ -78,11 +80,11 @@ public final class ShopSpotStatusHud extends CustomUIHud {
             b.set("#ItemLine.TextSpans", Message.translation(MSG + ".item").param("item", itemName));
             ShopPriceEntry entry = ShopSpotPricing.catalogEntry(plugin, itemId);
             long gold = ShopSpotPricing.goldPerBatch(plugin, record, itemId);
+            AetherhavenEconomy.show(b, "#PriceLine #Price", gold, PRICE_FONT_SIZE);
             if (entry.isBatched()) {
                 b.set(
-                    "#PriceLine.TextSpans",
+                    "#PriceLine #PriceText.TextSpans",
                     Message.translation(MSG + ".priceBatch")
-                        .param("gold", AetherhavenEconomy.provider().amount(gold))
                         .param("count", String.valueOf(entry.getBatchSize()))
                         .param("item", itemName)
                 );
@@ -94,10 +96,7 @@ public final class ShopSpotStatusHud extends CustomUIHud {
                         .param("items", String.valueOf(record.getStock()))
                 );
             } else {
-                b.set(
-                    "#PriceLine.TextSpans",
-                    Message.translation(MSG + ".price").param("gold", AetherhavenEconomy.provider().amount(gold))
-                );
+                b.set("#PriceLine #PriceText.TextSpans", Message.translation(MSG + ".price"));
                 b.set(
                     "#StockLine.TextSpans",
                     Message.translation(MSG + ".stock").param("n", String.valueOf(record.getStock()))

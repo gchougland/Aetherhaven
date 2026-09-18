@@ -337,13 +337,32 @@ $C.@PageOverlay {
             }
           }
 
+          // "Coins: [available] / [required]", the amounts drawn by the economy provider, the words
+          // green or red.
           Group #TreasuryRow {
-            LayoutMode: Top;
+            LayoutMode: Left;
             Visible: false;
             Anchor: (Bottom: 12);
 
             Label #TreasuryLabel {
-              Style: $C.@DefaultLabelStyle;
+              Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center);
+              Anchor: (Right: 4);
+            }
+
+            Group #TreasuryAvailable {
+              LayoutMode: Middle;
+              Anchor: (Vertical: 0);
+            }
+
+            Label #TreasurySlash {
+              Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center);
+              Anchor: (Horizontal: 4);
+              Text: "/";
+            }
+
+            Group #TreasuryRequired {
+              LayoutMode: Middle;
+              Anchor: (Vertical: 0);
             }
           }
 

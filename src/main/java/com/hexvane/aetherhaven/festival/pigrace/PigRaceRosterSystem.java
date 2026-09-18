@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.festival.pigrace;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.festival.FestivalRewardNotify;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -139,7 +140,7 @@ public final class PigRaceRosterSystem extends TickingSystem<EntityStore> {
                 name,
                 Message.translation(ROSTER_LANG + ".status.bet")
                     .param("pig", pig)
-                    .param("amount", String.valueOf(bet.amount())),
+                    .param("amount", AetherhavenEconomy.provider().amount(bet.amount())),
                 null,
                 false
             );

@@ -34,6 +34,12 @@ Button #Row {
     Anchor: (Right: 8);
   }
 
+  // What the choice costs in gold, drawn by the economy provider; empty for most choices.
+  Group #Cost {
+    LayoutMode: Middle;
+    Anchor: (Vertical: 0, Right: 8);
+  }
+
   Group #ItemRequirementsPanel {
     LayoutMode: Middle;
     Anchor: (Width: @DialogueItemGridWidth, Height: @DialogueItemGridHeight);

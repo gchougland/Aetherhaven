@@ -44,6 +44,8 @@ public final class ShopSpotBuyPage extends AetherhavenInteractiveCustomUIPage<Sh
     private static final String PRICE_COLOR_UNAFFORDABLE = "#e8a0a0";
     private static final String QTY_COLOR_OK = "#e8dcc8";
     private static final String QTY_COLOR_UNAFFORDABLE = "#e8a0a0";
+    /** FontSize of @ShopInfoDetailStyle and @QtyAmountStyle in ShopSpotBuyPage.ui, the lines amounts are drawn in. */
+    private static final int DETAIL_FONT_SIZE = 17;
 
     private boolean templateAppended;
     private int buyBatches = 1;
@@ -104,13 +106,13 @@ public final class ShopSpotBuyPage extends AetherhavenInteractiveCustomUIPage<Sh
         World world = store.getExternalData().getWorld();
         ShopSpotRecord record = resolveRecord(world, plugin);
         if (record == null || plugin == null) {
-            b.set("#QtyValue.TextSpans", Message.raw("1"));
+            b.set("#QtyValue #QtyText.TextSpans", Message.raw("1"));
             b.set("#BuyBtn.Disabled", true);
             return;
         }
         String itemId = record.getItemId();
         if (itemId == null) {
-            b.set("#QtyValue.TextSpans", Message.raw("1"));
+            b.set("#QtyValue #QtyText.TextSpans", Message.raw("1"));
             b.set("#BuyBtn.Disabled", true);
             return;
         }
@@ -124,13 +126,14 @@ public final class ShopSpotBuyPage extends AetherhavenInteractiveCustomUIPage<Sh
         long total = ShopSpotPricing.totalCost(gold, buyBatches);
         boolean canAfford = playerCanAfford(playerRef, store, record, total);
         b.set("#BuyBtn.Disabled", !canAfford);
-        b.set("#PriceLine.Style.TextColor", canAfford ? PRICE_COLOR_OK : PRICE_COLOR_UNAFFORDABLE);
-        b.set("#QtyValue.Style.TextColor", canAfford ? QTY_COLOR_OK : QTY_COLOR_UNAFFORDABLE);
+        b.set("#PriceLine #PriceText.Style.TextColor", canAfford ? PRICE_COLOR_OK : PRICE_COLOR_UNAFFORDABLE);
+        b.set("#QtyValue #QtyText.Style.TextColor", canAfford ? QTY_COLOR_OK : QTY_COLOR_UNAFFORDABLE);
+        AetherhavenEconomy.show(b, "#PriceLine #Price", gold, DETAIL_FONT_SIZE);
+        AetherhavenEconomy.show(b, "#QtyValue #Total", total, DETAIL_FONT_SIZE);
         if (batched) {
             b.set(
-                "#PriceLine.TextSpans",
+                "#PriceLine #PriceText.TextSpans",
                 Message.translation(MSG + ".priceBatch")
-                    .param("gold", AetherhavenEconomy.provider().amount(gold))
                     .param("count", String.valueOf(entry.getBatchSize()))
                     .param("item", itemName)
             );
@@ -140,19 +143,11 @@ public final class ShopSpotBuyPage extends AetherhavenInteractiveCustomUIPage<Sh
                     .param("batches", String.valueOf(maxBatches))
                     .param("items", String.valueOf(record.getStock()))
             );
-            b.set(
-                "#QtyValue.TextSpans",
-                Message.translation(MSG + ".qtyBatches")
-                    .param("n", String.valueOf(buyBatches))
-                    .param("total", AetherhavenEconomy.provider().amount(total))
-            );
+            b.set("#QtyValue #QtyText.TextSpans", Message.translation(MSG + ".qtyBatches").param("n", String.valueOf(buyBatches)));
         } else {
-            b.set("#PriceLine.TextSpans", Message.translation(MSG + ".price").param("gold", AetherhavenEconomy.provider().amount(gold)));
+            b.set("#PriceLine #PriceText.TextSpans", Message.translation(MSG + ".price"));
             b.set("#StockLine.TextSpans", Message.translation(MSG + ".stock").param("n", String.valueOf(record.getStock())));
-            b.set(
-                "#QtyValue.TextSpans",
-                Message.translation(MSG + ".qty").param("n", String.valueOf(buyBatches)).param("total", AetherhavenEconomy.provider().amount(total))
-            );
+            b.set("#QtyValue #QtyText.TextSpans", Message.translation(MSG + ".qty").param("n", String.valueOf(buyBatches)));
         }
     }
 

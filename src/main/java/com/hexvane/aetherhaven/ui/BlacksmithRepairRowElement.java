@@ -13,6 +13,9 @@ import javax.annotation.Nonnull;
 
 /** Row layout for {@code Aetherhaven/BlacksmithRepairElement.ui}. */
 public final class BlacksmithRepairRowElement extends ChoiceElement {
+    /** FontSize of the page's labels ($C.@DefaultLabelStyle), the line a price is drawn in. */
+    static final int FONT_SIZE = 16;
+
     private final ItemStack itemStack;
 
     public BlacksmithRepairRowElement(@Nonnull ItemStack itemStack, @Nonnull BlacksmithRepairInteraction interaction) {
@@ -32,10 +35,7 @@ public final class BlacksmithRepairRowElement extends ChoiceElement {
         commandBuilder.append("#ElementList", "Aetherhaven/BlacksmithRepairElement.ui");
         commandBuilder.set(selector + " #Icon.ItemId", this.itemStack.getItemId().toString());
         commandBuilder.set(selector + " #Name.TextSpans", Message.translation(this.itemStack.getItem().getTranslationKey()));
-        commandBuilder.set(
-            selector + " #Cost.TextSpans",
-            Message.translation("aetherhaven_misc.aetherhaven.blacksmith.repair.rowCost").param("cost", AetherhavenEconomy.provider().amount(cost))
-        );
+        AetherhavenEconomy.show(commandBuilder, selector + " #Cost #Gold", cost, FONT_SIZE);
         commandBuilder.set(selector + " #Durability.Text", durabilityPercentage + "%");
     }
 }

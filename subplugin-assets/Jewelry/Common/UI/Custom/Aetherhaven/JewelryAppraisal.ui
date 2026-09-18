@@ -18,6 +18,23 @@ $C.@PageOverlay {
       LayoutMode: Top;
       Padding: (Full: 16);
 
+      // "Costs per piece: [gold]" (or "No gold fee."), then the how-to on its own line.
+      Group #HintLine {
+        LayoutMode: Left;
+        Anchor: (Bottom: 2);
+
+        Label #HintText {
+          Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center);
+          Anchor: (Right: 4);
+          Text: "";
+        }
+
+        Group #Cost {
+          LayoutMode: Middle;
+          Anchor: (Vertical: 0);
+        }
+      }
+
       Label #Hint {
         Anchor: (Bottom: 10);
         Style: (...$C.@DefaultLabelStyle, Wrap: true);

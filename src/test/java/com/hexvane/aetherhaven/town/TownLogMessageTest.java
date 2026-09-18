@@ -77,7 +77,7 @@ class TownLogMessageTest {
         @Override public GoldAccount shopSafe(TownRecord town, UUID player) { throw new UnsupportedOperationException(); }
         @Override public List<ItemStack> goldItems(GoldSource source, String itemId, long amount) { return List.of(); }
         @Override public Message amount(long amount) { return Message.raw(amount + " marks"); }
-        @Override public void show(UICommandBuilder builder, String selector, long amount) {}
+        @Override public void show(UICommandBuilder builder, String selector, long amount, int fontSize) {}
     }
 
     private final MarksProvider marks = new MarksProvider();

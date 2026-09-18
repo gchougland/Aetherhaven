@@ -49,6 +49,8 @@ import com.hexvane.aetherhaven.jewelry.JewelryTooltipUiSupport;
 /** Appraise jewelry stacks in combined inventory; merchant charges gold, appraisal bench does not. */
 public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPage<JewelryAppraisalPage.PageData> {
     private static final String ROWS = "#Content #ListScroll #JewelryAppraisalRows";
+    /** FontSize of $C.@DefaultLabelStyle, the hint line the cost is drawn in. */
+    private static final int HINT_FONT_SIZE = 16;
     private static final int MAX_ROWS = 48;
 
     private final boolean chargeGold;
@@ -79,14 +81,13 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
             return;
         }
         if (chargeGold) {
-            commandBuilder.set(
-                "#Hint.TextSpans",
-                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.hintPaid")
-                    .param("cost", AetherhavenEconomy.provider().amount(AetherhavenConstants.JEWELRY_APPRAISAL_GOLD_COST))
-            );
+            commandBuilder.set("#HintLine #HintText.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.hintPaid"));
+            AetherhavenEconomy.show(commandBuilder, "#HintLine #Cost", AetherhavenConstants.JEWELRY_APPRAISAL_GOLD_COST, HINT_FONT_SIZE);
         } else {
-            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.hintFree"));
+            commandBuilder.set("#HintLine #HintText.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.hintFree"));
+            commandBuilder.clear("#HintLine #Cost");
         }
+        commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.hint"));
 
         CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.ARMOR_HOTBAR_UTILITY_STORAGE);
         commandBuilder.clear(ROWS);

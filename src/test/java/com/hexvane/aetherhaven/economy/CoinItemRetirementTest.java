@@ -100,7 +100,7 @@ class CoinItemRetirementTest {
             return token == null ? List.of() : List.of(new ItemStack(token, 1));
         }
         @Override public Message amount(long amount) { return Message.raw(String.valueOf(amount)); }
-        @Override public void show(UICommandBuilder builder, String selector, long amount) {}
+        @Override public void show(UICommandBuilder builder, String selector, long amount, int fontSize) {}
     }
 
     private final TokenProvider tokens = new TokenProvider();

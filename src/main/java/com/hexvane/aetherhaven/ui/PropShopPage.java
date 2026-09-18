@@ -47,6 +47,12 @@ import javax.annotation.Nullable;
 /** Cap'n Clive dialogue shop: list/grid of today's props with prefab preview and buy. */
 public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropShopPage.PageData> {
     private static final String MSG = "aetherhaven_prop_shop.aetherhaven.propShop";
+    /** Font sizes of the lines amounts are drawn in: the price under the selected item, the reroll button's label. */
+    private static final int PRICE_FONT_SIZE = 15;
+    private static final int BUTTON_FONT_SIZE = 17;
+    /** $C.@ColorButtonText and $C.@ColorDisabled of Common.ui. */
+    private static final String BUTTON_TEXT = "#bfcdd5";
+    private static final String BUTTON_TEXT_DISABLED = "#797b7c";
     private static final String ROWS = "#PropListScroll #PropRows";
     private static final String GRID = "#PropListScroll #PropGridRows";
 
@@ -112,9 +118,11 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         commandBuilder.set("#TabPalettes.Disabled", shopTab == ShopTab.PALETTES);
         commandBuilder.set("#SearchInput.Value", searchQuery);
         commandBuilder.set("#BuyButton.TextSpans", Message.translation(MSG + ".buy"));
-        commandBuilder.set("#RerollButton.TextSpans", Message.translation(MSG + ".reroll")
-            .param("gold", AetherhavenEconomy.provider().amount(FurnitureMerchantShopService.REROLL_GOLD_COST)));
-        commandBuilder.set("#RerollButton.Disabled", true);
+        commandBuilder.set("#RerollButton #Text.TextSpans", Message.translation(MSG + ".reroll"));
+        AetherhavenEconomy.show(
+            commandBuilder, "#RerollButton #Gold", FurnitureMerchantShopService.REROLL_GOLD_COST, BUTTON_FONT_SIZE
+        );
+        setRerollDisabled(commandBuilder, true);
         commandBuilder.set("#UnlockLine.Visible", false);
         bindBrowser(commandBuilder, eventBuilder, store, ref);
         schedulePrefabPreviewWithRetries(ref, store);
@@ -167,7 +175,7 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
             commandBuilder.set("#EmptyHint.Visible", true);
             commandBuilder.set("#BuyButton.Disabled", true);
             commandBuilder.set("#SelectedName.TextSpans", Message.raw(""));
-            commandBuilder.set("#PriceLine.TextSpans", Message.raw(""));
+            commandBuilder.clear("#PriceLine");
             commandBuilder.set("#StockLine.TextSpans", Message.raw(""));
             commandBuilder.set("#FundsLine.TextSpans", Message.raw(""));
             return;
@@ -178,7 +186,7 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
             commandBuilder.set("#EmptyHint.Visible", true);
             commandBuilder.set("#BuyButton.Disabled", true);
             commandBuilder.set("#SelectedName.TextSpans", Message.raw(""));
-            commandBuilder.set("#PriceLine.TextSpans", Message.raw(""));
+            commandBuilder.clear("#PriceLine");
             commandBuilder.set("#StockLine.TextSpans", Message.raw(""));
             commandBuilder.set("#FundsLine.TextSpans", Message.raw(""));
             return;
@@ -189,8 +197,7 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         String token = FurnitureMerchantShopService.inventoryToken(town);
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#RerollButton",
             EventData.of("Action", "Reroll").append("StockToken", token), false);
-        commandBuilder.set("#RerollButton.Disabled",
-            !playerCanAfford(store, ref, plugin, FurnitureMerchantShopService.REROLL_GOLD_COST));
+        setRerollDisabled(commandBuilder, !playerCanAfford(store, ref, plugin, FurnitureMerchantShopService.REROLL_GOLD_COST));
         if (shopTab == ShopTab.PROPS) {
             bindPropBrowser(commandBuilder, eventBuilder, plugin, town);
         } else {
@@ -385,7 +392,7 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
                 "#SelectedName.TextSpans",
                 Message.translation(shopTab == ShopTab.PROPS ? MSG + ".pickOne" : MSG + ".pickPalette")
             );
-            commandBuilder.set("#PriceLine.TextSpans", Message.raw(""));
+            commandBuilder.clear("#PriceLine");
             commandBuilder.set("#StockLine.TextSpans", Message.raw(""));
             commandBuilder.set("#BuyButton.Disabled", true);
             commandBuilder.set("#PreviewPlaceholder.Visible", true);
@@ -404,7 +411,7 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         PropDefinition def = plugin.getPropCatalog().get(slot.getPropId());
         if (def == null || !slot.hasStock()) {
             commandBuilder.set("#SelectedName.TextSpans", Message.translation(MSG + ".soldOut"));
-            commandBuilder.set("#PriceLine.TextSpans", Message.raw(""));
+            commandBuilder.clear("#PriceLine");
             commandBuilder.set("#StockLine.TextSpans", Message.raw(""));
             commandBuilder.set("#BuyButton.Disabled", true);
             commandBuilder.set("#PreviewPlaceholder.Visible", true);
@@ -412,10 +419,7 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         }
         long price = def.getGoldPrice();
         commandBuilder.set("#SelectedName.TextSpans", Message.raw(def.getDisplayName()));
-        commandBuilder.set(
-            "#PriceLine.TextSpans",
-            Message.translation(MSG + ".price").param("gold", AetherhavenEconomy.provider().amount(price))
-        );
+        AetherhavenEconomy.show(commandBuilder, "#PriceLine", price, PRICE_FONT_SIZE);
         commandBuilder.set(
             "#StockLine.TextSpans",
             Message.translation(MSG + ".stock").param("n", String.valueOf(slot.getStock()))
@@ -442,7 +446,7 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         BlockPaletteDefinition def = plugin.getBlockPaletteCatalog().get(slot.getPaletteId());
         if (def == null || !slot.hasStock()) {
             commandBuilder.set("#SelectedName.TextSpans", Message.translation(MSG + ".soldOutPalette"));
-            commandBuilder.set("#PriceLine.TextSpans", Message.raw(""));
+            commandBuilder.clear("#PriceLine");
             commandBuilder.set("#StockLine.TextSpans", Message.raw(""));
             commandBuilder.set("#BuyButton.Disabled", true);
             commandBuilder.set("#PreviewPlaceholder.Visible", true);
@@ -452,10 +456,7 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         commandBuilder.set("#UnlockLine.Visible", true);
         commandBuilder.set("#UnlockLine.TextSpans", Message.translation(paletteUnlockKey(paletteUnlockTown, def.getId())));
         commandBuilder.set("#SelectedName.TextSpans", Message.raw(def.getDisplayName()));
-        commandBuilder.set(
-            "#PriceLine.TextSpans",
-            Message.translation(MSG + ".price").param("gold", AetherhavenEconomy.provider().amount(price))
-        );
+        AetherhavenEconomy.show(commandBuilder, "#PriceLine", price, PRICE_FONT_SIZE);
         commandBuilder.set(
             "#StockLine.TextSpans",
             Message.translation(MSG + ".stock").param("n", String.valueOf(slot.getStock()))
@@ -492,6 +493,12 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
                 .param("treasury", String.valueOf(treasuryCoins))
         );
     }
+    /** The reroll button is composed by hand, so its label takes the disabled colour itself. */
+    private static void setRerollDisabled(@Nonnull UICommandBuilder commandBuilder, boolean disabled) {
+        commandBuilder.set("#RerollButton.Disabled", disabled);
+        commandBuilder.set("#RerollButton #Text.Style.TextColor", disabled ? BUTTON_TEXT_DISABLED : BUTTON_TEXT);
+    }
+
 
     private static boolean playerCanAfford(
         @Nonnull Store<EntityStore> store,

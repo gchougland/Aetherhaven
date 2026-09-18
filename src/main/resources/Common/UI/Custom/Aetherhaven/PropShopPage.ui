@@ -60,9 +60,33 @@ Group #PropShopRoot {
         LayoutMode: Left;
         Anchor: (Height: 32, Bottom: 8);
 
-        $C.@TextButton #RerollButton {
+        // A text button composed by hand, "Reroll stock:" then the price drawn by the economy provider.
+        Button #RerollButton {
+          LayoutMode: Center;
           Anchor: (Width: 270, Height: 28, Right: 8);
-          Text: "";
+          Style: (
+            Default: (Background: $C.@DefaultButtonDefaultBackground),
+            Hovered: (Background: $C.@DefaultButtonHoveredBackground),
+            Pressed: (Background: $C.@DefaultButtonPressedBackground),
+            Disabled: (Background: $C.@DefaultButtonDisabledBackground),
+            Sounds: $C.@ButtonSounds
+          );
+
+          Group {
+            LayoutMode: Left;
+            Anchor: (Vertical: 0);
+
+            Label #Text {
+              Style: (...$C.@DefaultButtonLabelStyle, VerticalAlignment: Center);
+              Anchor: (Right: 4);
+              Text: "";
+            }
+
+            Group #Gold {
+              LayoutMode: Middle;
+              Anchor: (Vertical: 0);
+            }
+          }
         }
 
         Group { FlexWeight: 1; }
@@ -113,10 +137,10 @@ Group #PropShopRoot {
           Text: "";
         }
 
-        Label #PriceLine {
-          Style: (...$C.@DefaultLabelStyle, TextColor: #c8a060, FontSize: 15, Wrap: true);
+        // The price, drawn by the economy provider.
+        Group #PriceLine {
+          LayoutMode: Left;
           Anchor: (Bottom: 2);
-          Text: "";
         }
 
         Label #UnlockLine {

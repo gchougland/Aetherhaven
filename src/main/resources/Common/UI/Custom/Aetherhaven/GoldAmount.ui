@@ -1,7 +1,8 @@
 $C = "../Common.ui";
 
-// A gold amount drawn by the built-in economy: the coin icon and a number.
-// Appended into an empty group by ItemCoinEconomy.show; #Amount.Text carries the number.
+// A gold amount drawn by the built-in economy: the coin icon and a number, the HUD's sizes.
+// Appended into an empty group by ItemCoinEconomy.show; #Amount.Text carries the number. For a
+// smaller line of text, show sets #Amount.Style.FontSize and scales #Icon.Anchor to match.
 Group #GoldAmount {
   LayoutMode: Left;
   HitTestVisible: false;

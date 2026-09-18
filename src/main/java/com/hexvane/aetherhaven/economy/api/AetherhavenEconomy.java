@@ -8,6 +8,7 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
@@ -63,6 +64,16 @@ public final class AetherhavenEconomy {
             return ItemCoinEconomy.INSTANCE;
         }
         return registered;
+    }
+
+    /**
+     * Draws {@code amount} into {@code selector}, an empty group of a page, with the provider's
+     * {@link EconomyProvider#show show}. The group is cleared first, so a page refreshed with a new builder draws
+     * the amount once.
+     */
+    public static void show(@Nonnull UICommandBuilder builder, @Nonnull String selector, long amount, int fontSize) {
+        builder.clear(selector);
+        provider().show(builder, selector, amount, fontSize);
     }
 
     /** Shortcut for {@code provider().account(ref, store)}. */

@@ -54,7 +54,7 @@ class AetherhavenEconomyTest {
         }
         @Override public List<ItemStack> goldItems(GoldSource source, String itemId, long amount) { return List.of(); }
         @Override public Message amount(long amount) { return Message.raw(String.valueOf(amount)); }
-        @Override public void show(UICommandBuilder builder, String selector, long amount) {}
+        @Override public void show(UICommandBuilder builder, String selector, long amount, int fontSize) {}
     }
 
     private final FakeProvider first = new FakeProvider("test:first");

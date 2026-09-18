@@ -16,6 +16,8 @@ import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
+import com.hypixel.hytale.server.core.ui.Anchor;
+import com.hypixel.hytale.server.core.ui.Value;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
@@ -35,6 +37,9 @@ public final class ItemCoinEconomy implements EconomyProvider {
     /** Translation key of the default amount text, "{count} gold". */
     public static final String AMOUNT_KEY = "aetherhaven_common.aetherhaven.common.goldAmount";
     private static final String AMOUNT_UI = "Aetherhaven/GoldAmount.ui";
+    /** What the document draws as written: the HUD's font size and icon size. */
+    private static final int AMOUNT_UI_FONT_SIZE = 16;
+    private static final int AMOUNT_UI_ICON_SIZE = 30;
 
     private ItemCoinEconomy() {}
 
@@ -96,9 +101,18 @@ public final class ItemCoinEconomy implements EconomyProvider {
     }
 
     @Override
-    public void show(@Nonnull UICommandBuilder builder, @Nonnull String selector, long amount) {
+    public void show(@Nonnull UICommandBuilder builder, @Nonnull String selector, long amount, int fontSize) {
         builder.append(selector, AMOUNT_UI);
         builder.set(selector + " #Amount.Text", String.valueOf(amount));
+        if (fontSize != AMOUNT_UI_FONT_SIZE) {
+            // The document is the HUD's size; scale the number and keep the icon's proportion to it.
+            int icon = Math.round(fontSize * AMOUNT_UI_ICON_SIZE / (float) AMOUNT_UI_FONT_SIZE);
+            builder.set(selector + " #Amount.Style.FontSize", fontSize);
+            Anchor anchor = new Anchor();
+            anchor.setWidth(Value.of(icon));
+            anchor.setHeight(Value.of(icon));
+            builder.setObject(selector + " #Icon.Anchor", anchor);
+        }
     }
 
     @Nonnull

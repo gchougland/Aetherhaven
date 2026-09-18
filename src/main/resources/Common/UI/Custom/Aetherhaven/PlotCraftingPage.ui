@@ -355,10 +355,20 @@ $C.@PageOverlay {
               }
             }
 
-            Label #CostLine {
-              Style: (...$C.@DefaultLabelStyle, TextColor: #c8a060, Wrap: true, FontSize: 16);
+            Group #CostLine {
+              LayoutMode: Left;
               Anchor: (Bottom: 6);
-              Text: "";
+
+              Label #CostText {
+                Style: (...$C.@DefaultLabelStyle, TextColor: #c8a060, FontSize: 16, VerticalAlignment: Center);
+                Anchor: (Right: 4);
+                Text: "";
+              }
+
+              Group #Cost {
+                LayoutMode: Middle;
+                Anchor: (Vertical: 0);
+              }
             }
 
             Label #FundsLine {
@@ -637,9 +647,39 @@ $C.@PageOverlay {
                   Text: "";
                 }
 
-                Label #InfoGoldValue {
-                  Style: (...$C.@DefaultLabelStyle, TextColor: #f1cf75, FontSize: 16, RenderBold: true, Wrap: true);
-                  Text: "";
+                // Two lines, an amount drawn by the economy provider then words: "[gold] to craft plot
+                // token", "[gold] to build from the town treasury".
+                Group #InfoGoldCraft {
+                  LayoutMode: Left;
+                  Anchor: (Bottom: 2);
+
+                  Group #Gold {
+                    LayoutMode: Middle;
+                    Anchor: (Vertical: 0);
+                  }
+
+                  Label #Text {
+                    FlexWeight: 1;
+                    Style: (...$C.@DefaultLabelStyle, TextColor: #f1cf75, FontSize: 16, RenderBold: true, Wrap: true, VerticalAlignment: Center);
+                    Anchor: (Left: 4);
+                    Text: "";
+                  }
+                }
+
+                Group #InfoGoldBuild {
+                  LayoutMode: Left;
+
+                  Group #Gold {
+                    LayoutMode: Middle;
+                    Anchor: (Vertical: 0);
+                  }
+
+                  Label #Text {
+                    FlexWeight: 1;
+                    Style: (...$C.@DefaultLabelStyle, TextColor: #f1cf75, FontSize: 16, RenderBold: true, Wrap: true, VerticalAlignment: Center);
+                    Anchor: (Left: 4);
+                    Text: "";
+                  }
                 }
               }
 

@@ -69,10 +69,17 @@ Group #ShopSpotStatusRoot {
         Group {
           LayoutMode: Center;
           Anchor: (Bottom: 4, Horizontal: 0);
-          Label #PriceLine {
-            Text: " ";
-            Style: @ShopHudDetailStyle;
-            Anchor: (Width: 380);
+          Group #PriceLine {
+            LayoutMode: Left;
+            Group #Price {
+              LayoutMode: Middle;
+              Anchor: (Vertical: 0);
+            }
+            Label #PriceText {
+              Text: " ";
+              Style: (...@ShopHudDetailStyle, VerticalAlignment: Center);
+              Anchor: (Left: 4);
+            }
           }
         }
         Group {

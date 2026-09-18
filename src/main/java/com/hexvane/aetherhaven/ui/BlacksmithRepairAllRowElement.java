@@ -29,15 +29,15 @@ public final class BlacksmithRepairAllRowElement extends ChoiceElement {
         PlayerRef playerRef
     ) {
         commandBuilder.append("#ElementList", "Aetherhaven/BlacksmithRepairElement.ui");
-        commandBuilder.set(selector + " #Icon.ItemId", AetherhavenConstants.ITEM_GOLD_COIN);
+        if (AetherhavenEconomy.usesCoinItem()) {
+            // The gold coin is an item only under the built-in economy.
+            commandBuilder.set(selector + " #Icon.ItemId", AetherhavenConstants.ITEM_GOLD_COIN);
+        }
         commandBuilder.set(
             selector + " #Name.TextSpans",
             Message.translation("aetherhaven_misc.aetherhaven.blacksmith.repair.fixAll")
         );
-        commandBuilder.set(
-            selector + " #Cost.TextSpans",
-            Message.translation("aetherhaven_misc.aetherhaven.blacksmith.repair.rowCost").param("cost", AetherhavenEconomy.provider().amount(this.totalCost))
-        );
+        AetherhavenEconomy.show(commandBuilder, selector + " #Cost #Gold", this.totalCost, BlacksmithRepairRowElement.FONT_SIZE);
         commandBuilder.set(
             selector + " #Durability.TextSpans",
             Message.translation("aetherhaven_misc.aetherhaven.blacksmith.repair.fixAll.count")
