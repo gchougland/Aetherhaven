@@ -1,5 +1,15 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- **Economy mods** Another mod can make its currency Aetherhaven's: prices, refunds, the tithe, quest rewards and loot then go through its accounts, and the gold coin stops being an item. Nothing changes without such a mod. Server owners can keep the gold coin even with one installed (`EconomyProvider: COINS` in `config.json`). See [tutorials/economy-providers.md](tutorials/economy-providers.md).
+
+### Changed
+
+- **Gold amounts** Prices and costs in pages and dialogues show the gold coin next to the number, the way the HUD does, and large amounts read with a thousands separator.
+
 ## [3.2.0] - 9/16/2026
 
 ### Added
