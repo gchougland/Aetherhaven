@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.townsfolk.data;
 
 import com.google.gson.annotations.SerializedName;
+import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,7 +37,16 @@ public final class TownsfolkPersonalityDefinition {
     private Map<String, Double> idleEmoteWeights;
 
     @Nonnull
-    public Map<String, Double> getThoughtItemWeights() { return weightsOrEmpty(thoughtItemWeights); }
+    /** What the villager thinks about. The gold coin is left out under an economy provider: it is no item then. */
+    public Map<String, Double> getThoughtItemWeights() {
+        Map<String, Double> weights = weightsOrEmpty(thoughtItemWeights);
+        if (AetherhavenEconomy.usesCoinItem() || !weights.containsKey(AetherhavenConstants.ITEM_GOLD_COIN)) {
+            return weights;
+        }
+        Map<String, Double> kept = new HashMap<>(weights);
+        kept.remove(AetherhavenConstants.ITEM_GOLD_COIN);
+        return Collections.unmodifiableMap(kept);
+    }
 
     @Nonnull
     public Map<String, Double> getSocialEmoteWeights() { return weightsOrEmpty(socialEmoteWeights); }

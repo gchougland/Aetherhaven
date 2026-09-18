@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.villager.data;
 
 import com.google.gson.annotations.SerializedName;
+import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.hud.AetherhavenCalendar;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleDefinition;
 import java.util.ArrayList;
@@ -280,19 +282,20 @@ public final class VillagerDefinition {
         return dailyTalkBonus != null ? dailyTalkBonus : defaultValue;
     }
 
+    /** Gift tastes. The gold coin is left out under an economy provider: nobody holds one to give. */
     @Nonnull
     public List<String> getGiftLoves() {
-        return listOrEmpty(giftLoves);
+        return gifts(giftLoves);
     }
 
     @Nonnull
     public List<String> getGiftLikes() {
-        return listOrEmpty(giftLikes);
+        return gifts(giftLikes);
     }
 
     @Nonnull
     public List<String> getGiftDislikes() {
-        return listOrEmpty(giftDislikes);
+        return gifts(giftDislikes);
     }
 
     @Nonnull
@@ -395,5 +398,13 @@ public final class VillagerDefinition {
             return List.of();
         }
         return Collections.unmodifiableList(new ArrayList<>(in));
+    }
+
+    private static List<String> gifts(@Nullable List<String> in) {
+        List<String> all = listOrEmpty(in);
+        if (AetherhavenEconomy.usesCoinItem() || !all.contains(AetherhavenConstants.ITEM_GOLD_COIN)) {
+            return all;
+        }
+        return all.stream().filter(id -> !AetherhavenConstants.ITEM_GOLD_COIN.equals(id)).toList();
     }
 }

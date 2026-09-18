@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.plugin;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.economy.CoinItemDepositSystem;
+import com.hexvane.aetherhaven.economy.CoinRecipeRewriter;
 import com.hexvane.aetherhaven.HStats;
 import com.hexvane.aetherhaven.dialogue.DialogueBootstrap;
 import com.hexvane.aetherhaven.command.AetherhavenCommand;
@@ -71,7 +73,9 @@ import com.hypixel.hytale.server.core.universe.world.events.AddWorldEvent;
 import com.hypixel.hytale.server.core.universe.world.events.AllWorldsLoadedEvent;
 import com.hypixel.hytale.server.core.universe.world.events.RemoveWorldEvent;
 import com.hypixel.hytale.server.core.universe.world.events.StartWorldEvent;
+import com.hypixel.hytale.assetstore.event.LoadedAssetsEvent;
 import com.hypixel.hytale.server.core.asset.LoadAssetEvent;
+import com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
@@ -143,6 +147,9 @@ public final class AetherhavenCoreBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new PlotLocateTrailSystem(plugin));
         plugin.getEntityStoreRegistry().registerSystem(new PlotTokenUnlockPlayerInitSystem());
         plugin.getChunkStoreRegistry().registerSystem(new PlotBlueprintSalvageBenchSystem());
+        // Under an economy provider the coin is no item: coins reaching a player are deposited, coin recipes rewritten.
+        plugin.getEntityStoreRegistry().registerSystem(new CoinItemDepositSystem());
+        plugin.getEventRegistry().register(LoadedAssetsEvent.class, CraftingRecipe.class, CoinRecipeRewriter::onRecipesLoaded);
         plugin.getEntityStoreRegistry().registerSystem(new ConstructionFavoritesPlayerInitSystem());
         TerritoryProtectionBootstrap.register(plugin);
 
