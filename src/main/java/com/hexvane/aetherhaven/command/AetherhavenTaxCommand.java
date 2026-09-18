@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.TownTaxService;
 import com.hexvane.aetherhaven.economy.TownTaxService.TaxMorningBreakdown;
 import com.hexvane.aetherhaven.economy.TownTaxService.VillagerTaxLine;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownCommandResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -87,7 +88,7 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
                                 .param("name", line.displayName())
                                 .param("kind", line.bindingKind())
                                 .param("comfort", String.format(Locale.US, "%.0f%%", line.needsRatio() * 100f))
-                                .param("gold", String.valueOf(line.contributionGold()))
+                                .param("gold", AetherhavenEconomy.provider().amount(line.contributionGold()))
                         );
                     }
                     playerRef.sendMessage(
@@ -157,7 +158,7 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
                     } else {
                         playerRef.sendMessage(
                             Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.debug.titheApplied")
-                                .param("amount", String.valueOf(r))
+                                .param("amount", AetherhavenEconomy.provider().amount(r))
                         );
                     }
                 }

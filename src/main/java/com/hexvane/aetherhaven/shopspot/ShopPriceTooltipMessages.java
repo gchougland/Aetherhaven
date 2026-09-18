@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.shopspot;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.jewelry.JewelryMetadata;
 import com.hexvane.aetherhaven.jewelry.JewelryVirtualItemRegistry;
 import com.hypixel.hytale.codec.ExtraInfo;
@@ -150,7 +151,7 @@ public final class ShopPriceTooltipMessages {
     @Nullable
     private static Message footerFor(@Nonnull String itemId, @Nonnull ShopPriceCatalog catalog) {
         ShopPriceEntry entry = catalog.getEntry(itemId);
-        String cacheKey = itemId + "|" + entry.getGoldPerBatch() + "|" + entry.getBatchSize();
+        String cacheKey = itemId + "|" + entry.getGoldPerBatch() + "|" + entry.getBatchSize() + "|" + AetherhavenEconomy.provider().id();
         return FOOTER_CACHE.computeIfAbsent(cacheKey, k -> buildFooter(entry));
     }
 
@@ -158,12 +159,12 @@ public final class ShopPriceTooltipMessages {
     private static Message buildFooter(@Nonnull ShopPriceEntry entry) {
         if (entry.isBatched()) {
             return Message.translation(BATCH_KEY)
-                .param("amount", String.valueOf(entry.getGoldPerBatch()))
+                .param("amount", AetherhavenEconomy.provider().amount(entry.getGoldPerBatch()))
                 .param("count", String.valueOf(entry.getBatchSize()))
                 .color(FOOTER_COLOR);
         }
         return Message.translation(PRICE_KEY)
-            .param("amount", String.valueOf(entry.getGoldPerBatch()))
+            .param("amount", AetherhavenEconomy.provider().amount(entry.getGoldPerBatch()))
             .color(FOOTER_COLOR);
     }
 

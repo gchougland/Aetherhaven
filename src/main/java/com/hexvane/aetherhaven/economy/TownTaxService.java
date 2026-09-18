@@ -679,7 +679,7 @@ public final class TownTaxService {
     private static void notifyTownTaxCollected(@Nonnull Store<EntityStore> store, @Nonnull TownRecord town, long goldAdded) {
         Message msg =
             Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.notificationTaxCollected")
-                .param("amount", Long.toString(goldAdded))
+                .param("amount", AetherhavenEconomy.provider().amount(goldAdded))
                 .param("town", town.getDisplayName());
         Query<EntityStore> q = Query.and(Player.getComponentType(), UUIDComponent.getComponentType(), PlayerRef.getComponentType());
         store.forEachChunk(

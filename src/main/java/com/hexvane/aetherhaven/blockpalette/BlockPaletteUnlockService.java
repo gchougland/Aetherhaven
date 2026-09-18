@@ -66,7 +66,7 @@ public final class BlockPaletteUnlockService {
                 playerRef.getPacketHandler(),
                 Message.translation("aetherhaven_block_palettes.aetherhaven.blockPalette.unlock.refunded")
                     .param("name", def.getDisplayName())
-                    .param("gold", String.valueOf(BlockPaletteConstants.DUPLICATE_UNLOCK_REFUND_GOLD)),
+                    .param("gold", AetherhavenEconomy.provider().amount(BlockPaletteConstants.DUPLICATE_UNLOCK_REFUND_GOLD)),
                 NotificationStyle.Success
             );
             return Result.REFUNDED;

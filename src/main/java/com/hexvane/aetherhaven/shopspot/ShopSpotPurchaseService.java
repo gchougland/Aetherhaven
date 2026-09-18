@@ -460,7 +460,7 @@ public final class ShopSpotPurchaseService {
                         .param("buyer", buyerName)
                         .param("item", UiMaterialLabels.itemNameMessage(itemId))
                         .param("count", String.valueOf(itemQty))
-                        .param("gold", String.valueOf(gold)),
+                        .param("gold", AetherhavenEconomy.provider().amount(gold)),
                     NotificationStyle.Success
                 );
                 break;

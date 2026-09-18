@@ -194,7 +194,7 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
             Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.sheetSubLabel")
                 .param("count", String.valueOf(b.taxResidentRowCount()))
         );
-        commandBuilder.set("#TitheSubGold.TextSpans", Message.raw(padGoldColumn(b.sumBeforeTownMultipliers())));
+        commandBuilder.set("#TitheSubGold.TextSpans", AetherhavenEconomy.provider().amount(b.sumBeforeTownMultipliers()));
 
         boolean founder = b.founderMonumentActive();
         commandBuilder.set("#TitheRowFounder.Visible", founder);
@@ -204,7 +204,7 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
                 Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.sheetFounderLabel")
                     .param("mult", formatPermilleMultiplier(b.founderMonumentPermille()))
             );
-            commandBuilder.set("#TitheFounderGold.TextSpans", Message.raw(padGoldColumn(b.sumAfterFounderMonument())));
+            commandBuilder.set("#TitheFounderGold.TextSpans", AetherhavenEconomy.provider().amount(b.sumAfterFounderMonument()));
         }
 
         boolean feast = b.stewardsFeastTaxActive();
@@ -215,10 +215,10 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
                 Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.sheetFeastLabel")
                     .param("mult", formatPermilleMultiplier(b.feastTaxBonusPermille()))
             );
-            commandBuilder.set("#TitheFeastGold.TextSpans", Message.raw(padGoldColumn(b.finalTotal())));
+            commandBuilder.set("#TitheFeastGold.TextSpans", AetherhavenEconomy.provider().amount(b.finalTotal()));
         }
 
-        commandBuilder.set("#TitheTotalGold.TextSpans", Message.raw(padGoldColumn(b.finalTotal())));
+        commandBuilder.set("#TitheTotalGold.TextSpans", AetherhavenEconomy.provider().amount(b.finalTotal()));
 
         commandBuilder.clear(TAX_ROWS);
         List<VillagerTaxLine> sorted = new ArrayList<>(b.lines());
@@ -243,7 +243,7 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
                 commandBuilder.set(
                     row + " #Comfort.TextSpans",
                     Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.townsfolkFlatGold")
-                        .param("amount", Integer.toString(AetherhavenConstants.TOWNSFOLK_TAX_GOLD_PER_DAY))
+                        .param("amount", AetherhavenEconomy.provider().amount(AetherhavenConstants.TOWNSFOLK_TAX_GOLD_PER_DAY))
                 );
             } else {
                 int comfortPct = Math.round(line.needsRatio() * 100f);
@@ -252,7 +252,7 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
                     Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.tax.comfortPercent").param("pct", String.valueOf(comfortPct))
                 );
             }
-            commandBuilder.set(row + " #Gold.TextSpans", Message.raw(padGoldColumn(line.contributionGold())));
+            commandBuilder.set(row + " #Gold.TextSpans", AetherhavenEconomy.provider().amount(line.contributionGold()));
         }
         if (sorted.size() > MAX_TAX_ROWS) {
             commandBuilder.set("#TaxResidentsFooter.Visible", true);
@@ -268,11 +268,6 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
     }
 
     @Nonnull
-    private static String padGoldColumn(long amount) {
-        return String.format(Locale.US, "%6d  g", amount);
-    }
-
-    @Nonnull
     private static String formatPermilleMultiplier(int permille) {
         double m = permille / 1000.0;
         return String.format(Locale.US, "%.2f×", m);
@@ -285,19 +280,19 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
         @Nonnull AetherhavenPluginConfig cfg
     ) {
         if (policy == null) {
-            return Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.policyShort.linear").param("max", maxPer);
+            return Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.policyShort.linear").param("max", AetherhavenEconomy.provider().amount(maxPer));
         }
         if (policy == CharterTaxPolicy.PER_CAPITA) {
             return Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.policyShort.perCapita")
-                .param("min", String.valueOf(cfg.getCharterPerCapitaMinGoldPerResidentPerDay()))
-                .param("max", String.valueOf(cfg.getCharterPerCapitaMaxGoldPerResidentPerDay()));
+                .param("min", AetherhavenEconomy.provider().amount(cfg.getCharterPerCapitaMinGoldPerResidentPerDay()))
+                .param("max", AetherhavenEconomy.provider().amount(cfg.getCharterPerCapitaMaxGoldPerResidentPerDay()));
         }
         int minComfortPct = (int) Math.round(cfg.getCharterHappinessTaxMinComfortRatio() * 100.0);
         int peakGold = (int) Math.floor(maxPer * (cfg.getCharterHappinessTaxPeakPermille() / 1000.0));
         return Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.policyShort.happiness")
-            .param("base", String.valueOf(maxPer))
+            .param("base", AetherhavenEconomy.provider().amount(maxPer))
             .param("minComfortPct", String.valueOf(minComfortPct))
-            .param("peak", String.valueOf(peakGold));
+            .param("peak", AetherhavenEconomy.provider().amount(peakGold));
     }
 
     @Override

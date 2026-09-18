@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.shopspot;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.ui.UiMaterialLabels;
 import com.hypixel.hytale.component.Store;
@@ -81,7 +82,7 @@ public final class ShopSpotStatusHud extends CustomUIHud {
                 b.set(
                     "#PriceLine.TextSpans",
                     Message.translation(MSG + ".priceBatch")
-                        .param("gold", String.valueOf(gold))
+                        .param("gold", AetherhavenEconomy.provider().amount(gold))
                         .param("count", String.valueOf(entry.getBatchSize()))
                         .param("item", itemName)
                 );
@@ -95,7 +96,7 @@ public final class ShopSpotStatusHud extends CustomUIHud {
             } else {
                 b.set(
                     "#PriceLine.TextSpans",
-                    Message.translation(MSG + ".price").param("gold", String.valueOf(gold))
+                    Message.translation(MSG + ".price").param("gold", AetherhavenEconomy.provider().amount(gold))
                 );
                 b.set(
                     "#StockLine.TextSpans",

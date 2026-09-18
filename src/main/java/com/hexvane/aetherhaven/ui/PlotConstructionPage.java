@@ -365,8 +365,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             commandBuilder.set(
                 "#TreasuryLabel.TextSpans",
                 Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.treasuryGold")
-                    .param("available", String.valueOf(spendableGold))
-                    .param("required", String.valueOf(goldCost))
+                    .param("available", AetherhavenEconomy.provider().amount(spendableGold))
+                    .param("required", AetherhavenEconomy.provider().amount(goldCost))
             );
             commandBuilder.set(
                 "#TreasuryLabel.Style.TextColor",

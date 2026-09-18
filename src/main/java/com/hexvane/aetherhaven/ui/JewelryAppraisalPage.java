@@ -82,7 +82,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
             commandBuilder.set(
                 "#Hint.TextSpans",
                 Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.hintPaid")
-                    .param("cost", AetherhavenConstants.JEWELRY_APPRAISAL_GOLD_COST)
+                    .param("cost", AetherhavenEconomy.provider().amount(AetherhavenConstants.JEWELRY_APPRAISAL_GOLD_COST))
             );
         } else {
             commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.hintFree"));

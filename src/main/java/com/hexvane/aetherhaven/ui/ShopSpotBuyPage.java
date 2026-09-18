@@ -130,7 +130,7 @@ public final class ShopSpotBuyPage extends AetherhavenInteractiveCustomUIPage<Sh
             b.set(
                 "#PriceLine.TextSpans",
                 Message.translation(MSG + ".priceBatch")
-                    .param("gold", String.valueOf(gold))
+                    .param("gold", AetherhavenEconomy.provider().amount(gold))
                     .param("count", String.valueOf(entry.getBatchSize()))
                     .param("item", itemName)
             );
@@ -144,14 +144,14 @@ public final class ShopSpotBuyPage extends AetherhavenInteractiveCustomUIPage<Sh
                 "#QtyValue.TextSpans",
                 Message.translation(MSG + ".qtyBatches")
                     .param("n", String.valueOf(buyBatches))
-                    .param("total", String.valueOf(total))
+                    .param("total", AetherhavenEconomy.provider().amount(total))
             );
         } else {
-            b.set("#PriceLine.TextSpans", Message.translation(MSG + ".price").param("gold", String.valueOf(gold)));
+            b.set("#PriceLine.TextSpans", Message.translation(MSG + ".price").param("gold", AetherhavenEconomy.provider().amount(gold)));
             b.set("#StockLine.TextSpans", Message.translation(MSG + ".stock").param("n", String.valueOf(record.getStock())));
             b.set(
                 "#QtyValue.TextSpans",
-                Message.translation(MSG + ".qty").param("n", String.valueOf(buyBatches)).param("total", String.valueOf(total))
+                Message.translation(MSG + ".qty").param("n", String.valueOf(buyBatches)).param("total", AetherhavenEconomy.provider().amount(total))
             );
         }
     }

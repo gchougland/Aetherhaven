@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.choices.ChoiceElement;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.choices.ChoiceInteraction;
@@ -35,7 +36,7 @@ public final class BlacksmithRepairAllRowElement extends ChoiceElement {
         );
         commandBuilder.set(
             selector + " #Cost.TextSpans",
-            Message.translation("aetherhaven_misc.aetherhaven.blacksmith.repair.rowCost").param("cost", this.totalCost)
+            Message.translation("aetherhaven_misc.aetherhaven.blacksmith.repair.rowCost").param("cost", AetherhavenEconomy.provider().amount(this.totalCost))
         );
         commandBuilder.set(
             selector + " #Durability.TextSpans",

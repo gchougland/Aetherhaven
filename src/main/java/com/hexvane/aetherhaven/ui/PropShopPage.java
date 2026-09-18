@@ -113,7 +113,7 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         commandBuilder.set("#SearchInput.Value", searchQuery);
         commandBuilder.set("#BuyButton.TextSpans", Message.translation(MSG + ".buy"));
         commandBuilder.set("#RerollButton.TextSpans", Message.translation(MSG + ".reroll")
-            .param("gold", String.valueOf(FurnitureMerchantShopService.REROLL_GOLD_COST)));
+            .param("gold", AetherhavenEconomy.provider().amount(FurnitureMerchantShopService.REROLL_GOLD_COST)));
         commandBuilder.set("#RerollButton.Disabled", true);
         commandBuilder.set("#UnlockLine.Visible", false);
         bindBrowser(commandBuilder, eventBuilder, store, ref);
@@ -414,7 +414,7 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         commandBuilder.set("#SelectedName.TextSpans", Message.raw(def.getDisplayName()));
         commandBuilder.set(
             "#PriceLine.TextSpans",
-            Message.translation(MSG + ".price").param("gold", String.valueOf(price))
+            Message.translation(MSG + ".price").param("gold", AetherhavenEconomy.provider().amount(price))
         );
         commandBuilder.set(
             "#StockLine.TextSpans",
@@ -454,7 +454,7 @@ public final class PropShopPage extends AetherhavenInteractiveCustomUIPage<PropS
         commandBuilder.set("#SelectedName.TextSpans", Message.raw(def.getDisplayName()));
         commandBuilder.set(
             "#PriceLine.TextSpans",
-            Message.translation(MSG + ".price").param("gold", String.valueOf(price))
+            Message.translation(MSG + ".price").param("gold", AetherhavenEconomy.provider().amount(price))
         );
         commandBuilder.set(
             "#StockLine.TextSpans",

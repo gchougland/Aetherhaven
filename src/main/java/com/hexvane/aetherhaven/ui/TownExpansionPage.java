@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.plotcreator.RuntimeCommonIconBroadcast;
 import com.hexvane.aetherhaven.territory.TownExpansionAssetDelivery;
 import com.hexvane.aetherhaven.territory.TownExpansionClaimService;
@@ -130,7 +131,7 @@ public final class TownExpansionPage extends AetherhavenInteractiveCustomUIPage<
         long cost = TownTerritoryClaims.nextClaimBlockCostGold(town, cfg);
         commandBuilder.set(
             "#ExpansionCostLabel.TextSpans",
-            Message.translation("aetherhaven_town.aetherhaven.ui.expansion.claimCost").param("cost", Long.toString(cost))
+            Message.translation("aetherhaven_town.aetherhaven.ui.expansion.claimCost").param("cost", AetherhavenEconomy.provider().amount(cost))
         );
         boolean canClaim =
             selectedChunkX != Integer.MIN_VALUE
@@ -147,7 +148,7 @@ public final class TownExpansionPage extends AetherhavenInteractiveCustomUIPage<
             commandBuilder.set(
                 "#ExpansionSellRefundLabel.TextSpans",
                 Message.translation("aetherhaven_town.aetherhaven.ui.expansion.sellRefund")
-                    .param("refund", Long.toString(refund))
+                    .param("refund", AetherhavenEconomy.provider().amount(refund))
             );
         } else {
             commandBuilder.set("#ExpansionSellRefundLabel.Visible", false);

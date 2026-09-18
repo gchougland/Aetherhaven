@@ -112,7 +112,7 @@ public final class BlacksmithRepairAllInteraction extends ChoiceInteraction {
         playerRef.sendMessage(
             Message.translation("aetherhaven_misc.aetherhaven.blacksmith.repair.fixAll.success")
                 .param("count", repaired)
-                .param("cost", cost)
+                .param("cost", AetherhavenEconomy.provider().amount(cost))
         );
         pageManager.setPage(ref, store, Page.None);
         UiSoundEffects.play2dUi(ref, store, AetherhavenConstants.SFX_WEAPON_BENCH_CRAFT);

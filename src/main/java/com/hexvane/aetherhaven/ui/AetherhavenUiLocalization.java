@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import java.util.function.UnaryOperator;
@@ -247,7 +248,7 @@ public final class AetherhavenUiLocalization {
         b.set(
             "#Hint.TextSpans",
             Message.translation("aetherhaven_misc.aetherhaven.blacksmith.repair.page.hint")
-                .param("maxCost", AetherhavenConstants.BLACKSMITH_REPAIR_COST_FULL)
+                .param("maxCost", AetherhavenEconomy.provider().amount(AetherhavenConstants.BLACKSMITH_REPAIR_COST_FULL))
         );
         b.set("#ItemHeader.TextSpans", t("aetherhaven_misc.aetherhaven.blacksmith.repair.page.item"));
         b.set("#CostHeader.TextSpans", t("aetherhaven_misc.aetherhaven.blacksmith.repair.page.cost"));

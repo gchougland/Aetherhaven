@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.economy.api.GoldAccount;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.production.PlotProductionState;
@@ -237,8 +238,8 @@ public final class ProductionUpgradeTreeUi {
             boolean goldOk = goldHeld >= needGold;
             Message goldLine =
                 t("aetherhaven.ui.productionUpgrades.tooltip.goldNeed")
-                    .param("held", String.valueOf(goldHeld))
-                    .param("need", String.valueOf(needGold))
+                    .param("held", AetherhavenEconomy.provider().amount(goldHeld))
+                    .param("need", AetherhavenEconomy.provider().amount(needGold))
                     .color(goldOk ? TOOLTIP_OK : TOOLTIP_BAD);
             body = Message.join(body, Message.raw("\n"), goldLine);
         }

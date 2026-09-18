@@ -657,7 +657,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             commandBuilder.set(
                 "#CostLine.TextSpans",
                 Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.costLine")
-                    .param("cost", Message.raw(String.valueOf(CRAFT_COST)))
+                    .param("cost", AetherhavenEconomy.provider().amount(CRAFT_COST))
             );
             commandBuilder.set(
                 "#FundsLine.TextSpans",
@@ -3319,11 +3319,11 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             b.set("#InfoCountsAsValue.TextSpans", Message.raw(String.join("\n", countsAsLabels)));
         }
 
-        String buildCost = constructionGold + " gold to build from the town treasury";
-        String goldDetails = moderationTab
+        Message buildCost = Message.join(AetherhavenEconomy.provider().amount(constructionGold), Message.raw(" to build from the town treasury"));
+        Message goldDetails = moderationTab
             ? buildCost
-            : CRAFT_COST + " gold to craft plot token\n" + buildCost;
-        b.set("#InfoGoldValue.TextSpans", Message.raw(goldDetails));
+            : Message.join(AetherhavenEconomy.provider().amount(CRAFT_COST), Message.raw(" to craft plot token\n"), buildCost);
+        b.set("#InfoGoldValue.TextSpans", goldDetails);
 
         List<String> missingMods = CommunityRequiredMods.missingPackNames(requiredMods);
         if (requiredMods.isEmpty()) {

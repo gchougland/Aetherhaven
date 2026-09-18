@@ -312,8 +312,8 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
             boolean goldOk = goldHeld >= goldNeed;
             Message goldLine =
                 Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed")
-                    .param("held", String.valueOf(goldHeld))
-                    .param("need", String.valueOf(goldNeed))
+                    .param("held", AetherhavenEconomy.provider().amount(goldHeld))
+                    .param("need", AetherhavenEconomy.provider().amount(goldNeed))
                     .color(goldOk ? TOOLTIP_OK_COLOR : TOOLTIP_BAD_COLOR);
             body = Message.join(body, Message.raw("\n"), goldLine);
         }
@@ -401,7 +401,7 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
         if (goldCost > 0L && !GoldCoinPayment.canAfford(town, account, goldCost, allowTreasuryGold)) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
-                Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.notify.needGold").param("need", goldCost),
+                Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.notify.needGold").param("need", AetherhavenEconomy.provider().amount(goldCost)),
                 NotificationStyle.Warning
             );
             refresh(ref, store);

@@ -105,6 +105,6 @@ public final class RetiredBuiltInPlotMigration {
         }
         town.consumePendingRetiredBuildingGoldNotice();
         towns.updateTown(town);
-        playerRef.sendMessage(Message.translation(NOTICE_LANG).param("gold", String.valueOf(gold)));
+        playerRef.sendMessage(Message.translation(NOTICE_LANG).param("gold", AetherhavenEconomy.provider().amount(gold)));
     }
 }

@@ -8,6 +8,7 @@ import com.hexvane.aetherhaven.dialogue.DialogueChoiceItemRequirements;
 import com.hexvane.aetherhaven.dialogue.DialogueConditionEvaluator;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerSystem;
+import com.hexvane.aetherhaven.economy.api.AetherhavenEconomy;
 import com.hexvane.aetherhaven.patrol.GuardFollowPlayerSystem;
 import com.hexvane.aetherhaven.questboard.TownRankCapacity;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -741,11 +742,11 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         Message m = Message.translation(text);
         if (LANG_PRIESTESS_DRAUGHT_SHARD.equals(text)) {
             long gold = dialogueWorldView.nextGaiaDraughtShardUpgradeGoldCost(ref, store, npcRef);
-            return m.param("gold", Long.toString(gold));
+            return m.param("gold", AetherhavenEconomy.provider().amount(gold));
         }
         if (LANG_PRIESTESS_DRAUGHT_CATALYST.equals(text)) {
             long gold = dialogueWorldView.nextGaiaDraughtCatalystUpgradeGoldCost(ref, store, npcRef);
-            return m.param("gold", Long.toString(gold));
+            return m.param("gold", AetherhavenEconomy.provider().amount(gold));
         }
         if (LANG_GUILD_ADVENTURER_HIRE.equals(text)) {
             long gold = dialogueWorldView.guardHireGoldCost(ref, store, npcRef);
@@ -753,7 +754,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             return withGuardHireCountParams(
                 ref,
                 store,
-                m.param("gold", Long.toString(gold)).param("type", Message.translation(typeKey))
+                m.param("gold", AetherhavenEconomy.provider().amount(gold)).param("type", Message.translation(typeKey))
             );
         }
         if (usesTouristMoveInParams(text)) {
