@@ -17,6 +17,19 @@ import java.util.*;
 /** Incremental, disk-backed ZIP preparation. Runtime only calls prepare on its backup worker. */
 public final class AetherhavenBackupArchive {
     public static final String MANIFEST = "aetherhaven-backup-manifest.json";
+    // Only archive files that belong to our persistence or authored-content layout.
+    // Stray files (for example test.json) must not block backups of actual town data.
+    private static final Set<String> ROOT_JSON = Set.of(
+        "config.json", "server_difficulty.json", "shop_prices.json", "geode_loot.json",
+        "floating_gift_loot.json", "prop_loot_exclusions.json", "community_install_instance.json"
+    );
+    private static final Set<String> WORLD_JSON = Set.of(
+        "towns.json", "difficulty.json", "props.json", "pois.json", "patrol_routes.json",
+        "path_commits.json", "townsfolk_pool.json", "shop_spots.json", "tourist_portals.json",
+        "world_npcs.json", "world_npc_routes.json", "world_npc_players.json",
+        "tree_climb_leaderboard.json", "snowball_leaderboard.json", "market_leaderboard.json",
+        "hallows_eve_leaderboard.json"
+    );
     record FileState(long size, java.nio.file.attribute.FileTime modified, Object key) {}
     record Cached(FileState state, String hash) {}
     record Prepared(Path path, String hash, Map<String, Cached> files, int changedFiles, long sourceBytes) {}
@@ -120,15 +133,41 @@ public final class AetherhavenBackupArchive {
             for (var it = walk.iterator(); it.hasNext();) {
                 checkInterrupted();
                 Path path = it.next();
+                String relative = root.relativize(path).toString().replace('\\', '/');
+                if (!isExpectedFile(relative)) continue;
                 var attrs = Files.readAttributes(path, BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
                 if (attrs.isSymbolicLink() || attrs.isOther()) throw new IOException("Unsupported linked/special file: " + path);
                 if (!attrs.isRegularFile()) continue;
-                String name = path.getFileName().toString();
-                if (name.endsWith(".tmp") || name.endsWith(".lock") || name.equals("LOCK")) continue;
-                result.put(root.relativize(path).toString().replace('\\', '/'), new FileState(attrs.size(), attrs.lastModifiedTime(), attrs.fileKey()));
+                result.put(relative, new FileState(attrs.size(), attrs.lastModifiedTime(), attrs.fileKey()));
             }
         }
         return result;
+    }
+    private static boolean isExpectedFile(String relative) {
+        // Preserve recovery copies only when their original file is part of our layout.
+        String original = relative.endsWith(".bak") ? relative.substring(0, relative.length() - 4) : relative;
+        if (original.endsWith(".json")) return isExpectedJson(original);
+        String content = original.startsWith("Community/") ? original.substring("Community/".length()) : original;
+        if (content.startsWith("Common/Icons/ItemsGenerated/") && content.endsWith(".png")) return true;
+        if (content.startsWith("Server/Aetherhaven/GuideTopics/") && content.endsWith(".md")) return true;
+        String[] parts = original.split("/");
+        return parts.length == 3 && parts[0].equals("villager_audit") && parts[2].equals("audit.jsonl");
+    }
+
+    private static boolean isExpectedJson(String relative) {
+        if (ROOT_JSON.contains(relative)) return true;
+        String[] parts = relative.split("/");
+        if (parts.length == 3 && parts[0].equals("worlds") && WORLD_JSON.contains(parts[2])) return true;
+        // These namespaces contain user-defined filenames, so a fixed filename list would lose content.
+        String content = relative.startsWith("Community/") ? relative.substring("Community/".length()) : relative;
+        if (content.startsWith("Server/Aetherhaven/")) return true;
+        if (content.startsWith("Server/Prefabs/") && content.endsWith(".prefab.json")) return true;
+        return (parts.length == 2 && (parts[0].equals("shop_loot") || parts[0].equals("avatar_exports")))
+            || (parts.length == 3 && parts[0].equals("npc_telemetry"))
+            || (parts.length == 3 && parts[0].equals("Community") && parts[1].equals(".install-meta"))
+            || (parts.length == 3 && parts[0].equals("Community")
+                && (parts[1].equals(".preview") || parts[1].equals(".moderation-preview"))
+                && relative.endsWith(".prefab.json"));
     }
     private static FileState state(Path path) throws IOException {
         var attrs = Files.readAttributes(path, BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);

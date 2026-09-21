@@ -57,10 +57,12 @@ class AetherhavenBackupTest {
         write(data, "worlds/default/towns.json", "{\"towns\":[]}");
         write(data, "worlds/second/props.json", "{\"props\":[]}");
         write(data, "worlds/default/towns.json.bak", "previous town data");
-        write(data, "custom/木.prefab.json", "{\"name\":\"café\"}");
+        write(data, "Server/Prefabs/木.prefab.json", "{\"name\":\"café\"}");
         write(data, "config.json", "{\"setting\":true}");
         byte[] binary = new byte[] {0, -1, 2, 3, 100};
-        Files.write(data.resolve("icon.png"), binary);
+        Path icon = data.resolve("Common/Icons/ItemsGenerated/Aetherhaven_Token_custom.png");
+        Files.createDirectories(icon.getParent());
+        Files.write(icon, binary);
         write(data, "worlds/default/towns.json.tmp", "half written");
         write(data, "LOCK", "locked");
         String hash = AetherhavenBackupArchive.writeSnapshot(data, archive());
@@ -68,8 +70,8 @@ class AetherhavenBackupTest {
         assertEquals(hash, AetherhavenBackupArchive.sha256(bytes));
         var entries = unzip(bytes);
         assertEquals(7, entries.size());
-        assertArrayEquals(binary, entries.get("data/icon.png"));
-        assertTrue(entries.containsKey("data/custom/木.prefab.json"));
+        assertArrayEquals(binary, entries.get("data/Common/Icons/ItemsGenerated/Aetherhaven_Token_custom.png"));
+        assertTrue(entries.containsKey("data/Server/Prefabs/木.prefab.json"));
         assertTrue(entries.containsKey("data/worlds/second/props.json"));
         assertTrue(entries.containsKey("data/worlds/default/towns.json.bak"));
         assertFalse(entries.containsKey("data/LOCK"));
@@ -80,6 +82,75 @@ class AetherhavenBackupTest {
         for (var file : manifest.getAsJsonObject("files").entrySet()) {
             assertEquals(file.getValue().getAsString(), AetherhavenBackupArchive.sha256(entries.get(file.getKey())));
         }
+    }
+
+    @Test void unexpectedFilesAreExcludedWithoutBlockingOrRetriggeringBackup() throws Exception {
+        Path data = data();
+        write(data, "worlds/default/towns.json", "{\"towns\":[]}");
+        for (String name : List.of("test.json", "valid-but-unrelated.json", "TEST.JSON",
+            "worlds/default/test.json", "unrelated/config.json", "Server/Prefabs/test.json",
+            "notes.txt", "random.bin", "icon.png", "test.json.bak", "worlds/default/notes.txt",
+            "Server/Aetherhaven/Buildings/notes.txt", "Community/unknown.bin", "config.json.tmp", "LOCK")) {
+            write(data, name, name.startsWith("valid") ? "{}" : "not valid JSON");
+        }
+        var fixture = resourceFixture(data);
+        prepareAndFlush(fixture);
+        var entries = unzip(Files.readAllBytes(archive()));
+        assertEquals(java.util.Set.of(AetherhavenBackupArchive.MANIFEST, "data/worlds/default/towns.json"), entries.keySet());
+        var manifest = JsonParser.parseString(new String(entries.get(AetherhavenBackupArchive.MANIFEST), StandardCharsets.UTF_8)).getAsJsonObject();
+        assertEquals(java.util.Set.of("data/worlds/default/towns.json"), manifest.getAsJsonObject("files").keySet());
+        write(data, "test.json", "changed but still invalid JSON");
+        assertNull(fixture.worker.request().get(10, TimeUnit.SECONDS));
+        write(data, "worlds/default/towns.json", "{\"towns\":[],\"revision\":2}");
+        prepareAndFlush(fixture);
+        assertEquals("{\"towns\":[],\"revision\":2}", new String(unzip(Files.readAllBytes(archive()))
+            .get("data/worlds/default/towns.json"), StandardCharsets.UTF_8));
+    }
+
+    @Test void expectedPersistenceAndAuthoredJsonRemainIncluded() throws Exception {
+        Path data = data();
+        List<String> expected = List.of(
+            "config.json", "server_difficulty.json", "shop_prices.json", "geode_loot.json",
+            "floating_gift_loot.json", "prop_loot_exclusions.json", "community_install_instance.json",
+            "worlds/default/towns.json", "worlds/default/difficulty.json", "worlds/default/props.json",
+            "worlds/default/pois.json", "worlds/default/patrol_routes.json", "worlds/default/path_commits.json",
+            "worlds/default/townsfolk_pool.json", "worlds/default/shop_spots.json", "worlds/default/tourist_portals.json",
+            "worlds/default/world_npcs.json", "worlds/default/world_npc_routes.json", "worlds/default/world_npc_players.json",
+            "worlds/default/tree_climb_leaderboard.json", "worlds/default/snowball_leaderboard.json",
+            "worlds/default/market_leaderboard.json", "worlds/default/hallows_eve_leaderboard.json",
+            "Server/Aetherhaven/Buildings/custom.json", "Server/Aetherhaven/Props/custom.json",
+            "Server/Aetherhaven/Festivals/custom.json", "Server/Prefabs/Props/custom.prefab.json",
+            "Community/Server/Aetherhaven/Buildings/custom.json", "Community/Server/Prefabs/custom.prefab.json",
+            "Community/.install-meta/custom.json", "Community/.preview/custom.prefab.json",
+            "Community/.moderation-preview/custom.prefab.json", "shop_loot/custom.json", "avatar_exports/custom.json",
+            "npc_telemetry/default/report.json"
+        );
+        for (String name : expected) write(data, name, "{}");
+        var entries = unzip(AetherhavenBackupArchive.capture(data));
+        assertEquals(expected.size() + 1, entries.size());
+        for (String name : expected) assertTrue(entries.containsKey("data/" + name), name);
+    }
+
+    @Test void knownNonJsonContentAndRecoveryCopiesRemainIncluded() throws Exception {
+        Path data = data();
+        List<String> expected = List.of("worlds/default/towns.json.bak", "shop_prices.json.bak",
+            "Server/Prefabs/custom.prefab.json.bak", "Common/Icons/ItemsGenerated/custom.png",
+            "Community/Common/Icons/ItemsGenerated/custom.png", "Server/Aetherhaven/GuideTopics/en-US/custom.md",
+            "villager_audit/default/audit.jsonl");
+        for (String name : expected) write(data, name, "raw content");
+        var entries = unzip(AetherhavenBackupArchive.capture(data));
+        assertEquals(expected.size() + 1, entries.size());
+        for (String name : expected) assertEquals("raw content", new String(entries.get("data/" + name), StandardCharsets.UTF_8));
+    }
+
+    @Test void corruptAuthoredContentStillPreservesPreviousSnapshot() throws Exception {
+        Path data = data();
+        write(data, "Server/Aetherhaven/Buildings/custom.json", "{}");
+        AetherhavenBackupArchive.writeSnapshot(data, archive());
+        byte[] before = Files.readAllBytes(archive());
+        write(data, "Server/Aetherhaven/Buildings/custom.json", "{");
+        assertThrows(IOException.class, () -> AetherhavenBackupArchive.writeSnapshot(data, archive()));
+        assertArrayEquals(before, Files.readAllBytes(archive()));
     }
 
     @Test void replacesChangedFilesAndDoesNotResurrectDeletedFiles() throws Exception {
@@ -308,9 +379,10 @@ class AetherhavenBackupTest {
         Path data = data();
         var random = new java.util.Random(731);
         byte[] block = new byte[1024 * 1024];
+        Path icons = Files.createDirectories(data.resolve("Common/Icons/ItemsGenerated"));
         for (int i = 0; i < 96; i++) {
             random.nextBytes(block);
-            Files.write(data.resolve("content-" + i + ".bin"), block);
+            Files.write(icons.resolve("content-" + i + ".png"), block);
         }
         write(data, "worlds/default/towns.json", "{\"towns\":[],\"revision\":1}");
         var fixture = resourceFixture(data);
@@ -332,8 +404,8 @@ class AetherhavenBackupTest {
         assertEquals(Files.size(data.resolve("worlds/default/towns.json")), delta.sourceBytes());
         fixture.resources.flushAll().get(10, TimeUnit.SECONDS);
         try (var zip = new java.util.zip.ZipFile(archive().toFile())) {
-            assertEquals(1024 * 1024, zip.getEntry("data/content-95.bin").getSize());
-            try (var input = zip.getInputStream(zip.getEntry("data/content-95.bin"))) {
+            assertEquals(1024 * 1024, zip.getEntry("data/Common/Icons/ItemsGenerated/content-95.png").getSize());
+            try (var input = zip.getInputStream(zip.getEntry("data/Common/Icons/ItemsGenerated/content-95.png"))) {
                 assertArrayEquals(block, input.readAllBytes());
             }
         }

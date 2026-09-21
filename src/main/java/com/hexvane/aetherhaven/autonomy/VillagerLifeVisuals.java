@@ -114,13 +114,16 @@ public final class VillagerLifeVisuals {
             if (id != null) {
                 var clip = VillagerLifeSpeech.select(VillagerLifePersonality.voice(ref, id.getUuid(), store), mood, rng.nextInt());
                 if (clip != null) {
-                    VillagerEmotionParticles.play(ref, gesture, mood, store);
-                    if (!clip.mouthCues().isEmpty()) VillagerMouthPlayback.start(ref, clip, gesture, clip.audioMs(), false, store);
-                    else {
-                        var expression = clip.faces().get(gesture);
-                        if (expression != null) NpcFaceVisuals.playExpression(ref, expression.id(), expression.durationMs()/1000f, store);
+                    var playback = VillagerSpeechAudio.prepare(ref, clip, true, store);
+                    if (playback != null) {
+                        VillagerEmotionParticles.play(ref, gesture, mood, store);
+                        if (!clip.mouthCues().isEmpty()) VillagerMouthPlayback.start(ref, clip, gesture, clip.audioMs(), false, store);
+                        else {
+                            var expression = clip.faces().get(gesture);
+                            if (expression != null) NpcFaceVisuals.playExpression(ref, expression.id(), expression.durationMs()/1000f, store);
+                        }
+                        playback.play(store);
                     }
-                    VillagerSpeechAudio.play(ref, clip, true, store);
                     life.nextAmbientVoiceMs = now + clip.audioMs() + rng.nextLong(4500, 9000);
                 }
             }
@@ -139,11 +142,13 @@ public final class VillagerLifeVisuals {
         var clip = VillagerLifeSpeech.select(VillagerLifePersonality.voice(ref, id.getUuid(), store), mood,
             java.util.concurrent.ThreadLocalRandom.current().nextInt());
         if (clip == null) return;
+        life.nextAmbientVoiceMs = now + clip.audioMs() + java.util.concurrent.ThreadLocalRandom.current().nextLong(4500, 9000);
+        var playback = VillagerSpeechAudio.prepare(ref, clip, true, store);
+        if (playback == null) return;
         var face = clip.faces().get("LookAround");
         if (!clip.mouthCues().isEmpty()) VillagerMouthPlayback.start(ref, clip, "LookAround", clip.audioMs(), false, store);
         else if (face != null) NpcFaceVisuals.playExpression(ref, face.id(), face.durationMs()/1000f, store);
-        VillagerSpeechAudio.play(ref, clip, true, store);
-        life.nextAmbientVoiceMs = now + clip.audioMs() + java.util.concurrent.ThreadLocalRandom.current().nextLong(4500, 9000);
+        playback.play(store);
     }
 
     static void emote(Ref<EntityStore> ref, String gesture, Store<EntityStore> store) {
@@ -225,6 +230,12 @@ public final class VillagerLifeVisuals {
             if (gesture != null) silentEmote(ref, gesture, store);
             return 0;
         }
+        var playback = VillagerSpeechAudio.prepare(ref, clip, randomChatter, store);
+        if (randomChatter && playback == null) {
+            // Keep the shared idle/work body behavior, but do not animate unheard speech.
+            if (gesture != null) silentEmote(ref, gesture, store);
+            return gesture == null ? 0 : VillagerLifeTiming.durationMs(gesture);
+        }
         var expression = gesture == null ? null : clip.faces().get(gesture);
         if (expression != null) {
             VillagerLifeProps.equip(ref, gesture, store);
@@ -232,12 +243,12 @@ public final class VillagerLifeVisuals {
             AnimationUtils.playAnimation(ref, BODY_SLOT, NpcFaceVisuals.itemAnimationsForFaceRig(ref, clip.actionsId(), store), expression.actionId(), false, store);
             if (clip.mouthCues().isEmpty()) NpcFaceVisuals.playExpression(ref, expression.id(), expression.durationMs() / 1000f, store);
             else VillagerMouthPlayback.start(ref, clip, gesture, expression.durationMs(), false, store);
-            VillagerSpeechAudio.play(ref, clip, randomChatter, store);
+            if (playback != null) playback.play(store);
             return Math.max(clip.audioMs(), expression.durationMs());
         }
         if (gesture != null) silentEmote(ref, gesture, store);
         if (!clip.mouthCues().isEmpty()) VillagerMouthPlayback.start(ref, clip, gesture, clip.audioMs(), false, store);
-        VillagerSpeechAudio.play(ref, clip, randomChatter, store);
+        if (playback != null) playback.play(store);
         return clip.audioMs();
     }
 

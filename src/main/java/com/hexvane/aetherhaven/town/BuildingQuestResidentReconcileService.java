@@ -6,7 +6,9 @@ import com.hexvane.aetherhaven.inn.InnVisitorShopPromotion;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
-import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
+import com.hexvane.aetherhaven.villager.TownVillagerSpawner;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcBinding;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.villager.audit.VillagerAuditContext;
@@ -15,11 +17,9 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +123,6 @@ public final class BuildingQuestResidentReconcileService {
         @Nonnull Store<EntityStore> store
     ) {
         ReconcileReport report = new ReconcileReport();
-        InnVisitorShopPromotion.tryPromoteReadyWorkplaces(world, plugin, town, tm);
 
         ConstructionCatalog constructions = plugin.getConstructionCatalog();
         for (VillagerDefinition def : plugin.getVillagerDefinitionCatalog().allByNpcRoleId().values()) {
@@ -179,57 +178,11 @@ public final class BuildingQuestResidentReconcileService {
                 continue;
             }
 
-            UUIDComponent uuidComp = store.getComponent(npcRef, UUIDComponent.getComponentType());
-            if (uuidComp == null) {
+            if (promoteCandidate(world, plugin, town, tm, store, roleId, residentKind, workplacePlotId, npcRef)) {
+                report.addPromoted();
+            } else {
                 report.addSkippedFailed();
-                continue;
             }
-            TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
-            if (binding == null || !town.getTownId().equals(binding.getTownId())) {
-                String visitorKind = def.getVisitorBindingKind();
-                String bindKind =
-                    visitorKind != null && !visitorKind.isBlank() ? visitorKind : residentKind;
-                store.putComponent(
-                    npcRef,
-                    TownVillagerBinding.getComponentType(),
-                    new TownVillagerBinding(town.getTownId(), bindKind, null)
-                );
-            }
-
-            String err =
-                WorkplacePlotAssignment.tryAssignWorker(
-                    world,
-                    plugin,
-                    town,
-                    tm,
-                    workplacePlotId,
-                    uuidComp.getUuid(),
-                    store
-                );
-            if (err != null) {
-                store.putComponent(
-                    npcRef,
-                    TownVillagerBinding.getComponentType(),
-                    new TownVillagerBinding(town.getTownId(), residentKind, workplacePlotId, workplacePlotId)
-                );
-                ResidentRegistryService.upsert(
-                    town,
-                    tm,
-                    roleId.trim(),
-                    residentKind,
-                    workplacePlotId,
-                    uuidComp.getUuid()
-                );
-                town.addInnVisitorPoolExcludedRoleId(roleId.trim());
-                tm.updateTown(town);
-                LOGGER.atWarning().log(
-                    "fixresidents: assign worker failed for %s on plot %s (%s); forced resident registry instead",
-                    roleId,
-                    workplacePlotId,
-                    err
-                );
-            }
-            report.addPromoted();
         }
 
         TownResidentReconcileService.reconcileTownOnWorldThread(world, plugin, town);
@@ -244,6 +197,136 @@ public final class BuildingQuestResidentReconcileService {
             );
         }
         return report;
+    }
+
+    private static boolean promoteCandidate(
+        World world, AetherhavenPlugin plugin, TownRecord town, TownManager tm, Store<EntityStore> store,
+        String roleId, String residentKind, UUID workplacePlotId, Ref<EntityStore> npcRef
+    ) {
+        UUIDComponent uuidComp = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        if (uuidComp == null) {
+            return false;
+        }
+        TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+        if (binding == null || !town.getTownId().equals(binding.getTownId())) {
+            store.putComponent(
+                npcRef,
+                TownVillagerBinding.getComponentType(),
+                new TownVillagerBinding(town.getTownId(), residentKind, null)
+            );
+        }
+
+        String err =
+            WorkplacePlotAssignment.tryAssignWorker(
+                world,
+                plugin,
+                town,
+                tm,
+                workplacePlotId,
+                uuidComp.getUuid(),
+                store
+            );
+        if (err != null) {
+            store.putComponent(
+                npcRef,
+                TownVillagerBinding.getComponentType(),
+                new TownVillagerBinding(town.getTownId(), residentKind, workplacePlotId, workplacePlotId)
+            );
+            ResidentRegistryService.upsert(
+                town,
+                tm,
+                roleId.trim(),
+                residentKind,
+                workplacePlotId,
+                uuidComp.getUuid()
+            );
+            town.addInnVisitorPoolExcludedRoleId(roleId.trim());
+            tm.updateTown(town);
+            LOGGER.atWarning().log(
+                "fixresidents: assign worker failed for %s on plot %s (%s); forced resident registry instead",
+                roleId,
+                workplacePlotId,
+                err
+            );
+        }
+        town.getInnPoolNpcIds().removeIf(id -> uuidComp.getUuid().toString().equalsIgnoreCase(id));
+        town.removeInnLockedEntity(uuidComp.getUuid());
+        if (TownVillagerBinding.KIND_GUILD_MASTER.equals(residentKind)) {
+            town.setGuildHallActive(true);
+        }
+        if (store.getComponent(npcRef, VillagerNeeds.getComponentType()) == null) {
+            store.putComponent(npcRef, VillagerNeeds.getComponentType(), VillagerNeeds.full());
+        }
+        if (store.getComponent(npcRef, AetherhavenVillagerHandle.getComponentType()) == null) {
+            store.putComponent(npcRef, AetherhavenVillagerHandle.getComponentType(), new AetherhavenVillagerHandle(
+                TownVillagerSpawner.handle(new TownVillagerBinding(town.getTownId(), residentKind, workplacePlotId))
+            ));
+        }
+        tm.updateTown(town);
+        return true;
+    }
+
+    /** Use the actual quest speaker, including legacy NPCs that never received a town binding. */
+    public static void reconcileQuestSpeaker(
+        World world, AetherhavenPlugin plugin, TownRecord town, TownManager tm, Store<EntityStore> store,
+        String questId, Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid() || !canRecoverNpc(store, town, npcRef)) {
+            return;
+        }
+        NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+        if (npc == null || npc.getRoleName() == null) {
+            return;
+        }
+        VillagerDefinition def = plugin.getVillagerDefinitionCatalog().byNpcRoleId(npc.getRoleName().trim());
+        PlotInstance plot = readyWorkplaceForQuest(plugin.getQuestCatalog(), plugin.getConstructionCatalog(), town, def, questId);
+        if (plot == null) {
+            return;
+        }
+        String kind = InnVisitorShopPromotion.resolveResidentKind(def);
+        if (kind == null || kind.isBlank() || isAlreadyHealthy(town, store, def.getNpcRoleId(), kind, plot.getPlotId())) {
+            return;
+        }
+        promoteCandidate(world, plugin, town, tm, store, def.getNpcRoleId(), kind, plot.getPlotId(), npcRef);
+    }
+
+    static PlotInstance readyWorkplaceForQuest(
+        com.hexvane.aetherhaven.quest.QuestCatalog quests, ConstructionCatalog constructions, TownRecord town,
+        VillagerDefinition def, String questId
+    ) {
+        if (def == null || !def.isInnPoolEligible() || def.getWorkConstructionId() == null
+            || !town.hasQuestActiveOrCompleted(questId)) {
+            return null;
+        }
+        String work = def.getWorkConstructionId();
+        if (!questId.equals(InnVisitorShopPromotion.findShopQuestId(quests, constructions, def, work))) {
+            return null;
+        }
+        return town.findCompletePlotForWorkConstruction(constructions, work);
+    }
+
+    private static boolean canRecoverNpc(Store<EntityStore> store, TownRecord town, Ref<EntityStore> ref) {
+        if (store.getComponent(ref, WorldNpcBinding.getComponentType()) != null) {
+            return false;
+        }
+        TownVillagerBinding binding = store.getComponent(ref, TownVillagerBinding.getComponentType());
+        AetherhavenVillagerHandle handle = store.getComponent(ref, AetherhavenVillagerHandle.getComponentType());
+        TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
+        boolean insideTown = transform != null && TownTerritoryClaims.containsBlock(
+            town, (int) Math.floor(transform.getPosition().x), (int) Math.floor(transform.getPosition().z)
+        );
+        return recoveryBelongsToTown(town.getTownId(), binding != null ? binding.getTownId() : null,
+            handle != null ? handle.getHandle() : null, insideTown);
+    }
+
+    static boolean recoveryBelongsToTown(UUID townId, UUID boundTownId, String handle, boolean insideTown) {
+        if (boundTownId != null) {
+            return townId.equals(boundTownId);
+        }
+        if (handle != null && !handle.isBlank()) {
+            return villagerHandleMatchesTownSuffix(townId, handle);
+        }
+        return insideTown;
     }
 
     /**
@@ -309,15 +392,15 @@ public final class BuildingQuestResidentReconcileService {
         @Nonnull String residentKind
     ) {
         Ref<EntityStore> fromPool = findInnPoolNpcRef(store, town, roleId);
-        if (fromPool != null) {
+        if (fromPool != null && canRecoverNpc(store, town, fromPool)) {
             return fromPool;
         }
         Ref<EntityStore> fromBinding = findTownBoundNpcRef(store, town, roleId, visitorBindingKind, residentKind);
-        if (fromBinding != null) {
+        if (fromBinding != null && canRecoverNpc(store, town, fromBinding)) {
             return fromBinding;
         }
         Ref<EntityStore> fromHandle = findHandleMatchedNpcRef(store, town, roleId);
-        if (fromHandle != null) {
+        if (fromHandle != null && canRecoverNpc(store, town, fromHandle)) {
             return fromHandle;
         }
         return findOrphanRoleNpcRef(store, town, tm, roleId);
@@ -337,37 +420,14 @@ public final class BuildingQuestResidentReconcileService {
         String roleId = def.getNpcRoleId().trim();
         removeLoadedDuplicatesForRole(store, town, tm, roleId);
 
-        NPCPlugin npcPlugin = NPCPlugin.get();
-        if (npcPlugin == null) {
-            return null;
-        }
         Vector3d position = resolveWorkplaceSpawnPosition(world, plugin, town, plot);
-        var pair = npcPlugin.spawnNPC(store, roleId, null, position, Rotation3f.ZERO);
-        if (pair == null) {
+        Ref<EntityStore> npcRef = TownVillagerSpawner.spawn(
+            store, roleId, position, new TownVillagerBinding(town.getTownId(), residentKind, plot.getPlotId(), plot.getPlotId()),
+            "FIX_RESIDENTS", "roleId=" + roleId + ",plotId=" + plot.getPlotId()
+        );
+        if (npcRef == null) {
             return null;
         }
-        Ref<EntityStore> npcRef = pair.first();
-        store.putComponent(npcRef, VillagerNeeds.getComponentType(), VillagerNeeds.full());
-        String hex = town.getTownId().toString().replace("-", "");
-        String suffix = hex.length() >= 8 ? hex.substring(0, 8) : hex;
-        store.putComponent(
-            npcRef,
-            AetherhavenVillagerHandle.getComponentType(),
-            new AetherhavenVillagerHandle("Villager_" + residentKind + "_" + suffix)
-        );
-        store.putComponent(
-            npcRef,
-            TownVillagerBinding.getComponentType(),
-            new TownVillagerBinding(town.getTownId(), residentKind, plot.getPlotId(), plot.getPlotId())
-        );
-        NpcSpawnOriginUtil.attach(
-            store,
-            npcRef,
-            "FIX_RESIDENTS",
-            "roleId=" + roleId + ",plotId=" + plot.getPlotId(),
-            world,
-            position
-        );
         LOGGER.atInfo().log(
             "fixresidents: spawned %s for town %s at workplace plot %s",
             roleId,
@@ -403,7 +463,6 @@ public final class BuildingQuestResidentReconcileService {
         @Nonnull TownManager tm,
         @Nonnull String roleId
     ) {
-        UUID townId = town.getTownId();
         String wanted = roleId.trim();
         if (wanted.isEmpty()) {
             return 0;
@@ -426,19 +485,9 @@ public final class BuildingQuestResidentReconcileService {
                     if (!wanted.equalsIgnoreCase(npc.getRoleName().trim())) {
                         continue;
                     }
-                    TownVillagerBinding b = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
-                    if (b != null) {
-                        if (townId.equals(b.getTownId())) {
-                            toRemove.add(npcRef);
-                            continue;
-                        }
-                        // Bound to another real town: leave alone.
-                        if (tm.getTown(b.getTownId()) != null) {
-                            continue;
-                        }
+                    if (canRecoverNpc(store, town, npcRef)) {
+                        toRemove.add(npcRef);
                     }
-                    // Unbound or stale town binding: safe to replace for this role.
-                    toRemove.add(npcRef);
                 }
             }
         );
@@ -585,18 +634,10 @@ public final class BuildingQuestResidentReconcileService {
                     if (ref == null || !ref.isValid()) {
                         continue;
                     }
-                    TownVillagerBinding b = store.getComponent(ref, TownVillagerBinding.getComponentType());
-                    if (b != null) {
-                        if (town.getTownId().equals(b.getTownId())) {
-                            found.set(ref);
-                            return;
-                        }
-                        if (tm.getTown(b.getTownId()) != null) {
-                            continue;
-                        }
+                    if (canRecoverNpc(store, town, ref)) {
+                        found.set(ref);
+                        return;
                     }
-                    found.set(ref);
-                    return;
                 }
             }
         );

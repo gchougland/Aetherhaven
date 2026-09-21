@@ -1,6 +1,5 @@
 package com.hexvane.aetherhaven.town;
 
-import com.hypixel.hytale.math.vector.Rotation3f;
 
 import com.hypixel.hytale.math.vector.Vector3fUtil;
 
@@ -25,7 +24,7 @@ import com.hexvane.aetherhaven.tourist.TouristAutonomyState;
 import com.hexvane.aetherhaven.tourist.TouristAutonomySystem;
 import com.hexvane.aetherhaven.tourist.TouristRecord;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
-import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
+import com.hexvane.aetherhaven.villager.TownVillagerSpawner;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.villager.audit.VillagerAuditContext;
@@ -99,6 +98,7 @@ public final class VillagerTownResetService {
         @Nonnull Vector3d basePosition
     ) {
         town.migrateInnFieldsIfNeeded();
+        BuildingQuestResidentReconcileService.reconcileForTown(world, plugin, town, tm, store);
         // Sync visitor bindings / resident registry with completed job plots (fixes "quest completed but still visitor").
         InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store, false);
         LinkedHashMap<UUID, CapturedNpc> captured = captureNpcs(town, store, plugin);
@@ -1217,16 +1217,6 @@ public final class VillagerTownResetService {
         if (role.isEmpty()) {
             return null;
         }
-        var pair = spawnOrSkip(role, town, () -> npc.spawnNPC(store, role, null, pos, Rotation3f.ZERO));
-        if (pair == null) {
-            return null;
-        }
-        Ref<EntityStore> ref = pair.first();
-        store.putComponent(ref, VillagerNeeds.getComponentType(), VillagerNeeds.full());
-        String hex = town.getTownId().toString().replace("-", "");
-        String suffix = hex.length() >= 8 ? hex.substring(0, 8) : hex;
-        store.putComponent(ref, AetherhavenVillagerHandle.getComponentType(), new AetherhavenVillagerHandle("Villager_" + c.bindingKind + "_" + suffix));
-
         TownVillagerBinding binding;
         if (TownVillagerBinding.KIND_INNKEEPER.equals(c.bindingKind) && innPlot != null) {
             UUID pid = innPlot.getPlotId();
@@ -1236,16 +1226,13 @@ public final class VillagerTownResetService {
         } else {
             binding = new TownVillagerBinding(town.getTownId(), c.bindingKind, null);
         }
-        store.putComponent(ref, TownVillagerBinding.getComponentType(), binding);
-        World world = store.getExternalData().getWorld();
-        NpcSpawnOriginUtil.attach(
-            store,
-            ref,
-            "ADMIN_RESET",
-            "roleId=" + role + ",kind=" + c.bindingKind + ",previousUuid=" + c.previousEntityUuid,
-            world,
-            pos
-        );
+        Ref<EntityStore> ref = spawnOrSkip(role, town, () -> TownVillagerSpawner.spawn(
+            store, role, pos, binding, "ADMIN_RESET",
+            "roleId=" + role + ",kind=" + c.bindingKind + ",previousUuid=" + c.previousEntityUuid
+        ));
+        if (ref == null) {
+            return null;
+        }
 
         UUIDComponent nu = store.getComponent(ref, UUIDComponent.getComponentType());
         if (nu == null) {

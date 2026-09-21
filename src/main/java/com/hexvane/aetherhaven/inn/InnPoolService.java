@@ -2,7 +2,6 @@ package com.hexvane.aetherhaven.inn;
 
 import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
 
-import com.hypixel.hytale.math.vector.Rotation3f;
 
 import com.hypixel.hytale.math.vector.Vector3fUtil;
 
@@ -20,9 +19,8 @@ import com.hexvane.aetherhaven.time.AetherhavenMorningWindow;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.townsfolk.PendingEntityRemovalService;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
-import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
+import com.hexvane.aetherhaven.villager.TownVillagerSpawner;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
-import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.villager.audit.VillagerAuditContext;
 import com.hexvane.aetherhaven.villager.data.InnPoolEntry;
 import com.hypixel.hytale.component.RemoveReason;
@@ -1472,28 +1470,13 @@ public final class InnPoolService {
             );
             return null;
         }
-        var pair = npc.spawnNPC(store, roleId, null, pos, Rotation3f.ZERO);
-        if (pair == null) {
-            LOGGER.atWarning().log("Failed to spawn inn visitor %s for town %s", roleId, town.getTownId());
+        Ref<EntityStore> ref = TownVillagerSpawner.spawn(
+            store, roleId, pos, new TownVillagerBinding(town.getTownId(), villagerKind, innPlot.getPlotId()),
+            spawnSource, "roleId=" + roleId + ",kind=" + villagerKind + ",slot=" + slotIndex
+        );
+        if (ref == null) {
             return null;
         }
-        Ref<EntityStore> ref = pair.first();
-        store.putComponent(ref, VillagerNeeds.getComponentType(), VillagerNeeds.full());
-        String handle = "Villager_" + villagerKind + "_" + shortHex(town.getTownId());
-        store.putComponent(ref, AetherhavenVillagerHandle.getComponentType(), new AetherhavenVillagerHandle(handle));
-        store.putComponent(
-            ref,
-            TownVillagerBinding.getComponentType(),
-            new TownVillagerBinding(town.getTownId(), villagerKind, innPlot.getPlotId())
-        );
-        NpcSpawnOriginUtil.attach(
-            store,
-            ref,
-            spawnSource,
-            "roleId=" + roleId + ",kind=" + villagerKind + ",slot=" + slotIndex,
-            world,
-            pos
-        );
         UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
         return uuidComp != null ? uuidComp.getUuid() : null;
     }
@@ -1586,12 +1569,6 @@ public final class InnPoolService {
         return spawnVisitor(world, plugin, town, store, innPlot, innDef, local, roleId, villagerKind, spawnSource, slotIndex);
     }
 
-    @Nonnull
-    private static String shortHex(@Nonnull UUID townId) {
-        String hex = townId.toString().replace("-", "");
-        return hex.length() >= 8 ? hex.substring(0, 8) : hex;
-    }
-
     /**
      * Spawns an inn visitor at an explicit world position (e.g. debug villager reset). {@code innPlot} supplies the
      * preferred plot id for {@link TownVillagerBinding} when non-null.
@@ -1609,30 +1586,14 @@ public final class InnPoolService {
         if (npc == null) {
             return null;
         }
-        var pair = npc.spawnNPC(store, roleId, null, worldPosition, Rotation3f.ZERO);
-        if (pair == null) {
-            LOGGER.atWarning().log("Failed to spawn inn visitor %s for town %s at reset position", roleId, town.getTownId());
+        UUID preferred = innPlot != null ? innPlot.getPlotId() : null;
+        Ref<EntityStore> ref = TownVillagerSpawner.spawn(
+            store, roleId, worldPosition, new TownVillagerBinding(town.getTownId(), villagerKind, preferred),
+            "INN_DEBUG_SPAWN", "roleId=" + roleId + ",kind=" + villagerKind + ",caller=spawnVisitorAtWorldPosition"
+        );
+        if (ref == null) {
             return null;
         }
-        Ref<EntityStore> ref = pair.first();
-        store.putComponent(ref, VillagerNeeds.getComponentType(), VillagerNeeds.full());
-        String handle = "Villager_" + villagerKind + "_" + shortHex(town.getTownId());
-        store.putComponent(ref, AetherhavenVillagerHandle.getComponentType(), new AetherhavenVillagerHandle(handle));
-        UUID preferred = innPlot != null ? innPlot.getPlotId() : null;
-        store.putComponent(
-            ref,
-            TownVillagerBinding.getComponentType(),
-            new TownVillagerBinding(town.getTownId(), villagerKind, preferred)
-        );
-        World world = store.getExternalData().getWorld();
-        NpcSpawnOriginUtil.attach(
-            store,
-            ref,
-            "INN_DEBUG_SPAWN",
-            "roleId=" + roleId + ",kind=" + villagerKind + ",caller=spawnVisitorAtWorldPosition",
-            world,
-            worldPosition
-        );
         UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
         return uuidComp != null ? uuidComp.getUuid() : null;
     }
@@ -2083,6 +2044,10 @@ public final class InnPoolService {
             return new RepairReport();
         }
         RepairReport report = new RepairReport();
+        if (fillOpenSlots) {
+            report.promotedResidents = com.hexvane.aetherhaven.town.BuildingQuestResidentReconcileService
+                .reconcileForTown(world, plugin, town, tm, store).getPromoted();
+        }
         List<InnPoolEntry> pool = innPoolOrLegacy(plugin);
         town.migrateInnFieldsIfNeeded();
         dedupeInnPoolIds(town, tm);
@@ -2093,7 +2058,7 @@ public final class InnPoolService {
         syncExcludedRolesFromResidents(town, store, tm, pool);
         report.lockedQuestVisitors = repairQuestLocksCount(town, store);
         autoLockQuestCriticalVisitors(town, tm, store);
-        report.promotedResidents = promoteEligibleVisitorsToResidents(world, plugin, town, tm, store);
+        report.promotedResidents += promoteEligibleVisitorsToResidents(world, plugin, town, tm, store);
         report.removedPoolEntries = syncInnPoolWithResidentBindings(town, store, tm);
         report.removedPoolEntries += removeIneligiblePoolVisitors(town, plugin, tm, store, pool);
         trimInnPoolListToMax(town, tm, store);
@@ -2329,60 +2294,22 @@ public final class InnPoolService {
                 continue;
             }
             String roleId = npc.getRoleName().trim();
-            String constructionId;
-            String residentKind;
-            if (AetherhavenConstants.NPC_BLACKSMITH.equals(roleId)) {
-                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_BLACKSMITH_SHOP;
-                residentKind = TownVillagerBinding.KIND_BLACKSMITH;
-            } else if (AetherhavenConstants.NPC_MERCHANT.equals(roleId)) {
-                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL;
-                residentKind = TownVillagerBinding.KIND_MERCHANT;
-            } else if (AetherhavenConstants.NPC_FARMER.equals(roleId)) {
-                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_FARM;
-                residentKind = TownVillagerBinding.KIND_FARMER;
-            } else if (AetherhavenConstants.NPC_PRIESTESS.equals(roleId)) {
-                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR;
-                residentKind = TownVillagerBinding.KIND_PRIESTESS;
-            } else if (AetherhavenConstants.NPC_MINER.equals(roleId)) {
-                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_MINERS_HUT;
-                residentKind = TownVillagerBinding.KIND_MINER;
-            } else if (AetherhavenConstants.NPC_LOGGER.equals(roleId)) {
-                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL;
-                residentKind = TownVillagerBinding.KIND_LOGGER;
-            } else if (AetherhavenConstants.NPC_RANCHER.equals(roleId)) {
-                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_BARN;
-                residentKind = TownVillagerBinding.KIND_RANCHER;
-            } else if (AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID.equals(roleId)) {
-                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL;
-                residentKind = TownVillagerBinding.KIND_GUILD_MASTER;
-            } else if (AetherhavenConstants.BARD_NPC_ROLE_ID.equals(roleId)) {
-                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL;
-                residentKind = TownVillagerBinding.KIND_BARD;
-            } else if (AetherhavenConstants.NPC_CRYSTAL_KEEPER.equals(roleId)) {
-                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_CRYSTAL_KEEPERS_SHOP;
-                residentKind = TownVillagerBinding.KIND_CRYSTAL_KEEPER;
-            } else if (AetherhavenConstants.NPC_PYROTECHNIC.equals(roleId)) {
-                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_BOMB_SHOP;
-                residentKind = TownVillagerBinding.KIND_PYROTECHNIC;
-            } else if (AetherhavenConstants.NPC_CLOWN.equals(roleId)) {
-                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_CLOWN_TENT;
-                residentKind = TownVillagerBinding.KIND_CLOWN;
-            } else if (AetherhavenConstants.NPC_FLORIST.equals(roleId)) {
-                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_FLOWER_SHOP;
-                residentKind = TownVillagerBinding.KIND_FLORIST;
-            } else if (AetherhavenConstants.NPC_FURNITURE_MERCHANT.equals(roleId)) {
-                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_FURNITURE_SHOP;
-                residentKind = TownVillagerBinding.KIND_FURNITURE_MERCHANT;
-            } else if (AetherhavenConstants.NPC_CHEF.equals(roleId)) {
-                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_RESTAURANT;
-                residentKind = TownVillagerBinding.KIND_CHEF;
-            } else if (AetherhavenConstants.NPC_BUILDER.equals(roleId)) {
-                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_BUILDERS_HUT;
-                residentKind = TownVillagerBinding.KIND_BUILDER;
-            } else {
+            var definition = plugin.getVillagerDefinitionCatalog().byNpcRoleId(roleId);
+            if (definition == null || !definition.isInnPoolEligible()) {
                 continue;
             }
-            PlotInstance residentPlot = town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(), constructionId);
+            String constructionId = definition.getWorkConstructionId();
+            String residentKind = InnVisitorShopPromotion.resolveResidentKind(definition);
+            if (constructionId == null || residentKind == null || residentKind.isBlank()) {
+                continue;
+            }
+            String questId = InnVisitorShopPromotion.findShopQuestId(
+                plugin.getQuestCatalog(), plugin.getConstructionCatalog(), definition, constructionId
+            );
+            if (questId == null || !town.hasQuestActiveOrCompleted(questId)) {
+                continue;
+            }
+            PlotInstance residentPlot = town.findCompletePlotForWorkConstruction(plugin.getConstructionCatalog(), constructionId);
             if (residentPlot == null) {
                 continue;
             }

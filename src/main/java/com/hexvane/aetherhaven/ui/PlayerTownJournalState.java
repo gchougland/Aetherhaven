@@ -272,6 +272,8 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
     private int villagerChatterFrequencyPercent = 100;
     private transient String lastDialogueClip;
     private final transient java.util.Map<UUID, Long> ambientSpeechHeard = new java.util.HashMap<>();
+    private transient long nextAmbientSpeechMs;
+    private transient long nextAmbientSpeechCleanupMs;
 
     @Nonnull
     private String activeTownId = "";
@@ -338,6 +340,8 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         c.villagerChatterFrequencyPercent = villagerChatterFrequencyPercent;
         c.lastDialogueClip = lastDialogueClip;
         c.ambientSpeechHeard.putAll(ambientSpeechHeard);
+        c.nextAmbientSpeechMs = nextAmbientSpeechMs;
+        c.nextAmbientSpeechCleanupMs = nextAmbientSpeechCleanupMs;
         c.activeTownId = activeTownId;
         c.toolKeyPrimary = toolKeyPrimary;
         c.toolKeySecondary = toolKeySecondary;
@@ -521,6 +525,8 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         villagerSpeechVolumePercent = 70;
         villagerChatterFrequencyPercent = 100;
         ambientSpeechHeard.clear();
+        nextAmbientSpeechMs = 0;
+        nextAmbientSpeechCleanupMs = 0;
     }
 
     public boolean isDialogueSpeechEnabled() {
@@ -535,12 +541,22 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
     public void setLastDialogueClip(String clip) { lastDialogueClip = clip; }
 
     public boolean tryAmbientSpeech(UUID villager, long now) {
-        if (villagerChatterFrequencyPercent == 0) return false;
+        return tryAmbientSpeech(villager, now, 0);
+    }
+
+    /** One ambient recording at a time per listener, in addition to each villager's cooldown. */
+    public boolean tryAmbientSpeech(UUID villager, long now, long audioMs) {
+        if (villagerSpeechVolumePercent == 0 || villagerChatterFrequencyPercent == 0 || now < nextAmbientSpeechMs) return false;
         long interval = 12_000L * 100 / villagerChatterFrequencyPercent;
         Long last = ambientSpeechHeard.get(villager);
         if (last != null && now - last < interval) return false;
-        ambientSpeechHeard.entrySet().removeIf(e -> now - e.getValue() > Math.max(interval, 300_000));
+        if (now >= nextAmbientSpeechCleanupMs) {
+            // Retain enough history even if the user reduces frequency to 1% later.
+            ambientSpeechHeard.entrySet().removeIf(e -> now - e.getValue() > 1_200_000L);
+            nextAmbientSpeechCleanupMs = now + 30_000;
+        }
         ambientSpeechHeard.put(villager, now);
+        nextAmbientSpeechMs = now + Math.max(audioMs, interval / 4);
         return true;
     }
 

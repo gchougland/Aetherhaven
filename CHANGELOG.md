@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.2.1] - Unreleased
+
+### Fixed
+
+- **Villagers** Fixed villagers staying at the inn after their workplaces are built. Villager repair commands now help stuck villagers from other mods too.
+- **Town backups** Unrelated files no longer stop town backups or fill the log with errors.
+- **Town performance** Reduced unnecessary saving when nothing is being built.
+- **Villager chatter** Reduced overlapping idle voices and unnecessary speech animations in busy towns.
+
 ## [3.2.0] - 9/16/2026
 
 ### Added

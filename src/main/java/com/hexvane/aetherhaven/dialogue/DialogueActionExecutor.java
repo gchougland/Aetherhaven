@@ -409,6 +409,9 @@ public final class DialogueActionExecutor {
             return;
         }
         UUID npcUuid = npcUuidFromRef(store, npcRef);
+        com.hexvane.aetherhaven.town.BuildingQuestResidentReconcileService.reconcileQuestSpeaker(
+            world, plugin, town, tm, store, qid, npcRef
+        );
         applyQuestCompletion(world, plugin, town, tm, qid, playerRef, npcUuid, store);
         com.hexvane.aetherhaven.hud.AetherhavenHudRefreshSystem.requestRefresh(world);
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());

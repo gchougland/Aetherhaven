@@ -119,6 +119,9 @@ public final class PlotAssemblyService {
     }
 
     private static void flushDirtyAssemblyTowns(@Nonnull TownManager tm, @Nonnull Map<UUID, TownRecord> dirty) {
+        // An idle assembly tick must not flush unrelated production/needs changes,
+        // bypassing TownSaveCoordinator's debounce and doing disk IO on the world thread.
+        if (dirty.isEmpty()) return;
         for (TownRecord town : dirty.values()) {
             tm.markDirty(town);
         }
@@ -739,7 +742,7 @@ public final class PlotAssemblyService {
         Instant start = raw == 0L ? simNow : Instant.ofEpochMilli(raw);
         if (start.isAfter(simNow)) {
             plot.setAssemblyStartEpochMs(simNow.toEpochMilli());
-            tm.markDirty(town);
+            tm.updateTown(town);
             return simNow;
         }
         return start;
@@ -762,13 +765,13 @@ public final class PlotAssemblyService {
         if (nextDue == 0L) {
             nextDue = assemblyStart.toEpochMilli() + slot;
             plot.setAssemblyNextPassiveDueSimMs(nextDue);
-            tm.markDirty(town);
+            tm.updateTown(town);
             return nextDue;
         }
         long wallNow = System.currentTimeMillis();
         if (nextDue > wallNow + 86_400_000L || nextDue > simNowMs + 3_600_000L) {
             plot.setAssemblyNextPassiveDueSimMs(simNowMs);
-            tm.markDirty(town);
+            tm.updateTown(town);
             return simNowMs;
         }
         return nextDue;

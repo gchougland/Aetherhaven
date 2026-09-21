@@ -69,6 +69,7 @@ public final class InnVisitorShopCompletion {
         UUIDComponent uuidComp = store.getComponent(npcRef, UUIDComponent.getComponentType());
         UUID npcUuid = uuidComp != null ? uuidComp.getUuid() : null;
         if (npcUuid != null) {
+            town.removeInnLockedEntity(npcUuid);
             town.getInnPoolNpcIds().removeIf(s -> {
                 try {
                     return npcUuid.equals(UUID.fromString(s.trim()));
