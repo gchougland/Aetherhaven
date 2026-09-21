@@ -177,5 +177,21 @@
       "R-Eyelid-Bot"
     ],
     "sharesHumanFaces": true
+  },
+  "Pyrotechnic": {
+    "rig": "Goblin",
+    "model": "NPC/Intelligent/Goblin/Models/Model.blockymodel",
+    "jawDegrees": 22,
+    "mutedAnimations": [],
+    "faceNodes": [
+      "Jaw",
+      "L-Eye",
+      "L-Eyelid-Bot",
+      "L-Eyelid-Top",
+      "R-Eye",
+      "R-Eyelid-Bot",
+      "R-Eyelid-Top"
+    ],
+    "sharesHumanFaces": false
   }
 }

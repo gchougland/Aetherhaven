@@ -77,7 +77,8 @@ public final class VillagerWorkVisuals {
         if (activity.playsToolAction()) {
             commandBuffer.run(s -> { if (npcRef.isValid()) VillagerLifeVisuals.workMurmur(npcRef, s); });
             playToolSwing(npcRef, store, commandBuffer, npc, activity);
-            spawnHitFx(store, commandBuffer, poi, activity);
+            spawnHitFx(store, commandBuffer, poi, activity,
+                com.hexvane.aetherhaven.plotcreator.PlotCreatorSpotPreview.isPreview(npcRef, store));
             // The murmur owns Face until its exact lip track finishes; restoring
             // the mood here would erase it on the same tick as the tool swing.
         }
@@ -173,7 +174,8 @@ public final class VillagerWorkVisuals {
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull PoiEntry poi,
-        @Nonnull VillagerWorkActivity activity
+        @Nonnull VillagerWorkActivity activity,
+        boolean silent
     ) {
         Vector3d pos = new Vector3d(poi.getX() + 0.5, poi.getY() + 0.55, poi.getZ() + 0.5);
         String swingId = activity.swingSoundEventId();
@@ -181,10 +183,10 @@ public final class VillagerWorkVisuals {
         String particleId = activity.hitParticleSystemId();
         float volume = activity.soundVolume();
         commandBuffer.run(s -> {
-            if (swingId != null) {
+            if (!silent && swingId != null) {
                 playSound3d(swingId, pos, volume, s);
             }
-            if (hitId != null) {
+            if (!silent && hitId != null) {
                 playSound3d(hitId, pos, volume, s);
             }
             if (particleId != null && !particleId.isBlank()) {

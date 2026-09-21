@@ -15,6 +15,11 @@ class CreatureFaceAssetsTest {
         return LifeAssetJson.read(path);
     }
 
+    private static Path modelPath(String name) {
+        var townsfolk = RES.resolve("Server/Models/Townsfolk/" + name + ".json");
+        return Files.exists(townsfolk) ? townsfolk : RES.resolve("Server/Models/Villager/" + name + ".json");
+    }
+
     @Test void machinariaRobotRoutesBothDialogueAndActivityFacesAtEveryPitch() {
         String model = "NPC/Gear/Robot.blockymodel";
         assertTrue(NpcFaceVisuals.supportsFaceModel(model));
@@ -32,13 +37,13 @@ class CreatureFaceAssetsTest {
 
     @Test void eachResidentUsesNativeFacesInBothAnimationSlotsAndAtEveryPitch() throws Exception {
         var rigs = json(RES.resolve("defaults/villager_creature_faces.json"));
-        assertEquals(11, rigs.size());
+        assertEquals(12, rigs.size());
         for (var entry : rigs.entrySet()) {
             var profile = entry.getValue().getAsJsonObject();
             String rig = profile.get("rig").getAsString();
             String model = profile.get("model").getAsString();
             assertTrue(NpcFaceVisuals.supportsFaceModel(model));
-            var bindings = json(RES.resolve("Server/Models/Townsfolk/" + entry.getKey() + ".json")).getAsJsonObject("AnimationSets");
+            var bindings = json(modelPath(entry.getKey())).getAsJsonObject("AnimationSets");
             for (String pitch : new String[]{"", "_Lower", "_Higher"}) {
                 String original = "Aetherhaven_Life_Actions" + pitch;
                 String selected = NpcFaceVisuals.itemAnimationsForModelAsset(entry.getKey(), model, original);
@@ -67,7 +72,7 @@ class CreatureFaceAssetsTest {
     }
 
     @Test void jawsActuallyArticulateAndCloseWithoutHumanMouthUvsOrBodyTracks() throws Exception {
-        for (String rig : new String[]{"Trork", "Feran", "Klops", "Slothian", "Skeleton"}) {
+        for (String rig : new String[]{"Goblin", "Trork", "Feran", "Klops", "Slothian", "Skeleton"}) {
             var table = json(RES.resolve("Server/Item/Animations/Aetherhaven_Life_Actions_" + rig + ".json")).getAsJsonObject("Animations");
             var paths = new java.util.HashSet<Path>();
             for (var action : table.entrySet())
@@ -103,7 +108,7 @@ class CreatureFaceAssetsTest {
             var profiles = json(RES.resolve("defaults/villager_creature_faces.json"));
             String resident = profiles.entrySet().stream().filter(e -> e.getValue().getAsJsonObject().get("rig").getAsString().equals(rig))
                 .findFirst().orElseThrow().getKey();
-            var bindings = json(RES.resolve("Server/Models/Townsfolk/" + resident + ".json")).getAsJsonObject("AnimationSets");
+            var bindings = json(modelPath(resident)).getAsJsonObject("AnimationSets");
             var apertures = new java.util.HashSet<Double>();
             for (String shape : new String[]{"A", "B", "C", "D", "E", "F"}) {
                 var binding = bindings.getAsJsonObject("Aetherhaven_Life_Mouth_" + shape).getAsJsonArray("Animations").get(0).getAsJsonObject();

@@ -31,6 +31,7 @@ import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import com.hypixel.hytale.server.npc.NPCPlugin;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -166,30 +167,34 @@ public final class VillagerLifeSystem extends EntityTickingSystem<EntityStore> {
         if (!available(ref, store, true)) return false;
         TownVillagerBinding binding = store.getComponent(ref, TownVillagerBinding.getComponentType());
         Vector3d pos = store.getComponent(ref, TransformComponent.getComponentType()).getPosition();
+        // Own this list: eligibility helpers may themselves make spatial queries.
         List<Ref<EntityStore>> candidates = new ArrayList<>();
-        // Read-only scan, with every reservation and write after iteration is complete.
-        store.forEachChunk(getQuery(), (chunk, ignored) -> {
-            for (int i = 0; i < chunk.size(); i++) {
-                Ref<EntityStore> other = chunk.getReferenceTo(i);
-                TownVillagerBinding b = chunk.getComponent(i, TownVillagerBinding.getComponentType());
-                TransformComponent tc = chunk.getComponent(i, TransformComponent.getComponentType());
-                if (other.equals(ref) || b == null || tc == null || !binding.getTownId().equals(b.getTownId())) continue;
-                if (pos.distanceSquared(tc.getPosition()) > VillagerLifePolicy.SEARCH_RADIUS * VillagerLifePolicy.SEARCH_RADIUS) continue;
-                VillagerLifeState otherLife = chunk.getComponent(i, VillagerLifeState.getComponentType());
-                if (otherLife != null && (otherLife.ownsActivity(now) || now < otherLife.socialCooldownMs)) continue;
-                VillagerNeeds otherNeeds = chunk.getComponent(i, VillagerNeeds.getComponentType());
-                if (otherNeeds == null || !VillagerLifePolicy.canSocialize(otherNeeds.getHunger(), otherNeeds.getEnergy())) continue;
-                boolean nearby = VillagerLifePolicy.inTalkingRange(pos.distanceSquared(tc.getPosition()), pos.y - tc.getPosition().y);
-                // A neighbor behind a wall must not repeatedly beat a visible partner.
-                if (nearby && !clearSight(pos, tc.getPosition(), store)) continue;
-                if (sameBuildingOnly && !sameBuilding(ref, other, store)) continue;
-                if ((mounted(ref, store) || mounted(other, store)) && !nearby) continue;
-                if (available(other, store, true)) candidates.add(other);
-            }
+        store.getResource(NPCPlugin.get().getNpcSpatialResource()).getSpatialStructure()
+            .collect(pos, VillagerLifePolicy.SEARCH_RADIUS, candidates);
+        candidates.removeIf(other -> {
+            if (!other.isValid() || other.equals(ref)) return true;
+            TownVillagerBinding b = store.getComponent(other, TownVillagerBinding.getComponentType());
+            TransformComponent tc = store.getComponent(other, TransformComponent.getComponentType());
+            return b == null || tc == null || !binding.getTownId().equals(b.getTownId())
+                || store.getComponent(other, UUIDComponent.getComponentType()) == null
+                || pos.distanceSquared(tc.getPosition()) > VillagerLifePolicy.SEARCH_RADIUS * VillagerLifePolicy.SEARCH_RADIUS;
         });
-        candidates.sort(Comparator.comparingDouble(r -> pos.distanceSquared(store.getComponent(r, TransformComponent.getComponentType()).getPosition())));
-        if (candidates.isEmpty()) return false;
-        Ref<EntityStore> other = candidates.getFirst();
+        // Find the same nearest eligible partner, but do expensive activity and sight
+        // checks only until a match is found. Reserve after the read-only search.
+        Ref<EntityStore> other = nearestEligiblePartner(candidates,
+            candidate -> pos.distanceSquared(store.getComponent(candidate, TransformComponent.getComponentType()).getPosition()),
+            candidate -> {
+                VillagerLifeState otherLife = store.getComponent(candidate, VillagerLifeState.getComponentType());
+                if (otherLife != null && (otherLife.ownsActivity(now) || now < otherLife.socialCooldownMs)) return false;
+                VillagerNeeds otherNeeds = store.getComponent(candidate, VillagerNeeds.getComponentType());
+                if (otherNeeds == null || !VillagerLifePolicy.canSocialize(otherNeeds.getHunger(), otherNeeds.getEnergy())) return false;
+                Vector3d otherPos = store.getComponent(candidate, TransformComponent.getComponentType()).getPosition();
+                boolean nearby = VillagerLifePolicy.inTalkingRange(pos.distanceSquared(otherPos), pos.y - otherPos.y);
+                if (sameBuildingOnly && !sameBuilding(ref, candidate, store)) return false;
+                if ((mounted(ref, store) || mounted(candidate, store)) && !nearby) return false;
+                return available(candidate, store, true) && (!nearby || clearSight(pos, otherPos, store));
+            });
+        if (other == null) return false;
         VillagerLifeState otherLife = store.getComponent(other, VillagerLifeState.getComponentType());
         if (otherLife == null) {
             otherLife = new VillagerLifeState();
@@ -208,6 +213,13 @@ public final class VillagerLifeSystem extends EntityTickingSystem<EntityStore> {
         // both workers' short animation gaps to coincide could starve chats forever.
         session.readyAfterMs = Math.max(now, otherLife.visualUntilMs);
         return true;
+    }
+
+    static <T> T nearestEligiblePartner(List<T> candidates, java.util.function.ToDoubleFunction<T> distanceSquared,
+                                        java.util.function.Predicate<T> eligible) {
+        candidates.sort(Comparator.comparingDouble(distanceSquared));
+        for (T candidate : candidates) if (eligible.test(candidate)) return candidate;
+        return null;
     }
 
     private void advance(VillagerLifeState.Session session, Store<EntityStore> store, long now) {
@@ -436,15 +448,32 @@ public final class VillagerLifeSystem extends EntityTickingSystem<EntityStore> {
 
     private static boolean clearSight(Vector3d a, Vector3d b, Store<EntityStore> store) {
         var world = store.getExternalData().getWorld();
+        return clearSight(a, b, (x, y, z) -> {
+            if (!com.hexvane.aetherhaven.world.ChunkSectionBlockUtil.isChunkInMemory(world, x, z)) return false;
+            var block = com.hexvane.aetherhaven.world.ChunkSectionBlockUtil.blockType(world, x, y, z);
+            return block == null || block.getMaterial() != com.hypixel.hytale.protocol.BlockMaterial.Solid;
+        });
+    }
+
+    @FunctionalInterface
+    interface SightBlockTest {
+        boolean clear(int x, int y, int z);
+    }
+
+    static boolean clearSight(Vector3d a, Vector3d b, SightBlockTest blocks) {
         int steps = Math.max(1, (int)Math.ceil(a.distance(b) * 5));
+        int previousX = 0, previousY = 0, previousZ = 0;
         for (int i = 1; i < steps; i++) {
             double t = (double)i / steps;
             int x = (int)Math.floor(a.x + (b.x - a.x) * t);
             int y = (int)Math.floor(a.y + (b.y - a.y) * t + 1.4);
             int z = (int)Math.floor(a.z + (b.z - a.z) * t);
-            if (!com.hexvane.aetherhaven.world.ChunkSectionBlockUtil.isChunkInMemory(world, x, z)) return false;
-            var block = com.hexvane.aetherhaven.world.ChunkSectionBlockUtil.blockType(world, x, y, z);
-            if (block != null && block.getMaterial() == com.hypixel.hytale.protocol.BlockMaterial.Solid) return false;
+            // Keep the exact same sight samples, but read each crossed block once.
+            if (i > 1 && x == previousX && y == previousY && z == previousZ) continue;
+            previousX = x;
+            previousY = y;
+            previousZ = z;
+            if (!blocks.clear(x, y, z)) return false;
         }
         return true;
     }

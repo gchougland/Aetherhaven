@@ -26,6 +26,7 @@ public final class VillagerLifeVisuals {
     private VillagerLifeVisuals() {}
 
     public static long dialogue(Ref<EntityStore> player, Ref<EntityStore> ref, String category, float volume, Store<EntityStore> store) {
+        if (com.hexvane.aetherhaven.plotcreator.PlotCreatorSpotPreview.isPreview(ref, store)) volume = 0;
         var cue = com.hexvane.aetherhaven.speech.DialogueSpeechCue.resolve(category);
         if (cue.clip().equals("None")) return 0;
         var id = store.getComponent(ref, com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
@@ -253,6 +254,7 @@ public final class VillagerLifeVisuals {
     }
 
     public static void eatingSound(Ref<EntityStore> ref, Store<EntityStore> store) {
+        if (com.hexvane.aetherhaven.plotcreator.PlotCreatorSpotPreview.isPreview(ref, store)) return;
         TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
         int sound = SoundEvent.getAssetMap().getIndex("SFX_Consume_Bread");
         if (tc == null || sound < 0) return;

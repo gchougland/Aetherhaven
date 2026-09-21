@@ -75,6 +75,7 @@ class VillagerVoiceProfilesTest {
         for (String profile : VillagerLifePolicy.VOICES) for (String variant : new String[]{"Lower","Higher"}) {
             var base = VillagerLifeSpeech.select(profile, "Talk", 0);
             var shifted = VillagerLifeSpeech.select(profile + variant, "Talk", 0);
+            assertSame(shifted, VillagerLifeSpeech.select(profile + variant, "Talk", 0));
             assertEquals(base.clip(), shifted.clip());
             assertEquals(Math.ceil(base.audioMs()/shifted.pitch()), shifted.audioMs());
             var table = JsonParser.parseString(Files.readString(RES.resolve("Server/Item/Animations/" + shifted.actionsId() + ".json"))).getAsJsonObject().getAsJsonObject("Animations");

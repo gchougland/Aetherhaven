@@ -13,6 +13,14 @@ import javax.annotation.Nullable;
 
 /** Marks a plot-creator or POI-tool important-spot villager preview NPC (owner-only, non-autonomous). */
 public final class PlotCreatorSpotPreview implements Component<EntityStore> {
+    public static boolean isPreview(
+        com.hypixel.hytale.component.Ref<EntityStore> ref,
+        com.hypixel.hytale.component.ComponentAccessor<EntityStore> accessor
+    ) {
+        var type = componentType;
+        return type != null && accessor.getComponent(ref, type) != null;
+    }
+
     @Nonnull
     public static final BuilderCodec<PlotCreatorSpotPreview> CODEC =
         BuilderCodec.builder(PlotCreatorSpotPreview.class, PlotCreatorSpotPreview::new)

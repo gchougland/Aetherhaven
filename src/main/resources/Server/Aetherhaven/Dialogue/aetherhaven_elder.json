@@ -406,6 +406,15 @@
           "next": "gold_explainer"
         },
         {
+          "text": "aetherhaven_repairs.aetherhaven.repairs.open",
+          "condition": {
+            "type": "elder_can_repair_town"
+          },
+          "whenFalse": "hide",
+          "next": "repair_menu",
+          "icon": "UI/Custom/cog.png"
+        },
+        {
           "text": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.c10",
           "next": null
         }
@@ -760,6 +769,152 @@
         {
           "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
           "next": "main_hub"
+        }
+      ]
+    },
+    "repair_menu": {
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.speaker",
+      "text": "aetherhaven_repairs.aetherhaven.repairs.intro",
+      "choices": [
+        {
+          "text": "aetherhaven_repairs.aetherhaven.repairs.villagers.label",
+          "condition": {
+            "type": "elder_can_repair_town"
+          },
+          "whenFalse": "hide",
+          "next": "repair_confirm_villagers",
+          "icon": "UI/Custom/cog.png"
+        },
+        {
+          "text": "aetherhaven_repairs.aetherhaven.repairs.plots.label",
+          "condition": {
+            "type": "elder_can_repair_town"
+          },
+          "whenFalse": "hide",
+          "next": "repair_confirm_plots",
+          "icon": "UI/Custom/cog.png"
+        },
+        {
+          "text": "aetherhaven_repairs.aetherhaven.repairs.inn.label",
+          "condition": {
+            "type": "elder_can_repair_town"
+          },
+          "whenFalse": "hide",
+          "next": "repair_confirm_inn",
+          "icon": "UI/Custom/cog.png"
+        },
+        {
+          "text": "aetherhaven_repairs.aetherhaven.repairs.support.label",
+          "condition": {
+            "type": "elder_can_repair_town"
+          },
+          "whenFalse": "hide",
+          "next": "repair_confirm_support",
+          "icon": "UI/Custom/cog.png"
+        },
+        {
+          "text": "aetherhaven_repairs.aetherhaven.repairs.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "repair_confirm_villagers": {
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.speaker",
+      "text": "aetherhaven_repairs.aetherhaven.repairs.villagers.confirm",
+      "choices": [
+        {
+          "text": "aetherhaven_repairs.aetherhaven.repairs.yes",
+          "condition": {
+            "type": "elder_can_repair_town"
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "elder_repair",
+              "repair": "villagers"
+            }
+          ],
+          "icon": "UI/Custom/cog.png"
+        },
+        {
+          "text": "aetherhaven_repairs.aetherhaven.repairs.no",
+          "next": "repair_menu",
+          "icon": "UI/Custom/cog.png"
+        }
+      ]
+    },
+    "repair_confirm_plots": {
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.speaker",
+      "text": "aetherhaven_repairs.aetherhaven.repairs.plots.confirm",
+      "choices": [
+        {
+          "text": "aetherhaven_repairs.aetherhaven.repairs.yes",
+          "condition": {
+            "type": "elder_can_repair_town"
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "elder_repair",
+              "repair": "plots"
+            }
+          ],
+          "icon": "UI/Custom/cog.png"
+        },
+        {
+          "text": "aetherhaven_repairs.aetherhaven.repairs.no",
+          "next": "repair_menu",
+          "icon": "UI/Custom/cog.png"
+        }
+      ]
+    },
+    "repair_confirm_inn": {
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.speaker",
+      "text": "aetherhaven_repairs.aetherhaven.repairs.inn.confirm",
+      "choices": [
+        {
+          "text": "aetherhaven_repairs.aetherhaven.repairs.yes",
+          "condition": {
+            "type": "elder_can_repair_town"
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "elder_repair",
+              "repair": "inn"
+            }
+          ],
+          "icon": "UI/Custom/cog.png"
+        },
+        {
+          "text": "aetherhaven_repairs.aetherhaven.repairs.no",
+          "next": "repair_menu",
+          "icon": "UI/Custom/cog.png"
+        }
+      ]
+    },
+    "repair_confirm_support": {
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.speaker",
+      "text": "aetherhaven_repairs.aetherhaven.repairs.support.confirm",
+      "choices": [
+        {
+          "text": "aetherhaven_repairs.aetherhaven.repairs.yes",
+          "condition": {
+            "type": "elder_can_repair_town"
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "elder_repair",
+              "repair": "support"
+            }
+          ],
+          "icon": "UI/Custom/cog.png"
+        },
+        {
+          "text": "aetherhaven_repairs.aetherhaven.repairs.no",
+          "next": "repair_menu",
+          "icon": "UI/Custom/cog.png"
         }
       ]
     }

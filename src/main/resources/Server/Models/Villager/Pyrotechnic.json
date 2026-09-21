@@ -58,6 +58,431 @@
           "Speed": 1
         }
       ]
+    },
+    "Talk": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Skeleton/Vanilla/Talk.blockyanim",
+          "Looping": true
+        }
+      ]
+    },
+    "Talk2": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Skeleton/Vanilla/Talk2.blockyanim",
+          "Looping": true
+        }
+      ]
+    },
+    "Talk3": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Skeleton/Vanilla/Talk3.blockyanim",
+          "Looping": true
+        }
+      ]
+    },
+    "Talk4": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Skeleton/Vanilla/Talk4.blockyanim",
+          "Looping": true
+        }
+      ]
+    },
+    "Talk5": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Skeleton/Vanilla/Talk5.blockyanim",
+          "Looping": true
+        }
+      ]
+    },
+    "Frown": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Vanilla/Frown.blockyanim",
+          "Looping": true
+        }
+      ]
+    },
+    "Grin": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Vanilla/Grin.blockyanim",
+          "Looping": true
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Greet": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Greet.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Talking_Greet": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Talking_Greet.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Explain": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Explain.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Talking_Explain": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Talking_Explain.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Story": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Story.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Talking_Story": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Talking_Story.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Question": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Question.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Talking_Question": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Talking_Question.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Agree": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Agree.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Talking_Agree": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Talking_Agree.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Laugh": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Laugh.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Talking_Laugh": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Talking_Laugh.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Surprise": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Surprise.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Talking_Surprise": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Talking_Surprise.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Disagree": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Disagree.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Talking_Disagree": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Talking_Disagree.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Hungry": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Hungry.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Sleepy": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Sleepy.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Bored": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Bored.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_LookAround": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/LookAround.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Stretch": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Stretch.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Fidget": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Fidget.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Read": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Read.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Craft": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Craft.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Sweep": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Sweep.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Inspect": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Inspect.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Tend": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Tend.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_ShowItem": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/ShowItem.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Talking_ShowItem": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Talking_ShowItem.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Mix": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Mix.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_ReadLoop": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Read.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Face_Ponder": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Inspect.blockyanim",
+          "Looping": false,
+          "BlendingDuration": 0.15
+        }
+      ]
+    },
+    "Aetherhaven_Life_Mouth_A": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Trork/Mouth/A.blockyanim",
+          "Looping": true,
+          "BlendingDuration": 0.035
+        }
+      ]
+    },
+    "Aetherhaven_Life_Mouth_B": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Skeleton/Mouth/B.blockyanim",
+          "Looping": true,
+          "BlendingDuration": 0.035
+        }
+      ]
+    },
+    "Aetherhaven_Life_Mouth_C": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Skeleton/Mouth/C.blockyanim",
+          "Looping": true,
+          "BlendingDuration": 0.035
+        }
+      ]
+    },
+    "Aetherhaven_Life_Mouth_D": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Skeleton/Mouth/D.blockyanim",
+          "Looping": true,
+          "BlendingDuration": 0.035
+        }
+      ]
+    },
+    "Aetherhaven_Life_Mouth_E": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Skeleton/Mouth/E.blockyanim",
+          "Looping": true,
+          "BlendingDuration": 0.035
+        }
+      ]
+    },
+    "Aetherhaven_Life_Mouth_F": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Skeleton/Mouth/F.blockyanim",
+          "Looping": true,
+          "BlendingDuration": 0.035
+        }
+      ]
+    },
+    "Aetherhaven_Life_Mouth_Smile_B": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Skeleton/Mouth/Smile_B.blockyanim",
+          "Looping": true,
+          "BlendingDuration": 0.035
+        }
+      ]
+    },
+    "Aetherhaven_Life_Mouth_Smile_C": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Skeleton/Mouth/E.blockyanim",
+          "Looping": true,
+          "BlendingDuration": 0.035
+        }
+      ]
+    },
+    "Aetherhaven_Life_Mouth_Smile_D": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Aetherhaven/CreatureFaces/Skeleton/Mouth/D.blockyanim",
+          "Looping": true,
+          "BlendingDuration": 0.035
+        }
+      ]
     }
   },
   "Icon": "Icons/ModelsGenerated/Aetherhaven_Pyrotechnic.png",

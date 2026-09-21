@@ -150,7 +150,7 @@ def main():
             ImageDraw.Draw(row).text((280*i+10, 8), f'{rig}: {label}', fill='#26333e')
         rows.append(row)
         print(f'{rig}: native bones checked; closed/open pose rendered.', flush=True)
-    sheet = Image.new('RGB', (1120, 278*4), '#dce1e4')
+    sheet = Image.new('RGB', (1120, 278*((len(rows)+1)//2)), '#dce1e4')
     for i, row in enumerate(rows):
         sheet.paste(row, ((i%2)*560, (i//2)*278))
     out = ROOT/'build/villager-life-preview/creature-faces.png'

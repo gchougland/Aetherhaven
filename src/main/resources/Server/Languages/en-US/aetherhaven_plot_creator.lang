@@ -407,8 +407,8 @@ aetherhaven.plotcreator.step.CONFIGURE.detail = Gold is paid from the town treas
 aetherhaven.plotcreator.field.selfBuildDays = Self-build days (game days)
 aetherhaven.plotcreator.field.maxHomeResidents = Max residents (1-8)
 
-aetherhaven.plotcreator.field.saveEmptySpaces = Save empty spaces in prefab
-aetherhaven.plotcreator.field.saveEmptySpaces.hint = When on, air in your footprint is saved and clears those blocks when the building is assembled. When off, only solid blocks are saved and existing terrain is kept. Editor empty markers always clear blocks.
+aetherhaven.plotcreator.field.saveEmptySpaces = Save empty spaces
+aetherhaven.plotcreator.field.saveEmptySpaces.hint = Choose whether empty spaces in your selection clear existing blocks when this building is placed.
 aetherhaven.plotcreator.field.preserveWater = Keep water when building
 aetherhaven.plotcreator.field.preserveWater.hint = When on, water stays in prefab air spaces outside the build. Editor empty markers still clear water so you can hollow out interiors.
 aetherhaven.plotcreator.field.touristDestination = Visitors may stop here
@@ -672,3 +672,8 @@ aetherhaven.plottoken.unlockall.success = Unlocked {count} plots at the crafting
 aetherhaven.plottoken.unlockall.noneLeft = You already unlocked every plot.
 aetherhaven.plottoken.list.empty = No buildings found.
 aetherhaven.plottoken.list.header = Building ids:
+
+aetherhaven.plotcreator.help.saveEmptySpaces.title = Save empty spaces
+aetherhaven.plotcreator.help.saveEmptySpaces.enabled = When ON: Empty space is part of your saved build. When the building is placed, any existing blocks where there was air in your selected area are removed. Use this to keep rooms and open spaces clear.
+aetherhaven.plotcreator.help.saveEmptySpaces.disabled = When OFF: Air in your selected area is ignored, so existing blocks in those spots stay. To clear a particular spot, put an Editor Empty block there before saving. That spot will be replaced with air when the building is placed.
+aetherhaven.plotcreator.help.close = Got it

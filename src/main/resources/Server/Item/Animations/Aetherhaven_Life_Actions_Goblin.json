@@ -1,0 +1,377 @@
+{
+  "Animations": {
+    "Mix": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Mix.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Mix.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Mix.blockyanim",
+      "Speed": 1,
+      "Looping": true,
+      "BlendingDuration": 0.35
+    },
+    "ShowItem": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/ShowItem.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/ShowItem.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/ShowItem.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Greet": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Greet.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Greet.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Greet.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Explain": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Explain.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Explain.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Explain.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Story": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Story.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Story.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Story.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Question": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Question.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Question.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Question.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Agree": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Agree.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Agree.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Agree.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Laugh": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Laugh.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Laugh.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Laugh.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Surprise.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Surprise.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Surprise.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Disagree.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Disagree.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Disagree.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Hungry": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Hungry.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Hungry.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Hungry.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sleepy": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Sleepy.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Sleepy.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Sleepy.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Bored": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Bored.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Bored.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Bored.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/LookAround.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/LookAround.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/LookAround.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Stretch": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Stretch.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Stretch.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Stretch.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Fidget": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Fidget.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Fidget.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Fidget.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Read": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Read.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Read.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Read.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35,
+      "FirstPerson": "Characters/Animations/Aetherhaven/Life/Held/Read.blockyanim"
+    },
+    "Craft": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Craft.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Craft.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Craft.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Sweep.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Sweep.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Sweep.blockyanim",
+      "Speed": 1,
+      "Looping": true,
+      "BlendingDuration": 0.35
+    },
+    "Inspect": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Inspect.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Inspect.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Inspect.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Tend.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Tend.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Tend.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/ReadLoop.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/ReadLoop.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Read.blockyanim",
+      "Speed": 1,
+      "Looping": true,
+      "BlendingDuration": 0.65,
+      "FirstPerson": "Characters/Animations/Aetherhaven/Life/Held/ReadLoop.blockyanim"
+    },
+    "Ponder": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Ponder.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Ponder.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Faces/Inspect.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.3
+    },
+    "Mix_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Mix.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Mix.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Mix.blockyanim",
+      "Speed": 1,
+      "Looping": true,
+      "BlendingDuration": 0.35
+    },
+    "ShowItem_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/ShowItem.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/ShowItem.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/ShowItem.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Greet_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Greet.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Greet.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Greet.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Explain_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Explain.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Explain.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Explain.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Story_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Story.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Story.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Story.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Question_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Question.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Question.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Question.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Agree_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Agree.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Agree.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Agree.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Laugh_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Laugh.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Laugh.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Laugh.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Surprise_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Surprise.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Surprise.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Surprise.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Disagree_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Disagree.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Disagree.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Disagree.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Hungry_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Hungry.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Hungry.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Hungry.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sleepy_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Sleepy.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Sleepy.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Sleepy.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Bored_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Bored.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Bored.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Bored.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "LookAround_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/LookAround.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/LookAround.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/LookAround.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Stretch_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Stretch.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Stretch.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Stretch.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Fidget_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Fidget.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Fidget.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Fidget.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Read_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Read.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Read.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Read.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35,
+      "FirstPerson": "Characters/Animations/Aetherhaven/Life/Held/Read.blockyanim"
+    },
+    "Craft_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Craft.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Craft.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Craft.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Sweep_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Sweep.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Sweep.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Sweep.blockyanim",
+      "Speed": 1,
+      "Looping": true,
+      "BlendingDuration": 0.35
+    },
+    "Inspect_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Inspect.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Inspect.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Inspect.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "Tend_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Tend.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Tend.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Tend.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.35
+    },
+    "ReadLoop_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/ReadLoop.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/ReadLoop.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Read.blockyanim",
+      "Speed": 1,
+      "Looping": true,
+      "BlendingDuration": 0.65,
+      "FirstPerson": "Characters/Animations/Aetherhaven/Life/Held/ReadLoop.blockyanim"
+    },
+    "Ponder_Speech": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Life/Ponder.blockyanim",
+      "ThirdPersonMoving": "Characters/Animations/Aetherhaven/Life/Ponder.blockyanim",
+      "ThirdPersonFace": "Characters/Animations/Aetherhaven/CreatureFaces/Goblin/Eyes/Inspect.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "BlendingDuration": 0.3
+    }
+  },
+  "WiggleWeights": {}
+}

@@ -65,6 +65,7 @@ public final class DialogueConditionEvaluator {
         return switch (type) {
             case "literal" -> o.get("value") != null && o.get("value").isJsonPrimitive() && o.get("value").getAsBoolean();
             case "true" -> true;
+            case "elder_can_repair_town" -> ElderRepairActions.manageableTown(playerRef, store, npcRef) != null;
             case "false" -> false;
             case "not" -> {
                 JsonObject inner = o.getAsJsonObject("condition");

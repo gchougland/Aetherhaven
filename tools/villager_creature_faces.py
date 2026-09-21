@@ -8,6 +8,7 @@ import json
 import math
 
 RIGS = {
+    'Goblin': (['Pyrotechnic'], 22),
     'Trork': (['Grunk_Stonebelly'], 20),
     'Feran': (['Saffra_Dunear', 'Zephyr_Sandtail'], 26),
     'Klops': (['Nell_Clinkjar', 'Pippin_Geargrin'], 18),
@@ -104,6 +105,8 @@ def retarget(data, rig, bones, degrees):
                 continue  # One eye: never apply both sides to the same node.
             target = {'L-Eye': 'Eye', 'L-Eyelid': 'Eyelid-Top',
                       'L-Eyelid-Bot': 'Eyelid-Bot', 'L-Eyebrow': 'Eyebrow'}.get(name, name)
+        elif rig == 'Goblin':
+            target = {'L-Eyelid': 'L-Eyelid-Top', 'R-Eyelid': 'R-Eyelid-Top'}.get(name, name)
         elif rig == 'KweebecSharp':
             target = {'L-Eyebrow': 'Eyebrow_L', 'R-Eyebrow': 'Eyebrow_R'}.get(name, name)
         if target not in bones:
@@ -124,7 +127,7 @@ def retarget(data, rig, bones, degrees):
     return result
 
 
-def generate(res, write, pool=None):
+def generate(res, write, pool=None, only_rigs=None):
     from villager_animation_pool import AnimationPool
     own_pool = pool is None
     pool = pool or AnimationPool(res, write)
@@ -134,8 +137,11 @@ def generate(res, write, pool=None):
     face_bindings = {name: binding for name, binding in human['AnimationSets'].items()
                      if name.startswith(('Aetherhaven_Life_Face_', 'Aetherhaven_Life_Mouth_'))
                      or name in ('Talk', 'Talk2', 'Talk3', 'Talk4', 'Talk5', 'Grin', 'Frown')}
-    report = {}
+    report_path = res/'defaults/villager_creature_faces.json'
+    report = json.loads(report_path.read_text()) if only_rigs and report_path.exists() else {}
     for rig, (names, degrees) in RIGS.items():
+        if only_rigs and rig not in only_rigs:
+            continue
         effective = resolve(names[0])
         bones = bones_for(effective)
         generated = {}
@@ -171,6 +177,8 @@ def generate(res, write, pool=None):
                 write(res/f'Server/Item/Animations/{name}{pitch}_{rig}.json', {'Parent':name+'_'+rig})
         for name in names:
             model_path = res/f'Server/Models/Townsfolk/{name}.json'
+            if not model_path.exists():
+                model_path = res/f'Server/Models/Villager/{name}.json'
             model = json.loads(model_path.read_text())
             model['AnimationSets'] = {k:v for k,v in model.get('AnimationSets', {}).items() if not k.startswith('Aetherhaven_Life_Lip_')}
             model['AnimationSets'].update(overrides)
@@ -194,8 +202,9 @@ def generate(res, write, pool=None):
                             'sharesHumanFaces': rig == 'Outlander'}
         print(f'{rig}: {len(generated)} native face timelines; {len(names)} townsfolk.', flush=True)
     write(res/'defaults/villager_creature_faces.json', report)
-    mute_town_idle_sounds(res, write)
-    if own_pool:pool.prune(['Characters/Animations/Aetherhaven/CreatureFaces'])
+    if not only_rigs:
+        mute_town_idle_sounds(res, write)
+    if own_pool and not only_rigs:pool.prune(['Characters/Animations/Aetherhaven/CreatureFaces'])
 
 
 def mute_town_idle_sounds(res, write):

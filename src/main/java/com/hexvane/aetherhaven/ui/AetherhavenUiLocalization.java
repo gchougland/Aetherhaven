@@ -143,6 +143,8 @@ public final class AetherhavenUiLocalization {
         b.set("#ResourceMultLabel.TooltipTextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.resourceMult.tooltip"));
         b.set("#GoldMultLabel.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.goldMult"));
         b.set("#GoldMultLabel.TooltipTextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.goldMult.tooltip"));
+        b.set("#SimplifyResourcesLabel.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.simplifyResources"));
+        b.set("#SimplifyResourcesLabel.TooltipTextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.simplifyResources.tooltip"));
         b.set("#AllBlocksToggle #AllBlocksLabel.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.allBlocks"));
         b.set(
             "#AllBlocksToggle #AllBlocksLabel.TooltipTextSpans",

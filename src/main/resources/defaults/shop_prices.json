@@ -1798,6 +1798,10 @@
       "gold": 10,
       "batchSize": 5
     },
+    "Plant_Crop_Aubergine_Item": {
+      "gold": 1,
+      "batchSize": 10
+    },
     "Plant_Crop_Berry_Block": {
       "gold": 10,
       "batchSize": 5
@@ -1810,13 +1814,21 @@
       "gold": 10,
       "batchSize": 5
     },
+    "Plant_Crop_Carrot_Item": {
+      "gold": 1,
+      "batchSize": 10
+    },
     "Plant_Crop_Cauliflower_Item": {
-      "gold": 10,
-      "batchSize": 5
+      "gold": 1,
+      "batchSize": 10
     },
     "Plant_Crop_Chilli_Item": {
-      "gold": 10,
-      "batchSize": 5
+      "gold": 1,
+      "batchSize": 10
+    },
+    "Plant_Crop_Corn_Item": {
+      "gold": 1,
+      "batchSize": 10
     },
     "Plant_Crop_Health1": {
       "gold": 10,
@@ -1829,6 +1841,10 @@
     "Plant_Crop_Health3": {
       "gold": 10,
       "batchSize": 5
+    },
+    "Plant_Crop_Lettuce_Item": {
+      "gold": 1,
+      "batchSize": 10
     },
     "Plant_Crop_Mushroom_Block_Blue_Trunk": {
       "gold": 1,
@@ -1855,6 +1871,26 @@
       "batchSize": 10
     },
     "Plant_Crop_Mushroom_Block_Yellow_Trunk": {
+      "gold": 1,
+      "batchSize": 10
+    },
+    "Plant_Crop_Onion_Item": {
+      "gold": 1,
+      "batchSize": 10
+    },
+    "Plant_Crop_Potato_Item": {
+      "gold": 1,
+      "batchSize": 10
+    },
+    "Plant_Crop_Pumpkin_Item": {
+      "gold": 1,
+      "batchSize": 10
+    },
+    "Plant_Crop_Tomato_Item": {
+      "gold": 1,
+      "batchSize": 10
+    },
+    "Plant_Crop_Turnip_Item": {
       "gold": 1,
       "batchSize": 10
     },

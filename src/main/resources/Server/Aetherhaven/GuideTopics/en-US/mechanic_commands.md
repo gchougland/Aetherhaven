@@ -359,3 +359,11 @@ Examples:
 - **`/ah path navviz`** — Toggle debug lines for villager path navigation. Requires path tool permission in play.
   - Permission: `hexvane.aetherhaven.command.aetherhaven.path.navviz`
   - Access: Creative
+
+### Copy content to another local save
+
+Use `/ah transfer` while playing your own local save. Choose the destination save and whether to copy props, buildings and festival looks, or configuration files. Review the choices before copying. Existing conflicting files are skipped unless you enable replacement. Keep the destination save closed until the transfer finishes, then open it to load the content.
+
+The command copies reusable files from Aetherhaven's mod data folder. Towns, villagers, inventories, and quest progress are not transferred. The original files stay in the source save. Only the local save's host can use this command.
+
+Elder Lyren also offers **Something needs fixing** to players who can manage his town. Each repair explains what it does and asks for confirmation. Sending a support packet uploads Aetherhaven save data and recent server logs to Aetherhaven support.

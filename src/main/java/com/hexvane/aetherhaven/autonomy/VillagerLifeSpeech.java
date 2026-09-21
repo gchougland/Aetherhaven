@@ -17,15 +17,12 @@ public final class VillagerLifeSpeech {
             this(clip, audioMs, faces, pitch, actionsId, List.of());
         }
     }
-    private static volatile Map<String, List<Clip>> CLIPS = load();
+    private record PlaybackCatalog(Map<String, List<Clip>> clips, Map<String, String> recordings) {}
+    private static volatile PlaybackCatalog catalog = prepareCatalog(load());
     private VillagerLifeSpeech() {}
 
     static String recordingName(String requested) {
-        for (String key : CLIPS.keySet()) {
-            int split = key.lastIndexOf('_');
-            if (split > 0 && key.substring(0, split).equalsIgnoreCase(requested)) return key.substring(0, split);
-        }
-        return null;
+        return requested == null ? null : catalog.recordings().get(requested.toLowerCase(java.util.Locale.ROOT));
     }
 
     /** Add-on packs supply the same clip/timeline schema as the bundled playback manifest. */
@@ -46,7 +43,9 @@ public final class VillagerLifeSpeech {
                     .log("Skipping invalid villager voice clips in %s", file);
             }
         }
-        CLIPS = Map.copyOf(merged);
+        // Publish the recordings and all derived timelines together. Active speakers
+        // retain their immutable clips; later selections immediately use the new pack.
+        catalog = prepareCatalog(merged);
     }
 
     static Clip select(String profile, String mood, int choice) {
@@ -54,14 +53,44 @@ public final class VillagerLifeSpeech {
     }
 
     static Clip selectExcept(String profile, String mood, int choice, String previous) {
-        var voice = VillagerVoiceProfile.resolve(profile, null, null);
-        List<Clip> options = CLIPS.get(voice.recording() + "_" + mood);
+        var current = catalog;
+        List<Clip> options = current.clips().get(profile + "_" + mood);
+        if (options == null) {
+            var voice = VillagerVoiceProfile.resolve(profile, null, null);
+            options = current.clips().get(voice.id() + "_" + mood);
+        }
         if (options == null || options.isEmpty()) return null;
-        var eligible = options.stream().filter(c -> !c.clip().equals(previous)).toList();
+        if (previous == null) return options.get(Math.floorMod(choice, options.size()));
+        int count = 0;
+        for (Clip clip : options) if (!clip.clip().equals(previous)) count++;
         // A one-recording category stays visually expressive but silent on immediate repetition.
-        if (eligible.isEmpty()) return null;
-        Clip clip = eligible.get(Math.floorMod(choice, eligible.size()));
-        if (voice.variant().isEmpty() || mood.equals("Stomach")) return clip;
+        if (count == 0) return null;
+        int selected = Math.floorMod(choice, count);
+        for (Clip clip : options) {
+            if (!clip.clip().equals(previous) && selected-- == 0) return clip;
+        }
+        return null;
+    }
+
+    private static PlaybackCatalog prepareCatalog(Map<String, List<Clip>> source) {
+        Map<String, List<Clip>> prepared = new HashMap<>(source);
+        Map<String, String> recordings = new HashMap<>();
+        source.forEach((key, clips) -> {
+            int split = key.lastIndexOf('_');
+            String recording = key.substring(0, split);
+            String mood = key.substring(split + 1);
+            recordings.put(recording.toLowerCase(java.util.Locale.ROOT), recording);
+            for (String variant : new String[]{"Lower", "Higher"}) {
+                float pitch = (float) Math.pow(2, (variant.equals("Lower") ? -2.0 : 2.0) / 12);
+                var voice = new VillagerVoiceProfile(recording + variant, recording, pitch, variant);
+                prepared.put(voice.id() + "_" + mood, mood.equals("Stomach") ? clips
+                    : clips.stream().map(clip -> pitched(clip, voice)).toList());
+            }
+        });
+        return new PlaybackCatalog(Map.copyOf(prepared), Map.copyOf(recordings));
+    }
+
+    private static Clip pitched(Clip clip, VillagerVoiceProfile voice) {
         if (!clip.mouthCues().isEmpty()) {
             long audioMs = (long)Math.ceil(clip.audioMs()/voice.pitch());
             Map<String, Face> faces = new HashMap<>();

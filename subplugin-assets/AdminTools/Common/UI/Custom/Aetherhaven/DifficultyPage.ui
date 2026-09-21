@@ -45,11 +45,11 @@ $C.@PageOverlay {
 
         Group #PresetCardsRow {
           LayoutMode: Left;
-          Anchor: (Bottom: 14, Height: 208);
+          Anchor: (Bottom: 14, Height: 262);
 
           Group #CardEasyShell {
             FlexWeight: 10;
-            Anchor: (Right: 8, Height: 176, Bottom: 0);
+            Anchor: (Right: 8, Height: 236, Bottom: 0);
             LayoutMode: Top;
             Padding: (Full: 4);
             Background: (...@CardWindowOuter, Color: #3d913f(0.62));
@@ -109,7 +109,7 @@ $C.@PageOverlay {
 
           Group #CardNormalShell {
             FlexWeight: 10;
-            Anchor: (Right: 8, Height: 176, Bottom: 0);
+            Anchor: (Right: 8, Height: 236, Bottom: 0);
             LayoutMode: Top;
             Padding: (Full: 4);
             Background: (...@CardWindowOuter, Color: #c9a227(0.62));
@@ -169,7 +169,7 @@ $C.@PageOverlay {
 
           Group #CardHardShell {
             FlexWeight: 10;
-            Anchor: (Height: 176, Bottom: 0);
+            Anchor: (Height: 236, Bottom: 0);
             LayoutMode: Top;
             Padding: (Full: 4);
             Background: (...@CardWindowOuter, Color: #962f2f(0.62));
@@ -321,6 +321,17 @@ $C.@PageOverlay {
               Anchor: (Left: 11);
               Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center);
             }
+          }
+        }
+
+        Group #SimplifyResourcesToggle {
+          LayoutMode: Left;
+          Anchor: (Bottom: 10);
+          $C.@CheckBox #CheckBox {}
+          Label #SimplifyResourcesLabel {
+            Text: "";
+            Anchor: (Left: 11);
+            Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center);
           }
         }
 

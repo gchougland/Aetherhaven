@@ -116,6 +116,10 @@ public final class DialogueActionExecutor {
         }
         switch (type) {
             case "close" -> out.setCloseDialogue(true);
+            case "elder_repair" -> {
+                ElderRepairActions.schedule(stringField(a, "repair"), playerRef, store, npcRef);
+                out.setCloseDialogue(true);
+            }
             case "goto" -> {
                 String node = stringField(a, "node");
                 if (node != null && !node.isBlank()) {

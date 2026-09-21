@@ -1,0 +1,15 @@
+aetherhaven.repairs.open = Something needs fixing.
+aetherhaven.repairs.intro = What needs fixing in our town? I will explain each option before making any changes.
+aetherhaven.repairs.back = Back.
+aetherhaven.repairs.yes = Yes, go ahead.
+aetherhaven.repairs.no = No, go back.
+aetherhaven.repairs.villagers.label = Reset our villagers.
+aetherhaven.repairs.villagers.confirm = Are you sure? This brings our town's villagers back in a circle around you. Use it when villagers are missing, stuck, or behaving strangely. Their town roles and progress are kept, but their current activities will stop.
+aetherhaven.repairs.plots.label = Repair our plots.
+aetherhaven.repairs.plots.confirm = Are you sure? This reconnects our completed buildings, signs, shelves, and special blocks to the town. Use it when a building or shop is not recognized. It does not rebuild the whole building. Nearby areas must be loaded.
+aetherhaven.repairs.inn.label = Repair our inn visitors.
+aetherhaven.repairs.inn.confirm = Are you sure? This fixes the inn's visitor list, helps workers move to completed workplaces, and fills available visitor spots. Use it when visitors are missing or stay at the inn after their workplace is built.
+aetherhaven.repairs.support.label = Send a support packet.
+aetherhaven.repairs.support.confirm = Are you sure? This uploads Aetherhaven save data and recent server logs to Aetherhaven support so the team can investigate a problem. The packet can include player names, town information, and data for other towns in this save. It does not repair anything by itself.
+aetherhaven.repairs.plots.result = Plot repair finished. Reconnected: {repaired}. Areas not loaded: {skipped}. Failed: {failed}.
+aetherhaven.repairs.inn.result = Inn repair finished. Workers moved to their workplaces: {promoted}. Visitor records repaired: {fixed}.

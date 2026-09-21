@@ -20,6 +20,10 @@ public final class TownDifficultySettings {
     @SerializedName("requireAllPrefabBlocks")
     private boolean requireAllPrefabBlocks;
 
+    @SerializedName("simplifyBuildingResources")
+    // Null means a save from before this option existed; use the preset default.
+    private Boolean simplifyBuildingResources;
+
     @SerializedName("buyPriceMultiplier")
     private double buyPriceMultiplier = 1.0;
 
@@ -86,6 +90,14 @@ public final class TownDifficultySettings {
 
     public void setRequireAllPrefabBlocks(boolean requireAllPrefabBlocks) {
         this.requireAllPrefabBlocks = requireAllPrefabBlocks;
+    }
+
+    public boolean isSimplifyBuildingResources() {
+        return simplifyBuildingResources != null ? simplifyBuildingResources : getPreset() == DifficultyPreset.EASY;
+    }
+
+    public void setSimplifyBuildingResources(boolean simplifyBuildingResources) {
+        this.simplifyBuildingResources = simplifyBuildingResources;
     }
 
     public double getBuyPriceMultiplier() {
@@ -189,6 +201,7 @@ public final class TownDifficultySettings {
     private void applyNormalDefaults() {
         setResourceCostMultiplier(1.0);
         setGoldCostMultiplier(1.0);
+        setSimplifyBuildingResources(false);
         setRequireAllPrefabBlocks(false);
         setBuyPriceMultiplier(1.0);
         setSellProfitMarginPercent(DEFAULT_SELL_PROFIT_MARGIN_PERCENT);
@@ -207,6 +220,7 @@ public final class TownDifficultySettings {
         switch (p) {
             case EASY -> {
                 applyNormalDefaults();
+                setSimplifyBuildingResources(true);
                 setResourceCostMultiplier(0.5);
                 setGoldCostMultiplier(0.5);
             }
@@ -247,6 +261,7 @@ public final class TownDifficultySettings {
         setResourceCostMultiplier(other.getResourceCostMultiplier());
         setGoldCostMultiplier(other.getGoldCostMultiplier());
         setRequireAllPrefabBlocks(other.isRequireAllPrefabBlocks());
+        setSimplifyBuildingResources(other.isSimplifyBuildingResources());
         setBuyPriceMultiplier(other.getBuyPriceMultiplier());
         setSellProfitMarginPercent(other.getSellProfitMarginPercent());
         setTaxMultiplier(other.getTaxMultiplier());

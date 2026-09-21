@@ -3,9 +3,11 @@ package com.hexvane.aetherhaven.autonomy;
 import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.component.spatial.SpatialResource;
 import com.hypixel.hytale.protocol.SoundCategory;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.modules.entity.EntityModule;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -28,6 +30,7 @@ final class VillagerSpeechAudio {
 
     /** Reserve listeners before starting particles or mouth tracks. Null means nobody will hear it. */
     static Playback prepare(Ref<EntityStore> npc, VillagerLifeSpeech.Clip clip, boolean randomChatter, Store<EntityStore> store) {
+        if (com.hexvane.aetherhaven.plotcreator.PlotCreatorSpotPreview.isPreview(npc, store)) return null;
         var transform = store.getComponent(npc, TransformComponent.getComponentType());
         var identity = store.getComponent(npc, UUIDComponent.getComponentType());
         int index = SoundEvent.getAssetMap().getIndex(VillagerLifeVisuals.PREFIX + clip.clip());
@@ -36,11 +39,14 @@ final class VillagerSpeechAudio {
         var position = transform.getPosition();
         long now = System.currentTimeMillis();
         List<Listener> listeners = null;
-        for (var listener : store.getExternalData().getWorld().getPlayerRefs()) {
-            var ref = listener.getReference();
+        var nearby = SpatialResource.<EntityStore>getThreadLocalReferenceList();
+        store.getResource(EntityModule.get().getPlayerSpatialResourceType()).getSpatialStructure()
+            .collect(position, event.getMaxDistance(), nearby);
+        double rangeSquared = event.getMaxDistance() * event.getMaxDistance();
+        for (var ref : nearby) {
             if (ref == null || !ref.isValid() || ref.getStore() != store) continue;
             var listenerTransform = store.getComponent(ref, TransformComponent.getComponentType());
-            if (listenerTransform == null || listenerTransform.getPosition().distanceSquared(position) > event.getMaxDistance()*event.getMaxDistance()) continue;
+            if (listenerTransform == null || listenerTransform.getPosition().distanceSquared(position) > rangeSquared) continue;
             var preferences = store.getComponent(ref, PlayerTownJournalState.getComponentType());
             if (preferences == null) {
                 preferences = new PlayerTownJournalState();

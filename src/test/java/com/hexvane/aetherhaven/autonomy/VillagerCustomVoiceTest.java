@@ -46,4 +46,33 @@ class VillagerCustomVoiceTest {
                 com.google.gson.JsonParser.parseString(json).getAsJsonObject()));
         }
     }
+
+    @Test void reloadReplacesCachedPitchTimelinesWithoutChangingActiveClips() throws Exception {
+        Path manifest = temp.resolve("reload.json");
+        String contents = """
+            {"Example_Automaton_Idle":[{"clip":"Example_Idle_1","audioMs":1200,
+              "mouthCues":[[0,"D"],[1000,"A"]]}]}
+            """;
+        try {
+            Files.writeString(manifest, contents);
+            VillagerLifeSpeech.reloadFromFiles(List.of(manifest));
+            var first = VillagerLifeSpeech.select("Example_AutomatonLower", "Idle", 0);
+            assertSame(first, VillagerLifeSpeech.select("Example_AutomatonLower", "Idle", 7));
+            assertSame(first, VillagerLifeSpeech.select("example_automatonlower", "Idle", -1));
+            assertNull(VillagerLifeSpeech.selectExcept("Example_AutomatonLower", "Idle", 0, first.clip()));
+            long oldDuration = first.audioMs();
+            long oldCue = first.mouthCues().getLast().timeMs();
+            Files.writeString(manifest, contents.replace("1200", "2400").replace("1000", "2000"));
+            VillagerLifeSpeech.reloadFromFiles(List.of(manifest));
+            var replacement = VillagerLifeSpeech.select("Example_AutomatonLower", "Idle", 0);
+            assertNotSame(first, replacement);
+            assertEquals((long) Math.ceil(2400 / replacement.pitch()), replacement.audioMs());
+            assertEquals(Math.round(2000 / replacement.pitch()), replacement.mouthCues().getLast().timeMs());
+            assertEquals(oldDuration, first.audioMs());
+            assertEquals(oldCue, first.mouthCues().getLast().timeMs());
+            assertThrows(UnsupportedOperationException.class, () -> replacement.mouthCues().clear());
+        } finally {
+            VillagerLifeSpeech.reloadFromFiles(List.of());
+        }
+    }
 }

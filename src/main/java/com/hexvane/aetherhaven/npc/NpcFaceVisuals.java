@@ -33,6 +33,7 @@ public final class NpcFaceVisuals {
     private static final String PLAYER_BLOCKYMODEL = "Characters/Player.blockymodel";
     private static final String PROWL_BLOCKYMODEL = "NPC/Prowl/prowl_hytale.blockymodel";
     private static final java.util.Map<String, String> CREATURE_FACE_RIGS = java.util.Map.of(
+        "NPC/Intelligent/Goblin/Models/Model.blockymodel", "Goblin",
         "NPC/Intelligent/Trork/Models/Model.blockymodel", "Trork",
         "NPC/Intelligent/Feran/Models/Model.blockymodel", "Feran",
         "NPC/Intelligent/Klops/Models/Model.blockymodel", "Klops",

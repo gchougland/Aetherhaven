@@ -18,6 +18,8 @@ import javax.annotation.Nullable;
 
 public final class VillagerAutonomyState
     implements Component<EntityStore>, PathNavTravelSupport.TravelWaypoints, AutonomyStallTrackable {
+    long nextStatueRecoveryCheckMs;
+
     public static final int PHASE_IDLE = 0;
     public static final int PHASE_TRAVEL = 1;
     public static final int PHASE_USE = 2;
@@ -606,6 +608,7 @@ public final class VillagerAutonomyState
     @Override
     public Component<EntityStore> clone() {
         VillagerAutonomyState c = new VillagerAutonomyState();
+        c.nextStatueRecoveryCheckMs = nextStatueRecoveryCheckMs;
         c.phase = phase;
         c.targetPoiId = targetPoiId;
         c.targetX = targetX;

@@ -109,6 +109,32 @@ class InnPoolServiceTest {
         assertTrue(guildFirst < 350, "guild master should not dominate first slot, got " + guildFirst);
     }
 
+    @Test
+    void unrelatedActiveQuestDoesNotKeepRancherOrFurnitureMerchantLocked() {
+        TownRecord town = new TownRecord();
+        town.addActiveQuest(AetherhavenConstants.QUEST_GAIA_ALTAR);
+        for (String role : List.of(AetherhavenConstants.NPC_RANCHER, AetherhavenConstants.NPC_FURNITURE_MERCHANT)) {
+            var uuid = java.util.UUID.randomUUID();
+            town.addInnLockedEntity(uuid);
+            assertTrue(InnPoolService.reconcileVisitorQuestLock(town, uuid, role, false));
+            assertFalse(town.isInnVisitorLocked(uuid));
+        }
+    }
+
+    @Test
+    void actualQuestOwnersStayLockedUntilTheirQuestEnds() {
+        TownRecord town = new TownRecord();
+        var uuid = java.util.UUID.randomUUID();
+        town.addActiveQuest(AetherhavenConstants.QUEST_BARN);
+        InnPoolService.reconcileVisitorQuestLock(town, uuid, AetherhavenConstants.NPC_RANCHER, false);
+        assertTrue(town.isInnVisitorLocked(uuid));
+        town.completeQuest(AetherhavenConstants.QUEST_BARN);
+        InnPoolService.reconcileVisitorQuestLock(town, uuid, AetherhavenConstants.NPC_RANCHER, false);
+        assertFalse(town.isInnVisitorLocked(uuid));
+        InnPoolService.reconcileVisitorQuestLock(town, uuid, "Addon_Visitor", true);
+        assertTrue(town.isInnVisitorLocked(uuid));
+    }
+
     private static List<String> weightedOrder(List<InnPoolEntry> pool, Set<String> exclude, long seed) {
         List<InnPoolEntry> remaining = new ArrayList<>();
         for (InnPoolEntry e : pool) {

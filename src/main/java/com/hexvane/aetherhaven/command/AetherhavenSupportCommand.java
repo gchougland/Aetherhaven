@@ -22,7 +22,7 @@ public final class AetherhavenSupportCommand extends AbstractCommandCollection {
         this.addSubCommand(new UploadCommand());
     }
 
-    private static void beginUpload(
+    public static void beginUpload(
         @Nonnull PlayerRef playerRef,
         @Nonnull World world,
         @Nullable String note

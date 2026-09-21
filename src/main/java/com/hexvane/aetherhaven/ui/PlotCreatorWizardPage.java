@@ -207,6 +207,10 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             EventData.of("@MaxHomeResidents", "#MaxHomeResidentsField.Value"),
             false
         );
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#SaveEmptySpacesHelpButton",
+            EventData.of("Action", "SaveEmptySpacesHelp"), false);
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#SaveEmptySpacesHelpCloseButton",
+            EventData.of("Action", "CloseSaveEmptySpacesHelp"), false);
         wireConfigureToggle(eventBuilder, "#SaveEmptySpacesToggle", "@SaveEmptySpaces");
         wireConfigureToggle(eventBuilder, "#PreserveWaterToggle", "@PreserveWater");
         wireConfigureToggle(eventBuilder, "#TouristDestinationToggle", "@TouristDestination");
@@ -296,6 +300,10 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#SelfBuildDaysField.PlaceholderText", Message.translation(MSG + ".field.selfBuildDays"));
         b.set("#MaxHomeResidentsLabel.TextSpans", Message.translation(MSG + ".field.maxHomeResidents"));
         b.set("#MaxHomeResidentsField.PlaceholderText", Message.translation(MSG + ".field.maxHomeResidents"));
+        b.set("#SaveEmptySpacesHelpTitle.TextSpans", Message.translation(MSG + ".help.saveEmptySpaces.title"));
+        b.set("#SaveEmptySpacesHelpEnabled.TextSpans", Message.translation(MSG + ".help.saveEmptySpaces.enabled"));
+        b.set("#SaveEmptySpacesHelpDisabled.TextSpans", Message.translation(MSG + ".help.saveEmptySpaces.disabled"));
+        b.set("#SaveEmptySpacesHelpCloseButton.TextSpans", Message.translation(MSG + ".help.close"));
         b.set("#SaveEmptySpacesLabel.TextSpans", Message.translation(MSG + ".field.saveEmptySpaces"));
         b.set("#SaveEmptySpacesHint.TextSpans", Message.translation(MSG + ".field.saveEmptySpaces.hint"));
         b.set("#PreserveWaterLabel.TextSpans", Message.translation(MSG + ".field.preserveWater"));
@@ -1085,6 +1093,12 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         if ("PickFestival".equals(data.action)) {
             applyPickFestival(ref, store, data.festivalId, Boolean.TRUE.equals(data.checked));
             refreshPartial();
+            return;
+        }
+        if ("SaveEmptySpacesHelp".equals(data.action) || "CloseSaveEmptySpacesHelp".equals(data.action)) {
+            UICommandBuilder b = new UICommandBuilder();
+            b.set("#SaveEmptySpacesHelpModal.Visible", "SaveEmptySpacesHelp".equals(data.action));
+            sendUpdate(b, null, false);
             return;
         }
         applyIncomingFields(data);

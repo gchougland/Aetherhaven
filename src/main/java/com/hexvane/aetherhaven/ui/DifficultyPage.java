@@ -38,10 +38,10 @@ import javax.annotation.Nullable;
 public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<DifficultyPage.PageData> {
     private static final String MSG = "aetherhaven_difficulty.aetherhaven.difficulty";
 
-    private static final int CARD_HEIGHT = 176;
-    private static final int CARD_HEIGHT_SELECTED = 202;
+    private static final int CARD_HEIGHT = 236;
+    private static final int CARD_HEIGHT_SELECTED = 256;
     private static final int CARD_FLEX = 10;
-    private static final int CARD_FLEX_SELECTED = 16;
+    private static final int CARD_FLEX_SELECTED = 10;
     private static final int CARD_ICON = 36;
     private static final int CARD_ICON_SELECTED = 44;
 
@@ -59,6 +59,7 @@ public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<Dif
     private double resourceMult = 1.0;
     private double goldMult = 1.0;
     private boolean requireAllBlocks;
+    private boolean simplifyBuildingResources;
     private double buyPriceMult = 1.0;
     private int sellMarginPercent = TownDifficultySettings.DEFAULT_SELL_PROFIT_MARGIN_PERCENT;
     private double taxMult = 1.0;
@@ -178,6 +179,7 @@ public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<Dif
         resourceMult = state.getResourceCostMultiplier();
         goldMult = state.getGoldCostMultiplier();
         requireAllBlocks = state.isRequireAllPrefabBlocks();
+        simplifyBuildingResources = state.isSimplifyBuildingResources();
         buyPriceMult = state.getBuyPriceMultiplier();
         sellMarginPercent = state.getSellProfitMarginPercent();
         taxMult = state.getTaxMultiplier();
@@ -250,6 +252,7 @@ public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<Dif
         b.set("#ResourceMultSlider.Value", (float) resourceMult);
         b.set("#ResourceMultBlocker.Visible", disableResource || readOnly);
         b.set("#AllBlocksToggle #CheckBox.Value", requireAllBlocks);
+        b.set("#SimplifyResourcesToggle #CheckBox.Value", simplifyBuildingResources);
         String resourceLabelColor = disableResource ? "#8a8698" : "#d8ccb8";
         b.set("#ResourceMultLabel.Style.TextColor", resourceLabelColor);
         b.set("#ResourceMultValue.Style.TextColor", resourceLabelColor);
@@ -296,6 +299,9 @@ public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<Dif
         bind(eventBuilder, "#BackToPresetsButton", "BackPresets");
         bind(eventBuilder, "#SaveButton", "Save");
         bind(eventBuilder, "#CancelButton", "Cancel");
+        eventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged,
+            "#SimplifyResourcesToggle #CheckBox",
+            EventData.of("@SimplifyResources", "#SimplifyResourcesToggle #CheckBox.Value"), false);
         bindSlider(eventBuilder, "#ResourceMultSlider", "@ResourceMult");
         bindSlider(eventBuilder, "#GoldMultSlider", "@GoldMult");
         bindSlider(eventBuilder, "#BuyPriceMultSlider", "@BuyPriceMult");
@@ -453,6 +459,11 @@ public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<Dif
             selectedPreset = DifficultyPreset.CUSTOM;
             changed = true;
         }
+        if (data.simplifyResources != null) {
+            simplifyBuildingResources = data.simplifyResources;
+            selectedPreset = DifficultyPreset.CUSTOM;
+            changed = true;
+        }
         if (data.allBlocks != null) {
             requireAllBlocks = data.allBlocks;
             selectedPreset = DifficultyPreset.CUSTOM;
@@ -583,6 +594,7 @@ public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<Dif
         state.setResourceCostMultiplier(TownDifficultySettings.clampMultiplier(resourceMult));
         state.setGoldCostMultiplier(TownDifficultySettings.clampMultiplier(goldMult));
         state.setRequireAllPrefabBlocks(requireAllBlocks);
+        state.setSimplifyBuildingResources(simplifyBuildingResources);
         state.setBuyPriceMultiplier(TownDifficultySettings.clampEconomyMultiplier(buyPriceMult));
         state.setSellProfitMarginPercent(
             TownDifficultySettings.clampSellProfitMarginPercent(sellMarginPercent)
@@ -661,6 +673,8 @@ public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<Dif
                     d -> d.otherLootMult
                 )
                 .add()
+                .append(new KeyedCodec<>("@SimplifyResources", Codec.BOOLEAN), (d, v) -> d.simplifyResources = v, d -> d.simplifyResources)
+                .add()
                 .append(new KeyedCodec<>("@AllBlocks", Codec.BOOLEAN), (d, v) -> d.allBlocks = v, d -> d.allBlocks)
                 .add()
                 .append(
@@ -690,6 +704,7 @@ public final class DifficultyPage extends AetherhavenInteractiveCustomUIPage<Dif
         private Float goldLootMult;
         private Float otherLootMult;
         private Boolean allBlocks;
+        private Boolean simplifyResources;
         private Boolean buildingStaffDisabled;
         private Boolean forceAllTowns;
     }

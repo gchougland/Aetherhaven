@@ -75,6 +75,7 @@ public final class PlotCreatorSelectionBoundsService {
         World world = store.getExternalData().getWorld();
         world.execute(
             () -> {
+                if (!isCurrentBoundsSession(session)) return;
                 if (!ref.isValid()) {
                     ACTIVE.remove(playerUuid);
                     revokeSurvivalSelectionAccess(playerUuid);
@@ -86,7 +87,7 @@ public final class PlotCreatorSelectionBoundsService {
                     return;
                 }
                 sendEnabledBuilderTools(playerRef, world);
-                seedBuilderSelection(playerRef, ref, store, draft);
+                seedBuilderSelection(playerRef, ref, store, session);
             }
         );
     }
@@ -96,8 +97,12 @@ public final class PlotCreatorSelectionBoundsService {
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store
     ) {
+        deactivate(playerRef, ref, store, false);
+    }
+
+    private static void deactivate(PlayerRef playerRef, Ref<EntityStore> ref, Store<EntityStore> store, boolean forceClear) {
         UUID playerUuid = playerRef.getUuid();
-        boolean wasActive = ACTIVE.remove(playerUuid);
+        boolean wasActive = ACTIVE.remove(playerUuid) || forceClear;
         if (wasActive) {
             clearLiveSelection(playerUuid);
             LAST_SELECTION_PACKET_MS.remove(playerUuid);
@@ -127,17 +132,27 @@ public final class PlotCreatorSelectionBoundsService {
     }
 
     public static void deactivateIfPresent(@Nullable PlayerRef playerRef) {
+        deactivateIfPresent(playerRef, false);
+    }
+
+    public static void clearForSessionEnd(@Nullable PlayerRef playerRef) {
+        deactivateIfPresent(playerRef, true);
+    }
+
+    private static void deactivateIfPresent(@Nullable PlayerRef playerRef, boolean forceClear) {
         if (playerRef == null) {
             return;
         }
         Ref<EntityStore> ref = playerRef.getReference();
         if (ref == null || !ref.isValid()) {
+            clearLiveSelection(playerRef.getUuid());
+            LAST_SELECTION_PACKET_MS.remove(playerRef.getUuid());
             if (ACTIVE.remove(playerRef.getUuid())) {
                 revokeSurvivalSelectionAccess(playerRef.getUuid());
             }
             return;
         }
-        deactivate(playerRef, ref, ref.getStore());
+        deactivate(playerRef, ref, ref.getStore(), forceClear);
     }
 
     /** Swaps back to the normal plot creator staff and clears survival builder tool overrides. */
@@ -410,8 +425,9 @@ public final class PlotCreatorSelectionBoundsService {
         @Nonnull PlayerRef playerRef,
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
-        @Nonnull PlotCreatorDraft draft
+        @Nonnull PlotCreatorSession session
     ) {
+        PlotCreatorDraft draft = session.getDraft();
         if (draft.getCornerFirst() == null || draft.getCornerSecond() == null) {
             return;
         }
@@ -425,10 +441,18 @@ public final class PlotCreatorSelectionBoundsService {
             player,
             playerRef,
             (entityRef, builderState, accessor) -> {
+                if (!isCurrentBoundsSession(session)) return;
                 builderState.update(min.x, min.y, min.z, max.x, max.y, max.z);
                 builderState.sendArea();
             }
         );
+    }
+
+    private static boolean isCurrentBoundsSession(PlotCreatorSession session) {
+        return isActive(session.getPlayerUuid())
+            && PlotCreatorSessions.get(session.getPlayerUuid()) == session
+            && session.getDraft().isEditingBounds()
+            && !session.getDraft().isFestivalSizeLocked();
     }
 
     private static void clearBuilderSelection(
@@ -436,6 +460,15 @@ public final class PlotCreatorSelectionBoundsService {
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store
     ) {
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player != null) {
+            BuilderToolsPlugin.addToQueue(player, playerRef, (entityRef, builderState, accessor) -> {
+                var selection = builderState.getSelection();
+                if (selection != null && selection.hasSelectionBounds()) {
+                    builderState.deselect(accessor);
+                }
+            });
+        }
         EditorBlocksChange packet = new EditorBlocksChange();
         packet.selection = null;
         playerRef.getPacketHandler().write(packet);
@@ -494,12 +527,16 @@ public final class PlotCreatorSelectionBoundsService {
 
     private static void sendEnabledBuilderTools(@Nonnull PlayerRef playerRef, @Nonnull World world) {
         writeEnabledBuilderTools(playerRef);
-        world.execute(() -> writeEnabledBuilderTools(playerRef));
+        world.execute(() -> {
+            if (isActive(playerRef.getUuid())) writeEnabledBuilderTools(playerRef);
+        });
     }
 
     private static void clearEnabledBuilderTools(@Nonnull PlayerRef playerRef, @Nonnull World world) {
         writeClearedBuilderTools(playerRef);
-        world.execute(() -> writeClearedBuilderTools(playerRef));
+        world.execute(() -> {
+            if (!isActive(playerRef.getUuid())) writeClearedBuilderTools(playerRef);
+        });
     }
 
     private static void writeEnabledBuilderTools(@Nonnull PlayerRef playerRef) {

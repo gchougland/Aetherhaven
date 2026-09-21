@@ -144,10 +144,12 @@ public final class VillagerTownResetService {
 
         PlotInstance innPlot =
             InnPlotResolver.resolveInnPlotForVisitors(town, plugin.getConstructionCatalog(), store);
+        int visitorCount = (int) order.stream().filter(CapturedNpc::visitor).count();
+        int circleSlots = order.size() + (innPlot != null ? Math.max(0, InnPoolService.MAX_VISITORS - visitorCount) : 0);
         int slot = 0;
         List<UUID> spawnedUuids = new ArrayList<>();
         for (CapturedNpc c : order) {
-            Vector3d pos = new Vector3d(basePosition.x + slot * 1.25, basePosition.y, basePosition.z);
+            Vector3d pos = VillagerResetLayout.position(basePosition, slot, circleSlots);
             slot++;
             UUID newUuid;
             if (c.visitor) {
@@ -270,7 +272,7 @@ public final class VillagerTownResetService {
         }
 
         if (innPlot != null) {
-            InnPoolService.fillRemainingInnVisitorSlotsNear(world, plugin, town, tm, store, innPlot, basePosition, slot);
+            InnPoolService.fillRemainingInnVisitorSlotsNear(world, plugin, town, tm, store, innPlot, basePosition, slot, circleSlots);
         }
 
         tm.updateTown(town);

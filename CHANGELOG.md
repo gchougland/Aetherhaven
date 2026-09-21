@@ -1,13 +1,31 @@
 # Changelog
 
-## [3.2.1] - Unreleased
+## [3.2.1] - 9/21/2026
+
+### Added
+
+- **Elder Lyren** Added repair dialogue choices for villagers, plots, and inn visitors, plus support packet uploads.
+- **Save transfers** Use /ah transfer to copy local and downloaded props, buildings, and settings to another local save.
+- **Plot creator** Added a help button explaining Save empty spaces and Editor Empty blocks.
+- **Difficulty** Added Use basic building resources for costs such as Any Wood and Any Stone. Enabled by default on Easy.
+
+### Changed
+
+- **Villager reset** Villagers now appear in a circle around the player instead of a line.
 
 ### Fixed
 
+- **Crop sales** All harvested vegetables can be sold in batches of 10 for 1 gold coin before difficulty adjustments.
+- **Plot creator** The bounds selection box now clears when finishing or canceling a session.
+- **Inn visitors** Reroll now releases old quest locks for visitors whose quests are no longer active.
+- **Difficulty menu** Preset descriptions now fit inside their cards.
+- **Plot creator** Villager and tourist previews stay quiet while showing their activities.
+- **Gaia altar** Villagers no longer gather on the statue or get stuck floating above it.
+- **Goblin villagers** Goblins such as Grubble now move their mouths when speaking.
 - **Villagers** Fixed villagers staying at the inn after their workplaces are built. Villager repair commands now help stuck villagers from other mods too.
 - **Town backups** Unrelated files no longer stop town backups or fill the log with errors.
 - **Town performance** Reduced unnecessary saving when nothing is being built.
-- **Villager chatter** Reduced overlapping idle voices and unnecessary speech animations in busy towns.
+- **Villager chatter** Reduced extra work in busy towns while keeping villagers talking and expressive.
 
 ## [3.2.0] - 9/16/2026
 

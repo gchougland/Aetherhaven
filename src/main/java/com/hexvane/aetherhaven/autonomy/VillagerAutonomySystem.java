@@ -324,9 +324,6 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         }
 
         long now = resolveNowMs(store);
-        if (VillagerLifeSystem.ownsActivity(ref, store)) {
-            return;
-        }
         VillagerAutonomyState autonomy = archetypeChunk.getComponent(index, VillagerAutonomyState.getComponentType());
         if (autonomy == null) {
             autonomy = VillagerAutonomyState.fresh(now);
@@ -335,6 +332,22 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return;
         }
 
+        if (now >= autonomy.nextStatueRecoveryCheckMs) {
+            autonomy.nextStatueRecoveryCheckMs = now + 1000L;
+            var transform = store.getComponent(ref, TransformComponent.getComponentType());
+            World statueWorld = store.getExternalData().getWorld();
+            var statue = transform != null ? VillagerBlockUtil.intersectingGaiaStatue(statueWorld, transform.getPosition()) : null;
+            var ground = statue != null ? VillagerBlockUtil.clearGroundBesideStatue(statueWorld, statue) : null;
+            if (ground != null) {
+                var statueRegistry = AetherhavenWorldRegistries.getOrCreatePoiRegistry(statueWorld, plugin);
+                abortActivePoiUseAndDismount(ref, store, commandBuffer, autonomy, needs, statueRegistry, false);
+                AutonomyStuckTeleportRecovery.teleportNpc(ref, commandBuffer, store, ground, npc);
+                npc.setLeashPoint(ground);
+                failTravel(autonomy, now, "DECORATIVE_STATUE", commandBuffer, ref, npc);
+                return;
+            }
+        }
+        if (VillagerLifeSystem.ownsActivity(ref, store)) return;
         applyAutonomyDebugOverlay(ref, store, commandBuffer, npc, needs, autonomy);
 
         MountedComponent mounted = store.getComponent(ref, MountedComponent.getComponentType());
@@ -355,6 +368,14 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord townRecord = tm.getTown(binding.getTownId());
         PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
+        PoiEntry previousTarget = autonomy.getTargetPoiUuid() != null ? reg.get(autonomy.getTargetPoiUuid()) : null;
+        if (previousTarget != null
+            && com.hexvane.aetherhaven.plot.GaiaStatueAppearance.isGaiaStatue(previousTarget.getBlockTypeId())) {
+            // Existing saves may still be using or traveling to the decorative statue marker.
+            abortActivePoiUseAndDismount(ref, store, commandBuffer, autonomy, needs, reg, false);
+            failTravel(autonomy, now, "DECORATIVE_STATUE", commandBuffer, ref, npc);
+            return;
+        }
         List<PoiEntry> pois = reg.listByTown(binding.getTownId());
         List<PoiEntry> poisForScoring = filterPoisForAutonomyScoring(townRecord, pois);
 
@@ -1246,6 +1267,10 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                     )
                     : Integer.MIN_VALUE;
             leashY = standY != Integer.MIN_VALUE ? standY + 0.02 : pick.getY();
+        }
+        if (VillagerBlockUtil.intersectingGaiaStatue(world, new Vector3d(tx, leashY, tz)) != null) {
+            failTravel(autonomy, now, "DECORATIVE_STATUE", commandBuffer, ref, npc);
+            return;
         }
         autonomy.setTravelTarget(tx, leashY, tz, pick.getId());
         autonomy.setPathFailureReason("");

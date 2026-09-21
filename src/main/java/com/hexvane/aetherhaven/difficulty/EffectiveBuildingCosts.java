@@ -10,6 +10,11 @@ import javax.annotation.Nonnull;
 
 /** Resolves building material and gold costs from town difficulty settings. */
 public final class EffectiveBuildingCosts {
+    private static final class SuggestedResources {
+        private static final com.hexvane.aetherhaven.construction.prefabmaterials.SuggestedResourceMaterialsGenerator GENERATOR =
+            com.hexvane.aetherhaven.construction.prefabmaterials.SuggestedResourceMaterialsGenerator.fromClasspath(
+                EffectiveBuildingCosts.class.getClassLoader());
+    }
     private final List<MaterialRequirement> materials;
     private final long treasuryGoldCoinCost;
 
@@ -36,7 +41,13 @@ public final class EffectiveBuildingCosts {
             // Re-apply at gameplay time so recipe checks see loaded Item assets (catalog may load earlier).
             base = PrefabMaterialItemIds.mergeNormalized(base);
         } else {
-            base = scaleMaterials(def.getMaterials(), effective.getResourceCostMultiplier());
+            base = def.getMaterials();
+        }
+        if (effective.isSimplifyBuildingResources()) {
+            base = SuggestedResources.GENERATOR.simplifyRequirements(base);
+        }
+        if (!effective.isRequireAllPrefabBlocks()) {
+            base = scaleMaterials(base, effective.getResourceCostMultiplier());
         }
         long gold = scaleGold(def.getTreasuryGoldCoinCost(), effective.getGoldCostMultiplier());
         return new EffectiveBuildingCosts(base, gold);

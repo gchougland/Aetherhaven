@@ -22,6 +22,9 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.UUID;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.function.IntBinaryOperator;
+import org.joml.Vector3i;
 
 /** Paths residents onto their scheduled plot footprint before local {@code WanderInRect} (anchored at the NPC). */
 public final class SchedulePlotCommute {
@@ -31,7 +34,7 @@ public final class SchedulePlotCommute {
 
     /**
      * If {@code preferredPlotId} resolves to a complete plot and the NPC is outside its horizontal footprint, starts
-     * {@link VillagerAutonomyState#PHASE_TRAVEL} toward the plot center (synthetic POI {@link
+     * {@link VillagerAutonomyState#PHASE_TRAVEL} toward clear ground inside the plot (synthetic POI {@link
      * AetherhavenConstants#SCHEDULE_ZONE_COMMUTE_POI_ID}).
      *
      * @return true if travel was started
@@ -82,29 +85,14 @@ public final class SchedulePlotCommute {
             && bz <= fp.getMaxZ() + pad) {
             return false;
         }
-        int cx = (fp.getMinX() + fp.getMaxX()) / 2;
-        int cz = (fp.getMinZ() + fp.getMaxZ()) / 2;
         int npcFeetY = (int) Math.floor(tc.getPosition().y);
         ConstructionDefinition cdef = plugin.getConstructionCatalog().get(plot.getConstructionId());
         AutonomyNavBounds.NavVerticalRange range = AutonomyNavBounds.rangeForPlotFootprint(fp, cdef);
-        int standY = VillagerBlockUtil.findStandYForNav(world, cx, cz, npcFeetY, npcFeetY, range);
-        if (standY == Integer.MIN_VALUE) {
-            standY =
-                VillagerBlockUtil.findStandYForNav(
-                    world,
-                    plot.getSignX(),
-                    plot.getSignZ(),
-                    npcFeetY,
-                    npcFeetY,
-                    range
-                );
-        }
-        if (standY == Integer.MIN_VALUE) {
-            return false;
-        }
-        double tx = cx + 0.5;
-        double tz = cz + 0.5;
-        double ty = standY + 0.02;
+        Vector3d destination = safePlotStand(world, fp, cdef, npcFeetY);
+        if (destination == null) return false;
+        double tx = destination.x;
+        double tz = destination.z;
+        double ty = destination.y;
         autonomy.setPhase(VillagerAutonomyState.PHASE_TRAVEL);
         autonomy.setTravelTarget(tx, ty, tz, AetherhavenConstants.SCHEDULE_ZONE_COMMUTE_POI_ID);
         autonomy.setPathFailureReason("");
@@ -149,4 +137,35 @@ public final class SchedulePlotCommute {
         VillagerAutonomySystem.applyAutonomyRoleState(ref, npc, commandBuffer);
         return true;
     }
+
+    /** Search neighboring columns rather than borrowing a floor height for an obstructed center. */
+    @Nullable
+    public static Vector3d safePlotStand(@Nonnull World world, @Nonnull PlotFootprintRecord fp,
+                                         @Nullable ConstructionDefinition def, int feetHint) {
+        var range = AutonomyNavBounds.rangeForPlotFootprint(fp, def);
+        int floorHint = range != null ? range.minFeetY() : fp.getMinY() + 1;
+        var cell = findClearColumn(fp.getMinX(), fp.getMaxX(), fp.getMinZ(), fp.getMaxZ(),
+            (x, z) -> VillagerBlockUtil.findStandYForNav(world, x, z, floorHint, feetHint, range));
+        return cell == null ? null : new Vector3d(cell.x + 0.5,
+            VillagerBlockUtil.resolveFeetYForStandCell(world, cell.x, cell.y, cell.z), cell.z + 0.5);
+    }
+
+    @Nullable
+    static Vector3i findClearColumn(int minX, int maxX, int minZ, int maxZ,
+                                            IntBinaryOperator standY) {
+        int cx = minX + (maxX - minX) / 2;
+        int cz = minZ + (maxZ - minZ) / 2;
+        int radius = Math.min(16, Math.max(maxX - minX, maxZ - minZ));
+        for (int r = 0; r <= radius; r++) {
+            for (int x = Math.max(minX, cx - r); x <= Math.min(maxX, cx + r); x++) {
+                for (int z = Math.max(minZ, cz - r); z <= Math.min(maxZ, cz + r); z++) {
+                    if (Math.max(Math.abs(x - cx), Math.abs(z - cz)) != r) continue;
+                    int y = standY.applyAsInt(x, z);
+                    if (y != Integer.MIN_VALUE) return new Vector3i(x, y, z);
+                }
+            }
+        }
+        return null;
+    }
+
 }

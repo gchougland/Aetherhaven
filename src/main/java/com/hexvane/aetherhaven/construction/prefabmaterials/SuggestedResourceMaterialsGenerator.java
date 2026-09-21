@@ -26,6 +26,32 @@ public final class SuggestedResourceMaterialsGenerator {
         return new SuggestedResourceMaterialsGenerator(PrefabMaterialConversionTable.loadFromClasspath(classLoader));
     }
 
+    /** Apply the plot creator's conversion rules to authored or full-blueprint costs, merging before scaling. */
+    @Nonnull
+    public List<MaterialRequirement> simplifyRequirements(@Nonnull List<MaterialRequirement> source) {
+        Map<String, Integer> items = new HashMap<>();
+        Map<String, Integer> resources = new HashMap<>();
+        for (MaterialRequirement requirement : source) {
+            if (requirement.getCount() <= 0) continue;
+            String resource = requirement.getResourceTypeId();
+            if (resource != null && !resource.isBlank()) {
+                String canonical = SuggestedResourceTypeResolver.canonicalizeResourceTypeId(resource);
+                resources.merge(canonical != null ? canonical : resource, requirement.getCount(), Integer::sum);
+                continue;
+            }
+            String item = requirement.getItemId();
+            if (item == null || item.isBlank()) continue;
+            String normalized = PrefabBlockNormalizer.normalizeBlockToItemId(item);
+            if (normalized == null) continue;
+            switch (SuggestedResourceTypeResolver.resolve(normalized, conversions)) {
+                case Target.Skip ignored -> {}
+                case Target.SpecialtyItem specialty -> items.merge(specialty.itemId(), requirement.getCount(), Integer::sum);
+                case Target.ResourceType type -> resources.merge(type.resourceTypeId(), requirement.getCount(), Integer::sum);
+            }
+        }
+        return PrefabMaterialsGenerator.toSortedRequirements(items, resources);
+    }
+
     @Nonnull
     public List<MaterialRequirement> generateFromPrefabPath(@Nonnull Path prefabPath) throws IOException {
         Map<String, Integer> items = new HashMap<>();

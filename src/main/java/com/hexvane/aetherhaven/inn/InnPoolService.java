@@ -665,7 +665,6 @@ public final class InnPoolService {
                 continue;
             }
             if (shouldPreserveInnVisitorFromQuestState(town, store, u)) {
-                town.addInnLockedEntity(u);
                 continue;
             }
             Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
@@ -728,7 +727,7 @@ public final class InnPoolService {
             town.migrateInnFieldsIfNeeded();
             dedupeInnPoolIds(town, tm);
             if (innLoaded) {
-                autoLockQuestCriticalVisitors(town, tm, store);
+                autoLockQuestCriticalVisitors(town, tm, store, plugin);
                 pruneDeadVisitors(town, store, tm);
                 trimInnPoolListToMax(town, tm, store);
                 syncInnPoolWithResidentBindings(town, store, tm);
@@ -1000,7 +999,6 @@ public final class InnPoolService {
                 continue;
             }
             if (shouldPreserveInnVisitorFromQuestState(town, store, u)) {
-                town.addInnLockedEntity(u);
                 continue;
             }
             Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
@@ -1075,7 +1073,7 @@ public final class InnPoolService {
         }
         town.migrateInnFieldsIfNeeded();
         dedupeInnPoolIds(town, tm);
-        autoLockQuestCriticalVisitors(town, tm, store);
+        autoLockQuestCriticalVisitors(town, tm, store, plugin);
         removeUnlockedInnVisitors(town, store);
         tm.updateTown(town);
         fillEmptyInnVisitorSlotsAtSpawns(world, plugin, town, tm, store, innPlot, innDef);
@@ -1714,7 +1712,7 @@ public final class InnPoolService {
     /**
      * Fills inn visitor pool slots up to {@link #MAX_VISITORS} with roles that are not already town residents,
      * respecting exclusions and active-inn-quest priority (same ordering as morning fill). Spawns near {@code basePos}
-     * with X offsets starting at {@code slotOffsetStart}.
+     * on the reset circle, starting at {@code slotOffsetStart}.
      */
     public static void fillRemainingInnVisitorSlotsNear(
         @Nonnull World world,
@@ -1724,7 +1722,8 @@ public final class InnPoolService {
         @Nonnull Store<EntityStore> store,
         @Nullable PlotInstance innPlot,
         @Nonnull Vector3d basePos,
-        int slotOffsetStart
+        int slotOffsetStart,
+        int circleSlots
     ) {
         if (innPlot == null) {
             return;
@@ -1769,7 +1768,7 @@ public final class InnPoolService {
             if (kind == null) {
                 kind = TownVillagerBinding.KIND_VISITOR_MERCHANT;
             }
-            Vector3d pos = new Vector3d(basePos.x + slot * 1.25, basePos.y, basePos.z);
+            Vector3d pos = com.hexvane.aetherhaven.town.VillagerResetLayout.position(basePos, slot, circleSlots);
             slot++;
             UUID spawned = spawnVisitorAtWorldPosition(store, town, roleId, kind, pos, innPlot);
             if (spawned == null) {
@@ -1876,22 +1875,28 @@ public final class InnPoolService {
     private static void autoLockQuestCriticalVisitors(
         @Nonnull TownRecord town,
         @Nonnull TownManager tm,
-        @Nonnull Store<EntityStore> store
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin
     ) {
         boolean changed = false;
-        for (String sid : town.getInnPoolNpcIds()) {
-            UUID u = parseUuid(sid);
-            if (u == null || town.isInnVisitorLocked(u)) {
-                continue;
-            }
-            if (shouldPreserveInnVisitorFromQuestState(town, store, u)) {
-                town.addInnLockedEntity(u);
-                changed = true;
-            }
+        // Inspect loaded identities directly. An unresolved UUID is not evidence that this visitor owns a quest.
+        for (LoadedInnVisitor visitor : collectLoadedInnVisitorsForTown(store, town)) {
+            boolean catalogQuest = town.getActiveQuestIdsSnapshot().stream().anyMatch(qid -> {
+                var quest = plugin.getQuestCatalog().get(qid);
+                return visitor.uuid().equals(town.getQuestTargetEntityUuid(qid))
+                    || (quest != null && visitor.roleId().equals(quest.assignNpcRoleId()));
+            });
+            changed |= reconcileVisitorQuestLock(town, visitor.uuid(), visitor.roleId(), catalogQuest);
         }
-        if (changed) {
-            tm.updateTown(town);
-        }
+        if (changed) tm.updateTown(town);
+    }
+
+    static boolean reconcileVisitorQuestLock(TownRecord town, UUID uuid, String roleId, boolean activeCatalogQuest) {
+        boolean required = activeCatalogQuest || isRoleRequiredByActiveInnQuest(town, roleId);
+        if (required == town.isInnVisitorLocked(uuid)) return false;
+        if (required) town.addInnLockedEntity(uuid);
+        else town.removeInnLockedEntity(uuid);
+        return true;
     }
 
     @Nonnull
@@ -2057,7 +2062,7 @@ public final class InnPoolService {
         report.poolEntriesFixed = reconcile.getPoolEntriesFixed();
         syncExcludedRolesFromResidents(town, store, tm, pool);
         report.lockedQuestVisitors = repairQuestLocksCount(town, store);
-        autoLockQuestCriticalVisitors(town, tm, store);
+        autoLockQuestCriticalVisitors(town, tm, store, plugin);
         report.promotedResidents += promoteEligibleVisitorsToResidents(world, plugin, town, tm, store);
         report.removedPoolEntries = syncInnPoolWithResidentBindings(town, store, tm);
         report.removedPoolEntries += removeIneligiblePoolVisitors(town, plugin, tm, store, pool);

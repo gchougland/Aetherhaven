@@ -594,6 +594,7 @@ public final class PoiScoring {
     }
 
     public static float score(@Nonnull VillagerNeeds needs, @Nonnull PoiEntry poi, boolean townHasRestaurant) {
+        if (com.hexvane.aetherhaven.plot.GaiaStatueAppearance.isGaiaStatue(poi.getBlockTypeId())) return 0f;
         float hungerDef = VillagerNeeds.MAX - needs.getHunger();
         float energyDef = VillagerNeeds.MAX - needs.getEnergy();
         float funDef = VillagerNeeds.MAX - needs.getFun();
@@ -889,6 +890,10 @@ public final class PoiScoring {
         double bestDistSq = Double.POSITIVE_INFINITY;
         for (PoiEntry e : candidates) {
             if (e.getTags().contains(AetherhavenConstants.POI_TAG_QUEST_BOARD)) {
+                continue;
+            }
+            // The statue POI records its appearance, not a place for a villager to stand.
+            if (com.hexvane.aetherhaven.plot.GaiaStatueAppearance.isGaiaStatue(e.getBlockTypeId())) {
                 continue;
             }
             if (isFestivalPoi(e)) {

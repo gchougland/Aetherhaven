@@ -1,6 +1,6 @@
 aetherhaven.difficulty.title = Aetherhaven difficulty
 aetherhaven.difficulty.easy.title = Easy
-aetherhaven.difficulty.easy.desc = Building materials and gold cost half as much.
+aetherhaven.difficulty.easy.desc = Buildings use basic resources such as Any Wood and Any Stone. Materials and gold cost half as much.
 aetherhaven.difficulty.normal.title = Normal
 aetherhaven.difficulty.normal.desc = Standard building costs and town economy.
 aetherhaven.difficulty.hard.title = Hard
@@ -52,3 +52,6 @@ aetherhaven.difficulty.journalCurrent = Current setting: {preset}
 aetherhaven.difficulty.journalNoTown = Join or select a town in the journal to view difficulty.
 aetherhaven.difficulty.journalButton = Change difficulty
 aetherhaven.difficulty.journalServerButton = Server difficulty
+
+aetherhaven.difficulty.simplifyResources = Use basic building resources
+aetherhaven.difficulty.simplifyResources.tooltip = Simplify building costs like Suggest Resources in the plot creator. Use Any Wood or Any Stone instead of specific blocks. Workbenches are still required. Items without a basic resource match are left out.

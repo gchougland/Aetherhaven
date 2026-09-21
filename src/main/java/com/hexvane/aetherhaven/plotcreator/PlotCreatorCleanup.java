@@ -29,7 +29,7 @@ public final class PlotCreatorCleanup {
     ) {
         PlotCreatorSessions.remove(session.getPlayerUuid());
         if (playerRef != null) {
-            PlotCreatorSelectionBoundsService.deactivateIfPresent(playerRef);
+            PlotCreatorSelectionBoundsService.clearForSessionEnd(playerRef);
             Ref<EntityStore> ref = playerRef.getReference();
             if (ref != null && ref.isValid()) {
                 PlotCreatorSelectionBoundsService.restoreNormalStaffInHand(playerRef, ref, ref.getStore());

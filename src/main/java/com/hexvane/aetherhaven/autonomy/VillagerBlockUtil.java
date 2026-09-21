@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.autonomy;
 
 import com.hexvane.aetherhaven.world.ChunkSectionBlockUtil;
+import com.hexvane.aetherhaven.plot.GaiaStatueAppearance;
 import com.hypixel.hytale.builtin.mounts.BlockMountComponent;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.protocol.BlockMaterial;
@@ -208,6 +209,62 @@ public final class VillagerBlockUtil {
         return ChunkSectionBlockUtil.blockType(world, x, y, z);
     }
 
+    /** Finds statues intersecting the NPC, including old saves with feet snapped above a filler voxel. */
+    @Nullable
+    static Vector3i intersectingGaiaStatue(World world, Vector3d feet) {
+        return intersectingGaiaStatue(feet, new StatueProbe() {
+            public Vector3i statueAt(int x, int y, int z) {
+                BlockType type = blockTypeNoLoad(world, x, y, z);
+                return type != null && GaiaStatueAppearance.isGaiaStatue(type.getId())
+                    ? resolveMountBaseBlock(world, x, y, z) : null;
+            }
+            public boolean blocksBelow(int x, int y, int z) {
+                return isGroundBlock(world, x, y, z);
+            }
+        });
+    }
+
+    @FunctionalInterface
+    interface StatueProbe {
+        Vector3i statueAt(int x, int y, int z);
+        default boolean blocksBelow(int x, int y, int z) { return false; }
+    }
+
+    @Nullable
+    static Vector3i intersectingGaiaStatue(Vector3d feet, StatueProbe blocks) {
+        for (int x = (int) Math.floor(feet.x - .3); x <= (int) Math.floor(feet.x + .3); x++) {
+            for (int z = (int) Math.floor(feet.z - .3); z <= (int) Math.floor(feet.z + .3); z++) {
+                for (int y = (int) Math.floor(feet.y) + 1; y >= Math.max(0, (int) Math.floor(feet.y) - 6); y--) {
+                    Vector3i base = blocks.statueAt(x, y, z);
+                    if (base != null && feet.y + 1.8 > base.y && feet.y < base.y + 6.1
+                        && feet.x + .3 > base.x && feet.x - .3 < base.x + 1
+                        && feet.z + .3 > base.z && feet.z - .3 < base.z + 1) return base;
+                    // A separate floor above the statue is a legitimate place to stand.
+                    if (y < Math.floor(feet.y) && blocks.blocksBelow(x, y, z)) break;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    static Vector3d clearGroundBesideStatue(World world, Vector3i statue) {
+        // Stay at the base of the statue. Never search upward onto its crown.
+        for (int radius = 1; radius <= 4; radius++) {
+            for (int x = statue.x - radius; x <= statue.x + radius; x++) {
+                for (int z = statue.z - radius; z <= statue.z + radius; z++) {
+                    if (Math.max(Math.abs(x - statue.x), Math.abs(z - statue.z)) != radius) continue;
+                    for (int y = statue.y + 1; y >= Math.max(1, statue.y - 2); y--) {
+                        if (!isNpcStandColumn(world, x, y, z)) continue;
+                        Vector3d candidate = new Vector3d(x + .5, resolveFeetYForStandCell(world, x, y, z), z + .5);
+                        if (intersectingGaiaStatue(world, candidate) == null) return candidate;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     /** True when an NPC can stand at feet Y in this column (passable feet/head, solid ground below). */
     public static boolean isNpcStandColumn(@Nonnull World world, int bx, int feetY, int bz) {
         return walkableColumn(world, bx, feetY, bz);
@@ -219,6 +276,11 @@ public final class VillagerBlockUtil {
      */
     @Nonnull
     public static Vector3d snapNpcFeetToStand(@Nonnull World world, @Nonnull Vector3d feet) {
+        Vector3i statue = intersectingGaiaStatue(world, feet);
+        if (statue != null) {
+            Vector3d beside = clearGroundBesideStatue(world, statue);
+            if (beside != null) return beside;
+        }
         int bx = (int) Math.floor(feet.x);
         int bz = (int) Math.floor(feet.z);
         int probeFeetY = (int) Math.floor(feet.y);
@@ -248,12 +310,13 @@ public final class VillagerBlockUtil {
         if (blockType == null || blockType == BlockType.EMPTY) {
             return by;
         }
+        Vector3i base = resolveMountBaseBlock(world, bx, by, bz);
         BlockBoundingBoxes hitboxAsset = BlockBoundingBoxes.getAssetMap().getAsset(blockType.getHitboxTypeIndex());
         if (hitboxAsset == null) {
             return by + 1.0;
         }
-        int rotationIndex = blockRotationIndexNoLoad(world, bx, by, bz);
-        return by + hitboxAsset.get(rotationIndex).getBoundingBox().max.y;
+        int rotationIndex = blockRotationIndexNoLoad(world, base.x, base.y, base.z);
+        return base.y + hitboxAsset.get(rotationIndex).getBoundingBox().max.y;
     }
 
     private static int findGroundBlockYBelowStandCell(@Nonnull World world, int bx, int standCellY, int bz) {
@@ -270,6 +333,7 @@ public final class VillagerBlockUtil {
         if (blockType == null || blockType == BlockType.EMPTY) {
             return false;
         }
+        if (GaiaStatueAppearance.isGaiaStatue(blockType.getId())) return false;
         if (blockType.getMaterial() == BlockMaterial.Solid) {
             return true;
         }
