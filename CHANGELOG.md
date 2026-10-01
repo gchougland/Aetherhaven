@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.2.2] - Unreleased
+
+### Changed
+
+- **Improved UI Icons** Edited UI Icons so they have a little more depth/detail to them.
+
+### Fixed
+
+- **Villager memories** Villager memories from other mods remain visible at the memory bench after their assets reload.
+- **Town backups** Closing a world or server no longer interrupts a backup and fills the log with archive errors.
+
 ## [3.2.1] - 9/21/2026
 
 ### Added

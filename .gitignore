@@ -46,3 +46,4 @@ AGENTS.md
 /scripts/translate.secrets.env
 # Hytale regenerates these beside .prefab.json; stale copies freeze wrong bounds (e.g. 16x16 overlays).
 *.prefab.json.lpf
+agents.md

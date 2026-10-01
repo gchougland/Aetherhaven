@@ -53,7 +53,13 @@ final class AetherhavenBackupWorker implements AutoCloseable {
                     scratch = Files.createTempDirectory(scratchParent, ".aetherhaven-backup-");
                 }
                 var prepared = builder.prepare(source, target, scratch);
-                synchronized (this) { ready = prepared; }
+                synchronized (this) {
+                    if (closed) {
+                        completion.complete(null);
+                        return;
+                    }
+                    ready = prepared;
+                }
                 completion.complete(prepared);
                 if (prepared != null) onReady.run();
             } catch (Exception e) {
@@ -68,7 +74,7 @@ final class AetherhavenBackupWorker implements AutoCloseable {
 
     /** Caller owns vanilla's resource save lock. No scanning, waiting, hashing or compression here. */
     synchronized String publishReady() throws IOException {
-        if (ready == null) return null;
+        if (closed || ready == null) return null;
         builder.publish(ready, target);
         String hash = ready.hash();
         ready = null;
@@ -76,16 +82,34 @@ final class AetherhavenBackupWorker implements AutoCloseable {
     }
 
     @Override public void close() {
-        synchronized (this) { closed = true; }
-        executor.shutdownNow();
+        synchronized (this) {
+            if (!closed) {
+                closed = true;
+                ready = null;
+                // Queue cleanup behind preparation so it also runs if the caller stops waiting.
+                executor.execute(() -> {
+                    synchronized (this) { cleanScratch(); }
+                });
+                // Interrupting zipfs during close can close its backing channel mid-commit and
+                // print errors directly to stderr. Drain without interrupting, even on timeout.
+                executor.shutdown();
+            }
+        }
         try {
-            if (executor.awaitTermination(30, TimeUnit.SECONDS)) {
-                if (scratch != null) AetherhavenBackupArchive.cleanScratch(scratch);
-            } else {
-                LOGGER.atWarning().log("Aetherhaven backup worker is still stopping; leaving its private scratch directory intact");
+            if (!executor.awaitTermination(30, TimeUnit.SECONDS)) {
+                LOGGER.atWarning().log("Aetherhaven backup worker is still stopping; it will clean its scratch files when finished");
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+        }
+    }
+
+    /** Caller holds this worker's monitor and preparation has finished. */
+    private void cleanScratch() {
+        if (scratch == null) return;
+        try {
+            AetherhavenBackupArchive.cleanScratch(scratch);
+            scratch = null;
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Could not clean Aetherhaven backup scratch files");
         }

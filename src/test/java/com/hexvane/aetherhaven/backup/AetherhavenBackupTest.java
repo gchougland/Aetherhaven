@@ -358,6 +358,97 @@ class AetherhavenBackupTest {
         assertTrue(Files.isRegularFile(archive()));
     }
 
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.ValueSource(booleans = {false, true})
+    void shutdownDuringIncrementalBackupDoesNotInterruptZipOrPublishLate(boolean interruptCaller) throws Exception {
+        Path data = data();
+        write(data, "config.json", "{}");
+        write(data, "worlds/default/towns.json", "{\"towns\":[]}");
+        Path scratchParent = Files.createDirectory(temp.resolve("scratch"));
+        var notifications = new java.util.concurrent.atomic.AtomicInteger();
+        var worker = new AetherhavenBackupWorker(data, archive(), scratchParent, notifications::incrementAndGet);
+        workers.add(worker);
+        worker.request().get(10, TimeUnit.SECONDS);
+        worker.publishReady();
+        awaitCondition(() -> notifications.get() == 1);
+        byte[] published = Files.readAllBytes(archive());
+        write(data, "worlds/default/towns.json", "{\"towns\":[],\"revision\":2}");
+
+        var stopped = new java.util.concurrent.CompletableFuture<Boolean>();
+        java.util.concurrent.CompletableFuture<AetherhavenBackupArchive.Prepared> preparing;
+        synchronized (TownWorldFile.class) {
+            preparing = worker.request();
+            // Hold preparation inside an open incremental ZIP, before copying the changed town.
+            // Existing config.json must be copied by zipfs when it commits on close.
+            var backupThread = new java.util.concurrent.atomic.AtomicReference<Thread>();
+            awaitCondition(() -> {
+                for (var entry : Thread.getAllStackTraces().entrySet()) {
+                    if (entry.getKey().getState() == Thread.State.BLOCKED
+                        && java.util.Arrays.stream(entry.getValue()).anyMatch(frame ->
+                            frame.getClassName().equals(AetherhavenBackupArchive.class.getName())
+                                && frame.getMethodName().equals("copyStable"))) {
+                        backupThread.set(entry.getKey());
+                        return true;
+                    }
+                }
+                return false;
+            });
+            Thread closer = new Thread(() -> {
+                try {
+                    if (interruptCaller) Thread.currentThread().interrupt();
+                    worker.close();
+                    stopped.complete(Thread.currentThread().isInterrupted());
+                } catch (Throwable e) { stopped.completeExceptionally(e); }
+            }, "Backup-shutdown-test");
+            closer.setDaemon(true);
+            closer.start();
+            awaitCondition(() -> worker.request().isDone());
+            assertNull(worker.request().get(1, TimeUnit.SECONDS));
+            if (interruptCaller) assertTrue(stopped.get(10, TimeUnit.SECONDS));
+            assertFalse(backupThread.get().isInterrupted(), "Shutdown must not interrupt the open ZIP");
+            assertFalse(preparing.isDone());
+        }
+        assertNull(preparing.get(10, TimeUnit.SECONDS));
+        assertEquals(interruptCaller, stopped.get(10, TimeUnit.SECONDS));
+        awaitCondition(() -> {
+            try (var files = Files.list(scratchParent)) { return files.findAny().isEmpty(); }
+            catch (IOException e) { throw new java.io.UncheckedIOException(e); }
+        });
+        assertEquals(1, notifications.get(), "Shutdown must discard the newly prepared snapshot");
+        assertNull(worker.publishReady());
+        assertArrayEquals(published, Files.readAllBytes(archive()));
+    }
+
+    @Test void interruptedShutdownStillCleansAnUnpublishedReadySnapshot() throws Exception {
+        Path data = data();
+        write(data, "config.json", "{}");
+        Path scratchParent = Files.createDirectory(temp.resolve("scratch"));
+        var worker = new AetherhavenBackupWorker(data, archive(), scratchParent, () -> {});
+        workers.add(worker);
+        assertNotNull(worker.request().get(10, TimeUnit.SECONDS));
+        try {
+            Thread.currentThread().interrupt();
+            worker.close();
+            assertTrue(Thread.currentThread().isInterrupted());
+        } finally { Thread.interrupted(); }
+        awaitCondition(() -> {
+            try (var files = Files.list(scratchParent)) { return files.findAny().isEmpty(); }
+            catch (IOException e) { throw new java.io.UncheckedIOException(e); }
+        });
+        assertNull(worker.publishReady());
+        assertNull(worker.request().get(1, TimeUnit.SECONDS));
+        assertFalse(Files.exists(archive()));
+        worker.close(); // Repeated lifecycle cleanup is harmless.
+    }
+
+    private static void awaitCondition(java.util.function.BooleanSupplier condition) throws InterruptedException {
+        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10);
+        while (!condition.getAsBoolean()) {
+            assertTrue(System.nanoTime() < deadline, "Timed out waiting for backup worker");
+            Thread.sleep(10);
+        }
+    }
+
     @Test void incrementalSnapshotRemovesDeletedEntriesAndAddsNewFiles() throws Exception {
         Path data = data();
         write(data, "worlds/removed/towns.json", "{\"towns\":[]}");

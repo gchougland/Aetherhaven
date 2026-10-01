@@ -11,6 +11,7 @@ import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderInfo;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderManager;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.nio.file.Files;
@@ -137,7 +138,7 @@ public final class AetherhavenNpcRoleLoader {
             for (String error : errors) {
                 LOGGER.atSevere().log("Aetherhaven NpcRoles validate: %s", error);
             }
-            builders.onAllBuildersLoaded(loaded);
+            finishLoading(builders, loaded);
         }
         LOGGER.atInfo().log(
             "Loaded %s NPC role file(s) from %s in pack %s",
@@ -145,6 +146,19 @@ public final class AetherhavenNpcRoleLoader {
             AetherhavenAssetPaths.NPC_ROLES,
             pack.getName()
         );
+    }
+
+    /** Complete dependency validation before memory providers inspect BuilderInfo.isValid(). */
+    static void finishLoading(BuilderManager builders, Int2ObjectMap<BuilderInfo> loaded) {
+        // Hytale's onAllBuildersLoaded dispatches its event BEFORE this final validation.
+        // A fresh/reloaded role is still NEEDS_VALIDATION after the asset checks above,
+        // so an already-started Memories plugin otherwise drops it from the bench list.
+        for (BuilderInfo info : loaded.values()) {
+            if (info.needsValidation()) {
+                builders.validateBuilder(info);
+            }
+        }
+        builders.onAllBuildersLoaded(loaded);
     }
 
     @Nonnull
