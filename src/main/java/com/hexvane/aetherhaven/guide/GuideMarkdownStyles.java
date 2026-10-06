@@ -4,6 +4,7 @@ import com.hypixel.hytale.server.core.Message;
 import com.vladsch.flexmark.ast.Code;
 import com.vladsch.flexmark.ast.Emphasis;
 import com.vladsch.flexmark.ast.HardLineBreak;
+import com.vladsch.flexmark.ast.Image;
 import com.vladsch.flexmark.ast.Paragraph;
 import com.vladsch.flexmark.ast.SoftLineBreak;
 import com.vladsch.flexmark.ast.StrongEmphasis;
@@ -104,7 +105,9 @@ public final class GuideMarkdownStyles {
         @Nonnull List<Message> out
     ) {
         for (Node c = node.getFirstChild(); c != null; c = c.getNext()) {
-            if (c instanceof Text t) {
+            if (c instanceof Image) {
+                continue;
+            } else if (c instanceof Text t) {
                 appendTextSegments(t.getChars().toString(), defaultColor, bulletContext, out);
             } else if (c instanceof Code code) {
                 String raw = code.getChars().toString();
@@ -181,7 +184,9 @@ public final class GuideMarkdownStyles {
     private static String collectPlain(@Nonnull Node node) {
         StringBuilder sb = new StringBuilder();
         for (Node c = node.getFirstChild(); c != null; c = c.getNext()) {
-            if (c instanceof Text t) {
+            if (c instanceof Image) {
+                continue;
+            } else if (c instanceof Text t) {
                 sb.append(t.getChars());
             } else if (c instanceof Code code) {
                 sb.append(code.getChars());

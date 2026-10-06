@@ -21,12 +21,28 @@
   },
   "reputationMilestones": [
     {
+      "rewardId": "rep_guild_orders_gift",
+      "minReputation": 25,
+      "itemId": "Aetherhaven_Rts_Flag",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_25",
+      "learnRecipeItemId": null
+    },
+    {
       "rewardId": "rep_guild_master_50",
       "minReputation": 50,
       "itemId": "",
       "itemCount": 0,
       "dialogueNodeId": "rep_reward_50",
       "learnRecipeItemId": "Aetherhaven_Battle_Horn"
+    },
+    {
+      "rewardId": "rep_guild_field_repairs",
+      "minReputation": 75,
+      "itemId": "Tool_Repair_Kit_Iron",
+      "itemCount": 6,
+      "dialogueNodeId": "rep_reward_75",
+      "learnRecipeItemId": null
     }
   ],
   "giftLoves": [

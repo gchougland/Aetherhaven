@@ -45,8 +45,8 @@
       "localY": 0,
       "localZ": 13,
       "tags": [
-        "WORK",
-        "workActivity:mine"
+        "workActivity:mine",
+        "WORK"
       ],
       "capacity": 1,
       "blockTypeId": "Rock_Stone",
@@ -59,8 +59,8 @@
       "localY": 0,
       "localZ": 11,
       "tags": [
-        "WORK",
-        "workActivity:mine"
+        "workActivity:mine",
+        "WORK"
       ],
       "capacity": 1,
       "blockTypeId": "Rock_Stone",
@@ -73,8 +73,8 @@
       "localY": 0,
       "localZ": 12,
       "tags": [
-        "WORK",
-        "workActivity:mine"
+        "workActivity:mine",
+        "WORK"
       ],
       "capacity": 1,
       "blockTypeId": "Rock_Stone",
@@ -84,5 +84,57 @@
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_miners_hut.displayName",
-  "styleId": "core"
+  "styleId": "core",
+  "productionLayout": {
+    "modRules": "4.0",
+    "mode": "mining_nodes",
+    "nodes": [
+      {
+        "x": 2,
+        "y": 0,
+        "z": 13,
+        "expectedBlockId": "Rock_Stone"
+      },
+      {
+        "x": 6,
+        "y": 0,
+        "z": 12,
+        "expectedBlockId": "Rock_Stone"
+      },
+      {
+        "x": 4,
+        "y": 0,
+        "z": 15,
+        "expectedBlockId": "Rock_Stone"
+      },
+      {
+        "x": 6,
+        "y": 0,
+        "z": 13,
+        "expectedBlockId": "Rock_Stone"
+      },
+      {
+        "x": 5,
+        "y": 0,
+        "z": 11,
+        "expectedBlockId": "Rock_Stone"
+      }
+    ]
+  },
+  "frontFacing": "North",
+  "tags": [
+    "work"
+  ],
+  "boundsLocal": {
+    "min": [
+      1,
+      -1,
+      1
+    ],
+    "max": [
+      7,
+      9,
+      16
+    ]
+  }
 }

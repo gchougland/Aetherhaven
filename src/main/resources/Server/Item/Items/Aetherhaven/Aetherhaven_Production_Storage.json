@@ -29,6 +29,7 @@
     },
     "HitboxType": "Wardrobe",
     "InteractionHitboxType": "Wardrobe",
+    "InteractionHint": "aetherhaven_feasts_production.aetherhaven.interaction.productionStorage",
     "Material": "Solid",
     "ParticleColor": "#543022",
     "Support": {

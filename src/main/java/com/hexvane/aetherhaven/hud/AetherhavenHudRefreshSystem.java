@@ -97,7 +97,7 @@ public final class AetherhavenHudRefreshSystem
         UUIDComponent uuid = chunk.getComponent(index, UUIDComponent.getComponentType());
         PlayerTownJournalState preferences =
             chunk.getComponent(index, PlayerTownJournalState.getComponentType());
-        if (player == null || playerRef == null || uuid == null || preferences == null) {
+        if (player == null || player.isWaitingForClientReady() || playerRef == null || uuid == null || preferences == null) {
             return;
         }
         if (!preferences.isHudEnabled()) {

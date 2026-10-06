@@ -4,15 +4,37 @@
   "Interface": "Hytale.Instruction",
   "$Comment": "Fight back when hit in Idle/Patrol before Aggressive mob detection runs.",
   "Parameters": {
-    "_ImportStates": ["Combat"]
+    "_ImportStates": [
+      "Combat"
+    ]
   },
   "Content": {
     "Continue": true,
-    "Sensor": { "Type": "Damage", "Combat": true },
+    "Sensor": {
+      "Type": "And",
+      "Sensors": [
+        {
+          "Type": "AetherhavenGuardAutomaticAggro"
+        },
+        {
+          "Type": "Damage",
+          "Combat": true
+        }
+      ]
+    },
     "Actions": [
-      { "Type": "AddToHostileTargetMemory" },
-      { "Type": "OverrideAttitude", "Attitude": "Hostile", "Duration": 120 },
-      { "Type": "ParentState", "State": "Combat" }
+      {
+        "Type": "AddToHostileTargetMemory"
+      },
+      {
+        "Type": "OverrideAttitude",
+        "Attitude": "Hostile",
+        "Duration": 120
+      },
+      {
+        "Type": "ParentState",
+        "State": "Combat"
+      }
     ]
   }
 }

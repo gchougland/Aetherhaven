@@ -1,0 +1,73 @@
+{
+  "Shape": "Cube",
+  "RenderMode": "BlendAdd",
+  "ParticleRotationInfluence": "None",
+  "ParticleRotateWithSpawner": true,
+  "LinearFiltering": true,
+  "LightInfluence": 0,
+  "LifeSpan": 1.2,
+  "MaxConcurrentParticles": 1,
+  "ParticleLifeSpan": {
+    "Min": 1.2,
+    "Max": 1.2
+  },
+  "SpawnBurst": true,
+  "SpawnRate": {
+    "Min": 1,
+    "Max": 1
+  },
+  "TotalParticles": {
+    "Min": 1,
+    "Max": 1
+  },
+  "InitialVelocity": {
+    "Speed": {
+      "Min": 0,
+      "Max": 0
+    },
+    "Yaw": {
+      "Min": 0,
+      "Max": 0
+    },
+    "Pitch": {
+      "Min": 0,
+      "Max": 0
+    }
+  },
+  "Particle": {
+    "Texture": "Particles/Aetherhaven/WorkplaceBorder.png",
+    "FrameSize": {
+      "Width": 32,
+      "Height": 32
+    },
+    "ScaleRatioConstraint": "OneToOne",
+    "SoftParticles": "Disable",
+    "InitialAnimationFrame": {
+      "Scale": {
+        "X": {
+          "Min": 1.01,
+          "Max": 1.01
+        }
+      },
+      "Rotation": {
+        "X": {
+          "Min": 90,
+          "Max": 90
+        }
+      },
+      "Opacity": 1,
+      "Color": "#6db79e"
+    },
+    "Animation": {
+      "0": {
+        "Opacity": 0
+      },
+      "50": {
+        "Opacity": 0.8
+      },
+      "100": {
+        "Opacity": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "id": "brew_antidote",
+  "name": "Antidote",
+  "workplace": "alchemy",
+  "sourceRecipe": "Potion_Antidote_Recipe_Generated_0",
+  "bench": "Alchemybench",
+  "benchTier": 1,
+  "skillLevel": 3
+}

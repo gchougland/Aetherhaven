@@ -1,0 +1,5 @@
+$C = "../Common.ui";
+Group { LayoutMode: Top; Anchor: (Width: 50); TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+  AssetImage #Icon { Anchor: (Width: 32, Height: 32, Left: 6, Bottom: 4); }
+  Label #Label { Anchor: (Width: 44, Height: 36); Style: (...$C.@DefaultLabelStyle, FontSize: 11, Wrap: true, HorizontalAlignment: Center, TextColor: #c7d3df); }
+}

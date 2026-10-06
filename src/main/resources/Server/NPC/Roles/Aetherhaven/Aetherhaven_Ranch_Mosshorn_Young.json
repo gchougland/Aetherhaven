@@ -1,0 +1,62 @@
+{
+  "Type": "Variant",
+  "Reference": "Template_Animal_Neutral",
+  "Modify": {
+    "Appearance": "Aetherhaven_Ranch_Mosshorn_Young",
+    "AttitudeGroup": "PreyBig",
+    "AttractiveItemSet": [
+      "Plant_Crop_Potato_Item"
+    ],
+    "AttractiveItemSetParticles": "Want_Food_Potato",
+    "DropList": "Empty",
+    "Attack": "Root_NPC_Attack_Melee",
+    "MaxHealth": 62,
+    "IsTameable": false,
+    "TameRoleChange": "Tamed_Mosshorn",
+    "IsMemory": false,
+    "MemoriesCategory": "Livestock",
+    "MemoriesNameOverride": "Mosshorn",
+    "NameTranslationKey": {
+      "Compute": "NameTranslationKey"
+    },
+    "_InteractionVars": {
+      "Melee_Start": {
+        "Interactions": [
+          {
+            "Parent": "NPC_Attack_Melee_Simple",
+            "$Comment": "Sets animations and delay before hit",
+            "Effects": {
+              "ItemPlayerAnimationsId": "Crocodile_Default",
+              "ItemAnimationId": "Bite"
+            },
+            "RunTime": 0.333
+          }
+        ]
+      },
+      "Melee_Damage": {
+        "Interactions": [
+          {
+            "Parent": "NPC_Attack_Melee_Damage",
+            "$Comment": "Sets damage and onhit effects",
+            "DamageCalculator": {
+              "Type": "Absolute",
+              "BaseDamage": {
+                "Physical": 12
+              },
+              "RandomPercentageModifier": 0.1
+            }
+          }
+        ]
+      }
+    },
+    "ProduceItem": "",
+    "FlockArray": []
+  },
+  "Parameters": {
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Mosshorn.name",
+      "Description": "Translation key for NPC name display"
+    }
+  },
+  "$Comment": "Town managed offspring. Native species behavior with no item output, taming or memories."
+}

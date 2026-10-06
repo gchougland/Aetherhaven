@@ -18,8 +18,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 /**
- * After Hytale's Update 6 {@link BlockEntitySystems.PositionMigrationSystem}, repair prefab
- * block entities that still have old-convention scale (binary cache skipped the engine flag).
+ * Legacy compatibility hook after the engine migration. Never infer a version from entity size.
  */
 public final class BlockEntityScaleRepairSystem extends HolderSystem<EntityStore> {
     @Nonnull
@@ -48,7 +47,7 @@ public final class BlockEntityScaleRepairSystem extends HolderSystem<EntityStore
 
     @Override
     public void onEntityAdd(@Nonnull Holder<EntityStore> holder, @Nonnull AddReason reason, @Nonnull Store<EntityStore> store) {
-        BlockEntityScaleMigration.migrateLoadedIfOversized(holder);
+        BlockEntityScaleMigration.migrateLoadedLegacyAnchor(holder);
     }
 
     @Override

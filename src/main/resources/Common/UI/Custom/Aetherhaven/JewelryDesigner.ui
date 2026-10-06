@@ -1,0 +1,22 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Top; FlexWeight: 1;
+  Label { Text: "CHOOSE A GEMSTONE"; Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d2bc85); }
+  Group #Gems { LayoutMode: Left; Anchor: (Height: 64, Bottom: 10); }
+  Group { LayoutMode: Left; Anchor: (Height: 38, Bottom: 10);
+    $C.@SecondaryTextButton #Silver { Text: "Silver"; FlexWeight: 1; Anchor: (Right: 5); Padding: (Horizontal: 5); }
+    $C.@SecondaryTextButton #Gold { Text: "Gold"; FlexWeight: 1; Anchor: (Right: 15); Padding: (Horizontal: 5); }
+    $C.@SecondaryTextButton #Ring { Text: "Ring"; FlexWeight: 1; Anchor: (Right: 5); Padding: (Horizontal: 5); }
+    $C.@SecondaryTextButton #Necklace { Text: "Necklace"; FlexWeight: 1; Padding: (Horizontal: 5); }
+  }
+  Group #Grades { LayoutMode: Left; Anchor: (Height: 50, Bottom: 10); }
+  Group { LayoutMode: Left; FlexWeight: 1; Background: $T.@Panel; Padding: (Full: 12);
+    ItemIcon #Preview { Anchor: (Width: 96, Height: 96, Right: 12); }
+    Group { LayoutMode: Top; FlexWeight: 1;
+      Label #PreviewName { Anchor: (Height: 40); Style: (...$C.@DefaultLabelStyle, FontSize: 18, TextColor: #e0d3af, Wrap: true, RenderBold: true); }
+      Label #Requirements { Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9fc5b2); }
+      Label #Appraisal { Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9fc5b2); }
+      Label #Status { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #dec68d, Wrap: true); }
+    }
+  }
+}

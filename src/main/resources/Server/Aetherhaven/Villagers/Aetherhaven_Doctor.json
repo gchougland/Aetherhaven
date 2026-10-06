@@ -1,0 +1,57 @@
+{
+  "npcRoleId": "Aetherhaven_Doctor",
+  "dialogueVillagerKind": "doctor",
+  "residentTreeId": "aetherhaven_doctor",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_doctor",
+  "displayName": "Elara Willowmere",
+  "portraitIcon": "Aetherhaven_Doctor.png",
+  "speechVoiceId": "MellowFemale",
+  "uiSortOrder": 23,
+  "innPoolEligible": true,
+  "innPoolOrder": 23,
+  "innPoolWeight": 1,
+  "visitorBindingKind": "visitor_doctor",
+  "minimumTownLevel": 3,
+  "birthdaySeason": "Autumn",
+  "birthdayDay": 9,
+  "giftLoves": [
+    "Potion_Health_Lesser",
+    "Plant_Crop_Health1"
+  ],
+  "giftLikes": [
+    "Plant_Crop_Health2",
+    "Ingredient_Fabric_Scrap_Linen"
+  ],
+  "giftDislikes": [
+    "Ingredient_Bone_Fragment"
+  ],
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_doctor_25",
+      "minReputation": 25,
+      "itemId": "Potion_Health_Lesser",
+      "itemCount": 5,
+      "dialogueNodeId": "rep_reward_25"
+    },
+    {
+      "rewardId": "rep_doctor_50",
+      "minReputation": 50,
+      "itemId": "Potion_Health",
+      "itemCount": 3,
+      "dialogueNodeId": "rep_reward_50"
+    },
+    {
+      "rewardId": "rep_doctor_75",
+      "minReputation": 75,
+      "itemId": "Potion_Health_Greater",
+      "itemCount": 2,
+      "dialogueNodeId": "rep_reward_75"
+    }
+  ],
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_doctor.greeting.0",
+    "aetherhaven_doctor.greeting.1",
+    "aetherhaven_doctor.greeting.2"
+  ]
+}

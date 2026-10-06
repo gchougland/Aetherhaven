@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 
 /**
  * NPC stalls are open during in-game daylight only and need an assigned workplace villager. Player-controlled spots
- * stay open at night whenever they have a listing.
+ * need their assigned Commerce clerk physically attending during daylight.
  */
 public final class ShopSpotOpenService {
     /** Scaled day band aligned with {@link WorldTimeResource} daylight (approx. sunrise through sunset). */
@@ -61,7 +61,7 @@ public final class ShopSpotOpenService {
             return false;
         }
         if (record.isPlayerControlled()) {
-            return true;
+            return com.hexvane.aetherhaven.autonomy.ShopClerkWorkService.attendingSkill(store, town, record.getPlotId()) > 0;
         }
         if (!isGameDay(store)) {
             return false;
@@ -74,6 +74,7 @@ public final class ShopSpotOpenService {
         @Nonnull TownRecord town,
         @Nonnull Store<EntityStore> store
     ) {
+        if (record.isPlayerControlled()) return com.hexvane.aetherhaven.autonomy.ShopClerkWorkService.attendingSkill(store, town, record.getPlotId()) > 0;
         return hasStaffedWorkplace(record, town,
             kind -> hasWorkerOnPlot(store, town.getTownId(), record.getPlotId(), kind));
     }

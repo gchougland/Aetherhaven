@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_seeds_corn",
+  "name": "Seeds Corn",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_seeds_corn",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 2,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 3
+    }
+  ],
+  "output": "Plant_Seeds_Corn",
+  "outputCount": 1,
+  "workSeconds": 12
+}

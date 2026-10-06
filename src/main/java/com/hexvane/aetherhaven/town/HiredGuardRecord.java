@@ -59,6 +59,8 @@ public final class HiredGuardRecord {
         return equipmentProfileId != null ? equipmentProfileId : "";
     }
 
+    public void setEquipmentProfileId(String profile) { equipmentProfileId=profile; }
+
     public boolean isCitizen() {
         return citizen;
     }

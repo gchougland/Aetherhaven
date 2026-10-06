@@ -1,0 +1,6 @@
+$C = "../Common.ui";
+Group { LayoutMode: Left; Anchor: (Height: 54, Bottom: 6);
+ ItemIcon #Icon { Anchor: (Width: 44, Height: 44, Right: 12); }
+ Label #Name { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 15); }
+ $C.@SecondaryTextButton #Equip { Text: "Equip"; Anchor: (Width: 110, Height: 40); }
+}

@@ -1,0 +1,10 @@
+{
+  "WiggleWeights": {},
+  "Animations": {
+    "WaterCrops": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Work/WaterCrops.blockyanim",
+      "BlendingDuration": 0.15,
+      "Looping": false
+    }
+  }
+}

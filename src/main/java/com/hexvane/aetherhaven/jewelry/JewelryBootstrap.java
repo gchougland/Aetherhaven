@@ -7,11 +7,9 @@ import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.ui.JewelryAppraisalPage;
 import com.hexvane.aetherhaven.ui.JewelryCraftingPage;
 import com.hexvane.aetherhaven.ui.OpenHandMirrorUiInteraction;
-import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.OpenCustomUIInteraction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
-import org.joml.Vector3i;
 import javax.annotation.Nonnull;
 
 public final class JewelryBootstrap {
@@ -42,12 +40,9 @@ public final class JewelryBootstrap {
                 if (!AetherhavenFeatures.isLoaded(AetherhavenPluginIds.JEWELRY)) {
                     return null;
                 }
-                BlockPosition targetBlock = context.getTargetBlock();
-                Vector3i benchPos =
-                    targetBlock != null
-                        ? new Vector3i(targetBlock.x, targetBlock.y, targetBlock.z)
-                        : null;
-                return new JewelryCraftingPage(playerRef, benchPos);
+                playerRef.sendMessage(com.hypixel.hytale.server.core.Message.raw(
+                    "Jewelry is now made by Apprentices. Unlock a jewelry workplace through the Merchant."));
+                return null;
             }
         );
     }

@@ -1,0 +1,68 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+@IngredientSlot = Button {
+ LayoutMode: Full; FlexWeight: 1; Anchor: (Right: 8);
+ Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed), Disabled: (Background: $T.@Inset));
+ Group #Shade { Anchor: (Full: 0); Background: #363a40; HitTestVisible: false; Visible: false; }
+ Group { LayoutMode: Top; Anchor: (Full: 0); Padding: (Full: 8);
+  Group { LayoutMode: Center; Anchor: (Height: 40);
+   ItemIcon #Icon { Anchor: (Width: 40, Height: 40); }
+   AssetImage #Lock { Anchor: (Width: 34, Height: 34); AssetPath: "UI/Custom/padlock.png"; HitTestVisible: false; Visible: false; }
+  }
+  Label #Name { Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, HorizontalAlignment: Center, TextColor: #c5d5ce); }
+ }
+};
+$C.@PageOverlay { LayoutMode: Middle;
+ $C.@DecoratedContainer { Anchor: (Width: 1060, Height: 780);
+  #Title { Label { Text: "THE ALCHEMIST'S CAULDRON"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+  #Content { LayoutMode: Top; Padding: (Full: 22);
+   Label #Summary { Anchor: (Height: 28, Bottom: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #e4c987); }
+   Group { LayoutMode: Left; FlexWeight: 1;
+    Group { LayoutMode: Top; Anchor: (Width: 395, Right: 18);
+     Label { Text: "INGREDIENTS & DISCOVERIES"; Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #91b7a5); }
+     Label #EmptyIngredients { Anchor: (Height: 58); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9ba9aa, Wrap: true); Visible: false; }
+     Group #Ingredients { LayoutMode: TopScrolling; FlexWeight: 1; ScrollbarStyle: $C.@DefaultScrollbarStyle; }
+    }
+    Group { LayoutMode: Top; FlexWeight: 1;
+     Group { LayoutMode: Left; Anchor: (Height: 88, Bottom: 8);
+      @IngredientSlot #Slot0 {}
+      @IngredientSlot #Slot1 {}
+      @IngredientSlot #Slot2 {}
+     }
+     Group { LayoutMode: Top; Anchor: (Height: 132, Bottom: 8); Background: $T.@Panel; Padding: (Full: 10);
+      Label #Progress { Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #e4c987, RenderBold: true); }
+      Label #Clue { Anchor: (Height: 46, Bottom: 6); Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true, TextColor: #d1e0d9); }
+      Group { LayoutMode: Left; Anchor: (Height: 36);
+       $C.@SecondaryTextButton #Grind { Text: "Grind"; FlexWeight: 1; Anchor: (Right: 8); }
+       $C.@SecondaryTextButton #Stir { Text: "Stir"; FlexWeight: 1; Anchor: (Right: 8); }
+       $C.@SecondaryTextButton #Simmer { Text: "Simmer"; FlexWeight: 1; }
+      }
+     }
+     Group { LayoutMode: Left; Anchor: (Height: 56, Bottom: 6); Background: $T.@Inset; Padding: (Full: 8);
+      ItemIcon #FlaskIcon { Anchor: (Width: 40, Height: 40, Right: 10); }
+      Label #FlaskState { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, VerticalAlignment: Center); }
+      $C.@SecondaryTextButton #NextFlask { Text: "Next"; Anchor: (Width: 110, Height: 36, Top: 6); }
+     }
+     Group { LayoutMode: Left; Anchor: (Height: 36, Bottom: 6);
+      $C.@TextButton #Brew { Text: "Fill flask"; FlexWeight: 1; Anchor: (Right: 8); }
+      $C.@SecondaryTextButton #Empty { Text: "Empty flask"; Anchor: (Width: 145); }
+     }
+     Group { LayoutMode: Left; Anchor: (Height: 52, Bottom: 4);
+      ItemIcon #LeatherIcon { Anchor: (Width: 40, Height: 40, Top: 9, Right: 8); }
+      Label #UpgradeInfo { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, VerticalAlignment: Center, TextColor: #91b7a5); }
+      $C.@SecondaryTextButton #Upgrade { Text: "Upgrade flask"; Anchor: (Width: 150, Height: 36, Top: 8); }
+     }
+     Label #Cost { Anchor: (Height: 44); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, TextColor: #b7c9bb); }
+    }
+   }
+   Group { LayoutMode: Left; Anchor: (Height: 36, Top: 12, Bottom: 8);
+    $C.@SecondaryTextButton #Learn { Text: "Learn flask recipe"; Anchor: (Width: 230, Right: 12); }
+    $C.@SecondaryTextButton #Upgrades { Text: "Building upgrades"; Anchor: (Width: 230, Right: 12); }
+    Group { FlexWeight: 1; }
+    $C.@SecondaryTextButton #Refresh { Text: "Refresh"; Anchor: (Width: 120); }
+   }
+   Label #Hint { Anchor: (Height: 48); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #e4c987); }
+  }
+ }
+}
+$C.@BackButton {}

@@ -18,12 +18,28 @@
   },
   "reputationMilestones": [
     {
+      "rewardId": "rep_pyrotechnic_festival_gift",
+      "minReputation": 25,
+      "itemId": "Aetherhaven_Festival_Firework",
+      "itemCount": 8,
+      "dialogueNodeId": "rep_reward_25",
+      "learnRecipeItemId": null
+    },
+    {
       "rewardId": "rep_pyrotechnic_50",
       "minReputation": 50,
       "itemId": "",
       "itemCount": 0,
       "dialogueNodeId": "rep_reward_50",
       "learnRecipeItemId": "Aetherhaven_Mining_Bomb"
+    },
+    {
+      "rewardId": "rep_pyrotechnic_firework_plans",
+      "minReputation": 75,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_75",
+      "learnRecipeItemId": "Aetherhaven_Festival_Firework"
     }
   ],
   "giftLoves": [

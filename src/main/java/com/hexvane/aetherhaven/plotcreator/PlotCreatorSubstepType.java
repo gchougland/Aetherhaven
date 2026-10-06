@@ -56,5 +56,7 @@ public enum PlotCreatorSubstepType {
     /** Snowball fight east team pad. */
     FESTIVAL_SNOWBALL_TEAM_B,
     /** Snowball fight out pad (stores facing). */
-    FESTIVAL_SNOWBALL_OUT
+    FESTIVAL_SNOWBALL_OUT,
+    /** Physical ore cell, not a villager standing spot. */
+    MINING_NODE
 }

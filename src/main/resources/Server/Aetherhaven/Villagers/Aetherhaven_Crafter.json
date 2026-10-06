@@ -1,0 +1,59 @@
+{
+  "npcRoleId": "Aetherhaven_Crafter",
+  "dialogueVillagerKind": "crafter",
+  "residentTreeId": "aetherhaven_crafter",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_crafter",
+  "displayName": "Tobin Reedwright",
+  "portraitIcon": "Aetherhaven_Crafter.png",
+  "speechVoiceId": "MellowMale",
+  "uiSortOrder": 25,
+  "innPoolEligible": true,
+  "innPoolOrder": 25,
+  "innPoolWeight": 1,
+  "visitorBindingKind": "visitor_crafter",
+  "minimumTownLevel": 3,
+  "birthdaySeason": "Spring",
+  "birthdayDay": 18,
+  "giftLoves": [
+    "Tool_Repair_Kit_Iron"
+  ],
+  "giftLikes": [
+    "Ingredient_Fabric_Scrap_Linen",
+    "Wood_Beech_Trunk"
+  ],
+  "giftDislikes": [
+    "Ingredient_Bone_Fragment"
+  ],
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_crafter_25",
+      "minReputation": 25,
+      "itemId": "Aetherhaven_Crafter_Kit",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_25",
+      "learnRecipeItemId": null
+    },
+    {
+      "rewardId": "rep_crafter_50",
+      "minReputation": 50,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_50",
+      "learnRecipeItemId": "Aetherhaven_Crafter_Kit"
+    },
+    {
+      "rewardId": "rep_crafter_75",
+      "minReputation": 75,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_75",
+      "learnRecipeItemId": "Aetherhaven_PatternCabinet"
+    }
+  ],
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_crafter.greeting.0",
+    "aetherhaven_crafter.greeting.1",
+    "aetherhaven_crafter.greeting.2"
+  ]
+}

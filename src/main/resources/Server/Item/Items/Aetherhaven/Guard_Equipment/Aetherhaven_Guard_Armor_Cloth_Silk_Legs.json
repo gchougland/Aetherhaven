@@ -1,0 +1,61 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Armor_Cloth_Silk_Legs.name"
+  },
+  "Quality": "Common",
+  "ItemLevel": 35,
+  "PlayerAnimationsId": "Block",
+  "ItemSoundSetId": "ISS_Armor_Cloth",
+  "Categories": [],
+  "Icon": "Icons/ItemsGenerated/Armor_Cloth_Silk_Legs.png",
+  "Model": "Items/Armors/Silk/Legs.blockymodel",
+  "Texture": "Items/Armors/Silk/Legs_Texture.png",
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    }
+  },
+  "Armor": {
+    "ArmorSlot": "Legs",
+    "BaseDamageResistance": 0,
+    "CosmeticsToHide": [
+      "Pants",
+      "Shoes"
+    ],
+    "DamageResistance": {},
+    "StatModifiers": {}
+  },
+  "MaxDurability": 0,
+  "DurabilityLossOnHit": 0,
+  "Tags": {
+    "Type": [
+      "Armor"
+    ],
+    "Family": [
+      "Cloth_Silk"
+    ]
+  },
+  "IconProperties": {
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Scale": 0.37,
+    "Translation": [
+      0,
+      -22.8
+    ]
+  }
+}

@@ -37,7 +37,7 @@ public final class ShopSpotStatusHud extends CustomUIHud {
         UICommandBuilder b = new UICommandBuilder();
         b.set("#ShopSpotHudTitle.TextSpans", Message.translation(MSG + ".title"));
         applyHint(b, record, town, viewerUuid, gameDay, getPlayerRef());
-        if (!gameDay && !record.isPlayerControlled()) {
+        if (!gameDay) {
             showClosed(b, Message.translation(MSG + ".closedNight"));
             this.update(false, b);
             return;
@@ -49,8 +49,11 @@ public final class ShopSpotStatusHud extends CustomUIHud {
             return;
         }
         Store<EntityStore> store = world.getEntityStore() != null ? world.getEntityStore().getStore() : null;
-        if (!record.isPlayerControlled() && store != null && !ShopSpotOpenService.hasStaffedWorkplace(record, town, store)) {
-            showClosed(b, Message.translation(MSG + ".closed"));
+        if (store != null && !ShopSpotOpenService.hasStaffedWorkplace(record, town, store)) {
+            var plot = town.findPlotById(record.getPlotId());
+            showClosed(b, record.isPlayerControlled() ? Message.raw(plot != null && plot.getShopClerkId() != null
+                ? "Closed. Your clerk is away from the counter."
+                : "Closed. Assign a clerk at the Town Records Shelf.") : Message.translation(MSG + ".closed"));
             this.update(false, b);
             return;
         }

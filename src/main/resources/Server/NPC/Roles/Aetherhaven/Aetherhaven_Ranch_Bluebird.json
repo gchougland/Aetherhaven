@@ -1,0 +1,26 @@
+{
+  "Type": "Variant",
+  "Reference": "Template_Birds_Passive",
+  "Modify": {
+    "Appearance": "Bluebird",
+    "FlockArray": [],
+    "DropList": "Empty",
+    "MaxHealth": 15,
+    "WanderRadius": 3,
+    "IsMemory": false,
+    "MemoriesCategory": "Avian",
+    "MemoriesNameOverride": "Bluebird",
+    "NameTranslationKey": {
+      "Compute": "NameTranslationKey"
+    },
+    "MinHeightOverGround": 0.5,
+    "MaxHeightOverGround": 2
+  },
+  "Parameters": {
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Bluebird.name",
+      "Description": "Translation key for NPC name display"
+    }
+  },
+  "$Comment": "Town raised offspring. Native appearance and behavior, with no item drops or memories. Collect products through attended Rancher work."
+}

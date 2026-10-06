@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Copper_Archer_Kit",
+  "name": "Copper Archer Kit",
+  "guardClass": "guard_archer",
+  "equipmentProfile": "guard_archer_copper",
+  "description": "+2 Dexterity, +1 Speed."
+}

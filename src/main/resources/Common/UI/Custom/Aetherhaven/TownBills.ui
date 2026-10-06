@@ -1,0 +1,28 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Top; FlexWeight: 1;
+  Group { LayoutMode: Left; Anchor: (Height: 98, Bottom: 10);
+    Group { LayoutMode: Top; FlexWeight: 1; Background: $T.@Card; Padding: (Full: 12);
+      Label #BillsTreasuryTitle { Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #b4c5d5); }
+      Label #BillsBalance { Anchor: (Height: 29); Style: (...$C.@DefaultLabelStyle, FontSize: 18, RenderBold: true, TextColor: #e3ce99); }
+      Label #BillsCoverage { Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true); }
+    }
+    Group { Anchor: (Width: 8); }
+    Group { LayoutMode: Top; FlexWeight: 1; Background: $T.@Card; Padding: (Full: 12);
+      Label #BillsUnpaidTitle { Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #b4c5d5); }
+      Label #BillsUnpaid { Anchor: (Height: 29); Style: (...$C.@DefaultLabelStyle, FontSize: 18, RenderBold: true, TextColor: #e3ce99); }
+      Label #BillsOverdue { Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true); }
+    }
+    Group { Anchor: (Width: 8); }
+    Group { LayoutMode: Top; FlexWeight: 1; Background: $T.@Card; Padding: (Full: 12);
+      Label #BillsWeeklyTitle { Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #b4c5d5); }
+      Label #BillsWeekly { Anchor: (Height: 29); Style: (...$C.@DefaultLabelStyle, FontSize: 18, RenderBold: true, TextColor: #e3ce99); }
+      Label #BillsEmployees { Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true); }
+    }
+  }
+  Label #BillsHelp { Anchor: (Height: 70, Bottom: 12); Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #b4c5d5); }
+  Group { LayoutMode: TopScrolling; FlexWeight: 1; ScrollbarStyle: $C.@DefaultScrollbarStyle;
+    Label #BillsEmpty { Style: (...$C.@DefaultLabelStyle, Wrap: true); }
+    Group #BillsRows { LayoutMode: Top; }
+  }
+}

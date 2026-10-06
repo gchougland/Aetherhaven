@@ -1,0 +1,7 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Left; Anchor: (Height: 50, Bottom: 5); Background: $T.@Inset; Padding: (Horizontal: 8, Vertical: 5);
+  ItemIcon #Icon { Anchor: (Width: 40, Height: 40, Right: 10); }
+  Label #Name { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #c6d0cb, Wrap: true, VerticalAlignment: Center); }
+  Label #Preference { Anchor: (Width: 110); Style: (...$C.@DefaultLabelStyle, FontSize: 13, HorizontalAlignment: End, VerticalAlignment: Center); }
+}

@@ -1,4 +1,5 @@
 $C = "../Common.ui";
+$T = "TownUiTheme.ui";
 $Sounds = "../Sounds.ui";
 
 @TabIconLbl = (
@@ -79,7 +80,7 @@ $C.@PageOverlay {
       LayoutMode: Middle;
       Anchor: (Full: 0);
 
-    $C.@DecoratedContainer {
+    $C.@DecoratedContainer #RecordsWindow {
       Anchor: (Width: 620);
 
       #Title {
@@ -92,14 +93,14 @@ $C.@PageOverlay {
 
       #Content {
         LayoutMode: Top;
-        Padding: (Full: 16);
+        Padding: (Full: 24);
 
         Group #ManagementTabStrip {
           LayoutMode: Left;
           Visible: false;
           Anchor: (Bottom: 14, Left: 0, Right: 0);
           Padding: (Horizontal: 6, Vertical: 8);
-          Background: #1e2430(0.92);
+          Background: $T.@Panel;
 
           Group { FlexWeight: 1; }
 
@@ -180,7 +181,7 @@ $C.@PageOverlay {
 
           Label #BuildingTitle {
             Anchor: (Bottom: 8);
-            Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+            Style: (...$C.@DefaultLabelStyle, FontSize: 22, TextColor: #e0c891, RenderBold: true);
           }
 
           Label #Description {
@@ -194,6 +195,8 @@ $C.@PageOverlay {
             Anchor: (Bottom: 12);
             Padding: (Horizontal: 8, Vertical: 8);
             Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+            $C.@SecondaryTextButton #ShopStaff { Text: "Manage shop staff"; Anchor: (Height: 38, Bottom: 10); }
 
             Group #PlayerShopNpcBuyAllowRow {
               LayoutMode: Left;
@@ -526,7 +529,9 @@ $C.@PageOverlay {
         }
 
         Group #PlayersTabContent {
-          LayoutMode: Top;
+          Anchor: (Height: 540);
+          LayoutMode: TopScrolling;
+          ScrollbarStyle: $C.@DefaultScrollbarStyle;
           Visible: false;
 
           Label #PlayersHint {

@@ -4,11 +4,20 @@
   "displayName": "Archer",
   "hireGoldCost": 35,
   "armor": [
-    "Armor_Leather_Light_Chest",
-    "Armor_Leather_Light_Legs",
-    "Armor_Leather_Light_Hands"
+    "Aetherhaven_Guard_Armor_Leather_Light_Head",
+    "Aetherhaven_Guard_Armor_Leather_Light_Chest",
+    "Aetherhaven_Guard_Armor_Leather_Light_Hands",
+    "Aetherhaven_Guard_Armor_Leather_Light_Legs"
   ],
   "hotbar": [
-    { "slot": 0, "itemId": "Weapon_Shortbow_Iron" }
-  ]
+    {
+      "slot": 0,
+      "itemId": "Weapon_Shortbow_Copper"
+    }
+  ],
+  "attributeCombat": true,
+  "attributeBonuses": {
+    "dexterity": 2,
+    "speed": 1
+  }
 }

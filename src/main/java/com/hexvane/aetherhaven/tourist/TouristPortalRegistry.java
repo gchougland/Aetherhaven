@@ -14,6 +14,16 @@ public final class TouristPortalRegistry {
     private final World world;
     private final Map<UUID, TouristPortalRecord> byId = new HashMap<>();
     private final Map<Long, UUID> byBlockKey = new HashMap<>();
+    // Keep unread save data intact until it can be repaired and loaded again.
+    private boolean persistenceBlocked;
+
+    boolean isPersistenceBlocked() {
+        return persistenceBlocked;
+    }
+
+    void setPersistenceBlocked(boolean blocked) {
+        persistenceBlocked = blocked;
+    }
 
     public TouristPortalRegistry(@Nonnull World world) {
         this.world = world;

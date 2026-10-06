@@ -7,13 +7,13 @@ npcRoleId: Aetherhaven_Guild_Master
 
 ![](wiki/villager_guild_master.png)
 
-**Lyra Fairhollow** runs the **guild hall** once it is built. Adventurers gather here, and you can hire them as **guards** who patrol and fight hostile mobs. See **Guild hall and guards** under Mechanics for patrol routes and the command post.
+**Lyra Fairhollow** runs the **guild hall** once it is built. Adventurers gather here and can be invited to live in town. Any resident Townsfolk can become a **guard** through their profile. See **Guild hall and guards** under Mechanics for equipment, patrol routes and the command post.
 
 
 ### Quests
 
 #### Raise the guild hall
-Lyra wants a proper guild hall where adventurers can sign on and guards can be hired.
+Lyra wants a proper guild hall where adventurers can meet the town and find a home.
 
 1. Finish the **town hall** first, then talk to Lyra at the inn.
 2. Take the guild hall plot token from Lyra.
@@ -32,7 +32,9 @@ Lyra runs the guild hall from dawn to dusk. She would like a quiet roof at night
 
 Visit them after your friendship reaches each level to pick up the reward through dialogue.
 
-- **Friendship 50:** teaches you to craft **Battle Horn**
+- **Friendship 25:** gives you **1 Command Flag** for directing guards.
+- **Friendship 50:** teaches you to craft **Battle Horn**.
+- **Friendship 75:** gives you **6 Iron Repair Kits** for your own equipment.
 
 ## Weekly routine
 

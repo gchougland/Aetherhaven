@@ -3,6 +3,10 @@
   "prefabPath": "Farm_Plot.prefab.json",
   "materials": [
     {
+      "itemId": "Ingredient_Fibre",
+      "count": 96
+    },
+    {
       "itemId": "Rock_Stone_Cobble",
       "count": 79
     },

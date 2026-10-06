@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Botanist_Kit",
+  "name": "Botanist's Tool Roll",
+  "skill": "farming",
+  "workSpeedBonus": 0.15,
+  "extraCarryingStacks": 0
+}

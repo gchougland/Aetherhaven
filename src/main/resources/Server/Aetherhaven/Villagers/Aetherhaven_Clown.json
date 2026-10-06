@@ -17,7 +17,32 @@
       "q_clown_rescue"
     ]
   },
-  "reputationMilestones": [],
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_clown_25",
+      "minReputation": 25,
+      "itemId": "Aetherhaven_Villager_Cosmetic_Clown_Nose",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_25",
+      "learnRecipeItemId": null
+    },
+    {
+      "rewardId": "rep_clown_50",
+      "minReputation": 50,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_50",
+      "learnRecipeItemId": "Aetherhaven_Prop_Balloons"
+    },
+    {
+      "rewardId": "rep_clown_75",
+      "minReputation": 75,
+      "itemId": "Aetherhaven_Villager_Cosmetic_Balloon_Hat_Red",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_75",
+      "learnRecipeItemId": null
+    }
+  ],
   "giftLoves": [
     "Aetherhaven_Festival_Ticket_Summer",
     "Aetherhaven_Festival_Ticket_Spring",

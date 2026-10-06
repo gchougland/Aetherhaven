@@ -1,0 +1,9 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Left; Anchor: (Height: 76, Bottom: 6); Padding: (Full: 10); Background: $T.@Card;
+  Group { LayoutMode: Top; FlexWeight: 1; Anchor: (Right: 10);
+    Label #Name { Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 15); }
+    Label #Due { Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #becadb); }
+  }
+  $C.@TextButton #Pay { Text: ""; Anchor: (Width: 172, Height: 44, Top: 5); TextTooltipStyle: $C.@DefaultTextTooltipStyle; }
+}

@@ -133,3 +133,17 @@ aetherhaven.profession.kind.builder=Builder
 aetherhaven.profession.kind.bard=Bard
 aetherhaven.profession.kind.townsfolk=Townsfolk
 aetherhaven.profession.kind.unknown=Resident
+
+aetherhaven.profession.kind.warehouse_manager=Warehouse Manager
+
+aetherhaven.profession.kind.druid=Druid
+
+aetherhaven.profession.kind.alchemist=Alchemist
+
+aetherhaven.profession.kind.doctor=Doctor
+
+aetherhaven.profession.kind.monster_hunter=Monster Hunter
+
+aetherhaven.profession.kind.crafter=Crafter
+
+aetherhaven.profession.kind.leatherworker=Leatherworker

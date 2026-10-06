@@ -1,0 +1,30 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_guard_kits.cobalt_knight_kit.name",
+    "Description": "aetherhaven_guard_kits.cobalt_knight_kit.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Cobalt_Knight_Kit.png",
+  "Model": "Items/Aetherhaven/Guard_Kits/Knight_Kit.blockymodel",
+  "Texture": "Items/Aetherhaven/Guard_Kits/Cobalt_Knight_Kit.png",
+  "PlayerAnimationsId": "Block",
+  "Categories": [
+    "Items.Tools",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "MaxStack": 1,
+  "Quality": "Epic",
+  "ItemSoundSetId": "ISS_Blocks_Wood",
+  "IconProperties": {
+    "Scale": 1,
+    "Rotation": [
+      22.5,
+      45,
+      0
+    ],
+    "Translation": [
+      0,
+      0
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Iron_Rogue_Kit",
+  "name": "Iron Rogue Kit",
+  "guardClass": "guard_rogue",
+  "equipmentProfile": "guard_rogue_iron",
+  "description": "+4 Dexterity, +2 Speed, +1 Vitality."
+}

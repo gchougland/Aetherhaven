@@ -1,0 +1,16 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Top; Anchor: (Width: 124, Height: 112);
+  Group { LayoutMode: Center; Anchor: (Height: 58);
+    Button #Cell { Anchor: (Width: 54, Height: 54); TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+      Style: (Default: (Background: $T.@Slot), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed), Disabled: (Background: $T.@Inset));
+      ItemIcon #Icon { Anchor: (Left: 5, Top: 3, Width: 44, Height: 44); }
+      Label #Quantity { Anchor: (Right: 4, Bottom: 2, Width: 48, Height: 16); Style: (...$C.@DefaultLabelStyle, FontSize: 12, RenderBold: true, HorizontalAlignment: End); }
+      Group #Lock { Anchor: (Full: 0); Background: #2b3038; Visible: false; HitTestVisible: false;
+        AssetImage { AssetPath: "UI/Custom/padlock.png"; Anchor: (Left: 11, Top: 11, Width: 32, Height: 32); HitTestVisible: false; }
+      }
+    }
+  }
+  Label #Name { Anchor: (Height: 32, Right: 6); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #ddd4c0, Wrap: true, HorizontalAlignment: Center); }
+  Label #Capacity { Anchor: (Height: 18, Right: 6); Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #9cb1b8, HorizontalAlignment: Center); }
+}

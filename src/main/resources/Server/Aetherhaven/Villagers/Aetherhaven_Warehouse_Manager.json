@@ -1,0 +1,59 @@
+{
+  "npcRoleId": "Aetherhaven_Warehouse_Manager",
+  "dialogueVillagerKind": "warehouse_manager",
+  "residentTreeId": "aetherhaven_warehouse_manager",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_warehouse",
+  "displayName": "Mara Finch",
+  "portraitIcon": "Aetherhaven_Warehouse_Manager.png",
+  "speechVoiceId": "MellowFemale",
+  "uiSortOrder": 20,
+  "innPoolEligible": true,
+  "innPoolOrder": 20,
+  "innPoolWeight": 1,
+  "visitorBindingKind": "visitor_warehouse_manager",
+  "minimumTownLevel": 3,
+  "birthdaySeason": "Autumn",
+  "birthdayDay": 9,
+  "giftLoves": [
+    "Aetherhaven_Gold_Coin"
+  ],
+  "giftLikes": [
+    "Ingredient_Leather_Light",
+    "Wood_Beech_Trunk"
+  ],
+  "giftDislikes": [
+    "Ingredient_Bone_Fragment"
+  ],
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_warehouse_25",
+      "minReputation": 25,
+      "itemId": "Aetherhaven_Courier_Kit",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_25",
+      "learnRecipeItemId": null
+    },
+    {
+      "rewardId": "rep_warehouse_50",
+      "minReputation": 50,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_50",
+      "learnRecipeItemId": "Aetherhaven_CourierPack_Kit"
+    },
+    {
+      "rewardId": "rep_warehouse_75",
+      "minReputation": 75,
+      "itemId": "Aetherhaven_Field_Ledger",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_75",
+      "learnRecipeItemId": null
+    }
+  ],
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_warehouse_manager.greeting.0",
+    "aetherhaven_warehouse_manager.greeting.1",
+    "aetherhaven_warehouse_manager.greeting.2"
+  ]
+}

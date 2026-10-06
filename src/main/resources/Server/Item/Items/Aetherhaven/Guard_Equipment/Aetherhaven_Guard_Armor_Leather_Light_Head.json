@@ -1,0 +1,63 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Armor_Leather_Light_Head.name"
+  },
+  "Quality": "Common",
+  "ItemLevel": 15,
+  "PlayerAnimationsId": "Block",
+  "ItemSoundSetId": "ISS_Armor_Leather",
+  "Categories": [],
+  "Icon": "Icons/ItemsGenerated/Armor_Leather_Light_Head.png",
+  "IconProperties": {
+    "Rotation": [
+      22.5,
+      47.815,
+      22.5
+    ],
+    "Scale": 0.5,
+    "Translation": [
+      -1.5,
+      -12.3
+    ]
+  },
+  "Model": "Items/Armors/Leather_Light/Head.blockymodel",
+  "Texture": "Items/Armors/Leather_Light/Head_Texture.png",
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    }
+  },
+  "Armor": {
+    "ArmorSlot": "Head",
+    "BaseDamageResistance": 0,
+    "CosmeticsToHide": [
+      "EarAccessory",
+      "Ear",
+      "Haircut",
+      "HeadAccessory"
+    ],
+    "DamageResistance": {},
+    "StatModifiers": {}
+  },
+  "MaxDurability": 0,
+  "DurabilityLossOnHit": 0,
+  "Tags": {
+    "Type": [
+      "Armor"
+    ],
+    "Family": [
+      "Leather"
+    ]
+  }
+}

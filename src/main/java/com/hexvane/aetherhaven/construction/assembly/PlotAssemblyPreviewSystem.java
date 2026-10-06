@@ -92,7 +92,7 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
             && AetherhavenConstants.PATH_TOOL_ITEM_ID.equals(hand.getItemId())) {
             return;
         }
-        boolean staffInHand = hand != null && !hand.isEmpty() && BuildingStaffTiers.isBuildingStaff(hand.getItemId());
+        boolean staffInHand = hand != null && !hand.isEmpty() && BuildingStaffTiers.isBuildingStaff(hand.getItemId()) && !com.hexvane.aetherhaven.workplace.WorkplaceToolState.isWorkplaceMode(ref, store);
         if (!staffInHand) {
             return;
         }
@@ -183,7 +183,7 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
             }
             return;
         }
-        boolean staffInHand = hand != null && !hand.isEmpty() && BuildingStaffTiers.isBuildingStaff(hand.getItemId());
+        boolean staffInHand = hand != null && !hand.isEmpty() && BuildingStaffTiers.isBuildingStaff(hand.getItemId()) && !com.hexvane.aetherhaven.workplace.WorkplaceToolState.isWorkplaceMode(ref, store);
         if (!staffInHand) {
             if (ASSEMBLY_FRONTIER_PREVIEW_ACTIVE.remove(previewCacheKey) != null) {
                 PREVIEW_TICK_COUNTER.remove(previewCacheKey);

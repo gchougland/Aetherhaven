@@ -33,6 +33,12 @@ public final class QuestBoardFetchEntryJson {
     @SerializedName("rankXpReward")
     private int rankXpReward;
 
+    /** Zero keeps authored rewards unchanged. Positive values enable a material-value payment floor. */
+    @SerializedName("materialPaymentBonusGold")
+    private int materialPaymentBonusGold;
+
+    public int materialPaymentBonusGold() { return Math.max(0, materialPaymentBonusGold); }
+
     @SerializedName("titleLangKey")
     @Nullable
     private String titleLangKey;

@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Jeweler_Kit",
+  "name": "Jeweler's Case",
+  "skill": "jewelry",
+  "workSpeedBonus": 0.15,
+  "extraCarryingStacks": 0
+}

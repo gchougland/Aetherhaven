@@ -1,0 +1,31 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+$C.@PageOverlay { LayoutMode: Middle;
+ $C.@DecoratedContainer { Anchor: (Width: 880, Height: 610);
+  #Title { Label #TitleText { Text: "FARM FIELDS"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+  #Content { LayoutMode: Top; Padding: (Full: 24);
+   Label #Mode { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 17, RenderBold: true, TextColor: #dec68d); }
+   Label #Intro { Text: "Plant crops in the farm's beds, select their outputs in storage, then let the Farmer tend them."; Anchor: (Height: 42, Bottom: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true); }
+   Group { LayoutMode: Left; Anchor: (Height: 270, Bottom: 14);
+    Group { LayoutMode: Top; Anchor: (Width: 424, Right: 18);
+     Label { Text: "PLANTED BEDS   |   NORTH AT TOP"; Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b7c9bb); }
+     Group #Map { FlexWeight: 1; Background: $T.@Inset; }
+    }
+    Group { FlexWeight: 1; LayoutMode: Top; Background: $T.@Panel; Padding: (Full: 18);
+     Label { Text: "CROP BEDS"; Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b7c9bb); }
+     Label #BedCount { Anchor: (Height: 54, Bottom: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 42, RenderBold: true, TextColor: #dec68d); }
+     Label #ActiveCount { Anchor: (Height: 40); Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true); }
+     Label #RipeCount { Anchor: (Height: 32); Style: (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #b7c9bb); }
+     Label #Cargo { Anchor: (Height: 64); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true); }
+    }
+   }
+   Label #Status { Anchor: (Height: 44, Bottom: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #dec68d); }
+   Group { LayoutMode: Left; Anchor: (Height: 38, Bottom: 10);
+    $C.@TextButton #Save { FlexWeight: 1; Anchor: (Right: 12); Text: "Start field work"; }
+    $C.@SecondaryTextButton #Refresh { Anchor: (Width: 150); Text: "Refresh"; }
+   }
+   Label #Warning { Anchor: (Height: 48); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, TextColor: #b7c9bb); }
+  }
+ }
+}
+$C.@BackButton {}

@@ -20,7 +20,7 @@
       "GradientId": "12"
     },
     {
-      "Model": "Characters/Body_Attachments/Ears/Ears1.blockymodel",
+      "Model": "Characters/Aetherhaven/Resident_Ears.blockymodel",
       "Texture": "Characters/Body_Attachments/Ears/Ears1_Textures/Ears1_Greyscale_Texture.png",
       "GradientSet": "Skin",
       "GradientId": "12"

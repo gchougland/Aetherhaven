@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_seeds_carrot_eternal",
+  "name": "Seeds Carrot Eternal",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_seeds_carrot_eternal",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 3,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 30
+    }
+  ],
+  "output": "Plant_Seeds_Carrot_Eternal",
+  "outputCount": 1,
+  "workSeconds": 14
+}

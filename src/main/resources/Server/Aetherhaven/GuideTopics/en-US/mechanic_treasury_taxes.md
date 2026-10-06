@@ -18,6 +18,10 @@ Tax collection runs while **at least one member of your town is online**. Gold s
 
 Open the treasury UI to see coins add up. The second tab shows a breakdown of who paid what.
 
+## Wage bills
+
+Employed Apprentices earn weekly wages. Open **Bills** in the treasury or Town Journal to see unpaid wages and their deadlines. Pay them from treasury funds. A paid bill leaves the list; an overdue bill pauses that worker until it is settled. The Work page lets you change employment, priorities and guard duty.
+
 ## Increasing income
 
 Several town systems raise how much you earn beyond the base tithe, including:

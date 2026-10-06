@@ -1,0 +1,35 @@
+{
+  "id": "brew_gaia_shard",
+  "name": "Shard of Gaia",
+  "workplace": "alchemy",
+  "sourceRecipe": "workplace:brew_gaia_shard",
+  "bench": "Alchemybench",
+  "benchTier": 4,
+  "skillLevel": 9,
+  "inputs": [
+    {
+      "itemId": "Plant_Crop_Health3",
+      "count": 1
+    },
+    {
+      "itemId": "Plant_Crop_Stamina3",
+      "count": 1
+    },
+    {
+      "itemId": "Plant_Crop_Mana3",
+      "count": 1
+    },
+    {
+      "itemId": "Ingredient_Bar_Gold",
+      "count": 3
+    },
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 20
+    }
+  ],
+  "output": "Aetherhaven_Shard_Of_Gaia",
+  "outputCount": 1,
+  "workSeconds": 60,
+  "requiresKnowledge": true
+}

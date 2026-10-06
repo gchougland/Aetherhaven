@@ -1,0 +1,35 @@
+{
+  "Type": "Variant",
+  "Reference": "Template_Animal_Neutral",
+  "Modify": {
+    "Appearance": "Goat_Kid",
+    "FlockArray": [],
+    "AttractiveItemSet": [
+      "Plant_Fruit_Apple"
+    ],
+    "AttractiveItemSetParticles": "Want_Food_Apple",
+    "DropList": "Empty",
+    "MaxHealth": 36,
+    "ViewRange": 10,
+    "ViewSector": 320,
+    "HearingRange": 6,
+    "AlertedRange": 11,
+    "AlertedActionRange": 6,
+    "AbsoluteDetectionRange": 1,
+    "IsTameable": false,
+    "TameRoleChange": "Tamed_Goat_Kid",
+    "IsMemory": false,
+    "MemoriesNameOverride": "Goat_Kid",
+    "NameTranslationKey": {
+      "Compute": "NameTranslationKey"
+    },
+    "ProduceItem": ""
+  },
+  "Parameters": {
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Goat_Kid.name",
+      "Description": "Translation key for NPC name display"
+    }
+  },
+  "$Comment": "Town managed offspring. Native species behavior with no item output, taming or memories."
+}

@@ -1,0 +1,106 @@
+{
+  "constructionId": "plot_alchemist",
+  "prefabPath": "Laboratory.prefab.json",
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 62
+    },
+    {
+      "resourceTypeId": "Soils",
+      "count": 60
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 56
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 49
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 48
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 44
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 36
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 27
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 26
+    },
+    {
+      "itemId": "Cloth_Block_Wool_Purple",
+      "count": 16
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 10
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Mossy",
+      "count": 8
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 6
+    },
+    {
+      "itemId": "Cloth_Block_Wool_Black",
+      "count": 5
+    },
+    {
+      "itemId": "Furniture_Temple_Emerald_Torch",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Hardwood_Beam",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Flat",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 2
+    },
+    {
+      "itemId": "Aetherhaven_Smokestack",
+      "count": 1
+    },
+    {
+      "itemId": "Alchemy_Cauldron",
+      "count": 1
+    },
+    {
+      "itemId": "Alchemy_Cauldron_Big",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Alchemy",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 1
+    },
+    {
+      "itemId": "Potion_Empty_Large",
+      "count": 1
+    },
+    {
+      "itemId": "Rock_Crystal_Cyan_Small",
+      "count": 1
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Top; Anchor: (Height: 94, Bottom: 6); Padding: (Full: 6); Background: $T.@Card;
+  Group { LayoutMode: Left; Anchor: (Height: 33);
+    ItemIcon #Icon { TextTooltipStyle: $C.@DefaultTextTooltipStyle; Anchor: (Width: 32, Height: 32, Right: 8); }
+    AssetImage #Lock { AssetPath: "UI/Custom/padlock.png"; Anchor: (Width: 22, Height: 22, Right: 6); Visible: false; HitTestVisible: false; }
+    Label #Name { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 15); }
+    $C.@SecondaryTextButton #Choose { Padding: (Horizontal: 8); Text: "Choose"; Anchor: (Width: 110); }
+  }
+  Label #Needs { Anchor: (Height: 23); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9fc5b2); }
+  Label #Status { Anchor: (Height: 27); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, TextColor: #dec68d); }
+}
+
+

@@ -1,0 +1,126 @@
+{
+  "constructionId": "plot_monster_hunter",
+  "prefabPath": "Hunter_Lodge.prefab.json",
+  "materials": [
+    {
+      "resourceTypeId": "Soils",
+      "count": 255
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 194
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 122
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 64
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 62
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 46
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 44
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 44
+    },
+    {
+      "itemId": "Survival_Trap_Spike_Wood_Large",
+      "count": 41
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Shallow",
+      "count": 22
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 20
+    },
+    {
+      "itemId": "Cloth_Block_Wool_Red",
+      "count": 15
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 15
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Flat",
+      "count": 11
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 9
+    },
+    {
+      "itemId": "Wood_Softwood_Ornate",
+      "count": 8
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 6
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Mossy",
+      "count": 5
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Oak_Trunk",
+      "count": 4
+    },
+    {
+      "itemId": "Deco_Bone_Ribs_Feran",
+      "count": 2
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Slate_Brick_Roof_Flat",
+      "count": 2
+    },
+    {
+      "itemId": "Aetherhaven_Hunt_Beacon",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Bone_Pile",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Mug",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Treasure_Pile_Large",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Treasure_Pile_Small",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Kebab_Meat",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 1
+    }
+  ]
+}

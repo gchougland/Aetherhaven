@@ -27,6 +27,14 @@ Even a traveling prop seller deserves a quiet berth on dry land.
 3. Assign Clive as resident on the house management block.
 4. Find Clive and close the quest in dialogue.
 
+### Friendship rewards
+
+Visit after reaching each friendship level to claim the reward through dialogue. Plans are learned by the town and crafted by Apprentices.
+
+- **Friendship 25:** Packaging Wand.
+- **Friendship 50:** Palm Streetlight plans, requiring Crafting 4.
+- **Friendship 75:** decorative Weapon Rack plans, requiring Crafting 6.
+
 ## Weekly routine
 
 Times are in world hours. Most days follow the same rhythm; Sunday can include a short visit to the altar.

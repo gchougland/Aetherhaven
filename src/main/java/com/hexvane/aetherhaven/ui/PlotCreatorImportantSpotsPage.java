@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plotcreator.PlotBuildingKind;
 import com.hexvane.aetherhaven.plotcreator.PlotBuildingKindRequirements;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorDraft;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorProductionRules;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorFestivalMechanicDefaults;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorFestivalNpcRoles;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorInteractions;
@@ -109,7 +110,9 @@ public final class PlotCreatorImportantSpotsPage
 
     private void applyContent(@Nonnull UICommandBuilder b, @Nonnull UIEventBuilder eventBuilder) {
         b.set("#ImportantSpotsTitleText.TextSpans", Message.translation(MSG + ".step.IMPORTANT_SPOTS.title"));
-        b.set("#StepHint.TextSpans", Message.translation(MSG + ".step.IMPORTANT_SPOTS.hint"));
+        boolean needsMining = PlotCreatorProductionRules.requiresMiningNodes(session.getDraft(),AetherhavenPlugin.get());
+        b.set("#StepHint.TextSpans", Message.translation(MSG + (needsMining
+            ? ".hint.miningCurrentRules" : ".step.IMPORTANT_SPOTS.hint")));
         b.set("#ConfirmButton.TextSpans", Message.translation(MSG + ".button.done"));
         b.set("#CloseButton.TextSpans", Message.translation(MSG + ".button.close"));
 
@@ -236,6 +239,8 @@ public final class PlotCreatorImportantSpotsPage
             if (type == PlotCreatorSubstepType.MANAGEMENT_BLOCK) {
                 continue;
             }
+            if (type == PlotCreatorSubstepType.MINING_NODE && !PlotCreatorProductionRules.requiresMiningNodes(
+                    session.getDraft(),AetherhavenPlugin.get())) continue;
             if (type == PlotCreatorSubstepType.WORK_POI) {
                 // Role-specific work spots are added below from workplaceRolesForDraft.
                 continue;
@@ -262,6 +267,7 @@ public final class PlotCreatorImportantSpotsPage
             out.add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.WORK_POI, 1));
         }
         for (String role : roles) {
+            if (TownVillagerBinding.KIND_MINER.equals(role)) continue;
             if (TownVillagerBinding.KIND_BARD.equals(role)) {
                 out.add(PlotCreatorSpotEntry.bard(1));
                 continue;
@@ -336,6 +342,8 @@ public final class PlotCreatorImportantSpotsPage
     }
 
     private boolean isLockedSpot(@Nonnull PlotCreatorSpotEntry spot) {
+        if (spot.type()==PlotCreatorSubstepType.MINING_NODE && PlotCreatorProductionRules.requiresMiningNodes(
+            session.getDraft(),AetherhavenPlugin.get())) return true;
         if (session.getDraft().isFestivalMode()) {
             for (PlotCreatorSpotEntry required :
                 PlotCreatorFestivalMechanicDefaults.requiredSpotsForMechanic(session.getDraft())) {

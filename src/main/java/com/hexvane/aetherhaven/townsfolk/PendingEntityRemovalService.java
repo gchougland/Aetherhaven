@@ -14,15 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /** Queues NPC despawn until the next {@link EntityStore} tick so chunk save never sees invalidated refs. */
 public final class PendingEntityRemovalService {
-    private static final ConcurrentHashMap<String, ConcurrentLinkedQueue<UUID>> PENDING_BY_WORLD = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<UUID, String> PENDING_SOURCE_BY_ENTITY = new ConcurrentHashMap<>();
+    private static final PendingEntityRemovalQueue PENDING = new PendingEntityRemovalQueue();
 
     private PendingEntityRemovalService() {}
 
@@ -34,10 +31,8 @@ public final class PendingEntityRemovalService {
         if (!world.isAlive()) {
             return;
         }
-        if (source != null && !source.isBlank()) {
-            PENDING_SOURCE_BY_ENTITY.put(entityUuid, source);
-        }
-        PENDING_BY_WORLD.computeIfAbsent(world.getName(), k -> new ConcurrentLinkedQueue<>()).add(entityUuid);
+        Store<EntityStore> store = world.getEntityStore().getStore();
+        if (store != null) PENDING.add(store, List.of(entityUuid), source);
     }
 
     public static void scheduleAll(@Nonnull World world, @Nonnull List<UUID> entityUuids) {
@@ -48,33 +43,25 @@ public final class PendingEntityRemovalService {
         if (!world.isAlive() || entityUuids.isEmpty()) {
             return;
         }
-        ConcurrentLinkedQueue<UUID> queue = PENDING_BY_WORLD.computeIfAbsent(world.getName(), k -> new ConcurrentLinkedQueue<>());
-        for (UUID entityUuid : entityUuids) {
-            if (entityUuid != null) {
-                if (source != null && !source.isBlank()) {
-                    PENDING_SOURCE_BY_ENTITY.put(entityUuid, source);
-                }
-                queue.add(entityUuid);
-            }
-        }
+        Store<EntityStore> store = world.getEntityStore().getStore();
+        if (store != null) PENDING.add(store, entityUuids, source);
+    }
+
+    /** Actual store shutdown, not a cancellable world-removal request, ends the queue's lifetime. */
+    public static com.hypixel.hytale.component.system.StoreSystem<EntityStore> lifecycle() {
+        return PENDING.lifecycle();
     }
 
     /** Called from {@link PendingEntityRemovalSystem} once per entity store tick (before chunk store tick). */
     static void flush(@Nonnull Store<EntityStore> store) {
         World world = store.getExternalData().getWorld();
-        String worldName = world.getName();
         if (!world.isAlive()) {
-            PENDING_BY_WORLD.remove(worldName);
+            PENDING.close(store);
             return;
         }
-        ConcurrentLinkedQueue<UUID> queue = PENDING_BY_WORLD.get(worldName);
-        if (queue == null) {
-            return;
-        }
-        UUID entityUuid;
-        while ((entityUuid = queue.poll()) != null) {
-            String source = PENDING_SOURCE_BY_ENTITY.remove(entityUuid);
-            removeNow(world, store, entityUuid, source != null ? source : "pending_removal_queue");
+        PendingEntityRemovalQueue.Removal removal;
+        while ((removal = PENDING.poll(store)) != null) {
+            removeNow(world, store, removal.entity(), removal.source());
         }
     }
 
@@ -141,15 +128,17 @@ public final class PendingEntityRemovalService {
 
     /** Drops invalidated entity refs so chunk serialization never sees them. */
     static void pruneInvalidEntityReferences(@Nonnull Store<ChunkStore> chunkStore) {
+        pruneInvalidEntityReferences(chunkStore, EntitySection.getComponentType());
+    }
+
+    static void pruneInvalidEntityReferences(@Nonnull Store<ChunkStore> chunkStore,
+            com.hypixel.hytale.component.ComponentType<ChunkStore, EntitySection> type) {
         chunkStore.forEachChunk(
-            EntitySection.getComponentType(),
+            type,
             (archetypeChunk, commandBuffer) -> {
                 for (int i = 0; i < archetypeChunk.size(); i++) {
-                    Ref<ChunkStore> sectionRef = archetypeChunk.getReferenceTo(i);
-                    if (sectionRef == null || !sectionRef.isValid()) {
-                        continue;
-                    }
-                    EntitySection entitySection = chunkStore.getComponent(sectionRef, EntitySection.getComponentType());
+                    // The query already supplies live section rows on the world thread.
+                    EntitySection entitySection = archetypeChunk.getComponent(i, type);
                     if (entitySection == null) {
                         continue;
                     }

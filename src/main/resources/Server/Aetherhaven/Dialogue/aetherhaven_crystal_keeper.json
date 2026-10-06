@@ -415,6 +415,57 @@
           "next": "main_hub"
         }
       ]
+    },
+    "rep_reward_25": {
+      "speaker": "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.root.speaker",
+      "text": "aetherhaven_friendship_4.crystal_keeper.25",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_crystal_keeper_25"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "rep_reward_50": {
+      "speaker": "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.root.speaker",
+      "text": "aetherhaven_friendship_4.crystal_keeper.50",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_crystal_keeper_50"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "rep_reward_75": {
+      "speaker": "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.root.speaker",
+      "text": "aetherhaven_friendship_4.crystal_keeper.75",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_crystal_keeper_75"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
     }
   }
 }

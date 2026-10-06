@@ -1,0 +1,78 @@
+{
+  "Type": "Variant",
+  "Reference": "Template_Intelligent",
+  "Modify": {
+    "DeathParticles": "Effect_Death_Void",
+    "MaxHealth": 193,
+    "DropList": "",
+    "Appearance": "Spawn_Void",
+    "AttitudeGroup": "Void",
+    "WakingPeriod": [
+      0,
+      24
+    ],
+    "DefaultOffHandSlot": -1,
+    "NighttimeOffhandSlot": -1,
+    "Weapons": [
+      "Weapon_Longsword_Void"
+    ],
+    "OffHand": [],
+    "FlockArray": [],
+    "Attack": "Root_NPC_Spawn_Void_Attack",
+    "AttackDistance": 2.5,
+    "DesiredAttackDistanceRange": [
+      2,
+      2.5
+    ],
+    "CombatAlwaysMovingWeight": 20,
+    "CombatBackOffDistanceRange": [
+      3,
+      3.5
+    ],
+    "CombatBackOffDurationRange": [
+      2,
+      2
+    ],
+    "CombatBackwardsRelativeSpeed": 0.2,
+    "CombatAttackPostDelay": [
+      0.6,
+      1
+    ],
+    "CombatMessageTargetGroups": [],
+    "IsMemory": false,
+    "MemoriesCategory": "Voidspawn",
+    "_InteractionVars": {
+      "Shield_Block_Damage": {
+        "Interactions": ["Shield_Block_Damage"]
+      },
+      "Melee_Damage": {
+        "Interactions": [
+          {
+            "Parent": "NPC_Attack_Melee_Damage",
+            "DamageCalculator": {
+              "Type": "Absolute",
+              "BaseDamage": {
+                "Physical": 48
+              },
+              "RandomPercentageModifier": 0.1
+            },
+            "DamageEffects": {
+              "Knockback": {
+                "Force": 0.5
+              }
+            }
+          }
+        ]
+      }
+    },
+    "NameTranslationKey": {
+      "Compute": "NameTranslationKey"
+    }
+  },
+  "Parameters": {
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Spawn_Void.name",
+      "Description": "Translation key for NPC name display"
+    }
+  }
+}

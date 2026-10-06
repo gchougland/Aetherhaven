@@ -1,0 +1,17 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { Anchor: (Height: 120, Bottom: 8); Background: $T.@Panel;
+ Group #LockedShade { Background: #343b43; Visible: false; HitTestVisible: false; }
+ Group { LayoutMode: Left; Padding: (Full: 12);
+  Group { Anchor: (Width: 76, Right: 12);
+   ItemIcon #Icon { Anchor: (Width: 64, Height: 64, Top: 12); }
+   AssetImage #Lock { AssetPath: "UI/Custom/padlock.png"; Anchor: (Width: 24, Height: 24, Right: 0, Bottom: 0); Visible: false; HitTestVisible: false; }
+  }
+  Group { LayoutMode: Top; FlexWeight: 1;
+   Label #Name { Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 18, RenderBold: true, TextColor: #d2bc85); }
+   Label #Description { Anchor: (Height: 40); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true); }
+   Label #Detail { Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #adc5b8); }
+  }
+  $C.@TextButton #Choose { Text: "Unlock"; Anchor: (Width: 130, Height: 38, Top: 28, Left: 12); TextTooltipStyle: $C.@DefaultTextTooltipStyle; }
+ }
+}

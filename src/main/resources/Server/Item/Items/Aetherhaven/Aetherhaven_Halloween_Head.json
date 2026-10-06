@@ -1,0 +1,15 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_halloween.head.name",
+    "Description": "aetherhaven_halloween.head.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Deco_Halloween_Pumpkin_Scary.png",
+  "Model": "Items/Halloween_Props/Pumpkin_Carve_01.blockymodel",
+  "Texture": "Items/Halloween_Props/Pumpkin_Carve_Texture_02.png",
+  "PlayerAnimationsId": "Item",
+  "MaxStack": 1,
+  "Categories": [
+    "Items.Misc",
+    "Aetherhaven.All"
+  ]
+}

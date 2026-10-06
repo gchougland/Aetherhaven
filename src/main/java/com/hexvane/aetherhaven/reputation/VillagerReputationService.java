@@ -377,7 +377,10 @@ public final class VillagerReputationService {
         }
         String learnId = def.learnRecipeItemId();
         if (learnId != null && !learnId.isBlank()) {
-            CraftingPlugin.learnRecipe(playerRef, learnId.trim(), store);
+            var plugin = AetherhavenPlugin.get();
+            if (plugin != null && com.hexvane.aetherhaven.workplace.WorkplaceRecipeUnlocks.grant(town, plugin.getApprenticeRecipes().all(), learnId.trim()))
+                tm.updateTown(town);
+            else CraftingPlugin.learnRecipe(playerRef, learnId.trim(), store);
             return null;
         }
         String itemId = def.itemId() != null ? def.itemId().trim() : "";

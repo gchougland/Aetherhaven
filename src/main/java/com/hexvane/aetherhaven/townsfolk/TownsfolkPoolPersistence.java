@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public final class TownsfolkPoolPersistence {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -38,23 +39,28 @@ public final class TownsfolkPoolPersistence {
 
     @Nonnull
     public static TownsfolkPoolState getOrLoad(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
-        return CACHE.computeIfAbsent(world.getName(), n -> loadFromDisk(world, plugin));
+        TownsfolkPoolState cached = CACHE.get(world.getName());
+        if (cached != null) return cached;
+        return getOrLoad(world.getName(), PersistentWorldSupport.shouldPersistWorldData(world) ? poolFile(world, plugin) : null);
+    }
+
+    static TownsfolkPoolState getOrLoad(String worldName, @Nullable Path path) {
+        return CACHE.computeIfAbsent(worldName, n -> loadFromDisk(n, path));
     }
 
     /** Loads pool state from disk only; {@link #getOrLoad} installs the result in {@link #CACHE}. */
     @Nonnull
-    private static TownsfolkPoolState loadFromDisk(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
-        if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
+    private static TownsfolkPoolState loadFromDisk(String worldName, @Nullable Path path) {
+        if (path == null) {
             return new TownsfolkPoolState();
         }
-        Path path = poolFile(world, plugin);
         try {
             TownsfolkPoolFile file = TownsfolkPoolFile.readOrEmpty(path);
             TownsfolkPoolState state = new TownsfolkPoolState();
             state.loadFromFile(file);
             return state;
         } catch (IOException e) {
-            LOGGER.atWarning().withCause(e).log("Failed to load townsfolk pool for world %s", world.getName());
+            LOGGER.atWarning().withCause(e).log("Failed to load townsfolk pool for world %s", worldName);
             return new TownsfolkPoolState();
         }
     }
@@ -64,25 +70,28 @@ public final class TownsfolkPoolPersistence {
         if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
             return;
         }
-        Path path = poolFile(world, plugin);
+        write(world.getName(), poolFile(world, plugin), state);
+    }
+
+    private static void write(String worldName, Path path, TownsfolkPoolState state) {
         try {
             state.toFile().writeAtomic(path);
         } catch (IOException e) {
-            LOGGER.atSevere().withCause(e).log("Failed to save townsfolk pool for world %s", world.getName());
+            LOGGER.atSevere().withCause(e).log("Failed to save townsfolk pool for world %s", worldName);
         }
     }
 
     public static void unloadWorld(@Nonnull World world) {
-        TownsfolkPoolState state = CACHE.remove(world.getName());
-        if (state == null) {
-            return;
-        }
-        if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
-            return;
-        }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin != null) {
-            save(world, plugin, state);
+        unloadWorld(world.getName(), plugin != null && PersistentWorldSupport.shouldPersistWorldData(world)
+            ? poolFile(world, plugin) : null);
+    }
+
+    static void unloadWorld(String worldName, @Nullable Path path) {
+        TownsfolkPoolState state = CACHE.remove(worldName);
+        if (state != null && path != null) {
+            // Persist the evicted state without installing it in the cache again.
+            write(worldName, path, state);
         }
     }
 

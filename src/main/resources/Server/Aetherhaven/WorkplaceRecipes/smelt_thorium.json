@@ -1,0 +1,9 @@
+{
+  "id": "smelt_thorium",
+  "name": "Thorium ingot",
+  "workplace": "smelting",
+  "sourceRecipe": "Ingredient_Bar_Thorium_Recipe_Generated_0",
+  "bench": "Furnace",
+  "benchTier": 2,
+  "skillLevel": 5
+}

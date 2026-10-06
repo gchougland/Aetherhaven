@@ -1,22 +1,45 @@
 ---
 name: Guild hall and guards
-description: Adventurers, hired guards, patrol routes, and command mode
+description: Resident invitations, guard equipment, patrol routes, and command mode
 author: Hexvane
 ---
 
 # Guild hall and guards
 
-The **guild hall** is a mid-game civic building where adventurers gather. **Lyra Fairhollow** asks you to raise it after the town hall is standing. See her villager page for the build quest.
+The **guild hall** is where adventurers gather. **Lyra Fairhollow** asks you to raise it after the town hall is standing. See her villager page for the build quest.
 
-Once the hall is finished you can hire **guards**, draw **patrol routes**, and use the **command post** for a top-down battlefield view.
+Once the hall is finished you can assign **guards**, draw **patrol routes**, and use the **command post** to direct them.
 
-## Hiring guards
+## Residents and guard duty
 
-Talk to adventurers at the guild hall to hire them as **guards**. Guards come as knights, archers, and mages. They patrol your town and fight hostile mobs. They will not attack villagers, tourists, or other guards.
+Talk to adventurers at the guild hall to **invite them to live in town**. Invitations need enough food capacity. The new resident can perform profession work or become a guard.
 
-Talk to a hired guard and choose **I need to let you go** if you want them to leave. They vanish, their house is freed, and you get the hire slot back.
+Open any resident Townsfolk's **profile**, then choose **Guard duty**. Choose Knight, Archer, Rogue or Mage. Town Rank limits how many guards you can support. Changing an existing guard's class does not need another place.
+
+Choose **Return to civilian life** to free their guard place. The resident keeps their home, skills and saved work priorities. Guards do no profession work while on duty. They must recover from injuries and finish any carried delivery before changing duty.
 
 Guards need a route or orders to know where to go. Unassigned guards still defend nearby threats when they can.
+
+## Attributes and equipment
+
+Attributes determine guard health, attack power, protection and movement. Knights favor Strength, Archers and Rogues favor Dexterity, and Mages favor Intelligence. Vitality improves health. Train learned Attributes with **Gaia Shards** through the profile.
+
+New guards receive starter equipment. Better **guard kits** equip a complete class set at once. An Iron Knight Kit includes iron armor, a sword and a shield.
+
+Create kit tasks at an **Armor Crafting workplace**. Choose a class and tier to see the bonuses, ingredients and requirements. Copper needs Blacksmithing 2 and Town Rank E. Iron needs Blacksmithing 4 and Rank D. Thorium needs Blacksmithing 6, Rank C and an Armorer's Workbench at tier 2. Couriers deliver supplies, then an Apprentice must work at the bench to complete the kit.
+
+Click the **Guard kit** card in a resident's profile to select a kit from your inventory or town storage. A swap returns their old kit to the same source slot. **Return kit** puts it in your inventory if there is room. A saved kit only provides bonuses while its matching guard class is on duty. Profession equipment has a separate slot.
+
+## Following and escort orders
+
+Ask a guard from your town to **Follow Me**, then talk to them again to choose orders.
+
+* **Wait here** keeps the guard at that location until you return and choose **Follow me again**. Waiting guards still count toward your follower limit and do not chase enemies or teleport after you.
+* **Defensive** responds when a creature attacks you. The guard will not start a fight just because a hostile is nearby or because you hit a harmless animal.
+* **Offensive** engages nearby hostile creatures automatically. This is the default stance. Friendly town residents and players remain protected.
+* **Stop Following** releases the escort and lets the guard return to normal duties.
+
+Your choice of combat stance remains when you pause and resume following. Explicit command-post orders replace following orders.
 
 ## Patrol wand
 
@@ -63,7 +86,7 @@ Place a **guard command post** stool in town (creative or progression unlock). *
 * **Select all / by type** — roster buttons on the HUD.
 * **Leave command tool (hotbar slot 8)** — exit command mode.
 
-The command post must sit **inside your town lands** to work. You need at least one hired guard.
+The command post must sit **inside your town lands** to work. You need at least one guard.
 
 ## Quest board
 

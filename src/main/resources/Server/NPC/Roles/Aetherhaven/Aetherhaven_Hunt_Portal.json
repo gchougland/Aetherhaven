@@ -1,0 +1,27 @@
+{
+  "Type": "Generic",
+  "Appearance": "Aetherhaven_Hunt_Portal",
+  "NameTranslationKey": "aetherhaven_monster_hunter.portal",
+  "MaxHealth": 1,
+  "Invulnerable": true,
+  "IsMemory": false,
+  "StartState": "Idle",
+  "MotionControllerList": [
+    {
+      "Type": "Walk",
+      "MaxWalkSpeed": 1,
+      "Gravity": 10
+    }
+  ],
+  "Instructions": [
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "Idle"
+      },
+      "BodyMotion": {
+        "Type": "Nothing"
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_MasterSmith_Kit",
+  "name": "Master Smith's Chest",
+  "skill": "blacksmithing",
+  "workSpeedBonus": 0.25,
+  "extraCarryingStacks": 0
+}

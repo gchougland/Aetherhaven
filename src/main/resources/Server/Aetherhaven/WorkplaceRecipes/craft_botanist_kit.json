@@ -1,0 +1,27 @@
+{
+  "id": "craft_botanist_kit",
+  "name": "Botanist's Tool Roll",
+  "workplace": "blacksmithing",
+  "sourceRecipe": "workplace:botanist_kit",
+  "bench": "Weapon_Bench",
+  "benchTier": 1,
+  "skillLevel": 3,
+  "requiresKnowledge": true,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 3
+    },
+    {
+      "itemId": "Ingredient_Leather_Light",
+      "count": 4
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 8
+    }
+  ],
+  "output": "Aetherhaven_Botanist_Kit",
+  "outputCount": 1,
+  "workSeconds": 25
+}

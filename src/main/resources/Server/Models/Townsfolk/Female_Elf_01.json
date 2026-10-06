@@ -38,7 +38,7 @@
       "GradientId": "BrownDarker"
     },
     {
-      "Model": "Characters/Haircuts/Magical_Pigtails.blockymodel",
+      "Model": "Characters/Aetherhaven/Resident_Magical_Pigtails.blockymodel",
       "Texture": "Characters/Haircuts/Magical_Pigtails_Greyscale.png",
       "GradientSet": "Hair",
       "GradientId": "BrownDarker"

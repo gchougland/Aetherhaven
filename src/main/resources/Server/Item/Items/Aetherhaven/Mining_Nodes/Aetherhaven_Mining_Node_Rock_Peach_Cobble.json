@@ -1,0 +1,47 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Rock_Peachstone_Cobble.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Rock_Peachstone_Cobble.png",
+  "BlockType": {
+    "DrawType": "Cube",
+    "BlockParticleSetId": "Stone",
+    "Textures": [
+      {
+        "All": "BlockTextures/Peachstone_Cobble.png",
+        "Weight": 1
+      },
+      {
+        "All": "BlockTextures/Peachstone_Cobble02.png",
+        "Weight": 1
+      },
+      {
+        "All": "BlockTextures/Peachstone_Cobble03.png",
+        "Weight": 3
+      },
+      {
+        "All": "BlockTextures/Peachstone_Cobble04.png",
+        "Weight": 2
+      },
+      {
+        "All": "BlockTextures/Peachstone_Cobble05.png",
+        "Weight": 2
+      }
+    ],
+    "ParticleColor": "#ecb489",
+    "BlockSoundSetId": "Stone",
+    "PhysicalMaterialId": "Stone",
+    "TextureComputedColor": "#E7B38B",
+    "Material": "Solid",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Unbreakable"
+      }
+    },
+    "Flags": {},
+    "Support": {}
+  },
+  "PlayerAnimationsId": "Block",
+  "MaxStack": 1,
+  "ItemSoundSetId": "ISS_Blocks_Stone"
+}

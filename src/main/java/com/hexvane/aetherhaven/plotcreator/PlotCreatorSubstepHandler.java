@@ -62,6 +62,7 @@ public final class PlotCreatorSubstepHandler {
             return false;
         }
         return switch (req.type()) {
+            case MINING_NODE -> PlotCreatorMiningNodes.remove(draft,targetBlock,playerRef);
             case VISITOR_SPAWN -> tryRemoveVisitorSpawnAt(session, targetBlock, playerRef);
             case ADVENTURER_SPAWN -> tryRemoveAdventurerSpawnAt(session, targetBlock, playerRef, commandBuffer);
             case MANAGEMENT_BLOCK -> clearLocalIfNear(
@@ -465,6 +466,7 @@ public final class PlotCreatorSubstepHandler {
                 playerEntityRef,
                 store
             );
+            case MINING_NODE -> PlotCreatorMiningNodes.add(session,targetBlock,playerRef);
             case FESTIVAL_NPC -> PlotCreatorFestivalPlacement.placeNpc(
                 session,
                 targetBlock,

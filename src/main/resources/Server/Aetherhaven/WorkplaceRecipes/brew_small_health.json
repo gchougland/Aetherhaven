@@ -1,0 +1,9 @@
+{
+  "id": "brew_small_health",
+  "name": "Small Health Potion",
+  "workplace": "alchemy",
+  "sourceRecipe": "Potion_Health_Small_Recipe_Generated_0",
+  "bench": "Alchemybench",
+  "benchTier": 2,
+  "skillLevel": 4
+}

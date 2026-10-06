@@ -3,6 +3,9 @@ name: Mechanics
 description: Tools, buildings, and town systems
 author: Hexvane
 sub-topics:
+  - mechanic_population
+  - mechanic_apprentice_workplaces
+  - mechanic_mastery
   - mechanic_commands
   - mechanic_plot_placement_staff
   - mechanic_plot_creator_staff
@@ -43,6 +46,7 @@ These pages describe how each major feature works in play. Start with **Getting 
 | **Treasury and taxes** | Morning gold from residents |
 | **Villager needs** | Hunger, energy, and fun |
 | **Reputation** | Friendship, gifts, and milestones |
+| **Mastery and training** | Specialist tools, production requirements and Townsfolk points |
 | **Guild hall and guards** | Hiring patrols and the command post |
 | **Tourist portal** | Visitors from other worlds |
 | **Festivals** | Holiday builds on the festival square |

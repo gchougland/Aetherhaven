@@ -1,0 +1,60 @@
+{
+  "npcRoleId": "Aetherhaven_Druid",
+  "dialogueVillagerKind": "druid",
+  "residentTreeId": "aetherhaven_druid",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_druid",
+  "displayName": "Rowan Mossweald",
+  "portraitIcon": "Aetherhaven_Druid.png",
+  "speechVoiceId": "MellowFemale",
+  "uiSortOrder": 21,
+  "innPoolEligible": true,
+  "innPoolOrder": 21,
+  "innPoolWeight": 1,
+  "visitorBindingKind": "visitor_druid",
+  "minimumTownLevel": 4,
+  "birthdaySeason": "Spring",
+  "birthdayDay": 12,
+  "giftLoves": [
+    "Plant_Crop_Mana1",
+    "Plant_Crop_Health1"
+  ],
+  "giftLikes": [
+    "Plant_Seeds_Stamina1",
+    "Soil_Dirt_Crystal"
+  ],
+  "giftDislikes": [
+    "Ingredient_Bone_Fragment"
+  ],
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_druid_25",
+      "minReputation": 25,
+      "itemId": "Aetherhaven_Botanist_Kit",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_25",
+      "learnRecipeItemId": null
+    },
+    {
+      "rewardId": "rep_druid_50",
+      "minReputation": 50,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_50",
+      "learnRecipeItemId": "Aetherhaven_Botanist_Kit"
+    },
+    {
+      "rewardId": "rep_druid_75",
+      "minReputation": 75,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_75",
+      "learnRecipeItemId": "Aetherhaven_Verdant_Catalyst"
+    }
+  ],
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_druid.greeting.0",
+    "aetherhaven_druid.greeting.1",
+    "aetherhaven_druid.greeting.2"
+  ]
+}

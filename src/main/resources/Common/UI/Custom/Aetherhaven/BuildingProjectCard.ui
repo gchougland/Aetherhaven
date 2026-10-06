@@ -1,0 +1,23 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Top; Background: $T.@Panel; Padding: (Full: 12); Anchor: (Height: 186, Bottom: 10, Right: 8);
+ Group { LayoutMode: Left; Anchor: (Height: 42, Bottom: 6);
+  ItemIcon #Icon { Anchor: (Width: 38, Height: 38, Right: 10); }
+  Label #Name { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 16, RenderBold: true, Wrap: true, TextColor: #dec68d); }
+ }
+ Group { Anchor: (Height: 18, Bottom: 4);
+  Group { LayoutMode: Left; Anchor: (Full: 3);
+   Group #Fill { FlexWeight: 1; Background: (TexturePath: "../XpBar.png"); }
+   Group #Remainder { FlexWeight: 1; }
+  }
+  Group { Anchor: (Full: 0); Background: (TexturePath: "../XpBarBorder.png", Border: 8); }
+ }
+ Label #Progress { Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b7c9bb); }
+ Label #Status { Anchor: (Height: 34, Bottom: 6); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true); }
+ Group #Ordering { LayoutMode: Left; Anchor: (Height: 30);
+  $C.@SecondaryTextButton #Earlier { Text: "Earlier"; FlexWeight: 1; Anchor: (Right: 6); }
+  $C.@SecondaryTextButton #Later { Text: "Later"; FlexWeight: 1; Anchor: (Right: 6); }
+  $C.@SecondaryTextButton #Remove { Text: "Remove"; FlexWeight: 1; }
+ }
+ $C.@TextButton #Add { Text: "Add to yard"; Anchor: (Height: 30); }
+}

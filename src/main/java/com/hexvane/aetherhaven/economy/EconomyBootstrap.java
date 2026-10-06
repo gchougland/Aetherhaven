@@ -97,6 +97,9 @@ public final class EconomyBootstrap {
                 long newEpochMinute
             ) {
                 TownEconomyTimeService.onGameTimeFromHub(world, core, wtr, store);
+                TownPayrollService.advance(world, core, newEpochMinute - prevEpochMinute);
+                com.hexvane.aetherhaven.workplace.FoodSiteService.advance(world, core, newEpochMinute - prevEpochMinute);
+                com.hexvane.aetherhaven.production.NativeHerdService.advance(world, core, newEpochMinute - prevEpochMinute);
             }
 
             @Override

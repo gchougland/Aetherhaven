@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Adamantite_Rogue_Kit",
+  "name": "Adamantite Rogue Kit",
+  "guardClass": "guard_rogue",
+  "equipmentProfile": "guard_rogue_adamantite",
+  "description": "+10 Dexterity, +5 Speed, +4 Vitality."
+}

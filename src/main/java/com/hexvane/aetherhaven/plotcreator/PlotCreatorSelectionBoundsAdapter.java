@@ -60,7 +60,8 @@ public final class PlotCreatorSelectionBoundsAdapter {
                 }
                 return true;
             }
-            return true;
+            // Other editor steps must leave normal selection and clipboard handling to the game.
+            return false;
         } catch (Exception e) {
             LOGGER.atWarning().log(
                 "Plot creator selection bounds packet filter error for %s: %s",

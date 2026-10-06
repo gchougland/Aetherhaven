@@ -203,12 +203,19 @@ public final class JewelryMetadata {
     public static ItemStack rollCraftedAppraised(
         @Nonnull String jewelryItemId, @Nonnull JewelryRarity rarity, @Nonnull ThreadLocalRandom rnd
     ) {
+        return rollCrafted(jewelryItemId,rarity,true,rnd);
+    }
+
+    @Nonnull
+    public static ItemStack rollCrafted(
+        @Nonnull String jewelryItemId, @Nonnull JewelryRarity rarity, boolean appraised, @Nonnull ThreadLocalRandom rnd
+    ) {
         if (!JewelryItemIds.isJewelry(jewelryItemId)) {
             return new ItemStack(jewelryItemId, 1);
         }
         ItemStack stack = new ItemStack(jewelryItemId, 1);
         AetherhavenPluginConfig cfg = JewelryRolling.config();
-        return applyRolledTraits(stack, rarity, true, rnd, cfg);
+        return applyRolledTraits(stack, rarity, appraised, rnd, cfg);
     }
 
     @Nonnull

@@ -1,0 +1,9 @@
+{
+  "id": "brew_health",
+  "name": "Health Potion",
+  "workplace": "alchemy",
+  "sourceRecipe": "Potion_Health_Recipe_Generated_0",
+  "bench": "Alchemybench",
+  "benchTier": 3,
+  "skillLevel": 6
+}

@@ -34,6 +34,14 @@ public final class EquipmentProfileDefinition {
     @Nullable
     private String guardNpcRole;
 
+    /** Opt in for pack supplied guard classes. Armor must be visual only to avoid duplicate bonuses. */
+    private boolean attributeCombat;
+    private java.util.Map<String,Integer> attributeBonuses;
+    public boolean usesAttributeCombat() { return attributeCombat; }
+    public int attributeBonus(String attribute) {
+        return attributeBonuses == null ? 0 : Math.clamp(attributeBonuses.getOrDefault(attribute,0),0,20);
+    }
+
     public static final class HotbarSlot {
         @SerializedName("slot")
         private int slot;

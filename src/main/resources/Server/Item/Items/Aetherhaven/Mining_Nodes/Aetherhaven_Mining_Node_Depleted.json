@@ -1,0 +1,39 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Rock_Stone.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Rock_Stone.png",
+  "BlockType": {
+    "DrawType": "Cube",
+    "BlockParticleSetId": "Stone",
+    "Textures": [
+      {
+        "All": "BlockTextures/Rock_Stone.png",
+        "Weight": 2
+      },
+      {
+        "All": "BlockTextures/Rock_Stone_2.png",
+        "Weight": 1
+      },
+      {
+        "All": "BlockTextures/Rock_Stone_3.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#737055",
+    "BlockSoundSetId": "Stone",
+    "PhysicalMaterialId": "Stone",
+    "TextureComputedColor": "#79785A",
+    "Material": "Solid",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Unbreakable"
+      }
+    },
+    "Flags": {},
+    "Support": {}
+  },
+  "PlayerAnimationsId": "Block",
+  "MaxStack": 1,
+  "ItemSoundSetId": "ISS_Blocks_Stone"
+}

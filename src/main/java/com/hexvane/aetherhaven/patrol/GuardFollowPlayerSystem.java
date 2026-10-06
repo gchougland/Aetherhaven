@@ -8,6 +8,7 @@ import com.hexvane.aetherhaven.autonomy.FollowPlayerTeleportRecovery;
 import com.hexvane.aetherhaven.npc.NpcFaceVisuals;
 import com.hexvane.aetherhaven.rts.GuardRtsCommandState;
 import com.hexvane.aetherhaven.rts.RtsGuardDirectory;
+import com.hexvane.aetherhaven.rts.RtsGuardCombatSupport;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -167,6 +168,36 @@ public final class GuardFollowPlayerSystem extends EntityTickingSystem<EntitySto
         }
     }
 
+    /** Applies an order only for the player this escort already belongs to. */
+    public static void applyEscortOrder(
+        @Nonnull Ref<EntityStore> guardRef, @Nonnull Store<EntityStore> store,
+        @Nonnull UUID playerId, @Nonnull String order
+    ) {
+        if (!guardRef.isValid()) return;
+        TownVillagerBinding binding = store.getComponent(guardRef, TownVillagerBinding.getComponentType());
+        GuardFollowPlayerState current = store.getComponent(guardRef, GuardFollowPlayerState.getComponentType());
+        NPCEntity npc = store.getComponent(guardRef, NPCEntity.getComponentType());
+        TransformComponent transform = store.getComponent(guardRef, TransformComponent.getComponentType());
+        if (binding == null || !TownVillagerBinding.KIND_GUARD.equals(binding.getKind())
+            || current == null || !current.isFollowing(playerId) || npc == null || npc.getRole() == null || transform == null) return;
+        GuardFollowPlayerState next = (GuardFollowPlayerState) current.clone();
+        Vector3d position = transform.getPosition();
+        switch (order) {
+            case "wait" -> next.waitHere(position.x, position.y, position.z);
+            case "resume" -> next.resumeFollowing();
+            case "defensive" -> next.setStance(GuardEscortStance.DEFENSIVE);
+            case "offensive" -> next.setStance(GuardEscortStance.OFFENSIVE);
+            default -> { return; }
+        }
+        store.putComponent(guardRef, GuardFollowPlayerState.getComponentType(), next);
+        clearFollowRecoveryTracking(store, guardRef);
+        RtsGuardCombatSupport.clearCombatTarget(npc, store);
+        npc.setLeashPoint(new Vector3d(position));
+        // Leave dialogue state intact until the dialogue closes; otherwise reset an existing combat state.
+        if (!NpcFaceVisuals.isInInteractionDialogue(npc)) ensurePatrolMotionStore(guardRef, npc, store);
+        store.putComponent(guardRef, NPCEntity.getComponentType(), npc);
+    }
+
     public static void stopFollow(
         @Nonnull Ref<EntityStore> guardRef,
         @Nonnull Store<EntityStore> store,
@@ -227,6 +258,15 @@ public final class GuardFollowPlayerSystem extends EntityTickingSystem<EntitySto
             return;
         }
         if (NpcFaceVisuals.isInInteractionDialogue(npc)) {
+            return;
+        }
+
+        if (follow.isWaiting()) {
+            // Waiting remains an active escort for ownership and follower limits, but never teleports after its owner.
+            RtsGuardCombatSupport.clearCombatTarget(npc, commandBuffer);
+            npc.setLeashPoint(new Vector3d(follow.getWaitX(), follow.getWaitY(), follow.getWaitZ()));
+            ensurePatrolMotion(ref, npc, commandBuffer);
+            commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
             return;
         }
 

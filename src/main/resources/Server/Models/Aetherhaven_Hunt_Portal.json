@@ -1,0 +1,33 @@
+{
+  "Model": "NPC/Aetherhaven/Hunt/Portal.blockymodel",
+  "Texture": "NPC/Aetherhaven/Hunt/Hunt.png",
+  "EyeHeight": 1,
+  "MinScale": 1,
+  "MaxScale": 1,
+  "Light": {
+    "Color": "#8cc"
+  },
+  "HitBox": {
+    "Min": {
+      "X": -1.5,
+      "Y": 0,
+      "Z": -0.3
+    },
+    "Max": {
+      "X": 1.5,
+      "Y": 3.5,
+      "Z": 0.3
+    }
+  },
+  "Particles": [
+    {
+      "SystemId": "Aetherhaven_Hunt_Portal",
+      "PositionOffset": {
+        "X": 0,
+        "Y": 1.5625,
+        "Z": 0.15
+      },
+      "ClearParticlesOnRemove": true
+    }
+  ]
+}

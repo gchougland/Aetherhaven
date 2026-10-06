@@ -1,0 +1,8 @@
+summary = Town Level {level}   |   Residents: {residents} / {capacity}   |   Food: {food}
+next = Next level at {next} residents. Each resident needs 2 food points.
+maximum = Highest town level reached. Each resident needs 2 food points.
+currentShortage = Food shortage: {points} more food points needed for current residents. New invitations are unavailable.
+atCapacity = Your town is at its food capacity. Add food production to welcome more residents.
+shortFood = Your town needs {points} more food points to welcome another resident.
+foodFirst = Recruit the Farmer and Rancher to reach Town Level 2 first.
+notAvailable = This villager needs Town Level {level} and their building prerequisites.

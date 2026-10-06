@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_sapling_beech",
+  "name": "Sapling Beech",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_sapling_beech",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 1,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 5
+    }
+  ],
+  "output": "Plant_Sapling_Beech",
+  "outputCount": 1,
+  "workSeconds": 10
+}

@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_seeds_fire",
+  "name": "Seeds Fire",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_seeds_fire",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 7,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 30
+    }
+  ],
+  "output": "Plant_Seeds_Fire",
+  "outputCount": 1,
+  "workSeconds": 22
+}

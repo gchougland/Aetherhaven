@@ -69,6 +69,6 @@ public final class BuildingStaffMarkerCleanupSystem extends TickingSystem<Entity
             return false;
         }
         ItemStack hand = InventoryComponent.getItemInHand(store, ownerRef);
-        return hand != null && !hand.isEmpty() && BuildingStaffTiers.isBuildingStaff(hand.getItemId());
+        return hand != null && !hand.isEmpty() && BuildingStaffTiers.isBuildingStaff(hand.getItemId()) && !com.hexvane.aetherhaven.workplace.WorkplaceToolState.isWorkplaceMode(ownerRef, store);
     }
 }

@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Iron_Archer_Kit",
+  "name": "Iron Archer Kit",
+  "guardClass": "guard_archer",
+  "equipmentProfile": "guard_archer_iron",
+  "description": "+4 Dexterity, +2 Speed, +1 Vitality."
+}

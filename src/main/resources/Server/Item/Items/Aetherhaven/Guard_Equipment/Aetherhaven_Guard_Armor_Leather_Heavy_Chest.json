@@ -1,0 +1,60 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Armor_Leather_Heavy_Chest.name"
+  },
+  "Quality": "Common",
+  "ItemLevel": 35,
+  "PlayerAnimationsId": "Block",
+  "ItemSoundSetId": "ISS_Armor_Leather",
+  "Categories": [],
+  "Icon": "Icons/ItemsGenerated/Armor_Leather_Heavy_Chest.png",
+  "IconProperties": {
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Scale": 0.405,
+    "Translation": [
+      0,
+      -6.6
+    ]
+  },
+  "Model": "Items/Armors/Leather_Heavy/Chest.blockymodel",
+  "Texture": "Items/Armors/Leather_Heavy/Chest_Texture.png",
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    }
+  },
+  "Armor": {
+    "ArmorSlot": "Chest",
+    "BaseDamageResistance": 0,
+    "CosmeticsToHide": [
+      "Overtop"
+    ],
+    "DamageResistance": {},
+    "StatModifiers": {}
+  },
+  "MaxDurability": 0,
+  "DurabilityLossOnHit": 0,
+  "Tags": {
+    "Type": [
+      "Armor"
+    ],
+    "Family": [
+      "Leather"
+    ]
+  }
+}

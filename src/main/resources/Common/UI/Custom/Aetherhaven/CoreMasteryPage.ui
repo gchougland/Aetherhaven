@@ -1,0 +1,76 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+$C.@PageOverlay { LayoutMode: Middle;
+  $C.@DecoratedContainer #MasteryWindow { Anchor: (Width: 1080, Height: 840);
+    #Title { Label { Text: "VILLAGER PROFILE"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+    #Content { LayoutMode: Top; Padding: (Full: 24);
+      Group { LayoutMode: Left; FlexWeight: 1;
+        Group { LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; Anchor: (Width: 282, Right: 18); Background: $T.@Panel; Padding: (Full: 14);
+          Label #Profession { Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d2bc85, HorizontalAlignment: Center, RenderBold: true); }
+          Group { Anchor: (Height: 136, Bottom: 8); Background: $T.@Inset;
+            AssetImage #Portrait { Anchor: (Width: 128, Height: 128, Top: 4, Left: 63); FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png"; }
+          }
+          Label #Name { Anchor: (Height: 42); Style: (...$C.@DefaultLabelStyle, FontSize: 20, RenderBold: true, Wrap: true, HorizontalAlignment: Center); }
+          Label #Town { Anchor: (Height: 24, Bottom: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #9ab8ae, Wrap: true, HorizontalAlignment: Center); }
+          Group { Anchor: (Height: 1, Bottom: 14); Background: #3b5153; }
+          Label #Reputation { Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 15, RenderBold: true, TextColor: #d9b1b5); }
+          Group #Hearts { LayoutMode: Left; Anchor: (Height: 22, Bottom: 20); }
+          Group #MasteryPanel { LayoutMode: Top;
+          Label #Level { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 17, RenderBold: true, TextColor: #e0c891); }
+          Group #MasterySegments { LayoutMode: Left; Anchor: (Height: 8, Bottom: 16);
+            Group #Pip0 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #Pip1 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #Pip2 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #Pip3 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #Pip4 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #Pip5 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #Pip6 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #Pip7 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #Pip8 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #Pip9 { FlexWeight: 1; Background: #30434a; }
+          }
+          Label #MasteryXp { Anchor: (Height: 22); TextTooltipStyle: $C.@DefaultTextTooltipStyle; TooltipText: "Earn XP when production reaches storage or a potion is bottled. Catalysts grant one level and keep your earned XP."; Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #99c7b5); }
+          $C.@ProgressBar #MasteryXpBar { Anchor: (Height: 12, Bottom: 12); Value: 0.0; }
+          $C.@TextButton #Train { Text: "Train +1 Mastery"; Anchor: (Height: 38, Bottom: 6); }
+          Group { LayoutMode: Left; Anchor: (Height: 38);
+            ItemIcon { ItemId: "Aetherhaven_Verdant_Catalyst"; Anchor: (Width: 28, Height: 28, Right: 6); }
+            Label { Text: "One Verdant Catalyst per level"; FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #99c7b5, Wrap: true); }
+          }
+          }
+          Group #NeedsHost { LayoutMode: Top; Anchor: (Top: 12, Bottom: 4); }
+        }
+        Group { LayoutMode: Top; FlexWeight: 1;
+          Group { LayoutMode: Left; Anchor: (Height: 38, Bottom: 14);
+            $C.@SecondaryTextButton #FriendshipTab { Text: "Friendship"; Anchor: (Width: 160, Right: 8); }
+            $C.@SecondaryTextButton #EquipmentTab { Text: "Equipment"; Anchor: (Width: 160, Right: 8); }
+            Group { FlexWeight: 1; }
+            $C.@SecondaryTextButton #Refresh { Text: "Refresh"; Anchor: (Width: 114); }
+          }
+          Group #FriendshipPanel { LayoutMode: Top; FlexWeight: 1;
+            Label { Text: "REPUTATION REWARDS"; Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 17, RenderBold: true, TextColor: #e0c891); }
+            Label { Text: "Keep growing your friendship. Claim unlocked rewards through dialogue."; Anchor: (Height: 32, Bottom: 6); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #92a5af, Wrap: true); }
+            Group #Rewards { LayoutMode: Top; }
+            Label #NoRewards { Text: "No reputation milestones are available."; Anchor: (Height: 48); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #92a5af); }
+            Label { Text: "DISCOVERED GIFT PREFERENCES"; Anchor: (Height: 28, Top: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 17, RenderBold: true, TextColor: #99c7b5); }
+            Label { Text: "Only gifts you have personally given appear here."; Anchor: (Height: 24, Bottom: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #92a5af); }
+            Label #NoGifts { Text: "Give a gift to discover what this villager enjoys."; Anchor: (Height: 72); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #92a5af, Wrap: true, VerticalAlignment: Center); }
+            Group #Gifts { LayoutMode: TopScrolling; FlexWeight: 1; ScrollbarStyle: $C.@DefaultScrollbarStyle; }
+          }
+          Group #ToolPanel { LayoutMode: Top; FlexWeight: 1; Visible: false;
+            Label { Text: "EQUIPPED TOOL"; Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 17, TextColor: #e0c891, RenderBold: true); }
+            Group { LayoutMode: Left; Anchor: (Height: 82, Bottom: 16); Background: $T.@Panel; Padding: (Full: 8);
+              ItemIcon #ToolIcon { Anchor: (Width: 64, Height: 64, Right: 12); }
+              Label #ToolName { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 17, Wrap: true, VerticalAlignment: Center); }
+            }
+            Label { Text: "Choose a tool from your inventory. Your previous tool returns to the same slot. Better tools can gather lower tier resources too."; Anchor: (Height: 58, Bottom: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #acbeb4); }
+            Group #Tools { FlexWeight: 1; LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; }
+            Label #Empty { Text: "Carry a suitable pickaxe or hatchet to equip it here."; Anchor: (Height: 48); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #92a5af); }
+          }
+        }
+      }
+      $C.@SecondaryTextButton #ReturnToJournal { Text: "Back to Journal"; Visible: false; Anchor: (Width: 180, Height: 32, Top: 6); }
+      Label #Hint { Anchor: (Height: 40, Top: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #b6c6d3); }
+    }
+  }
+}
+$C.@BackButton {}

@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Rancher_Kit",
+  "name": "Ranchhand's Bag",
+  "skill": "ranching",
+  "workSpeedBonus": 0.15,
+  "extraCarryingStacks": 0
+}

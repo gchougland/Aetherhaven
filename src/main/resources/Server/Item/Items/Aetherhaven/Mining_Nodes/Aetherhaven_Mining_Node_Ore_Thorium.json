@@ -1,0 +1,39 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Ore_Thorium_Sandstone.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Ore_Thorium_Sandstone.png",
+  "BlockType": {
+    "DrawType": "CubeWithModel",
+    "CustomModel": "Resources/Ores/Ore_Large.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Resources/Ores/Ore_Textures/Thorium.png",
+        "Weight": 1
+      }
+    ],
+    "RandomRotation": "YawStep90",
+    "BlockParticleSetId": "Ore",
+    "Textures": [
+      {
+        "Weight": 1,
+        "All": "BlockTextures/Rock_Sandstone_Side.png"
+      }
+    ],
+    "ParticleColor": "#2f6f12",
+    "BlockSoundSetId": "Ore",
+    "PhysicalMaterialId": "Stone",
+    "TextureComputedColor": "#164915",
+    "Material": "Solid",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Unbreakable"
+      }
+    },
+    "Flags": {},
+    "Support": {}
+  },
+  "PlayerAnimationsId": "Block",
+  "MaxStack": 1,
+  "ItemSoundSetId": "ISS_Blocks_Stone"
+}

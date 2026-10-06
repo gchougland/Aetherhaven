@@ -1,0 +1,93 @@
+{
+  "Type": "Variant",
+  "Reference": "Template_Intelligent",
+  "Parameters": {
+    "WanderRadius": {
+      "Value": 3,
+      "Description": "General wander radius for idle wander and wander on the break."
+    },
+    "FollowPatrolPath": {
+      "Value": false,
+      "Description": "Whether this NPC will follow patrol paths at all."
+    },
+    "Patrol": {
+      "Value": false,
+      "Description": "Whether or not this NPC will patrol during its waking hours, either alone or as part of a group."
+    },
+    "FlockArray": {
+      "Value": [
+        "Skeleton_Frost_Fighter",
+        "Skeleton_Frost_Archer"
+      ],
+      "TypeHint": "String",
+      "Description": "Array containing NPCs for this flock type."
+    },
+    "ApplySeparation": {
+      "Value": false,
+      "Description": "When set to false, NPCs wont try to avoid each other or player, it can lead to them stacking together, but can help to avoid jerky-like movemenet in enclosed space."
+    },
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Skeleton_Frost_Fighter.name",
+      "Description": "Translation key for NPC name display"
+    }
+  },
+  "Modify": {
+    "DeathParticles": "Effect_Death_Bones",
+    "MaxHealth": 74,
+    "HearingRange": 8,
+    "ViewSector": 270,
+    "WakingPeriod": [
+      0,
+      24
+    ],
+    "DropList": "",
+    "Appearance": "Skeleton_Frost_Fighter",
+    "Weapons": [
+      "Weapon_Club_Iron_Rusty"
+    ],
+    "FlockArray": [],
+    "FollowPatrolPath": false,
+    "Patrol": false,
+    "WanderRadius": {
+      "Compute": "WanderRadius"
+    },
+    "Attack": "Root_NPC_Skeleton_Frost_Fighter_Attack",
+    "AttackDistance": 2.5,
+    "AttackPauseRange": [
+      1,
+      2.5
+    ],
+    "CombatAttackPreDelay": [
+      0.05,
+      0.05
+    ],
+    "CombatRelativeTurnSpeed": 2,
+    "CombatBehaviorDistance": 4,
+    "CombatBackOffAfterAttack": true,
+    "CombatStrafeWeight": 20,
+    "CombatDirectWeight": 20,
+    "CombatAlwaysMovingWeight": 1000,
+    "LeashDistance": 40,
+    "HardLeashDistance": 60,
+    "LeashMinPlayerDistance": 15,
+    "LeashTimer": [
+      10,
+      15
+    ],
+    "DesiredAttackDistanceRange": [
+      2,
+      2.5
+    ],
+    "CombatMessageTargetGroups": [],
+    "ApplySeparation": {
+      "Compute": "ApplySeparation"
+    },
+    "IsMemory": false,
+    "MemoriesCategory": "Undead",
+    "MemoriesNameOverride": "Skeleton_Frost_Fighter",
+    "BreathesInWater": true,
+    "NameTranslationKey": {
+      "Compute": "NameTranslationKey"
+    }
+  }
+}

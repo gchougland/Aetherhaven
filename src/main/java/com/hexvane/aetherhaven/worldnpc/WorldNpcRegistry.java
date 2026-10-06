@@ -16,6 +16,16 @@ public final class WorldNpcRegistry {
     private final Map<String, WorldNpcRouteRecord> routesById = new LinkedHashMap<>();
     private final Map<UUID, WorldNpcPlayerProgress> playersByUuid = new LinkedHashMap<>();
     private boolean dirty;
+    // A failed load must never be followed by a save of incomplete registry data.
+    private boolean persistenceBlocked;
+
+    boolean isPersistenceBlocked() {
+        return persistenceBlocked;
+    }
+
+    void setPersistenceBlocked(boolean blocked) {
+        persistenceBlocked = blocked;
+    }
 
     public WorldNpcRegistry(@Nonnull World world) {
         this.world = world;

@@ -1,0 +1,10 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Left; Anchor: (Height: 122, Bottom: 6); Padding: (Full: 10); Background: $T.@Card;
+  Group { LayoutMode: Top; FlexWeight: 1; Anchor: (Right: 12);
+    Label #Label { Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 16, RenderBold: true); }
+    Label #RequiredBench { Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #e0c891); }
+    Label #Description { Anchor: (Height: 50); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #b6c6d3); }
+  }
+  $C.@SecondaryTextButton #Choose { Text: "Choose"; Padding: (Horizontal: 8); Anchor: (Width: 128, Height: 44, Top: 28); }
+}

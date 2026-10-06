@@ -55,8 +55,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Primary (LMB): spawn a short-lived bolt from the staff tip to the nearest permitted assembly frontier cell within
- * range; passes through blocks and vanishes at the target.
+ * Primary (LMB): guide to a permitted assembly target, preferring the plot containing the player, then nearby work.
+ * The short-lived bolt passes through blocks and vanishes at its target.
  */
 public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantInteraction {
     /** Slow flight so players can follow the bolt; paired with {@link AetherhavenConstants#BUILDING_STAFF_GUIDE_TRAIL_PARTICLE_SYSTEM_ID}. */
@@ -79,7 +79,7 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
     public static final BuilderCodec<BuildingStaffFrontierTracerInteraction> CODEC =
         BuilderCodec
             .builder(BuildingStaffFrontierTracerInteraction.class, BuildingStaffFrontierTracerInteraction::new, SimpleInstantInteraction.CODEC)
-            .documentation("Building staff primary: homing visual tracer to the nearest in-range frontier preview cell.")
+            .documentation("Building staff primary: homing guide to in-range assembly work, preferring the player's current plot.")
             .build();
 
     @Nonnull
@@ -104,6 +104,7 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
 
     @Override
     protected void firstRun(@Nonnull InteractionType type, @Nonnull InteractionContext context, @Nonnull CooldownHandler cooldownHandler) {
+        if (com.hexvane.aetherhaven.workplace.WorkplaceToolInteraction.routeWorkplaceAction(type, context)) return;
         if (SubpluginInteractionGuard.failIfDisabled(context, AetherhavenPluginIds.CONSTRUCTION)) {
             return;
         }
@@ -161,14 +162,14 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
         AssemblyObstructionWorldCells.collectWithinDefaultRange(world, plugin, tip, obstructionCells);
         ArrayList<Vector3i> frontierCells = new ArrayList<>();
         AssemblyFrontierWorldCells.collectWithinDefaultRange(world, plugin, tip, frontierCells);
-        ArrayList<Vector3i> cells = !obstructionCells.isEmpty() ? obstructionCells : frontierCells;
+        ArrayList<Vector3i> cells = new ArrayList<>(obstructionCells);
+        cells.addAll(frontierCells);
         if (cells.isEmpty()) {
             failWithHint(playerRef, store);
             context.getState().state = InteractionState.Failed;
             return;
         }
-        Vector3i best = null;
-        double bestSq = Double.MAX_VALUE;
+        ArrayList<BuildingStaffTracerTargets.Candidate> eligible = new ArrayList<>();
         for (int i = 0; i < cells.size(); i++) {
             Vector3i cell = cells.get(i);
             PlotAssemblyJob job = PlotAssemblyService.findJobContainingPreview(world, plugin, cell);
@@ -197,18 +198,9 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
             } else if (PlotAssemblyService.resolveFrontierPlacementIndex(world, job, plot, cell) < 0) {
                 continue;
             }
-            double cx = cell.x + 0.5;
-            double cy = cell.y + 0.5;
-            double cz = cell.z + 0.5;
-            double dx = cx - tip.x;
-            double dy = cy - tip.y;
-            double dz = cz - tip.z;
-            double dSq = dx * dx + dy * dy + dz * dz;
-            if (dSq < bestSq) {
-                bestSq = dSq;
-                best = cell;
-            }
+            eligible.add(new BuildingStaffTracerTargets.Candidate(cell, plot.toFootprint(), phase == PlotAssemblyPhase.CLEARING));
         }
+        Vector3i best = BuildingStaffTracerTargets.select(eligible, transform.getPosition(), tip, AssemblyFrontierWorldCells.DEFAULT_RANGE);
         if (best == null) {
             failWithHint(playerRef, store);
             context.getState().state = InteractionState.Failed;

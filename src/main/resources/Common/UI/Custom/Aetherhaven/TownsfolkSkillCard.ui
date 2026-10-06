@@ -1,0 +1,34 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+@TrainLabel = (FontSize: 12, TextColor: #dce8d9, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center);
+@TrainStyle = TextButtonStyle(
+  Default: (Background: $C.@TertiaryDefaultButtonBackground, LabelStyle: @TrainLabel),
+  Hovered: (Background: $C.@TertiaryHoveredButtonBackground, LabelStyle: @TrainLabel),
+  Pressed: (Background: $C.@TertiaryPressedButtonBackground, LabelStyle: @TrainLabel),
+  Disabled: (Background: $C.@TertiaryDisabledButtonBackground, LabelStyle: (...@TrainLabel, TextColor: #718183)),
+  Sounds: $C.@ButtonSounds
+);
+Group { LayoutMode: Top; FlexWeight: 1; Anchor: (Right: 6); Background: $T.@Card; Padding: (Full: 10);
+  Group { LayoutMode: Left; Anchor: (Height: 34, Bottom: 4);
+    AssetImage #Icon { Anchor: (Width: 26, Height: 26, Right: 8); }
+    Label #Name { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, VerticalAlignment: Center); }
+    Label #Level { Anchor: (Width: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 22, TextColor: #a7d5bd, RenderBold: true, HorizontalAlignment: End); }
+  }
+  Group { LayoutMode: Left; Anchor: (Height: 8, Bottom: 10);
+    Group #Pip0 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+    Group #Pip1 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+    Group #Pip2 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+    Group #Pip3 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+    Group #Pip4 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+    Group #Pip5 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+    Group #Pip6 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+    Group #Pip7 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+    Group #Pip8 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+    Group #Pip9 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+  }
+  Group { LayoutMode: Left; Anchor: (Height: 24);
+    Label #Tier { Visible: false; Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #8ba9a5, VerticalAlignment: Center); }
+    TextButton #Train { TextTooltipStyle: $C.@DefaultTextTooltipStyle; Style: @TrainStyle; FlexWeight: 1; Anchor: (Height: 24, Right: 4); Padding: (Horizontal: 2); Text: ""; }
+    TextButton #SpendPoint { TextTooltipStyle: $C.@DefaultTextTooltipStyle; Style: @TrainStyle; Anchor: (Width: 62, Height: 24); Padding: (Horizontal: 2); Text: "Point +1"; }
+  }
+}

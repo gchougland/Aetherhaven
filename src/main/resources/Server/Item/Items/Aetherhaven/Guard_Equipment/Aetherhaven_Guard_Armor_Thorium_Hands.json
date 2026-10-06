@@ -1,0 +1,57 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Armor_Thorium_Hands.name"
+  },
+  "Quality": "Rare",
+  "ItemLevel": 30,
+  "PlayerAnimationsId": "Block",
+  "ItemSoundSetId": "ISS_Armor_Heavy",
+  "Categories": [],
+  "Icon": "Icons/ItemsGenerated/Armor_Thorium_Hands.png",
+  "IconProperties": {
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Scale": 0.92,
+    "Translation": [
+      15,
+      3
+    ]
+  },
+  "Model": "Items/Armors/Thorium/Hands.blockymodel",
+  "Texture": "Items/Armors/Thorium/Hands_Texture.png",
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    }
+  },
+  "Armor": {
+    "ArmorSlot": "Hands",
+    "BaseDamageResistance": 0,
+    "DamageResistance": {},
+    "StatModifiers": {}
+  },
+  "MaxDurability": 0,
+  "DurabilityLossOnHit": 0,
+  "Tags": {
+    "Type": [
+      "Armor"
+    ],
+    "Family": [
+      "Thorium"
+    ]
+  }
+}

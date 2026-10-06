@@ -73,7 +73,7 @@ public final class TownSharedRecipeUnlockService {
             return false;
         }
         for (String recipeId : pending) {
-            if (recipeId == null || recipeId.isBlank()) {
+            if (recipeId == null || recipeId.isBlank() || recipeId.startsWith(com.hexvane.aetherhaven.workplace.WorkplaceRecipeUnlocks.PREFIX)) {
                 continue;
             }
             CraftingPlugin.learnRecipe(playerRef, recipeId.trim(), store);

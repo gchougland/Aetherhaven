@@ -14,6 +14,8 @@ public final class QuestAvailability {
         if (def == null) {
             return false;
         }
+        if (com.hexvane.aetherhaven.halloween.HalloweenResident.RESCUE_QUEST.equals(def.idOrEmpty())
+            && !com.hexvane.aetherhaven.halloween.HalloweenResident.rescueSeason()) return false;
         String raw = def.requiresSubpluginName();
         if (raw == null || raw.isBlank()) {
             return true;

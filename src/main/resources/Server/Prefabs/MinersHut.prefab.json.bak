@@ -5438,7 +5438,7 @@
       "x": 6,
       "y": 1,
       "z": 15,
-      "name": "Soil_Grass"
+      "name": "Soil_Dirt"
     },
     {
       "x": 6,
@@ -9018,50 +9018,6 @@
         "Prop": {},
         "Transform": {
           "Position": {
-            "X": 2.4748802185058594,
-            "Y": 0.787994384765625,
-            "Z": 12.47512149810791
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 2.131509780883789,
-            "Roll": 0.0
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 1.0
-        },
-        "Item": {
-          "Item": {
-            "Id": "Ore_Iron",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {},
-        "HeadRotation": {
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 2.131509780883789,
-            "Roll": 0.0
-          }
-        }
-      }
-    },
-    {
-      "Components": {
-        "Invulnerable": {},
-        "PreventItemMerging": {},
-        "Prop": {},
-        "Transform": {
-          "Position": {
             "X": 3.519193649291992,
             "Y": 0.8484954833984375,
             "Z": 11.584255695343018
@@ -9227,50 +9183,6 @@
             "Pitch": 0.0,
             "Yaw": 1.4941372871398926,
             "Roll": -2.9139416217803955
-          }
-        }
-      }
-    },
-    {
-      "Components": {
-        "Invulnerable": {},
-        "PreventItemMerging": {},
-        "Prop": {},
-        "Transform": {
-          "Position": {
-            "X": 4.713605880737305,
-            "Y": 0.8373870849609375,
-            "Z": 15.377997875213623
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 0.8490626215934753,
-            "Roll": 0.0
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 1.0
-        },
-        "Item": {
-          "Item": {
-            "Id": "Ore_Iron",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {},
-        "HeadRotation": {
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 0.8490626215934753,
-            "Roll": 0.0
           }
         }
       }

@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.production;
 
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.mastery.CoreProductionRequirements;
+import com.hexvane.aetherhaven.mastery.CoreVillagerMasteryService;
 import com.hexvane.aetherhaven.town.CharterSpecializationModifiers;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -32,7 +34,7 @@ public final class ProductionAccrualEngine {
         int plotBlockZ,
         int entityTicksToApply
     ) {
-        if (entityTicksToApply <= 0 || entry.catalogSize() <= 0) {
+        if (entityTicksToApply <= 0 || entry.catalogSize() <= 0 || NativeDruidCrops.CONSTRUCTION.equals(gameplayPlotId)) {
             return false;
         }
         state.migrateIfNeeded();
@@ -42,6 +44,7 @@ public final class ProductionAccrualEngine {
         Integer adventureZone =
             ProductionResourceZoneAffinity.resolveAdventureZoneOrSkip(world, plotBlockX, plotBlockZ);
         int slotCount = WorkplaceProductionUpgrades.slotCount(state);
+        String masteryKind = CoreProductionRequirements.kind(gameplayPlotId);
 
         boolean amountsChanged = false;
         boolean accumChanged = false;
@@ -57,6 +60,7 @@ public final class ProductionAccrualEngine {
                     }
                     continue;
                 }
+                if (CoreProductionRequirements.issue(town, gameplayPlotId, selected) != null) continue;
                 double zoneMul =
                     ProductionResourceZoneAffinity.timeMultiplierForResolvedZone(
                         adventureZone,
@@ -76,8 +80,13 @@ public final class ProductionAccrualEngine {
                 accumChanged = true;
                 long maxForItem = WorkplaceProductionUpgrades.effectiveMaxStorage(state, entry, selected);
                 long amount = CharterSpecializationModifiers.productionAmountPerCycle(town, ccat, gameplayPlotId);
+                long before = state.getAmount(selected);
                 state.addAmount(selected, amount, maxForItem);
-                amountsChanged = true;
+                long stored = state.getAmount(selected) - before;
+                if (stored > 0) {
+                    amountsChanged = true;
+                    if (masteryKind != null) CoreVillagerMasteryService.progress(town, masteryKind).earnXp(stored);
+                }
                 progressed = true;
             }
             if (!progressed) {

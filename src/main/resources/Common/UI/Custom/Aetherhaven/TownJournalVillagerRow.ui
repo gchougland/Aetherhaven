@@ -1,7 +1,7 @@
 $C = "../Common.ui";
 $Sounds = "../Sounds.ui";
 
-@VillagerRowHeight = 64;
+@VillagerRowHeight = 44;
 
 @IconLbl = (
   FontSize: 6,
@@ -43,7 +43,7 @@ Group #TownJournalVillagerRow {
     );
 
     AssetImage #Portrait {
-      Anchor: (Width: 64, Height: 64, Right: 10);
+      Anchor: (Width: 40, Height: 40, Right: 8);
       FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
     }
 
@@ -57,11 +57,6 @@ Group #TownJournalVillagerRow {
         Text: "";
       }
 
-      Group #ReputationHeartSlots {
-        LayoutMode: Left;
-        Anchor: (Bottom: 6);
-      }
-
       Label #ScheduleLocation {
         Style: (...$C.@DefaultLabelStyle, TextColor: #c8c2b0, FontSize: 12, Wrap: true);
         Text: "";
@@ -69,7 +64,20 @@ Group #TownJournalVillagerRow {
     }
   }
 
-  Group {
+  Group #ProfileGroup {
+    LayoutMode: Middle;
+    Anchor: (Width: 70, Height: @VillagerRowHeight, Left: 4);
+    Visible: false;
+    $C.@SecondaryTextButton #Profile {
+      Anchor: (Width: 66, Height: 28);
+      Padding: (Horizontal: 4);
+      Text: "Profile";
+      TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+      TooltipText: "View this resident's profile";
+    }
+  }
+
+  Group #LocateGroup {
     LayoutMode: Middle;
     Anchor: (Width: 44, Height: @VillagerRowHeight, Left: 6);
 

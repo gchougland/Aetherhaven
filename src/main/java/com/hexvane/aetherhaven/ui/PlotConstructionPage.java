@@ -27,14 +27,8 @@ import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyBuildStartResult;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
-import com.hexvane.aetherhaven.production.PlotProductionState;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.ProductionWorkplaceKinds;
-import com.hexvane.aetherhaven.production.WorkplaceProductionUpgrades;
-import com.hexvane.aetherhaven.production.WorkplaceProductionUpgrades.Branch;
-import com.hexvane.aetherhaven.production.WorkplaceProductionUpgrades.PurchaseResult;
-import com.hexvane.aetherhaven.restaurant.PlotRestaurantState;
-import com.hexvane.aetherhaven.restaurant.RestaurantUpgrades;
 import com.hexvane.aetherhaven.map.TownBorderMapOverlayService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.HouseResidentAssignment;
@@ -137,7 +131,6 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
     /** 0 = Plot, 1 = Players (management UI only). */
     private int managementTab;
     /** When both production and restaurant perk trees apply: 0 = production, 1 = restaurant. */
-    private int perkTreeTab;
     /** Move-building confirmation modal (management block, completed plot). */
     private boolean moveBuildingConfirmOpen;
     /** Reconstruct-building confirmation modal (management block, completed plot). */
@@ -153,8 +146,6 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
      * whole tree and breaks selectors (wrong title, orphan "Materials" label, empty tabs).
      */
     private boolean templateAppended;
-    private boolean productionUpgradeTreeAppended;
-    private boolean restaurantUpgradeTreeAppended;
     /** House management: hide villagers who already have a home assigned on another completed house plot. */
     private boolean hideHouseResidentElsewhereHoused;
     /** House resident picker modal open. */
@@ -238,14 +229,6 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             templateAppended = true;
             AetherhavenUiLocalization.applyPlotConstructionPage(commandBuilder);
         }
-        if (!productionUpgradeTreeAppended) {
-            commandBuilder.append("#ProductionUpgradeTreeSlot", "Aetherhaven/ProductionUpgradeSkillTree.ui");
-            productionUpgradeTreeAppended = true;
-        }
-        if (!restaurantUpgradeTreeAppended) {
-            commandBuilder.append("#ProductionUpgradeTreeSlot", "Aetherhaven/RestaurantUpgradeSkillTree.ui");
-            restaurantUpgradeTreeAppended = true;
-        }
         if (managementUi && pendingMoveBuildingModal) {
             moveBuildingConfirmOpen = true;
             pendingMoveBuildingModal = false;
@@ -258,6 +241,16 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         );
         boolean plotTabActive = !managementUi || managementTab == 0;
         commandBuilder.set("#ManagementTabStrip.Visible", managementUi);
+        if(managementUi) {
+            var frame=new com.hypixel.hytale.server.core.ui.Anchor();frame.setWidth(com.hypixel.hytale.server.core.ui.Value.of(860));
+            frame.setHeight(com.hypixel.hytale.server.core.ui.Value.of(696));
+            commandBuilder.setObject("#RecordsWindow.Anchor",frame);
+            var contentFrame = new com.hypixel.hytale.server.core.ui.Anchor();
+            contentFrame.setTop(com.hypixel.hytale.server.core.ui.Value.of(38));
+            contentFrame.setBottom(com.hypixel.hytale.server.core.ui.Value.of(0));
+            commandBuilder.setObject("#RecordsWindow #Content.Anchor", contentFrame);
+            commandBuilder.set("#TabNeedsButton.TooltipText","Residents and needs");
+        }
         commandBuilder.set("#PlotTabContent.Visible", plotTabActive);
         commandBuilder.set("#PlayersTabContent.Visible", managementUi && managementTab == 1);
         commandBuilder.set("#MoveBuildingModal.Visible", managementUi && moveBuildingConfirmOpen);
@@ -466,17 +459,6 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 : List.of();
         boolean showWorkplaceAssign = managementUi && completed && !workplaceRoles.isEmpty();
         boolean multiWorkplaceLabels = workplaceRoles.size() > 1;
-        boolean showProductionUpgrades =
-            managementUi
-                && completed
-                && plotTabActive
-                && gameplayIds.stream().anyMatch(ProductionCatalog::isProductionWorkplaceConstruction)
-                && AetherhavenFeatures.isLoaded(AetherhavenPluginIds.PRODUCTION);
-        boolean showRestaurantUpgrades =
-            managementUi
-                && completed
-                && plotTabActive
-                && gameplayIds.stream().anyMatch(AetherhavenConstants.CONSTRUCTION_PLOT_RESTAURANT::equals);
         boolean showTouristManifest =
             managementUi
                 && completed
@@ -513,17 +495,9 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         if (!showWorkplaceAssign) {
             commandBuilder.clear(WORKPLACE_ASSIGN_ROLE_ROWS);
         }
-        boolean bothPerkTrees = showProductionUpgrades && showRestaurantUpgrades;
-        commandBuilder.set("#PerkTreeTabStrip.Visible", bothPerkTrees);
-        commandBuilder.set("#ProductionUpgradeTreeSlot.Visible", showProductionUpgrades || showRestaurantUpgrades);
-        boolean showProductionTreeNow = showProductionUpgrades && (!bothPerkTrees || perkTreeTab == 0);
-        boolean showRestaurantTreeNow = showRestaurantUpgrades && (!bothPerkTrees || perkTreeTab == 1);
-        if (!showProductionTreeNow) {
-            commandBuilder.set("#ProductionUpgradeTreeSlot #ProductionUpgradeTree.Visible", false);
-        }
-        if (!showRestaurantTreeNow) {
-            commandBuilder.set("#ProductionUpgradeTreeSlot #RestaurantUpgradeTree.Visible", false);
-        }
+        // Building upgrades now live in the supervising villager's connected mastery tree.
+        commandBuilder.set("#PerkTreeTabStrip.Visible", false);
+        commandBuilder.set("#ProductionUpgradeTreeSlot.Visible", false);
 
         Store<ChunkStore> csMb = blockRef.getStore();
         ManagementBlock mbHouse = csMb.getComponent(blockRef, ManagementBlock.getComponentType());
@@ -579,59 +553,6 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                     workplacePickerFilterNpcRoleId,
                     workplacePickerResidentKind
                 );
-            }
-        }
-
-        if (bothPerkTrees) {
-            commandBuilder.set(
-                "#PerkTabProductionButton.TextSpans",
-                Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.perkTabProduction")
-            );
-            commandBuilder.set(
-                "#PerkTabRestaurantButton.TextSpans",
-                Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.perkTabRestaurant")
-            );
-            commandBuilder.set("#PerkTabProductionButton.Disabled", perkTreeTab == 0);
-            commandBuilder.set("#PerkTabRestaurantButton.Disabled", perkTreeTab == 1);
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                "#PerkTabProductionButton",
-                new EventData().append("Action", "SwitchPerkTabProduction"),
-                false
-            );
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                "#PerkTabRestaurantButton",
-                new EventData().append("Action", "SwitchPerkTabRestaurant"),
-                false
-            );
-        }
-
-        if (showProductionTreeNow && plotUuidMgmt != null && townUuidMgmt != null && plugWork != null) {
-            World worldPu = store.getExternalData().getWorld();
-            TownManager tmpu = AetherhavenWorldRegistries.getOrCreateTownManager(worldPu, plugWork);
-            TownRecord townPu = tmpu.getTown(townUuidMgmt);
-            CombinedItemContainer invPu =
-                player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
-            if (townPu != null && invPu != null && ucComp != null) {
-                PlotProductionState prodState = townPu.getOrCreatePlotProduction(plotUuidMgmt);
-                prodState.migrateIfNeeded();
-                boolean allowTreasury = townPu.playerCanSpendTreasuryGold(ucComp.getUuid());
-                ProductionUpgradeTreeUi.bind(commandBuilder, eventBuilder, prodState, townPu, invPu, allowTreasury);
-            }
-        }
-
-        if (showRestaurantTreeNow && plotUuidMgmt != null && townUuidMgmt != null && plugWork != null) {
-            World worldRu = store.getExternalData().getWorld();
-            TownManager tmru = AetherhavenWorldRegistries.getOrCreateTownManager(worldRu, plugWork);
-            TownRecord townRu = tmru.getTown(townUuidMgmt);
-            CombinedItemContainer invRu =
-                player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
-            if (townRu != null && invRu != null && ucComp != null) {
-                PlotRestaurantState restaurantState = townRu.getOrCreatePlotRestaurant(plotUuidMgmt);
-                restaurantState.migrateIfNeeded();
-                boolean allowTreasury = townRu.playerCanSpendTreasuryGold(ucComp.getUuid());
-                RestaurantUpgradeTreeUi.bind(commandBuilder, eventBuilder, restaurantState, townRu, invRu, allowTreasury);
             }
         }
 
@@ -1062,6 +983,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             return;
         }
         boolean canEdit = playerUuid != null && town.playerCanPlacePlots(playerUuid);
+        commandBuilder.set("#ShopStaff.Disabled", !canEdit);
+        if (canEdit) eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ShopStaff", new EventData().append("Action", "ShopStaff"), false);
         commandBuilder.set("#PlayerShopNpcBuyToggle.Value", plot.isAllowNpcShopPurchases());
         commandBuilder.set("#PlayerShopNpcBuyToggle.Disabled", !canEdit);
         if (canEdit) {
@@ -1612,6 +1535,15 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
+        if ("TeleportWorker".equals(data.action)) {
+            if(!managementUi||viewOnly)return;
+            var town=resolveManagementTown(store);var plot=resolveManagementPlotId();
+            if(town==null||plot==null||!town.hasMemberOrOwner(playerRef.getUuid())||data.workplacePickerResidentKind==null)return;
+            String assigned=findEntityUuidWithJobPlotAndKind(store,town.getTownId(),plot,data.workplacePickerResidentKind);
+            if(assigned.isEmpty()||!assigned.equals(data.workplaceWorkerUuid))return;
+            VillagerNeedsOverviewPage.rescueResident(playerRef,ref,store,town.getTownId(),UUID.fromString(assigned));
+            return;
+        }
         if (data.houseResidentHideElsewhere != null) {
             hideHouseResidentElsewhereHoused = data.houseResidentHideElsewhere;
             UUID prefKey = playerRef.getUuid();
@@ -1634,6 +1566,16 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         }
         if (data.action != null && data.action.equalsIgnoreCase("SetPlayerShopNpcBuy")) {
             handleSetPlayerShopNpcBuy(ref, store, data.allowNpcShopPurchases);
+            return;
+        }
+        if ("ShopStaff".equals(data.action) && managementUi && !viewOnly) {
+            var town = resolveManagementTown(store);
+            var plotId = resolveManagementPlotId();
+            var plugin = AetherhavenPlugin.get();
+            if (town != null && plotId != null && plugin != null && town.hasMemberOrOwner(playerRef.getUuid())
+                && town.playerCanPlacePlots(playerRef.getUuid())
+                && com.hexvane.aetherhaven.shopspot.ShopStaffing.isShop(town.findPlotById(plotId), plugin.getConstructionCatalog()))
+                store.getComponent(ref, Player.getComponentType()).getPageManager().openCustomPage(ref, store, new ShopStaffingPage(playerRef, town.getTownId(), plotId));
             return;
         }
         if (TownPortalTravelColorPickerUi.ACTION_OPEN.equalsIgnoreCase(data.action)) {
@@ -2057,22 +1999,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             sendUpdate(cmd, ev, false);
             return;
         }
-        if (data.action != null && data.action.equalsIgnoreCase("SwitchPerkTabProduction")) {
-            perkTreeTab = 0;
-            UICommandBuilder cmd = new UICommandBuilder();
-            UIEventBuilder ev = new UIEventBuilder();
-            build(ref, cmd, ev, store);
-            sendUpdate(cmd, ev, false);
-            return;
-        }
-        if (data.action != null && data.action.equalsIgnoreCase("SwitchPerkTabRestaurant")) {
-            perkTreeTab = 1;
-            UICommandBuilder cmd = new UICommandBuilder();
-            UIEventBuilder ev = new UIEventBuilder();
-            build(ref, cmd, ev, store);
-            sendUpdate(cmd, ev, false);
-            return;
-        }
+
+
         if (data.action != null && data.action.equalsIgnoreCase("OpenMemberPermissions")) {
             if (!managementUi || data.memberUuid == null) {
                 return;
@@ -2168,14 +2096,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             sendUpdate(cmd, ev, false);
             return;
         }
-        if (data.action != null && data.action.equalsIgnoreCase("PurchaseProductionUpgrade")) {
-            handlePurchaseProductionUpgrade(ref, store, data.upgradeBranch);
-            return;
-        }
-        if (data.action != null && data.action.equalsIgnoreCase("PurchaseRestaurantUpgrade")) {
-            handlePurchaseRestaurantUpgrade(ref, store, data.upgradeBranch);
-            return;
-        }
+
         if (data.action != null && data.action.equalsIgnoreCase("DepositMaterial")) {
             if (managementUi || viewOnly || data.materialIndex == null || data.materialIndex < 0) {
                 return;
@@ -3008,186 +2929,6 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         return pi != null ? pi.getState() : PlotInstanceState.BLUEPRINTING;
     }
 
-    private void handlePurchaseProductionUpgrade(
-        @Nonnull Ref<EntityStore> ref,
-        @Nonnull Store<EntityStore> store,
-        @Nullable String branchRaw
-    ) {
-        if (!AetherhavenFeatures.isLoaded(AetherhavenPluginIds.PRODUCTION)) {
-            return;
-        }
-        if (!managementUi) {
-            return;
-        }
-        Branch branch = ProductionUpgradeTreeUi.parseBranch(branchRaw);
-        if (branch == null) {
-            return;
-        }
-        PlotInstanceState st = resolvePlotState(store, ref);
-        if (st != PlotInstanceState.COMPLETE) {
-            return;
-        }
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        Player player = store.getComponent(ref, Player.getComponentType());
-        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
-        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        if (plugin == null || player == null || pr == null || uc == null) {
-            return;
-        }
-        Store<ChunkStore> cs = blockRef.getStore();
-        ManagementBlock mb = cs.getComponent(blockRef, ManagementBlock.getComponentType());
-        if (mb == null || mb.getPlotId().isBlank() || mb.getTownId().isBlank()) {
-            return;
-        }
-        UUID plotId;
-        UUID townId;
-        try {
-            plotId = UUID.fromString(mb.getPlotId().trim());
-            townId = UUID.fromString(mb.getTownId().trim());
-        } catch (IllegalArgumentException e) {
-            return;
-        }
-        World world = store.getExternalData().getWorld();
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.getTown(townId);
-        if (town == null || !town.playerCanManageConstructions(uc.getUuid())) {
-            return;
-        }
-        PlotInstance plot = town.findPlotById(plotId);
-        String storedId = plot != null ? plot.getConstructionId() : "";
-        boolean productionOk =
-            plot != null
-                && plot.getState() == PlotInstanceState.COMPLETE
-                && plugin.getConstructionCatalog().resolveGameplayConstructionIds(storedId).stream()
-                    .anyMatch(ProductionCatalog::isProductionWorkplaceConstruction);
-        if (!productionOk) {
-            return;
-        }
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
-        if (inv == null) {
-            return;
-        }
-        PlotProductionState state = town.getOrCreatePlotProduction(plotId);
-        state.migrateIfNeeded();
-        boolean allowTreasury = town.playerCanSpendTreasuryGold(uc.getUuid());
-        PurchaseResult result = WorkplaceProductionUpgrades.tryPurchase(state, branch, town, inv, allowTreasury);
-        if (result == PurchaseResult.OK) {
-            tm.updateTown(town);
-            NotificationUtil.sendNotification(
-                pr.getPacketHandler(),
-                Message.translation("aetherhaven_ui_town.aetherhaven.ui.productionUpgrades.notify.purchased"),
-                NotificationStyle.Success
-            );
-        } else {
-            String notifyKey =
-                switch (result) {
-                    case NEED_INGOT -> "aetherhaven.ui.productionUpgrades.notify.needIngot";
-                    case NEED_GOLD -> "aetherhaven.ui.productionUpgrades.notify.needGold";
-                    case PREREQUISITES -> "aetherhaven.ui.productionUpgrades.notify.locked";
-                    case MAXED -> "aetherhaven.ui.productionUpgrades.notify.maxed";
-                    default -> "aetherhaven.ui.productionUpgrades.notify.failed";
-                };
-            NotificationUtil.sendNotification(
-                pr.getPacketHandler(),
-                Message.translation("aetherhaven_ui_town." + notifyKey),
-                NotificationStyle.Warning
-            );
-        }
-        UICommandBuilder cmd = new UICommandBuilder();
-        UIEventBuilder ev = new UIEventBuilder();
-        build(ref, cmd, ev, store);
-        sendUpdate(cmd, ev, false);
-    }
-
-    private void handlePurchaseRestaurantUpgrade(
-        @Nonnull Ref<EntityStore> ref,
-        @Nonnull Store<EntityStore> store,
-        @Nullable String branchRaw
-    ) {
-        if (!managementUi) {
-            return;
-        }
-        RestaurantUpgrades.Branch branch = RestaurantUpgradeTreeUi.parseBranch(branchRaw);
-        if (branch == null) {
-            return;
-        }
-        PlotInstanceState st = resolvePlotState(store, ref);
-        if (st != PlotInstanceState.COMPLETE) {
-            return;
-        }
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        Player player = store.getComponent(ref, Player.getComponentType());
-        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
-        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        if (plugin == null || player == null || pr == null || uc == null) {
-            return;
-        }
-        Store<ChunkStore> cs = blockRef.getStore();
-        ManagementBlock mb = cs.getComponent(blockRef, ManagementBlock.getComponentType());
-        if (mb == null || mb.getPlotId().isBlank() || mb.getTownId().isBlank()) {
-            return;
-        }
-        UUID plotId;
-        UUID townId;
-        try {
-            plotId = UUID.fromString(mb.getPlotId().trim());
-            townId = UUID.fromString(mb.getTownId().trim());
-        } catch (IllegalArgumentException e) {
-            return;
-        }
-        World world = store.getExternalData().getWorld();
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.getTown(townId);
-        if (town == null || !town.playerCanManageConstructions(uc.getUuid())) {
-            return;
-        }
-        PlotInstance plot = town.findPlotById(plotId);
-        String storedId = plot != null ? plot.getConstructionId() : "";
-        boolean restaurantOk =
-            plot != null
-                && plot.getState() == PlotInstanceState.COMPLETE
-                && plugin.getConstructionCatalog().matchesGameplayConstruction(
-                    storedId,
-                    AetherhavenConstants.CONSTRUCTION_PLOT_RESTAURANT
-                );
-        if (!restaurantOk) {
-            return;
-        }
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
-        if (inv == null) {
-            return;
-        }
-        PlotRestaurantState state = town.getOrCreatePlotRestaurant(plotId);
-        state.migrateIfNeeded();
-        boolean allowTreasury = town.playerCanSpendTreasuryGold(uc.getUuid());
-        RestaurantUpgrades.PurchaseResult result = RestaurantUpgrades.tryPurchase(state, branch, town, inv, allowTreasury);
-        if (result == RestaurantUpgrades.PurchaseResult.OK) {
-            tm.updateTown(town);
-            NotificationUtil.sendNotification(
-                pr.getPacketHandler(),
-                Message.translation("aetherhaven_ui_town.aetherhaven.ui.restaurantUpgrades.notify.purchased"),
-                NotificationStyle.Success
-            );
-        } else {
-            String notifyKey =
-                switch (result) {
-                    case NEED_INGREDIENT -> "aetherhaven.ui.restaurantUpgrades.notify.needIngredient";
-                    case NEED_GOLD -> "aetherhaven.ui.restaurantUpgrades.notify.needGold";
-                    case MAXED -> "aetherhaven.ui.restaurantUpgrades.notify.maxed";
-                    default -> "aetherhaven.ui.restaurantUpgrades.notify.failed";
-                };
-            NotificationUtil.sendNotification(
-                pr.getPacketHandler(),
-                Message.translation("aetherhaven_ui_town." + notifyKey),
-                NotificationStyle.Warning
-            );
-        }
-        UICommandBuilder cmd = new UICommandBuilder();
-        UIEventBuilder ev = new UIEventBuilder();
-        build(ref, cmd, ev, store);
-        sendUpdate(cmd, ev, false);
-    }
-
     private void buildWorkplaceAssignRoleRows(
         @Nonnull Store<EntityStore> store,
         @Nonnull UICommandBuilder commandBuilder,
@@ -3259,6 +3000,10 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 WorkplaceWorkerDirectory.listEligible(store, town, plugin, gameplayWorkplaceId, filterNpcRoleId);
         }
 
+        commandBuilder.set(rowPath+" #TeleportWorker.Visible",!assignedUuid.isEmpty());
+        commandBuilder.set(rowPath+" #TeleportWorker.Disabled",town==null||!town.playerHasQuestPermission(playerRef.getUuid()));
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating,rowPath+" #TeleportWorker",
+            EventData.of("Action","TeleportWorker").append("WorkplaceWorkerUuid",assignedUuid).append("WorkplacePickerResidentKind",residentKind),false);
         String selectionPath = rowPath + " #WorkplaceWorkerSelection";
         if (assignedUuid.isEmpty()) {
             commandBuilder.set(selectionPath + " #PreviewPortrait.Visible", false);

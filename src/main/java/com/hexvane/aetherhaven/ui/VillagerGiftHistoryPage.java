@@ -8,6 +8,8 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.VillagerGiftLogEntry;
 import com.hexvane.aetherhaven.villager.gift.GiftPreference;
 import com.hexvane.aetherhaven.villager.gift.VillagerGiftService;
+import com.hexvane.aetherhaven.villager.VillagerBefriendableResolver;
+import com.hexvane.aetherhaven.town.TownResidentEligibility;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -106,10 +108,7 @@ public final class VillagerGiftHistoryPage extends AetherhavenInteractiveCustomU
             false
         );
         commandBuilder.set("#Portrait.AssetPath", NpcPortraitProvider.portraitPathForRoleId(npcRoleId));
-        commandBuilder.set(
-            "#VillagerName.TextSpans",
-            Message.translation("aetherhaven_ui_journal_items_tail.npcRoles." + npcRoleId + ".name")
-        );
+        commandBuilder.set("#VillagerName.Text", NpcPortraitProvider.displayLabelForRoleId(npcRoleId));
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {
             commandBuilder.set("#GiftCycleRow.Visible", false);
@@ -120,6 +119,7 @@ public final class VillagerGiftHistoryPage extends AetherhavenInteractiveCustomU
         }
         World world = store.getExternalData().getWorld();
         TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).getTown(townId);
+        if (town != null && !town.hasMemberOrOwner(playerRef.getUuid())) { close(); return; }
         if (town == null) {
             commandBuilder.set("#GiftCycleRow.Visible", false);
             commandBuilder.set("#EmptyHint.Visible", true);
@@ -136,8 +136,12 @@ public final class VillagerGiftHistoryPage extends AetherhavenInteractiveCustomU
             return;
         }
         Store<EntityStore> entityStore = world.getEntityStore().getStore();
-        List<TownVillagerRow> residents = TownVillagerDirectory.listResidents(entityStore, town);
-        commandBuilder.set("#GiftCycleRow.Visible", !residents.isEmpty());
+        List<TownVillagerRow> residents = giftResidents(TownVillagerDirectory.listResidents(entityStore, town), entityStore, plugin);
+        TownVillagerRow selected = residents.stream().filter(row -> row.entityUuid().equals(villagerEntityUuid)).findFirst().orElse(null);
+        if (selected == null) { close(); return; }
+        commandBuilder.set("#VillagerName.Text", selected.label());
+        commandBuilder.set("#Portrait.AssetPath", selected.portraitPath());
+        commandBuilder.set("#GiftCycleRow.Visible", residents.size() > 1);
         long day = VillagerReputationService.currentGameEpochDay(store);
         long weekBlock = day / 7L;
         VillagerReputationEntry e = VillagerReputationService.getOrCreateEntry(town, pu.getUuid(), villagerEntityUuid);
@@ -276,10 +280,12 @@ public final class VillagerGiftHistoryPage extends AetherhavenInteractiveCustomU
         }
         World world = store.getExternalData().getWorld();
         TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).getTown(townId);
-        if (town == null) {
+        if (town == null || !town.hasMemberOrOwner(playerRef.getUuid())) {
+            close();
             return;
         }
-        List<TownVillagerRow> rows = TownVillagerDirectory.listResidents(world.getEntityStore().getStore(), town);
+        List<TownVillagerRow> allResidents = TownVillagerDirectory.listResidents(store, town);
+        List<TownVillagerRow> rows = giftResidents(allResidents, store, plugin);
         if (rows.isEmpty()) {
             return;
         }
@@ -304,11 +310,18 @@ public final class VillagerGiftHistoryPage extends AetherhavenInteractiveCustomU
                     townId,
                     v.roleId(),
                     v.entityUuid(),
-                    newIdx,
+                    TownVillagerDirectory.indexOfEntity(allResidents, v.entityUuid()),
                     managementBlockRef,
                     managementBlockPos
                 )
             );
+    }
+
+    private static List<TownVillagerRow> giftResidents(List<TownVillagerRow> residents, Store<EntityStore> store, AetherhavenPlugin plugin) {
+        return residents.stream()
+            .filter(row -> !TownResidentEligibility.isTownsfolkPoolKind(row.bindingKind(), row.roleId(), plugin))
+            .filter(row -> VillagerBefriendableResolver.isBefriendableByEntity(store, row.entityUuid(), row.roleId(), plugin))
+            .toList();
     }
 
     @Nonnull

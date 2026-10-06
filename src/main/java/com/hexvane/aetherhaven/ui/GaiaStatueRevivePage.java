@@ -124,12 +124,15 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
         );
         commandBuilder.clear(ROWS);
 
-        List<ResidentNpcRecord> candidates = ResidentRegistryService.revivalCandidatesMerged(town, store);
+        com.hexvane.aetherhaven.townsfolk.TownsfolkWorkRoster.list(town, tm, store, plugin);
+        List<ResidentNpcRecord> candidates = ResidentRegistryService.altarCandidates(town, store);
+        commandBuilder.set("#Footer.TextSpans", Message.translation(candidates.isEmpty()
+            ? "aetherhaven_townsfolk_profile.noDeadResidents" : "aetherhaven_townsfolk_profile.revivalFooter"));
         for (int i = 0; i < candidates.size(); i++) {
             ResidentNpcRecord r = candidates.get(i);
             String roleId = r.getNpcRoleId();
-            Ref<EntityStore> ent = store.getExternalData().getRefFromUUID(r.getLastEntityUuid());
-            boolean present = ent != null && ent.isValid();
+            boolean present = com.hexvane.aetherhaven.entity.EntityPresenceUtil.isLoadedLive(
+                com.hexvane.aetherhaven.entity.EntityPresenceUtil.resolve(store, r.getLastEntityUuid()));
             commandBuilder.append(ROWS, "Aetherhaven/GaiaStatueReviveRow.ui");
             String row = ROWS + "[" + i + "]";
             AetherhavenUiLocalization.applyGaiaStatueReviveRow(commandBuilder, row);
@@ -138,8 +141,17 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
             Message statusMsg =
                 present
                     ? Message.translation("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.status.present")
-                    : Message.translation("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.status.missing");
+                    : Message.translation(r.isPendingDawnRevival() ? "aetherhaven_townsfolk_profile.deceased"
+                        : "aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.status.missing");
             Message nameMsg = Message.translation("aetherhaven_ui_journal_items_tail.npcRoles." + roleId + ".name");
+            if (r.getTownsfolkIdentity() != null) {
+                var character = plugin.getTownsfolkCharacterCatalog().byId(r.getTownsfolkIdentity().getCharacterId());
+                if (character != null) {
+                    nameMsg = Message.raw(character.getDisplayName() != null ? character.getDisplayName() : character.getId());
+                    commandBuilder.set(row + " #Portrait.AssetPath", "Icons/ModelsGenerated/"
+                        + (character.getPortraitIcon() != null ? character.getPortraitIcon() : character.getModelAssetId() + ".png"));
+                }
+            }
             commandBuilder.set(
                 row + " #VillagerLine.TextSpans",
                 Message.translation("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.row")
@@ -151,7 +163,7 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
                 row + " #ReviveButton",
-                new EventData().append("Action", "Revive").append("NpcRoleId", roleId),
+                new EventData().append("Action", "Revive").append("ResidentId", r.getLastEntityUuid().toString()),
                 false
             );
         }
@@ -179,7 +191,7 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
             });
             return;
         }
-        if (data.action == null || !"Revive".equalsIgnoreCase(data.action) || data.npcRoleId == null || data.npcRoleId.isBlank()) {
+        if (data.action == null || !"Revive".equalsIgnoreCase(data.action) || data.residentId == null || data.residentId.isBlank()) {
             return;
         }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
@@ -208,10 +220,10 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
         if (uc == null || player == null || !town.playerCanReviveVillagers(uc.getUuid())) {
             return;
         }
-        String role = data.npcRoleId.trim();
+        String residentId = data.residentId.trim();
         ResidentNpcRecord record = null;
-        for (ResidentNpcRecord r : ResidentRegistryService.revivalCandidatesMerged(town, store)) {
-            if (role.equalsIgnoreCase(r.getNpcRoleId())) {
+        for (ResidentNpcRecord r : ResidentRegistryService.altarCandidates(town, store)) {
+            if (residentId.equalsIgnoreCase(r.getLastEntityUuid().toString())) {
                 record = r;
                 break;
             }
@@ -328,7 +340,7 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
         public static final BuilderCodec<PageData> CODEC = BuilderCodec.builder(PageData.class, PageData::new)
             .append(new KeyedCodec<>("Action", Codec.STRING), (d, v) -> d.action = v, d -> d.action)
             .add()
-            .append(new KeyedCodec<>("NpcRoleId", Codec.STRING), (d, v) -> d.npcRoleId = v, d -> d.npcRoleId)
+            .append(new KeyedCodec<>("ResidentId", Codec.STRING), (d, v) -> d.residentId = v, d -> d.residentId)
             .add()
             .append(new KeyedCodec<>("AppearanceId", Codec.STRING), (d, v) -> d.appearanceId = v, d -> d.appearanceId)
             .add()
@@ -338,7 +350,7 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
         private String action;
 
         @Nullable
-        private String npcRoleId;
+        private String residentId;
 
         @Nullable
         private String appearanceId;

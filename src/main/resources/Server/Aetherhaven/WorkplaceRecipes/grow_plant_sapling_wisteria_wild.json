@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_sapling_wisteria_wild",
+  "name": "Sapling Wisteria Wild",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_sapling_wisteria_wild",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 6,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 25
+    }
+  ],
+  "output": "Plant_Sapling_Wisteria_Wild",
+  "outputCount": 1,
+  "workSeconds": 20
+}

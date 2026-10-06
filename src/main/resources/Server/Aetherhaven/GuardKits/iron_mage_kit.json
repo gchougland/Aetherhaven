@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Iron_Mage_Kit",
+  "name": "Iron Mage Kit",
+  "guardClass": "guard_mage",
+  "equipmentProfile": "guard_mage_iron",
+  "description": "+4 Intelligence, +3 Vitality."
+}

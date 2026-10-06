@@ -1,0 +1,6 @@
+$T = "TownUiTheme.ui";
+Group {
+ Background: $T.@Panel;
+ ItemIcon #Icon { Anchor: (Left: 3, Top: 2, Width: 20, Height: 20); }
+ Group #State { Anchor: (Left: 3, Right: 3, Bottom: 2, Height: 4); }
+}

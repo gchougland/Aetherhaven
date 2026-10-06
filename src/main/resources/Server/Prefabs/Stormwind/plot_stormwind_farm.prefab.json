@@ -4941,7 +4941,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T23:19:12Z"
+            "Planted": true
           }
         }
       }
@@ -4950,7 +4950,12 @@
       "x": 4,
       "y": 2,
       "z": -11,
-      "name": "Empty"
+      "name": "Plant_Crop_Wheat_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 4,
@@ -5039,7 +5044,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T23:53:22Z"
+            "Planted": true
           }
         }
       }
@@ -5048,7 +5053,12 @@
       "x": 4,
       "y": 2,
       "z": -10,
-      "name": "Empty"
+      "name": "Plant_Crop_Wheat_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 4,
@@ -5137,7 +5147,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T21:26:58Z"
+            "Planted": true
           }
         }
       }
@@ -5146,7 +5156,12 @@
       "x": 4,
       "y": 2,
       "z": -9,
-      "name": "Empty"
+      "name": "Plant_Crop_Wheat_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 4,
@@ -5235,7 +5250,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T18:41:44Z"
+            "Planted": true
           }
         }
       }
@@ -5244,7 +5259,12 @@
       "x": 4,
       "y": 2,
       "z": -8,
-      "name": "Empty"
+      "name": "Plant_Crop_Wheat_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 4,
@@ -5333,7 +5353,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T18:49:22Z"
+            "Planted": true
           }
         }
       }
@@ -5342,7 +5362,12 @@
       "x": 4,
       "y": 2,
       "z": -7,
-      "name": "Empty"
+      "name": "Plant_Crop_Wheat_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 4,
@@ -5431,7 +5456,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T21:40:50Z"
+            "Planted": true
           }
         }
       }
@@ -5440,7 +5465,12 @@
       "x": 4,
       "y": 2,
       "z": -6,
-      "name": "Empty"
+      "name": "Plant_Crop_Wheat_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 4,
@@ -5529,7 +5559,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T22:39:16Z"
+            "Planted": true
           }
         }
       }
@@ -5538,7 +5568,12 @@
       "x": 4,
       "y": 2,
       "z": -5,
-      "name": "Empty"
+      "name": "Plant_Crop_Wheat_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 4,
@@ -5627,7 +5662,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T23:11:50Z"
+            "Planted": true
           }
         }
       }
@@ -5636,7 +5671,12 @@
       "x": 4,
       "y": 2,
       "z": -4,
-      "name": "Empty"
+      "name": "Plant_Crop_Wheat_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 4,
@@ -6498,7 +6538,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T23:09:46Z"
+            "Planted": true
           }
         }
       }
@@ -6507,7 +6547,12 @@
       "x": 5,
       "y": 2,
       "z": -11,
-      "name": "Empty"
+      "name": "Plant_Crop_Wheat_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 5,
@@ -7108,7 +7153,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T18:32:16Z"
+            "Planted": true
           }
         }
       }
@@ -7117,7 +7162,12 @@
       "x": 5,
       "y": 2,
       "z": -4,
-      "name": "Empty"
+      "name": "Plant_Crop_Wheat_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 5,
@@ -7975,7 +8025,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T23:55:27Z"
+            "Planted": true
           }
         }
       }
@@ -7984,7 +8034,12 @@
       "x": 6,
       "y": 2,
       "z": -11,
-      "name": "Empty"
+      "name": "Plant_Crop_Wheat_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 6,
@@ -8069,7 +8124,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T20:00:14Z"
+            "Planted": true
           }
         }
       }
@@ -8078,7 +8133,12 @@
       "x": 6,
       "y": 2,
       "z": -10,
-      "name": "Empty"
+      "name": "Plant_Crop_Wheat_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 6,
@@ -8163,7 +8223,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T19:50:46Z"
+            "Planted": true
           }
         }
       }
@@ -8172,7 +8232,12 @@
       "x": 6,
       "y": 2,
       "z": -9,
-      "name": "Empty"
+      "name": "Plant_Crop_Wheat_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 6,
@@ -8257,7 +8322,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T21:35:11Z"
+            "Planted": true
           }
         }
       }
@@ -8266,7 +8331,12 @@
       "x": 6,
       "y": 2,
       "z": -8,
-      "name": "Empty"
+      "name": "Plant_Crop_Wheat_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 6,
@@ -8351,7 +8421,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T23:36:39Z"
+            "Planted": true
           }
         }
       }
@@ -8360,7 +8430,12 @@
       "x": 6,
       "y": 2,
       "z": -7,
-      "name": "Empty"
+      "name": "Plant_Crop_Wheat_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 6,
@@ -8445,7 +8520,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T23:02:05Z"
+            "Planted": true
           }
         }
       }
@@ -8454,7 +8529,12 @@
       "x": 6,
       "y": 2,
       "z": -6,
-      "name": "Empty"
+      "name": "Plant_Crop_Wheat_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 6,
@@ -8539,7 +8619,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T17:14:49Z"
+            "Planted": true
           }
         }
       }
@@ -8548,7 +8628,12 @@
       "x": 6,
       "y": 2,
       "z": -5,
-      "name": "Empty"
+      "name": "Plant_Crop_Wheat_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 6,
@@ -8634,7 +8719,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T21:22:06Z"
+            "Planted": true
           }
         }
       }
@@ -8643,7 +8728,12 @@
       "x": 6,
       "y": 2,
       "z": -4,
-      "name": "Empty"
+      "name": "Plant_Crop_Wheat_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 6,
@@ -12141,7 +12231,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T18:53:21Z"
+            "Planted": true
           }
         }
       }
@@ -12150,7 +12240,12 @@
       "x": 9,
       "y": 2,
       "z": -14,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 9,
@@ -12237,7 +12332,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T18:10:32Z"
+            "Planted": true
           }
         }
       }
@@ -12246,7 +12341,12 @@
       "x": 9,
       "y": 2,
       "z": -13,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 9,
@@ -12331,7 +12431,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T19:02:02Z"
+            "Planted": true
           }
         }
       }
@@ -12340,7 +12440,12 @@
       "x": 9,
       "y": 2,
       "z": -12,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 9,
@@ -12425,7 +12530,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T17:00:34Z"
+            "Planted": true
           }
         }
       }
@@ -12434,7 +12539,12 @@
       "x": 9,
       "y": 2,
       "z": -11,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 9,
@@ -12519,7 +12629,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T17:32:26Z"
+            "Planted": true
           }
         }
       }
@@ -12528,7 +12638,12 @@
       "x": 9,
       "y": 2,
       "z": -10,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 9,
@@ -12613,7 +12728,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T19:28:14Z"
+            "Planted": true
           }
         }
       }
@@ -12622,7 +12737,12 @@
       "x": 9,
       "y": 2,
       "z": -9,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 9,
@@ -12707,7 +12827,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T23:35:05Z"
+            "Planted": true
           }
         }
       }
@@ -12716,7 +12836,12 @@
       "x": 9,
       "y": 2,
       "z": -8,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 9,
@@ -12801,7 +12926,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T20:50:37Z"
+            "Planted": true
           }
         }
       }
@@ -12810,7 +12935,12 @@
       "x": 9,
       "y": 2,
       "z": -7,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 9,
@@ -12895,7 +13025,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T18:52:25Z"
+            "Planted": true
           }
         }
       }
@@ -12904,7 +13034,12 @@
       "x": 9,
       "y": 2,
       "z": -6,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 9,
@@ -12989,7 +13124,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T20:33:00Z"
+            "Planted": true
           }
         }
       }
@@ -12998,7 +13133,12 @@
       "x": 9,
       "y": 2,
       "z": -5,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 9,
@@ -13084,7 +13224,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T17:37:01Z"
+            "Planted": true
           }
         }
       }
@@ -13093,7 +13233,12 @@
       "x": 9,
       "y": 2,
       "z": -4,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 9,
@@ -13711,7 +13856,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T21:05:37Z"
+            "Planted": true
           }
         }
       }
@@ -13720,7 +13865,12 @@
       "x": 10,
       "y": 2,
       "z": -14,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 10,
@@ -14582,7 +14732,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T22:21:51Z"
+            "Planted": true
           }
         }
       }
@@ -14591,7 +14741,12 @@
       "x": 10,
       "y": 2,
       "z": -4,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 10,
@@ -15193,7 +15348,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T23:42:39Z"
+            "Planted": true
           }
         }
       }
@@ -15202,7 +15357,12 @@
       "x": 11,
       "y": 2,
       "z": -14,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 11,
@@ -15292,7 +15452,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T21:10:17Z"
+            "Planted": true
           }
         }
       }
@@ -15301,7 +15461,12 @@
       "x": 11,
       "y": 2,
       "z": -13,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 11,
@@ -15390,7 +15555,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T18:29:16Z"
+            "Planted": true
           }
         }
       }
@@ -15399,7 +15564,12 @@
       "x": 11,
       "y": 2,
       "z": -12,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 11,
@@ -15488,7 +15658,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T23:57:51Z"
+            "Planted": true
           }
         }
       }
@@ -15497,7 +15667,12 @@
       "x": 11,
       "y": 2,
       "z": -11,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 11,
@@ -15586,7 +15761,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T16:57:17Z"
+            "Planted": true
           }
         }
       }
@@ -15595,7 +15770,12 @@
       "x": 11,
       "y": 2,
       "z": -10,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 11,
@@ -15684,7 +15864,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T18:15:13Z"
+            "Planted": true
           }
         }
       }
@@ -15693,7 +15873,12 @@
       "x": 11,
       "y": 2,
       "z": -9,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 11,
@@ -15782,7 +15967,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T20:55:41Z"
+            "Planted": true
           }
         }
       }
@@ -15791,7 +15976,12 @@
       "x": 11,
       "y": 2,
       "z": -8,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 11,
@@ -15880,7 +16070,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T20:47:49Z"
+            "Planted": true
           }
         }
       }
@@ -15889,7 +16079,12 @@
       "x": 11,
       "y": 2,
       "z": -7,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 11,
@@ -15978,7 +16173,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T23:18:18Z"
+            "Planted": true
           }
         }
       }
@@ -15987,7 +16182,12 @@
       "x": 11,
       "y": 2,
       "z": -6,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 11,
@@ -16076,7 +16276,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T16:56:35Z"
+            "Planted": true
           }
         }
       }
@@ -16085,7 +16285,12 @@
       "x": 11,
       "y": 2,
       "z": -5,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 11,
@@ -16174,7 +16379,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-05T20:08:55Z"
+            "Planted": true
           }
         }
       }
@@ -16183,7 +16388,12 @@
       "x": 11,
       "y": 2,
       "z": -4,
-      "name": "Empty"
+      "name": "Plant_Crop_Lettuce_Block",
+      "components": {
+        "Components": {
+          "FarmingBlock": {}
+        }
+      }
     },
     {
       "x": 11,
@@ -44229,411 +44439,6 @@
         "PreventItemMerging": {},
         "Prop": {},
         "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 4.340788841247559,
-            "Y": 2.0,
-            "Z": -5.782423377037048
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -3.0080718994140625,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "BLfnvuEOTMCT7C3noMtt2w==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 1.0242880582809448
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 4.444770812988281,
-            "Y": 2.0,
-            "Z": -7.637181758880615
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -1.1911437511444092,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "DSwuE5+VSpWiUQaVl1cJ9g==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.0
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 4.472207069396973,
-            "Y": 2.0,
-            "Z": -6.60056209564209
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -3.0080718994140625,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "JUY8vnBTTfaYGF/dkm6b1g==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 1.5240000486373901
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 4.475438117980957,
-            "Y": 2.0,
-            "Z": -10.03026533126831
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -3.0080718994140625,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "uWRRwBnPRvqC5hOYa2dYNQ==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 1.5240000486373901
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 4.495912551879883,
-            "Y": 2.0,
-            "Z": -9.227562427520752
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -3.0080718994140625,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "lnTIHSfGSg6mYX9k5OhG/w==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 0.7147484421730042
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 4.517877578735352,
-            "Y": 2.0,
-            "Z": -4.595490038394928
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -3.0080718994140625,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "WWuM53Q1RaCH0MkuF1xKmg==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 1.5240000486373901
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 4.544699668884277,
-            "Y": 2.0,
-            "Z": -3.648861348628998
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -1.1911437511444092,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "C6Z2B+DbTIeAbqRCbLN1XA==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.0
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 4.577480316162109,
-            "Y": 2.0,
-            "Z": -5.296897649765015
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -3.0080718994140625,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "7ImcUtWYQr6V5MbsrHnsCw==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 0.7147484421730042
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 4.749945640563965,
-            "Y": 2.0,
-            "Z": -8.49712085723877
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -3.0080718994140625,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "+SRacM1oTJicka5RIqWRag==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 1.0242880582809448
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
           "BlockTypeKey": "Plant_Crop_Lettuce_Item"
         },
         "Transform": {
@@ -44651,681 +44456,6 @@
         "UUID": {
           "UUID": {
             "$binary": "tlE8+YXMTWeRd7oYp6SkOQ==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.1999998092651367
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 5.1138458251953125,
-            "Y": 2.0,
-            "Z": -10.425172805786133
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -3.0080718994140625,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "9iFRDiJIQb2iWZRIgpKRdg==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 1.0242880582809448
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 5.396087646484375,
-            "Y": 2.0,
-            "Z": -3.3602601289749146
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -3.0080718994140625,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "kKjZ1X6wTxm0mQkWM6UBfg==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 1.0242880582809448
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 5.613003730773926,
-            "Y": 2.0,
-            "Z": -10.791504859924316
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -3.0080718994140625,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "NI3BxisxMnGiec6Rngy7LQ==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 0.7147484421730042
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 6.213685989379883,
-            "Y": 2.0,
-            "Z": -10.437767028808594
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -3.0080718994140625,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "NjgKkl1lTWS0b9C0EkbUhw==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 1.5240000486373901
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 6.290897369384766,
-            "Y": 2.0,
-            "Z": -4.318962216377258
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -1.0469428300857544,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "3pPuwMgxQROhEbbNDdROUQ==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 0.9800000786781311
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 6.350668907165527,
-            "Y": 2.0,
-            "Z": -6.295517921447754
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -3.0080718994140625,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "lht8FitjQRuIZoLlonxzJg==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 0.7147484421730042
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 6.367460250854492,
-            "Y": 2.0,
-            "Z": -5.675133466720581
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -3.0080718994140625,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "AANckcYhTP2UB3/i9NS5JQ==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 1.0242880582809448
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 6.400338172912598,
-            "Y": 2.0,
-            "Z": -9.04941987991333
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -1.1911437511444092,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "k1/5zyh3NkuQfIvOahErWw==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.0
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 6.441522598266602,
-            "Y": 2.0,
-            "Z": -6.992555856704712
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -3.0080718994140625,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "q4VliBPIS2uhjNR3wsj5PQ==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 1.0242880582809448
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 6.486252784729004,
-            "Y": 2.0,
-            "Z": -7.986335277557373
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -3.0080718994140625,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "doIw4a6ZT8COXmaT32szWA==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 1.5240000486373901
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 6.518398284912109,
-            "Y": 2.0,
-            "Z": -3.558006316423416
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -1.0469428300857544,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "JgXtWVMFQ8KuUZih4CDlNg==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 1.2000000476837158
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 6.572834014892578,
-            "Y": 2.0,
-            "Z": -5.088921070098877
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -1.0469428300857544,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "Y5fr37DQT968HeocS4IzUA==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 1.2000000476837158
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 6.746294021606445,
-            "Y": 2.0,
-            "Z": -4.031361758708954
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -1.0469428300857544,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "oDl9JwwHSjeVfGxArqrKaQ==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 0.6520000100135803
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 6.787575721740723,
-            "Y": 2.0,
-            "Z": -4.6280903816223145
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": -1.0469428300857544,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "Tjm95VrcPUieNbZ+aweBqA==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 0.6520000100135803
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Pumpkin_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 9.428089141845703,
-            "Y": 2.0,
-            "Z": -12.79079818725586
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "H3wRawmHRWyuQMaeu7JSnA==",
             "$type": "04"
           }
         },
@@ -45399,366 +44529,6 @@
         "PreventItemMerging": {},
         "Prop": {},
         "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 9.437092781066895,
-            "Y": 2.0,
-            "Z": -10.700931549072266
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "7NSEUktXTfqwEFGO6JcKyg==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.0
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 9.470183372497559,
-            "Y": 2.0,
-            "Z": -4.321150183677673
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "yEYqyOsZRKucTDLQ4GPV0w==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.1999998092651367
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 9.490785598754883,
-            "Y": 2.0,
-            "Z": -5.230744957923889
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "3K8lLqRlSlG+r/OoPifTjA==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.0
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 9.50466537475586,
-            "Y": 2.0,
-            "Z": -8.113043308258057
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "cjnNWBVNSRCyiwc95EZY4w==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.1999998092651367
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 9.515060424804688,
-            "Y": 2.0,
-            "Z": -9.66131591796875
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "t9v2t6zZQ8CzkWWKT2yCUQ==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.1999998092651367
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 9.56218147277832,
-            "Y": 2.0,
-            "Z": -8.980620384216309
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "UncY+QRNScSJJbywVsr88w==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.0
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 9.568276405334473,
-            "Y": 2.0,
-            "Z": -11.882669448852539
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "PB7ruYRFTOO5axc6w7PW/A==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.0999999046325684
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 9.598793983459473,
-            "Y": 2.0,
-            "Z": -7.338776588439941
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "b+yjP3VuQ4+g5bz60U9POQ==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.0
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
           "BlockTypeKey": "Plant_Crop_Carrot_Item"
         },
         "Transform": {
@@ -45786,681 +44556,6 @@
         "Item": {
           "Item": {
             "Id": "Plant_Crop_Carrot_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 9.72337532043457,
-            "Y": 2.0,
-            "Z": -13.450753211975098
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 2.660830497741699,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "Xdi31XQmR+aejqWfShVorA==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.0
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 9.727943420410156,
-            "Y": 2.0,
-            "Z": -6.532923460006714
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "gn3tnwk3TWKdKfDBdbrM1w==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.1999998092651367
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 9.77284049987793,
-            "Y": 2.0,
-            "Z": -3.6459784507751465
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "+RS5FEbmSwG9p4R2RhykIQ==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.0999999046325684
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 10.636072158813477,
-            "Y": 2.0,
-            "Z": -3.5517380237579346
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "SBjpUehURgKFfbND+m75qw==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.0
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 10.646095275878906,
-            "Y": 2.0,
-            "Z": -13.37175464630127
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "47ASPmCjQomZTVze4JxWmw==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.1999998092651367
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 11.24821662902832,
-            "Y": 2.0,
-            "Z": -6.5905163288116455
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "C9BhxCYeSv6PGMdhmMIqjA==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.1999998092651367
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 11.369640350341797,
-            "Y": 2.0,
-            "Z": -9.425891399383545
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "zkGUUwcoTqCW8I35p2+w3w==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.1999998092651367
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 11.397624969482422,
-            "Y": 2.0,
-            "Z": -5.837699294090271
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "PvrD4+EdQqK6YU2Ggf9DZQ==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.0
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 11.414176940917969,
-            "Y": 2.0,
-            "Z": -13.51760482788086
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "1VhJaYcwSCGYJRhxdgVI4A==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.1999998092651367
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 11.422269821166992,
-            "Y": 2.0,
-            "Z": -8.621460437774658
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "U3FsjlxQSteY1xn3BiZxqg==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.0
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 11.439985275268555,
-            "Y": 2.0,
-            "Z": -4.253649950027466
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "dhos9uDvSpGqwEGr35UQHA==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.1999998092651367
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 11.478240966796875,
-            "Y": 2.0,
-            "Z": -10.40743350982666
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "8ZBU663HSkunOv5uliMs9w==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.0
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 11.485651016235352,
-            "Y": 2.0,
-            "Z": -11.467662334442139
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "dG8Gq7qrTyyr/CkbulSfEA==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.1999998092651367
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 11.487201690673828,
-            "Y": 2.0,
-            "Z": -12.419414520263672
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9145852327346802,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "gAwsnWa0TS2jWrlf59I+2Q==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.0
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
-            "Quantity": 1,
-            "Durability": 0.0,
-            "MaxDurability": 0.0,
-            "OverrideDroppedItemAnimation": true
-          },
-          "StackDelay": 1.5,
-          "PickupDelay": 0.5,
-          "PickupThrottle": 0.0,
-          "RemovedByPlayerPickup": false
-        },
-        "PrefabCopyable": {}
-      }
-    },
-    {
-      "Components": {
-        "PreventItemMerging": {},
-        "Prop": {},
-        "BlockEntity": {
-          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
-        },
-        "Transform": {
-          "Position": {
-            "X": 11.607357025146484,
-            "Y": 2.0,
-            "Z": -7.6149818897247314
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 1.9146209955215454,
-            "Roll": 0.0
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "fyZrSPf9Tr6rAQs1QqmeYA==",
-            "$type": "04"
-          }
-        },
-        "PreventPickup": {},
-        "EntityScale": {
-          "Scale": 2.1999998092651367
-        },
-        "Item": {
-          "Item": {
-            "Id": "Plant_Crop_Lettuce_Item",
             "Quantity": 1,
             "Durability": 0.0,
             "MaxDurability": 0.0,

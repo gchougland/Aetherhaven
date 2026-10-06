@@ -122,6 +122,14 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private final FestivalMechanicRegistry festivalMechanicRegistry = new FestivalMechanicRegistry();
     private VillagerDefinitionCatalog villagerDefinitionCatalog = VillagerDefinitionCatalog.empty();
     private TownsfolkPersonalityCatalog townsfolkPersonalityCatalog = TownsfolkPersonalityCatalog.empty();
+    private com.hexvane.aetherhaven.workplace.WorkplaceRecipeCatalog apprenticeRecipes = com.hexvane.aetherhaven.workplace.WorkplaceRecipeCatalog.empty();
+    public com.hexvane.aetherhaven.workplace.WorkplaceRecipeCatalog getApprenticeRecipes() { return apprenticeRecipes; }
+    private com.hexvane.aetherhaven.equipment.ProfessionKitCatalog professionKits = new com.hexvane.aetherhaven.equipment.ProfessionKitCatalog(java.util.List.of());
+    private com.hexvane.aetherhaven.equipment.GuardKitCatalog guardKits = new com.hexvane.aetherhaven.equipment.GuardKitCatalog(java.util.List.of());
+    public com.hexvane.aetherhaven.equipment.GuardKitCatalog getGuardKits() { return guardKits; }
+    public com.hexvane.aetherhaven.equipment.ProfessionKitCatalog getProfessionKits() { return professionKits; }
+    private com.hexvane.aetherhaven.workplace.WorkplaceFurnishingCatalog workplaceFurnishings = new com.hexvane.aetherhaven.workplace.WorkplaceFurnishingCatalog(java.util.List.of());
+    public com.hexvane.aetherhaven.workplace.WorkplaceFurnishingCatalog getWorkplaceFurnishings() { return workplaceFurnishings; }
     private TownsfolkCharacterCatalog townsfolkCharacterCatalog = TownsfolkCharacterCatalog.empty();
     private SpeechVoiceCatalog speechVoiceCatalog = SpeechVoiceCatalog.empty();
     private EquipmentProfileCatalog equipmentProfileCatalog = EquipmentProfileCatalog.empty();
@@ -479,6 +487,10 @@ public final class AetherhavenPlugin extends JavaPlugin {
             }
         }
         this.getEventRegistry().register(AssetPackRegisterEvent.class, e -> this.reloadAetherhavenAssetCatalogs());
+        this.getEventRegistry().register(EventPriority.LAST, com.hypixel.hytale.assetstore.event.LoadedAssetsEvent.class,
+            com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe.class, this::workplaceRecipesLoaded);
+        this.getEventRegistry().register(EventPriority.LAST, com.hypixel.hytale.assetstore.event.RemovedAssetsEvent.class,
+            com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe.class, this::workplaceRecipesRemoved);
         AetherhavenFeatureBootstrap.startEnabled(this);
         CorePrefabWarmup.warmAsync(this.constructionCatalog, this.constructionScheduler);
         com.hexvane.aetherhaven.backup.AetherhavenBackupResource.startPreparing();
@@ -544,10 +556,25 @@ public final class AetherhavenPlugin extends JavaPlugin {
         return event;
     }
 
+    private void workplaceRecipesLoaded(com.hypixel.hytale.assetstore.event.LoadedAssetsEvent<String,
+        com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe,
+        com.hypixel.hytale.assetstore.AssetMap<String,com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe>> event) {
+        this.apprenticeRecipes.refreshNativeRecipes();
+    }
+    private void workplaceRecipesRemoved(com.hypixel.hytale.assetstore.event.RemovedAssetsEvent<String,
+        com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe,
+        com.hypixel.hytale.assetstore.AssetMap<String,com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe>> event) {
+        this.apprenticeRecipes.refreshNativeRecipes();
+    }
+
     private void reloadAetherhavenAssetCatalogs() {
         ClassLoader cl = this.getClassLoader();
         this.villagerDefinitionCatalog = VillagerDefinitionCatalog.loadFromAssetPacksOrClasspath(cl);
         this.townsfolkPersonalityCatalog = TownsfolkPersonalityCatalog.loadFromAssetPacksOrClasspath(cl);
+        this.apprenticeRecipes = com.hexvane.aetherhaven.workplace.WorkplaceRecipeCatalog.load(cl);
+        this.professionKits = com.hexvane.aetherhaven.equipment.ProfessionKitCatalog.load(cl);
+        this.workplaceFurnishings = com.hexvane.aetherhaven.workplace.WorkplaceFurnishingCatalog.load(cl);
+        this.guardKits = com.hexvane.aetherhaven.equipment.GuardKitCatalog.load(cl);
         this.townsfolkCharacterCatalog =
             TownsfolkCharacterCatalog.loadFromAssetPacksOrClasspath(cl, this.townsfolkPersonalityCatalog);
         this.speechVoiceCatalog = SpeechVoiceCatalog.loadFromAssetPacksOrClasspath(cl);

@@ -1,0 +1,26 @@
+{
+  "Type": "Variant",
+  "Reference": "Template_Animal_Neutral",
+  "Modify": {
+    "Appearance": "Aetherhaven_Ranch_Tetrabird_Young",
+    "FlockArray": [],
+    "DropList": "Empty",
+    "MaxHealth": 19,
+    "WanderRadius": 3,
+    "RunThreshold": 0.6,
+    "IsMemory": false,
+    "MemoriesCategory": "Avian",
+    "NameTranslationKey": {
+      "Compute": "NameTranslationKey"
+    },
+    "ProduceItem": "",
+    "IsTameable": false
+  },
+  "Parameters": {
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Tetrabird.name",
+      "Description": "Translation key for NPC name display"
+    }
+  },
+  "$Comment": "Town raised offspring. Native appearance and behavior, with no item drops or memories. Collect products through attended Rancher work."
+}

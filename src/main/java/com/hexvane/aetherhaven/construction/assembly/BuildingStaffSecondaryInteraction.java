@@ -74,6 +74,7 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         @Nonnull InteractionContext context,
         @Nonnull CooldownHandler cooldownHandler
     ) {
+        if (com.hexvane.aetherhaven.workplace.WorkplaceToolInteraction.routeWorkplaceAction(type, context)) return;
         if (firstRun && SubpluginInteractionGuard.failIfDisabled(context, AetherhavenPluginIds.CONSTRUCTION)) {
             return;
         }

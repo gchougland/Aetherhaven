@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_seeds_carrot",
+  "name": "Seeds Carrot",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_seeds_carrot",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 2,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 3
+    }
+  ],
+  "output": "Plant_Seeds_Carrot",
+  "outputCount": 1,
+  "workSeconds": 12
+}

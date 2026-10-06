@@ -1,0 +1,34 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+$C.@PageOverlay { LayoutMode: Middle;
+ $C.@DecoratedContainer { Anchor: (Width: 780, Height: 610);
+  #Title { Label #FoodTitle { Text: "FOOD WORKPLACE"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+  #Content { LayoutMode: Top; Padding: (Full: 24);
+   Group { LayoutMode: Left; Anchor: (Height: 136, Bottom: 18);
+    Group { LayoutMode: Top; Anchor: (Width: 215, Right: 16); Padding: (Full: 16); Background: $T.@Panel;
+     Label { Text: "FOOD SUPPORT"; Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #d5c799, HorizontalAlignment: Center); }
+     Label #FoodPoints { Anchor: (Height: 48); Style: (...$C.@DefaultLabelStyle, FontSize: 36, RenderBold: true, TextColor: #b9dba8, HorizontalAlignment: Center); }
+     Label #Residents { Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 14, HorizontalAlignment: Center); }
+    }
+    Group { LayoutMode: Top; FlexWeight: 1; Padding: (Full: 18); Background: $T.@Inset;
+     Label #CareState { Anchor: (Height: 34); Style: (...$C.@DefaultLabelStyle, FontSize: 19, RenderBold: true, TextColor: #d7e4cc); }
+     $C.@ProgressBar #CareReserve { Anchor: (Height: 14, Top: 10, Bottom: 12); Value: 0.0; }
+     Label #CareTime { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #b7c9bb); }
+    }
+   }
+   Group { LayoutMode: Top; Anchor: (Height: 210, Bottom: 12); Padding: (Full: 18); Background: $T.@Panel;
+    Label #Habitat { Anchor: (Height: 44); Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true, TextColor: #d7c998); }
+    Label #Worker { Anchor: (Height: 44); Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true); }
+    Label #LastCare { Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #b7c9bb); }
+    Label { Text: "Apprentices visit periodically to tend this site. Enable its profession in the town journal. After a full simulated day without care, its food support pauses."; Anchor: (Height: 62); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #b7c9bb); }
+   }
+   Label { Text: "This workplace supports your residents. It does not produce inventory items. Time away from an unloaded town does not cause neglect."; Anchor: (Height: 48, Bottom: 4); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #b7c9bb); }
+   Group { LayoutMode: Left; Anchor: (Height: 40);
+    $C.@SecondaryTextButton #Back { Text: "Workplace settings"; FlexWeight: 1; Anchor: (Right: 12); }
+    $C.@SecondaryTextButton #Station { Text: "Station upgrades"; Anchor: (Width: 190, Right: 12); Visible: false; }
+    $C.@TextButton #Refresh { Text: "Refresh"; Anchor: (Width: 160); }
+   }
+  }
+ }
+}
+$C.@BackButton {}

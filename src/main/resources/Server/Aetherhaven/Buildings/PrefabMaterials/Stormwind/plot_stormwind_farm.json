@@ -7,6 +7,10 @@
       "count": 128
     },
     {
+      "itemId": "Ingredient_Fibre",
+      "count": 124
+    },
+    {
       "itemId": "Wood_Hardwood_Planks",
       "count": 99
     },
@@ -37,10 +41,6 @@
     {
       "resourceTypeId": "Wood_All",
       "count": 42
-    },
-    {
-      "itemId": "Ingredient_Fibre",
-      "count": 40
     },
     {
       "itemId": "Wood_Hardwood_Stairs",

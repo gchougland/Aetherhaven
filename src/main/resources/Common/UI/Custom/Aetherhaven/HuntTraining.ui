@@ -1,0 +1,10 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Left; Anchor: (Height: 92, Bottom: 8); Padding: (Full: 12); Background: $T.@Panel;
+ ItemIcon #Icon { Anchor: (Width: 60, Height: 60, Right: 12); }
+ Group { LayoutMode: Top; FlexWeight: 1;
+  Label #Name { Anchor: (Height: 27); Style: (...$C.@DefaultLabelStyle, FontSize: 16, RenderBold: true); }
+  Label #Description { Anchor: (Height: 40); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #b8c8bd); }
+ }
+ $C.@TextButton #Choose { Text: "Train"; Anchor: (Width: 116, Height: 38, Top: 14, Left: 8); }
+}

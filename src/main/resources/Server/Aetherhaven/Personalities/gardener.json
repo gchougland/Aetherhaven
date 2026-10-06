@@ -31,5 +31,12 @@
     "LookAround": 4,
     "Fidget": 2,
     "Stretch": 1
+  },
+  "startingSkills": {
+    "ranching": 2,
+    "farming": 5
+  },
+  "startingAttributes": {
+    "vitality": 6
   }
 }

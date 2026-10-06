@@ -1,0 +1,3002 @@
+{
+  "nodes": [
+    {
+      "id": "1",
+      "name": "Head",
+      "position": {
+        "x": 0,
+        "y": 91,
+        "z": -2
+      },
+      "orientation": {
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "w": 1
+      },
+      "shape": {
+        "type": "none",
+        "offset": {
+          "x": 0,
+          "y": 15,
+          "z": 3
+        },
+        "stretch": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "settings": {
+          "isPiece": true
+        },
+        "textureLayout": {},
+        "unwrapMode": "custom",
+        "visible": true,
+        "doubleSided": false,
+        "shadingMode": "flat"
+      },
+      "children": [
+        {
+          "id": "2",
+          "name": "HairBase",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "orientation": {
+            "x": 0.00065,
+            "y": 0,
+            "z": 0,
+            "w": 1
+          },
+          "shape": {
+            "type": "box",
+            "offset": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "stretch": {
+              "x": 1.02,
+              "y": 1.05,
+              "z": 1.05
+            },
+            "settings": {
+              "isPiece": false,
+              "size": {
+                "x": 30,
+                "y": 29,
+                "z": 28
+              }
+            },
+            "textureLayout": {
+              "back": {
+                "offset": {
+                  "x": 30,
+                  "y": 35
+                },
+                "mirror": {
+                  "x": true,
+                  "y": true
+                },
+                "angle": 0
+              },
+              "right": {
+                "offset": {
+                  "x": 30,
+                  "y": 71
+                },
+                "mirror": {
+                  "x": false,
+                  "y": false
+                },
+                "angle": 0
+              },
+              "front": {
+                "offset": {
+                  "x": 0,
+                  "y": 71
+                },
+                "mirror": {
+                  "x": false,
+                  "y": false
+                },
+                "angle": 0
+              },
+              "left": {
+                "offset": {
+                  "x": 58,
+                  "y": 71
+                },
+                "mirror": {
+                  "x": true,
+                  "y": false
+                },
+                "angle": 0
+              },
+              "top": {
+                "offset": {
+                  "x": 0,
+                  "y": 39
+                },
+                "mirror": {
+                  "x": false,
+                  "y": false
+                },
+                "angle": 0
+              }
+            },
+            "unwrapMode": "custom",
+            "visible": true,
+            "doubleSided": false,
+            "shadingMode": "flat"
+          },
+          "children": [
+            {
+              "id": "3",
+              "name": "Front-Strand",
+              "position": {
+                "x": -3.32756,
+                "y": 13.29595,
+                "z": 14.20057
+              },
+              "orientation": {
+                "x": 0.06839,
+                "y": 0.01406,
+                "z": 0.05315,
+                "w": 0.99614
+              },
+              "shape": {
+                "type": "quad",
+                "offset": {
+                  "x": 0,
+                  "y": 8,
+                  "z": 0
+                },
+                "stretch": {
+                  "x": 0.9,
+                  "y": 0.9,
+                  "z": 0.9
+                },
+                "settings": {
+                  "isPiece": false,
+                  "size": {
+                    "x": 20,
+                    "y": 12
+                  },
+                  "normal": "+Z"
+                },
+                "textureLayout": {
+                  "front": {
+                    "offset": {
+                      "x": 48,
+                      "y": 100
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  }
+                },
+                "unwrapMode": "custom",
+                "visible": true,
+                "doubleSided": true,
+                "shadingMode": "flat"
+              }
+            },
+            {
+              "id": "4",
+              "name": "Front-Strand-cross",
+              "position": {
+                "x": 2.25528,
+                "y": 16.81334,
+                "z": 11.94764
+              },
+              "orientation": {
+                "x": -0.01703,
+                "y": -0.85845,
+                "z": -0.09194,
+                "w": 0.50431
+              },
+              "shape": {
+                "type": "quad",
+                "offset": {
+                  "x": 0,
+                  "y": 6,
+                  "z": 0
+                },
+                "stretch": {
+                  "x": 0.9,
+                  "y": 0.9,
+                  "z": 0.9
+                },
+                "settings": {
+                  "isPiece": false,
+                  "size": {
+                    "x": 10,
+                    "y": 12
+                  },
+                  "normal": "+Z"
+                },
+                "textureLayout": {
+                  "front": {
+                    "offset": {
+                      "x": 52,
+                      "y": 114
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  }
+                },
+                "unwrapMode": "custom",
+                "visible": true,
+                "doubleSided": true,
+                "shadingMode": "flat"
+              }
+            }
+          ]
+        },
+        {
+          "id": "5",
+          "name": "Top_R",
+          "position": {
+            "x": 0,
+            "y": 18.5,
+            "z": 0
+          },
+          "orientation": {
+            "x": 0.00264,
+            "y": 0.00026,
+            "z": 0.04362,
+            "w": 0.99904
+          },
+          "shape": {
+            "type": "box",
+            "offset": {
+              "x": -7.737,
+              "y": -2,
+              "z": 0
+            },
+            "stretch": {
+              "x": 1.032,
+              "y": 1,
+              "z": 1.03
+            },
+            "settings": {
+              "isPiece": false,
+              "size": {
+                "x": 15,
+                "y": 4,
+                "z": 28
+              }
+            },
+            "textureLayout": {
+              "back": {
+                "offset": {
+                  "x": 15,
+                  "y": 39
+                },
+                "mirror": {
+                  "x": true,
+                  "y": true
+                },
+                "angle": 0
+              },
+              "front": {
+                "offset": {
+                  "x": 0,
+                  "y": 67
+                },
+                "mirror": {
+                  "x": false,
+                  "y": false
+                },
+                "angle": 0
+              },
+              "left": {
+                "offset": {
+                  "x": 64,
+                  "y": 44
+                },
+                "mirror": {
+                  "x": true,
+                  "y": false
+                },
+                "angle": 0
+              },
+              "top": {
+                "offset": {
+                  "x": 0,
+                  "y": 39
+                },
+                "mirror": {
+                  "x": false,
+                  "y": false
+                },
+                "angle": 0
+              }
+            },
+            "unwrapMode": "custom",
+            "visible": true,
+            "doubleSided": false,
+            "shadingMode": "flat"
+          },
+          "children": [
+            {
+              "id": "6",
+              "name": "Side",
+              "position": {
+                "x": -7.737,
+                "y": 1.99997,
+                "z": -0.005
+              },
+              "orientation": {
+                "x": 0,
+                "y": 0,
+                "z": -0.13053,
+                "w": 0.99144
+              },
+              "shape": {
+                "type": "box",
+                "offset": {
+                  "x": 2.5,
+                  "y": -8.5,
+                  "z": 0
+                },
+                "stretch": {
+                  "x": -1,
+                  "y": 1,
+                  "z": 1
+                },
+                "settings": {
+                  "isPiece": false,
+                  "size": {
+                    "x": 5,
+                    "y": 17,
+                    "z": 28
+                  }
+                },
+                "textureLayout": {
+                  "back": {
+                    "offset": {
+                      "x": 64,
+                      "y": 44
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "right": {
+                    "offset": {
+                      "x": 36,
+                      "y": 44
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "front": {
+                    "offset": {
+                      "x": 31,
+                      "y": 44
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  }
+                },
+                "unwrapMode": "custom",
+                "visible": true,
+                "doubleSided": false,
+                "shadingMode": "flat"
+              },
+              "children": [
+                {
+                  "id": "7",
+                  "name": "SideBot",
+                  "position": {
+                    "x": -2.5,
+                    "y": -8.5,
+                    "z": 0
+                  },
+                  "orientation": {
+                    "x": 0.00021,
+                    "y": 0.00084,
+                    "z": 0.24192,
+                    "w": 0.9703
+                  },
+                  "shape": {
+                    "type": "box",
+                    "offset": {
+                      "x": 2.5,
+                      "y": -4.5,
+                      "z": 0
+                    },
+                    "stretch": {
+                      "x": -1,
+                      "y": 1,
+                      "z": 0.99
+                    },
+                    "settings": {
+                      "isPiece": false,
+                      "size": {
+                        "x": 5,
+                        "y": 9,
+                        "z": 28
+                      }
+                    },
+                    "textureLayout": {
+                      "back": {
+                        "offset": {
+                          "x": 64,
+                          "y": 61
+                        },
+                        "mirror": {
+                          "x": false,
+                          "y": false
+                        },
+                        "angle": 0
+                      },
+                      "right": {
+                        "offset": {
+                          "x": 36,
+                          "y": 61
+                        },
+                        "mirror": {
+                          "x": false,
+                          "y": false
+                        },
+                        "angle": 0
+                      },
+                      "front": {
+                        "offset": {
+                          "x": 31,
+                          "y": 61
+                        },
+                        "mirror": {
+                          "x": false,
+                          "y": false
+                        },
+                        "angle": 0
+                      },
+                      "bottom": {
+                        "offset": {
+                          "x": 58,
+                          "y": 90
+                        },
+                        "mirror": {
+                          "x": false,
+                          "y": false
+                        },
+                        "angle": 90
+                      }
+                    },
+                    "unwrapMode": "custom",
+                    "visible": true,
+                    "doubleSided": false,
+                    "shadingMode": "flat"
+                  }
+                },
+                {
+                  "id": "8",
+                  "name": "FrontHair",
+                  "position": {
+                    "x": -2.72174,
+                    "y": -7.53246,
+                    "z": 14.81329
+                  },
+                  "orientation": {
+                    "x": -0.00802,
+                    "y": 0.12671,
+                    "z": 0.08684,
+                    "w": 0.9881
+                  },
+                  "shape": {
+                    "type": "quad",
+                    "offset": {
+                      "x": 0,
+                      "y": 0,
+                      "z": 0
+                    },
+                    "stretch": {
+                      "x": 1,
+                      "y": 1,
+                      "z": 1
+                    },
+                    "settings": {
+                      "isPiece": false,
+                      "size": {
+                        "x": 9,
+                        "y": 29
+                      },
+                      "normal": "+Z"
+                    },
+                    "textureLayout": {
+                      "front": {
+                        "offset": {
+                          "x": 59,
+                          "y": 71
+                        },
+                        "mirror": {
+                          "x": false,
+                          "y": false
+                        },
+                        "angle": 0
+                      }
+                    },
+                    "unwrapMode": "custom",
+                    "visible": true,
+                    "doubleSided": true,
+                    "shadingMode": "flat"
+                  }
+                },
+                {
+                  "id": "9",
+                  "name": "SideHair",
+                  "position": {
+                    "x": -2.33994,
+                    "y": -0.22786,
+                    "z": -2.0084
+                  },
+                  "orientation": {
+                    "x": 0.56232,
+                    "y": 0.42655,
+                    "z": 0.45394,
+                    "w": 0.54386
+                  },
+                  "shape": {
+                    "type": "quad",
+                    "offset": {
+                      "x": -8.00131,
+                      "y": -2.30229,
+                      "z": -0.00863
+                    },
+                    "stretch": {
+                      "x": -1,
+                      "y": 1,
+                      "z": 1
+                    },
+                    "settings": {
+                      "isPiece": false,
+                      "size": {
+                        "x": 16,
+                        "y": 24
+                      },
+                      "normal": "+Z"
+                    },
+                    "textureLayout": {
+                      "front": {
+                        "offset": {
+                          "x": 23,
+                          "y": 112
+                        },
+                        "mirror": {
+                          "x": false,
+                          "y": true
+                        },
+                        "angle": 90
+                      }
+                    },
+                    "unwrapMode": "custom",
+                    "visible": true,
+                    "doubleSided": true,
+                    "shadingMode": "flat"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "10",
+          "name": "Top_L",
+          "position": {
+            "x": 0,
+            "y": 18.5,
+            "z": -0.005
+          },
+          "orientation": {
+            "x": 0.00264,
+            "y": -0.00026,
+            "z": -0.04362,
+            "w": 0.99904
+          },
+          "shape": {
+            "type": "box",
+            "offset": {
+              "x": 7.737,
+              "y": -2,
+              "z": 0
+            },
+            "stretch": {
+              "x": -1.032,
+              "y": 1,
+              "z": 1.03
+            },
+            "settings": {
+              "isPiece": false,
+              "size": {
+                "x": 15,
+                "y": 4,
+                "z": 28
+              }
+            },
+            "textureLayout": {
+              "back": {
+                "offset": {
+                  "x": 15,
+                  "y": 39
+                },
+                "mirror": {
+                  "x": false,
+                  "y": true
+                },
+                "angle": 0
+              },
+              "front": {
+                "offset": {
+                  "x": 30,
+                  "y": 67
+                },
+                "mirror": {
+                  "x": true,
+                  "y": false
+                },
+                "angle": 0
+              },
+              "left": {
+                "offset": {
+                  "x": 64,
+                  "y": 44
+                },
+                "mirror": {
+                  "x": true,
+                  "y": false
+                },
+                "angle": 0
+              },
+              "top": {
+                "offset": {
+                  "x": 30,
+                  "y": 39
+                },
+                "mirror": {
+                  "x": true,
+                  "y": false
+                },
+                "angle": 0
+              }
+            },
+            "unwrapMode": "custom",
+            "visible": true,
+            "doubleSided": false,
+            "shadingMode": "flat"
+          },
+          "children": [
+            {
+              "id": "11",
+              "name": "Side",
+              "position": {
+                "x": 7.737,
+                "y": 2,
+                "z": 0
+              },
+              "orientation": {
+                "x": 0,
+                "y": 0,
+                "z": 0.13053,
+                "w": 0.99144
+              },
+              "shape": {
+                "type": "box",
+                "offset": {
+                  "x": -2.5,
+                  "y": -8.5,
+                  "z": 0
+                },
+                "stretch": {
+                  "x": 1,
+                  "y": 1,
+                  "z": 1
+                },
+                "settings": {
+                  "isPiece": false,
+                  "size": {
+                    "x": 5,
+                    "y": 17,
+                    "z": 28
+                  }
+                },
+                "textureLayout": {
+                  "back": {
+                    "offset": {
+                      "x": 64,
+                      "y": 44
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "right": {
+                    "offset": {
+                      "x": 36,
+                      "y": 44
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  },
+                  "front": {
+                    "offset": {
+                      "x": 31,
+                      "y": 44
+                    },
+                    "mirror": {
+                      "x": false,
+                      "y": false
+                    },
+                    "angle": 0
+                  }
+                },
+                "unwrapMode": "custom",
+                "visible": true,
+                "doubleSided": false,
+                "shadingMode": "flat"
+              },
+              "children": [
+                {
+                  "id": "12",
+                  "name": "SideBot",
+                  "position": {
+                    "x": 2.5,
+                    "y": -8.5,
+                    "z": 0
+                  },
+                  "orientation": {
+                    "x": 0.00021,
+                    "y": -0.00084,
+                    "z": -0.24192,
+                    "w": 0.9703
+                  },
+                  "shape": {
+                    "type": "box",
+                    "offset": {
+                      "x": -2.5,
+                      "y": -4.5,
+                      "z": 0
+                    },
+                    "stretch": {
+                      "x": 1,
+                      "y": 1,
+                      "z": 0.99
+                    },
+                    "settings": {
+                      "isPiece": false,
+                      "size": {
+                        "x": 5,
+                        "y": 9,
+                        "z": 28
+                      }
+                    },
+                    "textureLayout": {
+                      "back": {
+                        "offset": {
+                          "x": 64,
+                          "y": 61
+                        },
+                        "mirror": {
+                          "x": false,
+                          "y": false
+                        },
+                        "angle": 0
+                      },
+                      "right": {
+                        "offset": {
+                          "x": 36,
+                          "y": 61
+                        },
+                        "mirror": {
+                          "x": false,
+                          "y": false
+                        },
+                        "angle": 0
+                      },
+                      "front": {
+                        "offset": {
+                          "x": 31,
+                          "y": 61
+                        },
+                        "mirror": {
+                          "x": false,
+                          "y": false
+                        },
+                        "angle": 0
+                      },
+                      "bottom": {
+                        "offset": {
+                          "x": 58,
+                          "y": 90
+                        },
+                        "mirror": {
+                          "x": false,
+                          "y": false
+                        },
+                        "angle": 90
+                      }
+                    },
+                    "unwrapMode": "custom",
+                    "visible": true,
+                    "doubleSided": false,
+                    "shadingMode": "flat"
+                  }
+                },
+                {
+                  "id": "13",
+                  "name": "FrontHair",
+                  "position": {
+                    "x": 2.72133,
+                    "y": -7.5324,
+                    "z": 14.81489
+                  },
+                  "orientation": {
+                    "x": -0.00802,
+                    "y": -0.12671,
+                    "z": -0.08684,
+                    "w": 0.9881
+                  },
+                  "shape": {
+                    "type": "quad",
+                    "offset": {
+                      "x": 0,
+                      "y": 0,
+                      "z": 0
+                    },
+                    "stretch": {
+                      "x": -1,
+                      "y": 1,
+                      "z": 1
+                    },
+                    "settings": {
+                      "isPiece": false,
+                      "size": {
+                        "x": 9,
+                        "y": 29
+                      },
+                      "normal": "+Z"
+                    },
+                    "textureLayout": {
+                      "front": {
+                        "offset": {
+                          "x": 59,
+                          "y": 71
+                        },
+                        "mirror": {
+                          "x": false,
+                          "y": false
+                        },
+                        "angle": 0
+                      }
+                    },
+                    "unwrapMode": "custom",
+                    "visible": true,
+                    "doubleSided": true,
+                    "shadingMode": "flat"
+                  }
+                },
+                {
+                  "id": "14",
+                  "name": "SideHair",
+                  "position": {
+                    "x": 2.38442,
+                    "y": -0.02566,
+                    "z": -1.6752
+                  },
+                  "orientation": {
+                    "x": 0.56232,
+                    "y": -0.42655,
+                    "z": -0.45394,
+                    "w": 0.54386
+                  },
+                  "shape": {
+                    "type": "quad",
+                    "offset": {
+                      "x": 8.00131,
+                      "y": -2.30229,
+                      "z": -0.00862
+                    },
+                    "stretch": {
+                      "x": 1,
+                      "y": 1,
+                      "z": 1
+                    },
+                    "settings": {
+                      "isPiece": false,
+                      "size": {
+                        "x": 16,
+                        "y": 24
+                      },
+                      "normal": "+Z"
+                    },
+                    "textureLayout": {
+                      "front": {
+                        "offset": {
+                          "x": 23,
+                          "y": 112
+                        },
+                        "mirror": {
+                          "x": false,
+                          "y": true
+                        },
+                        "angle": 90
+                      }
+                    },
+                    "unwrapMode": "custom",
+                    "visible": true,
+                    "doubleSided": true,
+                    "shadingMode": "flat"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "15",
+          "name": "Hair_Neck",
+          "position": {
+            "x": -0.42468,
+            "y": -7.90535,
+            "z": -14.52275
+          },
+          "orientation": {
+            "x": 0.31822,
+            "y": 0,
+            "z": 0,
+            "w": 0.94802
+          },
+          "shape": {
+            "type": "quad",
+            "offset": {
+              "x": 0,
+              "y": -3,
+              "z": 0
+            },
+            "stretch": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "settings": {
+              "isPiece": false,
+              "size": {
+                "x": 28,
+                "y": 6
+              },
+              "normal": "+Z"
+            },
+            "textureLayout": {
+              "front": {
+                "offset": {
+                  "x": 1,
+                  "y": 6
+                },
+                "mirror": {
+                  "x": false,
+                  "y": true
+                },
+                "angle": 0
+              }
+            },
+            "unwrapMode": "custom",
+            "visible": true,
+            "doubleSided": true,
+            "shadingMode": "flat"
+          }
+        },
+        {
+          "id": "16",
+          "name": "Hairband_R",
+          "position": {
+            "x": -14.42929,
+            "y": 8.24282,
+            "z": -5.8735
+          },
+          "orientation": {
+            "x": 0.18883,
+            "y": 0.87183,
+            "z": 0.39769,
+            "w": 0.21469
+          },
+          "shape": {
+            "type": "box",
+            "offset": {
+              "x": 3,
+              "y": 0,
+              "z": 0
+            },
+            "stretch": {
+              "x": 0.95,
+              "y": 0.95,
+              "z": 0.95
+            },
+            "settings": {
+              "isPiece": false,
+              "size": {
+                "x": 6,
+                "y": 10,
+                "z": 10
+              }
+            },
+            "textureLayout": {
+              "back": {
+                "offset": {
+                  "x": 31,
+                  "y": 33
+                },
+                "mirror": {
+                  "x": false,
+                  "y": false
+                },
+                "angle": 0
+              },
+              "right": {
+                "offset": {
+                  "x": 37,
+                  "y": 23
+                },
+                "mirror": {
+                  "x": false,
+                  "y": false
+                },
+                "angle": 0
+              },
+              "front": {
+                "offset": {
+                  "x": 31,
+                  "y": 23
+                },
+                "mirror": {
+                  "x": false,
+                  "y": false
+                },
+                "angle": 0
+              },
+              "left": {
+                "offset": {
+                  "x": 47,
+                  "y": 33
+                },
+                "mirror": {
+                  "x": false,
+                  "y": false
+                },
+                "angle": 90
+              },
+              "top": {
+                "offset": {
+                  "x": 31,
+                  "y": 33
+                },
+                "mirror": {
+                  "x": false,
+                  "y": true
+                },
+                "angle": 0
+              },
+              "bottom": {
+                "offset": {
+                  "x": 31,
+                  "y": 33
+                },
+                "mirror": {
+                  "x": false,
+                  "y": false
+                },
+                "angle": 0
+              }
+            },
+            "unwrapMode": "custom",
+            "visible": true,
+            "doubleSided": false,
+            "shadingMode": "flat"
+          },
+          "children": [
+            {
+              "id": "17",
+              "name": "Hair-Bun",
+              "position": {
+                "x": 1.02166,
+                "y": -0.37587,
+                "z": -0.37587
+              },
+              "orientation": {
+                "x": -0.26116,
+                "y": -0.27998,
+                "z": -0.64932,
+                "w": 0.65711
+              },
+              "shape": {
+                "type": "none",
+                "offset": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                },
+                "stretch": {
+                  "x": 1,
+                  "y": 1,
+                  "z": 1
+                },
+                "settings": {
+                  "isPiece": false
+                },
+                "textureLayout": {},
+                "unwrapMode": "custom",
+                "visible": true,
+                "doubleSided": false,
+                "shadingMode": "flat"
+              },
+              "children": [
+                {
+                  "id": "18",
+                  "name": "PonyTail",
+                  "position": {
+                    "x": -0.67677,
+                    "y": 3.11809,
+                    "z": 0.30919
+                  },
+                  "orientation": {
+                    "x": 0.27943,
+                    "y": 0.25894,
+                    "z": 0.65896,
+                    "w": 0.64857
+                  },
+                  "shape": {
+                    "type": "box",
+                    "offset": {
+                      "x": 0,
+                      "y": 0,
+                      "z": 0
+                    },
+                    "stretch": {
+                      "x": 0.9,
+                      "y": 0.9,
+                      "z": 0.9
+                    },
+                    "settings": {
+                      "isPiece": false,
+                      "size": {
+                        "x": 8,
+                        "y": 8,
+                        "z": 8
+                      }
+                    },
+                    "textureLayout": {
+                      "back": {
+                        "offset": {
+                          "x": 87,
+                          "y": 119
+                        },
+                        "mirror": {
+                          "x": false,
+                          "y": true
+                        },
+                        "angle": 90
+                      },
+                      "front": {
+                        "offset": {
+                          "x": 79,
+                          "y": 127
+                        },
+                        "mirror": {
+                          "x": true,
+                          "y": true
+                        },
+                        "angle": 90
+                      },
+                      "top": {
+                        "offset": {
+                          "x": 87,
+                          "y": 127
+                        },
+                        "mirror": {
+                          "x": true,
+                          "y": false
+                        },
+                        "angle": 90
+                      },
+                      "bottom": {
+                        "offset": {
+                          "x": 87,
+                          "y": 127
+                        },
+                        "mirror": {
+                          "x": true,
+                          "y": true
+                        },
+                        "angle": 90
+                      }
+                    },
+                    "unwrapMode": "custom",
+                    "visible": true,
+                    "doubleSided": false,
+                    "shadingMode": "flat"
+                  },
+                  "children": [
+                    {
+                      "id": "19",
+                      "name": "QuadTail",
+                      "position": {
+                        "x": 1.5063,
+                        "y": 2.60792,
+                        "z": 2.62028
+                      },
+                      "orientation": {
+                        "x": 0.3818,
+                        "y": 0.02938,
+                        "z": -0.07247,
+                        "w": 0.92093
+                      },
+                      "shape": {
+                        "type": "quad",
+                        "offset": {
+                          "x": -0.57648,
+                          "y": 5,
+                          "z": 0
+                        },
+                        "stretch": {
+                          "x": 0.85,
+                          "y": 0.85,
+                          "z": 0.85
+                        },
+                        "settings": {
+                          "isPiece": false,
+                          "size": {
+                            "x": 10,
+                            "y": 10
+                          },
+                          "normal": "+Z"
+                        },
+                        "textureLayout": {
+                          "front": {
+                            "offset": {
+                              "x": 50,
+                              "y": 26
+                            },
+                            "mirror": {
+                              "x": false,
+                              "y": false
+                            },
+                            "angle": 0
+                          }
+                        },
+                        "unwrapMode": "custom",
+                        "visible": true,
+                        "doubleSided": true,
+                        "shadingMode": "flat"
+                      }
+                    },
+                    {
+                      "id": "20",
+                      "name": "PonyTail2",
+                      "position": {
+                        "x": 3.92763,
+                        "y": 4.00417,
+                        "z": 4.00375
+                      },
+                      "orientation": {
+                        "x": -0.00017,
+                        "y": 0.10841,
+                        "z": -0.11133,
+                        "w": 0.98785
+                      },
+                      "shape": {
+                        "type": "box",
+                        "offset": {
+                          "x": 5.31294,
+                          "y": -4.35,
+                          "z": -4.35
+                        },
+                        "stretch": {
+                          "x": 1,
+                          "y": 1,
+                          "z": 1
+                        },
+                        "settings": {
+                          "isPiece": false,
+                          "size": {
+                            "x": 12,
+                            "y": 8,
+                            "z": 8
+                          }
+                        },
+                        "textureLayout": {
+                          "back": {
+                            "offset": {
+                              "x": 87,
+                              "y": 107
+                            },
+                            "mirror": {
+                              "x": false,
+                              "y": true
+                            },
+                            "angle": 90
+                          },
+                          "right": {
+                            "offset": {
+                              "x": 68,
+                              "y": 108
+                            },
+                            "mirror": {
+                              "x": false,
+                              "y": false
+                            },
+                            "angle": 0
+                          },
+                          "front": {
+                            "offset": {
+                              "x": 78,
+                              "y": 119
+                            },
+                            "mirror": {
+                              "x": true,
+                              "y": true
+                            },
+                            "angle": 90
+                          },
+                          "left": {
+                            "offset": {
+                              "x": 68,
+                              "y": 127
+                            },
+                            "mirror": {
+                              "x": false,
+                              "y": false
+                            },
+                            "angle": 270
+                          },
+                          "top": {
+                            "offset": {
+                              "x": 87,
+                              "y": 119
+                            },
+                            "mirror": {
+                              "x": true,
+                              "y": false
+                            },
+                            "angle": 90
+                          },
+                          "bottom": {
+                            "offset": {
+                              "x": 87,
+                              "y": 119
+                            },
+                            "mirror": {
+                              "x": true,
+                              "y": true
+                            },
+                            "angle": 90
+                          }
+                        },
+                        "unwrapMode": "custom",
+                        "visible": true,
+                        "doubleSided": false,
+                        "shadingMode": "flat"
+                      },
+                      "children": [
+                        {
+                          "id": "21",
+                          "name": "QuadTail2",
+                          "position": {
+                            "x": 0.18157,
+                            "y": 4.47233,
+                            "z": 4.47229
+                          },
+                          "orientation": {
+                            "x": 0.3825,
+                            "y": 0.01195,
+                            "z": -0.02724,
+                            "w": 0.92348
+                          },
+                          "shape": {
+                            "type": "quad",
+                            "offset": {
+                              "x": 0,
+                              "y": -7.60189,
+                              "z": 0
+                            },
+                            "stretch": {
+                              "x": 1,
+                              "y": 1,
+                              "z": 1
+                            },
+                            "settings": {
+                              "isPiece": false,
+                              "size": {
+                                "x": 18,
+                                "y": 22
+                              },
+                              "normal": "+Z"
+                            },
+                            "textureLayout": {
+                              "front": {
+                                "offset": {
+                                  "x": 52,
+                                  "y": 2
+                                },
+                                "mirror": {
+                                  "x": false,
+                                  "y": false
+                                },
+                                "angle": 0
+                              }
+                            },
+                            "unwrapMode": "custom",
+                            "visible": true,
+                            "doubleSided": true,
+                            "shadingMode": "flat"
+                          }
+                        },
+                        {
+                          "id": "22",
+                          "name": "Hair-R",
+                          "position": {
+                            "x": 5.22816,
+                            "y": 0.34979,
+                            "z": 0.34979
+                          },
+                          "orientation": {
+                            "x": -0.54593,
+                            "y": 0.06825,
+                            "z": -0.70381,
+                            "w": 0.44939
+                          },
+                          "shape": {
+                            "type": "none",
+                            "offset": {
+                              "x": 0,
+                              "y": 0,
+                              "z": 0
+                            },
+                            "stretch": {
+                              "x": 1,
+                              "y": 1,
+                              "z": 1
+                            },
+                            "settings": {
+                              "isPiece": false
+                            },
+                            "textureLayout": {},
+                            "unwrapMode": "custom",
+                            "visible": true,
+                            "doubleSided": false,
+                            "shadingMode": "flat"
+                          },
+                          "children": [
+                            {
+                              "id": "23",
+                              "name": "PonyTail3",
+                              "position": {
+                                "x": 0,
+                                "y": -4,
+                                "z": 4.36396
+                              },
+                              "orientation": {
+                                "x": 0.27101,
+                                "y": 0.27101,
+                                "z": 0.65311,
+                                "w": 0.65311
+                              },
+                              "shape": {
+                                "type": "box",
+                                "offset": {
+                                  "x": 9,
+                                  "y": -4.5,
+                                  "z": -4.5
+                                },
+                                "stretch": {
+                                  "x": 1,
+                                  "y": 1,
+                                  "z": 1
+                                },
+                                "settings": {
+                                  "isPiece": false,
+                                  "size": {
+                                    "x": 18,
+                                    "y": 7,
+                                    "z": 7
+                                  }
+                                },
+                                "textureLayout": {
+                                  "back": {
+                                    "offset": {
+                                      "x": 87,
+                                      "y": 89
+                                    },
+                                    "mirror": {
+                                      "x": false,
+                                      "y": true
+                                    },
+                                    "angle": 90
+                                  },
+                                  "right": {
+                                    "offset": {
+                                      "x": 69,
+                                      "y": 99
+                                    },
+                                    "mirror": {
+                                      "x": false,
+                                      "y": false
+                                    },
+                                    "angle": 0
+                                  },
+                                  "front": {
+                                    "offset": {
+                                      "x": 79,
+                                      "y": 107
+                                    },
+                                    "mirror": {
+                                      "x": true,
+                                      "y": true
+                                    },
+                                    "angle": 90
+                                  },
+                                  "top": {
+                                    "offset": {
+                                      "x": 87,
+                                      "y": 107
+                                    },
+                                    "mirror": {
+                                      "x": true,
+                                      "y": false
+                                    },
+                                    "angle": 90
+                                  },
+                                  "bottom": {
+                                    "offset": {
+                                      "x": 87,
+                                      "y": 107
+                                    },
+                                    "mirror": {
+                                      "x": true,
+                                      "y": true
+                                    },
+                                    "angle": 90
+                                  }
+                                },
+                                "unwrapMode": "custom",
+                                "visible": true,
+                                "doubleSided": false,
+                                "shadingMode": "flat"
+                              },
+                              "children": [
+                                {
+                                  "id": "24",
+                                  "name": "QuadTail3",
+                                  "position": {
+                                    "x": -4.39927,
+                                    "y": 7.00421,
+                                    "z": 7.00421
+                                  },
+                                  "orientation": {
+                                    "x": 0.35532,
+                                    "y": -0.14139,
+                                    "z": 0.34084,
+                                    "w": 0.85883
+                                  },
+                                  "shape": {
+                                    "type": "quad",
+                                    "offset": {
+                                      "x": 0,
+                                      "y": -9,
+                                      "z": 0
+                                    },
+                                    "stretch": {
+                                      "x": 1,
+                                      "y": 1,
+                                      "z": 1
+                                    },
+                                    "settings": {
+                                      "isPiece": false,
+                                      "size": {
+                                        "x": 20,
+                                        "y": 18
+                                      },
+                                      "normal": "+Z"
+                                    },
+                                    "textureLayout": {
+                                      "front": {
+                                        "offset": {
+                                          "x": 72,
+                                          "y": 3
+                                        },
+                                        "mirror": {
+                                          "x": false,
+                                          "y": false
+                                        },
+                                        "angle": 0
+                                      }
+                                    },
+                                    "unwrapMode": "custom",
+                                    "visible": true,
+                                    "doubleSided": true,
+                                    "shadingMode": "flat"
+                                  }
+                                },
+                                {
+                                  "id": "25",
+                                  "name": "Hair-R2",
+                                  "position": {
+                                    "x": 8.10328,
+                                    "y": 1.48754,
+                                    "z": 1.48754
+                                  },
+                                  "orientation": {
+                                    "x": -0.43882,
+                                    "y": -0.08178,
+                                    "z": -0.70236,
+                                    "w": 0.55447
+                                  },
+                                  "shape": {
+                                    "type": "none",
+                                    "offset": {
+                                      "x": 0,
+                                      "y": 0,
+                                      "z": 0
+                                    },
+                                    "stretch": {
+                                      "x": 1,
+                                      "y": 1,
+                                      "z": 1
+                                    },
+                                    "settings": {
+                                      "isPiece": false
+                                    },
+                                    "textureLayout": {},
+                                    "unwrapMode": "custom",
+                                    "visible": true,
+                                    "doubleSided": false,
+                                    "shadingMode": "flat"
+                                  },
+                                  "children": [
+                                    {
+                                      "id": "26",
+                                      "name": "PonyTail4",
+                                      "position": {
+                                        "x": 0,
+                                        "y": -1,
+                                        "z": 3.52548
+                                      },
+                                      "orientation": {
+                                        "x": 0.2706,
+                                        "y": 0.2706,
+                                        "z": 0.65328,
+                                        "w": 0.65328
+                                      },
+                                      "shape": {
+                                        "type": "box",
+                                        "offset": {
+                                          "x": 6,
+                                          "y": -3.8,
+                                          "z": -3.8
+                                        },
+                                        "stretch": {
+                                          "x": 1,
+                                          "y": 1,
+                                          "z": 1
+                                        },
+                                        "settings": {
+                                          "isPiece": false,
+                                          "size": {
+                                            "x": 12,
+                                            "y": 6,
+                                            "z": 6
+                                          }
+                                        },
+                                        "textureLayout": {
+                                          "back": {
+                                            "offset": {
+                                              "x": 87,
+                                              "y": 77
+                                            },
+                                            "mirror": {
+                                              "x": false,
+                                              "y": true
+                                            },
+                                            "angle": 90
+                                          },
+                                          "right": {
+                                            "offset": {
+                                              "x": 71,
+                                              "y": 92
+                                            },
+                                            "mirror": {
+                                              "x": false,
+                                              "y": false
+                                            },
+                                            "angle": 0
+                                          },
+                                          "front": {
+                                            "offset": {
+                                              "x": 81,
+                                              "y": 89
+                                            },
+                                            "mirror": {
+                                              "x": true,
+                                              "y": true
+                                            },
+                                            "angle": 90
+                                          },
+                                          "top": {
+                                            "offset": {
+                                              "x": 87,
+                                              "y": 89
+                                            },
+                                            "mirror": {
+                                              "x": true,
+                                              "y": false
+                                            },
+                                            "angle": 90
+                                          },
+                                          "bottom": {
+                                            "offset": {
+                                              "x": 87,
+                                              "y": 89
+                                            },
+                                            "mirror": {
+                                              "x": true,
+                                              "y": true
+                                            },
+                                            "angle": 90
+                                          }
+                                        },
+                                        "unwrapMode": "custom",
+                                        "visible": true,
+                                        "doubleSided": false,
+                                        "shadingMode": "flat"
+                                      },
+                                      "children": [
+                                        {
+                                          "id": "27",
+                                          "name": "QuadTail4",
+                                          "position": {
+                                            "x": -3.55125,
+                                            "y": 1.15144,
+                                            "z": 1.19438
+                                          },
+                                          "orientation": {
+                                            "x": 0.28279,
+                                            "y": -0.28391,
+                                            "z": 0.6481,
+                                            "w": 0.64761
+                                          },
+                                          "shape": {
+                                            "type": "quad",
+                                            "offset": {
+                                              "x": 0,
+                                              "y": -7,
+                                              "z": 0
+                                            },
+                                            "stretch": {
+                                              "x": 1,
+                                              "y": 1,
+                                              "z": 1
+                                            },
+                                            "settings": {
+                                              "isPiece": false,
+                                              "size": {
+                                                "x": 16,
+                                                "y": 18
+                                              },
+                                              "normal": "+Z"
+                                            },
+                                            "textureLayout": {
+                                              "front": {
+                                                "offset": {
+                                                  "x": 79,
+                                                  "y": 21
+                                                },
+                                                "mirror": {
+                                                  "x": false,
+                                                  "y": false
+                                                },
+                                                "angle": 0
+                                              }
+                                            },
+                                            "unwrapMode": "custom",
+                                            "visible": true,
+                                            "doubleSided": true,
+                                            "shadingMode": "flat"
+                                          }
+                                        },
+                                        {
+                                          "id": "28",
+                                          "name": "PonyTail5",
+                                          "position": {
+                                            "x": 4.43184,
+                                            "y": 0.34205,
+                                            "z": 0.34205
+                                          },
+                                          "orientation": {
+                                            "x": -0.17127,
+                                            "y": 0.36401,
+                                            "z": 0.60622,
+                                            "w": 0.68605
+                                          },
+                                          "shape": {
+                                            "type": "quad",
+                                            "offset": {
+                                              "x": 0,
+                                              "y": -6.5,
+                                              "z": 0
+                                            },
+                                            "stretch": {
+                                              "x": 1,
+                                              "y": 1,
+                                              "z": 1
+                                            },
+                                            "settings": {
+                                              "isPiece": false,
+                                              "size": {
+                                                "x": 10,
+                                                "y": 13
+                                              },
+                                              "normal": "+Z"
+                                            },
+                                            "textureLayout": {
+                                              "front": {
+                                                "offset": {
+                                                  "x": 70,
+                                                  "y": 41
+                                                },
+                                                "mirror": {
+                                                  "x": false,
+                                                  "y": false
+                                                },
+                                                "angle": 0
+                                              }
+                                            },
+                                            "unwrapMode": "custom",
+                                            "visible": true,
+                                            "doubleSided": true,
+                                            "shadingMode": "flat"
+                                          },
+                                          "children": [
+                                            {
+                                              "id": "29",
+                                              "name": "QuadTail5",
+                                              "position": {
+                                                "x": 0,
+                                                "y": 2.69915,
+                                                "z": 0.30508
+                                              },
+                                              "orientation": {
+                                                "x": -0.01464,
+                                                "y": -0.70696,
+                                                "z": 0.01464,
+                                                "w": 0.70696
+                                              },
+                                              "shape": {
+                                                "type": "quad",
+                                                "offset": {
+                                                  "x": -6,
+                                                  "y": -8,
+                                                  "z": 0
+                                                },
+                                                "stretch": {
+                                                  "x": 1,
+                                                  "y": 1,
+                                                  "z": 1
+                                                },
+                                                "settings": {
+                                                  "isPiece": false,
+                                                  "size": {
+                                                    "x": 22,
+                                                    "y": 20
+                                                  },
+                                                  "normal": "+Z"
+                                                },
+                                                "textureLayout": {
+                                                  "front": {
+                                                    "offset": {
+                                                      "x": 0,
+                                                      "y": 108
+                                                    },
+                                                    "mirror": {
+                                                      "x": false,
+                                                      "y": false
+                                                    },
+                                                    "angle": 0
+                                                  }
+                                                },
+                                                "unwrapMode": "custom",
+                                                "visible": true,
+                                                "doubleSided": true,
+                                                "shadingMode": "flat"
+                                              }
+                                            },
+                                            {
+                                              "id": "30",
+                                              "name": "PonyTail6",
+                                              "position": {
+                                                "x": 0,
+                                                "y": -6.5,
+                                                "z": 0
+                                              },
+                                              "orientation": {
+                                                "x": 0.51095,
+                                                "y": 0,
+                                                "z": 0,
+                                                "w": 0.85961
+                                              },
+                                              "shape": {
+                                                "type": "quad",
+                                                "offset": {
+                                                  "x": 0,
+                                                  "y": -5,
+                                                  "z": 0
+                                                },
+                                                "stretch": {
+                                                  "x": 1,
+                                                  "y": 1,
+                                                  "z": 1
+                                                },
+                                                "settings": {
+                                                  "isPiece": false,
+                                                  "size": {
+                                                    "x": 10,
+                                                    "y": 10
+                                                  },
+                                                  "normal": "+Z"
+                                                },
+                                                "textureLayout": {
+                                                  "front": {
+                                                    "offset": {
+                                                      "x": 70,
+                                                      "y": 55
+                                                    },
+                                                    "mirror": {
+                                                      "x": false,
+                                                      "y": false
+                                                    },
+                                                    "angle": 0
+                                                  }
+                                                },
+                                                "unwrapMode": "custom",
+                                                "visible": true,
+                                                "doubleSided": true,
+                                                "shadingMode": "flat"
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "31",
+          "name": "Hairband_L",
+          "position": {
+            "x": 14.42929,
+            "y": 8.24282,
+            "z": -5.8735
+          },
+          "orientation": {
+            "x": 0.18883,
+            "y": -0.87183,
+            "z": -0.39769,
+            "w": 0.21469
+          },
+          "shape": {
+            "type": "box",
+            "offset": {
+              "x": -3,
+              "y": 0,
+              "z": 0
+            },
+            "stretch": {
+              "x": -0.95,
+              "y": 0.95,
+              "z": 0.95
+            },
+            "settings": {
+              "isPiece": false,
+              "size": {
+                "x": 6,
+                "y": 10,
+                "z": 10
+              }
+            },
+            "textureLayout": {
+              "back": {
+                "offset": {
+                  "x": 31,
+                  "y": 33
+                },
+                "mirror": {
+                  "x": false,
+                  "y": false
+                },
+                "angle": 0
+              },
+              "right": {
+                "offset": {
+                  "x": 37,
+                  "y": 23
+                },
+                "mirror": {
+                  "x": false,
+                  "y": false
+                },
+                "angle": 0
+              },
+              "front": {
+                "offset": {
+                  "x": 31,
+                  "y": 23
+                },
+                "mirror": {
+                  "x": false,
+                  "y": false
+                },
+                "angle": 0
+              },
+              "left": {
+                "offset": {
+                  "x": 47,
+                  "y": 33
+                },
+                "mirror": {
+                  "x": false,
+                  "y": false
+                },
+                "angle": 90
+              },
+              "top": {
+                "offset": {
+                  "x": 31,
+                  "y": 33
+                },
+                "mirror": {
+                  "x": false,
+                  "y": true
+                },
+                "angle": 0
+              },
+              "bottom": {
+                "offset": {
+                  "x": 31,
+                  "y": 33
+                },
+                "mirror": {
+                  "x": false,
+                  "y": false
+                },
+                "angle": 0
+              }
+            },
+            "unwrapMode": "custom",
+            "visible": true,
+            "doubleSided": false,
+            "shadingMode": "flat"
+          },
+          "children": [
+            {
+              "id": "32",
+              "name": "Hair-Bun",
+              "position": {
+                "x": -1.02166,
+                "y": -0.37587,
+                "z": -0.37587
+              },
+              "orientation": {
+                "x": -0.26116,
+                "y": 0.27998,
+                "z": 0.64932,
+                "w": 0.65711
+              },
+              "shape": {
+                "type": "none",
+                "offset": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                },
+                "stretch": {
+                  "x": 1,
+                  "y": 1,
+                  "z": 1
+                },
+                "settings": {
+                  "isPiece": false
+                },
+                "textureLayout": {},
+                "unwrapMode": "custom",
+                "visible": true,
+                "doubleSided": false,
+                "shadingMode": "flat"
+              },
+              "children": [
+                {
+                  "id": "33",
+                  "name": "PonyTail",
+                  "position": {
+                    "x": 0.67677,
+                    "y": 3.11809,
+                    "z": 0.30919
+                  },
+                  "orientation": {
+                    "x": 0.27943,
+                    "y": -0.25894,
+                    "z": -0.65896,
+                    "w": 0.64857
+                  },
+                  "shape": {
+                    "type": "box",
+                    "offset": {
+                      "x": 0,
+                      "y": 0,
+                      "z": 0
+                    },
+                    "stretch": {
+                      "x": -0.9,
+                      "y": 0.9,
+                      "z": 0.9
+                    },
+                    "settings": {
+                      "isPiece": false,
+                      "size": {
+                        "x": 8,
+                        "y": 8,
+                        "z": 8
+                      }
+                    },
+                    "textureLayout": {
+                      "back": {
+                        "offset": {
+                          "x": 87,
+                          "y": 119
+                        },
+                        "mirror": {
+                          "x": false,
+                          "y": true
+                        },
+                        "angle": 90
+                      },
+                      "front": {
+                        "offset": {
+                          "x": 79,
+                          "y": 127
+                        },
+                        "mirror": {
+                          "x": true,
+                          "y": true
+                        },
+                        "angle": 90
+                      },
+                      "top": {
+                        "offset": {
+                          "x": 87,
+                          "y": 127
+                        },
+                        "mirror": {
+                          "x": true,
+                          "y": false
+                        },
+                        "angle": 90
+                      },
+                      "bottom": {
+                        "offset": {
+                          "x": 87,
+                          "y": 127
+                        },
+                        "mirror": {
+                          "x": true,
+                          "y": true
+                        },
+                        "angle": 90
+                      }
+                    },
+                    "unwrapMode": "custom",
+                    "visible": true,
+                    "doubleSided": false,
+                    "shadingMode": "flat"
+                  },
+                  "children": [
+                    {
+                      "id": "34",
+                      "name": "QuadTail",
+                      "position": {
+                        "x": -1.5063,
+                        "y": 2.60792,
+                        "z": 2.62028
+                      },
+                      "orientation": {
+                        "x": 0.3818,
+                        "y": -0.02938,
+                        "z": 0.07247,
+                        "w": 0.92093
+                      },
+                      "shape": {
+                        "type": "quad",
+                        "offset": {
+                          "x": 0.57648,
+                          "y": 5,
+                          "z": 0
+                        },
+                        "stretch": {
+                          "x": -0.85,
+                          "y": 0.85,
+                          "z": 0.85
+                        },
+                        "settings": {
+                          "isPiece": false,
+                          "size": {
+                            "x": 10,
+                            "y": 10
+                          },
+                          "normal": "+Z"
+                        },
+                        "textureLayout": {
+                          "front": {
+                            "offset": {
+                              "x": 50,
+                              "y": 26
+                            },
+                            "mirror": {
+                              "x": false,
+                              "y": false
+                            },
+                            "angle": 0
+                          }
+                        },
+                        "unwrapMode": "custom",
+                        "visible": true,
+                        "doubleSided": true,
+                        "shadingMode": "flat"
+                      }
+                    },
+                    {
+                      "id": "35",
+                      "name": "PonyTail2",
+                      "position": {
+                        "x": -3.92763,
+                        "y": 4.00417,
+                        "z": 4.00375
+                      },
+                      "orientation": {
+                        "x": -0.00017,
+                        "y": -0.10841,
+                        "z": 0.11133,
+                        "w": 0.98785
+                      },
+                      "shape": {
+                        "type": "box",
+                        "offset": {
+                          "x": -5.31294,
+                          "y": -4.35,
+                          "z": -4.35
+                        },
+                        "stretch": {
+                          "x": -1,
+                          "y": 1,
+                          "z": 1
+                        },
+                        "settings": {
+                          "isPiece": false,
+                          "size": {
+                            "x": 12,
+                            "y": 8,
+                            "z": 8
+                          }
+                        },
+                        "textureLayout": {
+                          "back": {
+                            "offset": {
+                              "x": 87,
+                              "y": 107
+                            },
+                            "mirror": {
+                              "x": false,
+                              "y": true
+                            },
+                            "angle": 90
+                          },
+                          "right": {
+                            "offset": {
+                              "x": 68,
+                              "y": 108
+                            },
+                            "mirror": {
+                              "x": false,
+                              "y": false
+                            },
+                            "angle": 0
+                          },
+                          "front": {
+                            "offset": {
+                              "x": 78,
+                              "y": 119
+                            },
+                            "mirror": {
+                              "x": true,
+                              "y": true
+                            },
+                            "angle": 90
+                          },
+                          "left": {
+                            "offset": {
+                              "x": 68,
+                              "y": 127
+                            },
+                            "mirror": {
+                              "x": false,
+                              "y": false
+                            },
+                            "angle": 270
+                          },
+                          "top": {
+                            "offset": {
+                              "x": 87,
+                              "y": 119
+                            },
+                            "mirror": {
+                              "x": true,
+                              "y": false
+                            },
+                            "angle": 90
+                          },
+                          "bottom": {
+                            "offset": {
+                              "x": 87,
+                              "y": 119
+                            },
+                            "mirror": {
+                              "x": true,
+                              "y": true
+                            },
+                            "angle": 90
+                          }
+                        },
+                        "unwrapMode": "custom",
+                        "visible": true,
+                        "doubleSided": false,
+                        "shadingMode": "flat"
+                      },
+                      "children": [
+                        {
+                          "id": "36",
+                          "name": "QuadTail2",
+                          "position": {
+                            "x": -0.18157,
+                            "y": 4.47233,
+                            "z": 4.47229
+                          },
+                          "orientation": {
+                            "x": 0.3825,
+                            "y": -0.01195,
+                            "z": 0.02724,
+                            "w": 0.92348
+                          },
+                          "shape": {
+                            "type": "quad",
+                            "offset": {
+                              "x": 0,
+                              "y": -7.60189,
+                              "z": 0
+                            },
+                            "stretch": {
+                              "x": -1,
+                              "y": 1,
+                              "z": 1
+                            },
+                            "settings": {
+                              "isPiece": false,
+                              "size": {
+                                "x": 18,
+                                "y": 22
+                              },
+                              "normal": "+Z"
+                            },
+                            "textureLayout": {
+                              "front": {
+                                "offset": {
+                                  "x": 52,
+                                  "y": 2
+                                },
+                                "mirror": {
+                                  "x": false,
+                                  "y": false
+                                },
+                                "angle": 0
+                              }
+                            },
+                            "unwrapMode": "custom",
+                            "visible": true,
+                            "doubleSided": true,
+                            "shadingMode": "flat"
+                          }
+                        },
+                        {
+                          "id": "37",
+                          "name": "Hair-L",
+                          "position": {
+                            "x": -5.22816,
+                            "y": 0.34979,
+                            "z": 0.34979
+                          },
+                          "orientation": {
+                            "x": -0.54593,
+                            "y": -0.06825,
+                            "z": 0.70381,
+                            "w": 0.44939
+                          },
+                          "shape": {
+                            "type": "none",
+                            "offset": {
+                              "x": 0,
+                              "y": 0,
+                              "z": 0
+                            },
+                            "stretch": {
+                              "x": 1,
+                              "y": 1,
+                              "z": 1
+                            },
+                            "settings": {
+                              "isPiece": false
+                            },
+                            "textureLayout": {},
+                            "unwrapMode": "custom",
+                            "visible": true,
+                            "doubleSided": false,
+                            "shadingMode": "flat"
+                          },
+                          "children": [
+                            {
+                              "id": "38",
+                              "name": "PonyTail3",
+                              "position": {
+                                "x": 0,
+                                "y": -4,
+                                "z": 4.36396
+                              },
+                              "orientation": {
+                                "x": 0.27101,
+                                "y": -0.27101,
+                                "z": -0.65311,
+                                "w": 0.65311
+                              },
+                              "shape": {
+                                "type": "box",
+                                "offset": {
+                                  "x": -9,
+                                  "y": -4.5,
+                                  "z": -4.5
+                                },
+                                "stretch": {
+                                  "x": -1,
+                                  "y": 1,
+                                  "z": 1
+                                },
+                                "settings": {
+                                  "isPiece": false,
+                                  "size": {
+                                    "x": 18,
+                                    "y": 7,
+                                    "z": 7
+                                  }
+                                },
+                                "textureLayout": {
+                                  "back": {
+                                    "offset": {
+                                      "x": 87,
+                                      "y": 89
+                                    },
+                                    "mirror": {
+                                      "x": false,
+                                      "y": true
+                                    },
+                                    "angle": 90
+                                  },
+                                  "right": {
+                                    "offset": {
+                                      "x": 69,
+                                      "y": 99
+                                    },
+                                    "mirror": {
+                                      "x": false,
+                                      "y": false
+                                    },
+                                    "angle": 0
+                                  },
+                                  "front": {
+                                    "offset": {
+                                      "x": 79,
+                                      "y": 107
+                                    },
+                                    "mirror": {
+                                      "x": true,
+                                      "y": true
+                                    },
+                                    "angle": 90
+                                  },
+                                  "top": {
+                                    "offset": {
+                                      "x": 87,
+                                      "y": 107
+                                    },
+                                    "mirror": {
+                                      "x": true,
+                                      "y": false
+                                    },
+                                    "angle": 90
+                                  },
+                                  "bottom": {
+                                    "offset": {
+                                      "x": 87,
+                                      "y": 107
+                                    },
+                                    "mirror": {
+                                      "x": true,
+                                      "y": true
+                                    },
+                                    "angle": 90
+                                  }
+                                },
+                                "unwrapMode": "custom",
+                                "visible": true,
+                                "doubleSided": false,
+                                "shadingMode": "flat"
+                              },
+                              "children": [
+                                {
+                                  "id": "39",
+                                  "name": "QuadTail3",
+                                  "position": {
+                                    "x": 4.39927,
+                                    "y": 7.00421,
+                                    "z": 7.00421
+                                  },
+                                  "orientation": {
+                                    "x": 0.35532,
+                                    "y": 0.14139,
+                                    "z": -0.34084,
+                                    "w": 0.85883
+                                  },
+                                  "shape": {
+                                    "type": "quad",
+                                    "offset": {
+                                      "x": 0,
+                                      "y": -9,
+                                      "z": 0
+                                    },
+                                    "stretch": {
+                                      "x": -1,
+                                      "y": 1,
+                                      "z": 1
+                                    },
+                                    "settings": {
+                                      "isPiece": false,
+                                      "size": {
+                                        "x": 20,
+                                        "y": 18
+                                      },
+                                      "normal": "+Z"
+                                    },
+                                    "textureLayout": {
+                                      "front": {
+                                        "offset": {
+                                          "x": 72,
+                                          "y": 3
+                                        },
+                                        "mirror": {
+                                          "x": false,
+                                          "y": false
+                                        },
+                                        "angle": 0
+                                      }
+                                    },
+                                    "unwrapMode": "custom",
+                                    "visible": true,
+                                    "doubleSided": true,
+                                    "shadingMode": "flat"
+                                  }
+                                },
+                                {
+                                  "id": "40",
+                                  "name": "Hair-L2",
+                                  "position": {
+                                    "x": -8.10328,
+                                    "y": 1.48754,
+                                    "z": 1.48754
+                                  },
+                                  "orientation": {
+                                    "x": -0.43882,
+                                    "y": 0.08178,
+                                    "z": 0.70236,
+                                    "w": 0.55447
+                                  },
+                                  "shape": {
+                                    "type": "none",
+                                    "offset": {
+                                      "x": 0,
+                                      "y": 0,
+                                      "z": 0
+                                    },
+                                    "stretch": {
+                                      "x": 1,
+                                      "y": 1,
+                                      "z": 1
+                                    },
+                                    "settings": {
+                                      "isPiece": false
+                                    },
+                                    "textureLayout": {},
+                                    "unwrapMode": "custom",
+                                    "visible": true,
+                                    "doubleSided": false,
+                                    "shadingMode": "flat"
+                                  },
+                                  "children": [
+                                    {
+                                      "id": "41",
+                                      "name": "PonyTail4",
+                                      "position": {
+                                        "x": 0,
+                                        "y": -1,
+                                        "z": 3.52548
+                                      },
+                                      "orientation": {
+                                        "x": 0.2706,
+                                        "y": -0.2706,
+                                        "z": -0.65328,
+                                        "w": 0.65328
+                                      },
+                                      "shape": {
+                                        "type": "box",
+                                        "offset": {
+                                          "x": -6,
+                                          "y": -3.8,
+                                          "z": -3.8
+                                        },
+                                        "stretch": {
+                                          "x": -1,
+                                          "y": 1,
+                                          "z": 1
+                                        },
+                                        "settings": {
+                                          "isPiece": false,
+                                          "size": {
+                                            "x": 12,
+                                            "y": 6,
+                                            "z": 6
+                                          }
+                                        },
+                                        "textureLayout": {
+                                          "back": {
+                                            "offset": {
+                                              "x": 87,
+                                              "y": 77
+                                            },
+                                            "mirror": {
+                                              "x": false,
+                                              "y": true
+                                            },
+                                            "angle": 90
+                                          },
+                                          "right": {
+                                            "offset": {
+                                              "x": 71,
+                                              "y": 92
+                                            },
+                                            "mirror": {
+                                              "x": false,
+                                              "y": false
+                                            },
+                                            "angle": 0
+                                          },
+                                          "front": {
+                                            "offset": {
+                                              "x": 81,
+                                              "y": 89
+                                            },
+                                            "mirror": {
+                                              "x": true,
+                                              "y": true
+                                            },
+                                            "angle": 90
+                                          },
+                                          "top": {
+                                            "offset": {
+                                              "x": 87,
+                                              "y": 89
+                                            },
+                                            "mirror": {
+                                              "x": true,
+                                              "y": false
+                                            },
+                                            "angle": 90
+                                          },
+                                          "bottom": {
+                                            "offset": {
+                                              "x": 87,
+                                              "y": 89
+                                            },
+                                            "mirror": {
+                                              "x": true,
+                                              "y": true
+                                            },
+                                            "angle": 90
+                                          }
+                                        },
+                                        "unwrapMode": "custom",
+                                        "visible": true,
+                                        "doubleSided": false,
+                                        "shadingMode": "flat"
+                                      },
+                                      "children": [
+                                        {
+                                          "id": "42",
+                                          "name": "QuadTail4",
+                                          "position": {
+                                            "x": 3.55125,
+                                            "y": 1.15144,
+                                            "z": 1.19438
+                                          },
+                                          "orientation": {
+                                            "x": 0.28279,
+                                            "y": 0.28391,
+                                            "z": -0.6481,
+                                            "w": 0.64761
+                                          },
+                                          "shape": {
+                                            "type": "quad",
+                                            "offset": {
+                                              "x": 0,
+                                              "y": -7,
+                                              "z": 0
+                                            },
+                                            "stretch": {
+                                              "x": -1,
+                                              "y": 1,
+                                              "z": 1
+                                            },
+                                            "settings": {
+                                              "isPiece": false,
+                                              "size": {
+                                                "x": 16,
+                                                "y": 18
+                                              },
+                                              "normal": "+Z"
+                                            },
+                                            "textureLayout": {
+                                              "front": {
+                                                "offset": {
+                                                  "x": 79,
+                                                  "y": 21
+                                                },
+                                                "mirror": {
+                                                  "x": false,
+                                                  "y": false
+                                                },
+                                                "angle": 0
+                                              }
+                                            },
+                                            "unwrapMode": "custom",
+                                            "visible": true,
+                                            "doubleSided": true,
+                                            "shadingMode": "flat"
+                                          }
+                                        },
+                                        {
+                                          "id": "43",
+                                          "name": "PonyTail5",
+                                          "position": {
+                                            "x": -4.43184,
+                                            "y": 0.34205,
+                                            "z": 0.34205
+                                          },
+                                          "orientation": {
+                                            "x": -0.17127,
+                                            "y": -0.36401,
+                                            "z": -0.60622,
+                                            "w": 0.68605
+                                          },
+                                          "shape": {
+                                            "type": "quad",
+                                            "offset": {
+                                              "x": 0,
+                                              "y": -6.5,
+                                              "z": 0
+                                            },
+                                            "stretch": {
+                                              "x": -1,
+                                              "y": 1,
+                                              "z": 1
+                                            },
+                                            "settings": {
+                                              "isPiece": false,
+                                              "size": {
+                                                "x": 10,
+                                                "y": 13
+                                              },
+                                              "normal": "+Z"
+                                            },
+                                            "textureLayout": {
+                                              "front": {
+                                                "offset": {
+                                                  "x": 70,
+                                                  "y": 41
+                                                },
+                                                "mirror": {
+                                                  "x": false,
+                                                  "y": false
+                                                },
+                                                "angle": 0
+                                              }
+                                            },
+                                            "unwrapMode": "custom",
+                                            "visible": true,
+                                            "doubleSided": true,
+                                            "shadingMode": "flat"
+                                          },
+                                          "children": [
+                                            {
+                                              "id": "44",
+                                              "name": "QuadTail5",
+                                              "position": {
+                                                "x": 0,
+                                                "y": 2.69915,
+                                                "z": 0.30508
+                                              },
+                                              "orientation": {
+                                                "x": -0.01464,
+                                                "y": 0.70696,
+                                                "z": -0.01464,
+                                                "w": 0.70696
+                                              },
+                                              "shape": {
+                                                "type": "quad",
+                                                "offset": {
+                                                  "x": 6,
+                                                  "y": -8,
+                                                  "z": 0
+                                                },
+                                                "stretch": {
+                                                  "x": -1,
+                                                  "y": 1,
+                                                  "z": 1
+                                                },
+                                                "settings": {
+                                                  "isPiece": false,
+                                                  "size": {
+                                                    "x": 22,
+                                                    "y": 20
+                                                  },
+                                                  "normal": "+Z"
+                                                },
+                                                "textureLayout": {
+                                                  "front": {
+                                                    "offset": {
+                                                      "x": 0,
+                                                      "y": 108
+                                                    },
+                                                    "mirror": {
+                                                      "x": false,
+                                                      "y": false
+                                                    },
+                                                    "angle": 0
+                                                  }
+                                                },
+                                                "unwrapMode": "custom",
+                                                "visible": true,
+                                                "doubleSided": true,
+                                                "shadingMode": "flat"
+                                              }
+                                            },
+                                            {
+                                              "id": "45",
+                                              "name": "PonyTail6",
+                                              "position": {
+                                                "x": 0,
+                                                "y": -6.5,
+                                                "z": 0
+                                              },
+                                              "orientation": {
+                                                "x": 0.51095,
+                                                "y": 0,
+                                                "z": 0,
+                                                "w": 0.85961
+                                              },
+                                              "shape": {
+                                                "type": "quad",
+                                                "offset": {
+                                                  "x": 0,
+                                                  "y": -5,
+                                                  "z": 0
+                                                },
+                                                "stretch": {
+                                                  "x": -1,
+                                                  "y": 1,
+                                                  "z": 1
+                                                },
+                                                "settings": {
+                                                  "isPiece": false,
+                                                  "size": {
+                                                    "x": 10,
+                                                    "y": 10
+                                                  },
+                                                  "normal": "+Z"
+                                                },
+                                                "textureLayout": {
+                                                  "front": {
+                                                    "offset": {
+                                                      "x": 70,
+                                                      "y": 55
+                                                    },
+                                                    "mirror": {
+                                                      "x": false,
+                                                      "y": false
+                                                    },
+                                                    "angle": 0
+                                                  }
+                                                },
+                                                "unwrapMode": "custom",
+                                                "visible": true,
+                                                "doubleSided": true,
+                                                "shadingMode": "flat"
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "format": "character",
+  "lod": "auto"
+}

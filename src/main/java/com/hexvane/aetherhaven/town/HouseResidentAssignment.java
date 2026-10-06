@@ -91,6 +91,8 @@ public final class HouseResidentAssignment {
         if (residentUuid != null && TownResidentEligibility.excludeFromHouseAssignmentPicker(town, residentUuid)) {
             return;
         }
+        if (residentUuid != null && !TownAdmission.isMember(town, residentUuid)
+            && (!TownPopulation.snapshot(town, constructionCatalog).canAdmit() || TownPopulation.count(town) < 4)) return;
         if (residentUuid != null) {
             town.clearHomeResidentFromOtherPlots(plotId, residentUuid);
             // Same house: clear other slots so a villager occupies at most one bed.

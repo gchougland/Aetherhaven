@@ -321,6 +321,7 @@ public final class ProductionCatalog {
         return AetherhavenConstants.CONSTRUCTION_PLOT_FARM.equals(constructionId)
             || AetherhavenConstants.CONSTRUCTION_PLOT_MINERS_HUT.equals(constructionId)
             || AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL.equals(constructionId)
-            || AetherhavenConstants.CONSTRUCTION_PLOT_BARN.equals(constructionId);
+            || AetherhavenConstants.CONSTRUCTION_PLOT_BARN.equals(constructionId)
+            || NativeDruidCrops.CONSTRUCTION.equals(constructionId);
     }
 }

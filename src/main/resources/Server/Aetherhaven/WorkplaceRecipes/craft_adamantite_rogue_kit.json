@@ -1,0 +1,27 @@
+{
+  "id": "craft_adamantite_rogue_kit",
+  "name": "Adamantite Rogue Kit",
+  "workplace": "armorCrafting",
+  "sourceRecipe": "workplace:adamantite_rogue_kit",
+  "bench": "Armor_Bench",
+  "benchTier": 3,
+  "skillLevel": 10,
+  "townRank": "A",
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Adamantite",
+      "count": 42
+    },
+    {
+      "itemId": "Ingredient_Leather_Light",
+      "count": 14
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 24
+    }
+  ],
+  "output": "Aetherhaven_Adamantite_Rogue_Kit",
+  "outputCount": 1,
+  "workSeconds": 120
+}

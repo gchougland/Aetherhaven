@@ -76,6 +76,10 @@ public final class HiredGuardDeathRemoveSystem extends RefSystem<EntityStore> {
         if (!GuardHireService.isHiredGuard(town, entityUuid)) {
             return;
         }
+        if (com.hexvane.aetherhaven.town.ResidentRegistryService.preserveTownsfolkDeath(town, tm, ref, store, plugin)) {
+            GuardPatrolSystem.clearAssignmentsForGuard(world, plugin, entityUuid);
+            return;
+        }
         TownsfolkCharacterBinding tb = store.getComponent(ref, TownsfolkCharacterBinding.getComponentType());
         String characterId = tb != null ? tb.getCharacterId() : null;
         characterId = GuardHireService.removeHiredGuardFromTown(town, entityUuid, characterId);

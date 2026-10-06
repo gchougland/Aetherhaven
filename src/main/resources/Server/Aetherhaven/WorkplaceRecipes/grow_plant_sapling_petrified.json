@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_sapling_petrified",
+  "name": "Sapling Petrified",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_sapling_petrified",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 7,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 30
+    }
+  ],
+  "output": "Plant_Sapling_Petrified",
+  "outputCount": 1,
+  "workSeconds": 22
+}

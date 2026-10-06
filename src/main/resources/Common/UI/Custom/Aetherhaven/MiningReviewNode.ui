@@ -1,0 +1,6 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Button { Anchor: (Width: 30, Height: 30); Background: $T.@Card;
+ Group #Selected { Background: $T.@CardPressed; Visible: false; }
+ Label #Number { Style: (...$C.@DefaultLabelStyle, FontSize: 13, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center, TextColor: #dec68d); }
+}

@@ -1,0 +1,59 @@
+{
+  "npcRoleId": "Aetherhaven_Leatherworker",
+  "dialogueVillagerKind": "leatherworker",
+  "residentTreeId": "aetherhaven_leatherworker",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_leatherworker",
+  "displayName": "Sera Brindle",
+  "portraitIcon": "Aetherhaven_Leatherworker.png",
+  "speechVoiceId": "MellowFemale",
+  "uiSortOrder": 26,
+  "innPoolEligible": true,
+  "innPoolOrder": 26,
+  "innPoolWeight": 1,
+  "visitorBindingKind": "visitor_leatherworker",
+  "minimumTownLevel": 4,
+  "birthdaySeason": "Autumn",
+  "birthdayDay": 16,
+  "giftLoves": [
+    "Ingredient_Leather_Heavy"
+  ],
+  "giftLikes": [
+    "Ingredient_Leather_Light",
+    "Ingredient_Leather_Medium"
+  ],
+  "giftDislikes": [
+    "Ingredient_Bone_Fragment"
+  ],
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_leatherworker_25",
+      "minReputation": 25,
+      "itemId": "Aetherhaven_Leatherworker_Kit",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_25",
+      "learnRecipeItemId": null
+    },
+    {
+      "rewardId": "rep_leatherworker_50",
+      "minReputation": 50,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_50",
+      "learnRecipeItemId": "Aetherhaven_Leatherworker_Kit"
+    },
+    {
+      "rewardId": "rep_leatherworker_75",
+      "minReputation": 75,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_75",
+      "learnRecipeItemId": "Aetherhaven_StitchingFrame"
+    }
+  ],
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_leatherworker.greeting.0",
+    "aetherhaven_leatherworker.greeting.1",
+    "aetherhaven_leatherworker.greeting.2"
+  ]
+}

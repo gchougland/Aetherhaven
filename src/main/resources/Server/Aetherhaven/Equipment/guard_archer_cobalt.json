@@ -1,0 +1,24 @@
+{
+  "id": "guard_archer_cobalt",
+  "guardNpcRole": "Aetherhaven_Guard_Archer",
+  "displayName": "Cobalt Archer",
+  "hireGoldCost": 35,
+  "armor": [
+    "Aetherhaven_Guard_Armor_Leather_Heavy_Head",
+    "Aetherhaven_Guard_Armor_Leather_Heavy_Chest",
+    "Aetherhaven_Guard_Armor_Leather_Heavy_Hands",
+    "Aetherhaven_Guard_Armor_Leather_Heavy_Legs"
+  ],
+  "hotbar": [
+    {
+      "slot": 0,
+      "itemId": "Weapon_Shortbow_Cobalt"
+    }
+  ],
+  "attributeCombat": true,
+  "attributeBonuses": {
+    "dexterity": 8,
+    "speed": 4,
+    "vitality": 3
+  }
+}

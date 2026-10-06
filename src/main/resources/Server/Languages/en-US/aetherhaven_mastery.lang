@@ -1,0 +1,16 @@
+dialogue = View your profile.
+level = Mastery {level} / {max}
+complete = Mastery complete
+train = Train +1 Mastery
+reputation = Reputation {value} / 100
+reward.threshold = {value} REPUTATION
+reward.recipe = Recipe: {item}
+reward.items = {count} x {item}
+reward.special = A special reward
+reward.claimed = CLAIMED
+reward.ready = READY TO CLAIM
+gift.love = Loves
+gift.like = Likes
+gift.neutral = Neutral
+gift.dislike = Dislikes
+flaskRecipe = Teach me to make an Alchemy Flask.

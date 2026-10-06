@@ -99,6 +99,7 @@ public final class TouristReconcileService {
             boolean changed = false;
             Set<String> seenCharacters = new HashSet<>();
             for (TouristRecord rec : new ArrayList<>(town.getTouristRecords())) {
+                if (rec.getEntityUuid() != null && com.hexvane.aetherhaven.town.ResidentRegistryService.hasConfirmedDeath(town, rec.getEntityUuid())) continue;
                 String characterId = rec.getCharacterId();
                 if (characterId.isBlank()) {
                     if (town.getTouristRecords().remove(rec)) {

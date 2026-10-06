@@ -1,0 +1,31 @@
+{
+  "id": "craft_large_glow_ring",
+  "name": "Large Glow Ring",
+  "workplace": "jewelry",
+  "sourceRecipe": "workplace:craft_large_glow_ring",
+  "bench": "Aetherhaven_Jewelry_Crafting_Bench",
+  "benchTier": 1,
+  "skillLevel": 7,
+  "requiresKnowledge": true,
+  "inputs": [
+    {
+      "itemId": "Aetherhaven_Ring_Glow",
+      "count": 1
+    },
+    {
+      "itemId": "Ingredient_Bar_Silver",
+      "count": 4
+    },
+    {
+      "itemId": "Ingredient_Crystal_White",
+      "count": 12
+    },
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 8
+    }
+  ],
+  "output": "Aetherhaven_Ring_Large_Glow",
+  "outputCount": 1,
+  "workSeconds": 60
+}

@@ -1,0 +1,59 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+@Class = Button {
+  FlexWeight: 1; Anchor: (Right: 10); LayoutMode: Top; Padding: (Full: 14);
+  Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed));
+  Label #Selected { Anchor: (Height: 18); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #a4ccb8, RenderBold: true); }
+};
+$C.@PageOverlay { LayoutMode: Middle;
+ $C.@DecoratedContainer { Anchor: (Width: 940, Height: 710);
+  #Title { Label { Text: "GUARD DUTY"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+  #Content { LayoutMode: Top; Padding: (Full: 22);
+   Group { LayoutMode: Left; FlexWeight: 1;
+    Group { LayoutMode: Top; Anchor: (Width: 246, Right: 18); Padding: (Full: 16); Background: $T.@Panel;
+     AssetImage #Portrait { Anchor: (Width: 160, Height: 160, Left: 26); }
+     Label #Name { Anchor: (Height: 54); Style: (...$C.@DefaultLabelStyle, FontSize: 20, Wrap: true, RenderBold: true, HorizontalAlignment: Center); }
+     Label #Duty { Anchor: (Height: 34); Style: (...$C.@DefaultLabelStyle, FontSize: 16, TextColor: #a7cbbb, HorizontalAlignment: Center); }
+     Label #Capacity { Anchor: (Height: 36); Style: (...$C.@DefaultLabelStyle, FontSize: 16, TextColor: #d2bc85, HorizontalAlignment: Center); }
+     Label { Text: "Town Rank unlocks more guard places. Residents keep their home and learned skills when changing duty."; Anchor: (Height: 100, Top: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #acbeb4); }
+    }
+    Group { LayoutMode: Top; FlexWeight: 1;
+     Label { Text: "CHOOSE THEIR CLASS"; Anchor: (Height: 38); Style: (...$C.@DefaultLabelStyle, FontSize: 18, RenderBold: true); }
+     Group { LayoutMode: Left; Anchor: (Height: 194, Bottom: 10);
+      @Class #Class0 {
+       ItemIcon { ItemId: "Weapon_Sword_Copper"; Anchor: (Width: 56, Height: 56); }
+       Label { Text: "KNIGHT"; Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 17, RenderBold: true, TextColor: #d2bc85); }
+       Label { Text: "Sword and shield. Holds the front line."; Anchor: (Height: 54); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true); }
+      }
+      @Class #Class1 {
+       ItemIcon { ItemId: "Weapon_Shortbow_Copper"; Anchor: (Width: 56, Height: 56); }
+       Label { Text: "ARCHER"; Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 17, RenderBold: true, TextColor: #a7cbbb); }
+       Label { Text: "Bow and light armor. Supports from a distance."; Anchor: (Height: 54); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true); }
+      }
+     }
+     Group { LayoutMode: Left; Anchor: (Height: 194);
+      @Class #Class2 {
+       ItemIcon { ItemId: "Weapon_Daggers_Copper"; Anchor: (Width: 56, Height: 56); }
+       Label { Text: "ROGUE"; Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 17, RenderBold: true, TextColor: #c7b5d7); }
+       Label { Text: "Daggers and light armor. Fights at close range."; Anchor: (Height: 54); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true); }
+      }
+      @Class #Class3 {
+       ItemIcon { ItemId: "Weapon_Staff_Copper"; Anchor: (Width: 56, Height: 56); }
+       Label { Text: "MAGE"; Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 17, RenderBold: true, TextColor: #9abddc); }
+       Label { Text: "Staff and cloth armor. Uses ranged magic."; Anchor: (Height: 54); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true); }
+      }
+     }
+     Label #CombatStats { Anchor: (Height: 48, Top: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #d2bc85); }
+    }
+   }
+   Label #Hint { Anchor: (Height: 52, Top: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #c0cbbb); }
+   Group { LayoutMode: Left; Anchor: (Height: 40);
+    $C.@TextButton #Assign { Text: "Assign guard duty"; Anchor: (Width: 230, Right: 12); }
+    $C.@SecondaryTextButton #Return { Text: "Return to civilian life"; Anchor: (Width: 250); }
+    Group { FlexWeight: 1; }
+    $C.@SecondaryTextButton #Back { Text: "Profile"; Anchor: (Width: 120); }
+   }
+  }
+ }
+}
+$C.@BackButton {}

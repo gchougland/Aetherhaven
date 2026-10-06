@@ -16,6 +16,10 @@ import javax.annotation.Nullable;
  * {@code Server/Aetherhaven/Villagers/}. {@link #getNpcRoleId()} matches Hytale {@code NPCEntity} role name.
  */
 public final class VillagerDefinition {
+    /** Optional integration override; omitted roles use the standard recruitment ladder. */
+    private Integer minimumTownLevel;
+    public int getMinimumTownLevel() { return minimumTownLevel == null ? 0 : Math.clamp(minimumTownLevel, 1, 6); }
+
     @SerializedName("npcRoleId")
     private String npcRoleId = "";
 

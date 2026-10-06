@@ -37,6 +37,9 @@
   ],
   "Set": "Aetherhaven",
   "BlockType": {
+    "Interactions": {
+      "Use": { "Interactions": [{ "Type": "OpenCustomUI", "Page": { "Id": "AetherhavenWorkplaceBench" } }] }
+    },
     "Material": "Solid",
     "DrawType": "Model",
     "Opacity": "Transparent",
@@ -63,18 +66,6 @@
           "FaceType": "Full"
         }
       ]
-    },
-    "Interactions": {
-      "Use": {
-        "Interactions": [
-          {
-            "Type": "OpenCustomUI",
-            "Page": {
-              "Id": "AetherhavenJewelryCraftingBench"
-            }
-          }
-        ]
-      }
     }
   },
   "PlayerAnimationsId": "Block",

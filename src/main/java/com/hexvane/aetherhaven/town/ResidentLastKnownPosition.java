@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 public final class ResidentLastKnownPosition {
     @SerializedName("entityUuid")
     private String entityUuid = "";
+    private transient volatile UUID parsedEntityUuid;
 
     @SerializedName("x")
     private double x;
@@ -25,6 +26,7 @@ public final class ResidentLastKnownPosition {
 
     public ResidentLastKnownPosition(@Nonnull UUID entityUuid, double x, double y, double z, long updatedAtEpochMs) {
         this.entityUuid = entityUuid.toString();
+        this.parsedEntityUuid = entityUuid;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -33,11 +35,15 @@ public final class ResidentLastKnownPosition {
 
     @Nonnull
     public UUID getEntityUuid() {
+        UUID parsed = parsedEntityUuid;
+        if (parsed != null) return parsed;
         try {
-            return UUID.fromString(entityUuid.trim());
+            parsed = UUID.fromString(entityUuid.trim());
         } catch (Exception e) {
-            return new UUID(0L, 0L);
+            parsed = new UUID(0L, 0L);
         }
+        parsedEntityUuid = parsed;
+        return parsed;
     }
 
     public double getX() {

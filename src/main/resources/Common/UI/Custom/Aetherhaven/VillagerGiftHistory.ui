@@ -1,4 +1,5 @@
 $C = "../Common.ui";
+$T = "TownUiTheme.ui";
 $Sounds = "../Sounds.ui";
 
 @IconLbl = (
@@ -35,7 +36,7 @@ $C.@PageOverlay {  LayoutMode: Top;
       Anchor: (Full: 0);
 
       $C.@DecoratedContainer {
-        Anchor: (Width: 520);
+        Anchor: (Width: $T.@RecordsWidth, Height: $T.@RecordsHeight);
 
         #Title {
           Label #GiftHistoryTitleText {
@@ -46,8 +47,9 @@ $C.@PageOverlay {  LayoutMode: Top;
         }
 
         #Content {
+          Anchor: (Top: 38, Bottom: 0);
           LayoutMode: Top;
-          Padding: (Full: 16);
+          Padding: (Full: 24);
 
           Group {
             LayoutMode: Left;

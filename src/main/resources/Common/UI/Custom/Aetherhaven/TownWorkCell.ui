@@ -1,0 +1,5 @@
+$C = "../Common.ui";
+Group { LayoutMode: Top; Anchor: (Width: 50, Height: 44);
+  $C.@SecondaryTextButton #Priority { Text: ""; Anchor: (Width: 44, Height: 28); TextTooltipStyle: $C.@DefaultTextTooltipStyle; }
+  Label #Skill { Anchor: (Width: 44, Height: 14, Top: 2); Style: (...$C.@DefaultLabelStyle, FontSize: 11, HorizontalAlignment: Center, TextColor: #becdd9); }
+}

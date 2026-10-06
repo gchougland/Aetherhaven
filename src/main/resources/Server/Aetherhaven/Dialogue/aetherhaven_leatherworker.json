@@ -1,0 +1,369 @@
+{
+  "id": "aetherhaven_leatherworker",
+  "entry": "main_hub",
+  "nodes": {
+    "main_hub": {
+      "speaker": "aetherhaven_leatherworker.speaker",
+      "text": "aetherhaven_leatherworker.hub",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.offer",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              },
+              {
+                "type": "player_holds_any_item"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "giftDisableWhenNotAllowed": true,
+          "next": "gift_confirm"
+        },
+        {
+          "text": "aetherhaven_leatherworker.how",
+          "icon": "UI/Custom/leather.png",
+          "next": "how",
+          "condition": {
+            "type": "not",
+            "condition": {
+              "type": "npc_binding_is_visitor"
+            }
+          },
+          "whenFalse": "hide"
+        },
+        {
+          "text": "aetherhaven_leatherworker.offer",
+          "icon": "home",
+          "next": "offer",
+          "condition": {
+            "type": "not",
+            "condition": {
+              "type": "or",
+              "conditions": [
+                {
+                  "type": "town_quest_active",
+                  "questId": "q_leatherworker"
+                },
+                {
+                  "type": "town_quest_completed",
+                  "questId": "q_leatherworker"
+                }
+              ]
+            }
+          },
+          "whenFalse": "hide"
+        },
+        {
+          "text": "aetherhaven_leatherworker.finish",
+          "next": "welcome",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_leatherworker"
+              },
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_leatherworker"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_leatherworker"
+            }
+          ],
+          "speechClip": "Agree"
+        },
+        {
+          "text": "aetherhaven_leatherworker.progress",
+          "icon": "UI/Custom/hammer.png",
+          "next": "building",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_leatherworker"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_has_complete_plot",
+                  "constructionId": "plot_leatherworker"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide"
+        },
+        {
+          "text": "aetherhaven_leatherworker.bye",
+          "next": null
+        }
+      ],
+      "bodyMode": "villager_greeting",
+      "speechClip": "Greet"
+    },
+    "offer": {
+      "speaker": "aetherhaven_leatherworker.speaker",
+      "text": "aetherhaven_leatherworker.offer.body",
+      "choices": [
+        {
+          "text": "aetherhaven_leatherworker.accept",
+          "next": "accepted",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_leatherworker"
+            }
+          ],
+          "speechClip": "Agree"
+        },
+        {
+          "text": "aetherhaven_leatherworker.later",
+          "next": null
+        }
+      ],
+      "speechClip": "Question"
+    },
+    "accepted": {
+      "speaker": "aetherhaven_leatherworker.speaker",
+      "text": "aetherhaven_leatherworker.accepted.body",
+      "choices": [
+        {
+          "text": "aetherhaven_leatherworker.bye",
+          "next": null
+        }
+      ],
+      "speechClip": "Agree"
+    },
+    "building": {
+      "speaker": "aetherhaven_leatherworker.speaker",
+      "text": "aetherhaven_leatherworker.building.body",
+      "choices": [
+        {
+          "text": "aetherhaven_leatherworker.cancel",
+          "next": "cancelled",
+          "actions": [
+            {
+              "type": "abandon_quest",
+              "id": "q_leatherworker"
+            }
+          ]
+        },
+        {
+          "text": "aetherhaven_leatherworker.bye",
+          "next": null
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "cancelled": {
+      "speaker": "aetherhaven_leatherworker.speaker",
+      "text": "aetherhaven_leatherworker.cancelled.body",
+      "choices": [
+        {
+          "text": "aetherhaven_leatherworker.bye",
+          "next": null
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "welcome": {
+      "speaker": "aetherhaven_leatherworker.speaker",
+      "text": "aetherhaven_leatherworker.welcome.body",
+      "choices": [
+        {
+          "text": "aetherhaven_leatherworker.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "how": {
+      "speaker": "aetherhaven_leatherworker.speaker",
+      "text": "aetherhaven_leatherworker.how.body",
+      "choices": [
+        {
+          "text": "aetherhaven_leatherworker.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_confirm": {
+      "speaker": "aetherhaven_leatherworker.speaker",
+      "text": "aetherhaven_leatherworker.gift.confirm",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmYes",
+          "actions": [
+            {
+              "type": "gift_villager",
+              "reactionNodeLove": "gift_love",
+              "reactionNodeLike": "gift_like",
+              "reactionNodeNeutral": "gift_neutral",
+              "reactionNodeDislike": "gift_dislike"
+            }
+          ],
+          "next": "main_hub"
+        },
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmNo",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_love": {
+      "speaker": "aetherhaven_leatherworker.speaker",
+      "text": "aetherhaven_leatherworker.gift_love",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_like": {
+      "speaker": "aetherhaven_leatherworker.speaker",
+      "text": "aetherhaven_leatherworker.gift_like",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_neutral": {
+      "speaker": "aetherhaven_leatherworker.speaker",
+      "text": "aetherhaven_leatherworker.gift_neutral",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_dislike": {
+      "speaker": "aetherhaven_leatherworker.speaker",
+      "text": "aetherhaven_leatherworker.gift_dislike",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_love_birthday": {
+      "speaker": "aetherhaven_leatherworker.speaker",
+      "text": "aetherhaven_leatherworker.gift_love_birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_like_birthday": {
+      "speaker": "aetherhaven_leatherworker.speaker",
+      "text": "aetherhaven_leatherworker.gift_like_birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_neutral_birthday": {
+      "speaker": "aetherhaven_leatherworker.speaker",
+      "text": "aetherhaven_leatherworker.gift_neutral_birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_dislike_birthday": {
+      "speaker": "aetherhaven_leatherworker.speaker",
+      "text": "aetherhaven_leatherworker.gift_dislike_birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "rep_reward_25": {
+      "speaker": "aetherhaven_leatherworker.speaker",
+      "text": "aetherhaven_artisan_rewards.leatherworker.25",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_leatherworker_25"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "rep_reward_50": {
+      "speaker": "aetherhaven_leatherworker.speaker",
+      "text": "aetherhaven_artisan_rewards.leatherworker.50",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_leatherworker_50"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "rep_reward_75": {
+      "speaker": "aetherhaven_leatherworker.speaker",
+      "text": "aetherhaven_artisan_rewards.leatherworker.75",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_leatherworker_75"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
+    }
+  }
+}

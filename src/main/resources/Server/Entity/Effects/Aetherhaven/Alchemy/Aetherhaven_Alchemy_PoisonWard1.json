@@ -1,0 +1,13 @@
+{
+  "DamageResistance": {
+    "Poison": [
+      {
+        "Amount": 1.0,
+        "CalculationType": "Percent"
+      }
+    ]
+  },
+  "Duration": 60,
+  "OverlapBehavior": "Overwrite",
+  "StatusEffectIcon": "UI/StatusEffects/Aetherhaven/Alchemy_PoisonWard.png"
+}

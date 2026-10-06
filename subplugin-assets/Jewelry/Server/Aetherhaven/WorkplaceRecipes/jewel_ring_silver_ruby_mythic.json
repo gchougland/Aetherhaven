@@ -1,0 +1,31 @@
+{
+  "id": "jewel_ring_silver_ruby_mythic",
+  "name": "Mythic silver ruby ring",
+  "workplace": "jewelry",
+  "sourceRecipe": "workplace:jewel_ring_silver_ruby_mythic",
+  "bench": "Aetherhaven_Jewelry_Crafting_Bench",
+  "benchTier": 1,
+  "skillLevel": 7,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Silver",
+      "count": 5
+    },
+    {
+      "itemId": "Rock_Gem_Ruby",
+      "count": 1
+    },
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 5
+    },
+    {
+      "itemId": "Ingredient_Life_Essence_Concentrated",
+      "count": 1
+    }
+  ],
+  "output": "Aetherhaven_Ring_Silver_Ruby",
+  "outputCount": 1,
+  "workSeconds": 60,
+  "jewelryRarity": "mythic"
+}

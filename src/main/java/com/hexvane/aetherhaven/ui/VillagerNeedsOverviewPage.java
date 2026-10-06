@@ -11,18 +11,14 @@ import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
-import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.component.ArchetypeChunk;
-import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Rotation3f;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
-import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
@@ -55,6 +51,7 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
     @Nullable
     private final Vector3i managementBlockPos;
     private int selectedIndex;
+    private String residentFilter = "All";
     /** -1 = default (0); set when reopening (e.g. from gift history back). */
     private final int initialVillagerIndex;
     /** Read-only preview (e.g. Town Journal): no rescue teleport or gift history navigation. */
@@ -144,6 +141,12 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
             templateAppended = true;
         }
         AetherhavenUiLocalization.applyVillagerNeedsOverview(commandBuilder);
+        for (String filter : List.of("All", "Core", "Townsfolk")) {
+            commandBuilder.set("#Filter" + filter + ".Disabled", residentFilter.equals(filter));
+            eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#Filter" + filter,
+                EventData.of("Action", "Filter" + filter), false);
+        }
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#OpenProfile", EventData.of("Action", "Profile"), false);
         if (templateAppended && !reputationHeartSlotsAppended) {
             for (int h = 0; h < 10; h++) {
                 commandBuilder.append(REPUTATION_HEART_SLOTS, "Aetherhaven/HeartSlot.ui");
@@ -186,6 +189,7 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
             return;
         }
         TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).getTown(townId);
+        if (town != null && !town.hasMemberOrOwner(playerRef.getUuid())) { close(); return; }
         if (town == null) {
             commandBuilder.set("#RescueTeleportButton.Visible", false);
             commandBuilder.set("#GiftHistoryButton.Visible", false);
@@ -197,6 +201,7 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
         Store<EntityStore> entityStore = world.getEntityStore().getStore();
         List<TownVillagerRow> rows = TownVillagerDirectory.listResidents(entityStore, town);
         if (rows.isEmpty()) {
+            commandBuilder.set("#ResidentDetails.Visible", false);
             commandBuilder.set("#RescueTeleportButton.Visible", false);
             commandBuilder.set("#GiftHistoryButton.Visible", false);
             commandBuilder.set("#Hint.Visible", true);
@@ -211,41 +216,43 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
         commandBuilder.set("#RescueTeleportButton.Visible", !viewOnly);
         commandBuilder.set("#Hint.Visible", false);
         commandBuilder.clear(VILLAGER_ROWS);
+        int visibleRow = 0;
         for (int i = 0; i < rows.size(); i++) {
             TownVillagerRow r = rows.get(i);
-            commandBuilder.append(VILLAGER_ROWS, "Aetherhaven/VillagerNeedsRow.ui");
-            String row = VILLAGER_ROWS + "[" + i + "]";
-            commandBuilder.set(row + " #Pick #Portrait.AssetPath", r.portraitPath());
-            commandBuilder.set(row + " #Pick #Label.TextSpans", Message.raw(r.label()));
+            boolean townsfolk = com.hexvane.aetherhaven.town.TownResidentEligibility.isTownsfolkPoolKind(r.bindingKind(), r.roleId(), plugin);
+            if (!residentFilter.equals("All") && residentFilter.equals("Townsfolk") != townsfolk) continue;
+            commandBuilder.append(VILLAGER_ROWS, "Aetherhaven/TownJournalVillagerRow.ui");
+            String row = VILLAGER_ROWS + "[" + visibleRow++ + "]";
+            commandBuilder.set(row + " #Portrait.AssetPath", r.portraitPath());
+            commandBuilder.set(row + " #VillagerName.Text", r.label());
+            commandBuilder.set(row + " #ScheduleLocation.Text", townsfolk ? "Townsfolk" : "Villager");
+            commandBuilder.set(row + " #LocateGroup.Visible", false);
+            commandBuilder.set(row + " #Select.Disabled", selectedIndex == i);
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
-                row + " #Pick",
+                row + " #Select",
                 new EventData().append("Action", "Select").append("Index", Integer.toString(i)),
                 false
             );
         }
 
+        commandBuilder.set("#ResidentDetails.Visible", visibleRow > 0);
         TownVillagerRow sel = rows.get(selectedIndex);
-        boolean showNeeds = sel.usesNeeds();
-        commandBuilder.set("#NeedsBarsGroup.Visible", showNeeds);
-        commandBuilder.set("#NoNeedsHint.Visible", !showNeeds);
-        if (!showNeeds) {
-            commandBuilder.set(
-                "#NoNeedsHint.TextSpans",
-                Message.translation("aetherhaven_ui_town.aetherhaven.ui.villagerneeds.noNeedsForResident")
-            );
-        }
-        VillagerNeeds needs = showNeeds ? findNeeds(entityStore, sel.entityUuid()) : null;
-        float hunger = needs != null ? needs.getHunger() / VillagerNeeds.MAX : 0.5f;
-        float energy = needs != null ? needs.getEnergy() / VillagerNeeds.MAX : 0.5f;
-        float fun = needs != null ? needs.getFun() / VillagerNeeds.MAX : 0.5f;
-        commandBuilder.set("#HungerBar.Value", hunger);
-        commandBuilder.set("#EnergyBar.Value", energy);
-        commandBuilder.set("#FunBar.Value", fun);
-        commandBuilder.set("#Portrait.AssetPath", sel.portraitPath());
+        commandBuilder.set("#ResidentName.Text", sel.label());
+        commandBuilder.set("#OpenProfile.Disabled", !ResidentProfileNavigation.supports(store, town, sel));
+        boolean showNeeds = sel.usesNeeds() || TownVillagerBinding.KIND_TOWNSFOLK.equals(sel.bindingKind());
+        var needs = ResidentNeedsUi.read(entityStore, town, sel.entityUuid(), showNeeds);
+        commandBuilder.set("#NeedsBarsGroup.Visible", needs.available());
+        commandBuilder.set("#NoNeedsHint.Visible", true);
+        commandBuilder.set("#NoNeedsHint.Text", needs.status());
+        commandBuilder.set("#HungerBar.Value", needs.hunger());
+        commandBuilder.set("#EnergyBar.Value", needs.energy());
+        commandBuilder.set("#FunBar.Value", needs.fun());
+        commandBuilder.set("#SelectedResidentPortrait.AssetPath", sel.portraitPath());
 
         Ref<EntityStore> selRef = entityStore.getExternalData().getRefFromUUID(sel.entityUuid());
-        boolean befriendable = VillagerBefriendableResolver.isBefriendable(entityStore, selRef, plugin);
+        boolean befriendable = !com.hexvane.aetherhaven.town.TownResidentEligibility.isTownsfolkPoolKind(sel.bindingKind(), sel.roleId(), plugin)
+            && VillagerBefriendableResolver.isBefriendableByEntity(entityStore, sel.entityUuid(), sel.roleId(), plugin);
         commandBuilder.set("#ReputationBlock.Visible", befriendable);
         commandBuilder.set("#GiftHistoryButton.Visible", befriendable && !viewOnly);
         UUIDComponent pu = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -261,7 +268,28 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
+        var plugin = AetherhavenPlugin.get();
+        if (plugin == null) return;
+        var town = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin).getTown(townId);
+        if (town == null || !town.hasMemberOrOwner(playerRef.getUuid())) { close(); return; }
         if (data.action != null) {
+            if (List.of("FilterAll", "FilterCore", "FilterTownsfolk").contains(data.action)) {
+                residentFilter = data.action.substring(6);
+                var residents = TownVillagerDirectory.listResidents(store, town);
+                for (int i = 0; i < residents.size(); i++) {
+                    var resident = residents.get(i);
+                    boolean folk = com.hexvane.aetherhaven.town.TownResidentEligibility.isTownsfolkPoolKind(resident.bindingKind(), resident.roleId(), plugin);
+                    if (residentFilter.equals("All") || residentFilter.equals("Townsfolk") == folk) { selectedIndex = i; break; }
+                }
+                var c = new UICommandBuilder(); var e = new UIEventBuilder();
+                build(ref, c, e, store); sendUpdate(c, e, false); return;
+            }
+            if (data.action.equals("Profile")) {
+                var rows = TownVillagerDirectory.listResidents(store, town);
+                if (selectedIndex >= 0 && selectedIndex < rows.size())
+                    ResidentProfileNavigation.open(playerRef, ref, store, town, rows.get(selectedIndex).entityUuid(), viewOnly);
+                return;
+            }
             if (data.action.equalsIgnoreCase("SwitchTabPlot")) {
                 openPlotManagement(ref, store, 0, false);
                 return;
@@ -369,6 +397,15 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
     }
 
     private void handleRescueTeleport(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        var plugin=AetherhavenPlugin.get();if(plugin==null)return;
+        var town=AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(),plugin).getTown(townId);
+        if(town==null)return;
+        var rows=TownVillagerDirectory.listResidents(store,town);
+        if(selectedIndex<0||selectedIndex>=rows.size())return;
+        rescueResident(playerRef,ref,store,townId,rows.get(selectedIndex).entityUuid());
+    }
+
+    public static void rescueResident(PlayerRef playerRef,Ref<EntityStore> ref,Store<EntityStore> store,UUID townId,UUID residentId) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {
             return;
@@ -386,7 +423,7 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
             playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noQuestPermission"));
             return;
         }
-        int idx = selectedIndex;
+
         world.execute(
             () -> {
                 AetherhavenPlugin p = AetherhavenPlugin.get();
@@ -399,14 +436,12 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
                     return;
                 }
                 TownRecord tr = AetherhavenWorldRegistries.getOrCreateTownManager(world, p).getTown(townId);
-                if (tr == null) {
+                if (tr == null || !tr.hasMemberOrOwner(playerRef.getUuid()) || !tr.playerHasQuestPermission(playerRef.getUuid())) {
                     return;
                 }
                 List<TownVillagerRow> rows = TownVillagerDirectory.listResidents(es, tr);
-                if (rows.isEmpty() || idx < 0 || idx >= rows.size()) {
-                    return;
-                }
-                TownVillagerRow sel = rows.get(idx);
+                var sel = rows.stream().filter(r -> residentId.equals(r.entityUuid())).findFirst().orElse(null);
+                if (sel == null) return;
                 Ref<EntityStore> npcRef = es.getExternalData().getRefFromUUID(sel.entityUuid());
                 if (npcRef == null || !npcRef.isValid()) {
                     playerRef.sendMessage(Message.translation("aetherhaven_quests_portals.aetherhaven.villager.locateNotLoaded"));
@@ -454,6 +489,7 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
             return;
         }
         TownVillagerRow sel = rows.get(selectedIndex);
+        if (!VillagerBefriendableResolver.isBefriendableByEntity(store, sel.entityUuid(), sel.roleId(), plugin)) return;
         Player player = store.getComponent(ref, Player.getComponentType());
         if (player == null) {
             return;
@@ -518,27 +554,6 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
         } catch (IllegalArgumentException e) {
             return false;
         }
-    }
-
-    @Nullable
-    private static VillagerNeeds findNeeds(@Nonnull Store<EntityStore> store, @Nonnull UUID entityUuid) {
-        VillagerNeeds[] found = new VillagerNeeds[1];
-        store.forEachChunk(
-            Query.and(VillagerNeeds.getComponentType(), UUIDComponent.getComponentType()),
-            (ArchetypeChunk<EntityStore> archetypeChunk, CommandBuffer<EntityStore> commandBuffer) -> {
-                if (found[0] != null) {
-                    return;
-                }
-                for (int i = 0; i < archetypeChunk.size(); i++) {
-                    UUIDComponent u = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
-                    if (u != null && entityUuid.equals(u.getUuid())) {
-                        found[0] = archetypeChunk.getComponent(i, VillagerNeeds.getComponentType());
-                        return;
-                    }
-                }
-            }
-        );
-        return found[0];
     }
 
     public static final class PageData {

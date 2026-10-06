@@ -39,7 +39,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 
 public final class PlotBuildingRelocation {
-    private static final int SIGN_BREAK_SETTINGS = 10;
     private static final int INSTANT_BLOCKS_PER_BATCH = 500_000;
     private static final long INSTANT_BATCH_DELAY_MS = 1L;
 
@@ -126,6 +125,7 @@ public final class PlotBuildingRelocation {
         }
 
         PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
+        com.hexvane.aetherhaven.halloween.HalloweenGameService.beforeBuildingMove(world, store, tm, town, movePlotId);
         reg.unregisterByPlotId(movePlotId);
 
         ShopSpotRegistry shopRegistry = AetherhavenWorldRegistries.getOrCreateShopSpotRegistry(world, plugin);
@@ -153,7 +153,8 @@ public final class PlotBuildingRelocation {
 
         Runnable onComplete =
             () -> {
-                ChunkSectionBlockUtil.breakBlock(world, signPos.x, signPos.y, signPos.z, SIGN_BREAK_SETTINGS);
+                // Moving places no destination sign. This cell now belongs to the rebuilt prefab,
+                // and can contain furniture (the Laboratory cauldron sits at its center).
                 ConstructionCompleter.finishBuild(world, plugin, playerUuid, movePlotId, prefabOrigin, session.getPrefabYaw());
             };
         ConstructionAnimator.start(

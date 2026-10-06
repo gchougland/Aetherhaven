@@ -26,6 +26,7 @@ public final class BuildingStaffTiers {
             return false;
         }
         return AetherhavenConstants.BUILDING_STAFF_ITEM_ID.equals(itemId)
+            || "Aetherhaven_Workplace_Tool".equals(itemId) // Hidden alias for early 4.0 test saves.
             || STAFF_ITEM_ID_IRON.equals(itemId)
             || STAFF_ITEM_ID_THORIUM.equals(itemId)
             || STAFF_ITEM_ID_COBALT.equals(itemId)

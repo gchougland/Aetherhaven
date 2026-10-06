@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_seeds_onion_eternal",
+  "name": "Seeds Onion Eternal",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_seeds_onion_eternal",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 8,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 100
+    }
+  ],
+  "output": "Plant_Seeds_Onion_Eternal",
+  "outputCount": 1,
+  "workSeconds": 24
+}

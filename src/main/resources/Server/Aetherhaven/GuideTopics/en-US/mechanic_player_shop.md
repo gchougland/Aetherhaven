@@ -19,6 +19,8 @@ Vex now runs a **general store** selling furniture, blocks, and consumables thro
 
 ## Your own shop
 
+Assign a civilian with Commerce through the shop's town records shelf. They must be employed, paid and attending the counter during daylight for visiting villagers and tourists to buy. Higher Commerce skill improves the chance of a purchase. Guard duty takes priority over shop work. Shop work pauses when no town member is in this world, alongside wages.
+
 After **Vex's market stall** is built, Vex offers **Your Own Shop**:
 
 1. Take the **player shop** plot token from Vex.

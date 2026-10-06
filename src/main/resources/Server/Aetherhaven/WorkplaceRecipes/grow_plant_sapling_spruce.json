@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_sapling_spruce",
+  "name": "Sapling Spruce",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_sapling_spruce",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 4,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 15
+    }
+  ],
+  "output": "Plant_Sapling_Spruce",
+  "outputCount": 1,
+  "workSeconds": 16
+}

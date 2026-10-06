@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_seeds_onion",
+  "name": "Seeds Onion",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_seeds_onion",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 7,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 10
+    }
+  ],
+  "output": "Plant_Seeds_Onion",
+  "outputCount": 1,
+  "workSeconds": 22
+}

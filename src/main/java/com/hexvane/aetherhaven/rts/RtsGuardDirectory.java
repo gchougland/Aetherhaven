@@ -35,7 +35,8 @@ public final class RtsGuardDirectory {
                 continue;
             }
             Ref<EntityStore> ref = findByUuid(store, u);
-            if (ref != null && isTownGuard(ref, store, town.getTownId())) {
+            if (ref != null && isTownGuard(ref, store, town.getTownId())
+                && store.getComponent(ref, com.hypixel.hytale.server.core.modules.entity.damage.DeathComponent.getComponentType()) == null) {
                 out.add(ref);
             }
         }

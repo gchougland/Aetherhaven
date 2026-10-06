@@ -1,0 +1,9 @@
+{
+  "id": "brew_small_stamina",
+  "name": "Small Stamina Potion",
+  "workplace": "alchemy",
+  "sourceRecipe": "Potion_Stamina_Small_Recipe_Generated_0",
+  "bench": "Alchemybench",
+  "benchTier": 2,
+  "skillLevel": 4
+}

@@ -719,7 +719,7 @@ public final class PoiAutonomyVisuals {
         }
     }
 
-    private static void applyBodyYaw(
+    public static void applyBodyYaw(
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,

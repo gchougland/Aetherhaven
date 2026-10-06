@@ -44,11 +44,19 @@ public final class PlotCreatorBlockInteraction extends SimpleBlockInteraction {
         }
         Ref<EntityStore> ref = context.getEntity();
         PlayerRef playerRef = commandBuffer.getComponent(ref, PlayerRef.getComponentType());
-        if (playerRef == null || !PlotCreatorInteractions.hasPlotCreatorPermission(playerRef)) {
+        if (playerRef == null) {
             context.getState().state = InteractionState.Failed;
             return;
         }
         PlotCreatorSession session = PlotCreatorSessions.get(playerRef.getUuid());
+        boolean allowed = PlotCreatorStaffBoundsSwap.isEditorBoundsStaff(itemInHand)
+            ? session != null && session.getDraft().isBuildingEditorMode()
+                && BuildingEditorSessionStarter.requireCreative(playerRef, ref, commandBuffer.getStore())
+            : PlotCreatorInteractions.hasPlotCreatorPermission(playerRef);
+        if (!allowed) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
         if (session == null) {
             context.getState().state = InteractionState.Failed;
             return;

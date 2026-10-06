@@ -1,0 +1,35 @@
+{
+  "Type": "Variant",
+  "Reference": "Template_Animal_Neutral",
+  "Modify": {
+    "Appearance": "Calf",
+    "FlockArray": [],
+    "AttractiveItemSet": [
+      "Plant_Crop_Lettuce_Item"
+    ],
+    "AttractiveItemSetParticles": "Want_Food_Lettuce",
+    "DropList": "Empty",
+    "MaxHealth": 60,
+    "ViewRange": 12,
+    "ViewSector": 320,
+    "HearingRange": 7,
+    "AlertedRange": 13,
+    "AlertedActionRange": 6,
+    "AbsoluteDetectionRange": 1.5,
+    "IsTameable": false,
+    "TameRoleChange": "Tamed_Cow_Calf",
+    "IsMemory": false,
+    "MemoriesNameOverride": "Cow_Calf",
+    "NameTranslationKey": {
+      "Compute": "NameTranslationKey"
+    },
+    "ProduceItem": ""
+  },
+  "Parameters": {
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Cow_Calf.name",
+      "Description": "Translation key for NPC name display"
+    }
+  },
+  "$Comment": "Town managed offspring. Native species behavior with no item output, taming or memories."
+}

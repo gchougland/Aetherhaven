@@ -1,0 +1,84 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+$C.@PageOverlay { LayoutMode: Middle;
+  $C.@DecoratedContainer { Anchor: (Width: 1080, Height: 800);
+    #Title { Label #Name { Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+    #Content { LayoutMode: Top; Padding: (Full: 24);
+      Group { LayoutMode: Left; FlexWeight: 1;
+        Group { LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; Anchor: (Width: 224, Right: 16); Background: $T.@Panel; Padding: (Full: 12);
+          Label #DutyLabel { Text: "TOWNSFOLK"; Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d2bc85, HorizontalAlignment: Center, RenderBold: true); }
+          Group { Anchor: (Height: 126, Bottom: 4); Background: $T.@Inset;
+            AssetImage #Portrait { Anchor: (Width: 120, Height: 120, Top: 3, Left: 40); }
+          }
+          Label #Identity { Anchor: (Height: 40, Bottom: 2); Style: (...$C.@DefaultLabelStyle, FontSize: 18, RenderBold: true, Wrap: true, HorizontalAlignment: Center); }
+          Label #TownName { Anchor: (Height: 32, Bottom: 4); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #9ab8ae, Wrap: true, HorizontalAlignment: Center); }
+          Group { Anchor: (Height: 1, Bottom: 12); Background: #3b5153; }
+          Label #Summary { Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 17, RenderBold: true, TextColor: #e0c891); }
+          Group { LayoutMode: Left; Anchor: (Height: 8, Top: 4, Bottom: 6);
+            Group #MasteryPip0 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #MasteryPip1 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #MasteryPip2 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #MasteryPip3 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #MasteryPip4 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #MasteryPip5 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #MasteryPip6 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #MasteryPip7 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #MasteryPip8 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #MasteryPip9 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #MasteryPip10 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #MasteryPip11 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #MasteryPip12 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #MasteryPip13 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #MasteryPip14 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #MasteryPip15 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #MasteryPip16 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #MasteryPip17 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #MasteryPip18 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+            Group #MasteryPip19 { FlexWeight: 1; Anchor: (Right: 2); Background: #30434a; }
+          }
+          Label #MasteryXp { TextTooltipStyle: $C.@DefaultTextTooltipStyle; Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #b6c6d3); }
+          $C.@ProgressBar #MasteryXpBar { Anchor: (Height: 10, Bottom: 8); Value: 0.0; }
+          Label #SkillPoints { Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #99c7b5); }
+          Label #AttributePoints { Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #e0c891); }
+          Group #NeedsHost { LayoutMode: Top; Anchor: (Top: 12, Bottom: 4); }
+          Button #Equipment { TextTooltipStyle: $C.@DefaultTextTooltipStyle; LayoutMode: Left; Anchor: (Height: 62, Top: 8); Padding: (Full: 8);
+            Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed));
+            ItemIcon #KitIcon { Anchor: (Width: 44, Height: 44, Right: 8); }
+            Label #KitName { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #d2bc85, Wrap: true, VerticalAlignment: Center); }
+          }
+          Button #GuardEquipment { TextTooltipStyle: $C.@DefaultTextTooltipStyle; LayoutMode: Left; Anchor: (Height: 62, Top: 8); Padding: (Full: 8);
+            Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed));
+            ItemIcon #GuardKitIcon { Anchor: (Width: 44, Height: 44, Right: 8); }
+            Label #GuardKitName { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #d2bc85, Wrap: true, VerticalAlignment: Center); }
+          }
+          $C.@SecondaryTextButton #GuardDuty { Text: "Guard duty"; Anchor: (Height: 38, Top: 10); }
+        }
+        Group { LayoutMode: Top; Anchor: (Width: 234, Right: 16);
+          Label { Text: "ATTRIBUTES"; Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 18, TextColor: #e0c891, RenderBold: true); }
+          Label { Text: "Combat and physical ability"; Anchor: (Height: 28, Bottom: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #92a5af); }
+          Group #Attributes { LayoutMode: Top; }
+          Group { LayoutMode: Left; Anchor: (Height: 36, Top: 8);
+            ItemIcon { ItemId: "Aetherhaven_Shard_Of_Gaia"; Anchor: (Width: 28, Height: 28, Right: 6); }
+            Label { Text: "Train with Gaia Shards"; Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d2bc85, VerticalAlignment: Center); }
+          }
+        }
+        Group { LayoutMode: Top; FlexWeight: 1;
+          Label { Text: "PROFESSION SKILLS"; Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 18, TextColor: #99c7b5, RenderBold: true); }
+          Label { Text: "Aptitude for work across your town"; Anchor: (Height: 28, Bottom: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #92a5af); }
+          Group #SkillRow0 { LayoutMode: Left; Anchor: (Height: 112, Bottom: 8); }
+          Group #SkillRow1 { LayoutMode: Left; Anchor: (Height: 112, Bottom: 8); }
+          Group #SkillRow2 { LayoutMode: Left; Anchor: (Height: 112, Bottom: 8); }
+          Group #SkillRow3 { LayoutMode: Left; Anchor: (Height: 112, Bottom: 8); }
+          Label { Text: "Train with Verdant Catalysts"; Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #99c7b5); }
+        }
+      }
+      Group { LayoutMode: Left; Anchor: (Height: 32, Top: 6);
+        $C.@SecondaryTextButton #ReturnToJournal { Text: "Back to Journal"; Visible: false; Anchor: (Width: 180, Height: 32); }
+        Group { FlexWeight: 1; }
+        $C.@SecondaryTextButton #Refresh { Text: "Refresh"; Anchor: (Width: 114, Height: 32); }
+      }
+      Label #Hint { Anchor: (Height: 44, Top: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #b6c6d3); }
+    }
+  }
+}
+$C.@BackButton {}

@@ -13,7 +13,10 @@
       "Description": "Melee attack range"
     },
     "DesiredAttackDistanceRange": {
-      "Value": [1.5, 2.2],
+      "Value": [
+        1.5,
+        2.2
+      ],
       "Description": "Preferred melee engagement band"
     },
     "CombatBehaviorDistance": {
@@ -21,11 +24,17 @@
       "Description": "Distance within which combat positioning runs"
     },
     "StrafingDurationRange": {
-      "Value": [0.4, 1],
+      "Value": [
+        0.4,
+        1
+      ],
       "Description": "How long to strafe while maintaining distance"
     },
     "StrafingFrequencyRange": {
-      "Value": [0.5, 1.5],
+      "Value": [
+        0.5,
+        1.5
+      ],
       "Description": "How often to strafe while maintaining distance"
     },
     "MeleeAttack": {
@@ -33,11 +42,17 @@
       "Description": "Melee attack interaction root"
     },
     "AttackPauseRange": {
-      "Value": [1, 2],
+      "Value": [
+        1,
+        2
+      ],
       "Description": "Pause between melee swings"
     },
     "CombatAttackPreDelay": {
-      "Value": [0.15, 0.35],
+      "Value": [
+        0.15,
+        0.35
+      ],
       "Description": "Brief stop before swinging so the hit connects"
     }
   },
@@ -45,10 +60,27 @@
     "Instructions": [
       {
         "Continue": true,
-        "Sensor": { "Type": "Damage", "Combat": true },
+        "Sensor": {
+          "Type": "And",
+          "Sensors": [
+            {
+              "Type": "AetherhavenGuardAutomaticAggro"
+            },
+            {
+              "Type": "Damage",
+              "Combat": true
+            }
+          ]
+        },
         "Actions": [
-          { "Type": "AddToHostileTargetMemory" },
-          { "Type": "OverrideAttitude", "Attitude": "Hostile", "Duration": 60 }
+          {
+            "Type": "AddToHostileTargetMemory"
+          },
+          {
+            "Type": "OverrideAttitude",
+            "Attitude": "Hostile",
+            "Duration": 60
+          }
         ]
       },
       {
@@ -58,18 +90,34 @@
           "Sensors": [
             {
               "Type": "Target",
-              "Range": { "Compute": "CombatBehaviorDistance" },
-              "Filters": [{ "Type": "LineOfSight" }]
+              "Range": {
+                "Compute": "CombatBehaviorDistance"
+              },
+              "Filters": [
+                {
+                  "Type": "LineOfSight"
+                }
+              ]
             },
             {
               "Type": "Target",
               "TargetSlot": "LockedTarget",
-              "Range": { "Compute": "CombatBehaviorDistance" },
-              "Filters": [{ "Type": "LineOfSight" }]
+              "Range": {
+                "Compute": "CombatBehaviorDistance"
+              },
+              "Filters": [
+                {
+                  "Type": "LineOfSight"
+                }
+              ]
             }
           ]
         },
-        "HeadMotion": { "Type": "Aim", "RelativeTurnSpeed": 1.5, "HitProbability": 1.0 }
+        "HeadMotion": {
+          "Type": "Aim",
+          "RelativeTurnSpeed": 1.5,
+          "HitProbability": 1.0
+        }
       },
       {
         "Continue": true,
@@ -78,26 +126,51 @@
           "Sensors": [
             {
               "Type": "Target",
-              "Range": { "Compute": "AttackDistance" },
-              "Filters": [{ "Type": "LineOfSight" }]
+              "Range": {
+                "Compute": "AttackDistance"
+              },
+              "Filters": [
+                {
+                  "Type": "LineOfSight"
+                }
+              ]
             },
             {
               "Type": "Target",
               "TargetSlot": "LockedTarget",
-              "Range": { "Compute": "AttackDistance" },
-              "Filters": [{ "Type": "LineOfSight" }]
+              "Range": {
+                "Compute": "AttackDistance"
+              },
+              "Filters": [
+                {
+                  "Type": "LineOfSight"
+                }
+              ]
             }
           ]
         },
         "ActionsBlocking": true,
-        "HeadMotion": { "Type": "Aim", "RelativeTurnSpeed": 1.5, "HitProbability": 1.0 },
+        "HeadMotion": {
+          "Type": "Aim",
+          "RelativeTurnSpeed": 1.5,
+          "HitProbability": 1.0
+        },
         "Actions": [
-          { "Type": "Timeout", "Delay": { "Compute": "CombatAttackPreDelay" } },
+          {
+            "Type": "Timeout",
+            "Delay": {
+              "Compute": "CombatAttackPreDelay"
+            }
+          },
           {
             "Type": "Attack",
-            "Attack": { "Compute": "MeleeAttack" },
+            "Attack": {
+              "Compute": "MeleeAttack"
+            },
             "AvoidFriendlyFire": true,
-            "AttackPauseRange": { "Compute": "AttackPauseRange" }
+            "AttackPauseRange": {
+              "Compute": "AttackPauseRange"
+            }
           }
         ]
       },
@@ -111,14 +184,26 @@
               "Sensors": [
                 {
                   "Type": "Target",
-                  "Range": { "Compute": "ViewRange" },
-                  "Filters": [{ "Type": "LineOfSight" }]
+                  "Range": {
+                    "Compute": "ViewRange"
+                  },
+                  "Filters": [
+                    {
+                      "Type": "LineOfSight"
+                    }
+                  ]
                 },
                 {
                   "Type": "Target",
                   "TargetSlot": "LockedTarget",
-                  "Range": { "Compute": "ViewRange" },
-                  "Filters": [{ "Type": "LineOfSight" }]
+                  "Range": {
+                    "Compute": "ViewRange"
+                  },
+                  "Filters": [
+                    {
+                      "Type": "LineOfSight"
+                    }
+                  ]
                 }
               ]
             },
@@ -129,14 +214,26 @@
                 "Sensors": [
                   {
                     "Type": "Target",
-                    "Range": { "Compute": "AttackDistance" },
-                    "Filters": [{ "Type": "LineOfSight" }]
+                    "Range": {
+                      "Compute": "AttackDistance"
+                    },
+                    "Filters": [
+                      {
+                        "Type": "LineOfSight"
+                      }
+                    ]
                   },
                   {
                     "Type": "Target",
                     "TargetSlot": "LockedTarget",
-                    "Range": { "Compute": "AttackDistance" },
-                    "Filters": [{ "Type": "LineOfSight" }]
+                    "Range": {
+                      "Compute": "AttackDistance"
+                    },
+                    "Filters": [
+                      {
+                        "Type": "LineOfSight"
+                      }
+                    ]
                   }
                 ]
               }
@@ -162,23 +259,41 @@
           "Sensors": [
             {
               "Type": "Target",
-              "Range": { "Compute": "CombatBehaviorDistance" },
-              "Filters": [{ "Type": "LineOfSight" }]
+              "Range": {
+                "Compute": "CombatBehaviorDistance"
+              },
+              "Filters": [
+                {
+                  "Type": "LineOfSight"
+                }
+              ]
             },
             {
               "Type": "Target",
               "TargetSlot": "LockedTarget",
-              "Range": { "Compute": "CombatBehaviorDistance" },
-              "Filters": [{ "Type": "LineOfSight" }]
+              "Range": {
+                "Compute": "CombatBehaviorDistance"
+              },
+              "Filters": [
+                {
+                  "Type": "LineOfSight"
+                }
+              ]
             }
           ]
         },
         "BodyMotion": {
           "Type": "MaintainDistance",
-          "DesiredDistanceRange": { "Compute": "DesiredAttackDistanceRange" },
+          "DesiredDistanceRange": {
+            "Compute": "DesiredAttackDistanceRange"
+          },
           "MoveThreshold": 0.25,
-          "StrafingDurationRange": { "Compute": "StrafingDurationRange" },
-          "StrafingFrequencyRange": { "Compute": "StrafingFrequencyRange" },
+          "StrafingDurationRange": {
+            "Compute": "StrafingDurationRange"
+          },
+          "StrafingFrequencyRange": {
+            "Compute": "StrafingFrequencyRange"
+          },
           "RelativeForwardsSpeed": 0.75,
           "RelativeBackwardsSpeed": 0.4
         }

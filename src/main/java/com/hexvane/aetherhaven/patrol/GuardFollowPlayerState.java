@@ -24,6 +24,11 @@ public final class GuardFollowPlayerState implements Component<EntityStore> {
                 v -> v.playerUuid
             )
             .add()
+            .append(new KeyedCodec<>("Stance", Codec.STRING), (v, x) -> v.stance = GuardEscortStance.fromSaved(x), v -> v.stance.name()).add()
+            .append(new KeyedCodec<>("Waiting", Codec.BOOLEAN), (v, x) -> v.waiting = Boolean.TRUE.equals(x), v -> v.waiting).add()
+            .append(new KeyedCodec<>("WaitX", Codec.DOUBLE), (v, x) -> v.waitX = x, v -> v.waitX).add()
+            .append(new KeyedCodec<>("WaitY", Codec.DOUBLE), (v, x) -> v.waitY = x, v -> v.waitY).add()
+            .append(new KeyedCodec<>("WaitZ", Codec.DOUBLE), (v, x) -> v.waitZ = x, v -> v.waitZ).add()
             .build();
 
     @Nullable
@@ -32,6 +37,30 @@ public final class GuardFollowPlayerState implements Component<EntityStore> {
     private boolean active;
     @Nullable
     private String playerUuid;
+    private GuardEscortStance stance = GuardEscortStance.OFFENSIVE;
+    private boolean waiting;
+    private double waitX;
+    private double waitY;
+    private double waitZ;
+
+    public GuardEscortStance getStance() { return stance; }
+    public void setStance(@Nonnull GuardEscortStance stance) { this.stance = java.util.Objects.requireNonNull(stance); }
+    public boolean isWaiting() { return active && waiting; }
+    public double getWaitX() { return waitX; }
+    public double getWaitY() { return waitY; }
+    public double getWaitZ() { return waitZ; }
+
+    public void waitHere(double x, double y, double z) {
+        if (!active || !Double.isFinite(x) || !Double.isFinite(y) || !Double.isFinite(z)) {
+            throw new IllegalArgumentException("Waiting requires an active escort and finite position");
+        }
+        waiting = true;
+        waitX = x;
+        waitY = y;
+        waitZ = z;
+    }
+
+    public void resumeFollowing() { waiting = false; }
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
         if (componentType != null) {
@@ -73,11 +102,13 @@ public final class GuardFollowPlayerState implements Component<EntityStore> {
     public void startFollowing(@Nonnull UUID playerId) {
         this.active = true;
         this.playerUuid = playerId.toString();
+        this.waiting = false;
     }
 
     public void clear() {
         this.active = false;
         this.playerUuid = null;
+        this.waiting = false;
     }
 
     public boolean isFollowing(@Nonnull UUID playerId) {
@@ -90,6 +121,11 @@ public final class GuardFollowPlayerState implements Component<EntityStore> {
         GuardFollowPlayerState c = new GuardFollowPlayerState();
         c.active = active;
         c.playerUuid = playerUuid;
+        c.stance = stance;
+        c.waiting = waiting;
+        c.waitX = waitX;
+        c.waitY = waitY;
+        c.waitZ = waitZ;
         return c;
     }
 }

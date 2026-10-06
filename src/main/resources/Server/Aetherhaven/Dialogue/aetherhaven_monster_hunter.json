@@ -1,0 +1,385 @@
+{
+  "id": "aetherhaven_monster_hunter",
+  "entry": "main_hub",
+  "nodes": {
+    "main_hub": {
+      "speaker": "aetherhaven_monster_hunter.speaker",
+      "text": "aetherhaven_monster_hunter.hub",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.offer",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              },
+              {
+                "type": "player_holds_any_item"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "giftDisableWhenNotAllowed": true,
+          "next": "gift_confirm"
+        },
+        {
+          "text": "aetherhaven_monster_hunter.hunts",
+          "next": null,
+          "condition": {
+            "type": "not",
+            "condition": {
+              "type": "npc_binding_is_visitor"
+            }
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "open_hunts"
+            }
+          ]
+        },
+        {
+          "text": "aetherhaven_monster_hunter.how",
+          "icon": "hunts",
+          "next": "how",
+          "condition": {
+            "type": "not",
+            "condition": {
+              "type": "npc_binding_is_visitor"
+            }
+          },
+          "whenFalse": "hide"
+        },
+        {
+          "text": "aetherhaven_monster_hunter.offer",
+          "icon": "home",
+          "next": "offer",
+          "condition": {
+            "type": "not",
+            "condition": {
+              "type": "or",
+              "conditions": [
+                {
+                  "type": "town_quest_active",
+                  "questId": "q_monster_hunter"
+                },
+                {
+                  "type": "town_quest_completed",
+                  "questId": "q_monster_hunter"
+                }
+              ]
+            }
+          },
+          "whenFalse": "hide"
+        },
+        {
+          "text": "aetherhaven_monster_hunter.finish",
+          "next": "welcome",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_monster_hunter"
+              },
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_monster_hunter"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_monster_hunter"
+            }
+          ],
+          "speechClip": "Agree"
+        },
+        {
+          "text": "aetherhaven_monster_hunter.progress",
+          "icon": "UI/Custom/hammer.png",
+          "next": "building",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_monster_hunter"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_has_complete_plot",
+                  "constructionId": "plot_monster_hunter"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide"
+        },
+        {
+          "text": "aetherhaven_monster_hunter.bye",
+          "next": null
+        }
+      ],
+      "bodyMode": "villager_greeting",
+      "speechClip": "Greet"
+    },
+    "offer": {
+      "speaker": "aetherhaven_monster_hunter.speaker",
+      "text": "aetherhaven_monster_hunter.offer.body",
+      "choices": [
+        {
+          "text": "aetherhaven_monster_hunter.accept",
+          "next": "accepted",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_monster_hunter"
+            }
+          ],
+          "speechClip": "Agree"
+        },
+        {
+          "text": "aetherhaven_monster_hunter.later",
+          "next": null
+        }
+      ],
+      "speechClip": "Question"
+    },
+    "accepted": {
+      "speaker": "aetherhaven_monster_hunter.speaker",
+      "text": "aetherhaven_monster_hunter.accepted.body",
+      "choices": [
+        {
+          "text": "aetherhaven_monster_hunter.bye",
+          "next": null
+        }
+      ],
+      "speechClip": "Agree"
+    },
+    "building": {
+      "speaker": "aetherhaven_monster_hunter.speaker",
+      "text": "aetherhaven_monster_hunter.building.body",
+      "choices": [
+        {
+          "text": "aetherhaven_monster_hunter.cancel",
+          "next": "cancelled",
+          "actions": [
+            {
+              "type": "abandon_quest",
+              "id": "q_monster_hunter"
+            }
+          ]
+        },
+        {
+          "text": "aetherhaven_monster_hunter.bye",
+          "next": null
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "cancelled": {
+      "speaker": "aetherhaven_monster_hunter.speaker",
+      "text": "aetherhaven_monster_hunter.cancelled.body",
+      "choices": [
+        {
+          "text": "aetherhaven_monster_hunter.bye",
+          "next": null
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "welcome": {
+      "speaker": "aetherhaven_monster_hunter.speaker",
+      "text": "aetherhaven_monster_hunter.welcome.body",
+      "choices": [
+        {
+          "text": "aetherhaven_monster_hunter.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "how": {
+      "speaker": "aetherhaven_monster_hunter.speaker",
+      "text": "aetherhaven_monster_hunter.how.body",
+      "choices": [
+        {
+          "text": "aetherhaven_monster_hunter.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_confirm": {
+      "speaker": "aetherhaven_monster_hunter.speaker",
+      "text": "aetherhaven_monster_hunter.gift.confirm",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmYes",
+          "actions": [
+            {
+              "type": "gift_villager",
+              "reactionNodeLove": "gift_love",
+              "reactionNodeLike": "gift_like",
+              "reactionNodeNeutral": "gift_neutral",
+              "reactionNodeDislike": "gift_dislike"
+            }
+          ],
+          "next": "main_hub"
+        },
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmNo",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_love": {
+      "speaker": "aetherhaven_monster_hunter.speaker",
+      "text": "aetherhaven_monster_hunter.gift_love",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_like": {
+      "speaker": "aetherhaven_monster_hunter.speaker",
+      "text": "aetherhaven_monster_hunter.gift_like",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_neutral": {
+      "speaker": "aetherhaven_monster_hunter.speaker",
+      "text": "aetherhaven_monster_hunter.gift_neutral",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_dislike": {
+      "speaker": "aetherhaven_monster_hunter.speaker",
+      "text": "aetherhaven_monster_hunter.gift_dislike",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_love_birthday": {
+      "speaker": "aetherhaven_monster_hunter.speaker",
+      "text": "aetherhaven_monster_hunter.gift_love_birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_like_birthday": {
+      "speaker": "aetherhaven_monster_hunter.speaker",
+      "text": "aetherhaven_monster_hunter.gift_like_birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_neutral_birthday": {
+      "speaker": "aetherhaven_monster_hunter.speaker",
+      "text": "aetherhaven_monster_hunter.gift_neutral_birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_dislike_birthday": {
+      "speaker": "aetherhaven_monster_hunter.speaker",
+      "text": "aetherhaven_monster_hunter.gift_dislike_birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "rep_reward_25": {
+      "speaker": "aetherhaven_monster_hunter.speaker",
+      "text": "aetherhaven_monster_hunter.reward.25",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_monster_hunter_25"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "rep_reward_50": {
+      "speaker": "aetherhaven_monster_hunter.speaker",
+      "text": "aetherhaven_monster_hunter.reward.50",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_monster_hunter_50"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "rep_reward_75": {
+      "speaker": "aetherhaven_monster_hunter.speaker",
+      "text": "aetherhaven_monster_hunter.reward.75",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_monster_hunter_75"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
+    }
+  }
+}

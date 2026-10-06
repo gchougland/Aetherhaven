@@ -162,6 +162,7 @@ public final class BuildingEditorSessionStarter {
         if (!ref.isValid()) {
             return;
         }
+        BuildingEditorAirMarkers.restore(world, buffer, prefabOrigin, yaw);
         UUID uuid = playerRef.getUuid();
         PlotCreatorSessions.remove(uuid);
         PlotCreatorSession session = new PlotCreatorSession(uuid, world);
@@ -187,6 +188,7 @@ public final class BuildingEditorSessionStarter {
         }
         draft.setPlotAnchor(def.resolvePreviewSignAnchorWorld(prefabOrigin, yaw));
         convertPrefabLocalsToSignSpace(draft, def.getPlotAnchorOffset());
+        PlotCreatorMiningNodes.fromPrefabSpace(draft, prefabOrigin, yaw);
         seedSpecialBlocksFromPois(draft);
         seedShopStallsFromWorld(world, draft, fp);
         seedInnBellFromWorldIfMissing(world, draft, fp);
@@ -234,6 +236,7 @@ public final class BuildingEditorSessionStarter {
     }
 
     private static void shiftAllDraftLocals(@Nonnull PlotCreatorDraft draft, int dx, int dy, int dz) {
+        PlotCreatorMiningNodes.shift(draft, dx, dy, dz);
         shiftLocal(draft.getManagementBlockLocalPos(), dx, dy, dz, draft::setManagementBlockLocalPos);
         shiftLocal(draft.getProductionStorageLocalPos(), dx, dy, dz, draft::setProductionStorageLocalPos);
         shiftLocal(draft.getTreasuryLocalPos(), dx, dy, dz, draft::setTreasuryLocalPos);

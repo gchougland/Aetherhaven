@@ -49,6 +49,9 @@ public final class WorkplaceProductionUpgrades {
     public static long effectiveMaxStorage(@Nonnull PlotProductionState state, @Nonnull ProductionCatalog.Entry entry, @Nonnull String itemId) {
         double mul = capacityMultiplier(state);
         long base = entry.maxStorageForItem(itemId);
+        // Matching saplings are harvested without buying a separate output unlock.
+        if (state.usesPhysicalTimber() && !entry.containsItemId(itemId)
+                && NativeTimberProducts.automatic(itemId) && !NativeTimberProducts.BYPRODUCTS.contains(itemId)) base = 10;
         long scaled = (long) Math.ceil(base * mul);
         return Math.max(1L, Math.min(ProductionCatalog.MAX_STORAGE_PER_OUTPUT, scaled));
     }

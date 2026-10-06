@@ -1,0 +1,38 @@
+{
+  "id": "aetherhaven_halloween_rescue",
+  "entry": "root",
+  "nodes": {
+    "root": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.dialogue.rescue_body",
+      "choices": [
+        {
+          "text": "aetherhaven_halloween.dialogue.rescue_accept",
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_halloween_rescue"
+            },
+            {
+              "type": "despawn_npc",
+              "requiredCompletedTownQuest": "q_halloween_rescue"
+            },
+            {
+              "type": "close"
+            }
+          ],
+          "next": null,
+          "condition": {
+            "type": "halloween_rescue_available"
+          },
+          "whenFalse": "hide",
+          "speechClip": "Agree"
+        },
+        {
+          "text": "aetherhaven_halloween.dialogue.goodbye",
+          "next": null
+        }
+      ]
+    }
+  }
+}

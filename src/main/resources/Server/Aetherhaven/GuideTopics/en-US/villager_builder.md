@@ -10,6 +10,16 @@ npcRoleId: Aetherhaven_Builder
 **Rowan Ridgecraft** is the town **builder**. Once his hut is finished, he travels to plots that are still assembling during work hours and helps them rise faster while he works at the sign.
 
 
+### Apprentice Builder's yards
+
+Unlock a Building workplace through Rowan's building upgrades. Mark a yard inside town, place a Builder's Workbench and use it to open the project board.
+
+Start and supply a town construction project as usual, then add it to the yard. The board shows your queued projects beside other construction in town. Move projects earlier or later, remove queued projects, or pause the yard. Completed projects leave the queue automatically. Opening the board never purchases a building or charges its materials again.
+
+Employ a townsfolk, keep their wages paid and enable Building in the journal's work priorities. One Apprentice works for each yard. They walk to the actual building, face a piece within reach and use a hammer to help place it. Better Building skill and profession equipment improve their pace. Use Station details on the project board to inspect the Builder's Workbench.
+
+Leave paths and scaffolding for upper floors. Apprentices cannot build from across town or through an inaccessible route. Removing the Builder's Workbench, disabling Building or assigning guard duty stops their help. Rowan's own help and ordinary construction continue as usual when a yard is paused. Furniture and decorations keep their usual final assembly step.
+
 ### Quests
 
 #### Rowan's builder's hut
@@ -27,6 +37,14 @@ Even a builder who lives for good architecture deserves a quiet place to rest.
 2. Stake and build the house prefab.
 3. Assign Rowan as resident on the house management block.
 4. Find Rowan and close the quest in dialogue.
+
+### Friendship rewards
+
+Visit after reaching each friendship level to claim the reward through dialogue. Plans are learned by the town and crafted by Apprentices.
+
+- **Friendship 25:** Path Designer Shovel.
+- **Friendship 50:** White Walls Block Palette.
+- **Friendship 75:** Thorium Building Staff.
 
 ## Weekly routine
 

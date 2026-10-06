@@ -29,7 +29,7 @@ class VillagerVoiceProfilesTest {
                 }
             }
         }
-        assertEquals(80, count);
+        assertEquals(88, count);
         assertEquals("GravelyFemaleHigher", VillagerVoiceProfile.resolve("BrightFemaleHigher", "female", "goblin").id());
         assertEquals("GravelyMale", VillagerVoiceProfile.resolve(null, "male", "goblin").id());
     }
@@ -37,7 +37,7 @@ class VillagerVoiceProfilesTest {
     @Test void requestedNamedVoicesArePreserved() throws Exception {
         for (var entry : java.util.Map.of("Logger","WarmFemale","Rancher","MellowMale","Crystal_Keeper","MellowFemale",
             "Clown","GravelyMale","Miner","GravelyMaleLower","Pyrotechnic","GravelyMaleHigher","Blacksmith","WarmMaleLower",
-            "Elder_Lyren","OldMale","Guild_Master","OldFemale").entrySet()) {
+            "Elder_Lyren","OldMale","Guild_Master","OldFemale","Halloween","GravelyMaleLower").entrySet()) {
             var data = JsonParser.parseString(Files.readString(RES.resolve("Server/Aetherhaven/Villagers/Aetherhaven_" + entry.getKey() + ".json"))).getAsJsonObject();
             assertEquals(entry.getValue(), data.get("speechVoiceId").getAsString());
         }

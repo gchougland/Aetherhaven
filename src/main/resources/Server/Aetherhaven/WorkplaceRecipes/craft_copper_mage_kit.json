@@ -1,0 +1,27 @@
+{
+  "id": "craft_copper_mage_kit",
+  "name": "Copper Mage Kit",
+  "workplace": "armorCrafting",
+  "sourceRecipe": "workplace:copper_mage_kit",
+  "bench": "Armor_Bench",
+  "benchTier": 1,
+  "skillLevel": 2,
+  "townRank": "E",
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Copper",
+      "count": 18
+    },
+    {
+      "itemId": "Ingredient_Leather_Light",
+      "count": 6
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 8
+    }
+  ],
+  "output": "Aetherhaven_Copper_Mage_Kit",
+  "outputCount": 1,
+  "workSeconds": 40
+}

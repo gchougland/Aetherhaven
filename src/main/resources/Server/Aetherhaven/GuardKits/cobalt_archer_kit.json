@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Cobalt_Archer_Kit",
+  "name": "Cobalt Archer Kit",
+  "guardClass": "guard_archer",
+  "equipmentProfile": "guard_archer_cobalt",
+  "description": "+8 Dexterity, +4 Speed, +3 Vitality."
+}

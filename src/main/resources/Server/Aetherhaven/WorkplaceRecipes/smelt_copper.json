@@ -1,0 +1,9 @@
+{
+  "id": "smelt_copper",
+  "name": "Copper ingot",
+  "workplace": "smelting",
+  "sourceRecipe": "Ingredient_Bar_Copper_Recipe_Generated_0",
+  "bench": "Furnace",
+  "benchTier": 1,
+  "skillLevel": 1
+}

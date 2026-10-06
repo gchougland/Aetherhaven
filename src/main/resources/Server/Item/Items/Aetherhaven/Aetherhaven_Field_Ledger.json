@@ -1,0 +1,42 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_profession_kits.fieldledger.name",
+    "Description": "aetherhaven_profession_kits.fieldledger.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Field_Ledger.png",
+  "Model": "Items/Aetherhaven/Profession_Kits/Field_Ledger.blockymodel",
+  "Texture": "Items/Aetherhaven/Profession_Kits/Field_Ledger.png",
+  "PlayerAnimationsId": "Spellbook",
+  "Categories": [
+    "Items.Tools",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "MaxStack": 1,
+  "Quality": "Uncommon",
+  "ItemSoundSetId": "ISS_Weapons_Books",
+  "IconProperties": {
+    "Scale": 1,
+    "Rotation": [
+      22.5,
+      45,
+      0
+    ],
+    "Translation": [
+      0,
+      0
+    ]
+  },
+  "Interactions": {
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "OpenCustomUI",
+          "Page": {
+            "Id": "AetherhavenFieldLedger"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.tourist;
 
+import com.google.gson.JsonParseException;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.world.PersistentWorldSupport;
@@ -47,16 +48,25 @@ public final class TouristPortalPersistence {
             return;
         }
         Path path = portalsFile(plugin, world.getName());
+        load(path, world.getName(), registry);
+    }
+
+    static void load(@Nonnull Path path, @Nonnull String worldName, @Nonnull TouristPortalRegistry registry) {
+        registry.setPersistenceBlocked(true);
         try {
             TouristPortalWorldFile file = TouristPortalWorldFile.readOrEmpty(path);
             registry.replaceAll(TouristPortalWorldFile.toRecords(file));
+            registry.setPersistenceBlocked(false);
             LOGGER.atInfo().log(
                 "Aetherhaven loaded %s tourist portal(s) for world %s",
                 registry.allRecords().size(),
-                world.getName()
+                worldName
             );
-        } catch (IOException e) {
-            LOGGER.atWarning().withCause(e).log("Failed to load tourist portals for world %s", world.getName());
+        } catch (IOException | JsonParseException e) {
+            LOGGER.atSevere().withCause(e).log(
+                "Failed to load tourist portals from %s for world %s. World loading will continue, but tourist portal saving is disabled to preserve the existing file. Repair or restore the file and restart the world.",
+                path, worldName
+            );
         }
     }
 
@@ -69,11 +79,18 @@ public final class TouristPortalPersistence {
             return;
         }
         Path path = portalsFile(plugin, world.getName());
+        save(path, world.getName(), registry);
+    }
+
+    static void save(@Nonnull Path path, @Nonnull String worldName, @Nonnull TouristPortalRegistry registry) {
+        if (registry.isPersistenceBlocked()) {
+            return;
+        }
         try {
             TouristPortalWorldFile file = TouristPortalWorldFile.fromRecords(registry.allRecords());
             file.writeAtomic(path);
         } catch (IOException e) {
-            LOGGER.atSevere().withCause(e).log("Failed to save tourist portals for world %s", world.getName());
+            LOGGER.atSevere().withCause(e).log("Failed to save tourist portals for world %s", worldName);
         }
     }
 }

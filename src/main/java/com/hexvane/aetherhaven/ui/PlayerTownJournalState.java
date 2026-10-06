@@ -29,6 +29,8 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         TOWN,
         GUIDE,
         QUESTS,
+        WORK,
+        BILLS,
         SETTINGS;
 
         @Nonnull
@@ -39,6 +41,8 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
             return switch (s.trim().toUpperCase()) {
                 case "TOWN" -> TOWN;
                 case "GUIDE" -> GUIDE;
+                case "WORK" -> WORK;
+                case "BILLS" -> BILLS;
                 case "SETTINGS" -> SETTINGS;
                 default -> QUESTS;
             };

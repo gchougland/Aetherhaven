@@ -1,0 +1,42 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+@Action = TextButtonStyle(
+ Default: (Background: $C.@TertiaryDefaultButtonBackground, LabelStyle: (FontSize: 14, TextColor: #e5e9d6, HorizontalAlignment: Center, VerticalAlignment: Center)),
+ Hovered: (Background: $C.@TertiaryHoveredButtonBackground, LabelStyle: (FontSize: 14, TextColor: #ffffff, HorizontalAlignment: Center, VerticalAlignment: Center)),
+ Pressed: (Background: $C.@TertiaryPressedButtonBackground, LabelStyle: (FontSize: 14, TextColor: #ffffff, HorizontalAlignment: Center, VerticalAlignment: Center)),
+ Disabled: (Background: $C.@TertiaryDisabledButtonBackground, LabelStyle: (FontSize: 14, TextColor: #83968f, HorizontalAlignment: Center, VerticalAlignment: Center))
+);
+$C.@PageOverlay { LayoutMode: Middle;
+ $C.@DecoratedContainer #GuestBook { Anchor: (Width: 1020, Height: 760);
+  #Title { Label { Text: "INN GUEST BOOK"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+  #Content { LayoutMode: Top; Padding: (Full: 22);
+   Label #Summary { Anchor: (Height: 28, Bottom: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #dec78d); }
+   Group #Upgrade { LayoutMode: Left; Anchor: (Height: 68, Bottom: 10); Padding: (Full: 12); Background: $T.@Panel;
+    Group { LayoutMode: Top; FlexWeight: 1;
+     Label { Text: "INN UPGRADE: OUTREACH"; Anchor: (Height: 21); Style: (...$C.@DefaultLabelStyle, FontSize: 15, RenderBold: true, TextColor: #dec78d); }
+     Label { Text: "Choose who visits next. Requires Town Level 3."; Anchor: (Height: 21); Style: (...$C.@DefaultLabelStyle, FontSize: 13); }
+    }
+    TextButton #Unlock { Text: "Unlock for 100 gold"; Anchor: (Width: 205, Height: 36); Style: @Action; }
+   }
+   Group { LayoutMode: Left; Anchor: (Height: 390);
+    Group { LayoutMode: Top; FlexWeight: 1; Anchor: (Right: 14); Padding: (Full: 10); Background: $T.@Inset;
+     Group #Guests { LayoutMode: TopScrolling; FlexWeight: 1; ScrollbarStyle: $C.@DefaultScrollbarStyle; }
+     Label #Empty { Text: "All known guests have already joined your town."; Anchor: (Height: 50); Style: (...$C.@DefaultLabelStyle, Wrap: true); }
+    }
+    Group #Details { LayoutMode: Top; Anchor: (Width: 300); Padding: (Full: 18); Background: $T.@Panel;
+     Group { Anchor: (Height: 116); AssetImage #SelectedPortrait { Anchor: (Left: 76, Top: 0, Width: 112, Height: 112); } }
+     Label #SelectedName { Anchor: (Height: 44); Style: (...$C.@DefaultLabelStyle, FontSize: 20, RenderBold: true, HorizontalAlignment: Center, Wrap: true); }
+     Label #SelectedStatus { Anchor: (Height: 24, Bottom: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 13, HorizontalAlignment: Center, TextColor: #b8caac); }
+     Label #Description { Anchor: (Height: 100); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #c3d0c7, Wrap: true); }
+     TextButton #Invite { Text: "Invite to the Inn"; Anchor: (Height: 36); Style: @Action; }
+    }
+   }
+   Group { LayoutMode: Left; Anchor: (Height: 36, Top: 10);
+    Label #Pending { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #dec78d, VerticalAlignment: Center); }
+    TextButton #Cancel { Text: "Cancel invitation"; Anchor: (Width: 170); Style: @Action; }
+   }
+   Label #Hint { Anchor: (Height: 48, Top: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #afc0b6, Wrap: true); }
+  }
+ }
+}
+$C.@BackButton {}

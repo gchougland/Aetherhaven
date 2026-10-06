@@ -1,0 +1,9 @@
+{
+  "id": "forge_copper_sword",
+  "name": "Copper sword",
+  "workplace": "blacksmithing",
+  "sourceRecipe": "Weapon_Sword_Copper_Recipe_Generated_0",
+  "bench": "Weapon_Bench",
+  "benchTier": 1,
+  "skillLevel": 1
+}

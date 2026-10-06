@@ -4,11 +4,21 @@
   "displayName": "Knight",
   "hireGoldCost": 40,
   "armor": [
-    "Armor_Iron_Chest",
-    "Armor_Iron_Legs",
-    "Armor_Iron_Hands"
+    "Aetherhaven_Guard_Armor_Copper_Head",
+    "Aetherhaven_Guard_Armor_Copper_Chest",
+    "Aetherhaven_Guard_Armor_Copper_Hands",
+    "Aetherhaven_Guard_Armor_Copper_Legs"
   ],
   "hotbar": [
-    { "slot": 0, "itemId": "Weapon_Sword_Iron" }
-  ]
+    {
+      "slot": 0,
+      "itemId": "Weapon_Sword_Copper"
+    }
+  ],
+  "offhand": "Weapon_Shield_Copper",
+  "attributeCombat": true,
+  "attributeBonuses": {
+    "strength": 2,
+    "vitality": 2
+  }
 }

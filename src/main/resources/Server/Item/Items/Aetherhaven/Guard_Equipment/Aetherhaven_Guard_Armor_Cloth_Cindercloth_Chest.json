@@ -1,0 +1,60 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Armor_Cloth_Cindercloth_Chest.name"
+  },
+  "Quality": "Rare",
+  "ItemLevel": 45,
+  "PlayerAnimationsId": "Block",
+  "ItemSoundSetId": "ISS_Armor_Cloth",
+  "Categories": [],
+  "Icon": "Icons/ItemsGenerated/Armor_Cloth_Cindercloth_Chest.png",
+  "IconProperties": {
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Scale": 0.4,
+    "Translation": [
+      0,
+      -17.4
+    ]
+  },
+  "Model": "Items/Armors/Cindercloth/Chest.blockymodel",
+  "Texture": "Items/Armors/Cindercloth/Chest_Texture.png",
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    }
+  },
+  "Armor": {
+    "ArmorSlot": "Chest",
+    "BaseDamageResistance": 0,
+    "CosmeticsToHide": [
+      "Overtop"
+    ],
+    "DamageResistance": {},
+    "StatModifiers": {}
+  },
+  "MaxDurability": 0,
+  "DurabilityLossOnHit": 0,
+  "Tags": {
+    "Type": [
+      "Armor"
+    ],
+    "Family": [
+      "Iron"
+    ]
+  }
+}

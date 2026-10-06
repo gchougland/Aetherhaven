@@ -16,7 +16,32 @@
       "q_merchant_stall"
     ]
   },
-  "reputationMilestones": [],
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_florist_25",
+      "minReputation": 25,
+      "itemId": "Aetherhaven_Villager_Cosmetic_FlowerCrown_Pink",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_25",
+      "learnRecipeItemId": null
+    },
+    {
+      "rewardId": "rep_florist_50",
+      "minReputation": 50,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_50",
+      "learnRecipeItemId": "Aetherhaven_Prop_Plant_Arch"
+    },
+    {
+      "rewardId": "rep_florist_75",
+      "minReputation": 75,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_75",
+      "learnRecipeItemId": "Aetherhaven_Prop_Spooky_Terrarium"
+    }
+  ],
   "giftLoves": [
     "Plant_Cactus_Flower",
     "Plant_Flower_Bushy_Cyan",

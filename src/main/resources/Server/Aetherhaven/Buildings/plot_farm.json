@@ -3,27 +3,27 @@
   "displayName": "Farm plot",
   "description": "Fenced fields, a farming bench, and a small shelter.",
   "prefabPath": "Farm_Plot.prefab.json",
-  "selfBuildGameDays": 1,
+  "selfBuildGameDays": 1.0,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Farm",
   "plotAnchorOffset": [
-    6,
     0,
-    6
+    1,
+    0
   ],
   "managementBlockLocalPos": [
-    -3,
-    1,
-    -1
+    3,
+    0,
+    5
   ],
   "productionStorageLocalPos": [
-    -4,
-    1,
-    -3
+    2,
+    0,
+    3
   ],
   "rotationYaw": "None",
-  "autonomyNavFloorYAboveMinY": 1,
-  "autonomyNavMaxStandYSpanAboveMinY": 3,
-  "autonomyNavRoofExclusionYBelowMaxY": 5,
+  "autonomyNavFloorYAboveMinY": 1.0,
+  "autonomyNavMaxStandYSpanAboveMinY": 3.0,
+  "autonomyNavRoofExclusionYBelowMaxY": 5.0,
   "treasuryGoldCoinCost": 52,
   "materials": [
     {
@@ -45,59 +45,79 @@
   ],
   "pois": [
     {
-      "localX": -2,
-      "localY": 1,
-      "localZ": -3,
+      "localX": 4,
+      "localY": 0,
+      "localZ": 3,
+      "tags": [
+        "workActivity:craft",
+        "WORK"
+      ],
+      "capacity": 1,
       "blockTypeId": "Bench_Farming",
       "interactionKind": "WORK_SURFACE",
-      "tags": [
-        "WORK",
-        "workActivity:craft"
-      ],
-      "capacity": 1,
-      "interactionTargetYawDegrees": 0
+      "workResidentKind": "farmer",
+      "interactionTargetYawDegrees": 0.0
     },
     {
-      "localX": -2,
-      "localY": 1,
-      "localZ": 1,
-      "blockTypeId": "Soil_Dirt_Tilled",
-      "interactionKind": "WORK_SURFACE",
+      "localX": 4,
+      "localY": 0,
+      "localZ": 7,
       "tags": [
         "WORK",
         "workActivity:water"
       ],
       "capacity": 1,
-      "interactionTargetYawDegrees": 180
-    },
-    {
-      "localX": 3,
-      "localY": 1,
-      "localZ": 1,
       "blockTypeId": "Soil_Dirt_Tilled",
       "interactionKind": "WORK_SURFACE",
+      "workResidentKind": "farmer",
+      "interactionTargetYawDegrees": 180.0
+    },
+    {
+      "localX": 9,
+      "localY": 0,
+      "localZ": 7,
       "tags": [
         "WORK",
         "workActivity:water"
       ],
       "capacity": 1,
-      "interactionTargetYawDegrees": 180
-    },
-    {
-      "localX": 2,
-      "localY": 1,
-      "localZ": -2,
       "blockTypeId": "Soil_Dirt_Tilled",
       "interactionKind": "WORK_SURFACE",
+      "workResidentKind": "farmer",
+      "interactionTargetYawDegrees": 180.0
+    },
+    {
+      "localX": 8,
+      "localY": 0,
+      "localZ": 4,
       "tags": [
         "WORK",
         "workActivity:till"
       ],
       "capacity": 1,
-      "equipmentProfileId": "work_farmer_hoe",
-      "interactionTargetYawDegrees": -90
+      "blockTypeId": "Soil_Dirt_Tilled",
+      "interactionKind": "WORK_SURFACE",
+      "workResidentKind": "farmer",
+      "interactionTargetYawDegrees": -90.0,
+      "equipmentProfileId": "work_farmer_hoe"
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_farm.displayName",
-  "styleId": "core"
+  "styleId": "core",
+  "frontFacing": "North",
+  "tags": [
+    "work"
+  ],
+  "boundsLocal": {
+    "min": [
+      1,
+      -1,
+      1
+    ],
+    "max": [
+      12,
+      4,
+      12
+    ]
+  }
 }

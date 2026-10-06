@@ -1,0 +1,95 @@
+{
+  "Type": "Variant",
+  "Reference": "Template_Intelligent",
+  "Parameters": {
+    "WanderRadius": {
+      "Value": 3,
+      "Description": "General wander radius for idle wander and wander on the break."
+    },
+    "FollowPatrolPath": {
+      "Value": false,
+      "Description": "Whether this NPC will follow patrol paths at all."
+    },
+    "Patrol": {
+      "Value": false,
+      "Description": "Whether or not this NPC will patrol during its waking hours, either alone or as part of a group."
+    },
+    "FlockArray": {
+      "Value": [
+        "Skeleton_Burnt_Soldier",
+        "Skeleton_Burnt_Archer"
+      ],
+      "TypeHint": "String",
+      "Description": "Array containing NPCs for this flock type."
+    },
+    "ApplySeparation": {
+      "Value": false,
+      "Description": "When set to false, NPCs wont try to avoid each other or player, it can lead to them stacking together, but can help to avoid jerky-like movemenet in enclosed space."
+    },
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Skeleton_Burnt_Soldier.name",
+      "Description": "Translation key for NPC name display"
+    }
+  },
+  "Modify": {
+    "DeathParticles": "Effect_Death_Bones",
+    "MaxHealth": 124,
+    "HearingRange": 8,
+    "ViewSector": 270,
+    "WakingPeriod": [
+      0,
+      24
+    ],
+    "DropList": "",
+    "Appearance": "Skeleton_Burnt_Soldier",
+    "Weapons": [
+      "Weapon_Sword_Steel_Rusty"
+    ],
+    "OffHand": [
+      "Weapon_Shield_Rusty"
+    ],
+    "DefaultOffHandSlot": 0,
+    "FlockArray": [],
+    "FollowPatrolPath": false,
+    "Patrol": false,
+    "WanderRadius": {
+      "Compute": "WanderRadius"
+    },
+    "_InteractionVars": {
+      "Shield_Block_Damage": {
+        "Interactions": ["Shield_Block_Damage"]
+      },
+      "Skeleton_Burnt_Soldier_Sword_Swing_Left_Damage": {
+        "Interactions": ["NPC_Attack_Melee_Damage"]
+      },
+      "Skeleton_Burnt_Soldier_Sword_Swing_Right_Damage": {
+        "Interactions": ["NPC_Attack_Melee_Damage"]
+      },
+      "Skeleton_Burnt_Soldier_Sword_Swing_Down_Damage": {
+        "Interactions": ["NPC_Attack_Melee_Damage"]
+      }
+    },
+    "Attack": "Root_NPC_Skeleton_Burnt_Soldier_Attack",
+    "AttackDistance": 3,
+    "DesiredAttackDistanceRange": [
+      2,
+      2.5
+    ],
+    "CombatMessageTargetGroups": [],
+    "ApplySeparation": {
+      "Compute": "ApplySeparation"
+    },
+    "_CombatConfig": {
+      "EntityEffects": [
+        "Immunity_Fire"
+      ]
+    },
+    "IsMemory": false,
+    "MemoriesCategory": "Undead",
+    "MemoriesNameOverride": "Skeleton_Burnt_Soldier",
+    "BreathesInWater": true,
+    "NameTranslationKey": {
+      "Compute": "NameTranslationKey"
+    }
+  }
+}

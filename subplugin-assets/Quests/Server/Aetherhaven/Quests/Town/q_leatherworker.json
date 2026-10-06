@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "id": "q_leatherworker",
+  "category": "town",
+  "grantPlotTokenConstructionId": "plot_leatherworker",
+  "title": "Hides and Handywork",
+  "description": "Build Sera a tannery with room to prepare hides and leather goods.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "plot_token_received",
+      "text": "Collect the tannery plot token from Sera.",
+      "textLangKey": "aetherhaven_leatherworker.quest.objective.token"
+    },
+    {
+      "id": "build",
+      "kind": "construction_built",
+      "constructionId": "plot_leatherworker",
+      "text": "Build the tannery.",
+      "textLangKey": "aetherhaven_leatherworker.quest.objective.build"
+    },
+    {
+      "id": "talk",
+      "kind": "dialogue_turn_in",
+      "text": "Return to Sera.",
+      "textLangKey": "aetherhaven_leatherworker.quest.objective.talk"
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Leatherworker",
+      "amount": 14,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 14,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
+    ],
+    "onComplete": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ],
+    "onAbandon": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ]
+  },
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_leatherworker.quest.title",
+  "descriptionLangKey": "aetherhaven_leatherworker.quest.description"
+}

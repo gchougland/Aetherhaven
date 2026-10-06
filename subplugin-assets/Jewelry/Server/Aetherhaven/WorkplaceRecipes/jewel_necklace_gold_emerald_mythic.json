@@ -1,0 +1,31 @@
+{
+  "id": "jewel_necklace_gold_emerald_mythic",
+  "name": "Mythic gold emerald necklace",
+  "workplace": "jewelry",
+  "sourceRecipe": "workplace:jewel_necklace_gold_emerald_mythic",
+  "bench": "Aetherhaven_Jewelry_Crafting_Bench",
+  "benchTier": 1,
+  "skillLevel": 7,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Gold",
+      "count": 10
+    },
+    {
+      "itemId": "Rock_Gem_Emerald",
+      "count": 1
+    },
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 5
+    },
+    {
+      "itemId": "Ingredient_Life_Essence_Concentrated",
+      "count": 1
+    }
+  ],
+  "output": "Aetherhaven_Necklace_Gold_Emerald",
+  "outputCount": 1,
+  "workSeconds": 60,
+  "jewelryRarity": "mythic"
+}

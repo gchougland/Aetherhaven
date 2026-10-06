@@ -6,7 +6,7 @@ plugins {
 import java.util.zip.ZipFile
 
 group = "com.hexvane"
-version = "3.2.1"
+version = "4.0.0-dev"
 val javaVersion = 25
 
 repositories {
@@ -53,6 +53,9 @@ dependencies {
  */
 tasks.named<Jar>("jar") {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    // Also filter the final archive: old dev runs can leave these in resources/main
+    // even after processResources excludes them from its next incremental copy.
+    exclude("**/*.prefab.json.lpf", "**/*.bak", "**/*.tmp")
     from({
         modEmbed
             .filter { it.isFile && it.extension.equals("jar", ignoreCase = true) }
@@ -94,6 +97,10 @@ tasks.register("verifyReleaseJar") {
 
         ZipFile(jarFile).use { zip ->
             val names = zip.entries().asSequence().map { it.name }.toList()
+            val editorSidecars = names.filter { name ->
+                listOf(".prefab.json.lpf", ".bak", ".tmp").any { name.endsWith(it, ignoreCase = true) }
+            }
+            check(editorSidecars.isEmpty()) { "Release jar contains editor backups or caches: ${editorSidecars.take(5)}" }
 
             for (pattern in blockedPackages) {
                 if (names.any { it.contains(pattern) }) {
@@ -344,6 +351,7 @@ tasks.named<ProcessResources>("processResources") {
 
     // Never ship Hytale's sidecar LPF cache — equal mtime with JSON makes the engine prefer a stale LPF.
     exclude("**/*.prefab.json.lpf")
+    exclude("**/*.bak", "**/*.tmp")
     // Editable analyzer output is compiled into one playback manifest; clients
     // do not need another JSON asset for each recording.
     exclude("Server/Aetherhaven/VillagerLipSync/**")

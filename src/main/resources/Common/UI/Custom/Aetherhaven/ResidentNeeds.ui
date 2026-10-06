@@ -1,0 +1,12 @@
+$C = "../Common.ui";
+Group { LayoutMode: Top;
+  Label #NeedsStatus { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #99c7b5, Wrap: true); }
+  Group #NeedsMeters { LayoutMode: Top;
+    Label #ProfileHunger { Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 12); }
+    $C.@ProgressBar #ProfileHungerBar { Anchor: (Height: 8, Bottom: 6); Value: 0.0; }
+    Label #ProfileEnergy { Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 12); }
+    $C.@ProgressBar #ProfileEnergyBar { Anchor: (Height: 8, Bottom: 6); Value: 0.0; }
+    Label #ProfileFun { Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 12); }
+    $C.@ProgressBar #ProfileFunBar { Anchor: (Height: 8, Bottom: 6); Value: 0.0; }
+  }
+}

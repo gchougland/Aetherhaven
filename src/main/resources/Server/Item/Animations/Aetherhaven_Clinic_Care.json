@@ -1,0 +1,11 @@
+{
+  "WiggleWeights": {},
+  "Animations": {
+    "Treat": {
+      "ThirdPerson": "Characters/Animations/Aetherhaven/Clinic/Treat.blockyanim",
+      "Speed": 1,
+      "Looping": true,
+      "BlendingDuration": 0.4
+    }
+  }
+}

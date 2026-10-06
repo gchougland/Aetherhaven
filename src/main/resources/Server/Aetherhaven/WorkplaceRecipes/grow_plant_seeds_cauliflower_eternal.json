@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_seeds_cauliflower_eternal",
+  "name": "Seeds Cauliflower Eternal",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_seeds_cauliflower_eternal",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 4,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 50
+    }
+  ],
+  "output": "Plant_Seeds_Cauliflower_Eternal",
+  "outputCount": 1,
+  "workSeconds": 16
+}

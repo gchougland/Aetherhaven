@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Alchemist_Kit",
+  "name": "Brewer's Case",
+  "skill": "alchemy",
+  "workSpeedBonus": 0.15,
+  "extraCarryingStacks": 0
+}

@@ -1,0 +1,9 @@
+{
+  "id": "brew_greater_signature",
+  "name": "Greater Energy Potion",
+  "workplace": "alchemy",
+  "sourceRecipe": "Potion_Signature_Greater_Recipe_Generated_0",
+  "bench": "Alchemybench",
+  "benchTier": 4,
+  "skillLevel": 9
+}

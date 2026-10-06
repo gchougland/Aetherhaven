@@ -18,7 +18,7 @@
   "MemoriesCategory": "Aetherhaven",
   "MemoriesNameOverride": { "Compute": "MemoriesNameOverride" },
   "DisableDamageGroups": ["Self", "Player", "Aetherhaven_Townsfolk", "Friendly"],
-  "CombatConfig": { "EntityEffect": "Immunity_Environmental" },
+  "CombatConfig": { "EntityEffects": ["Immunity_Environmental"] },
   "Invulnerable": { "Compute": "Invulnerable" },
   "KnockbackScale": 0.0,
   "ApplySeparation": false,

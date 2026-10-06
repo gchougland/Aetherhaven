@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_CourierPack_Kit",
+  "name": "Quartermaster pack",
+  "skill": "logistics",
+  "workSpeedBonus": 0,
+  "extraCarryingStacks": 2
+}

@@ -1,0 +1,17 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Top; Anchor: (Height: 133, Bottom: 8); Padding: (Full: 8); Background: $T.@Card;
+  Group { LayoutMode: Left; Anchor: (Height: 25);
+    ItemIcon #Icon { Anchor: (Width: 25, Height: 25, Right: 6); }
+    Label #Name { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 15); }
+  }
+  Label #Amount { Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #9fc5b2); }
+  Label #Status { Anchor: (Height: 37); Style: (...$C.@DefaultLabelStyle, FontSize: 12, Wrap: true, TextColor: #dec68d); }
+  Group { LayoutMode: Left; Anchor: (Height: 31);
+    $C.@SecondaryTextButton #Up { Padding: (Horizontal: 8); Text: "Up"; Anchor: (Width: 64, Right: 6); }
+    $C.@SecondaryTextButton #Down { Padding: (Horizontal: 8); Text: "Down"; Anchor: (Width: 74, Right: 6); }
+    $C.@SecondaryTextButton #Pause { Padding: (Horizontal: 8); Text: "Pause"; FlexWeight: 1; Anchor: (Right: 6); }
+    $C.@SecondaryTextButton #Remove { Padding: (Horizontal: 8); Text: "Remove"; Anchor: (Width: 96); }
+  }
+}
+

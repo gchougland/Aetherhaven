@@ -1,0 +1,32 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Rock_Calcite_Cobble.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Rock_Calcite_Cobble.png",
+  "BlockType": {
+    "DrawType": "Cube",
+    "BlockParticleSetId": "Stone",
+    "Textures": [
+      {
+        "Weight": 1,
+        "Sides": "BlockTextures/Calcite_Cobble.png",
+        "UpDown": "BlockTextures/Calcite_Cobble_Top.png"
+      }
+    ],
+    "ParticleColor": "#d4ece7",
+    "BlockSoundSetId": "Stone",
+    "PhysicalMaterialId": "Stone",
+    "TextureComputedColor": "#8E9AA1",
+    "Material": "Solid",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Unbreakable"
+      }
+    },
+    "Flags": {},
+    "Support": {}
+  },
+  "PlayerAnimationsId": "Block",
+  "MaxStack": 1,
+  "ItemSoundSetId": "ISS_Blocks_Stone"
+}

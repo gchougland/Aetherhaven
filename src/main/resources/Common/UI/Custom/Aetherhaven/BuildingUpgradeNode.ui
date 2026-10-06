@@ -1,0 +1,16 @@
+$C = "../Common.ui";
+$T = "BuildingMasteryTheme.ui";
+Button #Node {
+  Anchor: (Width: 174, Height: 112);
+  Style: (Default: (Background: $T.@Node), Hovered: (Background: $T.@NodeHovered), Pressed: (Background: $T.@NodePressed));
+  TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+  Group #Selected { Anchor: (Full: 0); Background: $T.@NodePressed; Visible: false; }
+  Group #LockedBackground { Anchor: (Left: 8, Right: 8, Top: 8, Bottom: 8); Background: #2b3038; Visible: false; HitTestVisible: false; }
+  AssetImage #Icon { Anchor: (Left: 66, Top: 10, Width: 40, Height: 40); }
+  ItemIcon #Item { Anchor: (Left: 60, Top: 6, Width: 52, Height: 52); Visible: false; }
+  Group #Lock { Anchor: (Left: 64, Top: 8, Width: 44, Height: 44); Background: #2b3038(0.88); Visible: false; HitTestVisible: false;
+    AssetImage { AssetPath: "UI/Custom/padlock.png"; Anchor: (Left: 8, Top: 8, Width: 28, Height: 28); HitTestVisible: false; }
+  }
+  Label #Title { Anchor: (Left: 19, Right: 19, Top: 54, Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #c5cdd5, RenderBold: true, HorizontalAlignment: Center, Wrap: true); }
+  Label #State { Anchor: (Left: 24, Right: 24, Top: 85, Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 10, HorizontalAlignment: Center, RenderBold: true); }
+}

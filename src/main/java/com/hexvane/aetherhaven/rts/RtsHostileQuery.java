@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.rts;
 
 import com.hexvane.aetherhaven.npc.NpcSupportUtil;
 import com.hexvane.aetherhaven.patrol.GuardCombatClock;
+import com.hexvane.aetherhaven.patrol.GuardFollowPlayerState;
 import com.hexvane.aetherhaven.patrol.GuardNpcAttackerMemory;
 import com.hexvane.aetherhaven.patrol.GuardPlayerProvokedTargets;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -206,6 +207,15 @@ public final class RtsHostileQuery {
         if (!isValidNpcThreatCandidate(targetRef, guardRef, store)) {
             return false;
         }
+        GuardFollowPlayerState escort = store.getComponent(guardRef, GuardFollowPlayerState.getComponentType());
+        if (escort != null && escort.isActive()) {
+            // Central filter applies to target acquisition, squad assistance and retained combat targets.
+            Ref<EntityStore> owner = escort.getPlayerUuid() == null ? null
+                : store.getExternalData().getRefFromUUID(escort.getPlayerUuid());
+            return escort.getStance().permits(escort.isWaiting(), isGuardAttackableTarget(targetRef, store),
+                owner != null && owner.isValid() && isRecentAttackerOnPlayer(owner, targetRef, store),
+                isAmbientHostileCreature(targetRef, store));
+        }
         if (isReactiveGuardThreat(guardRef, targetRef, store, protectedPlayerRef)) {
             return true;
         }
@@ -315,8 +325,17 @@ public final class RtsHostileQuery {
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull Store<EntityStore> store
     ) {
-        if (!npcRef.isValid() || store.getComponent(playerRef, Player.getComponentType()) == null) {
+        if (!playerRef.isValid() || !npcRef.isValid() || store.getComponent(playerRef, Player.getComponentType()) == null) {
             return false;
+        }
+        UUIDComponent playerId = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (playerId != null) {
+            try {
+                GuardNpcAttackerMemory memory = store.getResource(GuardNpcAttackerMemory.getResourceType());
+                if (memory != null && memory.attackedPlayer(playerId.getUuid(), npcRef, GuardCombatClock.nowMs(store))) return true;
+            } catch (IllegalStateException ignored) {
+                // Lightweight test stores may not register the memory resource.
+            }
         }
         NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
         if (npc == null) {

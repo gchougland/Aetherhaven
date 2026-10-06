@@ -1,0 +1,24 @@
+{
+  "id": "guard_knight_iron",
+  "guardNpcRole": "Aetherhaven_Guard_Knight",
+  "displayName": "Iron Knight",
+  "hireGoldCost": 40,
+  "armor": [
+    "Aetherhaven_Guard_Armor_Iron_Head",
+    "Aetherhaven_Guard_Armor_Iron_Chest",
+    "Aetherhaven_Guard_Armor_Iron_Hands",
+    "Aetherhaven_Guard_Armor_Iron_Legs"
+  ],
+  "hotbar": [
+    {
+      "slot": 0,
+      "itemId": "Weapon_Sword_Iron"
+    }
+  ],
+  "offhand": "Weapon_Shield_Iron",
+  "attributeCombat": true,
+  "attributeBonuses": {
+    "strength": 4,
+    "vitality": 4
+  }
+}

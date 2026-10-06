@@ -2,8 +2,6 @@ package com.hexvane.aetherhaven.villager;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
-import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterCatalog;
-import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
 import com.hypixel.hytale.component.Ref;
@@ -28,8 +26,8 @@ public final class VillagerBefriendableResolver {
         }
         TownsfolkCharacterBinding tf = store.getComponent(npcRef, TownsfolkCharacterBinding.getComponentType());
         if (tf != null) {
-            TownsfolkCharacterDefinition def = plugin.getTownsfolkCharacterCatalog().byId(tf.getCharacterId());
-            return def != null && def.isBefriendable();
+            // Townsfolk progress through work, skills and attributes, not friendship.
+            return false;
         }
         NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
         if (npc == null || npc.getRoleName() == null) {

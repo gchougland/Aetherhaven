@@ -1,0 +1,39 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Rock_Runic_Cobble.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Rock_Runic_Cobble.png",
+  "BlockType": {
+    "DrawType": "Cube",
+    "BlockParticleSetId": "Stone",
+    "Textures": [
+      {
+        "Sides": "BlockTextures/Rock_Runic_Cobble_Side.png",
+        "UpDown": "BlockTextures/Rock_Runic_Cobble_Top.png"
+      },
+      {
+        "Sides": "BlockTextures/Rock_Runic_Cobble_Side02.png",
+        "UpDown": "BlockTextures/Rock_Runic_Cobble_Top2.png"
+      },
+      {
+        "Sides": "BlockTextures/Rock_Runic_Cobble_Side03.png",
+        "UpDown": "BlockTextures/Rock_Runic_Cobble_Top3.png"
+      }
+    ],
+    "ParticleColor": "#58ad9b",
+    "BlockSoundSetId": "Stone",
+    "PhysicalMaterialId": "Stone",
+    "TextureComputedColor": "#5C797D",
+    "Material": "Solid",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Unbreakable"
+      }
+    },
+    "Flags": {},
+    "Support": {}
+  },
+  "PlayerAnimationsId": "Block",
+  "MaxStack": 1,
+  "ItemSoundSetId": "ISS_Blocks_Stone"
+}

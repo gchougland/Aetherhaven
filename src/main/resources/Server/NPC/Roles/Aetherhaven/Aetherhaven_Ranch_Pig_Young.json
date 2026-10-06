@@ -1,0 +1,35 @@
+{
+  "Type": "Variant",
+  "Reference": "Template_Animal_Neutral",
+  "Modify": {
+    "Appearance": "Piglet",
+    "FlockArray": [],
+    "AttractiveItemSet": [
+      "Plant_Crop_Turnip_Item"
+    ],
+    "AttractiveItemSetParticles": "Want_Food_Turnip",
+    "DropList": "Empty",
+    "MaxHealth": 25,
+    "ViewRange": 10,
+    "ViewSector": 320,
+    "HearingRange": 6,
+    "AlertedRange": 11,
+    "AlertedActionRange": 6,
+    "AbsoluteDetectionRange": 1,
+    "IsTameable": false,
+    "TameRoleChange": "Tamed_Pig_Piglet",
+    "IsMemory": false,
+    "MemoriesNameOverride": "Pig_Piglet",
+    "NameTranslationKey": {
+      "Compute": "NameTranslationKey"
+    },
+    "ProduceItem": ""
+  },
+  "Parameters": {
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Pig_Piglet.name",
+      "Description": "Translation key for NPC name display"
+    }
+  },
+  "$Comment": "Town managed offspring. Native species behavior with no item output, taming or memories."
+}

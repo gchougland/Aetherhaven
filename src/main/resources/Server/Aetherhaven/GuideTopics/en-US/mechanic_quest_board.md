@@ -16,6 +16,8 @@ New cards refresh each **dawn** when at least one member of your town is online.
 
 A townsfolk needs supplies brought to town. Accept the job, gather the listed items, and **turn them in through that villager's dialogue**. Rank tiers gate harder requests and better rewards.
 
+Standard supply jobs include payment for the requested goods plus a delivery bonus. The board shows the full reward before you accept. That price stays fixed for the posted job, even if town shop prices change later. Special requests from other packs may set their own rewards.
+
 ### Hunt
 
 Kill a certain number of a mob type, then report back to the quest giver. Progress shows on the card and in your journal.

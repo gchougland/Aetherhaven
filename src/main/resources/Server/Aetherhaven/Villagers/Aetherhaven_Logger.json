@@ -23,6 +23,14 @@
       "learnRecipeItemId": "Aetherhaven_Firewood"
     },
     {
+      "rewardId": "rep_logger_root_remover_gift",
+      "minReputation": 75,
+      "itemId": "Aetherhaven_Root_Remover",
+      "itemCount": 5,
+      "dialogueNodeId": "rep_reward_75",
+      "learnRecipeItemId": null
+    },
+    {
       "rewardId": "rep_logger_100",
       "minReputation": 100,
       "itemId": "",

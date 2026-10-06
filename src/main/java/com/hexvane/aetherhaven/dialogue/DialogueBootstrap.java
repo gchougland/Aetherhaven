@@ -36,6 +36,8 @@ public final class DialogueBootstrap {
             npc.registerCoreComponentType("OpenAetherhavenDialogue", BuilderActionOpenAetherhavenDialogue::new);
             npc.registerCoreComponentType("BurstFestivalLettuce", BuilderActionBurstFestivalLettuce::new);
             npc.registerCoreComponentType("WanderInRectGroundPreference", BuilderBodyMotionWanderInRectGroundPreference::new);
+            npc.registerCoreComponentType("AetherhavenGuardAutomaticAggro", () -> new com.hexvane.aetherhaven.patrol.BuilderSensorGuardEscortGate(false));
+            npc.registerCoreComponentType("AetherhavenGuardCombatAllowed", () -> new com.hexvane.aetherhaven.patrol.BuilderSensorGuardEscortGate(true));
             npcCodecsRegistered = true;
             LOGGER.atInfo().log(
                 "Registered NPC actions OpenAetherhavenDialogue, BurstFestivalLettuce, and body motion WanderInRectGroundPreference"

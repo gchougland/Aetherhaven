@@ -1,0 +1,27 @@
+{
+  "id": "craft_copper_archer_kit",
+  "name": "Copper Archer Kit",
+  "workplace": "armorCrafting",
+  "sourceRecipe": "workplace:copper_archer_kit",
+  "bench": "Armor_Bench",
+  "benchTier": 1,
+  "skillLevel": 2,
+  "townRank": "E",
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Copper",
+      "count": 18
+    },
+    {
+      "itemId": "Ingredient_Leather_Light",
+      "count": 6
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 8
+    }
+  ],
+  "output": "Aetherhaven_Copper_Archer_Kit",
+  "outputCount": 1,
+  "workSeconds": 40
+}

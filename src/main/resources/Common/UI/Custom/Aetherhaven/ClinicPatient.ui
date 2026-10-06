@@ -1,0 +1,11 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Top; Anchor: (Height: 114, Bottom: 8); Padding: (Full: 12); Background: $T.@Card;
+ Group { LayoutMode: Left; Anchor: (Height: 32);
+  Label #Name { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 16, RenderBold: true); }
+  Label #Health { Anchor: (Width: 145); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #d2bc85); }
+ }
+ Group { Anchor: (Width: 330, Height: 10); Background: $T.@Inset; Group #HealthFill { Anchor: (Left: 0, Width: 0, Height: 10); Background: #79ad98; } }
+ Label #Course { Anchor: (Height: 28, Top: 4); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #d2bc85); }
+ Group { Anchor: (Width: 330, Height: 5); Background: $T.@Inset; Group #CourseFill { Anchor: (Left: 0, Width: 0, Height: 5); Background: #d2bc85; } }
+}

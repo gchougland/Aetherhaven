@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "q_halloween_rescue",
+  "category": "town",
+  "title": "A Knock from Within",
+  "description": "You met Jack Hollow inside a coffin in October.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [],
+  "rewards": [],
+  "lifecycle": {
+    "onStart": [],
+    "onComplete": [],
+    "onAbandon": []
+  },
+  "repeat": {
+    "mode": "none"
+  }
+}

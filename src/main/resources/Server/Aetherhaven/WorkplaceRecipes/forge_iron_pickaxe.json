@@ -1,0 +1,9 @@
+{
+  "id": "forge_iron_pickaxe",
+  "name": "Iron pickaxe",
+  "workplace": "blacksmithing",
+  "sourceRecipe": "Tool_Pickaxe_Iron_Recipe_Generated_0",
+  "bench": "Weapon_Bench",
+  "benchTier": 1,
+  "skillLevel": 3
+}

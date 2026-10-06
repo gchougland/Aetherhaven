@@ -1,0 +1,102 @@
+{
+  "constructionId": "plot_druid",
+  "prefabPath": "Conservatory.prefab.json",
+  "materials": [
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 160
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 115
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 67
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 64
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 52
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 48
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 43
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 34
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Flat",
+      "count": 34
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Shallow",
+      "count": 34
+    },
+    {
+      "resourceTypeId": "Soils",
+      "count": 34
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 26
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 22
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Steep",
+      "count": 22
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 20
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Mossy",
+      "count": 12
+    },
+    {
+      "itemId": "Deco_Rope",
+      "count": 5
+    },
+    {
+      "itemId": "Furniture_Kweebec_Candle",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_Farming",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Kweebec_Lantern",
+      "count": 1
+    },
+    {
+      "itemId": "Wood_Oak_Trunk",
+      "count": 1
+    },
+    {
+      "itemId": "Wood_Windwillow_Trunk",
+      "count": 1
+    }
+  ]
+}

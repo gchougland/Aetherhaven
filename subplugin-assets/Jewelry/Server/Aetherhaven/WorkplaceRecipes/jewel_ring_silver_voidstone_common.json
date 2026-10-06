@@ -1,0 +1,27 @@
+{
+  "id": "jewel_ring_silver_voidstone_common",
+  "name": "Common silver voidstone ring",
+  "workplace": "jewelry",
+  "sourceRecipe": "workplace:jewel_ring_silver_voidstone_common",
+  "bench": "Aetherhaven_Jewelry_Crafting_Bench",
+  "benchTier": 1,
+  "skillLevel": 1,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Silver",
+      "count": 5
+    },
+    {
+      "itemId": "Rock_Gem_Voidstone",
+      "count": 1
+    },
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 1
+    }
+  ],
+  "output": "Aetherhaven_Ring_Silver_Voidstone",
+  "outputCount": 1,
+  "workSeconds": 20,
+  "jewelryRarity": "common"
+}

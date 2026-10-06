@@ -65,7 +65,7 @@ public final class TownResidentEligibility {
             return false;
         }
         if (requiresHouseToAppear(binding.getKind(), roleId, plugin)) {
-            return town.isNpcHomeResidentOnHousePlot(entityUuid, constructionCatalog);
+            return TownAdmission.isMember(town, entityUuid) || town.isNpcHomeResidentOnHousePlot(entityUuid, constructionCatalog);
         }
         return true;
     }
@@ -88,7 +88,7 @@ public final class TownResidentEligibility {
             return false;
         }
         if (requiresHouseToAppear(bindingKind, roleId, plugin)) {
-            return town.isNpcHomeResidentOnHousePlot(entityUuid, constructionCatalog);
+            return TownAdmission.isMember(town, entityUuid) || town.isNpcHomeResidentOnHousePlot(entityUuid, constructionCatalog);
         }
         return true;
     }

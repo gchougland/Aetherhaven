@@ -1,0 +1,65 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Armor_Cobalt_Hands.name"
+  },
+  "Quality": "Rare",
+  "ItemLevel": 35,
+  "PlayerAnimationsId": "Block",
+  "ItemSoundSetId": "ISS_Armor_Heavy",
+  "Categories": [],
+  "Icon": "Icons/ItemsGenerated/Armor_Cobalt_Hands.png",
+  "IconProperties": {
+    "Rotation": [
+      21.94,
+      45.565,
+      22.5
+    ],
+    "Scale": 0.645,
+    "Translation": [
+      0.7,
+      -2.3
+    ]
+  },
+  "Model": "Items/Armors/Cobalt/Hands.blockymodel",
+  "Texture": "Items/Armors/Cobalt/Hands_Texture.png",
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    }
+  },
+  "Armor": {
+    "ArmorSlot": "Hands",
+    "BaseDamageResistance": 0,
+    "DamageResistance": {},
+    "StatModifiers": {},
+    "DamageClassEnhancement": {
+      "Signature": [
+        {
+          "Amount": 0.03,
+          "CalculationType": "Multiplicative"
+        }
+      ]
+    }
+  },
+  "MaxDurability": 0,
+  "DurabilityLossOnHit": 0,
+  "Tags": {
+    "Type": [
+      "Armor"
+    ],
+    "Family": [
+      "Cobalt"
+    ]
+  }
+}

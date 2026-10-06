@@ -441,6 +441,40 @@
           "next": "main_hub"
         }
       ]
+    },
+    "rep_reward_25": {
+      "speaker": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.root.speaker",
+      "text": "aetherhaven_core_rewards.chef.25",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_chef_25"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "rep_reward_75": {
+      "speaker": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.root.speaker",
+      "text": "aetherhaven_core_rewards.chef.75",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_chef_75"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
     }
   }
 }

@@ -25,6 +25,7 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.ui.Anchor;
+import com.hypixel.hytale.server.core.ui.PatchStyle;
 import com.hypixel.hytale.server.core.ui.Value;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -44,7 +45,7 @@ import javax.annotation.Nullable;
 /** Withdraw items from per plot workplace production storage (wardrobe block). */
 public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIPage<ProductionStoragePage.PageData> {
     private static final long LIVE_REFRESH_INTERVAL_MS = 1000L;
-    private static final int MAX_UI_SLOTS = 5;
+    private static final int MAX_UI_SLOTS = WorkplaceProductionUpgrades.MAX_SLOT_COUNT;
     private static final String SLOT_FRAGMENT = "[0]";
     private static final int SLOT_WIDTH_PX = 180;
     private static final int SLOT_GAP_PX = 20;
@@ -102,6 +103,9 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
             localizationApplied = true;
         }
         commandBuilder.set("#ErrMsg.Visible", false);
+        // Clear the previous view before checking permissions or a changed plot.
+        for (String section : List.of("MasteryInfo", "SlotsRow", "BottomUnlockRow", "HerdRow", "FieldRow", "GroveRow"))
+            commandBuilder.set("#" + section + ".Visible", false);
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         World world = store.getExternalData().getWorld();
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -129,7 +133,16 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
             return;
         }
         PlotProductionState state = town.getOrCreatePlotProduction(plotId);
+        if (!plot.getProductionLayout().legacy() && plot.getProductionLayout().validationError()!=null) {
+            commandBuilder.set("#ErrMsg.Visible", true);
+            commandBuilder.set("#ErrMsg.TextSpans", Message.raw("This building needs its physical production setup. Stored resources remain available."));
+        }
         state.migrateIfNeeded();
+        String masteryKind=com.hexvane.aetherhaven.mastery.CoreProductionRequirements.kind(gameplayConstructionId);
+        String masteryTool=masteryKind==null?null:com.hexvane.aetherhaven.mastery.CoreVillagerMasteryService.toolId(town,masteryKind);
+        commandBuilder.set("#MasteryInfo.Text",masteryKind==null?"":"Mastery "+
+            com.hexvane.aetherhaven.mastery.CoreVillagerMasteryService.level(town,masteryKind)+" / 10"+
+            (masteryTool==null?"":" · "+masteryTool.replace("Tool_","").replace('_',' '))+" · Train through villager dialogue");
 
         ProductionCatalog.Entry entry =
             ProductionEffectiveCatalog.effective(
@@ -146,8 +159,18 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
 
         AetherhavenPluginConfig cfg = plugin.getConfig().get();
         int slotCount = WorkplaceProductionUpgrades.slotCount(state);
+        commandBuilder.set("#MasteryInfo.Visible", true);
+        commandBuilder.set("#SlotsRow.Visible", true);
+        commandBuilder.set("#BottomUnlockRow.Visible", true);
+        commandBuilder.set("#GroveRow.Visible",com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL.equals(gameplayConstructionId));
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating,"#OpenGrove",EventData.of("Action","OpenGrove"),false);
+        commandBuilder.set("#FieldRow.Visible",com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_FARM.equals(gameplayConstructionId)||"plot_druid".equals(gameplayConstructionId));
+        commandBuilder.set("#OpenField.Text","plot_druid".equals(gameplayConstructionId)?"Review ingredient beds":"Review planted beds");
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating,"#OpenField",EventData.of("Action","OpenField"),false);
+        commandBuilder.set("#HerdRow.Visible",com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_BARN.equals(gameplayConstructionId));
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating,"#OpenHerd",EventData.of("Action","OpenHerd"),false);
         double speedMul = WorkplaceProductionUpgrades.speedMultiplier(state);
-        applyShellWidth(commandBuilder, slotCount);
+        applyShellWidth(commandBuilder, MAX_UI_SLOTS);
 
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
@@ -162,27 +185,32 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
             false
         );
 
+        boolean canCollectAny = false;
         for (int col = 0; col < MAX_UI_SLOTS; col++) {
             String host = slotHost(col);
             boolean active = col < slotCount;
-            if (active) {
-                commandBuilder.set(host + ".Visible", true);
-                resetHostAnchor(commandBuilder, host, col, slotCount);
-            } else {
-                commandBuilder.set(host + ".Visible", false);
-                collapseHostAnchor(commandBuilder, host);
-                continue;
-            }
+            commandBuilder.set(host + ".Visible", true);
+            resetHostAnchor(commandBuilder, host, col, MAX_UI_SLOTS);
             String base = slotBase(col);
+            commandBuilder.setObject(base + ".Background", new PatchStyle().setColor(Value.of(active ? "#1a2932" : "#2b3038")));
+            commandBuilder.set(base + " #Unlocked.Visible", active);
+            commandBuilder.set(base + " #Locked.Visible", !active);
+            commandBuilder.set(base + " #LockedTitle.Text", "Output slot " + (col + 1));
+            commandBuilder.set(base + " #Pick.Disabled", !active);
+            for (String control : List.of("Take1", "Take10", "Take100"))
+                commandBuilder.set(base + " #" + control + ".Disabled", true);
+            if (!active) continue;
+            commandBuilder.set(base + " #RequirementLock.Visible", false);
             String iconPath = base + " #Icon";
             int cursor = state.getSlotCursor(col);
             String itemId = entry.itemAtCursor(cursor);
             if (itemId == null || itemId.isBlank()) {
                 commandBuilder.set(iconPath + ".Visible", false);
-                commandBuilder.set(base + " #Name.TextSpans", Message.raw("—"));
+                commandBuilder.set(base + " #Name.TextSpans", Message.raw("No output"));
                 commandBuilder.set(base + " #Qty.TextSpans", Message.raw("0/0"));
                 commandBuilder.set(base + " #Time.TextSpans", Message.raw(""));
                 commandBuilder.set(base + " #Prog.Value", 0f);
+                commandBuilder.set(base + " #Prog.Visible", false);
             } else {
                 long lineCap = WorkplaceProductionUpgrades.effectiveMaxStorage(state, entry, itemId);
                 Item it = Item.getAssetMap().getAsset(itemId);
@@ -194,6 +222,10 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
                         : Message.raw(itemId);
                 commandBuilder.set(base + " #Name.TextSpans", nameMsg);
                 long have = state.getAmount(itemId);
+                boolean canCollect = have > town.getWarehouse().reservedProduction(plotId, itemId);
+                canCollectAny |= canCollect;
+                for (String control : List.of("Take1", "Take10", "Take100"))
+                    commandBuilder.set(base + " #" + control + ".Disabled", !canCollect);
                 commandBuilder.set(base + " #Qty.TextSpans", Message.raw(have + "/" + lineCap));
                 int ticks =
                     ProductionTimeScaling.effectiveTicksForItemAtPlot(
@@ -205,17 +237,87 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
                         plot.getSignZ(),
                         itemId
                     );
-                float progress = ticks > 0 ? Math.min(1f, state.getSlotTickAccum(col) / (float) ticks) : 0f;
+                boolean herd=state.usesPhysicalHerd();
+                boolean field=state.usesPhysicalField();
+                boolean grove=state.usesPhysicalTimber();
+                boolean needsIngredientReview="plot_druid".equals(gameplayConstructionId) && !field;
+                commandBuilder.set(base + " #Prog.Visible", !grove && !field && !herd && !needsIngredientReview);
+                boolean physical=!grove && !field && !herd && !needsIngredientReview && !plot.getProductionLayout().legacy() && plot.getProductionLayout().validationError()==null;
+                var miningCycle=physical?state.mining().cycle(col):null;
+                float progress = grove || field || herd || needsIngredientReview ? 0f : physical ? (float)miningCycle.progress()
+                    : ticks > 0 ? Math.min(1f, state.getSlotTickAccum(col) / (float) ticks) : 0f;
                 commandBuilder.set(base + " #Prog.Value", progress);
+                String requirement = com.hexvane.aetherhaven.mastery.CoreProductionRequirements.issue(town,gameplayConstructionId,itemId);
+                commandBuilder.set(base + " #RequirementLock.Visible", requirement != null);
+                commandBuilder.setObject(base + ".Background", new PatchStyle().setColor(Value.of(requirement == null ? "#1a2932" : "#2b3038")));
                 commandBuilder.set(
                     base + " #Time.TextSpans",
-                    Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.genInterval")
+                    requirement != null ? Message.raw(requirement)
+                    : needsIngredientReview ? Message.raw("Review ingredient beds to begin")
+                    : herd ? Message.raw(herdStatus(state,itemId,lineCap))
+                    : field ? Message.raw(fieldStatus(state,itemId,lineCap))
+                    : grove ? Message.raw(groveStatus(state,col,itemId,lineCap))
+                    : physical ? Message.raw(miningStatus(plugin,world,town,plot,state,itemId,lineCap,miningCycle))
+                    : Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.genInterval")
                         .param("time", ProductionCatalog.Entry.formatSecondsForTicks(ticks))
                 );
             }
             bindColEvents(eventBuilder, col);
         }
+        if (state.hasExcavationOutput() || state.usesPhysicalTimber() || state.usesPhysicalField() || state.usesPhysicalHerd())
+            canCollectAny |= state.getAmounts().entrySet().stream().anyMatch(stored ->
+                stored.getValue() > town.getWarehouse().reservedProduction(plotId, stored.getKey())
+                    && Item.getAssetMap().getAsset(stored.getKey()) != null);
+        commandBuilder.set("#CollectAll.Disabled", !canCollectAny);
         startLiveRefreshIfNeeded(store);
+    }
+
+    private static String herdStatus(PlotProductionState state,String item,long capacity) {
+        if(state.getAmount(item)>=capacity)return "Storage full";
+        var cargo=state.herd().cargo();
+        if(cargo!=null&&cargo.output().equals(item))return cargo.quantity()+" being carried to storage";
+        return state.herd().feed()>0?"Feeding and raising livestock":"Supply wheat at herd review";
+    }
+
+    private static String fieldStatus(PlotProductionState state,String item,long capacity) {
+        if(state.getAmount(item)>=capacity)return "Storage full";
+        var cargo=state.field().cargo();
+        if(cargo!=null&&cargo.output().equals(item))return cargo.quantity()+" being carried to storage";
+        long beds=state.field().beds().stream().filter(bed->bed.output().equals(item)).count();
+        return beds==0?"Plant and review crop beds":beds+" beds in the field";
+    }
+
+    private static String groveStatus(PlotProductionState state,int slot,String item,long capacity) {
+        var timber=state.timber();
+        if(state.getAmount(item)>=capacity)return "Storage full";
+        var cargo=timber.cargo();
+        if(cargo!=null&&cargo.output().equals(item))return cargo.remaining()+" items awaiting delivery";
+        if(com.hexvane.aetherhaven.production.NativeTimberProducts.supported(item))return "Collected with tree harvests";
+        var tree=timber.trees().get(slot);
+        if(tree!=null) {
+            if(timber.edited(tree.tree().id()))return "Review changed tree";
+            return timber.chopping(slot)>0?"Chopping in progress":"Growing or awaiting Logger";
+        }
+        var plan=timber.groves().get(slot);
+        if(plan==null)return "Plan a tree location";
+        if(!plan.output().equals(item))return "Review changed timber";
+        return "Waiting for free planting";
+    }
+
+    private static String miningStatus(AetherhavenPlugin plugin, World world, TownRecord town, PlotInstance plot,
+                                       PlotProductionState state, String item, long capacity,
+                                       com.hexvane.aetherhaven.production.MiningCycle cycle) {
+        long yield=com.hexvane.aetherhaven.town.CharterSpecializationModifiers.productionAmountPerCycle(
+            town,plugin.getConstructionCatalog(),com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_MINERS_HUT);
+        if (capacity-state.getAmount(item)<yield) return "Storage full";
+        if (!com.hexvane.aetherhaven.production.MiningNodeBlocks.supported(item)) return "Mining appearance missing";
+        boolean intact=false;
+        for (int n=0;n<plot.getProductionLayout().nodes().size();n++) {
+            if (com.hexvane.aetherhaven.production.MiningNodeBlocks.intact(world,plot,state.mining(),n)) { intact=true; break; }
+        }
+        if (!intact) return "Check mining cells";
+        if (cycle.remaining()>0) return "Vein returns in "+(int)Math.ceil(cycle.remaining())+"s";
+        return cycle.progress()>0 ? "Mining progress" : "Waiting for the Miner";
     }
 
     @Override
@@ -251,13 +353,6 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
         if (col < slotCount - 1) {
             anchor.setRight(Value.of(SLOT_GAP_PX));
         }
-        commandBuilder.setObject(host + ".Anchor", anchor);
-    }
-
-    private static void collapseHostAnchor(@Nonnull UICommandBuilder commandBuilder, @Nonnull String host) {
-        Anchor anchor = new Anchor();
-        anchor.setWidth(Value.of(0));
-        anchor.setHeight(Value.of(0));
         commandBuilder.setObject(host + ".Anchor", anchor);
     }
 
@@ -372,6 +467,24 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
             return;
         }
 
+        if (action.equalsIgnoreCase("OpenHerd")
+                && com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_BARN.equals(gameplayConstructionId)) {
+            liveRefreshActive = false;
+            player.getPageManager().openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.RancherHerdPage(playerRef,townId,plotId));
+            return;
+        }
+        if (action.equalsIgnoreCase("OpenField")
+                && (com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_FARM.equals(gameplayConstructionId)||"plot_druid".equals(gameplayConstructionId))) {
+            liveRefreshActive = false;
+            player.getPageManager().openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.FarmerFieldPage(playerRef,townId,plotId));
+            return;
+        }
+        if (action.equalsIgnoreCase("OpenGrove")
+                && com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL.equals(gameplayConstructionId)) {
+            liveRefreshActive = false;
+            player.getPageManager().openCustomPage(ref,store,new com.hexvane.aetherhaven.workplace.TimberGrovePage(playerRef,townId,plotId));
+            return;
+        }
         if (action.equalsIgnoreCase("OpenUnlocks")) {
             liveRefreshActive = false;
             player.getPageManager().openCustomPage(ref, store, new ProductionStorageUnlocksPage(playerRef, townId, plotId, blockX, blockY, blockZ));
@@ -439,13 +552,19 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
             }
             toTake.merge(itemId, have, Long::sum);
         }
+        // An adopted grove cannot select legacy byproducts again. Keep those
+        // saved supplies collectible locally even before a warehouse is built.
+        if (state.hasExcavationOutput() || state.usesPhysicalTimber() || state.usesPhysicalField() || state.usesPhysicalHerd()) for (var stored : state.getAmounts().entrySet()) {
+            if (stored.getValue() > 0 && Item.getAssetMap().getAsset(stored.getKey()) != null)
+                toTake.put(stored.getKey(), stored.getValue());
+        }
         if (toTake.isEmpty()) {
             refresh(ref, store);
             return;
         }
         ProductionWithdrawal.ResultSink result = new ProductionWithdrawal.ResultSink();
         for (var row : toTake.entrySet()) {
-            ProductionWithdrawal.withdrawToPlayer(ref, store, player, state, entry, row.getKey(), row.getValue(), result);
+            ProductionWithdrawal.withdrawToPlayer(ref, store, player, state, entry, row.getKey(), Math.min(row.getValue(),Math.max(0,state.getAmount(row.getKey())-town.getWarehouse().reservedProduction(plotId,row.getKey()))), result);
         }
         tm.updateTown(town);
         notifyWithdrawResult(pr, result);
@@ -470,7 +589,7 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
             return;
         }
         ProductionWithdrawal.ResultSink result = new ProductionWithdrawal.ResultSink();
-        ProductionWithdrawal.withdrawToPlayer(ref, store, player, state, entry, itemId, want, result);
+        ProductionWithdrawal.withdrawToPlayer(ref, store, player, state, entry, itemId, Math.min(want,Math.max(0,state.getAmount(itemId)-town.getWarehouse().reservedProduction(plotId,itemId))), result);
         tm.updateTown(town);
         notifyWithdrawResult(pr, result);
         refresh(ref, store);

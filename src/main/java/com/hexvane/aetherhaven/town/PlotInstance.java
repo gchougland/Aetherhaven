@@ -18,8 +18,33 @@ import javax.annotation.Nullable;
 
 /** One placed building plot: blueprint sign phase or completed prefab. */
 public final class PlotInstance {
+    /** Frozen when placed, not looked up from later marketplace downloads. Missing old saves remain legacy. */
+    @SerializedName("productionLayout")
+    private com.hexvane.aetherhaven.production.BuildingProductionLayout productionLayout;
+
+    public com.hexvane.aetherhaven.production.BuildingProductionLayout getProductionLayout() {
+        return productionLayout == null ? com.hexvane.aetherhaven.production.BuildingProductionLayout.LEGACY : productionLayout;
+    }
+
+    /** Placement only. A future editor conversion must use its own validated transaction. */
+    public void captureProductionLayout(ConstructionDefinition definition) {
+        if (productionLayout == null) productionLayout = definition.getProductionLayout();
+    }
+
+    /** Explicit conversion only. Caller validates every loaded cell before committing this snapshot. */
+    public boolean adoptMiningLayout(com.hexvane.aetherhaven.production.BuildingProductionLayout layout) {
+        if (!getProductionLayout().legacy() || layout == null || layout.legacy() || layout.validationError() != null) return false;
+        productionLayout = layout;
+        return true;
+    }
+
+    /** Stable Townsfolk identity, retained across entity unloads and resurrection. */
+    private String shopClerkId;
+    public String getShopClerkId() { return shopClerkId; }
+    public void setShopClerkId(String id) { shopClerkId = id == null || id.isBlank() ? null : id.toLowerCase(java.util.Locale.ROOT); }
     @SerializedName("plotId")
     private String plotId;
+    private transient volatile UUID parsedPlotId;
 
     @SerializedName("constructionId")
     private String constructionId;
@@ -184,6 +209,7 @@ public final class PlotInstance {
         long lastStateChangeEpochMs
     ) {
         this.plotId = plotId.toString();
+        this.parsedPlotId = plotId;
         this.constructionId = constructionId != null ? constructionId : "";
         this.state = state.name();
         this.minX = footprint.getMinX();
@@ -200,11 +226,17 @@ public final class PlotInstance {
 
     @Nonnull
     public UUID getPlotId() {
-        return UUID.fromString(plotId);
+        UUID parsed = parsedPlotId;
+        if (parsed == null) {
+            parsed = UUID.fromString(plotId);
+            parsedPlotId = parsed;
+        }
+        return parsed;
     }
 
     public void setPlotId(@Nonnull UUID id) {
         this.plotId = id.toString();
+        this.parsedPlotId = id;
     }
 
     @Nonnull

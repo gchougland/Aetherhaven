@@ -17,7 +17,10 @@
       "Description": "Retreat when hostiles stay inside this range"
     },
     "DesiredRangedDistance": {
-      "Value": [5, 14],
+      "Value": [
+        5,
+        14
+      ],
       "Description": "Preferred casting range"
     },
     "RangedAttack": {
@@ -25,11 +28,17 @@
       "Description": "Staff attack interaction"
     },
     "AttackPauseRange": {
-      "Value": [1.5, 2.5],
+      "Value": [
+        1.5,
+        2.5
+      ],
       "Description": "Pause between casts"
     },
     "CombatAttackPreDelay": {
-      "Value": [0.6, 1.1],
+      "Value": [
+        0.6,
+        1.1
+      ],
       "Description": "Cast wind-up time"
     },
     "CombatBehaviorDistance": {
@@ -41,27 +50,58 @@
     "Instructions": [
       {
         "Continue": true,
-        "Sensor": { "Type": "Damage", "Combat": true },
+        "Sensor": {
+          "Type": "And",
+          "Sensors": [
+            {
+              "Type": "AetherhavenGuardAutomaticAggro"
+            },
+            {
+              "Type": "Damage",
+              "Combat": true
+            }
+          ]
+        },
         "Actions": [
-          { "Type": "AddToHostileTargetMemory" },
-          { "Type": "OverrideAttitude", "Attitude": "Hostile", "Duration": 60 }
+          {
+            "Type": "AddToHostileTargetMemory"
+          },
+          {
+            "Type": "OverrideAttitude",
+            "Attitude": "Hostile",
+            "Duration": 60
+          }
         ]
       },
       {
         "Reference": "Component_Instruction_Combat_Retreat",
         "Modify": {
-          "CombatFleeIfTooCloseDistance": { "Compute": "CombatFleeIfTooCloseDistance" },
-          "AttackDistance": { "Compute": "AttackDistance" }
+          "CombatFleeIfTooCloseDistance": {
+            "Compute": "CombatFleeIfTooCloseDistance"
+          },
+          "AttackDistance": {
+            "Compute": "AttackDistance"
+          }
         }
       },
       {
         "Continue": true,
         "Sensor": {
           "Type": "Target",
-          "Range": { "Compute": "CombatBehaviorDistance" },
-          "Filters": [{ "Type": "LineOfSight" }]
+          "Range": {
+            "Compute": "CombatBehaviorDistance"
+          },
+          "Filters": [
+            {
+              "Type": "LineOfSight"
+            }
+          ]
         },
-        "HeadMotion": { "Type": "Aim", "RelativeTurnSpeed": 1.25, "HitProbability": 1.0 }
+        "HeadMotion": {
+          "Type": "Aim",
+          "RelativeTurnSpeed": 1.25,
+          "HitProbability": 1.0
+        }
       },
       {
         "Continue": true,
@@ -70,27 +110,48 @@
           "Sensors": [
             {
               "Type": "Target",
-              "Range": { "Compute": "AttackDistance" },
-              "Filters": [{ "Type": "LineOfSight" }]
+              "Range": {
+                "Compute": "AttackDistance"
+              },
+              "Filters": [
+                {
+                  "Type": "LineOfSight"
+                }
+              ]
             },
             {
               "Type": "Not",
               "Sensor": {
                 "Type": "Target",
-                "Range": { "Compute": "CombatFleeIfTooCloseDistance" }
+                "Range": {
+                  "Compute": "CombatFleeIfTooCloseDistance"
+                }
               }
             }
           ]
         },
         "ActionsBlocking": true,
-        "HeadMotion": { "Type": "Aim", "RelativeTurnSpeed": 1.25, "HitProbability": 1.0 },
+        "HeadMotion": {
+          "Type": "Aim",
+          "RelativeTurnSpeed": 1.25,
+          "HitProbability": 1.0
+        },
         "Actions": [
-          { "Type": "Timeout", "Delay": { "Compute": "CombatAttackPreDelay" } },
+          {
+            "Type": "Timeout",
+            "Delay": {
+              "Compute": "CombatAttackPreDelay"
+            }
+          },
           {
             "Type": "Attack",
-            "Attack": { "Compute": "RangedAttack" },
+            "Attack": {
+              "Compute": "RangedAttack"
+            },
             "AvoidFriendlyFire": true,
-            "AttackPauseRange": { "Compute": "AttackPauseRange" }
+            "AttackPauseRange": {
+              "Compute": "AttackPauseRange"
+            }
           }
         ]
       },
@@ -98,19 +159,32 @@
         "Continue": true,
         "Sensor": {
           "Type": "Target",
-          "Range": { "Compute": "CombatBehaviorDistance" },
-          "Filters": [{ "Type": "LineOfSight" }]
+          "Range": {
+            "Compute": "CombatBehaviorDistance"
+          },
+          "Filters": [
+            {
+              "Type": "LineOfSight"
+            }
+          ]
         },
         "BodyMotion": {
           "Type": "MaintainDistance",
-          "DesiredDistanceRange": { "Compute": "DesiredRangedDistance" },
+          "DesiredDistanceRange": {
+            "Compute": "DesiredRangedDistance"
+          },
           "MoveThreshold": 0.35,
           "RelativeForwardsSpeed": 0.4,
           "RelativeBackwardsSpeed": 0.5
         }
       },
       {
-        "Sensor": { "Type": "Target", "Range": { "Compute": "ViewRange" } },
+        "Sensor": {
+          "Type": "Target",
+          "Range": {
+            "Compute": "ViewRange"
+          }
+        },
         "BodyMotion": {
           "Type": "Seek",
           "SlowDownDistance": 12,

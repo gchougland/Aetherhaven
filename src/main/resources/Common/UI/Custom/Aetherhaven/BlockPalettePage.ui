@@ -1,4 +1,5 @@
 $C = "../Common.ui";
+$T = "TownUiTheme.ui";
 $Sounds = "../Sounds.ui";
 
 @TabIconLbl = (
@@ -63,7 +64,7 @@ $C.@PageOverlay {
       Anchor: (Full: 0);
 
       $C.@DecoratedContainer {
-        Anchor: (Width: 560);
+        Anchor: (Width: $T.@RecordsWidth, Height: $T.@RecordsHeight);
 
         #Title {
           Label #BlockPaletteTitleText {
@@ -74,15 +75,16 @@ $C.@PageOverlay {
         }
 
         #Content {
+          Anchor: (Top: 38, Bottom: 0);
           LayoutMode: Top;
-          Padding: (Full: 16);
+          Padding: (Full: 24);
 
           Group #ManagementTabStrip {
             LayoutMode: Left;
             Visible: false;
             Anchor: (Bottom: 14, Left: 0, Right: 0);
             Padding: (Horizontal: 6, Vertical: 8);
-            Background: #1e2430(0.92);
+            Background: $T.@Panel;
 
             Group { FlexWeight: 1; }
 
@@ -162,11 +164,12 @@ $C.@PageOverlay {
 
           Group #CategoryListPanel {
             LayoutMode: Top;
-            Anchor: (Height: 420, Bottom: 12);
+            FlexWeight: 1;
+            Anchor: (Bottom: 12);
 
             Label #StatusHint {
               Visible: false;
-              Anchor: (Top: 0, Left: 0, Right: 0, Height: 420);
+              Anchor: (Full: 0);
               Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #8a7a60, VerticalAlignment: Center, HorizontalAlignment: Center);
               Text: "";
             }
@@ -174,7 +177,7 @@ $C.@PageOverlay {
             Group #CategoryScroll {
               LayoutMode: TopScrolling;
               ScrollbarStyle: $C.@DefaultScrollbarStyle;
-              Anchor: (Top: 0, Left: 0, Right: 0, Height: 420);
+              Anchor: (Full: 0);
 
               Group #CategoryRows {
                 LayoutMode: Top;

@@ -175,6 +175,9 @@ public final class ProductionTickSystem extends EntityTickingSystem<EntityStore>
 
         }
 
+        // Physical or unknown future layouts must never also earn legacy timer output.
+        if (!plot.getProductionLayout().legacy()) return;
+
         ConstructionCatalog ccat = plugin.getConstructionCatalog();
 
         if (!ccat.matchesGameplayConstruction(plot.getConstructionId(), expectedConstruction)) {
@@ -232,6 +235,7 @@ public final class ProductionTickSystem extends EntityTickingSystem<EntityStore>
         ProductionCatalog catalog = plugin.getProductionCatalog();
 
         PlotProductionState state = town.getOrCreatePlotProduction(jobPlotId);
+        if (state.usesPhysicalTimber() || state.usesPhysicalField() || state.usesPhysicalHerd()) return;
 
         ProductionCatalog.Entry entry =
             ProductionEffectiveCatalog.effective(catalog, plugin.getWorkplaceUnlockCatalog(), gameplayPlotId, state);

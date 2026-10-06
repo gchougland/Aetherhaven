@@ -1,0 +1,60 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Armor_Cloth_Silk_Chest.name"
+  },
+  "Quality": "Common",
+  "ItemLevel": 35,
+  "PlayerAnimationsId": "Block",
+  "ItemSoundSetId": "ISS_Armor_Cloth",
+  "Categories": [],
+  "Icon": "Icons/ItemsGenerated/Armor_Cloth_Silk_Chest.png",
+  "IconProperties": {
+    "Rotation": [
+      9,
+      47.3,
+      5.6
+    ],
+    "Scale": 0.425,
+    "Translation": [
+      -4.2,
+      -30.6
+    ]
+  },
+  "Model": "Items/Armors/Silk/Chest.blockymodel",
+  "Texture": "Items/Armors/Silk/Chest_Texture.png",
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    }
+  },
+  "Armor": {
+    "ArmorSlot": "Chest",
+    "BaseDamageResistance": 0,
+    "CosmeticsToHide": [
+      "Overtop"
+    ],
+    "DamageResistance": {},
+    "StatModifiers": {}
+  },
+  "MaxDurability": 0,
+  "DurabilityLossOnHit": 0,
+  "Tags": {
+    "Type": [
+      "Armor"
+    ],
+    "Family": [
+      "Cloth_Silk"
+    ]
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Alchemy_Cauldron_Big.name"
+  },
+  "Categories": [
+    "Blocks.Deco"
+  ],
+  "Recipe": {
+    "Input": [
+      {
+        "ItemId": "Ingredient_Bar_Iron",
+        "Quantity": 12
+      },
+      {
+        "ItemId": "Soil_Clay_Smooth_White",
+        "Quantity": 8
+      },
+      {
+        "ItemId": "Ingredient_Tree_Sap",
+        "Quantity": 4
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Type": "Crafting",
+        "Id": "Furniture_Bench",
+        "Categories": [
+          "Furniture_Misc"
+        ]
+      }
+    ]
+  },
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Model",
+    "BlockSoundSetId": "Stone",
+    "PhysicalMaterialId": "Stone",
+    "Opacity": "Transparent",
+    "CustomModel": "Blocks/Dungeons/Cauldron_Big.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Dungeons/Cauldron_Big_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "CustomModelScale": 1,
+    "HitboxType": "Block_Seven_Eighth",
+    "VariantRotation": "Wall",
+    "AmbientSoundEventId": "SFX_Cauldron_Bubbling",
+    "Looping": true,
+    "Flags": {},
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "SoftBlocks"
+      }
+    },
+    "Particles": [
+      {
+        "SystemId": "Corrupted_Bubbles",
+        "TargetEntityPart": "PrimaryItem",
+        "TargetNodeName": "Middle"
+      }
+    ],
+    "TextureComputedColor": "#534539",
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "Simple"
+          }
+        ]
+      }
+    },
+    "InteractionHint": "aetherhaven_alchemy.cauldron.hint"
+  },
+  "PlayerAnimationsId": "Block",
+  "IconProperties": {
+    "Scale": 0.365,
+    "Translation": [
+      3.59,
+      -14.41
+    ],
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ]
+  },
+  "Icon": "Icons/ItemsGenerated/Deco_Cauldron_Big.png",
+  "Scale": 0.8
+}

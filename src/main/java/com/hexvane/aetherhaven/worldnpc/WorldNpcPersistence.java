@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.worldnpc;
 
+import com.google.gson.JsonParseException;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.world.PersistentWorldSupport;
@@ -45,20 +46,32 @@ public final class WorldNpcPersistence {
             return;
         }
         Path dir = worldDir(plugin, world.getName());
+        load(dir, world.getName(), registry);
+    }
+
+    static void load(@Nonnull Path dir, @Nonnull String worldName, @Nonnull WorldNpcRegistry registry) {
+        registry.setPersistenceBlocked(true);
+        Path source = dir.resolve(PLACEMENTS_FILE);
         try {
-            WorldNpcsWorldFile placements = WorldNpcsWorldFile.readOrEmpty(dir.resolve(PLACEMENTS_FILE));
-            WorldNpcRoutesWorldFile routes = WorldNpcRoutesWorldFile.readOrEmpty(dir.resolve(ROUTES_FILE));
-            WorldNpcPlayersWorldFile players = WorldNpcPlayersWorldFile.readOrEmpty(dir.resolve(PLAYERS_FILE));
+            WorldNpcsWorldFile placements = WorldNpcsWorldFile.readOrEmpty(source);
+            source = dir.resolve(ROUTES_FILE);
+            WorldNpcRoutesWorldFile routes = WorldNpcRoutesWorldFile.readOrEmpty(source);
+            source = dir.resolve(PLAYERS_FILE);
+            WorldNpcPlayersWorldFile players = WorldNpcPlayersWorldFile.readOrEmpty(source);
             registry.replaceAll(placements.getPlacements(), routes.getRoutes(), players.getPlayers());
+            registry.setPersistenceBlocked(false);
             LOGGER.atInfo().log(
                 "Aetherhaven loaded %s world NPC placements, %s routes, %s player rows for world %s",
                 registry.allPlacements().size(),
                 registry.allRoutes().size(),
                 registry.playerCount(),
-                world.getName()
+                worldName
             );
-        } catch (IOException e) {
-            LOGGER.atWarning().withCause(e).log("Failed to load world NPCs for world %s", world.getName());
+        } catch (IOException | JsonParseException e) {
+            LOGGER.atSevere().withCause(e).log(
+                "Failed to load world NPC data from %s for world %s. World loading will continue, but NPC data saving is disabled to preserve the existing files. Repair or restore the file and restart the world.",
+                source, worldName
+            );
         }
     }
 
@@ -67,6 +80,13 @@ public final class WorldNpcPersistence {
             return;
         }
         Path dir = worldDir(plugin, world.getName());
+        save(dir, world.getName(), registry);
+    }
+
+    static void save(@Nonnull Path dir, @Nonnull String worldName, @Nonnull WorldNpcRegistry registry) {
+        if (registry.isPersistenceBlocked()) {
+            return;
+        }
         try {
             WorldNpcsWorldFile placements = new WorldNpcsWorldFile();
             placements.getPlacements().addAll(registry.allPlacements());
@@ -85,7 +105,7 @@ public final class WorldNpcPersistence {
             }
             players.writeAtomic(dir.resolve(PLAYERS_FILE));
         } catch (IOException e) {
-            LOGGER.atSevere().withCause(e).log("Failed to save world NPCs for world %s", world.getName());
+            LOGGER.atSevere().withCause(e).log("Failed to save world NPCs for world %s", worldName);
         }
     }
 }

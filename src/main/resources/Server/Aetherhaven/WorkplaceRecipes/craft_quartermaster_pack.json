@@ -1,0 +1,27 @@
+{
+  "id": "craft_quartermaster_pack",
+  "name": "Quartermaster pack",
+  "workplace": "leatherworking",
+  "sourceRecipe": "workplace:quartermaster_pack",
+  "bench": "Tannery",
+  "benchTier": 1,
+  "skillLevel": 5,
+  "requiresKnowledge": true,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Leather_Light",
+      "count": 12
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 4
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 8
+    }
+  ],
+  "output": "Aetherhaven_CourierPack_Kit",
+  "outputCount": 1,
+  "workSeconds": 30
+}

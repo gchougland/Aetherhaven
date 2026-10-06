@@ -1,0 +1,8 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Button #Pick { LayoutMode: Top; FlexWeight: 1; Anchor: (Right: 5); Padding: (Full: 5);
+  Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed));
+  Group { LayoutMode: Center; Anchor: (Height: 42); ItemIcon #Icon { Anchor: (Width: 42, Height: 42); } }
+  Label #Name { Anchor: (Height: 18); Style: (...$C.@DefaultLabelStyle, FontSize: 13, HorizontalAlignment: Center); }
+  Group #Mark { Anchor: (Height: 2); Background: #dfbd78; Visible: false; }
+}

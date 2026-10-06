@@ -1,0 +1,50 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_profession_kits.stitchingframe.name",
+    "Description": "aetherhaven_profession_kits.stitchingframe.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_StitchingFrame.png",
+  "PlayerAnimationsId": "Block",
+  "Categories": [
+    "Furniture.Decoration",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "MaxStack": 10,
+  "Quality": "Uncommon",
+  "ItemSoundSetId": "ISS_Blocks_Wood",
+  "IconProperties": {
+    "Scale": 1,
+    "Rotation": [
+      22.5,
+      45,
+      0
+    ],
+    "Translation": [
+      0,
+      0
+    ]
+  },
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Model",
+    "Opacity": "Transparent",
+    "CustomModel": "Blocks/Aetherhaven/Artisans/StitchingFrame.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Aetherhaven/Artisans/StitchingFrame.png",
+        "Weight": 1
+      }
+    ],
+    "HitboxType": "Aetherhaven_StitchingFrame",
+    "VariantRotation": "NESW",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Benches"
+      }
+    },
+    "BlockParticleSetId": "Wood",
+    "BlockSoundSetId": "Wood",
+    "ParticleColor": "#745137"
+  }
+}

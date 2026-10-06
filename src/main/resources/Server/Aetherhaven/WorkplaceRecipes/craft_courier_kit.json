@@ -1,0 +1,26 @@
+{
+  "id": "craft_courier_kit",
+  "name": "Courier satchel",
+  "workplace": "leatherworking",
+  "sourceRecipe": "workplace:courier_kit",
+  "bench": "Tannery",
+  "benchTier": 1,
+  "skillLevel": 3,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Leather_Light",
+      "count": 6
+    },
+    {
+      "itemId": "Ingredient_Bar_Copper",
+      "count": 2
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 4
+    }
+  ],
+  "output": "Aetherhaven_Courier_Kit",
+  "outputCount": 1,
+  "workSeconds": 20
+}

@@ -15,6 +15,14 @@
   "visitorBindingKind": "visitor_rancher",
   "reputationMilestones": [
     {
+      "rewardId": "rep_rancher_25",
+      "minReputation": 25,
+      "itemId": "Aetherhaven_Rancher_Kit",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_25",
+      "learnRecipeItemId": null
+    },
+    {
       "rewardId": "rep_rancher_50",
       "minReputation": 50,
       "itemId": "",

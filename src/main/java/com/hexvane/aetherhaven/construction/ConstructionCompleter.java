@@ -13,6 +13,7 @@ import com.hexvane.aetherhaven.inn.MerchantStallCompletion;
 import com.hexvane.aetherhaven.inn.MinerHutCompletion;
 import com.hexvane.aetherhaven.festival.FestivalPrefabSize;
 import com.hexvane.aetherhaven.guild.GuildHallCompletion;
+import com.hexvane.aetherhaven.workplace.BuildingProjectCleanup;
 import com.hexvane.aetherhaven.map.TeleporterWarpSanitizer;
 import com.hexvane.aetherhaven.poi.PoiExtractor;
 import com.hexvane.aetherhaven.poi.marker.PoiMarkerDedupUtil;
@@ -105,6 +106,7 @@ public final class ConstructionCompleter {
             town.addWallSegment(
                 new WallSegmentRecord(plotId, plot.getConstructionId(), fp, prefabAnchorWorld.x, prefabAnchorWorld.y, prefabAnchorWorld.z, prefabYaw, now)
             );
+            retireYardProjectAfterPlacement(world, tm, town, plotId);
             tm.updateTown(town);
             return;
         }
@@ -113,6 +115,7 @@ public final class ConstructionCompleter {
             // Keep prefab management shelves as inert props (e.g. Jimmy's School). The plot is not registered, so
             // they are not town-linked; stripping them removed the furniture from decoration builds.
             town.removePlotInstance(plotId);
+            retireYardProjectAfterPlacement(world, tm, town, plotId);
             tm.updateTown(town);
             return;
         }
@@ -215,5 +218,13 @@ public final class ConstructionCompleter {
                 InnPoolService.repairInnPoolForTown(world, plugin, town, tm, entityStore, false);
             }
         }
+        retireYardProjectAfterPlacement(world, tm, town, plotId);
     }
+
+    private static void retireYardProjectAfterPlacement(World world, TownManager manager, TownRecord town, UUID plotId) {
+        BuildingProjectCleanup.afterCompletion(world, town, plotId, () -> {
+            if (manager.getTown(town.getTownId()) == town) manager.updateTown(town);
+        });
+    }
+
 }

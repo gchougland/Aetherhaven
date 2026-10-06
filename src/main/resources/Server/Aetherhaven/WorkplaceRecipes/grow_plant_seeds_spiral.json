@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_seeds_spiral",
+  "name": "Seeds Spiral",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_seeds_spiral",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 5,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 20
+    }
+  ],
+  "output": "Plant_Seeds_Spiral",
+  "outputCount": 1,
+  "workSeconds": 18
+}

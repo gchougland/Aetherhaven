@@ -18,3 +18,7 @@ Each staff grants extra max mana while you hold it. Placing blocks with secondar
 
 * Use scaffolding to reach higher places with the staff.
 * Very large buildings are split into sections when building for performance.
+
+## Plan a mineshaft
+
+Middle click to open the staff's mode menu and choose **Plan mineshaft**. Click the ground just in front of the rock, then choose a direction and length. The tunnel starts one block ahead of that ground, so you can plan into undug rock without reaching its far end. Save and review the terrain before starting excavation. See **Apprentice workplaces** for worker and Workbench requirements.

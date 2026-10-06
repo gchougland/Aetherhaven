@@ -93,7 +93,9 @@ public final class BuildingEditorFestivalSessionStarter {
             INSTANT_BATCH_DELAY_MS,
             () ->
                 world.execute(
-                    () ->
+                    () -> {
+                        if (!ref.isValid()) return;
+                        BuildingEditorAirMarkers.restore(world, buffer, centerCopy, Rotation.None);
                         finishAfterPaste(
                             plugin,
                             playerRef,
@@ -105,7 +107,8 @@ public final class BuildingEditorFestivalSessionStarter {
                             maxCopy,
                             centerCopy,
                             display
-                        )
+                        );
+                    }
                 )
         );
     }

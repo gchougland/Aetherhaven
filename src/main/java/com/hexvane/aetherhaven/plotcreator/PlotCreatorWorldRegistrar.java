@@ -141,6 +141,7 @@ public final class PlotCreatorWorldRegistrar {
                 groundedSign.z,
                 now
             );
+        inst.captureProductionLayout(def);
         inst.setPlacementPrefabYaw(yaw);
         inst.setPrefabWorldPlacement(prefabAnchor.x, prefabAnchor.y, prefabAnchor.z, yaw);
         town.addPlotInstance(inst);

@@ -270,6 +270,7 @@ public final class DialogueChoiceDefinition {
                  "gift_villager",
                  "goto",
                  "hire_guild_adventurer",
+                 "invite_guild_resident",
                  "dismiss_hired_guard" -> true;
             default -> false;
         };

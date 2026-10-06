@@ -1,0 +1,27 @@
+{
+  "id": "jewel_necklace_gold_zephyr_rare",
+  "name": "Rare gold zephyr necklace",
+  "workplace": "jewelry",
+  "sourceRecipe": "workplace:jewel_necklace_gold_zephyr_rare",
+  "bench": "Aetherhaven_Jewelry_Crafting_Bench",
+  "benchTier": 1,
+  "skillLevel": 5,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Gold",
+      "count": 10
+    },
+    {
+      "itemId": "Rock_Gem_Zephyr",
+      "count": 1
+    },
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 12
+    }
+  ],
+  "output": "Aetherhaven_Necklace_Gold_Zephyr",
+  "outputCount": 1,
+  "workSeconds": 45,
+  "jewelryRarity": "rare"
+}

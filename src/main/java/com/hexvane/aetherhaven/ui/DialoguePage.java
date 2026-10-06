@@ -123,6 +123,19 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
     private static final String ICON_FOLLOW = "UI/Custom/man-walking.png";
     private static final String ICON_TELEPORT = "UI/Custom/teleport.png";
     private static final String ICON_MARKET = "UI/Custom/market.png";
+    private static final String ICON_PROFILE = "UI/Custom/id-card.png";
+    private static final String ICON_UPGRADES = "UI/Custom/arrow_up_256.png";
+    private static final String ICON_STORAGE = "UI/Custom/crate.png";
+    private static final String ICON_PRIORITIES = "UI/Custom/grid.png";
+    private static final String ICON_HEALING = "UI/Custom/vitality.png";
+    private static final String ICON_HUNTS = "UI/Custom/skull.png";
+    private static final String ICON_RECRUITMENT = "UI/Custom/group_icon_256.png";
+    private static final String ICON_HOME = "UI/Custom/house_icon_256.png";
+    private static final String ICON_WAIT = "UI/Custom/location.png";
+    private static final String ICON_DEFENSIVE = "UI/Custom/dialogue-shield.png";
+    private static final String ICON_OFFENSIVE = "UI/Custom/dialogue-sword.png";
+    private static final String ICON_BACK = "UI/Custom/arrow_back_256.png";
+    private static final String ICON_CHAT = "UI/Custom/dialogue.png";
     private static final String LANG_FOLLOW_START =
         "aetherhaven_dialogue_follow.aetherhaven.dialogue.follow.start";
     private static final String LANG_FOLLOW_STOP =
@@ -641,11 +654,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         if (!"main_hub".equals(nodeId)) {
             return bodyMsg;
         }
-        Message roster = withGuardHireCountParams(ref, store, Message.translation(LANG_GUILD_ADVENTURER_ROSTER));
-        bodyMsg = bodyMsg.insert(Message.raw("\n\n")).insert(roster);
-        if (dialogueWorldView.guardHireAtLimit(ref, store)) {
-            bodyMsg = bodyMsg.insert(Message.raw(" ")).insert(Message.translation(LANG_GUILD_ADVENTURER_LIMIT));
-        }
+        bodyMsg = bodyMsg.insert(Message.raw("\n\nInvite this Townsfolk to live in your town. Work and guard duty can be chosen after they move in."));
         return bodyMsg;
     }
 
@@ -855,6 +864,9 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         }
         boolean disabled =
             visOnly != null ? !baseOk : !baseOk && "disabled".equalsIgnoreCase(wf);
+        Message admissionBlock = com.hexvane.aetherhaven.town.TownAdmission.blockedChoice(
+            plugin, resolvePlayerTown(store, ref), npcRef, store, ch);
+        if (admissionBlock != null) disabled = true;
         List<MaterialRequirement> itemRequirements =
             DialogueChoiceItemRequirements.resolve(ch, plugin, ref, store, npcRef);
         boolean hasRequiredItems =
@@ -877,15 +889,12 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         if (disabled) {
             Message reasonMsg = ch.isGiftDisableWhenNotAllowed()
                 ? dialogueWorldView.villagerGiftBlockMessage(ref, store, npcRef)
-                : null;
+                : admissionBlock;
             if (reasonMsg == null && itemRequirements.isEmpty()) {
                 String reason = ch.getDisabledReason();
                 if (reason != null && !reason.isBlank()) {
                     reasonMsg = dialogueMessage(reason);
                 }
-            }
-            if (reasonMsg == null && isGuildAdventurerHireChoice(text) && dialogueWorldView.guardHireAtLimit(ref, store)) {
-                reasonMsg = Message.translation(LANG_GUILD_ADVENTURER_LIMIT);
             }
             if (reasonMsg == null) {
                 reasonMsg = FestivalDialogueJoinHints.blockedReason(ch, ref, store, npcRef);
@@ -1070,6 +1079,51 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             }
         }
         choices.addAll(node.getChoices());
+        if ("main_hub".equals(nodeId) && npcRef != null && npcRef.isValid()) {
+            var supervisor = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+            var town = resolvePlayerTown(store, playerRef);
+            if (supervisor != null && town != null && town.getTownId().equals(supervisor.getTownId())
+                && com.hexvane.aetherhaven.warehouse.WarehouseAccess.MANAGER_KIND.equals(supervisor.getKind())) {
+                for (String destination : List.of("couriers", "storage")) {
+                    DialogueChoiceDefinition choice = new DialogueChoiceDefinition();
+                    choice.setId("warehouse_" + destination);
+                    choice.setText("aetherhaven_warehouse.dialogue." + destination);
+                    JsonObject action = new JsonObject();
+                    action.addProperty("type", destination.equals("couriers") ? "open_courier_roster" : "open_warehouse");
+                    choice.setActions(List.of(action)); choices.add(0, choice);
+                }
+            }
+            if (supervisor != null && town != null && town.getTownId().equals(supervisor.getTownId())
+                && store.getComponent(npcRef, com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding.getComponentType()) == null) {
+                DialogueChoiceDefinition mastery = new DialogueChoiceDefinition();
+                mastery.setId("core_mastery"); mastery.setText("aetherhaven_mastery.dialogue");
+                JsonObject action = new JsonObject(); action.addProperty("type", "open_core_mastery");
+                mastery.setActions(List.of(action)); choices.add(0, mastery);
+                if ("alchemist".equals(supervisor.getKind())) {
+                    DialogueChoiceDefinition flask = new DialogueChoiceDefinition();
+                    flask.setId("alchemy_flask_recipe"); flask.setText("aetherhaven_mastery.flaskRecipe");
+                    JsonObject teach = new JsonObject(); teach.addProperty("type", "learn_alchemy_flask");
+                    flask.setActions(List.of(teach)); choices.add(0, flask);
+                }
+            }
+            if (supervisor != null && town != null && town.getTownId().equals(supervisor.getTownId())
+                && com.hexvane.aetherhaven.workplace.WorkplaceUpgradesPage.supports(supervisor.getKind())) {
+                DialogueChoiceDefinition upgrade = new DialogueChoiceDefinition();
+                upgrade.setId("workplace_upgrades"); upgrade.setText("aetherhaven_workplace.dialogue");
+                JsonObject action = new JsonObject(); action.addProperty("type", "open_workplace_upgrades");
+                upgrade.setActions(List.of(action)); choices.add(0, upgrade);
+            }
+        }
+        if ("main_hub".equals(nodeId) && npcRef != null && npcRef.isValid()
+            && store.getComponent(npcRef, com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding.getComponentType()) != null) {
+            DialogueChoiceDefinition profile = new DialogueChoiceDefinition();
+            profile.setId("townsfolk_profile");
+            profile.setText("aetherhaven_townsfolk_profile.dialogue");
+            JsonObject openProfile = new JsonObject();
+            openProfile.addProperty("type", "open_townsfolk_profile");
+            profile.setActions(List.of(openProfile));
+            choices.add(0, profile);
+        }
         injectFollowChoice(choices, playerRef, store);
         injectMarketChoices(choices, playerRef, store);
         injectWintertideGiftChoice(choices, playerRef, store);
@@ -1137,6 +1191,23 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             }
         }
         choices.add(insertAt, follow);
+        if (guardEligible && following) {
+            var escort = store.getComponent(npcRef, com.hexvane.aetherhaven.patrol.GuardFollowPlayerState.getComponentType());
+            if (escort != null) {
+                List<String> orders = List.of(escort.isWaiting() ? "resume" : "wait",
+                    escort.getStance() == com.hexvane.aetherhaven.patrol.GuardEscortStance.DEFENSIVE ? "offensive" : "defensive");
+                for (String order : orders) {
+                    DialogueChoiceDefinition choice = new DialogueChoiceDefinition();
+                    choice.setId("guard_escort_" + order);
+                    choice.setText("aetherhaven_dialogue_follow.aetherhaven.dialogue.escort." + order);
+                    JsonObject command = new JsonObject();
+                    command.addProperty("type", "guard_escort_order");
+                    command.addProperty("order", order);
+                    choice.setActions(List.of(command, close));
+                    choices.add(++insertAt, choice);
+                }
+            }
+        }
     }
 
     private void injectMarketChoices(
@@ -1455,6 +1526,30 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         if (ch.isGiftChoice()) {
             return ICON_GIFT;
         }
+        if (ch.hasAction("learn_alchemy_flask")) return ICON_UPGRADES;
+        if (ch.hasAction("open_core_mastery")) return ICON_PROFILE;
+        if (ch.hasAction("open_townsfolk_profile")) return ICON_PROFILE;
+        if (ch.hasAction("open_workplace_upgrades")) return ICON_UPGRADES;
+        if (ch.hasAction("open_warehouse")) return ICON_STORAGE;
+        if (ch.hasAction("open_courier_roster")) return ICON_PRIORITIES;
+        if (ch.hasAction("open_clinic") || ch.hasAction("priestess_gold_heal")) return ICON_HEALING;
+        if (ch.hasAction("open_hunts")) return ICON_HUNTS;
+        if (ch.hasAction("open_inn_outreach")) return ICON_RECRUITMENT;
+        if (ch.hasAction("invite_guild_resident")) return ICON_HOME;
+        if (ch.hasAction("abandon_quest")) return "UI/Custom/minus_256.png";
+        if (ch.hasAction("dismiss_hired_guard") || "dismiss_confirm".equals(ch.getNext())) return "UI/Custom/eject.png";
+        for (JsonObject action : ch.getActions()) {
+            if (action != null && action.has("type")
+                && "guard_escort_order".equalsIgnoreCase(action.get("type").getAsString())) {
+                String order = action.has("order") ? action.get("order").getAsString() : "";
+                return switch (order.toLowerCase(Locale.ROOT)) {
+                    case "wait" -> ICON_WAIT;
+                    case "defensive" -> ICON_DEFENSIVE;
+                    case "offensive" -> ICON_OFFENSIVE;
+                    default -> ICON_FOLLOW;
+                };
+            }
+        }
         if (ch.hasAction("start_follow_player") || ch.hasAction("stop_follow_player")) {
             return ICON_FOLLOW;
         }
@@ -1490,10 +1585,13 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         if (ch.isQuestOfferChoice()) {
             return ICON_QUEST;
         }
-        if (ch.endsConversation()) {
+        // Opening a page also ends this conversation, but is not a goodbye action.
+        if (ch.endsConversation() && ch.getActions().stream().allMatch(action -> action == null
+            || (action.has("type") && "close".equalsIgnoreCase(action.get("type").getAsString())))) {
             return ICON_EXIT;
         }
-        return null;
+        if ("main_hub".equals(ch.getNext())) return ICON_BACK;
+        return ICON_CHAT;
     }
 
     /**
@@ -1521,6 +1619,19 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             case "geode" -> ICON_GEODE_OPEN;
             case "music" -> ICON_MUSICAL_NOTE;
             case "market" -> ICON_MARKET;
+            case "profile" -> ICON_PROFILE;
+            case "upgrades" -> ICON_UPGRADES;
+            case "storage" -> ICON_STORAGE;
+            case "priorities" -> ICON_PRIORITIES;
+            case "healing" -> ICON_HEALING;
+            case "hunts" -> ICON_HUNTS;
+            case "recruitment" -> ICON_RECRUITMENT;
+            case "home" -> ICON_HOME;
+            case "wait" -> ICON_WAIT;
+            case "defensive" -> ICON_DEFENSIVE;
+            case "offensive" -> ICON_OFFENSIVE;
+            case "back" -> ICON_BACK;
+            case "chat" -> ICON_CHAT;
             default -> trimmed;
         };
     }

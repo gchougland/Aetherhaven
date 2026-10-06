@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Courier_Kit",
+  "name": "Courier satchel",
+  "skill": "logistics",
+  "workSpeedBonus": 0,
+  "extraCarryingStacks": 1
+}

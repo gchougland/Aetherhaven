@@ -1,0 +1,34 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+$C.@PageOverlay { LayoutMode: Middle;
+ $C.@DecoratedContainer { Anchor: (Width: 1000, Height: 750);
+  #Title { Label #TitleText { Style: (...$C.@TitleStyle); } }
+  #Content { LayoutMode: Top; Padding: (Full: 24);
+   Group { LayoutMode: Left; Anchor: (Height: 34, Bottom: 8);
+    Label #Count { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 20, RenderBold: true, TextColor: #dec68d); }
+    Label #Contribution { Anchor: (Width: 350); Style: (...$C.@DefaultLabelStyle, FontSize: 15, HorizontalAlignment: End, TextColor: #b7c9bb); }
+   }
+   Label { Text: "Queue buildings whose construction has already started. Your Apprentice travels to the building and places pieces within reach."; Anchor: (Height: 42, Bottom: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true); }
+   Group { LayoutMode: Left; FlexWeight: 1; Anchor: (Bottom: 14);
+    Group { FlexWeight: 3; LayoutMode: Top; Background: $T.@Panel; Padding: (Full: 14); Anchor: (Right: 14);
+     Label { Text: "YARD PRIORITY"; Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #dec68d); }
+     Label #QueueEmpty { Text: "Choose a project from the town board."; Anchor: (Height: 52); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true); }
+     Group #Queue { FlexWeight: 1; LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; }
+    }
+    Group { FlexWeight: 2; LayoutMode: Top; Background: $T.@Inset; Padding: (Full: 14);
+     Label { Text: "TOWN CONSTRUCTION"; Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #b7c9bb); }
+     Label #AvailableEmpty { Text: "No other construction is ready. Start a building and supply its materials first."; Anchor: (Height: 80); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true); }
+     Group #Available { FlexWeight: 1; LayoutMode: TopScrolling; ScrollbarStyle: $C.@DefaultScrollbarStyle; }
+    }
+   }
+   Label #Status { Anchor: (Height: 40, Bottom: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #dec68d); }
+   Group { LayoutMode: Left; Anchor: (Height: 38, Bottom: 12);
+    $C.@TextButton #Pause { Text: "Pause yard"; FlexWeight: 1; Anchor: (Right: 12); }
+    $C.@SecondaryTextButton #Refresh { Text: "Refresh projects"; Anchor: (Width: 200, Right: 12); }
+    $C.@SecondaryTextButton #Station { Text: "Station details"; Anchor: (Width: 200); }
+   }
+   Label { Text: "Each yard needs a Builder's Workbench. One Apprentice works for each yard. Building skill and equipment improve their pace. Ordinary construction and the core Builder's help continue as usual."; Anchor: (Height: 44); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #b7c9bb); }
+  }
+ }
+}
+$C.@BackButton {}

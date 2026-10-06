@@ -20,8 +20,7 @@
       "Adventure": 5,
       "Creative": 6
     },
-    "AllEntities": true,
-    "Creative": 6
+    "AllEntities": true
   },
   "Tags": {
     "Family": ["Aetherhaven"],

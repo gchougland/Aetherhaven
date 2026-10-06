@@ -1,18 +1,51 @@
 {
   "Type": "Generic",
   "Parameters": {
-    "Invulnerable": { "Value": false, "Description": "Whether the NPC is invulnerable." },
-    "MemoriesNameOverride": { "Value": "Aetherhaven_Guard_Mage", "Description": "Memory name override" },
+    "Invulnerable": {
+      "Value": false,
+      "Description": "Whether the NPC is invulnerable."
+    },
+    "MemoriesNameOverride": {
+      "Value": "Aetherhaven_Guard_Mage",
+      "Description": "Memory name override"
+    },
     "NameTranslationKey": {
       "Value": "aetherhaven_ui_journal_items_tail.npcRoles.Aetherhaven_Guard.name",
       "Description": "Translation key for NPC name display"
     },
-    "ViewRange": { "Value": 24, "Description": "Combat detection range for aggressive mobs" },
-    "AttackDistance": { "Value": 15, "Description": "Maximum staff cast range" },
-    "CombatFleeIfTooCloseDistance": { "Value": 4, "Description": "Retreat when hostiles stay inside this range" },
-    "DesiredRangedDistance": { "Value": [5, 14], "Description": "Preferred staff casting range" },
-    "AetherhavenWanderPhaseTime": { "Value": [6, 14], "Description": "Patrol wander phase (seconds)" },
-    "AetherhavenPausePhaseTime": { "Value": [2, 5], "Description": "Patrol pause (seconds)" }
+    "ViewRange": {
+      "Value": 24,
+      "Description": "Combat detection range for aggressive mobs"
+    },
+    "AttackDistance": {
+      "Value": 15,
+      "Description": "Maximum staff cast range"
+    },
+    "CombatFleeIfTooCloseDistance": {
+      "Value": 4,
+      "Description": "Retreat when hostiles stay inside this range"
+    },
+    "DesiredRangedDistance": {
+      "Value": [
+        5,
+        14
+      ],
+      "Description": "Preferred staff casting range"
+    },
+    "AetherhavenWanderPhaseTime": {
+      "Value": [
+        6,
+        14
+      ],
+      "Description": "Patrol wander phase (seconds)"
+    },
+    "AetherhavenPausePhaseTime": {
+      "Value": [
+        2,
+        5
+      ],
+      "Description": "Patrol pause (seconds)"
+    }
   },
   "StartState": "Idle",
   "AttitudeGroup": "Aetherhaven_Townsfolk",
@@ -21,10 +54,21 @@
   "Appearance": "Male_Human_01",
   "MaxHealth": 180,
   "IsMemory": false,
-  "MemoriesNameOverride": { "Compute": "MemoriesNameOverride" },
-  "DisableDamageGroups": ["Self", "Player", "Aetherhaven_Townsfolk", "Friendly"],
-  "BusyStates": ["Combat"],
-  "Invulnerable": { "Compute": "Invulnerable" },
+  "MemoriesNameOverride": {
+    "Compute": "MemoriesNameOverride"
+  },
+  "DisableDamageGroups": [
+    "Self",
+    "Player",
+    "Aetherhaven_Townsfolk",
+    "Friendly"
+  ],
+  "BusyStates": [
+    "Combat"
+  ],
+  "Invulnerable": {
+    "Compute": "Invulnerable"
+  },
   "KnockbackScale": 0.5,
   "ApplySeparation": true,
   "SeparationDistance": 1.8,
@@ -34,9 +78,14 @@
   "SeparationPushSafeDistanceMultiplier": 0.8,
   "SeparationPushSteeringStrength": 0.8,
   "SeparationPushSpeedScale": 0.5,
-  "HotbarItems": ["Weapon_Staff_Iron"],
+  "HotbarItems": [
+    "Weapon_Staff_Copper"
+  ],
   "OverrideHeadPitchAngle": true,
-  "HeadPitchAngleRange": [-89, 89],
+  "HeadPitchAngleRange": [
+    -89,
+    89
+  ],
   "HotbarSize": 3,
   "OffHandSlots": 2,
   "MotionControllerList": [
@@ -52,8 +101,22 @@
   ],
   "StateTransitions": [
     {
-      "States": [{ "From": ["Patrol"], "To": ["Idle"] }],
-      "Actions": [{ "Type": "PlayAnimation", "Slot": "Status" }]
+      "States": [
+        {
+          "From": [
+            "Patrol"
+          ],
+          "To": [
+            "Idle"
+          ]
+        }
+      ],
+      "Actions": [
+        {
+          "Type": "PlayAnimation",
+          "Slot": "Status"
+        }
+      ]
     }
   ],
   "Instructions": [
@@ -62,9 +125,17 @@
       "Instructions": [
         {
           "Continue": true,
-          "Sensor": { "Type": "Any", "Once": true },
+          "Sensor": {
+            "Type": "Any",
+            "Once": true
+          },
           "Actions": [
-            { "Type": "Inventory", "Operation": "EquipHotbar", "UseTarget": false, "Slot": 0 }
+            {
+              "Type": "Inventory",
+              "Operation": "EquipHotbar",
+              "UseTarget": false,
+              "Slot": 0
+            }
           ]
         }
       ]
@@ -72,40 +143,67 @@
     {
       "Instructions": [
         {
-          "Sensor": { "Type": "State", "State": "Idle" },
+          "Sensor": {
+            "Type": "State",
+            "State": "Idle"
+          },
           "Instructions": [
             {
               "Reference": "Component_Instruction_Aetherhaven_Guard_Damage_Aggro",
-              "Modify": { "_ExportStates": ["Combat"] }
+              "Modify": {
+                "_ExportStates": [
+                  "Combat"
+                ]
+              }
             },
             {
               "Reference": "Component_Instruction_Aetherhaven_Guard_Idle_Aggro",
               "Modify": {
-                "_ExportStates": ["Combat"],
-                "ViewRange": { "Compute": "ViewRange" }
+                "_ExportStates": [
+                  "Combat"
+                ],
+                "ViewRange": {
+                  "Compute": "ViewRange"
+                }
               }
             },
             {
               "Reference": "Component_Instruction_Aetherhaven_Guard_Rect_Wander_Idle",
               "Modify": {
-                "WanderRectTimer": { "Compute": "AetherhavenWanderPhaseTime" },
-                "PauseTimer": { "Compute": "AetherhavenPausePhaseTime" }
+                "WanderRectTimer": {
+                  "Compute": "AetherhavenWanderPhaseTime"
+                },
+                "PauseTimer": {
+                  "Compute": "AetherhavenPausePhaseTime"
+                }
               }
             }
           ]
         },
         {
-          "Sensor": { "Type": "State", "State": "Patrol", "IgnoreMissingSetState": true },
+          "Sensor": {
+            "Type": "State",
+            "State": "Patrol",
+            "IgnoreMissingSetState": true
+          },
           "Instructions": [
             {
               "Reference": "Component_Instruction_Aetherhaven_Guard_Damage_Aggro",
-              "Modify": { "_ExportStates": ["Combat"] }
+              "Modify": {
+                "_ExportStates": [
+                  "Combat"
+                ]
+              }
             },
             {
               "Reference": "Component_Instruction_Aetherhaven_Guard_Idle_Aggro",
               "Modify": {
-                "_ExportStates": ["Combat"],
-                "ViewRange": { "Compute": "ViewRange" }
+                "_ExportStates": [
+                  "Combat"
+                ],
+                "ViewRange": {
+                  "Compute": "ViewRange"
+                }
               }
             },
             {
@@ -114,17 +212,29 @@
           ]
         },
         {
-          "Sensor": { "Type": "State", "State": "RtsCommand", "IgnoreMissingSetState": true },
+          "Sensor": {
+            "Type": "State",
+            "State": "RtsCommand",
+            "IgnoreMissingSetState": true
+          },
           "Instructions": [
             {
               "Reference": "Component_Instruction_Aetherhaven_Guard_Damage_Aggro",
-              "Modify": { "_ExportStates": ["Combat"] }
+              "Modify": {
+                "_ExportStates": [
+                  "Combat"
+                ]
+              }
             },
             {
               "Reference": "Component_Instruction_Aetherhaven_Guard_Idle_Aggro",
               "Modify": {
-                "_ExportStates": ["Combat"],
-                "ViewRange": { "Compute": "ViewRange" }
+                "_ExportStates": [
+                  "Combat"
+                ],
+                "ViewRange": {
+                  "Compute": "ViewRange"
+                }
               }
             },
             {
@@ -133,32 +243,75 @@
           ]
         },
         {
-          "Sensor": { "Type": "State", "State": "Combat" },
+          "Sensor": {
+            "Type": "State",
+            "State": "Combat"
+          },
           "Instructions": [
             {
               "Sensor": {
-                "Type": "Or",
+                "Type": "And",
                 "Sensors": [
                   {
-                    "Type": "Mob",
-                    "Range": { "Compute": "ViewRange" },
-                    "LockOnTarget": true,
-                    "Filters": [
-                      { "Type": "NPCGroup", "IncludeGroups": ["Aggressive", "Aetherhaven_Raid"] },
-                      { "Type": "LineOfSight" }
-                    ],
-                    "Collector": { "Type": "CombatTargets" }
+                    "Type": "AetherhavenGuardCombatAllowed"
                   },
                   {
-                    "Type": "Target",
-                    "Range": { "Compute": "ViewRange" },
-                    "Filters": [{ "Type": "LineOfSight" }]
-                  },
-                  {
-                    "Type": "Target",
-                    "TargetSlot": "LockedTarget",
-                    "Range": { "Compute": "ViewRange" },
-                    "Filters": [{ "Type": "LineOfSight" }]
+                    "Type": "Or",
+                    "Sensors": [
+                      {
+                        "Type": "And",
+                        "Sensors": [
+                          {
+                            "Type": "AetherhavenGuardAutomaticAggro"
+                          },
+                          {
+                            "Type": "Mob",
+                            "Range": {
+                              "Compute": "ViewRange"
+                            },
+                            "LockOnTarget": true,
+                            "Filters": [
+                              {
+                                "Type": "NPCGroup",
+                                "IncludeGroups": [
+                                  "Aggressive",
+                                  "Aetherhaven_Raid"
+                                ]
+                              },
+                              {
+                                "Type": "LineOfSight"
+                              }
+                            ],
+                            "Collector": {
+                              "Type": "CombatTargets"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "Type": "Target",
+                        "Range": {
+                          "Compute": "ViewRange"
+                        },
+                        "Filters": [
+                          {
+                            "Type": "LineOfSight"
+                          }
+                        ]
+                      },
+                      {
+                        "Type": "Target",
+                        "TargetSlot": "LockedTarget",
+                        "Range": {
+                          "Compute": "ViewRange"
+                        },
+                        "Filters": [
+                          {
+                            "Type": "LineOfSight"
+                          }
+                        ]
+                      }
+                    ]
                   }
                 ]
               },
@@ -166,34 +319,59 @@
                 {
                   "Reference": "Component_Instruction_Aetherhaven_Guard_Staff_Combat",
                   "Modify": {
-                    "ViewRange": { "Compute": "ViewRange" },
-                    "AttackDistance": { "Compute": "AttackDistance" },
-                    "CombatFleeIfTooCloseDistance": { "Compute": "CombatFleeIfTooCloseDistance" },
-                    "DesiredRangedDistance": { "Compute": "DesiredRangedDistance" }
+                    "ViewRange": {
+                      "Compute": "ViewRange"
+                    },
+                    "AttackDistance": {
+                      "Compute": "AttackDistance"
+                    },
+                    "CombatFleeIfTooCloseDistance": {
+                      "Compute": "CombatFleeIfTooCloseDistance"
+                    },
+                    "DesiredRangedDistance": {
+                      "Compute": "DesiredRangedDistance"
+                    }
                   }
                 }
               ]
             },
             {
               "Actions": [
-                { "Type": "ReleaseTarget" },
-                { "Type": "State", "State": "Idle" }
+                {
+                  "Type": "ReleaseTarget"
+                },
+                {
+                  "Type": "State",
+                  "State": "Idle"
+                }
               ]
             }
           ]
         },
         {
           "$Comment": "$Interaction cannot live in a referenced Component (engine validation).",
-          "Sensor": { "Type": "State", "State": "$Interaction" },
+          "Sensor": {
+            "Type": "State",
+            "State": "$Interaction"
+          },
           "Instructions": [
             {
               "Continue": true,
-              "Sensor": { "Type": "Target", "Range": 16 },
-              "HeadMotion": { "Type": "Watch" }
+              "Sensor": {
+                "Type": "Target",
+                "Range": 16
+              },
+              "HeadMotion": {
+                "Type": "Watch"
+              }
             },
             {
-              "Sensor": { "Type": "Any" },
-              "BodyMotion": { "Type": "Nothing" }
+              "Sensor": {
+                "Type": "Any"
+              },
+              "BodyMotion": {
+                "Type": "Nothing"
+              }
             }
           ]
         }
@@ -203,29 +381,57 @@
   "InteractionInstruction": {
     "Instructions": [
       {
-        "Sensor": { "Type": "Not", "Sensor": { "Type": "CanInteract", "ViewSector": 360 } },
-        "Actions": [{ "Type": "SetInteractable", "Interactable": false }]
-      },
-      {
-        "Continue": true,
-        "Sensor": { "Type": "Any" },
+        "Sensor": {
+          "Type": "Not",
+          "Sensor": {
+            "Type": "CanInteract",
+            "ViewSector": 360
+          }
+        },
         "Actions": [
-          { "Type": "SetInteractable", "Interactable": true, "Hint": "aetherhaven_misc.aetherhaven.interaction.dialogue" }
+          {
+            "Type": "SetInteractable",
+            "Interactable": false
+          }
         ]
       },
       {
-        "Sensor": { "Type": "HasInteracted" },
+        "Continue": true,
+        "Sensor": {
+          "Type": "Any"
+        },
+        "Actions": [
+          {
+            "Type": "SetInteractable",
+            "Interactable": true,
+            "Hint": "aetherhaven_misc.aetherhaven.interaction.dialogue"
+          }
+        ]
+      },
+      {
+        "Sensor": {
+          "Type": "HasInteracted"
+        },
         "Instructions": [
           {
-            "Sensor": { "Type": "Any" },
+            "Sensor": {
+              "Type": "Any"
+            },
             "Actions": [
-              { "Type": "LockOnInteractionTarget" },
-              { "Type": "OpenAetherhavenDialogue", "VillagerKind": "guard" }
+              {
+                "Type": "LockOnInteractionTarget"
+              },
+              {
+                "Type": "OpenAetherhavenDialogue",
+                "VillagerKind": "guard"
+              }
             ]
           }
         ]
       }
     ]
   },
-  "NameTranslationKey": { "Compute": "NameTranslationKey" }
+  "NameTranslationKey": {
+    "Compute": "NameTranslationKey"
+  }
 }

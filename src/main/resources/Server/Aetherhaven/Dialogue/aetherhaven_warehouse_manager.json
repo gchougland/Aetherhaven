@@ -1,0 +1,369 @@
+{
+  "id": "aetherhaven_warehouse_manager",
+  "entry": "main_hub",
+  "nodes": {
+    "main_hub": {
+      "speaker": "aetherhaven_warehouse_manager.speaker",
+      "text": "aetherhaven_warehouse_manager.hub",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.offer",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              },
+              {
+                "type": "player_holds_any_item"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "giftDisableWhenNotAllowed": true,
+          "next": "gift_confirm"
+        },
+        {
+          "text": "aetherhaven_warehouse_manager.how",
+          "icon": "storage",
+          "next": "how",
+          "condition": {
+            "type": "not",
+            "condition": {
+              "type": "npc_binding_is_visitor"
+            }
+          },
+          "whenFalse": "hide"
+        },
+        {
+          "text": "aetherhaven_warehouse_manager.offer",
+          "icon": "home",
+          "next": "offer",
+          "condition": {
+            "type": "not",
+            "condition": {
+              "type": "or",
+              "conditions": [
+                {
+                  "type": "town_quest_active",
+                  "questId": "q_warehouse"
+                },
+                {
+                  "type": "town_quest_completed",
+                  "questId": "q_warehouse"
+                }
+              ]
+            }
+          },
+          "whenFalse": "hide"
+        },
+        {
+          "text": "aetherhaven_warehouse_manager.finish",
+          "next": "welcome",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_warehouse"
+              },
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_warehouse"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_warehouse"
+            }
+          ],
+          "speechClip": "Agree"
+        },
+        {
+          "text": "aetherhaven_warehouse_manager.progress",
+          "icon": "UI/Custom/hammer.png",
+          "next": "building",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_warehouse"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_has_complete_plot",
+                  "constructionId": "plot_warehouse"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide"
+        },
+        {
+          "text": "aetherhaven_warehouse_manager.bye",
+          "next": null
+        }
+      ],
+      "bodyMode": "villager_greeting",
+      "speechClip": "Greet"
+    },
+    "offer": {
+      "speaker": "aetherhaven_warehouse_manager.speaker",
+      "text": "aetherhaven_warehouse_manager.offer.body",
+      "choices": [
+        {
+          "text": "aetherhaven_warehouse_manager.accept",
+          "next": "accepted",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_warehouse"
+            }
+          ],
+          "speechClip": "Agree"
+        },
+        {
+          "text": "aetherhaven_warehouse_manager.later",
+          "next": null
+        }
+      ],
+      "speechClip": "Question"
+    },
+    "accepted": {
+      "speaker": "aetherhaven_warehouse_manager.speaker",
+      "text": "aetherhaven_warehouse_manager.accepted.body",
+      "choices": [
+        {
+          "text": "aetherhaven_warehouse_manager.bye",
+          "next": null
+        }
+      ],
+      "speechClip": "Agree"
+    },
+    "building": {
+      "speaker": "aetherhaven_warehouse_manager.speaker",
+      "text": "aetherhaven_warehouse_manager.building.body",
+      "choices": [
+        {
+          "text": "aetherhaven_warehouse_manager.cancel",
+          "next": "cancelled",
+          "actions": [
+            {
+              "type": "abandon_quest",
+              "id": "q_warehouse"
+            }
+          ]
+        },
+        {
+          "text": "aetherhaven_warehouse_manager.bye",
+          "next": null
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "cancelled": {
+      "speaker": "aetherhaven_warehouse_manager.speaker",
+      "text": "aetherhaven_warehouse_manager.cancelled.body",
+      "choices": [
+        {
+          "text": "aetherhaven_warehouse_manager.bye",
+          "next": null
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "welcome": {
+      "speaker": "aetherhaven_warehouse_manager.speaker",
+      "text": "aetherhaven_warehouse_manager.welcome.body",
+      "choices": [
+        {
+          "text": "aetherhaven_warehouse_manager.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "how": {
+      "speaker": "aetherhaven_warehouse_manager.speaker",
+      "text": "aetherhaven_warehouse_manager.how.body",
+      "choices": [
+        {
+          "text": "aetherhaven_warehouse_manager.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_confirm": {
+      "speaker": "aetherhaven_warehouse_manager.speaker",
+      "text": "aetherhaven_warehouse_manager.gift.confirm",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmYes",
+          "actions": [
+            {
+              "type": "gift_villager",
+              "reactionNodeLove": "gift_love",
+              "reactionNodeLike": "gift_like",
+              "reactionNodeNeutral": "gift_neutral",
+              "reactionNodeDislike": "gift_dislike"
+            }
+          ],
+          "next": "main_hub"
+        },
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmNo",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_love": {
+      "speaker": "aetherhaven_warehouse_manager.speaker",
+      "text": "aetherhaven_warehouse_manager.gift_love",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_like": {
+      "speaker": "aetherhaven_warehouse_manager.speaker",
+      "text": "aetherhaven_warehouse_manager.gift_like",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_neutral": {
+      "speaker": "aetherhaven_warehouse_manager.speaker",
+      "text": "aetherhaven_warehouse_manager.gift_neutral",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_dislike": {
+      "speaker": "aetherhaven_warehouse_manager.speaker",
+      "text": "aetherhaven_warehouse_manager.gift_dislike",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_love_birthday": {
+      "speaker": "aetherhaven_warehouse_manager.speaker",
+      "text": "aetherhaven_warehouse_manager.gift_love_birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_like_birthday": {
+      "speaker": "aetherhaven_warehouse_manager.speaker",
+      "text": "aetherhaven_warehouse_manager.gift_like_birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_neutral_birthday": {
+      "speaker": "aetherhaven_warehouse_manager.speaker",
+      "text": "aetherhaven_warehouse_manager.gift_neutral_birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "gift_dislike_birthday": {
+      "speaker": "aetherhaven_warehouse_manager.speaker",
+      "text": "aetherhaven_warehouse_manager.gift_dislike_birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ],
+      "speechClip": "Talk"
+    },
+    "rep_reward_25": {
+      "speaker": "aetherhaven_warehouse_manager.speaker",
+      "text": "aetherhaven_warehouse_manager.reward.25",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_warehouse_25"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "rep_reward_50": {
+      "speaker": "aetherhaven_warehouse_manager.speaker",
+      "text": "aetherhaven_warehouse_manager.reward.50",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_warehouse_50"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "rep_reward_75": {
+      "speaker": "aetherhaven_warehouse_manager.speaker",
+      "text": "aetherhaven_warehouse_manager.reward.75",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_warehouse_75"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
+    }
+  }
+}

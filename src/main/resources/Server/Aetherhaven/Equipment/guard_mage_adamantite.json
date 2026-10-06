@@ -1,0 +1,23 @@
+{
+  "id": "guard_mage_adamantite",
+  "guardNpcRole": "Aetherhaven_Guard_Mage",
+  "displayName": "Adamantite Mage",
+  "hireGoldCost": 45,
+  "armor": [
+    "Aetherhaven_Guard_Armor_Cloth_Cindercloth_Head",
+    "Aetherhaven_Guard_Armor_Cloth_Cindercloth_Chest",
+    "Aetherhaven_Guard_Armor_Cloth_Cindercloth_Hands",
+    "Aetherhaven_Guard_Armor_Cloth_Cindercloth_Legs"
+  ],
+  "hotbar": [
+    {
+      "slot": 0,
+      "itemId": "Weapon_Staff_Adamantite"
+    }
+  ],
+  "attributeCombat": true,
+  "attributeBonuses": {
+    "intelligence": 10,
+    "vitality": 9
+  }
+}

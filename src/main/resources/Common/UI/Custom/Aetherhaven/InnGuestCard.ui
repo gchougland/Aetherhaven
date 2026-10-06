@@ -1,0 +1,14 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { FlexWeight: 1; Anchor: (Right: 8);
+ Button #Choose { Anchor: (Full: 0); Padding: (Full: 10); LayoutMode: Top;
+  Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed));
+  Group { LayoutMode: Left; Anchor: (Height: 62);
+   AssetImage #Portrait { Anchor: (Width: 58, Height: 58, Right: 8); }
+   Label #Name { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #dedbc3, Wrap: true, RenderBold: true, VerticalAlignment: Center); }
+  }
+  Label #Skill { Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9eb9ae); }
+  Label #Status { Anchor: (Height: 17); Style: (...$C.@DefaultLabelStyle, FontSize: 10, TextColor: #9ed4ae, RenderBold: true); }
+ }
+ Group #Selected { Anchor: (Left: 0, Top: 0, Bottom: 0, Width: 3); Background: #8bbd9d; }
+}

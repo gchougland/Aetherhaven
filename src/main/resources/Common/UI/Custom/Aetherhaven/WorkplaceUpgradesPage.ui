@@ -1,0 +1,48 @@
+$C = "../Common.ui";
+$T = "BuildingMasteryTheme.ui";
+$C.@PageOverlay { LayoutMode: Middle;
+  Group { Anchor: (Width: 1080, Height: 790); Background: $T.@Panel;
+    Group { Anchor: (Top: 8, Left: 50, Right: 50, Height: 32); Label { Text: "BUILDING UPGRADES"; Style: (...$C.@TitleStyle, FontName: "Secondary", FontSize: 24, LetterSpacing: 1.5, TextColor: #e8c984, HorizontalAlignment: Center); } }
+    Group { Anchor: (Top: 40, Bottom: 0, Left: 0, Right: 0); LayoutMode: Top; Padding: (Full: 20);
+      Label #Summary { Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #c5cdd5); }
+      Group { LayoutMode: Left; Anchor: (Height: 40, Bottom: 12);
+        $C.@SecondaryTextButton #Workplaces { Text: "Workplaces"; Anchor: (Width: 175, Right: 8); }
+        $C.@SecondaryTextButton #Production { Text: "Production"; Anchor: (Width: 175, Right: 8); }
+        $C.@SecondaryTextButton #Restaurant { Text: "Restaurant"; Anchor: (Width: 175, Right: 8); }
+        $C.@SecondaryTextButton #Alchemy { Text: "Alchemy"; Anchor: (Width: 175, Right: 8); }
+        $C.@SecondaryTextButton #Storage { Text: "Storage"; Anchor: (Width: 175, Right: 8); }
+        Group { FlexWeight: 1; }
+        $C.@SecondaryTextButton #Previous { Text: "<"; Anchor: (Width: 36, Right: 4); }
+        Label #Plot { Anchor: (Width: 95); Style: (...$C.@DefaultLabelStyle, FontSize: 12, HorizontalAlignment: Center, VerticalAlignment: Center); }
+        $C.@SecondaryTextButton #Next { Text: ">"; Anchor: (Width: 36); }
+      }
+      Group { LayoutMode: Left; FlexWeight: 1;
+        Group { Background: $T.@Canvas; Anchor: (Width: 674, Right: 14); Padding: (Full: 8);
+          Group #Scroll { LayoutMode: TopScrolling; Anchor: (Full: 0); ScrollbarStyle: $C.@DefaultScrollbarStyle;
+            Group #Canvas { Anchor: (Width: 640, Height: 1100); }
+          }
+        }
+        Group #UpgradeDetails { LayoutMode: Top; FlexWeight: 1; Padding: (Full: 18); Background: $T.@Panel;
+          Group { Anchor: (Height: 78, Bottom: 8);
+            AssetImage #DetailIcon { Anchor: (Left: 90, Top: 5, Width: 64, Height: 64); }
+            ItemIcon #DetailItem { Anchor: (Left: 86, Top: 1, Width: 72, Height: 72); Visible: false; }
+            Group #DetailLock { Anchor: (Left: 94, Top: 9, Width: 56, Height: 56); Background: #2b3038(0.9); Visible: false;
+              AssetImage { AssetPath: "UI/Custom/padlock.png"; Anchor: (Left: 10, Top: 10, Width: 36, Height: 36); }
+            }
+          }
+          Label #DetailTitle { Anchor: (Height: 58); Style: (...$C.@DefaultLabelStyle, FontSize: 22, TextColor: #e8c984, RenderBold: true, Wrap: true, HorizontalAlignment: Center); }
+          Label #DetailState { Anchor: (Height: 28, Bottom: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 12, RenderBold: true, HorizontalAlignment: Center); }
+          Group { Anchor: (Height: 1, Bottom: 15); Background: #48576a; }
+          Label #Description { Anchor: (Height: 108); Style: (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #c5cdd5, Wrap: true); }
+          Label #Requires { Anchor: (Height: 86); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #c5cdd5, Wrap: true); }
+          Group #Costs { LayoutMode: Left; Anchor: (Height: 58); }
+          Label #Gold { Anchor: (Height: 42); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #e8c984, Wrap: true); }
+          Group { FlexWeight: 1; }
+          $C.@TextButton #Purchase { Text: "Unlock"; Anchor: (Height: 44); }
+        }
+      }
+      Label #Hint { Anchor: (Height: 44, Top: 10); Style: (...$C.@DefaultLabelStyle, Wrap: true, FontSize: 13, TextColor: #c5cdd5); }
+    }
+  }
+}
+$C.@BackButton {}

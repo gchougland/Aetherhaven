@@ -917,6 +917,23 @@
           "icon": "UI/Custom/cog.png"
         }
       ]
+    },
+    "rep_reward_25": {
+      "speaker": "aetherhaven_dialogue_elder.aetherhaven.dialogue.aetherhaven_elder.root.speaker",
+      "text": "aetherhaven_friendship_4.elder.25",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_elder_training_gift"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
     }
   }
 }

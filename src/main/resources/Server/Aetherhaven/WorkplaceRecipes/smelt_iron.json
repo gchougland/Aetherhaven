@@ -1,0 +1,9 @@
+{
+  "id": "smelt_iron",
+  "name": "Iron ingot",
+  "workplace": "smelting",
+  "sourceRecipe": "Ingredient_Bar_Iron_Recipe_Generated_0",
+  "bench": "Furnace",
+  "benchTier": 1,
+  "skillLevel": 2
+}

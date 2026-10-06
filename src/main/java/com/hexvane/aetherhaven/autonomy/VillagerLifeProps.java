@@ -41,6 +41,9 @@ public final class VillagerLifeProps {
             case "Craft" -> "Tool_Hammer_Iron";
             case "Mix" -> SALAD;
             case "Tend" -> "Plant_Flower_Bushy_Blue";
+            case "WaterCrops" -> "Tool_Watering_Can";
+            case "FeedAnimals" -> "Tool_Feedbag";
+            case "Slaughter" -> "Tool_Hatchet_Crude";
             default -> null;
         };
     }
@@ -83,6 +86,13 @@ public final class VillagerLifeProps {
         VillagerEquipmentService.markHotbarEquipmentDirty(hotbar, slot, ref, store);
         store.putComponent(ref, InventoryComponent.Hotbar.getComponentType(), hotbar);
         if (gesture.equals("Mix")) equipSpoon(ref, life, store);
+    }
+
+    /** A visual copy of saved cargo, with the same non-lootable temporary metadata as activity props. */
+    static void carry(Ref<EntityStore> ref,String item,Store<EntityStore> store) {
+        var life=VillagerLifeVisuals.state(ref,store);String previous=life.conversationItemId;
+        try {life.conversationItemId=item;equip(ref,"ShowItem",store);}
+        finally {life.conversationItemId=previous;}
     }
 
     public static void clear(Ref<EntityStore> ref, Store<EntityStore> store) {

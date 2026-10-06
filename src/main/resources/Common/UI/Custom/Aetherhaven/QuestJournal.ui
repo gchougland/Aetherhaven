@@ -1,5 +1,31 @@
 $C = "../Common.ui";
 
+@JournalTabAnchor = Anchor(Width: 82, Height: 74, Right: 5, Bottom: -14);
+
+@JournalTopTabStyle = TabStyleState(
+  Background: "ContainerPatchTop.png",
+  Overlay: "../Common/TabOverlay.png",
+  IconAnchor: (Width: 44, Height: 44),
+  TooltipStyle: $C.@DefaultTextTooltipStyle,
+  Anchor: (...@JournalTabAnchor)
+);
+
+@JournalTabsStyle = TabNavigationStyle(
+  TabStyle: (
+    Default: (...@JournalTopTabStyle, Anchor: (...@JournalTabAnchor, Bottom: -14)),
+    Hovered: (...@JournalTopTabStyle, Anchor: (...@JournalTabAnchor, Bottom: -10)),
+    Pressed: (...@JournalTopTabStyle, Anchor: (...@JournalTabAnchor, Bottom: -12))
+  ),
+  SelectedTabStyle: (
+    Default: (
+      ...@JournalTopTabStyle,
+      Anchor: (...@JournalTabAnchor, Bottom: -6),
+      IconAnchor: (Width: 44, Height: 44),
+      Overlay: "../Common/TabSelectedOverlay.png"
+    )
+  )
+);
+
 @MainWidth = 1180;
 @NavTabGap = 12;
 @NavTabHeight = 50;
@@ -28,60 +54,20 @@ $C.@PageOverlay {
 
         Group #TopNavBar {
           LayoutMode: Middle;
-          Anchor: (Horizontal: 0);
-          Padding: (Bottom: 12);
-
-          Group #TopNavColumn {
-            LayoutMode: Top;
+          Anchor: (Height: 78);
+          Group {
             Anchor: (Width: @MainWidth);
-
-            Group #TopNavStrip {
-            LayoutMode: Middle;
-            Anchor: (Width: @MainWidth);
-            Padding: @NavStripPad;
-            Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
-
-            Group {
-              LayoutMode: Left;
-              Anchor: (Horizontal: 0, Vertical: 0);
-
-              $C.@SecondaryTextButton #TabTown {
-                Text: "";
-                FlexWeight: 1;
-                Anchor: (Height: @NavTabHeight);
-              }
-
-              Group {
-                Anchor: (Width: @NavTabGap);
-              }
-
-              $C.@SecondaryTextButton #TabGuide {
-                Text: "";
-                FlexWeight: 1;
-                Anchor: (Height: @NavTabHeight);
-              }
-
-              Group {
-                Anchor: (Width: @NavTabGap);
-              }
-
-              $C.@SecondaryTextButton #TabQuests {
-                Text: "";
-                FlexWeight: 1;
-                Anchor: (Height: @NavTabHeight);
-              }
-
-              Group {
-                Anchor: (Width: @NavTabGap);
-              }
-
-              $C.@SecondaryTextButton #TabSettings {
-                Text: "";
-                FlexWeight: 1;
-                Anchor: (Height: @NavTabHeight);
-              }
+            TabNavigation #JournalTabs {
+              Anchor: (Height: 78);
+              Style: @JournalTabsStyle;
+              SelectedTab: "TOWN";
+              TabButton { Id: "TOWN"; Icon: "../house_icon_256.png"; TooltipText: "Town"; }
+              TabButton { Id: "GUIDE"; Icon: "../open-book.png"; TooltipText: "Guide"; }
+              TabButton { Id: "QUESTS"; Icon: "../list.png"; TooltipText: "Quests"; }
+              TabButton { Id: "WORK"; Icon: "../hammer.png"; TooltipText: "Work priorities"; }
+              TabButton { Id: "BILLS"; Icon: "../dollar_coin_icon_256.png"; TooltipText: "Bills"; }
+              TabButton { Id: "SETTINGS"; Icon: "../cog.png"; TooltipText: "Settings"; }
             }
-          }
           }
         }
 
@@ -113,6 +99,9 @@ $C.@PageOverlay {
             Group #TabPagesHost {
               LayoutMode: Top;
               Anchor: (Height: @TabBodyHeight);
+
+              Group #WorkPage { LayoutMode: Top; FlexWeight: 1; Visible: false; }
+              Group #BillsPage { LayoutMode: Top; FlexWeight: 1; Visible: false; }
 
               Group #QuestsPage {
                 LayoutMode: Top;
@@ -275,6 +264,43 @@ $C.@PageOverlay {
                   Text: "";
                 }
 
+                Group #PopulationSummary {
+                  LayoutMode: Top;
+                  Anchor: (Height: 90, Bottom: 12);
+                  Visible: false;
+                  Label #PopulationLine {
+                    Anchor: (Height: 26);
+                    Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #e8dcc8);
+                  }
+                  Group #TownLevelProgress {
+                    LayoutMode: Full;
+                    Anchor: (Height: 24, Top: 2, Bottom: 8);
+                    Group {
+                      LayoutMode: Left;
+                      Anchor: (Left: 5, Right: 5, Top: 4, Bottom: 4);
+                      Background: #121820(0.95);
+                      Group #TownLevelFill {
+                        FlexWeight: 1;
+                        Background: (TexturePath: "../XpBar.png", Border: 0, Color: #8ad3bb);
+                      }
+                      Group #TownLevelRemainder { FlexWeight: 999; }
+                    }
+                    Group {
+                      Anchor: (Full: 0);
+                      Background: (TexturePath: "../XpBarBorder.png", Border: 8, Color: #ffffff);
+                    }
+                  }
+                  Label #NextTownLevel {
+                    Anchor: (Height: 28);
+                    Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #94a7bb, FontSize: 13);
+                  }
+                  Label #FoodWarning {
+                    Anchor: (Height: 28);
+                    Visible: false;
+                    Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #edc486, FontSize: 13);
+                  }
+                }
+
                 Group #TownSplit {
                   LayoutMode: Left;
                   FlexWeight: 1;
@@ -291,6 +317,16 @@ $C.@PageOverlay {
                       Text: "";
                     }
 
+                    Group { LayoutMode: Left; Anchor: (Height: 30, Bottom: 6);
+                      $C.@SecondaryTextButton #Residentsall { @Text="All"; Padding: (Horizontal: 8); Anchor: (Width: 72, Right: 4); }
+                      $C.@SecondaryTextButton #Residentscore { @Text="Villagers"; Padding: (Horizontal: 8); Anchor: (Width: 112, Right: 4); }
+                      $C.@SecondaryTextButton #Residentstownsfolk { @Text="Townsfolk"; Padding: (Horizontal: 8); Anchor: (Width: 124); }
+                    }
+                    Group { LayoutMode: Left; Anchor: (Height: 28, Bottom: 6);
+                      $C.@SecondaryTextButton #ResidentPrevious { @Text="<"; Anchor: (Width: 42); }
+                      Label #ResidentPage { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 12, HorizontalAlignment: Center, VerticalAlignment: Center); }
+                      $C.@SecondaryTextButton #ResidentNext { @Text=">"; Anchor: (Width: 42); }
+                    }
                     Group #TownVillagerScroll {
                       LayoutMode: TopScrolling;
                       FlexWeight: 1;

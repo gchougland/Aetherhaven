@@ -83,6 +83,9 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
     /** Move building: first Place click shows warning; confirm commits. */
     private boolean movePlaceConfirmOpen;
 
+    @Nullable
+    private String placementError;
+
     /** Coalesces {@link #scheduleRefreshPreview} when {@link #build} runs many times in one frame (avoids debug clear spam). */
     private int placementWireframeRefreshSerial;
 
@@ -142,6 +145,8 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
     ) {
         commandBuilder.append("Aetherhaven/PlotPlacementPage.ui");
         applySharedPlotPlacementLocalization(commandBuilder);
+        commandBuilder.set("#PlacementError.Visible", placementError != null);
+        commandBuilder.set("#PlacementError.Text", placementError != null ? placementError : "");
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         Player player = store.getComponent(ref, Player.getComponentType());
         CombinedItemContainer inv =
@@ -311,6 +316,10 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
+        if (data.constructionId != null || data.action != null &&
+            (data.action.startsWith("Move") || "Rotate".equals(data.action) || "SnapToLocation".equals(data.action))) {
+            placementError = null;
+        }
         if (data.constructionId != null && !data.constructionId.isBlank()) {
             String id = data.constructionId.trim();
             selectedDropdownValue = id;
@@ -644,6 +653,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
     }
 
     private boolean tryPlace(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        placementError = null;
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {
             return false;
@@ -746,7 +756,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
             return false;
         }
         if (!isReplaceableSignCell(world, placedSignPos.x, placedSignPos.y, placedSignPos.z)) {
-            sendError(store, ref, "Could not place plot sign (blocked or invalid spot).");
+            sendError(store, ref, "The plot sign needs a clear spot near the center. Move the preview or clear that spot.");
             return false;
         }
         if (!PlotTokenInventory.consumePlotToken(inv, def)) {
@@ -787,6 +797,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                         placedSignPos.z,
                         System.currentTimeMillis()
                     );
+                inst.captureProductionLayout(def);
                 inst.setPrefabWorldPlacement(prefabOrigin.x, prefabOrigin.y, prefabOrigin.z, session.getPrefabYaw());
                 town.addPlotInstance(inst);
             } finally {
@@ -812,6 +823,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                     placedSignPos.z,
                     System.currentTimeMillis()
                 );
+            miniPlot.captureProductionLayout(def);
             miniPlot.setPrefabWorldPlacement(
                 buildingAnchor.x,
                 buildingAnchor.y,
@@ -1051,6 +1063,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
     }
 
     private void sendError(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref, @Nonnull String text) {
+        placementError = text;
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (pr != null) {
             pr.sendMessage(Message.raw(text));

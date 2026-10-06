@@ -1,0 +1,57 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_monster_hunter.item.Beacon.name",
+    "Description": "aetherhaven_monster_hunter.item.Beacon.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Rock_Stone_Brick_Decorative.png",
+  "Categories": [
+    "Furniture.Decoration",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Cube",
+    "Opacity": "Solid",
+    "HitboxType": "Full",
+    "VariantRotation": "NESW",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Rocks"
+      }
+    },
+    "BlockParticleSetId": "Stone",
+    "BlockSoundSetId": "Stone",
+    "ParticleColor": "#526566",
+    "Textures": [
+      {
+        "All": "BlockTextures/Rock_Stone_Brick_Decorative.png",
+        "Weight": 1
+      }
+    ]
+  },
+  "PlayerAnimationsId": "Block",
+  "MaxStack": 10,
+  "Recipe": {
+    "TimeSeconds": 3,
+    "Input": [
+      {
+        "ResourceTypeId": "Rock",
+        "Quantity": 8
+      },
+      {
+        "ItemId": "Ingredient_Bar_Copper",
+        "Quantity": 4
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": [
+          "Aetherhaven_TownPlanning_Misc"
+        ]
+      }
+    ]
+  }
+}

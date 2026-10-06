@@ -1,0 +1,27 @@
+{
+  "id": "craft_crafter_kit",
+  "name": "Joiner's Toolbox",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:craft_crafter_kit",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 3,
+  "requiresKnowledge": true,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 4
+    },
+    {
+      "itemId": "Ingredient_Leather_Light",
+      "count": 3
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 6
+    }
+  ],
+  "output": "Aetherhaven_Crafter_Kit",
+  "outputCount": 1,
+  "workSeconds": 30
+}

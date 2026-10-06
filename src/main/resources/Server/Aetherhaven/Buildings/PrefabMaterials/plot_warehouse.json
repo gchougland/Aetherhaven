@@ -1,0 +1,82 @@
+{
+  "constructionId": "plot_warehouse",
+  "prefabPath": "Warehouse.prefab.json",
+  "materials": [
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 200
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 114
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 110
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 82
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 66
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Flat",
+      "count": 54
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 46
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Shallow",
+      "count": 46
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 42
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 42
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 42
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 21
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 12
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Mossy",
+      "count": 11
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 8
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 4
+    },
+    {
+      "itemId": "Deco_Rope",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 4
+    },
+    {
+      "itemId": "Aetherhaven_Warehouse_Ledger_Desk",
+      "count": 1
+    }
+  ]
+}

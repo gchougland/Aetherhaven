@@ -105,6 +105,14 @@ public final class AetherhavenCoreBootstrap {
                 PlotTokenUnlockPageUseInteraction.CODEC
             );
         registerGaiaStatueOpenUi(plugin);
+        plugin.getCodecRegistry(Interaction.CODEC).register("AetherhavenAlchemyFlaskConsume",
+            com.hexvane.aetherhaven.alchemy.AlchemyFlaskConsumeInteraction.class,
+            com.hexvane.aetherhaven.alchemy.AlchemyFlaskConsumeInteraction.CODEC);
+        com.hexvane.aetherhaven.warehouse.WarehouseBootstrap.register(plugin);
+        plugin.getCodecRegistry(Interaction.CODEC).register("AetherhavenWorkplaceTool",
+            com.hexvane.aetherhaven.workplace.WorkplaceToolInteraction.class, com.hexvane.aetherhaven.workplace.WorkplaceToolInteraction.CODEC);
+        com.hexvane.aetherhaven.workplace.WorkplaceToolState.register(plugin.getEntityStoreRegistry());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.workplace.WorkplacePreviewSystem(plugin));
         AetherhavenSubpluginAssetCodecs.registerAll(plugin);
         PropsBootstrap.registerAssetCodecs(plugin);
         com.hexvane.aetherhaven.blockpalette.BlockPalettesBootstrap.registerAssetCodecs(plugin);
@@ -145,6 +153,11 @@ public final class AetherhavenCoreBootstrap {
         plugin.getChunkStoreRegistry().registerSystem(new PlotBlueprintSalvageBenchSystem());
         plugin.getEntityStoreRegistry().registerSystem(new ConstructionFavoritesPlayerInitSystem());
         TerritoryProtectionBootstrap.register(plugin);
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.workplace.WorkplaceBenchUseSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.alchemy.AlchemyBlastWardSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.alchemy.AlchemyPoisonWardSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.alchemy.AlchemyFlaskInventoryNormalizeSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.alchemy.AlchemyFlaskInventoryNormalizeSystem.PlayerAdded());
 
         AetherhavenHudRefreshSystem hudRefreshSystem = new AetherhavenHudRefreshSystem(plugin);
         plugin.getEntityStoreRegistry().registerSystem(hudRefreshSystem);
@@ -367,7 +380,11 @@ public final class AetherhavenCoreBootstrap {
                                     readyPlayerRef,
                                     player.getWorld()
                                 );
-                                if (readyPlayerRef != null) {
+                                // Assets survive world transfers. Native readyId starts at zero for a new
+                                // connection and is copied when Player is replaced, so only the first ready
+                                // needs the catalog preload and icon rebuild. Runtime icon edits have their
+                                // own invalidation/broadcast path.
+                                if (readyPlayerRef != null && event.getReadyId() == 0) {
                                     if (plugin.getPropIconPacketAdapter() != null) {
                                         plugin.getPropIconPacketAdapter()
                                             .preloadCatalogIcons(readyPlayerRef, plugin.getPropCatalog());
@@ -384,6 +401,7 @@ public final class AetherhavenCoreBootstrap {
             .registerGlobal(
                 PlayerDisconnectEvent.class,
                 event -> {
+                    com.hexvane.aetherhaven.plotcreator.PlacedMineNodeEditing.cancel(event.getPlayerRef().getUuid());
                     Ref<EntityStore> ref = event.getPlayerRef().getReference();
                     if (ref != null && ref.isValid()) {
                         Store<EntityStore> store = ref.getStore();

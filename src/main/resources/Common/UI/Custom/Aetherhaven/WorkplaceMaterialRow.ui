@@ -1,0 +1,6 @@
+$C = "../Common.ui";
+Group { LayoutMode: Left; Anchor: (Height: 40, Bottom: 3); Padding: (Horizontal: 6, Vertical: 4); Background: #1b2839;
+  AssetImage #Icon { Anchor: (Width: 32, Height: 32, Right: 8); }
+  Label #Name { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 13, VerticalAlignment: Center); }
+  Label #Quantity { Anchor: (Width: 55); Style: (...$C.@DefaultLabelStyle, FontSize: 14, HorizontalAlignment: End, VerticalAlignment: Center, TextColor: #c8a060); }
+}

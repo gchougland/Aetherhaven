@@ -41,8 +41,9 @@ Group #UnlockCell {
         Visible: false;
         LayoutMode: Full;
         Anchor: (Full: 0);
-        Background: #0a0d12(0.78);
+        Background: #2b3038(0.82);
         HitTestVisible: false;
+        AssetImage { AssetPath: "UI/Custom/padlock.png"; Anchor: (Width: 28, Height: 28, Top: 16, Left: 16); HitTestVisible: false; }
       }
     }
   }

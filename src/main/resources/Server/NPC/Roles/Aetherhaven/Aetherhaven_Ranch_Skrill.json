@@ -1,0 +1,41 @@
+{
+  "Type": "Variant",
+  "Reference": "Template_Animal_Neutral",
+  "Modify": {
+    "Appearance": "Skrill",
+    "FlockArray": [],
+    "AttractiveItemSet": [
+      "Plant_Crop_Chilli_Item"
+    ],
+    "AttractiveItemSetParticles": "Want_Food_Chilli",
+    "DropList": "Empty",
+    "MaxHealth": 30,
+    "MaxSpeed": 6,
+    "ViewRange": 14,
+    "ViewSector": 270,
+    "HearingRange": 8,
+    "AlertedRange": 16,
+    "AlertedActionRange": 6,
+    "AbsoluteDetectionRange": 2.5,
+    "Timid": true,
+    "ProduceItem": "",
+    "ProduceTimeout": [
+      "PT36H",
+      "PT48H"
+    ],
+    "IsTameable": false,
+    "TameRoleChange": "Tamed_Skrill",
+    "IsMemory": false,
+    "MemoriesNameOverride": "Skrill",
+    "NameTranslationKey": {
+      "Compute": "NameTranslationKey"
+    }
+  },
+  "Parameters": {
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Skrill.name",
+      "Description": "Translation key for NPC name display"
+    }
+  },
+  "$Comment": "Town managed offspring. Native species behavior with no item output, taming or memories."
+}

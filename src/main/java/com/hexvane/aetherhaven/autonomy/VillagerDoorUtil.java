@@ -541,7 +541,7 @@ public final class VillagerDoorUtil {
         return out;
     }
 
-    private static boolean isDoorPrimaryBlock(@Nonnull World world, @Nonnull Vector3i primary) {
+    public static boolean isDoorPrimaryBlock(@Nonnull World world, @Nonnull Vector3i primary) {
         WorldChunk chunk = ChunkSectionBlockUtil.worldChunkIfInMemory(world, ChunkUtil.indexChunkFromBlock(primary.x, primary.z));
         if (chunk == null) {
             return false;

@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_seeds_pumpkin_eternal",
+  "name": "Seeds Pumpkin Eternal",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_seeds_pumpkin_eternal",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 5,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 60
+    }
+  ],
+  "output": "Plant_Seeds_Pumpkin_Eternal",
+  "outputCount": 1,
+  "workSeconds": 18
+}

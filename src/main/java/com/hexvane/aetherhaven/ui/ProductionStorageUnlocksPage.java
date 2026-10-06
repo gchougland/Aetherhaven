@@ -5,6 +5,8 @@ import com.hexvane.aetherhaven.difficulty.BuildingUpgradeCostScaler;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.production.PlotProductionState;
+import com.hexvane.aetherhaven.production.PhysicalProductionOutputPolicy;
+import com.hexvane.aetherhaven.production.NativeTimberProducts;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.ProductionEffectiveCatalog;
 import com.hexvane.aetherhaven.production.WorkplaceUnlockCatalog;
@@ -172,7 +174,8 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
         }
 
         WorkplaceUnlockCatalog ucat = plugin.getWorkplaceUnlockCatalog();
-        List<WorkplaceUnlockCatalog.UnlockLine> lines = ucat.linesForWorkplace(constructionId);
+        List<WorkplaceUnlockCatalog.UnlockLine> lines = ucat.linesForWorkplace(constructionId).stream()
+            .filter(line -> !state.usesPhysicalTimber() || !NativeTimberProducts.automatic(line.itemId())).toList();
         commandBuilder.clear(ROWS);
         if (lines.isEmpty()) {
             commandBuilder.set(ERR_MSG + ".Visible", true);
@@ -199,14 +202,16 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
                 commandBuilder.set(slotPath + ".AssetPath", ItemAssetImagePath.forItem(assetItem, itemId));
 
                 boolean unlocked = line.defaultUnlocked() || state.isWorkplaceOutputUnlocked(itemId);
+                boolean available = PhysicalProductionOutputPolicy.available(state, itemId);
                 commandBuilder.set(cell + " #UnlockHit.TextTooltipStyle", DEFAULT_TEXT_TOOLTIP_STYLE);
                 commandBuilder.set(
                     cell + " #UnlockHit.TooltipTextSpans",
-                    cellTooltipMessage(itemLineDisplayName(line, assetItem), unlocked, line, town, inv, town.playerCanSpendTreasuryGold(uc.getUuid()))
+                    available ? cellTooltipMessage(itemLineDisplayName(line, assetItem), unlocked, line, town, inv, town.playerCanSpendTreasuryGold(uc.getUuid()))
+                        : Message.join(itemLineDisplayName(line, assetItem), Message.raw("\nThis production setup cannot produce this material yet. Existing stock can still be collected."))
                 );
 
-                commandBuilder.set(cell + " #UnlockHit #IconFrame #LockOverlay.Visible", !unlocked);
-                commandBuilder.set(cell + " #UnlockHit.Disabled", false);
+                commandBuilder.set(cell + " #UnlockHit #IconFrame #LockOverlay.Visible", !unlocked || !available);
+                commandBuilder.set(cell + " #UnlockHit.Disabled", !available);
                 eventBuilder.addEventBinding(
                     CustomUIEventBindingType.Activating,
                     cell + " #UnlockHit",
@@ -235,12 +240,16 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
             return;
         }
         WorkplaceUnlockCatalog.UnlockLine line = ucat.findLine(constructionId, detailFocusItemId);
-        if (line == null) {
+        if (line == null || !PhysicalProductionOutputPolicy.available(state, line.itemId())) {
             commandBuilder.set(DETAIL_NAME + ".TextSpans", Message.raw(""));
             commandBuilder.set(DETAIL_BODY + ".TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.detailHint"));
             return;
         }
         commandBuilder.set(DETAIL_NAME + ".TextSpans", itemLineDisplayName(line));
+        if (state.usesPhysicalTimber() && NativeTimberProducts.automatic(line.itemId())) {
+            commandBuilder.set(DETAIL_BODY + ".TextSpans", Message.raw("Sap, sticks and matching saplings are collected automatically when a tree is harvested. No separate unlock is needed."));
+            return;
+        }
         boolean unlocked = line.defaultUnlocked() || state.isWorkplaceOutputUnlocked(line.itemId());
         commandBuilder.set(DETAIL_BODY + ".TextSpans", unlockRequirementBody(unlocked, line, town, inv, allowTreasuryGold));
     }
@@ -363,7 +372,8 @@ public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCu
         }
         PlotProductionState state = town.getOrCreatePlotProduction(plotId);
         state.migrateIfNeeded();
-        if (line.defaultUnlocked() || state.isWorkplaceOutputUnlocked(itemId)) {
+        if (!PhysicalProductionOutputPolicy.available(state, itemId) || line.defaultUnlocked() || state.isWorkplaceOutputUnlocked(itemId)
+                || state.usesPhysicalTimber() && NativeTimberProducts.automatic(itemId)) {
             refresh(ref, store);
             return;
         }

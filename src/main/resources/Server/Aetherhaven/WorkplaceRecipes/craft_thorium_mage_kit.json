@@ -1,0 +1,27 @@
+{
+  "id": "craft_thorium_mage_kit",
+  "name": "Thorium Mage Kit",
+  "workplace": "armorCrafting",
+  "sourceRecipe": "workplace:thorium_mage_kit",
+  "bench": "Armor_Bench",
+  "benchTier": 2,
+  "skillLevel": 6,
+  "townRank": "C",
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Thorium",
+      "count": 30
+    },
+    {
+      "itemId": "Ingredient_Leather_Light",
+      "count": 10
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 16
+    }
+  ],
+  "output": "Aetherhaven_Thorium_Mage_Kit",
+  "outputCount": 1,
+  "workSeconds": 80
+}

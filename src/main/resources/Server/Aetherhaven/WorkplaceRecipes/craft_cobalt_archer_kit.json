@@ -1,0 +1,27 @@
+{
+  "id": "craft_cobalt_archer_kit",
+  "name": "Cobalt Archer Kit",
+  "workplace": "armorCrafting",
+  "sourceRecipe": "workplace:cobalt_archer_kit",
+  "bench": "Armor_Bench",
+  "benchTier": 2,
+  "skillLevel": 8,
+  "townRank": "B",
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Cobalt",
+      "count": 36
+    },
+    {
+      "itemId": "Ingredient_Leather_Light",
+      "count": 12
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 20
+    }
+  ],
+  "output": "Aetherhaven_Cobalt_Archer_Kit",
+  "outputCount": 1,
+  "workSeconds": 100
+}

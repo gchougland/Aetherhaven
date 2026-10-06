@@ -115,6 +115,119 @@ public final class DialogueActionExecutor {
             return;
         }
         switch (type) {
+            case "open_hunts" -> {
+                if(plugin==null||npcRef==null||!npcRef.isValid())return;
+                var binding=store.getComponent(npcRef,TownVillagerBinding.getComponentType());
+                if(binding==null||!com.hexvane.aetherhaven.hunter.HuntService.KIND.equals(binding.getKind()))return;
+                UUID townId=binding.getTownId();out.setCloseDialogue(true);
+                out.setAfterClose(()->{
+                    if(!playerRef.isValid()||!npcRef.isValid())return;
+                    var player=store.getComponent(playerRef,Player.getComponentType());
+                    var pr=store.getComponent(playerRef,com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                    if(player!=null&&pr!=null)player.getPageManager().openCustomPage(playerRef,store,new com.hexvane.aetherhaven.hunter.HuntPage(pr,townId,npcRef));
+                });
+            }
+            case "open_clinic" -> {
+                if (plugin == null || npcRef == null || !npcRef.isValid()) return;
+                var binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+                if (binding == null || !com.hexvane.aetherhaven.clinic.ClinicCareSystem.KIND.equals(binding.getKind())) return;
+                UUID townId = binding.getTownId();
+                out.setCloseDialogue(true);
+                out.setAfterClose(() -> {
+                    if (!playerRef.isValid() || !npcRef.isValid()) return;
+                    var player = store.getComponent(playerRef, Player.getComponentType());
+                    var pr = store.getComponent(playerRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                    if (player != null && pr != null) player.getPageManager().openCustomPage(playerRef, store,
+                        new com.hexvane.aetherhaven.clinic.ClinicPage(pr, townId, npcRef));
+                });
+            }
+            case "open_warehouse", "open_courier_roster" -> {
+                if (plugin == null || npcRef == null || !npcRef.isValid()) return;
+                var binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+                if (binding == null || !com.hexvane.aetherhaven.warehouse.WarehouseAccess.MANAGER_KIND.equals(binding.getKind())) return;
+                UUID townId = binding.getTownId();
+                boolean couriers = "open_courier_roster".equals(type);
+                out.setCloseDialogue(true);
+                out.setAfterClose(() -> {
+                    if (!playerRef.isValid()) return;
+                    var player = store.getComponent(playerRef, Player.getComponentType());
+                    var pr = store.getComponent(playerRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                    if (player == null || pr == null) return;
+                    if (couriers) com.hexvane.aetherhaven.ui.QuestJournalPage.openWork(playerRef,store,pr,townId);
+                    else player.getPageManager().openCustomPage(playerRef, store,
+                        new com.hexvane.aetherhaven.warehouse.WarehousePage(pr, townId));
+                });
+            }
+            case "open_inn_outreach" -> {
+                if (npcRef == null || !npcRef.isValid()) return;
+                var binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+                if (binding == null || !TownVillagerBinding.KIND_INNKEEPER.equals(binding.getKind())) return;
+                UUID townId = binding.getTownId();
+                out.setCloseDialogue(true);
+                out.setAfterClose(() -> {
+                    if (!playerRef.isValid()) return;
+                    Player player = store.getComponent(playerRef, Player.getComponentType());
+                    var pr = store.getComponent(playerRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                    if (player != null && pr != null) player.getPageManager().openCustomPage(playerRef, store,
+                        new com.hexvane.aetherhaven.inn.InnOutreachPage(pr, townId));
+                });
+            }
+            case "learn_alchemy_flask" -> {
+                if (npcRef == null || !npcRef.isValid()) return;
+                var binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+                var viewer = store.getComponent(playerRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                if (binding == null || plugin == null || viewer == null || !"alchemist".equals(binding.getKind())) return;
+                var town = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin).getTown(binding.getTownId());
+                if (town == null || !town.hasMemberOrOwner(viewer.getUuid())
+                    || !com.hexvane.aetherhaven.workplace.TownWorkplaces.hasSupervisor(town,"alchemist")) return;
+                CraftingPlugin.learnRecipe(playerRef,"Aetherhaven_Alchemy_Flask",store);
+                viewer.sendMessage(Message.raw("You learned how to make an Alchemy Flask. Bring it to the laboratory cauldron."));
+            }
+            case "open_core_mastery" -> {
+                if (npcRef == null || !npcRef.isValid()) return;
+                var binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+                if (binding == null || binding.getKind() == null) return;
+                UUID townId = binding.getTownId(); String kind = binding.getKind();
+                out.setCloseDialogue(true);
+                out.setAfterClose(() -> {
+                    if (!playerRef.isValid()) return;
+                    Player player = store.getComponent(playerRef, Player.getComponentType());
+                    var pr = store.getComponent(playerRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                    if (player != null && pr != null) player.getPageManager().openCustomPage(playerRef, store,
+                        new com.hexvane.aetherhaven.mastery.CoreMasteryPage(pr, townId, kind, npcRef));
+                });
+            }
+            case "open_workplace_upgrades" -> {
+                if (npcRef == null || !npcRef.isValid()) return;
+                var binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+                if (binding == null || !com.hexvane.aetherhaven.workplace.WorkplaceUpgradesPage.supports(binding.getKind())) return;
+                UUID townId = binding.getTownId(); String supervisor = binding.getKind();
+                out.setCloseDialogue(true);
+                out.setAfterClose(() -> {
+                    if (!playerRef.isValid()) return;
+                    Player player = store.getComponent(playerRef, Player.getComponentType());
+                    var pr = store.getComponent(playerRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                    if (player != null && pr != null) player.getPageManager().openCustomPage(playerRef, store,
+                        new com.hexvane.aetherhaven.workplace.WorkplaceUpgradesPage(pr, townId, supervisor));
+                });
+            }
+            case "open_townsfolk_profile" -> {
+                if (npcRef == null || !npcRef.isValid()) return;
+                var character = store.getComponent(npcRef, com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding.getComponentType());
+                var binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+                if (character == null || binding == null) return;
+                UUID profileTown = binding.getTownId();
+                String characterId = character.getCharacterId();
+                UUID profileResident = npcUuidFromRef(store, npcRef);
+                out.setCloseDialogue(true);
+                out.setAfterClose(() -> {
+                    if (!playerRef.isValid()) return;
+                    Player player = store.getComponent(playerRef, Player.getComponentType());
+                    var pr = store.getComponent(playerRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                    if (player != null && pr != null) player.getPageManager().openCustomPage(playerRef, store,
+                        new com.hexvane.aetherhaven.ui.TownsfolkProfilePage(pr, profileTown, characterId, profileResident));
+                });
+            }
             case "close" -> out.setCloseDialogue(true);
             case "elder_repair" -> {
                 ElderRepairActions.schedule(stringField(a, "repair"), playerRef, store, npcRef);
@@ -165,6 +278,18 @@ public final class DialogueActionExecutor {
             case "gaia_draught_upgrade_catalyst" -> gaiaDraughtUpgradeCatalyst(playerRef, store, npcRef);
             case "priestess_gold_heal" -> priestessGoldHeal(playerRef, store, npcRef);
             case "hire_guild_adventurer" -> hireGuildAdventurer(playerRef, store, npcRef, out);
+            case "invite_guild_resident" -> {
+                if (npcRef == null || !npcRef.isValid()) return;
+                var active = AetherhavenPlugin.get();
+                var recipient = store.getComponent(playerRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                if (active == null || recipient == null) return;
+                var local = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), active);
+                var town = townForDialogue(playerRef, store, local, npcRef);
+                if (town == null) return;
+                var error = com.hexvane.aetherhaven.guild.GuildResidentInvitation.invite(store, town, owningTownManager(town, local), active, recipient.getUuid(), npcRef);
+                if (error != null) recipient.sendMessage(error);
+                else { recipient.sendMessage(Message.raw("Welcome to town. Choose work priorities in the journal or guard duty in their profile.")); out.setCloseDialogue(true); }
+            }
             case "dismiss_hired_guard" -> dismissHiredGuard(playerRef, store, npcRef, out);
             case "despawn_npc" -> despawnNpc(a, playerRef, store, npcRef);
             case "play_bard_song" -> playBardSong(a, playerRef, store, npcRef);
@@ -173,6 +298,12 @@ public final class DialogueActionExecutor {
             case "stop_bard_song" -> stopBardSong(playerRef, store, npcRef);
             case "start_follow_player" -> startFollowPlayer(playerRef, store, npcRef);
             case "stop_follow_player" -> stopFollowPlayer(store, npcRef);
+            case "guard_escort_order" -> {
+                UUIDComponent playerId = store.getComponent(playerRef, UUIDComponent.getComponentType());
+                if (npcRef != null && playerId != null && a.has("order") && a.get("order").isJsonPrimitive()) {
+                    GuardFollowPlayerSystem.applyEscortOrder(npcRef, store, playerId.getUuid(), a.get("order").getAsString());
+                }
+            }
             case "deliver_tourist_move_in_items" -> deliverTouristMoveInItems(playerRef, store, npcRef);
             default -> LOGGER.atWarning().log("Unknown dialogue action type: %s", type);
         }
@@ -270,6 +401,14 @@ public final class DialogueActionExecutor {
             return;
         }
         UUID npcUuid = npcUuidFromRef(store, npcRef);
+        if (com.hexvane.aetherhaven.town.TownAdmission.isAdmissionQuest(plugin, qid)) {
+            Message blocked = com.hexvane.aetherhaven.town.TownAdmission.blockedForNpc(plugin, town, npcRef, store);
+            if (blocked != null) {
+                var recipient = store.getComponent(playerRef, PlayerRef.getComponentType());
+                if (recipient != null) recipient.sendMessage(blocked);
+                return;
+            }
+        }
         if (qdef != null && qdef.repeatOrDefault().isPerEntity()) {
             if (town.hasQuestActive(qid)) {
                 return;
@@ -391,6 +530,16 @@ public final class DialogueActionExecutor {
         TownManager tm = owningTownManager(town, localTm);
         if (!town.playerCanCompleteQuests(pu.getUuid())) {
             return;
+        }
+        if(com.hexvane.aetherhaven.halloween.HalloweenResident.RESCUE_QUEST.equals(qid.trim())
+            &&!com.hexvane.aetherhaven.halloween.HalloweenResident.canAcceptRescue(playerRef,store,npcRef))return;
+        if (com.hexvane.aetherhaven.town.TownAdmission.isAdmissionQuest(plugin, qid)) {
+            Message blocked = com.hexvane.aetherhaven.town.TownAdmission.blockedForNpc(plugin, town, npcRef, store);
+            if (blocked != null) {
+                PlayerRef recipient = store.getComponent(playerRef, PlayerRef.getComponentType());
+                if (recipient != null) recipient.sendMessage(blocked);
+                return;
+            }
         }
         if (!town.hasQuestActive(qid)) {
             if (town.hasQuestCompleted(qid)) {
@@ -755,7 +904,7 @@ public final class DialogueActionExecutor {
             )) {
                 return;
             }
-            grantReputationRewardItems(def, playerRef, store, player);
+            grantReputationRewardItems(def, playerRef, store, player, null, null);
             return;
         }
         TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
@@ -774,21 +923,27 @@ public final class DialogueActionExecutor {
         if (!VillagerReputationService.claimPendingReward(town, tm, pu.getUuid(), nu.getUuid(), def.rewardId())) {
             return;
         }
-        grantReputationRewardItems(def, playerRef, store, player);
+        grantReputationRewardItems(def, playerRef, store, player, town, tm);
     }
 
     private static void grantReputationRewardItems(
         @Nonnull ReputationRewardCatalog.ReputationRewardDefinition def,
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store,
-        @Nonnull Player player
+        @Nonnull Player player,
+        @Nullable TownRecord rewardTown,
+        @Nullable TownManager rewardManager
     ) {
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         String learnId = def.learnRecipeItemId();
         if (learnId != null && !learnId.isBlank()) {
             String learnedItemId = learnId.trim();
             String learnedLabel = resolveItemLabel(pr, learnedItemId);
-            CraftingPlugin.learnRecipe(playerRef, learnedItemId, store);
+            var plugin = AetherhavenPlugin.get();
+            boolean townRecipe = rewardTown != null && plugin != null
+                && com.hexvane.aetherhaven.workplace.WorkplaceRecipeUnlocks.grant(rewardTown, plugin.getApprenticeRecipes().all(), learnedItemId);
+            if (townRecipe) rewardManager.updateTown(rewardTown);
+            else CraftingPlugin.learnRecipe(playerRef, learnedItemId, store);
             sendEventTitleBanner(
                 pr,
                 Message.translation("aetherhaven_misc.aetherhaven.banner.reputation.unlock.recipe")
@@ -1164,6 +1319,14 @@ public final class DialogueActionExecutor {
         @Nonnull Store<EntityStore> store,
         @Nullable Ref<EntityStore> npcRef
     ) {
+        String requiredQuest = blankToNull(stringField(a, "requiredCompletedTownQuest"));
+        if (requiredQuest != null) {
+            var plugin = AetherhavenPlugin.get();
+            if (plugin == null) return;
+            var manager = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin);
+            var town = townForDialogue(playerRef, store, manager, npcRef);
+            if (town == null || !town.hasQuestCompleted(requiredQuest)) return;
+        }
         UUID npcUuid = npcUuidFromRef(store, npcRef);
         if (npcUuid == null) {
             return;
@@ -1518,11 +1681,14 @@ public final class DialogueActionExecutor {
             return;
         }
         TownManager tm = owningTownManager(town, localTm);
-        if (GuardHireService.tryDismiss(world, plugin, town, tm, playerRef, npcRef, store)) {
-            out.setCloseDialogue(true);
-        } else {
-            out.setGotoNodeId("dismiss_confirm");
-        }
+        var identity = store.getComponent(npcRef, com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding.getComponentType());
+        var recipient = store.getComponent(playerRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+        var resident = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        if (identity == null || recipient == null || resident == null) return;
+        String error = com.hexvane.aetherhaven.guild.GuardDutyService.change(store, town, tm, plugin,
+            recipient.getUuid(), resident.getUuid(), identity.getCharacterId(), null);
+        if (error == null) out.setCloseDialogue(true);
+        else { recipient.sendMessage(Message.raw(error)); out.setGotoNodeId("dismiss_confirm"); }
     }
 
     private static void playBannerSound(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {

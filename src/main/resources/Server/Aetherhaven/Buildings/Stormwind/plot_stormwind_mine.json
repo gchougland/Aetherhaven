@@ -85,5 +85,29 @@
   "tags": [
     "mine",
     "work"
-  ]
+  ],
+  "productionLayout": {
+    "modRules": "4.0",
+    "mode": "mining_nodes",
+    "nodes": [
+      {
+        "x": 10,
+        "y": 1,
+        "z": -16,
+        "expectedBlockId": "Rock_Stone"
+      },
+      {
+        "x": 14,
+        "y": 1,
+        "z": -17,
+        "expectedBlockId": "Rock_Stone_Cobble_Mossy"
+      },
+      {
+        "x": 17,
+        "y": 1,
+        "z": -17,
+        "expectedBlockId": "Rock_Stone_Cobble"
+      }
+    ]
+  }
 }

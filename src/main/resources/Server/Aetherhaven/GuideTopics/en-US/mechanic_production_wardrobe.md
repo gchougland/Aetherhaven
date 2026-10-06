@@ -1,6 +1,6 @@
 ---
 name: Production wardrobe
-description: Outfits and output for production buildings
+description: Collect output, choose resources and plan physical work
 author: Hexvane
 ---
 
@@ -8,23 +8,22 @@ author: Hexvane
 
 # Production wardrobe
 
-Production buildings (farm, lumber mill, miner's hut, barn, and similar workplaces) store output in a **wardrobe-style chest** inside the plot. Interact with the wardrobe to open the production window.
+The Farm, Lumbermill, Miner's Hut, Barn and Conservatory keep output in a **storage cupboard** inside their building. Interact with it to choose outputs, collect materials and open the building's work controls.
 
 ## Production window
 
-* Use the **arrows** to cycle which resource type the building generates.
-* Each resource type is stored separately in the wardrobe inventory.
-* Selecting multiple slots of the **same** resource increases how fast that resource is produced.
-* Ores and woods finish at full speed when the building sits in the region those materials come from. Outside that region they take longer.
+Use the arrows to select unlocked resources for the available output slots. Each resource has its own stored quantity. **Collect all** also recovers older stock whose resource is no longer selected.
+
+An output may need greater **Mastery** or a better equipped tool. The storage screen explains what is missing. Talk to the resident specialist to train or change their tool. Earned stock and material already being carried stay available while you do this.
+
+For physical production, use the controls to review Farm or Conservatory beds, plan a Lumbermill grove or manage the Barn's herd. These work plans use real plants, trees and animals. The resident must finish the work and carry output back before it can be collected. A full cupboard pauses further harvesting. Couriers can collect stored materials needed by Apprentice tasks.
 
 ## Unlocks tab
 
-The **unlocks** page lists new resource types you can add to the rotation. Unlocking costs some of that resource plus **gold coins** from town funds.
+The **Unlocks** page lists more resources you can select. It shows each purchase's materials, gold and requirements. Buying an output does not bypass the resident's Mastery or tool requirement.
 
 ## Upgrades
 
-Open the **town records shelf** on a production building to **upgrade** it. Upgrades improve output or capacity depending on building type. Costs and tiers are shown in the shelf UI.
+Open **Building upgrades** for additional output slots, faster work and larger storage. The tree shows the required Town Level, earlier upgrades and cost. For physical growing, faster work shortens attended tending and harvesting; it does not skip plant or tree growth.
 
-*In the future you will be able to upgrade the max storage and production speed of buildings.*
-
-See **Town records shelf** for shelf controls on production plots and **Sprinklers** for farm watering.
+See the Farmer, Logger, Rancher and Druid guide pages for their work plans, **Mastery and training** for resource requirements, and **Sprinklers** for farm watering.

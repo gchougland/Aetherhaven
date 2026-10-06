@@ -122,6 +122,7 @@ public final class BuildingEditorPropSessionStarter {
         if (!ref.isValid()) {
             return;
         }
+        BuildingEditorAirMarkers.restore(world, buffer, prefabOrigin, yaw);
         UUID uuid = playerRef.getUuid();
         PlotCreatorSessions.remove(uuid);
         PlotCreatorSession session = new PlotCreatorSession(uuid, world);

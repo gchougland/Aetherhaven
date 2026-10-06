@@ -1,0 +1,27 @@
+{
+  "id": "craft_balloons",
+  "name": "Balloons",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:craft_balloons",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 3,
+  "requiresKnowledge": true,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Leather_Light",
+      "count": 6
+    },
+    {
+      "itemId": "Ingredient_Fabric_Scrap_Linen",
+      "count": 4
+    },
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 2
+    }
+  ],
+  "output": "Aetherhaven_Prop_Balloons",
+  "outputCount": 1,
+  "workSeconds": 25
+}

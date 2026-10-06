@@ -1,0 +1,47 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Ore_Onyxium.name",
+    "Description": "server.items.Ore_Onyxium.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Ore_Onyxium.png",
+  "BlockType": {
+    "DrawType": "CubeWithModel",
+    "BlockParticleSetId": "Stone",
+    "Textures": [
+      {
+        "All": "BlockTextures/Rock_Stone.png",
+        "Weight": 2
+      },
+      {
+        "All": "BlockTextures/Rock_Stone_2.png",
+        "Weight": 1
+      },
+      {
+        "All": "BlockTextures/Rock_Stone_3.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#737055",
+    "BlockSoundSetId": "Stone",
+    "PhysicalMaterialId": "Stone",
+    "TextureComputedColor": "#79785A",
+    "CustomModel": "Resources/Ores/Ore_Large.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Resources/Ores/Ore_Textures/Onyxium.png",
+        "Weight": 1
+      }
+    ],
+    "Material": "Solid",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Unbreakable"
+      }
+    },
+    "Flags": {},
+    "Support": {}
+  },
+  "PlayerAnimationsId": "Block",
+  "MaxStack": 1,
+  "ItemSoundSetId": "ISS_Blocks_Stone"
+}

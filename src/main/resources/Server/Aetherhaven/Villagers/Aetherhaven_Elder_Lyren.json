@@ -10,6 +10,14 @@
   "uiSortOrder": 0,
   "reputationMilestones": [
     {
+      "rewardId": "rep_elder_training_gift",
+      "minReputation": 25,
+      "itemId": "Aetherhaven_Verdant_Catalyst",
+      "itemCount": 2,
+      "dialogueNodeId": "rep_reward_25",
+      "learnRecipeItemId": null
+    },
+    {
       "rewardId": "rep_elder_50",
       "minReputation": 50,
       "itemId": "",

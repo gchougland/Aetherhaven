@@ -1,9 +1,9 @@
-aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire=Hire {type} guard ({gold} gold)
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire=Would you like to live in our town?
 aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.leave=Goodbye
-aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.body=Pay the fee and this adventurer will patrol for your town. They stay until they fall in battle or you let them go. You have {current} of {max} guards.
-aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes=Yes, hire them
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.body=Invite this Townsfolk to become a resident. You can choose their work in the journal or assign guard duty from their profile.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes=Welcome to town
 aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.no=Not now
-aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.body=They are yours. Keep them fed and housed if you want them to stay long.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.body=Your new resident is ready to settle in. Provide a home and choose how they will help the town.
 aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.leave=Goodbye
 aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_roster=Guards hired: {current}/{max}.
 aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_limitReached=Raise your town rank to hire more.

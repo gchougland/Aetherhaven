@@ -22,13 +22,15 @@ import javax.annotation.Nullable;
  * {@code world.execute} for spawns — never writes to Store directly during a tick system.
  */
 public final class PlotCreatorSpotMarkerSync {
-    private static final ConcurrentHashMap<UUID, Tracking> TRACKING = new ConcurrentHashMap<>();
+    private record Owner(World world,UUID player) {}
+    private static final ConcurrentHashMap<Owner, Tracking> TRACKING = new ConcurrentHashMap<>();
 
     private static final class Tracking {
         final Map<Long, UUID> keyToMarkerUuid = new HashMap<>();
         final Set<Long> pendingSpawnKeys = ConcurrentHashMap.newKeySet();
         final Map<Long, String> keyToTexture = new HashMap<>();
         final Map<Long, String> keyToLabel = new HashMap<>();
+        Set<Long> desiredKeys=Set.of();
     }
 
     private PlotCreatorSpotMarkerSync() {}
@@ -38,12 +40,13 @@ public final class PlotCreatorSpotMarkerSync {
         @Nonnull UUID ownerPlayerEntityUuid,
         @Nullable CommandBuffer<EntityStore> commandBuffer
     ) {
-        Tracking st = TRACKING.remove(ownerPlayerEntityUuid);
+        Tracking st = TRACKING.remove(new Owner(world,ownerPlayerEntityUuid));
         if (st != null) {
             st.keyToMarkerUuid.clear();
             st.pendingSpawnKeys.clear();
             st.keyToTexture.clear();
             st.keyToLabel.clear();
+            st.desiredKeys=Set.of();
         }
         // Single remove path — do not also remove-by-uuid (double CommandBuffer.removeEntity crashes).
         PlotCreatorSpotMarkerSpawner.removeAllForOwner(world, ownerPlayerEntityUuid, commandBuffer);
@@ -55,13 +58,14 @@ public final class PlotCreatorSpotMarkerSync {
         @Nonnull List<PlotCreatorSpotMarkerCollector.DesiredSpotMarker> desired,
         @Nullable CommandBuffer<EntityStore> commandBuffer
     ) {
-        Tracking st = TRACKING.computeIfAbsent(ownerPlayerEntityUuid, u -> new Tracking());
+        Tracking st = TRACKING.computeIfAbsent(new Owner(world,ownerPlayerEntityUuid), u -> new Tracking());
         Map<Long, PlotCreatorSpotMarkerCollector.DesiredSpotMarker> desiredByKey = new HashMap<>(desired.size());
         for (PlotCreatorSpotMarkerCollector.DesiredSpotMarker d : desired) {
             desiredByKey.put(d.key(), d);
         }
 
         Set<Long> desiredKeys = desiredByKey.keySet();
+        st.desiredKeys=Set.copyOf(desiredKeys);
         Iterator<Map.Entry<Long, UUID>> it = st.keyToMarkerUuid.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<Long, UUID> e = it.next();
@@ -118,6 +122,8 @@ public final class PlotCreatorSpotMarkerSync {
         final PlotCreatorSpotMarkerCollector.DesiredSpotMarker copy = desired;
         world.execute(() -> {
             try {
+                // A queued spawn must not recreate a marker after cancel, removal or switching tools.
+                if(TRACKING.get(new Owner(world,ownerPlayerEntityUuid))!=st||!st.desiredKeys.contains(key))return;
                 if (st.keyToMarkerUuid.containsKey(key)) {
                     return;
                 }

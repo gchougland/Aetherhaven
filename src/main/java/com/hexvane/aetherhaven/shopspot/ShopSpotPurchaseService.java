@@ -177,6 +177,9 @@ public final class ShopSpotPurchaseService {
         }
         registry.put(record);
         ShopSpotPersistence.save(world, plugin, registry);
+        if (record.isPlayerControlled() && com.hexvane.aetherhaven.autonomy.ShopClerkWorkService.completedSale(store,town,record.getPlotId()) > 0) {
+            tm.updateTown(town);
+        }
         if (commandBuffer != null) {
             ShopSpotDisplayService.syncDisplay(world, store, commandBuffer, plugin, registry, record, town);
         } else {

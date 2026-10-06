@@ -1,0 +1,31 @@
+{
+  "Type": "Variant",
+  "Reference": "Template_Scarak_Louse",
+  "Modify": {
+    "Appearance": "Scarak_Louse",
+    "DropList": "",
+    "AttackDistance": 1.6,
+    "Attack": "Aetherhaven_Hunt_Scarak_Bite",
+    "AttitudeGroup": "Scarak",
+    "FlockArray": [],
+    "MaxHealth": 90,
+    "_CombatConfig": {
+      "EntityEffects": [
+        "Immunity_Environmental",
+        "Immunity_Poison"
+      ]
+    },
+    "IsMemory": false,
+    "MemoriesCategory": "Scarak",
+    "MemoriesNameOverride": "Scarak_Louse",
+    "NameTranslationKey": {
+      "Compute": "NameTranslationKey"
+    }
+  },
+  "Parameters": {
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Scarak_Louse.name",
+      "Description": "Translation key for NPC name display"
+    }
+  }
+}

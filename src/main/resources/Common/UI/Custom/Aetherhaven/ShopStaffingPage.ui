@@ -1,0 +1,36 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+$C.@PageOverlay { LayoutMode: Middle;
+ $C.@DecoratedContainer { Anchor: (Width: 940, Height: 690);
+  #Title { Label { Text: "SHOP STAFF"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+  #Content { LayoutMode: Top; Padding: (Full: 22);
+   Label #ShopStatus { Anchor: (Height: 36, Bottom: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 16, TextColor: #d2bc85); }
+   Group { LayoutMode: Left; FlexWeight: 1;
+    Group { LayoutMode: Top; Anchor: (Width: 270, Right: 18); Padding: (Full: 16); Background: $T.@Panel;
+     AssetImage #Portrait { Anchor: (Width: 160, Height: 160, Left: 38); }
+     Label #Name { Anchor: (Height: 48); Style: (...$C.@DefaultLabelStyle, FontSize: 21, Wrap: true, RenderBold: true, HorizontalAlignment: Center); }
+     Label #Skill { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 16, TextColor: #a7cbbb, HorizontalAlignment: Center); }
+     Label #Chance { Anchor: (Height: 36); Style: (...$C.@DefaultLabelStyle, FontSize: 17, TextColor: #d2bc85, HorizontalAlignment: Center); }
+     Label #Details { Anchor: (Height: 90, Top: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #acbeb4); }
+     $C.@TextButton #Assign { Text: "Assign clerk"; Anchor: (Height: 40, Top: 10); }
+    }
+    Group { LayoutMode: Top; FlexWeight: 1;
+     Label { Text: "CHOOSE A TOWNSFOLK"; Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 17, RenderBold: true); }
+     Label { Text: "Commerce skill improves the chance of a visitor buying."; Anchor: (Height: 40); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #96aea4); }
+     Group { LayoutMode: TopScrolling; FlexWeight: 1; ScrollbarStyle: $C.@DefaultScrollbarStyle;
+      Group #Residents { LayoutMode: Top; }
+      Label #Empty { Text: "Invite Townsfolk to your town to choose a clerk."; Anchor: (Height: 70); Style: (...$C.@DefaultLabelStyle, Wrap: true); }
+     }
+    }
+   }
+   Label #Hint { Anchor: (Height: 45, Top: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #c0cbbb); }
+   Group { LayoutMode: Left; Anchor: (Height: 40);
+    $C.@SecondaryTextButton #Unassign { Text: "Remove clerk"; Anchor: (Width: 190, Right: 10); }
+    Group { FlexWeight: 1; }
+    $C.@SecondaryTextButton #Refresh { Text: "Refresh"; Anchor: (Width: 120, Right: 10); }
+    $C.@SecondaryTextButton #Close { Text: "Close"; Anchor: (Width: 120); }
+   }
+  }
+ }
+}
+$C.@BackButton {}

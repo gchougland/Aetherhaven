@@ -1,0 +1,30 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_guard_kits.iron_archer_kit.name",
+    "Description": "aetherhaven_guard_kits.iron_archer_kit.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Iron_Archer_Kit.png",
+  "Model": "Items/Aetherhaven/Guard_Kits/Archer_Kit.blockymodel",
+  "Texture": "Items/Aetherhaven/Guard_Kits/Iron_Archer_Kit.png",
+  "PlayerAnimationsId": "Block",
+  "Categories": [
+    "Items.Tools",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "MaxStack": 1,
+  "Quality": "Uncommon",
+  "ItemSoundSetId": "ISS_Blocks_Wood",
+  "IconProperties": {
+    "Scale": 1,
+    "Rotation": [
+      22.5,
+      45,
+      0
+    ],
+    "Translation": [
+      0,
+      0
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+@TrainLabel = (FontSize: 12, TextColor: #dce8d9, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center);
+@TrainStyle = TextButtonStyle(
+  Default: (Background: $C.@TertiaryDefaultButtonBackground, LabelStyle: @TrainLabel),
+  Hovered: (Background: $C.@TertiaryHoveredButtonBackground, LabelStyle: @TrainLabel),
+  Pressed: (Background: $C.@TertiaryPressedButtonBackground, LabelStyle: @TrainLabel),
+  Disabled: (Background: $C.@TertiaryDisabledButtonBackground, LabelStyle: (...@TrainLabel, TextColor: #718183)),
+  Sounds: $C.@ButtonSounds
+);
+Group { LayoutMode: Top; Anchor: (Height: 88, Bottom: 6); Background: $T.@Card; Padding: (Full: 8);
+  Group { LayoutMode: Left; Anchor: (Height: 28, Bottom: 2);
+    AssetImage #Icon { Anchor: (Width: 28, Height: 28, Right: 10); }
+    Label #Name { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 16, VerticalAlignment: Center); }
+    Label #Level { TextTooltipStyle: $C.@DefaultTextTooltipStyle; Anchor: (Width: 36); Style: (...$C.@DefaultLabelStyle, FontSize: 24, TextColor: #e0c891, RenderBold: true, HorizontalAlignment: End); }
+  }
+  Label #Tier { Anchor: (Height: 18); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #8da2b0, VerticalAlignment: Center); }
+  Group { LayoutMode: Left; Anchor: (Height: 24);
+    TextButton #Train { TextTooltipStyle: $C.@DefaultTextTooltipStyle; Style: @TrainStyle; Anchor: (Width: 84, Height: 24, Right: 4); Padding: (Horizontal: 4); Text: ""; }
+    TextButton #SpendPoint { TextTooltipStyle: $C.@DefaultTextTooltipStyle; Style: @TrainStyle; Anchor: (Width: 74, Height: 24); Padding: (Horizontal: 4); Text: "Point +1"; }
+  }
+}

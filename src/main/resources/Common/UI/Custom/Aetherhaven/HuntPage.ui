@@ -1,0 +1,59 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+$C.@PageOverlay { LayoutMode: Middle;
+ $C.@DecoratedContainer { Anchor: (Width: 1050, Height: 750);
+  #Title { Label { Text: "THE HUNTER'S LODGE"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+  #Content { LayoutMode: Top; Padding: (Full: 22);
+   Group { LayoutMode: Left; FlexWeight: 1;
+    Group { LayoutMode: Top; Anchor: (Width: 270, Right: 20); Padding: (Full: 18); Background: $T.@Panel;
+     AssetImage { AssetPath: "Icons/ModelsGenerated/Aetherhaven_Monster_Hunter.png"; Anchor: (Width: 148, Height: 148, Left: 42); }
+     Label { Text: "KAEL THORNE"; Anchor: (Height: 32); Style: (...$C.@DefaultLabelStyle, FontSize: 20, RenderBold: true, HorizontalAlignment: Center); }
+     Label #Record { Anchor: (Height: 38); Style: (...$C.@DefaultLabelStyle, FontSize: 16, TextColor: #d2bc85, HorizontalAlignment: Center); }
+     Label #Health { Anchor: (Height: 28, Top: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #bed5c8); }
+     Group { Anchor: (Width: 226, Height: 10); Background: $T.@Inset; Group #HealthFill { Anchor: (Left: 0, Width: 0, Height: 10); Background: #79ad98; } }
+     Label #Stats { Anchor: (Height: 64, Top: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 16, Wrap: true, TextColor: #bed5c8); }
+     Group { FlexWeight: 1; }
+     Label #Gold { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #d2bc85); }
+     $C.@TextButton #Start { Text: "Start run"; Anchor: (Height: 42); }
+     Label { Text: "Defeat restores the Hunter immediately. Each new run needs your order."; Anchor: (Height: 66, Top: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true); }
+    }
+    Group { LayoutMode: Top; FlexWeight: 1;
+     Group { LayoutMode: Left; Anchor: (Height: 38, Bottom: 16);
+      $C.@SecondaryTextButton #TabRun { Text: "Run"; FlexWeight: 1; Anchor: (Right: 6); }
+      $C.@SecondaryTextButton #TabCreatures { Text: "Creatures"; FlexWeight: 1; Anchor: (Right: 6); }
+      $C.@SecondaryTextButton #TabTraining { Text: "Training"; FlexWeight: 1; Anchor: (Right: 6); }
+      $C.@SecondaryTextButton #TabSpoils { Text: "Spoils"; FlexWeight: 1; }
+     }
+     Group #RunPanel { LayoutMode: Top; FlexWeight: 1; Padding: (Full: 22); Background: $T.@Panel;
+      Label #Wave { Anchor: (Height: 54); Style: (...$C.@DefaultLabelStyle, FontSize: 29, RenderBold: true, TextColor: #9dceba); }
+      Label #Status { Anchor: (Height: 56); Style: (...$C.@DefaultLabelStyle, FontSize: 18, Wrap: true, TextColor: #d2bc85); }
+      Label #RunInfo { Anchor: (Height: 44); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true); }
+      Label #RunDetails { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true, TextColor: #c0cbbb); }
+     }
+     Group #CreaturesPanel { LayoutMode: Top; FlexWeight: 1;
+      Label { Text: "FIELD BESTIARY"; Anchor: (Height: 38); Style: (...$C.@DefaultLabelStyle, FontSize: 20, RenderBold: true); }
+      Label { Text: "Bring samples from creatures found in the world. Unlocks are permanent and join the next run."; Anchor: (Height: 58); Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true); }
+      Group #CreatureCards { LayoutMode: Top; FlexWeight: 1; }
+      Group { LayoutMode: Left; Anchor: (Height: 38, Top: 8);
+       $C.@SecondaryTextButton #CreaturePrevious { Text: "Previous"; Anchor: (Width: 140); Padding: (Horizontal: 8); }
+       Label #CreaturePage { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 14, HorizontalAlignment: Center, VerticalAlignment: Center); }
+       $C.@SecondaryTextButton #CreatureNext { Text: "Next"; Anchor: (Width: 140); Padding: (Horizontal: 8); }
+      }
+     }
+     Group #TrainingPanel { LayoutMode: Top; FlexWeight: 1;
+      Label { Text: "PREPARE FOR A LONGER RUN"; Anchor: (Height: 38); Style: (...$C.@DefaultLabelStyle, FontSize: 20, RenderBold: true); }
+      Group #TrainingCards { LayoutMode: TopScrolling; FlexWeight: 1; ScrollbarStyle: $C.@DefaultScrollbarStyle; }
+     }
+     Group #SpoilsPanel { LayoutMode: Top; FlexWeight: 1;
+      Label { Text: "LODGE SPOILS"; Anchor: (Height: 38); Style: (...$C.@DefaultLabelStyle, FontSize: 20, RenderBold: true); }
+      Label { Text: "Collected drops are kept when a run ends. Full storage pauses the next wave."; Anchor: (Height: 54); Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true); }
+      Group #SpoilsCards { LayoutMode: TopScrolling; FlexWeight: 1; ScrollbarStyle: $C.@DefaultScrollbarStyle; }
+      Label #SpoilsEmpty { Text: "No spoils collected yet."; Anchor: (Height: 40); Style: (...$C.@DefaultLabelStyle, FontSize: 15); }
+     }
+    }
+   }
+   Label #Hint { Anchor: (Height: 54, Top: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #d2bc85); }
+  }
+ }
+}
+$C.@BackButton {}

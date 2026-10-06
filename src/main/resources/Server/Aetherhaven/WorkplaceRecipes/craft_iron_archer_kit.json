@@ -1,0 +1,27 @@
+{
+  "id": "craft_iron_archer_kit",
+  "name": "Iron Archer Kit",
+  "workplace": "armorCrafting",
+  "sourceRecipe": "workplace:iron_archer_kit",
+  "bench": "Armor_Bench",
+  "benchTier": 1,
+  "skillLevel": 4,
+  "townRank": "D",
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 24
+    },
+    {
+      "itemId": "Ingredient_Leather_Light",
+      "count": 8
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 12
+    }
+  ],
+  "output": "Aetherhaven_Iron_Archer_Kit",
+  "outputCount": 1,
+  "workSeconds": 60
+}

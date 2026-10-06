@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_seeds_corn_eternal",
+  "name": "Seeds Corn Eternal",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_seeds_corn_eternal",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 3,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 30
+    }
+  ],
+  "output": "Plant_Seeds_Corn_Eternal",
+  "outputCount": 1,
+  "workSeconds": 14
+}

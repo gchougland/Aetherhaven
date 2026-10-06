@@ -54,7 +54,7 @@ def world_role(
         "MemoriesCategory": "Aetherhaven",
         "MemoriesNameOverride": {"Compute": "MemoriesNameOverride"},
         "DisableDamageGroups": ["Self", "Player", "Aetherhaven_Townsfolk", "Friendly"],
-        "CombatConfig": {"EntityEffect": "Immunity_Environmental"},
+        "CombatConfig": {"EntityEffects": ["Immunity_Environmental"]},
         "BusyStates": ["$Interaction"],
         "Invulnerable": {"Compute": "Invulnerable"},
         "KnockbackScale": 0.0,

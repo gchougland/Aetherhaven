@@ -44,7 +44,7 @@ public final class FrontFacing {
         };
     }
 
-    /** Dominant look cardinal from player body yaw (yaw 0 faces north / {@code -Z}). */
+    /** Dominant look cardinal from player look yaw (yaw 0 faces north / {@code -Z}). */
     @Nonnull
     public static WallCardinal lookCardinalFromYaw(float yawRadians) {
         double dx = -Math.sin(yawRadians);

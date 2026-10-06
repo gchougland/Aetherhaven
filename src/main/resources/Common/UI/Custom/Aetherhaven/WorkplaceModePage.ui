@@ -1,0 +1,101 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+$C.@PageOverlay { LayoutMode: Middle;
+  $C.@DecoratedContainer { Anchor: (Width: 800, Height: 680);
+    #Title { Label { Text: "BUILDING STAFF"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+    #Content { LayoutMode: Top; Padding: (Full: 24);
+      Label { Text: "One staff. Shape your town."; Anchor: (Height: 34, Bottom: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 16, TextColor: #acbdb7, HorizontalAlignment: Center); }
+      Group { LayoutMode: Left; Anchor: (Height: 180, Bottom: 12);
+        Button #BUILD { LayoutMode: Top; FlexWeight: 1; Anchor: (Right: 10); Padding: (Full: 14);
+          Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed));
+          Group { LayoutMode: Left; Anchor: (Height: 86, Bottom: 8);
+            Group { Anchor: (Width: 94); ItemIcon { ItemId: "Aetherhaven_Building_Staff"; Anchor: (Left: 12, Top: 2, Width: 72, Height: 72); } }
+            Group { LayoutMode: Top; FlexWeight: 1;
+              Label { Text: "BUILDING"; Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 10, TextColor: #a9c7b4, RenderBold: true); }
+              Label { Text: "Build structures"; Anchor: (Height: 42); Style: (...$C.@DefaultLabelStyle, FontSize: 20, TextColor: #eee0bf, Wrap: true, RenderBold: true); }
+              Label #Active { Text: "SELECTED"; Anchor: (Height: 18); Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #9cdeb4, RenderBold: true); }
+            }
+          }
+          Label { Text: "Guide construction and assemble your town."; Anchor: (Height: 44); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #b5c6ce, Wrap: true); }
+        }
+        Button #CREATE { LayoutMode: Top; FlexWeight: 1; Anchor: (Right: 10); Padding: (Full: 14);
+          Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed));
+          Group { LayoutMode: Left; Anchor: (Height: 86, Bottom: 8);
+            Group { Anchor: (Width: 94); Group { Anchor: (Left: 10, Top: 14, Width: 58, Height: 2); Background: #709890; }
+Group { Anchor: (Left: 10, Top: 60, Width: 58, Height: 2); Background: #709890; }
+Group { Anchor: (Left: 10, Top: 14, Width: 2, Height: 48); Background: #709890; }
+Group { Anchor: (Left: 66, Top: 14, Width: 2, Height: 48); Background: #709890; }
+Group { Anchor: (Left: 7, Top: 11, Width: 7, Height: 7); Background: #a1d4b7; }
+Group { Anchor: (Left: 65, Top: 11, Width: 7, Height: 7); Background: #a1d4b7; }
+Group { Anchor: (Left: 7, Top: 59, Width: 7, Height: 7); Background: #a1d4b7; }
+Group { Anchor: (Left: 65, Top: 59, Width: 7, Height: 7); Background: #a1d4b7; }
+Group { Anchor: (Left: 31, Top: 32, Width: 20, Height: 4); Background: #a1d4b7; }
+Group { Anchor: (Left: 39, Top: 24, Width: 4, Height: 20); Background: #a1d4b7; } }
+            Group { LayoutMode: Top; FlexWeight: 1;
+              Label { Text: "WORKPLACES"; Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 10, TextColor: #a9c7b4, RenderBold: true); }
+              Label { Text: "Create workplace"; Anchor: (Height: 42); Style: (...$C.@DefaultLabelStyle, FontSize: 20, TextColor: #eee0bf, Wrap: true, RenderBold: true); }
+              Label #Active { Text: "SELECTED"; Anchor: (Height: 18); Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #9cdeb4, RenderBold: true); }
+            }
+          }
+          Label { Text: "Mark two corners to lay out a new work area."; Anchor: (Height: 44); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #b5c6ce, Wrap: true); }
+        }
+      }
+      Group { LayoutMode: Left; Anchor: (Height: 180, Bottom: 12);
+        Button #SELECT { LayoutMode: Top; FlexWeight: 1; Anchor: (Right: 10); Padding: (Full: 14);
+          Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed));
+          Group { LayoutMode: Left; Anchor: (Height: 86, Bottom: 8);
+            Group { Anchor: (Width: 94); Group { Anchor: (Left: 10, Top: 14, Width: 58, Height: 2); Background: #709890; }
+Group { Anchor: (Left: 10, Top: 60, Width: 58, Height: 2); Background: #709890; }
+Group { Anchor: (Left: 10, Top: 14, Width: 2, Height: 48); Background: #709890; }
+Group { Anchor: (Left: 66, Top: 14, Width: 2, Height: 48); Background: #709890; }
+Group { Anchor: (Left: 7, Top: 11, Width: 7, Height: 7); Background: #a1d4b7; }
+Group { Anchor: (Left: 65, Top: 11, Width: 7, Height: 7); Background: #a1d4b7; }
+Group { Anchor: (Left: 7, Top: 59, Width: 7, Height: 7); Background: #a1d4b7; }
+Group { Anchor: (Left: 65, Top: 59, Width: 7, Height: 7); Background: #a1d4b7; }
+AssetImage { AssetPath: "UI/Custom/cog.png"; Anchor: (Left: 28, Top: 28, Width: 28, Height: 28); } }
+            Group { LayoutMode: Top; FlexWeight: 1;
+              Label { Text: "WORKPLACES"; Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 10, TextColor: #a9c7b4, RenderBold: true); }
+              Label { Text: "Manage workplace"; Anchor: (Height: 42); Style: (...$C.@DefaultLabelStyle, FontSize: 20, TextColor: #eee0bf, Wrap: true, RenderBold: true); }
+              Label #Active { Text: "SELECTED"; Anchor: (Height: 18); Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #9cdeb4, RenderBold: true); }
+            }
+          }
+          Label { Text: "Open a workplace to manage its name, type and orders."; Anchor: (Height: 44); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #b5c6ce, Wrap: true); }
+        }
+        Button #RESIZE { LayoutMode: Top; FlexWeight: 1; Anchor: (Right: 10); Padding: (Full: 14);
+          Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed));
+          Group { LayoutMode: Left; Anchor: (Height: 86, Bottom: 8);
+            Group { Anchor: (Width: 94); Group { Anchor: (Left: 10, Top: 14, Width: 58, Height: 2); Background: #709890; }
+Group { Anchor: (Left: 10, Top: 60, Width: 58, Height: 2); Background: #709890; }
+Group { Anchor: (Left: 10, Top: 14, Width: 2, Height: 48); Background: #709890; }
+Group { Anchor: (Left: 66, Top: 14, Width: 2, Height: 48); Background: #709890; }
+Group { Anchor: (Left: 7, Top: 11, Width: 7, Height: 7); Background: #a1d4b7; }
+Group { Anchor: (Left: 65, Top: 11, Width: 7, Height: 7); Background: #a1d4b7; }
+Group { Anchor: (Left: 7, Top: 59, Width: 7, Height: 7); Background: #a1d4b7; }
+Group { Anchor: (Left: 65, Top: 59, Width: 7, Height: 7); Background: #a1d4b7; }
+Group { Anchor: (Left: 26, Top: 30, Width: 58, Height: 2); Background: #d9b675; }
+Group { Anchor: (Left: 26, Top: 74, Width: 58, Height: 2); Background: #d9b675; }
+Group { Anchor: (Left: 26, Top: 30, Width: 2, Height: 46); Background: #d9b675; }
+Group { Anchor: (Left: 82, Top: 30, Width: 2, Height: 46); Background: #d9b675; }
+AssetImage { AssetPath: "UI/Custom/arrow_forward_256.png"; Anchor: (Left: 39, Top: 35, Width: 26, Height: 26); } }
+            Group { LayoutMode: Top; FlexWeight: 1;
+              Label { Text: "WORKPLACES"; Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 10, TextColor: #a9c7b4, RenderBold: true); }
+              Label { Text: "Resize workplace"; Anchor: (Height: 42); Style: (...$C.@DefaultLabelStyle, FontSize: 20, TextColor: #eee0bf, Wrap: true, RenderBold: true); }
+              Label #Active { Text: "SELECTED"; Anchor: (Height: 18); Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #9cdeb4, RenderBold: true); }
+            }
+          }
+          Label { Text: "Select a workplace, then mark its new corners."; Anchor: (Height: 44); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #b5c6ce, Wrap: true); }
+        }
+      }
+      Button #MINESHAFT { LayoutMode: Left; Anchor: (Height: 70, Bottom: 8); Padding: (Full: 14);
+        Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed));
+        Group { LayoutMode: Top; Anchor: (Width: 220, Right: 16);
+          Label { Text: "Plan mineshaft"; Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 20, TextColor: #eee0bf, RenderBold: true); }
+          Label #Active { Text: "SELECTED"; Anchor: (Height: 18); Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #9cdeb4, RenderBold: true); }
+        }
+        Label { Text: "Choose the entrance ground, then set a direction and length through the rock."; FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #b5c6ce, Wrap: true); }
+      }
+      Label { Text: "Your saved workplaces stay unchanged until you save the new plan."; Anchor: (Height: 42, Top: 6); Style: (...$C.@DefaultLabelStyle, Wrap: true, FontSize: 13, TextColor: #91a6ad, HorizontalAlignment: Center); }
+    }
+  }
+}
+$C.@BackButton {}

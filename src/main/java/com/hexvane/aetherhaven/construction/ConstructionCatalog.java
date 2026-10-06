@@ -24,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -35,6 +36,19 @@ public final class ConstructionCatalog {
 
     private final Map<String, ConstructionDefinition> byId;
     private final Set<String> customConstructionIds;
+    // Only known catalog keys are cached, so arbitrary saved/queried IDs cannot grow this map.
+    private final Map<String, GameplayResolution> gameplayResolutions = new ConcurrentHashMap<>();
+
+    private record AliasDependency(ConstructionDefinition definition, List<String> aliases) {
+        boolean unchanged() { return definition.getCountsAsConstructionIds() == aliases; }
+    }
+
+    private record GameplayResolution(List<String> ids, AliasDependency[] dependencies) {
+        boolean current() {
+            for (AliasDependency dependency : dependencies) if (!dependency.unchanged()) return false;
+            return true;
+        }
+    }
 
     private ConstructionCatalog(Map<String, ConstructionDefinition> byId, Set<String> customConstructionIds) {
         this.byId = byId;
@@ -257,19 +271,27 @@ public final class ConstructionCatalog {
         if (def == null) {
             return List.of(start);
         }
+        GameplayResolution cached = gameplayResolutions.get(start);
+        if (cached != null && cached.current()) return cached.ids();
+        Map<ConstructionDefinition, AliasDependency> dependencies = new LinkedHashMap<>();
         List<String> aliases = def.getCountsAsConstructionIds();
+        dependencies.put(def, new AliasDependency(def, aliases));
+        List<String> result;
         if (aliases.isEmpty()) {
             String id = def.getId() != null ? def.getId() : start;
-            return List.of(id);
-        }
-        List<String> out = new ArrayList<>();
-        for (String alias : aliases) {
-            String resolved = resolveAliasChain(alias);
-            if (!resolved.isEmpty() && !out.contains(resolved)) {
-                out.add(resolved);
+            result = List.of(id);
+        } else {
+            List<String> out = new ArrayList<>();
+            for (String alias : aliases) {
+                String resolved = resolveAliasChain(alias, dependencies);
+                if (!resolved.isEmpty() && !out.contains(resolved)) {
+                    out.add(resolved);
+                }
             }
+            result = List.copyOf(out);
         }
-        return List.copyOf(out);
+        gameplayResolutions.put(start, new GameplayResolution(result, dependencies.values().toArray(AliasDependency[]::new)));
+        return result;
     }
 
     /** True when {@code plotStoredConstructionId} resolves to {@code wantedGameplayConstructionId} (any alias). */
@@ -297,7 +319,7 @@ public final class ConstructionCatalog {
     }
 
     @Nonnull
-    private String resolveAliasChain(@Nonnull String startId) {
+    private String resolveAliasChain(@Nonnull String startId, Map<ConstructionDefinition, AliasDependency> dependencies) {
         Set<String> visited = new HashSet<>();
         String current = startId.trim();
         for (int i = 0; i < 64; i++) {
@@ -309,6 +331,7 @@ public final class ConstructionCatalog {
                 return current;
             }
             List<String> aliases = def.getCountsAsConstructionIds();
+            dependencies.put(def, new AliasDependency(def, aliases));
             if (aliases.isEmpty()) {
                 return def.getId() != null ? def.getId() : current;
             }

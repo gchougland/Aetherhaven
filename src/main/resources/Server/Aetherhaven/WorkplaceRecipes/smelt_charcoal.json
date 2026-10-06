@@ -1,0 +1,9 @@
+{
+  "id": "smelt_charcoal",
+  "name": "Charcoal",
+  "workplace": "smelting",
+  "sourceRecipe": "native:furnace_charcoal",
+  "bench": "Furnace",
+  "benchTier": 1,
+  "skillLevel": 1
+}

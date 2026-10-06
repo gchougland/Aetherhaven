@@ -112,6 +112,12 @@ public final class GuardAutonomousCombatSystem extends EntityTickingSystem<Entit
         if (locked != null && locked.isValid() && RtsHostileQuery.isGuardThreatTarget(guardRef, locked, store, playerRef)) {
             return;
         }
+        GuardFollowPlayerState escort = store.getComponent(guardRef, GuardFollowPlayerState.getComponentType());
+        if (escort != null && escort.isActive()) {
+            RtsGuardCombatSupport.clearCombatTarget(npc, commandBuffer);
+            NpcSupportUtil.setState(guardRef, AetherhavenConstants.NPC_STATE_GUARD_PATROL, null, commandBuffer);
+            commandBuffer.putComponent(guardRef, NPCEntity.getComponentType(), npc);
+        }
         Ref<EntityStore> squadTarget = resolveFollowSquadThreat(guardRef, playerRef, store);
         Ref<EntityStore> threat = squadTarget != null ? squadTarget : resolveThreat(guardRef, playerRef, store);
         if (threat == null

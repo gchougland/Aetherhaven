@@ -1,0 +1,27 @@
+{
+  "id": "craft_glow_ring",
+  "name": "Glow Ring",
+  "workplace": "jewelry",
+  "sourceRecipe": "workplace:craft_glow_ring",
+  "bench": "Aetherhaven_Jewelry_Crafting_Bench",
+  "benchTier": 1,
+  "skillLevel": 5,
+  "requiresKnowledge": true,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Silver",
+      "count": 4
+    },
+    {
+      "itemId": "Ingredient_Crystal_Cyan",
+      "count": 6
+    },
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 4
+    }
+  ],
+  "output": "Aetherhaven_Ring_Glow",
+  "outputCount": 1,
+  "workSeconds": 40
+}

@@ -1,0 +1,9 @@
+{
+  "id": "cook_berry_salad",
+  "name": "Berry salad",
+  "workplace": "cooking",
+  "sourceRecipe": "Food_Salad_Berry_Recipe_Generated_0",
+  "bench": "Cookingbench",
+  "benchTier": 1,
+  "skillLevel": 1
+}

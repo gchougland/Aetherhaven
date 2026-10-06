@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Adamantite_Mage_Kit",
+  "name": "Adamantite Mage Kit",
+  "guardClass": "guard_mage",
+  "equipmentProfile": "guard_mage_adamantite",
+  "description": "+10 Intelligence, +9 Vitality."
+}

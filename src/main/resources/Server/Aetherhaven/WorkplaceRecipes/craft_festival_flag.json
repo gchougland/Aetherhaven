@@ -1,0 +1,27 @@
+{
+  "id": "craft_festival_flag",
+  "name": "Festival Flag",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:craft_festival_flag",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 3,
+  "requiresKnowledge": true,
+  "inputs": [
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 12
+    },
+    {
+      "itemId": "Ingredient_Fabric_Scrap_Linen",
+      "count": 8
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 2
+    }
+  ],
+  "output": "Aetherhaven_Prop_Festival_Flag",
+  "outputCount": 1,
+  "workSeconds": 25
+}

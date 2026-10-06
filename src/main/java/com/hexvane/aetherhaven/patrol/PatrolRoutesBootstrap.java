@@ -55,5 +55,8 @@ public final class PatrolRoutesBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new GuardFollowPlayerSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new GuardAutonomousCombatSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new GuardCombatProvocationDamageSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.guild.GuardAttributeCombat.Refresh());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.guild.GuardAttributeCombat.CombatDamage());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.clinic.ResidentRecoverySystem());
     }
 }

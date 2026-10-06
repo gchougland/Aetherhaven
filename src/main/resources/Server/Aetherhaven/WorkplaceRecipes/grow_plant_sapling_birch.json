@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_sapling_birch",
+  "name": "Sapling Birch",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_sapling_birch",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 3,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 10
+    }
+  ],
+  "output": "Plant_Sapling_Birch",
+  "outputCount": 1,
+  "workSeconds": 14
+}

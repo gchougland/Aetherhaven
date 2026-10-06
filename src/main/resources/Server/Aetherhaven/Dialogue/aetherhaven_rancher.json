@@ -448,6 +448,23 @@
           "next": "main_hub"
         }
       ]
+    },
+    "rep_reward_25": {
+      "speaker": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.root.speaker",
+      "text": "aetherhaven_core_rewards.rancher.25",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_rancher_25"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
     }
   }
 }

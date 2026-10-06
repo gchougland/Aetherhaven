@@ -1,0 +1,27 @@
+{
+  "id": "craft_alchemist_kit",
+  "name": "Brewer's Case",
+  "workplace": "alchemy",
+  "sourceRecipe": "workplace:alchemist_kit",
+  "bench": "Alchemybench",
+  "benchTier": 1,
+  "skillLevel": 3,
+  "requiresKnowledge": true,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Copper",
+      "count": 3
+    },
+    {
+      "itemId": "Ingredient_Leather_Light",
+      "count": 4
+    },
+    {
+      "itemId": "Potion_Empty_Small",
+      "count": 3
+    }
+  ],
+  "output": "Aetherhaven_Alchemist_Kit",
+  "outputCount": 1,
+  "workSeconds": 25
+}

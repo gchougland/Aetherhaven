@@ -1,0 +1,5 @@
+commands.root = Gameplay testing tools for world editors.
+commands.escort = Inspect or control the nearest loaded guard in your town.
+commands.escort.action = status, visit, follow, stop, wait, resume, defensive, or offensive
+commands.residents = Check population and open the nearest Townsfolk profile.
+commands.residents.action = Use status or profile.

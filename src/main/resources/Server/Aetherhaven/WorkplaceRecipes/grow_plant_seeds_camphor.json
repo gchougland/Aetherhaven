@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_seeds_camphor",
+  "name": "Seeds Camphor",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_seeds_camphor",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 3,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 10
+    }
+  ],
+  "output": "Plant_Seeds_Camphor",
+  "outputCount": 1,
+  "workSeconds": 14
+}

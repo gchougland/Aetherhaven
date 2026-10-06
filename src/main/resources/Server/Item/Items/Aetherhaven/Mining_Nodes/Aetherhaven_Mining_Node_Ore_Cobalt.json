@@ -1,0 +1,39 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Ore_Cobalt_Slate.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Ore_Cobalt_Slate.png",
+  "BlockType": {
+    "DrawType": "CubeWithModel",
+    "CustomModel": "Resources/Ores/Ore_Large.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Resources/Ores/Ore_Textures/Cobalt.png",
+        "Weight": 1
+      }
+    ],
+    "RandomRotation": "YawStep90",
+    "BlockParticleSetId": "Ore",
+    "Textures": [
+      {
+        "Weight": 1,
+        "All": "BlockTextures/Rock_Slate_Cobalt_Cracks03.png"
+      }
+    ],
+    "BlockSoundSetId": "Ore",
+    "PhysicalMaterialId": "Stone",
+    "ParticleColor": "#3e5578",
+    "TextureComputedColor": "#28292A",
+    "Material": "Solid",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Unbreakable"
+      }
+    },
+    "Flags": {},
+    "Support": {}
+  },
+  "PlayerAnimationsId": "Block",
+  "MaxStack": 1,
+  "ItemSoundSetId": "ISS_Blocks_Stone"
+}

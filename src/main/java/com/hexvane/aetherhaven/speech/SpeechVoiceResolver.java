@@ -80,6 +80,11 @@ public final class SpeechVoiceResolver {
         String roleId = roleId(npcRef, store);
         if (!roleId.isEmpty()) {
             VillagerDefinition def = plugin.getVillagerDefinitionCatalog().byNpcRoleId(roleId);
+            if (def == null) {
+                var resident = store.getComponent(npcRef, com.hexvane.aetherhaven.villager.TownVillagerBinding.getComponentType());
+                if (resident != null) def = plugin.getVillagerDefinitionCatalog()
+                    .byDialogueVillagerKind(resident.getKind().replaceFirst("^(visitor_|rescue_)", ""));
+            }
             if (def != null) {
                 return def.getSpeechVoiceId();
             }

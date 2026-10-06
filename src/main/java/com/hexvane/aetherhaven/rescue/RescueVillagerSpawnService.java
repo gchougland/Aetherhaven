@@ -26,7 +26,6 @@ import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3d;
@@ -37,6 +36,31 @@ public final class RescueVillagerSpawnService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     private RescueVillagerSpawnService() {}
+
+    @Nullable
+    public static UUID trySpawnBesideOpenedCoffin(World world, Store<EntityStore> store, TownRecord town,
+                                                  Vector3i coffin, UUID player) {
+        return trySpawnBesideOpenedCoffin(world,store,town,coffin,player,java.time.Clock.systemDefaultZone());
+    }
+
+    @Nullable
+    static UUID trySpawnBesideOpenedCoffin(World world, Store<EntityStore> store, TownRecord town,
+                                         Vector3i coffin, UUID player, java.time.Clock calendar) {
+        var trigger = RescueVillagerTriggers.HALLOWEEN;
+        if (!com.hexvane.aetherhaven.halloween.HalloweenResident.rescueSeason(calendar)
+            || !HalloweenCoffinUseSystem.isOpenedCoffin(ChunkSectionBlockUtil.blockType(world,coffin))
+            || anyAffiliatedTownAlreadyHasRescue(List.of(town), trigger)) return null;
+        if(!HalloweenRescueEncounters.mayOpen(world,store,town,coffin,player,calendar))return null;
+        for (int radius = 1; radius <= 3; radius++) {
+            for (int dx = -radius; dx <= radius; dx++) for (int dz = -radius; dz <= radius; dz++) {
+                if (Math.max(Math.abs(dx), Math.abs(dz)) != radius) continue;
+                var stand = resolveRescueStandPosition(world, coffin.x + dx, coffin.y, coffin.z + dz);
+                if (stand != null) return spawnRescueAt(world, store, town, stand, player, trigger,
+                    "RESCUE_COFFIN", "Opened coffin at " + coffin);
+            }
+        }
+        return null;
+    }
 
     /**
      * Town that should receive a field rescue for this player. Prefers an owned town (then any
@@ -98,21 +122,23 @@ public final class RescueVillagerSpawnService {
         @Nonnull UUID townId,
         @Nonnull String rescueBindingKind
     ) {
-        AtomicBoolean found = new AtomicBoolean(false);
-        store.forEachEntityParallel(TownVillagerBinding.getComponentType(), (index, archetypeChunk, commandBuffer) -> {
-            if (found.get()) {
-                return;
+        return findActiveRescueNpc(store,townId,rescueBindingKind)!=null;
+    }
+
+    @Nullable
+    private static Ref<EntityStore> findActiveRescueNpc(Store<EntityStore> store,UUID townId,String rescueBindingKind) {
+        var found=new java.util.ArrayList<Ref<EntityStore>>(1);
+        store.forEachChunk(TownVillagerBinding.getComponentType(),
+            (java.util.function.BiPredicate<com.hypixel.hytale.component.ArchetypeChunk<EntityStore>,com.hypixel.hytale.component.CommandBuffer<EntityStore>>)(chunk,buffer)->{
+            for(int index=0;index<chunk.size();index++) {
+                var binding=chunk.getComponent(index,TownVillagerBinding.getComponentType());
+                if(binding==null||!townId.equals(binding.getTownId())||!rescueBindingKind.equals(binding.getKind()))continue;
+                var ref=chunk.getReferenceTo(index);
+                if(ref!=null&&ref.isValid()){found.add(ref);return true;}
             }
-            TownVillagerBinding b = archetypeChunk.getComponent(index, TownVillagerBinding.getComponentType());
-            if (b == null || !townId.equals(b.getTownId()) || !rescueBindingKind.equals(b.getKind())) {
-                return;
-            }
-            Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
-            if (ref != null && ref.isValid()) {
-                found.set(true);
-            }
+            return false;
         });
-        return found.get();
+        return found.isEmpty()?null:found.getFirst();
     }
 
     /**
@@ -193,9 +219,34 @@ public final class RescueVillagerSpawnService {
         @Nonnull String originKind,
         @Nonnull String originDetail
     ) {
-        if (townHasActiveRescueNpc(store, town.getTownId(), trigger.rescueBindingKind())) {
+        boolean halloween=com.hexvane.aetherhaven.halloween.HalloweenResident.RESCUE_KIND.equals(trigger.rescueBindingKind());
+        if(halloween&&anyAffiliatedTownAlreadyHasRescue(List.of(town),trigger))return null;
+        var active=findActiveRescueNpc(store,town.getTownId(),trigger.rescueBindingKind());
+        if(active!=null) {
+            if(halloween)HalloweenRescueEncounters.observe(active,store);
             return null;
         }
+        var reservation=halloween?town.halloweenRescue().reserve(world.getName(),(int)Math.floor(stand.x),(int)Math.floor(stand.y),(int)Math.floor(stand.z)):null;
+        if(halloween&&reservation==null)return null;
+        if(halloween)HalloweenRescueEncounters.changed(town);
+        boolean succeeded=false;
+        try {
+            UUID result=spawnRescueEntity(world,store,town,stand,faceTowardPlayerUuid,trigger,originKind,originDetail,reservation);
+            succeeded=result!=null;return result;
+        }finally {
+            if(halloween&&!succeeded) {
+                var current=town.halloweenRescue().current();
+                if(current!=null&&current.token().equals(reservation.token())&&current.entity()!=null)
+                    com.hexvane.aetherhaven.townsfolk.PendingEntityRemovalService.schedule(world,current.entity(),"halloween_failed_spawn");
+                if(town.halloweenRescue().rollback(reservation.token()))HalloweenRescueEncounters.changed(town);
+            }
+        }
+    }
+
+    @Nullable
+    private static UUID spawnRescueEntity(World world,Store<EntityStore> store,TownRecord town,Vector3d stand,
+            UUID faceTowardPlayerUuid,RescueVillagerTrigger trigger,String originKind,String originDetail,
+            HalloweenRescueReceipt.Encounter reservation) {
         Rotation3f rotation = rotationTowardPlayer(store, stand, faceTowardPlayerUuid);
         NPCPlugin npc = NPCPlugin.get();
         if (npc == null) {
@@ -207,6 +258,12 @@ public final class RescueVillagerSpawnService {
             return null;
         }
         Ref<EntityStore> ref = pair.first();
+        UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
+        UUID spawned = uuidComp != null ? uuidComp.getUuid() : null;
+        if(reservation!=null&&!town.halloweenRescue().bind(reservation.token(),spawned)) {
+            if(spawned!=null)com.hexvane.aetherhaven.townsfolk.PendingEntityRemovalService.schedule(world,spawned,"halloween_cancelled_spawn");
+            return null;
+        }
         store.putComponent(ref, VillagerNeeds.getComponentType(), VillagerNeeds.full());
         String handle = "Villager_" + trigger.rescueBindingKind() + "_" + shortHex(town.getTownId());
         store.putComponent(ref, AetherhavenVillagerHandle.getComponentType(), new AetherhavenVillagerHandle(handle));
@@ -228,8 +285,7 @@ public final class RescueVillagerSpawnService {
             tc.getRotation().set(rotation.pitch(), rotation.yaw(), rotation.roll());
             store.putComponent(ref, TransformComponent.getComponentType(), tc);
         }
-        UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
-        UUID spawned = uuidComp != null ? uuidComp.getUuid() : null;
+        if(reservation!=null){HalloweenRescueEncounters.changed(town);HalloweenRescueEncounters.observe(ref,store);}
         LOGGER.atInfo().log(
             "Spawned %s rescue NPC %s for town %s at %s,%s,%s",
             trigger.logLabel(),

@@ -30,5 +30,13 @@
     "Stretch": 3,
     "Greet": 2,
     "Laugh": 2
+  },
+  "startingSkills": {
+    "logistics": 4,
+    "mining": 2
+  },
+  "startingAttributes": {
+    "vitality": 7,
+    "speed": 7
   }
 }

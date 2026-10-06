@@ -1,0 +1,23 @@
+{
+  "id": "guard_mage_cobalt",
+  "guardNpcRole": "Aetherhaven_Guard_Mage",
+  "displayName": "Cobalt Mage",
+  "hireGoldCost": 45,
+  "armor": [
+    "Aetherhaven_Guard_Armor_Cloth_Cindercloth_Head",
+    "Aetherhaven_Guard_Armor_Cloth_Cindercloth_Chest",
+    "Aetherhaven_Guard_Armor_Cloth_Cindercloth_Hands",
+    "Aetherhaven_Guard_Armor_Cloth_Cindercloth_Legs"
+  ],
+  "hotbar": [
+    {
+      "slot": 0,
+      "itemId": "Weapon_Staff_Cobalt"
+    }
+  ],
+  "attributeCombat": true,
+  "attributeBonuses": {
+    "intelligence": 8,
+    "vitality": 7
+  }
+}

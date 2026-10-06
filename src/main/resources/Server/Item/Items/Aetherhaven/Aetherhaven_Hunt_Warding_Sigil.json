@@ -1,0 +1,36 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_monster_hunter.item.Warding_Sigil.name",
+    "Description": "aetherhaven_monster_hunter.item.Warding_Sigil.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Hunt_Warding_Sigil.png",
+  "Categories": [
+    "Furniture.Decoration",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Model",
+    "Opacity": "Transparent",
+    "CustomModel": "Blocks/Aetherhaven/Hunt/Warding_Sigil.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Aetherhaven/Hunt/Hunt.png",
+        "Weight": 1
+      }
+    ],
+    "HitboxType": "Aetherhaven_Hunt_Warding_Sigil",
+    "VariantRotation": "NESW",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Rocks"
+      }
+    },
+    "BlockParticleSetId": "Stone",
+    "BlockSoundSetId": "Stone",
+    "ParticleColor": "#526566"
+  },
+  "PlayerAnimationsId": "Block",
+  "MaxStack": 10
+}

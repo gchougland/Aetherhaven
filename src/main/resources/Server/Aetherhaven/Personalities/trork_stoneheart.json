@@ -30,5 +30,13 @@
     "LookAround": 4,
     "Fidget": 2,
     "Stretch": 1
+  },
+  "startingSkills": {
+    "mining": 5,
+    "building": 4
+  },
+  "startingAttributes": {
+    "vitality": 8,
+    "strength": 8
   }
 }

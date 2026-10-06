@@ -1,0 +1,41 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+$C.@PageOverlay {
+  LayoutMode: Middle;
+  $C.@DecoratedContainer {
+    Anchor: (Width: 820, Height: 840);
+    #Title { Label { Text: "MINESHAFT ENTRANCE"; Style: (...$C.@TitleStyle); } }
+    #Content {
+      LayoutMode: Top;
+      Padding: (Full: 24);
+      Label { Text: "CHOOSE WHERE TO DIG"; Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 20, RenderBold: true, TextColor: #dec68d); }
+      Label { Text: "The ground you clicked marks the entrance. The first digging row is one block forward. Keep the clicked row and two rows behind it clear for the worker and Workbench."; Anchor: (Height: 58, Bottom: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #b7c9bb); }
+      Label { Text: "WORKPLACE NAME"; Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b7c9bb); }
+      $C.@TextField #Name { Anchor: (Height: 40, Bottom: 16); PlaceholderText: "Mineshaft name"; }
+      Group { LayoutMode: Left; Anchor: (Height: 40, Bottom: 12);
+        $C.@SecondaryTextButton #Direction { Text: "Dig toward North"; FlexWeight: 1; Anchor: (Right: 12); TextTooltipStyle: $C.@DefaultTextTooltipStyle; TooltipText: "Turn the tunnel toward North, East, South or West. The selected ground stays at the entrance."; }
+        $C.@SecondaryTextButton #Layout { Text: "Straight"; FlexWeight: 1; TextTooltipStyle: $C.@DefaultTextTooltipStyle; TooltipText: "Choose a straight tunnel, side branches, or stairs."; }
+      }
+      Label #LayoutDescription { Anchor: (Height: 42, Bottom: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true); }
+      Group { LayoutMode: Left; Anchor: (Height: 40, Bottom: 16);
+        Label { Text: "TUNNEL LENGTH"; Anchor: (Width: 145); Style: (...$C.@DefaultLabelStyle, FontSize: 13, VerticalAlignment: Center, TextColor: #b7c9bb); }
+        $C.@SecondaryTextButton #Shorter { Text: "-"; Anchor: (Width: 76, Right: 8); TextTooltipStyle: $C.@DefaultTextTooltipStyle; TooltipText: "Shorten the tunnel by one block."; }
+        $C.@TextField #Length { Anchor: (Width: 100, Right: 8); PlaceholderText: "12"; TextTooltipStyle: $C.@DefaultTextTooltipStyle; TooltipText: "Number of rows to excavate. The three clear approach rows are added automatically."; }
+        $C.@SecondaryTextButton #Longer { Text: "+"; Anchor: (Width: 76, Right: 14); TextTooltipStyle: $C.@DefaultTextTooltipStyle; TooltipText: "Lengthen the tunnel by one block."; }
+        Label #LengthRange { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 13, VerticalAlignment: Center, TextColor: #b7c9bb); }
+      }
+      Group { LayoutMode: Top; Anchor: (Height: 142, Bottom: 14); Background: $T.@Panel; Padding: (Full: 16);
+        Label #EntrancePosition { Anchor: (Height: 25); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #dec68d); }
+        Label #Area { Anchor: (Height: 25); Style: (...$C.@DefaultLabelStyle, FontSize: 14); }
+        Label #Coordinates { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #b7c9bb); }
+        Label #FirstRow { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #b7c9bb); }
+      }
+      Label #Hint { Anchor: (Height: 58, Bottom: 14); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #dec68d); }
+      Group { LayoutMode: Left; Anchor: (Height: 42);
+        $C.@TextButton #Save { Text: "Save and review"; FlexWeight: 1; Anchor: (Right: 12); }
+        $C.@SecondaryTextButton #Cancel { Text: "Cancel"; Anchor: (Width: 150); }
+      }
+    }
+  }
+}
+$C.@BackButton {}

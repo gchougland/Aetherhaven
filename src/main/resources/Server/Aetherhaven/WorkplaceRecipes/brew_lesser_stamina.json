@@ -1,0 +1,9 @@
+{
+  "id": "brew_lesser_stamina",
+  "name": "Lesser Stamina Potion",
+  "workplace": "alchemy",
+  "sourceRecipe": "Potion_Stamina_Lesser_Recipe_Generated_0",
+  "bench": "Alchemybench",
+  "benchTier": 1,
+  "skillLevel": 2
+}

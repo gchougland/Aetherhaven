@@ -1,0 +1,31 @@
+{
+  "id": "jewel_ring_gold_sapphire_legendary",
+  "name": "Legendary gold sapphire ring",
+  "workplace": "jewelry",
+  "sourceRecipe": "workplace:jewel_ring_gold_sapphire_legendary",
+  "bench": "Aetherhaven_Jewelry_Crafting_Bench",
+  "benchTier": 1,
+  "skillLevel": 10,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Gold",
+      "count": 5
+    },
+    {
+      "itemId": "Rock_Gem_Sapphire",
+      "count": 1
+    },
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 5
+    },
+    {
+      "itemId": "Ingredient_Life_Essence_Concentrated",
+      "count": 2
+    }
+  ],
+  "output": "Aetherhaven_Ring_Gold_Sapphire",
+  "outputCount": 1,
+  "workSeconds": 90,
+  "jewelryRarity": "legendary"
+}

@@ -1,0 +1,68 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Armor_Adamantite_Chest.name"
+  },
+  "Quality": "Rare",
+  "ItemLevel": 40,
+  "PlayerAnimationsId": "Block",
+  "ItemSoundSetId": "ISS_Armor_Heavy",
+  "Categories": [],
+  "Icon": "Icons/ItemsGenerated/Armor_Adamantite_Chest.png",
+  "IconProperties": {
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Scale": 0.335,
+    "Translation": [
+      0.3,
+      0.3
+    ]
+  },
+  "Model": "Items/Armors/Adamantite/Chest.blockymodel",
+  "Texture": "Items/Armors/Adamantite/Chest_Texture.png",
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    }
+  },
+  "Armor": {
+    "ArmorSlot": "Chest",
+    "BaseDamageResistance": 0,
+    "CosmeticsToHide": [
+      "Overtop"
+    ],
+    "DamageResistance": {},
+    "StatModifiers": {},
+    "DamageClassEnhancement": {
+      "Light": [
+        {
+          "Amount": 0.06,
+          "CalculationType": "Multiplicative"
+        }
+      ]
+    }
+  },
+  "MaxDurability": 0,
+  "DurabilityLossOnHit": 0,
+  "Tags": {
+    "Type": [
+      "Armor"
+    ],
+    "Family": [
+      "Adamantite"
+    ]
+  }
+}

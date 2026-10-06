@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_seeds_cotton_eternal",
+  "name": "Seeds Cotton Eternal",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_seeds_cotton_eternal",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 7,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 80
+    }
+  ],
+  "output": "Plant_Seeds_Cotton_Eternal",
+  "outputCount": 1,
+  "workSeconds": 22
+}

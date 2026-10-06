@@ -15,6 +15,10 @@ public final class PlotCreatorDraftLoader {
     private PlotCreatorDraftLoader() {}
 
     public static void loadIntoDraft(@Nonnull PlotCreatorDraft draft, @Nonnull ConstructionDefinition def) {
+        draft.getMiningNodes().clear();
+        var layout=def.getProductionLayout();
+        draft.setLoadedPhysicalMining(!layout.legacy() && layout.validationError()==null);
+        if(draft.isLoadedPhysicalMining()) draft.getMiningNodes().addAll(layout.nodes());
         draft.setEditingConstructionId(def.getId());
         draft.setConstructionId(def.getId());
         draft.setDisplayName(def.getDisplayName());
@@ -97,6 +101,8 @@ public final class PlotCreatorDraftLoader {
         for (PlotBuildingKindRequirements.SubstepRequirement req : defaults) {
             draft.getSelectedSpots().add(req.toSpotEntry());
         }
+        if(draft.isLoadedPhysicalMining() && !draft.getSelectedSpots().contains(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.MINING_NODE,1)))
+            draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.MINING_NODE,1));
         // Ensure recorded work roles are represented even if defaults missed them.
         for (BuildingPoisDefinition.PoiRow row : def.getPois()) {
             String role = row.getWorkResidentKind();
@@ -115,6 +121,7 @@ public final class PlotCreatorDraftLoader {
                 draft.getSelectedSpots().add(entry);
             }
         }
+        PlotCreatorProductionRules.enforceSelectedSpots(draft);
         if (!draft.getSelectedSpots().isEmpty()) {
             draft.setImportantSpotsConfirmed(true);
         }

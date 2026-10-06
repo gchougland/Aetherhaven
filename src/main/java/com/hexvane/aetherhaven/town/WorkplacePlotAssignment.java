@@ -305,6 +305,12 @@ public final class WorkplacePlotAssignment {
         if (binding == null || !town.getTownId().equals(binding.getTownId())) {
             return "That villager is not in this town.";
         }
+        if (TownAdmission.blocked(plugin, town, npcEntityUuid, npc.getRoleName()) != null) {
+            var population = TownPopulation.snapshot(town, catalog);
+            return !TownRecruitment.available(plugin, town, npc.getRoleName())
+                ? "This villager's town level or building requirements are not met."
+                : "Your town needs " + population.foodShortfallForNextResident() + " more food points.";
+        }
 
         PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
         if (TownVillagerBinding.KIND_BARD.equals(kind)) {

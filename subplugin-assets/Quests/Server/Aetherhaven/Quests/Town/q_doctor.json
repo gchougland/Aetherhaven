@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "id": "q_doctor",
+  "category": "town",
+  "grantPlotTokenConstructionId": "plot_doctor",
+  "title": "A Place to Recover",
+  "description": "Build Elara a clinic to care for injured residents and guards.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "plot_token_received",
+      "text": "Collect the clinic plot token from Elara.",
+      "textLangKey": "aetherhaven_doctor.quest.objective.token"
+    },
+    {
+      "id": "build",
+      "kind": "construction_built",
+      "constructionId": "plot_doctor",
+      "text": "Build the clinic.",
+      "textLangKey": "aetherhaven_doctor.quest.objective.build"
+    },
+    {
+      "id": "talk",
+      "kind": "dialogue_turn_in",
+      "text": "Return to Elara.",
+      "textLangKey": "aetherhaven_doctor.quest.objective.talk"
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Doctor",
+      "amount": 14,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 14,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
+    ],
+    "onComplete": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ],
+    "onAbandon": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ]
+  },
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_doctor.quest.title",
+  "descriptionLangKey": "aetherhaven_doctor.quest.description"
+}

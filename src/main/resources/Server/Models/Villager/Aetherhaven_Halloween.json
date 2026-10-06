@@ -1,0 +1,25 @@
+{
+  "Parent": "Skeleton",
+  "Model": "Characters/Aetherhaven/Halloween/Headless_Skeleton.blockymodel",
+  "Texture": "NPC/Undead/Skeleton/Models/Model_Textures/White.png",
+  "DefaultAttachments": [
+    {
+      "Model": "Cosmetics/Head/Jack_O_Lantern_Hat.blockymodel",
+      "Texture": "Items/Halloween_Props/Pumpkin_Carve_Texture_02.png"
+    }
+  ],
+  "RandomAttachmentSets": {},
+  "Icon": "Icons/ModelsGenerated/Aetherhaven_Halloween.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      19,
+      0
+    ],
+    "Translation": [
+      0,
+      -99
+    ]
+  }
+}

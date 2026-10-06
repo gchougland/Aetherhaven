@@ -1,0 +1,39 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Ore_Mithril_Stone.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Ore_Mithril_Stone.png",
+  "BlockType": {
+    "DrawType": "CubeWithModel",
+    "CustomModel": "Resources/Ores/Ore_Large.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Resources/Ores/Ore_Textures/Mithril.png",
+        "Weight": 1
+      }
+    ],
+    "RandomRotation": "YawStep90",
+    "BlockParticleSetId": "Ore",
+    "Textures": [
+      {
+        "Weight": 1,
+        "All": "BlockTextures/Rock_Stone.png"
+      }
+    ],
+    "ParticleColor": "#d2efec",
+    "BlockSoundSetId": "Ore",
+    "PhysicalMaterialId": "Stone",
+    "TextureComputedColor": "#BBC7D5",
+    "Material": "Solid",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Unbreakable"
+      }
+    },
+    "Flags": {},
+    "Support": {}
+  },
+  "PlayerAnimationsId": "Block",
+  "MaxStack": 1,
+  "ItemSoundSetId": "ISS_Blocks_Stone"
+}

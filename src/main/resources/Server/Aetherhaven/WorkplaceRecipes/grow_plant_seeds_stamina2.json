@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_seeds_stamina2",
+  "name": "Seeds Stamina2",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_seeds_stamina2",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 4,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 24
+    }
+  ],
+  "output": "Plant_Seeds_Stamina2",
+  "outputCount": 1,
+  "workSeconds": 16
+}

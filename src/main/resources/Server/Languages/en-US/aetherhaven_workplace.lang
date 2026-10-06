@@ -1,0 +1,3 @@
+dialogue = I want to upgrade your building and workplaces.
+test = Inspect Apprentice workplace screens in the local test town.
+test.action = upgrades, create or status

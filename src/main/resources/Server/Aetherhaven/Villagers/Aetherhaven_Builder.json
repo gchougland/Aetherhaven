@@ -13,7 +13,32 @@
   "innPoolOrder": 11,
   "innPoolWeight": 3,
   "visitorBindingKind": "visitor_builder",
-  "reputationMilestones": [],
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_builder_25",
+      "minReputation": 25,
+      "itemId": "Aetherhaven_Path_Tool",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_25",
+      "learnRecipeItemId": null
+    },
+    {
+      "rewardId": "rep_builder_50",
+      "minReputation": 50,
+      "itemId": "Aetherhaven_Block_Palette_Walls_White",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_50",
+      "learnRecipeItemId": null
+    },
+    {
+      "rewardId": "rep_builder_75",
+      "minReputation": 75,
+      "itemId": "Aetherhaven_Building_Staff_Thorium",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_75",
+      "learnRecipeItemId": null
+    }
+  ],
   "giftLoves": [
     "Tool_Hammer_Crude",
     "Tool_Hammer_Iron",

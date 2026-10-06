@@ -8,7 +8,9 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.UUID;
+import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -21,9 +23,13 @@ import javax.annotation.Nullable;
  * after a pick before TRAVEL is visible in the store.
  */
 public final class PoiOccupancy {
-    private static final ConcurrentHashMap<String, Map<String, Integer>> CACHE = new ConcurrentHashMap<>();
-    private static volatile long cachedWorldTick = -1L;
-    private static volatile String cachedWorldName = "";
+    // Store identity distinguishes a reloaded world from its previous instance.
+    // Values contain only UUID/cell counts, so they do not keep closed stores alive.
+    private static final Map<Store<EntityStore>, TickOccupancy> CACHE = new WeakHashMap<>();
+    private static final class TickOccupancy {
+        long tick = -1L;
+        final Map<UUID, Map<String, Integer>> towns = new HashMap<>();
+    }
 
     private PoiOccupancy() {}
 
@@ -38,15 +44,30 @@ public final class PoiOccupancy {
         @Nonnull Store<EntityStore> store,
         @Nonnull PoiRegistry registry
     ) {
-        long t = world.getTick();
-        String w = world.getName();
-        if (t != cachedWorldTick || !w.equals(cachedWorldName)) {
-            CACHE.clear();
-            cachedWorldTick = t;
-            cachedWorldName = w;
+        return cellOccupancyAtTick(store, townId, registry, world.getTick());
+    }
+
+    static Map<String, Integer> cellOccupancyAtTick(Store<EntityStore> store, UUID townId, PoiRegistry registry, long tick) {
+        TickOccupancy cache;
+        synchronized (CACHE) {
+            cache = CACHE.get(store);
+            if (cache == null) {
+                cache = new TickOccupancy();
+                CACHE.put(store, cache);
+            }
         }
-        String key = townId.toString();
-        return CACHE.computeIfAbsent(key, k -> buildCellCounts(store, townId, registry));
+        synchronized (cache) {
+            if (cache.tick != tick) {
+                cache.towns.clear();
+                cache.tick = tick;
+            }
+            Map<String, Integer> counts = cache.towns.get(townId);
+            if (counts == null) {
+                counts = buildCellCounts(store, townId, registry);
+                cache.towns.put(townId, counts);
+            }
+            return counts;
+        }
     }
 
     @Nonnull
@@ -162,25 +183,27 @@ public final class PoiOccupancy {
                 TownVillagerBinding.getComponentType(),
                 UUIDComponent.getComponentType()
             );
-        store.forEachEntityParallel(villagerQ, (index, chunk, commandBuffer) -> {
-            TownVillagerBinding b = chunk.getComponent(index, TownVillagerBinding.getComponentType());
-            if (b == null || !townId.equals(b.getTownId())) {
-                return;
-            }
-            UUIDComponent uc = chunk.getComponent(index, UUIDComponent.getComponentType());
-            if (uc != null && excludeEntityUuid != null && excludeEntityUuid.equals(uc.getUuid())) {
-                return;
-            }
-            VillagerAutonomyState a = chunk.getComponent(index, VillagerAutonomyState.getComponentType());
-            if (a == null) {
-                return;
-            }
-            int ph = a.getPhase();
-            if (ph != VillagerAutonomyState.PHASE_TRAVEL && ph != VillagerAutonomyState.PHASE_USE) {
-                return;
-            }
-            if (occupiesCell(a.getTargetPoiUuid(), a.getTargetX(), a.getTargetY(), a.getTargetZ(), registry, poiCell, standCell)) {
-                count[0]++;
+        store.forEachChunk(villagerQ, (chunk, commandBuffer) -> {
+            for (int index = 0; index < chunk.size(); index++) {
+                TownVillagerBinding b = chunk.getComponent(index, TownVillagerBinding.getComponentType());
+                if (b == null || !townId.equals(b.getTownId())) {
+                    continue;
+                }
+                UUIDComponent uc = chunk.getComponent(index, UUIDComponent.getComponentType());
+                if (uc != null && excludeEntityUuid != null && excludeEntityUuid.equals(uc.getUuid())) {
+                    continue;
+                }
+                VillagerAutonomyState a = chunk.getComponent(index, VillagerAutonomyState.getComponentType());
+                if (a == null) {
+                    continue;
+                }
+                int ph = a.getPhase();
+                if (ph != VillagerAutonomyState.PHASE_TRAVEL && ph != VillagerAutonomyState.PHASE_USE) {
+                    continue;
+                }
+                if (occupiesCell(a.getTargetPoiUuid(), a.getTargetX(), a.getTargetY(), a.getTargetZ(), registry, poiCell, standCell)) {
+                    count[0]++;
+                }
             }
         });
         Query<EntityStore> touristQ =
@@ -189,21 +212,23 @@ public final class PoiOccupancy {
                 TownVillagerBinding.getComponentType(),
                 UUIDComponent.getComponentType()
             );
-        store.forEachEntityParallel(touristQ, (index, chunk, commandBuffer) -> {
-            TownVillagerBinding b = chunk.getComponent(index, TownVillagerBinding.getComponentType());
-            if (b == null || !townId.equals(b.getTownId())) {
-                return;
-            }
-            UUIDComponent uc = chunk.getComponent(index, UUIDComponent.getComponentType());
-            if (uc != null && excludeEntityUuid != null && excludeEntityUuid.equals(uc.getUuid())) {
-                return;
-            }
-            TouristAutonomyState a = chunk.getComponent(index, TouristAutonomyState.getComponentType());
-            if (a == null || !isTouristOccupyingPhase(a.getPhase())) {
-                return;
-            }
-            if (occupiesCell(a.getTargetPoiUuid(), a.getTargetX(), a.getTargetY(), a.getTargetZ(), registry, poiCell, standCell)) {
-                count[0]++;
+        store.forEachChunk(touristQ, (chunk, commandBuffer) -> {
+            for (int index = 0; index < chunk.size(); index++) {
+                TownVillagerBinding b = chunk.getComponent(index, TownVillagerBinding.getComponentType());
+                if (b == null || !townId.equals(b.getTownId())) {
+                    continue;
+                }
+                UUIDComponent uc = chunk.getComponent(index, UUIDComponent.getComponentType());
+                if (uc != null && excludeEntityUuid != null && excludeEntityUuid.equals(uc.getUuid())) {
+                    continue;
+                }
+                TouristAutonomyState a = chunk.getComponent(index, TouristAutonomyState.getComponentType());
+                if (a == null || !isTouristOccupyingPhase(a.getPhase())) {
+                    continue;
+                }
+                if (occupiesCell(a.getTargetPoiUuid(), a.getTargetX(), a.getTargetY(), a.getTargetZ(), registry, poiCell, standCell)) {
+                    count[0]++;
+                }
             }
         });
         return count[0];
@@ -254,41 +279,47 @@ public final class PoiOccupancy {
     }
 
     @Nonnull
-    private static ConcurrentHashMap<String, Integer> buildCellCounts(
+    static ConcurrentHashMap<String, Integer> buildCellCounts(
         @Nonnull Store<EntityStore> store,
         @Nonnull UUID townId,
         @Nonnull PoiRegistry registry
     ) {
+        // This runs inside NPC ticks. Stay on the world thread: a parallel store
+        // scan stalled a live town, and shared occupancy counters must be exact.
         ConcurrentHashMap<String, Integer> counts = new ConcurrentHashMap<>();
         Query<EntityStore> villagerQ =
             Query.and(VillagerAutonomyState.getComponentType(), TownVillagerBinding.getComponentType());
-        store.forEachEntityParallel(villagerQ, (index, chunk, commandBuffer) -> {
-            TownVillagerBinding b = chunk.getComponent(index, TownVillagerBinding.getComponentType());
-            if (b == null || !townId.equals(b.getTownId())) {
-                return;
+        store.forEachChunk(villagerQ, (chunk, commandBuffer) -> {
+            for (int index = 0; index < chunk.size(); index++) {
+                TownVillagerBinding b = chunk.getComponent(index, TownVillagerBinding.getComponentType());
+                if (b == null || !townId.equals(b.getTownId())) {
+                    continue;
+                }
+                VillagerAutonomyState a = chunk.getComponent(index, VillagerAutonomyState.getComponentType());
+                if (a == null) {
+                    continue;
+                }
+                int ph = a.getPhase();
+                if (ph != VillagerAutonomyState.PHASE_TRAVEL && ph != VillagerAutonomyState.PHASE_USE) {
+                    continue;
+                }
+                mergeOccupancy(counts, a.getTargetPoiUuid(), a.getTargetX(), a.getTargetY(), a.getTargetZ(), registry);
             }
-            VillagerAutonomyState a = chunk.getComponent(index, VillagerAutonomyState.getComponentType());
-            if (a == null) {
-                return;
-            }
-            int ph = a.getPhase();
-            if (ph != VillagerAutonomyState.PHASE_TRAVEL && ph != VillagerAutonomyState.PHASE_USE) {
-                return;
-            }
-            mergeOccupancy(counts, a.getTargetPoiUuid(), a.getTargetX(), a.getTargetY(), a.getTargetZ(), registry);
         });
         Query<EntityStore> touristQ =
             Query.and(TouristAutonomyState.getComponentType(), TownVillagerBinding.getComponentType());
-        store.forEachEntityParallel(touristQ, (index, chunk, commandBuffer) -> {
-            TownVillagerBinding b = chunk.getComponent(index, TownVillagerBinding.getComponentType());
-            if (b == null || !townId.equals(b.getTownId())) {
-                return;
+        store.forEachChunk(touristQ, (chunk, commandBuffer) -> {
+            for (int index = 0; index < chunk.size(); index++) {
+                TownVillagerBinding b = chunk.getComponent(index, TownVillagerBinding.getComponentType());
+                if (b == null || !townId.equals(b.getTownId())) {
+                    continue;
+                }
+                TouristAutonomyState a = chunk.getComponent(index, TouristAutonomyState.getComponentType());
+                if (a == null || !isTouristOccupyingPhase(a.getPhase())) {
+                    continue;
+                }
+                mergeOccupancy(counts, a.getTargetPoiUuid(), a.getTargetX(), a.getTargetY(), a.getTargetZ(), registry);
             }
-            TouristAutonomyState a = chunk.getComponent(index, TouristAutonomyState.getComponentType());
-            if (a == null || !isTouristOccupyingPhase(a.getPhase())) {
-                return;
-            }
-            mergeOccupancy(counts, a.getTargetPoiUuid(), a.getTargetX(), a.getTargetY(), a.getTargetZ(), registry);
         });
         return counts;
     }

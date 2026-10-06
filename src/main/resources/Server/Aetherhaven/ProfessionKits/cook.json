@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Cook_Kit",
+  "name": "Chef's Utensil Roll",
+  "skill": "cooking",
+  "workSpeedBonus": 0.15,
+  "extraCarryingStacks": 0
+}

@@ -37,9 +37,6 @@ public final class ProductionBootstrap {
             ProductionStoragePage.class,
             AetherhavenConstants.PAGE_PRODUCTION_STORAGE,
             (ref, componentAccessor, playerRef, context) -> {
-                if (!AetherhavenFeatures.isLoaded(AetherhavenPluginIds.PRODUCTION)) {
-                    return null;
-                }
                 BlockPosition targetBlock = context.getTargetBlock();
                 if (targetBlock == null) {
                     return null;
@@ -71,6 +68,10 @@ public final class ProductionBootstrap {
                         continue;
                     }
                     String gameplayCid = p.getConstructionCatalog().resolveGameplayConstructionId(pi.getConstructionId());
+                    if (com.hexvane.aetherhaven.hunter.HuntService.CONSTRUCTION.equals(gameplayCid)
+                        && pi.containsWorldBlock(targetBlock.x, targetBlock.y, targetBlock.z)) {
+                        return new com.hexvane.aetherhaven.warehouse.WarehousePage(playerRef,town.getTownId(),pi.getPlotId());
+                    }
                     if (!ProductionCatalog.isProductionWorkplaceConstruction(gameplayCid)) {
                         continue;
                     }
@@ -80,8 +81,10 @@ public final class ProductionBootstrap {
                     }
                 }
                 if (plot == null) {
+                    playerRef.sendMessage(com.hypixel.hytale.server.core.Message.raw("Place this storage inside a completed production building or Hunter's Lodge."));
                     return null;
                 }
+                if (!AetherhavenFeatures.isLoaded(AetherhavenPluginIds.PRODUCTION)) return null;
                 return new ProductionStoragePage(
                     playerRef,
                     town.getTownId(),
@@ -101,7 +104,11 @@ public final class ProductionBootstrap {
     }
 
     public static void register(@Nonnull AetherhavenPlugin core, @Nonnull JavaPlugin plugin) {
+        RanchCaptureCompatibility.register(plugin);
+        ProductionCargoDisplays.register(plugin.getEntityStoreRegistry(),core);
         plugin.getEntityStoreRegistry().registerSystem(new ProductionTickSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new TimberPlayerEditSystems.Breaking(core));
+        plugin.getEntityStoreRegistry().registerSystem(new TimberPlayerEditSystems.Placing(core));
     }
 
     @Nonnull

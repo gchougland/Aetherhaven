@@ -1,0 +1,23 @@
+{
+  "id": "guard_mage_copper",
+  "guardNpcRole": "Aetherhaven_Guard_Mage",
+  "displayName": "Copper Mage",
+  "hireGoldCost": 45,
+  "armor": [
+    "Aetherhaven_Guard_Armor_Cloth_Cotton_Head",
+    "Aetherhaven_Guard_Armor_Cloth_Cotton_Chest",
+    "Aetherhaven_Guard_Armor_Cloth_Cotton_Hands",
+    "Aetherhaven_Guard_Armor_Cloth_Cotton_Legs"
+  ],
+  "hotbar": [
+    {
+      "slot": 0,
+      "itemId": "Weapon_Staff_Copper"
+    }
+  ],
+  "attributeCombat": true,
+  "attributeBonuses": {
+    "intelligence": 2,
+    "vitality": 1
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_sapling_bottletree",
+  "name": "Sapling Bottletree",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_sapling_bottletree",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 7,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 30
+    }
+  ],
+  "output": "Plant_Sapling_Bottletree",
+  "outputCount": 1,
+  "workSeconds": 22
+}

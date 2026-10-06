@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Crafter_Kit",
+  "name": "Joiner's Toolbox",
+  "skill": "crafting",
+  "workSpeedBonus": 0.15,
+  "extraCarryingStacks": 0
+}

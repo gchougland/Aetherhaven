@@ -1,0 +1,60 @@
+{
+  "id": "plot_halloween",
+  "displayName": "Pumpkin Shelter",
+  "description": "A simple shelter for Jack Hollow and his curious games.",
+  "prefabPath": "Halloween_Shelter.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "frontFacing": "South",
+  "styleId": "core",
+  "boundsLocal": {
+    "min": [
+      -3,
+      -1,
+      -3
+    ],
+    "max": [
+      3,
+      4,
+      3
+    ]
+  },
+  "managementBlockLocalPos": [
+    -2,
+    1,
+    2
+  ],
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 25,
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 80
+    }
+  ],
+  "tags": [
+    "work"
+  ],
+  "pois": [
+    {
+      "localX": 0,
+      "localY": 0,
+      "localZ": 0,
+      "tags": [
+        "WORK",
+        "workActivity:leisure"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Beam",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetYawDegrees": 180,
+      "equipmentProfileId": "work_bard",
+      "workResidentKind": "halloween"
+    }
+  ]
+}

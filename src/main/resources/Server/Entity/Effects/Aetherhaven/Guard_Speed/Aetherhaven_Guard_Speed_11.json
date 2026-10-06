@@ -1,0 +1,7 @@
+{
+  "Duration": 3,
+  "OverlapBehavior": "Overwrite",
+  "ApplicationEffects": {
+    "HorizontalSpeedMultiplier": 1.09
+  }
+}

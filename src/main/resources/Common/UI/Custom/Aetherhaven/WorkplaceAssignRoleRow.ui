@@ -1,4 +1,5 @@
 $C = "../Common.ui";
+$T = "TownUiTheme.ui";
 
 Group #WorkplaceAssignRole {
   LayoutMode: Top;
@@ -15,7 +16,7 @@ Group #WorkplaceAssignRole {
     LayoutMode: Left;
     Anchor: (Bottom: 8);
     Padding: (Horizontal: 6, Vertical: 4);
-    Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+    Background: $T.@Panel;
 
     AssetImage #PreviewPortrait {
       Anchor: (Width: 48, Height: 48, Right: 8);
@@ -35,8 +36,11 @@ Group #WorkplaceAssignRole {
         Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, Wrap: true);
       }
     }
+    $C.@SecondaryTextButton #TeleportWorker {
+      Text: "Teleport to me"; Anchor: (Width: 160, Height: 34, Top: 7); Visible: false;
+      TextTooltipStyle: $C.@DefaultTextTooltipStyle; TooltipText: "Bring the assigned villager to your side";
+    }
   }
-
   $C.@SecondaryTextButton #ChooseWorkplaceWorkerButton {
     Text: "";
     Anchor: (Bottom: 8);

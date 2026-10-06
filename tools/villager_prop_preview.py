@@ -15,9 +15,10 @@ def textured_faces(points, shape, texture):
     sx,sy=[int(shape['settings']['size'][k]) for k in 'xy']
     sz=int(shape['settings']['size'].get('z',1))
     # Image row zero is the top edge, while geometric +Y points upward.
-    specifications=[('front',[3,2,1,0],sx,sy,.94)] if shape['type']=='quad' else [('left',[0,1,3,2],sz,sy,.72),('right',[5,4,6,7],sz,sy,.88),
-                    ('bottom',[0,4,5,1],sx,sz,.60),('top',[2,6,7,3],sx,sz,1.06),
-                    ('back',[4,0,2,6],sx,sy,.76),('front',[1,5,7,3],sx,sy,.94)]
+    # TL, TR, BR, BL, matching BlockyModelLoader's native face mapping.
+    specifications=[('front',[3,2,1,0],sx,sy,.94)] if shape['type']=='quad' else [('left',[2,3,1,0],sz,sy,.72),('right',[7,6,4,5],sz,sy,.88),
+                    ('bottom',[1,5,4,0],sx,sz,.60),('top',[2,6,7,3],sx,sz,1.06),
+                    ('back',[6,2,0,4],sx,sy,.76),('front',[3,7,5,1],sx,sy,.94)]
     for side,indices,width,height,shade in specifications:
         layout=shape['textureLayout'].get(side)
         if layout is None:continue
@@ -37,3 +38,27 @@ def textured_faces(points, shape, texture):
                 poly=np.array([at(x/width,y/height),at((x+1)/width,y/height),
                                at((x+1)/width,(y+1)/height),at(x/width,(y+1)/height)])
                 yield (poly[:,2].mean(),poly,rgb,None)
+
+
+def rotation_matrix(q):
+    x,y,z,w=[q.get(k,0 if k!='w' else 1) for k in 'xyzw']
+    norm=math.sqrt(x*x+y*y+z*z+w*w)
+    x,y,z,w=[v/norm for v in (x,y,z,w)]
+    return np.array([[1-2*(y*y+z*z),2*(x*y-z*w),2*(x*z+y*w)],
+                     [2*(x*y+z*w),1-2*(x*x+z*z),2*(y*z-x*w)],
+                     [2*(x*z-y*w),2*(y*z+x*w),1-2*(x*x+y*y)]])
+
+
+def world_shapes(nodes, parent_rotation=None, parent_position=None):
+    """Shape offsets move the node frame, including descendants, in blockymodels."""
+    parent_rotation=np.eye(3) if parent_rotation is None else parent_rotation
+    parent_position=np.zeros(3) if parent_position is None else parent_position
+    for node in nodes:
+        rotation=parent_rotation @ rotation_matrix(node.get('orientation',{}))
+        shape=node.get('shape',{})
+        position=parent_position+parent_rotation @ np.array([node.get('position',{}).get(k,0) for k in 'xyz'])
+        position+=rotation @ np.array([shape.get('offset',{}).get(k,0) for k in 'xyz'])
+        if shape.get('visible',True) and shape.get('type') in ('box','quad'):
+            points=(rotation @ geometry_points(shape).T).T+position
+            yield node,points
+        yield from world_shapes(node.get('children',[]),rotation,position)

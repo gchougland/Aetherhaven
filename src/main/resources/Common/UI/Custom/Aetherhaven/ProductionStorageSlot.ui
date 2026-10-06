@@ -25,7 +25,11 @@ $Sounds = "../Sounds.ui";
 
 Group #ProductionStorageSlot {
   LayoutMode: Top;
-  Anchor: (Width: 180);
+  Anchor: (Width: 180, Height: 370);
+  Padding: (Full: 6);
+  Background: #1a2932;
+
+  Group #Unlocked { LayoutMode: Top;
 
   Group {
     LayoutMode: Center;
@@ -54,6 +58,9 @@ Group #ProductionStorageSlot {
             FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
             HitTestVisible: false;
           }
+          Group #RequirementLock { Anchor: (Full: 0); Background: #2b3038(0.84); Visible: false; HitTestVisible: false;
+            AssetImage { AssetPath: "UI/Custom/padlock.png"; Anchor: (Width: 28, Height: 28, Left: 10, Top: 10); HitTestVisible: false; }
+          }
         }
       }
     }
@@ -61,13 +68,13 @@ Group #ProductionStorageSlot {
 
   Label #Name {
     Style: (...@NameStyle);
-    Anchor: (Bottom: 6, Width: 168);
+    Anchor: (Bottom: 6, Width: 168, Height: 44);
     Text: "";
   }
 
   Label #Qty {
     Style: (...@QtyStyle);
-    Anchor: (Bottom: 4, Width: 168);
+    Anchor: (Bottom: 4, Width: 168, Height: 24);
     Text: "";
   }
 
@@ -78,8 +85,8 @@ Group #ProductionStorageSlot {
   }
 
   Label #Time {
-    Style: (...@TimeStyle);
-    Anchor: (Bottom: 8, Width: 168);
+    Style: (...@TimeStyle, Wrap: true);
+    Anchor: (Bottom: 8, Width: 168, Height: 42);
     Text: "";
   }
 
@@ -112,5 +119,16 @@ Group #ProductionStorageSlot {
         Text: "";
       }
     }
+  }
+  }
+  Group #Locked { LayoutMode: Top; Visible: false; Anchor: (Width: 168, Height: 358); Padding: (Horizontal: 8, Top: 42);
+    Group { LayoutMode: Middle; Anchor: (Height: 84, Bottom: 16);
+      Group { Anchor: (Width: 64, Height: 64); Background: #343b43;
+        AssetImage { AssetPath: "UI/Custom/padlock.png"; Anchor: (Width: 40, Height: 40, Top: 12, Left: 12); }
+      }
+    }
+    Label #LockedTitle { Anchor: (Height: 30, Bottom: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 16, RenderBold: true, HorizontalAlignment: Center, TextColor: #adb6bf); }
+    Label { Text: "LOCKED"; Anchor: (Height: 24, Bottom: 12); Style: (...$C.@DefaultLabelStyle, FontSize: 11, HorizontalAlignment: Center, TextColor: #8b99a3); }
+    Label { Text: "Unlock this output slot in Building upgrades."; Anchor: (Height: 64); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, HorizontalAlignment: Center, TextColor: #8b99a3); }
   }
 }

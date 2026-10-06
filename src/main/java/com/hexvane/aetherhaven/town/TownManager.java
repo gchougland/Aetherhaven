@@ -37,6 +37,10 @@ public final class TownManager {
     private long lastLoadedFromDiskMs;
     private long lastSavedToDiskMs;
     private boolean dirty;
+    private com.hexvane.aetherhaven.halloween.HalloweenGameState retiredHalloweenGames =
+        new com.hexvane.aetherhaven.halloween.HalloweenGameState();
+
+    public com.hexvane.aetherhaven.halloween.HalloweenGameState retiredHalloweenGames() { return retiredHalloweenGames; }
 
     public TownManager(@Nonnull World world, @Nonnull Path pluginDataDirectory) {
         this.world = world;
@@ -61,21 +65,29 @@ public final class TownManager {
     public void loadFromDisk() {
         if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
             byTownId.clear();
+            retiredHalloweenGames = new com.hexvane.aetherhaven.halloween.HalloweenGameState();
             return;
         }
         try {
             TownWorldFile file = readTownFileWithBackupFallback(saveFile);
             Map<UUID, TownRecord> loaded = new LinkedHashMap<>();
+            boolean completedProjectsRemoved = false;
             for (TownRecord t : file.getTowns()) {
                 t.migrateLegacyPlotFootprintsIfNeeded();
                 t.migrateInnFieldsIfNeeded();
                 t.migrateTownSocialFieldsIfNeeded();
                 t.migrateTerritoryClaimsIfNeeded();
+                completedProjectsRemoved |= com.hexvane.aetherhaven.workplace.BuildingProjectCleanup.reconcile(t);
                 loaded.put(t.getTownId(), t);
             }
             byTownId.clear();
             byTownId.putAll(loaded);
+            retiredHalloweenGames = file.retiredHalloweenGames();
             dedupeDisplayNamesAfterLoad();
+            if (completedProjectsRemoved) {
+                dirty = true;
+                TownSaveCoordinator.requestSave(this);
+            }
             lastLoadedFromDiskMs = System.currentTimeMillis();
             LOGGER.atInfo().log("Aetherhaven loaded %s towns for world %s from %s", byTownId.size(), world.getName(), saveFile);
         } catch (IOException e) {
@@ -182,6 +194,7 @@ public final class TownManager {
         if (removed == null) {
             return false;
         }
+        retiredHalloweenGames.absorbRetired(removed.halloweenGame());
         TownSaveCoordinator.requestSave(this);
         return true;
     }

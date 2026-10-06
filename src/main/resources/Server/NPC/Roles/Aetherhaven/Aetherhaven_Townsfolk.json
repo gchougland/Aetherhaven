@@ -18,7 +18,6 @@
   "MaxHealth": 200,
   "IsMemory": false,
   "DisableDamageGroups": ["Self", "Player", "Aetherhaven_Townsfolk", "Friendly"],
-  "CombatConfig": { "EntityEffect": "Immunity_Fire" },
   "Invulnerable": { "Compute": "Invulnerable" },
   "KnockbackScale": 0.5,
   "ApplySeparation": false,

@@ -1,0 +1,28 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+$C.@PageOverlay { LayoutMode: Middle;
+ $C.@DecoratedContainer { Anchor: (Width: 730, Height: 620);
+  #Title { Label { Text: "WORKPLACE STATION"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+  #Content { LayoutMode: Top; Padding: (Full: 24);
+   Group { LayoutMode: Left; Anchor: (Height: 112, Bottom: 18); Background: $T.@Panel; Padding: (Full: 14);
+    ItemIcon #Icon { Anchor: (Width: 80, Height: 80, Right: 18); }
+    Group { LayoutMode: Top; FlexWeight: 1;
+     Label #Name { Anchor: (Height: 32); Style: (...$C.@DefaultLabelStyle, FontSize: 22, RenderBold: true); }
+     Label #Tier { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, TextColor: #d7c998); }
+     Label #Site { Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #b7c9bb); }
+    }
+   }
+   Label #Summary { Anchor: (Height: 46); Style: (...$C.@DefaultLabelStyle, Wrap: true, FontSize: 15); }
+   Group { LayoutMode: TopScrolling; FlexWeight: 1; ScrollbarStyle: $C.@DefaultScrollbarStyle;
+    Group #Materials { LayoutMode: Top; }
+   }
+   $C.@ProgressBar #Progress { Anchor: (Height: 14, Top: 12, Bottom: 12); Value: 0.0; }
+   Label #Hint { Anchor: (Height: 56); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #dec68d); }
+   Group { LayoutMode: Left; Anchor: (Height: 40);
+    $C.@SecondaryTextButton #Back { Text: "Back to work"; Anchor: (Width: 190, Right: 12); }
+    $C.@TextButton #Upgrade { Text: "Upgrade station"; FlexWeight: 1; }
+   }
+  }
+ }
+}
+$C.@BackButton {}

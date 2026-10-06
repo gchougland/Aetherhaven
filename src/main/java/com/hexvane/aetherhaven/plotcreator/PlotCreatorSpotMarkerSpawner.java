@@ -45,7 +45,12 @@ public final class PlotCreatorSpotMarkerSpawner {
         @Nonnull UUID ownerPlayerEntityUuid,
         @Nonnull PlotCreatorSpotMarkerCollector.DesiredSpotMarker desired
     ) {
-        Model model = modelForTexture(desired.texturePath(), MARKER_SCALE);
+        var miningPreview=desired.type()==PlotCreatorSubstepType.MINING_NODE?
+            ModelAsset.getAssetMap().getAsset("Aetherhaven_Mining_Node_Preview"):null;
+        Model model = desired.type()==PlotCreatorSubstepType.MINING_NODE?
+            // Block geometry uses 32 units per cell; entity geometry uses 64.
+            (miningPreview==null?null:Model.createScaledModel(miningPreview, 2.0f)):
+            modelForTexture(desired.texturePath(), MARKER_SCALE);
         if (model == null) {
             return null;
         }
@@ -59,7 +64,8 @@ public final class PlotCreatorSpotMarkerSpawner {
         Rotation3f rot = new Rotation3f(0.0F, yaw, 0.0F);
         ent.unloadFromWorld();
         Holder<EntityStore> holder = ent.toHolder();
-        Vector3d pos = new Vector3d(desired.x() + 0.5, desired.y() + 0.5, desired.z() + 0.5);
+        Vector3d pos = new Vector3d(desired.x() + 0.5,
+            desired.y() + (desired.type()==PlotCreatorSubstepType.MINING_NODE ? 0 : 0.5), desired.z() + 0.5);
         holder.addComponent(TransformComponent.getComponentType(), new TransformComponent(pos, rot));
         holder.ensureComponent(UUIDComponent.getComponentType());
         holder.addComponent(EntityStore.REGISTRY.getNonSerializedComponentType(), NonSerialized.get());

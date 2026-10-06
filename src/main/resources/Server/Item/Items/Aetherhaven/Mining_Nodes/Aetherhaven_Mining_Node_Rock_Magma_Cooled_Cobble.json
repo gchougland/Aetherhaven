@@ -1,0 +1,32 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Rock_Magma_Cooled_Cobble.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Rock_Magma_Cooled_Cobble.png",
+  "BlockType": {
+    "DrawType": "Cube",
+    "BlockParticleSetId": "Stone",
+    "Textures": [
+      {
+        "Sides": "BlockTextures/Rock_Magma_Cooled_Cobble.png",
+        "UpDown": "BlockTextures/Rock_Magma_Cooled_Cobble.png",
+        "Weight": 70
+      }
+    ],
+    "ParticleColor": "#0d0a0a",
+    "BlockSoundSetId": "Stone",
+    "PhysicalMaterialId": "Stone",
+    "TextureComputedColor": "#1F1C1E",
+    "Material": "Solid",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Unbreakable"
+      }
+    },
+    "Flags": {},
+    "Support": {}
+  },
+  "PlayerAnimationsId": "Block",
+  "MaxStack": 1,
+  "ItemSoundSetId": "ISS_Blocks_Stone"
+}

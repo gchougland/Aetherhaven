@@ -1,0 +1,12 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Left; Anchor: (Height: 64, Bottom: 6); Background: #2b3038; Padding: (Full: 9);
+  Group { Anchor: (Width: 44, Height: 44, Right: 10); Background: #353c44;
+    AssetImage { AssetPath: "UI/Custom/padlock.png"; Anchor: (Width: 28, Height: 28, Left: 8, Top: 8); }
+  }
+  Group { LayoutMode: Top; FlexWeight: 1;
+    Label #Threshold { Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 14, RenderBold: true, TextColor: #c3b899); }
+    Label { Text: "A surprise to discover"; Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #81979e); }
+  }
+  Label { Text: "LOCKED"; Anchor: (Width: 86); Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #81979e, HorizontalAlignment: End, VerticalAlignment: Center); }
+}

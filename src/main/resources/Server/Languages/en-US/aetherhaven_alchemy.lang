@@ -1,0 +1,3 @@
+flask.name = Alchemy Flask
+flask.description = A reusable flask for Orin's mixed potions. Fill it at the laboratory cauldron and upgrade its capacity with leather.
+cauldron.hint = Press [{key}] to mix alchemy ingredients

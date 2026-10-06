@@ -56,6 +56,6 @@ class DialogueSpeechCueTest {
                 }
             }
         }
-        assertEquals(42, offers);
+        assertEquals(50, offers);
     }
 }

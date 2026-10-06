@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_seeds_aubergine_eternal",
+  "name": "Seeds Aubergine Eternal",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_seeds_aubergine_eternal",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 5,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 60
+    }
+  ],
+  "output": "Plant_Seeds_Aubergine_Eternal",
+  "outputCount": 1,
+  "workSeconds": 18
+}

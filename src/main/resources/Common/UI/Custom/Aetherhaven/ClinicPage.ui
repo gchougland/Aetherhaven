@@ -1,0 +1,41 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+$C.@PageOverlay { LayoutMode: Middle;
+ $C.@DecoratedContainer { Anchor: (Width: 940, Height: 700);
+  #Title { Label { Text: "THE CLINIC"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+  #Content { LayoutMode: Top; Padding: (Full: 24);
+   Group { LayoutMode: Left; FlexWeight: 1;
+    Group { LayoutMode: Top; Anchor: (Width: 306, Right: 22); Padding: (Full: 20); Background: $T.@Panel;
+     AssetImage { AssetPath: "Icons/ModelsGenerated/Aetherhaven_Doctor.png"; Anchor: (Width: 132, Height: 132, Left: 64); }
+     Label #State { Anchor: (Height: 34); Style: (...$C.@DefaultLabelStyle, FontSize: 17, RenderBold: true, HorizontalAlignment: Center, TextColor: #9dceba); }
+     Label { Text: "MEDICINE CABINET"; Anchor: (Height: 32, Top: 16); Style: (...$C.@DefaultLabelStyle, FontSize: 16, RenderBold: true); }
+     Label #Supply { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 16, TextColor: #d2bc85); }
+     Group { Anchor: (Width: 250, Height: 12); Background: $T.@Inset; Group #StockFill { Anchor: (Left: 0, Width: 0, Height: 12); Background: #79ad98; } }
+     Group { LayoutMode: Left; Anchor: (Height: 68, Top: 16);
+      ItemIcon { ItemId: "Potion_Health_Lesser"; Anchor: (Width: 52, Height: 52, Right: 10); }
+      Group { LayoutMode: Top; FlexWeight: 1;
+       Label { Text: "Lesser Health Potion"; Anchor: (Height: 25); Style: (...$C.@DefaultLabelStyle, FontSize: 13); }
+       Label { Text: "80 medicine per bottle"; Anchor: (Height: 25); Style: (...$C.@DefaultLabelStyle, FontSize: 13); }
+      }
+     }
+     Group { LayoutMode: Left; Anchor: (Height: 38);
+      $C.@TextButton #SupplyOne { Text: "Give 1"; FlexWeight: 1; Anchor: (Right: 8); }
+      $C.@TextButton #SupplyFive { Text: "Give 5"; FlexWeight: 1; }
+     }
+     $C.@SecondaryTextButton #Toggle { Text: "Pause care"; Anchor: (Height: 38, Top: 12); }
+    }
+    Group { LayoutMode: Top; FlexWeight: 1;
+     Label { Text: "RECOVERY WARD"; Anchor: (Height: 36); Style: (...$C.@DefaultLabelStyle, FontSize: 18, RenderBold: true); }
+     Label #PatientCount { Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #adbfbd); }
+     Label #CareDetail { Anchor: (Height: 40); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #d2bc85); }
+     Label { Text: "The Doctor treats one person at a time. Stay nearby inside the clinic for 12 seconds to recover up to 40 health. The most injured residents are seen first. Fighting interrupts treatment."; Anchor: (Height: 94); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #c0cbbb); }
+     Group #Patients { LayoutMode: TopScrolling; FlexWeight: 1; }
+     Label #Empty { Text: "No injured residents waiting nearby."; Anchor: (Height: 48); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #adbfbd); }
+    }
+   }
+   Label #Hint { Anchor: (Height: 52, Top: 14); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #c0cbbb); }
+   Group { LayoutMode: Left; Anchor: (Height: 38); Group { FlexWeight: 1; } $C.@SecondaryTextButton #Refresh { Text: "Refresh"; Anchor: (Width: 130); } }
+  }
+ }
+}
+$C.@BackButton {}

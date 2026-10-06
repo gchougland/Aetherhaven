@@ -1,8 +1,6 @@
 package com.hexvane.aetherhaven.questboard;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.construction.MaterialRequirement;
-import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.quest.data.QuestReward;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardFetchEntryJson;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardItemSetJson;
@@ -49,6 +47,11 @@ public final class FetchQuestBoardHandler implements QuestBoardQuestTypeHandler 
         if (itemSet == null || itemSet.itemsOrEmpty().isEmpty()) {
             return false;
         }
+        var plugin = AetherhavenPlugin.get();
+        if (entry.materialPaymentBonusGold() > 0 && plugin == null) return false;
+        var quoted = FetchQuestPayment.quote(entry, itemSet.itemsOrEmpty(),
+            plugin == null ? com.hexvane.aetherhaven.shopspot.ShopPriceCatalog.empty() : plugin.getShopPriceCatalog());
+        if (quoted.isEmpty()) return false;
         slot.setInstanceId(QuestBoardSlotRecord.newInstanceId());
         slot.setState(QuestBoardSlotState.OFFER);
         slot.setQuestType(TYPE_ID);
@@ -65,7 +68,7 @@ public final class FetchQuestBoardHandler implements QuestBoardQuestTypeHandler 
             slot.setDescriptionLangKey(entry.descriptionLangKey().trim());
         }
         slot.setRequiredItems(new ArrayList<>(itemSet.itemsOrEmpty()));
-        slot.setRewards(new ArrayList<>(entry.rewardsOrEmpty()));
+        slot.setRewards(quoted.get());
         slot.setDaysLimit(entry.daysLimit());
         String rank = slot.getQuestRank() != null ? slot.getQuestRank() : "E";
         int xp = entry.rankXpReward() > 0 ? entry.rankXpReward() : catalog.defaultXpRewardForRank(rank);
@@ -169,26 +172,16 @@ public final class FetchQuestBoardHandler implements QuestBoardQuestTypeHandler 
         if (inv == null) {
             return false;
         }
-        return InventoryMaterials.hasAll(inv, toMaterialRequirements(slot));
+        return FetchQuestMaterials.available(inv, slot.requiredItemsOrEmpty());
     }
 
     @Override
     public boolean consumeRequiredItems(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull QuestBoardSlotRecord slot) {
         CombinedItemContainer inv = playerInventory(playerRef, store);
-        if (inv == null || !hasRequiredItems(playerRef, store, slot)) {
+        if (inv == null) {
             return false;
         }
-        InventoryMaterials.removeAll(inv, toMaterialRequirements(slot));
-        return true;
-    }
-
-    @Nonnull
-    private static List<MaterialRequirement> toMaterialRequirements(@Nonnull QuestBoardSlotRecord slot) {
-        List<MaterialRequirement> out = new ArrayList<>();
-        for (QuestBoardItemRequirement req : slot.requiredItemsOrEmpty()) {
-            out.add(MaterialRequirement.ofItem(req.itemIdOrEmpty(), req.count()));
-        }
-        return out;
+        return FetchQuestMaterials.consume(inv, slot.requiredItemsOrEmpty());
     }
 
     @Nullable

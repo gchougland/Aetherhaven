@@ -1,0 +1,9 @@
+{
+  "id": "forge_iron_sword",
+  "name": "Iron sword",
+  "workplace": "blacksmithing",
+  "sourceRecipe": "Weapon_Sword_Iron_Recipe_Generated_0",
+  "bench": "Weapon_Bench",
+  "benchTier": 1,
+  "skillLevel": 3
+}

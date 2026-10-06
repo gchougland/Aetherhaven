@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Smith_Kit",
+  "name": "Smith's tool roll",
+  "skill": "blacksmithing",
+  "workSpeedBonus": 0.15,
+  "extraCarryingStacks": 0
+}

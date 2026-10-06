@@ -144,6 +144,13 @@ public final class GuardHireService {
             return false;
         }
 
+        var admissionBlock = com.hexvane.aetherhaven.town.TownAdmission.blocked(plugin, town, adventurerUuid, null);
+        if (admissionBlock != null) {
+            var recipient = store.getComponent(playerRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+            if (recipient != null) recipient.sendMessage(admissionBlock);
+            return false;
+        }
+
         TownsfolkPoolCheckoutRecord checkout =
             TownsfolkExistenceService.checkoutForCharacter(world, plugin, town.getTownId(), tb.getCharacterId());
         if (checkout == null) {
@@ -500,6 +507,7 @@ public final class GuardHireService {
         int removed = 0;
         for (HiredGuardRecord rec : snapshot) {
             UUID entityUuid = rec.getEntityUuid();
+            if (entityUuid != null && com.hexvane.aetherhaven.town.ResidentRegistryService.hasConfirmedDeath(town, entityUuid)) continue;
             if (entityUuid == null) {
                 removeHiredGuardFromTown(town, null, rec.getCharacterId());
                 removed++;
@@ -515,6 +523,8 @@ public final class GuardHireService {
             if (!deadOrGone) {
                 continue;
             }
+            if (ref != null && ref.isValid()
+                && com.hexvane.aetherhaven.town.ResidentRegistryService.preserveTownsfolkDeath(town, tm, ref, store, plugin)) continue;
             String characterId = removeHiredGuardFromTown(town, entityUuid, rec.getCharacterId());
             removed++;
             if (characterId != null && !characterId.isBlank()) {

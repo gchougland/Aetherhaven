@@ -609,6 +609,23 @@
           "next": "main_hub"
         }
       ]
+    },
+    "rep_reward_25": {
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.speaker",
+      "text": "aetherhaven_core_rewards.merchant.25",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_merchant_jeweler_case"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
     }
   }
 }

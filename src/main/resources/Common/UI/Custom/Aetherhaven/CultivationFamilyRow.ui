@@ -1,0 +1,5 @@
+$C = "../Common.ui";
+Group { LayoutMode: Top; Anchor: (Height: 104);
+  Label #Family { Anchor: (Height: 20); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #a5cabc, RenderBold: true); }
+  Group #Crops { LayoutMode: Left; Anchor: (Height: 78, Bottom: 6); }
+}

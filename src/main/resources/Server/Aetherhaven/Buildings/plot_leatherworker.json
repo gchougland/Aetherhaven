@@ -1,0 +1,103 @@
+{
+  "id": "plot_leatherworker",
+  "displayName": "Tannery",
+  "description": "Build Sera a tannery with room to prepare hides and leather goods.",
+  "touristDestination": true,
+  "prefabPath": "Tannery.prefab.json",
+  "selfBuildGameDays": 1.0,
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Leatherworker",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "managementBlockLocalPos": [
+    11,
+    1,
+    16
+  ],
+  "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1.0,
+  "autonomyNavMaxStandYSpanAboveMinY": 2.0,
+  "autonomyNavRoofExclusionYBelowMaxY": 5.0,
+  "treasuryGoldCoinCost": 70,
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 280
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 170
+    },
+    {
+      "itemId": "Bench_Tannery",
+      "count": 2
+    }
+  ],
+  "pois": [
+    {
+      "localX": 10,
+      "localY": 0,
+      "localZ": 15,
+      "tags": [
+        "workActivity:craft",
+        "WORK"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "workResidentKind": "leatherworker",
+      "interactionTargetYawDegrees": -174.51562,
+      "equipmentProfileId": "work_builder"
+    },
+    {
+      "localX": 4,
+      "localY": 0,
+      "localZ": 5,
+      "tags": [
+        "workActivity:craft",
+        "WORK"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "workResidentKind": "leatherworker",
+      "interactionTargetYawDegrees": -28.750977,
+      "equipmentProfileId": "work_builder"
+    },
+    {
+      "localX": 15,
+      "localY": 0,
+      "localZ": 8,
+      "tags": [
+        "workActivity:craft",
+        "WORK"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "workResidentKind": "leatherworker",
+      "interactionTargetYawDegrees": -95.20264,
+      "equipmentProfileId": "work_builder"
+    }
+  ],
+  "styleId": "core",
+  "tags": [
+    "work"
+  ],
+  "displayNameLangKey": "aetherhaven_leatherworker.building.name",
+  "frontFacing": "North",
+  "boundsLocal": {
+    "min": [
+      1,
+      -1,
+      0
+    ],
+    "max": [
+      20,
+      7,
+      18
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Iron_Knight_Kit",
+  "name": "Iron Knight Kit",
+  "guardClass": "guard_knight",
+  "equipmentProfile": "guard_knight_iron",
+  "description": "+4 Strength, +4 Vitality."
+}

@@ -46,6 +46,8 @@ public final class VillagerRevivalService {
         @Nonnull ResidentNpcRecord record,
         @Nonnull Vector3d spawnPos
     ) {
+        if (validateCanRevive(store, town, record) != null) return false;
+        if (record.getTownsfolkIdentity() != null) return reviveTownsfolk(world, plugin, town, tm, store, record, spawnPos);
         UUID oldUuid = record.getLastEntityUuid();
         EntityPresence presence = EntityPresenceUtil.resolve(store, oldUuid);
         if (EntityPresenceUtil.isLoadedLive(presence)) {
@@ -138,7 +140,7 @@ public final class VillagerRevivalService {
         @Nonnull TownRecord town,
         @Nonnull ResidentNpcRecord record
     ) {
-        if (!ResidentRegistryService.isGaiaRevivalEligible(record.getKind(), record.getNpcRoleId())) {
+        if (record.getTownsfolkIdentity() == null && !ResidentRegistryService.isGaiaRevivalEligible(record.getKind(), record.getNpcRoleId())) {
             return "That villager cannot be revived at the Gaia statue.";
         }
         UUID oldUuid = record.getLastEntityUuid();
@@ -149,16 +151,37 @@ public final class VillagerRevivalService {
         return null;
     }
 
-    /**
-     * Package-visible for tests — Gaia may revive when the saved uuid is merely unloaded; duplicates are purged on
-     * load / reconcile instead.
-     */
+    private static boolean reviveTownsfolk(World world, AetherhavenPlugin plugin, TownRecord town, TownManager manager,
+            Store<EntityStore> store, ResidentNpcRecord record, Vector3d position) {
+        var identity = record.getTownsfolkIdentity();
+        if (identity == null) return false;
+        UUID oldId = record.getLastEntityUuid();
+        UUID newId;
+        if (TownVillagerBinding.KIND_GUARD.equals(record.getKind())) {
+            newId = com.hexvane.aetherhaven.guild.GuardHireService.respawnHiredGuardAtPosition(world, plugin, town, store,
+                identity.getCharacterId(), record.getGuardEquipmentProfile() == null ? "guard_knight" : record.getGuardEquipmentProfile(),
+                identity, position, record.getJobPlotId());
+        } else {
+            newId = com.hexvane.aetherhaven.townsfolk.TownsfolkSpawnService.respawnPoolCharacterAtPosition(world, plugin, town,
+                store, identity.getCharacterId(), identity.getAssignmentKind(), identity, position, "GAIA_REVIVAL", "Resident resurrection");
+        }
+        if (newId == null) return false;
+        VillagerReputationService.migrateVillagerEntityUuid(town, manager, oldId, newId);
+        ResidentRegistryService.replaceEntityUuidEverywhere(town, manager, oldId, newId);
+        for (var tourist : town.getTouristRecords()) if (oldId.equals(tourist.getEntityUuid())) tourist.setEntityUuid(newId);
+        record.setLastEntityUuid(newId);
+        record.setPendingDawnRevival(false);
+        manager.updateTown(town);
+        return true;
+    }
+
+    /** Preserve Gaia's recovery policy: missing or unloaded residents may be revived; reconciliation removes duplicates. */
     static boolean appliesUnloadedRevivalGuard(@Nonnull ResidentNpcRecord record) {
         return false;
     }
 
     /**
-     * Package-visible for tests — only blocks when the saved uuid is already loaded live (unloaded copies are allowed).
+     * Only a loaded living entity blocks revival. A death notification is not required.
      */
     static boolean isRevivalBlockedForUnloadedEntity(
         @Nonnull Store<EntityStore> store,

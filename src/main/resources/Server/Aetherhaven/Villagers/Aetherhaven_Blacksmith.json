@@ -29,6 +29,14 @@
       "itemCount": 0,
       "dialogueNodeId": "rep_reward_50",
       "learnRecipeItemId": "Aetherhaven_Geode_Anvil"
+    },
+    {
+      "rewardId": "rep_blacksmith_75",
+      "minReputation": 75,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_75",
+      "learnRecipeItemId": "Aetherhaven_MasterSmith_Kit"
     }
   ],
   "giftLoves": [

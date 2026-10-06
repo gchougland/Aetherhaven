@@ -152,6 +152,8 @@ public final class ShopSpotPlayerComponent implements Component<EntityStore> {
         h = 31 * h + (gameDay ? 1 : 0);
         h = 31 * h + (record.isPlayerControlled() ? 1 : 0);
         h = 31 * h + (staffedWorkplace ? 1 : 0);
+        var plot = town.findPlotById(record.getPlotId());
+        h = 31 * h + (plot != null && plot.getShopClerkId() != null ? plot.getShopClerkId().hashCode() : 0);
         h = 31 * h + viewerUuid.hashCode();
         h = 31 * h + (town.playerCanUseShopSpots(viewerUuid) ? 1 : 0);
         UUID seller = record.getSellerUuid();

@@ -13,6 +13,22 @@
           "next": "inn_explain_pool"
         },
         {
+          "text": "aetherhaven_inn_outreach.open",
+          "condition": {
+            "type": "not",
+            "condition": {
+              "type": "npc_binding_is_visitor"
+            }
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "open_inn_outreach"
+            }
+          ],
+          "next": null
+        },
+        {
           "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.visitors_where",
           "condition": {
             "type": "and",

@@ -62,6 +62,11 @@ public final class GuardCombatProvocationDamageSystem extends DamageEventSystem 
             if (commandBuffer.getComponent(attackerRef, NPCEntity.getComponentType()) != null
                 && RtsHostileQuery.isGuardAttackableTarget(attackerRef, store)) {
                 markNpcAttacker(store, attackerRef, nowMs);
+                UUIDComponent victimUuid = archetypeChunk.getComponent(index, UUIDComponent.getComponentType());
+                GuardNpcAttackerMemory memory = store.getResource(GuardNpcAttackerMemory.getResourceType());
+                if (victimUuid != null && memory != null) {
+                    memory.markPlayerAttacker(victimUuid.getUuid(), attackerRef, nowMs);
+                }
             }
             return;
         }

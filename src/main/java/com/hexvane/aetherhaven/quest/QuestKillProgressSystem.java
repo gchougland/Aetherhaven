@@ -59,6 +59,7 @@ public final class QuestKillProgressSystem extends DeathSystems.OnDeathSystem {
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
+        if (store.getComponent(victimRef, com.hexvane.aetherhaven.hunter.HuntOpponent.getComponentType()) != null) return;
         if (store.getComponent(victimRef, Player.getComponentType()) != null) {
             return;
         }

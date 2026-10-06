@@ -68,11 +68,13 @@ public final class GuideMarkdownUiAppender {
             return 0;
         }
         String body = markdownBody.trim();
-        if (body.isEmpty()) {
+        boolean villager = guideNpcRoleId != null && !guideNpcRoleId.isBlank();
+        if (body.isEmpty() && !villager) {
             return 0;
         }
         Node doc = PARSER.parse(body);
         RenderState st = new RenderState(cmd, hostListSelector, maxRows, assetClassLoader, guideNpcRoleId);
+        if (villager) st.appendImage(NpcPortraitProvider.portraitPathForRoleId(guideNpcRoleId));
         for (Node n = doc.getFirstChild(); n != null; n = n.getNext()) {
             if (!st.renderBlock(n)) {
                 break;
@@ -149,6 +151,9 @@ public final class GuideMarkdownUiAppender {
             boolean wroteText = false;
             for (Node c = p.getFirstChild(); c != null; c = c.getNext()) {
                 if (c instanceof Image img) {
+                    // The portrait is always the first row, including translated and pack-provided topics.
+                    if (guideNpcRoleId != null && !guideNpcRoleId.isBlank()
+                        && isWikiVillagerHeroScreenshot(img.getUrl().toString())) continue;
                     if (!wroteText) {
                         flushParagraphRich(p);
                         wroteText = true;
@@ -268,7 +273,10 @@ public final class GuideMarkdownUiAppender {
         }
 
         private void appendInlineFragment(@Nonnull StringBuilder out, @Nonnull Node c) {
-            if (c instanceof Text t) {
+            if (c instanceof Image) {
+                // Images have their own rows; their alternative text is not a caption.
+                return;
+            } else if (c instanceof Text t) {
                 out.append(t.getChars());
             } else if (c instanceof StrongEmphasis || c instanceof Emphasis) {
                 out.append(collectInlineText(c));

@@ -1,0 +1,23 @@
+{
+  "id": "guard_mage_iron",
+  "guardNpcRole": "Aetherhaven_Guard_Mage",
+  "displayName": "Iron Mage",
+  "hireGoldCost": 45,
+  "armor": [
+    "Aetherhaven_Guard_Armor_Cloth_Silk_Head",
+    "Aetherhaven_Guard_Armor_Cloth_Silk_Chest",
+    "Aetherhaven_Guard_Armor_Cloth_Silk_Hands",
+    "Aetherhaven_Guard_Armor_Cloth_Silk_Legs"
+  ],
+  "hotbar": [
+    {
+      "slot": 0,
+      "itemId": "Weapon_Staff_Iron"
+    }
+  ],
+  "attributeCombat": true,
+  "attributeBonuses": {
+    "intelligence": 4,
+    "vitality": 3
+  }
+}

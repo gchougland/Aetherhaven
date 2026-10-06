@@ -68,6 +68,7 @@ public final class InnVisitorShopCompletion {
         }
         UUIDComponent uuidComp = store.getComponent(npcRef, UUIDComponent.getComponentType());
         UUID npcUuid = uuidComp != null ? uuidComp.getUuid() : null;
+        if (com.hexvane.aetherhaven.town.TownAdmission.blocked(plugin, town, npcUuid, config.npcRoleId()) != null) return;
         if (npcUuid != null) {
             town.removeInnLockedEntity(npcUuid);
             town.getInnPoolNpcIds().removeIf(s -> {

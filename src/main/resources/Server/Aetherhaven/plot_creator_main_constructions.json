@@ -79,6 +79,34 @@
     {
       "id": "plot_festival_square",
       "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_festival_square"
+    },
+    {
+      "id": "plot_warehouse",
+      "labelLang": "aetherhaven_warehouse_manager.building.name"
+    },
+    {
+      "id": "plot_druid",
+      "labelLang": "aetherhaven_druid.building.name"
+    },
+    {
+      "id": "plot_alchemist",
+      "labelLang": "aetherhaven_alchemist.building.name"
+    },
+    {
+      "id": "plot_doctor",
+      "labelLang": "aetherhaven_doctor.building.name"
+    },
+    {
+      "id": "plot_monster_hunter",
+      "labelLang": "aetherhaven_monster_hunter.building.name"
+    },
+    {
+      "id": "plot_crafter",
+      "labelLang": "aetherhaven_crafter.building.name"
+    },
+    {
+      "id": "plot_leatherworker",
+      "labelLang": "aetherhaven_leatherworker.building.name"
     }
   ]
 }

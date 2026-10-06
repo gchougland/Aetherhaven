@@ -47,6 +47,8 @@ Most of what you need to learn is explained inside the game through the **Town J
 - Assign villagers to **workplaces** and optional **houses** so they can sleep, work, and stay comfortable
 - Keep villagers happy by managing **hunger**, **energy**, and **fun** (parks and benches help with fun)
 - **Gift items** to villagers to raise **reputation** and unlock recipes, tools, and special rewards
+- Train resident specialists in **Mastery** and equip the Miner and Logger with tools for more demanding resources
+- Employ Townsfolk as Apprentices, set their work priorities, and spend the Mastery points they earn through completed work
 - Villagers follow **daily schedules**, commute to work, and react to the world around them
 
 ### Quests
@@ -62,6 +64,10 @@ Most of what you need to learn is explained inside the game through the **Town J
 - Store and manage gold in the **treasury** at the town hall
 - Host **feasts** at the banquet table for bonuses and town events
 - Production buildings (farm, mine, lumber mill, barn, and others) gather resources over time
+- Review planted beds, growing trees and herds so resident specialists can tend, harvest and carry their output to storage
+- Use **Couriers**, **Warehouse storage** and queued workplace tasks to supply Apprentice production
+- Settle unpaid **wage bills** in the treasury or Town Journal
+- Grow alchemical plants in the Druid's **Conservatory**, then discover mixtures at the Alchemist's **Laboratory** and improve a reusable **Alchemy Flask**
 - Break world containers for a chance to find loose gold coins while exploring
 
 ### Shops and trade

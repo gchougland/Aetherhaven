@@ -23,10 +23,13 @@ public final class PlotCreatorJsonWriter {
     private PlotCreatorJsonWriter() {}
 
     public static void writeBuilding(@Nonnull Path outputFile, @Nonnull PlotCreatorDraft draft) throws IOException {
+        String productionError=PlotCreatorProductionRules.validationError(draft,com.hexvane.aetherhaven.AetherhavenPlugin.get());
+        if (productionError!=null) throw new IOException(productionError);
         if (PlotBuildingKindRequirements.requiresGaiaStatue(draft, null)) {
             PlotCreatorGaiaStatueSupport.syncPoiFromLocalPos(draft);
         }
         Map<String, Object> root = new LinkedHashMap<>();
+        if(!draft.getMiningNodes().isEmpty() || draft.isLoadedPhysicalMining()) root.put("productionLayout",draft.miningLayout());
         root.put("id", draft.getConstructionId());
         root.put("displayName", draft.getDisplayName());
         String description = draft.getDescription();

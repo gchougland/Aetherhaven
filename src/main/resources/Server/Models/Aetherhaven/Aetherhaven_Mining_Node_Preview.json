@@ -1,0 +1,24 @@
+{
+  "Model": "Items/Aetherhaven/Mining_Node_Preview/Preview.blockymodel",
+  "Texture": "Items/Aetherhaven/Mining_Node_Preview/Stone.png",
+  "DefaultAttachments": [
+    {
+      "Model": "Items/Aetherhaven/Mining_Node_Preview/Ore.blockymodel",
+      "Texture": "Items/Aetherhaven/Mining_Node_Preview/Copper.png"
+    }
+  ],
+  "HitBox": {
+    "Min": {
+      "X": -0.25,
+      "Y": 0,
+      "Z": -0.25
+    },
+    "Max": {
+      "X": 0.25,
+      "Y": 0.75,
+      "Z": 0.25
+    }
+  },
+  "MinScale": 2,
+  "MaxScale": 2
+}

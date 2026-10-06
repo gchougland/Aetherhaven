@@ -1,0 +1,9 @@
+{
+  "id": "craft_repair_kit",
+  "name": "Repair kit",
+  "workplace": "crafting",
+  "sourceRecipe": "Tool_Repair_Kit_Iron_Recipe_Generated_0",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 2
+}

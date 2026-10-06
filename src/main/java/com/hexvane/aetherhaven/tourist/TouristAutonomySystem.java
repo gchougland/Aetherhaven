@@ -75,10 +75,6 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
     private static final long SHOP_VISIT_MIN_MS = 20_000L;
     private static final long SHOP_VISIT_MAX_MS = 40_000L;
     private static final int SHOP_SPOTS_PER_VISIT_MAX = 2;
-    /** Chance a visiting tourist buys one player listing after browsing a player shop (0–100). */
-    private static final int PLAYER_SHOP_BUY_CHANCE_PERCENT = 60;
-    /** Settled tourist citizens keep browsing towns, but buy from player shops less often. */
-    private static final int PLAYER_SHOP_BUY_CHANCE_CITIZEN_PERCENT = 20;
     private static final long POI_USE_MIN_MS = 15_000L;
     private static final long POI_USE_MAX_MS = 35_000L;
     private static final long SHOP_SPOT_BROWSE_MIN_MS = 5_000L;
@@ -138,6 +134,14 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         }
 
         Ref<EntityStore> ref = chunk.getReferenceTo(index);
+        if(com.hexvane.aetherhaven.autonomy.ClinicVisitService.active(ref))return;
+        if(com.hexvane.aetherhaven.hunter.HuntService.owns(ref,store))return;
+        var clerk=store.getComponent(ref,com.hexvane.aetherhaven.shopspot.ShopClerkState.getComponentType());
+        if(clerk!=null&&clerk.active)return;
+        var delivery=store.getComponent(ref,com.hexvane.aetherhaven.warehouse.CourierTravelState.getComponentType());
+        if(delivery!=null&&delivery.active)return;
+        var work=store.getComponent(ref,com.hexvane.aetherhaven.workplace.ApprenticeWorkState.getComponentType());
+        if(work!=null&&work.active)return;
         UUIDComponent touristUuid = store.getComponent(ref, UUIDComponent.getComponentType());
         if (touristUuid != null
             && com.hexvane.aetherhaven.festival.snowball.SnowballSessionIndex.isLivingFighter(touristUuid.getUuid())) {
@@ -1337,18 +1341,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         if (plot != null && !plot.isAllowNpcShopPurchases()) {
             return;
         }
-        int buyChancePercent = PLAYER_SHOP_BUY_CHANCE_PERCENT;
         TownsfolkCharacterBinding tb = store.getComponent(ref, TownsfolkCharacterBinding.getComponentType());
-        if (tb != null && !tb.getCharacterId().isBlank()) {
-            TouristRecord rec = TouristPortalTickService.findTouristRecord(town, tb.getCharacterId());
-            if (rec != null && rec.isCitizen()) {
-                buyChancePercent = PLAYER_SHOP_BUY_CHANCE_CITIZEN_PERCENT;
-            }
-        }
-        Random random = new Random(now ^ ref.hashCode() ^ plotId.hashCode());
-        if (random.nextInt(100) >= buyChancePercent) {
-            return;
-        }
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         if (uc == null) {
             return;
@@ -1360,17 +1353,16 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
                 buyerName = ch.getDisplayName().trim();
             }
         }
-        // Run on this tick (tourist systems already run on the world thread). Only mark done on success so a
-        // missed/empty listing can retry later in the same visit.
-        boolean bought =
-            NpcShopSpotBuyerService.tryBuyOneListingOnWorldThread(
+        // One skill roll per visit. Closed or empty shops may be checked again; a decline is final.
+        var outcome =
+            NpcShopSpotBuyerService.attempt(
                 world,
                 town.getTownId(),
                 plotId,
                 buyerName,
                 uc.getUuid()
             );
-        if (bought) {
+        if (outcome.visitComplete()) {
             autonomy.setShopPurchaseDoneThisVisit(true);
         }
     }

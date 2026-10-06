@@ -130,7 +130,11 @@ public final class VillagersBootstrap {
                 PoiMarkerEntity.CODEC
             );
         plugin.getChunkStoreRegistry().registerSystem(new ChunkUnloadMountDisconnectSystem());
-        plugin.getChunkStoreRegistry().registerSystem(new EntityChunkStaleReferenceCleanupSystem());
+        var entityCleanup = new EntityChunkStaleReferenceCleanupSystem();
+        plugin.getChunkStoreRegistry().registerSystem(entityCleanup);
+        plugin.getChunkStoreRegistry().registerSystem(entityCleanup.sections());
+        plugin.getChunkStoreRegistry().registerSystem(entityCleanup.sectionChanges());
+        plugin.getEntityStoreRegistry().registerSystem(entityCleanup.removals());
         plugin.getChunkStoreRegistry().registerSystem(new WorldSpawnStaleChunkRefCleanupSystem());
         plugin.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new ResidentLastKnownPositionSystem(core));
@@ -141,6 +145,14 @@ public final class VillagersBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new BlockMountDeathCleanupSystem());
         plugin.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new VillagerLifeSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.clinic.ClinicCareSystem(core));
+        com.hexvane.aetherhaven.hunter.HuntOpponent.register(plugin.getEntityStoreRegistry());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.hunter.HuntService());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.hunter.HuntService.DamageFilter());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.hunter.HuntService.Knockouts());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.hunter.HuntService.Deaths());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.workplace.RanchAnimalLifecycle.Deaths(core));
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.workplace.RanchAnimalLifecycle.Removals(core));
         plugin.getEntityStoreRegistry().registerSystem(new ClownCheerAssistSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new VillagerFollowPlayerSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new VillagerMoodVisualSystem(core));
@@ -148,6 +160,7 @@ public final class VillagersBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new AetherhavenNpcTeleportGuardSystem());
         plugin.getEntityStoreRegistry().registerSystem(new AetherhavenNpcUsedTeleporterGuardSystem());
         plugin.getEntityStoreRegistry().registerSystem(new PendingEntityRemovalSystem());
+        plugin.getEntityStoreRegistry().registerSystem(com.hexvane.aetherhaven.townsfolk.PendingEntityRemovalService.lifecycle());
         plugin.getEntityStoreRegistry().registerSystem(new TownsfolkAssignmentSystem());
         plugin.getEntityStoreRegistry().registerSystem(new VillagerDeathHandlerSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new HiredGuardDeathRemoveSystem(core));
@@ -155,6 +168,21 @@ public final class VillagersBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new TownVillagerHealthTopUpSystem.OnAdd());
         plugin.getEntityStoreRegistry().registerSystem(new TownVillagerHealthTopUpSystem.AfterRecalculate());
         plugin.getEntityStoreRegistry().registerSystem(new RescueVillagerBreakBlockSystem(core));
+        var halloweenCoffins = new com.hexvane.aetherhaven.rescue.HalloweenCoffinUseSystem(core);
+        plugin.getEntityStoreRegistry().registerSystem(halloweenCoffins);
+        plugin.getEntityStoreRegistry().registerSystem(halloweenCoffins.openings());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.rescue.HalloweenRescueSystems());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.rescue.HalloweenRescueSystems.Deaths());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.rescue.HalloweenRescueSystems.Reconcile());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.rescue.HalloweenRescueSystems.Lifecycle());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.halloween.HalloweenGameSystems.Use());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.halloween.HalloweenGameSystems.Break());
+        plugin.getEntityStoreRegistry().registerSystem(new com.hexvane.aetherhaven.halloween.HalloweenGameSystems.Reconcile());
+        com.hexvane.aetherhaven.halloween.HalloweenGameService.register(core);
+        core.getDialogueConditionRegistry().register("halloween_rescue_season", (condition, player, store, npc) ->
+            com.hexvane.aetherhaven.halloween.HalloweenResident.rescueSeason());
+        core.getDialogueConditionRegistry().register("halloween_rescue_available", (condition, player, store, npc) ->
+            com.hexvane.aetherhaven.halloween.HalloweenResident.canAcceptRescue(player,store,npc));
         plugin.getEntityStoreRegistry().registerSystem(new PoiMarkerSystems.EnsurePrefabCopyable());
         plugin.getEntityStoreRegistry().registerSystem(new NpcPersistentModelResyncSystem());
         core.registerAetherhavenSubcommand(new AetherhavenNeedsCommand());

@@ -54,6 +54,7 @@ public final class PlotBuildingKindRequirements {
         for (PlotCreatorSpotEntry entry : draft.getSelectedSpots()) {
             out.add(new SubstepRequirement(entry.type(), entry.minCount(), entry.workResidentKind()));
         }
+        PlotCreatorProductionRules.enforceRequirements(draft, AetherhavenPlugin.get(), out);
         return out;
     }
 
@@ -98,7 +99,9 @@ public final class PlotBuildingKindRequirements {
             merged.add(new SubstepRequirement(PlotCreatorSubstepType.GUILD_MASTER_SPAWN, 0));
         }
         expandWorkRoles(merged, draft, plugin);
-        return new ArrayList<>(merged);
+        var current = new ArrayList<>(merged);
+        PlotCreatorProductionRules.enforceRequirements(draft, plugin, current);
+        return current;
     }
 
     /**
@@ -513,6 +516,7 @@ public final class PlotBuildingKindRequirements {
         @Nonnull PlotCreatorDraft draft,
         @Nullable AetherhavenPlugin plugin
     ) {
+        if (PlotCreatorProductionRules.requiresHuntStorage(draft,plugin)) return true;
         if (plugin == null) {
             return false;
         }

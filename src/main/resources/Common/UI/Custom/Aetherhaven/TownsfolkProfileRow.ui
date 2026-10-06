@@ -1,0 +1,13 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group {
+  LayoutMode: Left;
+  Anchor: (Height: 48, Bottom: 4);
+  Background: $T.@Card;
+  Padding: (Horizontal: 8, Vertical: 6);
+  AssetImage #Icon { Anchor: (Width: 32, Height: 32, Right: 12); }
+  Label #Name { Anchor: (Width: 178); Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center); }
+  Label #Level { Anchor: (Width: 118); Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e0c891); }
+  Label #Tier { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #a5bac9); }
+  $C.@TextButton #Train { Anchor: (Width: 120); Text: ""; }
+}

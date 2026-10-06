@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Cobalt_Mage_Kit",
+  "name": "Cobalt Mage Kit",
+  "guardClass": "guard_mage",
+  "equipmentProfile": "guard_mage_cobalt",
+  "description": "+8 Intelligence, +7 Vitality."
+}

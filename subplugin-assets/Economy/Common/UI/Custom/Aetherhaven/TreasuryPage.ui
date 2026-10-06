@@ -80,12 +80,19 @@ $C.@PageOverlay {
                 Text: ".";
                 TooltipText: "";
               }
+              $C.@SecondaryTextButton #TabBillsButton {
+                Anchor: (Height: 44, Width: 86, Left: 10);
+                Text: "Bills";
+              }
+
             }
 
             Label #TreasuryTabSpacerR {
               FlexWeight: 1;
             }
           }
+
+          Group #BillsPage { LayoutMode: Top; Anchor: (Height: 440); Visible: false; }
 
           Group #CoinsTabContent {
             LayoutMode: Top;

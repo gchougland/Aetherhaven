@@ -36,7 +36,9 @@ Even a goblin who loves loud noises needs a quiet bed sometimes.
 
 Visit them after your friendship reaches each level to pick up the reward through dialogue.
 
-- **Friendship 50:** teaches you to craft **Mining Bomb**
+- **Friendship 25:** gives you **8 Fireworks**.
+- **Friendship 50:** teaches you to craft **Mining Bomb**.
+- **Friendship 75:** teaches the town to craft **Fireworks** at a crafting workplace with **Crafting 4**. Each batch makes four.
 
 ## Weekly routine
 

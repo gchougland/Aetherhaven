@@ -260,7 +260,7 @@ public final class AetherhavenRoleLabels {
     }
 
     @Nonnull
-    private static String kindDisplayTitle(@Nonnull String kind) {
+    public static String kindDisplayTitle(@Nonnull String kind) {
         if (kind.isEmpty()) {
             return "Resident";
         }

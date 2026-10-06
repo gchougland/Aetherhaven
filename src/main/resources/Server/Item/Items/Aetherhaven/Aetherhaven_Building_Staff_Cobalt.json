@@ -55,7 +55,28 @@
         }
       ]
     },
-    "Secondary": "Aetherhaven_BuildingStaff_Secondary_Root"
+    "Secondary": "Aetherhaven_BuildingStaff_Secondary_Root",
+    "Use": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenWorkplaceTool"
+        }
+      ]
+    },
+    "Ability1": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenWorkplaceTool"
+        }
+      ]
+    },
+    "Pick": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenWorkplaceTool"
+        }
+      ]
+    }
   },
   "InteractionConfig": {
     "UseDistance": {

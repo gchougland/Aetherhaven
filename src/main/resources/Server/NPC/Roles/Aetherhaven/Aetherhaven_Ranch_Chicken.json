@@ -1,0 +1,40 @@
+{
+  "Type": "Variant",
+  "Reference": "Template_Animal_Neutral",
+  "Modify": {
+    "Appearance": "Chicken",
+    "FlockArray": [],
+    "AttractiveItemSet": [
+      "Plant_Crop_Corn_Item"
+    ],
+    "AttractiveItemSetParticles": "Want_Food_Corn",
+    "DropList": "Empty",
+    "MaxHealth": 29,
+    "MaxSpeed": 5,
+    "ViewRange": 8,
+    "ViewSector": 300,
+    "HearingRange": 4,
+    "AlertedRange": 12,
+    "AlertedActionRange": 5,
+    "AbsoluteDetectionRange": 1.5,
+    "ProduceItem": "",
+    "ProduceTimeout": [
+      "PT36H",
+      "PT48H"
+    ],
+    "IsTameable": false,
+    "TameRoleChange": "Tamed_Chicken",
+    "IsMemory": false,
+    "MemoriesNameOverride": "Chicken",
+    "NameTranslationKey": {
+      "Compute": "NameTranslationKey"
+    }
+  },
+  "Parameters": {
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Chicken.name",
+      "Description": "Translation key for NPC name display"
+    }
+  },
+  "$Comment": "Town managed offspring. Native species behavior with no item output, taming or memories."
+}

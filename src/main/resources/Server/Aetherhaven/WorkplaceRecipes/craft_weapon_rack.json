@@ -1,0 +1,27 @@
+{
+  "id": "craft_weapon_rack",
+  "name": "Decorative Weapon Rack",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:craft_weapon_rack",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 6,
+  "requiresKnowledge": true,
+  "inputs": [
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 24
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 8
+    },
+    {
+      "itemId": "Ingredient_Leather_Light",
+      "count": 4
+    }
+  ],
+  "output": "Aetherhaven_Prop_Weapon_Rack",
+  "outputCount": 1,
+  "workSeconds": 45
+}

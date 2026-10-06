@@ -29,5 +29,12 @@
     "LookAround": 4,
     "Fidget": 2,
     "Stretch": 1
+  },
+  "startingSkills": {
+    "building": 3,
+    "blacksmithing": 3,
+    "leatherworking": 2,
+    "crafting": 5,
+    "jewelry": 2
   }
 }

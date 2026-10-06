@@ -41,40 +41,33 @@ public final class WorldMapTrackerCompat {
    */
   @Nonnull
   public static LongSet getLoadedChunks(@Nonnull Player player) {
-    HLongSet loaded = getLoadedSet(player);
-    if (loaded == null || loaded.isEmpty()) {
-      return new LongOpenHashSet();
-    }
-    LongOpenHashSet copy = new LongOpenHashSet(loaded.size());
-    for (long chunkIndex : loaded) {
-      copy.add(chunkIndex);
-    }
-    return copy;
+    return readLoaded(player, loaded -> new LongOpenHashSet(loaded), new LongOpenHashSet());
   }
 
   /** True when the tracker has already sent this map chunk to the player. */
   public static boolean hasChunkLoadedOnClient(@Nonnull Player player, long chunkIndex) {
-    HLongSet loaded = getLoadedSet(player);
-    return loaded != null && loaded.contains(chunkIndex);
+    return readLoaded(player, loaded -> loaded.contains(chunkIndex), false);
   }
 
-  @Nullable
-  private static HLongSet getLoadedSet(@Nonnull Player player) {
+  private static <T> T readLoaded(@Nonnull Player player, java.util.function.Function<HLongSet,T> read, T fallback) {
     if (LOADED_FIELD == null || LOADED_LOCK_FIELD == null) {
-      return null;
+      return fallback;
     }
     WorldMapTracker tracker = player.getWorldMapTracker();
     ReentrantReadWriteLock lock;
     try {
       lock = (ReentrantReadWriteLock) LOADED_LOCK_FIELD.get(tracker);
     } catch (IllegalAccessException e) {
-      return null;
+      return fallback;
     }
     lock.readLock().lock();
     try {
-      return (HLongSet) LOADED_FIELD.get(tracker);
+      // The tracker mutates this set on its map worker. Keep the read lock for
+      // the entire copy/lookup, not just while obtaining the mutable reference.
+      HLongSet loaded=(HLongSet) LOADED_FIELD.get(tracker);
+      return loaded==null?fallback:read.apply(loaded);
     } catch (IllegalAccessException e) {
-      return null;
+      return fallback;
     } finally {
       lock.readLock().unlock();
     }

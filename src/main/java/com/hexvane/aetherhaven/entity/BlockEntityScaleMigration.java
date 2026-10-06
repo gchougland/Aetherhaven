@@ -10,17 +10,14 @@ import javax.annotation.Nonnull;
 import org.joml.Vector3d;
 
 /**
- * Hytale Update 6 made block-entity scale 1.0 the natural size (it used to be 2.0) and moved the
- * visual center onto the entity position. Prefab JSON still stores the old scales; this applies the
- * same math as Hytale's {@code PositionMigrationSystem}.
+ * Migrate only entities explicitly flagged by Hytale's versioned BlockEntity codec.
+ * Scale itself is not a version: both small and large decorations can be intentional.
  */
 public final class BlockEntityScaleMigration {
     private BlockEntityScaleMigration() {}
 
     /**
-     * Prefab spawn: always convert old-convention {@code EntityScale} unless this clone was already
-     * migrated (plot-creator re-export). Consumes Hytale's outdated-anchor flag so the engine does
-     * not apply the same shift a second time on add.
+     * Consume the same legacy flag as the engine, so either spawn path can run first safely.
      */
     public static void migratePrefabSpawn(@Nonnull Holder<EntityStore> holder) {
         if (!BlockEntityScaleMigrated.isRegistered()) {
@@ -35,15 +32,14 @@ public final class BlockEntityScaleMigration {
         if (blockEntity == null || scaleComponent == null || transform == null) {
             return;
         }
-        apply(blockEntity, scaleComponent, transform);
-        holder.putComponent(BlockEntityScaleMigrated.getComponentType(), new BlockEntityScaleMigrated());
+        if (migrateLegacyAnchor(blockEntity, scaleComponent, transform))
+            holder.putComponent(BlockEntityScaleMigrated.getComponentType(), new BlockEntityScaleMigrated());
     }
 
     /**
-     * World load repair for decorations that skipped Hytale's version-0 path (binary prefab cache).
-     * Only touches scales still above 1.0 so already-migrated entities stay put.
+     * No scale threshold is safe here. The engine may already have converted a large decoration.
      */
-    public static void migrateLoadedIfOversized(@Nonnull Holder<EntityStore> holder) {
+    public static void migrateLoadedLegacyAnchor(@Nonnull Holder<EntityStore> holder) {
         if (!BlockEntityScaleMigrated.isRegistered()) {
             return;
         }
@@ -56,11 +52,8 @@ public final class BlockEntityScaleMigration {
         if (blockEntity == null || scaleComponent == null || transform == null) {
             return;
         }
-        if (scaleComponent.getScale() <= 1.0f) {
-            return;
-        }
-        apply(blockEntity, scaleComponent, transform);
-        holder.putComponent(BlockEntityScaleMigrated.getComponentType(), new BlockEntityScaleMigrated());
+        if (migrateLegacyAnchor(blockEntity, scaleComponent, transform))
+            holder.putComponent(BlockEntityScaleMigrated.getComponentType(), new BlockEntityScaleMigrated());
     }
 
     static void applyAnchorShift(@Nonnull Vector3d position, @Nonnull Rotation3fc rotation, float oldScale) {
@@ -68,14 +61,15 @@ public final class BlockEntityScaleMigration {
         position.add(0.0, 0.5, 0.0);
     }
 
-    private static void apply(
+    static boolean migrateLegacyAnchor(
         @Nonnull BlockEntity blockEntity,
         @Nonnull EntityScaleComponent scaleComponent,
         @Nonnull TransformComponent transform
     ) {
+        if (!blockEntity.consumeOutdatedAnchor()) return false;
         float scale = scaleComponent.getScale();
         scaleComponent.setScale(scale / 2.0f);
         applyAnchorShift(transform.getPosition(), transform.getRotation(), scale);
-        blockEntity.consumeOutdatedAnchor();
+        return true;
     }
 }

@@ -1,0 +1,35 @@
+{
+  "Type": "Variant",
+  "Reference": "Template_Animal_Neutral",
+  "Modify": {
+    "Appearance": "Lamb",
+    "FlockArray": [],
+    "AttractiveItemSet": [
+      "Plant_Crop_Lettuce_Item"
+    ],
+    "AttractiveItemSetParticles": "Want_Food_Lettuce",
+    "DropList": "Empty",
+    "MaxHealth": 29,
+    "ViewRange": 10,
+    "ViewSector": 320,
+    "HearingRange": 6,
+    "AlertedRange": 11,
+    "AlertedActionRange": 7,
+    "AbsoluteDetectionRange": 1,
+    "IsTameable": false,
+    "TameRoleChange": "Tamed_Sheep_Lamb",
+    "IsMemory": false,
+    "MemoriesNameOverride": "Sheep_Lamb",
+    "NameTranslationKey": {
+      "Compute": "NameTranslationKey"
+    },
+    "ProduceItem": ""
+  },
+  "Parameters": {
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Sheep_Lamb.name",
+      "Description": "Translation key for NPC name display"
+    }
+  },
+  "$Comment": "Town managed offspring. Native species behavior with no item output, taming or memories."
+}

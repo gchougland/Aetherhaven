@@ -1,0 +1,80 @@
+{
+  "Type": "Variant",
+  "Reference": "Template_Predator",
+  "Modify": {
+    "DeathParticles": "Effect_Death_Void",
+    "Appearance": "Crawler_Void",
+    "AttitudeGroup": "Void",
+    "DropList": "",
+    "MaxHealth": 74,
+    "MaxSpeed": 8,
+    "WanderRadius": 12,
+    "ViewRange": 18,
+    "HearingRange": 12,
+    "AbsoluteDetectionRange": 2,
+    "AlertedRange": 18,
+    "IsMemory": false,
+    "MemoriesCategory": "Voidspawn",
+    "AlertedTime": [
+      2,
+      3
+    ],
+    "MaintainDistanceWhileAlerted": false,
+    "ThreatenDelayRange": [
+      2,
+      2
+    ],
+    "ThreatenAnimation": "Jump",
+    "FleeIfNotThreatened": false,
+    "FleeRange": 11,
+    "HardLeashDistance": 60,
+    "LeashDistance": 30,
+    "LeashMinPlayerDistance": 7,
+    "LeashTimer": [
+      3,
+      4
+    ],
+    "CombatBehaviorDistance": 6.5,
+    "CombatRelativeTurnSpeed": 1,
+    "CombatDirectWeight": 10,
+    "CombatStrafeWeight": 10,
+    "CombatBackOffAfterAttack": true,
+    "CombatBackOffDurationRange": [
+      3,
+      4
+    ],
+    "CombatBackOffDistanceRange": [
+      2,
+      3
+    ],
+    "CombatStrafingFrequencyRange": [
+      1,
+      2
+    ],
+    "CombatStrafingDurationRange": [
+      2,
+      3
+    ],
+    "CombatMovingRelativeSpeed": 0.7,
+    "Attack": "Root_NPC_Crawler_Void_Attack",
+    "AttackDistance": 2.25,
+    "ChaseRelativeSpeed": 1,
+    "AlwaysSleepAtNight": false,
+    "DayFlavorAnimation": "",
+    "DayTimeNapWeight": 0,
+    "TimidDuringDay": false,
+    "DayTimePeriod": [
+      18.01,
+      6.01
+    ],
+    "NameTranslationKey": {
+      "Compute": "NameTranslationKey"
+    }
+  },
+  "Parameters": {
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Crawler_Void.name",
+      "Description": "Translation key for NPC name display"
+    }
+  }
+}

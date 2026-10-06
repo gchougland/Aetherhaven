@@ -1,0 +1,24 @@
+{
+  "id": "guard_knight_thorium",
+  "guardNpcRole": "Aetherhaven_Guard_Knight",
+  "displayName": "Thorium Knight",
+  "hireGoldCost": 40,
+  "armor": [
+    "Aetherhaven_Guard_Armor_Thorium_Head",
+    "Aetherhaven_Guard_Armor_Thorium_Chest",
+    "Aetherhaven_Guard_Armor_Thorium_Hands",
+    "Aetherhaven_Guard_Armor_Thorium_Legs"
+  ],
+  "hotbar": [
+    {
+      "slot": 0,
+      "itemId": "Weapon_Sword_Thorium"
+    }
+  ],
+  "offhand": "Weapon_Shield_Thorium",
+  "attributeCombat": true,
+  "attributeBonuses": {
+    "strength": 6,
+    "vitality": 6
+  }
+}

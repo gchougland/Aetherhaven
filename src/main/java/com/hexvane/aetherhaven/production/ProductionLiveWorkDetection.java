@@ -180,7 +180,7 @@ public final class ProductionLiveWorkDetection {
         return PoiScoring.isWorkPoi(poi) && Objects.equals(poi.getPlotId(), jobPlotId);
     }
 
-    private static boolean isOnWorkSchedule(
+    public static boolean isOnWorkSchedule(
         @Nonnull Store<EntityStore> store,
         @Nonnull Ref<EntityStore> ref,
         @Nonnull NPCEntity npc,

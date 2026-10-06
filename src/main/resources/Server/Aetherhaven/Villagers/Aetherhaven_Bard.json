@@ -20,7 +20,32 @@
       "plot_guild_hall"
     ]
   },
-  "reputationMilestones": [],
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_bard_25",
+      "minReputation": 25,
+      "itemId": "Potion_Stamina",
+      "itemCount": 3,
+      "dialogueNodeId": "rep_reward_25",
+      "learnRecipeItemId": null
+    },
+    {
+      "rewardId": "rep_bard_50",
+      "minReputation": 50,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_50",
+      "learnRecipeItemId": "Aetherhaven_Prop_Festival_Flag"
+    },
+    {
+      "rewardId": "rep_bard_75",
+      "minReputation": 75,
+      "itemId": "Aetherhaven_Villager_Cosmetic_Jester_Hat",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_75",
+      "learnRecipeItemId": null
+    }
+  ],
   "giftLoves": [
     "Aetherhaven_Lute",
     "Furniture_Dungeon_Chest_Epic",

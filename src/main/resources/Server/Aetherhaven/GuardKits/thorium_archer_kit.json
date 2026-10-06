@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Thorium_Archer_Kit",
+  "name": "Thorium Archer Kit",
+  "guardClass": "guard_archer",
+  "equipmentProfile": "guard_archer_thorium",
+  "description": "+6 Dexterity, +3 Speed, +2 Vitality."
+}

@@ -1,0 +1,40 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Ore_Adamantite_Magma.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Ore_Adamantite_Magma.png",
+  "BlockType": {
+    "DrawType": "CubeWithModel",
+    "CustomModel": "Resources/Ores/Ore_Large.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Resources/Ores/Ore_Textures/Adamantite.png",
+        "Weight": 1
+      }
+    ],
+    "RandomRotation": "YawStep90",
+    "Textures": [
+      {
+        "Weight": 1,
+        "Sides": "BlockTextures/Rock_Magma_Cooled_Adamantite_Cracks_Side02.png",
+        "UpDown": "BlockTextures/Rock_Magma_Cooled_Adamantite_Cracks02.png"
+      }
+    ],
+    "BlockSoundSetId": "Ore",
+    "PhysicalMaterialId": "Stone",
+    "BlockParticleSetId": "Ore",
+    "ParticleColor": "#b32716",
+    "TextureComputedColor": "#5E0B19",
+    "Material": "Solid",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Unbreakable"
+      }
+    },
+    "Flags": {},
+    "Support": {}
+  },
+  "PlayerAnimationsId": "Block",
+  "MaxStack": 1,
+  "ItemSoundSetId": "ISS_Blocks_Stone"
+}

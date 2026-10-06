@@ -1,0 +1,31 @@
+{
+  "id": "craft_palm_streetlight",
+  "name": "Palm Streetlight",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:craft_palm_streetlight",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 4,
+  "requiresKnowledge": true,
+  "inputs": [
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 16
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 6
+    },
+    {
+      "itemId": "Ingredient_Crystal_Yellow",
+      "count": 4
+    },
+    {
+      "itemId": "Ingredient_Charcoal",
+      "count": 4
+    }
+  ],
+  "output": "Aetherhaven_Prop_Palm_Streetlight",
+  "outputCount": 1,
+  "workSeconds": 35
+}

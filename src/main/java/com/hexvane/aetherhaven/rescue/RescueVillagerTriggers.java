@@ -10,6 +10,11 @@ import javax.annotation.Nullable;
 
 /** Static registry of rescue-villager triggers keyed by block type and binding kind. */
 public final class RescueVillagerTriggers {
+    // Opening, rather than breaking, is required. This is deliberately outside the block-break registry.
+    public static final RescueVillagerTrigger HALLOWEEN = new RescueVillagerTrigger(
+        "", "q_halloween_rescue", "Aetherhaven_Halloween_Rescue", "rescue_halloween", "aetherhaven_halloween_rescue",
+        0, 0, AetherhavenConstants.CLOWN_RESCUE_VANISH_PARTICLE_SYSTEM_ID,
+        AetherhavenConstants.CLOWN_RESCUE_VANISH_SOUND_EVENT_ID, "Jack Hollow");
     private static final List<RescueVillagerTrigger> ALL = List.of(
         new RescueVillagerTrigger(
             AetherhavenConstants.CRYSTALLIZED_PERSON_BLOCK_TYPE_ID,
@@ -66,6 +71,7 @@ public final class RescueVillagerTriggers {
 
     @Nullable
     public static RescueVillagerTrigger byBindingKind(@Nonnull String bindingKind) {
+        if (HALLOWEEN.rescueBindingKind().equals(bindingKind.trim())) return HALLOWEEN;
         return BY_BINDING_KIND.get(bindingKind.trim());
     }
 

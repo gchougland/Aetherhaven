@@ -1,0 +1,23 @@
+{
+  "id": "guard_mage_thorium",
+  "guardNpcRole": "Aetherhaven_Guard_Mage",
+  "displayName": "Thorium Mage",
+  "hireGoldCost": 45,
+  "armor": [
+    "Aetherhaven_Guard_Armor_Cloth_Cindercloth_Head",
+    "Aetherhaven_Guard_Armor_Cloth_Cindercloth_Chest",
+    "Aetherhaven_Guard_Armor_Cloth_Cindercloth_Hands",
+    "Aetherhaven_Guard_Armor_Cloth_Cindercloth_Legs"
+  ],
+  "hotbar": [
+    {
+      "slot": 0,
+      "itemId": "Weapon_Staff_Thorium"
+    }
+  ],
+  "attributeCombat": true,
+  "attributeBonuses": {
+    "intelligence": 6,
+    "vitality": 5
+  }
+}

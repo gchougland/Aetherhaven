@@ -29,6 +29,42 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class TownRecord {
+    private Map<String, com.hexvane.aetherhaven.mastery.CoreVillagerMastery> coreVillagerMastery;
+    public Map<String, com.hexvane.aetherhaven.mastery.CoreVillagerMastery> getCoreVillagerMastery() {
+        if (coreVillagerMastery == null) coreVillagerMastery = new LinkedHashMap<>();
+        return coreVillagerMastery;
+    }
+    private com.hexvane.aetherhaven.alchemy.AlchemyLaboratoryState alchemyLaboratory;
+    public com.hexvane.aetherhaven.alchemy.AlchemyLaboratoryState getAlchemyLaboratory() {
+        if (alchemyLaboratory == null) alchemyLaboratory = new com.hexvane.aetherhaven.alchemy.AlchemyLaboratoryState();
+        return alchemyLaboratory;
+    }
+    private com.hexvane.aetherhaven.inn.InnOutreach outreach;
+    public com.hexvane.aetherhaven.inn.InnOutreach getOutreach() {
+        if (outreach == null) outreach = new com.hexvane.aetherhaven.inn.InnOutreach();
+        return outreach;
+    }
+
+    private com.hexvane.aetherhaven.workplace.TownWorkplaces apprenticeWorkplaces;
+    private transient boolean retiredWorkplacesMigrated;
+    public com.hexvane.aetherhaven.workplace.TownWorkplaces getApprenticeWorkplaces() {
+        if (apprenticeWorkplaces == null) apprenticeWorkplaces = new com.hexvane.aetherhaven.workplace.TownWorkplaces();
+        return apprenticeWorkplaces;
+    }
+    @SerializedName("townsfolkProgress")
+    private Map<String, com.hexvane.aetherhaven.townsfolk.TownsfolkProgress> townsfolkProgress = new LinkedHashMap<>();
+    private com.hexvane.aetherhaven.economy.TownPayroll payroll;
+
+    public com.hexvane.aetherhaven.economy.TownPayroll getPayroll() {
+        if (payroll == null) payroll = new com.hexvane.aetherhaven.economy.TownPayroll();
+        return payroll;
+    }
+
+    public Map<String, com.hexvane.aetherhaven.townsfolk.TownsfolkProgress> getTownsfolkProgress() {
+        if (townsfolkProgress == null) townsfolkProgress = new LinkedHashMap<>();
+        return townsfolkProgress;
+    }
+
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     @SerializedName("townId")
@@ -238,7 +274,7 @@ public final class TownRecord {
     @SerializedName("guardHouseQuestTargetEntityUuid")
     private String guardHouseQuestTargetEntityUuid;
 
-    /** Active entity-scoped quests: quest id → target entity UUID string. */
+    /** Active entity-scoped quests: quest id â†’ target entity UUID string. */
     @SerializedName("questTargetEntityUuidByQuestId")
     private Map<String, String> questTargetEntityUuidByQuestId;
 
@@ -277,6 +313,22 @@ public final class TownRecord {
     @SerializedName("playerVillagerReputation")
     private Map<String, Map<String, VillagerReputationEntry>> playerVillagerReputation;
 
+    @SerializedName("halloweenGame")
+    private com.hexvane.aetherhaven.halloween.HalloweenGameState halloweenGame;
+
+    @SerializedName("halloweenRescue")
+    private com.hexvane.aetherhaven.rescue.HalloweenRescueReceipt halloweenRescue;
+
+    public synchronized com.hexvane.aetherhaven.rescue.HalloweenRescueReceipt halloweenRescue() {
+        if(halloweenRescue==null)halloweenRescue=new com.hexvane.aetherhaven.rescue.HalloweenRescueReceipt();
+        return halloweenRescue;
+    }
+
+    public com.hexvane.aetherhaven.halloween.HalloweenGameState halloweenGame() {
+        if (halloweenGame == null) halloweenGame = new com.hexvane.aetherhaven.halloween.HalloweenGameState();
+        return halloweenGame;
+    }
+
     /**
      * Key: {@code NPCEntity} role name (e.g. {@code Aetherhaven_Merchant}). Town-wide gift history; use
      * {@link VillagerGiftLogEntry#getGiverPlayerUuid()} to show the viewing player's entries.
@@ -298,7 +350,7 @@ public final class TownRecord {
     private List<ResidentNpcRecord> residentNpcRecords = new ArrayList<>();
 
     /**
-     * Entity UUIDs replaced by revive/reset/respawn this session. Not saved — used to despawn old copies when their
+     * Entity UUIDs replaced by revive/reset/respawn this session. Not saved â€” used to despawn old copies when their
      * chunks load again.
      */
     private transient LinkedHashSet<String> supersededEntityUuids;
@@ -372,7 +424,7 @@ public final class TownRecord {
     private long pendingRetiredBuildingGoldNotice;
 
     /**
-     * Per-resident cosmetic overrides: resident key ({@code role:...} / {@code character:...}) → slot id → cosmetic id.
+     * Per-resident cosmetic overrides: resident key ({@code role:...} / {@code character:...}) â†’ slot id â†’ cosmetic id.
      * Missing slot or {@code default} means use the villager's catalog look for that slot.
      */
     @Nullable
@@ -380,7 +432,7 @@ public final class TownRecord {
     private Map<String, Map<String, String>> villagerCosmeticOverrides;
 
     /**
-     * Player UUID string → recipe item ids to apply with {@code CraftingPlugin.learnRecipe} when that player next has
+     * Player UUID string â†’ recipe item ids to apply with {@code CraftingPlugin.learnRecipe} when that player next has
      * an entity in this world (offline at grant time, or new member after shared unlocks already exist).
      */
     @Nullable
@@ -521,6 +573,26 @@ public final class TownRecord {
     @SerializedName("plotProductionByPlotId")
     private Map<String, PlotProductionState> plotProductionByPlotId;
 
+    @SerializedName("warehouse")
+    private com.hexvane.aetherhaven.warehouse.TownWarehouse warehouse;
+
+    private com.hexvane.aetherhaven.clinic.TownClinic clinic;
+    private com.hexvane.aetherhaven.hunter.TownHunts hunts;
+    public com.hexvane.aetherhaven.hunter.TownHunts getHunts() {
+        if(hunts==null)hunts=new com.hexvane.aetherhaven.hunter.TownHunts();
+        return hunts;
+    }
+
+    public com.hexvane.aetherhaven.clinic.TownClinic getClinic() {
+        if (clinic == null) clinic = new com.hexvane.aetherhaven.clinic.TownClinic();
+        return clinic;
+    }
+
+    public com.hexvane.aetherhaven.warehouse.TownWarehouse getWarehouse() {
+        if (warehouse == null) warehouse = new com.hexvane.aetherhaven.warehouse.TownWarehouse();
+        return warehouse;
+    }
+
     /** Restaurant plot upgrade tiers: key plot UUID string. */
     @Nullable
     @SerializedName("plotRestaurantByPlotId")
@@ -589,6 +661,10 @@ public final class TownRecord {
     }
 
     public void migrateInnFieldsIfNeeded() {
+        if (!retiredWorkplacesMigrated) {
+            if (apprenticeWorkplaces != null) apprenticeWorkplaces.retireCultivation(getWarehouse());
+            retiredWorkplacesMigrated = true;
+        }
         if (innPoolNpcIds == null) {
             innPoolNpcIds = new ArrayList<>();
         }
@@ -732,6 +808,12 @@ public final class TownRecord {
     public PlotProductionState getOrCreatePlotProduction(@Nonnull UUID plotId) {
         migratePlotProductionIfNeeded();
         return plotProductionByPlotId.computeIfAbsent(plotId.toString(), k -> PlotProductionState.empty());
+    }
+
+    /** Read-only lookup for layout checks. Does not create production rows for unrelated plots. */
+    @Nullable
+    public PlotProductionState peekPlotProduction(@Nonnull UUID plotId) {
+        return plotProductionByPlotId == null ? null : plotProductionByPlotId.get(plotId.toString());
     }
 
     private void migratePlotRestaurantIfNeeded() {
@@ -1797,6 +1879,7 @@ public final class TownRecord {
         Set<String> done = normalizedQuestSet(completedQuestIds);
         done.add(q);
         completedQuestIds = new ArrayList<>(done);
+        if(com.hexvane.aetherhaven.halloween.HalloweenResident.RESCUE_QUEST.equals(q))halloweenRescue().complete();
         clearQuestObjectiveProgress(q);
         clearQuestKillProgress(q);
         clearQuestTarget(q);

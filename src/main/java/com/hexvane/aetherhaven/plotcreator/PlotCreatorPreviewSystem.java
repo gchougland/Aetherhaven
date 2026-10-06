@@ -61,6 +61,7 @@ public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntitySt
         }
         UUID uuid = pr.getUuid();
         World world = store.getExternalData().getWorld();
+        if(PlacedMineNodeEditing.tick(pr,ref,store,commandBuffer))return;
         PlotCreatorSession session = PlotCreatorSessions.get(uuid);
         if (session == null) {
             if (PlotCreatorHudSupport.isActive(player)) {

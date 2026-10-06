@@ -68,6 +68,10 @@ public final class BuildingStaffAssemblyChannelExecutor {
         @Nonnull UUID playerUuid,
         long nowNs
     ) {
+        if (com.hexvane.aetherhaven.workplace.WorkplaceToolState.isWorkplaceMode(playerRef, store)) {
+            channel.resetChargeSession();
+            return false;
+        }
         if (!channel.hasBrushLock() || !channel.isFresh(nowNs)) {
             return false;
         }

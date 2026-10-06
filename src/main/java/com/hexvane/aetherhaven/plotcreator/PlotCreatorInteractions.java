@@ -169,6 +169,10 @@ public final class PlotCreatorInteractions {
         @Nonnull InteractionContext context
     ) {
         ItemStack hand = context.getHeldItem();
+        if (PlotCreatorStaffBoundsSwap.isEditorBoundsStaff(hand)) {
+            BuildingEditorInteractions.handleUse(ref, commandBuffer, context);
+            return;
+        }
         if (!isPlotCreatorStaff(hand)) {
             context.getState().state = InteractionState.Failed;
             return;
@@ -703,7 +707,7 @@ public final class PlotCreatorInteractions {
                 context.getState().state = InteractionState.Failed;
                 return false;
             }
-            return true;
+            return BuildingEditorSessionStarter.requireCreative(playerRef, ref, commandBuffer.getStore());
         }
         if (!hasPlotCreatorPermission(playerRef)) {
             context.getState().state = InteractionState.Failed;

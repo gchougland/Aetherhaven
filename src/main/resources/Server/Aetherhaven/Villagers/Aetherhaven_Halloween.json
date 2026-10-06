@@ -1,0 +1,59 @@
+{
+  "npcRoleId": "Aetherhaven_Halloween",
+  "dialogueVillagerKind": "halloween",
+  "residentTreeId": "aetherhaven_halloween",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_halloween",
+  "displayName": "Jack Hollow",
+  "portraitIcon": "Aetherhaven_Halloween.png",
+  "speechVoiceId": "GravelyMaleLower",
+  "uiSortOrder": 29,
+  "innPoolEligible": true,
+  "innPoolOrder": 29,
+  "innPoolWeight": 1,
+  "visitorBindingKind": "visitor_halloween",
+  "innPoolRequires": {
+    "completedQuestIds": [
+      "q_halloween_rescue"
+    ]
+  },
+  "giftLoves": [
+    "Aetherhaven_Spooky_Candy",
+    "Deco_Halloween_Pumpkin_Scary"
+  ],
+  "giftLikes": [
+    "Food_Pie_Pumpkin",
+    "Deco_Halloween_Pumpkin_Cute"
+  ],
+  "giftDislikes": [
+    "Ingredient_Poop"
+  ],
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_halloween.dialogue.greeting"
+  ],
+  "birthdaySeason": "Autumn",
+  "birthdayDay": 28,
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_halloween_25",
+      "minReputation": 25,
+      "itemId": "Aetherhaven_Spooky_Candy",
+      "itemCount": 5,
+      "dialogueNodeId": "rep_reward_25"
+    },
+    {
+      "rewardId": "rep_halloween_50",
+      "minReputation": 50,
+      "itemId": "Aetherhaven_Villager_Cosmetic_Jack_O_Lantern_Hat",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_50"
+    },
+    {
+      "rewardId": "rep_halloween_75",
+      "minReputation": 75,
+      "itemId": "Aetherhaven_Spooky_Candy",
+      "itemCount": 15,
+      "dialogueNodeId": "rep_reward_75"
+    }
+  ]
+}

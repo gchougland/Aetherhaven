@@ -85,6 +85,8 @@ public final class PlotCreatorSpotMarkerCollector {
             return out;
         }
         addLocal(out, draft, draft.getManagementBlockLocalPos(), PlotCreatorSubstepType.MANAGEMENT_BLOCK, null, filter);
+        for(var node:draft.getMiningNodes())
+            addLocal(out,draft,new int[]{node.x(),node.y(),node.z()},PlotCreatorSubstepType.MINING_NODE,null,filter);
         addLocal(out, draft, draft.getProductionStorageLocalPos(), PlotCreatorSubstepType.PRODUCTION_STORAGE, null, filter);
         addLocal(out, draft, draft.getTreasuryLocalPos(), PlotCreatorSubstepType.TREASURY_BLOCK, null, filter);
         addLocal(out, draft, draft.getShopSafeLocalPos(), PlotCreatorSubstepType.SHOP_SAFE_BLOCK, null, filter);

@@ -1,0 +1,27 @@
+{
+  "id": "craft_mastersmith_kit",
+  "name": "Master Smith's Chest",
+  "workplace": "blacksmithing",
+  "sourceRecipe": "workplace:mastersmith_kit",
+  "bench": "Weapon_Bench",
+  "benchTier": 2,
+  "skillLevel": 5,
+  "requiresKnowledge": true,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 8
+    },
+    {
+      "itemId": "Ingredient_Bar_Cobalt",
+      "count": 2
+    },
+    {
+      "itemId": "Ingredient_Leather_Medium",
+      "count": 6
+    }
+  ],
+  "output": "Aetherhaven_MasterSmith_Kit",
+  "outputCount": 1,
+  "workSeconds": 45
+}

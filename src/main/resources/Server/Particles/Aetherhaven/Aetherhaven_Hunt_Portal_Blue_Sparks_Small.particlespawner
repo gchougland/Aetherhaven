@@ -1,0 +1,140 @@
+{
+  "RenderMode": "Erosion",
+  "ParticleRotationInfluence": "None",
+  "LinearFiltering": true,
+  "LightInfluence": 0,
+  "ParticleRotateWithSpawner": true,
+  "TrailSpawnerPositionMultiplier": 1,
+  "TrailSpawnerRotationMultiplier": 1,
+  "MaxConcurrentParticles": 12,
+  "ParticleLifeSpan": {
+    "Min": 0.8333333333333334,
+    "Max": 1
+  },
+  "SpawnRate": {
+    "Min": 8,
+    "Max": 10
+  },
+  "InitialVelocity": {},
+  "Attractors": [
+    {
+      "RadialAxis": {
+        "X": 0,
+        "Y": 0,
+        "Z": 1
+      },
+      "RadialTangentAcceleration": 2.5199999999999996,
+      "RadialImpulse": -1.47,
+      "RadialTangentImpulse": 0.42
+    }
+  ],
+  "$Comment": "Smol sparks for the circle portal",
+  "EmitOffset": {
+    "X": {
+      "Min": 0.7,
+      "Max": 1.0499999999999998
+    },
+    "Y": {
+      "Min": 0.7,
+      "Max": 1.0499999999999998
+    }
+  },
+  "Particle": {
+    "Texture": "Particles/Textures/Basic/Spark.png",
+    "FrameSize": {
+      "Width": 32,
+      "Height": 32
+    },
+    "ScaleRatioConstraint": "OneToOne",
+    "UVOption": "RandomFlipU",
+    "Animation": {
+      "0": {
+        "FrameIndex": {
+          "Min": 0,
+          "Max": 0
+        },
+        "Opacity": 0,
+        "Color": "#70b9b2",
+        "Scale": {
+          "X": {
+            "Min": 1,
+            "Max": 1
+          }
+        },
+        "Rotation": {
+          "X": {
+            "Min": 0,
+            "Max": 0
+          },
+          "Y": {
+            "Min": 0,
+            "Max": 0
+          },
+          "Z": {
+            "Min": 0,
+            "Max": 0
+          }
+        }
+      },
+      "20": {
+        "Opacity": 0.6,
+        "Color": "#70b9b2"
+      },
+      "80": {
+        "Opacity": 1
+      },
+      "100": {
+        "Scale": {
+          "X": {
+            "Min": 0.5,
+            "Max": 0.25
+          }
+        },
+        "Rotation": {
+          "X": {
+            "Min": 0,
+            "Max": 0
+          },
+          "Y": {
+            "Min": 0,
+            "Max": 0
+          },
+          "Z": {
+            "Min": -360,
+            "Max": -360
+          }
+        },
+        "Opacity": 0,
+        "Color": "#70b9b2"
+      }
+    },
+    "InitialAnimationFrame": {
+      "Rotation": {
+        "X": {
+          "Min": 0,
+          "Max": 0
+        },
+        "Y": {
+          "Min": 0,
+          "Max": 0
+        },
+        "Z": {
+          "Min": 0,
+          "Max": 0
+        }
+      },
+      "Scale": {
+        "X": {
+          "Min": 0.1,
+          "Max": 0.2
+        }
+      },
+      "Opacity": 1,
+      "Color": "#70b9b2",
+      "FrameIndex": {
+        "Min": 0,
+        "Max": 0
+      }
+    }
+  }
+}

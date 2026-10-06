@@ -1,0 +1,4 @@
+items.ledger.name = Warehouse Ledger Desk
+items.ledger.description = Browse your town's supplies, store your belongings and collect finished goods. Every ledger in the same town shares the same storage.
+dialogue.storage = Let me check the town stores.
+dialogue.couriers = Let's review the town's work priorities.

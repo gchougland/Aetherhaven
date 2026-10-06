@@ -1,0 +1,69 @@
+{
+  "id": "plot_doctor",
+  "displayName": "Clinic",
+  "description": "Build Elara a clinic to care for injured residents and guards.",
+  "touristDestination": true,
+  "prefabPath": "Clinic.prefab.json",
+  "selfBuildGameDays": 1.0,
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Doctor",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "managementBlockLocalPos": [
+    -1,
+    1,
+    -4
+  ],
+  "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1.0,
+  "autonomyNavMaxStandYSpanAboveMinY": 2.0,
+  "autonomyNavRoofExclusionYBelowMaxY": 3.0,
+  "treasuryGoldCoinCost": 75,
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 480
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 140
+    }
+  ],
+  "pois": [
+    {
+      "localX": 0,
+      "localY": 0,
+      "localZ": -2,
+      "tags": [
+        "workActivity:leisure",
+        "WORK"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Cloth_Block_Wool_Green",
+      "interactionKind": "WORK_SURFACE",
+      "workResidentKind": "doctor",
+      "interactionTargetYawDegrees": -168.49023,
+      "equipmentProfileId": "work_bard"
+    }
+  ],
+  "styleId": "core",
+  "tags": [
+    "work"
+  ],
+  "displayNameLangKey": "aetherhaven_doctor.building.name",
+  "frontFacing": "South",
+  "boundsLocal": {
+    "min": [
+      -7,
+      -1,
+      -6
+    ],
+    "max": [
+      7,
+      10,
+      6
+    ]
+  }
+}

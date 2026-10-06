@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Adamantite_Archer_Kit",
+  "name": "Adamantite Archer Kit",
+  "guardClass": "guard_archer",
+  "equipmentProfile": "guard_archer_adamantite",
+  "description": "+10 Dexterity, +5 Speed, +4 Vitality."
+}

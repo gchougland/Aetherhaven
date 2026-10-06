@@ -1,0 +1,71 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Armor_Adamantite_Head.name"
+  },
+  "Quality": "Rare",
+  "ItemLevel": 40,
+  "PlayerAnimationsId": "Block",
+  "ItemSoundSetId": "ISS_Armor_Heavy",
+  "Categories": [],
+  "Icon": "Icons/ItemsGenerated/Armor_Adamantite_Head.png",
+  "IconProperties": {
+    "Rotation": [
+      23.06,
+      43.315,
+      23.06
+    ],
+    "Scale": 0.45,
+    "Translation": [
+      0,
+      -1.5
+    ]
+  },
+  "Model": "Items/Armors/Adamantite/Head.blockymodel",
+  "Texture": "Items/Armors/Adamantite/Head_Texture.png",
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    }
+  },
+  "Armor": {
+    "ArmorSlot": "Head",
+    "BaseDamageResistance": 0,
+    "CosmeticsToHide": [
+      "EarAccessory",
+      "Ear",
+      "Haircut",
+      "HeadAccessory"
+    ],
+    "DamageResistance": {},
+    "StatModifiers": {},
+    "DamageClassEnhancement": {
+      "Light": [
+        {
+          "Amount": 0.03,
+          "CalculationType": "Multiplicative"
+        }
+      ]
+    }
+  },
+  "MaxDurability": 0,
+  "DurabilityLossOnHit": 0,
+  "Tags": {
+    "Type": [
+      "Armor"
+    ],
+    "Family": [
+      "Adamantite"
+    ]
+  }
+}

@@ -25,6 +25,9 @@ import javax.annotation.Nullable;
  * store directly.
  */
 public final class NpcShopSpotBuyerService {
+    public enum Result { UNAVAILABLE, DECLINED, PURCHASED;
+        public boolean visitComplete() { return this != UNAVAILABLE; }
+    }
     private NpcShopSpotBuyerService() {}
 
     /**
@@ -47,48 +50,54 @@ public final class NpcShopSpotBuyerService {
         @Nonnull String buyerDisplayName,
         @Nullable UUID buyerEntityUuid
     ) {
+        return attempt(world, townId, playerShopPlotId, buyerDisplayName, buyerEntityUuid) == Result.PURCHASED;
+    }
+
+    public static Result attempt(World world, UUID townId, UUID playerShopPlotId, String buyerDisplayName, UUID buyerEntityUuid) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {
-            return false;
+            return Result.UNAVAILABLE;
         }
         Store<EntityStore> store = world.getEntityStore() != null ? world.getEntityStore().getStore() : null;
         if (store == null) {
-            return false;
+            return Result.UNAVAILABLE;
         }
-        // Player listings stay open at night; only NPC shops are daylight-gated elsewhere.
+        // Recheck attendance when the queued purchase executes, not when the shopper starts walking.
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.getTown(townId);
         if (town == null) {
-            return false;
+            return Result.UNAVAILABLE;
         }
         PlotInstance plot = town.findPlotById(playerShopPlotId);
-        if (plot != null && !plot.isAllowNpcShopPurchases()) {
-            return false;
+        if (plot == null || !plot.isAllowNpcShopPurchases()) {
+            return Result.UNAVAILABLE;
         }
         ShopSpotRegistry registry = AetherhavenWorldRegistries.getOrCreateShopSpotRegistry(world, plugin);
         List<ShopSpotRecord> listings = registry.listPlayerListingsOnPlot(playerShopPlotId);
         if (listings.isEmpty()) {
-            return false;
+            return Result.UNAVAILABLE;
         }
         ShopSpotRecord record = listings.get(ThreadLocalRandom.current().nextInt(listings.size()));
         if (!ShopSpotOpenService.isOpen(record, town, world, store)) {
-            return false;
+            return Result.UNAVAILABLE;
         }
+        int commerce = com.hexvane.aetherhaven.autonomy.ShopClerkWorkService.attendingSkill(store, town, playerShopPlotId);
         String itemId = record.getItemId();
         if (itemId == null || record.getStock() <= 0) {
-            return false;
+            return Result.UNAVAILABLE;
         }
         ShopPriceEntry entry = ShopSpotPricing.catalogEntry(plugin, itemId);
         int buyBatches = 1;
         int itemQty = entry.itemsForBatchCount(buyBatches);
         if (itemQty <= 0 || itemQty > record.getStock()) {
-            return false;
+            return Result.UNAVAILABLE;
         }
         long goldPerBatch = ShopSpotPricing.goldPerBatch(plugin, record, itemId);
         long totalCost = ShopSpotPricing.totalCost(goldPerBatch, buyBatches);
         if (totalCost <= 0L) {
-            return false;
+            return Result.UNAVAILABLE;
         }
+        if (!ShopStaffing.makesPurchase(commerce, ThreadLocalRandom.current().nextDouble())) return Result.DECLINED;
         ShopSpotPurchaseService.creditSellerPayout(plugin, town, record, totalCost);
         TownLogService.appendEntry(
             town,
@@ -98,7 +107,6 @@ public final class NpcShopSpotBuyerService {
                 TownLogMessage.shopSaleParams(buyerDisplayName, itemId, Integer.toString(itemQty), Long.toString(totalCost))
             )
         );
-        tm.updateTown(town);
         record.setStock(record.getStock() - itemQty);
         UUID buyerUuid = buyerEntityUuid != null ? buyerEntityUuid : new UUID(0L, 0L);
         ShopSpotPurchaseService.notifySellerIfNeeded(
@@ -119,7 +127,9 @@ public final class NpcShopSpotBuyerService {
         }
         registry.put(record);
         ShopSpotPersistence.save(world, plugin, registry);
+        com.hexvane.aetherhaven.autonomy.ShopClerkWorkService.completedSale(store,town,playerShopPlotId);
+        tm.updateTown(town);
         ShopSpotDisplayService.syncDisplay(world, store, null, plugin, registry, record, town);
-        return true;
+        return Result.PURCHASED;
     }
 }

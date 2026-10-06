@@ -329,18 +329,14 @@ public final class PlotCreatorService {
             return steps;
         }
         if (draft.isPropMode()) {
-            if (!draft.isBuildingEditorMode()) {
-                steps.add(PlotCreatorStep.BOUNDS);
-            }
+            steps.add(PlotCreatorStep.BOUNDS);
             steps.add(PlotCreatorStep.CONFIGURE);
             steps.add(PlotCreatorStep.PREFAB_SAVE);
             steps.add(PlotCreatorStep.REVIEW);
             steps.add(PlotCreatorStep.DONE);
             return steps;
         }
-        if (!draft.isBuildingEditorMode()) {
-            steps.add(PlotCreatorStep.BOUNDS);
-        }
+        steps.add(PlotCreatorStep.BOUNDS);
         if (draft.hasKind(PlotBuildingKind.VARIANT)) {
             steps.add(PlotCreatorStep.VARIANT);
         }
@@ -656,6 +652,7 @@ public final class PlotCreatorService {
 
     /** Restores spots that cannot be deselected for the draft's effective building kinds. */
     public static void ensureRequiredSpots(@Nonnull PlotCreatorDraft draft) {
+        PlotCreatorProductionRules.enforceSelectedSpots(draft);
         if (draft.isFestivalMode()) {
             PlotCreatorFestivalMechanicDefaults.ensureRequiredSelectedSpots(draft);
             return;
@@ -872,6 +869,7 @@ public final class PlotCreatorService {
             PlotCreatorLocalCoords.recomputeAnchorOffset(draft);
         }
         String err = PlotCreatorValidator.validateBeforeSave(draft, plugin);
+        if (err == null) err = PlotCreatorMiningNodes.validateWorld(session);
         if (err != null) {
             String messageKey = err.startsWith("substep_")
                 ? "aetherhaven_plot_creator.aetherhaven.plotcreator.substep." + err.substring("substep_".length())

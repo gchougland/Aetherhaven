@@ -14,6 +14,14 @@
   "visitorBindingKind": "visitor_merchant",
   "reputationMilestones": [
     {
+      "rewardId": "rep_merchant_jeweler_case",
+      "minReputation": 25,
+      "itemId": "Aetherhaven_Jeweler_Kit",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_25",
+      "learnRecipeItemId": null
+    },
+    {
       "rewardId": "rep_merchant_50",
       "minReputation": 50,
       "itemId": "",

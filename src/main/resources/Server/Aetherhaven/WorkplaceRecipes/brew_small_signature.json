@@ -1,0 +1,9 @@
+{
+  "id": "brew_small_signature",
+  "name": "Small Energy Potion",
+  "workplace": "alchemy",
+  "sourceRecipe": "Potion_Signature_Small_Recipe_Generated_0",
+  "bench": "Alchemybench",
+  "benchTier": 2,
+  "skillLevel": 4
+}

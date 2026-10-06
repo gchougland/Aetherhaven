@@ -1,0 +1,72 @@
+{
+  "id": "plot_crafter",
+  "displayName": "Artisan Workshop",
+  "description": "Build Tobin a workshop to teach townsfolk practical crafting.",
+  "prefabPath": "Artisan_Workshop.prefab.json",
+  "selfBuildGameDays": 1.0,
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Crafter",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "managementBlockLocalPos": [
+    13,
+    1,
+    14
+  ],
+  "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1.0,
+  "autonomyNavMaxStandYSpanAboveMinY": 2.0,
+  "autonomyNavRoofExclusionYBelowMaxY": 5.0,
+  "treasuryGoldCoinCost": 65,
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 320
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 140
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 2
+    }
+  ],
+  "pois": [
+    {
+      "localX": 11,
+      "localY": 0,
+      "localZ": 9,
+      "tags": [
+        "workActivity:craft",
+        "WORK"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "workResidentKind": "crafter",
+      "interactionTargetYawDegrees": -38.223633,
+      "equipmentProfileId": "work_builder"
+    }
+  ],
+  "styleId": "core",
+  "tags": [
+    "work"
+  ],
+  "displayNameLangKey": "aetherhaven_crafter.building.name",
+  "frontFacing": "North",
+  "boundsLocal": {
+    "min": [
+      1,
+      -1,
+      0
+    ],
+    "max": [
+      19,
+      10,
+      16
+    ]
+  }
+}

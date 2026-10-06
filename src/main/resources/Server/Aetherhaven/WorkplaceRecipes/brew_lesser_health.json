@@ -1,0 +1,9 @@
+{
+  "id": "brew_lesser_health",
+  "name": "Lesser Health Potion",
+  "workplace": "alchemy",
+  "sourceRecipe": "Potion_Health_Lesser_Recipe_Generated_0",
+  "bench": "Alchemybench",
+  "benchTier": 1,
+  "skillLevel": 2
+}

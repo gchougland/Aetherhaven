@@ -375,6 +375,13 @@ $C.@PageOverlay {
         }
       }
 
+      Label #PlacementError {
+        Visible: false;
+        Anchor: (Width: 448, Bottom: 8);
+        Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #f1b7a3, HorizontalAlignment: Start);
+        Text: "";
+      }
+
       Group #RowActions {
         LayoutMode: Center;
         Anchor: (Top: 8, Left: 0, Right: 0);

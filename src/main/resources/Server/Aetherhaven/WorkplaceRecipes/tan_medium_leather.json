@@ -1,0 +1,9 @@
+{
+  "id": "tan_medium_leather",
+  "name": "Medium leather",
+  "workplace": "leatherworking",
+  "sourceRecipe": "Ingredient_Leather_Medium_Recipe_Generated_0",
+  "bench": "Tannery",
+  "benchTier": 1,
+  "skillLevel": 3
+}

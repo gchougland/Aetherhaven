@@ -13,6 +13,9 @@ import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
+import com.hypixel.hytale.component.Component;
+import com.hypixel.hytale.component.ComponentType;
+import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -22,8 +25,10 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.modules.block.BlockEntity;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockOperations;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockComponentSection;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
@@ -32,6 +37,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3i;
@@ -93,7 +100,7 @@ public final class PlotBlockStamper {
 
     private PlotBlockStamper() {}
 
-    /** Re-place and stamp every linked block type for a completed build (always writes components). */
+    /** Stamp every linked block type for a completed build (always writes link components). */
     public static void stampAllLinkedBlocks(
         @Nonnull World world,
         @Nonnull TownRecord town,
@@ -262,26 +269,7 @@ public final class PlotBlockStamper {
         return ((long) x & 0x3FFFFFFL) << 38 | ((long) y & 0xFFFL) << 26 | (long) z & 0x3FFFFFFL;
     }
 
-    @Nullable
-    private static Ref<ChunkStore> blockRefAt(@Nonnull World world, int wx, int y, int wz) {
-        Ref<ChunkStore> blockRef = ChunkSectionBlockUtil.blockEntityRefAt(world, wx, y, wz);
-        if (blockRef != null) {
-            return blockRef;
-        }
-        for (int dy : new int[] {-1, 1, -2, 2}) {
-            int yy = y + dy;
-            if (yy < 0 || yy >= 320) {
-                continue;
-            }
-            Ref<ChunkStore> r = ChunkSectionBlockUtil.blockEntityRefAt(world, wx, yy, wz);
-            if (r != null) {
-                return r;
-            }
-        }
-        return null;
-    }
-
-    /** Gaia statue prefab cells include filler voxels; link data must live on the unpacked base block. */
+    /** Prefab cells can be fillers; link data belongs only to the unpacked base block. */
     @Nonnull
     private static BlockPosition gaiaStatueBaseBlock(@Nonnull World world, int wx, int y, int wz) {
         BlockPosition position = new BlockPosition(wx, y, wz);
@@ -300,12 +288,76 @@ public final class PlotBlockStamper {
         );
     }
 
-    @Nullable
-    private static Ref<ChunkStore> gaiaStatueBlockRef(
-        @Nonnull World world, int wx, int y, int wz
+    private static <T extends Component<ChunkStore>> StampOutcome stampBlockLink(
+        @Nonnull World world, int x, int y, int z, @Nonnull String expectedBlockType,
+        @Nonnull ComponentType<ChunkStore, T> componentType, @Nonnull T link,
+        @Nonnull Predicate<T> matches, boolean force, boolean dryRun
     ) {
-        BlockPosition base = gaiaStatueBaseBlock(world, wx, y, wz);
-        return ChunkSectionBlockUtil.blockEntityRefAt(world, base.x, base.y, base.z);
+        BlockPosition base = gaiaStatueBaseBlock(world, x, y, z);
+        Ref<ChunkStore> sectionRef = ChunkSectionBlockUtil.sectionRefAt(world, base.x, base.y, base.z);
+        if (sectionRef == null || !sectionRef.isValid()) {
+            return StampOutcome.CHUNK_UNLOADED;
+        }
+        BlockType blockType = ChunkSectionBlockUtil.blockType(world, base.x, base.y, base.z);
+        if (blockType == null || !blockTypeIdMatches(expectedBlockType, blockType.getId())
+            || ChunkSectionBlockUtil.filler(world, base.x, base.y, base.z) != FillerBlockUtil.NO_FILLER) {
+            return StampOutcome.FAILED;
+        }
+        Store<ChunkStore> store = sectionRef.getStore();
+        BlockComponentSection section = store.getComponent(sectionRef, BlockComponentSection.getComponentType());
+        if (section == null) {
+            return StampOutcome.CHUNK_UNLOADED;
+        }
+        int rotation = PlotBlockRotationUtil.readBlockRotationIndex(world, new Vector3i(base.x, base.y, base.z));
+        return stampLink(store, section, ChunkUtil.indexBlock(base.x, base.y, base.z), componentType, link,
+            matches, blockType.getBlockEntity(), holder -> BlockEntity.setBlockEntity(
+                store, sectionRef, section, base.x, base.y, base.z, blockType, rotation, holder), force, dryRun);
+    }
+
+    /**
+     * Repair component state without changing the voxel. Non-ticking sections park their entities as holders;
+     * treating those as missing caused repeated block replacement, while NO_UPDATE_STATE prevented attachment.
+     */
+    static <T extends Component<ChunkStore>> StampOutcome stampLink(
+        @Nonnull Store<ChunkStore> store, @Nonnull BlockComponentSection section, int index,
+        @Nonnull ComponentType<ChunkStore, T> componentType, @Nonnull T link, @Nonnull Predicate<T> matches,
+        @Nullable Holder<ChunkStore> template, @Nonnull Consumer<Holder<ChunkStore>> attach,
+        boolean force, boolean dryRun
+    ) {
+        Ref<ChunkStore> ref = section.getBlockReference(index);
+        if (ref != null && !ref.isValid()) {
+            return StampOutcome.FAILED;
+        }
+        Holder<ChunkStore> holder = ref == null ? section.getBlockHolder(index) : null;
+        T existing = ref != null ? store.getComponent(ref, componentType)
+            : holder != null ? holder.getComponent(componentType) : null;
+        if (!force && existing != null && matches.test(existing)) {
+            return StampOutcome.ALREADY_OK;
+        }
+        if (dryRun) {
+            return StampOutcome.STAMPED;
+        }
+        if (ref != null) {
+            store.putComponent(ref, componentType, link);
+        } else if (holder != null) {
+            holder.putComponent(componentType, link);
+        } else {
+            if (template == null) {
+                return StampOutcome.FAILED;
+            }
+            Holder<ChunkStore> created = template.clone();
+            created.putComponent(componentType, link);
+            attach.accept(created);
+            Ref<ChunkStore> attached = section.getBlockReference(index);
+            Holder<ChunkStore> parked = section.getBlockHolder(index);
+            T result = attached != null && attached.isValid() ? store.getComponent(attached, componentType)
+                : parked != null ? parked.getComponent(componentType) : null;
+            if (result == null || !matches.test(result)) {
+                return StampOutcome.FAILED;
+            }
+        }
+        section.markBlockNeedsSaving(index);
+        return StampOutcome.STAMPED;
     }
 
     @Nonnull
@@ -357,48 +409,9 @@ public final class PlotBlockStamper {
             return StampOutcome.CHUNK_UNLOADED;
         }
 
-        if (!force) {
-            Ref<ChunkStore> existing = gaiaStatueBlockRef(world, baseX, baseY, baseZ);
-            if (existing != null) {
-                GaiaStatueBlock gs = existing.getStore().getComponent(existing, GaiaStatueBlock.getComponentType());
-                if (gs != null && linksMatch(gs.getPlotId(), gs.getTownId(), plotId, town)) {
-                    return StampOutcome.ALREADY_OK;
-                }
-            }
-            if (dryRun) {
-                return StampOutcome.STAMPED;
-            }
-        }
-
-        Vector3i cell = new Vector3i(baseX, baseY, baseZ);
-        BlockType placedType = ChunkSectionBlockUtil.blockType(world, baseX, baseY, baseZ);
-        String placeBlockTypeId =
-            placedType != null ? placedType.getId() : AetherhavenConstants.STATUE_OF_GAIA_BLOCK_TYPE_ID;
-        Rotation blockYaw = PlotBlockRotationUtil.readBlockYaw(world, cell);
-        RotationTuple rt = RotationTuple.of(blockYaw, Rotation.None, Rotation.None);
-        int rotationIndex = PlotBlockRotationUtil.readBlockRotationIndex(world, cell);
-        ensureBlockPlaced(
-            world,
-            baseX,
-            baseY,
-            baseZ,
-            placeBlockTypeId,
-            rt,
-            rotationIndex
-        );
-
-        Ref<ChunkStore> blockRef = gaiaStatueBlockRef(world, baseX, baseY, baseZ);
-        if (blockRef == null) {
-            LOGGER.atWarning().log("No block entity after re-placing Gaia statue at %s,%s,%s", baseX, baseY, baseZ);
-            return StampOutcome.FAILED;
-        }
-        Store<ChunkStore> cs = blockRef.getStore();
-        cs.putComponent(
-            blockRef,
-            GaiaStatueBlock.getComponentType(),
-            new GaiaStatueBlock(wantPlotId(plotId), wantTownId(town))
-        );
-        return StampOutcome.STAMPED;
+        return stampBlockLink(world, baseX, baseY, baseZ, AetherhavenConstants.STATUE_OF_GAIA_BLOCK_TYPE_ID,
+            GaiaStatueBlock.getComponentType(), new GaiaStatueBlock(wantPlotId(plotId), wantTownId(town)),
+            link -> linksMatch(link.getPlotId(), link.getTownId(), plotId, town), force, dryRun);
     }
 
     @Nonnull
@@ -464,45 +477,9 @@ public final class PlotBlockStamper {
             }
         }
 
-        if (!force) {
-            Ref<ChunkStore> existing = blockRefAt(world, wx, managementY, wz);
-            if (existing != null) {
-                ManagementBlock mb = existing.getStore().getComponent(existing, ManagementBlock.getComponentType());
-                if (mb != null && linksMatch(mb.getPlotId(), mb.getTownId(), plotId, town)) {
-                    return StampOutcome.ALREADY_OK;
-                }
-            }
-            if (dryRun) {
-                return StampOutcome.STAMPED;
-            }
-        }
-
-        Vector3i cell = new Vector3i(wx, managementY, wz);
-        Rotation blockYaw = PlotBlockRotationUtil.readBlockYaw(world, cell);
-        RotationTuple rt = RotationTuple.of(blockYaw, Rotation.None, Rotation.None);
-        int rotationIndex = PlotBlockRotationUtil.readBlockRotationIndex(world, cell);
-        ensureBlockPlaced(
-            world,
-            wx,
-            managementY,
-            wz,
-            AetherhavenConstants.MANAGEMENT_BLOCK_TYPE_ID,
-            rt,
-            rotationIndex
-        );
-
-        Ref<ChunkStore> blockRef = blockRefAt(world, wx, managementY, wz);
-        if (blockRef == null) {
-            LOGGER.atWarning().log("No block entity after re-placing management block at %s,%s,%s", wx, managementY, wz);
-            return StampOutcome.FAILED;
-        }
-        Store<ChunkStore> cs = blockRef.getStore();
-        cs.putComponent(
-            blockRef,
-            ManagementBlock.getComponentType(),
-            new ManagementBlock(wantPlotId(plotId), wantTownId(town))
-        );
-        return StampOutcome.STAMPED;
+        return stampBlockLink(world, wx, managementY, wz, AetherhavenConstants.MANAGEMENT_BLOCK_TYPE_ID,
+            ManagementBlock.getComponentType(), new ManagementBlock(wantPlotId(plotId), wantTownId(town)),
+            link -> linksMatch(link.getPlotId(), link.getTownId(), plotId, town), force, dryRun);
     }
 
     @Nonnull
@@ -557,45 +534,9 @@ public final class PlotBlockStamper {
             }
         }
 
-        if (!force) {
-            Ref<ChunkStore> existing = blockRefAt(world, wx, treasuryY, wz);
-            if (existing != null) {
-                TreasuryBlock tb = existing.getStore().getComponent(existing, TreasuryBlock.getComponentType());
-                if (tb != null && linksMatch(tb.getPlotId(), tb.getTownId(), plotId, town)) {
-                    return StampOutcome.ALREADY_OK;
-                }
-            }
-            if (dryRun) {
-                return StampOutcome.STAMPED;
-            }
-        }
-
-        Vector3i cell = new Vector3i(wx, treasuryY, wz);
-        Rotation blockYaw = PlotBlockRotationUtil.readBlockYaw(world, cell);
-        RotationTuple rt = RotationTuple.of(blockYaw, Rotation.None, Rotation.None);
-        int rotationIndex = PlotBlockRotationUtil.readBlockRotationIndex(world, cell);
-        ensureBlockPlaced(
-            world,
-            wx,
-            treasuryY,
-            wz,
-            AetherhavenConstants.TREASURY_BLOCK_TYPE_ID,
-            rt,
-            rotationIndex
-        );
-
-        Ref<ChunkStore> blockRef = blockRefAt(world, wx, treasuryY, wz);
-        if (blockRef == null) {
-            LOGGER.atWarning().log("No block entity after re-placing treasury at %s,%s,%s", wx, treasuryY, wz);
-            return StampOutcome.FAILED;
-        }
-        Store<ChunkStore> cs = blockRef.getStore();
-        cs.putComponent(
-            blockRef,
-            TreasuryBlock.getComponentType(),
-            new TreasuryBlock(wantPlotId(plotId), wantTownId(town))
-        );
-        return StampOutcome.STAMPED;
+        return stampBlockLink(world, wx, treasuryY, wz, AetherhavenConstants.TREASURY_BLOCK_TYPE_ID,
+            TreasuryBlock.getComponentType(), new TreasuryBlock(wantPlotId(plotId), wantTownId(town)),
+            link -> linksMatch(link.getPlotId(), link.getTownId(), plotId, town), force, dryRun);
     }
 
     @Nonnull
@@ -650,45 +591,9 @@ public final class PlotBlockStamper {
             }
         }
 
-        if (!force) {
-            Ref<ChunkStore> existing = blockRefAt(world, wx, safeY, wz);
-            if (existing != null) {
-                ShopSafeBlock sb = existing.getStore().getComponent(existing, ShopSafeBlock.getComponentType());
-                if (sb != null && linksMatch(sb.getPlotId(), sb.getTownId(), plotId, town)) {
-                    return StampOutcome.ALREADY_OK;
-                }
-            }
-            if (dryRun) {
-                return StampOutcome.STAMPED;
-            }
-        }
-
-        Vector3i cell = new Vector3i(wx, safeY, wz);
-        Rotation blockYaw = PlotBlockRotationUtil.readBlockYaw(world, cell);
-        RotationTuple rt = RotationTuple.of(blockYaw, Rotation.None, Rotation.None);
-        int rotationIndex = PlotBlockRotationUtil.readBlockRotationIndex(world, cell);
-        ensureBlockPlaced(
-            world,
-            wx,
-            safeY,
-            wz,
-            AetherhavenConstants.SHOP_SAFE_BLOCK_TYPE_ID,
-            rt,
-            rotationIndex
-        );
-
-        Ref<ChunkStore> blockRef = blockRefAt(world, wx, safeY, wz);
-        if (blockRef == null) {
-            LOGGER.atWarning().log("No block entity after re-placing shop safe at %s,%s,%s", wx, safeY, wz);
-            return StampOutcome.FAILED;
-        }
-        Store<ChunkStore> cs = blockRef.getStore();
-        cs.putComponent(
-            blockRef,
-            ShopSafeBlock.getComponentType(),
-            new ShopSafeBlock(wantPlotId(plotId), wantTownId(town))
-        );
-        return StampOutcome.STAMPED;
+        return stampBlockLink(world, wx, safeY, wz, AetherhavenConstants.SHOP_SAFE_BLOCK_TYPE_ID,
+            ShopSafeBlock.getComponentType(), new ShopSafeBlock(wantPlotId(plotId), wantTownId(town)),
+            link -> linksMatch(link.getPlotId(), link.getTownId(), plotId, town), force, dryRun);
     }
 
     @Nonnull
@@ -735,35 +640,20 @@ public final class PlotBlockStamper {
         }
 
         Integer storageY = findBlockY(world, wx, wy, wz, AetherhavenConstants.BLOCK_PRODUCTION_STORAGE);
-        if (!force && storageY != null) {
-            return StampOutcome.ALREADY_OK;
-        }
-        if (dryRun) {
-            return storageY != null ? StampOutcome.ALREADY_OK : StampOutcome.STAMPED;
-        }
-
         Vector3i cell = new Vector3i(wx, storageY != null ? storageY : wy, wz);
-        Rotation blockYaw = PlotBlockRotationUtil.readBlockYaw(world, cell);
-        RotationTuple rt = RotationTuple.of(blockYaw, Rotation.None, Rotation.None);
-        int rotationIndex = PlotBlockRotationUtil.readBlockRotationIndex(world, cell);
-        int placeY = storageY != null ? storageY : wy;
-        PrefabFootprintClearUtil.forceClearProductionStorageAt(world, wx, placeY, wz);
-        ensureBlockPlaced(
-            world,
-            wx,
-            placeY,
-            wz,
-            AetherhavenConstants.BLOCK_PRODUCTION_STORAGE,
-            rt,
-            rotationIndex
-        );
-
-        BlockType placed = ChunkSectionBlockUtil.blockType(world, wx, placeY, wz);
-        if (placed == null || !blockTypeIdMatches(AetherhavenConstants.BLOCK_PRODUCTION_STORAGE, placed.getId())) {
-            LOGGER.atWarning().log("Production storage missing after re-place at %s,%s,%s", wx, placeY, wz);
-            return StampOutcome.FAILED;
+        if (storageY != null) {
+            BlockPosition base = gaiaStatueBaseBlock(world, cell.x, cell.y, cell.z);
+            cell.set(base.x, base.y, base.z);
         }
-        return StampOutcome.STAMPED;
+        int rotationIndex = PlotBlockRotationUtil.readBlockRotationIndex(world, cell);
+        // PLACE_SETTINGS disables native fillers. Clearing/re-stamping with it used to leave only one
+        // interactive corner. Preserve the origin and restore only missing cells of its rotated hitbox.
+        return switch (com.hexvane.aetherhaven.production.ProductionStorageBlocks.repair(world, cell, rotationIndex, dryRun)) {
+            case READY -> StampOutcome.ALREADY_OK;
+            case REPAIRED, NEEDS_REPAIR -> StampOutcome.STAMPED;
+            case UNLOADED -> StampOutcome.CHUNK_UNLOADED;
+            case BLOCKED, FAILED -> StampOutcome.FAILED;
+        };
     }
 
     @Nullable

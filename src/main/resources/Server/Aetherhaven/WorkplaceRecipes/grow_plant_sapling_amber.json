@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_sapling_amber",
+  "name": "Sapling Amber",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_sapling_amber",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 4,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 15
+    }
+  ],
+  "output": "Plant_Sapling_Amber",
+  "outputCount": 1,
+  "workSeconds": 16
+}

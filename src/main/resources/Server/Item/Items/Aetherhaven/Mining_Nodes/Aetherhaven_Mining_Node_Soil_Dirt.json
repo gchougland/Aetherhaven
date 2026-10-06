@@ -1,0 +1,31 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Soil_Dirt.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Soil_Dirt.png",
+  "BlockType": {
+    "DrawType": "Cube",
+    "BlockParticleSetId": "Dirt",
+    "Textures": [
+      {
+        "All": "BlockTextures/Soil_Dirt.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#98743b",
+    "BlockSoundSetId": "Dirt",
+    "PhysicalMaterialId": "Dirt",
+    "TextureComputedColor": "#88632B",
+    "Material": "Solid",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Unbreakable"
+      }
+    },
+    "Flags": {},
+    "Support": {}
+  },
+  "PlayerAnimationsId": "Block",
+  "MaxStack": 1,
+  "ItemSoundSetId": "ISS_Blocks_Stone"
+}

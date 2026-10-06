@@ -1,5 +1,5 @@
 {
-  "Parent": "Player",
+  "Parent": "Aetherhaven_Human",
   "Model": "Characters/Player.blockymodel",
   "Texture": "Characters/Player_Textures/Player_Greyscale.png",
   "GradientSet": "Skin",

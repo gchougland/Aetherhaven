@@ -59,6 +59,10 @@ public final class ResidentRegistryService {
                 incoming.copyLastKnownNeedsFrom(r);
                 copied[0] = true;
             }
+            if (entityUuid.equals(r.getLastEntityUuid())) {
+                incoming.setTownsfolkIdentity(r.getTownsfolkIdentity());
+                incoming.setGuardEquipmentProfile(r.getGuardEquipmentProfile());
+            }
             return true;
         });
         incoming.setPendingDawnRevival(false);
@@ -194,6 +198,56 @@ public final class ResidentRegistryService {
             out.add(r);
         }
         return out;
+    }
+
+    /** Altar rows are confirmed deaths, never merely unloaded entities. Each Townsfolk retains a separate row. */
+    public static List<ResidentNpcRecord> deadResidents(TownRecord town) {
+        return town.getResidentNpcRecords().stream()
+            .filter(ResidentNpcRecord::isPendingDawnRevival)
+            .filter(r -> r.getTownsfolkIdentity() != null || isGaiaRevivalEligible(r.getKind(), r.getNpcRoleId()))
+            .toList();
+    }
+
+    /** Hide living residents without narrowing the established Gaia recovery policy for missing/unloaded villagers. */
+    public static List<ResidentNpcRecord> altarCandidates(TownRecord town, Store<EntityStore> store) {
+        List<ResidentNpcRecord> candidates = new ArrayList<>(revivalCandidatesMerged(town, store));
+        for (var record : town.getResidentNpcRecords()) {
+            if (record.getTownsfolkIdentity() != null && candidates.stream().noneMatch(r ->
+                    java.util.Objects.equals(r.getLastEntityUuid(), record.getLastEntityUuid()))) candidates.add(record);
+        }
+        candidates.removeIf(r -> EntityPresenceUtil.isLoadedLive(EntityPresenceUtil.resolve(store, r.getLastEntityUuid())));
+        return candidates;
+    }
+
+    public static boolean hasConfirmedDeath(TownRecord town, UUID entityId) {
+        return town.getResidentNpcRecords().stream().anyMatch(r -> r.isPendingDawnRevival() && entityId.equals(r.getLastEntityUuid()));
+    }
+
+    public static boolean preserveTownsfolkDeath(TownRecord town, TownManager manager,
+            Ref<EntityStore> victim, Store<EntityStore> store, AetherhavenPlugin plugin) {
+        var identity = store.getComponent(victim, com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding.getComponentType());
+        var uuid = store.getComponent(victim, UUIDComponent.getComponentType());
+        var binding = store.getComponent(victim, TownVillagerBinding.getComponentType());
+        var npc = store.getComponent(victim, NPCEntity.getComponentType());
+        if (identity == null || uuid == null || binding == null || npc == null) return false;
+        boolean guard = com.hexvane.aetherhaven.guild.GuardHireService.isHiredGuard(town, uuid.getUuid());
+        boolean citizen = town.isNpcHomeResidentOnHousePlot(uuid.getUuid(), plugin.getConstructionCatalog())
+            || town.getTouristRecords().stream().anyMatch(r -> r.isCitizen() && uuid.getUuid().equals(r.getEntityUuid()));
+        if (!guard && !citizen) return false;
+        if (hasConfirmedDeath(town, uuid.getUuid())) return true;
+        ResidentNpcRecord row = town.getResidentNpcRecords().stream()
+            .filter(r -> uuid.getUuid().equals(r.getLastEntityUuid())).findFirst().orElse(null);
+        if (row == null) {
+            row = new ResidentNpcRecord(npc.getRoleName(), binding.getKind(), binding.getJobPlotId(), uuid.getUuid());
+            town.getResidentNpcRecords().add(row);
+        }
+        row.setTownsfolkIdentity(identity);
+        row.setPendingDawnRevival(true);
+        if (guard) for (var hired : town.getHiredGuardRecords()) if (uuid.getUuid().equals(hired.getEntityUuid())) {
+            row.setGuardEquipmentProfile(hired.getEquipmentProfileId());
+        }
+        manager.updateTown(town);
+        return true;
     }
 
     /**

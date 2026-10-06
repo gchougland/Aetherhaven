@@ -41,6 +41,11 @@ class VillagerLifeAssetsTest {
 
     @org.junit.jupiter.api.BeforeAll
     static void registerRealCommonAssets() throws Exception {
+        Path clinic = RES.resolve("Common/Characters/Animations/Aetherhaven/Clinic/Treat.blockyanim");
+        String clinicName = "Characters/Animations/Aetherhaven/Clinic/Treat.blockyanim";
+        com.hypixel.hytale.server.core.asset.common.CommonAssetRegistry.addCommonAsset(PACK,
+            new com.hypixel.hytale.server.core.asset.common.asset.FileCommonAsset(clinic, clinicName, Files.readAllBytes(clinic)));
+        COMMON_NAMES.add(clinicName);
         for (String folder : new String[]{"Sounds/Aetherhaven/Life", "Particles/Aetherhaven/Life", "Particles/Aetherhaven/Emotions", "Items/Animations/Aetherhaven/Life", "Characters/Animations/Aetherhaven/Life", "Characters/Animations/Aetherhaven/ProwlFaces", "Characters/Animations/Aetherhaven/CreatureFaces"}) {
             if (!Files.isDirectory(RES.resolve("Common").resolve(folder))) continue;
             try (var files = Files.walk(RES.resolve("Common").resolve(folder))) {
@@ -75,6 +80,34 @@ class VillagerLifeAssetsTest {
         assertNotNull(decoded, file.toString());
         assertFalse(extra.getValidationResults().hasFailed(), file + ": " + extra.getValidationResults().getResults());
         return decoded;
+    }
+
+    @Test void doctorTreatmentLoopHasCompleteClientChannelsAndSeamlessRotations() throws Exception {
+        Path table = RES.resolve("Server/Item/Animations/Aetherhaven_Clinic_Care.json");
+        var asset = decode(com.hypixel.hytale.server.core.asset.type.itemanimation.config.ItemPlayerAnimations.CODEC,
+            Files.readString(table), table);
+        assertEquals(java.util.Set.of("Treat"), asset.getAnimations().keySet());
+        Path file = RES.resolve("Common/Characters/Animations/Aetherhaven/Clinic/Treat.blockyanim");
+        String json = Files.readString(file);
+        decode(com.hypixel.hytale.server.core.asset.common.BlockyAnimationCache.BlockyAnimation.CODEC, json, file);
+        var animation = JsonParser.parseString(json).getAsJsonObject();
+        assertFalse(animation.get("holdLastKeyframe").getAsBoolean());
+        for(var node : animation.getAsJsonObject("nodeAnimations").entrySet()) {
+            var tracks = node.getValue().getAsJsonObject();
+            assertEquals(java.util.Set.of("position", "orientation", "shapeStretch", "shapeVisible", "shapeUvOffset"), tracks.keySet());
+            var keys = tracks.getAsJsonArray("orientation");
+            assertEquals(0, keys.get(0).getAsJsonObject().get("time").getAsInt());
+            assertEquals(animation.get("duration").getAsInt(), keys.get(keys.size()-1).getAsJsonObject().get("time").getAsInt());
+            assertEquals(keys.get(0).getAsJsonObject().get("delta"), keys.get(keys.size()-1).getAsJsonObject().get("delta"));
+            for(var key : keys) {
+                double norm = 0;
+                for(String axis : new String[]{"x", "y", "z", "w"}) {
+                    double value = key.getAsJsonObject().getAsJsonObject("delta").get(axis).getAsDouble();
+                    assertTrue(Double.isFinite(value)); norm += value * value;
+                }
+                assertEquals(1, norm, 1e-5, node.getKey());
+            }
+        }
     }
 
     @org.junit.jupiter.api.AfterAll

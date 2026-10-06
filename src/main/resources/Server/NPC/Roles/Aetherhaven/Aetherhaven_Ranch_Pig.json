@@ -1,0 +1,36 @@
+{
+  "Type": "Variant",
+  "Reference": "Template_Animal_Neutral",
+  "Modify": {
+    "Appearance": "Pig",
+    "AttitudeGroup": "PreyBig",
+    "FlockArray": [],
+    "AttractiveItemSet": [
+      "Plant_Crop_Turnip_Item"
+    ],
+    "AttractiveItemSetParticles": "Want_Food_Turnip",
+    "DropList": "Empty",
+    "MaxHealth": 38,
+    "ViewRange": 15,
+    "ViewSector": 300,
+    "HearingRange": 9,
+    "AlertedRange": 17,
+    "AlertedActionRange": 6,
+    "AbsoluteDetectionRange": 2,
+    "ProduceItem": "",
+    "IsTameable": false,
+    "TameRoleChange": "Tamed_Pig",
+    "IsMemory": false,
+    "MemoriesNameOverride": "Pig",
+    "NameTranslationKey": {
+      "Compute": "NameTranslationKey"
+    }
+  },
+  "Parameters": {
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Pig.name",
+      "Description": "Translation key for NPC name display"
+    }
+  },
+  "$Comment": "Town managed offspring. Native species behavior with no item output, taming or memories."
+}

@@ -1,0 +1,117 @@
+{
+  "RenderMode": "Erosion",
+  "ParticleRotationInfluence": "None",
+  "LinearFiltering": false,
+  "LightInfluence": 0,
+  "ParticleRotateWithSpawner": true,
+  "TrailSpawnerPositionMultiplier": 1,
+  "TrailSpawnerRotationMultiplier": 1,
+  "MaxConcurrentParticles": 2,
+  "ParticleLifeSpan": {
+    "Min": 1.7,
+    "Max": 1.7
+  },
+  "SpawnRate": {
+    "Min": 0.6,
+    "Max": 0.6
+  },
+  "$Comment": "Rotating outer ring for the circle portal",
+  "EmitOffset": {
+    "Z": {
+      "Min": 0,
+      "Max": 0.005
+    }
+  },
+  "Particle": {
+    "Texture": "Particles/Textures/Circles/Portal_Blue.png",
+    "FrameSize": {
+      "Width": 128,
+      "Height": 128
+    },
+    "ScaleRatioConstraint": "OneToOne",
+    "UVOption": "None",
+    "Animation": {
+      "0": {
+        "FrameIndex": {
+          "Min": 0,
+          "Max": 0
+        },
+        "Scale": {
+          "X": {
+            "Min": 1,
+            "Max": 1
+          }
+        },
+        "Rotation": {
+          "X": {
+            "Min": 0,
+            "Max": 0
+          },
+          "Y": {
+            "Min": 0,
+            "Max": 0
+          },
+          "Z": {
+            "Min": 0,
+            "Max": 0
+          }
+        },
+        "Opacity": 1
+      },
+      "50": {
+        "Opacity": 1
+      },
+      "100": {
+        "Rotation": {
+          "X": {
+            "Min": 0,
+            "Max": 0
+          },
+          "Y": {
+            "Min": 0,
+            "Max": 0
+          },
+          "Z": {
+            "Min": -360,
+            "Max": -360
+          }
+        },
+        "Opacity": 1
+      }
+    },
+    "InitialAnimationFrame": {
+      "Rotation": {
+        "X": {
+          "Min": 0,
+          "Max": 0
+        },
+        "Y": {
+          "Min": 0,
+          "Max": 0
+        },
+        "Z": {
+          "Min": 0,
+          "Max": 0
+        }
+      },
+      "Scale": {
+        "X": {
+          "Min": 0.52,
+          "Max": 0.52
+        }
+      },
+      "Opacity": 0.6,
+      "FrameIndex": {
+        "Min": 0,
+        "Max": 0
+      }
+    }
+  },
+  "UVMotion": {
+    "Texture": "Particles/Textures/UVMotion/FlowMap.png",
+    "Strength": 0.7,
+    "Scale": 1.4,
+    "SpeedX": 0.27,
+    "SpeedY": 0
+  }
+}

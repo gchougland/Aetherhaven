@@ -1,0 +1,27 @@
+{
+  "id": "jewel_ring_gold_diamond_rare",
+  "name": "Rare gold diamond ring",
+  "workplace": "jewelry",
+  "sourceRecipe": "workplace:jewel_ring_gold_diamond_rare",
+  "bench": "Aetherhaven_Jewelry_Crafting_Bench",
+  "benchTier": 1,
+  "skillLevel": 5,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Gold",
+      "count": 5
+    },
+    {
+      "itemId": "Rock_Gem_Diamond",
+      "count": 1
+    },
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 12
+    }
+  ],
+  "output": "Aetherhaven_Ring_Gold_Diamond",
+  "outputCount": 1,
+  "workSeconds": 45,
+  "jewelryRarity": "rare"
+}

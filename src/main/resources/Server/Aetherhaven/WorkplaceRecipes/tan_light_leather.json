@@ -1,0 +1,9 @@
+{
+  "id": "tan_light_leather",
+  "name": "Light leather",
+  "workplace": "leatherworking",
+  "sourceRecipe": "Ingredient_Leather_Light_Recipe_Generated_0",
+  "bench": "Tannery",
+  "benchTier": 1,
+  "skillLevel": 1
+}

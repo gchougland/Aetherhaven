@@ -1,0 +1,48 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_halloween.head.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Deco_Halloween_Pumpkin_Scary.png",
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Model",
+    "Opacity": "Transparent",
+    "CustomModel": "Items/Halloween_Props/Pumpkin_Carve_01.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Halloween_Props/Pumpkin_Carve_Texture_02.png",
+        "Weight": 1
+      }
+    ],
+    "Group": "Wood",
+    "HitboxType": "Plant_Full",
+    "VariantRotation": "NESW",
+    "Light": {
+      "Radius": 8,
+      "Color": "#ec9"
+    },
+    "Flags": {},
+    "Gathering": {
+      "Soft": {
+        "DropList": {},
+        "IsWeaponBreakable": false
+      }
+    },
+    "BlockParticleSetId": "Stone",
+    "BlockSoundSetId": "Plushie",
+    "PhysicalMaterialId": "Wool",
+    "TextureComputedColor": "#A14A09",
+    "InteractionHint": "aetherhaven_halloween.interaction.pickup",
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "Simple"
+          }
+        ]
+      }
+    }
+  },
+  "PlayerAnimationsId": "Block",
+  "MaxStack": 1
+}

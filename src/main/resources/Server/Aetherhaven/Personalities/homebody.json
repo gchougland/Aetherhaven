@@ -29,5 +29,10 @@
     "Stretch": 4,
     "Sleepy": 2,
     "LookAround": 1
+  },
+  "startingSkills": {
+    "cooking": 3,
+    "crafting": 3,
+    "leatherworking": 2
   }
 }

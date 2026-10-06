@@ -34,7 +34,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Town residents for UI lists: story villagers always; townsfolk and guards only when assigned a house.
+ * Town residents for UI lists: story villagers and admitted townsfolk and guards, including unloaded residents.
  */
 public final class TownVillagerDirectory {
     private TownVillagerDirectory() {}
@@ -142,7 +142,7 @@ public final class TownVillagerDirectory {
     }
 
     /**
-     * Story villagers only from registry (one row per role). Townsfolk and guards use per entity fallbacks instead.
+     * Registry fallbacks keep the saved identity of unloaded townsfolk; story roles are deduplicated.
      */
     private static void addResidentsFromRegistry(
         @Nonnull Map<UUID, TownVillagerRow> byUuid,
@@ -154,9 +154,6 @@ public final class TownVillagerDirectory {
         UUID nil = new UUID(0L, 0L);
         for (ResidentNpcRecord r : town.getResidentNpcRecords()) {
             if (TownVillagerBinding.isVisitorKind(r.getKind())) {
-                continue;
-            }
-            if (TownResidentEligibility.isTownsfolkPoolKind(r.getKind(), r.getNpcRoleId(), plugin)) {
                 continue;
             }
             UUID u = r.getLastEntityUuid();
@@ -176,7 +173,9 @@ public final class TownVillagerDirectory {
             }
             String kind = r.getKind();
             int ko = kind != null && !kind.isBlank() ? kindOrderForBindingKind(kind) : kindOrderForRoleId(roleId);
-            TownResidentDisplay.Resolved display = TownResidentDisplay.resolveOffline(plugin, roleId, null, null);
+            var identity=r.getTownsfolkIdentity();
+            TownResidentDisplay.Resolved display = TownResidentDisplay.resolveOffline(plugin, roleId,
+                identity==null?null:identity.getCharacterId(),identity==null?null:identity.getModelAssetId());
             byUuid.put(
                 u,
                 new TownVillagerRow(

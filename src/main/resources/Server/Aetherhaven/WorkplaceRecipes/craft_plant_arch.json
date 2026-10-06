@@ -1,0 +1,31 @@
+{
+  "id": "craft_plant_arch",
+  "name": "Plant Arch",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:craft_plant_arch",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 4,
+  "requiresKnowledge": true,
+  "inputs": [
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 24
+    },
+    {
+      "itemId": "Plant_Flower_Common_Pink",
+      "count": 6
+    },
+    {
+      "itemId": "Plant_Flower_Common_White",
+      "count": 6
+    },
+    {
+      "itemId": "Ingredient_Fabric_Scrap_Linen",
+      "count": 4
+    }
+  ],
+  "output": "Aetherhaven_Prop_Plant_Arch",
+  "outputCount": 1,
+  "workSeconds": 35
+}

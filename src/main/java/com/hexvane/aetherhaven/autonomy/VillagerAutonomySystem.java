@@ -248,7 +248,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
     public Query<EntityStore> getQuery() {
         return Query.and(
             TownVillagerBinding.getComponentType(),
-            VillagerNeeds.getComponentType(),
+            Query.or(VillagerNeeds.getComponentType(), com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding.getComponentType()),
             NPCEntity.getComponentType()
         );
     }
@@ -267,26 +267,38 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return;
         }
 
-        if (store.getComponent(ref, VillagerSeatExit.getComponentType()) != null) return;
+        ClinicVisitService.observe(dt,ref,store);
+        if (store.getComponent(ref, VillagerSeatExit.getComponentType()) != null) { interruptWork(ref, store, npc, commandBuffer); return; }
 
         TownVillagerBinding binding = archetypeChunk.getComponent(index, TownVillagerBinding.getComponentType());
         VillagerNeeds needs = archetypeChunk.getComponent(index, VillagerNeeds.getComponentType());
-        if (binding == null || needs == null) {
+        if (needs == null && binding != null && TownVillagerBinding.KIND_TOWNSFOLK.equals(binding.getKind())) {
+            var uuid = store.getComponent(ref, UUIDComponent.getComponentType());
+            var manager = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin);
+            var town = manager.getTown(binding.getTownId());
+            if (com.hexvane.aetherhaven.townsfolk.TownsfolkWorkRoster.initializeResidentNeeds(town,
+                    uuid == null ? null : uuid.getUuid(), binding.getKind(), false,
+                    store.getComponent(ref, com.hypixel.hytale.server.core.modules.entity.damage.DeathComponent.getComponentType()) != null)) {
+                commandBuffer.putComponent(ref, VillagerNeeds.getComponentType(), VillagerNeeds.full());
+            }
             return;
         }
+        if (binding == null || needs == null) {
+            interruptWork(ref, store, npc, commandBuffer); return;
+        }
         if (skipsPoiAutonomy(binding, npc)) {
-            return;
+            interruptWork(ref, store, npc, commandBuffer); return;
         }
 
         BuilderConstructionAssistState assist =
             archetypeChunk.getComponent(index, BuilderConstructionAssistState.getComponentType());
         if (BuilderConstructionAssistSystem.shouldSkipAutonomy(assist)) {
-            return;
+            interruptWork(ref, store, npc, commandBuffer); return;
         }
         ClownCheerAssistState cheer =
             archetypeChunk.getComponent(index, ClownCheerAssistState.getComponentType());
         if (ClownCheerAssistSystem.shouldSkipAutonomy(cheer)) {
-            return;
+            interruptWork(ref, store, npc, commandBuffer); return;
         }
         UUIDComponent snowballUuid = store.getComponent(ref, UUIDComponent.getComponentType());
         if (snowballUuid != null
@@ -303,23 +315,23 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 needs,
                 npc
             );
-            return;
+            interruptWork(ref, store, npc, commandBuffer); return;
         }
         VillagerFollowPlayerState follow = store.getComponent(ref, VillagerFollowPlayerState.getComponentType());
         if (VillagerFollowPlayerSystem.shouldSkipAutonomy(follow)) {
-            return;
+            interruptWork(ref, store, npc, commandBuffer); return;
         }
         if (WintertideGiftSeekState.isRegistered()) {
             WintertideGiftSeekState seek = store.getComponent(ref, WintertideGiftSeekState.getComponentType());
             if (WintertideGiftSeekSystem.shouldSkipAutonomy(seek)) {
-                return;
+                interruptWork(ref, store, npc, commandBuffer); return;
             }
         }
         if (PlayerBirthdayGiftSeekState.isRegistered()) {
             PlayerBirthdayGiftSeekState birthdaySeek =
                 store.getComponent(ref, PlayerBirthdayGiftSeekState.getComponentType());
             if (PlayerBirthdayGiftSeekSystem.shouldSkipAutonomy(birthdaySeek)) {
-                return;
+                interruptWork(ref, store, npc, commandBuffer); return;
             }
         }
 
@@ -329,7 +341,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             autonomy = VillagerAutonomyState.fresh(now);
             commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             applyAutonomyDebugOverlay(ref, store, commandBuffer, npc, needs, autonomy);
-            return;
+            interruptWork(ref, store, npc, commandBuffer); return;
         }
 
         if (now >= autonomy.nextStatueRecoveryCheckMs) {
@@ -344,10 +356,19 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 AutonomyStuckTeleportRecovery.teleportNpc(ref, commandBuffer, store, ground, npc);
                 npc.setLeashPoint(ground);
                 failTravel(autonomy, now, "DECORATIVE_STATUE", commandBuffer, ref, npc);
-                return;
+                interruptWork(ref, store, npc, commandBuffer); return;
             }
         }
-        if (VillagerLifeSystem.ownsActivity(ref, store)) return;
+        if (com.hexvane.aetherhaven.hunter.HuntService.owns(ref,store)) {
+            if(autonomy.getPhase()!=VillagerAutonomyState.PHASE_IDLE) {
+                abortActivePoiUseAndDismount(ref,store,commandBuffer,autonomy,needs,
+                    AetherhavenWorldRegistries.getOrCreatePoiRegistry(store.getExternalData().getWorld(),plugin),false);
+                autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);autonomy.clearTravelAndPoiState();
+                commandBuffer.putComponent(ref,VillagerAutonomyState.getComponentType(),autonomy);
+            }
+            return;
+        }
+        if (VillagerLifeSystem.ownsActivity(ref, store)) { interruptWork(ref, store, npc, commandBuffer); return; }
         applyAutonomyDebugOverlay(ref, store, commandBuffer, npc, needs, autonomy);
 
         MountedComponent mounted = store.getComponent(ref, MountedComponent.getComponentType());
@@ -355,18 +376,26 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             int phase = autonomy.getPhase();
             if (phase == VillagerAutonomyState.PHASE_IDLE || phase == VillagerAutonomyState.PHASE_TRAVEL) {
                 releaseBlockMountAndSnapToGround(ref, store, commandBuffer);
-                return; // Do not run travel against a mount queued for removal.
+                interruptWork(ref, store, npc, commandBuffer); return; // Do not run travel against a mount queued for removal.
             }
         }
 
         String stateName = NpcSupportUtil.stateName(store, ref);
         if (stateName.contains("Interaction")) {
-            return;
+            interruptWork(ref, store, npc, commandBuffer); return;
         }
 
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord townRecord = tm.getTown(binding.getTownId());
+        if (ClinicVisitService.tick(dt, ref, store, commandBuffer, npc, binding, needs, autonomy, townRecord, plugin)) return;
+        if (ShopClerkWorkService.tick(ref, store, commandBuffer, npc, binding, needs, autonomy, townRecord, plugin)) return;
+        if (CourierWorkService.tick(ref, store, commandBuffer, npc, binding, needs, autonomy, townRecord, tm, plugin)) return;
+        if (ApprenticeWorkService.tick(dt, ref, store, commandBuffer, npc, binding, needs, autonomy, townRecord, tm, plugin)) return;
+        if (MiningWorkService.tick(dt, ref, store, commandBuffer, npc, binding, needs, autonomy, townRecord, tm, plugin)) return;
+        if (TimberWorkService.tick(dt, ref, store, commandBuffer, npc, binding, needs, autonomy, townRecord, tm, plugin)) return;
+        if (FieldWorkService.tick(dt, ref, store, commandBuffer, npc, binding, needs, autonomy, townRecord, tm, plugin)) return;
+        if (HerdWorkService.tick(dt, ref, store, commandBuffer, npc, binding, needs, autonomy, townRecord, tm, plugin)) return;
         PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
         PoiEntry previousTarget = autonomy.getTargetPoiUuid() != null ? reg.get(autonomy.getTargetPoiUuid()) : null;
         if (previousTarget != null
@@ -401,6 +430,17 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                     townRecord
                 );
         }
+    }
+
+    private static void interruptWork(Ref<EntityStore> ref, Store<EntityStore> store, NPCEntity npc, CommandBuffer<EntityStore> buffer) {
+        ClinicVisitService.interrupt(ref, store, npc, buffer);
+        MiningWorkService.interrupt(ref, store, npc, buffer);
+        TimberWorkService.interrupt(ref, store, npc, buffer);
+        FieldWorkService.interrupt(ref, store, npc, buffer);
+        HerdWorkService.interrupt(ref, store, npc, buffer);
+        ShopClerkWorkService.interrupt(ref, store, npc, buffer);
+        ApprenticeWorkService.interrupt(ref, store, npc, buffer);
+        CourierWorkService.interrupt(ref, store, npc, buffer);
     }
 
     @Nonnull

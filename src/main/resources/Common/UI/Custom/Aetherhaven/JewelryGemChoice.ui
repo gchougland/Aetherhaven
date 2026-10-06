@@ -1,0 +1,7 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Button #Pick { TextTooltipStyle: $C.@DefaultTextTooltipStyle; LayoutMode: Top; FlexWeight: 1; Anchor: (Right: 5); Padding: (Full: 5);
+  Style: (Default: (Background: $T.@Card), Hovered: (Background: $T.@CardHovered), Pressed: (Background: $T.@CardPressed));
+  ItemIcon #Icon { Anchor: (Width: 48, Height: 48); }
+  Group #Mark { Anchor: (Height: 2); Background: #dfbd78; Visible: false; }
+}

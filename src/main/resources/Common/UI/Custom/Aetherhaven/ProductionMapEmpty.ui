@@ -1,0 +1,14 @@
+$C = "../Common.ui";
+Group {
+ Anchor: (Full: 0);
+ LayoutMode: Middle;
+ Padding: (Full: 18);
+ Group {
+  Anchor: (Height: 96);
+  LayoutMode: Top;
+  Group { LayoutMode: Center; Anchor: (Height: 40, Bottom: 8);
+   ItemIcon #Icon { Anchor: (Width: 36, Height: 36); }
+  }
+  Label #Message { Anchor: (Height: 48); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, HorizontalAlignment: Center, TextColor: #b7c9bb); }
+ }
+}

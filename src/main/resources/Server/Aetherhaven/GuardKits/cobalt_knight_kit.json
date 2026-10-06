@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Cobalt_Knight_Kit",
+  "name": "Cobalt Knight Kit",
+  "guardClass": "guard_knight",
+  "equipmentProfile": "guard_knight_cobalt",
+  "description": "+8 Strength, +8 Vitality."
+}

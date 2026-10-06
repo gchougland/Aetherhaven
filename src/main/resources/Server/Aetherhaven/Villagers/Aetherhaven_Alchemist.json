@@ -1,0 +1,60 @@
+{
+  "npcRoleId": "Aetherhaven_Alchemist",
+  "dialogueVillagerKind": "alchemist",
+  "residentTreeId": "aetherhaven_alchemist",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_alchemist",
+  "displayName": "Orin Glasswick",
+  "portraitIcon": "Aetherhaven_Alchemist.png",
+  "speechVoiceId": "MellowMale",
+  "uiSortOrder": 22,
+  "innPoolEligible": true,
+  "innPoolOrder": 22,
+  "innPoolWeight": 1,
+  "visitorBindingKind": "visitor_alchemist",
+  "minimumTownLevel": 5,
+  "birthdaySeason": "Winter",
+  "birthdayDay": 6,
+  "giftLoves": [
+    "Plant_Crop_Health2",
+    "Plant_Crop_Mana2"
+  ],
+  "giftLikes": [
+    "Ingredient_Charcoal",
+    "Plant_Crop_Stamina1"
+  ],
+  "giftDislikes": [
+    "Ingredient_Bone_Fragment"
+  ],
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_alchemist_25",
+      "minReputation": 25,
+      "itemId": "Aetherhaven_Alchemist_Kit",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_25",
+      "learnRecipeItemId": null
+    },
+    {
+      "rewardId": "rep_alchemist_50",
+      "minReputation": 50,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_50",
+      "learnRecipeItemId": "Aetherhaven_Alchemist_Kit"
+    },
+    {
+      "rewardId": "rep_alchemist_75",
+      "minReputation": 75,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_75",
+      "learnRecipeItemId": "Aetherhaven_Shard_Of_Gaia"
+    }
+  ],
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_alchemist.greeting.0",
+    "aetherhaven_alchemist.greeting.1",
+    "aetherhaven_alchemist.greeting.2"
+  ]
+}

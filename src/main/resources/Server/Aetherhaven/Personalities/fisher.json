@@ -31,5 +31,12 @@
     "LookAround": 4,
     "Fidget": 2,
     "Stretch": 1
+  },
+  "startingSkills": {
+    "ranching": 3,
+    "cooking": 3
+  },
+  "startingAttributes": {
+    "dexterity": 6
   }
 }

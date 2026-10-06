@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Leatherworker_Kit",
+  "name": "Leatherworker's Roll",
+  "skill": "leatherworking",
+  "workSpeedBonus": 0.15,
+  "extraCarryingStacks": 0
+}

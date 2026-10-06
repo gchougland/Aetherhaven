@@ -225,7 +225,7 @@ public final class AetherhavenUiLocalization {
         b.set("#NeedHungerLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.villagerneeds.hunger"));
         b.set("#NeedEnergyLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.villagerneeds.energy"));
         b.set("#NeedFunLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.villagerneeds.fun"));
-        b.set("#VillagersHeader.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.villagerneeds.villagers"));
+        b.set("#VillagersHeader.Text", "Residents");
     }
 
     public static void applyVillagerGiftHistory(@Nonnull UICommandBuilder b) {
@@ -430,10 +430,6 @@ public final class AetherhavenUiLocalization {
 
     public static void applyTownJournalStatic(@Nonnull UICommandBuilder b) {
         b.set("#JournalShellTitle.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.shellTitle"));
-        b.set("#TabTown.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.tab.town"));
-        b.set("#TabGuide.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.tab.guide"));
-        b.set("#TabQuests.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.tab.quests"));
-        b.set("#TabSettings.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.tab.settings"));
         b.set(
             "#ActiveTownLabel.TextSpans",
             t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.activeTownLabel")

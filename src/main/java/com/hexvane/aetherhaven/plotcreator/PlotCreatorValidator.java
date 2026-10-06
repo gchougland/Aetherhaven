@@ -167,6 +167,8 @@ public final class PlotCreatorValidator {
 
     @Nullable
     public static String validateBeforeSave(@Nonnull PlotCreatorDraft draft, @Nonnull AetherhavenPlugin plugin) {
+        String productionError = PlotCreatorProductionRules.validationError(draft,plugin);
+        if (productionError != null) return productionError;
         if (draft.isFestivalMode()) {
             return validateFestivalBeforeSave(draft, plugin);
         }
@@ -220,6 +222,7 @@ public final class PlotCreatorValidator {
     ) {
         PlotCreatorSubstepType type = req.type();
         return switch (type) {
+            case MINING_NODE -> draft.getMiningNodes().size();
             case MANAGEMENT_BLOCK -> draft.getManagementBlockLocalPos() != null ? 1 : 0;
             case PRODUCTION_STORAGE -> draft.getProductionStorageLocalPos() != null ? 1 : 0;
             case TREASURY_BLOCK -> draft.getTreasuryLocalPos() != null ? 1 : 0;

@@ -1,0 +1,86 @@
+{
+  "constructionId": "plot_doctor",
+  "prefabPath": "Clinic.prefab.json",
+  "materials": [
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 127
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 105
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 92
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 69
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 63
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 41
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 36
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Shallow",
+      "count": 30
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 30
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 26
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 23
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Flat",
+      "count": 22
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Mossy",
+      "count": 10
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 7
+    },
+    {
+      "itemId": "Cloth_Block_Wool_Green",
+      "count": 5
+    },
+    {
+      "itemId": "Rock_Crystal_Green_Block",
+      "count": 5
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 2
+    },
+    {
+      "itemId": "Deco_Rope",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Crude_Candle",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 1
+    }
+  ]
+}

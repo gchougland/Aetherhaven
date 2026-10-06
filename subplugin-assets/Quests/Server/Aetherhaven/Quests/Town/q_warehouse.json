@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "id": "q_warehouse",
+  "category": "town",
+  "grantPlotTokenConstructionId": "plot_warehouse",
+  "title": "A Place for Everything",
+  "description": "Build Mara a warehouse to organize town storage and employ couriers.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "plot_token_received",
+      "text": "Collect the warehouse plot token from Mara.",
+      "textLangKey": "aetherhaven_warehouse_manager.quest.objective.token"
+    },
+    {
+      "id": "build",
+      "kind": "construction_built",
+      "constructionId": "plot_warehouse",
+      "text": "Build the warehouse.",
+      "textLangKey": "aetherhaven_warehouse_manager.quest.objective.build"
+    },
+    {
+      "id": "talk",
+      "kind": "dialogue_turn_in",
+      "text": "Return to Mara.",
+      "textLangKey": "aetherhaven_warehouse_manager.quest.objective.talk"
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Warehouse_Manager",
+      "amount": 14,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 14,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
+    ],
+    "onComplete": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ],
+    "onAbandon": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ]
+  },
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_warehouse_manager.quest.title",
+  "descriptionLangKey": "aetherhaven_warehouse_manager.quest.description"
+}

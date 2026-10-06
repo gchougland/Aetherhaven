@@ -96,6 +96,7 @@ public final class StarterTownBuildService {
             sign.z,
             System.currentTimeMillis()
         );
+        plot.captureProductionLayout(definition);
         plot.setPrefabWorldPlacement(
             building.prefabAnchor().x,
             building.prefabAnchor().y,

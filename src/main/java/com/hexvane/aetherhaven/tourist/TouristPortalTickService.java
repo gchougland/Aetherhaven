@@ -1270,6 +1270,10 @@ public final class TouristPortalTickService {
         @Nullable Store<EntityStore> store,
         @Nullable AetherhavenPlugin plugin
     ) {
+        if (!com.hexvane.aetherhaven.town.TownAdmission.isMember(town, entityUuid)) {
+            AetherhavenPlugin activePlugin = plugin != null ? plugin : AetherhavenPlugin.get();
+            if (activePlugin == null || com.hexvane.aetherhaven.town.TownAdmission.blocked(activePlugin, town, entityUuid, null) != null) return;
+        }
         for (TouristRecord rec : town.getTouristRecords()) {
             UUID u = rec.getEntityUuid();
             if (u != null && u.equals(entityUuid)) {

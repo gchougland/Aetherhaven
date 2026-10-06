@@ -1,0 +1,11 @@
+$C = "../Common.ui";
+// Records: 38 title + 48 content padding + 70 tabs + 540 page body.
+@RecordsWidth = 860;
+@RecordsHeight = 696;
+// Reuse the game's textured frames so new town screens belong to the same UI family.
+@Panel = PatchStyle(TexturePath: "../Common/ContainerFullPatch.png", Border: 16);
+@Inset = PatchStyle(TexturePath: "../Common/InputBox.png", Border: 12);
+@Card = PatchStyle(TexturePath: "../Common/InputBox.png", Border: 12);
+@CardHovered = PatchStyle(TexturePath: "../Common/InputBoxHovered.png", Border: 12);
+@CardPressed = PatchStyle(TexturePath: "../Common/InputBoxSelected.png", Border: 12);
+@Slot = PatchStyle(TexturePath: "../Common/InputBox.png", Border: 8);

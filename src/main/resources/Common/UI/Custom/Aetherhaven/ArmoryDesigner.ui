@@ -1,0 +1,17 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Top; FlexWeight: 1;
+  Label { Text: "GUARD CLASS"; Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d2bc85); }
+  Group #Classes { LayoutMode: Left; Anchor: (Height: 76, Bottom: 8); }
+  Label { Text: "EQUIPMENT TIER"; Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d2bc85); }
+  Group #Tiers { LayoutMode: Left; Anchor: (Height: 50, Bottom: 8); }
+  Group { LayoutMode: Left; FlexWeight: 1; Background: $T.@Panel; Padding: (Full: 12);
+    ItemIcon #Preview { TextTooltipStyle: $C.@DefaultTextTooltipStyle; Anchor: (Width: 76, Height: 76, Right: 10); }
+    Group { LayoutMode: Top; FlexWeight: 1;
+      Label #PreviewName { Anchor: (Height: 28); Style: (...$C.@DefaultLabelStyle, FontSize: 17, TextColor: #e0d3af, RenderBold: true); }
+      Label #Bonuses { Anchor: (Height: 36); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #9fc5b2); }
+      Label #Requirements { Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #becadb); }
+      Label #Status { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #dec68d, Wrap: true); }
+    }
+  }
+}

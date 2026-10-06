@@ -1,0 +1,105 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_warehouse.items.ledger.name",
+    "Description": "aetherhaven_warehouse.items.ledger.description"
+  },
+  "Recipe": {
+    "TimeSeconds": 3,
+    "Input": [
+      {
+        "ResourceTypeId": "Wood_All",
+        "Quantity": 12
+      },
+      {
+        "ItemId": "Ingredient_Bar_Copper",
+        "Quantity": 4
+      },
+      {
+        "ItemId": "Aetherhaven_Gold_Coin",
+        "Quantity": 20
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": [
+          "Aetherhaven_TownPlanning_Misc"
+        ]
+      }
+    ]
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Warehouse_Ledger_Desk.png",
+  "Categories": [
+    "Furniture.Benches",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "BlockType": {
+    "BlockEntity": { "Components": { "AetherhavenWarehouseDesk": {} } },
+    "Material": "Solid",
+    "DrawType": "Model",
+    "Opacity": "Transparent",
+    "CustomModel": "Blocks/Aetherhaven/Warehouse_Ledger_Desk/Warehouse_Ledger_Desk.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Aetherhaven/Warehouse_Ledger_Desk/Warehouse_Ledger_Desk.png",
+        "Weight": 1
+      }
+    ],
+    "HitboxType": "Aetherhaven_Warehouse_Ledger_Desk",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Benches"
+      }
+    },
+    "BlockParticleSetId": "Wood",
+    "ParticleColor": "#6b472f",
+    "BlockSoundSetId": "Wood",
+    "PhysicalMaterialId": "Wood",
+    "TextureComputedColor": "#755035",
+    "VariantRotation": "NESW",
+    "Support": {
+      "Down": [
+        {
+          "FaceType": "Full"
+        }
+      ]
+    },
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "OpenCustomUI",
+            "Page": {
+              "Id": "AetherhavenWarehouse"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "PlayerAnimationsId": "Block",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      22.5,
+      45,
+      0
+    ],
+    "Translation": [
+      0,
+      -10
+    ]
+  },
+  "Tags": {
+    "Type": [
+      "Bench"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "MaxStack": 1,
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

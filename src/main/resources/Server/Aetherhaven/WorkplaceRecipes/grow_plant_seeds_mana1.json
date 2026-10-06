@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_seeds_mana1",
+  "name": "Seeds Mana1",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_seeds_mana1",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 1,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 12
+    }
+  ],
+  "output": "Plant_Seeds_Mana1",
+  "outputCount": 1,
+  "workSeconds": 10
+}

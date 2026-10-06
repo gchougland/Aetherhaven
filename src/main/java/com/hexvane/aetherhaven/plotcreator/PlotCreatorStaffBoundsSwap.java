@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 
 /** Swaps the plot creator staff to an internal bounds variant with the Selection builder tool. */
 public final class PlotCreatorStaffBoundsSwap {
+    private static final String ORIGINAL_STAFF = "AetherhavenBoundsOriginalStaff";
     private PlotCreatorStaffBoundsSwap() {}
 
     public static boolean isMainStaff(@Nullable ItemStack stack) {
@@ -44,10 +45,10 @@ public final class PlotCreatorStaffBoundsSwap {
         if (isBoundsStaff(held)) {
             return true;
         }
-        if (!isMainStaff(held)) {
+        if (!isMainStaff(held) && !BuildingEditorInteractions.isBuildingEditorStaff(held)) {
             return false;
         }
-        ItemStack boundsStaff = new ItemStack(AetherhavenConstants.PLOT_CREATOR_STAFF_BOUNDS_ITEM_ID, held.getQuantity());
+        ItemStack boundsStaff = toBoundsStaff(held);
         return container.replaceItemStackInSlot(slot, held, boundsStaff).succeeded();
     }
 
@@ -68,7 +69,30 @@ public final class PlotCreatorStaffBoundsSwap {
         if (!isBoundsStaff(held)) {
             return false;
         }
-        ItemStack mainStaff = new ItemStack(AetherhavenConstants.PLOT_CREATOR_STAFF_ITEM_ID, held.getQuantity());
+        ItemStack mainStaff = fromBoundsStaff(held);
         return container.replaceItemStackInSlot(slot, held, mainStaff).succeeded();
+    }
+    public static boolean isEditorBoundsStaff(@Nullable ItemStack stack) {
+        if (!isBoundsStaff(stack) || stack.getMetadata() == null) return false;
+        var original = stack.getMetadata().get(ORIGINAL_STAFF);
+        return original instanceof org.bson.BsonDocument document
+            && document.get("Id") instanceof org.bson.BsonString id
+            && AetherhavenConstants.BUILDING_EDITOR_STAFF_ITEM_ID.equals(id.getValue());
+    }
+
+    static ItemStack toBoundsStaff(ItemStack held) {
+        if (!isMainStaff(held) && !BuildingEditorInteractions.isBuildingEditorStaff(held))
+            throw new IllegalArgumentException("A wizard staff is required");
+        return new ItemStack(AetherhavenConstants.PLOT_CREATOR_STAFF_BOUNDS_ITEM_ID, held.getQuantity())
+            .withMetadata(ORIGINAL_STAFF, ItemStack.CODEC, held);
+    }
+    static ItemStack fromBoundsStaff(ItemStack held) {
+        var metadata = held.getMetadata();
+        if (metadata != null && metadata.get(ORIGINAL_STAFF) instanceof org.bson.BsonDocument original) {
+            var restored = ItemStack.CODEC.decode(original, new com.hypixel.hytale.codec.ExtraInfo());
+            if (isMainStaff(restored) || BuildingEditorInteractions.isBuildingEditorStaff(restored)) return restored;
+        }
+        // Old saves had a plain bounds staff with no original-item receipt.
+        return new ItemStack(AetherhavenConstants.PLOT_CREATOR_STAFF_ITEM_ID, held.getQuantity());
     }
 }

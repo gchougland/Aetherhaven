@@ -1,0 +1,39 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Ore_Copper_Stone.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Ore_Copper_Stone.png",
+  "BlockType": {
+    "DrawType": "CubeWithModel",
+    "CustomModel": "Resources/Ores/Ore_Large.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Resources/Ores/Ore_Textures/Copper.png",
+        "Weight": 1
+      }
+    ],
+    "RandomRotation": "YawStep90",
+    "BlockParticleSetId": "Ore",
+    "Textures": [
+      {
+        "Weight": 1,
+        "All": "BlockTextures/Rock_Stone.png"
+      }
+    ],
+    "ParticleColor": "#ffa04a",
+    "BlockSoundSetId": "Ore",
+    "PhysicalMaterialId": "Stone",
+    "TextureComputedColor": "#905329",
+    "Material": "Solid",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Unbreakable"
+      }
+    },
+    "Flags": {},
+    "Support": {}
+  },
+  "PlayerAnimationsId": "Block",
+  "MaxStack": 1,
+  "ItemSoundSetId": "ISS_Blocks_Stone"
+}

@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "id": "q_alchemist",
+  "category": "town",
+  "grantPlotTokenConstructionId": "plot_alchemist",
+  "title": "Measure Twice, Brew Once",
+  "description": "Build Orin a laboratory where townsfolk can brew expedition supplies.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "plot_token_received",
+      "text": "Collect the laboratory plot token from Orin.",
+      "textLangKey": "aetherhaven_alchemist.quest.objective.token"
+    },
+    {
+      "id": "build",
+      "kind": "construction_built",
+      "constructionId": "plot_alchemist",
+      "text": "Build the laboratory.",
+      "textLangKey": "aetherhaven_alchemist.quest.objective.build"
+    },
+    {
+      "id": "talk",
+      "kind": "dialogue_turn_in",
+      "text": "Return to Orin.",
+      "textLangKey": "aetherhaven_alchemist.quest.objective.talk"
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Alchemist",
+      "amount": 14,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 14,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
+    ],
+    "onComplete": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ],
+    "onAbandon": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ]
+  },
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_alchemist.quest.title",
+  "descriptionLangKey": "aetherhaven_alchemist.quest.description"
+}

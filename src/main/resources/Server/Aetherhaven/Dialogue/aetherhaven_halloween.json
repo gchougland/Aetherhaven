@@ -1,0 +1,313 @@
+{
+  "id": "aetherhaven_halloween",
+  "entry": "main_hub",
+  "nodes": {
+    "main_hub": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.dialogue.greeting",
+      "choices": [
+        {
+          "text": "aetherhaven_halloween.dialogue.game_start",
+          "condition": {
+            "type": "halloween_game_can_start"
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "halloween_game_start"
+            }
+          ]
+        },
+        {
+          "text": "aetherhaven_halloween.dialogue.game_return",
+          "condition": {
+            "type": "halloween_game_can_return"
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "halloween_game_return"
+            }
+          ]
+        },
+        {
+          "text": "aetherhaven_halloween.dialogue.game_cancel",
+          "condition": {
+            "type": "halloween_game_can_cancel"
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "halloween_game_cancel"
+            }
+          ]
+        },
+        {
+          "text": "aetherhaven_halloween.dialogue.shelter_offer",
+          "condition": {
+            "type": "not",
+            "condition": {
+              "type": "or",
+              "conditions": [
+                {
+                  "type": "town_quest_active",
+                  "questId": "q_halloween_shelter"
+                },
+                {
+                  "type": "town_quest_completed",
+                  "questId": "q_halloween_shelter"
+                }
+              ]
+            }
+          },
+          "whenFalse": "hide",
+          "next": "shelter"
+        },
+        {
+          "text": "aetherhaven_halloween.dialogue.shelter_done",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_halloween_shelter"
+              },
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_halloween"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_halloween_shelter"
+            }
+          ],
+          "next": "settled"
+        },
+        {
+          "text": "aetherhaven_halloween.dialogue.gift",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              },
+              {
+                "type": "player_holds_any_item"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "giftDisableWhenNotAllowed": true,
+          "next": "gift_confirm"
+        },
+        {
+          "text": "aetherhaven_halloween.dialogue.goodbye",
+          "next": null
+        }
+      ]
+    },
+    "shelter": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.dialogue.shelter_body",
+      "choices": [
+        {
+          "text": "aetherhaven_halloween.dialogue.accept",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_halloween_shelter"
+            }
+          ],
+          "next": "accepted",
+          "speechClip": "Agree"
+        },
+        {
+          "text": "aetherhaven_halloween.dialogue.later",
+          "next": null
+        }
+      ],
+      "speechClip": "Question"
+    },
+    "accepted": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.dialogue.accepted_body",
+      "choices": [
+        {
+          "text": "aetherhaven_halloween.dialogue.goodbye",
+          "next": null
+        }
+      ]
+    },
+    "settled": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.dialogue.settled_body",
+      "choices": [
+        {
+          "text": "aetherhaven_halloween.dialogue.goodbye",
+          "next": null
+        }
+      ]
+    },
+    "gift_confirm": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmBody",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmYes",
+          "actions": [
+            {
+              "type": "gift_villager",
+              "reactionNodeLove": "gift_love",
+              "reactionNodeLike": "gift_like",
+              "reactionNodeNeutral": "gift_neutral",
+              "reactionNodeDislike": "gift_dislike"
+            }
+          ],
+          "next": "main_hub"
+        },
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmNo",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_love": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.dialogue.gift.love",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_like": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.dialogue.gift.like",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_neutral": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.dialogue.gift.neutral",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_dislike": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.dialogue.gift.dislike",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_love_birthday": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.dialogue.gift.love.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_like_birthday": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.dialogue.gift.like.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_neutral_birthday": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.dialogue.gift.neutral.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_dislike_birthday": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.dialogue.gift.dislike.birthday",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "rep_reward_25": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.dialogue.reward.25",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_halloween_25"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "rep_reward_50": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.dialogue.reward.50",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_halloween_50"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "rep_reward_75": {
+      "speaker": "aetherhaven_halloween.npc.name",
+      "text": "aetherhaven_halloween.dialogue.reward.75",
+      "speechClip": "Agree",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_halloween_75"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
+    }
+  }
+}

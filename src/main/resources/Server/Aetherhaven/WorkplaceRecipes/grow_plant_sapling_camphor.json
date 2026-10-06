@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_sapling_camphor",
+  "name": "Sapling Camphor",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_sapling_camphor",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 3,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 10
+    }
+  ],
+  "output": "Plant_Sapling_Camphor",
+  "outputCount": 1,
+  "workSeconds": 14
+}

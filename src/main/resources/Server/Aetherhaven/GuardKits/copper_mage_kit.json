@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Copper_Mage_Kit",
+  "name": "Copper Mage Kit",
+  "guardClass": "guard_mage",
+  "equipmentProfile": "guard_mage_copper",
+  "description": "+2 Intelligence, +1 Vitality."
+}

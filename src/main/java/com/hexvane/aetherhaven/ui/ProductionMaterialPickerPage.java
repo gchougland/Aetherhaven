@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.production.PlotProductionState;
+import com.hexvane.aetherhaven.production.PhysicalProductionOutputPolicy;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.ProductionEffectiveCatalog;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -151,7 +152,8 @@ public final class ProductionMaterialPickerPage extends AetherhavenInteractiveCu
                 String slotPath = cell + " #UnlockHit #IconFrame #IconInner #UnlockIcon";
                 Item assetItem = Item.getAssetMap().getAsset(itemId);
                 commandBuilder.set(slotPath + ".AssetPath", ItemAssetImagePath.forItem(assetItem, itemId));
-                commandBuilder.set(cell + " #UnlockHit #IconFrame #LockOverlay.Visible", false);
+                String issue = PhysicalProductionOutputPolicy.selectionIssue(state, targetSlot, itemId);
+                commandBuilder.set(cell + " #UnlockHit #IconFrame #LockOverlay.Visible", issue != null);
                 boolean selected = itemId.equals(selectedItemId);
                 commandBuilder.set(
                     cell + " #UnlockHit #IconFrame.Background",
@@ -162,8 +164,8 @@ public final class ProductionMaterialPickerPage extends AetherhavenInteractiveCu
                     assetItem != null && assetItem.getTranslationKey() != null && !assetItem.getTranslationKey().isBlank()
                         ? Message.translation(assetItem.getTranslationKey())
                         : Message.raw(itemId);
-                commandBuilder.set(cell + " #UnlockHit.TooltipTextSpans", nameMsg);
-                commandBuilder.set(cell + " #UnlockHit.Disabled", false);
+                commandBuilder.set(cell + " #UnlockHit.TooltipTextSpans", issue == null ? nameMsg : Message.join(nameMsg, Message.raw("\n" + issue)));
+                commandBuilder.set(cell + " #UnlockHit.Disabled", issue != null);
                 eventBuilder.addEventBinding(
                     CustomUIEventBindingType.Activating,
                     cell + " #UnlockHit",
@@ -223,6 +225,10 @@ public final class ProductionMaterialPickerPage extends AetherhavenInteractiveCu
                 state
             );
         if (entry == null) {
+            return;
+        }
+        if (slot != targetSlot || PhysicalProductionOutputPolicy.selectionIssue(state, slot, data.itemId.trim()) != null) {
+            openProduction(ref, store);
             return;
         }
         if (state.setSlotCursorToItem(slot, entry, data.itemId.trim())) {

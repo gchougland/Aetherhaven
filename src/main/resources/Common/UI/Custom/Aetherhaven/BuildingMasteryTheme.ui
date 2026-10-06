@@ -1,0 +1,6 @@
+// Native frames keep the edges crisp and the palette consistent with Hytale.
+@Panel = PatchStyle(TexturePath: "../Common/ContainerFullPatch.png", Border: 16);
+@Canvas = PatchStyle(TexturePath: "../Common/InputBox.png", Border: 8);
+@Node = PatchStyle(TexturePath: "../Common/InputBox.png", Border: 8);
+@NodeHovered = PatchStyle(TexturePath: "../Common/InputBoxHovered.png", Border: 8);
+@NodePressed = PatchStyle(TexturePath: "../Common/InputBoxSelected.png", Border: 8);

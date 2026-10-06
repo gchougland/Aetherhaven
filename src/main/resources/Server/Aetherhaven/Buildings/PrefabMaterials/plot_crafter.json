@@ -1,0 +1,98 @@
+{
+  "constructionId": "plot_crafter",
+  "prefabPath": "Artisan_Workshop.prefab.json",
+  "materials": [
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 237
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 225
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 163
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 148
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 125
+    },
+    {
+      "itemId": "Aetherhaven_Mining_Node_Rock_Stone_Cobble",
+      "count": 84
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 53
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 44
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Flat",
+      "count": 42
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 40
+    },
+    {
+      "itemId": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy",
+      "count": 35
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 28
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 18
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Mossy",
+      "count": 15
+    },
+    {
+      "itemId": "Soil_Clay",
+      "count": 12
+    },
+    {
+      "itemId": "Deco_Rope",
+      "count": 9
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Softwood_Fence",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Sticks",
+      "count": 3
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 2
+    },
+    {
+      "itemId": "Deco_Iron_Stack",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 2
+    },
+    {
+      "resourceTypeId": "Rubble",
+      "count": 1
+    }
+  ]
+}

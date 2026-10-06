@@ -159,6 +159,11 @@ public final class PropPrefabOps {
         int y,
         int z
     ) {
+        // Ordinary block breaks query every placed prop. Reject distant blocks before
+        // footprint() walks the prefab to distinguish solid and entity-only props.
+        if (!PrefabTriggerVolumeCleanup.prefabBox(origin, yaw, buffer).containsBlock(x, y, z)) {
+            return false;
+        }
         PlotFootprintRecord fp = footprint(origin, yaw, buffer);
         if (!fp.containsBlock(x, y, z)) {
             return false;

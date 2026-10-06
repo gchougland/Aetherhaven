@@ -11,6 +11,17 @@ import javax.annotation.Nullable;
  * (reputation keys use entity UUID; this stores the last known UUID per role).
  */
 public final class ResidentNpcRecord {
+    /** Saved identity for a deceased Townsfolk; keeps personality and appearance through revival. */
+    private com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding townsfolkIdentity;
+    private String guardEquipmentProfile;
+
+    public com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding getTownsfolkIdentity() { return townsfolkIdentity; }
+    public void setTownsfolkIdentity(com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding identity) {
+        townsfolkIdentity = identity == null ? null : (com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding) identity.clone();
+    }
+    public String getGuardEquipmentProfile() { return guardEquipmentProfile; }
+    public void setGuardEquipmentProfile(String profile) { guardEquipmentProfile = profile; }
+
     @SerializedName("npcRoleId")
     private String npcRoleId = "";
 
@@ -23,6 +34,7 @@ public final class ResidentNpcRecord {
 
     @SerializedName("lastEntityUuid")
     private String lastEntityUuid = "";
+    private transient volatile UUID parsedLastEntityUuid;
 
     /** Last hunger/energy/fun (0..100) saved while this entity was in a loaded simulation; used for tithe when unloaded. */
     @Nullable
@@ -57,6 +69,7 @@ public final class ResidentNpcRecord {
         this.kind = kind != null ? kind : "";
         this.jobPlotId = jobPlotId != null ? jobPlotId.toString() : null;
         this.lastEntityUuid = lastEntityUuid.toString();
+        this.parsedLastEntityUuid = lastEntityUuid;
     }
 
     @Nonnull
@@ -95,15 +108,20 @@ public final class ResidentNpcRecord {
 
     @Nonnull
     public UUID getLastEntityUuid() {
+        UUID parsed = parsedLastEntityUuid;
+        if (parsed != null) return parsed;
         try {
-            return UUID.fromString(lastEntityUuid.trim());
+            parsed = UUID.fromString(lastEntityUuid.trim());
         } catch (Exception e) {
-            return new UUID(0L, 0L);
+            parsed = new UUID(0L, 0L);
         }
+        parsedLastEntityUuid = parsed;
+        return parsed;
     }
 
     public void setLastEntityUuid(@Nonnull UUID uuid) {
         this.lastEntityUuid = uuid.toString();
+        this.parsedLastEntityUuid = uuid;
     }
 
     public boolean isPendingDawnRevival() {

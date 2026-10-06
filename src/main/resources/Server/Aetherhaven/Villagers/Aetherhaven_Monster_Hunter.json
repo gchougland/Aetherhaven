@@ -1,0 +1,54 @@
+{
+  "npcRoleId": "Aetherhaven_Monster_Hunter",
+  "dialogueVillagerKind": "monster_hunter",
+  "residentTreeId": "aetherhaven_monster_hunter",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_monster_hunter",
+  "displayName": "Kael Thorne",
+  "portraitIcon": "Aetherhaven_Monster_Hunter.png",
+  "speechVoiceId": "MellowMale",
+  "uiSortOrder": 24,
+  "innPoolEligible": true,
+  "innPoolOrder": 24,
+  "innPoolWeight": 1,
+  "visitorBindingKind": "visitor_monster_hunter",
+  "minimumTownLevel": 4,
+  "birthdaySeason": "Winter",
+  "birthdayDay": 17,
+  "giftLoves": [
+    "Ingredient_Chitin_Sturdy",
+    "Ingredient_Sac_Venom"
+  ],
+  "giftLikes": [
+    "Ingredient_Bone_Fragment"
+  ],
+  "giftDislikes": [],
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_monster_hunter_25",
+      "minReputation": 25,
+      "itemId": "Aetherhaven_Hunt_Practice_Standard",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_25"
+    },
+    {
+      "rewardId": "rep_monster_hunter_50",
+      "minReputation": 50,
+      "itemId": "Aetherhaven_Hunt_Recovery_Brazier",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_50"
+    },
+    {
+      "rewardId": "rep_monster_hunter_75",
+      "minReputation": 75,
+      "itemId": "Aetherhaven_Hunt_Warding_Sigil",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_75"
+    }
+  ],
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_monster_hunter.greeting.0",
+    "aetherhaven_monster_hunter.greeting.1",
+    "aetherhaven_monster_hunter.greeting.2"
+  ]
+}

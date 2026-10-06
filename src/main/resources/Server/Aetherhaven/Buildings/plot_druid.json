@@ -1,0 +1,81 @@
+{
+  "id": "plot_druid",
+  "displayName": "Conservatory",
+  "description": "Build Rowan a conservatory to cultivate plants for alchemy.",
+  "touristDestination": true,
+  "prefabPath": "Conservatory.prefab.json",
+  "selfBuildGameDays": 1.0,
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Druid",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "managementBlockLocalPos": [
+    2,
+    0,
+    3
+  ],
+  "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1.0,
+  "autonomyNavMaxStandYSpanAboveMinY": 2.0,
+  "autonomyNavRoofExclusionYBelowMaxY": 3.0,
+  "treasuryGoldCoinCost": 85,
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 450
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 110
+    },
+    {
+      "itemId": "Bench_Farming",
+      "count": 1
+    },
+    {
+      "itemId": "Soil_Dirt_Crystal",
+      "count": 34
+    }
+  ],
+  "pois": [
+    {
+      "localX": 1,
+      "localY": 0,
+      "localZ": -1,
+      "tags": [
+        "workActivity:tend",
+        "WORK"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "workResidentKind": "druid",
+      "interactionTargetYawDegrees": 0.0
+    }
+  ],
+  "styleId": "core",
+  "tags": [
+    "work"
+  ],
+  "displayNameLangKey": "aetherhaven_druid.building.name",
+  "frontFacing": "South",
+  "boundsLocal": {
+    "min": [
+      -8,
+      -1,
+      -4
+    ],
+    "max": [
+      8,
+      11,
+      5
+    ]
+  },
+  "productionStorageLocalPos": [
+    0,
+    0,
+    3
+  ]
+}

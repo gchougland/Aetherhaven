@@ -1,0 +1,73 @@
+{
+  "id": "plot_monster_hunter",
+  "displayName": "Hunter\u0027s Lodge",
+  "description": "Build Kael a lodge with an arena for survival hunts.",
+  "prefabPath": "Hunter_Lodge.prefab.json",
+  "selfBuildGameDays": 1.0,
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Monster_Hunter",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "managementBlockLocalPos": [
+    -6,
+    0,
+    -3
+  ],
+  "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1.0,
+  "autonomyNavMaxStandYSpanAboveMinY": 2.0,
+  "autonomyNavRoofExclusionYBelowMaxY": 3.0,
+  "treasuryGoldCoinCost": 125,
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 540
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 80
+    }
+  ],
+  "pois": [
+    {
+      "localX": -8,
+      "localY": 0,
+      "localZ": -1,
+      "tags": [
+        "workActivity:leisure",
+        "WORK"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Cloth_Block_Wool_Red",
+      "interactionKind": "WORK_SURFACE",
+      "workResidentKind": "monster_hunter",
+      "interactionTargetYawDegrees": -130.28944,
+      "equipmentProfileId": "work_bard"
+    }
+  ],
+  "styleId": "core",
+  "tags": [
+    "work"
+  ],
+  "displayNameLangKey": "aetherhaven_monster_hunter.building.name",
+  "frontFacing": "South",
+  "boundsLocal": {
+    "min": [
+      -12,
+      -1,
+      -9
+    ],
+    "max": [
+      13,
+      7,
+      9
+    ]
+  },
+  "productionStorageLocalPos": [
+    -6,
+    0,
+    3
+  ]
+}

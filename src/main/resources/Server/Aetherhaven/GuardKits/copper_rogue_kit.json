@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Copper_Rogue_Kit",
+  "name": "Copper Rogue Kit",
+  "guardClass": "guard_rogue",
+  "equipmentProfile": "guard_rogue_copper",
+  "description": "+2 Dexterity, +1 Speed."
+}

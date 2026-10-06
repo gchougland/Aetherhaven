@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_seeds_chilli_eternal",
+  "name": "Seeds Chilli Eternal",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_seeds_chilli_eternal",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 6,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 60
+    }
+  ],
+  "output": "Plant_Seeds_Chilli_Eternal",
+  "outputCount": 1,
+  "workSeconds": 20
+}

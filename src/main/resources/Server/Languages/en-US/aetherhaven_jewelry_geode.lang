@@ -41,7 +41,7 @@ items.Aetherhaven_Hand_Mirror.description=Opens your jewelry loadout: two rings 
 items.Aetherhaven_Appraisal_Bench.name=Appraisal Bench
 items.Aetherhaven_Appraisal_Bench.description=Identifies jewelry you already carry. Free to use once placed.
 items.Aetherhaven_Jewelry_Crafting_Bench.name=Jewelry Workbench
-items.Aetherhaven_Jewelry_Crafting_Bench.description=An iron anvil for finishing pieces. Craft at the town planning desk once you know the schematic. Pour in life essence with precious bars and a cut gem to forge jewelry.
+items.Aetherhaven_Jewelry_Crafting_Bench.description=A work surface for Apprentice jewelers. Place it inside a jewelry workplace unlocked through the Merchant.
 
 # === UI: Statue of Gaia (revival / resident list) ===
 

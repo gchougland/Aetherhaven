@@ -20,6 +20,16 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class ConstructionDefinition {
+    private record ParsedAliases(JsonElement source, List<String> ids) {}
+    private transient volatile ParsedAliases parsedAliases;
+    /** Explicit mod-era production declaration. Absence never implies automatic conversion. */
+    @SerializedName("productionLayout")
+    private com.hexvane.aetherhaven.production.BuildingProductionLayout productionLayout;
+
+    public com.hexvane.aetherhaven.production.BuildingProductionLayout getProductionLayout() {
+        return productionLayout == null ? com.hexvane.aetherhaven.production.BuildingProductionLayout.LEGACY : productionLayout;
+    }
+
     @SerializedName("id")
     private String id;
 
@@ -479,19 +489,29 @@ public final class ConstructionDefinition {
      */
     @Nonnull
     public List<String> getCountsAsConstructionIds() {
-        if (countsAsConstructionId == null || countsAsConstructionId.isJsonNull()) {
+        JsonElement source = countsAsConstructionId;
+        ParsedAliases cached = parsedAliases;
+        if (cached != null && cached.source() == source) return cached.ids();
+        List<String> ids = parseCountsAsConstructionIds(source);
+        parsedAliases = new ParsedAliases(source, ids);
+        return ids;
+    }
+
+    @Nonnull
+    private static List<String> parseCountsAsConstructionIds(@Nullable JsonElement source) {
+        if (source == null || source.isJsonNull()) {
             return List.of();
         }
         List<String> out = new ArrayList<>();
-        if (countsAsConstructionId.isJsonPrimitive() && countsAsConstructionId.getAsJsonPrimitive().isString()) {
-            String s = countsAsConstructionId.getAsString();
+        if (source.isJsonPrimitive() && source.getAsJsonPrimitive().isString()) {
+            String s = source.getAsString();
             if (s != null && !s.isBlank()) {
                 out.add(s.trim());
             }
             return List.copyOf(out);
         }
-        if (countsAsConstructionId.isJsonArray()) {
-            JsonArray arr = countsAsConstructionId.getAsJsonArray();
+        if (source.isJsonArray()) {
+            JsonArray arr = source.getAsJsonArray();
             for (JsonElement el : arr) {
                 if (el == null || !el.isJsonPrimitive() || !el.getAsJsonPrimitive().isString()) {
                     continue;

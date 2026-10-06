@@ -9,9 +9,8 @@
         {
           "text": "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire",
           "visibilityCondition": { "type": "npc_is_guild_hall_adventurer" },
-          "condition": { "type": "guard_hire_affordable" },
           "whenFalse": "disabled",
-          "next": "hire_confirm"
+          "actions": [{ "type": "invite_guild_resident" }]
         },
         {
           "text": "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.leave",
@@ -26,9 +25,8 @@
       "choices": [
         {
           "text": "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes",
-          "condition": { "type": "guard_hire_affordable" },
           "whenFalse": "disabled",
-          "actions": [{ "type": "hire_guild_adventurer" }]
+          "actions": [{ "type": "invite_guild_resident" }]
         },
         {
           "text": "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.no",

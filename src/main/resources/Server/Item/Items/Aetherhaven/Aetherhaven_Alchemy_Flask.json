@@ -1,0 +1,127 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_alchemy.flask.name",
+    "Description": "aetherhaven_alchemy.flask.description"
+  },
+  "PlayerAnimationsId": {
+    "Parent": "Item",
+    "Animations": {
+      "Consume": {
+        "FirstPerson": "Characters/Animations/Items/Main_Handed/Item/Attacks/Drink/Drink_FPS.blockyanim",
+        "ThirdPerson": "Characters/Animations/Items/Main_Handed/Item/Attacks/Drink/Drink.blockyanim",
+        "Speed": 1,
+        "Looping": true
+      }
+    }
+  },
+  "Categories": [
+    "Items.Potions",
+    "Aetherhaven.All"
+  ],
+  "Recipe": {
+    "TimeSeconds": 3,
+    "KnowledgeRequired": true,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Bar_Iron",
+        "Quantity": 4
+      },
+      {
+        "ItemId": "Ingredient_Leather_Light",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Ingredient_Tree_Sap",
+        "Quantity": 4
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": [
+          "Aetherhaven_TownPlanning_Misc"
+        ]
+      }
+    ]
+  },
+  "IconProperties": {
+    "Scale": 0.8,
+    "Rotation": [
+      6,
+      59,
+      27
+    ],
+    "Translation": [
+      0,
+      -9
+    ]
+  },
+  "Interactions": {
+    "Secondary": "Aetherhaven_Alchemy_Drink"
+  },
+  "InteractionVars": {
+    "RemoveEffect": {
+      "Interactions": [
+        {
+          "Type": "Simple"
+        }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "Simple"
+        }
+      ]
+    },
+    "ConsumeSFX": {
+      "Interactions": [
+        {
+          "Parent": "Consume_SFX",
+          "Effects": {
+            "LocalSoundEventId": "SFX_Health_Potion_Low_Drink"
+          }
+        }
+      ]
+    },
+    "ConsumedSFX": {
+      "Interactions": [
+        {
+          "Parent": "Consumed_SFX",
+          "Effects": {
+            "LocalSoundEventId": "SFX_Potion_Drink_Success"
+          }
+        }
+      ]
+    }
+  },
+  "InteractionConfig": {
+    "UseDistance": {
+      "Adventure": 5,
+      "Creative": 6
+    },
+    "AllEntities": true
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Alchemy_Flask.png",
+  "MaxStack": 1,
+  "MaxDurability": 1,
+  "DurabilityLossOnDeath": false,
+  "Quality": "Rare",
+  "Set": "Aetherhaven",
+  "Consumable": true,
+  "Tags": {
+    "Type": [
+      "Potion"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "Utility": {
+    "Compatible": false
+  },
+  "DropOnDeath": true,
+  "Model": "Items/Aetherhaven/Alchemy_Flask/Alchemy_Flask.blockymodel",
+  "Texture": "Items/Aetherhaven/Alchemy_Flask/Alchemy_Flask.png"
+}

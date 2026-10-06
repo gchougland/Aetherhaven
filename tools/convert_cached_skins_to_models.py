@@ -2,6 +2,7 @@
 """
 Convert Hytale CachedPlayerSkins JSON (main-menu avatar designer) into Server/Models/*.json
 (Parent: Player + DefaultAttachments), matching Aetherhaven PlayerSkinModelExporter / CosmeticRegistry rules.
+Exported human ears depend on Aetherhaven's Resident_Ears model for earring anchors.
 
 Usage:
   python tools/convert_cached_skins_to_models.py
@@ -18,7 +19,7 @@ import csv
 import json
 import os
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any
 
@@ -27,8 +28,10 @@ HAIR_GRADIENT_SET_ID = "Hair"
 PARENT_PLAYER = "Player"
 # Ears1.blockymodel + Skin gradient; Character Creator lists Ears.png but NPC/Player.json use this greyscale.
 EARS1_BLOCKYMODEL = "Characters/Body_Attachments/Ears/Ears1.blockymodel"
+RESIDENT_EARS_BLOCKYMODEL = "Characters/Aetherhaven/Resident_Ears.blockymodel"
 EAR_DEFAULT_NPC_GREYSCALE = "Characters/Body_Attachments/Ears/Ears1_Textures/Ears1_Greyscale_Texture.png"
 LEGACY_EAR_GREYSCALE = "Characters/Body_Attachments/Ears/Ears.png"
+DEFAULT_AETHERHAVEN_COMMON = Path(__file__).resolve().parents[1] / "src/main/resources/Common"
 
 DEFAULT_ASSETS = Path(r"c:\Users\gchou\OneDrive\Documents\Hytale-Modding\HytaleSourceCode\Assets")
 DEFAULT_INPUT = Path(os.environ.get("APPDATA", "")) / "Hytale" / "UserData" / "CachedPlayerSkins"
@@ -328,6 +331,10 @@ def sanitize_attachments(attachments: list[ModelAttachment]) -> None:
     if has_styled:
         attachments[:] = [a for a in attachments if a.model not in GENERIC_HAIR_MODELS]
     attachments[:] = [a for a in attachments if a.model != PLAYER_BODY_MODEL]
+    # Keep the selected texture and tint. Only native human ears need the
+    # additional earring anchors, matching PlayerSkinModelExporter in game.
+    attachments[:] = [replace(a, model=RESIDENT_EARS_BLOCKYMODEL)
+                      if a.model == EARS1_BLOCKYMODEL else a for a in attachments]
 
 
 def to_model_json(skin: dict[str, Any], registry: CosmeticRegistry) -> dict[str, Any]:
@@ -362,12 +369,13 @@ def common_asset_exists(common_root: Path, relative_path: str) -> bool:
     return (common_root / relative_path.replace("/", os.sep)).is_file()
 
 
-def validate_model(model: dict[str, Any], common_root: Path) -> list[str]:
+def validate_model(model: dict[str, Any], common_root: Path,
+                   aetherhaven_common: Path = DEFAULT_AETHERHAVEN_COMMON) -> list[str]:
     errors: list[str] = []
     for i, att in enumerate(model.get("DefaultAttachments", [])):
         for key in ("Model", "Texture"):
             path = att.get(key)
-            if path and not common_asset_exists(common_root, path):
+            if path and not any(common_asset_exists(root, path) for root in (aetherhaven_common, common_root)):
                 errors.append(f"attachment[{i}].{key}: missing Common asset '{path}'")
     return errors
 
@@ -415,6 +423,12 @@ def main() -> int:
         help="Hytale Assets root (contains Cosmetics/CharacterCreator and Common/)",
     )
     parser.add_argument(
+        "--aetherhaven-common",
+        type=Path,
+        default=DEFAULT_AETHERHAVEN_COMMON,
+        help="Aetherhaven Common assets used alongside native assets (default: this repository)",
+    )
+    parser.add_argument(
         "--manifest",
         type=Path,
         help="Optional CSV: source_stem_or_uuid,ModelAssetName (e.g. uuid,Villager_Merchant)",
@@ -454,7 +468,7 @@ def main() -> int:
                 skin = json.load(f)
             model = to_model_json(skin, registry)
             if not args.no_validate:
-                errs = validate_model(model, common_root)
+                errs = validate_model(model, common_root, args.aetherhaven_common)
                 if errs:
                     raise ValueError("; ".join(errs))
             out_path = args.output / f"{out_name}.json"

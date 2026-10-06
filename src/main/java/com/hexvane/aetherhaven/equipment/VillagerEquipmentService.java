@@ -23,6 +23,12 @@ public final class VillagerEquipmentService {
 
     private VillagerEquipmentService() {}
 
+    /** Clear through the native removal transaction, bypassing armor insertion filters. */
+    public static void clearArmorInventory(@Nonnull InventoryComponent.Armor armor) {
+        armor.getInventory().clear();
+        armor.setOutdatedEquipment(true);
+    }
+
     public static void applyProfile(
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull Store<EntityStore> store,
@@ -44,7 +50,7 @@ public final class VillagerEquipmentService {
         @Nullable CommandBuffer<EntityStore> commandBuffer,
         @Nonnull EquipmentProfileDefinition def
     ) {
-        applyArmor(npcRef, store, commandBuffer, def.getArmorItemIds());
+        applyArmor(npcRef, store, commandBuffer, def.getArmorItemIds(), !def.usesAttributeCombat());
         applyHotbar(npcRef, store, commandBuffer, def);
         applyOffhand(npcRef, store, commandBuffer, def.getOffhandItemId());
     }
@@ -75,7 +81,8 @@ public final class VillagerEquipmentService {
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull Store<EntityStore> store,
         @Nullable CommandBuffer<EntityStore> commandBuffer,
-        @Nonnull java.util.List<String> armorIds
+        @Nonnull java.util.List<String> armorIds,
+        boolean topUpHealth
     ) {
         if (armorIds.isEmpty()) {
             return;
@@ -92,7 +99,7 @@ public final class VillagerEquipmentService {
             }
             putArmor(npcRef, store, commandBuffer, armor);
             // Armor Health modifiers apply on the next Recalculate; queue a full top-up so max and current match.
-            TownVillagerHealthTopUp.request(npcRef, store);
+            if (topUpHealth) TownVillagerHealthTopUp.request(npcRef, store);
         } catch (RuntimeException ex) {
             LOGGER.at(Level.FINE).withCause(ex).log("Could not equip armor on NPC");
         }
@@ -145,15 +152,33 @@ public final class VillagerEquipmentService {
             return;
         }
         InventoryComponent.Utility util = store.getComponent(npcRef, InventoryComponent.Utility.getComponentType());
-        if (util == null) {
-            return;
-        }
         try {
-            util.getInventory().setItemStackForSlot((short) 0, new ItemStack(offhandItemId, 1));
+            util = prepareOffhandInventory(util);
+            if (!util.getInventory().setItemStackForSlot((short) 0, new ItemStack(offhandItemId, 1)).succeeded()) {
+                LOGGER.atWarning().log("Could not place NPC offhand item %s", offhandItemId);
+                return;
+            }
+            markOffhandEquipmentDirty(util, npcRef, commandBuffer != null ? commandBuffer : store);
             putUtility(npcRef, store, commandBuffer, util);
         } catch (RuntimeException ex) {
             LOGGER.at(Level.FINE).withCause(ex).log("Could not equip offhand on NPC");
         }
+    }
+
+    /** Native role changes can retain a civilian's zero-capacity utility inventory. */
+    static InventoryComponent.Utility prepareOffhandInventory(@Nullable InventoryComponent.Utility utility) {
+        if (utility == null) return new InventoryComponent.Utility((short) 1);
+        if (utility.getInventory().getCapacity() < 1) utility.ensureCapacity((short) 1, new java.util.ArrayList<>());
+        return utility;
+    }
+
+    /** A populated utility slot stays hidden until selected; replacing it also needs an equipment refresh. */
+    static void markOffhandEquipmentDirty(InventoryComponent.Utility util, Ref<EntityStore> ref,
+            ComponentAccessor<EntityStore> accessor) {
+        Objects.requireNonNull(accessor, "Held-item refresh requires an ECS accessor");
+        if (util.getActiveSlot() == 0) util.setActiveSlot((byte) -1, ref, accessor);
+        util.setActiveSlot((byte) 0, ref, accessor);
+        util.setOutdatedEquipment(true);
     }
 
     private static void putArmor(

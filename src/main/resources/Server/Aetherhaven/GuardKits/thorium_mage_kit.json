@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Thorium_Mage_Kit",
+  "name": "Thorium Mage Kit",
+  "guardClass": "guard_mage",
+  "equipmentProfile": "guard_mage_thorium",
+  "description": "+6 Intelligence, +5 Vitality."
+}

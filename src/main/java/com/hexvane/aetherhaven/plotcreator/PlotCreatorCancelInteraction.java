@@ -57,6 +57,10 @@ public final class PlotCreatorCancelInteraction extends SimpleInstantInteraction
             return;
         }
         ItemStack hand = context.getHeldItem();
+        if (PlotCreatorStaffBoundsSwap.isEditorBoundsStaff(hand)) {
+            BuildingEditorInteractions.handleCancel(ref, commandBuffer, context);
+            return;
+        }
         if (!PlotCreatorInteractions.isPlotCreatorStaff(hand)) {
             context.getState().state = InteractionState.Failed;
             return;

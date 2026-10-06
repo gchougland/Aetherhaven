@@ -151,11 +151,16 @@ public final class ProductionCatchUpService {
                     continue;
                 }
                 String gameplayPlotId = ccat.resolveGameplayConstructionId(plot.getConstructionId());
+                // Conservatory plants have always required physical harvest and delivery, including before adoption.
+                if (NativeDruidCrops.CONSTRUCTION.equals(gameplayPlotId)) continue;
+                // A calendar jump cannot stand in for physically mining a node.
+                if (!plot.getProductionLayout().legacy()) continue;
                 if (!ProductionCatalog.isProductionWorkplaceConstruction(gameplayPlotId)) {
                     continue;
                 }
                 UUID plotId = plot.getPlotId();
                 PlotProductionState state = town.getOrCreatePlotProduction(plotId);
+                if (state.usesPhysicalTimber() || state.usesPhysicalField() || state.usesPhysicalHerd()) continue;
                 state.migrateIfNeeded();
 
                 ProductionAssignedWorker.WorkerRole worker =

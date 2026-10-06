@@ -24,6 +24,11 @@ $C.@PageOverlay {
         Text: "";
       }
 
+      Label #MasteryInfo {
+        Anchor: (Height: 30);
+        Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #d2bc85, Wrap: true);
+        Text: "";
+      }
       Group #SlotsRow {
         LayoutMode: Left;
         Anchor: (Top: 8);
@@ -51,6 +56,30 @@ $C.@PageOverlay {
           TooltipText: "";
           Anchor: (Width: 200, Height: 38);
           Text: "";
+        }
+      }
+      Group #HerdRow {
+        Visible: false;
+        LayoutMode: Center;
+        Anchor: (Top: 10, Height: 38);
+        $C.@SecondaryTextButton #OpenHerd { Anchor: (Width: 240, Height: 38); Text: "Review herd"; }
+      }
+      Group #FieldRow {
+        Visible: false;
+        LayoutMode: Center;
+        Anchor: (Top: 10, Height: 38);
+        $C.@SecondaryTextButton #OpenField {
+          Anchor: (Width: 240, Height: 38);
+          Text: "Review crop beds";
+        }
+      }
+      Group #GroveRow {
+        Visible: false;
+        LayoutMode: Center;
+        Anchor: (Top: 10, Height: 38);
+        $C.@SecondaryTextButton #OpenGrove {
+          Anchor: (Width: 240, Height: 38);
+          Text: "Plan a grove";
         }
       }
     }

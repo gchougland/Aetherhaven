@@ -1,0 +1,16 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Top; FlexWeight: 1;
+  Label { Text: "BREW FOR YOUR NEXT JOURNEY"; Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d2bc85); }
+  Group #Families { LayoutMode: Left; Anchor: (Height: 76, Bottom: 10); }
+  Label { Text: "POTION STRENGTH"; Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #d2bc85); }
+  Group #Strengths { LayoutMode: Left; Anchor: (Height: 50, Bottom: 10); }
+  Group { LayoutMode: Left; FlexWeight: 1; Background: $T.@Panel; Padding: (Full: 12);
+    ItemIcon #Preview { TextTooltipStyle: $C.@DefaultTextTooltipStyle; Anchor: (Width: 88, Height: 88, Right: 12); }
+    Group { LayoutMode: Top; FlexWeight: 1;
+      Label #PreviewName { Anchor: (Height: 38); Style: (...$C.@DefaultLabelStyle, FontSize: 18, TextColor: #e0d3af, Wrap: true, RenderBold: true); }
+      Label #Requirements { Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9fc5b2); }
+      Label #Status { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #dec68d, Wrap: true); }
+    }
+  }
+}

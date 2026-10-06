@@ -23,6 +23,14 @@
       "learnRecipeItemId": ""
     },
     {
+      "rewardId": "rep_miner_glow_ring_plans",
+      "minReputation": 75,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_75",
+      "learnRecipeItemId": "Aetherhaven_Ring_Glow"
+    },
+    {
       "rewardId": "rep_miner_100",
       "minReputation": 100,
       "itemId": "Aetherhaven_Ring_Large_Glow",

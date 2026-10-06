@@ -113,6 +113,20 @@ public final class InnVisitorShopPromotion {
         return false;
     }
 
+    /** Uses the same content mapping for guest retention as for eventual shop promotion. */
+    public static boolean hasActiveShopQuest(
+        @Nonnull TownRecord town,
+        @Nonnull QuestCatalog quests,
+        @Nonnull ConstructionCatalog constructions,
+        @Nullable VillagerDefinition definition
+    ) {
+        if (definition == null || !definition.isInnPoolEligible()) return false;
+        String work = definition.getWorkConstructionId();
+        if (work == null || work.isBlank()) return false;
+        String quest = findShopQuestId(quests, constructions, definition, work);
+        return quest != null && town.hasQuestActive(quest);
+    }
+
     private static void tryPromoteVillager(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,

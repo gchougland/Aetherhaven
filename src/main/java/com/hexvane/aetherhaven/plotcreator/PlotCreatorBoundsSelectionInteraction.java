@@ -54,11 +54,19 @@ public final class PlotCreatorBoundsSelectionInteraction extends BuilderToolInte
             return;
         }
         PlayerRef playerRef = commandBuffer.getComponent(ref, PlayerRef.getComponentType());
-        if (playerRef == null || !PlotCreatorInteractions.hasPlotCreatorPermission(playerRef)) {
+        if (playerRef == null) {
             context.getState().state = InteractionState.Failed;
             return;
         }
         PlotCreatorSession session = PlotCreatorSessions.get(playerRef.getUuid());
+        boolean allowed = PlotCreatorStaffBoundsSwap.isEditorBoundsStaff(hand)
+            ? session != null && session.getDraft().isBuildingEditorMode()
+                && BuildingEditorSessionStarter.requireCreative(playerRef, ref, commandBuffer.getStore())
+            : PlotCreatorInteractions.hasPlotCreatorPermission(playerRef);
+        if (!allowed) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
         PlotCreatorDraft draft = session != null ? session.getDraft() : null;
         if (session == null
             || draft == null

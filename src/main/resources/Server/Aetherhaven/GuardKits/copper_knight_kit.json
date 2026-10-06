@@ -1,0 +1,7 @@
+{
+  "itemId": "Aetherhaven_Copper_Knight_Kit",
+  "name": "Copper Knight Kit",
+  "guardClass": "guard_knight",
+  "equipmentProfile": "guard_knight_copper",
+  "description": "+2 Strength, +2 Vitality."
+}

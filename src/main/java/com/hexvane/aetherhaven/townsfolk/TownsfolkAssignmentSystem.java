@@ -53,6 +53,12 @@ public final class TownsfolkAssignmentSystem extends EntityTickingSystem<EntityS
             return;
         }
         Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
+        var clerk=store.getComponent(ref,com.hexvane.aetherhaven.shopspot.ShopClerkState.getComponentType());
+        if(clerk!=null&&clerk.active)return;
+        var delivery=store.getComponent(ref,com.hexvane.aetherhaven.warehouse.CourierTravelState.getComponentType());
+        if(delivery!=null&&delivery.active)return;
+        var work=store.getComponent(ref,com.hexvane.aetherhaven.workplace.ApprenticeWorkState.getComponentType());
+        if(work!=null&&work.active)return;
         String state = NpcSupportUtil.stateName(store, ref);
         if (state.startsWith(AetherhavenConstants.NPC_STATE_AUTONOMY_POI)) {
             NpcSupportUtil.setState(ref, "Idle", null, commandBuffer);

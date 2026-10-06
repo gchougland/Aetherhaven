@@ -1,0 +1,31 @@
+{
+  "id": "craft_spooky_terrarium",
+  "name": "Spooky Terrarium",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:craft_spooky_terrarium",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 6,
+  "requiresKnowledge": true,
+  "inputs": [
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 16
+    },
+    {
+      "itemId": "Ingredient_Crystal_Green",
+      "count": 8
+    },
+    {
+      "itemId": "Ingredient_Bone_Fragment",
+      "count": 6
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 4
+    }
+  ],
+  "output": "Aetherhaven_Prop_Spooky_Terrarium",
+  "outputCount": 1,
+  "workSeconds": 45
+}

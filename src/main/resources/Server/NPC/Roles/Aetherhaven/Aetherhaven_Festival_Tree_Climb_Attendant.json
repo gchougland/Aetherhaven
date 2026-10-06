@@ -24,7 +24,7 @@
     "Friendly"
   ],
   "CombatConfig": {
-    "EntityEffect": "Immunity_Environmental"
+    "EntityEffects": ["Immunity_Environmental"]
   },
   "BusyStates": [],
   "Invulnerable": {

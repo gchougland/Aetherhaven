@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_seeds_lettuce",
+  "name": "Seeds Lettuce",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_seeds_lettuce",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 1,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 2
+    }
+  ],
+  "output": "Plant_Seeds_Lettuce",
+  "outputCount": 1,
+  "workSeconds": 10
+}

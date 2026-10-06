@@ -1,0 +1,27 @@
+{
+  "id": "jewel_necklace_silver_voidstone_rare",
+  "name": "Rare silver voidstone necklace",
+  "workplace": "jewelry",
+  "sourceRecipe": "workplace:jewel_necklace_silver_voidstone_rare",
+  "bench": "Aetherhaven_Jewelry_Crafting_Bench",
+  "benchTier": 1,
+  "skillLevel": 5,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Silver",
+      "count": 10
+    },
+    {
+      "itemId": "Rock_Gem_Voidstone",
+      "count": 1
+    },
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 12
+    }
+  ],
+  "output": "Aetherhaven_Necklace_Silver_Voidstone",
+  "outputCount": 1,
+  "workSeconds": 45,
+  "jewelryRarity": "rare"
+}

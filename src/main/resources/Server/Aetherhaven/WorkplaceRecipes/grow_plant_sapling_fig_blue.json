@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_sapling_fig_blue",
+  "name": "Sapling Fig Blue",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_sapling_fig_blue",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 5,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 20
+    }
+  ],
+  "output": "Plant_Sapling_Fig_Blue",
+  "outputCount": 1,
+  "workSeconds": 18
+}

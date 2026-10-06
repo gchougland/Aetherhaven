@@ -122,7 +122,7 @@ public final class TownTaxService {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         long titheDay = VillagerReputationService.currentGameEpochDay(store);
         long todayGameLocalEpochDay = wtr.getGameDateTime().toLocalDate().toEpochDay();
-        Set<UUID> onlinePlayers = collectOnlinePlayerUuids(store);
+        Set<UUID> onlinePlayers = TownEconomyPresence.onlinePlayers(store);
 
         for (TownRecord town : tm.allTowns()) {
             if (!world.getName().equals(town.getWorldName())) {
@@ -132,7 +132,7 @@ public final class TownTaxService {
             if (hall == null) {
                 continue;
             }
-            if (!anyAffiliatedTownPlayerOnline(town, onlinePlayers)) {
+            if (!TownEconomyPresence.hasMember(town, onlinePlayers)) {
                 continue;
             }
             Long lastRaw = town.getTreasuryLastTaxEpochDay();
@@ -257,8 +257,8 @@ public final class TownTaxService {
         boolean alreadyThisGameCalendarDay =
             wtr != null && lastTaxCal != null && lastTaxCal == wtr.getGameDateTime().toLocalDate().toEpochDay();
         boolean hall = town.findCompletePlotWithConstruction(constructionCatalog, AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL) != null;
-        Set<UUID> onlinePlayers = collectOnlinePlayerUuids(store);
-        boolean anyMember = anyAffiliatedTownPlayerOnline(town, onlinePlayers);
+        Set<UUID> onlinePlayers = TownEconomyPresence.onlinePlayers(store);
+        boolean anyMember = TownEconomyPresence.hasMember(town, onlinePlayers);
 
         int maxPer = cfg.getTreasuryMaxGoldTaxPerVillagerPerDay();
         CharterTaxPolicy policy = town.getCharterTaxPolicyEnum();
@@ -646,33 +646,6 @@ public final class TownTaxService {
             return null;
         }
         return raw;
-    }
-
-    @Nonnull
-    private static Set<UUID> collectOnlinePlayerUuids(@Nonnull Store<EntityStore> store) {
-        Query<EntityStore> q = Query.and(Player.getComponentType(), UUIDComponent.getComponentType());
-        Set<UUID> out = new HashSet<>();
-        store.forEachChunk(
-            q,
-            (ArchetypeChunk<EntityStore> chunk, CommandBuffer<EntityStore> commandBuffer) -> {
-                for (int i = 0; i < chunk.size(); i++) {
-                    UUIDComponent uc = chunk.getComponent(i, UUIDComponent.getComponentType());
-                    if (uc != null) {
-                        out.add(uc.getUuid());
-                    }
-                }
-            }
-        );
-        return out;
-    }
-
-    private static boolean anyAffiliatedTownPlayerOnline(@Nonnull TownRecord town, @Nonnull Set<UUID> onlinePlayers) {
-        for (UUID u : onlinePlayers) {
-            if (town.hasMemberOrOwner(u)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private static void notifyTownTaxCollected(@Nonnull Store<EntityStore> store, @Nonnull TownRecord town, long goldAdded) {

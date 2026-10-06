@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_sapling_dry",
+  "name": "Sapling Dry",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_sapling_dry",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 7,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 30
+    }
+  ],
+  "output": "Plant_Sapling_Dry",
+  "outputCount": 1,
+  "workSeconds": 22
+}

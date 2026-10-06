@@ -1,0 +1,73 @@
+{
+  "id": "plot_alchemist",
+  "displayName": "Laboratory",
+  "description": "Build Orin a laboratory where townsfolk can brew expedition supplies.",
+  "touristDestination": true,
+  "prefabPath": "Laboratory.prefab.json",
+  "selfBuildGameDays": 1.0,
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Alchemist",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "managementBlockLocalPos": [
+    -4,
+    1,
+    -2
+  ],
+  "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1.0,
+  "autonomyNavMaxStandYSpanAboveMinY": 2.0,
+  "autonomyNavRoofExclusionYBelowMaxY": 3.0,
+  "treasuryGoldCoinCost": 100,
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 260
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 100
+    },
+    {
+      "itemId": "Bench_Alchemy",
+      "count": 1
+    }
+  ],
+  "pois": [
+    {
+      "localX": 2,
+      "localY": 0,
+      "localZ": 0,
+      "tags": [
+        "WORK",
+        "workActivity:leisure"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Cloth_Block_Wool_Purple",
+      "interactionKind": "WORK_SURFACE",
+      "workResidentKind": "alchemist",
+      "interactionTargetYawDegrees": 90.0,
+      "equipmentProfileId": "work_bard"
+    }
+  ],
+  "styleId": "core",
+  "tags": [
+    "work"
+  ],
+  "displayNameLangKey": "aetherhaven_alchemist.building.name",
+  "frontFacing": "South",
+  "boundsLocal": {
+    "min": [
+      -6,
+      -1,
+      -6
+    ],
+    "max": [
+      6,
+      12,
+      6
+    ]
+  }
+}

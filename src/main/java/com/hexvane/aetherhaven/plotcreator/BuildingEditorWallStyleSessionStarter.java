@@ -117,7 +117,10 @@ public final class BuildingEditorWallStyleSessionStarter {
             store,
             INSTANT_BLOCKS_PER_BATCH,
             INSTANT_BATCH_DELAY_MS,
-            () -> world.execute(() -> pasteFrom(plugin, world, store, pending, index + 1, done))
+            () -> world.execute(() -> {
+                BuildingEditorAirMarkers.restore(world, entry.buffer(), entry.origin(), Rotation.None);
+                pasteFrom(plugin, world, store, pending, index + 1, done);
+            })
         );
     }
 

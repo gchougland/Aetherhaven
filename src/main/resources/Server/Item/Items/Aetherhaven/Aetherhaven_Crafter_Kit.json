@@ -1,0 +1,30 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_profession_kits.crafter.name",
+    "Description": "aetherhaven_profession_kits.crafter.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Crafter_Kit.png",
+  "Model": "Items/Aetherhaven/Profession_Kits/Crafter_Kit.blockymodel",
+  "Texture": "Items/Aetherhaven/Profession_Kits/Crafter_Kit.png",
+  "PlayerAnimationsId": "Block",
+  "Categories": [
+    "Items.Tools",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "MaxStack": 1,
+  "Quality": "Uncommon",
+  "ItemSoundSetId": "ISS_Blocks_Wood",
+  "IconProperties": {
+    "Scale": 1,
+    "Rotation": [
+      22.5,
+      45,
+      0
+    ],
+    "Translation": [
+      0,
+      0
+    ]
+  }
+}

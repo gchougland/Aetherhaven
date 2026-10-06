@@ -145,6 +145,10 @@ public final class PlayerSkinModelExporter {
     public static void sanitizeAttachmentList(@Nonnull List<ModelAttachment> list) {
         removeRedundantGenericHaircuts(list);
         list.removeIf(a -> PLAYER_BLOCKYMODEL.equals(a.getModel()));
+        // Exported player skins need the same real earring anchors as static resident models.
+        list.replaceAll(a -> EARS1_BLOCKYMODEL.equals(a.getModel())
+            ? new ModelAttachment("Characters/Aetherhaven/Resident_Ears.blockymodel",
+                a.getTexture(),a.getGradientSet(),a.getGradientId(),a.getWeight()) : a);
     }
 
     private static void removeRedundantGenericHaircuts(@Nonnull List<ModelAttachment> list) {

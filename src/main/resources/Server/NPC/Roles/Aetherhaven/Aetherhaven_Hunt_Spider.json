@@ -1,0 +1,125 @@
+{
+  "Type": "Variant",
+  "Reference": "Spider",
+  "Modify": {
+    "Appearance": "Spider_Cave",
+    "DropList": "",
+    "MaxHealth": 80,
+    "BlockStepDetectionBlockSet": "Web",
+    "BlockStepDetectionRange": 20,
+    "_InteractionVars": {
+      "Melee_Start": {
+        "Interactions": [
+          {
+            "Parent": "Spider_Bite",
+            "$Comment": "Sets animations and delay before hit",
+            "Effects": {
+              "ItemPlayerAnimationsId": "Spider_Default",
+              "ItemAnimationId": "Bite"
+            },
+            "RunTime": 0.333
+          }
+        ]
+      },
+      "Bite_Damage": {
+        "Interactions": [
+          {
+            "Type": "CooldownCondition",
+            "Id": "Spider_Cave_Poison",
+            "Next": {
+              "Type": "Serial",
+              "Interactions": [
+                {
+                  "Type": "TriggerCooldown",
+                  "Cooldown": {
+                    "Id": "Spider_Cave_Poison",
+                    "Cooldown": 8
+                  }
+                },
+                {
+                  "Type": "Simple",
+                  "RunTime": 0.1,
+                  "Effects": {
+                    "Particles": [
+                      {
+                        "SystemId": "Placeholder_Poison_Melee_Slash",
+                        "TargetEntityPart": "Entity",
+                        "PositionOffset": {
+                          "X": 0,
+                          "Y": 0.75,
+                          "Z": 1.5
+                        },
+                        "RotationOffset": {
+                          "Pitch": -30,
+                          "Roll": 0,
+                          "Yaw": 90
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "Parent": "Spider_Bite_Damage",
+                  "DamageCalculator": {
+                    "Type": "Absolute",
+                    "BaseDamage": {
+                      "Physical": 29
+                    },
+                    "RandomPercentageModifier": 0.1
+                  },
+                  "DamageEffects": {
+                    "Knockback": {
+                      "Force": 0.5
+                    }
+                  },
+                  "Next": {
+                    "Type": "EffectCondition",
+                    "Entity": "Target",
+                    "EntityEffectIds": [
+                      "Antidote"
+                    ],
+                    "Match": "None",
+                    "Next": {
+                      "Type": "ClearEntityEffect",
+                      "Entity": "Target",
+                      "EntityEffectId": "Poison_T1",
+                      "Next": {
+                        "Type": "ApplyEffect",
+                        "Entity": "Target",
+                        "EffectId": "Poison_T1"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "Failed": {
+              "Parent": "Spider_Bite_Damage",
+              "DamageCalculator": {
+                "Type": "Absolute",
+                "BaseDamage": {
+                  "Physical": 29
+                },
+                "RandomPercentageModifier": 0.1
+              },
+              "DamageEffects": {
+                "Knockback": {
+                  "Force": 0.5
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "NameTranslationKey": {
+      "Compute": "NameTranslationKey"
+    }
+  },
+  "Parameters": {
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Spider_Cave.name",
+      "Description": "Translation key for NPC name display"
+    }
+  }
+}

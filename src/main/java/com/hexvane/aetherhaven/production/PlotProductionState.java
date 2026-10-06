@@ -10,7 +10,38 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /** Stored production for one workplace plot: catalog slot cursors and per item amounts. */
-public final class PlotProductionState {
+public final class PlotProductionState implements com.hexvane.aetherhaven.warehouse.ProductionInventory {
+    private boolean excavationOutput;
+    public boolean hasExcavationOutput(){return excavationOutput;}
+    public void markExcavationOutput(){excavationOutput=true;}
+
+    private MiningProductionState mining;
+    private TimberProductionState timber;
+    private FieldProductionState field;
+    private HerdProductionState herd;
+    public HerdProductionState herd(){if(herd==null)herd=new HerdProductionState();return herd;}
+    public boolean usesPhysicalHerd(){return herd!=null&&herd.adopted();}
+    public boolean lostHerdAnimal(java.util.UUID animal){return herd!=null&&herd.lost(animal);}
+
+    public FieldProductionState field() {
+        if (field == null) field = new FieldProductionState();
+        return field;
+    }
+    public boolean usesPhysicalField() { return field != null && field.adopted(); }
+
+    public TimberProductionState timber() {
+        if (timber == null) timber = new TimberProductionState();
+        return timber;
+    }
+    public boolean usesPhysicalTimber() { return timber != null && timber.adopted(); }
+    public TimberProductionState.Cargo waitingTimberCargo() { return timber == null ? null : timber.cargo(); }
+    public boolean groveConflictsWith(TimberPlantingReceipt tree) { return timber != null && timber.conflictsWith(tree); }
+    public boolean markGroveEdited(TimberHarvestPlan.Position position) { return timber != null && timber.markEdited(position); }
+
+    public MiningProductionState mining() {
+        if (mining == null) mining = new MiningProductionState();
+        return mining;
+    }
 
     @SerializedName("s0")
     private int s0;

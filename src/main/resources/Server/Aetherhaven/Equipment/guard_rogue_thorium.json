@@ -1,0 +1,24 @@
+{
+  "id": "guard_rogue_thorium",
+  "guardNpcRole": "Aetherhaven_Guard_Rogue",
+  "displayName": "Thorium Rogue",
+  "hireGoldCost": 45,
+  "armor": [
+    "Aetherhaven_Guard_Armor_Leather_Heavy_Head",
+    "Aetherhaven_Guard_Armor_Leather_Heavy_Chest",
+    "Aetherhaven_Guard_Armor_Leather_Heavy_Hands",
+    "Aetherhaven_Guard_Armor_Leather_Heavy_Legs"
+  ],
+  "hotbar": [
+    {
+      "slot": 0,
+      "itemId": "Weapon_Daggers_Thorium"
+    }
+  ],
+  "attributeCombat": true,
+  "attributeBonuses": {
+    "dexterity": 6,
+    "speed": 3,
+    "vitality": 2
+  }
+}

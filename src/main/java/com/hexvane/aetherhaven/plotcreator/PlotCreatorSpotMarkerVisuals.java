@@ -17,6 +17,7 @@ public final class PlotCreatorSpotMarkerVisuals {
     @Nonnull
     public static String textureFor(@Nonnull PlotCreatorSubstepType type) {
         return switch (type) {
+            case MINING_NODE -> TEX_ORANGE;
             case VISITOR_SPAWN, TOURIST_VISIT_POI, TOURIST_PORTAL_BLOCK, FESTIVAL_TOURIST_SPOT -> TEX_TEAL;
             case ADVENTURER_SPAWN, INNKEEPER_SPAWN, GUILD_MASTER_SPAWN, FESTIVAL_NPC -> TEX_PURPLE;
             case SLEEP_POI, EAT_POI, FUN_POI, FESTIVAL_CENTERPIECE, FESTIVAL_WHEEL, FESTIVAL_TREE_CLIMB_FINISH,
@@ -75,6 +76,7 @@ public final class PlotCreatorSpotMarkerVisuals {
             return festivalNpcLabel(workResidentKind);
         }
         return switch (type) {
+            case MINING_NODE -> "Mining node";
             case MANAGEMENT_BLOCK -> "Town records shelf";
             case PRODUCTION_STORAGE -> "Production chest";
             case TREASURY_BLOCK -> "Treasury";

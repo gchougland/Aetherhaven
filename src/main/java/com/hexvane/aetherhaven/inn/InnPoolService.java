@@ -64,7 +64,7 @@ import javax.annotation.Nullable;
  * the source of truth for which visitors the mod spawned. Treasury tax is handled by {@link com.hexvane.aetherhaven.economy.TownEconomyTimeService}.
  * <p>
  * <b>Spawning</b> happens only during the morning window, at most once per calendar game day after the daily
- * refresh, and only when the inn's management block chunk is loaded — never to "replace" entries whose entities are
+ * refresh, and only when the inn's management block chunk is loaded â€” never to "replace" entries whose entities are
  * still unloaded elsewhere. <b>Pruning</b> never drops unlocked list
  * entries with a missing entity ref (unloaded); morning refresh can despawn and remove only when refs are valid.
  * <p>
@@ -107,6 +107,7 @@ public final class InnPoolService {
         @Nonnull List<InnPoolEntry> pool,
         @Nonnull String roleId
     ) {
+        if (!com.hexvane.aetherhaven.town.TownRecruitment.available(plugin, town, roleId)) return false;
         for (InnPoolEntry e : pool) {
             if (roleId.equals(e.npcRoleId())) {
                 return e.requires().isEmpty() || e.requires().satisfiedBy(town, plugin);
@@ -157,6 +158,10 @@ public final class InnPoolService {
             return false;
         }
         return true;
+    }
+
+    public static boolean isRoleVisiting(Store<EntityStore> store, TownRecord town, String roleId) {
+        return collectTownVisitorNpcRolesFromStore(store, town).contains(roleId);
     }
 
     @Nullable
@@ -433,11 +438,11 @@ public final class InnPoolService {
             if (keepUuids.contains(u)) {
                 rebuilt.add(u.toString());
             } else if (!loadedVisitorUuids.contains(u)) {
-                // Not among loaded visitors — still in an unloaded chunk; keep the pool slot so morning fill
+                // Not among loaded visitors â€” still in an unloaded chunk; keep the pool slot so morning fill
                 // does not spawn a replacement that later despawns the returning visitor.
                 rebuilt.add(u.toString());
             }
-            // else: loaded but not a keeper → duplicate/excess; drop (entity scheduled for removal)
+            // else: loaded but not a keeper â†’ duplicate/excess; drop (entity scheduled for removal)
         }
         for (LoadedInnVisitor keeper : keepersInOrder) {
             String sid = keeper.uuid().toString();
@@ -560,7 +565,7 @@ public final class InnPoolService {
 
         int poolSizeBefore = town.getInnPoolNpcIds().size();
         if (!finalKeepers.isEmpty() || !loaded.isEmpty()) {
-            // Keepers and/or loaded visitors present — sync list while preserving unloaded pool UUIDs.
+            // Keepers and/or loaded visitors present â€” sync list while preserving unloaded pool UUIDs.
             syncInnPoolListFromKeepers(town, tm, keepUuids, loadedVisitorUuids, finalKeepers);
         }
         if (!toRemove.isEmpty()) {
@@ -574,7 +579,7 @@ public final class InnPoolService {
             report.poolEntriesFixed++;
         }
 
-        // Only clear locks for visitors we are actually despawning — never for unloaded pool UUIDs.
+        // Only clear locks for visitors we are actually despawning â€” never for unloaded pool UUIDs.
         if (report.poolEntriesFixed > 0 || !toRemove.isEmpty()) {
             tm.updateTown(town);
         }
@@ -753,7 +758,7 @@ public final class InnPoolService {
     }
 
     /**
-     * True when the chunk containing the inn management block (or plot sign as fallback) is in memory — i.e. the inn
+     * True when the chunk containing the inn management block (or plot sign as fallback) is in memory â€” i.e. the inn
      * prefab is present in the simulation, not only in {@link TownRecord} data.
      */
     private static boolean isInnManagementChunkLoaded(
@@ -1092,7 +1097,7 @@ public final class InnPoolService {
 
     /**
      * Runs after world bootstrap. Must not touch {@link World#getEntityStore()} synchronously from {@code AddWorldEvent}
-     * — {@code EntityStore#getStore()} is often still null there; we defer to the world execution queue like
+     * â€” {@code EntityStore#getStore()} is often still null there; we defer to the world execution queue like
      * {@link InnkeeperSpawnService#reconcileAfterWorldLoad}.
      */
     public static void reconcileAfterWorldLoad(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
@@ -1315,6 +1320,7 @@ public final class InnPoolService {
                 continue;
             }
             town.getInnPoolNpcIds().add(spawned.toString());
+            town.getOutreach().arrived(roleId);
             if (isRoleRequiredByActiveInnQuest(town, roleId)) {
                 town.addInnLockedEntity(spawned);
             }
@@ -1334,7 +1340,7 @@ public final class InnPoolService {
         @Nonnull String roleId
     ) {
         AtomicBoolean found = new AtomicBoolean(false);
-        // Parallel callbacks run on ForkJoin workers — must use chunk.getComponent, not Store.getComponent (world thread only).
+        // Parallel callbacks run on ForkJoin workers â€” must use chunk.getComponent, not Store.getComponent (world thread only).
         store.forEachEntityParallel(TownVillagerBinding.getComponentType(), (index, archetypeChunk, commandBuffer) -> {
             if (found.get()) {
                 return;
@@ -1412,7 +1418,7 @@ public final class InnPoolService {
         if (!anyLockedMissingRef) {
             return;
         }
-        // Match prioritizedInnRoleOrder / isRoleRequiredByActiveInnQuest — including builder (was omitted and
+        // Match prioritizedInnRoleOrder / isRoleRequiredByActiveInnQuest â€” including builder (was omitted and
         // caused a second Rowan to spawn on load when the locked UUID ref lagged).
         presentRoles.addAll(prioritizedInnRoleOrder(town));
     }
@@ -1631,7 +1637,14 @@ public final class InnPoolService {
         @Nonnull List<InnPoolEntry> pool,
         long seed
     ) {
-        List<String> priority = prioritizedInnRoleOrder(town);
+        List<String> priority = town.getOutreach().prioritize(prioritizedInnRoleOrder(town),
+            !town.getOutreach().requestedRole().isEmpty()
+                && isRoleInInnPoolCatalog(pool, town.getOutreach().requestedRole())
+                && isRoleEligibleForInnPool(plugin, town, pool, town.getOutreach().requestedRole()));
+        // Founding food and the first source of quest income should not depend on random weights.
+        for (String essential : List.of("Aetherhaven_Farmer", "Aetherhaven_Rancher", "Aetherhaven_Guild_Master")) {
+            if (isRoleEligibleForInnPool(plugin, town, pool, essential) && !priority.contains(essential)) priority.add(essential);
+        }
         Set<String> exclude = new LinkedHashSet<>(priority);
         List<String> weightedOrder = weightedInnRoleOrderWithoutReplacement(plugin, town, pool, exclude, new Random(seed));
         Set<String> seen = new LinkedHashSet<>();
@@ -1775,6 +1788,7 @@ public final class InnPoolService {
                 break;
             }
             town.getInnPoolNpcIds().add(spawned.toString());
+            town.getOutreach().arrived(roleId);
             if (isRoleRequiredByActiveInnQuest(town, roleId)) {
                 town.addInnLockedEntity(spawned);
             }
@@ -1789,6 +1803,9 @@ public final class InnPoolService {
     }
 
     private static boolean isRoleRequiredByActiveInnQuest(@Nonnull TownRecord town, @Nonnull String roleId) {
+        var plugin = AetherhavenPlugin.get();
+        if (plugin != null && InnVisitorShopPromotion.hasActiveShopQuest(town, plugin.getQuestCatalog(),
+            plugin.getConstructionCatalog(), plugin.getVillagerDefinitionCatalog().byNpcRoleId(roleId))) return true;
         if (AetherhavenConstants.NPC_BLACKSMITH.equals(roleId)) {
             return town.hasQuestActive(AetherhavenConstants.QUEST_BLACKSMITH_SHOP);
         }
@@ -1838,6 +1855,10 @@ public final class InnPoolService {
     }
 
     private static boolean hasAnyActiveInnVisitorQuest(@Nonnull TownRecord town) {
+        var plugin = AetherhavenPlugin.get();
+        if (plugin != null && plugin.getVillagerDefinitionCatalog().allByNpcRoleId().values().stream()
+            .anyMatch(def -> InnVisitorShopPromotion.hasActiveShopQuest(town, plugin.getQuestCatalog(),
+                plugin.getConstructionCatalog(), def))) return true;
         return town.hasQuestActive(AetherhavenConstants.QUEST_BLACKSMITH_SHOP)
             || town.hasQuestActive(AetherhavenConstants.QUEST_MERCHANT_STALL)
             || town.hasQuestActive(AetherhavenConstants.QUEST_FARM_PLOT)
@@ -1943,6 +1964,13 @@ public final class InnPoolService {
         }
         if (town.hasQuestActive(AetherhavenConstants.QUEST_BUILDERS_HUT)) {
             out.add(AetherhavenConstants.NPC_BUILDER);
+        }
+        var plugin = AetherhavenPlugin.get();
+        if (plugin != null) {
+            for (var def : plugin.getVillagerDefinitionCatalog().allByNpcRoleId().values()) {
+                if (!out.contains(def.getNpcRoleId()) && InnVisitorShopPromotion.hasActiveShopQuest(town,
+                    plugin.getQuestCatalog(), plugin.getConstructionCatalog(), def)) out.add(def.getNpcRoleId());
+            }
         }
         return out;
     }

@@ -1,0 +1,60 @@
+{
+  "Type": "Simple",
+  "Effects": {
+    "ItemPlayerAnimationsId": "Scarak_Louse_Default",
+    "ItemAnimationId": "Bite"
+  },
+  "$Comment": "Prepare Delay",
+  "RunTime": 0.217,
+  "Next": {
+    "Type": "Parallel",
+    "$Comment": "Make sure this parallel interaction is needed and can't be optimized away",
+    "Interactions": [
+      {
+        "Interactions": [
+          {
+            "Type": "Selector",
+            "$Comment": "Length of Combat",
+            "RunTime": 0.117,
+            "Selector": {
+              "Id": "Horizontal",
+              "Direction": "ToLeft",
+              "TestLineOfSight": true,
+              "ExtendTop": 0.5,
+              "ExtendBottom": 0.5,
+              "StartDistance": 0.5,
+              "EndDistance": 2,
+              "Length": 30,
+              "RollOffset": -90,
+              "YawStartOffset": -15
+            },
+            "HitEntity": {
+              "Interactions": [
+                {
+                  "Parent": "NPC_Attack_Melee_Damage"
+                }
+              ]
+            },
+            "Next": {
+              "Type": "Simple",
+              "$Comment": "Pad the interaction length",
+              "RunTime": 0.166
+            }
+          }
+        ]
+      },
+      {
+        "Interactions": [
+          {
+            "Type": "Simple",
+            "$Comment": "Length of Effect",
+            "RunTime": 0.167,
+            "Effects": {
+              "WorldSoundEventId": "SFX_NPC_Unarmed_Swing"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

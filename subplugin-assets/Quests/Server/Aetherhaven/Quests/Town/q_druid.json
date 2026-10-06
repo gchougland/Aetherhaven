@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "id": "q_druid",
+  "category": "town",
+  "grantPlotTokenConstructionId": "plot_druid",
+  "title": "A Garden of Quiet Wonders",
+  "description": "Build Rowan a conservatory to cultivate plants for alchemy.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "plot_token_received",
+      "text": "Collect the conservatory plot token from Rowan.",
+      "textLangKey": "aetherhaven_druid.quest.objective.token"
+    },
+    {
+      "id": "build",
+      "kind": "construction_built",
+      "constructionId": "plot_druid",
+      "text": "Build the conservatory.",
+      "textLangKey": "aetherhaven_druid.quest.objective.build"
+    },
+    {
+      "id": "talk",
+      "kind": "dialogue_turn_in",
+      "text": "Return to Rowan.",
+      "textLangKey": "aetherhaven_druid.quest.objective.talk"
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Druid",
+      "amount": 14,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 14,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
+    ],
+    "onComplete": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ],
+    "onAbandon": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ]
+  },
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_druid.quest.title",
+  "descriptionLangKey": "aetherhaven_druid.quest.description"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "guard_archer_copper",
+  "guardNpcRole": "Aetherhaven_Guard_Archer",
+  "displayName": "Copper Archer",
+  "hireGoldCost": 35,
+  "armor": [
+    "Aetherhaven_Guard_Armor_Leather_Light_Head",
+    "Aetherhaven_Guard_Armor_Leather_Light_Chest",
+    "Aetherhaven_Guard_Armor_Leather_Light_Hands",
+    "Aetherhaven_Guard_Armor_Leather_Light_Legs"
+  ],
+  "hotbar": [
+    {
+      "slot": 0,
+      "itemId": "Weapon_Shortbow_Copper"
+    }
+  ],
+  "attributeCombat": true,
+  "attributeBonuses": {
+    "dexterity": 2,
+    "speed": 1,
+    "vitality": 0
+  }
+}

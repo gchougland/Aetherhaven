@@ -1,0 +1,31 @@
+{
+  "id": "craft_leatherworker_furnishing",
+  "name": "Stitching Frame",
+  "workplace": "leatherworking",
+  "sourceRecipe": "workplace:craft_leatherworker_furnishing",
+  "bench": "Tannery",
+  "benchTier": 1,
+  "skillLevel": 5,
+  "requiresKnowledge": true,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 4
+    },
+    {
+      "itemId": "Ingredient_Leather_Medium",
+      "count": 8
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 12
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 12
+    }
+  ],
+  "output": "Aetherhaven_StitchingFrame",
+  "outputCount": 1,
+  "workSeconds": 45
+}

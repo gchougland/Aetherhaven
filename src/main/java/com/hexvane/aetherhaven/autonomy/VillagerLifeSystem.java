@@ -333,13 +333,24 @@ public final class VillagerLifeSystem extends EntityTickingSystem<EntityStore> {
 
     private boolean available(Ref<EntityStore> ref, Store<EntityStore> store, boolean social) {
         if (ref == null || !ref.isValid()) return false;
+        if (MiningWorkService.active(ref)) return false;
+        if (TimberWorkService.active(ref) || FieldWorkService.active(ref) || HerdWorkService.active(ref)) return false;
+        if (ClinicVisitService.active(ref)) return false;
+        if (com.hexvane.aetherhaven.hunter.HuntService.owns(ref,store)) return false;
+        var clerk=store.getComponent(ref,com.hexvane.aetherhaven.shopspot.ShopClerkState.getComponentType());
+        if(clerk!=null&&clerk.active)return false;
+        var courier=store.getComponent(ref,com.hexvane.aetherhaven.warehouse.CourierTravelState.getComponentType());
+        if(courier!=null&&courier.active)return false;
+        var work=store.getComponent(ref,com.hexvane.aetherhaven.workplace.ApprenticeWorkState.getComponentType());
+        if(work!=null&&work.active)return false;
         if (store.getComponent(ref, VillagerSeatExit.getComponentType()) != null) return false;
         NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
         TownVillagerBinding binding = store.getComponent(ref, TownVillagerBinding.getComponentType());
         if (npc == null || binding == null || binding.getTownId() == null || npc.getRole() == null
             || VillagerAutonomySystem.skipsPoiAutonomy(binding, npc)
             || TownVillagerBinding.isRescueKind(binding.getKind())
-            || NpcFaceVisuals.isInInteractionDialogue(npc)) return false;
+            || NpcFaceVisuals.isInInteractionDialogue(npc)
+            || !NpcStandStill.supportsStandStillState(npc)) return false;
         String state = NpcSupportUtil.stateName(store, ref);
         if (!(state.equals("Idle") || state.startsWith("Idle.") || state.startsWith(AetherhavenConstants.NPC_STATE_AUTONOMY_POI)
             || state.startsWith(AetherhavenConstants.NPC_STATE_STAND_STILL))) return false;
@@ -481,6 +492,8 @@ public final class VillagerLifeSystem extends EntityTickingSystem<EntityStore> {
     private static void hold(Ref<EntityStore> ref, Store<EntityStore> store) {
         if (mounted(ref, store)) return;
         NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
+        // External villager roles opt in by declaring the cooperative hold state.
+        if (npc == null || !NpcStandStill.supportsStandStillState(npc)) return;
         Vector3d pos = store.getComponent(ref, TransformComponent.getComponentType()).getPosition();
         npc.setLeashPoint(new Vector3d(pos));
         NpcSupportUtil.setState(ref, AetherhavenConstants.NPC_STATE_STAND_STILL, null, store);

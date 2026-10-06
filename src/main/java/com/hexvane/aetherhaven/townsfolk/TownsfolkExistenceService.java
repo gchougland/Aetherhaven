@@ -177,6 +177,8 @@ public final class TownsfolkExistenceService {
                 toRelease.add(rec);
                 continue;
             }
+            var residentTown = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).getTown(townId);
+            if (residentTown != null && com.hexvane.aetherhaven.town.ResidentRegistryService.hasConfirmedDeath(residentTown, ledgerUuid)) continue;
             Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(ledgerUuid);
             if (ref != null && ref.isValid()) {
                 continue;

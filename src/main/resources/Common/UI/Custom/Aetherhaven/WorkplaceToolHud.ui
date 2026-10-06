@@ -1,0 +1,46 @@
+$C = "../Common.ui";
+
+@BuildingStaffTabAnchor = Anchor(Width: 52, Height: 44, Right: 3, Bottom: -10);
+
+@BuildingStaffTabsStyle = TabNavigationStyle(
+  TabStyle: (
+    Default: (...$C.@TopTabStyle, Anchor: (...@BuildingStaffTabAnchor, Bottom: -6), IconAnchor: (Width: 22, Height: 22)),
+    Hovered: (...$C.@TopTabStyle, Anchor: (...@BuildingStaffTabAnchor, Bottom: -2), IconAnchor: (Width: 22, Height: 22)),
+    Pressed: (...$C.@TopTabStyle, Anchor: (...@BuildingStaffTabAnchor, Bottom: -4), IconAnchor: (Width: 22, Height: 22))
+  ),
+  SelectedTabStyle: (
+    Default: (
+      ...$C.@TopTabStyle,
+      Anchor: (...@BuildingStaffTabAnchor, Bottom: 0),
+      IconAnchor: (Width: 24, Height: 24),
+      Overlay: "../Common/TabSelectedOverlay.png"
+    )
+  )
+);
+
+Group #BuildingStaffStatusRoot {
+  LayoutMode: Top;
+  Anchor: (Top: 72, Left: 20, Width: 520);
+  TabNavigation #BuildingStaffModeTabs {
+    Anchor: (Height: 48, Left: 4, Right: 0);
+    Style: @BuildingStaffTabsStyle;
+    SelectedTab: "BUILD";
+    TabButton { Icon: "../hammer.png"; TooltipText: "Build structures"; Id: "BUILD"; }
+    TabButton { Icon: "../location.png"; TooltipText: "Create workplace"; Id: "CREATE"; }
+    TabButton { Icon: "../cog.png"; TooltipText: "Manage workplace"; Id: "SELECT"; }
+    TabButton { Icon: "../move_icon_256.png"; TooltipText: "Resize workplace"; Id: "RESIZE"; }
+    TabButton { Icon: "../location.png"; TooltipText: "Plan mineshaft"; Id: "MINESHAFT"; }
+  }
+  $C.@DecoratedContainer {
+    Anchor: (Width: 520, Top: 4);
+    #Title { Label { Text: "BUILDING STAFF"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); Padding: (Horizontal: 12); } }
+    #Content {
+      LayoutMode: Top;
+      Padding: (Left: 14, Right: 14, Top: 10, Bottom: 14);
+      Label #Mode { Text: "Build structures"; Anchor: (Bottom: 6); Style: (...$C.@DefaultLabelStyle, TextColor: #b8d8ff, FontSize: 17, RenderBold: true); }
+      Label #Hint { Text: " "; Anchor: (Bottom: 10); Style: (...$C.@DefaultLabelStyle, TextColor: #dce4ec, FontSize: 14, Wrap: true); }
+      Group #Controls { LayoutMode: Top; }
+    }
+  }
+}
+

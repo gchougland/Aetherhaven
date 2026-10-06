@@ -2,9 +2,12 @@ package com.hexvane.aetherhaven.placement;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.math.vector.Rotation3fc;
+import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Horizontal plot nudges: in bird's-eye mode uses world -X/+X/-Z/+Z (matches fixed top-down camera).
@@ -27,11 +30,15 @@ public final class PlotPlacementNudgeUtil {
 
     /** Horizontal rotation (radians) on XZ for camera-relative nudges. */
     public static float getPlayerYawRadians(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        HeadRotation head = store.getComponent(ref, HeadRotation.getComponentType());
         TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
-        if (tc == null) {
-            return 0f;
-        }
-        return tc.getRotation().yaw();
+        return lookYaw(head == null ? null : head.getRotation(), tc == null ? null : tc.getRotation());
+    }
+
+    /** The camera can turn independently of the player's body while the placement page is open. */
+    static float lookYaw(@Nullable Rotation3fc head, @Nullable Rotation3fc body) {
+        if (head != null && Float.isFinite(head.yaw())) return head.yaw();
+        return body != null && Float.isFinite(body.yaw()) ? body.yaw() : 0f;
     }
 
     public static void nudgeHorizontal(

@@ -1,0 +1,9 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { LayoutMode: Top; Anchor: (Height: 176, Bottom: 12); Padding: (Full: 12); Background: $T.@Panel;
+  Group { LayoutMode: Left; Anchor: (Height: 28, Bottom: 4);
+    Label #BuildingName { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 17, TextColor: #e1c992, RenderBold: true); }
+    Label #Location { Anchor: (Width: 160); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #9cb1b8, HorizontalAlignment: End); }
+  }
+  Group #Slots { LayoutMode: LeftCenterWrap; FlexWeight: 1; }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_sapling_bamboo",
+  "name": "Sapling Bamboo",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_sapling_bamboo",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 4,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 15
+    }
+  ],
+  "output": "Plant_Sapling_Bamboo",
+  "outputCount": 1,
+  "workSeconds": 16
+}

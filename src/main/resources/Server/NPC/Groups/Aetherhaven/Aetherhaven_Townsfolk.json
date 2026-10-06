@@ -1,10 +1,11 @@
 {
-  "$Comment": "Town villagers, guards, and staff. Excludes quest-board raid spawn roles (matched by Aetherhaven_* wildcard).",
+  "$Comment": "Town villagers, guards, and staff. Arena summons and raid enemies are not residents.",
   "IncludeRoles": [
     "Aetherhaven_*"
   ],
   "ExcludeRoles": [
     "Aetherhaven_Raid_*",
-    "Aetherhaven_Raid_Vermin_*"
+    "Aetherhaven_Raid_Vermin_*",
+    "Aetherhaven_Hunt_*"
   ]
 }

@@ -20,6 +20,13 @@ public final class TownWorldFile {
     @com.google.gson.annotations.SerializedName("towns")
     private List<TownRecord> towns = new ArrayList<>();
 
+    private com.hexvane.aetherhaven.halloween.HalloweenGameState retiredHalloweenGames;
+
+    public com.hexvane.aetherhaven.halloween.HalloweenGameState retiredHalloweenGames() {
+        if (retiredHalloweenGames == null) retiredHalloweenGames = new com.hexvane.aetherhaven.halloween.HalloweenGameState();
+        return retiredHalloweenGames;
+    }
+
     @Nonnull
     public List<TownRecord> getTowns() {
         if (towns == null) {
@@ -40,13 +47,19 @@ public final class TownWorldFile {
 
     @Nonnull
     public static byte[] toJsonBytes(@Nonnull List<TownRecord> towns) {
+        return toJsonBytes(towns, null);
+    }
+
+    public static byte[] toJsonBytes(@Nonnull List<TownRecord> towns,
+        com.hexvane.aetherhaven.halloween.HalloweenGameState retired) {
         TownWorldFile file = new TownWorldFile();
         file.getTowns().addAll(towns);
+        file.retiredHalloweenGames = retired;
         return COMPACT_GSON.toJson(file).getBytes(StandardCharsets.UTF_8);
     }
 
     public void writeAtomic(@Nonnull Path path) throws IOException {
-        writeBytesAtomic(path, toJsonBytes(getTowns()));
+        writeBytesAtomic(path, toJsonBytes(getTowns(), retiredHalloweenGames));
     }
 
     public static synchronized void writeBytesAtomic(@Nonnull Path path, @Nonnull byte[] jsonUtf8) throws IOException {

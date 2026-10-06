@@ -1,0 +1,27 @@
+{
+  "id": "craft_leatherworker_kit",
+  "name": "Leatherworker's Roll",
+  "workplace": "leatherworking",
+  "sourceRecipe": "workplace:craft_leatherworker_kit",
+  "bench": "Tannery",
+  "benchTier": 1,
+  "skillLevel": 3,
+  "requiresKnowledge": true,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 3
+    },
+    {
+      "itemId": "Ingredient_Leather_Light",
+      "count": 6
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 6
+    }
+  ],
+  "output": "Aetherhaven_Leatherworker_Kit",
+  "outputCount": 1,
+  "workSeconds": 30
+}

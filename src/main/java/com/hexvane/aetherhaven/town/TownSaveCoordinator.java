@@ -153,7 +153,7 @@ public final class TownSaveCoordinator {
     @Nonnull
     private static byte[] serializeSnapshot(@Nonnull TownManager manager) throws IOException {
         List<TownRecord> snapshot = manager.snapshotTownsForSave();
-        return TownWorldFile.toJsonBytes(snapshot);
+        return TownWorldFile.toJsonBytes(snapshot, manager.retiredHalloweenGames());
     }
 
     private static void awaitIoIdle() {

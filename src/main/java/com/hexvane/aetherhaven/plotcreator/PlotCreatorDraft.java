@@ -10,6 +10,14 @@ import org.joml.Vector3i;
 
 /** Collected data for one plot creator session; preserved when navigating back. */
 public final class PlotCreatorDraft {
+    private final List<com.hexvane.aetherhaven.production.BuildingProductionLayout.Node> miningNodes = new ArrayList<>();
+    private boolean loadedPhysicalMining;
+    public List<com.hexvane.aetherhaven.production.BuildingProductionLayout.Node> getMiningNodes() { return miningNodes; }
+    public boolean isLoadedPhysicalMining() { return loadedPhysicalMining; }
+    public void setLoadedPhysicalMining(boolean value) { loadedPhysicalMining = value; }
+    public com.hexvane.aetherhaven.production.BuildingProductionLayout miningLayout() {
+        return new com.hexvane.aetherhaven.production.BuildingProductionLayout("4.0", "mining_nodes", miningNodes);
+    }
     @Nonnull
     private PlotCreatorStep step = PlotCreatorStep.WELCOME;
     private int substepIndex;

@@ -1,0 +1,34 @@
+{
+  "constructionId": "plot_simple_workplace",
+  "prefabPath": "Simple_Workplace.prefab.json",
+  "materials": [
+    {
+      "resourceTypeId": "Soils",
+      "count": 52
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 48
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 28
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Flat",
+      "count": 16
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 8
+    },
+    {
+      "itemId": "Wood_Hardwood_Beam",
+      "count": 8
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 4
+    }
+  ]
+}

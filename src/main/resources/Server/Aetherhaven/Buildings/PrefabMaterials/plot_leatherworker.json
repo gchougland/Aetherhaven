@@ -1,0 +1,82 @@
+{
+  "constructionId": "plot_leatherworker",
+  "prefabPath": "Tannery.prefab.json",
+  "materials": [
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 204
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 152
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 136
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 120
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 112
+    },
+    {
+      "itemId": "Aetherhaven_Mining_Node_Rock_Stone_Cobble",
+      "count": 108
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Flat",
+      "count": 84
+    },
+    {
+      "itemId": "Aetherhaven_Mining_Node_Rock_Stone_Cobble_Mossy",
+      "count": 48
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 44
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 35
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Mossy",
+      "count": 23
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 14
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 8
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 6
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 5
+    },
+    {
+      "itemId": "Bench_Tannery",
+      "count": 4
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 4
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 3
+    }
+  ]
+}

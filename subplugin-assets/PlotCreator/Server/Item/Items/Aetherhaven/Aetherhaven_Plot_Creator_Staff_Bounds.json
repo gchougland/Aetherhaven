@@ -44,8 +44,7 @@
     "Primary": {
       "Interactions": [
         {
-          "Type": "AetherhavenPlotCreatorBoundsSelection",
-          "AllowIndefiniteHold": true
+          "Type": "AetherhavenPlotCreatorBoundsSelection"
         },
         {
           "Type": "AetherhavenPlotCreatorBlock"
@@ -55,8 +54,7 @@
     "Secondary": {
       "Interactions": [
         {
-          "Type": "AetherhavenPlotCreatorBoundsSelection",
-          "AllowIndefiniteHold": true
+          "Type": "AetherhavenPlotCreatorBoundsSelection"
         },
         {
           "Type": "AetherhavenPlotCreatorBlock"

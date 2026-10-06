@@ -1,0 +1,1782 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": -3,
+      "y": -1,
+      "z": -3,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -3,
+      "y": 0,
+      "z": -3,
+      "name": "Wood_Beech_Trunk"
+    },
+    {
+      "x": -3,
+      "y": 1,
+      "z": -3,
+      "name": "Wood_Beech_Trunk"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": -3,
+      "name": "Wood_Beech_Trunk"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": -3,
+      "name": "Wood_Beech_Trunk"
+    },
+    {
+      "x": -3,
+      "y": 4,
+      "z": -3,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": -2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -3,
+      "y": 0,
+      "z": -2,
+      "name": "Wood_Hardwood_Beam"
+    },
+    {
+      "x": -3,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 4,
+      "z": -2,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": -1,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -3,
+      "y": 0,
+      "z": -1,
+      "name": "Wood_Hardwood_Beam"
+    },
+    {
+      "x": -3,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 4,
+      "z": -1,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": 0,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -3,
+      "y": 0,
+      "z": 0,
+      "name": "Wood_Hardwood_Beam"
+    },
+    {
+      "x": -3,
+      "y": 1,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 4,
+      "z": 0,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": 1,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -3,
+      "y": 0,
+      "z": 1,
+      "name": "Wood_Hardwood_Beam"
+    },
+    {
+      "x": -3,
+      "y": 1,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 4,
+      "z": 1,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": 2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -3,
+      "y": 0,
+      "z": 2,
+      "name": "Wood_Hardwood_Beam"
+    },
+    {
+      "x": -3,
+      "y": 1,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 4,
+      "z": 2,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": 3,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -3,
+      "y": 0,
+      "z": 3,
+      "name": "Wood_Beech_Trunk"
+    },
+    {
+      "x": -3,
+      "y": 1,
+      "z": 3,
+      "name": "Wood_Beech_Trunk"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": 3,
+      "name": "Wood_Beech_Trunk"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": 3,
+      "name": "Wood_Beech_Trunk"
+    },
+    {
+      "x": -3,
+      "y": 4,
+      "z": 3,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": -3,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": -3,
+      "name": "Wood_Hardwood_Beam"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 4,
+      "z": -3,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": -2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 4,
+      "z": -2,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": -1,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 4,
+      "z": -1,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": 0,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 4,
+      "z": 0,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": 1,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 4,
+      "z": 1,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": 2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": 2,
+      "name": "Wood_Hardwood_Beam"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": 2,
+      "name": "Aetherhaven_Management_Block",
+      "components": {
+        "Components": {
+          "AetherhavenManagementBlock": {
+            "PlotId": "",
+            "TownId": ""
+          }
+        }
+      }
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 4,
+      "z": 2,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": 3,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 4,
+      "z": 3,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": -3,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": -3,
+      "name": "Wood_Hardwood_Beam"
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 4,
+      "z": -3,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": -2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 4,
+      "z": -2,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": -1,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 4,
+      "z": -1,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": 0,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 4,
+      "z": 0,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": 1,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 4,
+      "z": 1,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": 2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 4,
+      "z": 2,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": 3,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 4,
+      "z": 3,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": -3,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": -3,
+      "name": "Wood_Hardwood_Beam"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": -3,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": -2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": -2,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": -1,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": -1,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": 0,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": 0,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": 1,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": 1,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": 2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": 2,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": 3,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": 3,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": -3,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": -3,
+      "name": "Wood_Hardwood_Beam"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": -3,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": -2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": -2,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": -1,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": -1,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": 0,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": 0,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": 1,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": 1,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": 2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": 2,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": 3,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": 3,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": -3,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": -3,
+      "name": "Wood_Hardwood_Beam"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "z": -3,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": -2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": -2,
+      "name": "Deco_Halloween_Pumpkin_Scary"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "z": -2,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": -1,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "z": -1,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": 0,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "z": 0,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": 1,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "z": 1,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": 2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "z": 2,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": 3,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "z": 3,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": -3,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": -3,
+      "name": "Wood_Beech_Trunk"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": -3,
+      "name": "Wood_Beech_Trunk"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "z": -3,
+      "name": "Wood_Beech_Trunk"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": -3,
+      "name": "Wood_Beech_Trunk"
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "z": -3,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": -2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": -2,
+      "name": "Wood_Hardwood_Beam"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "z": -2,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": -1,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": -1,
+      "name": "Wood_Hardwood_Beam"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "z": -1,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": 0,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": 0,
+      "name": "Wood_Hardwood_Beam"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "z": 0,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": 1,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": 1,
+      "name": "Wood_Hardwood_Beam"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "z": 1,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": 2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": 2,
+      "name": "Wood_Hardwood_Beam"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "z": 2,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": 3,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": 3,
+      "name": "Wood_Beech_Trunk"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": 3,
+      "name": "Wood_Beech_Trunk"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "z": 3,
+      "name": "Wood_Beech_Trunk"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": 3,
+      "name": "Wood_Beech_Trunk"
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "z": 3,
+      "name": "Wood_Softwood_Roof_Flat"
+    }
+  ],
+  "fluids": []
+}

@@ -1,0 +1,41 @@
+{
+  "id": "plot_simple_workplace",
+  "displayName": "Simple Workplace",
+  "description": "A sheltered space for your own workbenches and furnishings.",
+  "prefabPath": "Simple_Workplace.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "decorationPlot": true,
+  "excludeFromTownJournal": true,
+  "tags": [
+    "decoration"
+  ],
+  "styleId": "core",
+  "plotAnchorOffset": [
+    0,
+    0,
+    0
+  ],
+  "rotationYaw": "None",
+  "frontFacing": "South",
+  "boundsLocal": {
+    "min": [
+      -3,
+      0,
+      -3
+    ],
+    "max": [
+      4,
+      6,
+      4
+    ]
+  },
+  "selfBuildGameDays": 1,
+  "treasuryGoldCoinCost": 15,
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 130
+    }
+  ],
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_simple_workplace.displayName"
+}

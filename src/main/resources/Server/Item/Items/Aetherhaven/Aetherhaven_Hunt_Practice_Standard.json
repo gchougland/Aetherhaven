@@ -1,0 +1,36 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_monster_hunter.item.Practice_Standard.name",
+    "Description": "aetherhaven_monster_hunter.item.Practice_Standard.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Hunt_Practice_Standard.png",
+  "Categories": [
+    "Furniture.Decoration",
+    "Aetherhaven.All"
+  ],
+  "Set": "Aetherhaven",
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Model",
+    "Opacity": "Transparent",
+    "CustomModel": "Blocks/Aetherhaven/Hunt/Practice_Standard.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Aetherhaven/Hunt/Hunt.png",
+        "Weight": 1
+      }
+    ],
+    "HitboxType": "Aetherhaven_Hunt_Practice_Standard",
+    "VariantRotation": "NESW",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Rocks"
+      }
+    },
+    "BlockParticleSetId": "Stone",
+    "BlockSoundSetId": "Stone",
+    "ParticleColor": "#526566"
+  },
+  "PlayerAnimationsId": "Block",
+  "MaxStack": 10
+}

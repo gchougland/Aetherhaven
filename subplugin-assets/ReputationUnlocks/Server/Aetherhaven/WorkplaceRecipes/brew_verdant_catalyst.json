@@ -1,0 +1,35 @@
+{
+  "id": "brew_verdant_catalyst",
+  "name": "Verdant Catalyst",
+  "workplace": "alchemy",
+  "sourceRecipe": "workplace:brew_verdant_catalyst",
+  "bench": "Alchemybench",
+  "benchTier": 3,
+  "skillLevel": 6,
+  "inputs": [
+    {
+      "itemId": "Plant_Crop_Health2",
+      "count": 1
+    },
+    {
+      "itemId": "Plant_Crop_Stamina2",
+      "count": 1
+    },
+    {
+      "itemId": "Plant_Crop_Mana2",
+      "count": 1
+    },
+    {
+      "itemId": "Ingredient_Bar_Gold",
+      "count": 1
+    },
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 10
+    }
+  ],
+  "output": "Aetherhaven_Verdant_Catalyst",
+  "outputCount": 1,
+  "workSeconds": 45,
+  "requiresKnowledge": true
+}

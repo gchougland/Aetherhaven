@@ -1,0 +1,7 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+Group { Anchor: (Left: 24, Width: 592, Height: 30);
+  Group { Background: $T.@Card; Anchor: (Left: 0, Width: 88, Height: 30);
+    Label #Label { Anchor: (Full: 2); Style: (...$C.@DefaultLabelStyle, FontSize: 11, RenderBold: true, Wrap: true, HorizontalAlignment: Center, VerticalAlignment: Center, TextColor: #c8b68d); }
+  }
+}

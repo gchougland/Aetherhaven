@@ -1,0 +1,14 @@
+{
+  "RawStatModifiers": {
+    "Mana": [
+      {
+        "Amount": 20,
+        "CalculationType": "Additive",
+        "Target": "Max"
+      }
+    ]
+  },
+  "Duration": 240,
+  "OverlapBehavior": "Overwrite",
+  "StatusEffectIcon": "UI/StatusEffects/Aetherhaven/Alchemy_ManaBoost2.png"
+}

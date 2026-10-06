@@ -17,7 +17,32 @@
       "q_crystal_keeper_rescue"
     ]
   },
-  "reputationMilestones": [],
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_crystal_keeper_25",
+      "minReputation": 25,
+      "itemId": "Ingredient_Crystal_Cyan",
+      "itemCount": 8,
+      "dialogueNodeId": "rep_reward_25",
+      "learnRecipeItemId": null
+    },
+    {
+      "rewardId": "rep_crystal_keeper_50",
+      "minReputation": 50,
+      "itemId": "Aetherhaven_Shard_Of_Gaia",
+      "itemCount": 2,
+      "dialogueNodeId": "rep_reward_50",
+      "learnRecipeItemId": null
+    },
+    {
+      "rewardId": "rep_crystal_keeper_75",
+      "minReputation": 75,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_75",
+      "learnRecipeItemId": "Aetherhaven_Ring_Large_Glow"
+    }
+  ],
   "giftLoves": [
     "Ingredient_Crystal_Blue",
     "Ingredient_Crystal_Cyan",

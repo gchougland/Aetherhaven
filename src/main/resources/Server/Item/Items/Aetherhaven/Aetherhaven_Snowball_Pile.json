@@ -31,9 +31,9 @@
     "PlacementSettings": {
       "RotationMode": "Default"
     },
+    "InteractionHint": "aetherhaven_festivals.aetherhaven.festival.interactionHints.takeSnowballs",
     "Interactions": {
       "Use": {
-        "Hint": "aetherhaven_festivals.aetherhaven.festival.interactionHints.takeSnowballs",
         "Interactions": [
           {
             "Type": "AetherhavenFestivalSnowballPileUse"

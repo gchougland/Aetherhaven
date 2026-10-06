@@ -25,7 +25,7 @@
     "Friendly"
   ],
   "CombatConfig": {
-    "EntityEffect": "Immunity_Environmental"
+    "EntityEffects": ["Immunity_Environmental"]
   },
   "Invulnerable": {
     "Compute": "Invulnerable"

@@ -71,6 +71,23 @@ public final class QuestReward {
         return count <= 0 ? 1 : count;
     }
 
+    /** A quote owns its reward copy; never change the shared catalog entry. */
+    public QuestReward withItemCount(int newCount) {
+        if (newCount <= 0) throw new IllegalArgumentException("Item reward count must be positive");
+        var copy = new QuestReward();
+        copy.kind = kind;
+        copy.amount = amount;
+        copy.npcRoleId = npcRoleId;
+        copy.grantTo = grantTo;
+        copy.itemId = itemId;
+        copy.count = newCount;
+        copy.currencyId = currencyId;
+        copy.target = target;
+        copy.unlockId = unlockId;
+        copy.recipeItemId = recipeItemId;
+        return copy;
+    }
+
     @Nullable
     public String currencyId() {
         return currencyId;

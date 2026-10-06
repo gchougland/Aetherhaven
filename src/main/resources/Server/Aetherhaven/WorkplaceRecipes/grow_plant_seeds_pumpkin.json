@@ -1,0 +1,18 @@
+{
+  "id": "grow_plant_seeds_pumpkin",
+  "name": "Seeds Pumpkin",
+  "workplace": "crafting",
+  "sourceRecipe": "workplace:grow_plant_seeds_pumpkin",
+  "bench": "Workbench",
+  "benchTier": 1,
+  "skillLevel": 4,
+  "inputs": [
+    {
+      "itemId": "Ingredient_Life_Essence",
+      "count": 6
+    }
+  ],
+  "output": "Plant_Seeds_Pumpkin",
+  "outputCount": 1,
+  "workSeconds": 16
+}

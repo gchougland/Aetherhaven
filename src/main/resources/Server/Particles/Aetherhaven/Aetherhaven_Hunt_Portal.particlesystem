@@ -1,0 +1,15 @@
+{
+  "Spawners": [
+    {
+      "SpawnerId": "Aetherhaven_Hunt_Portal_Blue"
+    },
+    {
+      "SpawnerId": "Aetherhaven_Hunt_Portal_Blue_Center"
+    },
+    {
+      "SpawnerId": "Aetherhaven_Hunt_Portal_Blue_Sparks_Small"
+    }
+  ],
+  "CullDistance": 48,
+  "IsImportant": false
+}

@@ -21,6 +21,14 @@ Elias plays at the guild hall most days. He would like a quiet roof at night tha
 3. Assign Elias as resident on the house management block.
 4. Find Elias and close the quest in dialogue.
 
+### Friendship rewards
+
+Visit after reaching each friendship level to claim the reward through dialogue. Plans are learned by the town and crafted by Apprentices.
+
+- **Friendship 25:** 3 Stamina Potions.
+- **Friendship 50:** Festival Flag plans, requiring Crafting 3.
+- **Friendship 75:** Jester Hat Pattern for the town wardrobe.
+
 ## Weekly routine
 
 Times are in world hours. Most days follow the same rhythm; Sunday can include a short visit to the altar.

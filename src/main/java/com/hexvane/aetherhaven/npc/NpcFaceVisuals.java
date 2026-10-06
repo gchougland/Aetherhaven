@@ -32,6 +32,7 @@ public final class NpcFaceVisuals {
     public static final String FACE_GRIN = "Grin";
     private static final String PLAYER_BLOCKYMODEL = "Characters/Player.blockymodel";
     private static final String PROWL_BLOCKYMODEL = "NPC/Prowl/prowl_hytale.blockymodel";
+    private static final String HEADLESS_SKELETON = "Characters/Aetherhaven/Halloween/Headless_Skeleton.blockymodel";
     private static final java.util.Map<String, String> CREATURE_FACE_RIGS = java.util.Map.of(
         "NPC/Intelligent/Goblin/Models/Model.blockymodel", "Goblin",
         "NPC/Intelligent/Trork/Models/Model.blockymodel", "Trork",
@@ -39,6 +40,7 @@ public final class NpcFaceVisuals {
         "NPC/Intelligent/Klops/Models/Model.blockymodel", "Klops",
         "NPC/Intelligent/Slothian/Models/Model.blockymodel", "Slothian",
         "NPC/Undead/Skeleton/Models/Model.blockymodel", "Skeleton",
+        HEADLESS_SKELETON, "Skeleton",
         "NPC/Intelligent/Kweebec_Rootling/Kweebec_Rootling.blockymodel", "Kweebec",
         "Characters/Player_With_Face.blockymodel", "Outlander",
         "NPC/Gear/Robot.blockymodel", "MachinariaRobot"
@@ -103,6 +105,8 @@ public final class NpcFaceVisuals {
     }
 
     public static boolean supportsFaceModel(@Nullable String model) {
+        // Jack keeps the skeleton body rig, but neither his pumpkin nor the hidden skull has facial tracks.
+        if (HEADLESS_SKELETON.equals(model)) return false;
         return PLAYER_BLOCKYMODEL.equals(model) || PROWL_BLOCKYMODEL.equals(model)
             || (model != null && CREATURE_FACE_RIGS.containsKey(model));
     }

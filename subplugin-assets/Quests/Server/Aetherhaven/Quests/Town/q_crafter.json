@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "id": "q_crafter",
+  "category": "town",
+  "grantPlotTokenConstructionId": "plot_crafter",
+  "title": "Room to Make Things",
+  "description": "Build Tobin a workshop to teach townsfolk practical crafting.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "plot_token_received",
+      "text": "Collect the artisan workshop plot token from Tobin.",
+      "textLangKey": "aetherhaven_crafter.quest.objective.token"
+    },
+    {
+      "id": "build",
+      "kind": "construction_built",
+      "constructionId": "plot_crafter",
+      "text": "Build the artisan workshop.",
+      "textLangKey": "aetherhaven_crafter.quest.objective.build"
+    },
+    {
+      "id": "talk",
+      "kind": "dialogue_turn_in",
+      "text": "Return to Tobin.",
+      "textLangKey": "aetherhaven_crafter.quest.objective.talk"
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Crafter",
+      "amount": 14,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 14,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
+    ],
+    "onComplete": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ],
+    "onAbandon": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ]
+  },
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_crafter.quest.title",
+  "descriptionLangKey": "aetherhaven_crafter.quest.description"
+}

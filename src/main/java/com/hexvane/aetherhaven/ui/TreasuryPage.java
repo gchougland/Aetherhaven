@@ -49,7 +49,7 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
 
     private final Ref<ChunkStore> treasuryBlockRef;
     private boolean templateAppended;
-    /** 0 = coins, 1 = morning tithe breakdown. */
+    /** 0 = coins, 1 = morning tithe breakdown, 2 = bills. */
     private int treasuryTab;
 
     public TreasuryPage(@Nonnull PlayerRef playerRef, @Nonnull Ref<ChunkStore> treasuryBlockRef) {
@@ -111,9 +111,13 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
         commandBuilder.set("#TreasuryTabStrip.Visible", true);
         boolean coinsTab = treasuryTab == 0;
         commandBuilder.set("#CoinsTabContent.Visible", coinsTab);
-        commandBuilder.set("#TaxTabContent.Visible", !coinsTab);
+        commandBuilder.set("#TaxTabContent.Visible", treasuryTab == 1);
+        commandBuilder.set("#BillsPage.Visible", treasuryTab == 2);
+        commandBuilder.set("#TabBillsButton.Disabled", treasuryTab == 2);
         commandBuilder.set("#TabCoinsButton.Disabled", coinsTab);
-        commandBuilder.set("#TabTitheButton.Disabled", !coinsTab);
+        commandBuilder.set("#TabTitheButton.Disabled", treasuryTab == 1);
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#TabBillsButton",
+            new EventData().append("Action", "SwitchTabTreasuryBills"), false);
 
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
@@ -149,6 +153,8 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
                 new EventData().append("Action", "Withdraw"),
                 false
             );
+        } else if (treasuryTab == 2) {
+            TownBillsUi.build(commandBuilder, eventBuilder, town, plugin, uc.getUuid());
         } else {
             buildTaxTab(store, commandBuilder, town, plugin);
         }
@@ -158,6 +164,7 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
         commandBuilder.set("#TreasuryTabStrip.Visible", false);
         commandBuilder.set("#CoinsTabContent.Visible", true);
         commandBuilder.set("#TaxTabContent.Visible", false);
+        commandBuilder.set("#BillsPage.Visible", false);
         commandBuilder.clear(TAX_ROWS);
         commandBuilder.set("#TaxResidentsFooter.Visible", false);
         commandBuilder.set("#TaxHallMissing.Visible", false);
@@ -315,10 +322,16 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
             return;
         }
 
-        if (!action.equalsIgnoreCase("Deposit") && !action.equalsIgnoreCase("Withdraw")) {
+        if (action.equalsIgnoreCase("SwitchTabTreasuryBills")) {
+            treasuryTab = 2;
+            refresh(ref, store);
             return;
         }
-        if (treasuryTab != 0) {
+
+        if (!action.equalsIgnoreCase("Deposit") && !action.equalsIgnoreCase("Withdraw") && !action.equals("PayBill")) {
+            return;
+        }
+        if (treasuryTab != 0 && !action.equals("PayBill")) {
             return;
         }
 
@@ -347,6 +360,12 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
         Player player = store.getComponent(ref, Player.getComponentType());
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (uc == null || player == null || !town.playerCanOpenTreasuryPanel(uc.getUuid())) {
+            return;
+        }
+
+        if (action.equals("PayBill")) {
+            com.hexvane.aetherhaven.economy.TownPayrollService.pay(town, tm, uc.getUuid(), data.billId);
+            refresh(ref, store);
             return;
         }
 
@@ -421,9 +440,11 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
         public static final BuilderCodec<PageData> CODEC = BuilderCodec.builder(PageData.class, PageData::new)
             .append(new KeyedCodec<>("Action", Codec.STRING), (d, v) -> d.action = v, d -> d.action)
             .add()
+            .append(new KeyedCodec<>("BillId", Codec.STRING), (d, v) -> d.billId = v, d -> d.billId).add()
             .build();
 
         @Nullable
         private String action;
+        private String billId;
     }
 }

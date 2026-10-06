@@ -1,0 +1,11 @@
+$C = "../Common.ui";
+Group { LayoutMode: Top; Anchor: (Top: 96, Left: 20, Width: 520);
+ $C.@DecoratedContainer { Anchor: (Width: 520);
+  #Title { Label { Text: "MINING NODE EDITOR"; Style: (...$C.@TitleStyle, HorizontalAlignment: Center); } }
+  #Content { LayoutMode: Top; Padding: (Left: 14, Right: 14, Top: 10, Bottom: 14);
+   Label #Count { Anchor: (Bottom: 6); Style: (...$C.@DefaultLabelStyle, TextColor: #dec68d, FontSize: 17, RenderBold: true); }
+   Label #Hint { Anchor: (Bottom: 10); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true); }
+   Group #Controls { LayoutMode: Top; }
+  }
+ }
+}

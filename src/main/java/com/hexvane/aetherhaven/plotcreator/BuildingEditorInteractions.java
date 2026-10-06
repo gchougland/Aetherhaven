@@ -24,7 +24,8 @@ public final class BuildingEditorInteractions {
     public static boolean isBuildingEditorStaff(@Nullable ItemStack stack) {
         return stack != null
             && !stack.isEmpty()
-            && AetherhavenConstants.BUILDING_EDITOR_STAFF_ITEM_ID.equals(stack.getItemId());
+            && (AetherhavenConstants.BUILDING_EDITOR_STAFF_ITEM_ID.equals(stack.getItemId())
+                || PlotCreatorStaffBoundsSwap.isEditorBoundsStaff(stack));
     }
 
     public static void handleUse(
@@ -52,7 +53,11 @@ public final class BuildingEditorInteractions {
         }
         PlotCreatorSession session = PlotCreatorSessions.get(playerRef.getUuid());
         if (session == null) {
-            openPicker(playerRef, ref, store);
+            if(PlacedMineNodeEditing.review(playerRef,ref,store)) {
+                context.getState().state=InteractionState.Finished;return;
+            }
+            var target=PlotCreatorBlockTarget.resolve(ref,store,context,null);
+            if(!PlacedMineUpgradePage.tryOpen(playerRef,ref,store,target))openPicker(playerRef, ref, store);
             context.getState().state = InteractionState.Finished;
             return;
         }
@@ -149,6 +154,12 @@ public final class BuildingEditorInteractions {
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull InteractionContext context
     ) {
+        PlayerRef mineEditor=commandBuffer.getComponent(ref,PlayerRef.getComponentType());
+        if(mineEditor!=null&&isBuildingEditorStaff(context.getHeldItem())&&PlacedMineNodeEditing.active(mineEditor.getUuid())) {
+            PlacedMineNodeEditing.cancel(mineEditor.getUuid());
+            mineEditor.sendMessage(com.hypixel.hytale.server.core.Message.raw("Mining cell selection discarded. The mine was not changed."));
+            context.getState().state=InteractionState.Finished;return;
+        }
         if (!prepareEditorSession(ref, commandBuffer, context)) {
             return;
         }
@@ -183,6 +194,10 @@ public final class BuildingEditorInteractions {
             return;
         }
         PlotCreatorSession session = PlotCreatorSessions.get(playerRef.getUuid());
+        if(session==null&&PlacedMineNodeEditing.click(playerRef,ref,store,
+            PlotCreatorBlockTarget.resolve(ref,store,context,targetBlock),type)) {
+            context.getState().state=InteractionState.Finished;return;
+        }
         if (session == null || !session.getDraft().isBuildingEditorMode()) {
             context.getState().state = InteractionState.Failed;
             return;

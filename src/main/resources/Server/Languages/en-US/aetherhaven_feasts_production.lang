@@ -26,6 +26,7 @@ aetherhaven.ui.feast.err.berrycircleCooldown=Berrycircle Concord is still on coo
 aetherhaven.ui.feast.err.notEnoughIngredients=You do not have enough of the required ingredients.
 
 aetherhaven.ui.production.title=Workplace stores
+aetherhaven.interaction.productionStorage=Press [{key}] to open workplace stores
 aetherhaven.ui.production.prev=Prev
 aetherhaven.ui.production.next=Next
 aetherhaven.ui.production.prevTooltip=Previous output in this slot

@@ -9,6 +9,18 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class TownsfolkCharacterDefinition {
+    /** Optional starting values for integrations. Skill zero explicitly means incapable. */
+    private java.util.Map<String, Integer> startingAttributes;
+    private java.util.Map<String, Integer> startingSkills;
+
+    public java.util.Map<String, Integer> getStartingAttributes() {
+        return startingAttributes == null ? java.util.Map.of() : java.util.Collections.unmodifiableMap(startingAttributes);
+    }
+
+    public java.util.Map<String, Integer> getStartingSkills() {
+        return startingSkills == null ? java.util.Map.of() : java.util.Collections.unmodifiableMap(startingSkills);
+    }
+
     @SerializedName("id")
     private String id = "";
 

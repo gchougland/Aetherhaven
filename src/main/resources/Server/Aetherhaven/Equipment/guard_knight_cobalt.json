@@ -1,0 +1,24 @@
+{
+  "id": "guard_knight_cobalt",
+  "guardNpcRole": "Aetherhaven_Guard_Knight",
+  "displayName": "Cobalt Knight",
+  "hireGoldCost": 40,
+  "armor": [
+    "Aetherhaven_Guard_Armor_Cobalt_Head",
+    "Aetherhaven_Guard_Armor_Cobalt_Chest",
+    "Aetherhaven_Guard_Armor_Cobalt_Hands",
+    "Aetherhaven_Guard_Armor_Cobalt_Legs"
+  ],
+  "hotbar": [
+    {
+      "slot": 0,
+      "itemId": "Weapon_Sword_Cobalt"
+    }
+  ],
+  "offhand": "Weapon_Shield_Cobalt",
+  "attributeCombat": true,
+  "attributeBonuses": {
+    "strength": 8,
+    "vitality": 8
+  }
+}

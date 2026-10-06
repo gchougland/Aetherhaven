@@ -158,6 +158,10 @@ public final class BuildingQuestResidentReconcileService {
                 continue;
             }
             UUID workplacePlotId = plot.getPlotId();
+            if (TownAdmission.blocked(plugin, town, null, roleId) != null) {
+                report.addSkippedFailed();
+                continue;
+            }
             if (isAlreadyHealthy(town, store, roleId.trim(), residentKind, workplacePlotId)) {
                 report.addAlreadyOk();
                 continue;
@@ -207,6 +211,7 @@ public final class BuildingQuestResidentReconcileService {
         if (uuidComp == null) {
             return false;
         }
+        if (TownAdmission.blocked(plugin, town, uuidComp.getUuid(), roleId) != null) return false;
         TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
         if (binding == null || !town.getTownId().equals(binding.getTownId())) {
             store.putComponent(

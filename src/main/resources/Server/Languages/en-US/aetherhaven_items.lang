@@ -585,3 +585,5 @@ items.Aetherhaven_Villager_Cosmetic_Jack_O_Lantern_Hat.name=Jack o lantern Hat P
 items.Aetherhaven_Villager_Cosmetic_Jack_O_Lantern_Hat.description=Use to unlock a jack o lantern hat for villagers in your town wardrobe. Buy it from the Hallow's Eve merchant with autumn festival tickets.
 items.Aetherhaven_Villager_Cosmetic_Santa_Hat.name=Santa Hat Pattern
 items.Aetherhaven_Villager_Cosmetic_Santa_Hat.description=Use to unlock a santa hat for villagers in your town wardrobe. Buy it from a winter festival merchant with winter festival tickets.
+items.Aetherhaven_Prop_Weapon_Rack.name=Decorative Weapon Rack
+items.Aetherhaven_Prop_Weapon_Rack.description=Place a decorative weapon rack. It does not store equipment or supply usable weapons.

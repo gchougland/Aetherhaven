@@ -1,0 +1,32 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Rock_Sandstone_White_Cobble.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Rock_Sandstone_White_Cobble.png",
+  "BlockType": {
+    "DrawType": "Cube",
+    "BlockParticleSetId": "Stone",
+    "Textures": [
+      {
+        "Sides": "BlockTextures/Rock_Sandstone_White_Cobble_Side.png",
+        "UpDown": "BlockTextures/Rock_Sandstone_White_Cobble_Top.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#cca863",
+    "BlockSoundSetId": "Stone",
+    "PhysicalMaterialId": "Stone",
+    "TextureComputedColor": "#CFA766",
+    "Material": "Solid",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Unbreakable"
+      }
+    },
+    "Flags": {},
+    "Support": {}
+  },
+  "PlayerAnimationsId": "Block",
+  "MaxStack": 1,
+  "ItemSoundSetId": "ISS_Blocks_Stone"
+}

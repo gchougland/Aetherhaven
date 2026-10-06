@@ -1,0 +1,71 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Armor_Cobalt_Head.name"
+  },
+  "Quality": "Rare",
+  "ItemLevel": 35,
+  "PlayerAnimationsId": "Block",
+  "ItemSoundSetId": "ISS_Armor_Heavy",
+  "Categories": [],
+  "Icon": "Icons/ItemsGenerated/Armor_Cobalt_Head.png",
+  "IconProperties": {
+    "Rotation": [
+      23.06,
+      43.315,
+      23.06
+    ],
+    "Scale": 0.45,
+    "Translation": [
+      0,
+      -8.1
+    ]
+  },
+  "Model": "Items/Armors/Cobalt/Head.blockymodel",
+  "Texture": "Items/Armors/Cobalt/Head_Texture.png",
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "EquipItem"
+        }
+      ]
+    }
+  },
+  "Armor": {
+    "ArmorSlot": "Head",
+    "BaseDamageResistance": 0,
+    "CosmeticsToHide": [
+      "EarAccessory",
+      "Ear",
+      "Haircut",
+      "HeadAccessory"
+    ],
+    "DamageResistance": {},
+    "StatModifiers": {},
+    "DamageClassEnhancement": {
+      "Signature": [
+        {
+          "Amount": 0.03,
+          "CalculationType": "Multiplicative"
+        }
+      ]
+    }
+  },
+  "MaxDurability": 0,
+  "DurabilityLossOnHit": 0,
+  "Tags": {
+    "Type": [
+      "Armor"
+    ],
+    "Family": [
+      "Cobalt"
+    ]
+  }
+}

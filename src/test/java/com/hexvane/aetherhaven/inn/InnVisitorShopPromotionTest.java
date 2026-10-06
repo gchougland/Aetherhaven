@@ -22,6 +22,38 @@ class InnVisitorShopPromotionTest {
     private final Gson gson = new Gson();
 
     @Test
+    void contentDefinedShopQuestsRetainOnlyTheirOwnVisitorsUntilFinished() throws Exception {
+        for (String kind : java.util.List.of("druid", "alchemist", "warehouse", "crafter", "leatherworker")) {
+            String role = switch (kind) {
+                case "druid" -> "Aetherhaven_Druid";
+                case "alchemist" -> "Aetherhaven_Alchemist";
+                case "crafter" -> "Aetherhaven_Crafter";
+                case "leatherworker" -> "Aetherhaven_Leatherworker";
+                default -> "Aetherhaven_Warehouse_Manager";
+            };
+            var def = gson.fromJson(java.nio.file.Files.readString(java.nio.file.Path.of(
+                "src/main/resources/Server/Aetherhaven/Villagers/" + role + ".json")), VillagerDefinition.class);
+            var quest = gson.fromJson(java.nio.file.Files.readString(java.nio.file.Path.of(
+                "subplugin-assets/Quests/Server/Aetherhaven/Quests/Town/q_" + kind + ".json")), QuestDefinition.class);
+            var quests = QuestCatalog.of(Map.of(quest.idOrEmpty(), quest));
+            var town = new com.hexvane.aetherhaven.town.TownRecord();
+            var uuid = java.util.UUID.randomUUID();
+            town.addActiveQuest("q_unrelated");
+            assertFalse(InnVisitorShopPromotion.hasActiveShopQuest(town, quests, ConstructionCatalog.empty(), def));
+            town.addActiveQuest(quest.idOrEmpty());
+            boolean required = InnVisitorShopPromotion.hasActiveShopQuest(town, quests, ConstructionCatalog.empty(), def);
+            assertTrue(required, role);
+            InnPoolService.reconcileVisitorQuestLock(town, uuid, role, required);
+            assertTrue(town.isInnVisitorLocked(uuid), role);
+            town.completeQuest(quest.idOrEmpty());
+            required = InnVisitorShopPromotion.hasActiveShopQuest(town, quests, ConstructionCatalog.empty(), def);
+            assertFalse(required, role);
+            InnPoolService.reconcileVisitorQuestLock(town, uuid, role, required);
+            assertFalse(town.isInnVisitorLocked(uuid), role);
+        }
+    }
+
+    @Test
     void resolveResidentKind_prefersDialogueVillagerKind() {
         VillagerDefinition def = gson.fromJson(
             """

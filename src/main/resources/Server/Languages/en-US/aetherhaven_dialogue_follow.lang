@@ -3,3 +3,7 @@
 aetherhaven.dialogue.follow.start=Follow Me
 aetherhaven.dialogue.follow.stop=Stop Following
 aetherhaven.dialogue.follow.limitReached=You can only have {limit} followers at your town rank.
+aetherhaven.dialogue.escort.wait=Wait here
+aetherhaven.dialogue.escort.resume=Follow me again
+aetherhaven.dialogue.escort.defensive=Defensive: protect me when I am attacked
+aetherhaven.dialogue.escort.offensive=Offensive: engage nearby hostiles

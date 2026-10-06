@@ -1,4 +1,5 @@
 $C = "../Common.ui";
+$T = "TownUiTheme.ui";
 $Sounds = "../Sounds.ui";
 
 @IconLbl = (
@@ -28,7 +29,7 @@ $C.@PageOverlay {
       Anchor: (Full: 0);
 
       $C.@DecoratedContainer {
-        Anchor: (Width: 480);
+        Anchor: (Width: $T.@RecordsWidth, Height: $T.@RecordsHeight);
 
         #Title {
           Label #MemberPermTitleText {
@@ -39,8 +40,10 @@ $C.@PageOverlay {
         }
 
         #Content {
-          LayoutMode: Top;
-          Padding: (Full: 16);
+          Anchor: (Top: 38, Bottom: 0);
+          LayoutMode: TopScrolling;
+          ScrollbarStyle: $C.@DefaultScrollbarStyle;
+          Padding: (Full: 24);
 
           Group {
             LayoutMode: Left;

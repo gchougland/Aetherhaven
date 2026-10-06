@@ -1,4 +1,5 @@
 $C = "../Common.ui";
+$T = "TownUiTheme.ui";
 $Sounds = "../Sounds.ui";
 
 @TabIconLbl = (
@@ -63,7 +64,7 @@ $C.@PageOverlay {
       Anchor: (Full: 0);
 
       $C.@DecoratedContainer {
-        Anchor: (Width: 620);
+        Anchor: (Width: $T.@RecordsWidth, Height: $T.@RecordsHeight);
 
         #Title {
           Label #TownLogTitleText {
@@ -74,14 +75,15 @@ $C.@PageOverlay {
         }
 
         #Content {
+          Anchor: (Top: 38, Bottom: 0);
           LayoutMode: Top;
-          Padding: (Full: 16);
+          Padding: (Full: 24);
 
           Group #ManagementTabStrip {
             LayoutMode: Left;
             Anchor: (Bottom: 14, Left: 0, Right: 0);
             Padding: (Horizontal: 6, Vertical: 8);
-            Background: #1e2430(0.92);
+            Background: $T.@Panel;
 
             Group { FlexWeight: 1; }
 
@@ -160,11 +162,12 @@ $C.@PageOverlay {
 
           Group #LogListPanel {
             LayoutMode: Top;
-            Anchor: (Height: 480, Bottom: 12);
+            FlexWeight: 1;
+            Anchor: (Bottom: 12);
 
             Label #EmptyHint {
               Visible: false;
-              Anchor: (Top: 0, Left: 0, Right: 0, Height: 480);
+              Anchor: (Full: 0);
               Style: (...$C.@DefaultLabelStyle, TextColor: #8a7a60, Wrap: true, VerticalAlignment: Center, HorizontalAlignment: Center);
               Text: "";
             }
@@ -173,7 +176,7 @@ $C.@PageOverlay {
               LayoutMode: TopScrolling;
               ScrollbarStyle: $C.@DefaultScrollbarStyle;
               Visible: false;
-              Anchor: (Top: 0, Left: 0, Right: 0, Height: 480, Bottom: 0);
+              Anchor: (Full: 0);
 
               Group #LogRows {
                 LayoutMode: Top;

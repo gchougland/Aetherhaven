@@ -70,6 +70,13 @@ public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem
         String roleId = npc != null && npc.getRoleName() != null ? npc.getRoleName().trim() : "";
         String kind = binding.getKind();
 
+        if (ResidentRegistryService.preserveTownsfolkDeath(town, tm, victimRef, store, plugin)) {
+            if (entityUuid != null) GuardPatrolSystem.clearAssignmentsForGuard(world, plugin, entityUuid);
+            TownVillagerDeathNotifier.notifyTownMembers(store, victimRef, plugin, town, roleId, kind,
+                TownVillagerDeathNotifier.DeathCategory.CITIZEN, entityUuid, death);
+            return;
+        }
+
         boolean hiredGuard =
             TownVillagerBinding.KIND_GUARD.equals(kind)
                 || (entityUuid != null && GuardHireService.isHiredGuard(town, entityUuid));
@@ -218,8 +225,8 @@ public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem
             town.setInnkeeperEntityUuid(null);
         }
         InnPoolService.removeVisitorFromPool(town, entityUuid);
-        clearHomeResident(town, entityUuid);
         if (TownVillagerBinding.KIND_TOWNSFOLK.equals(kind)) {
+            clearHomeResident(town, entityUuid);
             town.getResidentNpcRecords().removeIf(r -> entityUuid.equals(r.getLastEntityUuid()));
         }
         tm.updateTown(town);

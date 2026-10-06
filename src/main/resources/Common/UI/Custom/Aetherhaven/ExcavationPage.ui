@@ -1,0 +1,43 @@
+$C = "../Common.ui";
+$T = "TownUiTheme.ui";
+$C.@PageOverlay { LayoutMode: Middle;
+ $C.@DecoratedContainer { Anchor: (Width: 920, Height: 820);
+  #Title { Label #TitleText { Style: (...$C.@TitleStyle); } }
+  #Content { LayoutMode: Top; Padding: (Full: 24);
+   Label { Text: "PLAN A REAL MINESHAFT"; Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 19, RenderBold: true, TextColor: #dec68d); }
+   Label { Text: "Use the Building Staff's Plan mineshaft mode to choose ground just in front of the rock. Set the direction and length, then review the tunnel here. Digging starts one block ahead of that ground. You can plan through solid rock without reaching the far end."; Anchor: (Height: 72, Bottom: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #b7c9bb); }
+   Label #LayoutDescription { Anchor: (Height: 44, Bottom: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true); }
+   Group { LayoutMode: Left; Anchor: (Height: 200, Bottom: 12);
+    Group { LayoutMode: Top; Anchor: (Width: 410, Right: 18);
+     Label { Text: "TUNNEL PLAN   |   NORTH AT TOP"; Anchor: (Height: 26); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b7c9bb); }
+     Group #Map { FlexWeight: 1; Background: $T.@Inset; }
+    }
+    Group { FlexWeight: 1; LayoutMode: Top; Background: $T.@Panel; Padding: (Full: 18);
+     Label { Text: "BLOCKS TO EXCAVATE"; Anchor: (Height: 22); Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b7c9bb); }
+     Label #Blocks { Anchor: (Height: 40, Bottom: 4); Style: (...$C.@DefaultLabelStyle, FontSize: 36, RenderBold: true, TextColor: #dec68d); }
+     Label #Skill { Anchor: (Height: 30); Style: (...$C.@DefaultLabelStyle, FontSize: 15, Wrap: true); }
+     Label #Progress { Anchor: (Height: 24); Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #b7c9bb); }
+     Label #Cargo { Anchor: (Height: 42); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true); }
+    }
+   }
+   Group { LayoutMode: Left; Anchor: (Height: 38, Bottom: 10);
+    $C.@SecondaryTextButton #Entrance { Text: "Direction and length"; FlexWeight: 1; Anchor: (Right: 10); }
+    $C.@SecondaryTextButton #Layout { Text: "Straight"; Anchor: (Width: 140, Right: 10); TextTooltipStyle: $C.@DefaultTextTooltipStyle; TooltipText: "Change the shape, direction or length from the same entrance ground."; }
+    $C.@SecondaryTextButton #Refresh { Text: "Review terrain"; Anchor: (Width: 170, Right: 10); }
+    $C.@SecondaryTextButton #Station { Text: "Upgrade station"; Anchor: (Width: 170); }
+   }
+   Group { LayoutMode: Left; Anchor: (Height: 44, Bottom: 8);
+    $C.@SecondaryTextButton #Fittings { Text: "No fittings"; Anchor: (Width: 230, Right: 14); TextTooltipStyle: $C.@DefaultTextTooltipStyle; TooltipText: "Choose optional supports and torches. Changing this review does not change the running order."; }
+    $C.@SecondaryTextButton #SetStart { Text: "Choose new start"; Anchor: (Width: 210, Right: 14); TextTooltipStyle: $C.@DefaultTextTooltipStyle; TooltipText: "Hold a Building Staff, then choose new entrance ground. Your saved plan stays unchanged until you save."; }
+    Label #FittingsCost { FlexWeight: 1; Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #b7c9bb); }
+   }
+   Label #Status { Anchor: (Height: 44, Bottom: 8); Style: (...$C.@DefaultLabelStyle, FontSize: 14, Wrap: true, TextColor: #dec68d); }
+   Group { LayoutMode: Left; Anchor: (Height: 38, Bottom: 12);
+    $C.@TextButton #Start { Text: "Start reviewed tunnel"; FlexWeight: 1; Anchor: (Right: 12); }
+    $C.@SecondaryTextButton #Pause { Text: "Pause saved tunnel"; Anchor: (Width: 250); }
+   }
+   Label { Text: "Starting permanently removes the reviewed rock as Apprentices work. Floors stay. Building plots and furnishings are excluded. No tunnel progress happens without a worker. Full mine storage pauses digging."; Anchor: (Height: 44); Style: (...$C.@DefaultLabelStyle, FontSize: 13, Wrap: true, TextColor: #b7c9bb); }
+  }
+ }
+}
+$C.@BackButton {}
